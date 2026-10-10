@@ -400,4 +400,80 @@ theorem normalize_supported (allowed : Nat → Prop) (forms : List Linear)
     subst result
     exact tighten_supported allowed values (reduceAll_supported allowed forms supported values reduced)
 
+/-- Every retained reduced inequality has at least one variable coefficient. -/
+theorem reduce_nonconstant (form : Linear) (result : List Linear)
+    (success : reduce form = some result) : ∀ other ∈ result, other.coefficients ≠ [] := by
+  unfold reduce at success
+  split at success
+  · split at success
+    · cases success; simp
+    · cases success
+  · next nonempty =>
+    cases success
+    intro other member
+    have same : other = reduceByGcd form := by simpa using member
+    subst other
+    simpa [reduceByGcd, divideCoefficients, List.isEmpty_iff] using nonempty
+
+/-- Reduction removes all constant inequalities from a successful conjunction. -/
+theorem reduceAll_nonconstant (forms result : List Linear) (success : reduceAll forms = some result) :
+    ∀ form ∈ result, form.coefficients ≠ [] := by
+  induction forms generalizing result with
+  | nil => simp [reduceAll] at success; subst result; simp
+  | cons first rest ih =>
+    cases head : reduce first <;> cases tail : reduceAll rest <;>
+      simp [reduceAll, head, tail] at success
+    subst result
+    intro form member
+    rcases List.mem_append.mp member with left | right
+    · exact reduce_nonconstant first _ head form left
+    · exact ih _ tail form right
+
+/-- Tightest-offset insertion retains nonempty directions. -/
+theorem insertTightest_nonconstant (form : Linear) (forms : List Linear)
+    (head : form.coefficients ≠ []) (tail : ∀ other ∈ forms, other.coefficients ≠ []) :
+    ∀ other ∈ insertTightest form forms, other.coefficients ≠ [] := by
+  induction forms with
+  | nil => simpa [insertTightest] using head
+  | cons first rest ih =>
+    by_cases same : form.coefficients = first.coefficients
+    · simp only [insertTightest, same, ↓reduceIte, List.mem_cons]
+      intro other member
+      rcases member with rfl | member
+      · exact tail first (by simp)
+      · exact tail other (by simp [member])
+    · simp only [insertTightest, same, ↓reduceIte, List.mem_cons]
+      intro other member
+      rcases member with rfl | member
+      · exact tail other (by simp)
+      · exact ih (fun other member => tail other (by simp [member])) other member
+
+/-- Direction merging retains nonempty directions. -/
+theorem tighten_nonconstant (forms : List Linear) (nonempty : ∀ form ∈ forms, form.coefficients ≠ []) :
+    ∀ form ∈ tighten forms, form.coefficients ≠ [] := by
+  induction forms with
+  | nil => simp [tighten]
+  | cons first rest ih =>
+    exact insertTightest_nonconstant first _ (nonempty first (by simp))
+      (ih (fun other member => nonempty other (by simp [member])))
+
+/-- No constant inequality remains after successful normalization. -/
+theorem normalize_nonconstant (forms result : List Linear) (success : normalize forms = some result) :
+    ∀ form ∈ result, form.coefficients ≠ [] := by
+  unfold normalize at success
+  cases reduced : reduceAll forms with
+  | none => simp [reduced] at success
+  | some values =>
+    cases contradiction : hasContradiction (tighten values) <;> simp [reduced, contradiction] at success
+    subst result
+    exact tighten_nonconstant values (reduceAll_nonconstant forms values reduced)
+
+/-- A normalized conjunction with no remaining variable is the empty conjunction. -/
+theorem normalize_no_variables (forms result : List Linear) (success : normalize forms = some result)
+    (constant : ∀ form ∈ result, form.coefficients = []) : result = [] := by
+  cases result with
+  | nil => rfl
+  | cons first rest => exact False.elim ((normalize_nonconstant forms _ success first (by simp))
+      (constant first (by simp)))
+
 end MicroCFTA.LatticeNormalize
