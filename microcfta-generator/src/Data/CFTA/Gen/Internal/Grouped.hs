@@ -388,7 +388,7 @@ relateGroupsM relation resultKey left right =
             (keyedBucketMass leftBucket * keyedBucketMass rightBucket)
             (joinNBucketStatic
                 componentIndex
-                (pureStatic (,))
+                (resizedStatic 0 $ pureStatic (,))
                 (ChainCons (keyedBucketStatic leftBucket) (ChainCons (keyedBucketStatic rightBucket) ChainNil)))
             Nothing
         )
