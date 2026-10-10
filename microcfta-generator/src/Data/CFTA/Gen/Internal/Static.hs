@@ -104,7 +104,8 @@ import Data.CFTA.Ranked.Internal.Decoder (
     sharedChoiceBound,
  )
 import Data.CFTA.Ranked.Internal.Sampler
-import Data.CFTA.Ranked.Internal.Size (MinimumSize (..), SizeIndex (minimumMemberSize), payIndex, SizedRank (..), countAtSize, sizeClassOf, sizeIndex)
+import Data.CFTA.Ranked.Internal.Shrink (planMemberSize)
+import Data.CFTA.Ranked.Internal.Size (MinimumSize (..), SizeIndex (minimumMemberSize), payIndex, countAtSize, sizeIndex)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -651,14 +652,13 @@ frequencyStaticWithMasses alternatives =
             [(indexOf alternative, massAt, fst $ staticSampling alternative) | (alternative, massAt) <- weighted]
     -- The count of the size class, times the share of the alternative in the
     -- class, times the share of the member in the alternative.
-    weightAt rank = case sizeClassOf (indexOf merged) rank of
-        Nothing -> Left $ SelectionOutOfRange rank $ outcomeCardinality $ staticOutcomes merged
-        Just (SizedRank size _) -> do
-            let (offset, alternative, massAt) = branchOf rank
-                total = sum [mass size | (_, mass) <- weighted]
-                inside = toRational $ countAtSize (indexOf alternative) size
-            memberWeight <- maybe (Right 1) ($ rebaseRank offset rank) $ snd $ staticSampling alternative
-            pure $ toRational (countAtSize (indexOf merged) size) * massAt size / total * memberWeight / inside
+    weightAt rank = do
+        let size = planMemberSize (outcomePlan $ staticOutcomes merged) rank
+            (offset, alternative, massAt) = branchOf rank
+            total = sum [mass size | (_, mass) <- weighted]
+            inside = toRational $ countAtSize (indexOf alternative) size
+        memberWeight <- maybe (Right 1) ($ rebaseRank offset rank) $ snd $ staticSampling alternative
+        pure $ toRational (countAtSize (indexOf merged) size) * massAt size / total * memberWeight / inside
     branchOf rank =
         last
             [ (offset, alternative, massAt)
