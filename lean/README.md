@@ -11,10 +11,13 @@ bounded atomic-pair probabilities can change, and minimization can delete the
 only accepted root term. This is not a proof of the complete Haskell
 implementation. See [the current report](SECOND-REPAIRS.md).
 
-Current source baseline: `dd6cc228da3bd14ec5a1e71c12a8903ca64f3c5e`, rebased
-onto `df56aee` with the `measured` API. Commit `fc2eb98` adapts three retained
+Current source baseline: `78387bb`, rebased onto `origin/microcfta` at
+`a232f82`. Commit `aefb1b6` adapts three retained
 regression cases to `measuredNode`. The existing findings reproduce on this
-baseline. Earlier reports retain their original source hashes.
+implementation. The corrected rebase changes only measure documentation
+relative to the tested source. All 37 patches are retained. The range diff
+shows only changed README context around the leaf-count correction.
+Earlier reports retain their original source hashes.
 The initial audit used `dbc6955a9b1fe9de92acc167301342915916f307`.
 Toolchain: Lean 4.34.1. Dependencies: Lean's bundled `Std` and `Lean` libraries.
 
