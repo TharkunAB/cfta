@@ -5,6 +5,10 @@ import MicroCFTA.Guards
 import MicroCFTA.Lattice
 import MicroCFTA.Integration
 import MicroCFTA.Counterexamples
+import MicroCFTA.Decoder
+import MicroCFTA.Holds
+import MicroCFTA.Minimization
+import MicroCFTA.Sized
 
 /-!
 # Proof dependency audit
