@@ -4,6 +4,10 @@
 `admit`, custom axiom, or `native_decide`. The module states its external
 obligations as theorem parameters.
 
+The initial implementation findings below refer to `dbc6955`. Their exact
+reproductions pass after `ae6b97b`. New proofs and remaining findings are in
+[CONTINUATION.md](CONTINUATION.md), `Holds.lean`, and `Minimization.lean`.
+
 ## Source map
 
 | Haskell source | Lean result | Boundary |
@@ -13,7 +17,7 @@ obligations as theorem parameters.
 | `microcfta/src/Data/CFTA/Constraint.hs`: `splitGuard` | `splitGuard_preserves` | The split retains neutral `Top` nodes. Haskell removes those nodes. The verdict identity laws prove that removal safe. |
 | `microcfta/src/Data/CFTA/Refinement/Prune.hs`: `groupVariants`, `specializeNode`, `pruneSemantic` | `groupByKey_cover`, `groupByKey_disjoint`, `grouping_homogeneous`, `partition_discharge_preserves`, `partition_cover_preserves` | Exact finite key partition is verified. The Haskell observation trie must cover the original language and provide sufficient keys. This module does not prove that implementation correspondence. |
 | `microcfta/src/Data/CFTA/Refinement/Evaluate.hs`: `substituteTerm` and `Same` | `substitution_preserves_equality`, `substitution_reflects_equality` | Equality survives any uniform map. Disequality requires an injective map. General symbol substitution is not injective. Capture avoidance in Liquid Fixpoint is not formalized. |
-| `microcfta/src/Data/CFTA/Refinement/Evaluate.hs`: `Holds` | `independent_holds_sound`, `holds_alias_counterexample`, `aliased_formals_restore_completeness` | Two occurrences of one path must denote one value. The current evaluator instead declares one fresh formal per occurrence. |
+| `microcfta/src/Data/CFTA/Refinement/Evaluate.hs`: `Holds` | `independent_holds_sound`, `holds_alias_counterexample`, `aliased_formals_restore_completeness` | These describe the old independent-formal query. The repaired evaluator adds aliases; `Holds.compiledQuery_iff` proves their exact meaning. |
 | `microcfta/src/Data/CFTA/Refinement/Minimize.hs`: representative substitution | `representative_preservation_is_not_language_equality`, `representative_replacement_can_destroy_all_guarded_terms` | Type-based representative selection is not exact language preservation. Negative equality can also prevent preservation of any accepted term. |
 
 `discharge_preserves` permits `Unknown` only when the original guard remains.
@@ -23,16 +27,16 @@ of recursive pruning or correctness of its memo tables.
 
 ## Repeated paths in Holds
 
-The complete evaluator constructs formals from `[0 .. length targets - 1]`.
-It assumes the selected refinement for each formal. It adds no equalities for
-repeated paths. For
+Before `b7b1a95`, the complete evaluator constructed formals from
+`[0 .. length targets - 1]` and assumed each selected refinement. It added no
+equalities for repeated paths. For
 
 ```haskell
 Holds [path [0], path [0]]
   (variable (contractTermName 0) .== variable (contractTermName 1))
 ```
 
-and a child with refinement `true`, its query is `true => x0 == x1`.
+and a child with refinement `true`, its query was `true => x0 == x1`.
 The intended query has one value and is reflexive. Independent formals reject
 this valid contract. The Lean counterexample uses a two-value domain, so the
 failure does not depend on an SMT implementation. The general theorem
@@ -43,9 +47,10 @@ unsound positive contract acceptance.
 The relational integer compiler uses a different translation:
 `Refinement/Internal/Compile.hs`, `Holds targets formula`, substitutes every
 formal with `targetTerm` at its target. Repeated targets produce the same
-expression. The shared Haskell reproduction confirms that complete evaluation returns
-`No` and compilation returns `Left EmptyGenerator` for the repeated-path
-tautology. A comparison with the integer-pool route remains separate.
+expression. The initial reproduction returned `No` and `Left EmptyGenerator`.
+At `ae6b97b`, it returns `Yes` and cardinality `Right 1`. `Holds.lean` now proves
+the first-name insertion, emitted alias list, and both directions of query
+equivalence. SMT and substitution implementation correspondence remain separate.
 
 ## Formula refutation is not Boolean complement
 
@@ -67,7 +72,7 @@ This difference alone is not an implementation error.
 
 ## Minimization requires compatibility with guards
 
-The executed counterexample uses a root transition
+The initial counterexample used a root transition
 `f[A, B]`, with `A = {a}` and `B = {b}`, guarded by
 `Not (Same [0] [1])`. Give both leaves the same refinement type. A subtype
 relation may then choose `a` to replace `b`.
@@ -85,12 +90,18 @@ automaton accepts no finite term at any depth, and that its root remains
 structurally productive. The final theorem is
 `similarity_guard_counterexample`.
 
-The shared Haskell reproduction in `repro/Counterexamples.hs` confirms the
-implementation result with the standard `refinementSubtypingOn` adapter:
-original denotation contains `f(a,b)`; both `minimize` and `reduce` return a
-successful result with an empty denotation. The live reproduction connects the
-Haskell rewrite to the before and after automata. The Lean proof certifies
-their semantic difference. No full translation of the minimizer is claimed.
+Before `cb770b0`, the Haskell reproduction with `refinementSubtypingOn`
+confirmed that both `minimize` and `reduce` returned an empty denotation.
+The repaired read check skips that rewrite, and both retain `f(a,b)`.
+The historical Lean proof still certifies the semantic difference of those
+two graphs. `Minimization.classified_guard_preserves` now proves the local
+read-classification rule. It does not verify the Haskell graph traversal.
+
+A separate current counterexample selects a representative whose own guard
+rejects every term. The representative is structurally productive. An unknown
+substitution guard can survive pruning, so `reduce` is also affected. See
+[the continuation report](CONTINUATION.md) and
+`RejectedRepresentative.guarded_representative_counterexample`.
 
 ## Paper obligations
 
@@ -112,7 +123,8 @@ does not use those paper claims as axioms.
 
 The historical loss of outcome weights in `groupBuilt` is repaired in the current
 source: it reads `outcomeMass`, computes a common denominator, and uses the
-scaled weights. Reconstructed atomic size remains a separate obligation.
+scaled weights. `ae6b97b` also retains top-level atomic size. Non-atomic and
+nested atomic source sizes remain incorrect in the reproduced cases.
 
 Reflexive `Same p p` is excluded from the positive equality cache, so its path
 existence condition remains a residual. A proof or implementation that replaces

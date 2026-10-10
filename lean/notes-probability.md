@@ -9,6 +9,12 @@ same output value as another run. An event probability sums all matching run
 masses. This matches the distinction between stable replay ranks and values in
 the generator API.
 
+After the initial fixes, [Sized.lean](MicroCFTA/Sized.lean) extends these laws
+to explicit size annotations and a concrete key partition.
+[Decoder.lean](MicroCFTA/Decoder.lean) proves exact rank-order preservation
+under plan normalization. See [CONTINUATION.md](CONTINUATION.md) for current
+coverage and the remaining size defects.
+
 | Haskell code | Lean results | Scope |
 | --- | --- | --- |
 | `microcfta/src/Data/CFTA/Index.hs`, `pairRank`, `splitRank`, offsets | `split_pair`, `pair_split`, `pairRank_lt`, `split_lt`, `pairRank_injective`, `offset_interval` | Mixed-radix encoding is a bijection on valid product ranks. Offsets preserve branch bounds. |
@@ -37,7 +43,9 @@ paths are relative to
   under bound one. If reconstruction changes its size to two, its mass under
   that bound is zero. `atomic_size_bound_preserves_distribution` and
   `reconstructed_size_bound_changes_distribution` prove this numerical
-  consequence of the reconstruction defect found by the Haskell review.
+  consequence of changing the size measure. The top-level atomic reproduction
+  is repaired at `ae6b97b`; non-atomic built sources and nested atomic boundaries
+  still reproduce the broader defect.
 
 ## Remaining proof obligations
 
