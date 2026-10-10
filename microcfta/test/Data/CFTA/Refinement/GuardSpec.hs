@@ -3,12 +3,13 @@
 module Data.CFTA.Refinement.GuardSpec (spec) where
 
 import Control.Exception (IOException, evaluate, try)
+import Data.CFTA.Constraint (contractTermName)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Formula (Formula (Forall), Sort (..))
 import Data.CFTA.Refinement (
     Automaton,
     Entailment (entails),
-    Guard (Bottom, Entails, Not, Or, Same, Satisfies, Substitute),
+    Guard (Bottom, Entails, Holds, Not, Or, Same, Satisfies, Substitute),
     Leafness (Mixed),
     Node (Node),
     Observed (Observed),
@@ -288,6 +289,15 @@ spec =
                         ]
             withZ3 declarations $ \solver ->
                 evaluateGuard solver guard term >>= (`shouldBe` Yes)
+
+        it "names one term for two indexes of a contract with the same path" $ do
+            -- Both names denote the child, so the contract is reflexive and its
+            -- negation is refuted.
+            let term = Term.Node (RefinedSymbol "host" true) [Term.Node (RefinedSymbol "x" (variable "v" .>= 0)) []]
+                reflexive = Holds [path [0], path [0]] (variable (contractTermName 0) .== variable (contractTermName 1))
+            withZ3 [] $ \solver -> do
+                evaluateGuard solver reflexive term >>= (`shouldBe` Yes)
+                evaluateGuard solver (Not reflexive) term >>= (`shouldBe` No)
 
         it "answers correctly after the solver rejects a query" $ do
             -- The query binds the fresh name twice, so it declares that name
