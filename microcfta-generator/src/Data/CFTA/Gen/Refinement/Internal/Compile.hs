@@ -59,6 +59,7 @@ import Data.CFTA.Gen.Internal.Static (
     labelStaticMatching,
     mapStatic,
     pointsStatic,
+    resizedStatic,
  )
 import Data.CFTA.Gen.Internal.Types (Gen (..), Grouped (..), Language (..), Recipe (..), payGrouped)
 import Data.CFTA.Gen.Label (ChoiceIndex)
@@ -367,9 +368,7 @@ emptyGroups grouped = case cardinalities grouped of
 Without observations the language is one group, and so is a language whose
 members have no root, such as 'fromIndexed'. With observations every member
 is read back with its term; a member's term is the user's part of the
-engine's labelled term. A member read back keeps its size, which can differ
-from the number of nodes of its term: a pay adds no node, and an atom of
-several nodes has size one.
+engine's labelled term. A member keeps its mass and its size.
 -}
 groupBuilt :: Set Path -> LTAGen a -> Either GenError (LTAGrouped ObservationKey a)
 groupBuilt requested generator
@@ -386,18 +385,19 @@ groupBuilt requested generator
             $ reposition keyObservations
             $ frequencies
                 [ ( Weight $ numerator (mass * fromInteger scale)
-                  , keyed (ObservationKey rank $ observe forest) (rebuildAt size forest value)
+                  , keyed (ObservationKey rank $ observe forest) (rebuild size forest value)
                   )
-                | (rank, (mass, value, forest, size)) <- zip [0 ..] members
+                | (rank, (mass, size, value, forest)) <- zip [0 ..] members
                 ]
   where
-    -- Each member keeps its own mass, so an 'atomic' choice keeps its distribution.
+    -- Each member keeps its own mass and its own size, so an 'atomic' choice
+    -- keeps its distribution and every member keeps its size class.
     member rank =
         (,,,)
             <$> massAt rank
+            <*> pure (sizeOfRank generator rank)
             <*> unrank generator rank
             <*> (surface <$> termAt generator rank)
-            <*> maybe (Left EmptyGenerator) Right (sizeOfRank generator rank)
     massAt rank = case genLanguage generator of
         TransparentLanguage result -> do
             static <- result
@@ -405,12 +405,21 @@ groupBuilt requested generator
         _ -> Left UnboundedGenerator
     observe [term] = Map.fromList [(target, observation) | target <- Set.toList requested, Just observation <- [labelAt target term]]
     observe _ = Map.empty
-    rebuild [Term.Node label children] value = node label $ withChildren children value
-    rebuild forest value = withChildren forest value
-    -- An atom keeps the term of the member and has size one, and each pay
-    -- above it adds one. A member of size zero has no node.
-    rebuildAt (Size 0) forest value = rebuild forest value
-    rebuildAt (Size size) forest value = iterate pay (atomic $ rebuild forest value) !! fromInteger (size - 1)
+    -- A rebuilt term counts the source choices of its own nodes, which need not
+    -- be the choices that made the member, so the member takes its own size. A
+    -- member of an atomic source is rebuilt atomic: inside a size class, a
+    -- choice weighs an atomic member by its mass and other members by count.
+    rebuild size forest value = keepSize size $ case forest of
+        [Term.Node label children] -> node label $ withChildren children value
+        _ -> withChildren forest value
+    keepSize size rebuilt
+        | atomicSource = atomic rebuilt
+        | otherwise = case (size, genLanguage rebuilt) of
+            (Just original, TransparentLanguage result) -> Gen Built $ TransparentLanguage $ resizedStatic original <$> result
+            _ -> rebuilt
+    atomicSource = case genLanguage generator of
+        TransparentLanguage (Right static) -> staticAtomic static
+        _ -> False
 
     -- The label at one path of a term, and whether it is a leaf.
     labelAt :: Path -> Term Symbol -> Maybe Observed
