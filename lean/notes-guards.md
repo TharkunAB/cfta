@@ -5,8 +5,9 @@
 obligations as theorem parameters.
 
 The initial implementation findings below refer to `dbc6955`. Their exact
-reproductions pass after `ae6b97b`. New proofs and remaining findings are in
-[CONTINUATION.md](CONTINUATION.md), `Holds.lean`, and `Minimization.lean`.
+reproductions pass after `ae6b97b`. The next audit is preserved in
+[CONTINUATION.md](CONTINUATION.md). Current proofs and findings are in
+[SECOND-REPAIRS.md](SECOND-REPAIRS.md) and `Productivity.lean`.
 
 ## Source map
 
@@ -97,11 +98,16 @@ The historical Lean proof still certifies the semantic difference of those
 two graphs. `Minimization.classified_guard_preserves` now proves the local
 read-classification rule. It does not verify the Haskell graph traversal.
 
-A separate current counterexample selects a representative whose own guard
-rejects every term. The representative is structurally productive. An unknown
-substitution guard can survive pruning, so `reduce` is also affected. See
-[the continuation report](CONTINUATION.md) and
-`RejectedRepresentative.guarded_representative_counterexample`.
+The next counterexample selected a representative whose own guard rejects
+every term. `bf0c370` repairs this case, including its retained substitution
+variant. `Productivity.lean` proves the local below-check is sufficient when
+combined with structural productivity on the same graph snapshot.
+
+A different root-deletion case remains: the representative is accepted but
+the initial state loses its only accepted alternative. Both `minimize` and
+`reduce` fail when pruning retains the other root guard. See
+[the current report](SECOND-REPAIRS.md) and
+`Productivity.RootDeletion.root_deletion_counterexample`.
 
 ## Paper obligations
 
@@ -123,8 +129,9 @@ does not use those paper claims as axioms.
 
 The historical loss of outcome weights in `groupBuilt` is repaired in the current
 source: it reads `outcomeMass`, computes a common denominator, and uses the
-scaled weights. `ae6b97b` also retains top-level atomic size. Non-atomic and
-nested atomic source sizes remain incorrect in the reproduced cases.
+scaled weights. `ae6b97b` retains top-level atomic size. `8fa39f0` repairs the
+non-atomic and nested atomic size cases. An observed atomic pair still loses
+its relative weights during bounded sampling; the current report records it.
 
 Reflexive `Same p p` is excluded from the positive equality cache, so its path
 existence condition remains a residual. A proof or implementation that replaces

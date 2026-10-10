@@ -2,8 +2,9 @@
 
 This is the historical report. The three exact cases below are repaired by
 `b7b1a95`, `cb770b0`, and `ae6b97b`. They were rerun successfully after pulling
-those fixes. See [CONTINUATION.md](CONTINUATION.md) for the new proofs and two
-remaining broader defects.
+those fixes. [CONTINUATION.md](CONTINUATION.md) records the next audit, whose
+exact cases are also repaired. See [SECOND-REPAIRS.md](SECOND-REPAIRS.md) for
+the current proofs and findings.
 
 Source revision: `dbc6955a9b1fe9de92acc167301342915916f307`.
 All three findings reproduce against this revision with the public APIs.

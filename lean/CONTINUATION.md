@@ -1,5 +1,9 @@
 # Formalization after the first repairs
 
+This is a historical report. The two findings below are repaired by
+`8fa39f0` and `bf0c370`. Their reproductions pass at `adb1f01`.
+See [SECOND-REPAIRS.md](SECOND-REPAIRS.md) for the current proofs and findings.
+
 Audited Haskell revision: `ae6b97b8a8fc9282999c031671b743f8983786a3`.
 This revision contains three repairs:
 

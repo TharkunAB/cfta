@@ -12,8 +12,10 @@ the generator API.
 After the initial fixes, [Sized.lean](MicroCFTA/Sized.lean) extends these laws
 to explicit size annotations and a concrete key partition.
 [Decoder.lean](MicroCFTA/Decoder.lean) proves exact rank-order preservation
-under plan normalization. See [CONTINUATION.md](CONTINUATION.md) for current
-coverage and the remaining size defects.
+under plan normalization. `SizeMass.lean` proves the count-scaled per-size
+weight formulas and concrete split/merge laws. `Sparse.lean` proves finite
+mass convolution. See [SECOND-REPAIRS.md](SECOND-REPAIRS.md) for current
+coverage and the remaining atomic-pair probability defect.
 
 | Haskell code | Lean results | Scope |
 | --- | --- | --- |
@@ -44,8 +46,8 @@ paths are relative to
   that bound is zero. `atomic_size_bound_preserves_distribution` and
   `reconstructed_size_bound_changes_distribution` prove this numerical
   consequence of changing the size measure. The top-level atomic reproduction
-  is repaired at `ae6b97b`; non-atomic built sources and nested atomic boundaries
-  still reproduce the broader defect.
+  is repaired at `ae6b97b`. `8fa39f0` repairs the non-atomic built-source and
+  nested atomic size cases. All those exact reproductions now pass.
 
 ## Remaining proof obligations
 
@@ -58,9 +60,9 @@ verified translation of the Haskell implementation. It does not prove:
   concrete gcd/lcm weight conversion.
 - Validity, positivity, or coverage of caller-supplied `WeightedIndexed`
   callbacks. The Haskell API states these as caller obligations.
-- Correct computation of size classes, recursive counts, group partitions,
-  or the list of accepted join groups. The grouping theorem proves the
-  probability identity for the supplied finite groups.
+- Construction of all Haskell size classes, recursive counts, observation
+  groups, or accepted join groups. The new modules prove finite sparse
+  arithmetic and a concrete first-key partition, with the listed invariants.
 - That arbitrary Haskell `GenBackend` instances obey probability laws.
 - The `Map.fromListWith (+)` implementation used for output aggregation.
 
@@ -69,6 +71,8 @@ claim applies to nonnegative masses and positive acceptance mass. Haskell's
 `Exact.filterGen` returns an empty list when acceptance mass is nonpositive.
 The Lean model does not identify that empty list with a list of zero-mass runs.
 
-No separate probability arithmetic defect was found in the inspected Haskell
-code. The verified identities do not rule out implementation defects in the
-unproved operations above.
+The per-size arithmetic is correct when the retained group masses satisfy its
+invariants. The current atomic-pair reproduction violates that requirement:
+an observation preserves the unbounded 9:1 distribution but changes bounded
+sampling to 1:1. The verified identities do not establish construction of
+those group masses in every Haskell path.
