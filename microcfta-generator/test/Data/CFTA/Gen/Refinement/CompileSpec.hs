@@ -293,10 +293,10 @@ spec = do
                 Right (sampled $ LTAGen.upToSize 4 compiled) `shouldBe` expected
                 LTAGen.pmf compiled `shouldBe` LTAGen.pmf plain
 
-        it "keeps the weights inside a size class when the top closes the integer leaf of a result" $
+        it "keeps the weights inside a size class when the top closes the integer leaf of a measure" $
             withZ3 declarations $ \solver -> do
                 -- The guard keeps the members with the atom a, which weighs 1
-                -- against 3. The result of each node is its integer leaf, so
+                -- against 3. The measure of each node is its integer leaf, so
                 -- the leaf stays open until the top closes it. The choice must
                 -- weigh the kept members as it does for listed integers.
                 let atom = LTAGen.atomic $ LTAGen.frequency [(1, LTAGen.leaf (0 :: Int) "a" (.== 0)), (3, LTAGen.leaf 1 "b" (.== 1))]
@@ -305,8 +305,8 @@ spec = do
                     choice :: LTAGen.LTAGen Integer -> LTAGen.LTAGen (Int, Integer)
                     choice digit =
                         LTAGen.oneof
-                            [ (LTAGen.refinedNode "outer" (const true) keepsA `LTAGen.ensuring` (\_ d -> d)) $ (,) <$> left <*> digit
-                            , (LTAGen.refinedNode "other" (const true) noConstraint `LTAGen.ensuring` (\_ d -> d)) $
+                            [ LTAGen.measuredNode "outer" keepsA (\_ d -> d) $ (,) <$> left <*> digit
+                            , LTAGen.measuredNode "other" noConstraint (\_ d -> d) $
                                 (,) <$> LTAGen.leaf 5 "x" (const true) <*> digit
                             ]
                     sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
@@ -513,12 +513,12 @@ spec = do
             map (LTAGen.sizeOfRank inner) [0, 1] `shouldBe` [Just 2, Just 2]
 
         it "count one source choice for each integer leaf, wherever a constructor closes it" $ do
-            -- A node without a result closes its leaf. A result keeps the leaf
+            -- A node without a measure closes its leaf. A measure keeps the leaf
             -- open, so the parent closes the two leaves together. Each leaf is
             -- one source choice, as a member of elements is.
             let digit = LTAGen.every `LTAGen.satisfying` (\v -> 8 .<= v .&& v .<= 9) :: LTAGen.LTAGen Integer
                 closedAtOnce = LTAGen.node "m"
-                keptOpen = LTAGen.refinedNode "m" (const true) noConstraint `LTAGen.ensuring` id
+                keptOpen = LTAGen.measuredNode "m" noConstraint id
                 pair inner leaf = LTAGen.node "n" $ (,) <$> inner leaf <*> inner leaf
                 sizes generator = map (LTAGen.sizeOfRank generator) [0 .. 3]
             listed <- compileOrFail latticeEntailment $ pair closedAtOnce $ LTAGen.elements [8, 9]
