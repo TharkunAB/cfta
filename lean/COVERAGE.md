@@ -15,9 +15,12 @@ is established. A theorem whose main algorithmic obligation is a premise
 does not close that obligation. An implementation counterexample prevents a
 soundness claim for that path; it does not remove that path from the scope.
 
-Source baseline: `dd6cc228da3bd14ec5a1e71c12a8903ca64f3c5e`, rebased onto
-`df56aee`. Retained test adaptation: `fc2eb98`. All 581 existing Haskell
-examples pass on this baseline. The recorded counterexamples still reproduce.
+Source baseline: `78387bb`, rebased onto `origin/microcfta` at `a232f82`.
+Retained test adaptation: `aefb1b6`. All 37 fix/proof patches are retained.
+The range diff shows only changed README context. The corrected source changes
+only measure documentation. All 581 existing
+Haskell examples pass on this implementation, and the recorded counterexamples
+still reproduce. Earlier reports retain their original source hashes.
 The earlier reports are evidence snapshots, not completion reports.
 
 ## Coverage ledger
