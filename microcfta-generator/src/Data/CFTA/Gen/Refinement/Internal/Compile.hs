@@ -52,7 +52,7 @@ import Data.CFTA.Gen.Internal.Static (
     Outcome (outcomeMass),
     OutcomeIndex (outcomeSelect),
     RootCount (..),
-    Static (staticOutcomes, staticRootCount),
+    Static (staticAtomic, staticOutcomes, staticRootCount),
     addRootCounts,
     commonRootCount,
     holeStatic,
