@@ -5,11 +5,12 @@ import MicroCFTA.Language
 
 The Haskell reproduction is `repro/Counterexamples.hs`. It uses `a` and `b`
 with the same refinement type and a parent with a negative equality guard.
-The minimizer replaces `b` by `a`. The resulting parent still has a finite
-structural derivation, but it has no accepting derivation.
+Before commit `cb770b0`, the minimizer replaced `b` by `a`. The resulting parent
+has a finite structural derivation. It has no accepting derivation.
 
-This module proves the before and after languages directly. It does not
-encode the complete Haskell minimizer or its choice of representatives.
+The repaired minimizer skips this rewrite. This module proves the historical
+before and after languages directly. It does not encode the complete Haskell
+minimizer or its choice of representatives.
 -/
 
 namespace MicroCFTA.Counterexamples
