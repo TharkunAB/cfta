@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Reproduce the implementation findings from the Lean spike.
+-- | Check the three original findings against the repaired implementation.
 module Main (main) where
 
 import qualified Data.Tree as Tree
