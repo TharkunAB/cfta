@@ -22,6 +22,36 @@ import MicroCFTA.LatticePolynomial
 import MicroCFTA.ObservationGraph
 import MicroCFTA.Fragments
 import MicroCFTA.MinimumSize
+import MicroCFTA.Faulhaber
+import MicroCFTA.PolynomialSum
+import MicroCFTA.EqualityTrie
+import MicroCFTA.LatticeLinear
+import MicroCFTA.LatticeNormalize
+import MicroCFTA.LatticeBound
+import MicroCFTA.LatticeEliminate
+import MicroCFTA.PolynomialSupport
+import MicroCFTA.SizedRank
+import MicroCFTA.LatticeFeasible
+import MicroCFTA.TablePosition
+import MicroCFTA.EqualityNormalize
+import MicroCFTA.LatticePiece
+import MicroCFTA.LatticePieceNormalize
+import MicroCFTA.LatticePipeline
+import MicroCFTA.FiniteSum
+import MicroCFTA.PlanVariants
+import MicroCFTA.LatticeCount
+import MicroCFTA.EqualitySaturation
+import MicroCFTA.LatticeSigned
+import MicroCFTA.LatticeFormula
+import MicroCFTA.LatticeInput
+import MicroCFTA.LatticeInterval
+import MicroCFTA.LatticeLevels
+import MicroCFTA.LatticeDecision
+import MicroCFTA.EqualityTermination
+import MicroCFTA.EqualityModel
+import MicroCFTA.LatticeAPI
+import MicroCFTA.LatticeCumulative
+import MicroCFTA.Sampler
 
 /-!
 # Proof dependency audit
