@@ -11,7 +11,10 @@ bounded atomic-pair probabilities can change, and minimization can delete the
 only accepted root term. This is not a proof of the complete Haskell
 implementation. See [the current report](SECOND-REPAIRS.md).
 
-Current audited source: `adb1f012b336ba0d1673f8fd7f310ad75bdfaf04`.
+Current source baseline: `dd6cc228da3bd14ec5a1e71c12a8903ca64f3c5e`, rebased
+onto `df56aee` with the `measured` API. Commit `fc2eb98` adapts three retained
+regression cases to `measuredNode`. The existing findings reproduce on this
+baseline. Earlier reports retain their original source hashes.
 The initial audit used `dbc6955a9b1fe9de92acc167301342915916f307`.
 Toolchain: Lean 4.34.1. Dependencies: Lean's bundled `Std` and `Lean` libraries.
 
@@ -21,12 +24,12 @@ Toolchain: Lean 4.34.1. Dependencies: Lean's bundled `Std` and `Lean` libraries.
 | --- | --- | --- |
 | Generate every required term | Exact bounded enumeration, recursive finite-term completeness, counted plain-graph decoding, repaired `Holds` aliases, and finite integer closure with an exact point table. | Minimization can delete the initial state's only accepted term, even with an accepted representative. |
 | Correct probabilities | Weighted finite distributions, products, conditioning, duplicate-output aggregation, concrete grouping, plan normalization, and count-scaled size-class weight formulas. | A tautological observation on an atomic pair changes bounded probabilities from 9:1 to 1:1. |
-| Valid optimizations | Synchronous intersection, equality sharing, plan normalization, guard classification, finite productivity and descendant closure, sparse convolution, zero-size split coverage, and selected integer-counting identities. | The full minimizer, observation trie, lazy recursive size tables, and lattice eliminator remain unproved. Internal product indexing requires a positive-size invariant. |
+| Valid optimizations | Synchronous intersection, canonical equality classes, sparse observations, plan normalization, finite productivity, exact finite size tables, integer normalization, terminating feasibility filtering, and general Faulhaber summation. | The full minimizer, constrained enumerator, lazy table execution, and complete counting/ranking pipeline remain open. Internal product indexing requires a positive-size invariant. |
 
 See [SECOND-REPAIRS.md](SECOND-REPAIRS.md) for current findings and repair directions.
 [CONTINUATION.md](CONTINUATION.md) and [FINDINGS.md](FINDINGS.md) preserve the
-earlier audits. This continuation adds proofs and reproductions; it does not
-change the Haskell libraries.
+earlier audits. This continuation adds proofs and reproductions. The rebase
+also adapts retained regression cases to the new constructor API.
 
 ## Build and inspect
 
@@ -79,6 +82,28 @@ that the audit rejects `sorryAx`. That temporary file is outside this project.
 | [ObservationGraph.lean](MicroCFTA/ObservationGraph.lean) | Cyclic-graph specialization coverage, exact stored observations, and `selectSpecialized_discharges_guard` |
 | [LatticeRank.lean](MicroCFTA/LatticeRank.lean) | Exact cumulative-count binary search, both lexicographic rank/select inverses, finite tuple coverage, and a verified integer-closure table |
 | [LatticePolynomial.lean](MicroCFTA/LatticePolynomial.lean) | Sparse polynomial normalization, addition, multiplication, powers, partial substitution, and constant extraction |
+| [Faulhaber.lean](MicroCFTA/Faulhaber.lean) | Exact source Bernoulli recurrence and the discrete-antiderivative identity for every degree and every rational argument |
+| [PolynomialSum.lean](MicroCFTA/PolynomialSum.lean) | Concrete `sumOver` equals the finite integer-interval sum, including negative endpoints and empty intervals |
+| [PolynomialSupport.lean](MicroCFTA/PolynomialSupport.lean) | Variable removal, preservation of prior removals, and exact constant extraction after all variables are absent |
+| [LatticeLinear.lean](MicroCFTA/LatticeLinear.lean) | Integer linear arithmetic, sparse-map invariants, supported expression parsing, and integer/rational evaluation correspondence |
+| [LatticeNormalize.lean](MicroCFTA/LatticeNormalize.lean) | Exact conjunction normalization, valid maps, no added variables, and elimination of constant inequalities |
+| [LatticeBound.lean](MicroCFTA/LatticeBound.lean) | Executable unit-coefficient extraction, exact inequality semantics, and variable deletion |
+| [LatticeFeasible.lean](MicroCFTA/LatticeFeasible.lean) | Actual minimum-cost variable choice, projection, termination by distinct-variable count, and sound rejection |
+| [EqualityTrie.lean](MicroCFTA/EqualityTrie.lean) | Exact path construction, prefix checks, sorted distinct enumeration, descent, and arity bounds |
+| [EqualityNormalize.lean](MicroCFTA/EqualityNormalize.lean) | Canonical connected components, congruence generation, contradiction detection, completed bounded normalization, and strict-extension range correctness |
+| [SizedRank.lean](MicroCFTA/SizedRank.lean) | Size-major/class-rank inverses, source/map/choice/application positions, and exact sparse product offsets |
+| [TablePosition.lean](MicroCFTA/TablePosition.lean) | Bottom-up term ranking, derived transition prefixes, last-successful overwrite semantics, acceptance equivalence, and exact replay |
+| [PlanVariants.lean](MicroCFTA/PlanVariants.lean) | Nested shared/sized plans, size/rank conversion, derived counts, and omission of zero-count classes |
+| [Sampler.lean](MicroCFTA/Sampler.lean) | Rational-to-integer masses, cumulative binary ticket decoding, exact weighted events, sampler composition, and bounded constructors |
+| [EqualitySaturation.lean](MicroCFTA/EqualitySaturation.lean) | Exact short-circuit trie cardinality and descent; finite-model saturation bound |
+| [EqualityTermination.lean](MicroCFTA/EqualityTermination.lean) | Unconditional termination of canonical equality saturation and exact total normalization semantics |
+| [EqualityModel.lean](MicroCFTA/EqualityModel.lean) | Constructive finite models for accepted fixed points; rejection iff no finite model exists |
+| [LatticePiece.lean](MicroCFTA/LatticePiece.lean), [LatticePipeline.lean](MicroCFTA/LatticePipeline.lean) | Actual bound traversal and piece construction, exact weighted splitting, normalization/feasibility filtering, and variable deletion |
+| [FiniteSum.lean](MicroCFTA/FiniteSum.lean), [LatticeCount.lean](MicroCFTA/LatticeCount.lean) | Unique finite-support sums, exact repeated elimination, and final constant extraction |
+| [LatticeSigned.lean](MicroCFTA/LatticeSigned.lean), [LatticeFormula.lean](MicroCFTA/LatticeFormula.lean) | Concrete signed simplification, all integer relations, polarity and Boolean compilation, and n-ary traversal/fold correspondence |
+| [LatticeInput.lean](MicroCFTA/LatticeInput.lean), [LatticeDecision.lean](MicroCFTA/LatticeDecision.lean) | Derived initial metadata/support/indicator, integer nonnegative counts, and zero count iff no satisfying assignment |
+| [LatticeLevels.lean](MicroCFTA/LatticeLevels.lean), [LatticeInterval.lean](MicroCFTA/LatticeInterval.lean), [LatticeCumulative.lean](MicroCFTA/LatticeCumulative.lean) | Stored elimination levels, exact floor-division intervals, cumulative polynomial construction, and exact clipped counts |
+| [LatticeAPI.lean](MicroCFTA/LatticeAPI.lean) | Actual point-count constructor, unreachable nonintegral error, and exact integer implication decisions |
 
 Detailed correspondence and limitations are in
 [language notes](notes-language.md), [probability notes](notes-probability.md),
@@ -99,9 +124,11 @@ records later progress and all remaining implementation obligations.
 - `intervalSum_antiderivative` verifies telescoping over intervals that can
   start at negative integers. Its discrete-antiderivative equation is a premise.
 
-These results do not prove the concrete `Map` simplification, feasibility
-recursion, complete polyhedral elimination, Bernoulli/Faulhaber construction,
-`pointCount`, `pointAt`, or `pointRank` implementations.
+The later modules prove the general Bernoulli/Faulhaber construction,
+terminating feasibility recursion, formula-to-count pipeline, and cumulative
+polynomial sums. The final connection to the checked section-count ranker is
+still in progress. Concrete `Map` storage, variable-order retry behavior,
+binding freshening, and typed Fixpoint syntax remain explicit boundaries.
 
 ## Meaning of the main theorem
 
@@ -119,16 +146,18 @@ module proves weighted-distribution identities with explicit preconditions.
 
 The SMT solver and concrete refinement evaluator are outside the language
 proof. Guards have a supplied Boolean interpretation there. `Guards.lean`
-separately states what sound atomic decisions and sufficient observations must
-provide. In particular, observation coverage and homogeneity are premises of
-the pruning theorems. They are not proved for the Haskell observation trie.
+states the atomic-decision and observation requirements. `Observation` and
+`ObservationGraph` now derive coverage and homogeneity from executable sparse
+plans and graph specialization. Substitution, ambiguous actuals, runtime
+interning, and recursive pruning still require caller proofs.
 
-Other remaining boundaries include recursive binder conversion, interning,
-union-find enumeration, memoization, recursive size tables, machine-integer
-conversions, binary searches, callback contracts, the random backend, and the
-full shrinker. The strict-smaller relation is covered by the size-retention
-proofs. The Lean definitions are handwritten reference algorithms. There is
-no verified translation or extraction connecting all Haskell code to them.
+Other remaining boundaries include recursive binder conversion, concrete
+interning and union-find callers, lazy size-table execution, machine-integer
+conversions, callback contracts, the random backend, and the full shrinker.
+The state algorithms, finite size recurrences, and lattice binary search have
+checked executable proofs. The strict-smaller relation is covered by the
+size-retention proofs. The Lean definitions are handwritten algorithms. There
+is no verified translation connecting all Haskell code to them.
 
 ## Papers
 
