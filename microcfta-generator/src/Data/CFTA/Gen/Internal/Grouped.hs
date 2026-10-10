@@ -52,7 +52,6 @@ import Data.CFTA.Gen.Internal.Chain
 import Data.CFTA.Gen.Internal.Inspection
 import Data.CFTA.Gen.Internal.Join
 import Data.CFTA.Gen.Internal.Recursive
-import Data.CFTA.Ranked.Internal.Size (minimumMemberSize)
 import Data.CFTA.Gen.Internal.Static
 import Data.CFTA.Gen.Internal.Types
 import Data.CFTA.Gen.Label (ComponentIndex)
@@ -407,7 +406,7 @@ pairBucket componentIndex leftBucket rightBucket
                 (keyedBucketStatic rightBucket)
                 paired
             )
-            (Just $ productMassIndex (minimumMemberSize $ outcomeSizeIndex $ staticOutcomes paired) (bucketMassIndex leftBucket) (bucketMassIndex rightBucket))
+            (Just $ pairMassIndex (bucketMassIndex leftBucket) (bucketMassIndex rightBucket))
     | otherwise = KeyedBucket mass paired Nothing
   where
     weighted = isJust (keyedBucketMasses leftBucket) || isJust (keyedBucketMasses rightBucket)

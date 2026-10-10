@@ -21,6 +21,7 @@ module Data.CFTA.Gen.Internal.Bucket (
     sumMassIndexes,
     productMassIndex,
     payMassIndex,
+    pairMassIndex,
 ) where
 
 import Data.Foldable (toList)
@@ -214,3 +215,9 @@ masses are read, as the counts of a pay do.
 payMassIndex :: MinimumSize -> MassIndex -> MassIndex
 payMassIndex smallest (MassIndex masses) =
     MassIndex $ fromMinimum (payMinimum smallest) [(size + 1, mass) | (size, mass) <- masses]
+{- | Convolve the mass series of two finite groups: the sizes of a pair add, and
+the masses multiply. A part can have size zero, so the series does not start
+with the zero mass at size one that 'productMassIndex' gives a recursive knot.
+-}
+pairMassIndex :: MassIndex -> MassIndex -> MassIndex
+pairMassIndex (MassIndex left) (MassIndex right) = MassIndex $ mulSparse left right

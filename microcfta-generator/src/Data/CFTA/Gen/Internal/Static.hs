@@ -376,7 +376,8 @@ indexedStaticWithLabels label indexed =
 
 Its term is a private 'Placeholder', which a theory fills when it compiles. The
 support is one leaf with the given symbol, which describes the values that
-can fill the placeholder.
+can fill the placeholder. The placeholder is not a source choice, so it has
+size zero. The theory gives the size of the values that fill it.
 -}
 holeStatic :: (Hashable symbol, Typeable symbol) => symbol -> a -> Static symbol a
 holeStatic summary value =
@@ -398,7 +399,7 @@ holeStatic summary value =
             )
             (const value)
             (uniformSampler 1 $ const value)
-            (PlanSelect 1 $ const value)
+            (PlanSized [SizeClass 0 1 (const value) (const value)])
         )
         False
         (Inspection Nothing $ Node [Edge (plainSymbol $ Label summary) []])
@@ -414,23 +415,24 @@ outcomes. To rank a term, the language ranks the outcome structurally, then
 gives the symbols at the placeholder leaves of the outcome, in order, to the
 given function, which gives the rank of the point and the point. The rewrite
 of the outcome for the point must then give the term, which checks every
-symbol of the term.
+symbol of the term. Every point has the given size.
 -}
 pointsStatic ::
     (Hashable symbol, Typeable symbol) =>
+    Size ->
     (p -> Term (Label symbol) -> Term (Label symbol)) ->
     ([symbol] -> Maybe (Rank, p)) ->
     Indexed p ->
     Static symbol (p -> a) ->
     Static symbol a
-pointsStatic rewrite rankPoint pointSource functions =
+pointsStatic size rewrite rankPoint pointSource functions =
     applied
         { staticSupport = staticSupport functions
         , staticOutcomes = (staticOutcomes applied){outcomeSelect = select, outcomeRanks = ranks}
         , staticInspection = staticInspection functions
         }
   where
-    applied = applyStatic functions $ pointChoice pointSource
+    applied = applyStatic functions $ resizedStatic size $ indexedStatic pointSource
     select index = do
         outcome <- outcomeSelect (staticOutcomes applied) index
         let point = indexedSelect pointSource $ snd $ splitRank (indexedCardinality pointSource) index
@@ -457,24 +459,6 @@ pointsStatic rewrite rankPoint pointSource functions =
         | otherwise = Nothing
     holes (Term.Node Placeholder []) (Term.Node (Label symbol) []) = Just [symbol]
     holes (Term.Node _ children) (Term.Node _ filled) = holesIn children filled
-
-{- | The choice of one point of an indexed source, of size zero. The point
-gives the values of placeholder leaves, and each leaf pays for itself, so the
-choice adds no size. The ranks and the decoder are those of 'indexedStatic'.
--}
-pointChoice :: (Hashable symbol, Typeable symbol) => Indexed p -> Static symbol p
-pointChoice source =
-    static{staticOutcomes = (staticOutcomes static){outcomePlan = plan, outcomeSizeIndex = sizeIndex plan}}
-  where
-    static = indexedStatic source
-    plan =
-        PlanSized
-            [ SizeClass
-                0
-                (indexedCardinality source)
-                (\(ClassRank position) -> indexedSelect source $ Rank position)
-                (indexedSelect source . Rank . toInteger)
-            ]
 
 {- | Retain a shared ranked term compiler and its exact equality support.
 
@@ -711,7 +695,7 @@ pairStaticWithMasses leftMasses left rightMasses right pair =
         leftWeight <- maybe (Right 1) ($ leftRank) $ snd $ staticSampling left
         rightWeight <- maybe (Right 1) ($ rightRank) $ snd $ staticSampling right
         let size = leftSize + rightSize
-            splits = sum [leftMass split * rightMass (size - split) | (split, _) <- sizeClassCounts (indexOf left), split < size]
+            splits = sum [leftMass split * rightMass (size - split) | (split, _) <- sizeClassCounts (indexOf left), split <= size]
             share part partSize weight = weight / toRational (countAtSize (indexOf part) partSize)
         pure $
             toRational (countAtSize (indexOf pair) size)
