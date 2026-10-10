@@ -12,6 +12,7 @@ module Data.CFTA.Gen.Internal.Bucket (
     mergeComponentsByKey,
 
     -- * Masses
+    bucketMassIndex,
     MassIndex (..),
     massAtSize,
     emptyMassIndex,
@@ -136,10 +137,8 @@ mergeBucketGroup buckets = do
         -- still one source choice and stays atomic. A mixed merge is not.
         | otherwise = retainAtomic $ frequencyStatic [(weight, keyedBucketStatic bucket) | (weight, bucket) <- weighted]
     masses
-        | massWeighted = Just $ sumMassIndexes $ map bucketMasses buckets
+        | massWeighted = Just $ sumMassIndexes $ map bucketMassIndex buckets
         | otherwise = Nothing
-    bucketMasses bucket =
-        fromMaybe (countMassIndex $ outcomeSizeIndex $ staticOutcomes $ keyedBucketStatic bucket) $ keyedBucketMasses bucket
     retainAtomic
         | all (staticAtomic . keyedBucketStatic) buckets
         , first@(MinimumSize (Size size)) : rest <- map (minimumMemberSize . outcomeSizeIndex . staticOutcomes . keyedBucketStatic) buckets
@@ -166,6 +165,11 @@ mergeComponentsByKey components = do
             { keyedBucketMass =
                 keyedBucketMass bucket / totalAcceptedMass
             }
+
+-- | The weight of a bucket in each size class: its own weights, or its member counts.
+bucketMassIndex :: KeyedBucket symbol a -> MassIndex
+bucketMassIndex bucket =
+    fromMaybe (countMassIndex $ outcomeSizeIndex $ staticOutcomes $ keyedBucketStatic bucket) $ keyedBucketMasses bucket
 
 {- | A memoized unnormalized mass for sizes in ascending order. Sizes without
 members are left out. A product and a pay start at their minimum size.

@@ -40,6 +40,7 @@ import Control.Monad.Except (ExceptT (..), runExceptT)
 import Data.Foldable (toList)
 import Data.Hashable (Hashable)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (isJust)
 import Data.Sequence (Seq (..))
 import qualified Data.Sequence as Sequence
 import Data.Text (Text)
@@ -51,6 +52,7 @@ import Data.CFTA.Gen.Internal.Chain
 import Data.CFTA.Gen.Internal.Inspection
 import Data.CFTA.Gen.Internal.Join
 import Data.CFTA.Gen.Internal.Recursive
+import Data.CFTA.Ranked.Internal.Size (minimumMemberSize)
 import Data.CFTA.Gen.Internal.Static
 import Data.CFTA.Gen.Internal.Types
 import Data.CFTA.Gen.Label (ComponentIndex)
@@ -384,18 +386,39 @@ relateGroupsM relation resultKey left right =
     -- The component index of a kept pair is the number of kept pairs before it.
     component componentIndex ((leftGroupKey, leftBucket), (rightGroupKey, rightBucket)) =
         ( resultKey leftGroupKey rightGroupKey
-        , KeyedBucket
-            (keyedBucketMass leftBucket * keyedBucketMass rightBucket)
-            (joinNBucketStatic
-                componentIndex
-                (resizedStatic 0 $ pureStatic (,))
-                (ChainCons (keyedBucketStatic leftBucket) (ChainCons (keyedBucketStatic rightBucket) ChainNil)))
-            Nothing
+        , pairBucket componentIndex leftBucket rightBucket
         )
 
-{- | Combine a list of finite families of one type, and keep the combinations of
-keys that the relation accepts.
+{- | The pair of two buckets. Pairing is not a source choice, so a pair has the
+size of its two parts. A part with weights of its own gives the pair weights
+of its own: the products of the weights of the parts.
 -}
+pairBucket ::
+    (Hashable symbol, Typeable symbol) =>
+    ComponentIndex -> KeyedBucket symbol left -> KeyedBucket symbol right -> KeyedBucket symbol (left, right)
+pairBucket componentIndex leftBucket rightBucket
+    | weighted =
+        KeyedBucket
+            mass
+            ( pairStaticWithMasses
+                (massAtSize <$> keyedBucketMasses leftBucket)
+                (keyedBucketStatic leftBucket)
+                (massAtSize <$> keyedBucketMasses rightBucket)
+                (keyedBucketStatic rightBucket)
+                paired
+            )
+            (Just $ productMassIndex (minimumMemberSize $ outcomeSizeIndex $ staticOutcomes paired) (bucketMassIndex leftBucket) (bucketMassIndex rightBucket))
+    | otherwise = KeyedBucket mass paired Nothing
+  where
+    weighted = isJust (keyedBucketMasses leftBucket) || isJust (keyedBucketMasses rightBucket)
+    mass = keyedBucketMass leftBucket * keyedBucketMass rightBucket
+    paired =
+        joinNBucketStatic
+            componentIndex
+            (resizedStatic 0 $ pureStatic (,))
+            (ChainCons (keyedBucketStatic leftBucket) (ChainCons (keyedBucketStatic rightBucket) ChainNil))
+
+-- | Compile one relation over a homogeneous list of grouped arguments.
 relateN ::
     (Ord key, Hashable symbol, Typeable symbol) =>
     (Seq key -> IO (Either relationError Bool)) ->
