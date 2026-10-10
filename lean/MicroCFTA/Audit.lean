@@ -9,6 +9,10 @@ import MicroCFTA.Decoder
 import MicroCFTA.Holds
 import MicroCFTA.Minimization
 import MicroCFTA.Sized
+import MicroCFTA.Productivity
+import MicroCFTA.SizeMass
+import MicroCFTA.Sparse
+import MicroCFTA.ZeroSize
 
 /-!
 # Proof dependency audit
