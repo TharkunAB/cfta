@@ -45,7 +45,7 @@ import Unsafe.Coerce (unsafeCoerce)
 
 import Data.CFTA.Equality.Constraint (EqConstraints (EmptyConstraints))
 import Data.CFTA.Gen
-import Data.CFTA.Gen.Internal.Bucket (KeyedBucket (..), mergeComponentsByKey)
+import Data.CFTA.Gen.Internal.Bucket (KeyedBucket (..), MassIndex (..), mergeComponentsByKey)
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import Data.CFTA.Gen.Internal.Grouped (groupKeys)
 import Data.CFTA.Gen.Internal.Static (
@@ -60,6 +60,7 @@ import Data.CFTA.Gen.Internal.Static (
     mapStatic,
     pointsStatic,
     resizedStatic,
+    staticSampling,
  )
 import Data.CFTA.Gen.Internal.Types (Gen (..), Grouped (..), Language (..), Recipe (..), payGrouped)
 import Data.CFTA.Gen.Label (ChoiceIndex)
@@ -368,7 +369,11 @@ emptyGroups grouped = case cardinalities grouped of
 Without observations the language is one group, and so is a language whose
 members have no root, such as 'fromIndexed'. With observations every member
 is read back with its term; a member's term is the user's part of the
-engine's labelled term. A member keeps its mass and its size.
+engine's labelled term. A member keeps its mass, its size, and its weight
+inside its size class. The groups carry these weights to the merges that join
+them again, so a guard that reads the language keeps its distribution inside a
+size class. A product of such a group with another child counts members
+inside a size class instead.
 -}
 groupBuilt :: Set Path -> LTAGen a -> Either GenError (LTAGrouped ObservationKey a)
 groupBuilt requested generator
@@ -385,7 +390,7 @@ groupBuilt requested generator
             $ reposition keyObservations
             $ frequencies
                 [ ( Weight $ numerator (mass * fromInteger scale)
-                  , keyed (ObservationKey rank $ observe forest) (rebuild size forest value)
+                  , keyedMember rank size (ObservationKey rank $ observe forest) (rebuild size forest value)
                   )
                 | (rank, (mass, size, value, forest)) <- zip [0 ..] members
                 ]
@@ -420,6 +425,21 @@ groupBuilt requested generator
     atomicSource = case genLanguage generator of
         TransparentLanguage (Right static) -> staticAtomic static
         _ -> False
+    -- A member keeps its weight inside its size class in the source, so the
+    -- merges of the groups keep the source's distribution inside a size class.
+    -- The atomic rebuild keeps the weights of an atomic source already.
+    keyedMember rank size key rebuilt = case (sourceWeight, size, genLanguage rebuilt) of
+        (Just weightOf, Just memberSize, TransparentLanguage result) ->
+            Grouped $ do
+                static <- result
+                weight <- weightOf $ toEnum rank
+                pure $ Map.singleton key $ KeyedBucket 1 static $ Just $ MassIndex [(memberSize, weight)]
+        _ -> keyed key rebuilt
+    sourceWeight
+        | atomicSource = Nothing
+        | otherwise = case genLanguage generator of
+            TransparentLanguage (Right static) -> snd $ staticSampling static
+            _ -> Nothing
 
     -- The label at one path of a term, and whether it is a leaf.
     labelAt :: Path -> Term Symbol -> Maybe Observed
@@ -935,13 +955,15 @@ settleGroups _ (Grouped (Left err)) = Right $ Grouped $ Left err
 settleGroups settle (Grouped (Right buckets)) = do
     settled <- catMaybes <$> traverse one (Map.toAscList buckets)
     let identity key = (keyObservations $ openObservations key, openCount key, openFormula key)
-        positions = firstPositions [identity key | (key, _, _) <- settled]
+        positions = firstPositions [identity key | (key, _) <- settled]
         positioned key = atPosition (positions Map.! identity key) key
-    pure $ Grouped $ mergeComponentsByKey [(positioned key, mass, static) | (key, mass, static) <- settled]
+    pure $ Grouped $ mergeComponentsByKey [(positioned key, bucket) | (key, bucket) <- settled]
   where
-    one (childKeys, KeyedBucket mass static) = fmap (build mass static) <$> settle childKeys
-    build mass static (key, kept, Nothing) = (key, mass * kept, static)
-    build mass static (key, kept, Just found) = (key, mass * kept, mapStatic const $ closePoints found static)
+    one (childKeys, bucket) = fmap (build bucket) <$> settle childKeys
+    build bucket (key, kept, Nothing) = (key, bucket{keyedBucketMass = keyedBucketMass bucket * kept})
+    -- The points give the group new members, so it has no weights of its own.
+    build (KeyedBucket mass static _) (key, kept, Just found) =
+        (key, KeyedBucket (mass * kept) (mapStatic const $ closePoints found static) Nothing)
 
 {- | Close every open group by the integer points of its formula, for a parent
 that reads no variable.
@@ -953,14 +975,14 @@ closeOpen (Grouped (Right buckets)) = do
     closed <- catMaybes <$> traverse one (Map.toAscList buckets)
     pure $ Grouped $ mergeComponentsByKey closed
   where
-    one (key, KeyedBucket mass static)
-        | openCount key == 0 = Right $ Just (openObservations key, mass, mapStatic ($ []) static)
+    one (key, bucket@(KeyedBucket mass static _))
+        | openCount key == 0 = Right $ Just (openObservations key, bucket{keyedBucketStatic = mapStatic ($ []) static})
         | otherwise = do
             found <- countPoints integerLabel (openCount key) (openFormula key)
             pure $
                 if pointCount found == 0
                     then Nothing
-                    else Just (openObservations key, mass, closePoints found static)
+                    else Just (openObservations key, KeyedBucket mass (closePoints found static) Nothing)
 
 {- | Apply the outcomes of an open group to the integer points of its formula.
 A term ranks by the integers at its placeholder leaves.

@@ -62,7 +62,7 @@ import qualified Data.CFTA.Ranked.Internal.Size as Size
 -- | Declare that every member of an inspectable generator has one key.
 keyed :: key -> Gen symbol a -> Grouped symbol key a
 keyed key (Transparent result) =
-    Grouped $ fmap (Map.singleton key . KeyedBucket 1) result
+    Grouped $ fmap (\static -> Map.singleton key $ KeyedBucket 1 static Nothing) result
 keyed key (Cyclic result) =
     CyclicGrouped $ fmap (Map.singleton key . keyedRecursive) result
 keyed _ (Opaque _) = Grouped $ Left CannotInspectOpaqueGenerator
@@ -110,11 +110,7 @@ regroupOn _ (Grouped (Left err)) = Grouped $ Left err
 regroupOn regroup (Grouped (Right buckets)) =
     Grouped $ fmap (fmap $ nameBucket Nothing) $ traverse (mergeBucketGroup . toList) grouped
   where
-    grouped =
-        groupOutcomes
-            [ (regroup oldKey, (keyedBucketMass bucket, keyedBucketStatic bucket))
-            | (oldKey, bucket) <- Map.toAscList buckets
-            ]
+    grouped = groupOutcomes [(regroup oldKey, bucket) | (oldKey, bucket) <- Map.toAscList buckets]
 
 -- | Map the values of each group. The function also gets the key of the group.
 mapWithKey :: (key -> a -> b) -> Grouped symbol key a -> Grouped symbol key b
@@ -125,10 +121,7 @@ mapWithKey transform (CyclicGrouped result) =
 mapWithKey transform (Grouped result) =
     Grouped $ fmap (Map.mapWithKey mapBucket) result
   where
-    mapBucket key bucket =
-        KeyedBucket
-            (keyedBucketMass bucket)
-            (mapStatic (transform key) $ keyedBucketStatic bucket)
+    mapBucket key bucket = bucket{keyedBucketStatic = mapStatic (transform key) $ keyedBucketStatic bucket}
 
 -- | Give each group a display name for 'inspect'. This does not read the members.
 nameGroups :: (key -> Text) -> Grouped symbol key a -> Grouped symbol key a
@@ -203,13 +196,18 @@ apply (Grouped (Right operations)) arguments
                 ]
         mergeComponentsByKey $ map buildComponent matchingBuckets
   where
+    -- A join counts the members of its parts inside a size class: it does not
+    -- keep the weights of a bucket that has weights of its own.
     buildComponent (componentIndex, resultKey, operationBucket, argumentsMass, argumentBuckets) =
         ( resultKey
-        , keyedBucketMass operationBucket * argumentsMass
-        , joinNBucketStatic
-            componentIndex
-            (keyedBucketStatic operationBucket)
-            (mapChain keyedBucketStatic argumentBuckets)
+        , KeyedBucket
+            (keyedBucketMass operationBucket * argumentsMass)
+            ( joinNBucketStatic
+                componentIndex
+                (keyedBucketStatic operationBucket)
+                (mapChain keyedBucketStatic argumentBuckets)
+            )
+            Nothing
         )
 
 {- | Read the finite bucket map of each argument family, in argument order.
@@ -316,7 +314,7 @@ frequencies weighted
 
     grouped =
         groupOutcomes
-            [ (key, (toRational weight / toRational totalWeight * keyedBucketMass bucket, keyedBucketStatic bucket))
+            [ (key, bucket{keyedBucketMass = toRational weight / toRational totalWeight * keyedBucketMass bucket})
             | (weight, Grouped (Right buckets)) <- alternatives
             , (key, bucket) <- Map.toAscList buckets
             ]
@@ -386,11 +384,13 @@ relateGroupsM relation resultKey left right =
     -- The component index of a kept pair is the number of kept pairs before it.
     component componentIndex ((leftGroupKey, leftBucket), (rightGroupKey, rightBucket)) =
         ( resultKey leftGroupKey rightGroupKey
-        , keyedBucketMass leftBucket * keyedBucketMass rightBucket
-        , joinNBucketStatic
-            componentIndex
-            (pureStatic (,))
-            (ChainCons (keyedBucketStatic leftBucket) (ChainCons (keyedBucketStatic rightBucket) ChainNil))
+        , KeyedBucket
+            (keyedBucketMass leftBucket * keyedBucketMass rightBucket)
+            (joinNBucketStatic
+                componentIndex
+                (pureStatic (,))
+                (ChainCons (keyedBucketStatic leftBucket) (ChainCons (keyedBucketStatic rightBucket) ChainNil)))
+            Nothing
         )
 
 {- | Combine a list of finite families of one type, and keep the combinations of
@@ -436,7 +436,7 @@ filterGroupsM predicate grouped = case finiteGroups grouped of
     Right buckets -> do
         retained <- runExceptT $ filterM (ExceptT . predicate . fst) (Map.toAscList buckets)
         pure $
-            Grouped . mergeComponentsByKey . map (\(key, bucket) -> (key, keyedBucketMass bucket, keyedBucketStatic bucket))
+            Grouped . mergeComponentsByKey
                 <$> retained
 
 -- | The keys of the groups, in key order, of a finite or a recursive family. A failed family has none.
