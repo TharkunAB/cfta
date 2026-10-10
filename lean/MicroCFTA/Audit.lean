@@ -13,6 +13,15 @@ import MicroCFTA.Productivity
 import MicroCFTA.SizeMass
 import MicroCFTA.Sparse
 import MicroCFTA.ZeroSize
+import MicroCFTA.UnionFind
+import MicroCFTA.LatticeRank
+import MicroCFTA.Observation
+import MicroCFTA.RecursiveSize
+import MicroCFTA.Cache
+import MicroCFTA.LatticePolynomial
+import MicroCFTA.ObservationGraph
+import MicroCFTA.Fragments
+import MicroCFTA.MinimumSize
 
 /-!
 # Proof dependency audit
