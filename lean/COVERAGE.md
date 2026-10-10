@@ -24,14 +24,14 @@ The earlier reports are evidence snapshots, not completion reports.
 | --- | --- | --- |
 | Term/path semantics: `Path`, `Internal.Tree`, `Generic`, `Simple` | `Language`: finite runs, bounded enumeration, path lookup, equality sharing. | Concrete path/trie constructors, FTA validation, public wrapper correspondence. |
 | Constraints: `Constraint`, `Equality.Constraint`, `Refinement.Guard` | `Guards`: Boolean evaluation and splitting. `Language`: path equality. | Concrete normalization, trie merging, contradictory constraints, residual guards, arity checks. |
-| Interning and recursion: `Interned.Type`, `Interned.Operations`, `Interned.Cache`, `Interned.Memo`, `Interned` | Synchronous graph intersection in `Language`. | Identity invariants, fresh allocation, hash collisions, concurrent insertion, memoization, binding/substitution, recursive conversion, union, intersection scheduling, depth bounding, redundant-edge removal. |
-| Enumeration: `Enumeration`, `Internal.UnionFind`, `Equality.Operations` | Reference enumeration and immediate-child sharing in `Language`. | Persistent union-find, suspended path constraints, expansion scheduling, assimilation, graph narrowing, full constrained enumeration, recursion markers versus finite denotation. |
+| Interning and recursion: `Interned.Type`, `Interned.Operations`, `Interned.Cache`, `Interned.Memo`, `Interned` | Synchronous graph intersection in `Language`. `Cache`: fresh identities, first-writer insertion, finite interleavings, memo results, sharding with collisions. | Runtime map/atomic/type-cast correspondence, binder-shape keys, binding/substitution, recursive conversion, union, intersection scheduling, depth bounding, redundant-edge removal. |
+| Enumeration: `Enumeration`, `Internal.UnionFind`, `Equality.Operations` | `Language`: reference enumeration and sharing. `UnionFind`: exact terminating state operations. `Fragments`: hole resolution, slot intersection, assimilation, and combined union/assimilation assignment semantics. | Caller/machine/live-slot invariants, concrete suspended paths, expansion scheduling, graph narrowing, full constrained enumeration, recursion markers versus finite denotation. |
 | Refinements: `Refinement.Evaluate`, `Expression`, `Verdict`, `LiquidFixpoint`, `Denotation`, `Automaton`, `Template` | Verdict laws, guard classification, first-formal aliases in `Holds`. | Concrete observation construction, substitution, formula interpretation, capture/freshness, API validation, evaluator correspondence and explicit solver contract. |
-| Pruning: `Refinement.Prune` | Abstract partition/discharge laws in `Guards`; concrete first-key list partition in `Sized`. | Path plans, variants, observation homogeneity, specialization coverage, recursive pruning, termination and error behavior. |
+| Pruning: `Refinement.Prune` | `Observation` and `ObservationGraph`: executable path plans, exact sparse views, graph variants, all-finite-term specialization coverage, homogeneous refinement decisions and successful guard discharge. | Interned representation/memo correspondence, substitution and equality observations, ambiguous-actual fallback, recursive pruning fixed points, termination and remaining errors. |
 | Similarity/minimization: `Refinement.Minimize` | Guard classification and finite productivity/below-check in `Minimization` and `Productivity`. | Similarity fixed point, actual graph read analysis, rewrite scheduling, root representative preservation, graph snapshots, complete postconditions. Known counterexamples remain recorded. |
-| Integer counting: `Refinement.Lattice` | Signed indicators, selected linear arithmetic, projection and interval summation in `Lattice`. | Concrete linear parser, map normalization, feasibility elimination, polynomial algebra, Bernoulli/Faulhaber construction, elimination levels, integrality, count/rank/select, entailment and supported-input errors. |
+| Integer counting: `Refinement.Lattice` | `Lattice`: signed indicators and selected linear arithmetic. `LatticePolynomial`: sparse arithmetic, normalization, substitution. `LatticeRank`: exact binary search and lexicographic rank/select from concrete section counts. | Concrete linear parser, constraint normalization, feasibility elimination, Bernoulli/Faulhaber construction, elimination levels, integrality, polynomial-level to section-count correspondence, entailment and supported-input errors. |
 | Ranked core: `Index`, `Ranked.Internal`, `Ranked.Internal.Decoder` | Mixed-radix laws; exact finite plan decoding and normalization in `Decoder`. | Full plan constructors, callback validation, n-ary dispatch, `PlanSized`, reverse rank, machine-index conversion, indexed-source correspondence. |
-| Size tables: `Ranked.Internal.Size`, `Gen.Internal.Table`, `Gen.Internal.Recursive`, `Gen.Internal.Recur` | Finite sparse convolution, zero-size split coverage, size retention. | Exact node-count recursive language/count/decoder, least sizes, guarded recursion, lazy-series productivity, rank/size inverse operations, multiple recursive occurrences. |
+| Size tables: `Ranked.Internal.Size`, `Gen.Internal.Table`, `Gen.Internal.Recursive`, `Gen.Internal.Recur` | Finite sparse convolution and zero-size coverage. `RecursiveSize`: exact node-count language/count/decoder and bounded probabilities. `MinimumSize`: terminating asynchronous least-size computation. | Actual graph/table adapters, guarded recursion, lazy-series productivity, inverse term ranking, multiple recursive generator occurrences and weighted tables. |
 | Sampling: `Ranked.Internal.Sampler`, `Ranked.QuickCheck`, generator QuickCheck modules | Finite exact rational distributions, tickets, products, conditioning, grouping and per-size weight formulas. | Concrete sampler construction, binary search, integer mass conversion, rejection termination, backend laws, bounded sampling and retained masses on every constructor. |
 | Shrinking: `Ranked.Internal.Shrink`, inspection functions | Size-retention preservation of the strict-smaller relation. | Complete shrink traversal, validity, rank completeness, ordering, bounds and callback correspondence. |
 | Static generation: `Gen.Internal.Static`, `Automaton`, `Flat`, `Support`, `Types` | Finite plan and size/mass laws. | Constructor invariants, language/value/rank/weight correspondence, atomic boundaries, imports, size reshaping and errors. |
@@ -58,10 +58,12 @@ verified or exempt all code that uses an external component.
 
 ## Current work
 
-- Prove the exact node-count table recurrence and its recursive term coverage.
-- Derive observation-path coverage and homogeneity from executable construction.
-- Prove cumulative-count binary search and lexicographic rank/select.
-- Prove persistent union-find lookup, path compression and class merging.
+- Complete size-class rank conversions and bottom-up inverse term ranking.
+- Prove the general Bernoulli/Faulhaber construction and connect polynomial
+  elimination levels to the checked section-count ranker.
+- Connect union-find and observation results to suspended constraints,
+  enumeration state, substitution and recursive pruning.
+- Establish the remaining concrete representation and runtime correspondences.
 
 After these prerequisites, continue through the ledger and compose the
 end-to-end generation, probability and optimization results. Keep unresolved

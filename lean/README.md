@@ -1,5 +1,9 @@
 # microcfta Lean spike
 
+The full-formalization goal is active. [COVERAGE.md](COVERAGE.md) tracks the
+complete implementation scope and the remaining proof obligations. The
+reports below record earlier findings; they are not completion reports.
+
 The earlier counterexamples are repaired. The formalization now also checks
 finite graph productivity, size-class weights, sparse convolution, zero-size
 splits, and integer-point closure. Two public correctness defects remain:
@@ -66,10 +70,21 @@ that the audit rejects `sorryAx`. That temporary file is outside this project.
 | [SizeMass.lean](MicroCFTA/SizeMass.lean) | `classWeights_total`, `classWeights_positive`, `mergeWeight_associative`, `split_merge_probability`, `split_product_probability`, and the atomic-pair mass counterexample |
 | [Sparse.lean](MicroCFTA/Sparse.lean) | `addSparse_ordered`, `mulSparse_ordered`, `valueAtSize_mulSparse`, `sparse_split_correct`, `seeded_product_correct`, and zero-size prefix counterexamples |
 | [ZeroSize.lean](MicroCFTA/ZeroSize.lean) | `splitPairs_exact`, `closePoints_exact`, `closePoints_has_rank`, `closePoints_size_count`, `zero_lag_no_finite_count` |
+| [UnionFind.lean](MicroCFTA/UnionFind.lean) | Exact compression and union classes, termination, size metadata, allocation-domain closure, and `union_satisfies` |
+| [Cache.lean](MicroCFTA/Cache.lean) | First-writer readback, pure memoization, interleaved identity allocation, canonical keys, and shard equivalence |
+| [Fragments.lean](MicroCFTA/Fragments.lean) | Completion-preserving hole resolution, slot intersection and assimilation, and exact combined union/assimilation constraints |
+| [RecursiveSize.lean](MicroCFTA/RecursiveSize.lean) | Exact node-count enumeration, count-recurrence uniqueness, size-major decoding, sparse convolution correspondence, and bounded run probabilities |
+| [MinimumSize.lean](MicroCFTA/MinimumSize.lean) | Asynchronous relaxation, proved convergence, least accepted node counts, and safe omission of empty or smaller size classes |
+| [Observation.lean](MicroCFTA/Observation.lean) | Concrete path-plan construction, sparse lookup, exact keys, and derived guard homogeneity |
+| [ObservationGraph.lean](MicroCFTA/ObservationGraph.lean) | Cyclic-graph specialization coverage, exact stored observations, and `selectSpecialized_discharges_guard` |
+| [LatticeRank.lean](MicroCFTA/LatticeRank.lean) | Exact cumulative-count binary search, both lexicographic rank/select inverses, finite tuple coverage, and a verified integer-closure table |
+| [LatticePolynomial.lean](MicroCFTA/LatticePolynomial.lean) | Sparse polynomial normalization, addition, multiplication, powers, partial substitution, and constant extraction |
 
 Detailed correspondence and limitations are in
 [language notes](notes-language.md), [probability notes](notes-probability.md),
-and [guard notes](notes-guards.md).
+and [guard notes](notes-guards.md). [State notes](notes-state.md) describe
+union-find, interning and memoization. The [coverage ledger](COVERAGE.md)
+records later progress and all remaining implementation obligations.
 
 `Lattice.lean` corresponds to `Refinement/Lattice.hs` as follows:
 
