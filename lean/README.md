@@ -1,12 +1,13 @@
 # microcfta Lean spike
 
-The first three counterexamples are repaired. The formalization now also
-checks alias construction, finite rank-plan normalization, bounded plain-graph
-counting and decoding, guard monotonicity, and size-preserving reconstruction.
-Two broader correctness defects remain. This is not a proof of the complete
-Haskell implementation. See [the continuation report](CONTINUATION.md).
+The earlier counterexamples are repaired. The formalization now also checks
+finite graph productivity, size-class weights, sparse convolution, zero-size
+splits, and integer-point closure. Two public correctness defects remain:
+bounded atomic-pair probabilities can change, and minimization can delete the
+only accepted root term. This is not a proof of the complete Haskell
+implementation. See [the current report](SECOND-REPAIRS.md).
 
-Current audited source: `ae6b97b8a8fc9282999c031671b743f8983786a3`.
+Current audited source: `adb1f012b336ba0d1673f8fd7f310ad75bdfaf04`.
 The initial audit used `dbc6955a9b1fe9de92acc167301342915916f307`.
 Toolchain: Lean 4.34.1. Dependencies: Lean's bundled `Std` and `Lean` libraries.
 
@@ -14,13 +15,14 @@ Toolchain: Lean 4.34.1. Dependencies: Lean's bundled `Std` and `Lean` libraries.
 
 | Requirement | Proved | Current implementation finding |
 | --- | --- | --- |
-| Generate every required term | Exact bounded enumeration, recursive finite-term completeness, and coverage of the normalized counted decoder for plain graphs. The repaired `Holds` aliases are sound and complete for their path-based meaning. | A semantically empty representative can still make minimization remove every accepted term. |
-| Correct probabilities | Exact weighted finite distributions, products, conditioning, duplicate-output aggregation, grouping, and weighted replay preservation under plan normalization. | Observing a non-atomic built source can still change its sizes and bounded probabilities. A nested atomic child can lose every value at the original bound. |
-| Valid optimizations | Synchronous intersection, equality sharing, map pushing, choice flattening, fused application decoding, guard splitting/classification, concrete key partition, and selected integer-counting identities. | The complete minimizer, observation trie, recursive size tables, and lattice eliminator still have proof obligations. |
+| Generate every required term | Exact bounded enumeration, recursive finite-term completeness, counted plain-graph decoding, repaired `Holds` aliases, and finite integer closure with an exact point table. | Minimization can delete the initial state's only accepted term, even with an accepted representative. |
+| Correct probabilities | Weighted finite distributions, products, conditioning, duplicate-output aggregation, concrete grouping, plan normalization, and count-scaled size-class weight formulas. | A tautological observation on an atomic pair changes bounded probabilities from 9:1 to 1:1. |
+| Valid optimizations | Synchronous intersection, equality sharing, plan normalization, guard classification, finite productivity and descendant closure, sparse convolution, zero-size split coverage, and selected integer-counting identities. | The full minimizer, observation trie, lazy recursive size tables, and lattice eliminator remain unproved. Internal product indexing requires a positive-size invariant. |
 
-See [CONTINUATION.md](CONTINUATION.md) for current findings and proposed repairs.
-[FINDINGS.md](FINDINGS.md) preserves the initial audit. This continuation adds
-proofs and reproductions; it does not change the Haskell libraries.
+See [SECOND-REPAIRS.md](SECOND-REPAIRS.md) for current findings and repair directions.
+[CONTINUATION.md](CONTINUATION.md) and [FINDINGS.md](FINDINGS.md) preserve the
+earlier audits. This continuation adds proofs and reproductions; it does not
+change the Haskell libraries.
 
 ## Build and inspect
 
@@ -58,8 +60,12 @@ that the audit rejects `sorryAx`. That temporary file is outside this project.
 | [Counterexamples.lean](MicroCFTA/Counterexamples.lean) | `similarity_guard_counterexample`: the original language is nonempty, the rewritten graph remains structurally productive, and its accepted language is empty at every depth. |
 | [Holds.lean](MicroCFTA/Holds.lean) | `firstNames_lookup`, `aliasPairs_correct`, `compiledQuery_iff`: repaired aliases represent exactly one value per mentioned path, in both polarities. |
 | [Decoder.lean](MicroCFTA/Decoder.lean) | `count_correct`, `decode_correct`, `decode_normalize`, `decode_binary_fusion`, `countAt_correct`, `compiled_coverage`, `compiled_probability_normalized` |
-| [Minimization.lean](MicroCFTA/Minimization.lean) | `classified_guard_preserves` and the remaining rejected-representative counterexample |
+| [Minimization.lean](MicroCFTA/Minimization.lean) | `classified_guard_preserves` and the historical rejected-representative counterexample |
 | [Sized.lean](MicroCFTA/Sized.lean) | Atomic repair correctness, source-size counterexamples, concrete partition coverage, and proposed size-retaining reconstruction laws |
+| [Productivity.lean](MicroCFTA/Productivity.lean) | `finite_stability`, `reachClosure_correct`, `productive_correct`, `checked_representative_has_accepted_term`, `RootDeletion.root_deletion_counterexample` |
+| [SizeMass.lean](MicroCFTA/SizeMass.lean) | `classWeights_total`, `classWeights_positive`, `mergeWeight_associative`, `split_merge_probability`, `split_product_probability`, and the atomic-pair mass counterexample |
+| [Sparse.lean](MicroCFTA/Sparse.lean) | `addSparse_ordered`, `mulSparse_ordered`, `valueAtSize_mulSparse`, `sparse_split_correct`, `seeded_product_correct`, and zero-size prefix counterexamples |
+| [ZeroSize.lean](MicroCFTA/ZeroSize.lean) | `splitPairs_exact`, `closePoints_exact`, `closePoints_has_rank`, `closePoints_size_count`, `zero_lag_no_finite_count` |
 
 Detailed correspondence and limitations are in
 [language notes](notes-language.md), [probability notes](notes-probability.md),
@@ -114,7 +120,7 @@ no verified translation or extraction connecting all Haskell code to them.
 The term semantics follows the supplied LTA paper's Figure 6 and the ECTA
 paper's finite-term denotation. ECTA reduction requires exact language
 preservation. LTA similarity minimization deliberately removes terms and needs
-a weaker representative-preservation property. The remaining rejected-representative
+a weaker representative-preservation property. The current root-deletion
 counterexample violates even nonemptiness preservation.
 
 The supplied LTA appendix's Lemmas 2 and 3 have proof headings without proof
@@ -132,9 +138,10 @@ ecta.pdf 34572866be0bc8e86a546f712ffb2666fe641d133417a895ecbdee5d8f6e1ebf
 ## Validation
 
 - The complete Lean package builds. The axiom audit passes.
-- The three repaired cases and the remaining counterexamples run with Z3 inside `nix-shell`.
-- Existing suites pass: 261 core, 182 generator, and 128 refinement examples;
-  571 total, zero failures. These passing suites do not cover the remaining findings.
+- All earlier repaired cases and the new counterexamples run inside `nix-shell`,
+  with Z3 for the public cases.
+- Existing suites pass: 263 core, 182 generator, and 136 refinement examples;
+  581 total, zero failures. These passing suites do not cover the new findings.
 - Fourmolu accepts the reproductions. Cabal-gild accepts both audited packages.
 
 The Haskell commands run from the repository root:
@@ -143,6 +150,7 @@ The Haskell commands run from the repository root:
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal build lib:microcfta lib:microcfta-generator -j1'
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc lean/repro/Counterexamples.hs'
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc lean/repro/RemainingFindings.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc lean/repro/CurrentFindings.hs'
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests microcfta-generator:gen-tests microcfta-generator:refinement-tests -j1 --test-show-details=direct'
 ```
 
@@ -152,12 +160,13 @@ add a package test suite.
 
 ## Next proof obligations
 
-1. Retain arbitrary member sizes during observed-source reconstruction.
-2. Require semantic nonemptiness of replacement representatives, and verify
-   that the graph read analysis establishes the proved context conditions.
-3. Prove the concrete constrained symbolic counter and recursive size-table recurrences.
-4. Prove the observation trie preserves language coverage, guard meaning,
-   masses, and size classes.
+1. Preserve atomic source masses across observed pair groups and bounded sampling.
+2. Preserve an accepted representative at the initial state. Verify the full
+   minimization schedule, including guard reads and changing graph snapshots.
+3. Prove the recursive size-table invariants, including positive size at each
+   recursive product, and connect the finite sparse proofs to lazy tables.
+4. Prove the observation trie and constrained symbolic counter preserve
+   language coverage, guard meaning, masses, and size classes.
 5. Verify the complete lattice eliminator and rank/select implementation.
 6. Establish an implementation correspondence through a translation, extraction,
    or a narrower verified core. Differential tests can support this work but
