@@ -150,7 +150,7 @@ sharedPrefixPathOrderInputs = pathOrderInputs sharedPrefixPathSets
         | n <- [0 .. 127]
         ]
 
--- | Equality classes whose branching shape distinguishes the trie comparator from the cached one.
+-- | Equality classes with a divergent branching shape.
 divergentBranchPathOrderInputs :: [[PathEClass]]
 divergentBranchPathOrderInputs = pathOrderInputs divergentBranchPathSets
   where
@@ -242,6 +242,7 @@ named prefix salt = Symbol $ Text.pack (prefix ++ show salt)
 {- | The congruence input at a chosen size: a chain of equal root paths, each
 with two children in one class. Every root forces classes over the children
 of all roots, so a pairwise congruence scan grows quadratically with the size.
+The size counts links: @congruenceChain 64@ gives 65 root pairs over 66 roots.
 -}
 congruenceChain :: Int -> Int -> [[Path]]
 congruenceChain size salt =
