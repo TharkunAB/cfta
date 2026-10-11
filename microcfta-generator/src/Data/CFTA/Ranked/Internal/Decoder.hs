@@ -33,12 +33,13 @@ import GHC.Arr (listArray, unsafeAt)
 
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), RankOffset, Size, offsetRank)
 
-{- | Symbolic rank-decoding structure retained beside every outcome index.
+{- | The rank structure of a language: its choices, products, maps, pays, and
+size classes.
 
-The plan preserves choice, product, and map structure instead of losing it in
-nested @Integer -> a@ closures, so lowering can normalize and compile it into
-one flat decoder. Branch order and mixed-radix product order match the stable
-rank order of the corresponding selectors exactly. Every producer in this
+A plan keeps this structure as data, not as nested @Integer -> a@ closures.
+So 'compilePlan' can normalize the plan and compile one flat decoder, and the
+size and shrink walks can read the structure. The order of the branches and
+the mixed-radix order of a product are the rank order. Every producer in this
 package keeps to this: a choice lists its branches in rank order, and a product
 puts the function rank before the argument rank, with the cardinality of the
 argument as its radix. The producers are the applicative and the choice of the
@@ -54,10 +55,11 @@ data Plan a where
     changes sizes only, so the decoder does not see it.
     -}
     PlanPay :: Plan a -> Plan a
-    {- | A leaf whose decoder must remain on demand even when it is small.
+    {- | A leaf that the decoder does not tabulate, even when it is small.
 
-    Automaton enumerators use this so compiling a rank plan never constructs
-    accepted terms merely to fill the ordinary small-leaf lookup table.
+    A tabulated leaf keeps each decoded member for as long as the decoder
+    lives. Automaton imports use this leaf, so the decoder does not keep
+    the accepted terms that it decodes.
     -}
     PlanSelectOnDemand :: !Cardinality -> (Rank -> a) -> Plan a
     {- | A shared subplan with its cardinality, its compiled decoder, and its
@@ -84,8 +86,10 @@ data Plan a where
     'PlanSized' does not check that the sizes ascend. Its producers keep them
     ascending. The bounded recursive language builds the classes with
     @sizeClasses@, which gives strictly ascending sizes. The @share@ of the
-    ranked layer gives a language with one member as one class. So ranks are
-    size-major, and a smaller rank never decodes to a larger member.
+    ranked layer gives a language with one member as one class. A point
+    choice of the static layer gives its members as one class of size zero.
+    So ranks are size-major, and a smaller rank never decodes to a larger
+    member.
     A bounded size-indexed generator lowers to this plan. The other
     constructors retain their mixed-radix order.
     -}
@@ -145,11 +149,10 @@ data SizeIndex a = SizeIndex
     gives 'SizesDoNotEnd'.
     -}
     , unguardedOccurrences :: IntSet
-    {- ^ The recursions whose probe can be reached without passing through a
-    pay, or a product whose other side has no member of size zero. Counting
-    such an index would consult its own size, so a recursive definition
-    shaped this way has no smallest member. Each element is the 'Int' of an
-    occurrence token.
+    {- ^ The recursions whose probe a path reaches with no pay, and with no
+    product whose other side has no member of size zero. To count one size,
+    such an index reads its own count at the same size, so the count does not
+    terminate. Each element is the 'Int' of an occurrence token.
     -}
     , termlessOccurrences :: IntSet
     {- ^ The recursions whose probe can be reached through choices, maps, and
@@ -465,7 +468,7 @@ dispatchParts [(offset, decode)]
     | otherwise = \index -> decode (index - offset)
 dispatchParts parts = compileTable (Map.fromDistinctAscList parts)
   where
-    -- \| Compile the branches once to avoid allocating a lookup result per rank.
+    -- Compile the branches once to avoid allocating a lookup result per rank.
     compileTable table
         | Map.null table =
             error

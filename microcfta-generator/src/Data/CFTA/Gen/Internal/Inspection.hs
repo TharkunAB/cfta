@@ -29,11 +29,11 @@ import Data.CFTA.Gen.Label (ComponentIndex, Label (..))
 import Data.CFTA.Index (ArgumentIndex (..))
 import Data.CFTA.Path (Path, unPath)
 
-{- | An original support label with an optional source or group name.
+{- | A support label with an optional source or group name.
 
-Names participate in diagnostic sharing. Two source occurrences can have the
-same original label and different meanings. Use 'originalSymbol' to inspect
-the support label. Display names do not participate in generation.
+Two source occurrences can have the same label and different meanings, so the
+name is part of the identity of an inspection node. 'originalSymbol' gives the
+support label. Generation does not read the name.
 -}
 data InspectionSymbol symbol = InspectionSymbol
     { originalSymbol :: Label symbol
@@ -45,11 +45,10 @@ instance (Hashable symbol) => Hashable (InspectionSymbol symbol)
 
 {- | A named diagnostic graph retained by an inspectable generator.
 
-The graph retains construction structure and equality obligations. It is not
-a replacement for the semantic support: diagnostic names can distinguish
-otherwise equal nodes, and this graph does not run equality reduction. The
-joins reduce only their supports, never this graph.
-All fields are lazy. Reading counts or decoding ranks does not build it.
+The graph keeps the construction steps and the equality constraints. It can
+differ from the support: names can make two equal nodes different, and the
+joins reduce their supports but not this graph. All fields are lazy, so
+counting and decoding do not build it.
 -}
 data Inspection symbol = Inspection
     { inspectionName :: Maybe Text

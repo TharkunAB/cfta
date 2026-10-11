@@ -75,13 +75,13 @@ first >> second = fmap (\_ value -> value) first <*> second
 
 {- | Applicative application for do-notation.
 
-A generator applies directly through its 'Prelude.Applicative' instance. A
-grouped operation family absorbs its argument families one at a time and
-builds a single 'apply' join once the last argument arrives; the staging never
-constructs an intermediate join. Instance selection distinguishes an operation
-family from an argument family by the 'Sig' in its key, the signature's key
-list tracks how many arguments remain, and unification enforces that each
-argument family's key matches the corresponding signature component.
+For a 'Gen', this is the '<*>' of 'Prelude.Applicative'. For a grouped
+operation family, it takes one argument family at a time. After the last
+argument, it builds one 'apply' join, and it builds no join before that.
+GHC selects the instance by the 'Sig' in the key of the operation family. The
+key list of the signature gives the number of arguments that remain. The type
+checker requires that the key of each argument family is the key at its
+position in the signature.
 -}
 class GenApply f g h | f g -> h where
     -- | Apply one generated function layer to one generated argument layer.

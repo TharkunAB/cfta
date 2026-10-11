@@ -15,11 +15,12 @@ Sizes follow FEAT (Duregård, Jansson, and Wang, "Feat: Functional Enumeration
 of Algebraic Types", Haskell Symposium 2012, §2 "Guarded recursion and
 costs"). `pure` costs zero, `<*>` adds the sizes of its sides, `fmap` and the
 choices keep sizes, and `pay` adds one to every member. An atom (`elements`,
-`fromIndexed`, `every`, `atomic`, a group of `groupOn`) costs one, a
+`fromIndexed`, `every`, `atomic`, a member of a `groupOn` group) costs one, a
 constructor (`node`, `leaf`, `guarded`, `measured`) pays one, and an imported
-term costs its number of nodes. A recursion must reach its occurrence through
-a pay, or through a product whose other side has no member of size zero, and
-through a product or a constructor, which adds a term node.
+term costs its number of nodes. A recursion must satisfy two rules on the way
+to each occurrence. It passes through a pay, or through a product whose other
+side has no member of size zero. It also passes through a product or a
+constructor, which adds a term node.
 `Data.CFTA.Gen` and `Data.CFTA.Ranked` export `pay`.
 
 ## Why
@@ -37,15 +38,16 @@ this cost model guards recursion and keeps every size class finite.
   ranks are associative. For a recursive language, the ranks inside a size
   class can differ: a product orders its splits by the size of its left side,
   so `(u <*> v) <*> w` and `u <*> (v <*> w)` order the same members
-  differently. The reference spec checks all five laws.
+  differently. The reference spec checks the four `Applicative` laws and
+  `fmap f x = pure f <*> x`.
 - A built tree is one larger for each constructor, and `pure` inside a product
   is one smaller, so size bounds and the samples of bounded generators change.
 - `recur (\t -> oneof [pure Leaf, Node <$> t <*> t])` is unguarded. A `node` or
   a `pay` around the recursive alternative guards it.
 - `recur (\t -> oneof [leaf, pay t])` is unguarded too, although FEAT accepts
-  it. A pay adds no term node, so the members of such a recursion can share
-  one term, as they do under a constructor that removes their choice
-  wrappers, and that term would have infinitely many ranks.
+  it. A pay adds no term node. So the members of such a recursion can have one
+  term in common, for example under a constructor that removes their choice
+  wrappers. That term would then have infinitely many ranks.
   `oneof [leaf, node "s" t]` is guarded.
 - Two imports keep a size that is not their number of nodes. A symbolic
   acyclic import is one atom per term, of size one. A compact acyclic import

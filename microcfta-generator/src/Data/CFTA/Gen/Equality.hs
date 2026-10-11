@@ -1,11 +1,11 @@
 {- | Generators over equality-constrained tree automata.
 
-An equality generator is a generator over 'Symbol' whose automata carry
-'Data.CFTA.Constraint.equalityConstraint' edges, the theory of
-"Data.CFTA.Equality": an edge may require that the subterms at two of its
-paths are equal. Everything of "Data.CFTA.Gen" applies. The joins 'match',
-'relate', and 'apply' express their keys as such equalities, so a joined
-language is one automaton whose support carries the constraint.
+An equality generator is a generator over 'Symbol'. Its automata use the
+theory of "Data.CFTA.Equality": an edge can require that the subterms at two
+of its paths are equal ('Data.CFTA.Constraint.equalityConstraint'). All of
+"Data.CFTA.Gen" applies. The joins 'match', 'relate', and 'apply' write their
+keys as such equalities, so the support of a joined language is one automaton
+with these constraints.
 
 This module fixes the symbol type in 'ECTAGen' and 'Grouped'. Imported
 automata rank constructors by arity, then by the order of 'Symbol': the text,

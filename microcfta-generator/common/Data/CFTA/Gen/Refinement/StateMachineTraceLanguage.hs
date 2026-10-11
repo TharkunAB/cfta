@@ -146,7 +146,9 @@ data Trace = Trace
     }
     deriving (Eq, Ord, Show)
 
--- | The finite generation boundary; the transition formulae are not unrolled.
+{- | The largest stack depth. The trace languages contain only stacks up to
+this depth.
+-}
 maximumStackDepth :: Int
 maximumStackDepth = 3
 
@@ -180,12 +182,13 @@ initialTracePrefix =
   where
     start = LTAGen.pure (TracePrefix id emptyState) :: LTAGen.LTAGen TracePrefix
 
-{- | Generate traces with exactly the requested number of commands through
-the compositional surface DSL.
+{- | Generate the traces of exactly the given number of commands with the
+generator combinators.
 
-This is the source of truth for the relational qualified-do benchmark.
-'compileTracesOfLength' retains this applicative recipe, groups prefixes by
-their output-state refinement, and never scans the Cartesian command language.
+The benchmark cell @lta-do@ measures this generator. 'compileTracesOfLength'
+keeps its applicative recipe and groups the prefixes by the refinement of
+their output state, so it does not enumerate the product of prefixes and
+commands.
 -}
 tracesOfLength :: Int -> LTAGen.LTAGen Trace
 tracesOfLength = fmap finishTracePrefix . tracePrefixesOfLength
@@ -265,11 +268,11 @@ data TraceNodeKey
     | PostNode !Int
     deriving (Eq, Ord)
 
-{- | Compile one exact trace surface language as relational ECTA joins.
+{- | Compile 'tracesOfLength' for one length.
 
-Z3 decides compatibility once per live tuple of prefix and command groups.
-Dynamic counting and unranking stay in the ECTA generator layer; complete
-traces are not visited during compilation.
+Z3 decides each step once for each tuple of a prefix group and a command
+group that has members. The compiled generator counts and unranks the
+traces. Compilation does not visit complete traces.
 -}
 compileTracesOfLength ::
     Entailment ->
@@ -383,12 +386,12 @@ handwrittenTraceGen length_ = generateFrom (max 0 length_) emptyState
             , Just (response, after) <- [modelStep before command]
             ]
 
-{- | Handwritten exact-uniform generation through one global rank.
+{- | Uniform generation by hand, through one rank for the whole trace.
 
-This is the strongest bespoke control: it manually duplicates the LTA
-adapter's count-and-unrank strategy, but constructs 'Trace' directly without a
-liquid witness. It is less idiomatic than 'handwrittenTraceGen' and makes the
-automaton library's compilation algorithm part of application code.
+This baseline counts and unranks as the compiled LTA generator does, but it
+builds the 'Trace' directly, without a liquid witness. It puts the counting
+algorithm of the library into application code, so it is harder to read than
+'handwrittenTraceGen'.
 -}
 rankedTraceGen :: Int -> QC.Gen Trace
 rankedTraceGen requestedLength = do
@@ -582,8 +585,8 @@ stateForRefinement refinement =
 
 The previous trace root is both the selected input state and the actual value
 substituted for the command's formal @model@. The command's post-state formula
-must then imply the new trace root. The constructor call has no numeric
-child indices.
+must then imply the new trace root. The guard takes the two child paths as
+arguments, so 'refinedNodeByRoots' and a 'Transition' can both use it.
 -}
 validStep :: Path -> Path -> Constraint
 validStep previous command =

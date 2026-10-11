@@ -114,7 +114,7 @@ regroupOn regroup (Grouped (Right buckets)) =
             | (oldKey, bucket) <- Map.toAscList buckets
             ]
 
--- | Map group values with access to their retained key.
+-- | Map the values of each group. The function also gets the key of the group.
 mapWithKey :: (key -> a -> b) -> Grouped symbol key a -> Grouped symbol key b
 mapWithKey transform (CyclicGrouped result) =
     CyclicGrouped $ fmap (Map.mapWithKey mapGroup) result
@@ -128,7 +128,7 @@ mapWithKey transform (Grouped result) =
             (keyedBucketMass bucket)
             (mapStatic (transform key) $ keyedBucketStatic bucket)
 
--- | Retain a display name for each group without inspecting its members.
+-- | Give each group a display name for 'inspect'. This does not read the members.
 nameGroups :: (key -> Text) -> Grouped symbol key a -> Grouped symbol key a
 nameGroups render (Grouped result) = Grouped $ fmap (Map.mapWithKey $ nameBucket . Just . render) result
 nameGroups render (CyclicGrouped result) =
@@ -148,7 +148,9 @@ nameKeyedRecursive name group = group{keyedRecursiveLanguage = named}
     recursive = keyedRecursiveLanguage group
     named = recursive{recursiveInspection = (recursiveInspection recursive){inspectionName = name}}
 
--- | Select one retained group as an ordinary conditional generator.
+{- | The members of one key, as an ordinary generator. A key without members
+gives 'EmptyGenerator'.
+-}
 atKey :: (Ord key) => key -> Grouped symbol key a -> Gen symbol a
 atKey key (CyclicGrouped result) =
     Cyclic $ do
@@ -165,12 +167,16 @@ atKey key (Grouped (Right buckets)) =
             (Right . keyedBucketStatic)
             (Map.lookup key buckets)
 
--- | Merge all retained groups while preserving their probability masses.
+{- | All the members of a family, as an ordinary generator. Each group keeps its
+probability.
+-}
 ungroup ::
     (Hashable symbol, Typeable symbol) => Grouped symbol key a -> Gen symbol a
 ungroup = atKey () . regroupOn (const ())
 
--- | Apply a generated operation of any arity to one argument family per signature component, retaining the operation's result group.
+{- | Apply each operation of a family to one argument family for each argument
+key of its signature. The result has the result key of the signature.
+-}
 apply ::
     (Ord resultKey, Hashable symbol, Typeable symbol) =>
     Grouped symbol (Sig argKeys resultKey) operation ->
@@ -270,7 +276,10 @@ mergeByKey ::
 mergeByKey entries =
     Map.mapMaybe (mergeRecursiveGroups . toList) $ groupOutcomes entries
 
--- | Choose among grouped generators with positive relative weights, group by group.
+{- | Choose among grouped generators with positive relative weights, group by
+group. If an alternative is recursive, all weights must be equal, and the result
+is 'oneofGrouped'. Unequal weights give 'WeightedRecursiveAlternatives'.
+-}
 frequencies ::
     (Ord key, Hashable symbol, Typeable symbol) =>
     [(Weight, Grouped symbol key a)] ->
@@ -314,15 +323,20 @@ frequencies weighted
       where
         totalWeight = sum $ map fst alternatives
 
--- | Choose uniformly among grouped generators, group by group.
+{- | Choose uniformly among grouped generators, group by group. If an
+alternative is recursive, the choice draws each alternative in proportion to its
+mass at the drawn size, as 'uniformlyGrouped' does.
+-}
 oneofGrouped ::
     (Ord key, Hashable symbol, Typeable symbol) =>
     [Grouped symbol key a] -> Grouped symbol key a
 oneofGrouped alternatives = frequencies [(1, alternative) | alternative <- alternatives]
 
-{- | Choose among grouped generators so that every member of the combined
-language is equally likely. If all alternatives are finite, each alternative is
-weighted by its cardinality. If any alternative is recursive, this is
+{- | Choose among grouped generators in proportion to their members. If all
+alternatives are finite, each alternative is weighted by its cardinality, so
+every member of the combined language is equally likely when every alternative
+is uniform. An alternative with its own weights, such as a 'frequencies', keeps
+them inside its share. If any alternative is recursive, this is
 'oneofGrouped', whose recursive merge draws each alternative in proportion to
 its mass at the drawn size. A member of several alternatives counts once for
 each.
@@ -347,7 +361,10 @@ uniformlyGrouped alternatives
             let total = sum groups
              in Right $ if total > 0 then Just total else Nothing
 
--- | Compile an effectful relation directly over two grouped languages.
+{- | Pair the groups of two finite families whose keys the relation accepts. The
+relation runs once for each pair of keys, and the second function gives the key
+of the pair.
+-}
 relateGroupsM ::
     (Ord resultKey, Hashable symbol, Typeable symbol) =>
     (leftKey -> rightKey -> IO (Either relationError Bool)) ->
@@ -401,7 +418,9 @@ relateGroupsM relation resultKey left right =
                             nextIndex = if keep then componentIndex + 1 else componentIndex
                          in decideRights nextIndex retained leftGroupKey leftBucket rest
 
--- | Compile one relation over a homogeneous list of grouped arguments.
+{- | Combine a list of finite families of one type, and keep the combinations of
+keys that the relation accepts.
+-}
 relateN ::
     (Ord key, Hashable symbol, Typeable symbol) =>
     (Seq key -> IO (Either relationError Bool)) ->
@@ -429,7 +448,9 @@ relateN relation (first : rest) = do
                     (mapWithKey (\_ (values, value) -> values :|> value) joined)
                     remaining
 
--- | Retain complete groups selected by one effectful key predicate.
+{- | Keep the groups whose key the predicate accepts. The predicate runs once for
+each key.
+-}
 filterGroupsM ::
     (Ord key, Hashable symbol, Typeable symbol) =>
     (key -> IO (Either relationError Bool)) ->
@@ -460,14 +481,18 @@ groupKeys :: Grouped symbol key a -> [key]
 groupKeys (CyclicGrouped result) = either (const []) Map.keys result
 groupKeys (Grouped result) = either (const []) Map.keys result
 
--- | Return the exact cardinality of each retained group in O(number of groups).
+{- | The number of members of each group of a finite family. It reads one count
+for each group and lists no member.
+-}
 cardinalities :: Grouped symbol key a -> Either GenError (Map.Map key Cardinality)
 cardinalities (CyclicGrouped (Left err)) = Left err
 cardinalities (CyclicGrouped _) = Left UnboundedGenerator
 cardinalities (Grouped result) =
     fmap (fmap $ outcomeCardinality . staticOutcomes . keyedBucketStatic) result
 
--- | Return the exact number of retained members in every live key at one structural size.
+{- | The number of members of each key at one size. A key with no member of that
+size is not in the map.
+-}
 countsAtSize :: Grouped symbol key a -> Size -> Either GenError (Map.Map key Cardinality)
 countsAtSize (CyclicGrouped result) size =
     Map.filter (> 0)
@@ -478,7 +503,8 @@ countsAtSize (Grouped result) size =
         . fmap (\bucket -> Size.countAtSize (outcomeSizeIndex $ staticOutcomes $ keyedBucketStatic bucket) size)
         <$> result
 
-{- | Return the exact distribution of retained keys conditional on one structural size.
+{- | The probability of each key, given the size of the member. A key with no
+member of that size is not in the map.
 
 For a finite family, this enumerates the members of each group to sum the mass
 of the members of that size. A group with uniform mass could read the count from

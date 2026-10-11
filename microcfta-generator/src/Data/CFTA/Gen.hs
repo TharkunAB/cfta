@@ -1,12 +1,13 @@
 {- | Generators over constrained tree automata.
 
-A generator is a language of values whose support is an interned automaton
-with edges of type @symbol@. Every edge carries a
-'Data.CFTA.Constraint.Constraint': none for an ordinary tree automaton,
-equalities between child paths for an equality automaton, and guards that a
-solver decides for a liquid automaton. Every value stands for a term the
-automaton accepts, so the language is counted, replayed by rank, sampled, and
-shrunk exactly.
+A generator is a language of values. Its support is an interned automaton
+with edges of type @symbol@. Each edge carries a
+'Data.CFTA.Constraint.Constraint': no constraint for an ordinary tree
+automaton, equalities between child paths for an equality automaton, and
+guards that a solver decides for a liquid automaton. Each value of an
+inspectable generator is a term that the automaton accepts. So the generator
+can count its language, decode a value from its rank, sample, and shrink
+exactly.
 
 An ordinary generator, one over a plain tree automaton, is 'FTAGen';
 "Data.CFTA.Gen.Equality" and "Data.CFTA.Gen.Refinement" fix the other two
@@ -188,9 +189,9 @@ size. The count sums over accepting runs. An ambiguous automaton is therefore
 rejected with 'AmbiguousAutomaton', and one with equality constraints with
 'CannotCountConstrainedEdges'.
 
-The values are the accepted terms, so a bounded generator keeps full
-inspection. The bounded form keeps the terms, the support, and the inspection
-graph. 'support', 'inspect', 'termAt', and 'ranksOf' work on it.
+The values are the accepted terms. The form that 'upToSize' bounds
+keeps the terms, the support, and the inspection graph, so 'support',
+'inspect', 'termAt', and 'ranksOf' work on it.
 -}
 fromAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol) =>
@@ -211,24 +212,24 @@ fromAutomatonUpToDepth = Flat.fromAutomatonUpToDepth id
 {- | Read a datatype grammar as a generator of its values.
 
 The generator is recursive when the datatype is, and finite otherwise. The
-value and its constructor term share one rank, and the codec runs only when a
-selected value is demanded. Ranks order the constructors of a type by arity,
-then in declaration order, and atomic literals in domain order. The derived
-grammar keeps its rows in that order, and a label is in the row of its own type
-only.
+value and its constructor term share one rank. A member is decoded only when
+its value is demanded. Ranks order the constructors of a type by arity, then
+in declaration order. They order atomic literals in domain order.
 
-The generator decodes one term per constructor when it is built. If the codec
-rejects one, the generator fails with 'UndecodableConstructor'. This happens
-for an atomic literal whose 'Show' text 'Read' does not accept.
+When the generator is built, it decodes one term for each constructor. If the
+codec rejects one, the generator fails with 'UndecodableConstructor'. This
+happens for an atomic literal whose 'Show' text 'Read' does not accept.
+
+A recursive datatype with an annotated constructor fails with
+'CannotCountConstrainedEdges'. Use 'fromDatatypeUpToDepth' for it.
 -}
 fromDatatype :: TypedFTA Constraint a -> Gen Symbol a
 fromDatatype datatype = importDatatype datatype Flat.fromAutomaton
 
 {- | The least rank of a datatype value in a generator from 'fromDatatype' or
 'fromDatatypeUpToDepth'. The codec of the type encodes the value as a
-constructor term. 'ranksOf' lists the ranks of a term in ascending order, so
-this is its first rank. A value that the generator does not give has
-'TermNotInLanguage'.
+constructor term, and the result is the first rank that 'ranksOf' gives for
+that term. A value that is not in the language gives 'TermNotInLanguage'.
 -}
 rankOfValue :: (HasFTA a) => Gen Symbol a -> a -> Either GenError Rank
 rankOfValue generator = rankOfTerm generator . fmap (fromString . constructorLabel) . encodeTerm

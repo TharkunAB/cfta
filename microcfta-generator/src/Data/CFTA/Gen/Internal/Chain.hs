@@ -12,10 +12,10 @@ module Data.CFTA.Gen.Internal.Chain (
     ArgStatics,
     lookupArgs,
     mapChain,
-    chainMass,
 
     -- * Finite chains
     chainLength,
+    chainMass,
     chainSupports,
     chainInspections,
     chainRootCounts,
@@ -27,9 +27,9 @@ module Data.CFTA.Gen.Internal.Chain (
     selectChain,
     chainRanks,
     joinKeysMatch,
-    recursiveChainTerms,
 
     -- * Recursive chains
+    recursiveChainTerms,
     recursiveSupports,
     recursiveInspections,
     recursiveChainIndex,
@@ -412,7 +412,7 @@ recursiveChainWeighted ChainNil = False
 recursiveChainWeighted (ChainCons recursive rest) =
     recursiveWeighted (keyedRecursiveLanguage recursive) || recursiveChainWeighted rest
 
--- | Whether a recursive argument's key mass differs from structural counts.
+-- | Whether the mass of a recursive argument differs from its member counts.
 recursiveChainMassWeighted ::
     ArgChain (KeyedRecursive symbol) operation result -> Bool
 recursiveChainMassWeighted ChainNil = False

@@ -1,14 +1,13 @@
 {- | Structural shrinking for transparent generators.
 
-A rank is a serialized derivation: through the plan it factors into a
-choice branch and mixed-radix product components, and shrinking works on
-those decisions instead of the number. Two mechanisms build on the same
-factoring:
+The plan splits a rank into the branch of each choice and the components of
+each product. Shrinking changes these parts, not the rank as a number. Two
+functions use this split:
 
-* 'shrinkPlanRank' produces structural shrink candidates: jump to an
-  earlier alternative at its smallest member, or shrink the operation and
-  each argument component independently. No candidate decodes to a member
-  larger than the current one.
+* 'shrinkPlanRank' gives structural shrink candidates. A candidate is the
+  smallest member of an earlier alternative, or a member where one product
+  component shrinks. No candidate decodes to a member that is larger than
+  the current one.
 
 * 'smallerPlanMembers' streams every member structurally smaller than a
   rank's member, in size order, where size ('planMemberSize') counts as
@@ -22,11 +21,10 @@ factoring:
   search reads at most @smallerMemberLimit@ members in each step.
   'Data.CFTA.Ranked.QuickCheck.forAll' does not use this stream.
 
-Every candidate either re-encodes a modified decision tree or is selected
-from a size class of the plan itself, so shrinking can never leave the
-generated language. The walkers read the raw plan, whose structure is the
-source of truth for rank order; only the compiled decoder needs the
-normalized form.
+Each candidate is a rank of the plan, or a member of a size class of the
+plan. So shrinking does not leave the language. The functions read the plan
+as built, because its structure defines the rank order. Only the compiled
+decoder reads the normalized plan.
 
 This module is an exposed internal module. The generator layers of
 microcfta-generator use it directly. Its exports are not covered by the PVP
@@ -121,7 +119,7 @@ The rank factors into a choice branch and mixed-radix product components,
 so shrinking is structural: jump to the smallest member of an earlier
 alternative first (in layered generators with base alternatives first, this
 replaces a whole subtree with an atom), then shrink each product component
-independently, recursing into operation and argument sub-ranks. Every
+independently, recursing into function and argument sub-ranks. Every
 candidate is a valid rank of the same plan, so shrinking never leaves the
 language, and every candidate is a strictly smaller rank whose member is no
 larger than the current member, so a shrink loop terminates without growing
@@ -185,7 +183,7 @@ holdsRank rank (offset, (branchCardinality, _)) =
 {- | The size of the member a rank decodes to.
 
 The member of @pure@ has size zero, an atom has size one, an application adds
-the sizes of its operation and argument, and a pay adds one.
+the sizes of its function and argument, and a pay adds one.
 -}
 planMemberSize :: Plan a -> Rank -> Size
 planMemberSize (PlanSelect _ _) _ = 1

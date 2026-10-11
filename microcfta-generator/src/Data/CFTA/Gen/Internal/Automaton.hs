@@ -20,6 +20,11 @@ Ambiguity is not counted either. The union over a node's edges counts
 accepting runs, so a node with two edges that accept a common term counts that
 term twice; such an automaton is rejected rather than miscounted.
 
+These two limits hold for 'automatonIndex' and 'automatonTermPosition', which
+take an automaton that can have cycles. 'finiteAutomaton' takes an acyclic
+graph. It counts equality constraints with intersections and symbolic counts,
+and it gives an ambiguous node the symbolic plan.
+
 The inverse of each index gives the rank, or the size and the position, of an
 accepted term. It follows the same plans as the index.
 
@@ -185,24 +190,28 @@ productiveRows node
 constrained :: Edge symbol -> Bool
 constrained = not . unconstrainedEdge
 
-{- | Compile a finite equality graph with shared ordinary rank plans.
+{- | Compile a finite equality graph to a static language with shared ordinary
+rank plans.
 
-Alternatives that accept no common term and direct-child equalities have
-compact plans. Equal child positions select one term from the intersection of
-their languages. Nested equality paths, residual Boolean equalities, and
-alternatives that share a symbol and accept a common term use symbolic
-equality contexts and intersection counts. Both forms of plan order the
-constructors by arity, then by the given key. In a compact plan, alternatives
-that share a symbol are then ordered by the canonical classes of their
-children ('canonicalClasses'), so their order does not depend on the order in
-which the edges were interned. If two of them have equal classes, the node
-uses the symbolic plan. Alternatives with distinct symbols and equal keys keep
-the order in which their edges were interned. 'Symbol' orders by text, so the
-symbol is a stable key. Nullary constructors come first, so rank shrinking
-moves toward leaves. Only a selected term is constructed. The static ranks an
-accepted term by the same plans: a compact node adds the offset of the
-matching edge to the mixed-radix rank of its equality groups, and a symbolic
-node counts the accepted terms before the term.
+A node gets a compact plan when its alternatives accept no common term and its
+equalities relate direct children only. Equal child positions then select one
+term from the intersection of their languages. A node gets a symbolic plan,
+with symbolic equality contexts and intersection counts, when an equality path
+goes below a direct child, when a constraint has a residual Boolean equality,
+or when two alternatives share a symbol and accept a common term.
+
+Both plans order the constructors by arity, then by the given key, so nullary
+constructors come first and rank shrinking moves toward leaves. In a compact
+plan, alternatives with one symbol are then ordered by the canonical classes of
+their children ('canonicalClasses'), so the order does not depend on the order
+of interning. If two of them have equal classes, the node uses the symbolic
+plan. Alternatives with different symbols and equal keys keep the order of
+interning. 'Symbol' orders by text, so the symbol is a stable key.
+
+The result builds only the selected term. It ranks an accepted term by the same
+plans: a compact node adds the offset of the matching edge to the mixed-radix
+rank of its equality groups, and a symbolic node counts the accepted terms
+before the term.
 -}
 finiteAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>

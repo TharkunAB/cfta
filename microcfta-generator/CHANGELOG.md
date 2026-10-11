@@ -8,24 +8,24 @@ tree automata of `microcfta`, with QuickCheck integration.
 - `Data.CFTA.Gen`: one generator type, `Gen symbol a`, for every kind of
   automaton. An ordinary generator is `FTAGen symbol a`, that is
   `Gen symbol a`; the equality and refinement facades fix the symbol in
-  `ECTAGen` and `LTAGen`. Sources (`elements`, `leaf`,
-  `namedElements`, `fromIndexed`, `fromGen`), constructors closed with
-  `node`, `frequency` and `oneof`, `match` and `relate` joins, the grouped
-  layer with `Sig` signatures and `apply`, recursion with `recur`, `atomic`,
-  and `upToSize`, and exact inspection: `cardinality`, `values`, `unrank`,
-  `termAt` with its inverse `rankOf` and `ranksOf`, `support`, `inspect` with
-  `drawInspection`, size counts, `pmf`,
-  structural `shrinkRank`, and `smallerMembers`. A generator keeps every
-  construction failure as one `GenError` with `explain`, and `orFail` fails
-  with that text.
+  `ECTAGen` and `LTAGen`. The sources are `elements`, `leaf`,
+  `namedElements`, `fromIndexed`, and `fromGen`. `node` closes a constructor,
+  and `frequency` and `oneof` choose. `match` and `relate` join two generators,
+  and the grouped layer joins more with `Sig` signatures and `apply`. `recur`,
+  `atomic`, and `upToSize` make and bound recursive languages. The exact
+  inspectors are `cardinality`, `values`, `unrank`, `termAt` with its inverses
+  `rankOf` and `ranksOf`, `support`, `inspect` with `drawInspection`, the
+  counts by size, `pmf`, the structural `shrinkRank`, and `smallerMembers`. A
+  generator keeps each construction failure as one `GenError`. `explain`
+  describes it, and `orFail` fails with that text.
 - Sizes count pays, as in FEAT: `pure` has size zero, an atom one, `<*>` adds
   the sizes of its sides, and `pay`, which `Data.CFTA.Gen` and
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree
   and an imported term both count their nodes. The `Functor` and
   `Applicative` laws hold for sizes. A join (`match`, `relate`) adds the sizes
-  of its sides, as a product does. A recursion reaches its occurrence through
-  a pay, or through a product whose other side has no member of size zero,
-  and through a product or a constructor. See
+  of its sides, as a product does. A recursion must reach each occurrence
+  through a pay, or through a product whose other side has no member of size
+  zero. It must also pass through a product or a constructor. See
   `docs/adr/0002-sizes-count-pays.md`.
 - `Data.CFTA.Gen.QuickCheck`: `toGen`, `toGenWithRank`, `forAll` with
   size-minimal counterexamples, `sized`, and the frozen pools `samplePool`
@@ -73,9 +73,6 @@ tree automata of `microcfta`, with QuickCheck integration.
   source-ordered ranks, and structural shrinking, and sampling makes no solver
   calls. A constructor that needs the solver, and an import whose guards the
   engine cannot count, defer the generator until `compile`.
-- `Data.CFTA.Constraint` gains `indicators`, a constraint read as a signed
-  sum of equality indicators, so the symbolic counter handles Boolean
-  equality guards of the liquid automata without the solver.
 - `Data.CFTA.Ranked`: finite ranks, weighted sampling, replay, and structural
   shrinking, independent of automata, with `Data.CFTA.Ranked.QuickCheck`.
 - The engine modules `Data.CFTA.Gen.Internal.*` and the ranked internals

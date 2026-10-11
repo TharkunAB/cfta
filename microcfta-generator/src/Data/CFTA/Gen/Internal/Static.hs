@@ -1,10 +1,10 @@
 {- | Finite languages and the builders that compose them.
 
 A t'Static' is an ECTA support paired with an t'OutcomeIndex' that counts,
-selects, decodes, and samples outcomes by rank. The basic finite combinators
-of "Data.CFTA.Gen" are one function here: pure, elements, frequency, fmap,
-application, atomic marking, and labelling. Joins, grouping, and recursion
-live in "Data.CFTA.Gen.Internal.Join", "Data.CFTA.Gen.Internal.Grouped",
+selects, decodes, and samples outcomes by rank. Each basic finite
+combinator of "Data.CFTA.Gen" is one function here: pure, elements,
+frequency, fmap, application, pay, atomic, and node. Joins, grouping, and
+recursion live in "Data.CFTA.Gen.Internal.Join", "Data.CFTA.Gen.Internal.Grouped",
 "Data.CFTA.Gen.Internal.Bucket", and "Data.CFTA.Gen.Internal.Recur". The
 sampling engine itself lives in
 "Data.CFTA.Ranked.Internal.Sampler".
@@ -124,9 +124,9 @@ data OutcomeIndex symbol a = OutcomeIndex
     -}
     , outcomeValueAt :: Rank -> a
     , outcomeSampler :: Sampler a
-    {- ^ The compositional sampler is demand-driven. Uniform lowering uses the
-    compiled rank plan instead, while weighted and atomic paths force this
-    fallback once when they need it.
+    {- ^ The sampler that the combinators compose. It is built on first use.
+    A uniform language samples through 'outcomeDecoder' and does not build it.
+    A weighted or atomic language builds it once.
     -}
     , outcomePlan :: Plan a
     , outcomeSizeIndex :: SizeIndex a
@@ -134,10 +134,10 @@ data OutcomeIndex symbol a = OutcomeIndex
     a shrink loop builds them once. Construct through 'mkOutcomeIndex'.
     -}
     , outcomeDecoder :: RankDecoder a
-    {- ^ The compiled 'outcomePlan', built on first use and retained.
-    'sampleStatic' and 'sampleStaticWithRank' read this field, so every sample
-    that they draw shares one decoder whatever the optimizer does with the
-    sampler's function body. The samplers of the constructors do not read it.
+    {- ^ The compiled 'outcomePlan', built on first use and kept.
+    'sampleStatic' and 'sampleStaticWithRank' read this field, so all their
+    samples share one decoder. The samplers of the combinators do not read this
+    field.
     -}
     , outcomeSizeSampling :: Maybe (SampleIndex a, Rank -> Either GenError Rational)
     {- ^ The sampler of each size class, and the weight of each rank inside its
@@ -250,12 +250,12 @@ data Static symbol a = Static
     -}
     , staticOutcomes :: !(OutcomeIndex symbol a)
     , staticAtomic :: !Bool
-    {- ^ Whether an explicit atomic boundary closes this finite language.
+    {- ^ Whether 'atomicStatic' made this language one atom.
 
-    Ordinary finite weights do not control recursive structure. 'atomicStatic'
-    sets this marker so 'staticSampling' can keep them as one choice at the
-    size of the atom: one, or more under a pay. The sampler itself already
-    lives in 'staticOutcomes'.
+    Inside a size class, the ordinary finite weights of a language become
+    member counts. An atom keeps its weights: 'staticSampling' draws its
+    members by weight inside the one size of the atom. That size is one, or
+    more under a pay. The sampler is in 'staticOutcomes'.
     -}
     , staticInspection :: Inspection symbol
     -- ^ Diagnostic structure. Counting and decoding do not force this field.

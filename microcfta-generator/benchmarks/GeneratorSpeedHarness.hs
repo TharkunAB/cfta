@@ -2,18 +2,15 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 
-{- | Process-isolated sampling benchmark shared by the generator packages.
+{- | Process-isolated sampling benchmark.
 
-The three packages carry byte-identical copies of this module, because a
-source distribution cannot reach outside its own directory. CI checks that
-they stay identical.
-
-Each cell gets a fresh process so process-global hash-consing tables cannot
-make later depths look cheaper. The first-sample column includes generator
-construction; the steady-state columns reuse that generator. Each complete
-entry has a fixed workload and a 30-second wall-clock limit; entries which
-cannot finish are reported as timeouts. Wall-clock time includes external work
-such as solver calls.
+Each cell runs in a new process, so the global hash-consing tables of an
+earlier cell cannot make a later cell look cheaper. The driver runs each cell
+three times and prints the median of each column. The first-sample column
+includes the construction of the generator. The steady-state columns reuse that
+generator. Each run draws a fixed number of samples and has a 30-second
+wall-clock limit. After a timeout, the driver skips the larger sizes of that
+engine. Wall-clock time includes external work, such as solver calls.
 -}
 module GeneratorSpeedHarness (
     Benchmark (..),

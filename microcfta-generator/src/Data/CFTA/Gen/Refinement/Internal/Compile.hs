@@ -11,9 +11,9 @@ reads: the label at the child's root, and at deeper requested paths. The
 solver decides a guard once per tuple of child groups, the accepted tuples
 become one join per constructor, and an imported automaton is pruned and
 split by the same observations without enumerating its terms. The result is
-an ordinary generator of the engine, finite or, for a recursive import,
-recursive, with exact counts, ranks, and structural shrinking. 'validOutcomes' is the explicit oracle: it enumerates
-every candidate and checks each complete witness.
+an ordinary generator of the engine. It is finite, or recursive for a
+recursive import. 'validOutcomes' is the oracle: it enumerates every
+candidate and checks each complete witness.
 -}
 module Data.CFTA.Gen.Refinement.Internal.Compile (
     compile,
@@ -183,9 +183,10 @@ several children, and a choice of @pure@ values gives none. A built language
 gives the number that its members give, which 'staticRootCount' keeps: a
 source without symbols, such as 'fromIndexed' and the pools of @freeze@ and
 @samplePool@, gives none, and a join gives one for each side. A language
-without members gives one, so that it does not refuse a guard. The result is
-'NoCommonCount' when two members give different numbers, and for a recursive
-or opaque built language, whose number is not known.
+without members, or a language that failed to build, gives one, so that the
+guard does not report the failure first. The result is 'NoCommonCount' when
+two members give different numbers, and for a recursive or opaque built
+language, whose number is not known.
 -}
 rootCount :: Gen symbol a -> RootCount
 rootCount generator = case genRecipe generator of

@@ -5,37 +5,35 @@
 A language's members split into size classes. Sizes follow FEAT (Duregård,
 Jansson, and Wang, "Feat: Functional Enumeration of Algebraic Types",
 Haskell 2012): the member of @pure@ has size zero, an atom has size one, a
-product adds the sizes of its operation and argument, a choice keeps the
+product adds the sizes of its function and its argument, a choice keeps the
 sizes of its alternatives, and 'payIndex' adds one. A t'SizeIndex' counts
-every class by convolution (a product of size @s@ splits into an operation
-of size @a@ and arguments of size @s - a@) and indexes into one directly,
-returning the member's rank alongside its value.
+every class by convolution (a product of size @s@ splits into a function
+of size @a@ and an argument of size @s - a@). It selects a member of a class
+directly, and it gives the rank of the member with its value.
 
-Two kinds of index share the type. 'sizeIndex' reads a finite 'Plan' and
-reports that plan's own mixed-radix rank, so counting a class never changes
-what a rank means. The combinators ('mapIndex', 'productIndex',
-'choiceIndex', 'fixIndex') build languages that may be recursive, where
-mixed radix has no meaning because a side can be unbounded; those report a
-size-major rank instead, the position of the member in the size-ordered
-enumeration. Either way the rank is the one canonical rank of the
-generator it came from: the compiled decoder of a finite plan reads the
-mixed-radix rank, and 'unrank' of a recursive generator reads the size-major
-rank. The callers that take the rank part of 'sizeClassSelect' on a finite plan
-index use it as a plan rank, and the others take the value or compute the
-size-major rank from the counts.
+Two kinds of index have this type, and they give different ranks.
+'sizeIndex' reads a finite 'Plan' and gives the mixed-radix rank of the plan.
+So the size classes do not change the meaning of a rank. 'productIndex',
+'choiceIndex', and 'fixIndex' build languages that can be recursive. A side
+of such a language can have no bound, so a mixed-radix rank is not defined.
+These indexes give the size-major rank: the rank of the member when the
+members are in size order. 'mapIndex', 'payIndex', and 'constructorIndex'
+keep the ranks of the index that they change. In both cases the rank is the
+rank that the generator decodes: the compiled decoder of a finite plan reads
+the mixed-radix rank, and 'unrank' of a recursive generator reads the
+size-major rank.
 
 The counts are sparse: sizes in ascending order, each with its count. A
-shared automaton can have members of astronomical size and only a few
-distinct sizes, so the work follows the size classes that exist, not the
-range of sizes. A 'Data.CFTA.Index.Size' holds an 'Integer' for the same
-reason. A count can be zero: a product and a pay give their smallest size
-before they count it, and that entry can be zero.
+shared automaton can have very large members and only a few distinct sizes.
+So the work is proportional to the number of size classes, not to the largest
+size. A 'Data.CFTA.Index.Size' holds an 'Integer' for the same reason. A
+count can be zero: a product and a pay give their smallest size before they
+count it, and that entry can be zero.
 
-Convolution is productive on infinite operands, which is what makes
-'fixIndex' work. A recursive occurrence must be guarded: it contributes to
-size @s@ only through a pay, or through a product whose other side has no
-member of size zero. Then counting size @s@ only consults the occurrence at
-sizes below @s@.
+Convolution is productive on infinite operands. 'fixIndex' needs this. A
+recursive occurrence must be guarded: it contributes to size @s@ only through
+a pay, or through a product whose other side has no member of size zero. Then
+counting size @s@ only consults the occurrence at sizes below @s@.
 
 This module is an exposed internal module. The generator layers of
 microcfta-generator use it directly. Its exports are not covered by the PVP
@@ -129,9 +127,9 @@ used to check that the recursive definition is guarded before it is tied.
 The token identifies the recursion. A nested definition can reach the probe
 of an enclosing one, so each recursion reads only its own token.
 
-Only its metadata is ever read: building a language around a probe answers
-whether the recursion passes through a product and whether it can close to a
-finite member, without counting anything.
+Only its metadata is read. A language built around a probe shows whether a pay
+or a product guards the recursion, whether a product or a constructor adds a
+term node, and the smallest size of a member. It counts nothing.
 -}
 probeIndexWithMinimum :: Occurrence -> MinimumSize -> SizeIndex a
 probeIndexWithMinimum (Occurrence token) minimumSize' =
@@ -473,8 +471,8 @@ mapIndexWithRank transform index =
 
 {- | The product of two indexes, ranked size-major.
 
-Within a size class, splits come in ascending operation size, and each split
-is ordered operation-major. Either side may be recursive.
+Within a size class, splits come in ascending function size, and each split
+is ordered function-major. Either side may be recursive.
 -}
 productIndex :: SizeIndex (a -> b) -> SizeIndex a -> SizeIndex b
 -- A side with no member of size zero makes every member of the product larger
@@ -811,7 +809,7 @@ productSplitInt indexF indexX size = go $ takeWhile ((<= size) . fst) (sizeClass
         block = fromInteger functionCount * argumentCount
 
 {- | Add two sparse series of values by size, merging their sizes. Each series
-lists the sizes with a nonzero value, in ascending order.
+lists sizes in ascending order. A value can be zero.
 -}
 addSparse :: (Num value) => [(Size, value)] -> [(Size, value)] -> [(Size, value)]
 addSparse [] right = right

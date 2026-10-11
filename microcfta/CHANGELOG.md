@@ -110,7 +110,9 @@ remains a separate ECTA-only package.
   `semanticConstraint` build one, and `conjoinConstraints` conjoins two. A
   guard (`Satisfies`, `Holds`) adds a constraint that a solver decides.
   `PlainFTA` is `FTA state symbol Constraint`, and an ordinary automaton has
-  `noConstraint` on every transition.
+  `noConstraint` on every transition. `indicators` reads a constraint as a
+  signed sum of equality indicators. The symbolic counter of the generator
+  uses it to count Boolean equality guards without the solver.
 
 ### Differences from microecta 0.1.0.0
 

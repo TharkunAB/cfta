@@ -90,7 +90,9 @@ data WeightedIndexed a = WeightedIndexed
 data RankedError
     = -- | The language has no members.
       EmptyRanked
-    | -- | A weighted alternative carried a weight below one.
+    | {- | A weight was below one: the weight of an alternative or of a
+      value, or the total weight of a weighted source.
+      -}
       NonPositiveRankedWeight !Weight
     | {- | The total weight cannot give every rank a positive integer weight.
       The fields contain the cardinality and total weight, respectively.
@@ -151,11 +153,11 @@ fromIndexed Indexed{indexedCardinality, indexedSelect}
                 (PlanSelect indexedCardinality indexedSelect)
                 (uniformSampler indexedCardinality indexedSelect)
 
-{- | Build a ranked language whose members are decoded only when selected.
+{- | Build a ranked language that decodes a member each time a caller reads it.
 
-Unlike 'fromIndexed', small sources are not tabulated while the rank decoder
-is compiled. Automaton adapters use this to keep term materialization at the
-enumeration boundary.
+'fromIndexed' tabulates a source of at most 4096 members, so the decoder
+keeps each member that it decodes. This function does not tabulate.
+Automaton imports use it.
 -}
 fromIndexedOnDemand :: Indexed a -> Either RankedError (Ranked a)
 fromIndexedOnDemand Indexed{indexedCardinality, indexedSelect}

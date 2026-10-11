@@ -5,16 +5,17 @@
 
 A refinement generator is a generator over 'Symbol' and
 'Constraint': every constructor carries a refinement, and the guard of
-a constructor relates the refinements of its children. Everything of
+a constructor relates the refinements of its children. All of
 "Data.CFTA.Gen" applies, and this module adds the refined sources, the
 guarded constructors, and the imports of the theory.
 
-A guard that the engine cannot decide without a solver defers the generator:
-its inspectors report 'SourceRequiresCompilation' until 'compile' has
-decided every guard once, with the solver, and returned an ordinary
-generator: finite, or recursive for a recursive import. A constructor without a guard needs no solver and is built at once.
-A guard of Boolean equality between subterms also defers the generator. An
-imported automaton counts Boolean equality symbolically and is built at once.
+The engine builds a constructor without a guard at once. A guard that needs
+the solver defers the generator, and so does a guard of Boolean equality
+between subterms. The inspectors of a deferred generator report
+'SourceRequiresCompilation'. 'compile' decides each guard once with the
+solver and returns an ordinary generator, which is finite, or recursive for a
+recursive import. An imported automaton does not wait for 'compile' because
+of Boolean equality: the engine counts these equalities symbolically.
 -}
 module Data.CFTA.Gen.Refinement (
     -- * Generators
@@ -157,16 +158,19 @@ unbounded type, such as 'Integer', needs conditions that bound it:
 
 @n <- every @Integer `satisfying` (\\v -> 0 .<= v .&& v .< 1000000)@
 
-On this leaf, a condition narrows the values, and a contract of 'guarded' keeps
-the tuples of values that it admits. 'compile' counts them without enumeration,
-by counting integer points. The solver still decides the parts of a guard that
-read no value of 'every'. Inside one group, 'compile' ranks the tuples in
-increasing lexicographic order, with the leaves of 'every' as the digits from
-left to right and the tuple as the fastest part of the rank. Groups are ordered
-by their keys, so ranks in different groups are not ordered by their integers. A
-condition and a contract must be linear. They read a value as its integer,
-'toLiteral', so compare it with a 'literal', as in
-@\\c -> c ./= literal Red@. Arithmetic on these integers is exact: it does
+A condition on this leaf narrows its values. A contract of 'guarded' keeps
+the tuples of values that it admits. 'compile' counts these tuples as integer
+points and does not enumerate them. The solver still decides the parts of a
+guard that read no value of 'every'.
+
+In one group, the ranks of the tuples follow increasing lexicographic order,
+with the leaves of 'every' as the digits from left to right. The tuple is the
+least significant part of the rank. 'compile' orders the groups by their
+keys, so the ranks in different groups do not follow the integers.
+
+A condition and a contract must be linear. They read a value as its integer,
+'toLiteral', so compare a value with a 'literal', as in
+@\\c -> c ./= literal Red@. Arithmetic on these integers is exact and does
 not wrap around. A term names each value by its integer.
 -}
 every :: forall a. (Literal a) => LTAGen a
@@ -228,15 +232,15 @@ checkPool solver entries =
         verdict <- entails solver (refinementFormula (.== literal member)) (refinementFormula refinement)
         pure [member | verdict /= Yes]
 
-{- | Retain the most specific semantic representatives in each similarity
-class through the core LTA @Similarity@ and @Minimize@ procedures.
+{- | Keep the most specific entries of each class of a pool.
 
-The pool is represented as a one-node LTA whose transition refinements are the
-entry annotations. The projection supplies the non-liquid type class used by
-'refinementSubtypingOn'. Within one class, a subtype replaces its supertype;
-equivalent refinements keep the earlier entry. Incomparable entries remain.
-This operation is opt-in: ordinary QuickCheck pools should keep syntactically
-distinct values when broad coverage matters more than semantic representatives.
+The function reads the pool as an LTA with one node and one transition for
+each entry, and applies the @Similarity@ and @Minimize@ procedures of the
+core. The key function gives the class of each entry, as for
+'refinementSubtypingOn'. In one class, an entry whose refinement implies the
+refinement of another entry removes that other entry. Of two equivalent
+entries, the earlier entry stays. An entry that is not comparable with the
+other entries stays. Use 'pool' or 'namedPool' to keep every entry.
 -}
 minimizePoolOn ::
     (Eq key) =>
@@ -393,8 +397,9 @@ contract of a parent and a condition from 'satisfying' read the measure. A
 measure does not change the generated value.
 
 Each child that the measure names must have a measure of its own: a
-refinement that fixes one integer, as 'elements' and 'leaf' give, an integer
-from 'every', or a constructor from 'measured' or 'measuredNode'. The measure
+refinement that fixes one integer, as 'elements' gives, or a 'leaf' or 'pool'
+entry whose refinement is an equality such as @(.== 0)@; an integer from
+'every'; or a constructor from 'measured' or 'measuredNode'. The measure
 of children from 'every' stays a term of their integers, so a parent's
 contract relates it without enumerating them. A child without a measure makes
 'compile' report 'InexactMeasure'. The contract and the measure must each take
