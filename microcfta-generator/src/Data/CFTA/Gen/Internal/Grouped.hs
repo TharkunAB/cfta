@@ -219,9 +219,7 @@ argsMaps ::
     Args symbol argKeys operation result ->
     Either GenError (ArgMaps (KeyedBucket symbol) argKeys operation result)
 argsMaps ANil = Right MapsNil
-argsMaps (Grouped family :& rest) = MapsCons <$> family <*> argsMaps rest
-argsMaps (CyclicGrouped (Left err) :& _) = Left err
-argsMaps (CyclicGrouped _ :& _) = Left UnboundedGenerator
+argsMaps (family :& rest) = MapsCons <$> finiteGroups family <*> argsMaps rest
 
 {- | Apply an operation family to argument families of which at least one is
 recursive.
@@ -373,14 +371,9 @@ relateGroupsM ::
     Grouped symbol rightKey right ->
     IO (Either relationError (Grouped symbol resultKey (left, right)))
 relateGroupsM relation resultKey left right =
-    case (left, right) of
-        (Grouped (Left err), _) -> pure $ Right $ Grouped $ Left err
-        (_, Grouped (Left err)) -> pure $ Right $ Grouped $ Left err
-        (CyclicGrouped (Left err), _) -> pure $ Right $ Grouped $ Left err
-        (_, CyclicGrouped (Left err)) -> pure $ Right $ Grouped $ Left err
-        (CyclicGrouped _, _) -> pure $ Right $ Grouped $ Left UnboundedGenerator
-        (_, CyclicGrouped _) -> pure $ Right $ Grouped $ Left UnboundedGenerator
-        (Grouped (Right leftBuckets), Grouped (Right rightBuckets)) -> do
+    case (,) <$> finiteGroups left <*> finiteGroups right of
+        Left err -> pure $ Right $ Grouped $ Left err
+        Right (leftBuckets, rightBuckets) -> do
             related <- decidePairs 0 Empty $ Map.toAscList leftBuckets
             pure $ fmap (Grouped . mergeComponentsByKey . toList) related
           where
@@ -456,12 +449,11 @@ filterGroupsM ::
     (key -> IO (Either relationError Bool)) ->
     Grouped symbol key a ->
     IO (Either relationError (Grouped symbol key a))
-filterGroupsM _ (Grouped (Left err)) = pure $ Right $ Grouped $ Left err
-filterGroupsM _ (CyclicGrouped (Left err)) = pure $ Right $ Grouped $ Left err
-filterGroupsM _ (CyclicGrouped _) = pure $ Right $ Grouped $ Left UnboundedGenerator
-filterGroupsM predicate (Grouped (Right buckets)) = do
-    retained <- go Empty $ Map.toAscList buckets
-    pure $ fmap (Grouped . mergeComponentsByKey . toList) retained
+filterGroupsM predicate grouped = case finiteGroups grouped of
+    Left err -> pure $ Right $ Grouped $ Left err
+    Right buckets -> do
+        retained <- go Empty $ Map.toAscList buckets
+        pure $ fmap (Grouped . mergeComponentsByKey . toList) retained
   where
     go accepted [] = pure $ Right accepted
     go accepted ((key, bucket) : rest) = do
@@ -485,10 +477,7 @@ groupKeys (Grouped result) = either (const []) Map.keys result
 for each group and lists no member.
 -}
 cardinalities :: Grouped symbol key a -> Either GenError (Map.Map key Cardinality)
-cardinalities (CyclicGrouped (Left err)) = Left err
-cardinalities (CyclicGrouped _) = Left UnboundedGenerator
-cardinalities (Grouped result) =
-    fmap (fmap $ outcomeCardinality . staticOutcomes . keyedBucketStatic) result
+cardinalities = fmap (fmap $ outcomeCardinality . staticOutcomes . keyedBucketStatic) . finiteGroups
 
 {- | The number of members of each key at one size. A key with no member of that
 size is not in the map.

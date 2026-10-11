@@ -80,11 +80,7 @@ inspect (Opaque _) = Left CannotInspectOpaqueGenerator
 'UnboundedGenerator'.
 -}
 cardinality :: Gen symbol a -> Either GenError Cardinality
-cardinality (Transparent result) =
-    outcomeCardinality . staticOutcomes <$> result
-cardinality (Cyclic (Left err)) = Left err
-cardinality (Cyclic (Right _)) = Left UnboundedGenerator
-cardinality (Opaque _) = Left CannotInspectOpaqueGenerator
+cardinality = fmap (outcomeCardinality . staticOutcomes) . staticView
 
 {- | Every value of a finite generator, in rank order.
 

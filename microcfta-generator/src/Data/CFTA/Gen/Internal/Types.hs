@@ -23,11 +23,13 @@ module Data.CFTA.Gen.Internal.Types (
     isRecursive,
     isOpaque,
     recursiveView,
+    staticView,
 
     -- * Grouped generators
     Grouped (..),
     isRecursiveGrouped,
     recursiveGroups,
+    finiteGroups,
 
     -- * Composing
     Args (..),
@@ -170,6 +172,13 @@ recursiveView (Transparent result) = recursiveFromStatic <$> result
 recursiveView (Cyclic result) = result
 recursiveView (Opaque _) = Left CannotInspectOpaqueGenerator
 
+-- | The finite language of a generator. A recursive generator gives 'UnboundedGenerator'.
+staticView :: Gen symbol a -> Either GenError (Static symbol a)
+staticView (Transparent result) = result
+staticView (Cyclic (Left err)) = Left err
+staticView (Cyclic (Right _)) = Left UnboundedGenerator
+staticView (Opaque _) = Left CannotInspectOpaqueGenerator
+
 -- | A generator whose values are classified by a projected key: one language per key.
 data Grouped symbol key a
     = Grouped !(Either GenError (Map.Map key (KeyedBucket symbol a)))
@@ -191,6 +200,12 @@ recursiveGroups ::
     Either GenError (Map.Map key (KeyedRecursive symbol a))
 recursiveGroups (CyclicGrouped result) = result
 recursiveGroups (Grouped result) = keyedRecursiveFromBuckets <$> result
+
+-- | The finite groups of a family. A recursive family gives 'UnboundedGenerator'.
+finiteGroups :: Grouped symbol key a -> Either GenError (Map.Map key (KeyedBucket symbol a))
+finiteGroups (Grouped result) = result
+finiteGroups (CyclicGrouped (Left err)) = Left err
+finiteGroups (CyclicGrouped (Right _)) = Left UnboundedGenerator
 
 {- | Argument families for 'apply', one per signature component, in order.
 
