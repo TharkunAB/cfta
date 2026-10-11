@@ -1,7 +1,6 @@
 -- | Shared size indexing for ordinary, possibly recursive automata.
 module Data.CFTA.Gen.Internal.Table (
     rowsOf,
-    automatonIndex,
     tableIndex,
     tablePosition,
     minimumSizes,
@@ -53,14 +52,6 @@ rowsOf root =
         [ (NodeId ident, [FTA.Transition (edgeSymbol edge) (map nodeIdentity $ edgeChildren edge) () | edge <- edges])
         | (ident, edges) <- IntMap.toList (reachable root)
         ]
-
-{- | Count accepting runs by their number of tree nodes.
-
-Ranks are size-major. Ambiguous automata can assign several ranks to one term.
-Each state shares one index, including recursive references to that index.
--}
-automatonIndex :: (Ord state) => FTA.FTA state symbol () -> SizeIndex (Tree.Tree symbol)
-automatonIndex automaton = tableIndex (FTA.initialState automaton) (FTA.transitionTable automaton)
 
 {- | Index ordinary transition rows supplied by a graph adapter.
 
@@ -141,10 +132,7 @@ stateTable rows = (indexOf, prefixesOf)
     prefixTable = LazyMap.map (map $ \transition -> (transition, childPrefixes transition)) rows
       where
         childPrefixes transition =
-            NonEmpty.scanl
-                consumeChild
-                (payIndex $ constantIndex $ Tree.Node $ FTA.transitionSymbol transition)
-                (map indexOf $ FTA.transitionChildren transition)
+            NonEmpty.scanl consumeChild (seed transition) (map indexOf $ FTA.transitionChildren transition)
     -- Sampling reads this index. It is built directly, not as the last child
     -- prefix, because an index from the prefix list made each sample slower
     -- (about 1% more instructions in the sampling benchmarks).
@@ -159,10 +147,7 @@ stateTable rows = (indexOf, prefixesOf)
 
         transitionIndex transition =
             mapIndex ($ []) $
-                foldl'
-                    consumeChild
-                    (payIndex $ constantIndex $ Tree.Node $ FTA.transitionSymbol transition)
-                    (map indexOf $ FTA.transitionChildren transition)
+                foldl' consumeChild (seed transition) (map indexOf $ FTA.transitionChildren transition)
     indexOf state
         | Map.member state minima = Map.findWithDefault emptyIndex state indexTable
         | otherwise = emptyIndex
@@ -170,6 +155,8 @@ stateTable rows = (indexOf, prefixesOf)
         | Map.member state minima = Map.findWithDefault [] state prefixTable
         | otherwise = []
     emptyIndex = choiceIndex []
+    -- The index of a transition before its children: the symbol, with its pay.
+    seed transition = payIndex $ constantIndex $ Tree.Node $ FTA.transitionSymbol transition
     consumeChild built child = productIndex (mapIndex prepend built) child
       where
         prepend build term arguments = build (term : arguments)

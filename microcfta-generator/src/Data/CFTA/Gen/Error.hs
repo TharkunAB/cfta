@@ -9,14 +9,12 @@ module Data.CFTA.Gen.Error (
     GenError (..),
     explain,
     orFail,
-    fromRankedError,
 ) where
 
 import Data.List (intercalate)
 
 import Data.CFTA.Equality.Constraint (EqConstraints)
 import Data.CFTA.Index (Cardinality, Rank, Weight)
-import qualified Data.CFTA.Ranked as Ranked
 import Data.CFTA.Refinement (
     AutomatonError (GuardArityMismatch),
     Guard,
@@ -85,8 +83,6 @@ data GenError
       contains the named constructor or atomic literal.
       -}
       UndecodableConstructor !String
-    | -- | The compiled rank plan is invalid.
-      InvalidRankedGenerator !Ranked.RankedError
     | -- | The solver could not decide a guard.
       SolverUnknown
     | -- | A solver query reached the time limit, in milliseconds.
@@ -302,7 +298,6 @@ explain (UndecodableConstructor name) =
         , "give the type a HasFTA instance whose decodeTerm accepts every term"
         , "that encodeTerm gives."
         ]
-explain (InvalidRankedGenerator err) = "Invalid compiled rank plan: " <> show err
 explain SolverUnknown =
     guidance
         [ "The solver could not decide a guard."
@@ -454,14 +449,6 @@ explain TermNotInLanguage =
         , "accepts, and rankOfValue encodes a datatype value with its codec."
         , "Fix: rank a term that the generator produced."
         ]
-
--- | Report a failure of the shared ranked engine as a generator failure.
-fromRankedError :: Ranked.RankedError -> GenError
-fromRankedError Ranked.EmptyRanked = EmptyGenerator
-fromRankedError (Ranked.NonPositiveRankedWeight weight) = NonPositiveWeight weight
-fromRankedError (Ranked.NegativeRankedRank rank) = NegativeRank rank
-fromRankedError (Ranked.RankedSelectionOutOfRange rank total) = SelectionOutOfRange rank total
-fromRankedError err@(Ranked.InsufficientRankedWeight _ _) = InvalidRankedGenerator err
 
 -- | One guidance message, one line per element.
 guidance :: [String] -> String

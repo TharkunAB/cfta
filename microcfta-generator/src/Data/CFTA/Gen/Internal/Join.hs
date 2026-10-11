@@ -153,11 +153,7 @@ joinGroupedStatic left right related =
                 joined =
                     reducePartially $
                         Node
-                            [ mkEdge
-                                Join
-                                [leftNode, rightNode]
-                                (equalityConstraint $ mkEqConstraints [[path [0, 0], path [1, 0]]])
-                            ]
+                            [mkEdge Join [leftNode, rightNode] keysEqual]
                 -- The private join labels flatten into the roots of the two sides.
                 sideRootCount terms = commonRootCount $ map (RootCount . termRootCount) terms
                 rootCount =
@@ -170,6 +166,8 @@ joinGroupedStatic left right related =
                 (\outcomes -> Static joined outcomes False (inspectionJoined groups) rootCount)
                     <$> joinOutcomeIndex left right groups
   where
+    -- The two sides of a pair have the same group key.
+    keysEqual = equalityConstraint $ mkEqConstraints [[path [0, 0], path [1, 0]]]
     inspectionJoined groups =
         Inspection Nothing $
             Node
@@ -178,7 +176,7 @@ joinGroupedStatic left right related =
                     [ side LeftKeyed (fmap outcomeInspection . joinGroupLeft)
                     , side RightKeyed (fmap outcomeInspection . joinGroupRight)
                     ]
-                    (equalityConstraint $ mkEqConstraints [[path [0, 0], path [1, 0]]])
+                    keysEqual
                 ]
       where
         side symbol outcomes =

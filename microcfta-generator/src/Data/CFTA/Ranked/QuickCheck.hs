@@ -1,5 +1,4 @@
 {-# LANGUAGE DerivingStrategies #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 -- | QuickCheck lowering for finite ranked generators.
 module Data.CFTA.Ranked.QuickCheck (
@@ -15,16 +14,16 @@ import Data.List (mapAccumL)
 import qualified Test.QuickCheck as QC
 
 import Data.CFTA.Index (Cardinality (..), Rank (..), Weight (..))
-import qualified Data.CFTA.Ranked as Tree
+import qualified Data.CFTA.Ranked as Ranked
 
 {- | QuickCheck as the sampling backend.
 
-The wrapper exists to avoid an orphan 'Tree.GenBackend' instance for 'QC.Gen'.
+The wrapper exists to avoid an orphan 'Ranked.GenBackend' instance for 'QC.Gen'.
 -}
 newtype QuickCheckBackend a = QuickCheckBackend (QC.Gen a)
     deriving newtype (Functor, Applicative)
 
-instance Tree.GenBackend QuickCheckBackend where
+instance Ranked.GenBackend QuickCheckBackend where
     selectInteger (Cardinality bound) =
         QuickCheckBackend $ Rank <$> QC.chooseInteger (0, bound - 1)
 
@@ -58,27 +57,24 @@ instance Tree.GenBackend QuickCheckBackend where
             let upperBound = total + weight
              in (upperBound, (upperBound, generated))
 
-    filterGen predicate (QuickCheckBackend generated) =
-        QuickCheckBackend $ generated `QC.suchThat` predicate
-
 -- | Lower a ranked language to a QuickCheck generator.
-toGen :: Tree.Ranked a -> QC.Gen a
-toGen ranked = case Tree.lower ranked of
+toGen :: Ranked.Ranked a -> QC.Gen a
+toGen ranked = case Ranked.lower ranked of
     QuickCheckBackend generated -> generated
 
 -- | Lower a ranked language with its deterministic replay rank.
-toGenWithRank :: Tree.Ranked a -> QC.Gen (Tree.RankedValue a)
-toGenWithRank ranked = case Tree.lowerWithRank ranked of
+toGenWithRank :: Ranked.Ranked a -> QC.Gen (Ranked.RankedValue a)
+toGenWithRank ranked = case Ranked.lowerWithRank ranked of
     QuickCheckBackend generated -> generated
 
 -- | Quantify over a ranked language and shrink only to valid members.
-forAll :: (QC.Testable prop, Show a) => Tree.Ranked a -> (a -> prop) -> QC.Property
+forAll :: (QC.Testable prop, Show a) => Ranked.Ranked a -> (a -> prop) -> QC.Property
 forAll ranked = forAllWith (toGenWithRank ranked) shrink
   where
     shrink rank =
-        [ Tree.RankedValue candidate value
-        | candidate <- Tree.shrinkRank ranked rank
-        , Right value <- [Tree.unrank ranked candidate]
+        [ Ranked.RankedValue candidate value
+        | candidate <- Ranked.shrinkRank ranked rank
+        , Right value <- [Ranked.unrank ranked candidate]
         ]
 
 {- | Quantify over ranked members with a shrink function of the layer's
@@ -87,13 +83,13 @@ The failing rank is printed with the counterexample.
 -}
 forAllWith ::
     (QC.Testable prop, Show a) =>
-    QC.Gen (Tree.RankedValue a) ->
-    (Rank -> [Tree.RankedValue a]) ->
+    QC.Gen (Ranked.RankedValue a) ->
+    (Rank -> [Ranked.RankedValue a]) ->
     (a -> prop) ->
     QC.Property
 forAllWith ranked shrink prop =
     QC.forAllShrinkShow
         ranked
-        (shrink . Tree.valueRank)
-        (\(Tree.RankedValue rank value) -> "rank " <> show rank <> ": " <> show value)
-        (prop . Tree.rankedValue)
+        (shrink . Ranked.valueRank)
+        (\(Ranked.RankedValue rank value) -> "rank " <> show rank <> ": " <> show value)
+        (prop . Ranked.rankedValue)

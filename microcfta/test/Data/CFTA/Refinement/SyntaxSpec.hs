@@ -28,7 +28,7 @@ import Data.CFTA.Refinement (
     pattern Transition,
  )
 import Data.CFTA.Refinement.Expression (refinementFormula, true, (.==), (.>=))
-import Data.CFTA.Refinement.Guard (automaton, contract, isSubtypeOf, requires, transition, unconstrained)
+import Data.CFTA.Refinement.Guard (automaton, contract, isSubtypeOf, requires, transition)
 import Data.CFTA.Refinement.TestSupport (tableEntailment)
 
 spec :: Spec
@@ -49,7 +49,7 @@ spec =
         it "builds transitions from refinements and named guards" $ do
             let nonNegative v = v .>= 0
                 built = do
-                    zero <- automaton [transition "zero" nonNegative [] unconstrained]
+                    zero <- automaton [transition "zero" nonNegative [] noConstraint]
                     automaton [transition "sqrt" (const true) [zero] (`requires` nonNegative)]
             case built of
                 Left err -> expectationFailure $ show err

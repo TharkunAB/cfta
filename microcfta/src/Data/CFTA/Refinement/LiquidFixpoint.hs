@@ -1,6 +1,5 @@
 -- | A Z3-backed 'Entailment' implemented with Liquid Fixpoint's SMT API.
 module Data.CFTA.Refinement.LiquidFixpoint (
-    integerDeclarations,
     withZ3,
     withZ3Assuming,
     withZ3Timeout,
@@ -23,18 +22,6 @@ import qualified Language.Fixpoint.Smt.Interface as SMT
 import qualified Language.Fixpoint.Smt.Types as SMTTypes
 import qualified Language.Fixpoint.Types as Fixpoint
 import Language.Fixpoint.Types.Config (SMTSolver (Z3), defConfig, smtTimeout, solver)
-
-{- | Explicitly declare each supplied name as an integer.
-
-'withZ3' and 'withZ3Assuming' declare every free name as an integer. When
-actual terms at different positions share a name, each gets a separate solver
-value with the sort of that name, or an integer when the name has no
-declaration. So this helper only makes the integer sort explicit. Pass other
-Liquid Fixpoint sorts directly to 'withZ3' or 'withZ3Assuming' when the
-language needs them.
--}
-integerDeclarations :: [String] -> [(Fixpoint.Symbol, Fixpoint.Sort)]
-integerDeclarations = map (\name -> (Fixpoint.symbol name, Fixpoint.FInt))
 
 {- | Run actions using one reusable Z3 process and a fixed declaration set.
 Each query has the time limit 'defaultTimeLimit', as in 'withZ3Assuming'.

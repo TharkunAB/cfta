@@ -69,7 +69,7 @@ atomic (Cyclic result) =
                 -- The sizes end, so the bound keeps every member. A bounded
                 -- recursion keeps its Mu in the support, so the support cannot
                 -- tell whether the sizes end.
-                LargestSize _ -> atomicStatic <$> boundedStatic (Size $ toInteger (maxBound :: Int)) recursive
+                LargestSize largest -> atomicStatic <$> boundedStatic largest recursive
                 SizesDoNotEnd -> Left UnboundedGenerator
 atomic (Opaque _) = Transparent $ Left CannotInspectOpaqueGenerator
 
@@ -214,7 +214,7 @@ recurGrouped build
 
     keys = Map.keys keyMinimums
     positions = Map.fromList $ zip keys [0 :: KeyIndex ..]
-    positionOf key = Map.findWithDefault 0 key positions
+    positionOf key = positions Map.! key
     -- The placeholders stand for the occurrence, so bounding one is bounding
     -- the family that is still being defined.
     placeholder supportNode index sampling masses =

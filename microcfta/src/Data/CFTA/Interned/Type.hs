@@ -28,8 +28,6 @@ module Data.CFTA.Interned.Type (
     modifyNode,
     createMu,
     createMuDontCleanup,
-    shape,
-    matchMu,
 ) where
 
 import Data.Foldable (toList)
@@ -373,15 +371,15 @@ data UninternedNode symbol
 
       > substFree i (Rec j) (f i) == f j
 
-      The shape is the result of applying 'shape' to the function, stored
-      rather than recomputed. Computing it
-      builds nodes, which interns them, so leaving it to 'Eq' or 'Hashable'
-      would make hashing an uninterned node re-enter the interning cache. The
-      strict field forces it while the value is still being constructed, which
-      is before 'intern' looks at anything. See 'shape'.
+      The shape is the body applied to its placeholder, as
+      'createMuDontCleanup' computes it, stored rather than recomputed.
+      Computing it builds nodes, which interns them, so leaving it to 'Eq' or
+      'Hashable' would make hashing an uninterned node re-enter the interning
+      cache. The strict field forces it while the value is still being
+      constructed, which is before 'intern' looks at anything.
 
       The first node is the body applied to 'RecDepth'; the second is its
-      ordinary 'shape'. Keeping both distinguishes a real recursive binder
+      ordinary shape. Keeping both distinguishes a real recursive binder
       from a redundant nested one whose captured outer reference happens to
       equal the ordinary shape placeholder. Without that distinction, the
       unused binder can reuse the recursive node before 'createMu' removes it.
@@ -450,9 +448,7 @@ identifyNode i (UninternedMu depthShape s n) =
               -- This follows from parametricity:
               --
               -- >    internedMuShape
-              -- >      -- { definition of internedMuShape }
-              -- > == shape n
-              -- >      -- { definition of shape }
+              -- >      -- { definition of internedMuShape in 'createMuDontCleanup' }
               -- > == n (RecUnint (numNestedMu (n RecDepth)))
               -- >      -- { by parametricity, depth is independent of the variable number }
               -- > == n (RecUnint (numNestedMu (n (RecInt i))))
@@ -465,50 +461,6 @@ identifyNode i (UninternedMu depthShape s n) =
               internedMuShape = s
             , internedMuDepthShape = depthShape
             }
-
-{- | Compute the " shape " of the body of a 'Mu'
-
-During interning we need to know the shape of the body of a 'Mu' node /before/ we know the 'NodeId' of that node. We do
-this by replacing any 'Rec' nodes in the node by placeholders. We have to be careful here however to correctly assign
-placeholders in the presence of nested 'Mu' nodes. For example, if the user writes a term such as
-
-> -- f (f (f ... (g (g (g ... a)))))
-> Mu $ \r -> Node [
->     Edge "f" [r]
->   , Edge "g" [ Mu $ \r' -> Node [
->                    Edge "g" [r']
->                  , Edge "a" []
->                  ]
->              ]
->   ]
-
-we should be careful not to accidentally identify @r@ and @r'@.
-
-Precondition: the function must be parametric in the choice of variable names:
-
-> substFree i (Rec j) (f i) == f j
-
-Put another way, we must rule out /exotic terms/: in our case, exotic terms would be uninterned @Mu@ nodes that
-have one shape when given one variable, and another shape when given a different variable. We do not have such terms.
-(Of course, a function such as substitution /does/ do one thing if it sees one variable and another thing when it
-sees a different variable, but this is okay: substitution is a function /on/ terms, mapping non-exotic terms to
-non-exotic terms.)
-
-Implementation note: We are calling the function twice: once to compute the depth of the node, and then a second time
-to give it the right placeholder variable. Some observations:
-
-o Semantically, this is okay; if we were working with a first order representation, it would be the equivalent of
-  first executing some kind of function @Node -> Int@, followed by some kind of substitution @Node -> Node@. It's the
-  same with the higher order representation, except that in /principle/ the function could do entirely different
-  things when given 'RecDepth' versus some other kind of placeholder; the parametricity precondition rules this out.
-o It's slightly inefficient, but since this lives at the user interface boundary only, performance here is not
-  critical: internally we work with interned nodes only, and this function is not relevant.
-o It /is/ important that the placeholder we pick here is uniquely determined by the node itself: this is what
-  justifies using 'shape' during interning.
--}
-{-# INLINEABLE shape #-}
-shape :: (RecNodeId -> Node symbol) -> Node symbol
-shape f = f (RecUnint (numNestedMu (f RecDepth)))
 
 -- Interning Edges
 
@@ -691,6 +643,27 @@ createMu = dropRedundantMu . createMuDontCleanup
 
 Interning a 'Mu' is what assigns the identity its body refers to, so the redundancy check in 'createMu' can only run
 afterwards. This is that first half, exported for tests that need to observe a redundant node before it is dropped.
+
+Interning needs the shape of the body before the node has a 'NodeId'. The shape is the body applied to the placeholder
+@'RecUnint' ('numNestedMu' bodyAtDepth)@. The placeholder holds the maximum number of nested 'Mu' nodes in the body, so
+a nested binder gets a different placeholder. For example, the placeholders of @r@ and @r'@ differ in
+
+> -- f (f (f ... (g (g (g ... a)))))
+> Mu $ \r -> Node [
+>     Edge "f" [r]
+>   , Edge "g" [ Mu $ \r' -> Node [
+>                    Edge "g" [r']
+>                  , Edge "a" []
+>                  ]
+>              ]
+>   ]
+
+Precondition: the function must be parametric in the choice of variable names:
+
+> substFree i (Rec j) (f i) == f j
+
+The function is applied twice: to 'RecDepth' to find the depth, and to the placeholder. The precondition makes the two
+results agree. The node determines its placeholder, so interning can use the shape as a key.
 -}
 {-# INLINEABLE createMuDontCleanup #-}
 createMuDontCleanup ::

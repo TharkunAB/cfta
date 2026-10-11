@@ -29,7 +29,7 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import qualified Data.CFTA.Gen.Equality as ECTAGen
-import Data.CFTA.Gen.Equality.TestSupport (decodesEveryRankExactly)
+import Data.CFTA.Gen.TestSupport (decodesEveryRankExactly)
 import Data.CFTA.Interned (fromFTA, numNestedMu, toFTA)
 import Data.CFTA.Path (path)
 import qualified Data.CFTA.Simple as Simple

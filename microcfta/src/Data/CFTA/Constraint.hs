@@ -39,7 +39,6 @@ module Data.CFTA.Constraint (
     equalitiesHold,
     residual,
     indicators,
-    equalityIndicators,
     constraintAsGuard,
     constraintIndicators,
     equalityPathPairs,

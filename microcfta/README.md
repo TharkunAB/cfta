@@ -752,13 +752,13 @@ replaces the raw constraint, and `Data.CFTA.Refinement.Guard` checks it
 against the children:
 
 ```haskell
-import Data.CFTA.Refinement (Automaton, AutomatonError)
+import Data.CFTA.Refinement (Automaton, AutomatonError, noConstraint)
 import Data.CFTA.Refinement.Expression (Refinement, (.>=))
-import Data.CFTA.Refinement.Guard (automaton, requires, transition, unconstrained)
+import Data.CFTA.Refinement.Guard (automaton, requires, transition)
 
 numbers :: Either AutomatonError Automaton
 numbers = do
-  number <- automaton [transition "zero" nonNegative [] unconstrained]
+  number <- automaton [transition "zero" nonNegative [] noConstraint]
   automaton
     [ transition "sqrt" nonNegative [number]
         (\argument -> argument `requires` nonNegative)

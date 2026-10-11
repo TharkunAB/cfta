@@ -13,7 +13,6 @@ module Data.CFTA.Refinement.Guard (
     GuardBuilder (buildGuardFrom, guardArgumentCount),
     buildGuard,
     root,
-    unconstrained,
     argument,
     descendant,
     requires,
@@ -61,10 +60,6 @@ import Numeric.Natural (Natural)
 -- | The root/result of the guarded transition.
 root :: Path
 root = EmptyPath
-
--- | A transition with no liquid constraint.
-unconstrained :: Constraint
-unconstrained = noConstraint
 
 {- | A constraint or a function over consecutive constructor arguments.
 

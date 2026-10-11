@@ -84,7 +84,7 @@ toGen generator
     -- The generator at index n is bounded at size n, so QuickCheck's size selects it.
     bounded = [toGen (upToSize (max firstSize size) generator) | size <- [0 ..]]
       where
-        firstSize = either (raise "toGen") (fromMaybe 1) $ minimumSize generator
+        firstSize = either (raise "toGen") (fromMaybe 0) $ minimumSize generator
 
 {- | Sample an inspectable generator together with its stable replay rank.
 
@@ -98,7 +98,7 @@ toGenWithRank generator
   where
     bounded = [toGenWithRank (upToSize (max firstSize size) generator) | size <- [0 ..]]
       where
-        firstSize = either (raise "toGenWithRank") (fromMaybe 1) $ minimumSize generator
+        firstSize = either (raise "toGenWithRank") (fromMaybe 0) $ minimumSize generator
 
 {- | Fail a sample with the error's own guidance.
 

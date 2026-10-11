@@ -13,9 +13,9 @@ import qualified Data.Tree as Tree
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
-import Data.CFTA.Gen.Refinement.ExampleSupport (nonNegative)
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.TestSupport (compileOrFail, massesByRank, rightOrFail, values)
+import Data.CFTA.Gen.Refinement.TypedExpressionLanguage (nonNegative)
 import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import Data.CFTA.Refinement (
     Entailment (Entailment),
@@ -48,7 +48,6 @@ import Data.CFTA.Refinement.Guard (
     isSubtypeOf,
     notGuard,
     requires,
-    unconstrained,
  )
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
@@ -389,7 +388,7 @@ spec = do
             withZ3 declarations $ \solver -> do
                 let digits = LTAGen.every `LTAGen.satisfying` (\v -> 0 .<= v .&& v .<= 9) :: LTAGen.LTAGen Integer
                     below = LTAGen.refinedNode "p" (const true) (\n -> descendant n [0] `requires` (.>= 5)) (LTAGen.node "n" digits)
-                    byRoots = LTAGen.refinedNodeByRoots "r" (const $ const true) unconstrained digits
+                    byRoots = LTAGen.refinedNodeByRoots "r" (const $ const true) noConstraint digits
                 belowRead <- LTAGen.compileWith solver below
                 roots <- LTAGen.compileWith solver byRoots
                 either isIntegerLeafRead (const False) belowRead `shouldBe` True

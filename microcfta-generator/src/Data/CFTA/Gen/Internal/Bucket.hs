@@ -75,7 +75,7 @@ bucketFromOutcomes retainAtomic weightedOutcomes = do
                 { outcomeSizeSampling = sizeSampling
                 }
             retainAtomic
-            (Inspection Nothing $ Node [inspectionEdge $ outcomeInspection outcome | outcome <- toList outcomes])
+            (Inspection Nothing $ Node [rootEdge $ outcomeInspection outcome | outcome <- toList outcomes])
             (commonRootCount $ toList $ RootCount . termRootCount . outcomeTerm <$> outcomes)
   where
     outcomes = snd <$> weightedOutcomes
@@ -88,9 +88,8 @@ bucketFromOutcomes retainAtomic weightedOutcomes = do
     conditional = (\outcome -> outcome{outcomeMass = outcomeMass outcome / bucketMass}) <$> outcomes
     totalOutcomes = toEnum $ length outcomes
     uniformMass = commonValue $ Just . outcomeMass <$> toList conditional
-    bucketSupport = Node [termEdge $ outcomeTerm outcome | outcome <- toList outcomes]
-    termEdge (Tree.Node symbol children) = Edge symbol $ map singletonNode children
-    inspectionEdge (Tree.Node symbol children) = Edge symbol $ map singletonNode children
+    bucketSupport = Node [rootEdge $ outcomeTerm outcome | outcome <- toList outcomes]
+    rootEdge (Tree.Node symbol children) = Edge symbol $ map singletonNode children
 
     select index = do
         checkIndex totalOutcomes index

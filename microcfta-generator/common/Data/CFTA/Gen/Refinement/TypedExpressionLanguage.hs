@@ -18,10 +18,9 @@ module Data.CFTA.Gen.Refinement.TypedExpressionLanguage (
     dependentApplications,
 ) where
 
-import Data.CFTA.Gen.Refinement.ExampleSupport (nonNegative)
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Refinement (Formula, Symbol)
-import Data.CFTA.Refinement.Expression (Refinement, refinementFormula, true, variable, (./=), (.==))
+import Data.CFTA.Refinement.Expression (Refinement, refinementFormula, true, variable, (./=), (.==), (.>=))
 import Data.CFTA.Refinement.Guard (allOf, descendant, isSubtypeOf, withActualFor)
 
 -- | Expressions used by the LTA capability examples.
@@ -40,6 +39,10 @@ data RefinedExpression = RefinedExpression
     , expressionRefinement :: !Formula
     }
     deriving (Eq, Show)
+
+-- | The non-negative integer refinement.
+nonNegative :: Refinement
+nonNegative v = v .>= 0
 
 -- | The non-zero integer refinement.
 nonZero :: Refinement

@@ -19,8 +19,8 @@ The types are defined in "Data.CFTA.Ranked.Internal"; in short:
   language.
 
 * t'GenBackend' is what a sampling backend provides: selecting a rank below a
-  cardinality or a machine 'Int' below a bound, weighted choice among backend generators, and
-  retrying a backend-native generator until a predicate holds.
+  cardinality or a machine 'Int' below a bound, and weighted choice among
+  backend generators.
 
 * t'Ranked' is a compiled language; it is abstract here and has 'Functor' and
   'Applicative' instances.

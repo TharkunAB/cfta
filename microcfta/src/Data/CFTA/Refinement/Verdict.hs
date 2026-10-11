@@ -17,8 +17,8 @@ module Data.CFTA.Refinement.Verdict (
     SemanticIntersection (..),
     semanticIntersection,
     negateVerdict,
-    andM,
-    orM,
+    andVerdicts,
+    orVerdicts,
 ) where
 
 import qualified Language.Fixpoint.Types as Fixpoint
@@ -141,19 +141,19 @@ orVerdict _ Unknown = Unknown
 orVerdict No No = No
 
 -- | Conjoin verdicts in order and stop at the first 'No'.
-andM :: [IO Verdict] -> IO Verdict
-andM [] = pure Yes
-andM (action : rest) = do
+andVerdicts :: [IO Verdict] -> IO Verdict
+andVerdicts [] = pure Yes
+andVerdicts (action : rest) = do
     verdict <- action
     case verdict of
         No -> pure No
-        _ -> andVerdict verdict <$> andM rest
+        _ -> andVerdict verdict <$> andVerdicts rest
 
 -- | Disjoin verdicts in order and stop at the first 'Yes'.
-orM :: [IO Verdict] -> IO Verdict
-orM [] = pure No
-orM (action : rest) = do
+orVerdicts :: [IO Verdict] -> IO Verdict
+orVerdicts [] = pure No
+orVerdicts (action : rest) = do
     verdict <- action
     case verdict of
         Yes -> pure Yes
-        _ -> orVerdict verdict <$> orM rest
+        _ -> orVerdict verdict <$> orVerdicts rest

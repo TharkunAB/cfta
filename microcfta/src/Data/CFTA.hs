@@ -256,14 +256,12 @@ Alternatives with a removed child state are removed with them. The initial
 state keeps a row, which is empty when the language is empty.
 -}
 trim :: (Ord state) => FTA state symbol constraint -> FTA state symbol constraint
-trim automaton = FTA initial $ trimTable initial $ transitionTable automaton
+trim automaton =
+    FTA initial
+        $ Map.insertWith (\_ kept -> kept) initial []
+        $ trimRows transitionChildren (Map.toList $ transitionTable automaton) initial
   where
     initial = initialState automaton
-
--- | 'trim' on a transition table with the given initial state.
-trimTable ::
-    (Ord state) => state -> Map state [Transition state symbol constraint] -> Map state [Transition state symbol constraint]
-trimTable initial table = Map.insertWith (\_ kept -> kept) initial [] $ trimRows transitionChildren (Map.toList table) initial
 
 -- | Change transition annotations without changing the accepted tree shapes.
 mapConstraints :: (constraint -> other) -> FTA state symbol constraint -> FTA state symbol other

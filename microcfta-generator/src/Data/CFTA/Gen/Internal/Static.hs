@@ -628,7 +628,7 @@ frequencyStatic alternatives =
     Static
         ( Node
             [ Edge (Choice index) [staticSupport static]
-            | (index, (_, static)) <- numbered
+            | (_, _, index, _, static) <- rankedBranches
             ]
         )
         ( mkOutcomeIndex
@@ -653,7 +653,6 @@ frequencyStatic alternatives =
         (commonRootCount $ map (staticRootCount . snd) alternatives)
   where
     totalWeight = sum $ map fst alternatives
-    numbered = zip [0 :: ChoiceIndex ..] alternatives
     rankedBranches =
         [ ( nextOffset offset $ outcomeCardinality (staticOutcomes static)
           , offset
@@ -749,12 +748,7 @@ alternativePlan outcomes = case outcomePlan outcomes of
 -- | Map the values of a static language.
 mapStatic :: (a -> b) -> Static symbol a -> Static symbol b
 mapStatic transform static =
-    Static
-        (staticSupport static)
-        (mapOutcomeIndex transform $ staticOutcomes static)
-        (staticAtomic static)
-        (staticInspection static)
-        (staticRootCount static)
+    static{staticOutcomes = mapOutcomeIndex transform $ staticOutcomes static}
 
 -- | Map the values of an outcome index.
 mapOutcomeIndex :: (a -> b) -> OutcomeIndex symbol a -> OutcomeIndex symbol b
