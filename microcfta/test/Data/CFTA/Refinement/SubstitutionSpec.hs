@@ -2,7 +2,7 @@
 
 module Data.CFTA.Refinement.SubstitutionSpec (spec) where
 
-import Data.CFTA.Formula (Name)
+import Data.CFTA.Formula (Formula (Forall), Name, Sort (..))
 import Data.CFTA.Refinement (
     Constraint,
     Entailment (Entailment),
@@ -199,9 +199,20 @@ spec =
                 evaluateGuard solver (guard $ variable "y" .== variable "w") term >>= (`shouldBe` No)
                 evaluateGuard solver (guard $ variable "y" .< variable "w") term >>= (`shouldBe` Yes)
 
+        it "renames quantified binders instead of capturing the actual variable" $
+            withZ3 declarations $ \solver -> do
+                let requirement =
+                        Forall [("x", IntSort)] $
+                            variable "y" .== variable "x"
+                    guard =
+                        Substitute [Substitution (path [0]) (path [1])] $
+                            Satisfies (path []) requirement
+                    term = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
+                evaluateGuard solver guard term >>= (`shouldBe` No)
+
 -- | Integer names for actual variables and constructor result values in these checks.
-declarations :: [Name]
-declarations = [fromString valueName, "app", "w", "x", "y", "z"]
+declarations :: [(Name, Sort)]
+declarations = [(name, IntSort) | name <- [fromString valueName, "app", "w", "x", "y", "z"]]
 
 -- | Two different applications whose result refinements identify their values.
 collidingActuals :: Term Symbol

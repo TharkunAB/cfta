@@ -670,7 +670,8 @@ substitution, negation, conjunction, and disjunction. Refinement implication
 is discharged through the small `Entailment` boundary;
 `Data.CFTA.Refinement.LiquidFixpoint.withZ3` supplies the reusable Z3
 implementation. It translates each formula to Liquid Fixpoint and declares
-every name as an integer. Each query has a time limit of ten seconds
+every free name as an integer unless the caller gives the name another sort.
+Each query has a time limit of ten seconds
 (`defaultTimeLimit`). A query that reaches it raises `TimeLimitReached`, so a
 timeout is not taken for an undecided query; `withZ3Timeout` sets another limit.
 
@@ -1048,7 +1049,7 @@ productivity; they do not prove that arbitrary transition guards are satisfiable
 | `Data.CFTA.Equality.Operations` | Reduction, membership, and template restriction; exposed for lower-level callers. |
 | `Data.CFTA.Refinement` | Liquid tree automata: refined transitions, guards, recognition, pruning, similarity, minimization, and the bounded denotation. |
 | `Data.CFTA.Refinement.Guard` | Guard syntax over named child positions, contracts over the children's values, and `transition` and `automaton`, which check a named guard against the children. |
-| `Data.CFTA.Formula` | The refinement logic: names, integer terms, six comparisons, and the connectives, without quantifiers; simplifying conjunction and disjunction, free names, substitution, and `renderFormula`. |
+| `Data.CFTA.Formula` | The refinement logic: names, integer terms with division, modulo, casts, and uninterpreted functions, six comparisons, the connectives, and quantifiers over sorted names; simplifying conjunction and disjunction, free names, capture-avoiding substitution, and `renderFormula`. The lattice entailment decides the integer formulas without quantifiers; the Z3 entailment decides every form. |
 | `Data.CFTA.Refinement.Expression` | The refinement logic: terms with integer arithmetic, comparisons, connectives, and refinements as functions of the value. |
 | `Data.CFTA.Refinement.Lattice` | Exact counting and lexicographic ranking of the integer points of a linear formula, without enumeration, and `latticeEntailment`, which decides bounded linear integer implications without a solver. |
 | `Data.CFTA.Refinement.LiquidFixpoint` | The Z3-backed `Entailment`. |

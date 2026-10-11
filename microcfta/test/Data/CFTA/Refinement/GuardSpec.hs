@@ -4,6 +4,7 @@ module Data.CFTA.Refinement.GuardSpec (spec) where
 
 import Control.Exception (IOException, evaluate, try)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Formula (Formula (Forall), Sort (..))
 import Data.CFTA.Refinement (
     Automaton,
     Entailment (entails),
@@ -225,6 +226,25 @@ spec =
             evaluateGuard tableEntailment missingFormal term >>= (`shouldBe` No)
             evaluateGuard tableEntailment (Not missingActual) term >>= (`shouldBe` Yes)
 
+        it "does not capture a free refinement name when comparing quantified annotations" $ do
+            let quantified body = Forall [("x", IntSort)] body
+                term =
+                    Term.Node
+                        ( RefinedSymbol
+                            "context"
+                            true
+                        )
+                        [ Term.Node (RefinedSymbol "x" true) []
+                        , Term.Node (RefinedSymbol "y" true) []
+                        , Term.Node (RefinedSymbol "predicate" (quantified $ variable "y" .== variable "x")) []
+                        , Term.Node (RefinedSymbol "predicate" (quantified $ variable "x" .== variable "x")) []
+                        ]
+                guard =
+                    Substitute
+                        [Substitution (path [0]) (path [1])]
+                        (Same (path [2]) (path [3]))
+            evaluateGuard tableEntailment guard term >>= (`shouldBe` No)
+
         it "checks scoped syntactic equality without comparing huge actual value identities" $ do
             let huge =
                     iterate (\child -> Term.Node (RefinedSymbol "app" true) [child, child]) (Term.Node (RefinedSymbol "leaf" true) []) !! 45
@@ -245,7 +265,7 @@ spec =
             result `shouldBe` Just (Yes, Yes)
 
         it "connects a substituted node symbol to that node's refinement" $ do
-            let declarations = [fromString valueName, "model", "previous"]
+            let declarations = [(name, IntSort) | name <- [fromString valueName, "model", "previous"]]
                 guard =
                     Substitute
                         [Substitution (path [0]) (path [1, 0])]
@@ -279,7 +299,7 @@ spec =
                 positive = x .> 0
                 nonNegative = x .>= 0
                 twice = [("fresh", "x"), ("fresh", "x")]
-            withZ3 ["x"] $ \solver -> do
+            withZ3 ([("x", IntSort)]) $ \solver -> do
                 rejection <- try (entailsWithBindings solver twice positive positive) :: IO (Either IOException Verdict)
                 either (const True) (const False) rejection `shouldBe` True
                 results <- mapM (uncurry $ entails solver) [(positive, nonNegative), (nonNegative, positive), (positive, nonNegative)]

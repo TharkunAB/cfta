@@ -4,6 +4,7 @@ module Data.CFTA.Gen.Refinement.BoundedGeneratorSpec (spec) where
 
 import Control.Exception (throwIO)
 import Control.Monad (forM_, void)
+import Data.CFTA.Formula (Sort (..))
 import Data.CFTA.Index (Cardinality (..), Depth (..), Rank (..))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -136,7 +137,7 @@ spec :: Spec
 spec = do
     describe "liquid annotations on a derived datatype" $ do
         it "keeps the datatype codec and shrinks within the guarded language" $
-            withZ3 [fromString valueName] $ \solver -> do
+            withZ3 ([(fromString valueName, IntSort)]) $ \solver -> do
                 datatype <- either (fail . show) pure $ Datatype.deriveFTAWith @(Maybe (Int, Int)) $ Datatype.domain @Int [0, 1, 2]
                 let annotate constructor
                         | Datatype.constructorType constructor == typeRep (Proxy @Int) =
@@ -237,7 +238,7 @@ spec = do
                     (result >>= LTAGen.cardinality) `shouldBe` Left LTAGen.EmptyGenerator
 
         it "checks root, nested, and missing observations across an imported boundary" $
-            withZ3 [fromString valueName] $ \solver -> do
+            withZ3 ([(fromString valueName, IntSort)]) $ \solver -> do
                 let zero = variable valueName .== 0
                     boxed =
                         Node
@@ -416,7 +417,7 @@ spec = do
                 denotationAtMost solver 2 automaton `shouldDenote` termsOf compiled
 
         it "reports unavailable compound actual identities without changing the core language" $
-            withZ3 [fromString valueName, "x", "y", "app", "known"] $ \solver -> do
+            withZ3 ([(name, IntSort) | name <- [fromString valueName, "x", "y", "app", "known"]]) $ \solver -> do
                 let guard =
                         Substitute
                             [Substitution (path [0]) (path [2]), Substitution (path [1]) (path [3])]

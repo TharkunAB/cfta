@@ -12,7 +12,7 @@ import Data.String (fromString)
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
-import Data.CFTA.Formula (Name)
+import Data.CFTA.Formula (Name, Sort (..))
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.TestSupport (compileOrFail, massesByRank, rightOrFail, values)
 import Data.CFTA.Gen.Refinement.TypedExpressionLanguage (nonNegative)
@@ -501,5 +501,5 @@ homogeneousBits width = foldr (\_ rest -> prepend rest) ((: []) <$> bit) [2 .. w
     equivalent left right = allOf [left `isSubtypeOf` right, right `isSubtypeOf` left]
 
 -- | Integer names needed by the exact integer refinements.
-declarations :: [Name]
-declarations = [fromString valueName]
+declarations :: [(Name, Sort)]
+declarations = [(fromString valueName, IntSort)]

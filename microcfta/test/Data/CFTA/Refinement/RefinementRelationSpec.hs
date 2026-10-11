@@ -3,7 +3,7 @@
 module Data.CFTA.Refinement.RefinementRelationSpec (spec) where
 
 import Control.Exception (IOException, try)
-import Data.CFTA.Formula (iff, implies)
+import Data.CFTA.Formula (Sort (..), iff, implies)
 import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import Data.CFTA.Refinement (
     Entailment (entails),
@@ -46,17 +46,17 @@ spec :: Spec
 spec = do
     describe "semantic refinement comparison" $ do
         it "recognises strict subtyping" $
-            withZ3 [fromString valueName] $ \solver ->
+            withZ3 ([(fromString valueName, IntSort)]) $ \solver ->
                 refinementRelation solver (refinementFormula (\v -> v .== 0)) (refinementFormula (\v -> v .>= 0))
                     >>= (`shouldBe` StrictSubtype)
 
         it "recognises logical equivalence" $
-            withZ3 [fromString valueName] $ \solver ->
+            withZ3 ([(fromString valueName, IntSort)]) $ \solver ->
                 refinementRelation solver (refinementFormula (\v -> v .>= 0)) (refinementFormula (\v -> v .>= 0))
                     >>= (`shouldBe` Equivalent)
 
         it "does not merge incomparable refinements" $
-            withZ3 [fromString valueName] $ \solver ->
+            withZ3 ([(fromString valueName, IntSort)]) $ \solver ->
                 refinementRelation solver (refinementFormula (\v -> v .>= 0)) (refinementFormula (\v -> v ./= 0))
                     >>= (`shouldBe` Incomparable)
 
@@ -96,19 +96,19 @@ spec = do
                 evaluateConstraint solver (notGuard scoped) quad >>= (`shouldBe` No)
 
         it "retains the antecedent when semantic intersection succeeds" $
-            withZ3 [fromString valueName] $ \solver -> do
+            withZ3 ([(fromString valueName, IntSort)]) $ \solver -> do
                 let exactZero = refinementFormula (\v -> v .== 0)
                 semanticIntersection solver exactZero (refinementFormula (\v -> v .>= 0))
                     >>= (`shouldBe` RetainedAntecedent exactZero)
 
         it "does not reverse a directional semantic intersection" $
-            withZ3 [fromString valueName] $ \solver -> do
+            withZ3 ([(fromString valueName, IntSort)]) $ \solver -> do
                 let exactZero = refinementFormula (\v -> v .== 0)
                 semanticIntersection solver (refinementFormula (\v -> v .>= 0)) exactZero
                     >>= (`shouldBe` BottomIntersection)
 
         it "reduces incomparable semantic transitions to bottom" $
-            withZ3 [fromString valueName] $ \solver ->
+            withZ3 ([(fromString valueName, IntSort)]) $ \solver ->
                 semanticIntersection solver (refinementFormula (\v -> v .>= 0)) (refinementFormula (\v -> v ./= 0))
                     >>= (`shouldBe` BottomIntersection)
 
@@ -136,7 +136,7 @@ spec = do
 
     describe "lattice entailment" $ do
         it "decides each implication between two point cases as a search of every point and Z3 do" $
-            withZ3 ["x", "y"] $ \solver -> do
+            withZ3 ([(name, IntSort) | name <- ["x", "y"]]) $ \solver -> do
                 let pairs = [(antecedent, consequent) | antecedent <- pointCases, consequent <- pointCases]
                     searched (_, antecedent) (_, consequent) =
                         if and [consequent a b | a <- [-3 .. 3], b <- [-3 .. 3], antecedent a b] then Yes else No

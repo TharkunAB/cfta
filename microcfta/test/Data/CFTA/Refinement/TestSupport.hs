@@ -9,7 +9,7 @@ module Data.CFTA.Refinement.TestSupport (
 
 import Data.String (fromString)
 
-import Data.CFTA.Formula (Name)
+import Data.CFTA.Formula (Name, Sort (..))
 import Data.CFTA.Refinement (Entailment (Entailment), Verdict (..))
 import Data.CFTA.Refinement.Expression (true)
 import Data.CFTA.Symbol (valueName)
@@ -27,5 +27,5 @@ unusedEntailment :: Entailment
 unusedEntailment = Entailment $ \_ _ -> error "unusedEntailment: consulted"
 
 -- | Integer declarations shared by the pruning and minimization examples.
-declarations :: [Name]
-declarations = [fromString valueName, "x", "y", "n"]
+declarations :: [(Name, Sort)]
+declarations = [(name, IntSort) | name <- [fromString valueName, "x", "y", "n"]]

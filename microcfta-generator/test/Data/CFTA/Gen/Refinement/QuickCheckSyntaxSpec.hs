@@ -4,6 +4,7 @@ import Control.Monad (forM_, void)
 import Data.String (fromString)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
+import Data.CFTA.Formula (Sort (..))
 import qualified Data.CFTA.Gen.Refinement as LTAGen
 import Data.CFTA.Gen.Refinement.TestSupport (termsOf, values)
 import Data.CFTA.Gen.Refinement.TypedExpressionLanguage (nonNegative)
@@ -90,7 +91,7 @@ spec = do
             (compiled >>= LTAGen.cardinality) `shouldBe` Right (2 ^ (50 :: Int))
 
         it "preserves fresh value declarations through the compilation cache" $
-            withZ3 [fromString valueName, "app", "x", "y"] $ \solver -> do
+            withZ3 ([(name, IntSort) | name <- [fromString valueName, "app", "x", "y"]]) $ \solver -> do
                 let actual :: Int -> LTAGen.LTAGen Int
                     actual integer =
                         LTAGen.refinedNode "app" (const $ variable valueName .== fromIntegral integer) Top $
@@ -196,7 +197,7 @@ compileActualEquality ::
     LTAGen.LTAGen Int ->
     IO (Either LTAGen.GenError Cardinality)
 compileActualEquality left right =
-    withZ3 [fromString valueName, "shared", "app", "x", "y"] $ \solver -> do
+    withZ3 ([(name, IntSort) | name <- [fromString valueName, "shared", "app", "x", "y"]]) $ \solver -> do
         let forest =
                 (\actualLeft actualRight _ _ -> (actualLeft, actualRight))
                     <$> left

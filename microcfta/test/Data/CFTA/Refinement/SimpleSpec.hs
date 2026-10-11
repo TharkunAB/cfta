@@ -208,6 +208,7 @@ truth bindings formula = case formula of
     Formula.Or parts -> any (truth bindings) parts
     Formula.Not inner -> not $ truth bindings inner
     Formula.Atom relation left right -> compareBy relation (valueOf left) (valueOf right)
+    _ -> error $ "an unexpected formula: " <> show formula
   where
     valueOf (Formula.Lit number) = number
     valueOf (Formula.Var name) =

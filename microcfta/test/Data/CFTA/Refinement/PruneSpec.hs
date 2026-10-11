@@ -4,6 +4,7 @@ module Data.CFTA.Refinement.PruneSpec (spec) where
 
 import Data.CFTA.Constraint (equalities)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Formula (Sort (..))
 import Data.CFTA.Refinement (
     Automaton,
     Constraint (constraintGuard),
@@ -169,7 +170,7 @@ spec =
                 ]
 
         it "retains guards whose compound actual identities need complete terms" $
-            withZ3 (["app", "known"] <> declarations) $ \solver -> do
+            withZ3 ([(name, IntSort) | name <- ["app", "known"]] <> declarations) $ \solver -> do
                 before <- denotationAtMost solver 2 compoundActuals
                 fmap length before `shouldBe` Right 3
                 result <- prune solver compoundActuals

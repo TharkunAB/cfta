@@ -3,10 +3,15 @@
 
 {- | The formulas of the refinement logic.
 
-A 'Formula' states a fact about named integer values. A 'Term' gives an
-integer from names and literals. An atom compares two terms, and the
-connectives combine formulas. The logic has no quantifiers, so 'substitute'
-cannot capture a name.
+A 'Formula' states a fact about named values. A 'Term' gives a value from
+names, literals, arithmetic, and applications of uninterpreted functions. An
+atom compares two terms, the connectives combine formulas, and a quantifier
+binds names of a 'Sort'. 'substitute' renames a bound name that a
+replacement would capture.
+
+The liquid tree automata build only integer terms without quantifiers.
+'Data.CFTA.Refinement.Lattice' decides only those. The Z3 entailment
+translates every form.
 
 'conjunction' and 'disjunction' simplify their result as the functions
 @pAnd@ and @pOr@ of Liquid Fixpoint do. Formula equality decides the interning
@@ -23,6 +28,7 @@ module Data.CFTA.Formula (
     Term (..),
     Relation (..),
     Formula (..),
+    Sort (..),
     conjunction,
     disjunction,
     implies,
@@ -43,7 +49,7 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Generics (Generic)
 
--- | The name of an integer value. It shows as its text.
+-- | The name of a value or of a function. It shows as its text.
 newtype Name = Name Text
     deriving newtype (Eq, Ord, Show)
 
@@ -58,12 +64,14 @@ instance Hashable Name where
 instance IsString Name where
     fromString = Name . Text.pack
 
--- | An integer term.
+-- | A term: a value of the logic.
 data Term
     = -- | An integer literal.
       Lit !Integer
     | -- | A named value.
       Var !Name
+    | -- | An uninterpreted function applied to its arguments.
+      App !Name ![Term]
     | -- | The negation of a term.
       Neg !Term
     | -- | The sum of two terms.
@@ -72,8 +80,14 @@ data Term
       Sub !Term !Term
     | -- | The product of two terms.
       Mul !Term !Term
+    | -- | The integer quotient of two terms.
+      Div !Term !Term
+    | -- | The remainder of the integer division of two terms.
+      Mod !Term !Term
     | -- | The first term when the formula holds, and the second term when it does not.
       Ite !Formula !Term !Term
+    | -- | A term with a given sort.
+      Cast !Term !Sort
     deriving (Eq, Ord, Show, Generic)
 
 instance Hashable Term
@@ -101,9 +115,24 @@ data Formula
       Not !Formula
     | -- | The relation holds between the two terms.
       Atom !Relation !Term !Term
+    | -- | The formula holds for all values of the bound names.
+      Forall ![(Name, Sort)] !Formula
+    | -- | The formula holds for some values of the bound names.
+      Exists ![(Name, Sort)] !Formula
     deriving (Eq, Ord, Show, Generic)
 
 instance Hashable Formula
+
+-- | The sort of a name: integers, reals, booleans, or a function.
+data Sort
+    = IntSort
+    | RealSort
+    | BoolSort
+    | -- | A function from the argument sorts to the result sort.
+      FunctionSort ![Sort] !Sort
+    deriving (Eq, Ord, Show, Generic)
+
+instance Hashable Sort
 
 {- | The conjunction of the formulas, simplified as @pAnd@ of Liquid Fixpoint.
 
@@ -184,57 +213,93 @@ implies premise conclusion = Or [Not premise, conclusion]
 iff :: Formula -> Formula -> Formula
 iff left right = Or [And [left, right], And [Not left, Not right]]
 
-{- | The names in a formula, each once.
+{- | The free names in a formula, each once: the names of values and of
+applied functions, without the names that a quantifier binds.
 
 The order is the order of a hash set of the names, as for @syms@ of Liquid
 Fixpoint. It is the same in each process.
 -}
 freeNames :: Formula -> [Name]
-freeNames = HashSet.toList . inFormula
-  where
-    inFormula formula = case formula of
-        Top -> HashSet.empty
-        And parts -> foldMap inFormula parts
-        Bottom -> HashSet.empty
-        Or parts -> foldMap inFormula parts
-        Not inner -> inFormula inner
-        Atom _ left right -> inTerm left <> inTerm right
-    inTerm term = case term of
-        Lit _ -> HashSet.empty
-        Var name -> HashSet.singleton name
-        Neg inner -> inTerm inner
-        Add left right -> inTerm left <> inTerm right
-        Sub left right -> inTerm left <> inTerm right
-        Mul left right -> inTerm left <> inTerm right
-        Ite condition yes no -> inFormula condition <> inTerm yes <> inTerm no
+freeNames = HashSet.toList . namesIn
 
-{- | Replace names by terms, all at once.
+-- | The free names of a formula as a set.
+namesIn :: Formula -> HashSet.HashSet Name
+namesIn formula = case formula of
+    Top -> HashSet.empty
+    And parts -> foldMap namesIn parts
+    Bottom -> HashSet.empty
+    Or parts -> foldMap namesIn parts
+    Not inner -> namesIn inner
+    Atom _ left right -> termNames left <> termNames right
+    Forall bound inner -> HashSet.difference (namesIn inner) (HashSet.fromList $ map fst bound)
+    Exists bound inner -> HashSet.difference (namesIn inner) (HashSet.fromList $ map fst bound)
+
+-- | The free names of a term as a set.
+termNames :: Term -> HashSet.HashSet Name
+termNames term = case term of
+    Lit _ -> HashSet.empty
+    Var name -> HashSet.singleton name
+    App function arguments -> HashSet.insert function $ foldMap termNames arguments
+    Neg inner -> termNames inner
+    Add left right -> termNames left <> termNames right
+    Sub left right -> termNames left <> termNames right
+    Mul left right -> termNames left <> termNames right
+    Div left right -> termNames left <> termNames right
+    Mod left right -> termNames left <> termNames right
+    Ite condition yes no -> namesIn condition <> termNames yes <> termNames no
+    Cast inner _ -> termNames inner
+
+{- | Replace names of values by terms, all at once.
 
 For a name with more than one replacement, the first replacement applies. A
-replacement of a name by the same name is ignored. The result is not
-simplified.
+replacement of a name by the same name is ignored, and so is a replacement of
+a name that a quantifier binds. A bound name that occurs in a replacement
+gets a fresh name, so that the replacement is not captured. The names of
+applied functions do not change. The result is not simplified.
 -}
 substitute :: [(Name, Term)] -> Formula -> Formula
-substitute replacements = inFormula
+substitute replacements = inFormula (filter (\(name, term) -> term /= Var name) replacements)
   where
-    active = filter (\(name, term) -> term /= Var name) replacements
-    inFormula formula = case formula of
-        And parts -> And $ map inFormula parts
-        Or parts -> Or $ map inFormula parts
-        Not inner -> Not $ inFormula inner
-        Atom relation left right -> Atom relation (inTerm left) (inTerm right)
+    inFormula active formula = case formula of
+        And parts -> And $ map (inFormula active) parts
+        Or parts -> Or $ map (inFormula active) parts
+        Not inner -> Not $ inFormula active inner
+        Atom relation left right -> Atom relation (inTerm active left) (inTerm active right)
+        Forall bound inner -> uncurry Forall $ underBinders active bound inner
+        Exists bound inner -> uncurry Exists $ underBinders active bound inner
         _ -> formula
-    inTerm term = case term of
+    inTerm active term = case term of
         Var name -> fromMaybe term $ lookup name active
-        Neg inner -> Neg $ inTerm inner
-        Add left right -> Add (inTerm left) (inTerm right)
-        Sub left right -> Sub (inTerm left) (inTerm right)
-        Mul left right -> Mul (inTerm left) (inTerm right)
-        Ite condition yes no -> Ite (inFormula condition) (inTerm yes) (inTerm no)
+        App function arguments -> App function $ map (inTerm active) arguments
+        Neg inner -> Neg $ inTerm active inner
+        Add left right -> Add (inTerm active left) (inTerm active right)
+        Sub left right -> Sub (inTerm active left) (inTerm active right)
+        Mul left right -> Mul (inTerm active left) (inTerm active right)
+        Div left right -> Div (inTerm active left) (inTerm active right)
+        Mod left right -> Mod (inTerm active left) (inTerm active right)
+        Ite condition yes no -> Ite (inFormula active condition) (inTerm active yes) (inTerm active no)
+        Cast inner sort -> Cast (inTerm active inner) sort
         Lit _ -> term
+    -- The replacements of the bound names stop, and a bound name that a
+    -- replacement mentions becomes the first fresh name.
+    underBinders active bound inner =
+        let kept = [(name, term) | (name, term) <- active, name `notElem` map fst bound]
+            captured = foldMap (termNames . snd) kept
+            avoid = captured <> namesIn inner <> HashSet.fromList (map fst bound)
+            renamed = zipWith rename bound (freshNames avoid)
+            rename (name, sort) fresh
+                | HashSet.member name captured = ((fresh, sort), [(name, Var fresh)])
+                | otherwise = ((name, sort), [])
+         in (map fst renamed, inFormula (concatMap snd renamed <> kept) inner)
+    freshNames avoid =
+        [ candidate
+        | index <- [1 :: Int ..]
+        , let candidate = Name $ Text.pack $ "__microcfta_bound_" <> show index
+        , not $ HashSet.member candidate avoid
+        ]
 
 {- | A formula as text, in the notation of the operators of
-"Data.CFTA.Refinement.Expression", as in @__cfta_value >= 0 && x /= y@. A
+"Data.CFTA.Refinement.Expression", as in @__microcfta_value >= 0 && x /= y@. A
 conjunction or a disjunction inside another formula gets parentheses, and so
 does an atom inside a negation.
 -}
@@ -251,6 +316,9 @@ renderFormula = go (0 :: Int)
         And parts -> parenthesize (context >= 1) $ intercalate " && " $ map (go 1) parts
         Or [] -> "false"
         Or parts -> parenthesize (context >= 1) $ intercalate " || " $ map (go 1) parts
+        Forall bound inner -> parenthesize (context >= 1) $ "forall " <> binders bound <> ". " <> go 0 inner
+        Exists bound inner -> parenthesize (context >= 1) $ "exists " <> binders bound <> ". " <> go 0 inner
+    binders bound = unwords ["(" <> Text.unpack name <> " : " <> renderSort sort <> ")" | (Name name, sort) <- bound]
     operator relation = case relation of
         Eq -> "=="
         Ne -> "/="
@@ -259,8 +327,9 @@ renderFormula = go (0 :: Int)
         Lt -> "<"
         Le -> "<="
 
-{- | A term as text: names, literals, @+@, @-@, @*@, and @if then else@, with
-the parentheses that the precedence of the operators needs.
+{- | A term as text: names, literals, @+@, @-@, @*@, @div@, @mod@, function
+applications as @f(x, y)@, @if then else@, and casts as @(x : Int)@, with the
+parentheses that the precedence of the operators needs.
 -}
 renderTerm :: Term -> String
 renderTerm = go (0 :: Int)
@@ -272,8 +341,23 @@ renderTerm = go (0 :: Int)
         Add left right -> parenthesize (context > 6) $ go 6 left <> " + " <> go 7 right
         Sub left right -> parenthesize (context > 6) $ go 6 left <> " - " <> go 7 right
         Mul left right -> parenthesize (context > 7) $ go 7 left <> " * " <> go 8 right
+        Div left right -> parenthesize (context > 7) $ go 7 left <> " `div` " <> go 8 right
+        Mod left right -> parenthesize (context > 7) $ go 7 left <> " `mod` " <> go 8 right
+        App (Name function) arguments -> Text.unpack function <> "(" <> intercalate ", " (map (go 0) arguments) <> ")"
+        Cast inner sort -> "(" <> go 0 inner <> " : " <> renderSort sort <> ")"
         Ite condition yes no ->
             parenthesize (context > 0) $ "if " <> renderFormula condition <> " then " <> go 0 yes <> " else " <> go 0 no
+
+-- | A sort as text, as in @Int -> Bool@.
+renderSort :: Sort -> String
+renderSort sort = case sort of
+    IntSort -> "Int"
+    RealSort -> "Real"
+    BoolSort -> "Bool"
+    FunctionSort arguments result -> intercalate " -> " $ map argument arguments <> [renderSort result]
+  where
+    argument function@FunctionSort{} = "(" <> renderSort function <> ")"
+    argument other = renderSort other
 
 -- | The text in parentheses when the condition holds.
 parenthesize :: Bool -> String -> String

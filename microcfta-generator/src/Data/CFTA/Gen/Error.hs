@@ -394,9 +394,14 @@ explain (UncountableIntegers err) =
                     ]
                 NonLinearTerm term ->
                     [ "The term " <> show term <> " is not linear: it multiplies two"
-                    , "values, or it chooses a term by a condition, as abs and signum do."
+                    , "values, divides, applies a function, casts, or chooses a term by a"
+                    , "condition, as abs and signum do."
                     , "Fix: state the condition with sums, differences, and constant factors,"
                     , "as in -3 .<= v .&& v .<= 3 for abs v .<= 3."
+                    ]
+                UnsupportedFormula formula ->
+                    [ "The formula " <> show formula <> " has a quantifier."
+                    , "Fix: state the condition with .==, ./=, .<, .<=, .>, .>=, .&&, .||, and lnot."
                     ]
                 UnknownName name ->
                     [ "The formula names " <> show name <> ", which is not a value that"

@@ -49,8 +49,12 @@ import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..), entailmentWithBin
 
 -- | Why the integer points of a formula cannot be counted.
 data LatticeError
-    = -- | A term multiplies two variables or chooses a term by a formula.
+    = {- | A term multiplies two variables, divides, applies a function,
+      casts, or chooses a term by a formula.
+      -}
       NonLinearTerm !Term
+    | -- | The formula has a quantifier.
+      UnsupportedFormula !Formula
     | -- | The formula names a variable that is not in the list of variables.
       UnknownName !Name
     | -- | No bound limits the variable in one direction.
@@ -293,7 +297,7 @@ linearTerm variableOf = go
                 (Linear leftCoefficients factor, _) | IntMap.null leftCoefficients -> Right $ scale factor rightForm
                 (_, Linear rightCoefficients factor) | IntMap.null rightCoefficients -> Right $ scale factor leftForm
                 _ -> Left $ NonLinearTerm term
-        Ite{} -> Left $ NonLinearTerm term
+        _ -> Left $ NonLinearTerm term
 
 -- Formulas
 
@@ -327,6 +331,8 @@ signed variableOf = go True
         Atom relation left right -> do
             difference <- minus <$> linearTerm variableOf right <*> linearTerm variableOf left
             Right $ atom (if positive then relation else oppositeRelation relation) difference
+        Forall{} -> Left $ UnsupportedFormula formula
+        Exists{} -> Left $ UnsupportedFormula formula
       where
         {- The relation that holds exactly when the given relation does not.
 
