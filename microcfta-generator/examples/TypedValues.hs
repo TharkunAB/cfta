@@ -49,4 +49,4 @@ main = do
                     LTAGen.unrank compiled rank == Right pixel
                 ]
     unless (QC.isSuccess result) $
-        fail "pixels, their replay, or their shrinking failed"
+        fail "pixels or their replay failed"

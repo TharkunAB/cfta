@@ -57,4 +57,4 @@ main = do
                     LTAGen.unrank compiled rank == Right xs
                 ]
     unless (QC.isSuccess result) $
-        fail "sorted lists, their replay, or their shrinking failed"
+        fail "sorted lists or their replay failed"

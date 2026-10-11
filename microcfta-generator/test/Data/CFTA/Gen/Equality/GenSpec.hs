@@ -19,7 +19,7 @@ import qualified Test.QuickCheck as QC
 import qualified Test.QuickCheck.Gen as QCGen
 import qualified Test.QuickCheck.Random as QCRandom
 
-import Data.CFTA.Constraint (equalityConstraint, noConstraint)
+import Data.CFTA.Constraint (Constraint, equalityConstraint)
 import Data.CFTA.Equality (Node (Node), accepts, edgeChildren, edgeConstraint, edgeSymbol, termsWith)
 import qualified Data.CFTA.Equality as ECTA
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
@@ -99,6 +99,10 @@ matchedFixture =
         (authenticatedUser :==: fileOwner)
         authenticationFixture
         filesystemFixture
+
+-- | The constraint of a join support: the keys of the two sides are equal.
+keysEqual :: Constraint
+keysEqual = equalityConstraint $ mkEqConstraints [[Path.path [0, 0], Path.path [1, 0]]]
 
 -- | Access pairs generated through the relation under test.
 relatedAccess :: ECTAGen ((Role, String), (Classification, String))
@@ -306,7 +310,7 @@ spec = do
                     , ((Member, Public), 1 % 7)
                     ]
 
-        it "matches the prototype's exact fixture and rejection counts" $ do
+        it "counts the pairs that rejection of the plain product discards" $ do
             fmap length (ECTAGen.pmf authenticationFixture) `shouldBe` Right 8
             fmap length (ECTAGen.pmf filesystemFixture) `shouldBe` Right 12
             case ECTAGen.pmf rawFixture of
@@ -323,7 +327,7 @@ spec = do
 
         it "represents the join with an ECTA equality constraint" $
             case ECTAGen.support matchedFixture of
-                Right (Node [edge]) -> edgeConstraint edge `shouldNotBe` noConstraint
+                Right (Node [edge]) -> edgeConstraint edge `shouldBe` keysEqual
                 result -> expectationFailure $ "unexpected join support: " <> show result
 
         it "reports an empty join" $
@@ -348,7 +352,7 @@ spec = do
 
         it "represents a relation with an ECTA equality witness" $
             case ECTAGen.support relatedAccess of
-                Right (Node [edge]) -> edgeConstraint edge `shouldNotBe` noConstraint
+                Right (Node [edge]) -> edgeConstraint edge `shouldBe` keysEqual
                 result -> expectationFailure $ "unexpected relation support: " <> show result
 
         it "preserves frequency weights around already-conditioned generators" $

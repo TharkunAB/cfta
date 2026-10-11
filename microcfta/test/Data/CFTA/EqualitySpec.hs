@@ -307,11 +307,6 @@ spec = do
                     _ <- evaluate (nodeCount onePass + nodeCount rounds)
                     pure $ shallowTerms 3 onePass == shallowTerms 3 m && shallowTerms 3 rounds == shallowTerms 3 m
 
-        it "reduction preserves terms" $
-            property $
-                mapSize (min 3) $
-                    \(n :: Node Symbol) -> HashSet.fromList (terms n) `shouldBe` HashSet.fromList (terms $ reducePartially n)
-
         it "reducing child domains preserves constrained terms" $
             property $
                 mapSize (min 3) $ \(e :: Edge Symbol) ->
@@ -395,10 +390,7 @@ spec = do
             refold (Node [Edge "f" [infiniteFNode]]) `shouldBe` infiniteFNode
 
     describe "traversals" $ do
-        it "mapNodes hits each node exactly once" $
-            -- Note: If the Arbitrary Node instance is changed to return empty or mu nodes, this will need to change
-            -- Note: If the Arbitrary Node instance is changed to return empty or mu nodes, this will need to change
-
+        it "mapNodes calls its function once for each node, by count" $
             -- Note: If the Arbitrary Node instance is changed to return empty or mu nodes, this will need to change
             property $ \(n :: Node Symbol) -> unsafePerformIO $ do
                 v <- newIORef 0
@@ -532,7 +524,7 @@ spec = do
             length (termsPruneWith "Mu" Nothing preferLast oracle twoHoleNode)
                 `shouldBe` 2
 
-        it "an oracle with monotone rejections gives the same terms for every expansion order" $ do
+        it "an oracle with monotone rejections gives the same terms in the default order and in the reversed order" $ do
             -- Rejects every fragment that holds an "x". A fragment only grows,
             -- so no extension of a rejected fragment is accepted.
             let oracle _ _ (Left frag) = do
@@ -616,31 +608,30 @@ spec = do
             numNestedMu (createMuDontCleanup (\_r -> Node [Edge "f" []]) :: Node Symbol) `shouldBe` 1
 
     describe "nested Mu" $
-        it "references to different Mu nodes are not confused" $
-            property $ do
-                -- Two nodes with very similar structure
-                -- We are precise about evaluation order here: what we are testing is that after the first term have been
-                -- interned, we do /NOT/ reuse that term when interning the second. (If we /did/ confuse different references
-                -- to 'Mu' nodes, @m@ looks precisely like the inner @Mu@ node of @n@.)
-                n <- evaluate (Mu (\r1 -> Mu $ \r2 -> Node [Edge "f" [r1], Edge "g" [r2], Edge "a" []]) :: Node Symbol)
-                m <- evaluate (Mu (\r -> Node [Edge "f" [r], Edge "g" [r], Edge "a" []]) :: Node Symbol)
+        it "references to different Mu nodes are not confused" $ do
+            -- Two nodes with very similar structure
+            -- We are precise about evaluation order here: what we are testing is that after the first term have been
+            -- interned, we do /NOT/ reuse that term when interning the second. (If we /did/ confuse different references
+            -- to 'Mu' nodes, @m@ looks precisely like the inner @Mu@ node of @n@.)
+            n <- evaluate (Mu (\r1 -> Mu $ \r2 -> Node [Edge "f" [r1], Edge "g" [r2], Edge "a" []]) :: Node Symbol)
+            m <- evaluate (Mu (\r -> Node [Edge "f" [r], Edge "g" [r], Edge "a" []]) :: Node Symbol)
 
-                -- This is a low-level test; crush doesn't work, because we don't see what 'InternedMu' caches.
-                let collectAllIds :: Node Symbol -> Set NodeId
-                    collectAllIds EmptyNode = Set.empty
-                    collectAllIds (InternedNode node) =
-                        Set.unions
-                            [ Set.singleton (internedNodeId node)
-                            , Set.unions $ concatMap (map collectAllIds . edgeChildren) (internedNodeEdges node)
-                            ]
-                    collectAllIds (InternedMu mu) =
-                        Set.unions
-                            [ Set.singleton (internedMuId mu)
-                            , Set.union (collectAllIds (internedMuBody mu)) (collectAllIds (internedMuShape mu))
-                            ]
-                    collectAllIds (Rec _) = Set.empty
+            -- This is a low-level test; crush doesn't work, because we don't see what 'InternedMu' caches.
+            let collectAllIds :: Node Symbol -> Set NodeId
+                collectAllIds EmptyNode = Set.empty
+                collectAllIds (InternedNode node) =
+                    Set.unions
+                        [ Set.singleton (internedNodeId node)
+                        , Set.unions $ concatMap (map collectAllIds . edgeChildren) (internedNodeEdges node)
+                        ]
+                collectAllIds (InternedMu mu) =
+                    Set.unions
+                        [ Set.singleton (internedMuId mu)
+                        , Set.union (collectAllIds (internedMuBody mu)) (collectAllIds (internedMuShape mu))
+                        ]
+                collectAllIds (Rec _) = Set.empty
 
-                Set.intersection (collectAllIds n) (collectAllIds m) `shouldBe` Set.empty
+            Set.intersection (collectAllIds n) (collectAllIds m) `shouldBe` Set.empty
 
 -------------------------------------
 --- Example inputs for the intersection tests

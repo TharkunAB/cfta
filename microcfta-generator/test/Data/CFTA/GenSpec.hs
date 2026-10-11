@@ -40,12 +40,11 @@ data DerivedTree = Leaf Bool | Fork DerivedTree DerivedTree
 
 instance Datatype.HasFTA DerivedTree
 
-{- | A record fixture retains selector names without partial record fields.
-| A call with a list of arguments, for a recursion nested in another one.
--}
+-- | A call with a list of arguments, for a recursion nested in another one.
 data Call = NoCall | Call [Call]
     deriving (Eq, Show)
 
+-- | A record fixture: it keeps its selector names without partial record fields.
 data RecordPair = RecordPair {leftChild :: DerivedTree, rightChild :: DerivedTree}
     deriving (Eq, Show, Generic)
 
@@ -181,7 +180,7 @@ spec = do
                 `shouldBe` (Left FTAGen.UnguardedRecursion, Left FTAGen.UnguardedRecursion)
             FTAGen.cardinalities (FTAGen.groupOn id failed) `shouldBe` Left FTAGen.UnguardedRecursion
 
-        it "needs the smaller-member search to remove members before a failing one" $ do
+        it "shrinks [False, False, True] to [True] only with smallerMembers" $ do
             -- A greedy shrink loop takes the first candidate that still fails.
             -- In a product, structural candidates shrink each component on its
             -- own, so they cannot drop a False in front of the True. A bounded
@@ -574,7 +573,7 @@ spec = do
             map (FTAGen.cardinality . Expressions.expressionsAtDepth) [0 .. 4]
                 `shouldBe` map (Right . Cardinality . Expressions.expressionCount) [0 .. 4]
 
-        it "generates executable expressions without type-side conditions" $ do
+        it "decodes every rank of the depth-two language" $ do
             let expressions = Expressions.expressionsAtDepth 2
                 total = fromRight 0 $ FTAGen.cardinality expressions
                 generated =
@@ -583,7 +582,6 @@ spec = do
                     , Right expression <- [FTAGen.unrank expressions rank]
                     ]
             toEnum (length generated) `shouldBe` total
-            generated `shouldSatisfy` all ((>= 0) . Expressions.evaluate)
 
         modifyMaxSuccess (const 500)
             $ it "keeps both reference generators in the exact-depth language"

@@ -20,9 +20,9 @@ tableEntailment = Entailment $ \antecedent consequent ->
             then Yes
             else No
 
--- | A solver that must not be consulted.
+-- | A solver that must not be consulted. A call fails the test.
 unusedEntailment :: Entailment
-unusedEntailment = Entailment $ \_ _ -> pure Unknown
+unusedEntailment = Entailment $ \_ _ -> error "unusedEntailment: consulted"
 
 -- | Integer declarations shared by the pruning and minimization examples.
 declarations :: [(Fixpoint.Symbol, Fixpoint.Sort)]
