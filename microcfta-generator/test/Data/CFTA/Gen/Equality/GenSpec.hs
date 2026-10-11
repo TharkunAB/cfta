@@ -25,7 +25,7 @@ import qualified Data.CFTA.Equality as ECTA
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Gen.Equality.QuickCheck (Args (..), ECTAGen, On (..), Sig ((:*), (:->)))
 import qualified Data.CFTA.Gen.Equality.QuickCheck as ECTAGen
-import Data.CFTA.Gen.Equality.TestSupport (ranksBack, ranksEveryMemberBack, renameSymbols)
+import Data.CFTA.Gen.TestSupport (ranksBack, ranksEveryMemberBack, renameSymbols)
 import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import qualified Data.CFTA.Path as Path
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))

@@ -23,9 +23,9 @@ import Control.Monad (void)
 import qualified Data.CFTA as Automaton
 import Data.CFTA.Constraint (noConstraint)
 import Data.CFTA.Gen (On ((:==:)))
-import Data.CFTA.Gen.Equality.TestSupport (ranksBack, ranksEveryMemberBack)
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import qualified Data.CFTA.Gen.QuickCheck as FTAGen
+import Data.CFTA.Gen.TestSupport (ranksBack, ranksEveryMemberBack)
 import qualified Data.CFTA.Gen.UntypedExpressionLanguage as Expressions
 import qualified Data.CFTA.Generic as Datatype
 import Data.CFTA.Index (Cardinality (..), everyRank)

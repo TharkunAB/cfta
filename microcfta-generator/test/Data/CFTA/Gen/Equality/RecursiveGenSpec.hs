@@ -30,7 +30,7 @@ import Data.CFTA.Equality (
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Gen.Equality.QuickCheck (Args (..), ECTAGen, GenError (..), On (..), Sig (..))
 import qualified Data.CFTA.Gen.Equality.QuickCheck as ECTAGen
-import Data.CFTA.Gen.Equality.TestSupport (aggregateRights, renameSymbols)
+import Data.CFTA.Gen.TestSupport (aggregateRights, renameSymbols)
 import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import Data.CFTA.Path (path)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))

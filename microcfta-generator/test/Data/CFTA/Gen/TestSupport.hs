@@ -1,5 +1,5 @@
 -- | Helpers shared by the generator specs.
-module Data.CFTA.Gen.Equality.TestSupport (
+module Data.CFTA.Gen.TestSupport (
     aggregateRights,
     decodesEveryRankExactly,
     ranksBack,

@@ -7,7 +7,7 @@ import qualified Test.QuickCheck as QC
 
 import Data.CFTA.Gen.Equality.QuickCheck (Args (..), Sig ((:*), (:->)))
 import qualified Data.CFTA.Gen.Equality.QuickCheck as ECTAGen
-import Data.CFTA.Gen.Equality.TestSupport (decodesEveryRankExactly)
+import Data.CFTA.Gen.TestSupport (decodesEveryRankExactly)
 import Data.CFTA.Index (everyRank)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 
