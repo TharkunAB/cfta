@@ -1,7 +1,6 @@
 module Data.CFTA.Gen.Refinement.StateMachineTraceSpec (spec) where
 
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
 import qualified Test.QuickCheck as QC
@@ -13,6 +12,7 @@ import qualified Data.CFTA.Gen.Refinement.TestSupport as Support
 import Data.CFTA.Index (Cardinality (..))
 import Data.CFTA.Refinement (Symbol (RefinedSymbol))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3Assuming)
+import qualified Data.CFTA.Term as Term
 
 -- | Compile one trace language with the symbolic model environment.
 compileOrFail :: LTAGen.LTAGen a -> IO (LTAGen.LTAGen a)
@@ -90,7 +90,7 @@ spec =
             zip (values compiled) (termsOf compiled)
                 `shouldSatisfy` all
                     ( \(trace, term) ->
-                        let RefinedSymbol _ refinement = Tree.rootLabel term
+                        let RefinedSymbol _ refinement = Term.rootLabel term
                          in refinement == stateRefinement (traceFinalState trace)
                     )
 

@@ -9,13 +9,13 @@ module Data.CFTA.Gen.Refinement.TestSupport (
     massesByRank,
 ) where
 
-import qualified Data.Tree as Tree
 import Test.Hspec (expectationFailure)
 
 import qualified Data.CFTA.Gen.Refinement as LTAGen
 import Data.CFTA.Index (Rank, everyRank)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Refinement (Entailment, Symbol)
+import Data.CFTA.Term (Term)
 
 -- | Compile a fixture, reporting a compilation error as an Hspec failure.
 compileOrFail :: Entailment -> LTAGen.LTAGen a -> IO (LTAGen.LTAGen a)
@@ -37,11 +37,11 @@ values :: LTAGen.LTAGen a -> [a]
 values generator = [value | rank <- ranks generator, Right value <- [LTAGen.unrank generator rank]]
 
 -- | The accepted liquid term of every rank, in rank order.
-termsOf :: LTAGen.LTAGen a -> [Tree.Tree Symbol]
+termsOf :: LTAGen.LTAGen a -> [Term Symbol]
 termsOf generator = [term | rank <- ranks generator, Right term <- [termOf generator rank]]
 
 -- | The accepted liquid term of one rank: the user's part of the engine's term.
-termOf :: LTAGen.LTAGen a -> Rank -> Either LTAGen.GenError (Tree.Tree Symbol)
+termOf :: LTAGen.LTAGen a -> Rank -> Either LTAGen.GenError (Term Symbol)
 termOf generator rank = do
     labelled <- LTAGen.termAt generator rank
     case LTAGen.surface labelled of

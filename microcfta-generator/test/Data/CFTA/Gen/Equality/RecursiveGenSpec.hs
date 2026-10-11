@@ -8,7 +8,6 @@ import Data.List (mapAccumL, sort)
 import qualified Data.Map.Strict as Map
 import Data.Ratio ((%))
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
@@ -35,6 +34,8 @@ import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import Data.CFTA.Path (path)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | A binary tree over three leaf values, defined by its own language.
 data Tree = Leaf Int | Branch Tree Tree
@@ -684,7 +685,7 @@ spec = do
             let choiceUnderNode :: ECTAGen Int
                 choiceUnderNode = ECTAGen.node "n" (ECTAGen.oneof [ECTAGen.elements [1, 2], ECTAGen.elements [3, 4]])
             (ECTAGen.ranksOf choiceUnderNode =<< ECTAGen.termAt choiceUnderNode 0) `shouldBe` Right [0, 2]
-            ECTAGen.rankOf trees (Tree.Node (ECTAGen.Label "other") []) `shouldBe` Left TermNotInLanguage
+            ECTAGen.rankOf trees (Term.Node (ECTAGen.Label "other") []) `shouldBe` Left TermNotInLanguage
 
         it "rank a deep term under a choice of labels in time linear in its depth" $ do
             -- An alternative with another label than the term read the whole
@@ -700,7 +701,7 @@ spec = do
                 nested depth = if depth == 0 then ECTAGen.node "e" literal else step (nested (depth - 1))
                 -- The term e(or(t, lit)), wrapped forty times around t = e(lit).
                 deep base =
-                    iterate (\term -> Tree.Node (ECTAGen.Label "e") [Tree.Node (ECTAGen.Label "or") (term : Tree.subForest base)]) base
+                    iterate (\term -> Term.Node (ECTAGen.Label "e") [Term.Node (ECTAGen.Label "or") (term : Term.subForest base)]) base
                         !! 40
             mapM_
                 ( \generator -> do
@@ -752,11 +753,11 @@ roundTrips generator ranks = do
 -- | The term with one label changed, once for each label that the function changes.
 changedAt ::
     (ECTAGen.Label symbol -> Maybe (ECTAGen.Label symbol)) ->
-    Tree.Tree (ECTAGen.Label symbol) ->
-    [Tree.Tree (ECTAGen.Label symbol)]
+    Term (ECTAGen.Label symbol) ->
+    [Term (ECTAGen.Label symbol)]
 changedAt change term =
     [ snd $ mapAccumL (\index label -> (index + 1, if index == position then changed else label)) (0 :: Int) term
-    | (position, Just changed) <- zip [0 ..] $ map change $ Tree.flatten term
+    | (position, Just changed) <- zip [0 ..] $ map change $ Term.flatten term
     ]
 
 -- | Two atoms under one key.
@@ -768,5 +769,5 @@ rankOperators :: ECTAGen.Grouped (Sig '[()] ()) (String -> String)
 rankOperators = ECTAGen.keyed (() :-> ()) $ ECTAGen.elements [("x" <>), ("y" <>)]
 
 -- | The head symbol of a term, as a coverage key.
-termSymbol :: Tree.Tree Symbol -> String
+termSymbol :: Term Symbol -> String
 termSymbol = show

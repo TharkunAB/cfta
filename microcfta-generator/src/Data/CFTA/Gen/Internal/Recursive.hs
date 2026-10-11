@@ -40,7 +40,6 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust)
 import Data.Sequence (Seq (..))
 import qualified Data.Sequence as Sequence
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 
 import Data.CFTA.Equality (Edge (Edge), Node (Node))
@@ -74,6 +73,8 @@ import Data.CFTA.Ranked.Internal.Size (
     sizeMajorRank,
     valueAtSize,
  )
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 {- | One recursive ECTA and the size-stratified language it accepts.
 
@@ -113,7 +114,7 @@ language, so a term view gives a list of positions in ascending size-major
 order.
 -}
 data RecursiveTerms symbol = RecursiveTerms
-    { recursiveTermIndex :: SizeIndex (Tree.Tree (Label symbol))
+    { recursiveTermIndex :: SizeIndex (Term (Label symbol))
     -- ^ The term of each member.
     , recursiveTermPositions :: TermView symbol -> [CheckedRank SizedRank]
     {- ^ The size class and position of each member whose term has the view,
@@ -168,13 +169,13 @@ productTerms ::
 productTerms indexF indexX termsF termsX =
     RecursiveTerms
         ( productIndex
-            (mapIndex (\function argument -> Tree.Node Apply [function, argument]) $ recursiveTermIndex termsF)
+            (mapIndex (\function argument -> Term.Node Apply [function, argument]) $ recursiveTermIndex termsF)
             (recursiveTermIndex termsX)
         )
         positions
   where
     positions view = sort $ case view of
-        WholeTerm (Tree.Node Apply [function, argument]) -> positionsFrom (WholeTerm function) argument
+        WholeTerm (Term.Node Apply [function, argument]) -> positionsFrom (WholeTerm function) argument
         WholeTerm _ -> []
         SpineView arguments -> spinePositions arguments
         LabelledView arguments -> spinePositions $ Sequence.fromList arguments
@@ -196,14 +197,14 @@ choiceTerms :: [SizeIndex a] -> [RecursiveTerms symbol] -> RecursiveTerms symbol
 choiceTerms indexes terms =
     RecursiveTerms
         ( choiceIndex
-            [ mapIndex (\term -> Tree.Node (Choice branch) [term]) $ recursiveTermIndex branchTerms
+            [ mapIndex (\term -> Term.Node (Choice branch) [term]) $ recursiveTermIndex branchTerms
             | (branch, branchTerms) <- zip [0 ..] terms
             ]
         )
         positions
   where
     positions view = sort $ case view of
-        WholeTerm (Tree.Node (Choice branch) [child]) -> branchPositions branch $ WholeTerm child
+        WholeTerm (Term.Node (Choice branch) [child]) -> branchPositions branch $ WholeTerm child
         WholeTerm _ -> []
         SpineView (term :<| Empty) -> positions $ WholeTerm term
         SpineView _ -> []
@@ -366,7 +367,7 @@ labelRecursive symbol recursive =
     labelTerms terms = RecursiveTerms (mapIndex (labelTerm symbol) $ recursiveTermIndex terms) positions
       where
         positions view = case view of
-            WholeTerm (Tree.Node (Label found) children)
+            WholeTerm (Term.Node (Label found) children)
                 | found == symbol -> recursiveTermPositions terms $ LabelledView children
             SpineView (term :<| Empty) -> positions $ WholeTerm term
             LabelledView [term] -> positions $ WholeTerm term

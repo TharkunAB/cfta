@@ -20,7 +20,6 @@ import Data.Hashable (Hashable)
 import Data.IORef (IORef, atomicModifyIORef', newIORef)
 import qualified Data.Map.Strict as Map
 import Data.Sequence (Seq (..))
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 import System.IO.Unsafe (unsafePerformIO)
 
@@ -57,6 +56,7 @@ import Data.CFTA.Ranked.Internal.Size (
     usesOccurrence,
     withKnotMetadata,
  )
+import qualified Data.CFTA.Term as Term
 
 -- | Treat every member of a finite generator as one atom of size one.
 atomic :: Gen symbol a -> Gen symbol a
@@ -349,14 +349,14 @@ recurGrouped build
             )
             (memberPositions key)
     memberPositions key view = case view of
-        WholeTerm (Tree.Node AtKey [Tree.Node (Key position) [], Tree.Node Family [Tree.Node (Key position') [], body]])
+        WholeTerm (Term.Node AtKey [Term.Node (Key position) [], Term.Node Family [Term.Node (Key position') [], body]])
             | position == positionOf key && position' == position ->
                 maybe [] (`recursiveTermPositions` WholeTerm body) $ Map.lookup key bodyTerms
         SpineView (term :<| Empty) -> memberPositions key $ WholeTerm term
         LabelledView [term] -> memberPositions key $ WholeTerm term
         _ -> []
     atKeyTerm position body =
-        Tree.Node AtKey [Tree.Node (Key position) [], Tree.Node Family [Tree.Node (Key position) [], body]]
+        Term.Node AtKey [Term.Node (Key position) [], Term.Node Family [Term.Node (Key position) [], body]]
 
     -- The probe of each key assumes the least minimum of the key, as the probe
     -- of 'recur' does. A nested definition whose finite members all go through

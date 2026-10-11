@@ -5,11 +5,12 @@ module Data.CFTA.Gen.Refinement.BoundedGeneratorSpec (spec) where
 import Control.Exception (throwIO)
 import Control.Monad (forM_, void)
 import Data.CFTA.Index (Cardinality (..), Depth (..), Rank (..))
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.List (nub, sort)
 import Data.Proxy (Proxy (Proxy))
 import Data.Ratio ((%))
-import qualified Data.Tree as Tree
 import Data.Typeable (typeRep)
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList, shouldSatisfy)
@@ -50,7 +51,7 @@ unusedEntailment :: Entailment
 unusedEntailment = Entailment $ \_ _ -> fail "unexpected solver call"
 
 -- | Compile a bounded language or report the compiler error.
-compileBounded :: Entailment -> Depth -> Automaton -> IO (LTAGen.LTAGen (Tree.Tree Symbol))
+compileBounded :: Entailment -> Depth -> Automaton -> IO (LTAGen.LTAGen (Term Symbol))
 compileBounded solver depth automaton =
     LTAGen.compileWith solver (LTAGen.fromAutomatonUpToDepth depth automaton) >>= either (fail . show) pure
 
@@ -59,16 +60,16 @@ compileBoundedWith ::
     Entailment -> (Symbol -> Formula -> [a] -> a) -> Depth -> Automaton -> IO (Either LTAGen.GenError (LTAGen.LTAGen a))
 compileBoundedWith solver build depth automaton =
     LTAGen.compileWith solver $
-        Tree.foldTree (\(RefinedSymbol symbol refinement) -> build symbol refinement)
+        Term.foldTree (\(RefinedSymbol symbol refinement) -> build symbol refinement)
             <$> LTAGen.fromAutomatonUpToDepth depth automaton
 
 -- | The replay rank of one accepted term.
-rankOf :: LTAGen.LTAGen a -> Tree.Tree Symbol -> IO Rank
+rankOf :: LTAGen.LTAGen a -> Term Symbol -> IO Rank
 rankOf compiled = either (fail . show) pure . LTAGen.rankOfTerm compiled
 
 -- | The number of nodes of a term.
-termSize :: Tree.Tree Symbol -> Int
-termSize = length . Tree.flatten
+termSize :: Term Symbol -> Int
+termSize = length . Term.flatten
 
 {- | Check that structural shrinks stay in the language at smaller ranks, and
 that every member of smaller size is accepted and strictly smaller.
@@ -191,7 +192,7 @@ spec = do
             values compiled `shouldBe` replicate 9 (7, 7)
             map snd (massesByRank compiled) `shouldBe` concat (replicate 3 [1 % 21, 1 % 21, 5 % 21])
             termsOf compiled
-                `shouldBe` [ Tree.Node (RefinedSymbol "combined" true) [term, Tree.Node (RefinedSymbol symbol true) []]
+                `shouldBe` [ Term.Node (RefinedSymbol "combined" true) [term, Term.Node (RefinedSymbol symbol true) []]
                            | term <- termsOf imported
                            , symbol <- ["draw", "draw", "other"]
                            ]
@@ -259,15 +260,15 @@ spec = do
                     denotationAtMost solver 2 oracle `shouldDenote` termsOf compiled
 
         it "reports unsupported scoped equality while retaining the core denotation" $ do
-            let a = Tree.Node (RefinedSymbol "a" true) []
-                b = Tree.Node (RefinedSymbol "b" true) []
-                wrapped = Tree.Node (RefinedSymbol "wrap" true) [a]
+            let a = Term.Node (RefinedSymbol "a" true) []
+                b = Term.Node (RefinedSymbol "b" true) []
+                wrapped = Term.Node (RefinedSymbol "wrap" true) [a]
                 positive = [(a, a), (a, b), (b, a), (b, b), (wrapped, wrapped)]
                 negative = [(a, wrapped), (b, wrapped), (wrapped, a), (wrapped, b)]
                 allPairs = [(left, right) | left <- [a, b, wrapped], right <- [a, b, wrapped]]
             forM_ [(same, positive), (Not same, negative), (Or [same, Not same], allPairs)] $ \(guard, pairs) -> do
                 let scoped = Substitute [Substitution (path [0]) (path [1])] guard
-                    expected = [Tree.Node (RefinedSymbol "pair" true) [left, right] | (left, right) <- pairs]
+                    expected = [Term.Node (RefinedSymbol "pair" true) [left, right] | (left, right) <- pairs]
                     automaton = pairsWith $ semanticConstraint scoped
                     source = LTAGen.fromAutomatonUpToDepth 2 automaton
                 denotationAtMost unusedEntailment 2 automaton `shouldDenote` expected
@@ -295,7 +296,7 @@ spec = do
         it "maps a shared depth-70 singleton beside an ordinary child without expanding its witness" $ do
             result <- timeout 60000000 $ do
                 let automaton = sharedBinaryTerm noConstraint
-                    rootSymbol (Tree.Node (RefinedSymbol symbol _) _) = symbol
+                    rootSymbol (Term.Node (RefinedSymbol symbol _) _) = symbol
                     source = fmap rootSymbol $ LTAGen.fromAutomatonUpToDepth 71 automaton
                     generator =
                         LTAGen.node "combined" $
@@ -401,9 +402,9 @@ spec = do
             checkShrinks unusedEntailment automaton compiled
             wrappedPair <-
                 rankOf compiled
-                    $ Tree.Node (RefinedSymbol "pair" true)
+                    $ Term.Node (RefinedSymbol "pair" true)
                     $ replicate 2
-                    $ Tree.Node (RefinedSymbol "wrap" true) [Tree.Node (RefinedSymbol "a" true) []]
+                    $ Term.Node (RefinedSymbol "wrap" true) [Term.Node (RefinedSymbol "a" true) []]
             LTAGen.smallerMembers compiled wrappedPair `shouldSatisfy` (not . null)
 
         it "evaluates absent paths inside negation and disjunction" $
@@ -467,18 +468,18 @@ spec = do
         it "orders the ranks of a shared graph by its explicit view" $ do
             let automaton = Node [plain "root" [forks !! 2]]
             compiled <- compileBounded unusedEntailment 3 automaton
-            termsOf compiled `shouldMatchList` [Tree.Node (RefinedSymbol "root" true) [fork 2]]
+            termsOf compiled `shouldMatchList` [Term.Node (RefinedSymbol "root" true) [fork 2]]
   where
     same = Same (path [0]) (path [1])
     missing = Satisfies (path [0, 0]) true
     variable :: String -> Expr
     variable name = toExpr $ Fixpoint.EVar $ Fixpoint.symbol (name :: String)
-    fork :: Int -> Tree.Tree Symbol
-    fork 0 = Tree.Node (RefinedSymbol "a" true) []
-    fork height = Tree.Node (RefinedSymbol "fork" true) [fork (height - 1), fork (height - 1)]
+    fork :: Int -> Term Symbol
+    fork 0 = Term.Node (RefinedSymbol "a" true) []
+    fork height = Term.Node (RefinedSymbol "fork" true) [fork (height - 1), fork (height - 1)]
 
 {- | Compare a bounded denotation with the terms it should contain. The
 denotation is a set, so order is not compared.
 -}
-shouldDenote :: IO (Either DenotationError [Tree.Tree Symbol]) -> [Tree.Tree Symbol] -> IO ()
+shouldDenote :: IO (Either DenotationError [Term Symbol]) -> [Term Symbol] -> IO ()
 shouldDenote denotation expected = denotation >>= \result -> fmap sort result `shouldBe` Right (sort expected)

@@ -23,13 +23,12 @@ module Data.CFTA.Gen.Equality (
     fromAutomatonUpToDepth,
 ) where
 
-import qualified Data.Tree as Tree
-
 import Data.CFTA.Equality (Node)
 import Data.CFTA.Gen hiding (Grouped, fromAutomaton, fromAutomatonUpToDepth)
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Index (Depth)
 import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.Term (Term)
 
 -- | A generator over equality-constrained tree automata.
 type ECTAGen = Gen Symbol
@@ -40,9 +39,9 @@ type Grouped = Gen.Grouped Symbol
 {- | Read an equality-constrained automaton as a generator of the terms it
 accepts: 'Data.CFTA.Gen.fromAutomaton' at 'Symbol'.
 -}
-fromAutomaton :: Node Symbol -> ECTAGen (Tree.Tree Symbol)
+fromAutomaton :: Node Symbol -> ECTAGen (Term Symbol)
 fromAutomaton = Gen.fromAutomaton
 
 -- | Read the terms an automaton accepts up to a constructor-depth bound. A leaf has depth zero.
-fromAutomatonUpToDepth :: Depth -> Node Symbol -> ECTAGen (Tree.Tree Symbol)
+fromAutomatonUpToDepth :: Depth -> Node Symbol -> ECTAGen (Term Symbol)
 fromAutomatonUpToDepth = Gen.fromAutomatonUpToDepth

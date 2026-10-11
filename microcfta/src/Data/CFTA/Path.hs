@@ -21,12 +21,12 @@ module Data.CFTA.Path (
 
 import Data.Coerce (coerce)
 import Data.Hashable (Hashable (..))
-import Data.List ((!?))
 import Data.Maybe (maybeToList)
-import qualified Data.Tree as Tree
 
 import Data.CFTA.Index (ChildIndex (..))
 import Data.CFTA.Internal.Tree (adjustAt)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 {- | Path into an edge's children, represented as child indexes.
 
@@ -88,13 +88,14 @@ class Pathable t t' | t -> t' where
     -- | Apply a local edit at a path.
     modifyAtPath :: (t' -> t') -> Path -> t -> t
 
-instance Pathable (Tree.Tree symbol) (Tree.Tree symbol) where
-    type Emptyable (Tree.Tree symbol) = Maybe (Tree.Tree symbol)
+-- | Each child index is one index into the children.
+instance Pathable (Term symbol) (Term symbol) where
+    type Emptyable (Term symbol) = Maybe (Term symbol)
 
     getPath EmptyPath t = Just t
-    getPath (ConsPath (ChildIndex p) ps) (Tree.Node _ ts) = getPath ps =<< ts !? p
+    getPath (ConsPath (ChildIndex p) ps) t = getPath ps =<< Term.child p t
 
     getAllAtPath p t = maybeToList $ getPath p t
 
     modifyAtPath f EmptyPath t = f t
-    modifyAtPath f (ConsPath p ps) (Tree.Node s ts) = Tree.Node s (adjustAt p (modifyAtPath f ps) ts)
+    modifyAtPath f (ConsPath (ChildIndex p) ps) t = Term.adjustChild (modifyAtPath f ps) p t

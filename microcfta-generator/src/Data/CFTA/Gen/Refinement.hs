@@ -60,7 +60,6 @@ import Data.Bifunctor (first)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.String (fromString)
-import qualified Data.Tree as Tree
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Gen hiding (
@@ -132,6 +131,7 @@ import Data.CFTA.Refinement.Guard (
 import Data.CFTA.Refinement.Lattice (onlyPoint)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3Assuming)
 import Data.CFTA.Symbol (valueName)
+import Data.CFTA.Term (Term)
 
 -- | A generator over liquid tree automata.
 type LTAGen = Gen Symbol
@@ -552,11 +552,11 @@ root, and ranks the parts by those labels: by symbol text and refinement, with
 a constructor before a leaf of the same symbol. Arity orders the constructors
 within one part.
 -}
-fromAutomaton :: Automaton -> LTAGen (Tree.Tree Symbol)
+fromAutomaton :: Automaton -> LTAGen (Term Symbol)
 fromAutomaton = deferConstrained . Flat.fromAutomaton id
 
 -- | Read the terms a liquid automaton accepts up to a constructor-depth bound. A leaf has depth zero.
-fromAutomatonUpToDepth :: Depth -> Automaton -> LTAGen (Tree.Tree Symbol)
+fromAutomatonUpToDepth :: Depth -> Automaton -> LTAGen (Term Symbol)
 fromAutomatonUpToDepth depth = deferConstrained . Flat.fromAutomatonUpToDepth id depth
 
 -- | Defer an import whose guards the engine cannot count to 'compile'.

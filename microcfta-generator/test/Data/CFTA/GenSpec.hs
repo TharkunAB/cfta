@@ -32,7 +32,8 @@ import Data.CFTA.Index (Cardinality (..), everyRank)
 import qualified Data.CFTA.Interned as Common
 import qualified Data.CFTA.Ranked as Ranked
 import Data.CFTA.Symbol (Symbol)
-import qualified Data.Tree as Tree
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | A derived recursive fixture with named child positions.
 data DerivedTree = Leaf Bool | Fork DerivedTree DerivedTree
@@ -122,12 +123,12 @@ spec = do
                     map (FTAGen.pmfAtSize built) [0 .. 7] `shouldBe` map (FTAGen.pmfAtSize imported) [0 .. 7]
 
         it "retains record names, positions, and fully applied field types" $ do
-            let Tree.Node constructor _ = Datatype.encodeTerm $ RecordPair (Leaf False) (Leaf True)
+            let Term.Node constructor _ = Datatype.encodeTerm $ RecordPair (Leaf False) (Leaf True)
                 typ = typeRep $ Proxy @DerivedTree
             Datatype.constructorName constructor `shouldBe` "RecordPair"
             Datatype.fieldNamed "rightChild" constructor
                 `shouldBe` Just (Datatype.Field 1 (Just "rightChild") typ)
-            (Datatype.decodeTerm (Tree.Node constructor []) :: Maybe DerivedTree) `shouldBe` Nothing
+            (Datatype.decodeTerm (Term.Node constructor []) :: Maybe DerivedTree) `shouldBe` Nothing
             (Datatype.decodeTerm (Datatype.encodeTerm True) :: Maybe DerivedTree) `shouldBe` Nothing
 
         it "reuses mutually recursive type states and accepts finite nested lists" $ do
@@ -162,7 +163,7 @@ spec = do
                 Right datatype -> do
                     FTAGen.cardinality (FTAGen.fromDatatypeUpToDepth 3 datatype)
                         `shouldBe` Left FTAGen.EmptyGenerator
-                    FTAGen.rankOfTerm (FTAGen.fromDatatypeUpToDepth 3 datatype) (Tree.Node (fromString "EmptyDatatype") [])
+                    FTAGen.rankOfTerm (FTAGen.fromDatatypeUpToDepth 3 datatype) (Term.Node (fromString "EmptyDatatype") [])
                         `shouldBe` Left FTAGen.EmptyGenerator
             void (Datatype.deriveFTA @(Growing Bool))
                 `shouldBe` Left
@@ -273,7 +274,7 @@ spec = do
             FTAGen.cardinality boxed `shouldBe` Right 2
             FTAGen.unrank boxed 1 `shouldBe` Right 2
             FTAGen.termAt boxed 1
-                `shouldBe` Right (Tree.Node (FTAGen.Label "box") [Tree.Node (FTAGen.Label "one") []])
+                `shouldBe` Right (Term.Node (FTAGen.Label "box") [Term.Node (FTAGen.Label "one") []])
 
         it "uses each do binding as one direct constructor child" $ do
             -- A child that is a choice keeps its alternative label, so equal
@@ -281,27 +282,27 @@ spec = do
             FTAGen.cardinality pairs `shouldBe` Right 4
             FTAGen.termAt pairs 2
                 `shouldBe` Right
-                    ( Tree.Node
+                    ( Term.Node
                         (FTAGen.Label "pair")
-                        [ Tree.Node (FTAGen.Choice 1) [Tree.Node (FTAGen.Label "one") []]
-                        , Tree.Node (FTAGen.Choice 0) [Tree.Node (FTAGen.Label "zero") []]
+                        [ Term.Node (FTAGen.Choice 1) [Term.Node (FTAGen.Label "one") []]
+                        , Term.Node (FTAGen.Choice 0) [Term.Node (FTAGen.Label "zero") []]
                         ]
                     )
 
         it "compiles and walks a language that two alternatives reuse once" $ do
             let depth = 40 :: Int
-                chain :: Int -> FTAGen.FTAGen String (Tree.Tree String)
-                chain 0 = pure (Tree.Node "z" [])
+                chain :: Int -> FTAGen.FTAGen String (Term String)
+                chain 0 = pure (Term.Node "z" [])
                 chain n = FTAGen.oneof [wrap "a" <$> rest, wrap "b" <$> rest]
                   where
                     rest = chain (n - 1)
-                rankedChain :: Int -> Either Ranked.RankedError (Ranked.Ranked (Tree.Tree String))
-                rankedChain 0 = Right (pure (Tree.Node "z" []))
+                rankedChain :: Int -> Either Ranked.RankedError (Ranked.Ranked (Term String))
+                rankedChain 0 = Right (pure (Term.Node "z" []))
                 rankedChain n = do
                     rest <- rankedChain (n - 1)
                     Ranked.oneof [wrap "a" <$> rest, wrap "b" <$> rest]
-                wrap symbol term = Tree.Node symbol [term]
-                path symbol = iterate (wrap symbol) (Tree.Node "z" []) !! depth
+                wrap symbol term = Term.Node symbol [term]
+                path symbol = iterate (wrap symbol) (Term.Node "z" []) !! depth
                 generator = chain depth
                 ranked = rankedChain depth
                 lastRank = 2 ^ depth - 1
@@ -315,7 +316,7 @@ spec = do
                         && FTAGen.smallest generator == Right (Just (path "a"))
                         && take 1 (FTAGen.shrinkRank generator lastRank) == [0]
                         && fmap (\language -> take 1 (Ranked.shrinkRank language lastRank)) ranked == Right [0]
-                        && length (Tree.flatten drawn) == depth + 1
+                        && length (Term.flatten drawn) == depth + 1
                         && (ranked >>= (`Ranked.unrank` lastRank)) == Right (path "b")
             completed `shouldBe` Just True
 
@@ -323,7 +324,7 @@ spec = do
             case (FTAGen.support pairs, traverse (FTAGen.termAt pairs) [0 .. 3]) of
                 (Right support, Right terms) -> do
                     terms `shouldSatisfy` all (acceptsPlain support)
-                    acceptsPlain support (Tree.Node (FTAGen.Label "pair") [Tree.Node (FTAGen.Label "zero") []])
+                    acceptsPlain support (Term.Node (FTAGen.Label "pair") [Term.Node (FTAGen.Label "zero") []])
                         `shouldBe` False
                 (Left err, _) -> expectationFailure $ show err
                 (_, Left err) -> expectationFailure $ show err
@@ -331,7 +332,7 @@ spec = do
     describe "ordinary FTA compilation" $ do
         it "indexes recursive runs by size and bounds them by depth" $ do
             let rows = [((), [Automaton.Transition "z" [] noConstraint, Automaton.Transition "s" [()] noConstraint])]
-                terms = take 5 $ iterate (\term -> Tree.Node "s" [term]) (Tree.Node "z" [])
+                terms = take 5 $ iterate (\term -> Term.Node "s" [term]) (Term.Node "z" [])
             case Automaton.mkFTA () rows of
                 Left err -> expectationFailure $ show err
                 Right automaton -> do
@@ -348,8 +349,8 @@ spec = do
                     -- The terms rank back to their ranks, also by size in the recursive import.
                     let bounded = FTAGen.fromAutomatonUpToDepth 4 node
                         recursive = FTAGen.fromAutomaton node
-                        deeper = Tree.Node "s" [last terms]
-                        wrongArity = Tree.Node "s" []
+                        deeper = Term.Node "s" [last terms]
+                        wrongArity = Term.Node "s" []
                     ranksEveryMemberBack FTAGen.rankOfTerm bounded
                     ranksBack FTAGen.rankOfTerm recursive [0 .. 9]
                     map (FTAGen.rankOfTerm bounded) [deeper, wrongArity]
@@ -372,7 +373,7 @@ spec = do
                 Right empty -> do
                     FTAGen.cardinality (FTAGen.upToSize 10 $ FTAGen.fromAutomaton $ Common.fromFTA empty)
                         `shouldBe` Left FTAGen.EmptyGenerator
-                    FTAGen.rankOfTerm (FTAGen.fromAutomaton $ Common.fromFTA empty) (Tree.Node "step" [Tree.Node "again" []])
+                    FTAGen.rankOfTerm (FTAGen.fromAutomaton $ Common.fromFTA empty) (Term.Node "step" [Term.Node "again" []])
                         `shouldBe` Left FTAGen.EmptyGenerator
             let productive =
                     [
@@ -401,14 +402,14 @@ spec = do
                         `shouldBe` Right 5
                     -- The two step alternatives overlap, so the bound ranks symbolically.
                     ranksEveryMemberBack FTAGen.rankOfTerm bounded
-                    FTAGen.rankOfTerm (FTAGen.fromAutomaton node) (Tree.Node "z" [])
+                    FTAGen.rankOfTerm (FTAGen.fromAutomaton node) (Term.Node "z" [])
                         `shouldBe` Left FTAGen.AmbiguousAutomaton
 
         it "compiles the common interned unit-constraint graph without ECTA" $ do
             let leaves = Common.Node [Common.Edge "zero" [], Common.Edge "one" []] :: Common.Node String
                 root = Common.Node [Common.Edge "pair" [leaves, leaves]]
                 expected =
-                    [ Tree.Node "pair" [Tree.Node left [], Tree.Node right []]
+                    [ Term.Node "pair" [Term.Node left [], Term.Node right []]
                     | left <- ["one", "zero"]
                     , right <- ["one", "zero"]
                     ]
@@ -420,12 +421,12 @@ spec = do
                     traverse (FTAGen.unrank generator) [0 .. 3] `shouldBe` Right expected
                     all (Automaton.accepts automaton) expected `shouldBe` True
                     ranksEveryMemberBack FTAGen.rankOfTerm generator
-                    map (FTAGen.rankOfTerm generator) [Tree.Node "pair" [Tree.Node "one" []], Tree.Node "zero" []]
+                    map (FTAGen.rankOfTerm generator) [Term.Node "pair" [Term.Node "one" []], Term.Node "zero" []]
                         `shouldBe` [Left FTAGen.TermNotInLanguage, Left FTAGen.TermNotInLanguage]
 
         it "ranks imported alternatives in symbol order, not in interning order" $ do
             -- Interning is global: these symbols appear in no other test.
-            let leaves = [Tree.Node "order-a" [], Tree.Node "order-b" []]
+            let leaves = [Term.Node "order-a" [], Term.Node "order-b" []]
                 flat = Common.Node [Common.Edge "order-a" [], Common.Edge "order-b" []] :: Common.Node String
                 transitions =
                     [Automaton.Transition symbol [] noConstraint | symbol <- ["order-b", "order-a"]]
@@ -452,7 +453,7 @@ spec = do
                 Left err -> expectationFailure $ show err
                 Right automaton ->
                     FTAGen.values (Flat.fromAutomaton (const ()) $ Common.fromFTA automaton)
-                        `shouldBe` Right [Tree.Node "tie-f" [Tree.Node symbol []] | symbol <- ["tie-a", "tie-b"]]
+                        `shouldBe` Right [Term.Node "tie-f" [Term.Node symbol []] | symbol <- ["tie-a", "tie-b"]]
 
         it "ranks alternatives with one symbol by their children, not in interning order" $ do
             -- Interning is global: these symbols appear in no other test.
@@ -462,7 +463,7 @@ spec = do
             -- Intern the later alternative first.
             void $ evaluate $ Common.nodeCount (Common.Node [pair "canonical-b"])
             FTAGen.values (FTAGen.fromAutomaton flat)
-                `shouldBe` Right [Tree.Node "canonical-pair" [Tree.Node symbol []] | symbol <- ["canonical-a", "canonical-b"]]
+                `shouldBe` Right [Term.Node "canonical-pair" [Term.Node symbol []] | symbol <- ["canonical-a", "canonical-b"]]
             ranksEveryMemberBack FTAGen.rankOfTerm $ FTAGen.fromAutomaton flat
 
         it "ranks alternatives with one symbol in a cyclic automaton by their children" $ do
@@ -470,15 +471,15 @@ spec = do
             let leaf symbol = Common.Node [Common.Edge symbol []] :: Common.Node String
                 pair symbol = Common.Edge "cyclic-pair" [leaf symbol]
                 cyclic = Common.createMu $ \self -> Common.Node [Common.Edge "cyclic-end" [], Common.Edge "cyclic-wrap" [self], pair "cyclic-a", pair "cyclic-b"]
-                paired symbol = Tree.Node "cyclic-pair" [Tree.Node symbol []]
+                paired symbol = Term.Node "cyclic-pair" [Term.Node symbol []]
             -- Intern the later alternative first.
             void $ evaluate $ Common.nodeCount (Common.Node [pair "cyclic-b"])
             FTAGen.values (FTAGen.upToSize 2 $ FTAGen.fromAutomaton cyclic)
                 `shouldBe` Right
-                    [ Tree.Node "cyclic-end" []
+                    [ Term.Node "cyclic-end" []
                     , paired "cyclic-a"
                     , paired "cyclic-b"
-                    , Tree.Node "cyclic-wrap" [Tree.Node "cyclic-end" []]
+                    , Term.Node "cyclic-wrap" [Term.Node "cyclic-end" []]
                     ]
 
         it "shares state compilation and decoding across a large finite DAG" $ do
@@ -488,7 +489,7 @@ spec = do
                         : [ (state, [Automaton.Transition "a" [state - 1] noConstraint, Automaton.Transition "b" [state - 1] noConstraint])
                           | state <- [1 .. depth]
                           ]
-                chain symbol = iterate (\term -> Tree.Node symbol [term]) (Tree.Node "z" []) !! depth
+                chain symbol = iterate (\term -> Term.Node symbol [term]) (Term.Node "z" []) !! depth
             case Automaton.mkFTA depth rows of
                 Left err -> expectationFailure $ show err
                 Right automaton -> do
@@ -519,13 +520,13 @@ spec = do
                     ]
                 -- Each node of an imported term pays one, so each node of the reference pays.
                 reference = do
-                    leaves <- Ranked.oneof [Ranked.pay $ pure $ Tree.Node "x" [], Ranked.pay $ pure $ Tree.Node "y" []]
+                    leaves <- Ranked.oneof [Ranked.pay $ pure $ Term.Node "x" [], Ranked.pay $ pure $ Term.Node "y" []]
                     alternatives <-
                         Ranked.oneof
-                            [ Ranked.pay $ pure $ Tree.Node "a" []
-                            , Ranked.pay $ pure (\child -> Tree.Node "wrap" [child]) <*> leaves
+                            [ Ranked.pay $ pure $ Term.Node "a" []
+                            , Ranked.pay $ pure (\child -> Term.Node "wrap" [child]) <*> leaves
                             ]
-                    pure $ Ranked.pay $ pure (\left right -> Tree.Node "pair" [left, right]) <*> alternatives <*> alternatives
+                    pure $ Ranked.pay $ pure (\left right -> Term.Node "pair" [left, right]) <*> alternatives <*> alternatives
             case Automaton.mkFTA (2 :: Int) rows of
                 Left err -> expectationFailure $ show err
                 Right automaton -> case reference of
@@ -557,13 +558,13 @@ spec = do
                     , ("b", [Automaton.Transition "b" [] noConstraint])
                     , ("c", [Automaton.Transition "c" [] noConstraint])
                     ]
-                deep = foldl' (\term right -> Tree.Node "f" [term, Tree.Node right []]) (Tree.Node "a" []) (replicate 40 "c")
+                deep = foldl' (\term right -> Term.Node "f" [term, Term.Node right []]) (Term.Node "a" []) (replicate 40 "c")
             case Automaton.mkFTA "list" rows of
                 Left err -> expectationFailure $ show err
                 Right automaton -> do
                     let generator = FTAGen.fromAutomaton $ Common.fromFTA automaton
                     ranksBack FTAGen.rankOfTerm generator [0 .. 30]
-                    FTAGen.rankOfTerm generator (Tree.Node "f" [Tree.Node "a" [], Tree.Node "a" []])
+                    FTAGen.rankOfTerm generator (Term.Node "f" [Term.Node "a" [], Term.Node "a" []])
                         `shouldBe` Left FTAGen.TermNotInLanguage
                     (FTAGen.rankOfTerm generator deep >>= \rank -> (,) (FTAGen.sizeOfRank generator rank) <$> FTAGen.unrank generator rank)
                         `shouldBe` Right (Just 81, deep)
@@ -604,7 +605,7 @@ expressionDepth (Expressions.Multiply left right) =
     1 + max (expressionDepth left) (expressionDepth right)
 
 -- | Membership in a plain interned support.
-acceptsPlain :: Common.Node (FTAGen.Label String) -> Tree.Tree (FTAGen.Label String) -> Bool
+acceptsPlain :: Common.Node (FTAGen.Label String) -> Term (FTAGen.Label String) -> Bool
 acceptsPlain = Common.acceptsWith (\_ _ -> True)
 
 -- | The generator symbol of a derived constructor.

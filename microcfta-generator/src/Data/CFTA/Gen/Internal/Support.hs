@@ -36,7 +36,6 @@ import Data.List (compareLength)
 import qualified Data.Map.Strict as Map
 import Data.Sequence (Seq (..))
 import qualified Data.Sequence as Sequence
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 
 import Data.CFTA.Constraint (
@@ -58,6 +57,8 @@ import Data.CFTA.Equality.Constraint (EqConstraints (EmptyConstraints), mkEqCons
 import Data.CFTA.Gen.Label (ComponentIndex, GroupIndex, KeyIndex, Label (..))
 import Data.CFTA.Index (ArgumentIndex (..))
 import Data.CFTA.Path (ChildIndex (..), path)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 {- | Whether an edge carries no constraint at all: no path equality and no
 residual obligation. Such an edge is an ordinary transition of any theory.
@@ -99,8 +100,8 @@ keyNode :: (Hashable symbol, Typeable symbol) => GroupIndex -> Node (Label symbo
 keyNode index = Node [Edge (Group index) []]
 
 -- | The node accepting exactly one term.
-singletonNode :: (Hashable symbol, Typeable symbol) => Tree.Tree symbol -> Node symbol
-singletonNode = Tree.foldTree $ \symbol children -> Node [Edge symbol children]
+singletonNode :: (Hashable symbol, Typeable symbol) => Term symbol -> Node symbol
+singletonNode = Term.foldTree $ \symbol children -> Node [Edge symbol children]
 
 -- TODO: The operation is the first child of the centre, before the keys, so
 -- that readers match @operation : keys@ and builders cons. The measurement
@@ -146,7 +147,7 @@ joinNodeWith inject componentIndex operationSupport argumentSupports =
     -- of the centre. In both edges, argument i is child i + 1.
     argumentChild (ArgumentIndex position) = ChildIndex (position + 1)
     keyNodes =
-        [ singletonNode $ Tree.Node (inject $ ArgKey componentIndex position) []
+        [ singletonNode $ Term.Node (inject $ ArgKey componentIndex position) []
         | position <- positions
         ]
     operationNode =
@@ -176,7 +177,7 @@ restrictToKeyWith inject position family =
     Node
         [ mkEdge
             (inject AtKey)
-            [singletonNode $ Tree.Node (inject $ Key position) [], family]
+            [singletonNode $ Term.Node (inject $ Key position) [], family]
             (equalityConstraint $ mkEqConstraints [[path [0], path [1, 0]]])
         ]
 
@@ -197,7 +198,7 @@ familyNodeWith ::
     (Label symbol -> other) -> [(KeyIndex, Node other)] -> Node other
 familyNodeWith inject keyed =
     Node
-        [ Edge (inject Family) [singletonNode $ Tree.Node (inject $ Key position) [], body]
+        [ Edge (inject Family) [singletonNode $ Term.Node (inject $ Key position) [], body]
         | (position, body) <- keyed
         ]
 
@@ -269,43 +270,43 @@ isChoiceEdge original edge
     | otherwise = False
 
 -- | Close one private applicative term spine with a domain constructor.
-labelTerm :: symbol -> Tree.Tree (Label symbol) -> Tree.Tree (Label symbol)
+labelTerm :: symbol -> Term (Label symbol) -> Term (Label symbol)
 labelTerm symbol = labelTermWith id (Label symbol)
 
 -- | Close a term layer by recognizing the private labels under a representation.
-labelTermWith :: (other -> Label symbol) -> other -> Tree.Tree other -> Tree.Tree other
-labelTermWith original symbol term@(Tree.Node internal children) =
+labelTermWith :: (other -> Label symbol) -> other -> Term other -> Term other
+labelTermWith original symbol term@(Term.Node internal children) =
     case original internal of
-        JoinN -> Tree.Node symbol children
+        JoinN -> Term.Node symbol children
         Choice _ | [child] <- children -> labelTermWith original symbol child
-        Pure -> Tree.Node symbol []
+        Pure -> Term.Node symbol []
         _
-            | Just arguments <- applicationTermChildren original term -> Tree.Node symbol $ toList arguments
-            | otherwise -> Tree.Node symbol [term]
+            | Just arguments <- applicationTermChildren original term -> Term.Node symbol $ toList arguments
+            | otherwise -> Term.Node symbol [term]
 
 {- | The children that 'labelTerm' gives a term under a node label: the
 arguments of an applicative spine, the children of an n-way join, or the term
 itself. A choice wrapper gives the children of its alternative.
 -}
-labelledChildren :: Tree.Tree (Label symbol) -> [Tree.Tree (Label symbol)]
-labelledChildren = Tree.subForest . labelTermWith id Pure
+labelledChildren :: Term (Label symbol) -> [Term (Label symbol)]
+labelledChildren = Term.subForest . labelTermWith id Pure
 
 {- | The arguments that a term gives as the function side of an applicative
 spine: none for @pure@, the arguments of a spine, or the term itself.
 -}
-spineChildren :: Tree.Tree (Label symbol) -> Seq (Tree.Tree (Label symbol))
+spineChildren :: Term (Label symbol) -> Seq (Term (Label symbol))
 spineChildren = applicationLeftChildren id
 
 -- | Recognize the children of one private applicative term spine.
-applicationTermChildren :: (other -> Label symbol) -> Tree.Tree other -> Maybe (Seq (Tree.Tree other))
-applicationTermChildren original (Tree.Node internal [functions, argument])
+applicationTermChildren :: (other -> Label symbol) -> Term other -> Maybe (Seq (Term other))
+applicationTermChildren original (Term.Node internal [functions, argument])
     | Apply <- original internal =
         Just $ applicationLeftChildren original functions :|> argument
 applicationTermChildren _ _ = Nothing
 
 -- | Flatten the already-applied left portion of an applicative term spine.
-applicationLeftChildren :: (other -> Label symbol) -> Tree.Tree other -> Seq (Tree.Tree other)
-applicationLeftChildren original term@(Tree.Node internal children)
+applicationLeftChildren :: (other -> Label symbol) -> Term other -> Seq (Term other)
+applicationLeftChildren original term@(Term.Node internal children)
     | Pure <- original internal
     , null children =
         Empty

@@ -55,7 +55,6 @@ import Data.Hashable (Hashable)
 import Data.Maybe (isNothing)
 import Data.Set (Set)
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import GHC.Generics (Generic)
 
 import Data.CFTA.Equality.Constraint (
@@ -69,6 +68,7 @@ import Data.CFTA.Equality.Constraint (
 import Data.CFTA.Index (ArgumentIndex)
 import Data.CFTA.Path (Path, getPath)
 import Data.CFTA.Symbol (Formula)
+import Data.CFTA.Term (Term)
 
 -- | A transition guard over paths relative to the transition's root term.
 data Guard
@@ -142,7 +142,7 @@ recognizes, such as contradictory equalities or the guard 'Bottom', holds for
 no term, as interning drops its edge. The rest of the residual beyond the
 equalities is not decided here.
 -}
-equalitiesHold :: (Eq symbol) => Constraint -> Tree.Tree symbol -> Bool
+equalitiesHold :: (Eq symbol) => Constraint -> Term symbol -> Bool
 equalitiesHold constraint term
     | contradictory constraint = False
     | otherwise = case equalities constraint of

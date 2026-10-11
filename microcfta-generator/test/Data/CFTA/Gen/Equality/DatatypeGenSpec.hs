@@ -7,7 +7,6 @@ import Data.List (sort)
 import Data.Ratio ((%))
 import qualified Data.Set as Set
 import Data.String (fromString)
-import qualified Data.Tree as Tree
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 
@@ -21,6 +20,7 @@ import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import qualified Data.CFTA.Interned as Interned
 import qualified Data.CFTA.Path as Paths
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
+import qualified Data.CFTA.Term as Term
 
 -- | Annotate the tuple constructor and leave its field datatypes unchanged.
 equalFields :: [[Paths.ChildIndex]] -> Datatype.Constructor -> Interned.Constraint
@@ -160,7 +160,7 @@ spec = do
                     evaluate $
                         ECTAGen.cardinality generator == Right 1
                             && case ECTAGen.unrank generator 0 of
-                                Right (Tree.Node symbol _) -> symbol == fromString "pair"
+                                Right (Term.Node symbol _) -> symbol == fromString "pair"
                                 Left _ -> False
             completed `shouldBe` Just True
 
@@ -203,4 +203,4 @@ spec = do
             let generator = ECTAGen.fromAutomatonUpToDepth 1 (Interned.fromFTA (FTA.mapConstraints Interned.equalityConstraint intersection))
             ECTAGen.cardinality generator `shouldBe` Right 1
             ECTAGen.unrank generator 0
-                `shouldBe` Right (Tree.Node (fromString "pair") [Tree.Node (fromString "b") [], Tree.Node (fromString "b") []])
+                `shouldBe` Right (Term.Node (fromString "pair") [Term.Node (fromString "b") [], Term.Node (fromString "b") []])

@@ -2,11 +2,11 @@
 
 module Data.CFTA.TermSearchSpec (spec) where
 
-import qualified Data.Tree as Tree
 import Test.Hspec
 
 import Data.CFTA.Equality
 import Data.CFTA.Symbol
+import qualified Data.CFTA.Term as Term
 import Data.CFTA.TermSearch (constFunc, filterType, reduceFully, theArrowNode, typeNode)
 
 -----------------------------------------------------------------
@@ -44,11 +44,11 @@ spec = do
     describe "filterType" $ do
         it "keeps only the terms of the requested type" $
             terms (reduceFully (filterType constants intType))
-                `shouldBe` [Tree.Node "filter" [Tree.Node "Int" [], Tree.Node "one" [Tree.Node "Int" []]]]
+                `shouldBe` [Term.Node "filter" [Term.Node "Int" [], Term.Node "one" [Term.Node "Int" []]]]
 
         it "keeps the other type when that is what is asked for" $
             terms (reduceFully (filterType constants boolType))
-                `shouldBe` [Tree.Node "filter" [Tree.Node "Bool" [], Tree.Node "true" [Tree.Node "Bool" []]]]
+                `shouldBe` [Term.Node "filter" [Term.Node "Bool" [], Term.Node "true" [Term.Node "Bool" []]]]
 
         it "an unrepresented type leaves nothing" $
             reduceFully (filterType constants (typeNode @Char)) `shouldBe` EmptyNode

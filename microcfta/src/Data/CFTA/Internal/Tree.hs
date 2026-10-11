@@ -30,9 +30,10 @@ import qualified Data.Map.Strict as Map
 import Data.Sequence (Seq (..))
 import qualified Data.Sequence as Sequence
 import qualified Data.Set as Set
-import Data.Tree (Tree (Node))
+import qualified Data.Tree as Tree
 
 import Data.CFTA.Index (ChildIndex (..), Depth (..), TransitionIndex (..))
+import Data.CFTA.Term (Term (Leaf, One, Three, Two), arity, childAt, rootLabel, pattern Node)
 
 {- | A root-relative location in a tree view.
 
@@ -70,22 +71,22 @@ toTreeBy ::
     (node -> [edge]) ->
     (edge -> [node]) ->
     node ->
-    Tree (Either (StateView node) edge)
+    Tree.Tree (Either (StateView node) edge)
 toTreeBy outgoing children root = State.evalState (visit Set.empty Empty root) Set.empty
   where
     visit ancestors path node
-        | Set.member node ancestors = pure $ Node (Left $ Recursive (toList path) node) []
+        | Set.member node ancestors = pure $ Tree.Node (Left $ Recursive (toList path) node) []
         | otherwise = do
             seen <- State.get
             if Set.member node seen
-                then pure $ Node (Left $ Shared (toList path) node) []
+                then pure $ Tree.Node (Left $ Shared (toList path) node) []
                 else do
                     State.modify' (Set.insert node)
                     transitions <- zipWithM (transition (Set.insert node ancestors) path) [0 ..] $ outgoing node
-                    pure $ Node (Left $ Expanded (toList path) node) transitions
+                    pure $ Tree.Node (Left $ Expanded (toList path) node) transitions
 
     transition ancestors path index edge =
-        Node (Right edge)
+        Tree.Node (Right edge)
             <$> zipWithM
                 (\child -> visit ancestors (path :|> ViewStep index child))
                 [0 ..]
@@ -145,14 +146,14 @@ all carry distinct symbols cannot repeat a term, and the others are
 deduplicated per level. A child key without a row accepts nothing, so
 'trimRows' removes the alternatives that use it.
 -}
-termsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [Tree symbol]
+termsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [Term symbol]
 termsBy rows root = concat $ termLevelsBy rows root
 
 {- | The terms of 'termsBy' grouped by depth: the terms of depth zero first,
 then the terms of depth one, and so on. The list of levels is lazy, so a
 prefix of it bounds the depth without building the deeper terms.
 -}
-termLevelsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [[Tree symbol]]
+termLevelsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [[Term symbol]]
 termLevelsBy rows root
     | Map.member root table = map (Map.! root) $ takeWhile (not . all null) $ map exactly levels
     | otherwise = []
@@ -170,14 +171,10 @@ termLevelsBy rows root
       where
         deeper =
             fmap
-                (\outgoing -> dedup [Node symbol children | (symbol, childKeys@(_ : _)) <- outgoing, children <- deepest childKeys])
+                ( \outgoing ->
+                    dedup [term | (symbol, childKeys@(_ : _)) <- outgoing, term <- deepestTerms current atMost shallower symbol childKeys]
+                )
                 table
-        -- Child lists whose deepest child has exactly the current depth. The
-        -- first child at that depth is fixed, so no list is produced twice.
-        deepest [] = []
-        deepest (key : keys) =
-            [child : rest | child <- current Map.! key, rest <- traverse (atMost Map.!) keys]
-                <> [child : rest | rest <- deepest keys, child <- shallower Map.! key]
 
 {- | The terms of depth at most the bound that a check accepts, from rows.
 
@@ -190,35 +187,54 @@ termsUpToBy ::
     (Monad m, Ord key, Ord symbol, Hashable symbol) =>
     (alternative -> symbol) ->
     (alternative -> [key]) ->
-    (key -> alternative -> Tree symbol -> m Bool) ->
+    (key -> alternative -> Term symbol -> m Bool) ->
     [(key, [alternative])] ->
     Depth ->
     key ->
-    m [Tree symbol]
+    m [Term symbol]
 termsUpToBy symbolOf childrenOf accept rows bound root
     | bound < 0 || Map.notMember root table = pure []
     | otherwise = do
-        leaves <- level (\keys -> [[] | null keys])
+        leaves <- level (\symbol keys -> [Leaf symbol | null keys])
         collect 1 (leaves, leaves, fmap (const []) table) (Sequence.singleton $ leaves Map.! root)
   where
     table = trimRows childrenOf rows root
     dedup = dedupUnless (all (distinctSymbols . map symbolOf) table)
 
-    level combos = Map.traverseWithKey (\key outgoing -> dedup . concat <$> traverse (candidates key) outgoing) table
+    level terms = Map.traverseWithKey (\key outgoing -> dedup . concat <$> traverse (candidates key) outgoing) table
       where
         candidates key alternative =
-            filterM (accept key alternative) [Node (symbolOf alternative) children | children <- combos (childrenOf alternative)]
+            filterM (accept key alternative) (terms (symbolOf alternative) (childrenOf alternative))
 
     collect depth (current, atMost, shallower) collected
         | depth > bound || all null current = pure (concat collected)
         | otherwise = do
-            deeper <- level (\keys -> if null keys then [] else deepest keys)
+            deeper <- level (deepestTerms current atMost shallower)
             collect (depth + 1) (deeper, Map.unionWith (++) deeper atMost, atMost) (collected :|> deeper Map.! root)
-      where
-        deepest [] = []
-        deepest (key : keys) =
-            [child : rest | child <- current Map.! key, rest <- traverse (atMost Map.!) keys]
-                <> [child : rest | rest <- deepest keys, child <- shallower Map.! key]
+
+{- | The terms of a symbol whose deepest child has exactly the current depth.
+The maps give the terms of each key of exactly the current depth, of at most
+that depth, and of at most the depth before it. The first child at the
+current depth is fixed, so no term comes twice. A term with up to three
+children is built without a list of children. No keys give no terms.
+-}
+deepestTerms ::
+    (Ord key) => Map key [Term symbol] -> Map key [Term symbol] -> Map key [Term symbol] -> symbol -> [key] -> [Term symbol]
+deepestTerms current atMost shallower symbol keys = case keys of
+    [first] -> [One symbol a | a <- current Map.! first]
+    [first, second] ->
+        [Two symbol a b | a <- current Map.! first, b <- atMost Map.! second]
+            <> [Two symbol a b | b <- current Map.! second, a <- shallower Map.! first]
+    [first, second, third] ->
+        [Three symbol a b c | a <- current Map.! first, b <- atMost Map.! second, c <- atMost Map.! third]
+            <> [Three symbol a b c | b <- current Map.! second, c <- atMost Map.! third, a <- shallower Map.! first]
+            <> [Three symbol a b c | c <- current Map.! third, b <- shallower Map.! second, a <- shallower Map.! first]
+    _ -> map (Node symbol) (childLists keys)
+  where
+    childLists [] = []
+    childLists (key : rest) =
+        [child : others | child <- current Map.! key, others <- traverse (atMost Map.!) rest]
+            <> [child : others | others <- childLists rest, child <- shallower Map.! key]
 
 {- | Whether alternatives carry pairwise distinct symbols. Then no two of
 them build the same term, so a level built from deduplicated levels has no
@@ -284,14 +300,14 @@ acceptsBy ::
     (key -> [alternative]) ->
     (alternative -> symbol) ->
     (alternative -> [key]) ->
-    (key -> alternative -> Tree symbol -> m Bool) ->
+    (key -> alternative -> Term symbol -> m Bool) ->
     key ->
-    Tree symbol ->
+    Term symbol ->
     m Bool
 acceptsBy outgoing symbolOf childrenOf check = unshared
   where
-    matches (Node symbol children) alternative =
-        symbolOf alternative == symbol && length (childrenOf alternative) == length children
+    matches term alternative =
+        symbolOf alternative == rootLabel term && length (childrenOf alternative) == arity term
 
     -- The alternatives of a row from the first one that matches a subterm.
     fromMatch _ [] = []
@@ -300,16 +316,19 @@ acceptsBy outgoing symbolOf childrenOf check = unshared
         | otherwise = fromMatch term rest
 
     -- No other visit reaches this subterm, so its result needs no table.
-    unshared key term@(Node _ children) = case fromMatch term (outgoing key) of
+    -- The alternative matched, so the children have the keys of its child
+    -- list, in order.
+    unshared key term = case fromMatch term (outgoing key) of
         [] -> pure False
         alternative : rest -> case fromMatch term rest of
             [] ->
-                childrenAccept (childrenOf alternative) children >>= \accepted ->
+                childrenAccept (childrenOf alternative) 0 term >>= \accepted ->
                     if accepted then check key alternative term else pure False
             _ -> State.evalStateT (shared key (positioned term)) Map.empty
-    childrenAccept (key : keys) (child : rest) =
-        unshared key child >>= \accepted -> if accepted then childrenAccept keys rest else pure False
-    childrenAccept _ _ = pure True
+    childrenAccept (key : keys) index term =
+        unshared key (childAt index term) >>= \accepted ->
+            if accepted then childrenAccept keys (index + 1) term else pure False
+    childrenAccept [] _ _ = pure True
 
     -- This subterm is at or below a subterm that two or more alternatives
     -- match. The table holds the result of each position and key.

@@ -13,6 +13,7 @@ module Data.CFTA.Gen.Internal.Join (
 ) where
 
 import Data.CFTA.Constraint (equalityConstraint)
+import qualified Data.CFTA.Term as Term
 import Data.Foldable (toList)
 import Data.Hashable (Hashable)
 import qualified Data.IntMap.Strict as IntMap
@@ -20,7 +21,6 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust)
 import Data.Sequence (Seq (..))
 import qualified Data.Sequence as Sequence
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 
 import Data.CFTA.Equality (Edge (Edge), Node (Node), mkEdge, numNestedMu, reducePartially)
@@ -183,7 +183,7 @@ joinGroupedStatic left right related =
             Node
                 [ Edge
                     (plainSymbol symbol)
-                    [ singletonNode $ Tree.Node (plainSymbol $ Group $ joinGroupIndex group) []
+                    [ singletonNode $ Term.Node (plainSymbol $ Group $ joinGroupIndex group) []
                     , singletonNode outcome
                     ]
                 | group <- groups
@@ -319,23 +319,23 @@ joinOutcomeIndex left right groups = do
     select index = do
         checkIndex totalOutcomes index
         let (group, leftOutcome, rightOutcome) = selectPair index
-            keyTerm = Tree.Node (Group $ joinGroupIndex group) []
+            keyTerm = Term.Node (Group $ joinGroupIndex group) []
             leftTerm =
-                Tree.Node LeftKeyed [keyTerm, outcomeTerm leftOutcome]
+                Term.Node LeftKeyed [keyTerm, outcomeTerm leftOutcome]
             rightTerm =
-                Tree.Node RightKeyed [keyTerm, outcomeTerm rightOutcome]
+                Term.Node RightKeyed [keyTerm, outcomeTerm rightOutcome]
         pure $
             Outcome
-                (Tree.Node Join [leftTerm, rightTerm])
+                (Term.Node Join [leftTerm, rightTerm])
                 ( outcomeMass leftOutcome
                     * outcomeMass rightOutcome
                     / totalMass
                 )
                 (outcomeValue leftOutcome, outcomeValue rightOutcome)
-                ( Tree.Node
+                ( Term.Node
                     (plainSymbol Join)
-                    [ Tree.Node (plainSymbol LeftKeyed) [fmap plainSymbol keyTerm, outcomeInspection leftOutcome]
-                    , Tree.Node (plainSymbol RightKeyed) [fmap plainSymbol keyTerm, outcomeInspection rightOutcome]
+                    [ Term.Node (plainSymbol LeftKeyed) [fmap plainSymbol keyTerm, outcomeInspection leftOutcome]
+                    , Term.Node (plainSymbol RightKeyed) [fmap plainSymbol keyTerm, outcomeInspection rightOutcome]
                     ]
                 )
 
@@ -345,10 +345,10 @@ joinOutcomeIndex left right groups = do
 
     -- The key of a pair names its group, and each side is one enumerated outcome of its group.
     pairRanks term = case term of
-        Tree.Node
+        Term.Node
             Join
-            [ Tree.Node LeftKeyed [Tree.Node (Group (GroupIndex key)) [], leftTerm]
-                , Tree.Node RightKeyed [Tree.Node (Group (GroupIndex key')) [], rightTerm]
+            [ Term.Node LeftKeyed [Term.Node (Group (GroupIndex key)) [], leftTerm]
+                , Term.Node RightKeyed [Term.Node (Group (GroupIndex key')) [], rightTerm]
                 ]
                 | key == key' ->
                     [ CheckedRank (offsetRank offset $ pairRank (toEnum $ Sequence.length $ joinGroupRight group) leftIndex rightIndex) True
@@ -532,7 +532,7 @@ joinNBucketStatic componentIndex operation arguments =
         (foldr addRootCounts (RootCount 0) (staticRootCount operation : chainRootCounts arguments))
   where
     keyTerms =
-        [ Tree.Node (ArgKey componentIndex position) []
+        [ Term.Node (ArgKey componentIndex position) []
         | position <- map ArgumentIndex [0 .. chainLength arguments - 1]
         ]
     unreduced = joinNode componentIndex (staticSupport operation) (chainSupports arguments)
@@ -559,14 +559,14 @@ joinNBucketStatic componentIndex operation arguments =
         (argumentTerms, argumentInspections, argumentsMass, value) <-
             selectChain (outcomeValue operationOutcome) arguments keyTerms argumentIndex
         let operationTerm =
-                Tree.Node CenterKeyed (outcomeTerm operationOutcome : keyTerms)
+                Term.Node CenterKeyed (outcomeTerm operationOutcome : keyTerms)
         pure $
             Outcome
-                (Tree.Node JoinN (operationTerm : argumentTerms))
+                (Term.Node JoinN (operationTerm : argumentTerms))
                 (outcomeMass operationOutcome * argumentsMass)
                 value
-                ( Tree.Node (plainSymbol JoinN) $
-                    Tree.Node
+                ( Term.Node (plainSymbol JoinN) $
+                    Term.Node
                         (plainSymbol CenterKeyed)
                         ( outcomeInspection operationOutcome
                             : zipWith
@@ -583,13 +583,13 @@ joinNBucketStatic componentIndex operation arguments =
 
     -- A node label replaces the private n-way join label and keeps its children.
     joinRanks view = case view of
-        WholeTerm (Tree.Node JoinN children) -> childrenRanks children
+        WholeTerm (Term.Node JoinN children) -> childrenRanks children
         WholeTerm _ -> []
         LabelledView children -> childrenRanks children
         SpineView (term :<| Empty) -> joinRanks $ WholeTerm term
         SpineView _ -> []
       where
-        childrenRanks (Tree.Node CenterKeyed centre : argumentTerms) = case centre of
+        childrenRanks (Term.Node CenterKeyed centre : argumentTerms) = case centre of
             operationTerm : keys ->
                 let keysChecked = joinKeysMatch componentIndex keys argumentTerms
                  in [ CheckedRank

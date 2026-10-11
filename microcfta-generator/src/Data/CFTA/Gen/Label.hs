@@ -18,11 +18,12 @@ module Data.CFTA.Gen.Label (
 ) where
 
 import Data.Hashable (Hashable)
-import qualified Data.Tree as Tree
 import GHC.Generics (Generic)
 
 import Data.CFTA.Index (ArgumentIndex, Rank)
 import Data.CFTA.Ranked.Internal.Size (ChoiceIndex (..))
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | A user symbol, or one private label of the generator engine.
 data Label symbol
@@ -91,6 +92,6 @@ Every 'Label' node is kept, and every private node is flattened into its
 parent's children. A term whose root is private surfaces as a forest, and a
 private leaf surfaces as nothing.
 -}
-surface :: Tree.Tree (Label symbol) -> [Tree.Tree symbol]
-surface (Tree.Node (Label symbol) children) = [Tree.Node symbol $ concatMap surface children]
-surface (Tree.Node _ children) = concatMap surface children
+surface :: Term (Label symbol) -> [Term symbol]
+surface (Term.Node (Label symbol) children) = [Term.Node symbol $ concatMap surface children]
+surface (Term.Node _ children) = concatMap surface children

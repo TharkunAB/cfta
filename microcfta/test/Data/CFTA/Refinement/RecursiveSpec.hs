@@ -2,7 +2,6 @@
 
 module Data.CFTA.Refinement.RecursiveSpec (spec) where
 
-import qualified Data.Tree as Tree
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 
@@ -22,6 +21,7 @@ import Data.CFTA.Refinement (
     pattern Transition,
  )
 import Data.CFTA.Refinement.Expression (true)
+import qualified Data.CFTA.Term as Term
 
 alwaysEntails :: Entailment
 alwaysEntails = Entailment $ \_ _ -> pure Yes
@@ -39,9 +39,9 @@ spec :: Spec
 spec =
     describe "recursive LTAs" $ do
         it "accepts cyclic languages when guards do not inspect the cycle" $ do
-            let item = Tree.Node (RefinedSymbol "item" true) []
-                nil = Tree.Node (RefinedSymbol "nil" true) []
-                list = Tree.Node (RefinedSymbol "cons" true) [item, Tree.Node (RefinedSymbol "cons" true) [item, nil]]
+            let item = Term.Node (RefinedSymbol "item" true) []
+                nil = Term.Node (RefinedSymbol "nil" true) []
+                list = Term.Node (RefinedSymbol "cons" true) [item, Term.Node (RefinedSymbol "cons" true) [item, nil]]
             validate recursiveLists `shouldBe` Right ()
             accepts alwaysEntails recursiveLists list >>= (`shouldBe` Yes)
 
@@ -58,8 +58,8 @@ spec =
                         [ Transition "g" true [leaf] noConstraint
                         , Transition "f" true [leaf, self] (semanticConstraint $ Satisfies (path [1, 0]) true)
                         ]
-                a = Tree.Node (RefinedSymbol "a" true) []
-                term = Tree.Node (RefinedSymbol "f" true) [a, Tree.Node (RefinedSymbol "g" true) [a]]
+                a = Term.Node (RefinedSymbol "a" true) []
+                term = Term.Node (RefinedSymbol "f" true) [a, Term.Node (RefinedSymbol "g" true) [a]]
             validate automaton `shouldBe` Right ()
             pruned <- timeout 10000000 $ prune alwaysEntails automaton
             case pruned of
@@ -73,8 +73,8 @@ spec =
                         [ Transition "g" true [leaf] noConstraint
                         , Transition "f" true [leaf, self] (semanticConstraint $ Same (path [0]) (path [1, 0]))
                         ]
-                a = Tree.Node (RefinedSymbol "a" true) []
-                term = Tree.Node (RefinedSymbol "f" true) [a, Tree.Node (RefinedSymbol "g" true) [a]]
+                a = Term.Node (RefinedSymbol "a" true) []
+                term = Term.Node (RefinedSymbol "f" true) [a, Term.Node (RefinedSymbol "g" true) [a]]
             validate automaton `shouldBe` Right ()
             pruned <- timeout 10000000 $ prune alwaysEntails automaton
             case pruned of
@@ -92,11 +92,11 @@ spec =
                             [leaf, Mu $ \inner -> Node [Transition "h" true [inner, self] noConstraint, Transition "b" true [] noConstraint]]
                             (semanticConstraint $ Same (path [0]) (path [1, 1, 0]))
                         ]
-                a = Tree.Node (RefinedSymbol "a" true) []
+                a = Term.Node (RefinedSymbol "a" true) []
                 term =
-                    Tree.Node
+                    Term.Node
                         (RefinedSymbol "f" true)
-                        [a, Tree.Node (RefinedSymbol "h" true) [Tree.Node (RefinedSymbol "b" true) [], Tree.Node (RefinedSymbol "g" true) [a]]]
+                        [a, Term.Node (RefinedSymbol "h" true) [Term.Node (RefinedSymbol "b" true) [], Term.Node (RefinedSymbol "g" true) [a]]]
             validate automaton `shouldBe` Right ()
             pruned <- timeout 10000000 $ prune alwaysEntails automaton
             case pruned of
@@ -110,6 +110,6 @@ spec =
                 f child = Transition "f" true [child] noConstraint
                 automaton = Mu $ \q -> Node [a, f q, f (Node [a, f q])]
                 label name = RefinedSymbol name true
-                deep leaf = iterate (\term -> Tree.Node (label "f") [term]) (Tree.Node (label leaf) [])
+                deep leaf = iterate (\term -> Term.Node (label "f") [term]) (Term.Node (label leaf) [])
             decided <- timeout 10000000 $ mapM (accepts alwaysEntails automaton . (!! 60) . deep) ["a", "b"]
             decided `shouldBe` Just [Yes, No]

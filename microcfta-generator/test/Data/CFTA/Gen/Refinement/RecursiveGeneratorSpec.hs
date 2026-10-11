@@ -5,8 +5,9 @@ module Data.CFTA.Gen.Refinement.RecursiveGeneratorSpec (spec) where
 import Control.Exception (evaluate)
 import Control.Monad (forM_)
 import Data.CFTA.Index (Depth (..), Size (..))
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList, shouldReturn)
 
@@ -56,8 +57,8 @@ variablePairAutomaton = Node [plain "missing" [EmptyNode], plain "pair" [choice,
     choice = Node [plain "wrap" [Node [plain "x" [], plain "y" []]], plain "atom" []]
 
 -- | Count the physical nodes of one small test term.
-termSize :: Tree.Tree Symbol -> Int
-termSize = length . Tree.flatten
+termSize :: Term Symbol -> Int
+termSize = length . Term.flatten
 
 unusedEntailment :: Entailment
 unusedEntailment = Entailment $ \_ _ -> pure Unknown
@@ -100,8 +101,8 @@ spec = do
     describe "structural automaton shrinking" $ do
         it "lists the members with fewer nodes than a rank's member" $ do
             compiled <- compileAutomaton (largeOrSmallAutomaton 0) >>= either (fail . show) pure
-            large <- rankOf compiled $ Tree.Node (RefinedSymbol "large" true) [Tree.Node (RefinedSymbol "atom" true) []]
-            small <- rankOf compiled $ Tree.Node (RefinedSymbol "small" true) []
+            large <- rankOf compiled $ Term.Node (RefinedSymbol "large" true) [Term.Node (RefinedSymbol "atom" true) []]
+            small <- rankOf compiled $ Term.Node (RefinedSymbol "small" true) []
             map LTAGen.valueRank (LTAGen.smallerMembers compiled large) `shouldBe` [small]
             LTAGen.smallerMembers compiled small `shouldBe` []
             LTAGen.smallerMembers compiled (-1) `shouldBe` []
@@ -110,9 +111,9 @@ spec = do
         it "skips dead transitions and lists every smaller pair" $ do
             compiled <- compileAutomaton variablePairAutomaton >>= either (fail . show) pure
             LTAGen.cardinality compiled `shouldBe` Right 9
-            let wrap leaf = Tree.Node (RefinedSymbol "wrap" true) [Tree.Node (RefinedSymbol leaf true) []]
-                atom = Tree.Node (RefinedSymbol "atom" true) []
-                pairOf left right = Tree.Node (RefinedSymbol "pair" true) [left, right]
+            let wrap leaf = Term.Node (RefinedSymbol "wrap" true) [Term.Node (RefinedSymbol leaf true) []]
+                atom = Term.Node (RefinedSymbol "atom" true) []
+                pairOf left right = Term.Node (RefinedSymbol "pair" true) [left, right]
             source <- rankOf compiled $ pairOf (wrap "x") (wrap "y")
             expected <-
                 traverse
@@ -135,8 +136,8 @@ spec = do
             compiled <-
                 compileAutomatonWith unavailableValue (largeOrSmallAutomaton 0)
                     >>= either (fail . show) pure
-            large <- rankOf compiled $ Tree.Node (RefinedSymbol "large" true) [Tree.Node (RefinedSymbol "atom" true) []]
-            small <- rankOf compiled $ Tree.Node (RefinedSymbol "small" true) []
+            large <- rankOf compiled $ Term.Node (RefinedSymbol "large" true) [Term.Node (RefinedSymbol "atom" true) []]
+            small <- rankOf compiled $ Term.Node (RefinedSymbol "small" true) []
             map LTAGen.valueRank (LTAGen.smallerMembers compiled large) `shouldBe` [small]
             map LTAGen.valueRank (LTAGen.smallerMembers (fmap (const False) compiled) large) `shouldBe` [small]
 
@@ -197,16 +198,16 @@ spec = do
             let automaton = Node [plain "wrap" [EmptyNode], plain "wrap" [Node [plain "item-a" []]]]
             result <- compileAutomaton automaton
             (result >>= LTAGen.cardinality) `shouldBe` Right 1
-            fmap values result `shouldBe` Right [Tree.Node (RefinedSymbol "wrap" true) [itemA]]
+            fmap values result `shouldBe` Right [Term.Node (RefinedSymbol "wrap" true) [itemA]]
 
         it "reports an empty root without an overlap" $ do
             result <- compileAutomaton EmptyNode
             (result >>= LTAGen.cardinality) `shouldBe` Left LTAGen.EmptyGenerator
   where
     sameChildren = mkEqConstraints [[path [0], path [1]]]
-    itemA = Tree.Node (RefinedSymbol "item-a" true) []
-    itemB = Tree.Node (RefinedSymbol "item-b" true) []
-    pair item = Tree.Node (RefinedSymbol "pair" true) [item, item]
+    itemA = Term.Node (RefinedSymbol "item-a" true) []
+    itemB = Term.Node (RefinedSymbol "item-b" true) []
+    pair item = Term.Node (RefinedSymbol "pair" true) [item, item]
 
     selectedTag symbol _ children = case (symbol, children) of
         ("pair", [_, tag]) -> tag
@@ -218,7 +219,7 @@ spec = do
     -- Fold each accepted term into a value as it is selected.
     compileAutomatonWith build =
         LTAGen.compileWith unusedEntailment
-            . fmap (Tree.foldTree $ \(RefinedSymbol symbol refinement) -> build symbol refinement)
+            . fmap (Term.foldTree $ \(RefinedSymbol symbol refinement) -> build symbol refinement)
             . LTAGen.fromAutomaton
 
     rankOf compiled = either (fail . show) pure . LTAGen.rankOfTerm compiled

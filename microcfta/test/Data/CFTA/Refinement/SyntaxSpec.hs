@@ -3,7 +3,6 @@
 module Data.CFTA.Refinement.SyntaxSpec (spec) where
 
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList, shouldSatisfy)
 
@@ -30,6 +29,7 @@ import Data.CFTA.Refinement (
 import Data.CFTA.Refinement.Expression (refinementFormula, true, (.==), (.>=))
 import Data.CFTA.Refinement.Guard (automaton, contract, isSubtypeOf, requires, transition)
 import Data.CFTA.Refinement.TestSupport (tableEntailment)
+import qualified Data.CFTA.Term as Term
 
 spec :: Spec
 spec =
@@ -57,7 +57,7 @@ spec =
                     accepts
                         tableEntailment
                         root
-                        (Tree.Node (RefinedSymbol "sqrt" true) [Tree.Node (RefinedSymbol "zero" (refinementFormula nonNegative)) []])
+                        (Term.Node (RefinedSymbol "sqrt" true) [Term.Node (RefinedSymbol "zero" (refinementFormula nonNegative)) []])
                         >>= (`shouldBe` Yes)
 
         it "interprets entailments carried by interned edges" $ do
@@ -75,9 +75,9 @@ spec =
                             (semanticConstraint $ Entails (path [0]) (path [1]))
                         ]
                 terms =
-                    [ Tree.Node (RefinedSymbol "check" true) [left, right]
-                    | left <- [Tree.Node (RefinedSymbol "zero" nonNegative) [], Tree.Node (RefinedSymbol "unknown" true) []]
-                    , right <- [Tree.Node (RefinedSymbol "zero" nonNegative) [], Tree.Node (RefinedSymbol "unknown" true) []]
+                    [ Term.Node (RefinedSymbol "check" true) [left, right]
+                    | left <- [Term.Node (RefinedSymbol "zero" nonNegative) [], Term.Node (RefinedSymbol "unknown" true) []]
+                    , right <- [Term.Node (RefinedSymbol "zero" nonNegative) [], Term.Node (RefinedSymbol "unknown" true) []]
                     ]
             validate root `shouldBe` Right ()
             automatonAlphabet root `shouldSatisfy` Set.member (RefinedSymbol "zero" nonNegative)

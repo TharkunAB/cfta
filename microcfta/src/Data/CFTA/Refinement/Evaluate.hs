@@ -19,10 +19,11 @@ import Data.Containers.ListUtils (nubOrd)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing)
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 
 import Data.CFTA.Index (ArgumentIndex (..))
 import Data.CFTA.Path (Path, getPath)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import qualified Language.Fixpoint.Types as Fixpoint
 
 import Data.CFTA.Constraint (
@@ -76,12 +77,12 @@ leafnessOf children = if null children then Leaf else Inner
 {-# INLINE leafnessOf #-}
 
 -- | Evaluate a guard against one candidate term.
-evaluateGuard :: Entailment -> Guard -> Tree.Tree Symbol -> IO Verdict
+evaluateGuard :: Entailment -> Guard -> Term Symbol -> IO Verdict
 evaluateGuard entailment guard term =
     evaluateGuardWithSame entailment observedAt sameAt guard
   where
     observedAt target = do
-        Tree.Node symbol children <- getPath target term
+        Term.Node symbol children <- getPath target term
         pure $ Observed symbol $ leafnessOf children
 
     sameAt substitutions left right = do
@@ -229,7 +230,7 @@ evaluateGuardWithSame entailment observedAt sameAt guard = go guard
         orVerdicts (map (evaluateWith substitutions) guards)
 
 -- | Evaluate both the ECTA equality classes and liquid guard of a transition.
-evaluateConstraint :: Entailment -> Constraint -> Tree.Tree Symbol -> IO Verdict
+evaluateConstraint :: Entailment -> Constraint -> Term Symbol -> IO Verdict
 evaluateConstraint entailment constraint term
     | equalitiesHold constraint term =
         evaluateGuard entailment (constraintGuard constraint) term
@@ -375,7 +376,7 @@ Solver-generated value identities are not symbols in the structural alphabet.
 The first non-identity mapping for a repeated formal name takes precedence,
 matching refinement substitution.
 -}
-substituteTerm :: [[ResolvedSubstitution]] -> Tree.Tree Symbol -> Tree.Tree Symbol
+substituteTerm :: [[ResolvedSubstitution]] -> Term Symbol -> Term Symbol
 substituteTerm scopes = fmap $ \(RefinedSymbol symbol refinement) ->
     let (renamed, annotation) = substituteObservation scopes (symbol, refinement)
      in RefinedSymbol renamed annotation

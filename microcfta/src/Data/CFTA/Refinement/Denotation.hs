@@ -17,7 +17,6 @@ import Control.Monad.Except (runExceptT, throwError)
 import Control.Monad.IO.Class (liftIO)
 import Data.Containers.ListUtils (nubOrd)
 import Data.IORef (newIORef, readIORef, writeIORef)
-import qualified Data.Tree as Tree
 import qualified Language.Fixpoint.Types as Fixpoint
 
 import Data.CFTA.Constraint (Constraint)
@@ -29,11 +28,12 @@ import Data.CFTA.Refinement.Automaton (Automaton)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
 import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..))
 import Data.CFTA.Symbol (Symbol (RefinedSymbol))
+import Data.CFTA.Term (Term)
 
 -- | Failure while computing the bounded denotation from Figure 6.
 data DenotationError
     = -- | The solver could not decide a transition's guard on the subterm the transition built.
-      DenotationUnknown Constraint (Tree.Tree Symbol)
+      DenotationUnknown Constraint (Term Symbol)
     deriving (Eq, Show)
 
 {- | Decide whether an annotated term is accepted at the root.
@@ -46,7 +46,7 @@ the search comes to a subterm again with the same node, it uses the first
 result, so the solver decides each guard at most once at each position in the
 term.
 -}
-accepts :: Entailment -> Automaton -> Tree.Tree Symbol -> IO Verdict
+accepts :: Entailment -> Automaton -> Term Symbol -> IO Verdict
 accepts entailment automaton term = do
     undecided <- newIORef False
     accepted <- acceptsBy nodeEdges edgeSymbol edgeChildren (check undecided) automaton term
@@ -71,7 +71,7 @@ some run all hold. The result has each term once, in the order of the runs,
 because the paper defines a set of terms. Check a generator against it on
 bounded inputs.
 -}
-denotationAtMost :: Entailment -> Depth -> Automaton -> IO (Either DenotationError [Tree.Tree Symbol])
+denotationAtMost :: Entailment -> Depth -> Automaton -> IO (Either DenotationError [Term Symbol])
 denotationAtMost entailment bound automaton
     | bound < 0 = pure (Right [])
     | unconstrained automaton = pure (Right (plainTermsAtMost bound automaton))

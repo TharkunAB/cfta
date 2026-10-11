@@ -23,10 +23,10 @@ module Data.CFTA.Symbol (
     eraseRefinements,
 ) where
 
+import Data.CFTA.Term (Term)
 import Data.Hashable (Hashable (..))
 import Data.String (IsString (..))
 import Data.Text (Text)
-import qualified Data.Tree as Tree
 import qualified Language.Fixpoint.Types as Fixpoint
 import System.IO.Unsafe (unsafePerformIO)
 import Text.Read (Read (..))
@@ -99,7 +99,7 @@ unrefined :: Symbol -> Symbol
 unrefined (InternedSymbol _ _ _ _ ordinary) = ordinary
 
 -- | Remove the refinements of a term.
-eraseRefinements :: Tree.Tree Symbol -> Tree.Tree Symbol
+eraseRefinements :: Term Symbol -> Term Symbol
 eraseRefinements = fmap unrefined
 
 -- | Intern one text and refinement.

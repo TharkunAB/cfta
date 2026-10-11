@@ -22,12 +22,13 @@ module Data.CFTA.Gen.UntypedExpressionLanguage (
     handwrittenExpressionGen,
 ) where
 
-import qualified Data.Tree as Tree
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as Automaton
 import Data.CFTA.Constraint (noConstraint)
 import qualified Data.CFTA.Gen.QuickCheck as FTAGen
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | Integer expressions with no explicit type annotation.
 data Expression
@@ -122,21 +123,21 @@ expressionAutomaton =
         Right automaton -> automaton
 
 -- | Generate a generic ranked term at one exact depth.
-genericTermAtDepth :: Int -> QC.Gen (Tree.Tree String)
+genericTermAtDepth :: Int -> QC.Gen (Term String)
 genericTermAtDepth depth
-    | depth <= 0 = QC.elements [Tree.Node "zero" [], Tree.Node "one" []]
+    | depth <= 0 = QC.elements [Term.Node "zero" [], Term.Node "one" []]
     | otherwise = do
         symbol <- QC.elements ["add", "multiply"]
         left <- genericTermAtDepth $ depth - 1
         right <- genericTermAtDepth $ depth - 1
-        pure $ Tree.Node symbol [left, right]
+        pure $ Term.Node symbol [left, right]
 
 -- | Decode a recognized generic term into the example datatype.
-expressionFromTerm :: Tree.Tree String -> Maybe Expression
-expressionFromTerm (Tree.Node "zero" []) = Just $ Literal 0
-expressionFromTerm (Tree.Node "one" []) = Just $ Literal 1
-expressionFromTerm (Tree.Node "add" [left, right]) =
+expressionFromTerm :: Term String -> Maybe Expression
+expressionFromTerm (Term.Node "zero" []) = Just $ Literal 0
+expressionFromTerm (Term.Node "one" []) = Just $ Literal 1
+expressionFromTerm (Term.Node "add" [left, right]) =
     Add <$> expressionFromTerm left <*> expressionFromTerm right
-expressionFromTerm (Tree.Node "multiply" [left, right]) =
+expressionFromTerm (Term.Node "multiply" [left, right]) =
     Multiply <$> expressionFromTerm left <*> expressionFromTerm right
 expressionFromTerm _ = Nothing

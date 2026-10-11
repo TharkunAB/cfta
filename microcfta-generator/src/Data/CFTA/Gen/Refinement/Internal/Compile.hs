@@ -40,7 +40,6 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 import Data.String (fromString)
 import qualified Data.Text as Text
-import qualified Data.Tree as Tree
 import System.Mem.StableName (StableName, eqStableName, hashStableName, makeStableName)
 import Unsafe.Coerce (unsafeCoerce)
 
@@ -99,6 +98,8 @@ import Data.CFTA.Refinement.Lattice (
  )
 import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..))
 import Data.CFTA.Symbol (valueName)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | A generator over liquid tree automata.
 type LTAGen = Gen Symbol
@@ -404,7 +405,7 @@ groupBuilt requested generator
         _ -> Left UnboundedGenerator
     observe [term] = Map.fromList [(target, observation) | target <- Set.toList requested, Just observation <- [labelAt target term]]
     observe _ = Map.empty
-    rebuild [Tree.Node label children] value = node label $ withChildren children value
+    rebuild [Term.Node label children] value = node label $ withChildren children value
     rebuild forest value = withChildren forest value
     -- An atom keeps the term of the member and has size one, and each pay
     -- above it adds one. A member of size zero has no node.
@@ -412,17 +413,17 @@ groupBuilt requested generator
     rebuildAt (Size size) forest value = iterate pay (atomic $ rebuild forest value) !! fromInteger (size - 1)
 
     -- The label at one path of a term, and whether it is a leaf.
-    labelAt :: Path -> Tree.Tree Symbol -> Maybe Observed
+    labelAt :: Path -> Term Symbol -> Maybe Observed
     labelAt target = go (unPath target)
       where
-        go [] (Tree.Node label children) = Just $ Observed label $ leafnessOf children
-        go (ChildIndex index : rest) (Tree.Node _ children) = go rest =<< children !? index
+        go [] (Term.Node label children) = Just $ Observed label $ leafnessOf children
+        go (ChildIndex index : rest) term = go rest =<< Term.child index term
 
 -- | A generator of one value whose term has the given children.
-withChildren :: [Tree.Tree Symbol] -> a -> LTAGen a
+withChildren :: [Term Symbol] -> a -> LTAGen a
 withChildren children value = foldl (\prefix child -> prefix <* rebuild child) (pure value) children
   where
-    rebuild (Tree.Node label grandchildren) = node label $ withChildren grandchildren ()
+    rebuild (Term.Node label grandchildren) = node label $ withChildren grandchildren ()
 
 {- | Compile a child description as one group per tuple of child observations.
 
@@ -971,12 +972,12 @@ integers of a point, and make each label that names open variables exact.
 The variables of a constructor are the placeholders of its subtree, in
 order, so a label names them from the first placeholder below it.
 -}
-fillHoles :: [Integer] -> Tree.Tree (Label Symbol) -> Tree.Tree (Label Symbol)
+fillHoles :: [Integer] -> Term (Label Symbol) -> Term (Label Symbol)
 fillHoles point = snd . fill point
   where
-    fill (value : rest) (Tree.Node Placeholder _) = (rest, Tree.Node (Label $ integerSymbol value) [])
-    fill remaining (Tree.Node (Label label) children) = Tree.Node (Label $ exactLabel remaining label) <$> mapAccumL fill remaining children
-    fill remaining (Tree.Node private children) = Tree.Node private <$> mapAccumL fill remaining children
+    fill (value : rest) (Term.Node Placeholder _) = (rest, Term.Node (Label $ integerSymbol value) [])
+    fill remaining (Term.Node (Label label) children) = Term.Node (Label $ exactLabel remaining label) <$> mapAccumL fill remaining children
+    fill remaining (Term.Node private children) = Term.Node private <$> mapAccumL fill remaining children
     exactLabel remaining label@(RefinedSymbol symbol refinement)
         | any isIntegerName $ freeNames refinement =
             let named = substitute [(integerName index, literal value) | (index, value) <- zip [0 ..] remaining] refinement
@@ -1057,7 +1058,7 @@ compileImport ::
     Maybe Depth ->
     (Symbol -> key) ->
     Automaton ->
-    IO (Either GenError (LTAGrouped ObservationKey (Tree.Tree Symbol)))
+    IO (Either GenError (LTAGrouped ObservationKey (Term Symbol)))
 compileImport entailment requested bound order automaton
     | Just depth <- bound, depth < 0 = pure $ Right $ frequencies []
     | otherwise = do

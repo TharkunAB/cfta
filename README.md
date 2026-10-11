@@ -17,7 +17,7 @@ The original ECTA line stays in this repository as
 [`microecta-generator`](microecta-generator/README.md). `microecta` remains on
 Hackage as a separate, ECTA-only package.
 
-Concrete terms use `Data.Tree.Tree` from `containers`. The interned engine in
+Concrete terms are `Term symbol` from `Data.CFTA.Term`. The interned engine in
 `Data.CFTA.Interned` has the types `Node symbol` and `Edge symbol`, and
 `Data.CFTA` is the named-state view of the same graph. Every edge carries one
 `Constraint` from `Data.CFTA.Constraint`. An ordinary edge has `noConstraint`,
@@ -185,4 +185,4 @@ source archive of its workspace dependency. Publish `microcfta` first, then
 
 Code that imports `Data.CFTA.*` must declare `microcfta`, and code that imports
 `Data.CFTA.Gen.*` or `Data.CFTA.Ranked.*` must declare `microcfta-generator`.
-Code that imports `Data.Tree` directly must declare `containers`.
+Code that imports `Data.Tree` directly, for `drawTree`, must declare `containers`.

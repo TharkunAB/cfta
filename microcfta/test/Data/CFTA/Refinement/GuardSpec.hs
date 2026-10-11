@@ -3,7 +3,6 @@
 module Data.CFTA.Refinement.GuardSpec (spec) where
 
 import Control.Exception (IOException, evaluate, try)
-import qualified Data.Tree as Tree
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
@@ -34,6 +33,7 @@ import Data.CFTA.Refinement.Guard (anyOf, buildGuard, isSameTermAs, notGuard, re
 import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..), withZ3, withZ3Timeout)
 import Data.CFTA.Refinement.TestSupport (tableEntailment)
 import Data.CFTA.Symbol (valueName)
+import qualified Data.CFTA.Term as Term
 import qualified Language.Fixpoint.Types as Fixpoint
 
 spec :: Spec
@@ -42,28 +42,28 @@ spec =
         it "states a literal precondition without a phantom predicate child" $ do
             let nonNegative v = v .>= 0
                 guard = buildGuard $ \denominator -> denominator `requires` nonNegative
-                term = Tree.Node (RefinedSymbol "divide" true) [Tree.Node (RefinedSymbol "n" (refinementFormula nonNegative)) []]
+                term = Term.Node (RefinedSymbol "divide" true) [Term.Node (RefinedSymbol "n" (refinementFormula nonNegative)) []]
             guard `shouldBe` semanticConstraint (Satisfies (path [0]) (refinementFormula nonNegative))
             evaluateConstraint tableEntailment guard term >>= (`shouldBe` Yes)
 
         it "rejects a child whose refinement does not establish the requirement" $ do
             let nonNegative v = v .>= 0
                 guard = buildGuard $ \denominator -> denominator `requires` nonNegative
-                term = Tree.Node (RefinedSymbol "divide" true) [Tree.Node (RefinedSymbol "n" true) []]
+                term = Term.Node (RefinedSymbol "divide" true) [Term.Node (RefinedSymbol "n" true) []]
             evaluateConstraint tableEntailment guard term >>= (`shouldBe` No)
 
         it "keeps syntactic equality inside the full Boolean constraint language" $ do
             let same = buildGuard $ \left right -> left `isSameTermAs` right
                 different = notGuard same
-                equalTerm = Tree.Node (RefinedSymbol "pair" true) [Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "x" true) []]
-                differentTerm = Tree.Node (RefinedSymbol "pair" true) [Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "y" true) []]
+                equalTerm = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "x" true) []]
+                differentTerm = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
                 differentlyRefinedTerm =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "pair"
                             true
                         )
-                        [Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== 1))) []]
+                        [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== 1))) []]
                 equalityOrRequirement = anyOf [same, buildGuard $ \left -> left `requires` const true]
             same `shouldBe` semanticConstraint (Same (path [0]) (path [1]))
             evaluateConstraint tableEntailment same differentlyRefinedTerm >>= (`shouldBe` No)
@@ -72,7 +72,7 @@ spec =
             evaluateConstraint tableEntailment equalityOrRequirement differentTerm >>= (`shouldBe` Yes)
 
         it "rejects equality at missing paths and accepts its negation" $ do
-            let term = Tree.Node (RefinedSymbol "leaf" true) []
+            let term = Term.Node (RefinedSymbol "leaf" true) []
                 absent = path [0]
             evaluateGuard tableEntailment (Same absent absent) term >>= (`shouldBe` No)
             evaluateGuard tableEntailment (Same (path []) absent) term >>= (`shouldBe` No)
@@ -91,7 +91,7 @@ spec =
             evaluateGuardWithShape tableEntailment observe (Same (path [2]) (path [2])) >>= (`shouldBe` No)
 
         it "compares renamed variable leaves only inside an explicit substitution scope" $ do
-            let term = Tree.Node (RefinedSymbol "pair" true) [Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "y" true) []]
+            let term = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
                 same = Same (path [0]) (path [1])
                 scoped = Substitute [Substitution (path [0]) (path [1])] same
             evaluateGuard tableEntailment same term >>= (`shouldBe` No)
@@ -100,7 +100,7 @@ spec =
             evaluateGuard tableEntailment same term >>= (`shouldBe` No)
 
         it "puts cached positive equality inside the named substitution scope" $ do
-            let term = Tree.Node (RefinedSymbol "pair" true) [Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "y" true) []]
+            let term = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
                 cached = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
                 scoped = buildGuard $ \actual formal -> withActualFor actual formal cached
             evaluateConstraint tableEntailment cached term >>= (`shouldBe` No)
@@ -108,20 +108,20 @@ spec =
 
         it "renames nested constructor symbols and free refinement names before comparison" $ do
             let annotated symbol name =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "box"
                             (refinementFormula (\v -> v .== variable name))
                         )
-                        [Tree.Node (RefinedSymbol symbol (refinementFormula (\v -> v .== variable name))) []]
+                        [Term.Node (RefinedSymbol symbol (refinementFormula (\v -> v .== variable name))) []]
                 term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "context"
                             true
                         )
-                        [ Tree.Node (RefinedSymbol "x" true) []
-                        , Tree.Node (RefinedSymbol "y" true) []
+                        [ Term.Node (RefinedSymbol "x" true) []
+                        , Term.Node (RefinedSymbol "y" true) []
                         , annotated "x" "x"
                         , annotated "y" "y"
                         ]
@@ -132,13 +132,13 @@ spec =
 
         it "does not replace a formal leaf with the whole actual subtree" $ do
             let term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "context"
                             true
                         )
-                        [ Tree.Node (RefinedSymbol "app" true) [Tree.Node (RefinedSymbol "argument" true) []]
-                        , Tree.Node (RefinedSymbol "formal" true) []
+                        [ Term.Node (RefinedSymbol "app" true) [Term.Node (RefinedSymbol "argument" true) []]
+                        , Term.Node (RefinedSymbol "formal" true) []
                         ]
                 guard =
                     Substitute
@@ -147,35 +147,35 @@ spec =
             evaluateGuard tableEntailment guard term >>= (`shouldBe` No)
 
         it "applies a symbol swap simultaneously within one equality scope" $ do
-            let term = Tree.Node (RefinedSymbol "pair" true) [Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "y" true) []]
+            let term = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
                 scope =
                     Substitute
                         [Substitution (path [0]) (path [1]), Substitution (path [1]) (path [0])]
                 annotated =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "context"
                             true
                         )
-                        [ Tree.Node (RefinedSymbol "x" true) []
-                        , Tree.Node (RefinedSymbol "y" true) []
-                        , Tree.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .== variable "x"))) []
-                        , Tree.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .== variable "y"))) []
+                        [ Term.Node (RefinedSymbol "x" true) []
+                        , Term.Node (RefinedSymbol "y" true) []
+                        , Term.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .== variable "x"))) []
+                        , Term.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .== variable "y"))) []
                         ]
             evaluateGuard tableEntailment (scope $ Same (path [0]) (path [1])) term >>= (`shouldBe` No)
             evaluateGuard tableEntailment (scope $ Same (path [2]) (path [3])) annotated >>= (`shouldBe` No)
 
         it "uses the first nonidentity replacement for duplicate formal names" $ do
             let term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "context"
                             true
                         )
-                        [ Tree.Node (RefinedSymbol "a" (refinementFormula (\v -> v .== variable "a"))) []
-                        , Tree.Node (RefinedSymbol "b" (refinementFormula (\v -> v .== variable "b"))) []
-                        , Tree.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== variable "x"))) []
-                        , Tree.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== variable "x"))) []
+                        [ Term.Node (RefinedSymbol "a" (refinementFormula (\v -> v .== variable "a"))) []
+                        , Term.Node (RefinedSymbol "b" (refinementFormula (\v -> v .== variable "b"))) []
+                        , Term.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== variable "x"))) []
+                        , Term.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== variable "x"))) []
                         ]
                 duplicates =
                     Substitute
@@ -190,14 +190,14 @@ spec =
 
         it "applies nested equality scopes from the inner scope to the outer scope" $ do
             let term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "triple"
                             true
                         )
-                        [ Tree.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== variable "x"))) []
-                        , Tree.Node (RefinedSymbol "y" (refinementFormula (\v -> v .== variable "y"))) []
-                        , Tree.Node (RefinedSymbol "z" (refinementFormula (\v -> v .== variable "z"))) []
+                        [ Term.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== variable "x"))) []
+                        , Term.Node (RefinedSymbol "y" (refinementFormula (\v -> v .== variable "y"))) []
+                        , Term.Node (RefinedSymbol "z" (refinementFormula (\v -> v .== variable "z"))) []
                         ]
                 guard =
                     Substitute [Substitution (path [0]) (path [1])]
@@ -206,7 +206,7 @@ spec =
             evaluateGuard tableEntailment guard term >>= (`shouldBe` Yes)
 
         it "retains Boolean and missing-path behavior inside equality substitution scopes" $ do
-            let term = Tree.Node (RefinedSymbol "pair" true) [Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "y" true) []]
+            let term = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
                 scope = Substitute [Substitution (path [0]) (path [1])]
                 same = Same (path [0]) (path [1])
                 missing = Same (path [2]) (path [2])
@@ -217,7 +217,7 @@ spec =
             evaluateGuard tableEntailment (scope $ Or [missing, same]) term >>= (`shouldBe` Yes)
 
         it "rejects an equality scope whose actual or formal position is absent" $ do
-            let term = Tree.Node (RefinedSymbol "leaf" true) []
+            let term = Term.Node (RefinedSymbol "leaf" true) []
                 same = Same (path []) (path [])
                 missingActual = Substitute [Substitution (path [0]) (path [])] same
                 missingFormal = Substitute [Substitution (path []) (path [0])] same
@@ -228,15 +228,15 @@ spec =
         it "does not capture a free refinement name when comparing quantified annotations" $ do
             let quantified body = Fixpoint.PAll [(Fixpoint.symbol ("x" :: String), Fixpoint.FInt)] body
                 term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "context"
                             true
                         )
-                        [ Tree.Node (RefinedSymbol "x" true) []
-                        , Tree.Node (RefinedSymbol "y" true) []
-                        , Tree.Node (RefinedSymbol "predicate" (quantified $ variable "y" .== variable "x")) []
-                        , Tree.Node (RefinedSymbol "predicate" (quantified $ variable "x" .== variable "x")) []
+                        [ Term.Node (RefinedSymbol "x" true) []
+                        , Term.Node (RefinedSymbol "y" true) []
+                        , Term.Node (RefinedSymbol "predicate" (quantified $ variable "y" .== variable "x")) []
+                        , Term.Node (RefinedSymbol "predicate" (quantified $ variable "x" .== variable "x")) []
                         ]
                 guard =
                     Substitute
@@ -246,14 +246,14 @@ spec =
 
         it "checks scoped syntactic equality without comparing huge actual value identities" $ do
             let huge =
-                    iterate (\child -> Tree.Node (RefinedSymbol "app" true) [child, child]) (Tree.Node (RefinedSymbol "leaf" true) []) !! 45
+                    iterate (\child -> Term.Node (RefinedSymbol "app" true) [child, child]) (Term.Node (RefinedSymbol "leaf" true) []) !! 45
                 term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "context"
                             true
                         )
-                        [huge, huge, Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "y" true) []]
+                        [huge, huge, Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
                 scope =
                     Substitute
                         [Substitution (path [0]) (path [2]), Substitution (path [1]) (path [3])]
@@ -275,19 +275,19 @@ spec =
                         [Substitution (path [0]) (path [1, 0])]
                         (Entails (path [1, 1]) (path []))
                 term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "step"
                             (refinementFormula (\v -> v .== 1))
                         )
-                        [ Tree.Node (RefinedSymbol "previous" (refinementFormula (\v -> v .== 0))) []
-                        , Tree.Node
+                        [ Term.Node (RefinedSymbol "previous" (refinementFormula (\v -> v .== 0))) []
+                        , Term.Node
                             ( RefinedSymbol
                                 "command"
                                 true
                             )
-                            [ Tree.Node (RefinedSymbol "model" true) []
-                            , Tree.Node (RefinedSymbol "post-state" (refinementFormula (\v -> v .== (toExpr model + 1)))) []
+                            [ Term.Node (RefinedSymbol "model" true) []
+                            , Term.Node (RefinedSymbol "post-state" (refinementFormula (\v -> v .== (toExpr model + 1)))) []
                             ]
                         ]
             withZ3 declarations $ \solver ->

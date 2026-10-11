@@ -55,11 +55,11 @@ import Data.CFTA.Constraint (
     Constraint (..),
     noConstraint,
  )
+import Data.CFTA.Term (Term)
 import Data.Hashable (Hashable)
 import Data.Kind (Type)
 import Data.List (find)
 import qualified Data.Map.Strict as Map
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 import qualified Test.QuickCheck as QC
 
@@ -144,7 +144,7 @@ data Recipe symbol a where
     Uniform :: [Gen symbol a] -> Recipe symbol a
     -- | An imported automaton, its depth bound, and the key that orders its constructors.
     Imported ::
-        (Ord key) => Maybe Depth -> (symbol -> key) -> Node symbol -> Recipe symbol (Tree.Tree symbol)
+        (Ord key) => Maybe Depth -> (symbol -> key) -> Node symbol -> Recipe symbol (Term symbol)
     -- | A leaf of the integers that its constraint admits. The theory of the constraint counts them.
     Integers :: Constraint -> Recipe symbol Integer
 

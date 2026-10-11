@@ -9,7 +9,6 @@ import Data.List (mapAccumL, sort)
 import qualified Data.Map.Strict as Map
 import Data.Ratio ((%))
 import Data.String (fromString)
-import qualified Data.Tree as Tree
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
@@ -52,6 +51,7 @@ import Data.CFTA.Refinement.Guard (
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Symbol (valueName)
+import qualified Data.CFTA.Term as Term
 import qualified Language.Fixpoint.Types as Fixpoint
 
 -- | Exact refinement attached to one integer.
@@ -300,7 +300,7 @@ spec = do
                 LTAGen.compileWith
                     latticeEntailment
                     (LTAGen.fromAutomatonUpToDepth 0 (Node [first', second']) `LTAGen.satisfying` (.>= 0))
-            fmap (map Tree.rootLabel) (compiled >>= LTAGen.values)
+            fmap (map Term.rootLabel) (compiled >>= LTAGen.values)
                 `shouldBe` Right [RefinedSymbol "interned-a" (refinementFormula (.== 0)), RefinedSymbol "interned-b" (refinementFormula (.== 1))]
 
         it "give an empty language for an import that its condition empties" $ do
@@ -319,7 +319,7 @@ spec = do
                             [ Transition "nil" (refinementFormula (.== 0)) [] noConstraint
                             , Transition "cons" (refinementFormula (.>= 1)) [list] noConstraint
                             ]
-                dead = LTAGen.refinedNode "dead" (const true) Bottom (pure (Tree.Node "x" []))
+                dead = LTAGen.refinedNode "dead" (const true) Bottom (pure (Term.Node "x" []))
             compiled <- compileOrFail latticeEntailment $ LTAGen.oneof [LTAGen.fromAutomaton lists, dead]
             map (LTAGen.countAtSize compiled) [1, 2] `shouldBe` [Right 1, Right 1]
 
@@ -458,7 +458,7 @@ unranked generator ranks =
     outside = LTAGen.Label $ RefinedSymbol (fromString "outside") true
     relabellings term =
         [ snd $ mapAccumL (\index label -> (index + 1, if index == position then outside else label)) (0 :: Int) term
-        | (position, LTAGen.Label _) <- zip [0 ..] $ Tree.flatten term
+        | (position, LTAGen.Label _) <- zip [0 ..] $ Term.flatten term
         ]
 
 -- | Every rank of a finite language.

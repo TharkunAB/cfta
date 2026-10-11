@@ -27,6 +27,8 @@ import Data.CFTA.Interned.Type (MuDepth (..))
 import Data.CFTA.Path (getPath, path)
 import qualified Data.CFTA.Simple as Simple
 import Data.CFTA.Template (Template (..), matchesTemplate, restrict, restrictFTA)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 data State = Expression
     deriving (Eq, Ord, Show)
@@ -40,10 +42,10 @@ spec = do
                 [(Expression, [Transition "zero" [] noConstraint, Transition "add" [Expression, Expression] noConstraint])] of
                 Left err -> expectationFailure $ show err
                 Right automaton -> do
-                    Automaton.accepts automaton (Tree.Node "zero" []) `shouldBe` True
+                    Automaton.accepts automaton (Term.Node "zero" []) `shouldBe` True
                     Automaton.accepts
                         automaton
-                        (Tree.Node "add" [Tree.Node "zero" [], Tree.Node "zero" []])
+                        (Term.Node "add" [Term.Node "zero" [], Term.Node "zero" []])
                         `shouldBe` True
                     Automaton.toTree automaton
                         `shouldBe` Tree.Node
@@ -77,9 +79,9 @@ spec = do
                         Left err -> expectationFailure $ show err
                         Right intersection -> do
                             let ordinary = Automaton.dropConstraints intersection
-                            Automaton.accepts ordinary (Tree.Node "shared" []) `shouldBe` True
-                            Automaton.accepts ordinary (Tree.Node "left" []) `shouldBe` False
-                            Automaton.accepts ordinary (Tree.Node "right" []) `shouldBe` False
+                            Automaton.accepts ordinary (Term.Node "shared" []) `shouldBe` True
+                            Automaton.accepts ordinary (Term.Node "left" []) `shouldBe` False
+                            Automaton.accepts ordinary (Term.Node "right" []) `shouldBe` False
                 (Left err, _) -> expectationFailure $ show err
                 (_, Left err) -> expectationFailure $ show err
 
@@ -89,8 +91,8 @@ spec = do
                 [(Expression, [Transition "zero" [] noConstraint, Transition "add" [Expression, Expression] noConstraint])] of
                 Left err -> expectationFailure $ show err
                 Right expressions -> do
-                    let zero = Tree.Node "zero" []
-                        add left right = Tree.Node "add" [left, right]
+                    let zero = Term.Node "zero" []
+                        add left right = Term.Node "add" [left, right]
                         pair = add zero zero
                     take 5 (Automaton.terms expressions)
                         `shouldBe` [zero, pair, add pair pair, add pair zero, add zero pair]
@@ -118,15 +120,15 @@ spec = do
                     let trimmed = Automaton.trim automaton
                     Automaton.states trimmed `shouldBe` [0]
                     Automaton.transitionsFrom trimmed 0 `shouldBe` [Transition "leaf" [] noConstraint]
-                    Automaton.terms automaton `shouldBe` [Tree.Node "leaf" []]
-                    acceptPlain (Common.fromFTA automaton) (Tree.Node "leaf" []) `shouldBe` True
+                    Automaton.terms automaton `shouldBe` [Term.Node "leaf" []]
+                    acceptPlain (Common.fromFTA automaton) (Term.Node "leaf" []) `shouldBe` True
 
     describe "common interned automaton engine" $ do
         it "recognizes and intersects unit-constrained languages" $ do
             let choices = Common.Node [Common.Edge "a" [], Common.Edge "b" []] :: Common.Node String
                 other = Common.Node [Common.Edge "b" [], Common.Edge "c" []] :: Common.Node String
                 shared = Common.intersect choices other
-            map (acceptPlain shared) [Tree.Node "a" [], Tree.Node "b" [], Tree.Node "c" []]
+            map (acceptPlain shared) [Term.Node "a" [], Term.Node "b" [], Term.Node "c" []]
                 `shouldBe` [False, True, False]
             Common.intersect choices choices `shouldBe` choices
 
@@ -254,7 +256,7 @@ spec = do
                     Common.Node
                         [Common.Edge "zero" [], Common.Edge "succ" [Common.Node [Common.Edge "succ" [rec]]]]
                 shared = Common.intersect naturals evens :: Common.Node String
-                terms = take 9 $ iterate (\term -> Tree.Node "succ" [term]) (Tree.Node "zero" [])
+                terms = take 9 $ iterate (\term -> Term.Node "succ" [term]) (Term.Node "zero" [])
             map (acceptPlain shared) terms `shouldBe` map even [0 :: Int .. 8]
             let recursiveNodes = Common.crush (\case Common.InternedMu _ -> Sum (1 :: Int); _ -> Sum 0)
             getSum (recursiveNodes $ Common.Node [Common.Edge "pair" [naturals, naturals]]) `shouldBe` 1
@@ -278,8 +280,8 @@ spec = do
                 entails = guarded $ Entails (path []) (path [])
             Common.nodeIdentity plain `shouldNotBe` Common.nodeIdentity same
             same `shouldNotBe` entails
-            Common.acceptsWith (\constraint _ -> not $ residual constraint) same (Tree.Node "a" []) `shouldBe` False
-            Common.acceptsWith (\constraint _ -> not $ residual constraint) plain (Tree.Node "a" []) `shouldBe` True
+            Common.acceptsWith (\constraint _ -> not $ residual constraint) same (Term.Node "a" []) `shouldBe` False
+            Common.acceptsWith (\constraint _ -> not $ residual constraint) plain (Term.Node "a" []) `shouldBe` True
             Common.intersect plain same `shouldBe` same
             guarded Bottom `shouldBe` Common.EmptyNode
 
@@ -306,7 +308,7 @@ spec = do
         it "unfolds a recursive node a bounded number of times and refolds it" $ do
             let naturals = Common.createMu $ \rec ->
                     Common.Node [Common.Edge "zero" [], Common.Edge "succ" [rec]] :: Common.Node String
-                terms = take 4 $ iterate (\term -> Tree.Node "succ" [term]) (Tree.Node "zero" [])
+                terms = take 4 $ iterate (\term -> Term.Node "succ" [term]) (Term.Node "zero" [])
                 bounded = Common.unfoldBounded 2 naturals
             map (acceptPlain bounded) terms `shouldBe` [True, True, False, False]
             Common.refold (Common.unfoldOuterRec naturals) `shouldBe` naturals
@@ -330,8 +332,8 @@ spec = do
                                    , Right $ Automaton.Transition "leaf" [] noConstraint
                                    ]
                     let node = Common.fromFTA graph
-                    acceptPlain node (Tree.Node "pair" [Tree.Node "leaf" [], Tree.Node "leaf" []]) `shouldBe` True
-                    acceptPlain node (Tree.Node "pair" [Tree.Node "pair" [], Tree.Node "leaf" []]) `shouldBe` False
+                    acceptPlain node (Term.Node "pair" [Term.Node "leaf" [], Term.Node "leaf" []]) `shouldBe` True
+                    acceptPlain node (Term.Node "pair" [Term.Node "pair" [], Term.Node "leaf" []]) `shouldBe` False
                     case Common.toFTA node of
                         Left err -> expectationFailure $ show err
                         Right view -> length (Automaton.states view) `shouldBe` 2
@@ -364,7 +366,7 @@ spec = do
                 both = Common.Node [Common.Edge "a" [], Common.Edge "b" []]
                 redundant = Common.Node [Common.Edge "f" [leaf], Common.Edge "f" [both]]
             Common.edgeCount (Common.withoutRedundantEdges redundant) `shouldBe` 3
-            acceptPlain (Common.withoutRedundantEdges redundant) (Tree.Node "f" [Tree.Node "a" []]) `shouldBe` True
+            acceptPlain (Common.withoutRedundantEdges redundant) (Term.Node "f" [Term.Node "a" []]) `shouldBe` True
 
         it "removes a subsumed alternative of a recursive node and keeps its language" $ do
             let leaf = Common.Node [Common.Edge "a" []] :: Common.Node String
@@ -396,22 +398,22 @@ spec = do
                     Enumeration.plainTerms (restrict template (Common.fromFTA bounded)) `shouldBe` expected
                     -- The check constrains every "add" node, and the root "zero" passes it.
                     let accept _ transition term = pure (Automaton.transitionSymbol transition /= "add" || matchesTemplate template term)
-                        zero = Tree.Node "zero" []
-                        add left right = Tree.Node "add" [left, right]
+                        zero = Term.Node "zero" []
+                        add left right = Term.Node "add" [left, right]
                     runIdentity (Automaton.termsUpToM accept 2 expressions)
                         `shouldMatchList` [zero, add zero zero, add zero (add zero zero)]
                     runIdentity (Automaton.termsUpToM (\_ _ _ -> pure True) 2 expressions) `shouldBe` Automaton.terms bounded
                     -- The same check decides membership one term at a time.
                     map (runIdentity . Automaton.acceptsM accept expressions) [zero, add zero zero, add (add zero zero) zero]
                         `shouldBe` [True, True, False]
-                    runIdentity (Automaton.acceptsM accept expressions (Tree.Node "mul" [zero, zero])) `shouldBe` False
+                    runIdentity (Automaton.acceptsM accept expressions (Term.Node "mul" [zero, zero])) `shouldBe` False
 
     describe "explicit-state recognition" $ do
         it "rejects a transition whose guard is Bottom, as the interned view does" $ do
             let bottom = case Automaton.mkFTA ("q" :: String) [("q", [Transition "a" [] (semanticConstraint Bottom)])] of
                     Right fta -> fta
                     Left err -> error $ show err
-                leaf = Tree.Node "a" [] :: Tree.Tree String
+                leaf = Term.Node "a" [] :: Term String
             (Automaton.accepts bottom leaf, Common.acceptsWith equalitiesHold (Common.fromFTA bottom) leaf)
                 `shouldBe` (False, False)
 
@@ -424,7 +426,7 @@ spec = do
                     either (error . show) id $
                         Automaton.mkFTA ("q" :: String) [("q", [a, f "q", f "r"]), ("r", [a, f "q"])]
                 node = Common.fromFTA ambiguous
-                chain depth leaf = iterate (\term -> Tree.Node "f" [term]) (Tree.Node leaf []) !! depth
+                chain depth leaf = iterate (\term -> Term.Node "f" [term]) (Term.Node leaf []) !! depth
                 decide term = [Automaton.accepts ambiguous term, Common.acceptsWith equalitiesHold node term]
             forM_ [chain depth leaf | depth <- [0 .. 10], leaf <- ["a", "b"]] $ \term ->
                 (term, map Just (decide term)) `shouldBe` (term, replicate 2 (Simple.accepts ambiguous term))
@@ -516,9 +518,9 @@ data Shape = Dot Int | Box Int Shape
 instance Datatype.HasFTA Shape
 
 -- | Recognize an ordinary interned automaton.
-acceptPlain :: Common.Node String -> Tree.Tree String -> Bool
+acceptPlain :: Common.Node String -> Term String -> Bool
 acceptPlain = Common.acceptsWith (\_ _ -> True)
 
 -- | The term p(left, right) over two leaves.
-leafPair :: String -> String -> Tree.Tree String
-leafPair left right = Tree.Node "p" [Tree.Node left [], Tree.Node right []]
+leafPair :: String -> String -> Term String
+leafPair left right = Term.Node "p" [Term.Node left [], Term.Node right []]

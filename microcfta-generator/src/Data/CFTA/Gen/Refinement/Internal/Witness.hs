@@ -13,10 +13,11 @@ module Data.CFTA.Gen.Refinement.Internal.Witness (
 
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.Map.Strict as Map
-import qualified Data.Tree as Tree
 
 import Data.CFTA.Refinement
 import Data.CFTA.Refinement.Verdict (andVerdicts)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | One complete generated node with its label, guard, and children.
 data Witness = Witness
@@ -26,15 +27,15 @@ data Witness = Witness
     }
 
 -- | Read one witness as its annotated liquid term.
-witnessTerm :: Witness -> Tree.Tree Symbol
+witnessTerm :: Witness -> Term Symbol
 witnessTerm Witness{witnessLabel, witnessChildren} =
-    Tree.Node witnessLabel (map witnessTerm witnessChildren)
+    Term.Node witnessLabel (map witnessTerm witnessChildren)
 
 {- | The witness of a term that the engine already accepted. No node of the
 witness has a constraint.
 -}
-termWitness :: Tree.Tree Symbol -> Witness
-termWitness (Tree.Node label childTerms) =
+termWitness :: Term Symbol -> Witness
+termWitness (Term.Node label childTerms) =
     Witness label noConstraint $ map termWitness childTerms
 
 {- | Check a witness and its children against their guards.

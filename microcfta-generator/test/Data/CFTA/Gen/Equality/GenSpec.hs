@@ -30,7 +30,8 @@ import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import qualified Data.CFTA.Path as Path
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Symbol (Symbol)
-import qualified Data.Tree as Tree
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 data UserId = Alice | Bob | Carol | Dave
     deriving (Bounded, Enum, Eq, Ord, Show)
@@ -198,7 +199,7 @@ randomAutomaton depth = do
 {- | Require that a finite import ranks exactly the terms that the automaton
 accepts, each to the rank that decodes to it.
 -}
-ranksExactlyAccepted :: Node Symbol -> [Tree.Tree Symbol] -> IO ()
+ranksExactlyAccepted :: Node Symbol -> [Term Symbol] -> IO ()
 ranksExactlyAccepted root candidates =
     map (ECTAGen.rankOfTerm generator >=> ECTAGen.unrank generator) candidates
         `shouldBe` [if accepts root term then Right term else Left ECTAGen.TermNotInLanguage | term <- candidates]
@@ -772,7 +773,7 @@ spec = do
 
     describe "ranks of imported automata" $ do
         it "ranks every term of compact, overlapping, nested, and mixed plans" $ do
-            let term name children = Tree.Node (fromString name) children
+            let term name children = Term.Node (fromString name) children
                 a = term "a" []
                 b = term "b" []
                 boxed value = term "box" [value, term "u" []]
@@ -797,7 +798,7 @@ spec = do
                 small = [(root, terms) | (root, Right terms) <- counted, length terms <= 150]
             length small `shouldSatisfy` (>= 50)
             sequence_
-                [ ECTAGen.rankOfTerm (ECTAGen.fromAutomaton root) (Tree.Node (fromString "a") []) `shouldBe` Left err
+                [ ECTAGen.rankOfTerm (ECTAGen.fromAutomaton root) (Term.Node (fromString "a") []) `shouldBe` Left err
                 | (root, Left err) <- counted
                 ]
             sequence_

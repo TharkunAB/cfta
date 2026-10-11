@@ -84,7 +84,8 @@ import Data.CFTA.Gen (Args (..), Gen, GenError (..), On (..), Sig (..))
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Index (Weight (..))
 import Data.CFTA.Symbol (Symbol (Symbol))
-import qualified Data.Tree as Tree
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | A description of a generator of 'Value'.
 data Desc
@@ -319,12 +320,12 @@ automatonNode = go []
 {- | The terms of one size, the number of their nodes, of an automaton,
 without its equalities. A term comes once for each accepting run.
 -}
-termsOfSize :: Automaton -> Integer -> [Tree.Tree Symbol]
+termsOfSize :: Automaton -> Integer -> [Term Symbol]
 termsOfSize = go []
   where
     go loops automaton size = case automaton of
         States edges ->
-            [ Tree.Node (Symbol symbol) children
+            [ Term.Node (Symbol symbol) children
             | AutomatonEdge symbol parts _ <- edges
             , children <- spread loops parts (size - 1)
             ]

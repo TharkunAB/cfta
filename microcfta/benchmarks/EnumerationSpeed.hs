@@ -17,7 +17,6 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import qualified Data.Text as Text
-import qualified Data.Tree as Tree
 import System.CPUTime (getCPUTime)
 import System.Environment (getArgs)
 import Text.Printf (printf)
@@ -26,6 +25,8 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, noConstraint)
 import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Interned as Common
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 data Bench = forall language. Bench
     { benchName :: String
@@ -90,16 +91,16 @@ benchmarks =
         Bench name repeats (prepared Common.nodeCount language) (sizes . enumerate)
     prepared force build i = let built = build i in built <$ evaluate (force built)
 
-sizes :: [Tree.Tree a] -> IO Int
-sizes = evaluate . sum . map (length . Tree.flatten)
+sizes :: [Term a] -> IO Int
+sizes = evaluate . sum . map (length . Term.flatten)
 
 -- | Enumerate an acyclic automaton with a plain product per state.
-naiveTerms :: (Ord state) => FTA.PlainFTA state symbol -> [Tree.Tree symbol]
+naiveTerms :: (Ord state) => FTA.PlainFTA state symbol -> [Term symbol]
 naiveTerms acyclic = table Map.! FTA.initialState acyclic
   where
     table = fmap fromRow (FTA.transitionTable acyclic)
     fromRow outgoing =
-        [ Tree.Node symbol children
+        [ Term.Node symbol children
         | FTA.Transition symbol childStates _ <- outgoing
         , children <- traverse (table Map.!) childStates
         ]

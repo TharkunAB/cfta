@@ -5,7 +5,6 @@ module Data.CFTA.Refinement.RefinementRelationSpec (spec) where
 import Control.Exception (IOException, try)
 import Data.Either (isLeft)
 import Data.List (elemIndex)
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
@@ -39,6 +38,7 @@ import Data.CFTA.Refinement.Guard (argument, contract, notGuard, withActualFor)
 import Data.CFTA.Refinement.Lattice (latticeEntailment, pointAt, pointCount, pointRank, points)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Symbol (valueName)
+import qualified Data.CFTA.Term as Term
 import qualified Language.Fixpoint.Types as Fixpoint
 
 spec :: Spec
@@ -76,16 +76,16 @@ spec = do
             withZ3 [] $ \solver -> do
                 let v = variable valueName
                     n = variable "n"
-                    leaf name refinement = Tree.Node (RefinedSymbol name refinement) []
+                    leaf name refinement = Term.Node (RefinedSymbol name refinement) []
                     -- Only a knows that n is at least zero, and the contract names only b.
-                    pair = Tree.Node (RefinedSymbol "pair" true) [leaf "a" (v .== n .&& n .>= 0), leaf "b" (v .== n + 1)]
+                    pair = Term.Node (RefinedSymbol "pair" true) [leaf "a" (v .== n .&& n .>= 0), leaf "b" (v .== n + 1)]
                     positive = contract (\_ b -> b .> 0)
                 evaluateConstraint solver positive pair >>= (`shouldBe` No)
                 evaluateConstraint solver (notGuard positive) pair >>= (`shouldBe` No)
                 evaluateConstraint solver (notGuard $ contract (\a _ -> a .< 0)) pair >>= (`shouldBe` Yes)
                 -- The same contract after n replaces m in the refinement of b.
                 let quad =
-                        Tree.Node
+                        Term.Node
                             (RefinedSymbol "quad" true)
                             [leaf "a" (v .== n .&& n .>= 0), leaf "b" (v .== variable "m" + 1), leaf "m" true, leaf "n" true]
                     scoped = withActualFor (argument 3) (argument 2) $ contract (\_ b _ _ -> b .> 0)

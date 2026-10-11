@@ -119,8 +119,22 @@ remains a separate ECTA-only package.
 - The type of an ECTA is `Node symbol`; there is no separate
   ECTA node type. `edgeEcs` is `edgeConstraint`, a `Constraint`, and the FTA views return
   `FTAViewError`.
-- Concrete terms are `Data.Tree.Tree` from `containers`, and partial or
-  truncated enumeration uses `PartialSymbol symbol` rather than inventing
+- Concrete terms are `Term symbol` from `Data.CFTA.Term`: a symbol with
+  its children in a constructor chosen by the arity (`Leaf`, `One`, `Two`,
+  `Three`, and `Many` with a `Seq` of four or more children), so a path
+  reads a subterm with one field read or one `Seq.lookup` per step. The
+  module does not export the constructors. The pattern `Node` builds and views
+  the children as a list, as `Data.Tree.Node` does, and `fromRoseTree` and
+  `toRoseTree` convert to and from `Data.Tree.Tree`. `Ord` and `Hashable`
+  agree with `Data.Tree`, so the orders of `terms` and `fromTerms` do not
+  change; a term shows as `Node symbol [children]`. Every function that
+  takes or gives a term uses this type: `accepts`, `acceptsM`, `fromTerms`,
+  `terms`, `termsUpToM`, the enumerators of `Data.CFTA.Enumeration`,
+  `equalitiesHold`, the codecs of `Data.CFTA.Generic`, the refinement
+  evaluation and denotation, `Data.CFTA.Simple`, `eraseRefinements`, and
+  `matchesTemplate`. The
+  automaton views of `toTree` stay `Data.Tree.Tree`, for `drawTree`. Partial
+  or truncated enumeration uses `PartialSymbol symbol` rather than inventing
   symbols in the caller's alphabet.
 - The hash-consing and memo tables are immutable maps updated atomically, so
   building automata from several threads is safe. Edge joins are keyed on the
