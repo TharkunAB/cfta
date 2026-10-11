@@ -1,12 +1,14 @@
 import MicroCFTA.DistinctRank
+import MicroCFTA.EpsilonUnion
 
 /-!
 # Union with an enclosing recursion reference
 
-`Interned.Operations.union` concatenates `nodeEdges`. A bare `Rec` contributes
-no edges. This source behavior is documented, but it is weaker than language
+At baseline `d7f7c11`, `Interned.Operations.union` concatenated `nodeEdges`.
+A bare `Rec` contributed no edges. This historical behavior is weaker than language
 union inside a nested binder. The example is `A = a | wrap(B); B = A | b`.
-The source union drops the reference to A, leaving `A = a | wrap(b)`.
+The old union dropped the reference to A, leaving `A = a | wrap(b)`.
+The repaired operation retains epsilon operands, as modeled in `EpsilonUnion`.
 -/
 
 namespace MicroCFTA.OpenUnion
@@ -53,5 +55,28 @@ theorem enclosing_reference_loses_term :
     have member := (mem_enumerate_iff actual 2 false witness).mpr ⟨accepted, by simp [witness, Term.height]⟩
     have absent : witness ∉ enumerate actual 2 false := by decide +kernel
     exact absent member
+
+/-- The repaired graph retains the reference from B to A as an epsilon edge. -/
+def repaired : EpsilonUnion.Graph Bool Nat where
+  references
+    | false => []
+    | true => [false]
+  transitions
+    | false => [edge 0 [], edge 2 [true]]
+    | true => [edge 1 []]
+
+/-- The enclosing reference supplies the missing child without consuming a constructor. -/
+theorem repaired_accepts : EpsilonUnion.Accepts repaired false witness := by
+  apply EpsilonUnion.Accepts.node (edge 2 [true]) [.node 0 []] (by simp [repaired])
+  · apply All₂.cons ?_ .nil
+    apply EpsilonUnion.Accepts.reference (target := false) (by simp [repaired])
+    exact .node (edge 0 []) [] (by simp [repaired]) .nil rfl
+  · rfl
+
+/-- Executable depth-first epsilon elimination retains the previously lost term. -/
+theorem repaired_collection_accepts :
+    Accepts (EpsilonUnion.collect [false, true] repaired) false witness := by
+  exact (EpsilonUnion.collect_exact [false, true]
+    (by intro state; cases state <;> simp) (by simp) repaired false witness).mpr repaired_accepts
 
 end MicroCFTA.OpenUnion

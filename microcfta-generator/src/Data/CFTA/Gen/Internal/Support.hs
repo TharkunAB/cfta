@@ -89,6 +89,7 @@ relabel rename root = State.evalState (visit Map.empty root) Map.empty
                                 )
                                 Map.empty
                     Core.InternedNode payload -> Node <$> traverse (copyEdge environment) (Core.internedNodeEdges payload)
+                    Core.InternedUnion payload -> Core.createUnion <$> traverse (visit environment) (Core.internedUnionMembers payload)
                 State.modify' $ Map.insert node copied
                 pure copied
     copyEdge environment edge = do
