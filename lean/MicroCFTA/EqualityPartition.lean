@@ -68,11 +68,11 @@ theorem decoded_partition (classes : Constraints) (mergeFuel readFuel : Nat)
     (forest after : UnionFind.Forest) (entries : List (Nat × Nat))
     (merged : EqualityArray.mergePairs mergeFuel ((encoded classes).flatMap EqualityArray.classPairs)
       (UnionFind.withInitialValues (encoded classes).flatten) = some forest)
-    (readback : EqualityArray.readAll readFuel (encoded classes).flatten.eraseDups forest = some (entries, after))
+    (readback : EqualityArray.readAll readFuel (List.range (members classes).length) forest = some (entries, after))
     (left right : Path) :
     (∃ paths ∈ decodedGroups classes entries, left ∈ paths ∧ right ∈ paths) ↔ Connected classes left right := by
   have valid := (EqualityArray.mergePairs_correct (Value := Nat) _ _ (UnionFind.initial_total _) mergeFuel forest merged).1
-  have grouped := EqualityArray.grouped_partition (encoded classes).flatten.eraseDups forest valid readFuel entries after readback
+  have grouped := EqualityArray.grouped_partition (List.range (members classes).length) forest valid readFuel entries after readback
   constructor
   · rintro ⟨paths, present, first, second⟩
     obtain ⟨indices, indicesMember, rfl⟩ := List.mem_map.mp present
@@ -81,8 +81,8 @@ theorem decoded_partition (classes : Constraints) (mergeFuel readFuel : Nat)
     obtain ⟨leftDomain, rightDomain, related⟩ := (grouped leftIndex rightIndex).mp ⟨indices, indicesMember, leftMember, rightMember⟩
     exact decode_connected classes leftIndex rightIndex
       ((EqualityArray.complete_connected (encoded classes) mergeFuel forest merged leftIndex rightIndex).mp related)
-      (encoded_bounded classes leftIndex (by simpa using leftDomain))
-      (encoded_bounded classes rightIndex (by simpa using rightDomain))
+      (List.mem_range.mp leftDomain)
+      (List.mem_range.mp rightDomain)
   · intro connected
     have original := connected_member classes left right connected
     have leftPresent : left ∈ classes.flatten := by
@@ -94,8 +94,8 @@ theorem decoded_partition (classes : Constraints) (mergeFuel readFuel : Nat)
     have related := (EqualityArray.complete_connected (encoded classes) mergeFuel forest merged
       (encode classes left) (encode classes right)).mpr (encode_connected classes left right connected)
     obtain ⟨indices, present, first, second⟩ := (grouped (encode classes left) (encode classes right)).mpr
-      ⟨by simpa using encoded_covers classes _ (encode_bounded classes left leftPresent),
-        by simpa using encoded_covers classes _ (encode_bounded classes right rightPresent), related⟩
+      ⟨List.mem_range.mpr (encode_bounded classes left leftPresent),
+        List.mem_range.mpr (encode_bounded classes right rightPresent), related⟩
     exact ⟨indices.map (decode classes), List.mem_map.mpr ⟨indices, present, rfl⟩,
       List.mem_map.mpr ⟨_, first, decode_encode classes left leftPresent⟩,
       List.mem_map.mpr ⟨_, second, decode_encode classes right rightPresent⟩⟩
@@ -103,7 +103,7 @@ theorem decoded_partition (classes : Constraints) (mergeFuel readFuel : Nat)
 /-- Distinct root buckets remain disjoint after decoding their allocated indexes. -/
 theorem decoded_disjoint (classes : Constraints) (forest after : UnionFind.Forest)
     (valid : UnionFind.Total forest) (fuel : Nat) (entries : List (Nat × Nat))
-    (readback : EqualityArray.readAll fuel (encoded classes).flatten.eraseDups forest = some (entries, after)) :
+    (readback : EqualityArray.readAll fuel (List.range (members classes).length) forest = some (entries, after)) :
     (decodedGroups classes entries).Pairwise (fun left right => overlap left right = false) := by
   have listed := (EqualityArray.readAll_correct _ forest valid fuel entries after readback).2.2
   simp only [decodedGroups, EqualityArray.groups, List.map_map, Function.comp_def]
@@ -122,8 +122,8 @@ theorem decoded_disjoint (classes : Constraints) (forest after : UnionFind.Fores
   obtain ⟨leftDomain, leftSize, first⟩ := (listed leftKey leftIndex).mp leftPresent
   obtain ⟨rightDomain, rightSize, second⟩ := (listed rightKey rightIndex).mp rightPresent
   have same := decode_injective classes leftIndex rightIndex
-    (encoded_bounded classes leftIndex (by simpa using leftDomain))
-    (encoded_bounded classes rightIndex (by simpa using rightDomain)) (leftPath.trans rightPath.symm)
+    (List.mem_range.mp leftDomain)
+    (List.mem_range.mp rightDomain) (leftPath.trans rightPath.symm)
   subst rightIndex
   exact different (UnionFind.reaches_unique first second).1
 
@@ -143,7 +143,7 @@ theorem decoded_active (classes : Constraints) (active : Active classes) (mergeF
     (forest after : UnionFind.Forest) (entries : List (Nat × Nat))
     (merged : EqualityArray.mergePairs mergeFuel ((encoded classes).flatMap EqualityArray.classPairs)
       (UnionFind.withInitialValues (encoded classes).flatten) = some forest)
-    (readback : EqualityArray.readAll readFuel (encoded classes).flatten.eraseDups forest = some (entries, after)) :
+    (readback : EqualityArray.readAll readFuel (List.range (members classes).length) forest = some (entries, after)) :
     Active (decodedGroups classes entries) := by
   have valid := (EqualityArray.mergePairs_correct (Value := Nat) _ _ (UnionFind.initial_total _) mergeFuel forest merged).1
   have disjoint := decoded_disjoint classes forest after valid readFuel entries readback
@@ -178,7 +178,7 @@ theorem source_complete_eq (classes : Constraints) (active : Active classes) (me
     (forest after : UnionFind.Forest) (entries : List (Nat × Nat))
     (merged : EqualityArray.mergePairs mergeFuel ((encoded classes).flatMap EqualityArray.classPairs)
       (UnionFind.withInitialValues (encoded classes).flatten) = some forest)
-    (readback : EqualityArray.readAll readFuel (encoded classes).flatten.eraseDups forest = some (entries, after)) :
+    (readback : EqualityArray.readAll readFuel (List.range (members classes).length) forest = some (entries, after)) :
     complete classes = canonicalize (decodedGroups classes entries) := by
   have valid := (EqualityArray.mergePairs_correct (Value := Nat) _ _ (UnionFind.initial_total _) mergeFuel forest merged).1
   apply complete_matches_partition classes _ active
@@ -193,7 +193,7 @@ theorem source_complete_eq (classes : Constraints) (active : Active classes) (me
 /-- Complete source equality merging with the concrete array representation. -/
 def completeArray (fuel : Nat) (classes : Constraints) : Option Constraints := do
   let parents ← EqualityArray.mergeArrays fuel ((encoded classes).flatMap EqualityArray.classPairs) id
-  let (entries, _) ← EqualityArray.readArrays fuel (encoded classes).flatten.eraseDups parents
+  let (entries, _) ← EqualityArray.readArrays fuel (List.range (members classes).length) parents
   pure (canonicalize (decodedGroups classes entries))
 
 /-- Actual array completion eventually returns exactly the proved reference completion. -/
@@ -204,7 +204,7 @@ theorem completeArray_eventual (classes : Constraints) (active : Active classes)
     (UnionFind.withInitialValues (encoded classes).flatten) (UnionFind.initial_total _)
   have valid := (EqualityArray.mergePairs_correct (Value := Nat) _ _ (UnionFind.initial_total _) mergeFuel forest merged).1
   obtain ⟨readFuel, entries, after, readback⟩ := EqualityArray.readAll_terminates
-    (encoded classes).flatten.eraseDups forest valid
+    (List.range (members classes).length) forest valid
   have completeSame := source_complete_eq classes active mergeFuel readFuel forest after entries merged readback
   refine ⟨max mergeFuel readFuel, ?_⟩
   intro fuel enough

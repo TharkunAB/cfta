@@ -340,6 +340,27 @@ theorem complete_groups_exact (classes : List (List Nat)) (mergeFuel readFuel : 
   · intro accepted group present left leftMember right rightMember
     exact accepted left right ((grouped left right).mp ⟨group, present, leftMember, rightMember⟩).2.2
 
+/-- Any complete source member traversal preserves exactly the original equations. -/
+theorem complete_groups_domain_exact (classes : List (List Nat)) (domain : List Nat)
+    (covers : ∀ index, index ∈ domain ↔ index ∈ classes.flatten) (mergeFuel readFuel : Nat)
+    (forest after : Forest) (entries : List (Nat × Nat))
+    (merged : mergePairs mergeFuel (classes.flatMap classPairs) (withInitialValues classes.flatten) = some forest)
+    (readback : readAll readFuel domain forest = some (entries, after)) (assignment : Nat → Value) :
+    (∀ group ∈ groups entries, ∀ left ∈ group, ∀ right ∈ group, assignment left = assignment right) ↔
+      ∀ members ∈ classes, ∀ left ∈ members, ∀ right ∈ members, assignment left = assignment right := by
+  have valid := (mergePairs_correct (Value := Value) (classes.flatMap classPairs) _ (initial_total _) mergeFuel forest merged).1
+  have grouped := grouped_partition domain forest valid readFuel entries after readback
+  rw [← complete_equations classes mergeFuel forest merged assignment]
+  constructor
+  · intro output left right related
+    rcases connected_members classes left right ((complete_connected classes mergeFuel forest merged left right).mp related) with same | members
+    · rw [same]
+    · obtain ⟨group, present, leftMember, rightMember⟩ := (grouped left right).mpr
+        ⟨(covers left).mpr members.1, (covers right).mpr members.2, related⟩
+      exact output group present left leftMember right rightMember
+  · intro accepted group present left leftMember right rightMember
+    exact accepted left right ((grouped left right).mp ⟨group, present, leftMember, rightMember⟩).2.2
+
 /-- More fuel preserves the whole representative readback sequence. -/
 theorem readAll_more (members : List Nat) (forest : Forest) (small large : Nat) (bound : small ≤ large)
     (entries : List (Nat × Nat)) (after : Forest)
