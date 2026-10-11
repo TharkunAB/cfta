@@ -73,6 +73,7 @@ module Data.CFTA.Gen.Reference (
 import Control.Monad (when)
 import Data.IntSet (IntSet)
 import qualified Data.IntSet as IntSet
+import Data.List (sortOn)
 import qualified Data.Map as Map
 import Data.Maybe (catMaybes, listToMaybe)
 import Data.Text (Text)
@@ -632,9 +633,10 @@ equalWeights (weight : rest) = all (== weight) rest
 equalWeights [] = True
 
 {- | Pairs of members of two finite languages whose keys the relation relates.
-The key pairs come in ascending order, and the pairs of one key pair in
-mixed radix. Every pair has size two. The mass and the weight in the size
-class of a pair are the products of those of its sides, normalized.
+The key pairs come in ascending order. In one key pair, each side is in size
+order, and the pairs are in mixed radix. A pair has the sizes of its two
+sides added. The mass and the weight in the size class of a pair are the
+products of those of its sides, normalized.
 -}
 joinLang :: (Ord key) => (key -> key -> Bool) -> (Value -> key) -> Lang Value -> Lang Value -> Lang Value
 joinLang relation key left right = case (left, right) of
@@ -654,29 +656,31 @@ joinLang relation key left right = case (left, right) of
                             ( count
                             , [ Member
                                     (Paired (memberValue first) (memberValue second))
-                                    2
+                                    size
                                     (memberMass first * memberMass second / mass)
-                                    (fromInteger count * memberWeight first * memberWeight second / weight)
+                                    (fromInteger (classCount size) * memberWeight first * memberWeight second / classWeight size)
                               | (first, second) <- pairs
+                              , let size = pairSize (first, second)
                               ]
                             )
                     , modelAtomic = False
-                    , modelCount = \size -> if size == 2 then count else 0
+                    , modelCount = classCount
                     , modelClass = \size ->
-                        if size == 2
-                            then
-                                [ (Paired (memberValue first) (memberValue second), memberWeight first * memberWeight second / weight)
-                                | (first, second) <- pairs
-                                ]
-                            else []
-                    , modelMinimum = Just 2
-                    , modelLargest = Just 2
+                        [ (Paired (memberValue first) (memberValue second), memberWeight first * memberWeight second / classWeight size)
+                        | (first, second) <- pairs
+                        , pairSize (first, second) == size
+                        ]
+                    , modelMinimum = Just $ minimum sizes
+                    , modelLargest = Just $ maximum sizes
                     , modelReaches = IntSet.empty
                     , modelUnguarded = IntSet.empty
                     , modelTermless = IntSet.empty
                     }
       where
-        byKey model' = Map.fromListWith (flip (<>)) [(key $ memberValue member, [member]) | member <- maybe [] snd $ modelFinite model']
+        -- In a group, each side is in size order, and the sort is stable.
+        byKey model' =
+            sortOn memberSize
+                <$> Map.fromListWith (flip (<>)) [(key $ memberValue member, [member]) | member <- maybe [] snd $ modelFinite model']
         groups =
             [ (firsts, seconds)
             | (leftKey, firsts) <- Map.toAscList $ byKey leftModel
@@ -686,7 +690,11 @@ joinLang relation key left right = case (left, right) of
         pairs = [(first, second) | (firsts, seconds) <- groups, first <- firsts, second <- seconds]
         count = toInteger $ length pairs
         mass = sum [sum (map memberMass firsts) * sum (map memberMass seconds) | (firsts, seconds) <- groups]
-        weight = sum [memberWeight first * memberWeight second | (first, second) <- pairs]
+        -- A pair has the sizes of its two sides added, as a product has.
+        pairSize (first, second) = memberSize first + memberSize second
+        sizes = map pairSize pairs
+        classCount size = toInteger $ length $ filter (== size) sizes
+        classWeight size = sum [memberWeight first * memberWeight second | pair@(first, second) <- pairs, pairSize pair == size]
 
 {- | A choice. Each alternative has its weight in a finite choice, its weight
 in a size class, and its model.

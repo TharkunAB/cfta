@@ -644,11 +644,11 @@ size zero, `<*>` adds the sizes of its sides, and `fmap` and the choices keep
 sizes. `pay` adds one to every member. An atom (`elements`, `fromIndexed`,
 `every`, `atomic`) has size one, and a constructor (`node`, `leaf`, `guarded`,
 `measured`) pays one, so the size of a tree built with `node` is its number
-of nodes, as for an imported term. A join (`match`, `relate`) treats the
-member of each side as one atom, so every pair has size two. The tree above
-has no `node`, so its size is its number of leaves: each leaf is an atom of
-size one. Each side of `Branch <$> self <*> self` has no member of size zero,
-so each side guards the other, and the tree needs no pay.
+of nodes, as for an imported term. A join (`match`, `relate`) adds the sizes
+of its two sides, as a product does. The tree above has no `node`, so its
+size is its number of leaves: each leaf is an atom of size one. Each side of
+`Branch <$> self <*> self` has no member of size zero, so each side guards
+the other, and the tree needs no pay.
 "Size-major rank" is this package's own term for the resulting order. [ADR
 2](../docs/adr/0002-sizes-count-pays.md) records the decision. Counting a family by a size recurrence and
 drawing from those counts is the recursive method of Nijenhuis and Wilf,

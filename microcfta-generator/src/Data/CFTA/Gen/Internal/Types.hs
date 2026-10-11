@@ -226,8 +226,8 @@ Symposium 2012).
 Sizes count pays. 'pure' has size zero, '<*>' adds the sizes of its sides, and
 'fmap' and the choices keep sizes. An atom ('elements', 'fromIndexed') has
 size one, and a constructor ('node', 'leaf') pays one. So the 'Functor' and
-'Applicative' laws hold for sizes. A join ('match', 'relate') treats the
-member of each side as one atom, so every pair has size two.
+'Applicative' laws hold for sizes. A join ('match', 'relate') adds the sizes
+of its two sides, as a product does.
 
 A recursion must reach its occurrence through a pay, or through a product
 whose other side has no member of size zero. It must also reach it through a
