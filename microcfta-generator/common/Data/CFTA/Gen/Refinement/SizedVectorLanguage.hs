@@ -82,9 +82,7 @@ child by the child's term.
 vectorsAtDepth :: Int -> LTAGen.LTAGen SizedVector
 vectorsAtDepth requestedDepth
     | requestedDepth <= 0 = sourceVectors
-    | otherwise = vectorLayer depth $ vectorsAtDepth (depth - 1)
-  where
-    depth = max 0 requestedDepth
+    | otherwise = vectorLayer requestedDepth $ vectorsAtDepth (requestedDepth - 1)
 
 -- | Add one dependent vector-operation layer.
 vectorLayer :: Int -> LTAGen.LTAGen SizedVector -> LTAGen.LTAGen SizedVector
@@ -154,12 +152,11 @@ resultRefinement [] = error "resultRefinement: missing result annotation"
 safeProgramsAtDepth :: Int -> LTAGen.LTAGen Program
 safeProgramsAtDepth requestedDepth =
     LTAGen.guarded "index" inBounds $ LTAGen.do
-        vector <- vectorsAtDepth depth
+        vector <- vectorsAtDepth requestedDepth
         index <- candidateIndexes maximumLength
         LTAGen.pure $ Index (vectorExpression vector) (numberValue index)
   where
-    depth = max 0 requestedDepth
-    maximumLength = maximumLengthAtDepth depth
+    maximumLength = maximumLengthAtDepth requestedDepth
 
 -- | Indexing a vector of length @n@ at @i@ needs @0 <= i < n@.
 inBounds :: Expr -> Expr -> Formula

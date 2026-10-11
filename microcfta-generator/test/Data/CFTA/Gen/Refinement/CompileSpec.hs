@@ -13,9 +13,9 @@ import qualified Data.Tree as Tree
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
-import Data.CFTA.Gen.Refinement.ExampleSupport (nonNegative)
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.TestSupport (compileOrFail, massesByRank, rightOrFail, values)
+import Data.CFTA.Gen.Refinement.TypedExpressionLanguage (nonNegative)
 import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import Data.CFTA.Refinement (
     Entailment (Entailment),

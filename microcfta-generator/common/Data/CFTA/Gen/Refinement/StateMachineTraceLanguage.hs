@@ -70,6 +70,7 @@ import qualified Language.Fixpoint.Types as Fixpoint
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
+import Data.CFTA.Gen.TypedExpressionLanguage (frequencyInteger)
 import Data.CFTA.Refinement (
     Automaton,
     AutomatonError,
@@ -92,7 +93,6 @@ import Data.CFTA.Refinement.Guard (
     root,
     withActualFor,
  )
-import Data.List (elemIndex)
 
 -- | Ground value types shared with the typed-expression example.
 data ValueType = TInt | TBool
@@ -228,7 +228,7 @@ traceAutomaton requestedLength = validate rootNode >> pure rootNode
             | prefixLength <- [0 .. traceLength - 1]
             , output <- stackStates
             ]
-                <> [ (CommandNode contractRank, Node [contractTransition contract])
+                <> [ (CommandNode contractRank, Node [contractTransition contractRank contract])
                    | (contractRank, contract) <- zip [0 ..] commandContractValues
                    ]
                 <> [(FormalNode, Node [Transition "model" stateRange [] noConstraint])]
@@ -250,17 +250,12 @@ traceAutomaton requestedLength = validate rootNode >> pure rootNode
         , (contractRank, _) <- zip [0 ..] commandContractValues
         ]
 
-    contractTransition contract =
+    contractTransition contractRank contract =
         Transition
             (contractSymbol contract)
             (contractInputSpace contract)
-            [nodes LazyMap.! FormalNode, nodes LazyMap.! PostNode (findContractIndex contract)]
+            [nodes LazyMap.! FormalNode, nodes LazyMap.! PostNode contractRank]
             noConstraint
-
-    findContractIndex selected =
-        case elemIndex selected commandContractValues of
-            Just index -> index
-            Nothing -> error "traceAutomaton: unknown command contract"
 
 -- | The shared nodes of the exact-length trace LTA.
 data TraceNodeKey
@@ -495,28 +490,6 @@ initialTraceValue = Trace [] emptyState
 commandValues :: [Command]
 commandValues = map Push literalValues <> [Add, And, Equal, Not, Pop]
 
--- | Preserve exact relative weights, using an Integer draw when needed.
-frequencyInteger :: [(Integer, QC.Gen a)] -> QC.Gen a
-frequencyInteger [] = error "frequencyInteger: empty alternatives"
-frequencyInteger alternatives
-    | totalWeight <= toInteger (maxBound :: Int) =
-        QC.frequency
-            [ (fromInteger weight, generator)
-            | (weight, generator) <- reduced
-            ]
-    | otherwise = do
-        selected <- QC.chooseInteger (1, totalWeight)
-        pick selected reduced
-  where
-    commonFactor = foldl' gcd 0 $ map fst alternatives
-    reduced = [(weight `div` commonFactor, generator) | (weight, generator) <- alternatives]
-    totalWeight = sum $ map fst reduced
-
-    pick _ [] = error "frequencyInteger: selected past the alternatives"
-    pick selected ((weight, generator) : remaining)
-        | selected <= weight = generator
-        | otherwise = pick (selected - weight) remaining
-
 {- | Advance the pure abstract model when a command's stack type permits it.
 
 This function is deliberately independent of the LTA guard. The specs replay
@@ -646,7 +619,6 @@ data CommandContract = CommandContract
     , contractInputSpace :: !Formula
     , contractPostState :: !Formula
     }
-    deriving (Eq)
 
 -- | The eleven schemas from which every trace layer is constructed.
 commandContractValues :: [CommandContract]

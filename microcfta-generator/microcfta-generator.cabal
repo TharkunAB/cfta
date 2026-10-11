@@ -302,7 +302,6 @@ test-suite refinement-tests
     Data.CFTA.Gen.Refinement.BoundedGeneratorSpec
     Data.CFTA.Gen.Refinement.CompileSpec
     Data.CFTA.Gen.Refinement.DependentApplicationSpec
-    Data.CFTA.Gen.Refinement.ExampleSupport
     Data.CFTA.Gen.Refinement.OracleSpec
     Data.CFTA.Gen.Refinement.PreconditionTypedExpressionSpec
     Data.CFTA.Gen.Refinement.QuickCheckSyntaxSpec
@@ -317,6 +316,7 @@ test-suite refinement-tests
     Data.CFTA.Gen.Refinement.SubsumptionTypedExpressionSpec
     Data.CFTA.Gen.Refinement.TestSupport
     Data.CFTA.Gen.Refinement.TypedExpressionLanguage
+    Data.CFTA.Gen.TypedExpressionLanguage
 
   build-depends:
     base >=4.22 && <4.23,
@@ -327,6 +327,7 @@ test-suite refinement-tests
     microcfta >=0.1.0.0 && <0.2,
     microcfta-generator,
     QuickCheck >=2.14 && <2.19,
+    text >=2.1 && <2.2,
 
 benchmark untyped-expression-speed
   import: warnings, extensions
@@ -392,8 +393,8 @@ benchmark state-machine-trace-speed
     -with-rtsopts=-T
 
   other-modules:
-    Data.CFTA.Gen.Refinement.ExampleSupport
     Data.CFTA.Gen.Refinement.StateMachineTraceLanguage
+    Data.CFTA.Gen.TypedExpressionLanguage
     GeneratorSpeedHarness
 
   build-depends:
@@ -405,6 +406,7 @@ benchmark state-machine-trace-speed
     process >=1.6 && <1.7,
     QuickCheck >=2.14 && <2.19,
     random >=1.2 && <1.4,
+    text >=2.1 && <2.2,
 
 benchmark typed-expression-constraint-cost
   import: warnings
