@@ -22,6 +22,7 @@ module Data.CFTA.Ranked.Internal.Decoder (
     LargestSize (..),
     RankedValue (..),
     offsetRankedValue,
+    withOffsets,
     planCardinality,
     compilePlan,
     sharedChoiceBound,
@@ -31,7 +32,7 @@ import Data.IntSet (IntSet)
 import qualified Data.Map.Lazy as Map
 import GHC.Arr (listArray, unsafeAt)
 
-import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), RankOffset, Size, offsetRank)
+import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), RankOffset, Size, nextOffset, offsetRank)
 
 {- | The rank structure of a language: its choices, products, maps, pays, and
 size classes.
@@ -212,6 +213,14 @@ instance Functor RankedValue where
 offsetRankedValue :: RankOffset -> RankedValue a -> RankedValue a
 offsetRankedValue offset (RankedValue rank value) = RankedValue (offsetRank offset rank) value
 {-# INLINE offsetRankedValue #-}
+
+-- | Pair each alternative with its cumulative rank offset, given its cardinality.
+withOffsets :: (a -> Cardinality) -> [a] -> [(RankOffset, a)]
+withOffsets cardinalityOf = go 0
+  where
+    go _ [] = []
+    go offset (alternative : rest) =
+        (offset, alternative) : go (nextOffset offset $ cardinalityOf alternative) rest
 
 -- | The exact number of ranks a plan decodes.
 planCardinality :: Plan a -> Cardinality

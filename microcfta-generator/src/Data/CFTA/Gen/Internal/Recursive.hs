@@ -60,10 +60,12 @@ import Data.CFTA.Ranked.Internal.Size (
     choiceIndex,
     choicePosition,
     constructorIndex,
+    fromMinimum,
     mapIndex,
     mapIndexWithRank,
     mulSparse,
     payIndex,
+    payMinimum,
     planPosition,
     productIndex,
     productPosition,
@@ -535,11 +537,7 @@ before the product is computed.
 -}
 productMassIndex :: MinimumSize -> MassIndex -> MassIndex -> MassIndex
 productMassIndex smallest (MassIndex left) (MassIndex right) =
-    MassIndex $ case smallest of
-        NoFiniteMember -> []
-        MinimumSize size -> (size, valueAtSize convolution size) : dropWhile ((<= size) . fst) convolution
-  where
-    convolution = mulSparse left right
+    MassIndex $ fromMinimum smallest $ mulSparse left right
 
 {- | The masses of a pay: each size is one larger. Given the minimum size of
 the inner language, the masses start with its smallest size before the inner
@@ -547,7 +545,4 @@ masses are read, as the counts of a pay do.
 -}
 payMassIndex :: MinimumSize -> MassIndex -> MassIndex
 payMassIndex smallest (MassIndex masses) =
-    MassIndex $ case smallest of
-        NoFiniteMember -> []
-        MinimumSize size ->
-            (size + 1, valueAtSize masses size) : [(size' + 1, mass) | (size', mass) <- masses, size' > size]
+    MassIndex $ fromMinimum (payMinimum smallest) [(size + 1, mass) | (size, mass) <- masses]

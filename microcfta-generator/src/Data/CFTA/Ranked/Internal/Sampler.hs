@@ -46,7 +46,7 @@ import Data.CFTA.Index (
     offsetRank,
     pairRank,
  )
-import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..), SizeClass (..), offsetRankedValue)
+import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..), SizeClass (..), offsetRankedValue, withOffsets)
 import Data.CFTA.Ranked.Internal.Size (
     SizeIndex,
     countAtSize,
@@ -432,13 +432,9 @@ boundedSampler classes sampling =
         )
         ( chooseWeighted
             [ (countWeight count, offsetRankedValue offset <$> runRankAtSize sampling size)
-            | (size, count, offset) <- offsetClasses 0 classes
+            | (offset, SizeClass{classSize = size, classCardinality = count}) <- withOffsets classCardinality classes
             ]
         )
-  where
-    offsetClasses _ [] = []
-    offsetClasses offset (SizeClass{classSize = size, classCardinality = count} : rest) =
-        (size, count, offset) : offsetClasses (nextOffset offset count) rest
 
 -- | Avoid a random branch selection when only one branch is live.
 chooseWeighted :: (GenBackend gen) => [(Weight, gen a)] -> gen a

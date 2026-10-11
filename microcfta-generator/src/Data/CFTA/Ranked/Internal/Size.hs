@@ -76,6 +76,8 @@ module Data.CFTA.Ranked.Internal.Size (
     addSparse,
     mulSparse,
     valueAtSize,
+    fromMinimum,
+    payMinimum,
 ) where
 
 import Data.Foldable (toList)
@@ -107,6 +109,7 @@ import Data.CFTA.Ranked.Internal.Decoder (
     SizeCounts,
     SizeIndex (..),
     planCardinality,
+    withOffsets,
  )
 
 {- | A token that identifies the occurrence of one recursion in the probe
@@ -346,10 +349,7 @@ sizeIndex (PlanMap transform plan) = mapIndex transform $ sizeIndex plan
 sizeIndex (PlanChoice branches) =
     SizeIndex counts select selectInt minimumSize' largestSize IntSet.empty IntSet.empty IntSet.empty
   where
-    entries = offsetBranches 0 branches
-    offsetBranches _ [] = []
-    offsetBranches offset ((branchCardinality, branch) : rest) =
-        (offset, sizeIndex branch) : offsetBranches (nextOffset offset branchCardinality) rest
+    entries = [(offset, sizeIndex branch) | (offset, (_, branch)) <- withOffsets fst branches]
     counts = foldr (addSparse . sizeClassCounts . snd) [] entries
     minimumSize' = minimumOf $ map (minimumMemberSize . snd) entries
     largestSize = largestOf $ map (largestMemberSize . snd) entries
@@ -386,14 +386,11 @@ sizeIndex (PlanSized classes) =
     SizeIndex counts select selectInt minimumSize' largestSize IntSet.empty IntSet.empty IntSet.empty
   where
     counts = [(size, count) | SizeClass{classSize = size, classCardinality = count} <- classes, count > 0]
-    largestSize = LargestSize $ maximum $ 0 : [size | SizeClass{classSize = size, classCardinality = count} <- classes, count > 0]
-    minimumSize' = case [size | SizeClass{classSize = size, classCardinality = count} <- classes, count > 0] of
+    largestSize = LargestSize $ maximum $ 0 : map fst counts
+    minimumSize' = case map fst counts of
         [] -> NoFiniteMember
         liveSizes -> MinimumSize $ minimum liveSizes
-    offsets = offsetClasses 0 classes
-    offsetClasses _ [] = []
-    offsetClasses offset (sizeClass@SizeClass{classCardinality = count} : rest) =
-        (offset, sizeClass) : offsetClasses (nextOffset offset count) rest
+    offsets = withOffsets classCardinality classes
 
     select size position = case [entry | entry@(_, SizeClass{classSize = size'}) <- offsets, size' == size] of
         (offset, SizeClass{classMember = decode}) : _ -> RankedValue (classMemberRank offset position) (decode position)
@@ -494,9 +491,7 @@ productIndex indexF indexX =
     -- from the minimums of the sides, before the convolution is read. So a
     -- recursive definition that uses this product gives its own smallest
     -- members before the product is counted.
-    counts = case smallest of
-        NoFiniteMember -> []
-        MinimumSize size -> (size, valueAtSize convolution size) : dropWhile ((<= size) . fst) convolution
+    counts = fromMinimum smallest convolution
     convolution = productCounts indexF indexX
     ranks = sizeMajorRanks counts
 
@@ -535,18 +530,10 @@ definition does not terminate.
 payIndex :: SizeIndex a -> SizeIndex a
 payIndex index =
     SizeIndex
-        ( case minimumMemberSize index of
-            NoFiniteMember -> []
-            MinimumSize smallest ->
-                (smallest + 1, valueAtSize (sizeClassCounts index) smallest)
-                    : [(size + 1, count) | (size, count) <- sizeClassCounts index, size > smallest]
-        )
+        (fromMinimum (payMinimum $ minimumMemberSize index) [(size + 1, count) | (size, count) <- sizeClassCounts index])
         (\size -> sizeClassSelect index (size - 1))
         (\size -> sizeClassValueInt index (size - 1))
-        ( case minimumMemberSize index of
-            MinimumSize size -> MinimumSize $ size + 1
-            NoFiniteMember -> NoFiniteMember
-        )
+        (payMinimum $ minimumMemberSize index)
         ( case largestMemberSize index of
             LargestSize size -> LargestSize $ size + 1
             SizesDoNotEnd -> SizesDoNotEnd
@@ -557,23 +544,11 @@ payIndex index =
 
 {- | The members of an index under a constructor: each one larger, as
 'payIndex' gives them. A constructor adds a term node, so no occurrence below
-it is termless. The result is a new record, not an update of the index, as in
-'withKnotMetadata'.
+it is termless. The update reads only the constructor that 'payIndex' builds,
+not the index, so it is safe inside a knot.
 -}
 constructorIndex :: SizeIndex a -> SizeIndex a
-constructorIndex index =
-    SizeIndex
-        { sizeClassCounts = sizeClassCounts paid
-        , sizeClassSelect = sizeClassSelect paid
-        , sizeClassValueInt = sizeClassValueInt paid
-        , minimumMemberSize = minimumMemberSize paid
-        , largestMemberSize = largestMemberSize paid
-        , unguardedOccurrences = unguardedOccurrences paid
-        , termlessOccurrences = IntSet.empty
-        , usedOccurrences = usedOccurrences paid
-        }
-  where
-    paid = payIndex index
+constructorIndex index = (payIndex index){termlessOccurrences = IntSet.empty}
 
 {- | Ordered alternatives, ranked size-major.
 
@@ -834,6 +809,18 @@ mulSparse ((leftSize, leftValue) : leftRest) right@((rightSize, rightValue) : ri
         : addSparse
             [(leftSize + size, leftValue * value) | (size, value) <- rightRest]
             (mulSparse leftRest right)
+
+{- | A sparse series that gives its entry at the smallest size before it reads
+the series. A knot reads that entry before the series is counted.
+-}
+fromMinimum :: (Num value) => MinimumSize -> [(Size, value)] -> [(Size, value)]
+fromMinimum NoFiniteMember _ = []
+fromMinimum (MinimumSize size) series = (size, valueAtSize series size) : dropWhile ((<= size) . fst) series
+
+-- | The smallest size under a pay: one more than the smallest size inside it.
+payMinimum :: MinimumSize -> MinimumSize
+payMinimum (MinimumSize size) = MinimumSize $ size + 1
+payMinimum NoFiniteMember = NoFiniteMember
 
 -- | The value of one size in a sparse series, zero when the size is absent.
 valueAtSize :: (Num value) => [(Size, value)] -> Size -> value

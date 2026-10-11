@@ -32,9 +32,7 @@ module Data.CFTA.Gen.Internal.Chain (
     recursiveChainTerms,
     recursiveSupports,
     recursiveInspections,
-    recursiveChainIndex,
-    recursiveChainMass,
-    recursiveChainSampling,
+    recursiveChainProduct,
     recursiveChainWeighted,
     recursiveChainMassWeighted,
 ) where
@@ -344,44 +342,20 @@ recursiveInspections ::
     ArgChain (KeyedRecursive symbol) operation result -> [Inspection symbol]
 recursiveInspections = chainToList (recursiveInspection . keyedRecursiveLanguage)
 
--- | Consume the argument groups into the operation, left to right.
-recursiveChainIndex ::
-    SizeIndex operation ->
-    ArgChain (KeyedRecursive symbol) operation result ->
-    SizeIndex result
-recursiveChainIndex index ChainNil = index
-recursiveChainIndex index (ChainCons recursive rest) =
-    recursiveChainIndex
-        (productIndex index $ recursiveIndex $ keyedRecursiveLanguage recursive)
-        rest
-
-{- | Multiply group masses through an applicative chain. The index of the
-operation gives the smallest size of each product.
+{- | Consume the argument groups into the operation, left to right: the size
+index, the masses, and the sampler of the product. The index of the operation
+gives the smallest size of each product. One fold builds the three, so they
+share each product index.
 -}
-recursiveChainMass ::
-    SizeIndex operation ->
-    MassIndex ->
-    ArgChain (KeyedRecursive symbol) operation result ->
-    MassIndex
-recursiveChainMass _ mass ChainNil = mass
-recursiveChainMass index mass (ChainCons recursive rest) =
-    recursiveChainMass
-        nextIndex
-        (productMassIndex (minimumMemberSize nextIndex) mass $ keyedRecursiveMasses recursive)
-        rest
-  where
-    nextIndex = productIndex index $ recursiveIndex $ keyedRecursiveLanguage recursive
-
--- | Consume recursive argument samplers in the same product order as ranks.
-recursiveChainSampling ::
+recursiveChainProduct ::
     SizeIndex operation ->
     MassIndex ->
     SampleIndex operation ->
     ArgChain (KeyedRecursive symbol) operation result ->
-    SampleIndex result
-recursiveChainSampling _ _ sampling ChainNil = sampling
-recursiveChainSampling index mass sampling (ChainCons recursive rest) =
-    recursiveChainSampling nextIndex nextMass nextSampling rest
+    (SizeIndex result, MassIndex, SampleIndex result)
+recursiveChainProduct index mass sampling ChainNil = (index, mass, sampling)
+recursiveChainProduct index mass sampling (ChainCons recursive rest) =
+    recursiveChainProduct nextIndex nextMass nextSampling rest
   where
     recursive' = keyedRecursiveLanguage recursive
     nextIndex = productIndex index $ recursiveIndex recursive'

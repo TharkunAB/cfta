@@ -644,14 +644,9 @@ recursiveJoin componentIndex operation arguments =
   where
     operationRecursive = keyedRecursiveLanguage operation
     operationIndex = recursiveIndex operationRecursive
-    joinedIndex = recursiveChainIndex operationIndex arguments
-    joinedMasses =
-        recursiveChainMass
-            operationIndex
-            (keyedRecursiveMasses operation)
-            arguments
-    joinedSampling =
-        recursiveChainSampling
+    -- Lazy: the knot of a recursive family reads the index before the sampler.
+    ~(joinedIndex, joinedMasses, joinedSampling) =
+        recursiveChainProduct
             operationIndex
             (keyedRecursiveMasses operation)
             (recursiveSampling operationRecursive)
