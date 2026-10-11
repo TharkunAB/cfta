@@ -253,11 +253,6 @@ initEnumerationState n =
 -- | Nondeterministic enumeration state monad.
 type EnumerateM symbol = StateT (EnumerationState symbol) []
 
--- | Run a lower-level enumeration action from an explicit state.
-runEnumerateM ::
-    EnumerateM symbol a -> EnumerationState symbol -> [(a, EnumerationState symbol)]
-runEnumerateM = runStateT
-
 ---------------------
 -------- UVar accessors
 ---------------------
@@ -701,7 +696,7 @@ truncatedTerms ::
     (Hashable symbol, Typeable symbol) =>
     Node symbol -> [Tree.Tree (PartialSymbol symbol)]
 truncatedTerms n = map fst $
-    flip runEnumerateM (initEnumerationState n) $ do
+    flip runStateT (initEnumerationState n) $ do
         enumerateFully
         rootTermFrag >>= expandPartialTermFrag
 
@@ -775,7 +770,7 @@ termsPruneWith ::
     Node symbol ->
     [Tree.Tree symbol]
 termsPruneWith recursionSymbol ost order oracle n =
-    map fst $ flip runEnumerateM (initEnumerationState n) $ do
+    map fst $ flip runStateT (initEnumerationState n) $ do
         enumerateFully' ost order oracle
         expandUVarWith recursionSymbol (intToUVar 0)
 
@@ -823,7 +818,7 @@ runs ::
     (Hashable symbol, Typeable symbol) =>
     symbol -> Node symbol -> [(Tree.Tree symbol, [(Constraint, Tree.Tree symbol)])]
 runs recursionSymbol n =
-    map fst $ flip runEnumerateM (initEnumerationState n) $ do
+    map fst $ flip runStateT (initEnumerationState n) $ do
         enumerateFully
         term <- expandUVarWith recursionSymbol (intToUVar 0)
         obligations <- gets _obligations

@@ -24,7 +24,6 @@ module Data.CFTA.Interned (
     modifyNode,
     createMu,
     createMuDontCleanup,
-    matchMu,
     substFree,
     edgeChildren,
     edgeConstraint,
@@ -32,7 +31,6 @@ module Data.CFTA.Interned (
     nodeIdentity,
     numNestedMu,
     freeVars,
-    shape,
     module Data.CFTA.Constraint,
 
     -- * Operations
@@ -49,12 +47,10 @@ module Data.CFTA.Interned (
     union,
     intersect,
     intersectEdge,
-    dropRedundantEdges,
     withoutRedundantEdges,
     dropEdgeConstraints,
     dropConstraints,
     acceptsWith,
-    edgeAcceptsWith,
     fixUnbounded,
     pathsMatching,
     requirePath,

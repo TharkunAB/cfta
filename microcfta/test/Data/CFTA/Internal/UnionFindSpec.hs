@@ -29,7 +29,7 @@ runEquivTestM = \m -> runEquivM (: []) (++) (unForAllEquivM $ runWriterT' m)
 type PersistentUFTestM = WriterT [Bool] (State UnionFind)
 
 runPersistentUFTestM :: PersistentUFTestM a -> (a, [Bool])
-runPersistentUFTestM m = evalState (runWriterT m) empty
+runPersistentUFTestM m = evalState (runWriterT m) (withInitialValues [])
 
 data UnionFindCommand
     = Union UVar UVar

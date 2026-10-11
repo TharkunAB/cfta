@@ -14,11 +14,9 @@ module Data.CFTA.Interned.Operations (
     edgeCount,
     union,
     acceptsWith,
-    edgeAcceptsWith,
     dropEdgeConstraints,
     dropConstraints,
     intersect,
-    dropRedundantEdges,
     withoutRedundantEdges,
     intersectEdge,
     fixUnbounded,
@@ -514,20 +512,6 @@ acceptsWith ::
 acceptsWith acceptsConstraint node = runIdentity . acceptsBy nodeEdges edgeSymbol edgeChildren check node
   where
     check _ edge term = Identity $ acceptsConstraint (edgeConstraint edge) term
-
--- | Recognize one constructor and apply its constraint interpreter.
-{-# INLINEABLE edgeAcceptsWith #-}
-edgeAcceptsWith ::
-    (Hashable symbol, Typeable symbol) =>
-    (Constraint -> Tree.Tree symbol -> Bool) -> Edge symbol -> Tree.Tree symbol -> Bool
-edgeAcceptsWith acceptsConstraint edge term@(Tree.Node symbol children) =
-    symbol == edgeSymbol edge
-        && childrenRepresent (edgeChildren edge) children
-        && acceptsConstraint (edgeConstraint edge) term
-  where
-    childrenRepresent [] [] = True
-    childrenRepresent (node : nodes) (child : rest) = acceptsWith acceptsConstraint node child && childrenRepresent nodes rest
-    childrenRepresent _ _ = False
 
 -- | Tables for removal of redundant alternatives.
 genericWithoutRedundantEdgesCache :: TypeableMemoCache

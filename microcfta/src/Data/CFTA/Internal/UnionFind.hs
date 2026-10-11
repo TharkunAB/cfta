@@ -18,7 +18,6 @@ module Data.CFTA.Internal.UnionFind (
     uvarToInt,
     intToUVar,
     UnionFind,
-    empty,
     withInitialValues,
     union,
     find,
@@ -77,10 +76,6 @@ data Entry = Parent !UVar | Root !Int
 -- | Persistent union-find forest, keyed by the integer id of a variable.
 newtype UnionFind = UnionFind {getUnionFindMap :: IntMap Entry}
     deriving (Eq, Ord, Show)
-
--- | Empty forest. Variables are inserted lazily by 'find'.
-empty :: UnionFind
-empty = UnionFind IntMap.empty
 
 -- | Forest containing each supplied variable as a singleton set.
 withInitialValues :: [UVar] -> UnionFind
