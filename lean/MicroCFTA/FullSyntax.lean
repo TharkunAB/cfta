@@ -10,9 +10,9 @@ semantics uses propositions. It does not assume a decision procedure for all
 integer formulas. An interpretation supplies sort domains and primitive
 operations; real arithmetic and solver behavior are separate boundaries.
 
-Substitution follows the source algorithm, including its treatment of names
-at function-application heads. The final counterexample exposes a semantic
-failure in that algorithm even for an integer binder and a nullary application.
+Substitution in this file records the historical source at `d7f7c11`, including
+its unchanged application heads. The counterexample remains a regression
+witness for that source. `FormulaSubstitution` models the repaired algorithm.
 -/
 
 namespace MicroCFTA.FullSyntax
