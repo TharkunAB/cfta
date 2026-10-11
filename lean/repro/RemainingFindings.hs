@@ -3,8 +3,6 @@
 -- | Reproduce the remaining findings after the three initial repairs.
 module Main (main) where
 
-import qualified Language.Fixpoint.Types as Fixpoint
-
 import Data.CFTA.Constraint (semanticConstraint)
 import qualified Data.CFTA.Gen.Refinement as G
 import Data.CFTA.Refinement
@@ -46,22 +44,22 @@ main = withZ3 declarations $ \solver -> do
         built = G.ungroup $ G.keyed () original
         outer guard = G.refinedNode "outer" (const true) guard built
     putStrLn "Non-atomic built source: an observation must preserve these sizes and masses"
-    print [G.sizeOfRank built rank | rank <- [0, 1]]
+    print [G.sizeOfRank (outer noConstraint) rank | rank <- [0, 1]]
     compiled <- G.compileWith solver $ outer (requires (argument 0) (const true))
     print $ fmap (\g -> [G.sizeOfRank g rank | rank <- [0, 1]]) compiled
-    print $ G.pmf $ G.upToSize 1 $ outer noConstraint
-    print $ compiled >>= G.pmf . G.upToSize 1
+    print $ G.pmf $ G.upToSize 2 $ outer noConstraint
+    print $ compiled >>= G.pmf . G.upToSize 2
     print $ fmap (\g -> map (G.smallerMembers g) [0, 1]) compiled
 
     let nested = G.node "pair" $ (,) <$> G.atomic original <*> G.leaf (7 :: Int) "c" (const true)
         nestedBuilt = G.ungroup $ G.keyed () nested
         nestedOuter guard = G.refinedNode "outer" (const true) guard nestedBuilt
-    putStrLn "A non-atomic product with an atomic child must retain both size-two members"
-    print [G.sizeOfRank nestedBuilt rank | rank <- [0, 1]]
+    putStrLn "A non-atomic product with an atomic child must retain both equal-size members"
+    print [G.sizeOfRank (nestedOuter noConstraint) rank | rank <- [0, 1]]
     nestedCompiled <- G.compileWith solver $ nestedOuter (requires (argument 0) (const true))
     print $ fmap (\g -> [G.sizeOfRank g rank | rank <- [0, 1]]) nestedCompiled
-    print $ G.pmf $ G.upToSize 2 $ nestedOuter noConstraint
-    print $ nestedCompiled >>= G.pmf . G.upToSize 2
+    print $ G.pmf $ G.upToSize 4 $ nestedOuter noConstraint
+    print $ nestedCompiled >>= G.pmf . G.upToSize 4
 
     let leaf symbol = Node [Transition symbol true [] noConstraint]
         pairWith accepted rejected =
@@ -99,4 +97,4 @@ main = withZ3 declarations $ \solver -> do
             printLanguage solver "After prune" automaton
     printReduced solver retained
   where
-    declarations = [(Fixpoint.symbol name, Fixpoint.FInt) | name <- ["app", "x", "y", "v"] :: [String]]
+    declarations = ["app", "x", "y", "v"]

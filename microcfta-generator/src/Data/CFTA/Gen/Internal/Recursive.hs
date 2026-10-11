@@ -51,8 +51,8 @@ import Data.CFTA.Gen.Internal.Bucket (
     countMassIndex,
     emptyMassIndex,
     massAtSize,
-    productMassIndex,
     payMassIndex,
+    productMassIndex,
     sumMassIndexes,
  )
 import Data.CFTA.Gen.Internal.Inspection
@@ -63,16 +63,14 @@ import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size, every
 import Data.CFTA.Ranked.Internal.Decoder (MinimumSize (..), Plan (..), RankedValue (..), SizeClass (..))
 import Data.CFTA.Ranked.Internal.Sampler
 import Data.CFTA.Ranked.Internal.Size (
-    SizeIndex (minimumMemberSize, sizeClassCounts, sizeClassSelect),
+    SizeIndex (minimumMemberSize, sizeClassSelect),
     SizedRank (..),
     choiceIndex,
     choicePosition,
     constructorIndex,
-    fromMinimum,
     mapIndex,
     mapIndexWithRank,
     payIndex,
-    payMinimum,
     planPosition,
     productIndex,
     productPosition,

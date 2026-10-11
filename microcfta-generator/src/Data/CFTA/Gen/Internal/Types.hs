@@ -285,8 +285,16 @@ payGroupsWith ::
     Grouped symbol key a ->
     Grouped symbol key a
 payGroupsWith static _ (Grouped result) =
-    Grouped $
-        fmap (Map.mapWithKey $ \key bucket -> bucket{keyedBucketStatic = static key $ keyedBucketStatic bucket}) result
+    Grouped $ fmap (Map.mapWithKey payBucket) result
+  where
+    payBucket key bucket =
+        bucket
+            { keyedBucketStatic = static key original
+            , keyedBucketMasses = payMassIndex smallest <$> keyedBucketMasses bucket
+            }
+      where
+        original = keyedBucketStatic bucket
+        smallest = minimumMemberSize $ outcomeSizeIndex $ staticOutcomes original
 payGroupsWith _ recursive (CyclicGrouped result) =
     CyclicGrouped $ fmap (Map.mapWithKey payGroup) result
   where

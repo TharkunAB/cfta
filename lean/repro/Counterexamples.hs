@@ -3,7 +3,7 @@
 -- | Check the three original findings against the repaired implementation.
 module Main (main) where
 
-import qualified Data.Tree as Tree
+import qualified Data.CFTA.Term as Term
 
 import Data.CFTA.Constraint (contractTermName, semanticConstraint)
 import qualified Data.CFTA.Gen.Refinement as G
@@ -16,8 +16,8 @@ import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 main :: IO ()
 main = withZ3 [] $ \solver -> do
     let p = path [0]
-        child = Tree.Node (RefinedSymbol "x" (variable "v" .>= 0)) []
-        term = Tree.Node (RefinedSymbol "host" true) [child]
+        child = Term.Node (RefinedSymbol "x" (variable "v" .>= 0)) []
+        term = Term.Node (RefinedSymbol "host" true) [child]
         alias =
             semanticConstraint $
                 Holds
@@ -44,12 +44,12 @@ main = withZ3 [] $ \solver -> do
     print $ fmap (\g -> [G.sizeOfRank g rank | rank <- [0, 1]]) result
     putStrLn "Shrinks after observation: expected no strictly smaller peer"
     print $ fmap (\g -> [G.smallerMembers g rank | rank <- [0, 1]]) result
-    putStrLn "Values at size at most 1, before and after observation"
-    print $ G.values $ G.upToSize 1 unobserved
-    print $ result >>= G.values . G.upToSize 1
-    putStrLn "Exact probabilities at size at most 1, before and after observation"
-    print $ G.pmf $ G.upToSize 1 unobserved
-    print $ result >>= G.pmf . G.upToSize 1
+    putStrLn "Values at size at most 2, before and after observation"
+    print $ G.values $ G.upToSize 2 unobserved
+    print $ result >>= G.values . G.upToSize 2
+    putStrLn "Exact probabilities at size at most 2, before and after observation"
+    print $ G.pmf $ G.upToSize 2 unobserved
+    print $ result >>= G.pmf . G.upToSize 2
     let a = Node [Transition "a" true [] noConstraint]
         b = Node [Transition "b" true [] noConstraint]
         unequalChildren = semanticConstraint $ Not $ Same (path [0]) (path [1])

@@ -50,15 +50,17 @@ import Data.CFTA.Gen.Internal.Bucket (
     MassIndex (..),
     mergeComponentsByKey,
     pairMassIndex,
+    payMassIndex,
  )
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import Data.CFTA.Gen.Internal.Grouped (groupKeys)
 import Data.CFTA.Gen.Internal.Static (
     Outcome (outcomeMass),
-    OutcomeIndex (outcomeSelect),
+    OutcomeIndex (outcomeSelect, outcomeSizeIndex),
     RootCount (..),
     Static (staticAtomic, staticOutcomes, staticRootCount),
     addRootCounts,
+    atomicStatic,
     commonRootCount,
     holeStatic,
     labelStaticMatching,
@@ -75,13 +77,13 @@ import Data.CFTA.Index (
     Cardinality (..),
     Depth (..),
     Rank (..),
-    Size (..),
     VarIndex (..),
     Weight (..),
     childIndexes,
     countWeight,
     everyRank,
  )
+import Data.CFTA.Ranked.Internal.Size (minimumMemberSize)
 import Data.CFTA.Refinement
 import Data.CFTA.Refinement.Expression (
     definingTerm,
@@ -422,11 +424,10 @@ groupBuilt requested generator
     rebuild size forest value = keepSize size $ case forest of
         [Term.Node label children] -> node label $ withChildren children value
         _ -> withChildren forest value
-    keepSize size rebuilt
-        | atomicSource = atomic rebuilt
-        | otherwise = case (size, genLanguage rebuilt) of
-            (Just original, TransparentLanguage result) -> Gen Built $ TransparentLanguage $ resizedStatic original <$> result
-            _ -> rebuilt
+    keepSize size rebuilt = case (size, genLanguage rebuilt) of
+        (Just original, TransparentLanguage result) ->
+            Gen Built $ TransparentLanguage $ resizedStatic original . (if atomicSource then atomicStatic else id) <$> result
+        _ -> rebuilt
     atomicSource = case genLanguage generator of
         TransparentLanguage (Right static) -> staticAtomic static
         _ -> False
@@ -910,9 +911,14 @@ compileOpenNode compiler requested labelling constraint child
     labelGroups (Grouped result) = Grouped $ Map.mapWithKey labelBucket <$> result
     labelGroups cyclic = nodeWithKey closeLabel cyclic
     labelBucket childKeys bucket =
-        bucket{keyedBucketStatic = labelStaticMatching (fills label) label $ keyedBucketStatic bucket}
+        bucket
+            { keyedBucketStatic = labelStaticMatching (fills label) label originalStatic
+            , keyedBucketMasses = payMassIndex smallest <$> keyedBucketMasses bucket
+            }
       where
         label = closeLabel childKeys
+        originalStatic = keyedBucketStatic bucket
+        smallest = minimumMemberSize $ outcomeSizeIndex $ staticOutcomes originalStatic
     fills label@(RefinedSymbol symbol _) found@(RefinedSymbol foundSymbol _)
         | symbolic label = foundSymbol == symbol
         | otherwise = found == label
