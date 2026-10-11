@@ -35,7 +35,7 @@ naturalValue :: Natural -> Integer
 naturalValue Zero = 0
 naturalValue (Successor child) = 1 + naturalValue child
 
--- | Import heights zero through two, and keep the positive ones as denominators.
+-- | Import the terms of depth zero to two, and keep the positive ones as denominators.
 divisions :: LTAGen.LTAGen (Integer, Integer, Integer)
 divisions = LTAGen.node "divide" $ LTAGen.do
     numerator <- LTAGen.elements [12, 24]

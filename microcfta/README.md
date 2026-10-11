@@ -800,7 +800,7 @@ node. Wrap a raw `Transition` in `Right` to include it in the same list.
 
 `denotationAtMost` is the small, materializing implementation of Figure 6. It
 bounds the graph with `boundDepth`, so it works for cyclic LTAs under an
-explicit tree-height bound, and it is the semantics oracle against which
+explicit depth bound, and it is the semantics oracle against which
 optimized pruning and generation can be checked.
 
 ### Visualize a refined automaton

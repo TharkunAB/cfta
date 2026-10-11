@@ -126,7 +126,7 @@ ltaTerms depth = do
     result <- denotationAtMost (entailmentWithBindings (\_ _ _ -> pure Yes)) depth ltaExpressions
     either (error . show) sizes result
 
--- | pair(q, q) with the guard [0] = [1] over expressions of height at most two: 302 terms, 91,204 candidate pairs.
+-- | pair(q, q) with the guard [0] = [1] over expressions of depth at most two: 302 terms, 91,204 candidate pairs.
 ltaEqualPair :: Automaton
 ltaEqualPair =
     Node
