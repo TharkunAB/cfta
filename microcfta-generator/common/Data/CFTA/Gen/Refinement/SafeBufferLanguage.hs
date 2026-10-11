@@ -18,7 +18,6 @@ module Data.CFTA.Gen.Refinement.SafeBufferLanguage (
     RefinedBuffer (..),
     Program (..),
     variable,
-    solverDeclarations,
     solverAssumptions,
     sourceBuffers,
     appendedBuffers,
@@ -31,13 +30,11 @@ module Data.CFTA.Gen.Refinement.SafeBufferLanguage (
 ) where
 
 import Data.String (fromString)
-import qualified Language.Fixpoint.Types as Fixpoint
 
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Refinement (Formula, Symbol (RefinedSymbol))
 import Data.CFTA.Refinement.Expression (Expr, Refinement, refinementFormula, variable, (.&&), (.<), (.<=), (.==), (.>=))
 import Data.CFTA.Refinement.Guard (contract)
-import Data.CFTA.Symbol (valueName)
 
 -- | Buffer expressions understood by the example interpreter.
 data BufferExpression
@@ -57,13 +54,6 @@ data Program
     = ReadAt !BufferExpression !Int
     | ReadHead !BufferExpression
     deriving (Eq, Ord, Show)
-
--- | Integer names used by guards and their ambient typing environment.
-solverDeclarations :: [(Fixpoint.Symbol, Fixpoint.Sort)]
-solverDeclarations =
-    [ (Fixpoint.symbol name, Fixpoint.FInt)
-    | name <- valueName : "n" : "m" : map fst namedIntegers
-    ]
 
 -- | Facts a Liquid typing environment knows about the named inputs.
 solverAssumptions :: [Formula]

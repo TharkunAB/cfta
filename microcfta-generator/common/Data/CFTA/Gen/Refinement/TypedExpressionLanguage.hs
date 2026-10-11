@@ -11,7 +11,6 @@ module Data.CFTA.Gen.Refinement.TypedExpressionLanguage (
     variable,
     nonNegative,
     nonZero,
-    solverDeclarations,
     atoms,
     nonNegativeExpressions,
     divisions,
@@ -19,14 +18,11 @@ module Data.CFTA.Gen.Refinement.TypedExpressionLanguage (
     dependentApplications,
 ) where
 
-import qualified Language.Fixpoint.Types as Fixpoint
-
 import Data.CFTA.Gen.Refinement.ExampleSupport (nonNegative)
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Refinement (Formula, Symbol)
 import Data.CFTA.Refinement.Expression (Refinement, refinementFormula, true, variable, (./=), (.==))
 import Data.CFTA.Refinement.Guard (allOf, descendant, isSubtypeOf, withActualFor)
-import Data.CFTA.Symbol (valueName)
 
 -- | Expressions used by the LTA capability examples.
 data Expression
@@ -48,13 +44,6 @@ data RefinedExpression = RefinedExpression
 -- | The non-zero integer refinement.
 nonZero :: Refinement
 nonZero v = v ./= 0
-
--- | All free integer symbols that can reach a solver query in the examples.
-solverDeclarations :: [(Fixpoint.Symbol, Fixpoint.Sort)]
-solverDeclarations =
-    [ (Fixpoint.symbol name, Fixpoint.FInt)
-    | name <- [valueName, "x", "y", "p", "n"] :: [String]
-    ]
 
 -- | Atoms ordered from least information to more useful concrete witnesses.
 atoms :: LTAGen.LTAGen RefinedExpression

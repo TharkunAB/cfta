@@ -11,7 +11,7 @@ spec :: Spec
 spec =
     describe "dependent function application" $ do
         it "matches result refinements after actual-for-formal substitution" $
-            withZ3 solverDeclarations $ \solver -> do
+            withZ3 [] $ \solver -> do
                 result <- LTAGen.compileWith solver dependentApplications
                 case result of
                     Left err -> expectationFailure $ show err
@@ -22,7 +22,7 @@ spec =
                                        ]
 
         it "prunes the negative argument before it reaches QuickCheck" $
-            withZ3 solverDeclarations $ \solver -> do
+            withZ3 [] $ \solver -> do
                 result <- LTAGen.compileWith solver dependentApplications
                 case result of
                     Left err -> expectationFailure $ show err

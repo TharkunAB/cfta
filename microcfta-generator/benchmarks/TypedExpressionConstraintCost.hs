@@ -12,7 +12,6 @@ import qualified Test.QuickCheck as QC
 import qualified Data.CFTA.Gen.Equality.QuickCheck as ECTAGen
 import Data.CFTA.Gen.Refinement.EqualityTypedExpressionLanguage (
     compileEqualityExpressionsAtDepth,
-    solverDeclarations,
  )
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.TypedExpressionLanguage (
@@ -46,7 +45,7 @@ benchmark =
 prepare :: String -> Int -> IO (QC.Gen TypedExpression)
 prepare "ecta" depth = pure $ ECTAGen.toGen $ expressionGenAtDepth depth
 prepare "lta-eq" depth =
-    withZ3 solverDeclarations $ \solver -> do
+    withZ3 [] $ \solver -> do
         result <- compileEqualityExpressionsAtDepth solver depth
         case result of
             Left err -> fail $ "could not compile equality-refined LTA: " <> show err

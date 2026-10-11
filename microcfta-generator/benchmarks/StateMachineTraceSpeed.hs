@@ -49,7 +49,7 @@ prepare "bespoke" length_ = pure $ handwrittenTraceGen length_
 prepare "ranked" length_ = pure $ rankedTraceGen length_
 prepare "lta" length_ = prepare "lta-do" length_
 prepare "lta-do" length_ =
-    withZ3Assuming solverDeclarations solverAssumptions $ \solver -> do
+    withZ3Assuming [] solverAssumptions $ \solver -> do
         result <- compileTracesOfLength solver length_
         case result of
             Left err -> fail $ "could not compile LTA benchmark: " <> LTAGen.explain err
@@ -58,7 +58,7 @@ prepare "lta-do" length_ =
                     pure $ LTAGen.toGen compiled
                 | otherwise -> fail "LTA cardinality differs from the independent trace count"
 prepare "lta-automaton" length_ =
-    withZ3Assuming solverDeclarations solverAssumptions $ \solver -> do
+    withZ3Assuming [] solverAssumptions $ \solver -> do
         result <- compileTraceAutomaton solver length_
         case result of
             Left err -> fail $ "could not compile the trace automaton: " <> LTAGen.explain err

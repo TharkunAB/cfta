@@ -1435,7 +1435,7 @@ draws a buffer with ``allBuffers `satisfying` (\v -> v .>= 1)``, so it can prove
 the appended buffer non-empty. The property itself needs no precondition:
 
 ```haskell
-withZ3Assuming solverDeclarations solverAssumptions $ \solver -> do
+withZ3Assuming [] solverAssumptions $ \solver -> do
   Right compiled <- LTAGen.compileWith solver safePrograms
   quickCheck $ LTAGen.forAll compiled $ \program ->
     programIsSafe program && safeResult program == Just (runProgram program)

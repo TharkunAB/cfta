@@ -20,7 +20,6 @@ module Data.CFTA.Gen.Refinement.SizedVectorLanguage (
     VectorExpression (..),
     SizedVector (..),
     Program (..),
-    solverDeclarationsAtDepth,
     sourceVectors,
     vectorsAtDepth,
     safeProgramsAtDepth,
@@ -31,13 +30,11 @@ module Data.CFTA.Gen.Refinement.SizedVectorLanguage (
 ) where
 
 import Data.String (fromString)
-import qualified Language.Fixpoint.Types as Fixpoint
 
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Refinement (Formula, Symbol (RefinedSymbol))
 import Data.CFTA.Refinement.Expression (Expr, Refinement, refinementFormula, (.&&), (.<), (.<=), (.==))
 import Data.CFTA.Refinement.Guard (contract)
-import Data.CFTA.Symbol (valueName)
 
 -- | Pure syntax for a small sized-vector pipeline.
 data VectorExpression
@@ -57,17 +54,6 @@ data SizedVector = SizedVector
 -- | A partial indexing operation over a generated pipeline.
 data Program = Index !VectorExpression !Int
     deriving (Eq, Ord, Show)
-
--- | Integer names that occur in the dependent contracts at one depth.
-solverDeclarationsAtDepth :: Int -> [(Fixpoint.Symbol, Fixpoint.Sort)]
-solverDeclarationsAtDepth requestedDepth =
-    [ (Fixpoint.symbol name, Fixpoint.FInt)
-    | name <-
-        [valueName, "n", "m", "k", "i"]
-            <> map numberName [-1 .. maximumLength]
-    ]
-  where
-    maximumLength = maximumLengthAtDepth requestedDepth
 
 -- | Three ordinary vector inputs with distinct lengths.
 sourceVectors :: LTAGen.LTAGen SizedVector
