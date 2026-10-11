@@ -433,7 +433,7 @@ groupBuilt requested generator
         _ -> False
     -- A member keeps its weight inside its size class in the source, so the
     -- merges of the groups keep the source's distribution inside a size class.
-    -- The atomic rebuild keeps the weights of an atomic source already.
+    -- A later product is not atomic, so atomic members also need this weight.
     keyedMember rank size key rebuilt = case (sourceWeight, size, genLanguage rebuilt) of
         (Just weightOf, Just memberSize, TransparentLanguage result) ->
             Grouped $ do
@@ -441,11 +441,9 @@ groupBuilt requested generator
                 weight <- weightOf $ toEnum rank
                 pure $ Map.singleton key $ KeyedBucket 1 static $ Just $ MassIndex [(memberSize, weight)]
         _ -> keyed key rebuilt
-    sourceWeight
-        | atomicSource = Nothing
-        | otherwise = case genLanguage generator of
-            TransparentLanguage (Right static) -> snd $ staticSampling static
-            _ -> Nothing
+    sourceWeight = case genLanguage generator of
+        TransparentLanguage (Right static) -> snd $ staticSampling static
+        _ -> Nothing
 
     -- The label at one path of a term, and whether it is a leaf.
     labelAt :: Path -> Term Symbol -> Maybe Observed
@@ -913,12 +911,12 @@ compileOpenNode compiler requested labelling constraint child
     labelBucket childKeys bucket =
         bucket
             { keyedBucketStatic = labelStaticMatching (fills label) label originalStatic
-            , keyedBucketMasses = payMassIndex smallest <$> keyedBucketMasses bucket
+            , keyedBucketMasses = payMassIndex sourceMinimum <$> keyedBucketMasses bucket
             }
       where
         label = closeLabel childKeys
         originalStatic = keyedBucketStatic bucket
-        smallest = minimumMemberSize $ outcomeSizeIndex $ staticOutcomes originalStatic
+        sourceMinimum = minimumMemberSize $ outcomeSizeIndex $ staticOutcomes originalStatic
     fills label@(RefinedSymbol symbol _) found@(RefinedSymbol foundSymbol _)
         | symbolic label = foundSymbol == symbol
         | otherwise = found == label

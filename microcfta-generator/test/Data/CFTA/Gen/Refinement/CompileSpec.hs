@@ -137,9 +137,16 @@ spec = do
                         LTAGen.atomic $
                             LTAGen.frequency [(9, LTAGen.leaf (0 :: Int) "a" (exact 0)), (1, LTAGen.leaf 1 "b" (exact 1))]
                     pair guard = LTAGen.refinedNode "pair" (const true) guard $ (,) <$> weighted <*> LTAGen.elements [7 :: Int]
+                    expected = [((0, 7), 9 % 10), ((1, 7), 1 % 10)]
+                    sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
+                    repeated generator = LTAGen.recur $ \rest -> LTAGen.oneof [(: []) <$> generator, (:) <$> generator <*> rest]
                 forM_ [pair (\left _ -> left `requires` nonNegative), pair (\_ right -> right `requires` nonNegative)] $ \generator -> do
                     compiled <- compileOrFail solver generator
                     massesByRank compiled `shouldBe` [(0, 9 % 10), (1, 1 % 10)]
+                    LTAGen.pmf (LTAGen.upToSize 3 compiled) `shouldBe` Right expected
+                    sampled (LTAGen.upToSize 3 compiled) `shouldBe` expected
+                    forM_ [3, 6] $ \size ->
+                        LTAGen.pmfAtSize (repeated compiled) size `shouldBe` LTAGen.pmfAtSize (repeated $ pair noConstraint) size
 
         it "keeps the sizes of an atomic choice whether or not a guard reads it" $
             withZ3 declarations $ \solver -> do
