@@ -38,8 +38,8 @@ directly:
   occurrence of an enclosing recursion is an error. A join, a grouping, or an
   application over a recursion that failed gives the error of that recursion.
 
-The model lists every member of a size class, so it is slow. It is correct
-because it is simple.
+The model lists every member of a size class, so it is slow. Each rule is a
+few lines, so a reader can check it against the rules above.
 -}
 module Data.CFTA.Gen.Reference (
     -- * Descriptions

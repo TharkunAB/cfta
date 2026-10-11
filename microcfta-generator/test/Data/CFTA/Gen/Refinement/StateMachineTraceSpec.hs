@@ -34,7 +34,7 @@ spec =
             map LTAGen.cardinality compiled
                 `shouldBe` [Right $ Cardinality $ traceCount length_ (StackState []) | length_ <- [1 .. 4]]
 
-        it "counts the deeper benchmark language without enumerating traces" $
+        it "keeps the independent trace counts through length ten" $
             -- These constants are the values traceCount produced when the
             -- trace grammar was fixed. They lock the grammar; the compiled
             -- languages agree with traceCount for lengths one to four above
@@ -42,7 +42,7 @@ spec =
             [traceCount length_ (StackState []) | length_ <- [1 .. 10]]
                 `shouldBe` [4, 22, 132, 556, 3104, 13760, 73528, 342136, 1783112, 8567224]
 
-        it "compiles the qualified-do surface beyond the old length-six wall" $ do
+        it "compiles the qualified-do surface at length ten" $ do
             compiled <- compileTraceOrFail 10
             LTAGen.cardinality compiled `shouldBe` Right (Cardinality $ traceCount 10 (StackState []))
 
@@ -94,7 +94,7 @@ spec =
                          in refinement == stateRefinement (traceFinalState trace)
                     )
 
-        it "shrinks only to shorter traces whose stack preconditions still hold" $ do
+        it "shrinks to smaller traces, some shorter, whose stack preconditions still hold" $ do
             compiled <- compileOrFail $ tracesUpTo 3
             let ranked = zip (ranks compiled) (values compiled)
                 lengthThreeRanks =

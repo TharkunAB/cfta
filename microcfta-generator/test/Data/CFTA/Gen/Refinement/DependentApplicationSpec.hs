@@ -10,7 +10,7 @@ import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 spec :: Spec
 spec =
     describe "dependent function application" $ do
-        it "matches result refinements after actual-for-formal substitution" $
+        it "keeps the positive arguments x and p and prunes the negative y" $
             withZ3 [] $ \solver -> do
                 result <- LTAGen.compileWith solver dependentApplications
                 case result of
@@ -20,11 +20,3 @@ spec =
                             `shouldBe` [ ApplyIncrement (Variable "x")
                                        , ApplyIncrement (Variable "p")
                                        ]
-
-        it "prunes the negative argument before it reaches QuickCheck" $
-            withZ3 [] $ \solver -> do
-                result <- LTAGen.compileWith solver dependentApplications
-                case result of
-                    Left err -> expectationFailure $ show err
-                    Right compiled -> do
-                        ApplyIncrement (Variable "y") `elem` map expression (values compiled) `shouldBe` False

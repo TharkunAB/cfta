@@ -419,7 +419,7 @@ spec = do
             traverse (ECTAGen.countAtSize traces) [1 .. 3]
                 `shouldBe` Right [4, 16, 64]
 
-        it "requires a recursive or opaque language to cross a finite boundary" $ do
+        it "refuses atomic over a recursive or an opaque language, and accepts a bound" $ do
             let recursive = ECTAGen.fromAutomaton typeAutomaton
                 bounded = ECTAGen.atomic $ ECTAGen.upToSize 2 recursive
                 opaque = ECTAGen.atomic $ ECTAGen.fromGen (pure True)
@@ -684,7 +684,7 @@ spec = do
             let choiceUnderNode :: ECTAGen Int
                 choiceUnderNode = ECTAGen.node "n" (ECTAGen.oneof [ECTAGen.elements [1, 2], ECTAGen.elements [3, 4]])
             (ECTAGen.ranksOf choiceUnderNode =<< ECTAGen.termAt choiceUnderNode 0) `shouldBe` Right [0, 2]
-            ECTAGen.rankOf rankTree (Tree.Node (ECTAGen.Label "other") []) `shouldBe` Left TermNotInLanguage
+            ECTAGen.rankOf trees (Tree.Node (ECTAGen.Label "other") []) `shouldBe` Left TermNotInLanguage
 
         it "rank a deep term under a choice of labels in time linear in its depth" $ do
             -- An alternative with another label than the term read the whole
@@ -717,10 +717,10 @@ spec = do
                 binary = ECTAGen.keyed (() :* () :-> ()) $ ECTAGen.elements [(<>)]
                 family = ECTAGen.recurGrouped $ \self -> ECTAGen.oneofGrouped [rankAtoms, ECTAGen.apply rankOperators (self :& ANil)]
                 family2 = ECTAGen.recurGrouped $ \self -> ECTAGen.oneofGrouped [rankAtoms, ECTAGen.apply binary (self :& self :& ANil)]
-            roundTrips rankTree [0 .. 150]
+            roundTrips trees [0 .. 150]
             roundTrips labelled [0 .. 150]
-            roundTrips (show <$> rankTree) [0 .. 50]
-            roundTrips (ECTAGen.upToSize 4 rankTree) [0 .. 120]
+            roundTrips (show <$> trees) [0 .. 50]
+            roundTrips (ECTAGen.upToSize 4 trees) [0 .. 120]
             roundTrips (ECTAGen.atKey () family) [0 .. 100]
             roundTrips (ECTAGen.ungroup family2) [0 .. 100]
 
@@ -758,10 +758,6 @@ changedAt change term =
     [ snd $ mapAccumL (\index label -> (index + 1, if index == position then changed else label)) (0 :: Int) term
     | (position, Just changed) <- zip [0 ..] $ map change $ Tree.flatten term
     ]
-
--- | A recursive language of binary trees.
-rankTree :: ECTAGen Tree
-rankTree = ECTAGen.recur $ \self -> ECTAGen.oneof [Leaf <$> ECTAGen.elements [0 .. 2], Branch <$> self <*> self]
 
 -- | Two atoms under one key.
 rankAtoms :: ECTAGen.Grouped () String

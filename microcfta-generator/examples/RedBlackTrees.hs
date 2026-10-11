@@ -76,4 +76,4 @@ main = do
                     LTAGen.unrank compiled rank == Right tree
                 ]
     unless (QC.isSuccess result) $
-        fail "red-black trees, their replay, or their shrinking failed"
+        fail "red-black trees or their replay failed"

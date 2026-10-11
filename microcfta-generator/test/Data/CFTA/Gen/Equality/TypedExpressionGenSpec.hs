@@ -132,7 +132,7 @@ referenceExpressions depth TBool =
     integers = referenceExpressions (depth - 1) TInt
     booleans = referenceExpressions (depth - 1) TBool
 
--- | Exercise the same generators and invariants as the prototype executable.
+-- | The typed-expression generators against independent type inference.
 spec :: Spec
 spec =
     describe "typed expression generation" $ do

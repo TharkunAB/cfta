@@ -382,7 +382,7 @@ importAgreement (RandomAutomaton automaton) =
                               where
                                 size = toInteger $ length term
                        | rank <- take rankBound [0 ..]
-                       , maybe False (<= Size sizeBound) $ Gen.sizeOfRank recursiveGenerator rank
+                       , maybe True (<= Size sizeBound) $ Gen.sizeOfRank recursiveGenerator rank
                        ]
 
 -- | The largest size that a property reads.
