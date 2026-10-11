@@ -58,9 +58,6 @@ instance Tree.GenBackend QuickCheckBackend where
             let upperBound = total + weight
              in (upperBound, (upperBound, generated))
 
-    filterGen predicate (QuickCheckBackend generated) =
-        QuickCheckBackend $ generated `QC.suchThat` predicate
-
 -- | Lower a ranked language to a QuickCheck generator.
 toGen :: Tree.Ranked a -> QC.Gen a
 toGen ranked = case Tree.lower ranked of

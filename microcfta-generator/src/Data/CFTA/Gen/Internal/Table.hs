@@ -1,7 +1,6 @@
 -- | Shared size indexing for ordinary, possibly recursive automata.
 module Data.CFTA.Gen.Internal.Table (
     rowsOf,
-    automatonIndex,
     tableIndex,
     tablePosition,
     minimumSizes,
@@ -53,14 +52,6 @@ rowsOf root =
         [ (NodeId ident, [FTA.Transition (edgeSymbol edge) (map nodeIdentity $ edgeChildren edge) () | edge <- edges])
         | (ident, edges) <- IntMap.toList (reachable root)
         ]
-
-{- | Count accepting runs by their number of tree nodes.
-
-Ranks are size-major. Ambiguous automata can assign several ranks to one term.
-Each state shares one index, including recursive references to that index.
--}
-automatonIndex :: (Ord state) => FTA.FTA state symbol () -> SizeIndex (Tree.Tree symbol)
-automatonIndex automaton = tableIndex (FTA.initialState automaton) (FTA.transitionTable automaton)
 
 {- | Index ordinary transition rows supplied by a graph adapter.
 

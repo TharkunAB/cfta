@@ -54,7 +54,7 @@ import Data.CFTA.Ranked.Internal.Size (
     sizeClassSelect,
  )
 
--- | Operations a sampling backend provides. 'filterGen' serves adapters that retry a backend-native generator.
+-- | Operations a sampling backend provides.
 class (Applicative gen) => GenBackend gen where
     -- | Select a rank of a language with the given cardinality, in @[0, cardinality)@.
     selectInteger :: Cardinality -> gen Rank
@@ -74,9 +74,6 @@ class (Applicative gen) => GenBackend gen where
     -}
     selectWeighted :: [(Weight, a)] -> (Int, Int -> a) -> gen a
     selectWeighted _ (bound, decode) = decode <$> selectInt bound
-
-    -- | Retry until the generated value satisfies a predicate.
-    filterGen :: (a -> Bool) -> gen a -> gen a
 
 -- | A finite exact interpretation of one sampler, for distribution checks.
 newtype Exact a = Exact {runExact :: [(Rational, a)]}
@@ -116,17 +113,6 @@ instance GenBackend Exact where
         Exact [(toRational weight / toRational totalWeight, value) | (weight, value) <- weighted]
       where
         totalWeight = sum $ map fst weighted
-
-    filterGen predicate (Exact outcomes)
-        | acceptedMass <= 0 = Exact []
-        | otherwise =
-            Exact
-                [ (mass / acceptedMass, value)
-                | (mass, value) <- accepted
-                ]
-      where
-        accepted = filter (predicate . snd) outcomes
-        acceptedMass = sum $ map fst accepted
 
 -- | Backend-independent plans for sampling a value, with or without its rank.
 data Sampler a = Sampler

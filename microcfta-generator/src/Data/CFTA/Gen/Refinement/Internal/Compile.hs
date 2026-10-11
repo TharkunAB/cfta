@@ -311,7 +311,10 @@ compileGenOnce compiler requested generator
         Closed symbol constraint child -> compileNode compiler requested (FixedLabel symbol) constraint child
         ClosedBy symbolOf constraint child -> compileNode compiler requested (ComputedLabel symbolOf) constraint child
         Imported bound order automaton -> compileImport (compilerEntailment compiler) requested bound order automaton
-        Integers constraint -> pure $ integerGroup constraint >>= closeOpen
+        Integers _ ->
+            error
+                "microcfta-generator bug in Data.CFTA.Gen.Refinement.Internal.Compile.compileGenOnce: \
+                \an integer leaf reached it, but compileGen sends such a leaf to compileOpen"
   where
     -- A choice of the compiled alternatives, with one weight for each.
     choose weights groups =
@@ -629,7 +632,10 @@ compileOpen compiler requested generator =
                                         ]
                         Closed symbol constraint child -> compileOpenNode compiler requested (FixedLabel symbol) constraint child
                         ClosedBy symbolOf constraint child -> compileOpenNode compiler requested (ComputedLabel symbolOf) constraint child
-                        _ -> pure $ Left SourceRequiresCompilation
+                        _ ->
+                            error
+                                "microcfta-generator bug in Data.CFTA.Gen.Refinement.Internal.Compile.compileOpen: \
+                                \a generator without an integer leaf reached the open path"
   where
     members grouped = case cardinalities grouped of
         Right counts -> countWeight . sum <$> traverse (uncurry pointsOf) (Map.toList counts)
