@@ -50,6 +50,7 @@ import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..), SizeClass (..), offs
 import Data.CFTA.Ranked.Internal.Size (
     SizeIndex,
     countAtSize,
+    sizeClassCounts,
     sizeClassSelect,
  )
 

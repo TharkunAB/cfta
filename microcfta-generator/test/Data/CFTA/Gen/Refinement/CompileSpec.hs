@@ -151,13 +151,13 @@ spec = do
                     outer guard = LTAGen.refinedNode "outer" (const true) guard atom
                 compiled <- compileOrFail solver $ outer (`requires` const true)
                 map (LTAGen.sizeOfRank compiled) [0, 1] `shouldBe` map (LTAGen.sizeOfRank $ outer noConstraint) [0, 1]
-                LTAGen.pmf (LTAGen.upToSize 1 compiled) `shouldBe` Right [(0, 1 % 2), (1, 1 % 2)]
+                LTAGen.pmf (LTAGen.upToSize 2 compiled) `shouldBe` Right [(0, 1 % 2), (1, 1 % 2)]
                 map (LTAGen.smallerMembers compiled) [0, 1] `shouldBe` [[], []]
 
         it "keeps the sizes of a built source whether or not a guard reads it" $
             withZ3 declarations $ \solver -> do
                 -- Behind keyed and ungroup a language is a built source. A node
-                -- adds no source choice and a product adds the sizes of its
+                -- adds one to the size and a product adds the sizes of its
                 -- parts, so a member's size is not the number of its nodes.
                 let choice = LTAGen.oneof [LTAGen.leaf (0 :: Int) "a" (const true), LTAGen.node "wrap" $ LTAGen.leaf 1 "b" (const true)]
                     built = LTAGen.ungroup $ LTAGen.keyed () choice
@@ -169,12 +169,12 @@ spec = do
                             $ (,) <$> LTAGen.atomic choice <*> LTAGen.leaf (7 :: Int) "c" (const true)
                     outerPair guard = LTAGen.refinedNode "outer" (const true) guard paired
                 compiled <- compileOrFail solver $ outer (`requires` const true)
-                map (LTAGen.sizeOfRank compiled) [0, 1] `shouldBe` map (LTAGen.sizeOfRank built) [0, 1]
-                LTAGen.pmf (LTAGen.upToSize 1 compiled) `shouldBe` LTAGen.pmf (LTAGen.upToSize 1 $ outer noConstraint)
-                map (LTAGen.smallerMembers compiled) [0, 1] `shouldBe` [[], []]
+                map (LTAGen.sizeOfRank compiled) [0, 1] `shouldBe` map (fmap (+ 1) . LTAGen.sizeOfRank built) [0, 1]
+                LTAGen.pmf (LTAGen.upToSize 2 compiled) `shouldBe` LTAGen.pmf (LTAGen.upToSize 2 $ outer noConstraint)
+                map (LTAGen.smallerMembers compiled) [0, 1] `shouldBe` [[], [LTAGen.RankedValue 0 0]]
                 compiledPair <- compileOrFail solver $ outerPair (`requires` const true)
-                map (LTAGen.sizeOfRank compiledPair) [0, 1] `shouldBe` map (LTAGen.sizeOfRank paired) [0, 1]
-                LTAGen.pmf (LTAGen.upToSize 2 compiledPair) `shouldBe` LTAGen.pmf (LTAGen.upToSize 2 $ outerPair noConstraint)
+                map (LTAGen.sizeOfRank compiledPair) [0, 1] `shouldBe` map (fmap (+ 1) . LTAGen.sizeOfRank paired) [0, 1]
+                LTAGen.pmf (LTAGen.upToSize 4 compiledPair) `shouldBe` LTAGen.pmf (LTAGen.upToSize 4 $ outerPair noConstraint)
 
         it "keeps the sizes of a node with several children when a guard reads one" $
             withZ3 declarations $ \solver -> do
@@ -187,7 +187,7 @@ spec = do
                     readsChild = Satisfies (path [0]) true
                 compiledPair <- compileOrFail solver $ LTAGen.refinedNode "n" (const true) readsChild pair
                 map (LTAGen.sizeOfRank compiledPair) [0, 1] `shouldBe` map (LTAGen.sizeOfRank $ LTAGen.node "n" pair) [0, 1]
-                LTAGen.cardinality (LTAGen.upToSize 2 compiledPair) `shouldBe` Right 2
+                LTAGen.cardinality (LTAGen.upToSize 4 compiledPair) `shouldBe` Right 2
                 compiledTriple <- compileOrFail solver $ LTAGen.refinedNode "n" (const true) readsChild triple
                 map (LTAGen.sizeOfRank compiledTriple) [0, 1] `shouldBe` map (LTAGen.sizeOfRank $ LTAGen.node "n" triple) [0, 1]
 
@@ -206,11 +206,11 @@ spec = do
                     outer guard = LTAGen.refinedNode "outer" (const true) guard built
                     expected = [((0, 7), 1 % 4), ((1, 7), 3 % 4)]
                     sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
-                LTAGen.pmf (LTAGen.upToSize 2 $ outer noConstraint) `shouldBe` Right expected
+                LTAGen.pmf (LTAGen.upToSize 4 $ outer noConstraint) `shouldBe` Right expected
                 forM_ [Satisfies (path [0]) true, Satisfies (path [0, 0]) true] $ \guard -> do
                     compiled <- compileOrFail solver $ outer guard
-                    LTAGen.pmf (LTAGen.upToSize 2 compiled) `shouldBe` Right expected
-                    sampled (LTAGen.upToSize 2 compiled) `shouldBe` expected
+                    LTAGen.pmf (LTAGen.upToSize 4 compiled) `shouldBe` Right expected
+                    sampled (LTAGen.upToSize 4 compiled) `shouldBe` expected
 
         it "keeps the weights of each size class when the groups of a built source have several sizes" $
             withZ3 declarations $ \solver -> do
@@ -231,10 +231,10 @@ spec = do
                     outer guard = LTAGen.refinedNode "outer" (const true) guard built
                     expected = [(Left 0, 1 % 8), (Left 1, 3 % 8), (Right (0, 7), 3 % 8), (Right (1, 7), 1 % 8)]
                     sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
-                LTAGen.pmf (LTAGen.upToSize 2 $ outer noConstraint) `shouldBe` Right expected
+                LTAGen.pmf (LTAGen.upToSize 4 $ outer noConstraint) `shouldBe` Right expected
                 compiled <- compileOrFail solver $ outer $ Satisfies (path [0, 0]) true
-                LTAGen.pmf (LTAGen.upToSize 2 compiled) `shouldBe` Right expected
-                sampled (LTAGen.upToSize 2 compiled) `shouldBe` expected
+                LTAGen.pmf (LTAGen.upToSize 4 compiled) `shouldBe` Right expected
+                sampled (LTAGen.upToSize 4 compiled) `shouldBe` expected
 
         it "keeps the weights inside a size class when a guard reads one child of a pair" $
             withZ3 declarations $ \solver -> do
@@ -259,10 +259,10 @@ spec = do
                             ]
                     outer guard = LTAGen.refinedNode "outer" (const true) guard $ (,) <$> left <*> right
                     sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
-                    expected = LTAGen.pmf $ LTAGen.upToSize 3 $ outer noConstraint
+                    expected = LTAGen.pmf $ LTAGen.upToSize 6 $ outer noConstraint
                 compiled <- compileOrFail solver $ outer $ Satisfies (path [0, 0]) true
-                LTAGen.pmf (LTAGen.upToSize 3 compiled) `shouldBe` expected
-                Right (sampled $ LTAGen.upToSize 3 compiled) `shouldBe` expected
+                LTAGen.pmf (LTAGen.upToSize 6 compiled) `shouldBe` expected
+                Right (sampled $ LTAGen.upToSize 6 compiled) `shouldBe` expected
                 LTAGen.pmf compiled `shouldBe` LTAGen.pmf (outer noConstraint)
 
         it "keeps the weights inside a size class when a node closes an integer leaf beside a guarded child" $

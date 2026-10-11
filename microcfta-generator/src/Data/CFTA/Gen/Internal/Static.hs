@@ -106,7 +106,14 @@ import Data.CFTA.Ranked.Internal.Decoder (
  )
 import Data.CFTA.Ranked.Internal.Sampler
 import Data.CFTA.Ranked.Internal.Shrink (planMemberSize)
-import Data.CFTA.Ranked.Internal.Size (MinimumSize (..), SizeIndex (minimumMemberSize, sizeClassCounts), payIndex, mapIndex, countAtSize, sizeIndex)
+import Data.CFTA.Ranked.Internal.Size (
+    MinimumSize (..),
+    SizeIndex (minimumMemberSize, sizeClassCounts),
+    countAtSize,
+    mapIndex,
+    payIndex,
+    sizeIndex,
+ )
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 

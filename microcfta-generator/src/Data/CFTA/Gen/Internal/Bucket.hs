@@ -40,8 +40,8 @@ import Data.CFTA.Gen.Internal.Support (singletonNode)
 import Data.CFTA.Index (Size (..))
 import Data.CFTA.Ranked.Internal.Decoder (MinimumSize (..), Plan (..), SizeIndex (minimumMemberSize))
 import Data.CFTA.Ranked.Internal.Sampler (atomicSampleIndex)
+import Data.CFTA.Ranked.Internal.Size (addSparse, fromMinimum, mulSparse, payMinimum, sizeClassCounts, valueAtSize)
 import qualified Data.CFTA.Term as Term
-import Data.CFTA.Ranked.Internal.Size (sizeClassCounts, addSparse, mulSparse, valueAtSize, fromMinimum, payMinimum)
 
 -- | One compact conditional generator and its mass in the whole distribution.
 data KeyedBucket symbol a = KeyedBucket
@@ -80,22 +80,23 @@ bucketFromOutcomes retainAtomic weightedOutcomes = do
                 sequenceSampler $
                     (\(weight, outcome) -> outcome{outcomeMass = weight}) <$> weightedOutcomes
             pure $ Just (atomicSampleIndex 1 weightSampler, Right . weightAt)
-    let static = Static
-            bucketSupport
-            ( mkOutcomeIndex
-                totalOutcomes
-                uniformMass
-                select
-                (enumeratedRanks $ toList $ outcomeTerm <$> outcomes)
-                selectValue
-                sampler
-                (PlanSelect totalOutcomes selectValue)
-            )
-                { outcomeSizeSampling = sizeSampling
-                }
-            retainAtomic
-            (Inspection Nothing $ Node [rootEdge $ outcomeInspection outcome | outcome <- toList outcomes])
-            (commonRootCount $ toList $ RootCount . termRootCount . outcomeTerm <$> outcomes)
+    let static =
+            Static
+                bucketSupport
+                ( mkOutcomeIndex
+                    totalOutcomes
+                    uniformMass
+                    select
+                    (enumeratedRanks $ toList $ outcomeTerm <$> outcomes)
+                    selectValue
+                    sampler
+                    (PlanSelect totalOutcomes selectValue)
+                )
+                    { outcomeSizeSampling = sizeSampling
+                    }
+                retainAtomic
+                (Inspection Nothing $ Node [rootEdge $ outcomeInspection outcome | outcome <- toList outcomes])
+                (commonRootCount $ toList $ RootCount . termRootCount . outcomeTerm <$> outcomes)
     pure $ KeyedBucket bucketMass static Nothing
   where
     outcomes = snd <$> weightedOutcomes
@@ -142,10 +143,11 @@ mergeBucketGroup buckets = do
         | otherwise = Nothing
     retainAtomic
         | all (staticAtomic . keyedBucketStatic) buckets
-        , first@(MinimumSize (Size size)) : rest <- map (minimumMemberSize . outcomeSizeIndex . staticOutcomes . keyedBucketStatic) buckets
+        , first@(MinimumSize (Size size)) : rest <-
+            map (minimumMemberSize . outcomeSizeIndex . staticOutcomes . keyedBucketStatic) buckets
         , all (== first) rest =
             -- An atom has size one, and each pay above it adds one.
-            \merged -> iterate payStatic (atomicStatic merged) !! fromInteger (size - 1)
+            \static -> iterate payStatic (atomicStatic static) !! fromInteger (size - 1)
         | otherwise = id
 
 -- | Merge weighted joined components into normalized result-key groups.
@@ -215,6 +217,7 @@ masses are read, as the counts of a pay do.
 payMassIndex :: MinimumSize -> MassIndex -> MassIndex
 payMassIndex smallest (MassIndex masses) =
     MassIndex $ fromMinimum (payMinimum smallest) [(size + 1, mass) | (size, mass) <- masses]
+
 {- | Convolve the mass series of two finite groups: the sizes of a pair add, and
 the masses multiply. A part can have size zero, so the series does not start
 with the zero mass at size one that 'productMassIndex' gives a recursive knot.
