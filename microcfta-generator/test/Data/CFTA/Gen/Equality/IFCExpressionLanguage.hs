@@ -58,7 +58,6 @@ module Data.CFTA.Gen.Equality.IFCExpressionLanguage (
 
 import qualified Data.Map.Strict as Map
 import Data.String (fromString)
-import qualified Data.Tree as Tree
 import qualified Test.QuickCheck as QC
 
 import Data.CFTA.Equality (Edge (Edge), Node (EmptyNode, Node))
@@ -66,6 +65,8 @@ import Data.CFTA.Gen.Equality.QuickCheck (Grouped, Sig ((:*), (:->)))
 import qualified Data.CFTA.Gen.Equality.QuickCheck as ECTAGen
 import Data.CFTA.Gen.TypedExpressionLanguage (frequencyInteger)
 import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 {- | Security labels. The derived 'Ord' is the flow order, MAC's @Less@ at
 the value level: @Public <= Private@ and nothing flows down. Because the
@@ -582,18 +583,18 @@ surfaceProgramNode depth label =
         ]
 
 -- | Read a surface term back as an expression, for readable output.
-termToExpression :: Tree.Tree Symbol -> Maybe Expression
-termToExpression (Tree.Node "print" [value]) = Print <$> termToExpression value
-termToExpression (Tree.Node "not" [value]) = Not <$> termToExpression value
-termToExpression (Tree.Node "if" [condition, ifTrue, ifFalse]) =
+termToExpression :: Term Symbol -> Maybe Expression
+termToExpression (Term.Node "print" [value]) = Print <$> termToExpression value
+termToExpression (Term.Node "not" [value]) = Not <$> termToExpression value
+termToExpression (Term.Node "if" [condition, ifTrue, ifFalse]) =
     IfExpression
         <$> termToExpression condition
         <*> termToExpression ifTrue
         <*> termToExpression ifFalse
-termToExpression (Tree.Node symbol [first, second])
+termToExpression (Term.Node symbol [first, second])
     | Just function_ <- lookup symbol binaryFunctionSymbols =
         ApplyBinary function_ <$> termToExpression first <*> termToExpression second
-termToExpression (Tree.Node symbol []) = lookup symbol atomSymbols
+termToExpression (Term.Node symbol []) = lookup symbol atomSymbols
 termToExpression _ = Nothing
 
 -- | The surface symbol of every binary function, as the automaton spells it.

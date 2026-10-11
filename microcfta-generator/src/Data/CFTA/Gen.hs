@@ -131,7 +131,6 @@ module Data.CFTA.Gen (
 import Data.Hashable (Hashable)
 import Data.String (fromString)
 import Data.Text (Text)
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 
 import qualified Data.CFTA as FTA
@@ -162,6 +161,7 @@ import Data.CFTA.Ranked.Internal (Indexed (..))
 import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
 import Data.CFTA.Refinement (AutomatonError (InconsistentArity))
 import Data.CFTA.Symbol (Symbol (Symbol))
+import Data.CFTA.Term (Term)
 
 -- | A generator over ordinary tree automata: the theory without constraints.
 type FTAGen symbol = Gen symbol
@@ -195,7 +195,7 @@ keeps the terms, the support, and the inspection graph, so 'support',
 -}
 fromAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol) =>
-    Node symbol -> Gen symbol (Tree.Tree symbol)
+    Node symbol -> Gen symbol (Term symbol)
 fromAutomaton = Flat.fromAutomaton id
 
 {- | Read the terms an automaton accepts up to a constructor-depth bound.
@@ -206,7 +206,7 @@ constructs only the selected term, and shrinks remain in the language.
 -}
 fromAutomatonUpToDepth ::
     (Ord symbol, Hashable symbol, Typeable symbol) =>
-    Depth -> Node symbol -> Gen symbol (Tree.Tree symbol)
+    Depth -> Node symbol -> Gen symbol (Term symbol)
 fromAutomatonUpToDepth = Flat.fromAutomatonUpToDepth id
 
 {- | Read a datatype grammar as a generator of its values.
@@ -249,7 +249,7 @@ the key.
 -}
 importDatatype ::
     TypedFTA Constraint a ->
-    ((Symbol -> (Int, Text)) -> Node Symbol -> Gen Symbol (Tree.Tree Symbol)) ->
+    ((Symbol -> (Int, Text)) -> Node Symbol -> Gen Symbol (Term Symbol)) ->
     Gen Symbol a
 importDatatype datatype readAutomaton =
     case FTA.mapSymbols (fromString . constructorLabel) (datatypeFTA datatype) of

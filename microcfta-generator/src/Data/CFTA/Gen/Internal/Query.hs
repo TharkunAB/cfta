@@ -35,7 +35,6 @@ module Data.CFTA.Gen.Internal.Query (
 ) where
 
 import qualified Data.Map.Strict as Map
-import qualified Data.Tree as Tree
 
 import Data.CFTA.Equality (Node)
 import Data.CFTA.Gen.Error
@@ -61,6 +60,7 @@ import Data.CFTA.Ranked.Internal.Size (
     sizeClassOf,
  )
 import qualified Data.CFTA.Ranked.Internal.Size as Size
+import Data.CFTA.Term (Term)
 
 -- | Return the ECTA support of an inspectable generator.
 support :: Gen symbol a -> Either GenError (Node (Label symbol))
@@ -132,7 +132,7 @@ classMember ranks members index = case (minimumMemberSize ranks, sizeClassOf ran
 
 A recursive generator uses the size-major ranks of 'unrank'.
 -}
-termAt :: Gen symbol a -> Rank -> Either GenError (Tree.Tree (Label symbol))
+termAt :: Gen symbol a -> Rank -> Either GenError (Term (Label symbol))
 termAt _ index | index < 0 = Left $ NegativeRank index
 termAt (Transparent result) index = do
     static <- result
@@ -154,7 +154,7 @@ labels, and it checks the user symbols where it can. For a rank whose symbols
 it did not check, 'ranksOf' compares the term that 'termAt' gives with the
 given term. So a term with other user symbols has no rank.
 -}
-ranksOf :: (Eq symbol) => Gen symbol a -> Tree.Tree (Label symbol) -> Either GenError [Rank]
+ranksOf :: (Eq symbol) => Gen symbol a -> Term (Label symbol) -> Either GenError [Rank]
 ranksOf generator term = map checkedRank . filter checked <$> candidates generator
   where
     checked (CheckedRank rank symbolsChecked) = symbolsChecked || termAt generator rank == Right term
@@ -170,7 +170,7 @@ ranksOf generator term = map checkedRank . filter checked <$> candidates generat
 'termAt', so that @termAt g =<< rankOf g t@ gives @t@ back. A term that is not
 a member gives 'TermNotInLanguage'.
 -}
-rankOf :: (Eq symbol) => Gen symbol a -> Tree.Tree (Label symbol) -> Either GenError Rank
+rankOf :: (Eq symbol) => Gen symbol a -> Term (Label symbol) -> Either GenError Rank
 rankOf generator term = do
     ranks <- ranksOf generator term
     case ranks of
@@ -182,7 +182,7 @@ automaton accepts, as 'fromAutomaton' returns it. A term that is not a member
 gives 'TermNotInLanguage'. An import keeps its terms under 'fmap', so the
 rank of a mapped import is the rank of the term it maps.
 -}
-rankOfTerm :: (Eq symbol) => Gen symbol a -> Tree.Tree symbol -> Either GenError Rank
+rankOfTerm :: (Eq symbol) => Gen symbol a -> Term symbol -> Either GenError Rank
 rankOfTerm generator = rankOf generator . fmap Label
 
 -- | A smallest member: the first member by size, then by rank.

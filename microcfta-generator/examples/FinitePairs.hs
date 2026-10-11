@@ -4,13 +4,13 @@
 module Main (main) where
 
 import Control.Monad (unless)
-import qualified Data.Tree as Tree
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA.Gen.QuickCheck as FTAGen
 import Data.CFTA.Generic (deriveFTAWith, domain)
 import qualified Data.CFTA.Interned as Common
 import Data.CFTA.Symbol (Symbol)
+import qualified Data.CFTA.Term as Term
 
 -- | All four ordered pairs of the leaf choices.
 pairs :: FTAGen.FTAGen Symbol (Int, Int)
@@ -31,7 +31,7 @@ main = do
         graph = Common.Node [Common.Edge "pair" [leaf, leaf]]
         imported = FTAGen.fromAutomaton graph
     unless (FTAGen.cardinality imported == Right 4) $ fail "wrong interned FTA count"
-    unless (FTAGen.unrank imported 3 == Right (Tree.Node "pair" [Tree.Node "zero" [], Tree.Node "zero" []])) $
+    unless (FTAGen.unrank imported 3 == Right (Term.Node "pair" [Term.Node "zero" [], Term.Node "zero" []])) $
         fail "wrong interned FTA replay"
 
     result <- QC.quickCheckResult $ FTAGen.forAll pairs $ \(left, right) ->

@@ -48,6 +48,8 @@ import Data.CFTA.Constraint (
     indicators,
     residual,
  )
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import Data.Hashable (Hashable, hash)
 import qualified Data.IntMap.Strict as IntMap
 import Data.List (compareLength, partition, sort, sortOn, tails)
@@ -57,7 +59,6 @@ import qualified Data.Set as Set
 import Data.String (fromString)
 import Data.Text (Text)
 import qualified Data.Text as Text
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 
 import Data.CFTA.Equality (
@@ -100,7 +101,7 @@ one, whose runs outnumber its terms.
 -}
 automatonIndex ::
     (Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Node symbol -> Either GenError (SizeIndex (Tree.Tree symbol))
+    (symbol -> key) -> Node symbol -> Either GenError (SizeIndex (Term symbol))
 automatonIndex order root = uncurry Ordinary.tableIndex <$> automatonRows order root
 
 {- | Find the size class and the position in it of a term that an automaton
@@ -114,7 +115,7 @@ and the automaton once: each term then uses the same counts.
 -}
 automatonTermPosition ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Node symbol -> Tree.Tree symbol -> Either GenError SizedRank
+    (symbol -> key) -> Node symbol -> Term symbol -> Either GenError SizedRank
 automatonTermPosition order root = case automatonRows order root of
     Left err -> const $ Left err
     Right (initial, rows) -> maybe (Left TermNotInLanguage) Right . Ordinary.tablePosition initial rows
@@ -215,7 +216,7 @@ before the term.
 -}
 finiteAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Node symbol -> Either GenError (Static symbol (Tree.Tree symbol))
+    (symbol -> key) -> Node symbol -> Either GenError (Static symbol (Term symbol))
 finiteAutomaton order root =
     (\(ranked, rankOf) -> termStatic root (maybe (Left TermNotInLanguage) Right . rankOf) ranked)
         <$> compileFiniteAutomaton order root
@@ -230,7 +231,7 @@ compileFiniteAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
     (symbol -> key) ->
     Node symbol ->
-    Either GenError (Ranked.Ranked (Tree.Tree symbol), Tree.Tree symbol -> Maybe Rank)
+    Either GenError (Ranked.Ranked (Term symbol), Term symbol -> Maybe Rank)
 compileFiniteAutomaton order root
     | null (nodeEdges root) = Left EmptyGenerator
     | any (any (isNothing . indicators . edgeConstraint)) (reachable root) = Left CannotCountConstrainedEdges
@@ -302,7 +303,7 @@ compileFiniteAutomaton order root
                     ( Ranked.pay $
                         -- The groups cover each child index once, so the slots
                         -- hold the children in index order.
-                        Tree.Node (edgeSymbol edge) . Map.elems <$> slots
+                        Term.Node (edgeSymbol edge) . Map.elems <$> slots
                     , rankEdge edge $ zip groups compiledGroups
                     )
       where
@@ -315,7 +316,7 @@ compileFiniteAutomaton order root
         (\values term -> foldr (`Map.insert` term) values positions) <$> prefix <*> ranked
     -- The groups are the digits of a mixed-radix rank, and the first group is
     -- the most significant digit. The terms of one group must be equal.
-    rankEdge edge groups (Tree.Node symbol terms)
+    rankEdge edge groups (Term.Node symbol terms)
         | symbol /= edgeSymbol edge || length terms /= length (edgeChildren edge) = Nothing
         | otherwise = foldM addGroupRank 0 groups
       where
@@ -418,7 +419,7 @@ the labels of one type share a long prefix: on a probe that samples a
 datatype with integer literals, comparing them was a quarter of the
 instructions. The table is built once for each application to a datatype.
 -}
-datatypeDecoder :: TypedFTA annotation a -> Tree.Tree Symbol -> Maybe a
+datatypeDecoder :: TypedFTA annotation a -> Term Symbol -> Maybe a
 datatypeDecoder datatype = datatypeDecode datatype <=< traverse constructorOf
   where
     table =
@@ -440,14 +441,14 @@ state. So the check decodes one term per transition and does not enumerate
 the language. An atomic literal whose 'Show' text 'Read' does not accept makes
 its term fail.
 -}
-undecodableConstructor :: (Ord state) => (Tree.Tree symbol -> Bool) -> FTA.FTA state symbol annotation -> Maybe symbol
+undecodableConstructor :: (Ord state) => (Term symbol -> Bool) -> FTA.FTA state symbol annotation -> Maybe symbol
 undecodableConstructor rejects automaton =
     listToMaybe
         [ symbol
         | (state, context) <- Map.toList contexts
         , FTA.Transition symbol children _ <- FTA.transitionsFrom automaton state
         , Just arguments <- [traverse (`Map.lookup` witnesses) children]
-        , rejects $ context $ Tree.Node symbol arguments
+        , rejects $ context $ Term.Node symbol arguments
         ]
   where
     -- One term for each productive state, as a least fixed point.
@@ -458,7 +459,7 @@ undecodableConstructor rejects automaton =
     addWitness state transitions known
         | Map.member state known = known
         | otherwise =
-            case [ Tree.Node symbol arguments
+            case [ Term.Node symbol arguments
                  | FTA.Transition symbol children _ <- transitions
                  , Just arguments <- [traverse (`Map.lookup` known) children]
                  ] of
@@ -471,7 +472,7 @@ undecodableConstructor rejects automaton =
         let added =
                 Map.fromList
                     [ ( child
-                      , \hole -> (found Map.! state) $ Tree.Node symbol $ adjustAt position (const hole) arguments
+                      , \hole -> (found Map.! state) $ Term.Node symbol $ adjustAt position (const hole) arguments
                       )
                     | FTA.Transition symbol children _ <- FTA.transitionsFrom automaton state
                     , Just arguments <- [traverse (`Map.lookup` witnesses) children]

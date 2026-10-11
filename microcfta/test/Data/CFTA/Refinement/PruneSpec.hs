@@ -2,7 +2,6 @@
 
 module Data.CFTA.Refinement.PruneSpec (spec) where
 
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList)
 
 import Data.List (permutations)
@@ -37,6 +36,8 @@ import Data.CFTA.Refinement.Expression (refinementFormula, variable, (.==), (.>=
 import qualified Data.CFTA.Refinement.Guard as Guard
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Refinement.TestSupport (declarations)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import qualified Language.Fixpoint.Types as Fixpoint
 
 spec :: Spec
@@ -94,9 +95,9 @@ spec =
         it "removes a transition whose equalities need an absent descendant" $ do
             let solver = Entailment $ \_ _ -> pure Unknown
                 constraint = semanticConstraint $ And [Same (path [0]) (path [1]), Same (path [0, 0]) (path [1, 0])]
-                leaf = Tree.Node (RefinedSymbol "a" Fixpoint.PTrue) []
+                leaf = Term.Node (RefinedSymbol "a" Fixpoint.PTrue) []
                 original = Node [Transition "pair" Fixpoint.PTrue [atomA, atomA] constraint]
-            accepts solver original (Tree.Node (RefinedSymbol "pair" Fixpoint.PTrue) [leaf, leaf]) >>= (`shouldBe` No)
+            accepts solver original (Term.Node (RefinedSymbol "pair" Fixpoint.PTrue) [leaf, leaf]) >>= (`shouldBe` No)
             prune solver original >>= (`shouldBe` Right EmptyNode)
 
         it "keeps semantic and syntactic splits apart" $
@@ -108,8 +109,8 @@ spec =
                             [ Transition "a" zero [] noConstraint
                             , Transition "b" one [] noConstraint
                             ]
-                    leafA = Tree.Node (RefinedSymbol "a" zero) []
-                    leafB = Tree.Node (RefinedSymbol "b" one) []
+                    leafA = Term.Node (RefinedSymbol "a" zero) []
+                    leafB = Term.Node (RefinedSymbol "b" one) []
                     semantic =
                         Node [Transition "f" Fixpoint.PTrue [atoms] $ semanticConstraint $ Satisfies (path [0]) zero]
                     syntactic =
@@ -117,14 +118,14 @@ spec =
                 checkPrunedLanguage
                     solver
                     semantic
-                    [ Tree.Node (RefinedSymbol "f" Fixpoint.PTrue) [child]
-                    | child <- [leafA, leafB, Tree.Node (RefinedSymbol "sentinel" Fixpoint.PTrue) []]
+                    [ Term.Node (RefinedSymbol "f" Fixpoint.PTrue) [child]
+                    | child <- [leafA, leafB, Term.Node (RefinedSymbol "sentinel" Fixpoint.PTrue) []]
                     ]
                     1
                 checkPrunedLanguage
                     solver
                     syntactic
-                    [Tree.Node (RefinedSymbol "pair" Fixpoint.PTrue) [left, right] | left <- [leafA, leafB], right <- [leafA, leafB]]
+                    [Term.Node (RefinedSymbol "pair" Fixpoint.PTrue) [left, right] | left <- [leafA, leafB], right <- [leafA, leafB]]
                     2
 
         it "partitions substitution positions by their value-naming symbol" $
@@ -139,9 +140,9 @@ spec =
                 equalPairs = [("x", "x"), ("x", "y"), ("y", "x"), ("y", "y"), ("z", "z")]
                 differentPairs = filter (`notElem` equalPairs) allPairs
                 term (left, right) =
-                    Tree.Node
+                    Term.Node
                         (RefinedSymbol "scoped" Fixpoint.PTrue)
-                        [Tree.Node (RefinedSymbol symbol Fixpoint.PTrue) [] | symbol <- ["x", "y", left, right]]
+                        [Term.Node (RefinedSymbol symbol Fixpoint.PTrue) [] | symbol <- ["x", "y", left, right]]
                 automaton guard =
                     Node
                         [ Transition
@@ -242,7 +243,7 @@ spec =
                 mapM_ check $ permutations requirements
 
 -- | Compare recognition before and after pruning, including the expected accepted count.
-checkPrunedLanguage :: Entailment -> Automaton -> [Tree.Tree Symbol] -> Int -> IO ()
+checkPrunedLanguage :: Entailment -> Automaton -> [Term Symbol] -> Int -> IO ()
 checkPrunedLanguage solver original terms expected = do
     result <- prune solver original
     case result of
@@ -258,8 +259,8 @@ checkPrunedLanguage solver original terms expected = do
 
 -- | Compare denotations as sets without requiring an ordering for Fixpoint expressions.
 equivalentTermSets ::
-    Either DenotationError [Tree.Tree Symbol] ->
-    Either DenotationError [Tree.Tree Symbol] ->
+    Either DenotationError [Term Symbol] ->
+    Either DenotationError [Term Symbol] ->
     Bool
 equivalentTermSets (Right left) (Right right) =
     all (`elem` right) left && all (`elem` left) right
@@ -293,13 +294,13 @@ optionalDescendant guard =
             ]
 
 -- | Both finite terms of 'optionalDescendant' before its guard is checked.
-optionalDescendantTerms :: [Tree.Tree Symbol]
+optionalDescendantTerms :: [Term Symbol]
 optionalDescendantTerms =
-    [ Tree.Node (RefinedSymbol "f" Fixpoint.PTrue) [leaf]
-    , Tree.Node (RefinedSymbol "f" Fixpoint.PTrue) [Tree.Node (RefinedSymbol "b" Fixpoint.PTrue) [leaf]]
+    [ Term.Node (RefinedSymbol "f" Fixpoint.PTrue) [leaf]
+    , Term.Node (RefinedSymbol "f" Fixpoint.PTrue) [Term.Node (RefinedSymbol "b" Fixpoint.PTrue) [leaf]]
     ]
   where
-    leaf = Tree.Node (RefinedSymbol "a" Fixpoint.PTrue) []
+    leaf = Term.Node (RefinedSymbol "a" Fixpoint.PTrue) []
 
 -- | Three independent choices constrained by positive equalities and entailment.
 equalTriples :: Constraint -> Automaton
@@ -386,7 +387,7 @@ syntacticPairs =
     Node [Transition "pair" Fixpoint.PTrue [leftOrShared, sharedOrRight] $ semanticConstraint $ Same (path [0]) (path [1])]
 
 -- | One accepted equal pair followed by two rejected unequal pairs.
-syntacticPairTerms :: [Tree.Tree Symbol]
+syntacticPairTerms :: [Term Symbol]
 syntacticPairTerms =
     [ pair "shared" "shared"
     , pair "left" "shared"
@@ -394,9 +395,9 @@ syntacticPairTerms =
     ]
   where
     pair left right =
-        Tree.Node
+        Term.Node
             (RefinedSymbol "pair" Fixpoint.PTrue)
-            [Tree.Node (RefinedSymbol left Fixpoint.PTrue) [], Tree.Node (RefinedSymbol right Fixpoint.PTrue) []]
+            [Term.Node (RefinedSymbol left Fixpoint.PTrue) [], Term.Node (RefinedSymbol right Fixpoint.PTrue) []]
 
 -- | The same structural overlap reached below a wrapper on the left.
 nestedSyntacticPairs :: Automaton
@@ -418,29 +419,29 @@ negativeEquality :: Guard
 negativeEquality = Not $ Same (path [0]) (path [1])
 
 -- | All concrete pairs from the heterogeneous atom node.
-pairTerms :: [Tree.Tree Symbol]
-pairTerms = [Tree.Node (RefinedSymbol "pair" Fixpoint.PTrue) [left, right] | left <- predicates, right <- predicates]
+pairTerms :: [Term Symbol]
+pairTerms = [Term.Node (RefinedSymbol "pair" Fixpoint.PTrue) [left, right] | left <- predicates, right <- predicates]
 
 -- | All concrete pairs with the left atom below a box constructor.
-nestedPairTerms :: [Tree.Tree Symbol]
+nestedPairTerms :: [Term Symbol]
 nestedPairTerms =
-    [ Tree.Node
+    [ Term.Node
         (RefinedSymbol "pair" Fixpoint.PTrue)
-        [Tree.Node (RefinedSymbol "box" Fixpoint.PTrue) [left], right]
+        [Term.Node (RefinedSymbol "box" Fixpoint.PTrue) [left], right]
     | left <- predicates
     , right <- predicates
     ]
 
 -- | Every actual-name and output-refinement combination.
-substitutionTerms :: [Tree.Tree Symbol]
+substitutionTerms :: [Term Symbol]
 substitutionTerms =
-    [ Tree.Node
+    [ Term.Node
         (RefinedSymbol "application" Fixpoint.PTrue)
-        [actual, Tree.Node (RefinedSymbol "n" Fixpoint.PTrue) [], output]
+        [actual, Term.Node (RefinedSymbol "n" Fixpoint.PTrue) [], output]
     | actual <- namedActuals
     , output <-
-        [ Tree.Node (RefinedSymbol "output-x" (refinementFormula (\v -> v .== variable "x"))) []
-        , Tree.Node (RefinedSymbol "output-y" (refinementFormula (\v -> v .== variable "y"))) []
+        [ Term.Node (RefinedSymbol "output-x" (refinementFormula (\v -> v .== variable "x"))) []
+        , Term.Node (RefinedSymbol "output-y" (refinementFormula (\v -> v .== variable "y"))) []
         ]
     ]
 
@@ -457,18 +458,18 @@ predicateNode :: Automaton
 predicateNode = Node predicateTransitions
 
 -- | Concrete formula terms matching 'predicateTransitions'.
-predicates :: [Tree.Tree Symbol]
+predicates :: [Term Symbol]
 predicates =
-    [ Tree.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .== 0))) []
-    , Tree.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .== 1))) []
-    , Tree.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .>= 0))) []
+    [ Term.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .== 0))) []
+    , Term.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .== 1))) []
+    , Term.Node (RefinedSymbol "predicate" (refinementFormula (\v -> v .>= 0))) []
     ]
 
 -- | Variable leaves used by the substitution example.
-namedActuals :: [Tree.Tree Symbol]
+namedActuals :: [Term Symbol]
 namedActuals =
-    [ Tree.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== 0))) []
-    , Tree.Node (RefinedSymbol "y" (refinementFormula (\v -> v .== 1))) []
+    [ Term.Node (RefinedSymbol "x" (refinementFormula (\v -> v .== 0))) []
+    , Term.Node (RefinedSymbol "y" (refinementFormula (\v -> v .== 1))) []
     ]
 
 -- | Direct semantic relation between sibling positions.

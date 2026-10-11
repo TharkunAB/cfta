@@ -17,8 +17,9 @@ module Main (main) where
 import Control.Exception (evaluate)
 import Control.Monad (void)
 import Data.CFTA.Index (Depth)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import qualified Data.Text as Text
-import qualified Data.Tree as Tree
 import System.CPUTime (getCPUTime)
 import System.Environment (getArgs)
 import Text.Printf (printf)
@@ -72,8 +73,8 @@ runBench multiplier Bench{benchName, benchRepeats, benchPrepare, benchAction} = 
         x <- benchAction language
         loop rest (acc + x)
 
-sizes :: [Tree.Tree a] -> IO Int
-sizes = evaluate . sum . map (length . Tree.flatten)
+sizes :: [Term a] -> IO Int
+sizes = evaluate . sum . map (length . Term.flatten)
 
 -- | The plain FTA view of an ECTA with its constraints dropped.
 plainView :: Node Symbol -> FTA.FTA Interned.InternedState Symbol ()

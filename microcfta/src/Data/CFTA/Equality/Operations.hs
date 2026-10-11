@@ -20,7 +20,6 @@ import Data.List (compareLength, (!?))
 import Data.Maybe (fromMaybe)
 import Data.Set (Set)
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import System.IO.Unsafe (unsafePerformIO)
 import Type.Reflection (Typeable)
 
@@ -35,6 +34,7 @@ import Data.CFTA.Interned.Memo (
  )
 import Data.CFTA.Path (ChildIndex (..), Path (..), Pathable (..))
 import Data.CFTA.Template (Template (..), restrict)
+import Data.CFTA.Term (Term)
 
 ------------
 ------ Membership
@@ -43,7 +43,7 @@ import Data.CFTA.Template (Template (..), restrict)
 {- | Recognize through the common traversal and the equality interpreter. A
 constraint's residual beyond its path equalities is not decided here.
 -}
-accepts :: (Hashable symbol, Typeable symbol) => Node symbol -> Tree.Tree symbol -> Bool
+accepts :: (Hashable symbol, Typeable symbol) => Node symbol -> Term symbol -> Bool
 accepts = acceptsWith equalitiesHold
 
 ------------------------------------

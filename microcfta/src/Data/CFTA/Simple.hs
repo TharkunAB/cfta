@@ -42,15 +42,15 @@ import Data.Either (fromRight)
 import Data.List ((!?))
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
-import Data.Tree (Tree (..))
 
 import Data.CFTA (FTA, Transition (..), initialState, mkFTA, states, transitionsFrom)
 import Data.CFTA.Constraint (Constraint, Guard (..), conjoinConstraints, constraintAsGuard)
 import Data.CFTA.Index (Depth (..))
 import Data.CFTA.Path (ChildIndex (..), Path, unPath)
+import Data.CFTA.Term (Term, pattern Node)
 
 -- | The subterm at a path, when the term has that path.
-subtermAt :: Path -> Tree symbol -> Maybe (Tree symbol)
+subtermAt :: Path -> Term symbol -> Maybe (Term symbol)
 subtermAt path term = go (unPath path) term
   where
     go [] subterm = Just subterm
@@ -61,7 +61,7 @@ subtermAt path term = go (unPath path) term
 {- | Whether a complete term satisfies a guard. 'Same' compares subterms, the
 connectives are Boolean, and the given function decides every other atom.
 -}
-guardHolds :: (Monad m, Eq symbol) => (Guard -> Tree symbol -> m Bool) -> Guard -> Tree symbol -> m Bool
+guardHolds :: (Monad m, Eq symbol) => (Guard -> Term symbol -> m Bool) -> Guard -> Term symbol -> m Bool
 guardHolds atom guard term = case guard of
     Top -> pure True
     Bottom -> pure False
@@ -76,13 +76,13 @@ guardHolds atom guard term = case guard of
 {- | Decide a constraint by 'guardHolds' of 'constraintAsGuard'. 'Nothing' when
 the constraint has an atom that is not 'Same'.
 -}
-equalitiesOnly :: (Eq symbol) => Constraint -> Tree symbol -> Maybe Bool
+equalitiesOnly :: (Eq symbol) => Constraint -> Term symbol -> Maybe Bool
 equalitiesOnly constraint = guardHolds (\_ _ -> Nothing) (constraintAsGuard constraint)
 
 -- | Whether the automaton accepts a term. The function decides whether a term satisfies a constraint.
 acceptsM ::
     (Monad m, Ord state, Eq symbol) =>
-    (Constraint -> Tree symbol -> m Bool) -> FTA state symbol Constraint -> Tree symbol -> m Bool
+    (Constraint -> Term symbol -> m Bool) -> FTA state symbol Constraint -> Term symbol -> m Bool
 acceptsM satisfies automaton = acceptedAt (initialState automaton)
   where
     acceptedAt state term = anyM (fits term) (transitionsFrom automaton state)
@@ -94,13 +94,13 @@ acceptsM satisfies automaton = acceptedAt (initialState automaton)
 {- | Whether an automaton whose constraints are equalities accepts a term.
 'Nothing' when a constraint has an atom that is not 'Same'.
 -}
-accepts :: (Ord state, Eq symbol) => FTA state symbol Constraint -> Tree symbol -> Maybe Bool
+accepts :: (Ord state, Eq symbol) => FTA state symbol Constraint -> Term symbol -> Maybe Bool
 accepts = acceptsM equalitiesOnly
 
 -- | Every accepted term of depth at most the bound, in term order, each once.
 termsUpToM ::
     (Monad m, Ord state, Ord symbol) =>
-    (Constraint -> Tree symbol -> m Bool) -> Depth -> FTA state symbol Constraint -> m [Tree symbol]
+    (Constraint -> Term symbol -> m Bool) -> Depth -> FTA state symbol Constraint -> m [Term symbol]
 termsUpToM satisfies (Depth depth) automaton = filterM (acceptsM satisfies automaton) $ Set.toList $ trees depth $ initialState automaton
   where
     -- The trees of the underlying graph at a state, of depth at most the bound, by bound.
@@ -116,7 +116,7 @@ termsUpToM satisfies (Depth depth) automaton = filterM (acceptsM satisfies autom
             ]
 
 -- | 'termsUpToM' for an automaton whose constraints are equalities.
-termsUpTo :: (Ord state, Ord symbol) => Depth -> FTA state symbol Constraint -> Maybe [Tree symbol]
+termsUpTo :: (Ord state, Ord symbol) => Depth -> FTA state symbol Constraint -> Maybe [Term symbol]
 termsUpTo = termsUpToM equalitiesOnly
 
 {- | The terms of either automaton: a new initial state has the transitions of

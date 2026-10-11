@@ -20,7 +20,6 @@ import Data.Either (isLeft)
 import Data.Functor.Identity (Identity (..))
 import Data.List (sort)
 import Data.Maybe (fromMaybe, isJust)
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, it)
 import Test.QuickCheck (
     Gen,
@@ -74,6 +73,8 @@ import Data.CFTA.Refinement.Expression (literal, refinementFormula, variable, (.
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
 import qualified Data.CFTA.Simple as Simple
 import Data.CFTA.Symbol (Formula, valueName)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import qualified Language.Fixpoint.Types as Fixpoint
 
 spec :: Spec
@@ -149,7 +150,7 @@ spec = describe "liquid tree automata against Data.CFTA.Simple" $ do
                                 let added = filter (not . simpleAccepts explicit) terms
                                  in counterexample (show (result, added)) $ null added
 
-simpleAccepts :: FTA Int Symbol Constraint -> Tree.Tree Symbol -> Bool
+simpleAccepts :: FTA Int Symbol Constraint -> Term Symbol -> Bool
 simpleAccepts explicit = runIdentity . Simple.acceptsM (\constraint -> Identity . holds constraint) explicit
 
 {- | Decide a constraint on a complete term by brute force. Every refinement
@@ -159,7 +160,7 @@ path fails, and a negated condition or contract holds when the refinements
 refute the formula. No formula names a constructor, so a substitution only
 needs its two paths.
 -}
-holds :: Constraint -> Tree.Tree Symbol -> Bool
+holds :: Constraint -> Term Symbol -> Bool
 holds constraint term = equalitiesHold constraint term && decide (constraintGuard constraint)
   where
     decide guard = case guard of
@@ -187,7 +188,7 @@ holds constraint term = equalitiesHold constraint term && decide (constraintGuar
             _ -> not $ decide nested
     at target = getPath target term
     values target = do
-        Tree.Node (RefinedSymbol _ refinement) _ <- at target
+        Term.Node (RefinedSymbol _ refinement) _ <- at target
         pure [value | value <- domain, truth [(valueName, value)] refinement]
     contract formula assignment = truth (zip (map contractTermName [0 ..]) assignment) formula
     resolved = all (\(Substitution actual formal) -> isJust (at actual) && isJust (at formal))
@@ -285,5 +286,5 @@ automaton = (`suchThat` (either (const False) (const True) . validate . fromFTA)
             ]
 
 -- | The trees of the underlying graph up to depth two, to test recognition on.
-candidates :: FTA Int Symbol Constraint -> [Tree.Tree Symbol]
+candidates :: FTA Int Symbol Constraint -> [Term Symbol]
 candidates = fromMaybe [] . Simple.termsUpTo 2 . mapConstraints (const noConstraint)

@@ -74,6 +74,8 @@ import Data.CFTA.Internal.Tree (
     trimRows,
  )
 import Data.CFTA.Path (ChildIndex (..), Path (ConsPath, EmptyPath))
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | One ranked transition from a parent state to child states.
 data Transition state symbol constraint = Transition
@@ -183,15 +185,16 @@ Duplicate terms are removed and alternatives use ascending term order.
 -}
 fromTerms ::
     (Ord symbol) =>
-    [Tree.Tree symbol] -> Either (FTAError (Maybe (Tree.Tree symbol)) symbol) (PlainFTA (Maybe (Tree.Tree symbol)) symbol)
+    [Term symbol] ->
+    Either (FTAError (Maybe (Term symbol)) symbol) (PlainFTA (Maybe (Term symbol)) symbol)
 fromTerms input =
     mkFTA Nothing $
         (Nothing, map transition distinct)
             : [(Just term, [transition term]) | term <- Set.toList $ Set.fromList $ concatMap subterms distinct]
   where
     distinct = Set.toList $ Set.fromList input
-    transition (Tree.Node symbol children) = Transition symbol (map Just children) noConstraint
-    subterms term@(Tree.Node _ children) = term : concatMap subterms children
+    transition (Term.Node symbol children) = Transition symbol (map Just children) noConstraint
+    subterms term@(Term.Node _ children) = term : concatMap subterms children
 
 -- | All states in ascending key order.
 states :: FTA state symbol constraint -> [state]
@@ -372,7 +375,7 @@ of each constraint are checked, as 'Data.CFTA.Equality.accepts' checks them. A
 residual guard beyond the equalities is not decided; use 'acceptsM' for it.
 This is 'acceptsM' with 'equalitiesHold' as the check.
 -}
-accepts :: (Ord state, Eq symbol) => PlainFTA state symbol -> Tree.Tree symbol -> Bool
+accepts :: (Ord state, Eq symbol) => PlainFTA state symbol -> Term symbol -> Bool
 accepts automaton = runIdentity . acceptsM check automaton
   where
     check _ transition term = Identity $ equalitiesHold (transitionConstraint transition) term
@@ -385,7 +388,7 @@ one. Each term appears once, even when several runs accept it. Constraints are
 not interpreted: the list describes the underlying ordinary automaton. Use
 'termsUpToM' to decide constraints while enumerating.
 -}
-terms :: (Ord state, Ord symbol, Hashable symbol) => FTA state symbol constraint -> [Tree.Tree symbol]
+terms :: (Ord state, Ord symbol, Hashable symbol) => FTA state symbol constraint -> [Term symbol]
 terms automaton =
     termsBy
         [ (state, [(transitionSymbol transition, transitionChildren transition) | transition <- outgoing])
@@ -403,10 +406,10 @@ automaton does not repeat terms.
 -}
 termsUpToM ::
     (Monad m, Ord state, Ord symbol, Hashable symbol) =>
-    (state -> Transition state symbol constraint -> Tree.Tree symbol -> m Bool) ->
+    (state -> Transition state symbol constraint -> Term symbol -> m Bool) ->
     Depth ->
     FTA state symbol constraint ->
-    m [Tree.Tree symbol]
+    m [Term symbol]
 termsUpToM accept bound automaton =
     termsUpToBy
         transitionSymbol
@@ -429,9 +432,9 @@ for each state, transition, and position in the term.
 -}
 acceptsM ::
     (Monad m, Ord state, Eq symbol) =>
-    (state -> Transition state symbol constraint -> Tree.Tree symbol -> m Bool) ->
+    (state -> Transition state symbol constraint -> Term symbol -> m Bool) ->
     FTA state symbol constraint ->
-    Tree.Tree symbol ->
+    Term symbol ->
     m Bool
 acceptsM check automaton =
     acceptsBy (transitionsFrom automaton) transitionSymbol transitionChildren check (initialState automaton)

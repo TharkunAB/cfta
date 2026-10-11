@@ -17,7 +17,6 @@ import Data.Hashable (Hashable)
 import qualified Data.Map.Strict as Map
 import Data.Sequence (Seq (..))
 import qualified Data.Sequence as Sequence
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 
 import Data.CFTA.Equality (Edge (Edge), Node (Node))
@@ -28,6 +27,7 @@ import Data.CFTA.Gen.Internal.Support (singletonNode)
 import Data.CFTA.Index (Size (..))
 import Data.CFTA.Ranked.Internal.Decoder (MinimumSize (..), Plan (..), SizeIndex (minimumMemberSize))
 import Data.CFTA.Ranked.Internal.Sampler (atomicSampleIndex)
+import qualified Data.CFTA.Term as Term
 
 -- | One compact conditional generator and its mass in the whole distribution.
 data KeyedBucket symbol a = KeyedBucket
@@ -89,7 +89,7 @@ bucketFromOutcomes retainAtomic weightedOutcomes = do
     totalOutcomes = toEnum $ length outcomes
     uniformMass = commonValue $ Just . outcomeMass <$> toList conditional
     bucketSupport = Node [rootEdge $ outcomeTerm outcome | outcome <- toList outcomes]
-    rootEdge (Tree.Node symbol children) = Edge symbol $ map singletonNode children
+    rootEdge (Term.Node symbol children) = Edge symbol $ map singletonNode children
 
     select index = do
         checkIndex totalOutcomes index

@@ -65,7 +65,6 @@ import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.String (fromString)
-import qualified Data.Tree as Tree
 import qualified Language.Fixpoint.Types as Fixpoint
 import qualified Test.QuickCheck as QC
 
@@ -93,6 +92,8 @@ import Data.CFTA.Refinement.Guard (
     root,
     withActualFor,
  )
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | Ground value types shared with the typed-expression example.
 data ValueType = TInt | TBool
@@ -460,10 +461,10 @@ traceFromCommands commands = do
         pure (Event before command response after : events, after)
 
 -- | Decode one accepted liquid witness into the ordinary QSM trace value.
-traceFromLiquidTerm :: Tree.Tree Symbol -> Maybe Trace
-traceFromLiquidTerm (Tree.Node (RefinedSymbol "start" liquidRefinement) [])
+traceFromLiquidTerm :: Term Symbol -> Maybe Trace
+traceFromLiquidTerm (Term.Node (RefinedSymbol "start" liquidRefinement) [])
     | liquidRefinement == stateRefinement emptyState = Just initialTraceValue
-traceFromLiquidTerm (Tree.Node (RefinedSymbol "step" liquidRefinement) [previousTerm, commandTerm]) = do
+traceFromLiquidTerm (Term.Node (RefinedSymbol "step" liquidRefinement) [previousTerm, commandTerm]) = do
     previous <- traceFromLiquidTerm previousTerm
     command <- commandFromLiquidTerm commandTerm
     let before = traceFinalState previous
@@ -476,8 +477,8 @@ traceFromLiquidTerm (Tree.Node (RefinedSymbol "step" liquidRefinement) [previous
 traceFromLiquidTerm _ = Nothing
 
 -- | Recover the command represented by one reusable liquid schema.
-commandFromLiquidTerm :: Tree.Tree Symbol -> Maybe Command
-commandFromLiquidTerm (Tree.Node (RefinedSymbol liquidSymbol _) [_, _]) =
+commandFromLiquidTerm :: Term Symbol -> Maybe Command
+commandFromLiquidTerm (Term.Node (RefinedSymbol liquidSymbol _) [_, _]) =
     lookup
         liquidSymbol
         [ (contractSymbol contract, contractCommand contract)

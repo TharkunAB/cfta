@@ -12,7 +12,6 @@ import Data.List ((!?))
 import qualified Data.Map.Strict as Map
 import Data.Maybe (mapMaybe)
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 import System.IO.Unsafe (unsafePerformIO)
 
@@ -27,6 +26,8 @@ import Data.CFTA.Interned.Operations (intersect, intersectEdge, nodeEdges)
 import Data.CFTA.Interned.Type (Edge, NodeId (..), edgeChildren, edgeConstraint, edgeSymbol, nodeIdentity, setChildren)
 import Data.CFTA.Path (ChildIndex (..), Path (ConsPath, EmptyPath), adjustAt, path)
 import qualified Data.CFTA.Ranked.Internal as Ranked
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | A constructor context whose variables denote whole subtree languages.
 data Fragment symbol = Variable VarIndex | Constructor symbol [Fragment symbol]
@@ -150,7 +151,7 @@ symbolicRanked ::
     (Theory symbol, Ord key) =>
     (symbol -> key) ->
     ECTA.Node symbol ->
-    Either Ranked.RankedError (Ranked.Ranked (Tree.Tree symbol), Tree.Tree symbol -> Maybe Rank)
+    Either Ranked.RankedError (Ranked.Ranked (Term symbol), Term symbol -> Maybe Rank)
 symbolicRanked order root = do
     ranked <- Ranked.fromIndexedOnDemand $ Ranked.Indexed total select
     pure (ranked, rankOf)
@@ -428,7 +429,7 @@ selectTerm ::
     Node symbol ->
     Path ->
     Rank ->
-    State.State (Counts symbol) (Tree.Tree symbol)
+    State.State (Counts symbol) (Term symbol)
 selectTerm order root position (Rank rank) = do
     ~(term, _, _) <- selectAt order root position rank
     pure term
@@ -440,7 +441,7 @@ selectAt ::
     Node symbol ->
     Path ->
     Integer ->
-    State.State (Counts symbol) (Tree.Tree symbol, Node symbol, Integer)
+    State.State (Counts symbol) (Term symbol, Node symbol, Integer)
 selectAt order root position rank = do
     let local = project position root
     count <- countNode local
@@ -461,7 +462,7 @@ selectAt order root position rank = do
             then choose (remaining - count) rest
             else do
                 ~(children, final, suffixRank) <- selectChildren restricted remaining (childIndexes arity)
-                pure (Tree.Node symbol children, final, suffixRank)
+                pure (Term.Node symbol children, final, suffixRank)
     selectChildren graph remaining [] = pure ([], graph, remaining)
     selectChildren graph remaining (index : rest) = do
         ~(term, restricted, suffixRank) <- selectAt order graph (position <> path [index]) remaining
@@ -479,10 +480,10 @@ rankAt ::
     (symbol -> key) ->
     Node symbol ->
     Path ->
-    Tree.Tree symbol ->
+    Term symbol ->
     Integer ->
     State.State (Counts symbol) (Maybe (Node symbol, Integer))
-rankAt order root position term@(Tree.Node symbol children) before = do
+rankAt order root position term@(Term.Node symbol children) before = do
     let local = project position root
     count <- countNode local
     if count == 1
@@ -514,7 +515,7 @@ selectUniqueAt ::
     (symbol -> key) ->
     Node symbol ->
     Path ->
-    State.State (Counts symbol) (Tree.Tree symbol)
+    State.State (Counts symbol) (Term symbol)
 selectUniqueAt order root position = choose $ constructorsAt order position root
   where
     choose [] =
@@ -528,7 +529,7 @@ selectUniqueAt order root position = choose $ constructorsAt order position root
             else do
                 counts <- State.get
                 pure $
-                    Tree.Node
+                    Term.Node
                         symbol
                         [ State.evalState (selectUniqueAt order root $ position <> path [index]) counts
                         | index <- childIndexes arity

@@ -29,7 +29,6 @@ module Data.CFTA.Gen.Internal.Flat (
 import qualified Data.Array as Array
 import Data.Hashable (Hashable)
 import qualified Data.Text as Text
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 import qualified Test.QuickCheck as QC
 
@@ -52,6 +51,7 @@ import Data.CFTA.Ranked.Internal (Indexed (..))
 import Data.CFTA.Ranked.Internal.Sampler (GenBackend (frequencyGen), choiceSampleIndex, uniformSampleIndex)
 import Data.CFTA.Ranked.Internal.Size (mapIndex)
 import Data.CFTA.Ranked.QuickCheck (QuickCheckBackend (..))
+import Data.CFTA.Term (Term)
 
 -- | Interpret a reified condition as one key projection per side.
 withKeys ::
@@ -91,20 +91,20 @@ constraints, because its count sums over accepting runs.
 -}
 fromAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Node symbol -> Gen symbol (Tree.Tree symbol)
+    (symbol -> key) -> Node symbol -> Gen symbol (Term symbol)
 fromAutomaton order root = withRecipe (Imported Nothing order root) $ readAutomaton order root
 
 -- | Read the terms an automaton accepts up to a constructor-depth bound. A leaf has depth zero.
 fromAutomatonUpToDepth ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Depth -> Node symbol -> Gen symbol (Tree.Tree symbol)
+    (symbol -> key) -> Depth -> Node symbol -> Gen symbol (Term symbol)
 fromAutomatonUpToDepth order depth graph =
     withRecipe (Imported (Just depth) order graph) $ readAutomaton order $ Common.boundDepth depth graph
 
 -- | The language of an automaton: finite when acyclic, counted by size otherwise.
 readAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Node symbol -> Gen symbol (Tree.Tree symbol)
+    (symbol -> key) -> Node symbol -> Gen symbol (Term symbol)
 readAutomaton order root
     | Common.numNestedMu root == 0 = Transparent $ finiteAutomaton order root
     | otherwise = Cyclic $ do

@@ -30,9 +30,10 @@ import qualified Data.Map.Strict as Map
 import Data.Sequence (Seq (..))
 import qualified Data.Sequence as Sequence
 import qualified Data.Set as Set
-import Data.Tree (Tree (Node))
+import qualified Data.Tree as Tree
 
 import Data.CFTA.Index (ChildIndex (..), Depth (..), TransitionIndex (..))
+import Data.CFTA.Term (Term, pattern Node)
 
 {- | A root-relative location in a tree view.
 
@@ -70,22 +71,22 @@ toTreeBy ::
     (node -> [edge]) ->
     (edge -> [node]) ->
     node ->
-    Tree (Either (StateView node) edge)
+    Tree.Tree (Either (StateView node) edge)
 toTreeBy outgoing children root = State.evalState (visit Set.empty Empty root) Set.empty
   where
     visit ancestors path node
-        | Set.member node ancestors = pure $ Node (Left $ Recursive (toList path) node) []
+        | Set.member node ancestors = pure $ Tree.Node (Left $ Recursive (toList path) node) []
         | otherwise = do
             seen <- State.get
             if Set.member node seen
-                then pure $ Node (Left $ Shared (toList path) node) []
+                then pure $ Tree.Node (Left $ Shared (toList path) node) []
                 else do
                     State.modify' (Set.insert node)
                     transitions <- zipWithM (transition (Set.insert node ancestors) path) [0 ..] $ outgoing node
-                    pure $ Node (Left $ Expanded (toList path) node) transitions
+                    pure $ Tree.Node (Left $ Expanded (toList path) node) transitions
 
     transition ancestors path index edge =
-        Node (Right edge)
+        Tree.Node (Right edge)
             <$> zipWithM
                 (\child -> visit ancestors (path :|> ViewStep index child))
                 [0 ..]
@@ -145,14 +146,14 @@ all carry distinct symbols cannot repeat a term, and the others are
 deduplicated per level. A child key without a row accepts nothing, so
 'trimRows' removes the alternatives that use it.
 -}
-termsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [Tree symbol]
+termsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [Term symbol]
 termsBy rows root = concat $ termLevelsBy rows root
 
 {- | The terms of 'termsBy' grouped by depth: the terms of depth zero first,
 then the terms of depth one, and so on. The list of levels is lazy, so a
 prefix of it bounds the depth without building the deeper terms.
 -}
-termLevelsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [[Tree symbol]]
+termLevelsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [[Term symbol]]
 termLevelsBy rows root
     | Map.member root table = map (Map.! root) $ takeWhile (not . all null) $ map exactly levels
     | otherwise = []
@@ -190,11 +191,11 @@ termsUpToBy ::
     (Monad m, Ord key, Ord symbol, Hashable symbol) =>
     (alternative -> symbol) ->
     (alternative -> [key]) ->
-    (key -> alternative -> Tree symbol -> m Bool) ->
+    (key -> alternative -> Term symbol -> m Bool) ->
     [(key, [alternative])] ->
     Depth ->
     key ->
-    m [Tree symbol]
+    m [Term symbol]
 termsUpToBy symbolOf childrenOf accept rows bound root
     | bound < 0 || Map.notMember root table = pure []
     | otherwise = do
@@ -284,9 +285,9 @@ acceptsBy ::
     (key -> [alternative]) ->
     (alternative -> symbol) ->
     (alternative -> [key]) ->
-    (key -> alternative -> Tree symbol -> m Bool) ->
+    (key -> alternative -> Term symbol -> m Bool) ->
     key ->
-    Tree symbol ->
+    Term symbol ->
     m Bool
 acceptsBy outgoing symbolOf childrenOf check = unshared
   where

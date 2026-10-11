@@ -15,7 +15,6 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (mapMaybe)
 import Data.Sequence (Seq (..))
 import qualified Data.Sequence as Sequence
-import qualified Data.Tree as Tree
 
 import Data.Hashable (Hashable)
 import qualified Data.IntMap.Strict as IntMap
@@ -39,6 +38,8 @@ import Data.CFTA.Ranked.Internal.Size (
     productPosition,
     withKnotMetadata,
  )
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 {- | The rows of an interned graph, one per reachable node, keyed by node
 identity. Constraints are dropped; the caller checks them first. The root
@@ -59,7 +60,7 @@ Missing rows accept nothing. Constraint layers must validate their annotations
 before supplying ordinary rows. This worker does not interpret constraints.
 -}
 tableIndex ::
-    (Ord state) => state -> Map.Map state [FTA.Transition state symbol ()] -> SizeIndex (Tree.Tree symbol)
+    (Ord state) => state -> Map.Map state [FTA.Transition state symbol ()] -> SizeIndex (Term symbol)
 tableIndex initial rows = fst (stateTable rows) initial
 
 {- | Find the size class and the position in it of a term that the initial
@@ -73,7 +74,7 @@ function to the rows once: each term then uses the same counts.
 -}
 tablePosition ::
     (Ord state, Ord symbol) =>
-    state -> Map.Map state [FTA.Transition state symbol ()] -> Tree.Tree symbol -> Maybe SizedRank
+    state -> Map.Map state [FTA.Transition state symbol ()] -> Term symbol -> Maybe SizedRank
 tablePosition initial rows = Map.lookup initial . positionsOf
   where
     (indexOf, prefixesOf) = stateTable rows
@@ -98,7 +99,7 @@ tablePosition initial rows = Map.lookup initial . positionsOf
     -- The size and position of a term in each state that accepts it. The
     -- index of a state is a choice over its transitions, so the index of a
     -- transition is its choice index.
-    positionsOf (Tree.Node symbol children) =
+    positionsOf (Term.Node symbol children) =
         Map.fromList
             [ (state, SizedRank size (choicePosition indexes (ChoiceIndex branch) size position))
             | (state, TransitionIndex branch, transition, prefixes, indexes) <-
@@ -123,8 +124,8 @@ index, which recursive references to the state share.
 stateTable ::
     (Ord state) =>
     Map.Map state [FTA.Transition state symbol ()] ->
-    ( state -> SizeIndex (Tree.Tree symbol)
-    , state -> [(FTA.Transition state symbol (), NonEmpty (SizeIndex ([Tree.Tree symbol] -> Tree.Tree symbol)))]
+    ( state -> SizeIndex (Term symbol)
+    , state -> [(FTA.Transition state symbol (), NonEmpty (SizeIndex ([Term symbol] -> Term symbol)))]
     )
 stateTable rows = (indexOf, prefixesOf)
   where
@@ -156,7 +157,7 @@ stateTable rows = (indexOf, prefixesOf)
         | otherwise = []
     emptyIndex = choiceIndex []
     -- The index of a transition before its children: the symbol, with its pay.
-    seed transition = payIndex $ constantIndex $ Tree.Node $ FTA.transitionSymbol transition
+    seed transition = payIndex $ constantIndex $ Term.Node $ FTA.transitionSymbol transition
     consumeChild built child = productIndex (mapIndex prepend built) child
       where
         prepend build term arguments = build (term : arguments)

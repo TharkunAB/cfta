@@ -17,10 +17,11 @@ module Data.CFTA.Gen.Equality.SimpleSpec (spec) where
 
 import Control.Monad (forM, forM_, unless)
 import Data.CFTA.Index (Cardinality, Depth (..), everyRank)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import Data.List (sort)
 import Data.Maybe (fromMaybe)
 import Data.String (fromString)
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, it, shouldBe)
 import Test.QuickCheck (Gen, chooseInt, elements, forAll, property, vectorOf, within)
 
@@ -65,7 +66,7 @@ spec = describe "generation from equality automata against Data.CFTA.Simple" $ d
                         sort [term | rank <- ranks, Right term <- [ECTAGen.unrank generator rank]] `shouldBe` sort (FTA.terms explicit)
                     else -- A cyclic one is counted by size, the number of nodes, and must be unambiguous.
                         forM_ [1 .. 3] $ \size -> do
-                            let ofSize = [term | term <- simpleTerms 2 explicit, toEnum (length (Tree.flatten term)) == size]
+                            let ofSize = [term | term <- simpleTerms 2 explicit, toEnum (length (Term.flatten term)) == size]
                                 isAmbiguous = either (error . show) ambiguous (toFTA node)
                             (size, ECTAGen.countAtSize generator size)
                                 `shouldBe` ( size
@@ -134,5 +135,5 @@ counted :: [a] -> Either ECTAGen.GenError Cardinality
 counted [] = Left ECTAGen.EmptyGenerator
 counted members = Right $ toEnum $ length members
 
-simpleTerms :: Depth -> FTA Int Symbol Constraint -> [Tree.Tree Symbol]
+simpleTerms :: Depth -> FTA Int Symbol Constraint -> [Term Symbol]
 simpleTerms depth = fromMaybe (error "an equality constraint needed a solver") . Simple.termsUpTo depth

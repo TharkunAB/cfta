@@ -17,7 +17,6 @@ module Data.CFTA.Gen.Refinement.EqualityTypedExpressionLanguage (
 ) where
 
 import qualified Data.Map.Lazy as LazyMap
-import qualified Data.Tree as Tree
 
 import qualified Data.CFTA.Gen.Refinement as LTAGen
 import Data.CFTA.Gen.TypedExpressionLanguage (
@@ -43,6 +42,8 @@ import Data.CFTA.Refinement (
  )
 import Data.CFTA.Refinement.Expression (Refinement, refinementFormula, (.==))
 import Data.CFTA.Refinement.Guard (allOf, argument, requires)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | Encode one ground type as an exact integer equality refinement.
 typeEquality :: Type -> Refinement
@@ -175,19 +176,19 @@ functionSymbol Or = "or"
 functionSymbol And = "and"
 
 -- | Decode one accepted liquid witness to the canonical expression value.
-expressionFromLiquidTerm :: Tree.Tree Symbol -> Maybe TypedExpression
-expressionFromLiquidTerm (Tree.Node (RefinedSymbol "int-0" _) []) =
+expressionFromLiquidTerm :: Term Symbol -> Maybe TypedExpression
+expressionFromLiquidTerm (Term.Node (RefinedSymbol "int-0" _) []) =
     Just $ TypedExpression TInt $ IntLiteral 0
-expressionFromLiquidTerm (Tree.Node (RefinedSymbol "int-1" _) []) =
+expressionFromLiquidTerm (Term.Node (RefinedSymbol "int-1" _) []) =
     Just $ TypedExpression TInt $ IntLiteral 1
-expressionFromLiquidTerm (Tree.Node (RefinedSymbol "bool-false" _) []) =
+expressionFromLiquidTerm (Term.Node (RefinedSymbol "bool-false" _) []) =
     Just $ TypedExpression TBool $ BoolLiteral False
-expressionFromLiquidTerm (Tree.Node (RefinedSymbol "bool-true" _) []) =
+expressionFromLiquidTerm (Term.Node (RefinedSymbol "bool-true" _) []) =
     Just $ TypedExpression TBool $ BoolLiteral True
-expressionFromLiquidTerm (Tree.Node (RefinedSymbol "not" _) [operand]) = do
+expressionFromLiquidTerm (Term.Node (RefinedSymbol "not" _) [operand]) = do
     decoded <- expressionFromLiquidTerm operand
     pure $ TypedExpression TBool $ Not $ expression decoded
-expressionFromLiquidTerm (Tree.Node (RefinedSymbol liquidSymbol liquidRefinement) [first, second])
+expressionFromLiquidTerm (Term.Node (RefinedSymbol liquidSymbol liquidRefinement) [first, second])
     | Just function_ <- functionFromSymbol liquidSymbol = do
         result <- typeFromRefinement liquidRefinement
         decodedFirst <- expressionFromLiquidTerm first
@@ -195,7 +196,7 @@ expressionFromLiquidTerm (Tree.Node (RefinedSymbol liquidSymbol liquidRefinement
         pure
             $ TypedExpression result
             $ ApplyBinary function_ (expression decodedFirst) (expression decodedSecond)
-expressionFromLiquidTerm (Tree.Node (RefinedSymbol "if" liquidRefinement) [condition, ifTrue, ifFalse]) = do
+expressionFromLiquidTerm (Term.Node (RefinedSymbol "if" liquidRefinement) [condition, ifTrue, ifFalse]) = do
     result <- typeFromRefinement liquidRefinement
     decodedCondition <- expressionFromLiquidTerm condition
     decodedTrue <- expressionFromLiquidTerm ifTrue

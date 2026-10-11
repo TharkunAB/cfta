@@ -16,7 +16,6 @@ import Data.Functor.Identity (Identity (..))
 import Data.List (sort)
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 import Test.QuickCheck (Gen, chooseInt, elements, forAll, property, vectorOf, within)
 
@@ -53,6 +52,8 @@ import qualified Data.CFTA.Interned as Interned
 import Data.CFTA.Path (ChildIndex (..), path, unPath)
 import qualified Data.CFTA.Simple as Simple
 import Data.CFTA.Template (Template (..), matchesTemplate, restrictFTA)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 spec :: Spec
 spec = describe "the interned automata against Data.CFTA.Simple" $ do
@@ -119,12 +120,12 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
                             partial <- expandPartialTermFrag fragment
                             return (holdsB partial, ())
                         oracle _ _ (Right _) = return (False, ())
-                        holdsB (Tree.Node (ConcreteSymbol symbol) children) = symbol == "b" || any holdsB children
-                        holdsB (Tree.Node _ children) = any holdsB children
+                        holdsB (Term.Node (ConcreteSymbol symbol) children) = symbol == "b" || any holdsB children
+                        holdsB (Term.Node _ children) = any holdsB children
                         preferLast _ holes = case reverse holes of
                             uv : _ -> Just uv
                             [] -> Nothing
-                        expected = Set.fromList $ filter (notElem "b" . Tree.flatten) (simpleTerms depth explicit)
+                        expected = Set.fromList $ filter (notElem "b" . Term.flatten) (simpleTerms depth explicit)
                     (depth, Set.fromList (termsPruneWith "Mu" () noExpansionPreference oracle bounded)) `shouldBe` (depth, expected)
                     (depth, Set.fromList (termsPruneWith "Mu" () preferLast oracle bounded)) `shouldBe` (depth, expected)
 
@@ -207,8 +208,8 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
         , ("both to a fixpoint", fixUnbounded (withoutRedundantEdges . reducePartially))
         ]
     sameSymbol left right = if left == right then Just left else Nothing
-    treeDepth (Tree.Node _ []) = 0 :: Depth
-    treeDepth (Tree.Node _ children) = 1 + maximum (map treeDepth children)
+    treeDepth (Term.Node _ []) = 0 :: Depth
+    treeDepth (Term.Node _ children) = 1 + maximum (map treeDepth children)
     concrete (ConcreteSymbol symbol) = Just symbol
     concrete _ = Nothing
 
@@ -270,15 +271,15 @@ deepest explicit
     | otherwise = 2
 
 -- | The trees of the underlying graph up to a depth, without constraints.
-underlying :: Depth -> FTA Int String Constraint -> [Tree.Tree String]
+underlying :: Depth -> FTA Int String Constraint -> [Term String]
 underlying depth = fromMaybe [] . Simple.termsUpTo depth . mapConstraints (const noConstraint)
 
 -- | Terms to test membership of: the trees of the underlying graph, and trees with a foreign symbol.
-candidates :: FTA Int String Constraint -> [Tree.Tree String]
-candidates explicit = underlying (deepest explicit) explicit <> [Tree.Node "c" [], Tree.Node "f" [Tree.Node "c" []]]
+candidates :: FTA Int String Constraint -> [Term String]
+candidates explicit = underlying (deepest explicit) explicit <> [Term.Node "c" [], Term.Node "f" [Term.Node "c" []]]
 
-simpleAccepts :: (Ord state) => FTA state String Constraint -> Tree.Tree String -> Bool
+simpleAccepts :: (Ord state) => FTA state String Constraint -> Term String -> Bool
 simpleAccepts explicit = fromMaybe (error "an equality constraint needed a solver") . Simple.accepts explicit
 
-simpleTerms :: (Ord state) => Depth -> FTA state String Constraint -> [Tree.Tree String]
+simpleTerms :: (Ord state) => Depth -> FTA state String Constraint -> [Term String]
 simpleTerms depth = fromMaybe (error "an equality constraint needed a solver") . Simple.termsUpTo depth

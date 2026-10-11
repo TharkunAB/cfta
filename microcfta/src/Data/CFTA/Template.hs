@@ -17,7 +17,6 @@ module Data.CFTA.Template (
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
 import Data.Maybe (mapMaybe)
-import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 
 import Data.CFTA (FTA, Transition (..))
@@ -26,6 +25,8 @@ import Data.CFTA.Index (Arity (..))
 import Data.CFTA.Internal.Tree (explore)
 import Data.CFTA.Interned.Operations (unfoldOuterRec)
 import Data.CFTA.Interned.Type
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- | Pattern over first-order terms.
 data Template symbol
@@ -64,8 +65,8 @@ prefix templates (Arity count)
     | otherwise = Nothing
 
 -- | Test a concrete term against a template.
-matchesTemplate :: (Eq symbol) => Template symbol -> Tree.Tree symbol -> Bool
-matchesTemplate template (Tree.Node symbol children) =
+matchesTemplate :: (Eq symbol) => Template symbol -> Term symbol -> Bool
+matchesTemplate template (Term.Node symbol children) =
     maybe False (\templates -> and (zipWith matchesTemplate templates children)) $
         childTemplates template symbol (Arity (length children))
 

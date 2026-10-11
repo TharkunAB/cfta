@@ -39,7 +39,6 @@ import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Monoid (Sum (..))
 import Data.Set (Set)
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import System.IO.Unsafe (unsafePerformIO)
 import Type.Reflection (Typeable)
 
@@ -49,6 +48,7 @@ import Data.CFTA.Internal.Tree (acceptsBy, adjustAt)
 import Data.CFTA.Interned.Memo
 import Data.CFTA.Interned.Type
 import Data.CFTA.Path (ChildIndex (..), Path (ConsPath, EmptyPath), Pathable (..))
+import Data.CFTA.Term (Term)
 
 -- | Transform the immediate alternatives of one node.
 {-# INLINEABLE nodeMapChildren #-}
@@ -508,7 +508,7 @@ term.
 {-# INLINEABLE acceptsWith #-}
 acceptsWith ::
     (Hashable symbol, Typeable symbol) =>
-    (Constraint -> Tree.Tree symbol -> Bool) -> Node symbol -> Tree.Tree symbol -> Bool
+    (Constraint -> Term symbol -> Bool) -> Node symbol -> Term symbol -> Bool
 acceptsWith acceptsConstraint node = runIdentity . acceptsBy nodeEdges edgeSymbol edgeChildren check node
   where
     check _ edge term = Identity $ acceptsConstraint (edgeConstraint edge) term

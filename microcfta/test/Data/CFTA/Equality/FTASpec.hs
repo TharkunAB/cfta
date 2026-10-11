@@ -1,7 +1,6 @@
 module Data.CFTA.Equality.FTASpec (spec) where
 
 import Data.Tree (flatten)
-import qualified Data.Tree as Tree
 
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 
@@ -10,6 +9,7 @@ import qualified Data.CFTA.Equality as Core
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import qualified Data.CFTA.Interned as Common
 import Data.CFTA.Path (path)
+import qualified Data.CFTA.Term as Term
 
 data State = Expression | Atom
     deriving (Eq, Ord, Show)
@@ -24,8 +24,8 @@ spec =
                     Common.Node
                         [Common.mkEdge "pair" [leaves, leaves] equalChildren]
                 ecta = graph :: Core.Node String
-            Core.accepts ecta (Tree.Node "pair" [Tree.Node "a" [], Tree.Node "a" []]) `shouldBe` True
-            Core.accepts ecta (Tree.Node "pair" [Tree.Node "a" [], Tree.Node "b" []]) `shouldBe` False
+            Core.accepts ecta (Term.Node "pair" [Term.Node "a" [], Term.Node "a" []]) `shouldBe` True
+            Core.accepts ecta (Term.Node "pair" [Term.Node "a" [], Term.Node "b" []]) `shouldBe` False
             case Core.toTree ecta of
                 Left err -> expectationFailure $ show err
                 Right tree ->

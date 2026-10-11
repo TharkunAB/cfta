@@ -24,11 +24,12 @@ module Data.CFTA.Gen.Refinement.OracleSpec (spec) where
 
 import Control.Monad (filterM, forM, when)
 import Data.CFTA.Index (Depth (..), Rank (..), everyRank)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import Data.Either (isRight)
 import Data.IORef (newIORef, readIORef, writeIORef)
 import Data.List (sort)
 import Data.String (fromString)
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, it)
 import Test.QuickCheck (
     Gen,
@@ -171,7 +172,7 @@ spec = describe "the refinement compiler against validOutcomes" $ do
 count from one to four, and up to depth three. 'Nothing' when the lattice
 cannot decide a guard.
 -}
-simpleTerms :: Automaton -> IO (Maybe ([[Tree.Tree Symbol]], [Tree.Tree Symbol]))
+simpleTerms :: Automaton -> IO (Maybe ([[Term Symbol]], [Term Symbol]))
 simpleTerms automaton = do
     undecided <- newIORef False
     let explicit = either (error . show) id $ explicitView automaton
@@ -180,7 +181,7 @@ simpleTerms automaton = do
             when (verdict == Unknown) $ writeIORef undecided True
             pure $ verdict == Yes
     bySize <- forM [1 .. 4] $ \size ->
-        filter ((== size) . length . Tree.flatten) <$> Simple.termsUpToM decide (Depth (size - 1)) explicit
+        filter ((== size) . length . Term.flatten) <$> Simple.termsUpToM decide (Depth (size - 1)) explicit
     shallow <- Simple.termsUpToM decide 3 explicit
     unknown <- readIORef undecided
     pure $ if unknown then Nothing else Just (bySize, shallow)
@@ -189,7 +190,7 @@ simpleTerms automaton = do
 accepts, and whose root satisfies the condition. 'Nothing' when the lattice
 cannot decide a guard.
 -}
-boundedTerms :: Automaton -> Depth -> Maybe Integer -> IO (Maybe [Tree.Tree Symbol])
+boundedTerms :: Automaton -> Depth -> Maybe Integer -> IO (Maybe [Term Symbol])
 boundedTerms automaton depth condition = do
     undecided <- newIORef False
     let explicit = either (error . show) id $ explicitView automaton

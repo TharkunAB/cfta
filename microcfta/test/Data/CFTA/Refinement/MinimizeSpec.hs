@@ -3,7 +3,6 @@
 module Data.CFTA.Refinement.MinimizeSpec (spec) where
 
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList, shouldSatisfy)
 
 import Data.CFTA.Refinement (
@@ -42,6 +41,7 @@ import qualified Data.CFTA.Refinement.Guard as Guard
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Refinement.TestSupport (declarations)
+import qualified Data.CFTA.Term as Term
 import qualified Language.Fixpoint.Types as Fixpoint
 
 spec :: Spec
@@ -110,8 +110,8 @@ spec =
                     Right edge -> Node [edge]
                     Left err -> error (show err)
                 subtyping = refinementSubtypingOn latticeEntailment (Just . length . edgeChildren)
-                int k = Tree.Node (RefinedSymbol "Int" (refinementFormula (.== k))) []
-                divide left right = Tree.Node (RefinedSymbol "div" true) [int left, int right]
+                int k = Term.Node (RefinedSymbol "Int" (refinementFormula (.== k))) []
+                divide left right = Term.Node (RefinedSymbol "div" true) [int left, int right]
             accepts latticeEntailment root (divide 0 0) >>= (`shouldBe` No)
             reduced <- reduce latticeEntailment subtyping root
             case reduced of
@@ -132,7 +132,7 @@ spec =
                 checkMinimization (atomSubtyping solver) finalStateWithAlternative $ \reduced -> do
                     reduced `shouldBe` Node [otherAtom]
                     denotationAtMost solver 0 reduced
-                        >>= (`shouldBe` Right [Tree.Node (RefinedSymbol "other" Fixpoint.PTrue) []])
+                        >>= (`shouldBe` Right [Term.Node (RefinedSymbol "other" Fixpoint.PTrue) []])
 
         it "allows multiple representatives for one target and substitutes repeated nodes together" $
             withZ3 declarations $ \solver ->

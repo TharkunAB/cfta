@@ -3,7 +3,6 @@
 module Data.CFTA.Refinement.RecognitionSpec (spec) where
 
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import Data.CFTA.Refinement (
@@ -22,6 +21,7 @@ import Data.CFTA.Refinement (
  )
 import Data.CFTA.Refinement.Expression (refinementFormula, true, (.==))
 import Data.CFTA.Refinement.TestSupport (unusedEntailment)
+import qualified Data.CFTA.Term as Term
 
 spec :: Spec
 spec =
@@ -29,13 +29,13 @@ spec =
         it "accepts the transition's declared refinement" $ do
             let zero = refinementFormula (\v -> v .== 0)
                 automaton = Node [Transition "zero" zero [] noConstraint]
-            accepts unusedEntailment automaton (Tree.Node (RefinedSymbol "zero" zero) [])
+            accepts unusedEntailment automaton (Term.Node (RefinedSymbol "zero" zero) [])
                 >>= (`shouldBe` Yes)
 
         it "rejects an invented refinement on the same constructor" $ do
             let zero = refinementFormula (\v -> v .== 0)
                 automaton = Node [Transition "zero" zero [] noConstraint]
-            accepts unusedEntailment automaton (Tree.Node (RefinedSymbol "zero" true) [])
+            accepts unusedEntailment automaton (Term.Node (RefinedSymbol "zero" true) [])
                 >>= (`shouldBe` No)
 
         it "keeps arity ranked by constructor even across refinements" $ do
@@ -57,15 +57,15 @@ spec =
                         , Node [Transition "right" true [] noConstraint]
                         ]
             Set.size (automatonAlphabet automaton) `shouldBe` 2
-            accepts unusedEntailment automaton (Tree.Node (RefinedSymbol "left" true) [])
+            accepts unusedEntailment automaton (Term.Node (RefinedSymbol "left" true) [])
                 >>= (`shouldBe` Yes)
-            accepts unusedEntailment automaton (Tree.Node (RefinedSymbol "right" true) [])
+            accepts unusedEntailment automaton (Term.Node (RefinedSymbol "right" true) [])
                 >>= (`shouldBe` Yes)
 
         it "gives the empty final-state set an empty denotation" $ do
             let automaton = union [] :: Automaton
             automaton `shouldBe` EmptyNode
             automatonAlphabet automaton `shouldBe` Set.empty
-            accepts unusedEntailment automaton (Tree.Node (RefinedSymbol "unused" true) [])
+            accepts unusedEntailment automaton (Term.Node (RefinedSymbol "unused" true) [])
                 >>= (`shouldBe` No)
             denotationAtMost unusedEntailment 2 automaton >>= (`shouldBe` Right [])

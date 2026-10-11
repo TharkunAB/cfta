@@ -3,7 +3,6 @@ module Data.CFTA.Equality.ConstraintSpec (spec) where
 import qualified Data.IntMap.Lazy as IntMap
 import Data.List (nub, sort, subsequences, (\\))
 import qualified Data.Set as Set
-import qualified Data.Tree as Tree
 
 import Test.Hspec
 import Test.QuickCheck
@@ -11,6 +10,8 @@ import Test.QuickCheck
 import Data.CFTA.Constraint (equalitiesHold, equalityConstraint)
 import Data.CFTA.Equality.Constraint
 import Data.CFTA.Path
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -----------------------------------------------------------------
 
@@ -124,14 +125,14 @@ spec = do
                 `shouldBe` True
 
 -- | Whether a term satisfies normalized equalities.
-satisfied :: EqConstraints -> Tree.Tree Char -> Bool
+satisfied :: EqConstraints -> Term Char -> Bool
 satisfied constraints = equalitiesHold (equalityConstraint constraints)
 
 {- | Whether a term satisfies raw classes: each path exists and the subterms
 agree. A class of fewer than two distinct paths requires nothing, as
 'mkEqConstraints' drops it.
 -}
-rawHolds :: [[Path]] -> Tree.Tree Char -> Bool
+rawHolds :: [[Path]] -> Term Char -> Bool
 rawHolds classes term = all agree [paths | paths <- map nub classes, length paths > 1]
   where
     agree paths = case traverse (`getPath` term) paths of
@@ -150,11 +151,11 @@ classesGen = do
             path . map ChildIndex <$> vectorOf len (chooseInt (0, 2))
 
 -- | A term over a, b, f of one child, and g of two, at most the given depth.
-termGen :: Int -> Gen (Tree.Tree Char)
-termGen 0 = elements [Tree.Node 'a' [], Tree.Node 'b' []]
+termGen :: Int -> Gen (Term Char)
+termGen 0 = elements [Term.Node 'a' [], Term.Node 'b' []]
 termGen depth =
     oneof
         [ termGen 0
-        , (\child -> Tree.Node 'f' [child]) <$> termGen (depth - 1)
-        , (\left right -> Tree.Node 'g' [left, right]) <$> termGen (depth - 1) <*> termGen (depth - 1)
+        , (\child -> Term.Node 'f' [child]) <$> termGen (depth - 1)
+        , (\left right -> Term.Node 'g' [left, right]) <$> termGen (depth - 1) <*> termGen (depth - 1)
         ]

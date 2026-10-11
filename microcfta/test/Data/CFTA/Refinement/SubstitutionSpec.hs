@@ -2,7 +2,6 @@
 
 module Data.CFTA.Refinement.SubstitutionSpec (spec) where
 
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import Data.CFTA.Refinement (
@@ -20,6 +19,8 @@ import Data.CFTA.Refinement.Expression (false, fromExpr, toExpr, true, variable,
 import Data.CFTA.Refinement.Guard (buildGuard, isSubtypeOf, withActualFor, withActualsFor)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3, withZ3Assuming)
 import Data.CFTA.Symbol (valueName)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import qualified Language.Fixpoint.Types as Fixpoint
 
 equalityEntailment :: Entailment
@@ -39,15 +40,15 @@ spec =
             let expected = variable valueName .== variable "x"
                 dependent = variable valueName .== variable "n"
                 term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "app"
                             true
                         )
-                        [ Tree.Node (RefinedSymbol "result" expected) []
-                        , Tree.Node (RefinedSymbol "output" dependent) []
-                        , Tree.Node (RefinedSymbol "x" true) []
-                        , Tree.Node (RefinedSymbol "n" true) []
+                        [ Term.Node (RefinedSymbol "result" expected) []
+                        , Term.Node (RefinedSymbol "output" dependent) []
+                        , Term.Node (RefinedSymbol "x" true) []
+                        , Term.Node (RefinedSymbol "n" true) []
                         ]
             evaluateConstraint equalityEntailment dependentGuard term >>= (`shouldBe` Yes)
 
@@ -55,15 +56,15 @@ spec =
             let expected = variable valueName .== variable "y"
                 dependent = variable valueName .== variable "n"
                 term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "app"
                             true
                         )
-                        [ Tree.Node (RefinedSymbol "result" expected) []
-                        , Tree.Node (RefinedSymbol "output" dependent) []
-                        , Tree.Node (RefinedSymbol "x" true) []
-                        , Tree.Node (RefinedSymbol "n" true) []
+                        [ Term.Node (RefinedSymbol "result" expected) []
+                        , Term.Node (RefinedSymbol "output" dependent) []
+                        , Term.Node (RefinedSymbol "x" true) []
+                        , Term.Node (RefinedSymbol "n" true) []
                         ]
             evaluateConstraint equalityEntailment dependentGuard term >>= (`shouldBe` No)
 
@@ -76,17 +77,17 @@ spec =
                             [(firstActual, firstFormal), (secondActual, secondFormal)]
                             (functionOutput `isSubtypeOf` resultType)
                 term =
-                    Tree.Node
+                    Term.Node
                         ( RefinedSymbol
                             "binary-app"
                             true
                         )
-                        [ Tree.Node (RefinedSymbol "result" expected) []
-                        , Tree.Node (RefinedSymbol "output" dependent) []
-                        , Tree.Node (RefinedSymbol "x" true) []
-                        , Tree.Node (RefinedSymbol "n" true) []
-                        , Tree.Node (RefinedSymbol "y" true) []
-                        , Tree.Node (RefinedSymbol "m" true) []
+                        [ Term.Node (RefinedSymbol "result" expected) []
+                        , Term.Node (RefinedSymbol "output" dependent) []
+                        , Term.Node (RefinedSymbol "x" true) []
+                        , Term.Node (RefinedSymbol "n" true) []
+                        , Term.Node (RefinedSymbol "y" true) []
+                        , Term.Node (RefinedSymbol "m" true) []
                         ]
             evaluateConstraint equalityEntailment guard term >>= (`shouldBe` Yes)
 
@@ -123,15 +124,15 @@ spec =
                             [Substitution (path [0]) (path [2]), Substitution (path [1]) (path [3])]
                             (Satisfies (path []) requirement)
                     term =
-                        Tree.Node
+                        Term.Node
                             ( RefinedSymbol
                                 "pair"
                                 true
                             )
-                            [ Tree.Node (RefinedSymbol "x" true) []
-                            , Tree.Node (RefinedSymbol "x" true) []
-                            , Tree.Node (RefinedSymbol "y" true) []
-                            , Tree.Node (RefinedSymbol "z" true) []
+                            [ Term.Node (RefinedSymbol "x" true) []
+                            , Term.Node (RefinedSymbol "x" true) []
+                            , Term.Node (RefinedSymbol "y" true) []
+                            , Term.Node (RefinedSymbol "z" true) []
                             ]
                 evaluateGuard solver (guard $ variable "y" .== 7) term >>= (`shouldBe` Yes)
                 evaluateGuard solver (guard $ variable "y" .== variable "z") term >>= (`shouldBe` Yes)
@@ -142,7 +143,7 @@ spec =
                         Substitute
                             [Substitution (path [0]) (path [1]), Substitution (path [1]) (path [0])]
                             (Satisfies (path []) $ variable "x" .== variable "y")
-                    term = Tree.Node (RefinedSymbol "pair" true) [Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "y" true) []]
+                    term = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
                 evaluateGuard solver guard term >>= (`shouldBe` No)
 
         it "does not swap the value assumptions of actual arguments" $
@@ -152,13 +153,13 @@ spec =
                             [Substitution (path [0]) (path [1]), Substitution (path [1]) (path [0])]
                             (Satisfies (path []) $ variable "x" .< variable "y")
                     term =
-                        Tree.Node
+                        Term.Node
                             ( RefinedSymbol
                                 "pair"
                                 true
                             )
-                            [ Tree.Node (RefinedSymbol "x" (variable valueName .== 0)) []
-                            , Tree.Node (RefinedSymbol "y" (variable valueName .== 1)) []
+                            [ Term.Node (RefinedSymbol "x" (variable valueName .== 0)) []
+                            , Term.Node (RefinedSymbol "y" (variable valueName .== 1)) []
                             ]
                 evaluateGuard solver guard term >>= (`shouldBe` No)
 
@@ -170,12 +171,12 @@ spec =
                             $ Satisfies (path [])
                             $ variable "y" .== variable "z"
                     term =
-                        Tree.Node
+                        Term.Node
                             ( RefinedSymbol
                                 "triple"
                                 true
                             )
-                            [Tree.Node (RefinedSymbol "z" true) [], Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "y" true) []]
+                            [Term.Node (RefinedSymbol "z" true) [], Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
                 evaluateGuard solver guard term >>= (`shouldBe` Yes)
 
         it "keeps actual refinements in their ambient environment under nested scopes" $
@@ -185,15 +186,15 @@ spec =
                             $ Substitute [Substitution (path [2]) (path [3])]
                             $ Satisfies (path []) requirement
                     term =
-                        Tree.Node
+                        Term.Node
                             ( RefinedSymbol
                                 "quadruple"
                                 true
                             )
-                            [ Tree.Node (RefinedSymbol "x" (variable valueName .== variable "z")) []
-                            , Tree.Node (RefinedSymbol "y" true) []
-                            , Tree.Node (RefinedSymbol "w" (variable valueName .== 1)) []
-                            , Tree.Node (RefinedSymbol "z" true) []
+                            [ Term.Node (RefinedSymbol "x" (variable valueName .== variable "z")) []
+                            , Term.Node (RefinedSymbol "y" true) []
+                            , Term.Node (RefinedSymbol "w" (variable valueName .== 1)) []
+                            , Term.Node (RefinedSymbol "z" true) []
                             ]
                 evaluateGuard solver (guard $ variable "y" .== variable "w") term >>= (`shouldBe` No)
                 evaluateGuard solver (guard $ variable "y" .< variable "w") term >>= (`shouldBe` Yes)
@@ -206,7 +207,7 @@ spec =
                     guard =
                         Substitute [Substitution (path [0]) (path [1])] $
                             Satisfies (path []) requirement
-                    term = Tree.Node (RefinedSymbol "pair" true) [Tree.Node (RefinedSymbol "x" true) [], Tree.Node (RefinedSymbol "y" true) []]
+                    term = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
                 evaluateGuard solver guard term >>= (`shouldBe` No)
 
 -- | Sorts for actual variables and constructor result values in these checks.
@@ -214,15 +215,15 @@ declarations :: [(Fixpoint.Symbol, Fixpoint.Sort)]
 declarations = [(Fixpoint.symbol name, Fixpoint.FInt) | name <- [valueName, "app", "w", "x", "y", "z"] :: [String]]
 
 -- | Two different applications whose result refinements identify their values.
-collidingActuals :: Tree.Tree Symbol
+collidingActuals :: Term Symbol
 collidingActuals =
-    Tree.Node
+    Term.Node
         ( RefinedSymbol
             "pair"
             true
         )
-        [ Tree.Node (RefinedSymbol "app" (variable valueName .== 0)) [Tree.Node (RefinedSymbol "zero" true) []]
-        , Tree.Node (RefinedSymbol "app" (variable valueName .== 1)) [Tree.Node (RefinedSymbol "one" true) []]
-        , Tree.Node (RefinedSymbol "x" true) []
-        , Tree.Node (RefinedSymbol "y" true) []
+        [ Term.Node (RefinedSymbol "app" (variable valueName .== 0)) [Term.Node (RefinedSymbol "zero" true) []]
+        , Term.Node (RefinedSymbol "app" (variable valueName .== 1)) [Term.Node (RefinedSymbol "one" true) []]
+        , Term.Node (RefinedSymbol "x" true) []
+        , Term.Node (RefinedSymbol "y" true) []
         ]

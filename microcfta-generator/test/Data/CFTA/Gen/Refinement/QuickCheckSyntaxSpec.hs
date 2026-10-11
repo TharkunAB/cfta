@@ -1,7 +1,6 @@
 module Data.CFTA.Gen.Refinement.QuickCheckSyntaxSpec (spec) where
 
 import Control.Monad (forM_, void)
-import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Data.CFTA.Gen.Refinement as LTAGen
@@ -32,6 +31,7 @@ import Data.CFTA.Refinement.Guard (
  )
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Symbol (valueName)
+import qualified Data.CFTA.Term as Term
 import qualified Language.Fixpoint.Types as Fixpoint
 
 spec :: Spec
@@ -146,10 +146,10 @@ spec = do
                         $ (,) <$> actuals <*> formal
                 expected =
                     [ ( (actual, 99)
-                      , Tree.Node
+                      , Term.Node
                             (RefinedSymbol "pair" true)
-                            [ Tree.Node (RefinedSymbol symbol (refinementFormula $ annotation name)) []
-                            , Tree.Node (RefinedSymbol "x" (refinementFormula $ annotation "x")) []
+                            [ Term.Node (RefinedSymbol symbol (refinementFormula $ annotation name)) []
+                            , Term.Node (RefinedSymbol "x" (refinementFormula $ annotation "x")) []
                             ]
                       )
                     | (actual, symbol, name) <- [(10, "a", "a"), (20, "b", "b")]
@@ -165,8 +165,8 @@ spec = do
                         [ LTAGen.leaf (1 :: Int) "atom" (const true)
                         , LTAGen.node "box" $ LTAGen.leaf 2 "payload" (const true)
                         ]
-            let atomTerm = Tree.Node (RefinedSymbol "atom" true) []
-                compoundTerm = Tree.Node (RefinedSymbol "box" true) [Tree.Node (RefinedSymbol "payload" true) []]
+            let atomTerm = Term.Node (RefinedSymbol "atom" true) []
+                compoundTerm = Term.Node (RefinedSymbol "box" true) [Term.Node (RefinedSymbol "payload" true) []]
                 acceptedAtoms = [(1, atomTerm)]
                 acceptedCompounds = [(2, compoundTerm)]
                 alternatives =
@@ -182,7 +182,7 @@ spec = do
                             (\actual formal -> withActualFor actual formal $ predicate $ actual `isSameTermAs` formal)
                             $ (,) <$> actuals <*> LTAGen.leaf (9 :: Int) "x" (const true)
                     expected =
-                        [ ((actual, 9), Tree.Node (RefinedSymbol "pair" true) [term, Tree.Node (RefinedSymbol "x" true) []])
+                        [ ((actual, 9), Term.Node (RefinedSymbol "pair" true) [term, Term.Node (RefinedSymbol "x" true) []])
                         | (actual, term) <- accepted
                         ]
                 compiled <- LTAGen.compileWith unusedEntailment generator >>= either (fail . show) pure
