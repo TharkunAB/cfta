@@ -20,6 +20,7 @@ import qualified Data.CFTA.Refinement.SyntaxSpec
 import qualified Data.CFTA.SimpleSpec
 import qualified Data.CFTA.SymbolSpec
 import qualified Data.CFTA.TermSearchSpec
+import qualified Data.CFTA.TermSpec
 import qualified Data.CFTASpec
 
 main :: IO ()
@@ -34,6 +35,7 @@ main = do
         Data.CFTA.Equality.ConstraintSpec.spec
         Data.CFTA.Equality.FTASpec.spec
         Data.CFTA.EqualitySpec.spec
+        Data.CFTA.TermSpec.spec
         Data.CFTA.TermSearchSpec.spec
         Data.CFTA.Refinement.GuardSpec.spec
         Data.CFTA.Refinement.RecognitionSpec.spec
