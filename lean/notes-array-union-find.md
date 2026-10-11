@@ -33,8 +33,15 @@ bounds. Returned representatives are allocated. Input path indexes must come
 from the source's finite member map.
 
 The functional array model specifies source reads and writes. Physical
-`STUArray` storage and conversion of the finite size to `Int` remain contracts. The
-path-to-index map, inverse path lookup, canonical output ordering, and their
-composition with the saturation loop remain source adapters. The existing
+`EqualityIndex` proves the complete path-index map and its inverse. Every
+input path has exactly one valid index. Every allocated index represents an
+input path. `indexed_exact` verifies the actual consecutive index entries.
+`source_path_semantics` connects the complete indexed loop to existing-subterm
+equality, including path existence. `source_canonical_semantics` includes path
+set construction and final sorting.
+
+`STUArray` storage and conversion of the finite size to `Int` remain contracts.
+Canonical partition identity and composition with the repeated saturation
+loop remain source adapters. The existing
 `EqualityNormalize.complete_matches_partition` states the canonical
 connected-partition uniqueness property needed by that final composition.
