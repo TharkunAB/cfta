@@ -10,12 +10,13 @@ import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA.Gen.Equality.QuickCheck as ECTAGen
 import Data.CFTA.Gen.TypedExpressionLanguage (
-    TypedExpression (expressionType),
+    TypedExpression,
     allTypes,
     expressionCount,
     expressionGenAtDepth,
     handwrittenExpressionGen,
     naiveExpressionGen,
+    typedExpressionScore,
  )
 import GeneratorSpeedHarness (Benchmark (..), benchmarkMain)
 
@@ -32,7 +33,7 @@ benchmark =
         , benchmarkSampleCount = 20000
         , benchmarkMembers = \depth -> sum $ map (expressionCount depth) allTypes
         , benchmarkPrepare = prepare
-        , benchmarkTally = fromEnum . expressionType
+        , benchmarkTally = typedExpressionScore
         }
 
 -- | Construct one selected exact-depth generator.

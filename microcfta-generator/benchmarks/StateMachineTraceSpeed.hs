@@ -87,10 +87,10 @@ commandScore Equal = 22
 commandScore Not = 23
 commandScore Pop = 24
 
--- | Give each concrete literal a distinct score.
+-- | Give each literal a distinct score: even for an integer, odd for a Boolean.
 valueScore :: Value -> Int
 valueScore (IntValue integer) = 2 * integer
-valueScore (BoolValue boolean) = if boolean then 3 else 2
+valueScore (BoolValue boolean) = if boolean then 3 else 1
 
 -- | Give each predicted response a distinct score.
 responseScore :: Response -> Int

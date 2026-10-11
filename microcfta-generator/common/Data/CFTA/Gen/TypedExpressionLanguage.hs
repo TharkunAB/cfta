@@ -59,6 +59,10 @@ module Data.CFTA.Gen.TypedExpressionLanguage (
     handwrittenExpressionOfType,
     handwrittenExpressionGen,
     frequencyInteger,
+
+    -- * Benchmark checksums
+    typedExpressionScore,
+    expressionScore,
 ) where
 
 import qualified Data.Text as Text
@@ -524,3 +528,18 @@ frequencyInteger alternatives
     pick selected ((weight, generator) : remaining)
         | selected <= weight = generator
         | otherwise = pick (selected - weight) remaining
+
+-- | Force and score every field of one typed expression.
+typedExpressionScore :: TypedExpression -> Int
+typedExpressionScore (TypedExpression type_ expression_) =
+    fromEnum type_ + expressionScore expression_
+
+-- | Force the complete expression tree and return a stable checksum component.
+expressionScore :: Expression -> Int
+expressionScore (IntLiteral value) = 2 * value + 1
+expressionScore (BoolLiteral value) = if value then 4 else 3
+expressionScore (Not argument) = 5 + expressionScore argument
+expressionScore (ApplyBinary function_ first second) =
+    7 + fromEnum function_ + expressionScore first + expressionScore second
+expressionScore (IfExpression condition ifTrue ifFalse) =
+    13 + expressionScore condition + expressionScore ifTrue + expressionScore ifFalse

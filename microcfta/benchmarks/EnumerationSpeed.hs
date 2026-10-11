@@ -10,7 +10,7 @@ in the hundreds of milliseconds, above the noise of a shared machine.
 module Main (main) where
 
 import Control.Exception (evaluate)
-import Control.Monad (void)
+import Control.Monad ((>=>))
 import Data.Functor.Identity (runIdentity)
 import Data.List (elemIndex)
 import qualified Data.Map.Strict as Map
@@ -27,12 +27,12 @@ import Data.CFTA.Constraint (Constraint, noConstraint)
 import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Interned as Common
 
-data Bench = Bench
+data Bench = forall language. Bench
     { benchName :: String
     , benchRepeats :: Int
-    , benchPrepare :: Int -> IO ()
+    , benchPrepare :: Int -> IO language
     -- ^ Build and force the language for one repeat.
-    , benchAction :: Int -> IO Int
+    , benchAction :: language -> IO Int
     }
 
 main :: IO ()
@@ -47,19 +47,19 @@ parseMultiplier _ = 1
 
 runBench :: Int -> Bench -> IO ()
 runBench multiplier Bench{benchName, benchRepeats, benchPrepare, benchAction} = do
-    mapM_ benchPrepare [1 .. totalRepeats]
+    languages <- mapM benchPrepare [1 .. totalRepeats]
     start <- getCPUTime
-    checksum <- loop totalRepeats 0
+    checksum <- loop languages 0
     end <- getCPUTime
     let seconds = fromIntegral (end - start) / (10 ^ (12 :: Int) :: Double)
     printf "%s,%.6f,%d,%d\n" benchName seconds totalRepeats checksum
   where
     totalRepeats = benchRepeats * multiplier
 
-    loop 0 !acc = return acc
-    loop n !acc = do
-        x <- benchAction n
-        loop (n - 1) (acc + x)
+    loop [] !acc = return acc
+    loop (language : rest) !acc = do
+        x <- benchAction language
+        loop rest (acc + x)
 
 benchmarks :: [Bench]
 benchmarks =
@@ -70,27 +70,25 @@ benchmarks =
     , interned "interned/expressions-lazy-500k" 5 internedExpressions $ take 500000 . Enumeration.plainTerms
     , interned "interned/shared-pairs-lazy-500k" 5 sharedPairs $ take 500000 . Enumeration.plainTerms
     , -- Chains of depth n have n nodes, so this row counts terms instead of nodes.
-      Bench "terms/naturals-500k" 5 (void . evaluate . length . FTA.states . naturals) $
-        evaluate . length . take 500000 . FTA.terms . naturals
+      Bench "terms/naturals-500k" 5 (prepared (length . FTA.states) naturals) $
+        evaluate . length . take 500000 . FTA.terms
     , explicit "termsUpToM-identity/expressions-depth-3" 10 expressions $ runIdentity . FTA.termsUpToM (\_ _ _ -> pure True) 3
-    , Bench "termsUpToM-io/expressions-depth-3" 10 (void . evaluate . length . FTA.states . expressions) $ \i ->
-        FTA.termsUpToM (\_ _ _ -> pure True) 3 (expressions i) >>= sizes
+    , Bench "termsUpToM-io/expressions-depth-3" 10 (prepared (length . FTA.states) expressions) $
+        FTA.termsUpToM (\_ _ _ -> pure True) 3 >=> sizes
     , explicit "termsUpToM-ambiguous-identity/expressions-depth-3" 2 ambiguousExpressions $
         runIdentity . FTA.termsUpToM (\_ _ _ -> pure True) 3
-    , Bench
-        "termsUpToM-ambiguous-identity-text/expressions-depth-3"
-        2
-        (void . evaluate . length . FTA.states . textExpressions)
-        $ sizes . runIdentity . FTA.termsUpToM (\_ _ _ -> pure True) 3 . textExpressions
-    , Bench "termsUpToM-ambiguous-identity-int/expressions-depth-3" 2 (void . evaluate . length . FTA.states . intExpressions) $
-        sizes . runIdentity . FTA.termsUpToM (\_ _ _ -> pure True) 3 . intExpressions
+    , explicit "termsUpToM-ambiguous-identity-text/expressions-depth-3" 2 textExpressions $
+        runIdentity . FTA.termsUpToM (\_ _ _ -> pure True) 3
+    , explicit "termsUpToM-ambiguous-identity-int/expressions-depth-3" 2 intExpressions $
+        runIdentity . FTA.termsUpToM (\_ _ _ -> pure True) 3
     , explicit "terms-ambiguous/expressions-depth-3" 2 (FTA.boundDepth 3 . ambiguousExpressions) FTA.terms
     ]
   where
     explicit name repeats language enumerate =
-        Bench name repeats (void . evaluate . length . FTA.states . language) (sizes . enumerate . language)
+        Bench name repeats (prepared (length . FTA.states) language) (sizes . enumerate)
     interned name repeats language enumerate =
-        Bench name repeats (void . evaluate . Common.nodeCount . language) (sizes . enumerate . language)
+        Bench name repeats (prepared Common.nodeCount language) (sizes . enumerate)
+    prepared force build i = let built = build i in built <$ evaluate (force built)
 
 sizes :: [Tree.Tree a] -> IO Int
 sizes = evaluate . sum . map (length . Tree.flatten)
