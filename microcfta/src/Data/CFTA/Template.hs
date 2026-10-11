@@ -17,13 +17,13 @@ module Data.CFTA.Template (
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
 import Data.Maybe (mapMaybe)
-import qualified Data.Set as Set
 import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
 
 import Data.CFTA (FTA, Transition (..))
 import qualified Data.CFTA as FTA
 import Data.CFTA.Index (Arity (..))
+import Data.CFTA.Internal.Tree (explore)
 import Data.CFTA.Interned.Operations (unfoldOuterRec)
 import Data.CFTA.Interned.Type
 
@@ -103,17 +103,9 @@ restrictFTA template automaton =
     -- The input is ranked, so the restriction is ranked and validation cannot fail.
     fromRight (error "restrictFTA: the restriction of a ranked automaton is ranked")
         $ FTA.mkFTA initial
-        $ build Set.empty [initial] []
+        $ explore restrictTransitions transitionChildren initial
   where
     initial = (FTA.initialState automaton, template)
-
-    build _ [] rows = rows
-    build visited (state : pending) rows
-        | Set.member state visited = build visited pending rows
-        | otherwise =
-            build (Set.insert state visited) (concatMap transitionChildren outgoing <> pending) ((state, outgoing) : rows)
-      where
-        outgoing = restrictTransitions state
 
     restrictTransitions (state, wanted) = mapMaybe (restrictTransition wanted) (FTA.transitionsFrom automaton state)
     restrictTransition wanted transition =

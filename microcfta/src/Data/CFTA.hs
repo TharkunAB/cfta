@@ -67,6 +67,7 @@ import Data.CFTA.Internal.Tree (
     ViewPath,
     ViewStep (..),
     acceptsBy,
+    explore,
     termsBy,
     termsUpToBy,
     toTreeBy,
@@ -351,20 +352,9 @@ intersectWith ::
         (FTAError (ProductState leftState rightState) resultSymbol)
         (FTA (ProductState leftState rightState) resultSymbol resultConstraint)
 intersectWith matchSymbol combineConstraint left right =
-    mkFTA initial $ build Set.empty [initial] []
+    mkFTA initial $ explore intersectState transitionChildren initial
   where
     initial = ProductState (initialState left) (initialState right)
-
-    build _ [] rows = rows
-    build visited (productState : pending) rows
-        | Set.member productState visited = build visited pending rows
-        | otherwise =
-            build
-                (Set.insert productState visited)
-                (concatMap transitionChildren outgoing <> pending)
-                ((productState, outgoing) : rows)
-      where
-        outgoing = intersectState productState
 
     intersectState (ProductState leftState rightState) =
         [ Transition

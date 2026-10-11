@@ -140,8 +140,8 @@ toTree root
 -- TODO: Data.Graph.reachable says what this function does, but it needs the
 -- graph first, and this walk is what finds the graph. The other searches that
 -- discover their states as they go (Refinement.Automaton.located,
--- CFTA.intersectWith, Template.restrictFTA, Simple.intersect) stay hand written
--- for the same reason.
+-- Internal.Tree.explore, Simple.intersect) stay hand written for the same
+-- reason.
 
 {- | Outgoing alternatives of every node reachable from a root. The key is the
 'Int' of the 'NodeId' of the node. An empty root reaches no node.

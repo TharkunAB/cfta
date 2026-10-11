@@ -7,6 +7,7 @@ module Data.CFTA.Internal.Tree (
     ViewPath,
     StateView (..),
     toTreeBy,
+    explore,
     trimRows,
     termsBy,
     termLevelsBy,
@@ -89,6 +90,20 @@ toTreeBy outgoing children root = State.evalState (visit Set.empty Empty root) S
                 (\child -> visit ancestors (path :|> ViewStep index child))
                 [0 ..]
                 (children edge)
+
+{- | The keys that a search from the root reaches, each with its row. The search
+finds the rows as it goes, so it cannot use 'Data.Graph.reachable', which needs
+the graph first.
+-}
+explore :: (Ord key) => (key -> [alternative]) -> (alternative -> [key]) -> key -> [(key, [alternative])]
+explore rowOf childrenOf root = go Set.empty [root] []
+  where
+    go _ [] rows = rows
+    go visited (key : pending) rows
+        | Set.member key visited = go visited pending rows
+        | otherwise = go (Set.insert key visited) (concatMap childrenOf row <> pending) ((key, row) : rows)
+      where
+        row = rowOf key
 
 {- | Keep the rows the root reaches through alternatives whose children all
 accept a term.
