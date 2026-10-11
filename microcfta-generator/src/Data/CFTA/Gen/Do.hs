@@ -34,9 +34,9 @@ recognize the unqualified names inside a qualified block.
 -}
 module Data.CFTA.Gen.Do (
     GenApply (..),
-    GenPure (..),
     Applying,
     fmap,
+    pure,
     return,
     (>>),
     (>>=),
@@ -58,15 +58,11 @@ fmap :: (Prelude.Functor f) => (a -> b) -> f a -> f b
 fmap = Prelude.fmap
 
 -- | The result of a block with no more binds: the language of one value.
-class GenPure f where
-    -- | Lift one value into the block result.
-    pure :: a -> f a
-
-instance (Hashable symbol, Typeable symbol) => GenPure (Gen symbol) where
-    pure = Prelude.pure
+pure :: (Hashable symbol, Typeable symbol) => a -> Gen symbol a
+pure = Prelude.pure
 
 -- | Synonym for 'pure'.
-return :: (GenPure f) => a -> f a
+return :: (Hashable symbol, Typeable symbol) => a -> Gen symbol a
 return = pure
 
 {- | Sequence two generators, keeping only the second value.
