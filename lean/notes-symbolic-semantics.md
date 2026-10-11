@@ -18,8 +18,24 @@ next-variable supply. `occurs_constructor_reject` proves the actual occurrence
 test cannot reject a finite solution. `constructor_obligations_semantics`
 proves the constructor decomposition used by `unify`.
 
-These are assignment-preservation results. They do not yet establish the
-finite assignment-count bijection for every domain merge and expansion.
+`SymbolicSolutions.lean` defines finite live tuples independently of the
+counter. `normalize_count` proves exact count preservation under the source's
+empty or one-binding normalization invariant. It also proves the independent
+product count and the zero-count path and occurrence branches.
+
+`SymbolicBijections.lean` proves that these tuples are distinct and gives a
+finite relation cardinality theorem. `SymbolicMerge.unify_variables_count`
+uses it to prove the exact delete/intersect/insert/binding update. Other
+pending correlations remain in the theorem.
+
+`SymbolicScope.normalize_scoped` proves that successful normalization leaves
+only live names in pending requirements. `SymbolicExpansion` uses this result
+to extend old assignments with fresh child names without changing earlier
+requirements. `expand_component_count` proves a bijection for the exact
+sorted-domain, binding, and edge-obligation update. Each raw equality
+component has its own selected-variable language. Components can contain
+terms rejected by the original guard before signed cancellation. The proof
+does not assume these terms belong to the original node language.
 
 ## Counts and caches
 
@@ -80,6 +96,6 @@ Intersection must not increase a retained domain's budget. These are structural
 graph premises. The full lexicographic measure for constructor/path work and
 the universal sufficient execution bound remain open.
 
-All six modules build with Lean 4.34.1. The proofs use no added axioms, `sorry`,
+These modules build with Lean 4.34.1. The proofs use no added axioms, `sorry`,
 or native evaluation. The finite-rank existence proof uses Lean's standard
 classical choice principle.
