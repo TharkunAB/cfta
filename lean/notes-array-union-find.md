@@ -41,7 +41,11 @@ equality, including path existence. `source_canonical_semantics` includes path
 set construction and final sorting.
 
 `STUArray` storage and conversion of the finite size to `Int` remain contracts.
-Canonical partition identity and composition with the repeated saturation
-loop remain source adapters. The existing
-`EqualityNormalize.complete_matches_partition` states the canonical
-connected-partition uniqueness property needed by that final composition.
+`EqualityPartition` proves the exact reference connected relation, disjoint
+output components, and preservation of nontrivial classes.
+`source_complete_eq` derives equality of the entire canonical output with
+`EqualityNormalize.complete`. `completeArray_eventual` includes the concrete
+array merge and readback workers. At every sufficiently large bound, they
+return exactly that reference result. The repeated saturation proofs can use
+this result at each active completion call. Source `Map`/`Set` operations must
+implement their stated ordered-map and ordered-set contracts.
