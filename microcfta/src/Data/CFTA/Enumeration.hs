@@ -393,6 +393,7 @@ enumerateNode scs n =
      in case hereConstraints of
             Sequence.Empty -> case n of
                 Mu _ -> TermFragmentUVar <$> addUVarValue (Just n)
+                InternedUnion _ -> TermFragmentUVar <$> addUVarValue (Just n)
                 Node es -> enumerateEdge scs =<< lift es
                 Rec recId ->
                     error $
@@ -473,8 +474,8 @@ findExpandableUVars = do
                 candidates' = case mbContents of
                     -- An unconstrained Mu is the recursive base case: expanding
                     -- it would unfold forever with nothing to stop it.
-                    Just (InternedMu _)
-                        | Sequence.null scs -> candidates
+                    Just node
+                        | recursiveBoundary node, Sequence.null scs -> candidates
                     Just _ -> IntSet.insert i candidates
                     Nothing -> candidates
              in (candidates', ruledOut', uf')
@@ -536,13 +537,12 @@ enumerateOutUVar uv =
         ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt uv') . _recursionAncestry
         modify' $ \s ->
             s
-                { _expansionAncestry = case n of
-                    Mu _ -> HashSet.insert (recursionKey n scs) ancestry
-                    _ -> ancestry
+                { _expansionAncestry = if recursiveBoundary n then HashSet.insert (recursionKey n scs) ancestry else ancestry
                 }
 
         t <- case n of
             Mu _ -> enumerateNode scs (unfoldOuterRec n)
+            InternedUnion _ -> enumerateNode scs (Node $ nodeEdges n)
             _ -> enumerateNode scs n
 
         modify' $ \s -> s{_expansionAncestry = HashSet.empty}
@@ -598,7 +598,7 @@ enumerateFully' ost order oracle = do
              in do
                     UVarUnenumerated (Just n) scs <- getUVarValue uv
                     case n of
-                        Mu _ -> do
+                        _ | recursiveBoundary n -> do
                             uv' <- getUVarRepresentative uv
                             ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt uv') . _recursionAncestry
                             if HashSet.member (recursionKey n scs) ancestry
@@ -648,7 +648,7 @@ expandPartialTermFrag (TermFragmentUVar uv) = do
     value <- getUVarValue uv
     case value of
         UVarEnumerated fragment -> expandPartialTermFrag fragment
-        UVarUnenumerated (Just (InternedMu _)) Sequence.Empty -> return $ Term.Node TruncatedRecursion []
+        UVarUnenumerated (Just node) Sequence.Empty | recursiveBoundary node -> return $ Term.Node TruncatedRecursion []
         _ -> return $ Term.Node (UVarHole uv) []
 
 -- | Expand a complete term fragment into a concrete term, with the symbol that stands for truncated recursion.
@@ -660,7 +660,7 @@ expandTermFragWith recursionSymbol = go
         val <- getUVarValue uv
         case val of
             UVarEnumerated t -> go t
-            UVarUnenumerated (Just (InternedMu _)) _ -> return $ Term.Node recursionSymbol []
+            UVarUnenumerated (Just node) _ | recursiveBoundary node -> return $ Term.Node recursionSymbol []
             _ ->
                 error "expandTermFragWith: Non-recursive, unenumerated node encountered"
 
@@ -676,7 +676,7 @@ expandUVarWith recursionSymbol uv = do
     value <- getUVarValue uv
     case value of
         UVarEnumerated fragment -> expandTermFragWith recursionSymbol fragment
-        UVarUnenumerated (Just (InternedMu _)) _ -> return $ Term.Node recursionSymbol []
+        UVarUnenumerated (Just node) _ | recursiveBoundary node -> return $ Term.Node recursionSymbol []
         _ -> mzero
 
 ---------------------

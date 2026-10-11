@@ -7,7 +7,7 @@ every symbol type.
 -}
 module Data.CFTA.Interned (
     -- * Nodes and edges
-    Node (EmptyNode, InternedNode, InternedMu, Rec, Node, Mu),
+    Node (EmptyNode, InternedNode, InternedMu, InternedUnion, Rec, Node, Mu),
     Edge (InternedEdge, Edge),
     NodeId (..),
     EdgeId (..),
@@ -15,6 +15,7 @@ module Data.CFTA.Interned (
     UninternedEdge (..),
     InternedNode (..),
     InternedMu (..),
+    InternedUnion (..),
     IntersectId,
     pattern IntersectId,
     mkNode,
@@ -24,6 +25,8 @@ module Data.CFTA.Interned (
     modifyNode,
     createMu,
     createMuDontCleanup,
+    createUnion,
+    recursiveBoundary,
     substFree,
     edgeChildren,
     edgeConstraint,

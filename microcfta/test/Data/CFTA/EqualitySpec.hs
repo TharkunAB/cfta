@@ -213,6 +213,45 @@ spec = do
                     HashSet.fromList (terms $ termsMatching template node)
                         `shouldBe` HashSet.fromList (filter (matchesTemplate template) $ terms node)
 
+    describe "recursive union" $ do
+        it "retains an enclosing reference through a nested binder" $ do
+            let grammar :: Node Symbol
+                grammar = Mu $ \outer ->
+                    Node [Edge "a" [], Edge "wrap" [Mu $ \_ -> union [outer, Node [Edge "b" []]]]]
+                wrap term = Term.Node "wrap" [term]
+                a = Term.Node "a" []
+                b = Term.Node "b" []
+                expected = a : concat [map (!! depth) [iterate wrap a, iterate wrap b] | depth <- [1 .. 4]]
+            Set.fromList (plainTermsAtMost 4 grammar) `shouldBe` Set.fromList expected
+            accepts grammar (wrap a) `shouldBe` True
+            accepts grammar b `shouldBe` False
+            freeVars grammar `shouldBe` Set.empty
+            case toFTA grammar of
+                Left err -> expectationFailure $ show err
+                Right graph -> Set.fromList (plainTermsAtMost 4 $ fromFTA graph) `shouldBe` Set.fromList expected
+
+        it "takes the least fixed point through epsilon cycles" $ do
+            let a = Node [Edge "a" []] :: Node Symbol
+                self = Mu $ \r -> union [r, a]
+                nested = Mu $ \outer -> Mu $ \inner -> union [outer, inner, a]
+                empty = Mu (\outer -> Mu $ \inner -> union [outer, inner]) :: Node Symbol
+            completed <-
+                timeout 5000000
+                    $ evaluate
+                    $ plainTermsAtMost 3 self == [Term.Node "a" []]
+                        && plainTermsAtMost 3 nested == [Term.Node "a" []]
+                        && null (plainTermsAtMost 3 empty)
+            completed `shouldBe` Just True
+
+        it "intersects and restricts terms without adding a union constructor" $ do
+            let grammar :: Node Symbol
+                grammar = Mu $ \outer -> Node [Edge "a" [], Edge "wrap" [union [outer, Node [Edge "b" []]]]]
+                onlyA = Mu $ \self -> Node [Edge "a" [], Edge "wrap" [self]]
+                expected = take 5 $ iterate (\term -> Term.Node "wrap" [term]) (Term.Node "a" [])
+            Set.fromList (plainTermsAtMost 4 $ intersect grammar onlyA) `shouldBe` Set.fromList expected
+            Set.fromList (plainTermsAtMost 4 $ restrict (TemplateNode "wrap" [Hole]) grammar)
+                `shouldBe` Set.fromList (filter (matchesTemplate $ TemplateNode "wrap" [Hole]) $ plainTermsAtMost 4 grammar)
+
     describe "intersection" $ do
         it "intersection commutes with terms" $
             property $
@@ -631,6 +670,8 @@ spec = do
                         , Set.union (collectAllIds (internedMuBody mu)) (collectAllIds (internedMuShape mu))
                         ]
                 collectAllIds (Rec _) = Set.empty
+                collectAllIds (InternedUnion group) =
+                    Set.insert (internedUnionId group) $ Set.unions $ map collectAllIds $ internedUnionMembers group
 
             Set.intersection (collectAllIds n) (collectAllIds m) `shouldBe` Set.empty
 

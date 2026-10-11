@@ -81,6 +81,7 @@ reducePartially' constraints node =
     go :: EqConstraints -> Node symbol -> Node symbol
     go _ EmptyNode = EmptyNode
     go _ (Mu n) = Mu n
+    go _ n@(InternedUnion _) = n
     go inheritedEcs n@(Node _) = modifyNode n $ \es ->
         map
             (reduceChildren inheritedEcs . reduceEdgeIntersection inheritedEcs)
@@ -216,6 +217,7 @@ reduceEqConstraints = go
 
     nodeMeetsConstrainedMu :: Path -> Node symbol -> Bool
     nodeMeetsConstrainedMu _ (Rec _) = True
+    nodeMeetsConstrainedMu _ (InternedUnion _) = True
     nodeMeetsConstrainedMu _ n | numNestedMu n == 0 && null (freeVars n) = False
     nodeMeetsConstrainedMu p n@(InternedMu _)
         | not (unconstrained n) = True
@@ -248,6 +250,7 @@ requireAll paths = requireList (foldr insertNeeded (Needed IntMap.empty) paths)
     requireNode (Needed children) n | IntMap.null children = n
     requireNode _ EmptyNode = EmptyNode
     requireNode needed n@(Mu _) = requireNode needed (unfoldOuterRec n)
+    requireNode needed n@(InternedUnion _) = requireNode needed (Node $ nodeEdges n)
     requireNode needed@(Needed children) (Node es) =
         Node
             [ setChildren e (requireList needed (edgeChildren e))
@@ -283,6 +286,7 @@ editAll edits = editList (foldr (uncurry insertEdit) (EditBelow IntMap.empty) ed
     editNode (EditAt f) n = f n
     editNode _ EmptyNode = EmptyNode
     editNode below n@(Mu _) = editNode below (unfoldOuterRec n)
+    editNode below n@(InternedUnion _) = editNode below (Node $ nodeEdges n)
     editNode below (Node es) = Node (map (\e -> setChildren e (editList below (edgeChildren e))) es)
     editNode _ (Rec _) = error "editAll: unexpected Rec"
 
