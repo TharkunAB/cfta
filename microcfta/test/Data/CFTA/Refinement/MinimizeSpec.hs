@@ -120,19 +120,33 @@ spec =
                     accepts latticeEntailment result (divide 0 0) >>= (`shouldBe` No)
                     accepts latticeEntailment result (divide 0 1) >>= (`shouldBe` Yes)
 
-        it "does not strand the root during minimization" $
+        it "installs the chosen representative when removing the only root transition" $
             withZ3 declarations $ \solver -> do
                 inferred <- similarity (atomSubtyping solver) finalStateSupertype
                 case inferred of
                     Left err -> expectationFailure $ show err
-                    Right related -> minimize finalStateSupertype related `shouldBe` Right finalStateSupertype
+                    Right related -> minimize finalStateSupertype related `shouldBe` Right naturalNode
 
         it "can remove a root transition when another root derivation remains" $
             withZ3 declarations $ \solver ->
                 checkMinimization (atomSubtyping solver) finalStateWithAlternative $ \reduced -> do
-                    reduced `shouldBe` Node [otherAtom]
+                    reduced `shouldBe` Node [naturalAtom, otherAtom]
                     denotationAtMost solver 0 reduced
-                        >>= (`shouldBe` Right [Term.Node (RefinedSymbol "other" true) []])
+                        >>= (`shouldBe` Right [Term.Node (transitionLabel naturalAtom) [], Term.Node (transitionLabel otherAtom) []])
+
+        it "keeps an accepted root representative when the other root alternative rejects every term" $
+            withZ3 declarations $ \solver -> do
+                denotationAtMost solver 1 rootWithRejectedAlternative
+                    >>= (`shouldBe` Right [Term.Node (transitionLabel unknownAtom) []])
+                checkMinimization (atomSubtyping solver) rootWithRejectedAlternative $ \reduced ->
+                    denotationAtMost solver 1 reduced
+                        >>= (`shouldBe` Right [Term.Node (transitionLabel naturalAtom) []])
+
+        it "keeps each root representative after multiple scheduled removals" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (twoClassSubtyping solver) multipleRootRepresentatives $ \reduced -> do
+                    map transitionSymbol (nodeEdges reduced) `shouldMatchList` ["pair", "specific-a", "specific-b"]
+                    denotationAtMost solver 1 reduced >>= (\terms -> fmap length terms `shouldBe` Right 3)
 
         it "allows multiple representatives for one target and substitutes repeated nodes together" $
             withZ3 declarations $ \solver ->
@@ -326,6 +340,19 @@ finalStateSupertype = Node [wrap "unknown" [naturalNode]]
 -- | A root supertype can be removed while another root alternative remains.
 finalStateWithAlternative :: Automaton
 finalStateWithAlternative = Node [wrap "unknown" [naturalNode], otherAtom]
+
+-- | A structurally productive alternative rejects all terms after root removal.
+rootWithRejectedAlternative :: Automaton
+rootWithRejectedAlternative =
+    Node
+        [ unknownAtom
+        , Transition "f" true [naturalNode] $ semanticConstraint $ Satisfies (path []) false
+        ]
+
+-- | Two root alternatives use different representatives in the same schedule.
+multipleRootRepresentatives :: Automaton
+multipleRootRepresentatives =
+    Node [plain "unknown-a", plain "unknown-b", wrap "pair" [specificANode, specificBNode]]
 
 -- | Two removed transitions share a node but use different representatives.
 multipleRepresentatives :: Automaton
