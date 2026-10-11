@@ -43,7 +43,7 @@ module Data.CFTA.Enumeration (
     EnumerateM,
 ) where
 
-import Control.Monad (forM_, guard, mzero, unless, void, when, zipWithM)
+import Control.Monad (forM_, guard, mzero, unless, when, zipWithM)
 import Control.Monad.State.Strict (StateT (..), gets, modify')
 import Control.Monad.Trans.Class (lift)
 import qualified Data.Foldable as Foldable
@@ -560,7 +560,7 @@ enumerateOutUVar uv =
 -- | Expand the root UVar until it represents a complete term.
 enumerateFully :: (Hashable symbol, Typeable symbol) => EnumerateM symbol ()
 enumerateFully =
-    void $ enumerateFully' () noExpansionPreference (\state _ _ -> return (False, state))
+    enumerateFully' () noExpansionPreference (\state _ _ -> return (False, state))
 
 {- | Enumerate until the root term is complete, with optional oracle pruning.
 
@@ -587,12 +587,12 @@ enumerateFully' ::
     a ->
     ExpansionOrder a ->
     (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
-    EnumerateM symbol Bool
+    EnumerateM symbol ()
 enumerateFully' ost order oracle = do
     muv <- nextExpandableUVar (order ost)
     case muv of
         ExpansionStuck -> mzero
-        ExpansionDone -> return True
+        ExpansionDone -> return ()
         ExpansionNext uv ->
             let continue ost' = do
                     tf <- enumerateOutUVar uv
@@ -606,7 +606,6 @@ enumerateFully' ost order oracle = do
              in do
                     UVarUnenumerated (Just n) scs <- getUVarValue uv
                     case n of
-                        Mu _ | scs == Sequence.empty -> return True
                         Mu _ -> do
                             uv' <- getUVarRepresentative uv
                             ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt uv') . _recursionAncestry
@@ -777,8 +776,8 @@ termsPruneWith ::
     [Tree.Tree symbol]
 termsPruneWith recursionSymbol ost order oracle n =
     map fst $ flip runEnumerateM (initEnumerationState n) $ do
-        finished <- enumerateFully' ost order oracle
-        if finished then expandUVarWith recursionSymbol (intToUVar 0) else mzero
+        enumerateFully' ost order oracle
+        expandUVarWith recursionSymbol (intToUVar 0)
 
 {- | The terms of the automaton's accepting runs, each once.
 
