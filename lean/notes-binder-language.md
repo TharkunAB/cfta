@@ -14,8 +14,17 @@ These facts do not assume that a binder body is productive.
 `cleanup_exact` proves that both cases preserve the complete language.
 An unused binder has its body's language. A self-only binder has no term.
 
+`BinderSubstitution.substitution_exact` proves the language law for prepared
+simultaneous substitution. `environment_bind` derives the binder case. It
+requires that no replacement's free name matches an enclosed bound name.
+`unfold_substitution` proves that the actual self-unfolding substitution has
+the binder's language. Closed replacements meet the freshness requirement.
+`capture_requires_freshness` proves that an arbitrary raw replacement can
+capture a reference and remove a term when this requirement is absent.
+This is a requirement on source identities, not a new production counterexample.
+
 This semantic layer does not prove source identifier allocation, callback
-parametricity, substitution freshness, or the SCC-based `fromFTA` schedule.
+parametricity, establishment of freshness, or the SCC-based `fromFTA` schedule.
 The source requires `createMu` callbacks to be parametric in reference names.
 The least-language model is independent of the epsilon worklist model.
 A full construction proof must relate the allocated binder graph to both.
