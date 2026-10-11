@@ -179,11 +179,11 @@ and `compileWith` returns it. Use `validOutcomes`
 for explicit diagnostics on small inputs. Sampling, replay, and shrinking
 use the pure compiled result.
 
-`LTAGen.fromAutomatonUpToDepth maximumHeight automaton` imports an existing
+`LTAGen.fromAutomatonUpToDepth maximumDepth automaton` imports an existing
 interned automaton into the same source syntax. It preserves graph sharing
 until compilation. Each distinct accepted annotated term contributes one rank.
 Repeated ordinary pool draws keep their separate ranks and weights. A leaf has
-height zero; an empty bound is an empty source. The standalone
+depth zero, and an empty bound is an empty source. The standalone
 [`AutomatonInterop.hs`](../microcfta-generator/examples/AutomatonInterop.hs)
 imports a derived recursive natural-number grammar with
 `fromDatatypeUpToDepth` and composes it with a refined pool.

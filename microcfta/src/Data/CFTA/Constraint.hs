@@ -9,11 +9,11 @@ path equalities ('equalityConstraint'). A liquid tree automaton also has guards
 that a solver decides ('semanticConstraint'). One type serves all three, so an
 operation on automata is written once.
 
-The guard is the complete semantics, including 'Same'. The equality field is
-a compiled positive-conjunction form that the equality reduction and the
-enumerator use. 'constraintAsGuard' recovers the complete constraint. This
-module only builds and inspects constraints: "Data.CFTA.Refinement.Evaluate"
-decides guards, and the equality engine decides equalities.
+The equality field is a compiled positive-conjunction form that the equality
+reduction and the enumerator use. 'constraintAsGuard' recovers the complete
+constraint. This module only builds and inspects constraints:
+"Data.CFTA.Refinement.Evaluate" decides guards, and the equality engine
+decides equalities.
 
 Every constraint exposes the path equalities it requires ('equalities').
 Enumeration solves those by unification, and hands a constraint with a
@@ -101,13 +101,9 @@ data Guard
 
 instance Hashable Guard
 
-{- | A complete LTA constraint with an optional normalized equality cache.
-
-The authoritative semantics is the full Boolean 'Guard', including 'Same'. The
-equality field is a compiled positive-conjunction form that the equality
-reduction and the enumerator use. 'constraintAsGuard' always recovers the
-complete paper-level constraint, so the split representation cannot erase
-Boolean equality.
+{- | A transition constraint: path equalities and a guard. The equalities are
+positive and in normal form, for the reduction and the enumerator.
+'constraintAsGuard' gives the two fields as one guard.
 -}
 data Constraint = Constraint
     { constraintEqualities :: !EqConstraints
@@ -224,7 +220,7 @@ conjoinConstraints
             (combineEqConstraints leftEqualities rightEqualities)
             (combineGuards leftGuard rightGuard)
 
--- | Recover the complete paper-level Boolean constraint.
+-- | The constraint as one guard: the equalities as 'Same' atoms, conjoined with the guard.
 constraintAsGuard :: Constraint -> Guard
 constraintAsGuard Constraint{constraintEqualities, constraintGuard} =
     combineGuards (equalitiesAsGuard constraintEqualities) constraintGuard

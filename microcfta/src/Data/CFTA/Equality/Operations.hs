@@ -91,18 +91,18 @@ reducePartially' constraints node =
         setChildren e $
             reduceWithInheritedEcs (inheritedEcs `combineEqConstraints` equalities (edgeConstraint e)) (edgeChildren e)
 
-    -- \| Reduce children with inherited constraints
+    -- Reduce children with inherited constraints.
     --
     -- This function is used to avoid infinite unfolding of recursive nodes,
     -- and we do this by passing constraints from the current edge and ancestors to descendants.
     -- For example, let `tau` be "any" node, and we define
     --
-    -- > let n1 = Node [ mkEdge "Pair" [tau, tau] (mkEqConstraints [[path [0, 0], path [0, 1], path [1]]])]
+    -- > let n1 = Node [ mkEdge "Pair" [tau, tau] (equalityConstraint $ mkEqConstraints [[path [0, 0], path [0, 1], path [1]]])]
     -- > let n2 = Node [ Edge "Pair" [tau, tau] ]
-    -- > let n  = Node [ mkEdge "Pair" [n1, n2]   (mkEqConstraints [[path [0, 0], path [0, 1], path [1]]])]
+    -- > let n  = Node [ mkEdge "Pair" [n1, n2]   (equalityConstraint $ mkEqConstraints [[path [0, 0], path [0, 1], path [1]]])]
     --
-    -- We notice that, if we call `reducePartially n` without propagating constraints down to its children `n1` or `n2`,
-    -- the `tau` can be infinitely expanded between rounds of reduction.
+    -- If `reducePartially n` does not propagate constraints down to its children `n1` or `n2`,
+    -- the reduction can expand `tau` without end between rounds.
     --
     -- To break such cycles, we actively pass constraints down to children.
     -- In this example, we first call `reducePartially' EmptyConstraints n` at the top level, where the inherited constraint is empty,
@@ -130,7 +130,9 @@ genericReduceEdgeIntersectionCache :: TypeableMemoCache
 genericReduceEdgeIntersectionCache = unsafePerformIO newTypeableMemoCache
 {-# NOINLINE genericReduceEdgeIntersectionCache #-}
 
--- | Narrow an edge's children by its own and the inherited equality constraints.
+{- | Narrow an edge's children by its own equality constraints. The edge becomes
+empty when its constraints contradict the inherited constraints.
+-}
 reduceEdgeIntersection ::
     forall symbol.
     (Hashable symbol, Typeable symbol) =>
@@ -146,7 +148,8 @@ reduceEdgeIntersection constraints edge =
             (edgeConstraint e)
 {-# NOINLINE reduceEdgeIntersection #-}
 
-{- | Apply local and inherited equality constraints to a child list.
+{- | Apply the local equality classes to a child list. Make every child empty
+when the local and inherited classes contradict each other.
 
 One pass over the classes is not always enough: the intersection for one class
 can narrow a node that a class earlier in the pass already read. The reduction

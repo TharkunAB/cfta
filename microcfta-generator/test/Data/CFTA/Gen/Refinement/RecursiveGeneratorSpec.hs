@@ -33,7 +33,7 @@ import Data.CFTA.Refinement.Expression (true)
 plain :: Symbol -> [Automaton] -> Transition
 plain symbol children = Transition symbol true children noConstraint
 
--- | Complete binary fork trees over one atom, by height.
+-- | Complete binary fork trees over one atom, by depth.
 forks :: [Automaton]
 forks = Node [plain "atom" []] : [Node [plain "fork" [shorter, shorter]] | shorter <- forks]
 

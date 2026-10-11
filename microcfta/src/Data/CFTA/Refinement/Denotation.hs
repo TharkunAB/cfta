@@ -2,9 +2,9 @@
 
 {- | The reference semantics of an LTA.
 
-'accepts' decides one annotated term. 'denotationAtMost' materializes the
-Figure 6 denotation up to a height bound. Both are deliberately simple. They
-are the oracle that generator backends are checked against.
+'accepts' decides one annotated term. 'denotationAtMost' lists the Figure 6
+denotation up to a depth bound. The tests check the generators against these
+two functions, and check 'denotationAtMost' against "Data.CFTA.Simple".
 -}
 module Data.CFTA.Refinement.Denotation (
     DenotationError (..),
@@ -60,18 +60,16 @@ accepts entailment automaton term = do
             No -> pure False
             Unknown -> writeIORef undecided True >> pure False
 
-{- | Materialize the Figure 6 denotation up to a tree-height bound.
+{- | List the Figure 6 denotation up to a depth bound.
 
-A leaf has height zero. The bound makes this reference interpreter total for
-cyclic LTAs as well as acyclic ones. A graph without constraints is listed
-level by level up to the bound. Otherwise the bounded graph is listed by the
-shared enumerator: path equalities are solved by unification, and the solver
-decides each remaining guard on the complete subterm its transition built. A
-term is accepted when the guards of some run all hold. The result has each
-term once, in enumeration order, because the paper defines a set of terms even
-when several runs accept the same tree. This is the authoritative, deliberately
-simple semantics oracle. Generator backends are optimizations. Check them
-against it on bounded inputs.
+A leaf has depth zero. The bound makes the result finite for a cyclic LTA. A
+graph without constraints is listed level by level up to the bound. Otherwise
+'runs' lists the bounded graph on the shared enumerator: path equalities are
+solved by unification, and the solver decides each remaining guard on the
+complete subterm its transition built. A term is accepted when the guards of
+some run all hold. The result has each term once, in the order of the runs,
+because the paper defines a set of terms. Check a generator against it on
+bounded inputs.
 -}
 denotationAtMost :: Entailment -> Depth -> Automaton -> IO (Either DenotationError [Tree.Tree Symbol])
 denotationAtMost entailment bound automaton

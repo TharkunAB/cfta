@@ -17,8 +17,8 @@ remains a separate ECTA-only package.
 - `Data.CFTA.Equality`: equality-constrained automata as
   `Node symbol` with `equalityConstraint` edges, with reduction, membership, template
   restriction, and enumeration with unification variables. An automaton with
-  no equality constraint and no recursion is enumerated by the shared
-  enumerator.
+  no constraint and no recursion is listed level by level, without
+  unification variables.
 - `Data.CFTA.Refinement`: liquid tree automata as
   `Node Symbol`, built with the interned constructors;
   the module re-exports `Data.CFTA.Interned`. It has the paper's Boolean guard
@@ -109,8 +109,8 @@ remains a separate ECTA-only package.
   (`constraintGuard`). `noConstraint`, `equalityConstraint`, and
   `semanticConstraint` build one, and `conjoinConstraints` conjoins two. A
   guard (`Satisfies`, `Holds`) adds a constraint that a solver decides.
-  `PlainFTA` is an `FTA state symbol Constraint` whose transitions carry
-  `noConstraint`.
+  `PlainFTA` is `FTA state symbol Constraint`, and an ordinary automaton has
+  `noConstraint` on every transition.
 
 ### Differences from microecta 0.1.0.0
 

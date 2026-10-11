@@ -492,12 +492,8 @@ Returning 'Nothing' means "no preference". Returning a UVar that is not in the
 list means the same thing: this steers the order and can never make a UVar
 expandable before it is ready.
 
-Steering is worth it when the caller waits on a particular hole, one whose
-expansion settles a check parked in the oracle's own state. The caller then
-resolves that hole first, instead of enumerating the rest of a branch that the
-check rejects.
-At one step, it cannot change which UVars are expandable. It can only choose
-which of them goes first.
+Use it when a check in the oracle state waits for a hole. Return that hole,
+and the check is settled before the enumerator lists the rest of the branch.
 -}
 type ExpansionOrder state = state -> [UVar] -> Maybe UVar
 

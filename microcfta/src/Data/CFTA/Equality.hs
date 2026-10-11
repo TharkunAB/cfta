@@ -1,6 +1,6 @@
 {- | Equality-constrained finite tree automata.
 
-This is the main public API for the ECTA core.
+Import this module to use equality-constrained automata.
 
 A @Node symbol@ represents a set of accepted terms. Each outgoing @Edge@ is one
 alternative: it has a symbol, child nodes, and a 'Constraint', here the path
@@ -28,22 +28,11 @@ The usual workflow is:
    with 'termsMatching'.
 6. Enumerate accepted terms with 'terms' or 'termsPrune'.
 
-A pruning oracle passed to 'termsPrune' sees each UVar that is actually
-expanded twice: as @Right node@ before expansion, and as @Left fragment@
-after. An unconstrained 'Mu' is never offered for expansion, so it produces
-neither callback. The oracle carries its own state down each branch, so a
-check that cannot be settled while a hole is still unexpanded can be parked in
-that state under the hole's UVar. Enumeration can merge that UVar into
-another one, so the oracle looks up the current representative of each parked
-UVar with 'getUVarRepresentative' at each call.
-'termsPruneWith' takes the truncated-recursion symbol explicitly instead
-of requiring 'Data.String.IsString', and additionally lets the oracle say which
-hole it would like expanded next, so a parked check resolves before the branch
-it rejects is enumerated. The oracle alone decides which terms to reject. This
-module supplies only the callbacks and 'expandPartialTermFrag' to read a
-partial term. Its 'PartialSymbol' result
-keeps concrete symbols, unexpanded variables, and truncated recursion
-structurally distinct.
+'termsPrune' calls an oracle two times for each UVar that it expands: with
+@Right node@ before the expansion, and with @Left fragment@ after it. The
+oracle returns 'True' to remove the branch. The Haddock of 'termsPrune' shows
+how to park a check on a hole. 'termsPruneWith' takes the recursion symbol as
+an argument, and it lets the oracle select the next hole.
 
 A node is a set of alternatives, and enumeration reads them back:
 

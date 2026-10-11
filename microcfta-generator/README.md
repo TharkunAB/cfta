@@ -1185,7 +1185,7 @@ specification can change them.
 ### Import an LTA
 
 `fromAutomaton` reads a liquid automaton, and `fromAutomatonUpToDepth` bounds
-it first by tree height, leaves having height zero. An automaton whose guards
+it first by depth, a leaf having depth zero. An automaton whose guards
 the engine can count is read at once, with one rank per distinct accepted
 term: Boolean equality between subterms, nested equalities, negation,
 disjunction, and overlapping alternatives are counted symbolically. An
@@ -1495,8 +1495,8 @@ implicitly.
 ### Recursive LTAs
 
 The core accepts recursive LTAs as long as guards do not point into cyclic
-states. QuickCheck needs a finite language, so bound the import by tree
-height before compiling:
+states. QuickCheck needs a finite language, so bound the import by depth
+before compiling:
 
 ```haskell
 Right compiled <- LTAGen.compileWith solver (LTAGen.fromAutomatonUpToDepth 6 recursiveLTA)

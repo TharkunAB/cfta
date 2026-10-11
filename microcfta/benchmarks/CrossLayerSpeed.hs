@@ -5,10 +5,12 @@
 Every row enumerates one language and reports CPU seconds and a checksum of
 the term sizes. The FTA rows enumerate the plain explicit-state view of the
 same ECTA node, so the rows differ only in the enumerator. The LTA rows
-decide their guards without a solver. Each repeat uses a separately built
-language, so no result is shared between repeats, and every language is
-built before timing. Enumeration through equality constraints is measured by
-@microecta:bench:micro-bench@.
+decide their guards without a solver. Each FTA and ECTA repeat uses a
+separately built language, so no result is shared between repeats, and every
+language is built before timing. The LTA rows use one language for all
+repeats, so the later repeats reuse the interned graph and the memo tables of
+the first. Enumeration through equality constraints is measured by
+@microcfta:bench:micro-bench@.
 -}
 module Main (main) where
 
@@ -126,7 +128,7 @@ ltaTerms depth = do
     result <- denotationAtMost (entailmentWithBindings (\_ _ _ -> pure Yes)) depth ltaExpressions
     either (error . show) sizes result
 
--- | pair(q, q) with the guard [0] = [1] over expressions of height at most two: 302 terms, 91,204 candidate pairs.
+-- | pair(q, q) with the guard [0] = [1] over expressions of depth at most two: 302 terms, 91,204 candidate pairs.
 ltaEqualPair :: Automaton
 ltaEqualPair =
     Node
@@ -156,7 +158,7 @@ ltaEqualPairTerms = do
 named :: String -> Int -> Symbol
 named prefix salt = Symbol $ Text.pack (prefix ++ show salt)
 
--- | Two levels of binary choice over two leaves: 128 terms on five nodes.
+-- | Two levels of binary choice over two leaves: 128 terms on three nodes.
 finiteChoiceNode :: Int -> Node Symbol
 finiteChoiceNode salt =
     Node

@@ -1,9 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-{- | Representations of paths in an FTA, data structures for equality
-constraints over paths, and algorithms for saturating these constraints.
-
-The 'Data.CFTA.Constraint.Constraint' instance lives with the class.
+{- | Equality constraints over the paths into the children of an edge. A path
+trie holds the paths of one class. 'mkEqConstraints' closes the classes under
+congruence and finds contradictions.
 -}
 module Data.CFTA.Equality.Constraint (
     getMaxNonemptyIndex,
@@ -45,12 +44,6 @@ import qualified Data.Set as Set
 import Data.CFTA.Index (Arity (..))
 import Data.CFTA.Interned.Memo (memo2)
 import Data.CFTA.Path (ChildIndex (..), Path (..), isStrictSubpath)
-
--------------------------------------------------------
-
------------------------------------------------------------------------
---------------------------- Misc / general ----------------------------
------------------------------------------------------------------------
 
 -----------------------------------------------------------------------
 -------------------------------- Paths --------------------------------
@@ -318,12 +311,10 @@ isContradicting = any (\paths -> any (\p -> any (isStrictSubpath p) paths) paths
 
 {- | Build normalized equality constraints.
 
-This performs equality-class completion, adds path congruences, and detects
-contradictions caused by a path being forced equal to one of its strict
-subpaths. The implementation is intentionally direct rather than clever because
-constraint construction is not the main API boundary. Class completion is a
-small union-find. The congruence step is the most expensive part, and it
-repeats until it reaches a fixed point.
+Merge the overlapping classes, add the path congruences, and find the
+contradictions. A class that holds a path and one of its strict subpaths is a
+contradiction. A small union-find merges the classes. The congruence step
+costs the most, and it repeats until the classes do not change.
 
 One congruence step is polynomial in the number of paths of the current
 classes. The closure itself can be exponentially larger than the input: the

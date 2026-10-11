@@ -107,7 +107,7 @@ naiveTerms acyclic = table Map.! FTA.initialState acyclic
 -- Each language takes a salt that is added to its symbols, so repeats use
 -- distinct automata.
 
--- | Two literals, one unary and two binary constructors: 182,710 terms at depth 3.
+-- | Two literals, one unary and two binary constructors: 182,712 terms of depth at most 3.
 expressions :: Int -> FTA.PlainFTA Int String
 expressions salt = automaton 0 [(0, expressionAlternatives salt 0)]
 
@@ -140,7 +140,7 @@ internedExpressions salt =
 internedBoundedExpressions :: Int -> Common.Node String
 internedBoundedExpressions = Common.fromFTA . boundedExpressions
 
--- | Five levels of shared pairs over two leaves: 4,294,967,296 terms on seven nodes.
+-- | Five levels of shared pairs over two leaves: 4,294,967,296 terms on six nodes.
 sharedPairs :: Int -> Common.Node String
 sharedPairs salt = iterate (\child -> Common.Node [Common.Edge (named salt "pair") [child, child]]) leaves !! 5
   where
