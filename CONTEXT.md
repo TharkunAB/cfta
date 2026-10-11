@@ -14,8 +14,9 @@ Wilf, and Feat (ranking).
   say arity.
 - **Path**: the child indexes from the root of a term to one of its nodes.
   TATA and the LTA paper call this a *position* (`Pos(t)`, `t|p`, `i.j.k`);
-  ECTA calls it a path. In this repository "position" never names a single
-  number.
+  ECTA calls it a path. In this repository the list is a path. "Position"
+  has its plain meaning: the place of one item in a sequence, such as a
+  child among the children of a node, or a member in its size class.
 - **Child index**: one step of a path: the zero-based position of a child
   among the children of a term node or a transition. The LTA paper says
   *position index*.
