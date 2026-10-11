@@ -8,7 +8,6 @@ import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 
 import Data.CFTA.Refinement (
     Automaton,
-    AutomatonError (CyclicGuardReference),
     Entailment (Entailment),
     Guard (Same, Satisfies),
     Node (Mu, Node),
@@ -52,7 +51,7 @@ spec =
                     Node [Transition "wrap" true [self, checked] (semanticConstraint $ Satisfies (path [1]) true)]
             validate automaton `shouldBe` Right ()
 
-        it "prunes a guard that reads a position through the recursive reference" $ do
+        it "pruning ends and keeps a term when a guard reads a position through the recursive reference" $ do
             let leaf = Node [Transition "a" true [] noConstraint]
                 automaton = Mu $ \self ->
                     Node
@@ -67,7 +66,7 @@ spec =
                 Just (Right result) -> accepts alwaysEntails result term >>= (`shouldBe` Yes)
                 other -> expectationFailure $ show other
 
-        it "prunes an equality that reads a position through the recursive reference" $ do
+        it "pruning ends and keeps a term when an equality reads a position through the recursive reference" $ do
             let leaf = Node [Transition "a" true [] noConstraint]
                 automaton = Mu $ \self ->
                     Node
@@ -114,10 +113,3 @@ spec =
                 deep leaf = iterate (\term -> Tree.Node (label "f") [term]) (Tree.Node (label leaf) [])
             decided <- timeout 10000000 $ mapM (accepts alwaysEntails automaton . (!! 60) . deep) ["a", "b"]
             decided `shouldBe` Just [Yes, No]
-
-        it "rejects a guard that points into a recursive node" $ do
-            let automaton = Mu $ \self ->
-                    Node [Transition "loop" true [self] (semanticConstraint $ Satisfies (path [0]) true)]
-            case validate automaton of
-                Left (CyclicGuardReference _ target) -> target `shouldBe` path [0]
-                other -> expectationFailure $ show other

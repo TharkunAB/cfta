@@ -42,7 +42,7 @@ import qualified Language.Fixpoint.Types as Fixpoint
 spec :: Spec
 spec =
     describe "semantic pruning" $ do
-        it "splits heterogeneous nodes at semantic guard positions" $
+        it "keeps the language when it prunes heterogeneous nodes at semantic guard positions" $
             withZ3 declarations $ \solver ->
                 checkPrunedLanguage solver semanticPairs pairTerms 5
 
@@ -54,7 +54,7 @@ spec =
                     [root] -> length (transitionsAt root $ path [0]) `shouldBe` 3
                     roots -> expectationFailure $ "unexpected Figure 12 roots: " <> show roots
 
-        it "splits nested semantic positions without enumerating complete terms" $
+        it "keeps the language when it prunes nested semantic positions" $
             withZ3 declarations $ \solver ->
                 checkPrunedLanguage solver nestedPairs nestedPairTerms 5
 
