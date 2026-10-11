@@ -4,6 +4,7 @@
 module Main (main) where
 
 import Data.CFTA.Constraint (semanticConstraint)
+import Data.CFTA.Formula (Sort (IntSort))
 import qualified Data.CFTA.Gen.Refinement as G
 import Data.CFTA.Refinement
 import Data.CFTA.Refinement.Expression (false, true, variable, (.>=))
@@ -97,4 +98,4 @@ main = withZ3 declarations $ \solver -> do
             printLanguage solver "After prune" automaton
     printReduced solver retained
   where
-    declarations = ["app", "x", "y", "v"]
+    declarations = [(name, IntSort) | name <- ["app", "x", "y", "v"]]
