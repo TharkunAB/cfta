@@ -24,15 +24,16 @@ regressions: quantified substitution, observed atomic weights, accepted root
 representatives, and open recursive unions. Historical counterexamples remain
 separate from the repair theorems. See [SYSTEM.md](SYSTEM.md).
 
-The later source proofs include the complete mutual symbolic counter and its
-termination, compiled guard indicators, adaptive cached acceptance, typed
-single and mutual recursive sampling records, the suspended enumeration
-caller's storage invariant, recursive binder substitution, and the equality
-parent-array completion loop. See the [symbolic notes](notes-symbolic-semantics.md),
+The later source proofs include complete symbolic count/select/rank execution
+and its distinct-term bijection, compiled guard indicators, three-valued cached
+acceptance, typed single and mutual recursive sampling records, enumeration
+assignment soundness and progress, successful recursive pruning, binder
+substitution, and the full indexed-array equality normalization loop. See the [symbolic notes](notes-symbolic-semantics.md),
 [indicator notes](notes-constraint-indicators.md), [acceptance notes](notes-acceptance.md),
 [recursive source notes](notes-recursive-source.md), [keyed source notes](notes-keyed-source.md),
 [enumeration notes](notes-enumeration-driver.md), [binder notes](notes-binder-language.md),
-and [array notes](notes-array-union-find.md).
+[array notes](notes-array-union-find.md), [pruning notes](notes-prune-correctness.md),
+and [lattice retry notes](notes-lattice-retry.md).
 
 This is not a claim that the whole Haskell implementation is verified. The
 Lean algorithms are handwritten. Some complete driver invariants, concrete runtime
@@ -141,8 +142,9 @@ records later progress and all remaining implementation obligations.
 The later modules prove the general Bernoulli/Faulhaber construction,
 terminating feasibility recursion, formula-to-count pipeline, and cumulative
 polynomial sums. `LatticeSelect` now connects the stored cumulative polynomials to exact
-section counts and the recursive ranker. Concrete `Map` storage, variable-order retry behavior,
-recursive graph binding, and concrete Fixpoint serialization remain explicit boundaries.
+section counts and the recursive ranker. `LatticeRetry` proves the named-error
+and variable-order retry policy. Concrete `Map` storage, scoped binding,
+recursive graph conversion, and Fixpoint serialization remain boundaries.
 Full formula freshening and typed syntax lowering are proved in the later
 `Formula*` modules; see [formula correctness](notes-formula-correctness.md).
 
@@ -164,8 +166,10 @@ The SMT solver and concrete refinement evaluator are outside the language
 proof. Guards have a supplied Boolean interpretation there. `Guards.lean`
 states the atomic-decision and observation requirements. `Observation` and
 `ObservationGraph` now derive coverage and homogeneity from executable sparse
-plans and graph specialization. The full substitution algorithm is now proved. Ambiguous actual handling, runtime
-interning, and the recursive pruning driver still require caller proofs.
+plans and graph specialization. The full substitution algorithm is proved.
+`PruneCandidates` proves ambiguous Unknown restoration. `PruneCorrectness`
+proves the successful recursive driver under named primitive laws. Concrete
+interning, binder adapters and recursive termination remain obligations.
 
 Other remaining boundaries include recursive binder conversion, concrete
 interning and union-find callers, lazy size-table execution, machine-integer
@@ -231,7 +235,7 @@ add a package test suite.
 4. Prove the observation trie and constrained symbolic counter preserve
    language coverage, guard meaning, masses, and size classes.
 5. Connect the checked lattice eliminator and rank/select implementation to
-   variable-order retry and binding adapters.
+   scoped binding and concrete container adapters.
 6. Establish an implementation correspondence through a translation, extraction,
    or a narrower verified core. Differential tests can support this work but
    cannot replace the correspondence proof.

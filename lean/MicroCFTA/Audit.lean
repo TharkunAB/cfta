@@ -134,6 +134,20 @@ import MicroCFTA.KeyedMinimumWitness
 import MicroCFTA.GroupedFlags
 import MicroCFTA.ArrayBounds
 import MicroCFTA.SymbolicCounterTotal
+import MicroCFTA.EqualityIndex
+import MicroCFTA.EqualityPartition
+import MicroCFTA.AcceptanceEffects
+import MicroCFTA.SymbolicComplete
+import MicroCFTA.AcceptanceSoundness
+import MicroCFTA.EqualitySource
+import MicroCFTA.EnumerationSoundness
+import MicroCFTA.EnumerationProgress
+import MicroCFTA.PruneCorrectness
+import MicroCFTA.LatticeRetry
+import MicroCFTA.SymbolicSourceUnion
+import MicroCFTA.SymbolicStructuralBudget
+import MicroCFTA.SymbolicInternedView
+import MicroCFTA.SymbolicSmartRows
 /-!
 # Proof dependency audit
 
