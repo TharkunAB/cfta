@@ -68,8 +68,8 @@ import Data.CFTA.Gen.Internal.Inspection
 import Data.CFTA.Gen.Internal.Recursive
 import Data.CFTA.Gen.Internal.Static
 import Data.CFTA.Gen.Label (Label (..))
-import Data.CFTA.Index (Cardinality (..), Depth, Rank (..), Weight)
-import Data.CFTA.Ranked.Internal.Decoder (RankDecoder (..), RankedValue (..))
+import Data.CFTA.Index (Depth, Weight)
+import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
 import Data.CFTA.Ranked.Internal.Sampler
 import Data.CFTA.Ranked.Internal.Size (MinimumSize, SizeIndex (minimumMemberSize), productIndex)
 import Data.CFTA.Ranked.QuickCheck (QuickCheckBackend (..))
@@ -384,9 +384,7 @@ runQuickCheckBackend (QuickCheckBackend generated) = generated
 lowerUniform :: Gen symbol a -> Maybe (QC.Gen a)
 lowerUniform (Transparent (Right static))
     | Just _ <- outcomeUniformMass outcomes =
-        Just $ case outcomeDecoder outcomes of
-            SmallDecoder bound decode -> decode <$> QC.chooseInt (0, bound - 1)
-            LargeDecoder (Cardinality bound) decode -> decode . Rank <$> QC.chooseInteger (0, bound - 1)
+        Just $ runQuickCheckBackend $ drawUniform $ outcomeDecoder outcomes
   where
     outcomes = staticOutcomes static
 lowerUniform _ = Nothing
@@ -395,11 +393,7 @@ lowerUniform _ = Nothing
 lowerUniformWithRank :: Gen symbol a -> Maybe (QC.Gen (RankedValue a))
 lowerUniformWithRank (Transparent (Right static))
     | Just _ <- outcomeUniformMass outcomes =
-        Just $ case outcomeDecoder outcomes of
-            SmallDecoder bound decode ->
-                (\index -> RankedValue (Rank $ toInteger index) (decode index)) <$> QC.chooseInt (0, bound - 1)
-            LargeDecoder (Cardinality bound) decode ->
-                (\index -> RankedValue (Rank index) (decode $ Rank index)) <$> QC.chooseInteger (0, bound - 1)
+        Just $ runQuickCheckBackend $ drawUniformWithRank $ outcomeDecoder outcomes
   where
     outcomes = staticOutcomes static
 lowerUniformWithRank _ = Nothing

@@ -47,6 +47,8 @@ module Data.CFTA.Gen.Internal.Static (
     sequenceSampler,
     sampleStatic,
     sampleStaticWithRank,
+    drawUniform,
+    drawUniformWithRank,
 
     -- * Inspection
     enumerateOutcomeIndex,
@@ -946,10 +948,7 @@ sampleStatic ::
     Static symbol a ->
     gen (Either GenError a)
 sampleStatic static
-    | Just _ <- outcomeUniformMass outcomes =
-        case outcomeDecoder outcomes of
-            SmallDecoder bound decode -> Right . decode <$> selectInt bound
-            LargeDecoder bound decode -> Right . decode <$> selectInteger bound
+    | Just _ <- outcomeUniformMass outcomes = Right <$> drawUniform (outcomeDecoder outcomes)
     | otherwise =
         Right <$> runValueSampler (outcomeSampler outcomes)
   where
@@ -961,16 +960,22 @@ sampleStaticWithRank ::
     Static symbol a ->
     gen (Either GenError (RankedValue a))
 sampleStaticWithRank static
-    | Just _ <- outcomeUniformMass outcomes =
-        case outcomeDecoder outcomes of
-            SmallDecoder bound decode ->
-                (\index -> Right $ RankedValue (Rank $ toInteger index) (decode index)) <$> selectInt bound
-            LargeDecoder bound decode ->
-                (\rank -> Right $ RankedValue rank (decode rank)) <$> selectInteger bound
+    | Just _ <- outcomeUniformMass outcomes = Right <$> drawUniformWithRank (outcomeDecoder outcomes)
     | otherwise =
         Right <$> runRankSampler (outcomeSampler outcomes)
   where
     outcomes = staticOutcomes static
+
+-- | Draw one value of a uniform language through its compiled decoder.
+drawUniform :: (GenBackend gen) => RankDecoder a -> gen a
+drawUniform (SmallDecoder bound decode) = decode <$> selectInt bound
+drawUniform (LargeDecoder bound decode) = decode <$> selectInteger bound
+
+-- | 'drawUniform' with the replay rank of the value.
+drawUniformWithRank :: (GenBackend gen) => RankDecoder a -> gen (RankedValue a)
+drawUniformWithRank (SmallDecoder bound decode) =
+    (\index -> RankedValue (Rank $ toInteger index) (decode index)) <$> selectInt bound
+drawUniformWithRank (LargeDecoder bound decode) = (\rank -> RankedValue rank (decode rank)) <$> selectInteger bound
 
 -- | Select every outcome in rank order.
 enumerateOutcomeIndex :: OutcomeIndex symbol a -> Either GenError [Outcome symbol a]
