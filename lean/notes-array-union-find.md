@@ -49,3 +49,10 @@ array merge and readback workers. At every sufficiently large bound, they
 return exactly that reference result. The repeated saturation proofs can use
 this result at each active completion call. Source `Map`/`Set` operations must
 implement their stated ordered-map and ordered-set contracts.
+
+`EqualitySource` composes the full source initialization and fixed-point loop
+with actual array completion at every step. `source_normalization_exact`
+derives a sufficient execution bound and exact existing-subterm equality
+semantics. `source_rejection_exact` proves that source rejection is equivalent
+to having no finite equality model. The bound is proof instrumentation.
+The Haskell loop runs until contradiction or canonical equality.
