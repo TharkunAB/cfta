@@ -1,4 +1,8 @@
--- | A Z3-backed 'Entailment' implemented with Liquid Fixpoint's SMT API.
+{- | A Z3-backed 'Entailment' implemented with Liquid Fixpoint's SMT API.
+
+The entailment translates each 'Formula' to a Liquid Fixpoint expression. A
+name is an integer unless a declaration gives it another 'Sort'.
+-}
 module Data.CFTA.Refinement.LiquidFixpoint (
     withZ3,
     withZ3Assuming,
@@ -16,6 +20,7 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Text as Text
 import GHC.Clock (getMonotonicTime)
 
+import Data.CFTA.Formula (Formula (..), Name (..), Relation (..), Sort (..), Term (..))
 import Data.CFTA.Refinement (Entailment, Verdict (..), entailmentWithBindings)
 import Data.CFTA.Symbol (valueName)
 import qualified Language.Fixpoint.Smt.Interface as SMT
@@ -26,7 +31,7 @@ import Language.Fixpoint.Types.Config (SMTSolver (Z3), defConfig, smtTimeout, so
 {- | Run actions using one reusable Z3 process and a fixed declaration set.
 Each query has the time limit 'defaultTimeLimit', as in 'withZ3Assuming'.
 -}
-withZ3 :: [(Fixpoint.Symbol, Fixpoint.Sort)] -> (Entailment -> IO a) -> IO a
+withZ3 :: [(Name, Sort)] -> (Entailment -> IO a) -> IO a
 withZ3 declarations = withZ3Assuming declarations []
 
 {- | Run entailment queries under a fixed collection of ambient assumptions.
@@ -35,16 +40,18 @@ This models the surrounding Liquid typing environment. For example, an input
 named @bufferLength@ may be declared as an integer and assumed equal to three;
 position substitution can then prove that an index lies below that particular
 buffer length. Each query declares as an integer every free name that the
-declarations do not give a sort, including 'valueName' and term symbols
-that become actual values in a position substitution. Declare a name to give
-it another sort.
+declarations do not give a sort, including 'valueName' and term symbols that
+become actual values in a position substitution. Declare a name to give it
+another sort, such as a 'FunctionSort' for an uninterpreted function. A fresh
+value name of a binding gets the sort of the name that it stands for, and it
+must not be one of the declared names; otherwise the query gives 'Unknown'.
 
 Each query has the time limit 'defaultTimeLimit'. A query that reaches the
 limit raises 'TimeLimitReached'. 'withZ3Timeout' sets another limit.
 -}
 withZ3Assuming ::
-    [(Fixpoint.Symbol, Fixpoint.Sort)] ->
-    [Fixpoint.Pred] ->
+    [(Name, Sort)] ->
+    [Formula] ->
     (Entailment -> IO a) ->
     IO a
 withZ3Assuming = withZ3Timeout defaultTimeLimit
@@ -64,31 +71,33 @@ answer is @unknown@ and the check took the whole limit, it raises
 -}
 withZ3Timeout ::
     Int ->
-    [(Fixpoint.Symbol, Fixpoint.Sort)] ->
-    [Fixpoint.Pred] ->
+    [(Name, Sort)] ->
+    [Formula] ->
     (Entailment -> IO a) ->
     IO a
-withZ3Timeout milliseconds given assumptions action =
+withZ3Timeout milliseconds sorted assumptions action =
     bracket acquire release $ \contextVar ->
         action (entailmentWithBindings $ query contextVar)
   where
     valueSymbol = Fixpoint.symbol valueName
+    given = [(nameSymbol name, sortToFixpoint sort) | (name, sort) <- sorted]
     declarations
         | valueSymbol `elem` map fst given = given
         | otherwise = (valueSymbol, Fixpoint.FInt) : given
     known = HashSet.fromList $ map fst declarations
+    solverAssumptions = map toFixpoint assumptions
 
     config = defConfig{solver = Z3, smtTimeout = Just milliseconds}
 
     acquire = newMVar =<< SMT.makeContextNoLog config
     release contextVar = withMVar contextVar SMT.cleanupContext
 
-    query contextVar bindings antecedent consequent =
+    query contextVar bindings antecedentFormula consequentFormula =
         case traverse freshDeclaration bindings of
             Nothing -> pure Unknown
             Just freshDeclarations -> do
                 outcome <- modifyMVar contextVar $ \context -> do
-                    let mentioned = foldMap Fixpoint.exprSymbolsSet (antecedent : consequent : assumptions)
+                    let mentioned = foldMap Fixpoint.exprSymbolsSet (antecedent : consequent : solverAssumptions)
                         declared = HashSet.union known $ HashSet.fromList $ map fst freshDeclarations
                         undeclared =
                             [(name, Fixpoint.FInt) | name <- HashSet.toList $ HashSet.difference mentioned declared]
@@ -115,10 +124,13 @@ withZ3Timeout milliseconds given assumptions action =
                             _ -> pure (nextContext, Right answer)
                 either throwIO responseVerdict outcome
       where
+        antecedent = toFixpoint antecedentFormula
+        consequent = toFixpoint consequentFormula
+
         check freshDeclarations = SMT.smtBracket "microcfta entailment" $ do
             SMT.smtDecls $ declarations <> freshDeclarations
             SMT.smtAssertDecl $
-                Fixpoint.pAnd (assumptions <> [antecedent, Fixpoint.PNot consequent])
+                Fixpoint.pAnd (solverAssumptions <> [antecedent, Fixpoint.PNot consequent])
             start <- liftIO getMonotonicTime
             response <- SMT.command SMTTypes.CheckSat
             end <- liftIO getMonotonicTime
@@ -130,8 +142,8 @@ withZ3Timeout milliseconds given assumptions action =
             SMT.makeContextNoLog config
 
         freshDeclaration (fresh, original)
-            | HashSet.member fresh known = Nothing
-            | otherwise = Just (fresh, fromMaybe Fixpoint.FInt $ lookup original declarations)
+            | HashSet.member (nameSymbol fresh) known = Nothing
+            | otherwise = Just (nameSymbol fresh, fromMaybe Fixpoint.FInt $ lookup (nameSymbol original) declarations)
 
         responseVerdict (SMTTypes.Unsat, _) = pure Yes
         responseVerdict (SMTTypes.Sat, _) = pure No
@@ -142,6 +154,54 @@ withZ3Timeout milliseconds given assumptions action =
             ioError . userError $ "Z3 rejected a microcfta query: " <> Text.unpack message
         responseVerdict (response, _) =
             ioError . userError $ "Unexpected Z3 response: " <> show response
+
+-- | The Liquid Fixpoint expression of a formula.
+toFixpoint :: Formula -> Fixpoint.Expr
+toFixpoint formula = case formula of
+    Top -> Fixpoint.PTrue
+    And parts -> Fixpoint.PAnd $ map toFixpoint parts
+    Bottom -> Fixpoint.PFalse
+    Or parts -> Fixpoint.POr $ map toFixpoint parts
+    Not inner -> Fixpoint.PNot $ toFixpoint inner
+    Atom relation left right -> Fixpoint.PAtom (brel relation) (termToFixpoint left) (termToFixpoint right)
+    Forall bound inner -> Fixpoint.PAll (map binder bound) (toFixpoint inner)
+    Exists bound inner -> Fixpoint.PExist (map binder bound) (toFixpoint inner)
+  where
+    binder (name, sort) = (nameSymbol name, sortToFixpoint sort)
+    brel relation = case relation of
+        Eq -> Fixpoint.Eq
+        Ne -> Fixpoint.Ne
+        Gt -> Fixpoint.Gt
+        Ge -> Fixpoint.Ge
+        Lt -> Fixpoint.Lt
+        Le -> Fixpoint.Le
+
+-- | The Liquid Fixpoint expression of a term.
+termToFixpoint :: Term -> Fixpoint.Expr
+termToFixpoint term = case term of
+    Lit value -> Fixpoint.ECon $ Fixpoint.I value
+    Var name -> Fixpoint.EVar $ nameSymbol name
+    Neg inner -> Fixpoint.ENeg $ termToFixpoint inner
+    Add left right -> Fixpoint.EBin Fixpoint.Plus (termToFixpoint left) (termToFixpoint right)
+    Sub left right -> Fixpoint.EBin Fixpoint.Minus (termToFixpoint left) (termToFixpoint right)
+    Mul left right -> Fixpoint.EBin Fixpoint.Times (termToFixpoint left) (termToFixpoint right)
+    Div left right -> Fixpoint.EBin Fixpoint.Div (termToFixpoint left) (termToFixpoint right)
+    Mod left right -> Fixpoint.EBin Fixpoint.Mod (termToFixpoint left) (termToFixpoint right)
+    App function arguments -> Fixpoint.eApps (Fixpoint.EVar $ nameSymbol function) (map termToFixpoint arguments)
+    Ite condition yes no -> Fixpoint.EIte (toFixpoint condition) (termToFixpoint yes) (termToFixpoint no)
+    Cast inner sort -> Fixpoint.ECst (termToFixpoint inner) (sortToFixpoint sort)
+
+-- | The Liquid Fixpoint sort of a sort.
+sortToFixpoint :: Sort -> Fixpoint.Sort
+sortToFixpoint sort = case sort of
+    IntSort -> Fixpoint.FInt
+    RealSort -> Fixpoint.FReal
+    BoolSort -> Fixpoint.boolSort
+    FunctionSort arguments result -> Fixpoint.mkFFunc 0 $ map sortToFixpoint arguments <> [sortToFixpoint result]
+
+-- | The Liquid Fixpoint symbol of a name.
+nameSymbol :: Name -> Fixpoint.Symbol
+nameSymbol (Name text) = Fixpoint.symbol text
 
 {- | Z3 stopped a query at the time limit, in milliseconds, before it decided
 the query.

@@ -3,10 +3,8 @@
 module Data.CFTA.Refinement.GuardSpec (spec) where
 
 import Control.Exception (IOException, evaluate, try)
-import System.Timeout (timeout)
-import Test.Hspec (Spec, describe, it, shouldBe)
-
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Formula (Formula (Forall), Sort (..))
 import Data.CFTA.Refinement (
     Automaton,
     Entailment (entails),
@@ -17,6 +15,7 @@ import Data.CFTA.Refinement (
     Substitution (Substitution),
     Symbol (RefinedSymbol),
     Verdict (..),
+    entailsWithBindings,
     equalityConstraint,
     evaluateConstraint,
     evaluateGuard,
@@ -28,13 +27,15 @@ import Data.CFTA.Refinement (
     termsWith,
     pattern Transition,
  )
-import Data.CFTA.Refinement.Expression (false, refinementFormula, toExpr, true, variable, (.&&), (.==), (.>=))
+import Data.CFTA.Refinement.Expression (false, refinementFormula, true, variable, (.&&), (.==), (.>), (.>=))
 import Data.CFTA.Refinement.Guard (anyOf, buildGuard, isSameTermAs, notGuard, requires, withActualFor)
 import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..), withZ3, withZ3Timeout)
 import Data.CFTA.Refinement.TestSupport (tableEntailment)
 import Data.CFTA.Symbol (valueName)
 import qualified Data.CFTA.Term as Term
-import qualified Language.Fixpoint.Types as Fixpoint
+import Data.String (fromString)
+import System.Timeout (timeout)
+import Test.Hspec (Spec, describe, it, shouldBe)
 
 spec :: Spec
 spec =
@@ -226,7 +227,7 @@ spec =
             evaluateGuard tableEntailment (Not missingActual) term >>= (`shouldBe` Yes)
 
         it "does not capture a free refinement name when comparing quantified annotations" $ do
-            let quantified body = Fixpoint.PAll [(Fixpoint.symbol ("x" :: String), Fixpoint.FInt)] body
+            let quantified body = Forall [("x", IntSort)] body
                 term =
                     Term.Node
                         ( RefinedSymbol
@@ -264,12 +265,7 @@ spec =
             result `shouldBe` Just (Yes, Yes)
 
         it "connects a substituted node symbol to that node's refinement" $ do
-            let model :: Fixpoint.Expr
-                model = Fixpoint.EVar $ Fixpoint.symbol ("model" :: String)
-                declarations =
-                    [ (Fixpoint.symbol name, Fixpoint.FInt)
-                    | name <- [valueName, "model", "previous"] :: [String]
-                    ]
+            let declarations = [(name, IntSort) | name <- [fromString valueName, "model", "previous"]]
                 guard =
                     Substitute
                         [Substitution (path [0]) (path [1, 0])]
@@ -287,24 +283,24 @@ spec =
                                 true
                             )
                             [ Term.Node (RefinedSymbol "model" true) []
-                            , Term.Node (RefinedSymbol "post-state" (refinementFormula (\v -> v .== (toExpr model + 1)))) []
+                            , Term.Node (RefinedSymbol "post-state" (refinementFormula (\v -> v .== (variable "model" + 1)))) []
                             ]
                         ]
             withZ3 declarations $ \solver ->
                 evaluateGuard solver guard term >>= (`shouldBe` Yes)
 
         it "answers correctly after the solver rejects a query" $ do
-            -- Z3 rejects the assertion that applies the Int constant f, and it
-            -- still answers the check-sat. The rejection is an exception. The
-            -- next queries go to a new solver process, so each one reads its
-            -- own answer, not the answer of the query before it.
-            let x = Fixpoint.EVar (Fixpoint.symbol ("x" :: String))
-                f = Fixpoint.EVar (Fixpoint.symbol ("f" :: String))
-                rejected = Fixpoint.PAtom Fixpoint.Gt (Fixpoint.EApp f x) (Fixpoint.expr (0 :: Int))
-                positive = Fixpoint.PAtom Fixpoint.Gt x (Fixpoint.expr (0 :: Int))
-                nonNegative = Fixpoint.PAtom Fixpoint.Ge x (Fixpoint.expr (0 :: Int))
-            withZ3 [(Fixpoint.symbol ("x" :: String), Fixpoint.FInt), (Fixpoint.symbol ("f" :: String), Fixpoint.FInt)] $ \solver -> do
-                rejection <- try (entails solver rejected positive) :: IO (Either IOException Verdict)
+            -- The query binds the fresh name twice, so it declares that name
+            -- twice. Z3 rejects the second declaration, and it still answers
+            -- the check-sat. The rejection is an exception. The next queries
+            -- go to a new solver process, so each one reads its own answer,
+            -- not the answer of the query before it.
+            let x = variable "x"
+                positive = x .> 0
+                nonNegative = x .>= 0
+                twice = [("fresh", "x"), ("fresh", "x")]
+            withZ3 ([("x", IntSort)]) $ \solver -> do
+                rejection <- try (entailsWithBindings solver twice positive positive) :: IO (Either IOException Verdict)
                 either (const True) (const False) rejection `shouldBe` True
                 results <- mapM (uncurry $ entails solver) [(positive, nonNegative), (nonNegative, positive), (positive, nonNegative)]
                 results `shouldBe` [Yes, No, Yes]
