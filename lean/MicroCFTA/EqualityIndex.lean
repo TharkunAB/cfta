@@ -137,12 +137,13 @@ theorem source_equations_exact (classes : Constraints) (mergeFuel readFuel : Nat
     (forest after : UnionFind.Forest) (entries : List (Nat × Nat))
     (merged : EqualityArray.mergePairs mergeFuel ((encoded classes).flatMap EqualityArray.classPairs)
       (UnionFind.withInitialValues (encoded classes).flatten) = some forest)
-    (readback : EqualityArray.readAll readFuel (encoded classes).flatten.eraseDups forest = some (entries, after))
+    (readback : EqualityArray.readAll readFuel (List.range (members classes).length) forest = some (entries, after))
     (assignment : Path → Value) :
     (∀ paths ∈ decodedGroups classes entries, ∀ left ∈ paths, ∀ right ∈ paths, assignment left = assignment right) ↔
       ∀ paths ∈ classes, ∀ left ∈ paths, ∀ right ∈ paths, assignment left = assignment right := by
   simp only [decodedGroups, List.forall_mem_map]
-  exact (EqualityArray.complete_groups_exact (encoded classes) mergeFuel readFuel forest after entries merged readback
+  exact (EqualityArray.complete_groups_domain_exact (encoded classes) (List.range (members classes).length)
+    (fun index => List.mem_range.trans (encoded_domain classes index).symm) mergeFuel readFuel forest after entries merged readback
     (fun index => assignment (decode classes index))).trans (input_equations classes assignment)
 
 /-- Indexed array completion preserves existing-subterm equalities in both directions. -/
@@ -150,11 +151,11 @@ theorem source_path_semantics (classes : Constraints) (active : Active classes) 
     (forest after : UnionFind.Forest) (entries : List (Nat × Nat))
     (merged : EqualityArray.mergePairs mergeFuel ((encoded classes).flatMap EqualityArray.classPairs)
       (UnionFind.withInitialValues (encoded classes).flatten) = some forest)
-    (readback : EqualityArray.readAll readFuel (encoded classes).flatten.eraseDups forest = some (entries, after))
+    (readback : EqualityArray.readAll readFuel (List.range (members classes).length) forest = some (entries, after))
     (term : Language.Term Symbol) :
     Satisfies term (decodedGroups classes entries) ↔ Satisfies term classes := by
   have valid := (EqualityArray.mergePairs_correct (Value := Nat) _ _ (UnionFind.initial_total _) mergeFuel forest merged).1
-  have grouped := EqualityArray.grouped_partition (encoded classes).flatten.eraseDups forest valid readFuel entries after readback
+  have grouped := EqualityArray.grouped_partition (List.range (members classes).length) forest valid readFuel entries after readback
   constructor
   · intro result paths pathsMember left leftMember right rightMember different
     have indexedClass : paths.map (encode classes) ∈ encoded classes := List.mem_map.mpr ⟨paths, pathsMember, rfl⟩
@@ -166,7 +167,8 @@ theorem source_path_semantics (classes : Constraints) (active : Active classes) 
     have leftPresent := List.mem_flatten.mpr ⟨_, indexedClass, leftIndex⟩
     have rightPresent := List.mem_flatten.mpr ⟨_, indexedClass, rightIndex⟩
     obtain ⟨indices, present, first, second⟩ := (grouped (encode classes left) (encode classes right)).mpr
-      ⟨by simpa using leftPresent, by simpa using rightPresent, related⟩
+      ⟨List.mem_range.mpr (encoded_bounded classes _ leftPresent),
+        List.mem_range.mpr (encoded_bounded classes _ rightPresent), related⟩
     have leftRound := decode_encode classes left (List.mem_flatten.mpr ⟨paths, pathsMember, leftMember⟩)
     have rightRound := decode_encode classes right (List.mem_flatten.mpr ⟨paths, pathsMember, rightMember⟩)
     have firstPath : left ∈ indices.map (decode classes) := List.mem_map.mpr ⟨_, first, leftRound⟩
@@ -187,7 +189,7 @@ theorem source_path_semantics (classes : Constraints) (active : Active classes) 
     subst left
     have originalIndex : index ∈ (encoded classes).flatten := by
       have both := (grouped index index).mp ⟨indices, indicesMember, indexMember, indexMember⟩
-      simpa using both.1
+      exact encoded_covers classes index (List.mem_range.mp both.1)
     have originalPath := decode_member classes index (encoded_bounded classes index originalIndex)
     obtain ⟨originalPaths, originalMember, pathMember⟩ := List.mem_flatten.mp originalPath
     obtain ⟨value, found⟩ := class_member_exists term originalPaths (active originalPaths originalMember)
@@ -202,7 +204,7 @@ theorem source_canonical_semantics (classes : Constraints) (active : Active clas
     (forest after : UnionFind.Forest) (entries : List (Nat × Nat))
     (merged : EqualityArray.mergePairs mergeFuel ((encoded classes).flatMap EqualityArray.classPairs)
       (UnionFind.withInitialValues (encoded classes).flatten) = some forest)
-    (readback : EqualityArray.readAll readFuel (encoded classes).flatten.eraseDups forest = some (entries, after))
+    (readback : EqualityArray.readAll readFuel (List.range (members classes).length) forest = some (entries, after))
     (term : Language.Term Symbol) :
     Satisfies term (canonicalize (decodedGroups classes entries)) ↔ Satisfies term classes :=
   (canonicalize_correct term _).trans
