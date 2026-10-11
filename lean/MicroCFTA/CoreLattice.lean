@@ -4,7 +4,8 @@ import MicroCFTA.LatticeFormula
 /-!
 # Core formulas and the checked integer lattice compiler
 
-This module connects `Data.CFTA.Formula` to the existing lattice proofs.
+This module connects the integer fragment of `Data.CFTA.Formula` to the
+existing lattice proofs. `FullSyntax` supplies the current complete syntax.
 Every core constructor has an explicit translation. A conditional term maps
 to the parser's unsupported arithmetic case, as in `linearTerm`. Formula
 lists expand to the same right folds as the source's `signed` function.

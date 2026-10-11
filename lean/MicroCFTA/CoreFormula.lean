@@ -3,9 +3,10 @@ import Std
 /-!
 # Integer formulas from `Data.CFTA.Formula`
 
-The syntax includes all constructors of the core formula module. Integer
-arithmetic has the same unbounded domain as Haskell `Integer`. An environment
-assigns an integer to each name. The semantics evaluates every term and formula.
+The syntax is the integer fragment from `55fe503`. `FullSyntax` models the
+later sorted extension and proves that successful lattice parses remain in
+this fragment. Integer arithmetic has the same unbounded domain as Haskell
+`Integer`. An environment assigns an integer to each name.
 
 The substitution model retains the source order of replacements and removes
 identity replacements before lookup. It does not substitute inside replacement
@@ -23,7 +24,7 @@ inductive Relation where
   deriving DecidableEq, Repr
 
 mutual
-/-- The complete integer term syntax. -/
+/-- The integer term fragment used by the automata. -/
 inductive Term where
   | lit (value : Int)
   | var (name : Name)
@@ -34,7 +35,7 @@ inductive Term where
   | ite (condition : Formula) (yes no : Term)
   deriving Repr
 
-/-- The complete quantifier-free formula syntax. -/
+/-- Quantifier-free formulas over the integer term fragment. -/
 inductive Formula where
   | top
   | and (parts : List Formula)
@@ -505,7 +506,7 @@ theorem eval_simplifyNot (env : Name → Int) (p : Formula) :
   cases p <;> simp [simplifyNot, evalFormula]
 
 mutual
-/-- The complete source simplifier, including its asymmetric `And` and `Or`. -/
+/-- The source simplifier on the integer fragment, including its asymmetric `And` and `Or`. -/
 def simplify : Formula → Formula
   | .or [] => .bottom
   | .or [p] => simplify p
