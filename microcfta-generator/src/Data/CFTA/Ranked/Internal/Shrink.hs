@@ -51,7 +51,7 @@ import Data.CFTA.Index (
     rebaseRank,
     splitRank,
  )
-import Data.CFTA.Ranked.Internal.Decoder (Plan (..), RankedValue (..), SizeClass (..))
+import Data.CFTA.Ranked.Internal.Decoder (Plan (..), RankedValue (..), SizeClass (..), withOffsets)
 import Data.CFTA.Ranked.Internal.Size (
     MinimumSize (..),
     SizeIndex (minimumMemberSize, sizeClassCounts, sizeClassSelect),
@@ -164,14 +164,6 @@ shrinkPlanRank = go
     -- halvings of the distance back toward the original.
     towardZero (Rank index) =
         [Rank $ index - step | step <- takeWhile (> 0) (iterate (`div` 2) index)]
-
--- | Pair each alternative with its cumulative rank offset, given its cardinality.
-withOffsets :: (a -> Cardinality) -> [a] -> [(RankOffset, a)]
-withOffsets cardinalityOf = go 0
-  where
-    go _ [] = []
-    go offset (alternative : rest) =
-        (offset, alternative) : go (nextOffset offset $ cardinalityOf alternative) rest
 
 {- | Whether a rank falls inside an offset branch. The branches before it hold
 the smaller ranks, so the rank is at least the offset of the branch.

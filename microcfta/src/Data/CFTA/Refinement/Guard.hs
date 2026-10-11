@@ -52,7 +52,7 @@ import Data.CFTA.Refinement (
     validate,
     pattern Transition,
  )
-import Data.CFTA.Refinement.Expression (Expr, Refinement, refinementFormula, variable)
+import Data.CFTA.Refinement.Expression (Expr, Refinement, refinementFormula, substitute, variable)
 import Data.Maybe (fromMaybe)
 import qualified Language.Fixpoint.Types as Fixpoint
 import Numeric.Natural (Natural)
@@ -190,13 +190,7 @@ contract builder =
     conjuncts formula = [formula]
     -- A quantifier renames its bound name when the renaming uses that name, so no term is captured.
     renumbered named conjunct =
-        Fixpoint.rapierSubstExpr (Fixpoint.exprSymbolsSet conjunct <> Fixpoint.substSymbolsSet renaming) renaming conjunct
-      where
-        renaming =
-            Fixpoint.mkSubst
-                [ (Fixpoint.symbol $ contractTermName old, Fixpoint.EVar $ Fixpoint.symbol $ contractTermName new)
-                | (new, old) <- zip [0 ..] named
-                ]
+        substitute [(contractTermName old, variable $ contractTermName new) | (new, old) <- zip [0 ..] named] conjunct
 
 -- | Require the left position's refinement to be a subtype of the right one.
 isSubtypeOf :: Path -> Path -> Constraint

@@ -23,11 +23,13 @@ module Data.CFTA.Gen.Internal.Types (
     isRecursive,
     isOpaque,
     recursiveView,
+    staticView,
 
     -- * Grouped generators
     Grouped (..),
     isRecursiveGrouped,
     recursiveGroups,
+    finiteGroups,
 
     -- * Composing
     Args (..),
@@ -68,8 +70,8 @@ import Data.CFTA.Gen.Internal.Inspection
 import Data.CFTA.Gen.Internal.Recursive
 import Data.CFTA.Gen.Internal.Static
 import Data.CFTA.Gen.Label (Label (..))
-import Data.CFTA.Index (Cardinality (..), Depth, Rank (..), Weight)
-import Data.CFTA.Ranked.Internal.Decoder (RankDecoder (..), RankedValue (..))
+import Data.CFTA.Index (Depth, Weight)
+import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
 import Data.CFTA.Ranked.Internal.Sampler
 import Data.CFTA.Ranked.Internal.Size (MinimumSize, SizeIndex (minimumMemberSize), productIndex)
 import Data.CFTA.Ranked.QuickCheck (QuickCheckBackend (..))
@@ -170,6 +172,13 @@ recursiveView (Transparent result) = recursiveFromStatic <$> result
 recursiveView (Cyclic result) = result
 recursiveView (Opaque _) = Left CannotInspectOpaqueGenerator
 
+-- | The finite language of a generator. A recursive generator gives 'UnboundedGenerator'.
+staticView :: Gen symbol a -> Either GenError (Static symbol a)
+staticView (Transparent result) = result
+staticView (Cyclic (Left err)) = Left err
+staticView (Cyclic (Right _)) = Left UnboundedGenerator
+staticView (Opaque _) = Left CannotInspectOpaqueGenerator
+
 -- | A generator whose values are classified by a projected key: one language per key.
 data Grouped symbol key a
     = Grouped !(Either GenError (Map.Map key (KeyedBucket symbol a)))
@@ -191,6 +200,12 @@ recursiveGroups ::
     Either GenError (Map.Map key (KeyedRecursive symbol a))
 recursiveGroups (CyclicGrouped result) = result
 recursiveGroups (Grouped result) = keyedRecursiveFromBuckets <$> result
+
+-- | The finite groups of a family. A recursive family gives 'UnboundedGenerator'.
+finiteGroups :: Grouped symbol key a -> Either GenError (Map.Map key (KeyedBucket symbol a))
+finiteGroups (Grouped result) = result
+finiteGroups (CyclicGrouped (Left err)) = Left err
+finiteGroups (CyclicGrouped (Right _)) = Left UnboundedGenerator
 
 {- | Argument families for 'apply', one per signature component, in order.
 
@@ -255,34 +270,29 @@ instance (Hashable symbol, Typeable symbol) => NodeLayer symbol (Grouped symbol 
 nodeWithKey ::
     (Hashable symbol, Typeable symbol) =>
     (key -> symbol) -> Grouped symbol key a -> Grouped symbol key a
-nodeWithKey symbolOf (Grouped result) =
-    Grouped $ fmap (Map.mapWithKey labelBucket) result
-  where
-    labelBucket key bucket =
-        bucket
-            { keyedBucketStatic =
-                labelStatic (symbolOf key) $ keyedBucketStatic bucket
-            }
-nodeWithKey symbolOf (CyclicGrouped result) =
-    CyclicGrouped $ fmap (Map.mapWithKey labelGroup) result
-  where
-    labelGroup key group =
-        group
-            { keyedRecursiveLanguage =
-                labelRecursive (symbolOf key) $ keyedRecursiveLanguage group
-            , keyedRecursiveMasses = payMassIndex (groupMinimum group) $ keyedRecursiveMasses group
-            }
+nodeWithKey symbolOf = payGroupsWith (labelStatic . symbolOf) (labelRecursive . symbolOf)
 
 -- | 'pay' for every group of a grouped generator: every member is one larger.
 payGrouped :: Grouped symbol key a -> Grouped symbol key a
-payGrouped (Grouped result) =
-    Grouped $ fmap (fmap $ \bucket -> bucket{keyedBucketStatic = payStatic $ keyedBucketStatic bucket}) result
-payGrouped (CyclicGrouped result) =
-    CyclicGrouped $ fmap (fmap payGroup) result
+payGrouped = payGroupsWith (const payStatic) (const payRecursive)
+
+{- | Change every group of a family with a function that pays one. Every member
+is one larger, so the masses of a recursive group move up one size.
+-}
+payGroupsWith ::
+    (key -> Static symbol a -> Static symbol a) ->
+    (key -> Recursive symbol a -> Recursive symbol a) ->
+    Grouped symbol key a ->
+    Grouped symbol key a
+payGroupsWith static _ (Grouped result) =
+    Grouped $
+        fmap (Map.mapWithKey $ \key bucket -> bucket{keyedBucketStatic = static key $ keyedBucketStatic bucket}) result
+payGroupsWith _ recursive (CyclicGrouped result) =
+    CyclicGrouped $ fmap (Map.mapWithKey payGroup) result
   where
-    payGroup group =
+    payGroup key group =
         group
-            { keyedRecursiveLanguage = payRecursive $ keyedRecursiveLanguage group
+            { keyedRecursiveLanguage = recursive key $ keyedRecursiveLanguage group
             , keyedRecursiveMasses = payMassIndex (groupMinimum group) $ keyedRecursiveMasses group
             }
 
@@ -384,9 +394,7 @@ runQuickCheckBackend (QuickCheckBackend generated) = generated
 lowerUniform :: Gen symbol a -> Maybe (QC.Gen a)
 lowerUniform (Transparent (Right static))
     | Just _ <- outcomeUniformMass outcomes =
-        Just $ case outcomeDecoder outcomes of
-            SmallDecoder bound decode -> decode <$> QC.chooseInt (0, bound - 1)
-            LargeDecoder (Cardinality bound) decode -> decode . Rank <$> QC.chooseInteger (0, bound - 1)
+        Just $ runQuickCheckBackend $ drawUniform $ outcomeDecoder outcomes
   where
     outcomes = staticOutcomes static
 lowerUniform _ = Nothing
@@ -395,11 +403,7 @@ lowerUniform _ = Nothing
 lowerUniformWithRank :: Gen symbol a -> Maybe (QC.Gen (RankedValue a))
 lowerUniformWithRank (Transparent (Right static))
     | Just _ <- outcomeUniformMass outcomes =
-        Just $ case outcomeDecoder outcomes of
-            SmallDecoder bound decode ->
-                (\index -> RankedValue (Rank $ toInteger index) (decode index)) <$> QC.chooseInt (0, bound - 1)
-            LargeDecoder (Cardinality bound) decode ->
-                (\index -> RankedValue (Rank index) (decode $ Rank index)) <$> QC.chooseInteger (0, bound - 1)
+        Just $ runQuickCheckBackend $ drawUniformWithRank $ outcomeDecoder outcomes
   where
     outcomes = staticOutcomes static
 lowerUniformWithRank _ = Nothing

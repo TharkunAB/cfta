@@ -1,8 +1,5 @@
 {- | Internal representation for finite ranked generators.
 
-The public contracts of the ranked API are documented again in
-"Data.CFTA.Ranked". Keep the two consistent.
-
 This module is an exposed internal module. The generator layers of
 microcfta-generator use it directly. Its exports are not covered by the PVP
 contract of the package.
@@ -235,8 +232,10 @@ share ranked
                 "microcfta-generator bug in Data.CFTA.Ranked.Internal.share: \
                 \a language with one member has no size"
 
-{- | The members of a ranked language, each one larger: the @pay@ of FEAT. The
-ranks, the values, and the sampler do not change.
+{- | Add one to the size of every member: the @pay@ of FEAT (Duregård, Jansson,
+and Wang, Haskell Symposium 2012). Sizes count pays: 'pure' has size zero, an
+indexed source has size one, and '<*>' adds the sizes of its sides. Ranks and
+values do not change.
 -}
 pay :: Ranked a -> Ranked a
 pay ranked =

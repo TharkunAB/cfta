@@ -250,21 +250,8 @@ data Variant = Variant
 
 -- | Every homogeneous child specialization required to evaluate one guard.
 specializations :: Guard -> Transition -> PruneM [(Transition, Observations)]
-specializations guard edge = do
-    children <- specializeChildren (planChildren plan) (edgeChildren edge)
-    pure
-        [ (mkEdge (edgeSymbol edge) specialized (edgeConstraint edge), rootObservations `Map.union` childObservations)
-        | (specialized, _, childObservations) <- children
-        ]
-  where
-    plan = planGuard guard
-    rootObservations = rootObservationsOf plan edge
-
--- | The root observation of a transition, if the plan reads the root.
-rootObservationsOf :: PathPlan -> Transition -> Observations
-rootObservationsOf plan edge = case planObservation plan of
-    Nothing -> Map.empty
-    Just _ -> Map.singleton EmptyPath $ Observed (edgeSymbol edge) $ leafnessOf $ edgeChildren edge
+specializations guard edge =
+    map (\(_, observations, specialized) -> (specialized, observations)) <$> specializeEdge (planGuard guard) edge
 
 -- | Partition one node's language by the observations in a path plan.
 specializeNode :: Automaton -> PathPlan -> PruneM [Variant]
@@ -306,7 +293,10 @@ specializeEdge plan edge = do
     rootSignature = case planObservation plan of
         Nothing -> Map.empty
         Just need -> Map.singleton EmptyPath $ observe need edge
-    rootObservations = rootObservationsOf plan edge
+    -- The root observation of the transition, if the plan reads the root.
+    rootObservations = case planObservation plan of
+        Nothing -> Map.empty
+        Just _ -> Map.singleton EmptyPath $ Observed (edgeSymbol edge) $ leafnessOf $ edgeChildren edge
 
 -- | Cartesian product of child variants, sharing every unobserved child.
 specializeChildren :: IntMap.IntMap PathPlan -> [Automaton] -> PruneM [([Automaton], Signature, Observations)]

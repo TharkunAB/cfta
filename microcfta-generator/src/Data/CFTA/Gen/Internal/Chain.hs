@@ -32,9 +32,7 @@ module Data.CFTA.Gen.Internal.Chain (
     recursiveChainTerms,
     recursiveSupports,
     recursiveInspections,
-    recursiveChainIndex,
-    recursiveChainMass,
-    recursiveChainSampling,
+    recursiveChainProduct,
     recursiveChainWeighted,
     recursiveChainMassWeighted,
 ) where
@@ -102,46 +100,40 @@ mapChain _ ChainNil = ChainNil
 mapChain transform (ChainCons group rest) =
     ChainCons (transform group) (mapChain transform rest)
 
+-- | Read every group of a chain, in order.
+chainToList :: (forall x. f x -> b) -> ArgChain f operation result -> [b]
+chainToList _ ChainNil = []
+chainToList read_ (ChainCons group rest) = read_ group : chainToList read_ rest
+
 -- | The product of the matched groups' probability masses.
 chainMass :: ArgChain (KeyedBucket symbol) operation result -> Rational
-chainMass ChainNil = 1
-chainMass (ChainCons bucket rest) = keyedBucketMass bucket * chainMass rest
+chainMass = product . chainToList keyedBucketMass
 
 -- | Number of arguments in the chain.
 chainLength :: ArgStatics symbol operation result -> Int
-chainLength ChainNil = 0
-chainLength (ChainCons _ rest) = 1 + chainLength rest
+chainLength = length . chainToList (const ())
 
 -- | ECTA support of every argument group, in order.
 chainSupports ::
     ArgStatics symbol operation result -> [Node (Label symbol)]
-chainSupports ChainNil = []
-chainSupports (ChainCons static rest) = staticSupport static : chainSupports rest
+chainSupports = chainToList staticSupport
 
 -- | The root count of every argument group, in order.
 chainRootCounts :: ArgStatics symbol operation result -> [RootCount]
-chainRootCounts ChainNil = []
-chainRootCounts (ChainCons static rest) = staticRootCount static : chainRootCounts rest
+chainRootCounts = chainToList staticRootCount
 
 -- | Diagnostic metadata of each matched finite argument group.
 chainInspections ::
     ArgStatics symbol operation result -> [Inspection symbol]
-chainInspections ChainNil = []
-chainInspections (ChainCons static rest) = staticInspection static : chainInspections rest
+chainInspections = chainToList staticInspection
 
 -- | Product of the argument group cardinalities.
 chainCardinality :: ArgStatics symbol operation result -> Cardinality
-chainCardinality ChainNil = 1
-chainCardinality (ChainCons static rest) =
-    outcomeCardinality (staticOutcomes static) * chainCardinality rest
+chainCardinality = product . chainToList (outcomeCardinality . staticOutcomes)
 
 -- | Product of the argument uniform masses, when all are uniform.
 chainUniformMass :: ArgStatics symbol operation result -> Maybe Rational
-chainUniformMass ChainNil = Just 1
-chainUniformMass (ChainCons static rest) =
-    (*)
-        <$> outcomeUniformMass (staticOutcomes static)
-        <*> chainUniformMass rest
+chainUniformMass = fmap product . sequence . chainToList (outcomeUniformMass . staticOutcomes)
 
 {- | Compose the mixed-radix rank sampler as a left 'productSampler' fold.
 
@@ -343,55 +335,27 @@ recursiveChainTerms componentIndex operationIndex operationTerms arguments = do
 -- | The support of every matched recursive argument group, in order.
 recursiveSupports ::
     ArgChain (KeyedRecursive symbol) operation result -> [Node (Label symbol)]
-recursiveSupports ChainNil = []
-recursiveSupports (ChainCons recursive rest) =
-    recursiveSupport (keyedRecursiveLanguage recursive) : recursiveSupports rest
+recursiveSupports = chainToList (recursiveSupport . keyedRecursiveLanguage)
 
 -- | Diagnostic metadata of each matched recursive argument group.
 recursiveInspections ::
     ArgChain (KeyedRecursive symbol) operation result -> [Inspection symbol]
-recursiveInspections ChainNil = []
-recursiveInspections (ChainCons recursive rest) =
-    recursiveInspection (keyedRecursiveLanguage recursive) : recursiveInspections rest
+recursiveInspections = chainToList (recursiveInspection . keyedRecursiveLanguage)
 
--- | Consume the argument groups into the operation, left to right.
-recursiveChainIndex ::
-    SizeIndex operation ->
-    ArgChain (KeyedRecursive symbol) operation result ->
-    SizeIndex result
-recursiveChainIndex index ChainNil = index
-recursiveChainIndex index (ChainCons recursive rest) =
-    recursiveChainIndex
-        (productIndex index $ recursiveIndex $ keyedRecursiveLanguage recursive)
-        rest
-
-{- | Multiply group masses through an applicative chain. The index of the
-operation gives the smallest size of each product.
+{- | Consume the argument groups into the operation, left to right: the size
+index, the masses, and the sampler of the product. The index of the operation
+gives the smallest size of each product. One fold builds the three, so they
+share each product index.
 -}
-recursiveChainMass ::
-    SizeIndex operation ->
-    MassIndex ->
-    ArgChain (KeyedRecursive symbol) operation result ->
-    MassIndex
-recursiveChainMass _ mass ChainNil = mass
-recursiveChainMass index mass (ChainCons recursive rest) =
-    recursiveChainMass
-        nextIndex
-        (productMassIndex (minimumMemberSize nextIndex) mass $ keyedRecursiveMasses recursive)
-        rest
-  where
-    nextIndex = productIndex index $ recursiveIndex $ keyedRecursiveLanguage recursive
-
--- | Consume recursive argument samplers in the same product order as ranks.
-recursiveChainSampling ::
+recursiveChainProduct ::
     SizeIndex operation ->
     MassIndex ->
     SampleIndex operation ->
     ArgChain (KeyedRecursive symbol) operation result ->
-    SampleIndex result
-recursiveChainSampling _ _ sampling ChainNil = sampling
-recursiveChainSampling index mass sampling (ChainCons recursive rest) =
-    recursiveChainSampling nextIndex nextMass nextSampling rest
+    (SizeIndex result, MassIndex, SampleIndex result)
+recursiveChainProduct index mass sampling ChainNil = (index, mass, sampling)
+recursiveChainProduct index mass sampling (ChainCons recursive rest) =
+    recursiveChainProduct nextIndex nextMass nextSampling rest
   where
     recursive' = keyedRecursiveLanguage recursive
     nextIndex = productIndex index $ recursiveIndex recursive'
@@ -408,13 +372,9 @@ recursiveChainSampling index mass sampling (ChainCons recursive rest) =
 -- | Whether any recursive argument contains a weighted atomic choice.
 recursiveChainWeighted ::
     ArgChain (KeyedRecursive symbol) operation result -> Bool
-recursiveChainWeighted ChainNil = False
-recursiveChainWeighted (ChainCons recursive rest) =
-    recursiveWeighted (keyedRecursiveLanguage recursive) || recursiveChainWeighted rest
+recursiveChainWeighted = or . chainToList (recursiveWeighted . keyedRecursiveLanguage)
 
 -- | Whether the mass of a recursive argument differs from its member counts.
 recursiveChainMassWeighted ::
     ArgChain (KeyedRecursive symbol) operation result -> Bool
-recursiveChainMassWeighted ChainNil = False
-recursiveChainMassWeighted (ChainCons recursive rest) =
-    keyedRecursiveMassWeighted recursive || recursiveChainMassWeighted rest
+recursiveChainMassWeighted = or . chainToList keyedRecursiveMassWeighted

@@ -21,7 +21,6 @@ module Data.CFTA.Symbol (
     symbolRefinement,
     unrefined,
     eraseRefinements,
-    liquidOrder,
 ) where
 
 import Data.Hashable (Hashable (..))
@@ -102,11 +101,6 @@ unrefined (InternedSymbol _ _ _ _ ordinary) = ordinary
 -- | Remove the refinements of a term.
 eraseRefinements :: Tree.Tree Symbol -> Tree.Tree Symbol
 eraseRefinements = fmap unrefined
-
--- | Order constructors of equal arity by symbol text and refinement, not by interning order.
-liquidOrder :: Symbol -> (Text, Formula)
-liquidOrder (RefinedSymbol (Symbol name) refinement) = (name, refinement)
-{-# INLINE liquidOrder #-}
 
 -- | Intern one text and refinement.
 internSymbol :: Text -> Formula -> Symbol

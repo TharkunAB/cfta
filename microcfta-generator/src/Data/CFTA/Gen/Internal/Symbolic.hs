@@ -97,7 +97,8 @@ selectCached cache selection = unsafePerformIO $ do
 -- | Requirements of the shared graph and its equality interpretation.
 type Theory symbol = (Ord symbol, Hashable symbol, Typeable symbol)
 
-{- | A sum of equality indicators. Each term's sum must be zero or one.
+{- | A constraint as a sum of equality indicators. Each term's sum must be zero
+or one.
 
 'indicators' keeps to this. It gives the path equalities of a constraint as
 one summand, or none for a contradiction, and writes its Boolean guard as a
@@ -107,8 +108,21 @@ zero or one on every term.
 For example, the negation of equality is the unconstrained indicator minus
 the equality indicator. This representation permits Boolean constraints without
 enumerating the terms that fail an equality.
+
+Each equality class requires that all its paths exist and hold equal subterms.
+A singleton class requires only existence. The interpretation must preserve
+conjunction: interpreting conjoined guards must give the pointwise product of
+their indicators. 'indicators' preserves it, because conjunction merges the
+equality classes and conjoins the guards. Checking this by enumerating the
+language would defeat the compiler.
 -}
-type Interpretation = Constraint -> [(Integer, [[Path]])]
+interpret :: Constraint -> [(Integer, [[Path]])]
+interpret constraint = case indicators constraint of
+    Just summands -> summands
+    Nothing ->
+        error
+            "microcfta-generator bug in Data.CFTA.Gen.Internal.Symbolic.interpret: \
+            \a constraint without indicators reached symbolic counting"
 
 -- | A count times a signed coefficient of inclusion and exclusion.
 scaled :: Integer -> Cardinality -> Cardinality
@@ -137,50 +151,26 @@ symbolicRanked ::
     (symbol -> key) ->
     ECTA.Node symbol ->
     Either Ranked.RankedError (Ranked.Ranked (Tree.Tree symbol), Tree.Tree symbol -> Maybe Rank)
-symbolicRanked order = symbolicRankedWith order interpret
-  where
-    interpret constraint = case indicators constraint of
-        Just summands -> summands
-        Nothing ->
-            error
-                "microcfta-generator bug in Data.CFTA.Gen.Internal.Symbolic.symbolicRanked: \
-                \a constraint without indicators reached symbolic counting"
-
-{- | Compile a finite graph with an exact sum of equality indicators per guard.
-
-Each equality class requires that all its paths exist and hold equal subterms.
-A singleton class requires only existence. The interpretation must preserve
-conjunction: interpreting conjoined guards
-must give the pointwise product of their indicators. 'indicators' preserves
-it, because conjunction merges the equality classes and conjoins the guards.
-Checking this by enumerating the language would defeat the compiler.
--}
-symbolicRankedWith ::
-    (Theory symbol, Ord key) =>
-    (symbol -> key) ->
-    Interpretation ->
-    Node symbol ->
-    Either Ranked.RankedError (Ranked.Ranked (Tree.Tree symbol), Tree.Tree symbol -> Maybe Rank)
-symbolicRankedWith order interpret root = do
+symbolicRanked order root = do
     ranked <- Ranked.fromIndexedOnDemand $ Ranked.Indexed total select
     pure (ranked, rankOf)
   where
-    (total, counts) = State.runState (countNode interpret root) emptyCounts
+    (total, counts) = State.runState (countNode root) emptyCounts
     cache = newCountCache counts
-    select rank = selectCached cache $ selectTerm order interpret root EmptyPath rank
-    rankOf term = selectCached cache $ fmap (Rank . snd) <$> rankAt order interpret root EmptyPath term 0
+    select rank = selectCached cache $ selectTerm order root EmptyPath rank
+    rankOf term = selectCached cache $ fmap (Rank . snd) <$> rankAt order root EmptyPath term 0
 
 -- | Count a shared graph once per interned identity.
 countNode ::
-    (Theory symbol) => Interpretation -> Node symbol -> State.State (Counts symbol) Cardinality
-countNode interpret node
+    (Theory symbol) => Node symbol -> State.State (Counts symbol) Cardinality
+countNode node
     | null (nodeEdges node) = pure 0
     | otherwise = do
         counts <- State.get
         case IntMap.lookup ident $ graphCounts counts of
             Just count -> pure count
             Nothing -> do
-                count <- countUnion (countEdge interpret) $ nodeEdges node
+                count <- countUnion (countEdge) $ nodeEdges node
                 State.modify' $ \cache -> cache{graphCounts = IntMap.insert ident count $ graphCounts cache}
                 pure count
   where
@@ -210,13 +200,13 @@ countUnion count edges =
 
 -- | Convert an edge into independent child domains and path obligations.
 countEdge ::
-    (Theory symbol) => Interpretation -> Edge symbol -> State.State (Counts symbol) Cardinality
-countEdge interpret edge =
+    (Theory symbol) => Edge symbol -> State.State (Counts symbol) Cardinality
+countEdge edge =
     sum
         <$> traverse (\(coefficient, constraint) -> scaled coefficient <$> count constraint) (interpret $ edgeConstraint edge)
   where
     count constraint =
-        solve interpret $
+        solve $
             Problem
                 (IntMap.fromList $ zip [0 ..] children)
                 IntMap.empty
@@ -289,8 +279,8 @@ normalize problem = do
 -- | Share counts of equivalent contexts before expanding constrained variables.
 solve ::
     (Theory symbol) =>
-    Interpretation -> Problem symbol -> State.State (Counts symbol) Cardinality
-solve interpret problem
+    Problem symbol -> State.State (Counts symbol) Cardinality
+solve problem
     | any (null . nodeEdges) $ IntMap.elems $ domains problem = pure 0
     | otherwise = case normalize problem of
         Nothing -> pure 0
@@ -303,40 +293,38 @@ solve interpret problem
             case Map.lookup key $ contextCounts cache of
                 Just count -> pure count
                 Nothing -> do
-                    count <- solveStep interpret normalized
+                    count <- solveStep normalized
                     State.modify' $ \current -> current{contextCounts = Map.insert key count $ contextCounts current}
                     pure count
 
 -- | Solve one normalized obligation, then multiply independent domain counts.
 solveStep ::
     (Theory symbol) =>
-    Interpretation -> Problem symbol -> State.State (Counts symbol) Cardinality
-solveStep interpret problem = case obligations problem of
-    [] -> product <$> traverse (countNode interpret) (IntMap.elems $ domains problem)
+    Problem symbol -> State.State (Counts symbol) Cardinality
+solveStep problem = case obligations problem of
+    [] -> product <$> traverse (countNode) (IntMap.elems $ domains problem)
     Exists target : rest -> case resolve problem target of
         Absent -> pure 0
-        Expand variable -> expandVariable interpret problem variable
-        Resolved _ -> solve interpret problem{obligations = rest}
+        Expand variable -> expandVariable problem variable
+        Resolved _ -> solve problem{obligations = rest}
     Equal left right : rest -> case (resolve problem left, resolve problem right) of
         (Absent, _) -> pure 0
         (_, Absent) -> pure 0
-        (Expand variable, _) -> expandVariable interpret problem variable
-        (_, Expand variable) -> expandVariable interpret problem variable
-        (Resolved first, Resolved second) -> unify interpret problem{obligations = rest} first second
+        (Expand variable, _) -> expandVariable problem variable
+        (_, Expand variable) -> expandVariable problem variable
+        (Resolved first, Resolved second) -> unify problem{obligations = rest} first second
 
 -- | Merge whole subtree variables or compare constructor contexts.
 unify ::
     (Theory symbol) =>
-    Interpretation ->
     Problem symbol ->
     Fragment symbol ->
     Fragment symbol ->
     State.State (Counts symbol) Cardinality
-unify interpret problem (Variable left) (Variable right)
-    | left == right = solve interpret problem
+unify problem (Variable left) (Variable right)
+    | left == right = solve problem
     | otherwise =
         solve
-            interpret
             problem
                 { domains = IntMap.insert (fromEnum right) common $ IntMap.delete (fromEnum left) $ domains problem
                 , bindings = IntMap.insert (fromEnum left) (Variable right) $ bindings problem
@@ -345,19 +333,17 @@ unify interpret problem (Variable left) (Variable right)
     common =
         (domains problem IntMap.! fromEnum left)
             `intersect` (domains problem IntMap.! fromEnum right)
-unify interpret problem (Variable variable) fragment
+unify problem (Variable variable) fragment
     | occurs problem variable fragment = pure 0
     | otherwise =
         expandVariable
-            interpret
             problem{obligations = Equal (Target (Variable variable) EmptyPath) (Target fragment EmptyPath) : obligations problem}
             variable
-unify interpret problem fragment (Variable variable) = unify interpret problem (Variable variable) fragment
-unify interpret problem (Constructor left children) (Constructor right others)
+unify problem fragment (Variable variable) = unify problem (Variable variable) fragment
+unify problem (Constructor left children) (Constructor right others)
     | left /= right || length children /= length others = pure 0
     | otherwise =
         solve
-            interpret
             problem
                 { obligations = zipWith (\a b -> Equal (Target a EmptyPath) (Target b EmptyPath)) children others <> obligations problem
                 }
@@ -372,8 +358,8 @@ occurs problem variable fragment = case resolve problem $ Target fragment EmptyP
 -- | Expose one constrained variable's root, preserving overlaps symbolically.
 expandVariable ::
     (Theory symbol) =>
-    Interpretation -> Problem symbol -> VarIndex -> State.State (Counts symbol) Cardinality
-expandVariable interpret problem variable =
+    Problem symbol -> VarIndex -> State.State (Counts symbol) Cardinality
+expandVariable problem variable =
     countUnion expand $ nodeEdges $ domains problem IntMap.! fromEnum variable
   where
     expand edge =
@@ -383,7 +369,6 @@ expandVariable interpret problem variable =
                 (interpret $ edgeConstraint edge)
     expandWith edge constraint =
         solve
-            interpret
             problem
                 { domains = IntMap.union fresh $ IntMap.delete (fromEnum variable) $ domains problem
                 , bindings = IntMap.insert (fromEnum variable) context $ bindings problem
@@ -440,31 +425,29 @@ project position root = Node $ concatMap nodeEdges $ Set.toList $ go position $ 
 selectTerm ::
     (Theory symbol, Ord key) =>
     (symbol -> key) ->
-    Interpretation ->
     Node symbol ->
     Path ->
     Rank ->
     State.State (Counts symbol) (Tree.Tree symbol)
-selectTerm order interpret root position (Rank rank) = do
-    ~(term, _, _) <- selectAt order interpret root position rank
+selectTerm order root position (Rank rank) = do
+    ~(term, _, _) <- selectAt order root position rank
     pure term
 
 -- | Restrict the selected prefix and decode only its selected descendants.
 selectAt ::
     (Theory symbol, Ord key) =>
     (symbol -> key) ->
-    Interpretation ->
     Node symbol ->
     Path ->
     Integer ->
     State.State (Counts symbol) (Tree.Tree symbol, Node symbol, Integer)
-selectAt order interpret root position rank = do
+selectAt order root position rank = do
     let local = project position root
-    count <- countNode interpret local
+    count <- countNode local
     if count == 1
         then do
             counts <- State.get
-            pure (State.evalState (selectUniqueAt order interpret local EmptyPath) counts, root, rank)
+            pure (State.evalState (selectUniqueAt order local EmptyPath) counts, root, rank)
         else choose rank $ constructorsAt order position root
   where
     choose _ [] =
@@ -473,7 +456,7 @@ selectAt order interpret root position rank = do
             \a rank outside the language"
     choose remaining (constructor@(symbol, arity) : rest) = do
         let restricted = condition position constructor root
-        Cardinality count <- countNode interpret restricted
+        Cardinality count <- countNode restricted
         if remaining >= count
             then choose (remaining - count) rest
             else do
@@ -481,7 +464,7 @@ selectAt order interpret root position rank = do
                 pure (Tree.Node symbol children, final, suffixRank)
     selectChildren graph remaining [] = pure ([], graph, remaining)
     selectChildren graph remaining (index : rest) = do
-        ~(term, restricted, suffixRank) <- selectAt order interpret graph (position <> path [index]) remaining
+        ~(term, restricted, suffixRank) <- selectAt order graph (position <> path [index]) remaining
         ~(children, final, finalRank) <- selectChildren restricted suffixRank rest
         pure (term : children, final, finalRank)
 
@@ -494,34 +477,33 @@ term of the graph has the subterm at the position.
 rankAt ::
     (Theory symbol, Ord key) =>
     (symbol -> key) ->
-    Interpretation ->
     Node symbol ->
     Path ->
     Tree.Tree symbol ->
     Integer ->
     State.State (Counts symbol) (Maybe (Node symbol, Integer))
-rankAt order interpret root position term@(Tree.Node symbol children) before = do
+rankAt order root position term@(Tree.Node symbol children) before = do
     let local = project position root
-    count <- countNode interpret local
+    count <- countNode local
     if count == 1
         then do
             counts <- State.get
-            let unique = State.evalState (selectUniqueAt order interpret local EmptyPath) counts
+            let unique = State.evalState (selectUniqueAt order local EmptyPath) counts
             pure $ if unique == term then Just (root, before) else Nothing
         else case break (== (symbol, Arity (length children))) $ constructorsAt order position root of
             (_, []) -> pure Nothing
             (earlier, constructor : _) -> do
-                skipped <- traverse (\other -> countNode interpret $ condition position other root) earlier
+                skipped <- traverse (\other -> countNode $ condition position other root) earlier
                 let restricted = condition position constructor root
                     Cardinality skippedCount = sum skipped
-                restrictedCount <- countNode interpret restricted
+                restrictedCount <- countNode restricted
                 if restrictedCount == 0
                     then pure Nothing
                     else rankChildren restricted (before + skippedCount) $ zip [0 ..] children
   where
     rankChildren graph rank [] = pure $ Just (graph, rank)
     rankChildren graph rank ((index, child) : rest) = do
-        result <- rankAt order interpret graph (position <> path [index]) child rank
+        result <- rankAt order graph (position <> path [index]) child rank
         case result of
             Nothing -> pure Nothing
             Just (restricted, suffixRank) -> rankChildren restricted suffixRank rest
@@ -530,18 +512,17 @@ rankAt order interpret root position term@(Tree.Node symbol children) before = d
 selectUniqueAt ::
     (Theory symbol, Ord key) =>
     (symbol -> key) ->
-    Interpretation ->
     Node symbol ->
     Path ->
     State.State (Counts symbol) (Tree.Tree symbol)
-selectUniqueAt order interpret root position = choose $ constructorsAt order position root
+selectUniqueAt order root position = choose $ constructorsAt order position root
   where
     choose [] =
         error
             "microcfta-generator bug in Data.CFTA.Gen.Internal.Symbolic.selectUniqueAt: \
             \a language with one member has no constructor"
     choose (constructor@(symbol, arity) : rest) = do
-        count <- countNode interpret $ condition position constructor root
+        count <- countNode $ condition position constructor root
         if count == 0
             then choose rest
             else do
@@ -549,6 +530,6 @@ selectUniqueAt order interpret root position = choose $ constructorsAt order pos
                 pure $
                     Tree.Node
                         symbol
-                        [ State.evalState (selectUniqueAt order interpret root $ position <> path [index]) counts
+                        [ State.evalState (selectUniqueAt order root $ position <> path [index]) counts
                         | index <- childIndexes arity
                         ]

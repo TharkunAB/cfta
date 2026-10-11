@@ -131,7 +131,7 @@ import Data.CFTA.Refinement.Guard (
  )
 import Data.CFTA.Refinement.Lattice (onlyPoint)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3Assuming)
-import Data.CFTA.Symbol (liquidOrder, valueName)
+import Data.CFTA.Symbol (valueName)
 
 -- | A generator over liquid tree automata.
 type LTAGen = Gen Symbol
@@ -553,11 +553,11 @@ a constructor before a leaf of the same symbol. Arity orders the constructors
 within one part.
 -}
 fromAutomaton :: Automaton -> LTAGen (Tree.Tree Symbol)
-fromAutomaton = deferConstrained . Flat.fromAutomaton liquidOrder
+fromAutomaton = deferConstrained . Flat.fromAutomaton id
 
 -- | Read the terms a liquid automaton accepts up to a constructor-depth bound. A leaf has depth zero.
 fromAutomatonUpToDepth :: Depth -> Automaton -> LTAGen (Tree.Tree Symbol)
-fromAutomatonUpToDepth depth = deferConstrained . Flat.fromAutomatonUpToDepth liquidOrder depth
+fromAutomatonUpToDepth depth = deferConstrained . Flat.fromAutomatonUpToDepth id depth
 
 -- | Defer an import whose guards the engine cannot count to 'compile'.
 deferConstrained :: LTAGen a -> LTAGen a
@@ -589,7 +589,7 @@ fromDatatypeUpToDepth depth datatype =
             | otherwise -> decode <$> deferConstrained (Flat.fromAutomatonUpToDepth key depth graph)
   where
     order = declarationOrder datatype
-    key symbol@(RefinedSymbol (Symbol name) _) = (order name, liquidOrder symbol)
+    key symbol@(RefinedSymbol (Symbol name) _) = (order name, symbol)
     bounded = FTA.boundDepth depth $ datatypeFTA datatype
     graph = nodes Map.! FTA.initialState bounded
     -- The bounded graph is acyclic and the map is lazy in its values, so

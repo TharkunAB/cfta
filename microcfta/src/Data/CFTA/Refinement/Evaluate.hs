@@ -21,17 +21,16 @@ import Data.Maybe (isJust, isNothing)
 import qualified Data.Set as Set
 import qualified Data.Tree as Tree
 
-import Data.CFTA.Equality.Constraint (EqConstraints)
 import Data.CFTA.Index (ArgumentIndex (..))
 import Data.CFTA.Path (Path, getPath)
 import qualified Language.Fixpoint.Types as Fixpoint
 
 import Data.CFTA.Constraint (
-    Constraint (constraintEqualities, constraintGuard),
+    Constraint (constraintGuard),
     Guard (..),
     Substitution (..),
     contractTermName,
-    equalityPathPairs,
+    equalitiesHold,
     guardPaths,
  )
 import Data.CFTA.Refinement.Verdict (
@@ -42,7 +41,7 @@ import Data.CFTA.Refinement.Verdict (
     negateVerdict,
     orVerdicts,
  )
-import Data.CFTA.Symbol (Formula, Symbol (RefinedSymbol, Symbol), liquidOrder, valueName)
+import Data.CFTA.Symbol (Formula, Symbol (RefinedSymbol, Symbol), valueName)
 
 {- | What a guard reads at one path: the symbol, and whether the node there is
 a leaf.
@@ -56,11 +55,7 @@ data Observed = Observed
     { observedSymbol :: !Symbol
     , observedLeaf :: !Leafness
     }
-    deriving (Eq, Show)
-
-instance Ord Observed where
-    compare (Observed leftSymbol leftLeaf) (Observed rightSymbol rightLeaf) =
-        compare (liquidOrder leftSymbol, leftLeaf) (liquidOrder rightSymbol, rightLeaf)
+    deriving (Eq, Ord, Show)
 
 {- | Whether the node at a path is a leaf. 'Mixed' is for a group of terms:
 some members of the group are leaves and some are not. An observer reads
@@ -236,18 +231,9 @@ evaluateGuardWithSame entailment observedAt sameAt guard = go guard
 -- | Evaluate both the ECTA equality classes and liquid guard of a transition.
 evaluateConstraint :: Entailment -> Constraint -> Tree.Tree Symbol -> IO Verdict
 evaluateConstraint entailment constraint term
-    | satisfiesEqualities (constraintEqualities constraint) term =
+    | equalitiesHold constraint term =
         evaluateGuard entailment (constraintGuard constraint) term
     | otherwise = pure No
-
--- | Check positive ECTA equality classes against the complete LTA term shape.
-satisfiesEqualities :: EqConstraints -> Tree.Tree Symbol -> Bool
-satisfiesEqualities equalities term =
-    maybe False (all agrees) $ equalityPathPairs equalities
-  where
-    agrees (anchor, other) = case getPath anchor term of
-        Nothing -> False
-        Just expected -> getPath other term == Just expected
 
 {- | One position substitution with its actual-value assumption.
 
