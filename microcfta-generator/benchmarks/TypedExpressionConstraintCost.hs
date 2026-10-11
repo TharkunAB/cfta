@@ -15,11 +15,11 @@ import Data.CFTA.Gen.Refinement.EqualityTypedExpressionLanguage (
  )
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.TypedExpressionLanguage (
-    Expression (..),
-    TypedExpression (..),
+    TypedExpression,
     allTypes,
     expressionCount,
     expressionGenAtDepth,
+    typedExpressionScore,
  )
 import Data.CFTA.Index (Cardinality (..))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
@@ -63,18 +63,3 @@ prepare engine _ = fail $ "unknown engine: " <> engine
 -- | Exact number of well-typed expressions across both result types.
 expressionTotal :: Int -> Integer
 expressionTotal depth = sum $ map (expressionCount depth) allTypes
-
--- | Force and score every field of one typed expression.
-typedExpressionScore :: TypedExpression -> Int
-typedExpressionScore TypedExpression{expressionType, expression} =
-    fromEnum expressionType + expressionScore expression
-
--- | Force the complete expression tree and return a stable checksum component.
-expressionScore :: Expression -> Int
-expressionScore (IntLiteral value) = 2 * value + 1
-expressionScore (BoolLiteral value) = if value then 4 else 3
-expressionScore (Not argument) = 5 + expressionScore argument
-expressionScore (ApplyBinary function_ first second) =
-    7 + fromEnum function_ + expressionScore first + expressionScore second
-expressionScore (IfExpression condition ifTrue ifFalse) =
-    13 + expressionScore condition + expressionScore ifTrue + expressionScore ifFalse
