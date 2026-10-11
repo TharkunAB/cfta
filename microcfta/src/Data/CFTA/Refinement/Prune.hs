@@ -40,6 +40,7 @@ import Data.CFTA.Interned (
     edgeChildren,
     edgeConstraint,
     edgeSymbol,
+    fixUnbounded,
     freeVars,
     mkEdge,
     nodeEdges,
@@ -144,11 +145,14 @@ pruneMu entailment node mu = do
     let rebuilt = createMu $ \self -> substFree (RecInt (internedMuId mu)) self body
     if rebuilt == node then pure node else pruneNode entailment rebuilt
 
--- | Prune the children of one transition, narrow them by its equalities, then discharge its guard.
+{- | Prune the children of one transition, narrow them by its equalities to a
+fixpoint, then discharge its guard. One pass of the narrowing can miss an
+empty child that a later pass finds.
+-}
 pruneEdge :: Entailment -> Transition -> PruneM [Transition]
 pruneEdge entailment edge = do
     children <- traverse (pruneNode entailment) (edgeChildren edge)
-    let narrowed = reduceEdgeIntersection EmptyConstraints $ mkEdge (edgeSymbol edge) children (edgeConstraint edge)
+    let narrowed = fixUnbounded (reduceEdgeIntersection EmptyConstraints) $ mkEdge (edgeSymbol edge) children (edgeConstraint edge)
     if EmptyNode `elem` edgeChildren narrowed
         then pure []
         else pruneSemantic entailment narrowed

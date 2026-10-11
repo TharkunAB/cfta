@@ -152,10 +152,11 @@ reduceEdgeIntersection constraints edge =
 when the local and inherited classes contradict each other.
 
 One pass over the classes is not always enough: the intersection for one class
-can narrow a node that a class earlier in the pass already read. The reduction
-repeats the pass until the children stop changing, so the result is a
-fixpoint. Constraints on nested edges can still require further passes of
-'reducePartially'.
+can narrow a node that a class earlier in the pass already read. Iterate the
+reduction, as 'fixUnbounded' does, to get a fixpoint. The reduction does not
+iterate by itself. The next pass reads the new nodes of this pass, so its
+intersections miss the memo. A fixpoint at each edge made the term search of
+the ECTA paper about 100 times slower than a fixpoint of 'reducePartially'.
 
 A class stays unreduced when one of its paths meets a recursive node with
 constraints, at the end of the path or before it. Unfolding such a node shows
@@ -170,7 +171,7 @@ reduceEqConstraints ::
     EqConstraints ->
     [Node symbol] ->
     [Node symbol]
-reduceEqConstraints local inherited = fixUnbounded (go local inherited)
+reduceEqConstraints = go
   where
     propagateEmptyNodes :: [Node symbol] -> [Node symbol]
     propagateEmptyNodes ns = if EmptyNode `elem` ns then map (const EmptyNode) ns else ns
