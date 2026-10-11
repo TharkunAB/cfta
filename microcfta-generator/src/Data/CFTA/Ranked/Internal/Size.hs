@@ -352,7 +352,7 @@ sizeIndex (PlanChoice branches) =
     offsetBranches _ [] = []
     offsetBranches offset ((branchCardinality, branch) : rest) =
         (offset, sizeIndex branch) : offsetBranches (nextOffset offset branchCardinality) rest
-    counts = foldr (addCounts . sizeClassCounts . snd) [] entries
+    counts = foldr (addSparse . sizeClassCounts . snd) [] entries
     minimumSize' = minimumOf $ map (minimumMemberSize . snd) entries
     largestSize = largestOf $ map (largestMemberSize . snd) entries
 
@@ -594,7 +594,7 @@ choiceIndex branches =
         (IntSet.unions $ map termlessOccurrences branches)
         (IntSet.unions $ map usedOccurrences branches)
   where
-    counts = foldr (addCounts . sizeClassCounts) [] branches
+    counts = foldr (addSparse . sizeClassCounts) [] branches
     ranks = sizeMajorRanks counts
     entries = [((), branch) | branch <- branches]
 
@@ -730,7 +730,7 @@ rankAt ranks size position = case dropWhile ((< size) . fst) ranks of
 
 -- | Size counts of a product: one choice from each side, so sizes add.
 productCounts :: SizeIndex (a -> b) -> SizeIndex a -> SizeCounts
-productCounts indexF indexX = mulCounts (sizeClassCounts indexF) (sizeClassCounts indexX)
+productCounts indexF indexX = mulSparse (sizeClassCounts indexF) (sizeClassCounts indexX)
 
 {- | The alternative holding one position of a size class, with the position
 rebased into it.
@@ -809,14 +809,6 @@ productSplitInt indexF indexX size = go $ takeWhile ((<= size) . fst) (sizeClass
         argumentCount = case countAtSize indexX (size - functionSize) of
             Cardinality wide -> fromInteger wide
         block = fromInteger functionCount * argumentCount
-
--- | Add two sparse counts, merging their sizes.
-addCounts :: SizeCounts -> SizeCounts -> SizeCounts
-addCounts = addSparse
-
--- | Convolve two sparse counts: the sizes of a pair add, and the counts multiply.
-mulCounts :: SizeCounts -> SizeCounts -> SizeCounts
-mulCounts = mulSparse
 
 {- | Add two sparse series of values by size, merging their sizes. Each series
 lists the sizes with a nonzero value, in ascending order.

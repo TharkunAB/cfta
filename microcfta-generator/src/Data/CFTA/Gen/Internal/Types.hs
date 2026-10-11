@@ -32,7 +32,6 @@ module Data.CFTA.Gen.Internal.Types (
     -- * Composing
     Args (..),
     NodeLayer (..),
-    node,
     pay,
     payGrouped,
     nodeWithKey,
@@ -56,6 +55,7 @@ import Data.CFTA.Constraint (
  )
 import Data.Hashable (Hashable)
 import Data.Kind (Type)
+import Data.List (find)
 import qualified Data.Map.Strict as Map
 import qualified Data.Tree as Tree
 import Data.Typeable (Typeable)
@@ -209,15 +209,11 @@ infixr 5 :&
 
 -- | A generated child layer that can be closed with one visible constructor label.
 class NodeLayer symbol layer | layer -> symbol where
-    -- | Replace an open layer's private root with a domain constructor.
-    closeNode :: symbol -> layer a -> layer a
+    {- | Close an applicative child description with one domain constructor.
 
-{- | Close an applicative child description with one domain constructor.
-
-The constructor pays, as in 'pay': every member is one larger.
--}
-node :: (NodeLayer symbol layer) => symbol -> layer a -> layer a
-node = closeNode
+    The constructor pays, as in 'pay': every member is one larger.
+    -}
+    node :: symbol -> layer a -> layer a
 
 {- | Add one to the size of every member: the @pay@ of FEAT (Duregård, Jansson,
 and Wang, "Feat: Functional Enumeration of Algebraic Types", Haskell
@@ -246,14 +242,14 @@ pay generator =
         Opaque generated -> Opaque generated
 
 instance (Hashable symbol, Typeable symbol) => NodeLayer symbol (Gen symbol) where
-    closeNode symbol generator =
+    node symbol generator =
         withRecipe (Closed symbol noConstraint generator) $ case generator of
             Transparent result -> Transparent $ fmap (labelStatic symbol) result
             Cyclic result -> Cyclic $ fmap (labelRecursive symbol) result
             Opaque generated -> Opaque generated
 
 instance (Hashable symbol, Typeable symbol) => NodeLayer symbol (Grouped symbol key) where
-    closeNode symbol = nodeWithKey (const symbol)
+    node symbol = nodeWithKey (const symbol)
 
 -- | Close every group with a constructor computed from its key.
 nodeWithKey ::
@@ -298,10 +294,7 @@ instance Functor (Grouped symbol key) where
     fmap transform (Grouped result) =
         Grouped $ fmap (fmap mapBucket) result
       where
-        mapBucket bucket =
-            KeyedBucket
-                (keyedBucketMass bucket)
-                (mapStatic transform $ keyedBucketStatic bucket)
+        mapBucket bucket = bucket{keyedBucketStatic = mapStatic transform $ keyedBucketStatic bucket}
     fmap transform (CyclicGrouped result) =
         CyclicGrouped $ fmap (fmap mapGroup) result
       where
@@ -413,12 +406,7 @@ lowerUniformWithRank _ = Nothing
 
 -- | Find the first invalid alternative weight.
 firstNonPositiveWeight :: [(Weight, a)] -> Maybe Weight
-firstNonPositiveWeight = go
-  where
-    go [] = Nothing
-    go ((weight, _) : rest)
-        | weight <= 0 = Just weight
-        | otherwise = go rest
+firstNonPositiveWeight = fmap fst . find ((<= 0) . fst)
 
 -- | Whether every alternative carries the same weight.
 allWeightsEqual :: [(Weight, a)] -> Bool

@@ -101,22 +101,13 @@ regroupOn regroup (CyclicGrouped result) =
     CyclicGrouped $ do
         groups <- result
         pure
-            $ Map.map clearRecursiveName
+            $ Map.map (nameKeyedRecursive Nothing)
             $ Map.mapMaybe (mergeRecursiveGroups . toList)
             $ groupOutcomes [(regroup oldKey, group) | (oldKey, group) <- Map.toAscList groups]
-  where
-    clearRecursiveName group = group{keyedRecursiveLanguage = named}
-      where
-        recursive = keyedRecursiveLanguage group
-        named = recursive{recursiveInspection = (recursiveInspection recursive){inspectionName = Nothing}}
 regroupOn _ (Grouped (Left err)) = Grouped $ Left err
 regroupOn regroup (Grouped (Right buckets)) =
-    Grouped $ fmap (fmap clearName) $ traverse (mergeBucketGroup . toList) grouped
+    Grouped $ fmap (fmap $ nameBucket Nothing) $ traverse (mergeBucketGroup . toList) grouped
   where
-    clearName bucket = bucket{keyedBucketStatic = named}
-      where
-        static = keyedBucketStatic bucket
-        named = static{staticInspection = (staticInspection static){inspectionName = Nothing}}
     grouped =
         groupOutcomes
             [ (regroup oldKey, (keyedBucketMass bucket, keyedBucketStatic bucket))
@@ -139,18 +130,23 @@ mapWithKey transform (Grouped result) =
 
 -- | Retain a display name for each group without inspecting its members.
 nameGroups :: (key -> Text) -> Grouped symbol key a -> Grouped symbol key a
-nameGroups render (Grouped result) = Grouped $ fmap (Map.mapWithKey nameBucket) result
+nameGroups render (Grouped result) = Grouped $ fmap (Map.mapWithKey $ nameBucket . Just . render) result
+nameGroups render (CyclicGrouped result) =
+    CyclicGrouped $ fmap (Map.mapWithKey $ nameKeyedRecursive . Just . render) result
+
+-- | Set the display name of a finite group.
+nameBucket :: Maybe Text -> KeyedBucket symbol a -> KeyedBucket symbol a
+nameBucket name bucket = bucket{keyedBucketStatic = named}
   where
-    nameBucket key bucket = bucket{keyedBucketStatic = named}
-      where
-        static = keyedBucketStatic bucket
-        named = static{staticInspection = (staticInspection static){inspectionName = Just $ render key}}
-nameGroups render (CyclicGrouped result) = CyclicGrouped $ fmap (Map.mapWithKey nameGroup) result
+    static = keyedBucketStatic bucket
+    named = static{staticInspection = (staticInspection static){inspectionName = name}}
+
+-- | Set the display name of a recursive group.
+nameKeyedRecursive :: Maybe Text -> KeyedRecursive symbol a -> KeyedRecursive symbol a
+nameKeyedRecursive name group = group{keyedRecursiveLanguage = named}
   where
-    nameGroup key group = group{keyedRecursiveLanguage = named}
-      where
-        recursive = keyedRecursiveLanguage group
-        named = recursive{recursiveInspection = (recursiveInspection recursive){inspectionName = Just $ render key}}
+    recursive = keyedRecursiveLanguage group
+    named = recursive{recursiveInspection = (recursiveInspection recursive){inspectionName = name}}
 
 -- | Select one retained group as an ordinary conditional generator.
 atKey :: (Ord key) => key -> Grouped symbol key a -> Gen symbol a
@@ -473,34 +469,14 @@ cardinalities (Grouped result) =
 
 -- | Return the exact number of retained members in every live key at one structural size.
 countsAtSize :: Grouped symbol key a -> Size -> Either GenError (Map.Map key Cardinality)
-countsAtSize (CyclicGrouped result) size = do
-    groups <- result
-    if size < 0
-        then pure Map.empty
-        else
-            pure
-                $ Map.filter (> 0)
-                $ fmap
-                    ( \group ->
-                        Size.countAtSize
-                            (recursiveIndex $ keyedRecursiveLanguage group)
-                            size
-                    )
-                    groups
-countsAtSize (Grouped result) size = do
-    buckets <- result
-    if size < 0
-        then pure Map.empty
-        else
-            pure
-                $ Map.filter (> 0)
-                $ fmap
-                    ( \bucket ->
-                        Size.countAtSize
-                            (outcomeSizeIndex $ staticOutcomes $ keyedBucketStatic bucket)
-                            size
-                    )
-                    buckets
+countsAtSize (CyclicGrouped result) size =
+    Map.filter (> 0)
+        . fmap (\group -> Size.countAtSize (recursiveIndex $ keyedRecursiveLanguage group) size)
+        <$> result
+countsAtSize (Grouped result) size =
+    Map.filter (> 0)
+        . fmap (\bucket -> Size.countAtSize (outcomeSizeIndex $ staticOutcomes $ keyedBucketStatic bucket) size)
+        <$> result
 
 {- | Return the exact distribution of retained keys conditional on one structural size.
 
@@ -512,15 +488,12 @@ it does not.
 massesAtSize :: Grouped symbol key a -> Size -> Either GenError (Map.Map key Rational)
 massesAtSize (CyclicGrouped result) size = do
     groups <- result
-    if size < 0
-        then pure Map.empty
-        else do
-            let positive = Map.filter (> 0) $ fmap (`keyedRecursiveMassAtSize` size) groups
-                total = sum positive
-            pure $
-                if total <= 0
-                    then Map.empty
-                    else fmap (/ total) positive
+    let positive = Map.filter (> 0) $ fmap (`keyedRecursiveMassAtSize` size) groups
+        total = sum positive
+    pure $
+        if total <= 0
+            then Map.empty
+            else fmap (/ total) positive
 massesAtSize (Grouped result) size = do
     buckets <- result
     if size < 0
