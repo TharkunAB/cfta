@@ -495,7 +495,7 @@ compileWeighted weighted
             entries = snd $ mapAccumL compileGroup 0 grouped
             lastIndex = length entries - 1
             table = listArray (0, lastIndex) entries
-            -- \| Search the array without allocating a lookup result per ticket.
+            -- Search the array without allocating a lookup result per ticket.
             lookupTicket ticket = go 0 lastIndex
               where
                 go low high

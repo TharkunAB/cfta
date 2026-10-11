@@ -1,10 +1,11 @@
-{- | The recursive generator builders and the bound that closes them.
+{- | The recursive generators 'recur' and 'recurGrouped', the size bound
+'upToSize', and 'atomic'.
 
-Each builder ties its own language through a fixpoint: counts, masses,
-sampling, terms, inspection, and the @Mu@ support are tied in separate passes,
-and each pass reads the definition rather than its language. 'upToSize' turns
-the result back into a finite generator with the ranks the recursive language
-already gave it.
+'recur' and 'recurGrouped' tie a language to itself. They tie the counts, the
+masses, the sampling, the terms, the inspection, and the @Mu@ support in
+separate passes. Each pass builds the body of the definition once and lists no
+member of the language. 'upToSize' makes a finite generator from a recursive
+one, and keeps the ranks that the recursive language gives its members.
 -}
 module Data.CFTA.Gen.Internal.Recur (
     atomic,
@@ -294,8 +295,9 @@ recurGrouped build
         either (const Map.empty) (fmap keyedRecursiveMasses) $
             bodyGroups massPlaceholders
       where
-        -- Key masses form a guarded knot beside counts. Across all keys they sum
-        -- to the structural member count at each size.
+        -- The masses of the keys form a second knot beside the counts. At each
+        -- size, the masses of all keys add up to the number of members of that
+        -- size.
         massPlaceholders =
             Map.fromList
                 [ (key, placeholder EmptyNode (indexAt key) emptySampleIndex $ massAt key)

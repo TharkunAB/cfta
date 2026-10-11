@@ -1,4 +1,7 @@
--- | Count finite equality languages without constructing their members.
+{- | Rank the terms of a finite equality language without enumerating the
+language: count the terms, decode a rank to a term, and give the rank of a
+term.
+-}
 module Data.CFTA.Gen.Internal.Symbolic (symbolicRanked) where
 
 import qualified Control.Monad.State.Lazy as State
@@ -111,12 +114,13 @@ type Interpretation = Constraint -> [(Integer, [[Path]])]
 scaled :: Integer -> Cardinality -> Cardinality
 scaled coefficient (Cardinality count) = Cardinality $ coefficient * count
 
-{- | Build one exact rank per term in a finite equality language.
+{- | Give each term of a finite equality language one rank.
 
-Counting expands constructor contexts only along constrained paths. Equal
-variables share an intersected domain. Inclusion-exclusion removes overlapping
-alternatives. Rank selection conditions the graph on one constructor at a time.
-Only the selected term is constructed. No accepted-term table is retained.
+The count expands a constructor context only along a constrained path. Equal
+variables share the intersection of their domains. Inclusion-exclusion counts
+overlapping alternatives once. To decode a rank, the function keeps one
+constructor at a time in the graph. It constructs only the selected term and
+keeps no table of terms.
 
 Ranks follow the order of the constructors at each position, and the
 constructors are ordered by arity, then by the given key. Two symbols of one
@@ -144,7 +148,7 @@ symbolicRanked order = symbolicRankedWith order interpret
 
 {- | Compile a finite graph with an exact sum of equality indicators per guard.
 
-Each path class requires all its positions to exist and denote equal subtrees.
+Each equality class requires that all its paths exist and hold equal subterms.
 A singleton class requires only existence. The interpretation must preserve
 conjunction: interpreting conjoined guards
 must give the pointwise product of their indicators. 'indicators' preserves

@@ -1,9 +1,8 @@
-{- | Recursive languages and the key masses that condition them.
+{- | Recursive languages, and the masses of the keys of a recursive family.
 
-A t'Recursive' is one @Mu@ automaton together with the size classes it
-accepts. Members are reached through those classes rather than through a
-cardinality, and 'boundedStatic' turns one back into a finite language that
-keeps the ranks the recursive language already gave its members.
+A t'Recursive' is one @Mu@ automaton and the size classes of the language that
+it accepts. 'boundedStatic' makes a finite language from it, and keeps the
+ranks of the members.
 -}
 module Data.CFTA.Gen.Internal.Recursive (
     -- * Recursive languages
@@ -83,17 +82,17 @@ cardinality, and ranks are size-major, so bounding the language with
 -}
 data Recursive symbol a = Recursive
     { recursiveSupport :: Node (Label symbol)
-    {- ^ The ECTA support is demand-driven. Counting, mass, and sampling
-    interpret the same recursive declaration without forcing this field.
-    A support observer builds it once when needed.
+    {- ^ The ECTA support. Counting, masses, and sampling do not read it. It is
+    built the first time that a query reads it.
     -}
     , recursiveIndex :: SizeIndex a
     , recursiveSampling :: SampleIndex a
     -- ^ A valid sampler at every size, tied through the recursive knot.
     , recursiveWeighted :: !Bool
-    {- ^ Whether any reachable atom is non-uniform. This is read from the
-    non-knot body, so bounded lowering can choose the sampler without forcing
-    a Boolean fixpoint. 'False' permits uniform rank selection instead.
+    {- ^ Whether an atom of the language has weights that are not uniform.
+    'recur' reads it from the probe build, not from the knot, so
+    'boundedStatic' can choose its sampler without a fixpoint. When it is
+    'False', the bounded language selects a rank uniformly.
     -}
     , recursiveTerm :: Maybe (RecursiveTerms symbol)
     {- ^ The engine term of every member, indexed by the same size classes and
@@ -229,14 +228,15 @@ recursivePositions recursive view = do
 {- | Bound a recursive language to its members of size at most the bound.
 
 The result is an ordinary finite language with the same size-major ranks the
-recursive language gives its members, so a rank replays through either. Size
-classes retain their count-based probability. Finite choices closed with
-'atomicStatic' retain their own distribution inside each class. The support
-stays the recursive automaton. A size bound restricts the rank space, not the
-set of terms the automaton accepts.
+recursive language gives its members, so a rank replays through either. The
+bounded language selects a size class in proportion to its number of members.
+Inside a class, a finite choice that 'atomicStatic' closes keeps its own
+distribution. The support is still the recursive automaton: the bound limits
+the ranks, not the terms that the support accepts.
 
-Every member carries its engine term from the term index of the recursive
-language, and a term ranks through its size class and position.
+Every member keeps its engine term from the term index of the recursive
+language, and a term finds its rank through its size class and its class
+rank.
 -}
 boundedStatic :: Size -> Recursive symbol a -> Either GenError (Static symbol a)
 boundedStatic bound recursive
@@ -340,8 +340,8 @@ boundedStatic bound recursive
             | index < count = decode $ ClassRank index
             | otherwise = go rest (Rank $ index - count)
 
-{- | Close one recursive child layer with a user-facing node label. The label
-is a constructor, so it pays: every member is one larger.
+{- | Put a node with the given symbol over every member of a recursive
+language. The node is a constructor, so it pays: every member is one larger.
 -}
 labelRecursive ::
     (Hashable symbol, Typeable symbol) =>
@@ -390,11 +390,12 @@ payRecursive recursive =
                 ]
             )
 
-{- | One recursive language conditioned on a retained key.
+{- | The recursive language of one key of a family, and the mass of the key at
+each size.
 
-The mass is unnormalized. Across all sibling keys it sums to the structural
-member count at that size. This keeps language counts separate from sampler
-probabilities while allowing keys to be merged without losing either.
+The mass is not normalized. At each size, the masses of all keys of the family
+add up to the number of members of that size. So a merge of keys keeps the
+counts and the sampling probabilities apart.
 -}
 data KeyedRecursive symbol a = KeyedRecursive
     { keyedRecursiveLanguage :: !(Recursive symbol a)
