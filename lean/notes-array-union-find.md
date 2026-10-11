@@ -27,8 +27,13 @@ retains exactly all original assignment equations.
 its exact output equations. No caller-level connected-component property is
 assumed. Group ordering has no effect on these equations.
 
+`ArrayBounds` proves that initialized parents stay in the allocated interval.
+Find, union, all merge iterations, and representative readback preserve these
+bounds. Returned representatives are allocated. Input path indexes must come
+from the source's finite member map.
+
 The functional array model specifies source reads and writes. Physical
-`STUArray` storage and machine bounds remain representation contracts. The
+`STUArray` storage and conversion of the finite size to `Int` remain contracts. The
 path-to-index map, inverse path lookup, canonical output ordering, and their
 composition with the saturation loop remain source adapters. The existing
 `EqualityNormalize.complete_matches_partition` states the canonical
