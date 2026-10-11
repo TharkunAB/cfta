@@ -666,15 +666,17 @@ structure RenderStable (before after : State Symbol Guard) : Prop where
   counter : after.counter = before.counter
   values : after.values = before.values
   obligations : after.obligations = before.obligations
+  classes : ∀ left right, UnionFind.SameClass after.representatives left right ↔ UnionFind.SameClass before.representatives left right
 
 /-- An unchanged rendering state retains all stored data. -/
 theorem RenderStable.refl (state : State Symbol Guard) (safe : Safe state) : RenderStable state state :=
-  ⟨safe, rfl, rfl, rfl⟩
+  ⟨safe, rfl, rfl, rfl, fun _ _ => Iff.rfl⟩
 
 /-- Rendering preservation composes through consecutive actions. -/
 theorem RenderStable.trans (left : RenderStable before middle) (right : RenderStable middle after) :
     RenderStable before after :=
-  ⟨right.safe, right.counter.trans left.counter, right.values.trans left.values, right.obligations.trans left.obligations⟩
+  ⟨right.safe, right.counter.trans left.counter, right.values.trans left.values, right.obligations.trans left.obligations,
+    fun first second => (right.classes first second).trans (left.classes first second)⟩
 
 /-- A bounded UVar read preserves storage and returns a bounded stored value. -/
 theorem getValue_storage (fuel uv : Nat) (before after : State Symbol Guard) (value : UVarValue Symbol)
@@ -684,7 +686,8 @@ theorem getValue_storage (fuel uv : Nat) (before after : State Symbol Guard) (va
   have reached := (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1
   have root : IsRoot before.representatives found.representative := ⟨found.size, .root (UnionFind.reaches_terminal reached)⟩
   have safeAfter := (compression_safe before safe fuel uv found.representative inside root found lookup).1
-  exact ⟨⟨safeAfter, rfl, rfl, rfl⟩, safe.1.values value (List.mem_of_getElem? stored)⟩
+  exact ⟨⟨safeAfter, rfl, rfl, rfl, UnionFind.findRoot_classes safe.1.total lookup⟩,
+    safe.1.values value (List.mem_of_getElem? stored)⟩
 
 /-- A bounded fragment list bounds each listed child. -/
 theorem fragmentsBound_member (limit : Nat) (children : List (Fragment Symbol))
