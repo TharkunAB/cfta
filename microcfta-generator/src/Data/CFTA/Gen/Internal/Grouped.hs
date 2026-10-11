@@ -35,6 +35,8 @@ module Data.CFTA.Gen.Internal.Grouped (
     massesAtSize,
 ) where
 
+import Control.Monad (filterM)
+import Control.Monad.Except (ExceptT (..), runExceptT)
 import Data.Foldable (toList)
 import Data.Hashable (Hashable)
 import qualified Data.Map.Strict as Map
@@ -374,42 +376,22 @@ relateGroupsM relation resultKey left right =
     case (,) <$> finiteGroups left <*> finiteGroups right of
         Left err -> pure $ Right $ Grouped $ Left err
         Right (leftBuckets, rightBuckets) -> do
-            related <- decidePairs 0 Empty $ Map.toAscList leftBuckets
-            pure $ fmap (Grouped . mergeComponentsByKey . toList) related
-          where
-            rightEntries = Map.toAscList rightBuckets
-
-            decidePairs _ accepted [] = pure $ Right accepted
-            decidePairs componentIndex accepted ((leftGroupKey, leftBucket) : rest) = do
-                decided <- decideRights componentIndex accepted leftGroupKey leftBucket rightEntries
-                case decided of
-                    Left err -> pure $ Left err
-                    Right (nextIndex, retained) -> decidePairs nextIndex retained rest
-
-            decideRights componentIndex accepted _ _ [] =
-                pure $ Right (componentIndex, accepted)
-            decideRights componentIndex accepted leftGroupKey leftBucket ((rightGroupKey, rightBucket) : rest) = do
-                decision <- relation leftGroupKey rightGroupKey
-                case decision of
-                    Left err -> pure $ Left err
-                    Right keep ->
-                        let retained =
-                                if keep
-                                    then
-                                        accepted
-                                            :|> ( resultKey leftGroupKey rightGroupKey
-                                                , keyedBucketMass leftBucket * keyedBucketMass rightBucket
-                                                , joinNBucketStatic
-                                                    componentIndex
-                                                    (pureStatic (,))
-                                                    ( ChainCons
-                                                        (keyedBucketStatic leftBucket)
-                                                        (ChainCons (keyedBucketStatic rightBucket) ChainNil)
-                                                    )
-                                                )
-                                    else accepted
-                            nextIndex = if keep then componentIndex + 1 else componentIndex
-                         in decideRights nextIndex retained leftGroupKey leftBucket rest
+            related <-
+                runExceptT $
+                    filterM
+                        (\((leftGroupKey, _), (rightGroupKey, _)) -> ExceptT $ relation leftGroupKey rightGroupKey)
+                        [(leftEntry, rightEntry) | leftEntry <- Map.toAscList leftBuckets, rightEntry <- Map.toAscList rightBuckets]
+            pure $ Grouped . mergeComponentsByKey . zipWith component [0 ..] <$> related
+  where
+    -- The component index of a kept pair is the number of kept pairs before it.
+    component componentIndex ((leftGroupKey, leftBucket), (rightGroupKey, rightBucket)) =
+        ( resultKey leftGroupKey rightGroupKey
+        , keyedBucketMass leftBucket * keyedBucketMass rightBucket
+        , joinNBucketStatic
+            componentIndex
+            (pureStatic (,))
+            (ChainCons (keyedBucketStatic leftBucket) (ChainCons (keyedBucketStatic rightBucket) ChainNil))
+        )
 
 {- | Combine a list of finite families of one type, and keep the combinations of
 keys that the relation accepts.
@@ -452,21 +434,10 @@ filterGroupsM ::
 filterGroupsM predicate grouped = case finiteGroups grouped of
     Left err -> pure $ Right $ Grouped $ Left err
     Right buckets -> do
-        retained <- go Empty $ Map.toAscList buckets
-        pure $ fmap (Grouped . mergeComponentsByKey . toList) retained
-  where
-    go accepted [] = pure $ Right accepted
-    go accepted ((key, bucket) : rest) = do
-        decision <- predicate key
-        case decision of
-            Left err -> pure $ Left err
-            Right keep ->
-                go
-                    ( if keep
-                        then accepted :|> (key, keyedBucketMass bucket, keyedBucketStatic bucket)
-                        else accepted
-                    )
-                    rest
+        retained <- runExceptT $ filterM (ExceptT . predicate . fst) (Map.toAscList buckets)
+        pure $
+            Grouped . mergeComponentsByKey . map (\(key, bucket) -> (key, keyedBucketMass bucket, keyedBucketStatic bucket))
+                <$> retained
 
 -- | The keys of the groups, in key order, of a finite or a recursive family. A failed family has none.
 groupKeys :: Grouped symbol key a -> [key]
