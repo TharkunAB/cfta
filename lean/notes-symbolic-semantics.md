@@ -145,6 +145,38 @@ pipeline. That pipeline can remove empty rows and normalize constraint
 representations. Its copied raw rows must be connected to the actual stored
 rows with the corresponding cleanup and guard-equivalence proofs.
 
+`SymbolicNormalizedRows.normalized_full_index` permits those row removals.
+An omitted row must have a false guard or an empty copied child. The proof
+derives exact acceptance by term induction and budget bounds from structural
+row inclusion. No language equivalence is assumed for the cleanup itself.
+
+`SymbolicProductRows.closed_full_index` additionally models the closed
+self-intersection shortcut. It handles `intersect node node = node` as a
+separate operational branch. This is necessary: returning the operand omits
+nonempty cross rows, so those rows cannot be justified by emptiness.
+
+`SymbolicAllocatedGraph.allocated_full_index` replaces the topological-rank
+input with finite constructor allocation histories. Each reservation checks
+that its child identities already exist. First-writer installation preserves
+the invariant. Different rows can come from different finite snapshots. The
+numeric identity order still gives one global rank. The theorem retains
+explicit copied-row identity and compiled-guard checks. It does not assume
+that the allocation history has pre-enumerated accepted terms.
+
+`SymbolicHashJoin` models the source singleton-prepending bucket loop.
+`build_exact` gives the exact reversed right bucket, including repeated
+occurrences. `hashJoin_member` proves that every equal-key pair is emitted
+and no unequal-key pair is emitted. `hashJoin_length` retains multiplicity.
+The map is keyed by the complete symbol key; the proof does not equate a
+hash collision with key equality.
+
+The remaining Haskell correspondence checks are concrete. They include the
+identity map for the distinguished `EmptyNode`, typed cache selection,
+constructor payload readback, canonical operand reordering, constraint
+normalization on copied guards, and the concrete runtime table operations.
+The pure row and allocation theorems state the checks precisely. They do
+not turn those runtime checks into machine-checked GHC implementation proofs.
+
 `SymbolicSmartRows` proves the source node constructor's empty-child filter
 and edge deduplication preserve row membership. It also proves that an edge
 removed by the singleton-node emptiness check has numeric indicator zero.
