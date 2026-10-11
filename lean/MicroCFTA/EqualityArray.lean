@@ -376,7 +376,7 @@ theorem readAll_terminates (members : List Nat) (forest : Forest) (valid : Total
       exact ⟨firstFuel + tailFuel, (found.representative, index) :: entries, after,
         by simp [readAll, firstLarge, tailLarge]⟩
 
-/-- The complete finite source algorithm terminates and retains precisely its original equations. -/
+/-- Representative readback through the source parent-array operations. -/
 def readArrays (fuel : Nat) : List Nat → ArrayUnionFind.Parents → Option (List (Nat × Nat) × ArrayUnionFind.Parents)
   | [], parents => some ([], parents)
   | index :: rest, parents => do
