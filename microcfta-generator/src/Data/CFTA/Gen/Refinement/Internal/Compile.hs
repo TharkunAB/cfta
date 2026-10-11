@@ -294,14 +294,11 @@ compileGenOnce compiler requested generator
         Mapped transform inner -> fmap (mapWithKey (const transform)) <$> compileGen compiler requested inner
         Paid inner -> fmap payGrouped <$> compileGen compiler requested inner
         Applied _ _
-            -- A product whose one term comes from one part, such as @elements [2] <* pure ()@,
-            -- answers the requested paths of that part. Another product observes nothing.
-            | not (null requested)
-            , counts <- spineRootCounts generator
-            , all (`elem` [RootCount 0, RootCount 1]) counts
-            , [position] <- [index | (index, RootCount 1) <- zip [0 ..] counts] ->
+            -- A product whose one term comes from one part answers the
+            -- requested paths of that part. Another product observes nothing.
+            | Just position <- oneTermPart requested generator ->
                 fmap (regroupOn (!! position))
-                    <$> compileSpine compiler [if index == position then requested else Set.empty | index <- [0 .. length counts - 1]] generator
+                    <$> compileSpine compiler (partRequirements position requested generator) generator
             | otherwise ->
                 fmap (regroupOn (const noObservations))
                     <$> compileSpine compiler (replicate (fromEnum $ spineArity generator) Set.empty) generator
@@ -586,8 +583,14 @@ compileOpen compiler requested generator =
                         Integers constraint -> pure $ integerGroup constraint
                         Mapped transform inner -> fmap (mapWithKey (const (transform .))) <$> compileOpen compiler requested inner
                         Paid inner -> fmap payGrouped <$> compileOpen compiler requested inner
-                        Applied _ _ ->
-                            fmap joinPositioned <$> compileOpenSpine compiler (replicate (fromEnum $ spineArity generator) Set.empty) generator
+                        Applied _ _
+                            -- As in 'compileGenOnce', a product whose one term comes from
+                            -- one part answers the requested paths of that part.
+                            | Just position <- oneTermPart requested generator ->
+                                fmap (regroupOn $ \keys -> (joinOpenKeys keys){openObservations = openObservations (keys !! position)})
+                                    <$> compileOpenSpine compiler (partRequirements position requested generator) generator
+                            | otherwise ->
+                                fmap joinPositioned <$> compileOpenSpine compiler (replicate (fromEnum $ spineArity generator) Set.empty) generator
                         Chosen alternatives -> do
                             compiled <-
                                 traverse (\(weight, alternative) -> fmap (weight,) <$> compileOpen compiler requested alternative) alternatives
@@ -666,22 +669,41 @@ integerGroup constraint = case points [valueName] domain of
 joinPositioned :: LTAGrouped [OpenKey] a -> LTAGrouped OpenKey a
 joinPositioned grouped = regroupOn rekey grouped
   where
-    identity keys = let joined = joinKeys keys in (openCount joined, openFormula joined)
+    identity keys = let joined = joinOpenKeys keys in (openCount joined, openFormula joined)
     positions =
         Map.fromListWith (\_ earlier -> earlier) $
             zip (map identity $ either (const []) Map.keys $ sizes grouped) [0 :: Int ..]
     rekey keys =
-        let joined = joinKeys keys
+        let joined = joinOpenKeys keys
          in joined{openObservations = (openObservations joined){keyPosition = positions Map.! identity keys}}
 
-    -- The key of a bare applicative spine: no observation, and the variables of its positions joined.
-    joinKeys :: [OpenKey] -> OpenKey
-    joinKeys keys =
-        OpenKey
-            noObservations
-            (sum $ map openCount keys)
-            (foldr (.&&) true $ renamedFormulas keys)
-            (product <$> traverse openPoints keys)
+-- | The key of a bare applicative spine: no observation, and the variables of its positions joined.
+joinOpenKeys :: [OpenKey] -> OpenKey
+joinOpenKeys keys =
+    OpenKey
+        noObservations
+        (sum $ map openCount keys)
+        (foldr (.&&) true $ renamedFormulas keys)
+        (product <$> traverse openPoints keys)
+
+{- | The part of a product whose one term is the term of the product, such as
+the first part of @elements [2] <* pure ()@, when a parent requests paths.
+The other parts give no term.
+-}
+oneTermPart :: Set Path -> LTAGen a -> Maybe Int
+oneTermPart requested generator
+    | null requested = Nothing
+    | all (`elem` [RootCount 0, RootCount 1]) counts
+    , [position] <- [index | (index, RootCount 1) <- zip [0 ..] counts] =
+        Just position
+    | otherwise = Nothing
+  where
+    counts = spineRootCounts generator
+
+-- | The requested paths at one part of a product, and none at the other parts.
+partRequirements :: Int -> Set Path -> LTAGen a -> [Set Path]
+partRequirements position requested generator =
+    [if index == position then requested else Set.empty | index <- [0 .. length (spineRootCounts generator) - 1]]
 
 {- | Count the points of a formula over the given number of open variables. On
 a failure, count again with readable names for the variables, so that the
