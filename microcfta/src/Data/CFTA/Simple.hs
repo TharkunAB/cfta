@@ -39,7 +39,6 @@ module Data.CFTA.Simple (
 
 import Control.Monad (filterM)
 import Data.Either (fromRight)
-import Data.List ((!?))
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 
@@ -48,15 +47,14 @@ import Data.CFTA.Constraint (Constraint, Guard (..), conjoinConstraints, constra
 import Data.CFTA.Index (Depth (..))
 import Data.CFTA.Path (ChildIndex (..), Path, unPath)
 import Data.CFTA.Term (Term, pattern Node)
+import qualified Data.CFTA.Term as Term
 
 -- | The subterm at a path, when the term has that path.
 subtermAt :: Path -> Term symbol -> Maybe (Term symbol)
 subtermAt path term = go (unPath path) term
   where
     go [] subterm = Just subterm
-    go (ChildIndex index : rest) (Node _ children)
-        | Just child <- children !? index = go rest child
-        | otherwise = Nothing
+    go (ChildIndex index : rest) subterm = go rest =<< Term.child index subterm
 
 {- | Whether a complete term satisfies a guard. 'Same' compares subterms, the
 connectives are Boolean, and the given function decides every other atom.

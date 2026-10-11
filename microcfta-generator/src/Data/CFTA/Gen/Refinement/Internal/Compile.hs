@@ -417,7 +417,7 @@ groupBuilt requested generator
     labelAt target = go (unPath target)
       where
         go [] (Term.Node label children) = Just $ Observed label $ leafnessOf children
-        go (ChildIndex index : rest) (Term.Node _ children) = go rest =<< children !? index
+        go (ChildIndex index : rest) term = go rest =<< Term.child index term
 
 -- | A generator of one value whose term has the given children.
 withChildren :: [Term Symbol] -> a -> LTAGen a
