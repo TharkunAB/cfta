@@ -230,7 +230,8 @@ Each selected supertype transition is considered once. A step keeps existing
 incoming alternatives, adds copies with all occurrences of the removed target
 replaced together, then removes only the selected original transition. Later
 steps can copy alternatives added by earlier steps. Equal transitions are
-deduplicated. The root stays the root.
+deduplicated. A removed root alternative also installs its representative at
+the root. The root stays the root.
 
 A copy replaces the node of the supertype by the node of the representative,
 so it reaches every alternative of that node. The similarity pair relates
@@ -269,7 +270,8 @@ representatives with an undecided guard, a 'Same', or an equality class at or
 below them.
 
 The original automaton is retained if dependencies become unsafe, a
-representative loses its finite structural derivations, the last finite root
+representative loses its finite structural derivations, an installed root
+representative has no finite unconstrained derivation, the last finite root
 derivation is lost, or a guard would inspect a recursive node. Unproductive
 transitions are removed after a successful schedule.
 -}
@@ -310,29 +312,39 @@ minimize automaton (Similarity original related) = do
                 , transition <- transitions
                 , child <- FTA.transitionChildren transition
                 ]
-        applyStep (table', parents, steps) pair
-            | source == destination && removed == retained = (Map.adjust nub source table', parents, steps)
+        applyStep (table', parents, steps, roots) pair
+            | source == destination && removed == retained = (Map.adjust nub source table', parents, steps, roots)
             -- A copy reaches every alternative of the destination, and only the
             -- representative is similar to the removed transition.
-            | source /= destination && Map.findWithDefault [] destination table /= [retained] = (table', parents, steps)
-            | removed `notElem` Map.findWithDefault [] source table' = (table', parents, steps)
-            | retained `notElem` Map.findWithDefault [] destination table' = (table', parents, steps)
+            | source /= destination && Map.findWithDefault [] destination table /= [retained] = (table', parents, steps, roots)
+            | removed `notElem` Map.findWithDefault [] source table' = (table', parents, steps, roots)
+            | retained `notElem` Map.findWithDefault [] destination table' = (table', parents, steps, roots)
             -- The step changes the terms of the source in every context, so
             -- each guard that reads the source must keep its answer.
-            | not $ keepsGuards table' source = (table', parents, steps)
+            | not $ keepsGuards table' source = (table', parents, steps, roots)
             -- Without a solver, a representative has an accepted term only when
             -- no constraint at or below it can reject its structural terms.
-            | not $ unconstrainedBelow table' retained = (table', parents, steps)
+            | not $ unconstrainedBelow table' retained = (table', parents, steps, roots)
             | otherwise =
-                ( Map.adjust (filter (/= removed)) source $ foldl' (flip $ Map.adjust (copyAlternatives redirect)) table' affected
-                , Map.insertWith Set.union destination (Set.fromList affected) parents
+                ( Map.adjust replaceRemoved source $ foldl' (flip $ Map.adjust (copyAlternatives redirect)) table' affected
+                , updatedParents
                 , steps :|> redirect
+                , if source == initial then Set.insert (chosenRepresentative pair) roots else roots
                 )
           where
             redirect@(source, destination) = redirectFor pair
             removed = current Map.! replacedSupertype pair
             retained = current Map.! chosenRepresentative pair
             affected = Set.toList $ Map.findWithDefault Set.empty source parents
+            -- Installing a root representative adds its child links to the index.
+            updatedParents =
+                foldl'
+                    (\known child -> Map.insertWith Set.union child (Set.singleton source) known)
+                    (Map.insertWith Set.union destination (Set.fromList affected) parents)
+                    (if source == initial then FTA.transitionChildren retained else [])
+            replaceRemoved transitions =
+                let remaining = filter (/= removed) transitions
+                 in if source == initial then nub (retained : remaining) else remaining
         -- This equals @nub (transitions <> map redirect transitions)@ when the
         -- transitions are distinct. Each row of the view is, because a node
         -- keeps each edge once, and each step keeps its rows distinct.
@@ -345,15 +357,28 @@ minimize automaton (Similarity original related) = do
                     , let copy = redirectTransition (Map.singleton source destination) transition
                     , copy `notElem` transitions
                     ]
-        (rewritten, _, applied) = foldl' applyStep (table, parentsOf, Empty) resolved
+        (rewritten, _, applied, rootRepresentatives) = foldl' applyStep (table, parentsOf, Empty, Set.empty) resolved
         productive = productiveStates rewritten
         finiteTransition = all (`Set.member` productive) . FTA.transitionChildren
+        pruned = fmap (filter finiteTransition) rewritten
+        unconstrainedProductive = productiveStates $ fmap (filter $ (== noConstraint) . FTA.transitionConstraint) pruned
         hasFiniteDerivation chosen =
             any
                 ( \transition ->
                     transition `elem` Map.findWithDefault [] (addressNode chosen) rewritten && finiteTransition transition
                 )
-                (foldl' (flip copyAlternatives) [current Map.! chosen] applied)
+                (representativeCopies chosen)
+        representativeCopies chosen = foldl' (flip copyAlternatives) [current Map.! chosen] applied
+        -- Recheck the complete schedule: a later step can change the children
+        -- or remove a transition installed at the root by an earlier step.
+        hasAcceptedRootRepresentative chosen =
+            any
+                ( \transition ->
+                    transition `elem` Map.findWithDefault [] initial pruned
+                        && FTA.transitionConstraint transition == noConstraint
+                        && all (`Set.member` unconstrainedProductive) (FTA.transitionChildren transition)
+                )
+                (representativeCopies chosen)
         representatives = Set.toAscList $ Set.fromList $ map chosenRepresentative resolved
         losesFinal = Set.member initial (productiveStates table) && Set.notMember initial productive
         -- A state depends on the states of its redirects and of its transitions' children.
@@ -376,9 +401,12 @@ minimize automaton (Similarity original related) = do
                         Graph.dfs
                             dependencies
                             [start | child <- FTA.transitionChildren $ current Map.! chosenRepresentative pair, Just start <- [vertexOf child]]
-    if any dependsOnRemovedTarget resolved || not (all hasFiniteDerivation representatives) || losesFinal
+    if any dependsOnRemovedTarget resolved
+        || not (all hasFiniteDerivation representatives)
+        || not (all hasAcceptedRootRepresentative rootRepresentatives)
+        || losesFinal
         then Right automaton
-        else case FTA.mkFTA initial (Map.toList $ fmap (filter finiteTransition) rewritten) of
+        else case FTA.mkFTA initial (Map.toList pruned) of
             Left err -> Left $ InvalidMinimizedAutomaton $ fromViewError err
             Right minimizedView ->
                 let minimized = fromFTA minimizedView

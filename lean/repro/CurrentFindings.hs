@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Reproduce the findings at adb1f01 after the second set of repairs.
+-- | Check the retained language and distribution repairs.
 module Main (main) where
 
 import Data.CFTA.Constraint (semanticConstraint)
@@ -30,12 +30,23 @@ atomicPair solver = do
     print $ observed >>= G.pmf
     print $ observed >>= G.pmf . G.upToSize 3
     print $ fmap (\g -> [G.sizeOfRank g rank | rank <- [0, 1]]) observed
+    case observed of
+        Right compiled
+            | G.pmf compiled == G.pmf original
+            , G.pmf (G.upToSize 3 compiled) == G.pmf (G.upToSize 3 original)
+            , [G.sizeOfRank compiled rank | rank <- [0, 1]] == [Just 3, Just 3] ->
+                putStrLn "Atomic pair repair: PASS"
+        _ -> fail "Observing the atomic pair changed its probability or size"
 
 -- | Print the concrete accepted language through depth four.
 printLanguage :: Entailment -> String -> Automaton -> IO ()
 printLanguage solver label automaton = do
     putStrLn label
-    print . fmap (map eraseRefinements) =<< denotationAtMost solver 4 automaton
+    result <- fmap (map eraseRefinements) <$> denotationAtMost solver 4 automaton
+    print result
+    case result of
+        Right (_ : _) -> pure ()
+        _ -> error "A root representative was lost."
 
 -- | Removing the root's only accepted alternative must not empty its language.
 rootRemoval :: Entailment -> IO ()
