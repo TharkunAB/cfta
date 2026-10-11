@@ -7,6 +7,10 @@ equality-constrained tree automata, and liquid tree automata into one package
 with one representation. The equality layer descends from `microecta`, which
 remains a separate ECTA-only package.
 
+- `Data.CFTA.Formula`: the refinement logic. A formula is `Top`,
+  `Bottom`, a comparison of two integer terms, or a conjunction,
+  disjunction, or negation, without quantifiers. A `Symbol` holds one, and
+  only the Z3 entailment translates it to Liquid Fixpoint.
 - `Data.CFTA` and `Data.CFTA.Interned`: the explicit-state and interned
   automata. The interned automaton has one `Constraint` on every edge, and
   the explicit-state automaton has an annotation parameter. Ordinary automata use `noConstraint`.
