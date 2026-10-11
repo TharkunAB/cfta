@@ -20,7 +20,7 @@ engine descends from the
 [`microecta`](https://hackage.haskell.org/package/microecta) package, which
 remains a separate, ECTA-only line. The refinement layer is the liquid tree
 automaton (LTA) of Mishra and Jagannathan, with Liquid Fixpoint refinements and
-Z3 entailment. Concrete terms are `Data.Tree.Tree` from `containers`.
+Z3 entailment. Concrete terms are `Term symbol` from `Data.CFTA.Term`.
 
 - Derive `HasFTA` for your datatype to get a grammar, constructor metadata, and
   codecs between Haskell values and constructor trees.
@@ -226,16 +226,16 @@ The explicit-state interface is useful when a grammar comes from a file or
 state names are part of your application:
 
 ```haskell
-import qualified Data.Tree as Tree
 import Data.CFTA (FTAError, PlainFTA, Transition (Transition), accepts, mkFTA)
 import Data.CFTA.Constraint (noConstraint)
+import qualified Data.CFTA.Term as Term
 
 naturals :: Either (FTAError Int String) (PlainFTA Int String)
 naturals =
   mkFTA 0 [(0, [Transition "zero" [] noConstraint, Transition "successor" [0] noConstraint])]
 
 oneAccepted :: Either (FTAError Int String) Bool
-oneAccepted = fmap (`accepts` Tree.Node "successor" [Tree.Node "zero" []]) naturals
+oneAccepted = fmap (`accepts` Term.Node "successor" [Term.Node "zero" []]) naturals
 
 -- Right True
 ```
@@ -335,7 +335,8 @@ The main entry point is `Data.CFTA.Equality`.
 import Data.CFTA.Constraint (equalityConstraint)
 import Data.CFTA.Equality
 import Data.CFTA.Symbol (Symbol)
-import qualified Data.Tree as Tree
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 ```
 
 An equality-constrained automaton is a `Node symbol`, which is a set of
@@ -383,7 +384,7 @@ instance Hashable NatSymbol
 zeroOrOne :: Node NatSymbol
 zeroOrOne = Node [Edge Zero [], Edge Succ [Node [Edge Zero []]]]
 
-terms :: [Tree.Tree NatSymbol]
+terms :: [Term NatSymbol]
 terms = termsWith Recursion zeroOrOne
 ```
 
@@ -576,13 +577,13 @@ keep enumerating with updated state.
 The caller decides which terms to reject. The library supplies the callbacks
 and `expandPartialTermFrag` to read a partial term. Its `PartialSymbol` alphabet
 keeps concrete symbols, unexpanded `UVarHole`s, and `TruncatedRecursion`
-distinct; no placeholder can collide with a real symbol. `Tree.Tree` is a functor,
+distinct; no placeholder can collide with a real symbol. `Term` is a functor,
 so a caller that deliberately wants one concrete alphabet can materialize a
 partial term with `fmap resolvePartial`.
 
 ```haskell
 -- Drop any branch whose partial term already contains a forbidden symbol.
-prunedTerms :: [Symbol] -> Node Symbol -> [Tree.Tree Symbol]
+prunedTerms :: [Symbol] -> Node Symbol -> [Term Symbol]
 prunedTerms forbidden =
   termsPrune () $ \() _ event ->
     case event of
@@ -591,9 +592,9 @@ prunedTerms forbidden =
         partial <- expandPartialTermFrag fragment
         pure (any (`occursIn` partial) forbidden, ())
   where
-    occursIn s (Tree.Node (ConcreteSymbol s') ts) =
+    occursIn s (Term.Node (ConcreteSymbol s') ts) =
       s == s' || any (occursIn s) ts
-    occursIn s (Tree.Node _ ts) = any (occursIn s) ts
+    occursIn s (Term.Node _ ts) = any (occursIn s) ts
 ```
 
 A `Right node` decision covers a whole UVar, so it removes every term under
@@ -616,7 +617,7 @@ can be settled before the enumerator lists the branch that the check rejects:
 
 ```haskell
 -- Expand a hole some parked check is waiting on, if one is available.
-resolveParkedFirst :: ExpansionOrder (IntMap [Tree.Tree Symbol])
+resolveParkedFirst :: ExpansionOrder (IntMap [Term Symbol])
 resolveParkedFirst parked candidates =
   listToMaybe [uv | uv <- candidates, uvarToInt uv `IntMap.member` parked]
 
@@ -653,12 +654,12 @@ interned graph, `Node Symbol`, built with the same
 automaton. The module re-exports `Data.CFTA.Interned`, so one import gives
 the constructors, the views, and the LTA operations. It uses the equality
 layer for the path equalities of a guard.
-Concrete annotated terms use `Data.Tree.Tree Symbol`. Construct a node
-with `Tree.Node (RefinedSymbol symbol refinement) children`. A `Symbol` is an
+Concrete annotated terms are `Term Symbol` from `Data.CFTA.Term`. Construct
+a node with `Term.Node (RefinedSymbol symbol refinement) children`. A `Symbol` is an
 interned text and a refinement; an ordinary symbol has the refinement `PTrue`.
-`symbolText` and `symbolRefinement` read the two parts. The tree label and child list use the
-standard lazy `Data.Tree` representation. `eraseRefinements` maps each label
-to its ordinary symbol.
+`symbolText` and `symbolRefinement` read the two parts. The pattern `Node` gives
+the label and the list of children, and the children stay lazy. `eraseRefinements`
+maps each label to its ordinary symbol.
 
 A transition is an edge whose symbol is a refined `Symbol`, a ranked constructor
 with its Liquid Fixpoint refinement, and whose constraint is the paper's
@@ -1051,7 +1052,8 @@ productivity; they do not prove that arbitrary transition guards are satisfiable
 | `Data.CFTA.Refinement.Lattice` | Exact counting and lexicographic ranking of the integer points of a linear formula, without enumeration, and `latticeEntailment`, which decides bounded linear integer implications without a solver. |
 | `Data.CFTA.Refinement.LiquidFixpoint` | The Z3-backed `Entailment`. |
 | `Data.CFTA.Simple` | The automata defined as simply as possible, on explicit-state automata: membership by recursion on the term, the terms up to a depth by filtering every tree, and the textbook union, product, and depth bound. It is slow, and the tests check the other modules against it. |
-| `Data.Tree` from `containers` | Concrete constructor trees. |
+| `Data.CFTA.Term` | Concrete terms: `Term symbol`, built and matched with the pattern `Node symbol children`, with `child`, `arity`, `flatten`, and the conversions to and from `Data.Tree`. |
+| `Data.Tree` from `containers` | The automaton views of `toTree`, for `drawTree`. |
 
 The interned engine has a symbol type. Every edge carries a `Constraint`,
 which supplies conjunction and known contradictions; `acceptsWith` takes the

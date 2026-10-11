@@ -42,6 +42,10 @@ tree automata of `microcfta`, with QuickCheck integration.
   or in declaration order for a datatype, so they are the same in every run.
   `rankOfTerm` gives the rank of an accepted term, and `rankOfValue` the
   rank of a datatype value through its codec.
+- Terms are `Term symbol` from `Data.CFTA.Term` of `microcfta`:
+  `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
+  `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
+  terms in place of `Data.Tree.Tree`.
 - `Data.CFTA.Gen.Equality`: `ECTAGen`, symbol-text order for imports,
   and equality constraints from `Data.CFTA.Equality`. The engine's
   `support` and `termAt` return graphs and terms over `Data.CFTA.Gen.Label`,

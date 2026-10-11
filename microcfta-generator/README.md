@@ -791,7 +791,7 @@ recursive generator, counting terms by size, which is the number of term
 nodes.
 
 ```haskell
-import qualified Data.Tree as Tree
+import Data.CFTA.Term (Term)
 
 types :: Node Symbol
 types = createMu $ \recursive -> Node
@@ -800,7 +800,7 @@ types = createMu $ \recursive -> Node
     , Edge "Maybe" [recursive]
     ]
 
-typeGen :: ECTAGen (Tree.Tree Symbol)
+typeGen :: ECTAGen (Term Symbol)
 typeGen = ECTAGen.fromAutomaton types
 ```
 
