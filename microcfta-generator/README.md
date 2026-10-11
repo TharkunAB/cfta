@@ -10,6 +10,8 @@ one generator type, `Gen symbol a`, and one facade per kind of automaton:
 | `Data.CFTA.Gen.QuickCheck` | Sampling and properties over a generator, and frozen pools. |
 | `Data.CFTA.Gen.Do` | Qualified applicative do-notation, re-exported by the three `QuickCheck` facades; `FTAGen.do`, `ECTAGen.do`, and `LTAGen.do` are this module under the facade's alias. |
 | `Data.CFTA.Gen.Error` | The one failure vocabulary, and `explain`. |
+| `Data.CFTA.Gen.Label` | The labels of the engine's support and terms: `Label` for user symbols and the private labels, and `surface`. |
+| `Data.CFTA.Gen.Sig` | Operation signatures for `apply`; `Data.CFTA.Gen` re-exports them. |
 | `Data.CFTA.Gen.Equality` | `ECTAGen`: equality-constrained generators, and imports ranked by symbol text. |
 | `Data.CFTA.Gen.Equality.QuickCheck` | Re-exports `Data.CFTA.Gen.Equality` with the QuickCheck functions. |
 | `Data.CFTA.Gen.Refinement` | `LTAGen`: inferred and refined pools, values without a pool with `every`, conditions with `satisfying`, contracts with `guarded`, measures with `measured`, bounded recursion with `recurUpTo`, liquid imports, `compile`, and `validOutcomes`. |
@@ -38,31 +40,41 @@ the accepted pairs with QuickCheck. It also constructs the same language as an
 interned `Common.Node String`, imports it with `fromAutomaton`, and checks
 the imported generator.
 
-`FTAGen.node "pair"` closes an applicative child block with one constructor.
-Each binding supplies one direct child. A binding whose generator is itself a
-product, such as `f <$> a <*> b`, supplies one child for each of its parts;
-close it with its own `node` to make it one child. Enable `ApplicativeDo` and
-`QualifiedDo`, and finish the block with `FTAGen.pure`. Child generators must be
-independent. `leaf value symbol` is a constructor without children, and
-`oneof` and `frequency` choose between generators. They skip an empty
-alternative and do not report an error. A weight of `frequency` is a
-`Data.CFTA.Index.Weight`, and an integer literal is a weight.
+`FTAGen.node "pair"` closes a qualified do-block of children with one
+constructor. Enable `ApplicativeDo` and `QualifiedDo`, and end the block with
+`FTAGen.pure`. Each binding gives one direct child, and the bindings must be
+independent. A binding whose generator is a product, such as `f <$> a <*> b`,
+gives one child for each part of the product. To make it one child, close it
+with its own `node`.
+
+`leaf value symbol` is a constructor without children. `oneof` and `frequency`
+choose between generators. They skip an empty alternative without an error. A
+weight of `frequency` is a `Data.CFTA.Index.Weight`, and an integer literal is
+a weight.
 
 `fromAutomaton` reads an interned automaton as a generator of the terms it
-accepts. An acyclic automaton gives a finite generator with one rank per
-distinct term: where alternatives overlap or an equality reaches below
-direct children, the count is symbolic. Ranks order the constructors at each
-node by arity, then by the symbol's `Ord`, so nullary constructors come first
-and the ranks do not depend on the order in which the automaton was built. A
-cyclic automaton gives a recursive generator counted by size, the number of
-term nodes, and uses the same order within each size; it must be
-unambiguous, because its count sums over accepting runs. A symbolic count has
-no size classes, so its members report size one, and `smallerMembers` and the
-size-minimal search of `forAll` find no smaller member.
-`fromAutomatonUpToDepth` bounds the automaton by constructor depth first, a
-leaf having depth zero, and `upToSize` bounds any
-generator to the members of at most a given size, in size-major rank order. Use `Data.CFTA.Interned.fromFTA` first when the source
-is an explicit-state automaton; the import is total and retains shared states.
+accepts.
+
+An acyclic automaton gives a finite generator with one rank for each distinct
+term. Where alternatives overlap, or an equality reaches below the direct
+children, the count is symbolic. A symbolic count has no size classes, so each
+of its members has size one. So `smallerMembers` and the search of `forAll` for
+a smaller member find nothing.
+
+A cyclic automaton gives a recursive generator. The size of a term is its
+number of nodes. The automaton must be unambiguous, because its count is a sum
+over accepting runs.
+
+At each node, ranks order the constructors by arity, then by the `Ord` of the
+symbol. So nullary constructors come first, and the ranks do not depend on the
+order in which the automaton was built. A recursive generator uses this order
+inside each size.
+
+`fromAutomatonUpToDepth` first bounds the automaton by depth. A leaf has depth
+zero. `upToSize` bounds any generator to its members of at most a given size,
+in size-major rank order. For an explicit-state automaton, call
+`Data.CFTA.Interned.fromFTA` first. That conversion is total and keeps shared
+states.
 
 `fromDatatype` reads a derived grammar as a generator of its values,
 recursive when the datatype is, and `fromDatatypeUpToDepth` bounds it by
@@ -187,21 +199,18 @@ ordered pair of expressions from the previous depth, so `n` expressions give
 `2 + n * n`. The rank decoder constructs the
 selected values from the compiled grammar.
 
-The QuickCheck adapter adds random sampling and shrinking. Counts and replay
-ranks identify distinct terms; an ambiguous handwritten grammar is counted
-symbolically, so one term still has one rank.
-
-For another complete example, see
-[`FinitePairs.hs`](examples/FinitePairs.hs), or run
-`cabal run cfta-pairs` from the workspace root.
+The QuickCheck adapter adds random sampling and shrinking. For an imported
+automaton or grammar, counts and replay ranks identify distinct terms. The
+import counts an ambiguous grammar symbolically, so each term has one rank.
 
 ## Equality-constrained generators
 
-An equality generator is `Gen Symbol`, written `ECTAGen`. Its
-transparent regions retain an exact equality-constrained support,
-cardinality, and replay rank; the QuickCheck functions add sampling, opaque
-fallbacks, and structural shrinking. Run the complete introductory example
-from the workspace root with `nix-shell --run 'cabal run cfta-finite-languages'`.
+An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
+transparent region of it has an exact support with equality constraints, an
+exact cardinality, and replay ranks. The QuickCheck functions add sampling and
+structural shrinking. They also sample opaque regions, which have no ranks.
+Run the complete introductory example from the workspace root with
+`nix-shell --run 'cabal run cfta-finite-languages'`.
 
 Import the QuickCheck-facing API:
 
@@ -240,26 +249,25 @@ alternatives count each accepted term once. Unranking constructs only the
 selected term. `fromAutomaton` reads an acyclic automaton the same way, and a
 cyclic one as a recursive generator counted by size.
 
-`elements` and `fromIndexed` turn a finite indexed source into an ECTA whose
-leaves contain stable indices, not generated values. `Functor` and
-`Applicative` composition preserve that symbolic structure, so ordinary
-`ApplicativeDo` builds ECTA products. Alongside the ECTA, the generator tracks
-an exact cardinality and a rank-to-outcome selector; applicative products
-multiply their counts rather than materializing their Cartesian products.
+`elements` and `fromIndexed` turn a finite indexed source into an ECTA. Its
+leaves hold stable indexes, not the generated values. `fmap` and `<*>` keep
+this structure, so ordinary `ApplicativeDo` builds ECTA products. The generator
+also keeps an exact cardinality and a function from a rank to a value. A
+product multiplies the counts of its parts and does not build their Cartesian
+product.
 
-`match` generates two values under a reified key equality: in
-`match (authenticatedUser :==: fileOwner) authentication filesystem`, the
-`:==:` keeps both projections as data, so the match can group each input by
-its own key, encode the shared keys as an actual ECTA equality constraint,
-count the matching group products, and unrank directly into the selected
-group. `:&&:` conjoins several equalities. This is the exact-uniform
+`match` generates two values with equal keys. In
+`match (authenticatedUser :==: fileOwner) authentication filesystem`,
+`:==:` keeps the two projections as data. So `match` groups each input by
+its own key, and encodes the shared keys as an ECTA equality constraint. It
+counts the products of the matching groups, and it unranks directly into the
+selected group. `:&&:` conjoins several equalities. This is the exact uniform
 conditioning of [Claessen, Duregård and Pałka, *Generating Constrained Random
 Data with Uniform Distribution*, JFP 25,
-2015](https://doi.org/10.1017/S0956796815000143). The condition is reified as
-data, so `match` does not test it on samples. `match` accepts arbitrary value
-projections, so it must enumerate the input ranks to find its groups. To
-condition three or more generators, use the grouped layer (`groupOn` and
-`apply`).
+2015](https://doi.org/10.1017/S0956796815000143). Because the condition is
+data, `match` does not test it on samples. A projection can be any function, so
+`match` enumerates the ranks of each input to find its groups. For three or
+more generators, use the grouped layer (`groupOn` and `apply`).
 
 `relate leftKey rightKey relation left right` admits every pair for which the
 projected keys satisfy `relation`. The relation is an ordinary Haskell
@@ -279,14 +287,13 @@ it to turn solver-approved refinement tuples into a pure ECTA rank plan.
 `filterGroupsM` performs an effectful selection over an existing key space
 without visiting the members below each key.
 
-`Grouped key a` keeps the grouping of a generator, for nested or very large
-languages. The snippets in this section are fragments of one complete
-program, the typed-expression flagship
+A `Grouped key a` is a generator whose members are grouped by a key. Use it
+for nested or very large languages. The `key` is the type that the classifier
+returns. The key decides which groups a join can combine, and it is not part of
+the generated `a`. Equal keys get equal internal labels on the constrained ECTA
+paths. The snippets on grouped generators come from one complete program,
 [`Data.CFTA.Gen.TypedExpressionLanguage`](https://github.com/Tritlo/microecta/blob/main/microcfta-generator/common/Data/CFTA/Gen/TypedExpressionLanguage.hs).
-Read the whole program when the snippets are not sufficient. The `key` is the
-type that the classifier returns. It decides which groups can be joined, and it
-is not part of the generated `a`. Matching key values receive equal internal
-labels on constrained ECTA paths.
+The other snippets in this section are sketches.
 
 `groupOn` classifies the outcomes of any transparent generator and enumerates
 them once. `keyed key generator` declares that every member already has one
@@ -365,11 +372,10 @@ conditionalLayer children =
     (children :& children :& children :& ANil)
 ```
 
-The
 [`Data.CFTA.Gen.TypedExpressionLanguage`](https://github.com/Tritlo/microecta/blob/main/microcfta-generator/common/Data/CFTA/Gen/TypedExpressionLanguage.hs)
-flagship, a test and benchmark support module, combines unary `Not`, binary functions, and
-ternary `IfExpression`. Its finite layers combine those three alternatives with
-`uniformlyGrouped`, so every expression remains equally likely. Its
+is a support module of the tests and benchmarks. It combines unary `Not`,
+binary functions, and the ternary `IfExpression`. Its finite layers combine
+those three alternatives with `uniformlyGrouped`, so every expression remains equally likely. Its
 recursive layer uses equal structural alternatives, as recursive declarations
 require.
 
@@ -406,43 +412,48 @@ are. A statement whose result is a tuple, as `match` and `relate` give, must
 bind it lazily: `ApplicativeDo` rejects `(a, b) <- match ...` and accepts
 `~(a, b) <- match ...`.
 
-Every transparent generator samples compositionally by rank, including exact
-non-uniform `frequency` and conditioned joins; sampling never materializes the
-final Cartesian product. `cardinality` and `unrank` expose deterministic
-replay, while `countOn` reports exact coverage of ranked outcomes. A retained
-`Grouped` key is also a symbolic observation. `countsAtSize` reports how many
-members reach each key. `massesAtSize` reports the exact key distribution used
-by sampling that size. Declared atomic weights can therefore produce equal
-counts and unequal masses. Recursive groups memoize both size series, so these
-queries do not enumerate traces. ECTA support is demand-driven: counts, masses,
-replay, sampling, and constrained joins retain it as a lazy thunk. `support`
-forces the complete symbolic representation, a `Node (Label Symbol)`:
-`Label` wraps the user's symbols, and the other constructors of
-`Data.CFTA.Gen.Label` are the engine's private labels for the applicative
-spine, choices, source indexes, joins, keys, and recursive families.
+Every transparent generator samples by rank, one part at a time. This includes
+`frequency` with unequal weights and the conditioned joins. Sampling does not
+build the Cartesian product. `cardinality` and `unrank` give deterministic
+replay. `countOn` gives the exact number of members for each value of a
+projection.
+
+The key of a `Grouped` family is also an observation. `countsAtSize` gives the
+number of members of each key at one size. `massesAtSize` gives the probability
+of each key at one size, as sampling draws it. So atomic choices with declared
+weights can give equal counts and unequal masses. A recursive family memoizes
+both series, so these queries do not enumerate traces.
+
+Counts, masses, replay, sampling, and constrained joins do not build the ECTA
+support. `support` builds all of it, as a `Node (Label Symbol)`. `Label` wraps
+the symbols of the user. The other constructors of `Data.CFTA.Gen.Label` are
+the private labels of the engine: for the applicative spine, choices, source
+indexes, joins, keys, and recursive families.
 
 `termAt` gives the engine term of the member at a rank, and `rankOf` is its
 inverse: it gives the least rank of an engine term, or `TermNotInLanguage`
 when the term is not a member. `ranksOf` gives every rank of a term. A term can
 have more than one rank, because a constructor label removes the choice
-wrapper of its alternatives. The ranking follows the private labels and checks
-the user symbols. Where it cannot check a symbol, `termAt` checks the rank, so a
-term with other user symbols has no rank. A
-recursive generator uses the size-major ranks of `unrank`. For an imported
+wrapper of its alternatives. The ranking reads the private labels and checks
+the user symbols. When the ranking cannot check every symbol of a candidate
+rank, `ranksOf` compares the term with `termAt` at that rank. So a term with
+different user symbols has no rank. A recursive generator uses the size-major
+ranks of `unrank`. For an imported
 automaton, `rankOfTerm` takes the tree of user symbols, and `rankOfValue`
 takes a datatype value from `fromDatatype`.
 
-`smallest (atKey key family)` returns a globally smallest witness for one
-observation. An unreachable key returns `Right Nothing`. A temporal observation
-such as "failure state reached" belongs in the recursive key as a sticky state
-bit; it is not recovered later by filtering complete traces.
+`smallest (atKey key family)` gives a smallest member of the family that has
+the key. A key that no member has gives `Right Nothing`. To find the shortest
+trace that reaches a failure state, put a flag "failure reached" in the key of
+the recursive family, and keep the flag set in every longer trace. Do not filter
+complete traces for the failure afterwards.
 
-`pmfAtSize` asks the more general value-level distribution question. It
-interprets the same size-indexed sampler used by lowering, including weighted
-atomic choices, but may enumerate products before equal results are aggregated.
-The generic `countOn`, `pmf`, and `pmfAtSize` observers are therefore best for
-finite or small result languages. Retain a reusable classification with
-`Grouped` when the observation is part of a recursive language.
+`pmfAtSize` gives the probability of each value at one size. It reads the
+sampler of `toGen` at that size, with the weights of atomic choices. It can
+enumerate the members of a product before it adds up equal values. So use
+`countOn`, `pmf`, and `pmfAtSize` on finite or small languages. When the
+observation is part of a recursive language, make it the key of a `Grouped`
+family.
 
 ```haskell
 failure = ECTAGen.atKey FailureReached tracesByOutcome
@@ -524,7 +535,7 @@ their members. Both functions preserve semantic support, ranks, and weights.
 
 import qualified Data.CFTA.Gen.Equality.QuickCheck as ECTAGen
 
--- | Two named integer source choices.
+-- | Two named integers.
 integers :: ECTAGen.ECTAGen Int
 integers = ECTAGen.namedElements [("zero", 0), ("one", 1)]
 
@@ -542,10 +553,11 @@ to `ECTA.toTree`, then render the typed labels with `fmap` and
 name when one is available. `ViewPath` locations belong to the graph passed to
 `toTree`.
 
-Source names describe source choices. `fmap` preserves those names; it does not
-infer names for mapped results. `regroupOn` clears old group names because the
-keys change. Apply `nameGroups` after regrouping to name the new keys. Source
-names remain available through grouping, application, and recursion.
+A name belongs to one member of a source, such as an entry of `namedElements`.
+`fmap` preserves those names; it does not infer names for mapped results.
+`regroupOn` clears old group names because the keys change. Apply `nameGroups`
+after regrouping to name the new keys. Source names remain available through
+grouping, application, and recursion.
 
 The diagnostic graph preserves construction structure and equality obligations.
 Names distinguish occurrences that share one semantic node, such as integer
@@ -558,7 +570,7 @@ Inspecting the graph also allocates its nodes and formatted names.
 
 Run `cabal run cfta-draw-typed-expressions` to draw the actual finite and
 recursive expression generators. The [example](examples/DrawTypedExpressions.hs) calls
-`drawInspection`, which shows source choices such as `Add :: Int -> Int -> Int`
+`drawInspection`, which shows named members such as `Add :: Int -> Int -> Int`
 and `IntLiteral 0 :: Int`, with `Int` and `Bool` labels on the equality witnesses.
 
 #### Read the ASCII tree
@@ -642,22 +654,23 @@ The convolution and the size measure are FEAT's ([Duregård, Jansson and Wang,
 2012](https://doi.org/10.1145/2364506.2364515)): sizes count pays. `pure` has
 size zero, `<*>` adds the sizes of its sides, and `fmap` and the choices keep
 sizes. `pay` adds one to every member. An atom (`elements`, `fromIndexed`,
-`every`, `atomic`) has size one, and a constructor (`node`, `leaf`, `guarded`,
-`measured`) pays one, so the size of a tree built with `node` is its number
-of nodes, as for an imported term. A join (`match`, `relate`) adds the sizes
-of its two sides, as a product does. The tree above has no `node`, so its
-size is its number of leaves: each leaf is an atom of size one. Each side of
-`Branch <$> self <*> self` has no member of size zero, so each side guards
-the other, and the tree needs no pay.
+`every`, `atomic`, or a member of a `groupOn` group) has size one, and a
+constructor (`node`, `leaf`, `guarded`, `measured`) pays one, so the size of a
+tree built with `node` is its number of nodes, as for an imported term. A join
+(`match`, `relate`) adds the sizes of its two sides, as a product does. The
+tree above has no `node`, so its size is its number of leaves: each leaf is an
+atom of size one. Each side of `Branch <$> self <*> self` has no member of size
+zero, so each side guards the other, and the tree needs no pay.
 "Size-major rank" is this package's own term for the resulting order. [ADR
-2](../docs/adr/0002-sizes-count-pays.md) records the decision. Counting a family by a size recurrence and
-drawing from those counts is the recursive method of Nijenhuis and Wilf,
-*Combinatorial Algorithms*, 2nd ed., 1978, and of [Flajolet, Zimmermann and Van
-Cutsem, *A Calculus for the Random Generation of Labelled Combinatorial
-Structures*, TCS 132, 1994](https://doi.org/10.1016/0304-3975(94)90226-7);
-turning a rank back into a member is unranking, as in [Martínez and Molinero,
-*A generic approach for the unranking of labeled combinatorial classes*, RSA
-19, 2001](https://doi.org/10.1002/rsa.10025).
+2](../docs/adr/0002-sizes-count-pays.md) records the decision. Counting a family
+by a size recurrence and drawing from those counts is the recursive method of
+Nijenhuis and Wilf, *Combinatorial Algorithms*, 2nd ed., 1978, and of [Flajolet,
+Zimmermann and Van Cutsem, *A Calculus for the Random Generation of Labelled
+Combinatorial Structures*, TCS 132,
+1994](https://doi.org/10.1016/0304-3975(94)90226-7); turning a rank back into a
+member is unranking, as in [Martínez and Molinero, *A generic approach for the
+unranking of labeled combinatorial classes*, RSA 19,
+2001](https://doi.org/10.1002/rsa.10025).
 
 So the `Functor` and `Applicative` laws hold for sizes: `pure f <*> x` and
 `f <$> x` have the same sizes and the same ranks, and so do `pure id <*> v`
@@ -678,11 +691,11 @@ therefore replays under any larger bound. `forAll` first tests the whole size
 classes below the failing member. After its cap, it shrinks the components of
 the form bounded at the failing member's size.
 
-`atomic` treats every member of a finite generator as one atom of size one.
-This sets a domain-sized boundary inside a recursive language. For example, an
-acyclic command FTA can retain its compact support and rank decoder while each
-complete command, rather than each node in its term, contributes one unit to a
-trace's size:
+`atomic` makes every member of a finite generator one atom of size one. Use it
+to choose the unit of size in a recursive language. For example, an acyclic
+command FTA keeps its compact support and its rank decoder, and each complete
+command adds one to the size of a trace, whatever the number of nodes in its
+term:
 
 ```haskell
 command = decodeCommand <$> ECTAGen.atomic (ECTAGen.fromAutomaton commandFTA)
@@ -694,12 +707,13 @@ nonEmptyTrace = ECTAGen.recur $ \rest ->
     ]
 ```
 
-This does not enumerate the FTA or add one support edge per command. It keeps
-the accepted language, compact support, ranks, and decoder. The whole acyclic
-FTA becomes the finite command source, so QuickCheck's size acts on the outer
-trace instead of taking a second prefix inside each command. For an already
-finite generator, its cardinality and distribution also stay unchanged. Only
-the size and structural-shrinking boundary changes. A recursive input has
+`atomic` does not enumerate the FTA, and it adds no support edge for each
+command. The accepted language, the compact support, the ranks, and the decoder
+stay the same. The whole FTA is one finite source of commands, so the
+QuickCheck size bounds the number of commands in a trace and not the size of
+each command. The cardinality and the distribution of the finite generator do
+not change. Only its sizes change, and shrinking treats each of its members as
+one unit. A recursive input has
 infinitely many members, so bound it with `upToSize` before making it atomic,
 and do that *outside* the recursive definition. Neither `upToSize` nor `atomic`
 can be applied to the `recur` argument, or to anything built from it: the bound
@@ -757,11 +771,11 @@ intExpression = ECTAGen.atKey TInt expressions
 The set of keys in the family is part of the fixpoint, so `recurGrouped`
 solves it first. It starts from the empty family and adds the result keys of
 operations whose argument keys are already present. Then it ties the languages
-over that set. All the keys share one `Mu` node whose edges carry their key as
-a first child; an occurrence at one key is that node under an edge holding
-the key's label, with an equality constraint tying the two. A recursive
-family is therefore one recursive automaton whose cycle carries the keyed
-joins' equality constraints. Only an ECTA can hold this shape.
+over that set. All keys share one `Mu` node. Each edge of that node has its key
+as the first child. An occurrence at one key is the `Mu` node under an edge with
+the label of that key, and an equality constraint makes the two keys equal. So a
+recursive family is one recursive automaton, and the equality constraints of the
+keyed joins are on its cycle. An FTA cannot express these constraints.
 
 For the language above, unfolding that automaton twice accepts exactly the 46
 expressions produced by the hand-unrolled depth-one generator. This includes
@@ -1018,19 +1032,18 @@ third is the measure of the new term. Both are functions with one term for
 each child, in order, and each term is the measure of that child, not the
 child's Haskell value. The refinement of each constructed term is then
 `\v -> v .== measure`, so the contract of a parent reads it. A measure does
-not change the generated value. `recurUpTo` unfolds a recursive description a
-bounded number of times, from the empty generator, and `compile` compiles each
-unfolding once.
+not change the generated value. `recurUpTo n` unfolds a recursive description
+so that its recursive occurrences nest at most `n` times. The first unfolding
+starts from the empty generator, and `compile` compiles each unfolding once.
 
-Where does the integer come from? Every node of a term of a liquid tree
-automaton has one integer, the `v` of its refinement, and the solver reads only
-these integers, never the Haskell value. So the generator builds two things
-side by side: the Haskell value, through `fmap` and `<*>`, and a term of
-refined symbols. For a type with a natural integer, the refinement gives it:
-`elements [1, 2, 3]` refines each member as `v == x`. A tree has no natural
-integer, so the author chooses what `v` means. A leaf gets its integer from its
-refinement, and a constructor from `measured` gets its integer from its
-measure.
+Each node of a term of a liquid tree automaton has one integer, the `v` of its
+refinement. The solver reads only these integers, and never the Haskell value.
+So the generator builds two things together: the Haskell value, through `fmap`
+and `<*>`, and a term of refined symbols. For a type with a natural integer, the
+refinement gives it: `elements [1, 2, 3]` refines each member as `v == x`. A
+tree has no natural integer, so the author chooses what `v` means. A leaf gets
+its integer from its refinement, and a constructor from `measured` gets its
+integer from its measure.
 
 These two give red-black trees. The measure of a tree is its black height: a
 leaf has black height zero, a black node adds one, and a red node keeps the
@@ -1080,7 +1093,7 @@ The measure is also what makes `compile` fast here. It groups the children by
 their measures, decides each contract once for each pair of groups, and counts
 the trees without listing them.
 
-With three unfoldings, the compiled generator has 25,728,160,405 trees.
+With the bound 3, the compiled generator has 25,728,160,405 trees.
 `countAtSize` gives the number of trees with n internal nodes at size 2n + 1:
 1, 1, 2, 2, 4, 8, 16, 33, 56, 90, and 164 for n up to ten. Compilation takes a
 few milliseconds, because each unfolding is compiled once.
@@ -1127,10 +1140,10 @@ run these programs, and CI runs them with the other examples.
 ### Construction and compilation
 
 `elements` and `pool` choose uniformly. `namedPool` takes
-`Refined value symbol refinement` atoms with explicit symbols, and `leaf` is one
-such atom. Repeated entries are repeated ranks. `oneof` and `frequency` are the
-generic choices: `frequency` weights its branches as QuickCheck's does, and
-skips an empty branch.
+`Refined value symbol refinement` entries with explicit symbols, and makes each
+one a `leaf`: a constructor without children. Repeated entries are repeated
+ranks. `oneof` and `frequency` are the generic choices: `frequency` weights its
+branches as QuickCheck's does, and skips an empty branch.
 
 Each qualified do-block describes independent direct children, and its
 adjacent `node` or `guarded` supplies the constructor. A contract must take
@@ -1165,12 +1178,12 @@ decide a guard, so the accepted language can be larger than a machine integer.
 Groups are ordered by the first member that has their observations, so ranks
 keep source order.
 
-`isSameTermAs` normally requires exact subtree equality. Inside `withActualFor`,
-it compares views with the formal symbol replaced by the actual symbol,
-including free variables in refinement annotations. The generated terms and
-values stay unchanged. Several replacements in `withActualsFor` apply
-simultaneously. Compilation can decide this scoped equality on observed leaves.
-Scoped equality on compound subtrees remains unsupported by the compiler.
+`isSameTermAs` requires two equal subtrees. Inside `withActualFor`, it first
+replaces the formal symbol by the actual symbol, also in the free variables of
+the refinements, and then compares. The replacement changes only the
+comparison, not the generated terms or values. `withActualsFor` applies several
+replacements at the same time. `compile` can decide this equality on observed
+leaves. It cannot decide it on compound subtrees.
 
 The result of `compile` is an ordinary finite generator: `cardinality`,
 `unrank`, `termAt`, `rankOf`, `support`, `shrinkRank`, and `smallerMembers`
@@ -1284,7 +1297,7 @@ applicationGuard result function argument =
 The compiler checks these contracts through grouped observations. It reports
 an error for a contract that needs complete candidates.
 
-### Flagship: typed state-machine traces
+### Example: typed state-machine traces
 
 [`Data.CFTA.Gen.Refinement.StateMachineTraceLanguage`](https://github.com/Tritlo/microecta/blob/main/microcfta-generator/common/Data/CFTA/Gen/Refinement/StateMachineTraceLanguage.hs)
 is the LTA step in the repository's worked progression. The FTA example has
@@ -1397,14 +1410,13 @@ programs. The tests enumerate them, check every result refinement against an
 independent list interpreter, and execute the deliberately partial indexer over
 every accepted program.
 
-This example shows how much specification the LTA saves. A handwritten
-exact-uniform
-generator must group every recursive sublanguage by result length, derive the
-append, take, and zip cardinality recurrences for those groups, weight each
-constructor by its number of valid completions, and repeat the bookkeeping for
-the final index. The LTA source states the four dependent contracts once. This
-small surface compiler is an example for clarity. Compile large recursive
-languages as automata so that terms stay symbolic.
+A handwritten exact uniform generator for this language must group each
+recursive sublanguage by result length. It must derive the count recurrences of
+append, take, and zip for those groups, weight each constructor by its number of
+valid completions, and do the same for the final index. The LTA source states
+the four dependent contracts once. The example uses the surface syntax for
+clarity. Compile a large recursive language as an automaton, so that its terms
+stay symbolic.
 
 ### A second dependent example: safe buffer programs
 
@@ -1475,9 +1487,9 @@ prove it only for a type with a `Literal` encoding: `elements` infers the exact
 refinement of each value, and `checkPool` proves hand-written ones. For another
 type, the caller must justify the refinements before constructing the pool.
 
-Similarity minimisation is separate and opt-in, because a test often needs a
-value that is syntactically different, and minimisation drops it. Declare the
-non-liquid type class when you want semantic representatives:
+Similarity minimization is a separate step and is off by default. A test often
+needs a value that is syntactically different, and minimization removes it.
+Declare the non-liquid type class when you want semantic representatives:
 
 ```haskell
 Right representatives <-
@@ -1517,7 +1529,7 @@ cabal run cfta-automaton-interop
 
 ## Sampling performance
 
-The flagship FTA and ECTA languages each have three exact-uniform generators:
+The example FTA and ECTA languages each have three exact uniform generators:
 
 - The naive generator makes an unconstrained representation, then recognizes
   or rejects it.
@@ -1525,10 +1537,9 @@ The flagship FTA and ECTA languages each have three exact-uniform generators:
 - The FTA or ECTA generator compiles the declarative automaton to a rank
   decoder.
 
-All rows at a given depth therefore sample the same finite language with the
-same uniform distribution. A smaller or biased baseline would make a speed
-comparison meaningless. The FTA's naive generator builds a generic
-ranked term, recognizes it with a one-state FTA, then decodes it. There is no
+All rows at one depth sample the same finite language with the same uniform
+distribution, so their speeds are comparable. The FTA's naive generator builds
+a generic ranked term, recognizes it with a one-state FTA, then decodes it. There is no
 semantic condition to reject, so that row is the zero-rejection control. The
 ECTA's naive generator creates a raw application at each layer and rejects it
 after independent type inference; its root alternatives are weighted by raw
@@ -1567,8 +1578,9 @@ because it builds a generic term and then recognizes it.
 ### Equality generators: typed integer and Boolean expressions
 
 Each successful ECTA cell draws 20,000 samples. The smaller fixed workload
-keeps depth three measurable while preserving the depth-four rejection
-failure; it is still large enough for stable normalized rates.
+keeps depth three measurable, and the naive generator completes depth four with
+it at 9,897 samples/s. The workload is still large enough for stable normalized
+rates.
 
 | depth | members | engine | first sample | samples/s | alloc/sample | setup mem | retained after 20k |
 | ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -1675,8 +1687,8 @@ The crossover and deep-scaling rows are:
 | 40 | 11,207,052,560,775,737,667,197,734,440 | LTA do | 116.07 ms | 130,377 | 20.1 KB | 3.81 MB | 4.41 MB |
 | 40 | 11,207,052,560,775,737,667,197,734,440 | LTA automaton | 1866.66 ms | 19,747 | 131.2 KB | 78.42 MB | 85.47 MB |
 
-The ordinary bespoke generator wins at very short lengths, but LTA do overtakes
-it after length five. At length 40 the generic relational compiler produces
+LTA do is faster than the ordinary bespoke generator at every length in the
+table. At length 40 the generic relational compiler produces
 130,377 traces/s against 6,825/s, 19x the throughput, and retains 4.41 MB
 instead of 742.60 MB after the fixed workload. Its setup takes 116 ms once,
 and it then reuses the compiled ECTA rank plan instead of rebuilding weighted
@@ -1693,20 +1705,12 @@ Naive rejection times out at length 20 for the 20,000-sample workload. At length
 12 it is already 79x slower than LTA do and allocates 833.7 KB per accepted
 trace.
 
-The first benchmark run made repeated solver work visible: length four took
-6.50 seconds to compile and length five timed out, despite only 115 distinct
-entailment requests among 34,073 requests at length four. Caching exact
-obligations for one compile and checking a generated witness directly, rather
-than first turning it into a singleton automaton, cut length-four setup to 188
-ms and made length five complete in 1.94 seconds.
-
-Replacing the outcome lists with `PlanAp` removed product allocation but did
-not remove the work: the old surface compiler still visited `11^6 = 1,771,561`
-ranks to discover 13,760 valid traces. Retaining the applicative recipe changes
-that algorithm. Children are grouped by only the refinements their parent
-observes; the solver selects live key tuples, and the equality counter counts
-their products without visiting members. The same qualified-do source now
-reaches length 40.
+`compile` caches each entailment obligation for one compilation, and it checks
+a generated witness directly. It groups the children of a constructor by the
+refinements that the guard of the constructor reads. The solver selects the live
+tuples of groups, and the equality counter counts their products without
+visiting their members. So the compiler does not visit the 11^6 = 1,771,561
+candidate traces of length six to find the 13,760 valid ones.
 
 The LTA automaton row samples through the compact plans of the imported
 automaton. At length 40 it draws 19,747 traces/s and allocates 131.2 KB per
@@ -1718,8 +1722,7 @@ optimizations to try.
 
 ### Equality theory cost: ECTA versus LTA
 
-The typed-expression flagship also has a deliberately equivalent liquid
-encoding in
+The typed-expression example also has an equivalent liquid encoding in
 [`Data.CFTA.Gen.Refinement.EqualityTypedExpressionLanguage`](https://github.com/Tritlo/microecta/blob/main/microcfta-generator/common/Data/CFTA/Gen/Refinement/EqualityTypedExpressionLanguage.hs).
 `TInt` is the refinement `v = 0` and `TBool` is `v = 1`. Each application LTA
 contains candidate ground child states, and Z3 retains precisely those whose
@@ -1768,19 +1771,17 @@ Generators are safe to use from any thread. They build automata, and
 `microcfta` interns nodes through process-global tables, which are
 synchronized.
 
-A testing library needs this, because test runners run tests in parallel:
-`tasty` runs independent tests concurrently by default when the test binary is
-linked with `-threaded` and run with `+RTS -N`, and `hspec` does so under
-`parallel`. A property that draws from an `ECTAGen` can run that way even when
-nothing in your code looks concurrent. With `microecta` 0.1.0.0, that gave
-silent corruption, not a crash; see the concurrency note in the `microcfta`
-README.
+Test runners can run properties in parallel, so a property that draws from a
+generator can run on several threads even when your code starts no thread.
+`microecta` 0.1.0.0 did not synchronize its tables, and parallel use gave wrong
+results without an error. The concurrency note in the `microcfta` README gives
+the details.
 
 ## Dependencies
 
 The library depends on `microcfta`, `QuickCheck`, `array`, `containers`,
-`hashable`, `mtl`, and `text`; the benchmarks additionally use `random` and
-`process`. The refinement generator and its tests need `z3` on `PATH`.
+`hashable`, `mtl`, and `text`. The benchmarks also use `random`, `process`, and
+`liquid-fixpoint`. The refinement generator and its tests need `z3` on `PATH`.
 
 ## Build
 

@@ -88,9 +88,8 @@ list.
 Ranks follow the lexicographic order of the symbolic leaves, from left to
 right. Rank 0 of `pixels` is `(Green, 0, True)`. A shrink goes to an earlier
 rank, so it makes the first leaves smaller first. In the size of a member,
-each `every` leaf is one atom of size one, and a constructor pays one, as
-every constructor does. The choice of the point that fills the leaves adds no
-size.
+each `every` leaf is an atom of size one, and each constructor adds one. The
+values that fill the leaves do not change the size.
 
 ## What compile can count
 
@@ -108,9 +107,9 @@ The formula must meet three rules:
    breaks this rule when `x` comes after `y`, and `2 * x .<= 10` never does.
 
 A formula that breaks a rule gives `UncountableIntegers`, and `explain` names
-the rule. A guard form other than a contract or a condition, an equality, and a
-guard that reads below the root of a child with open values give
-`IntegerLeafRead`.
+the rule. `IntegerLeafRead` comes from three other cases: a guard that is not a
+contract or a condition, an equality, and a guard that reads below the root of
+a child with open values.
 
 ## How the counter works
 
