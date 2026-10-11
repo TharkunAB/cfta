@@ -11,7 +11,7 @@ import Data.CFTA.Refinement.LiquidFixpoint (withZ3Assuming)
 
 compileOrFail :: LTAGen.LTAGen a -> IO (LTAGen.LTAGen a)
 compileOrFail generator =
-    withZ3Assuming solverDeclarations solverAssumptions $ \solver ->
+    withZ3Assuming [] solverAssumptions $ \solver ->
         Support.compileOrFail solver generator
 
 spec :: Spec

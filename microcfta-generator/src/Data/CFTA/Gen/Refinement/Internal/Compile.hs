@@ -294,14 +294,11 @@ compileGenOnce compiler requested generator
         Mapped transform inner -> fmap (mapWithKey (const transform)) <$> compileGen compiler requested inner
         Paid inner -> fmap payGrouped <$> compileGen compiler requested inner
         Applied _ _
-            -- A product whose one term comes from one part, such as @elements [2] <* pure ()@,
-            -- answers the requested paths of that part. Another product observes nothing.
-            | not (null requested)
-            , counts <- spineRootCounts generator
-            , all (`elem` [RootCount 0, RootCount 1]) counts
-            , [position] <- [index | (index, RootCount 1) <- zip [0 ..] counts] ->
+            -- A product whose one term comes from one part answers the
+            -- requested paths of that part. Another product observes nothing.
+            | Just position <- oneTermPart requested generator ->
                 fmap (regroupOn (!! position))
-                    <$> compileSpine compiler [if index == position then requested else Set.empty | index <- [0 .. length counts - 1]] generator
+                    <$> compileSpine compiler (partRequirements position requested generator) generator
             | otherwise ->
                 fmap (regroupOn (const noObservations))
                     <$> compileSpine compiler (replicate (fromEnum $ spineArity generator) Set.empty) generator
@@ -328,7 +325,7 @@ compileGenOnce compiler requested generator
     -- and a recursive alternative makes the choice equal.
     uniformWeights groups
         | any recursiveGroup groups = map (const 1) groups
-        | otherwise = map (either (const 1) (countWeight . sum) . sizes) groups
+        | otherwise = map (either (const 1) (countWeight . sum) . cardinalities) groups
 
 -- | The leaf of one integer, refined as itself.
 integerSymbol :: Integer -> Symbol
@@ -354,7 +351,7 @@ recursiveGroup _ = False
 
 -- | Whether a grouped generator has no member.
 emptyGroups :: LTAGrouped key a -> Bool
-emptyGroups grouped = case sizes grouped of
+emptyGroups grouped = case cardinalities grouped of
     Left EmptyGenerator -> True
     Right groups -> all (== 0) groups
     Left _ -> False
@@ -586,8 +583,14 @@ compileOpen compiler requested generator =
                         Integers constraint -> pure $ integerGroup constraint
                         Mapped transform inner -> fmap (mapWithKey (const (transform .))) <$> compileOpen compiler requested inner
                         Paid inner -> fmap payGrouped <$> compileOpen compiler requested inner
-                        Applied _ _ ->
-                            fmap joinPositioned <$> compileOpenSpine compiler (replicate (fromEnum $ spineArity generator) Set.empty) generator
+                        Applied _ _
+                            -- As in 'compileGenOnce', a product whose one term comes from
+                            -- one part answers the requested paths of that part.
+                            | Just position <- oneTermPart requested generator ->
+                                fmap (regroupOn $ \keys -> (joinOpenKeys keys){openObservations = openObservations (keys !! position)})
+                                    <$> compileOpenSpine compiler (partRequirements position requested generator) generator
+                            | otherwise ->
+                                fmap joinPositioned <$> compileOpenSpine compiler (replicate (fromEnum $ spineArity generator) Set.empty) generator
                         Chosen alternatives -> do
                             compiled <-
                                 traverse (\(weight, alternative) -> fmap (weight,) <$> compileOpen compiler requested alternative) alternatives
@@ -628,7 +631,7 @@ compileOpen compiler requested generator =
                         ClosedBy symbolOf constraint child -> compileOpenNode compiler requested (ComputedLabel symbolOf) constraint child
                         _ -> pure $ Left SourceRequiresCompilation
   where
-    members grouped = case sizes grouped of
+    members grouped = case cardinalities grouped of
         Right counts -> countWeight . sum <$> traverse (uncurry pointsOf) (Map.toList counts)
         Left _ -> Right 1
     pointsOf key count = case openPoints key of
@@ -666,22 +669,41 @@ integerGroup constraint = case points [valueName] domain of
 joinPositioned :: LTAGrouped [OpenKey] a -> LTAGrouped OpenKey a
 joinPositioned grouped = regroupOn rekey grouped
   where
-    identity keys = let joined = joinKeys keys in (openCount joined, openFormula joined)
+    identity keys = let joined = joinOpenKeys keys in (openCount joined, openFormula joined)
     positions =
         Map.fromListWith (\_ earlier -> earlier) $
-            zip (map identity $ either (const []) Map.keys $ sizes grouped) [0 :: Int ..]
+            zip (map identity $ either (const []) Map.keys $ cardinalities grouped) [0 :: Int ..]
     rekey keys =
-        let joined = joinKeys keys
+        let joined = joinOpenKeys keys
          in joined{openObservations = (openObservations joined){keyPosition = positions Map.! identity keys}}
 
-    -- The key of a bare applicative spine: no observation, and the variables of its positions joined.
-    joinKeys :: [OpenKey] -> OpenKey
-    joinKeys keys =
-        OpenKey
-            noObservations
-            (sum $ map openCount keys)
-            (foldr (.&&) true $ renamedFormulas keys)
-            (product <$> traverse openPoints keys)
+-- | The key of a bare applicative spine: no observation, and the variables of its positions joined.
+joinOpenKeys :: [OpenKey] -> OpenKey
+joinOpenKeys keys =
+    OpenKey
+        noObservations
+        (sum $ map openCount keys)
+        (foldr (.&&) true $ renamedFormulas keys)
+        (product <$> traverse openPoints keys)
+
+{- | The part of a product whose one term is the term of the product, such as
+the first part of @elements [2] <* pure ()@, when a parent requests paths.
+The other parts give no term.
+-}
+oneTermPart :: Set Path -> LTAGen a -> Maybe Int
+oneTermPart requested generator
+    | null requested = Nothing
+    | all (`elem` [RootCount 0, RootCount 1]) counts
+    , [position] <- [index | (index, RootCount 1) <- zip [0 ..] counts] =
+        Just position
+    | otherwise = Nothing
+  where
+    counts = spineRootCounts generator
+
+-- | The requested paths at one part of a product, and none at the other parts.
+partRequirements :: Int -> Set Path -> LTAGen a -> [Set Path]
+partRequirements position requested generator =
+    [if index == position then requested else Set.empty | index <- [0 .. length (spineRootCounts generator) - 1]]
 
 {- | Count the points of a formula over the given number of open variables. On
 a failure, count again with readable names for the variables, so that the
@@ -713,7 +735,7 @@ childLabel (RefinedSymbol (Symbol constructor) _) childKeys index =
 
 -- | The keys of the groups of a grouped generator.
 openKeys :: LTAGrouped OpenKey a -> [OpenKey]
-openKeys = either (const []) Map.keys . sizes
+openKeys = either (const []) Map.keys . cardinalities
 
 -- | The formula of each group of a tuple, with the variables of the tuple renamed apart.
 renamedFormulas :: [OpenKey] -> [Formula]
@@ -735,7 +757,7 @@ repositionOpen grouped = regroupOn rekey grouped
     identity (_, key) = (keyObservations $ openObservations key, openCount key, openFormula key)
     positions =
         Map.fromListWith (\_ earlier -> earlier) $
-            zip (map identity $ either (const []) Map.keys $ sizes grouped) [0 :: Int ..]
+            zip (map identity $ either (const []) Map.keys $ cardinalities grouped) [0 :: Int ..]
     rekey indexed@(_, key) =
         key{openObservations = (openObservations key){keyPosition = positions Map.! identity indexed}}
 

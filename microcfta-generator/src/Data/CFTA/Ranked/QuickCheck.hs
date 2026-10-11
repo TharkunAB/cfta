@@ -11,8 +11,7 @@ module Data.CFTA.Ranked.QuickCheck (
 ) where
 
 import Data.Array (listArray, (!))
-import Data.List (mapAccumL, sortOn)
-import Data.Ord (Down (Down))
+import Data.List (mapAccumL)
 import qualified Test.QuickCheck as QC
 
 import Data.CFTA.Index (Cardinality (..), Rank (..), Weight (..))
@@ -35,12 +34,12 @@ instance Tree.GenBackend QuickCheckBackend where
     frequencyGen [] =
         error "microcfta-generator bug: no ranked QuickCheck alternative"
     frequencyGen alternatives =
-        let ordered = sortOn (Down . fst) alternatives
-            (total, cumulative) = mapAccumL accumulateWeight 0 ordered
+        let (total, cumulative) = mapAccumL accumulateWeight 0 alternatives
             lastIndex = length cumulative - 1
             table = listArray (0, lastIndex) cumulative
             -- Search for the first alternative whose upper bound is above
-            -- the selected ticket. The upper bounds do not decrease, so a
+            -- the selected ticket. The alternatives keep the order the user
+            -- gave them. The upper bounds do not decrease in any order, so a
             -- binary search finds the alternative that a linear scan finds.
             pick selected low high
                 | low == high = case snd (table ! low) of QuickCheckBackend generated -> generated

@@ -456,7 +456,7 @@ spec = do
                         $ Map.fromListWith
                             (+)
                             [(value, 1) | value <- accepted]
-            ECTAGen.sizes operations
+            ECTAGen.cardinalities operations
                 `shouldBe` Right (Map.fromList [(0 :* 0 :-> 0, 2), (1 :* 0 :-> 1, 1)])
             ECTAGen.pmf (ECTAGen.atKey (0 :* 0 :-> 0) operations)
                 `shouldBe` Right (zip (take 2 centers) [1 % 2, 1 % 2])
@@ -689,7 +689,7 @@ spec = do
                         ]
                 family = ECTAGen.keyed DeclaredUsers source
                 selected = ECTAGen.atKey DeclaredUsers family
-            ECTAGen.sizes family
+            ECTAGen.cardinalities family
                 `shouldBe` Right (Map.singleton DeclaredUsers 3)
             ECTAGen.support selected `shouldBe` ECTAGen.support source
             traverse (ECTAGen.unrank selected) [0 .. 2]
@@ -707,7 +707,7 @@ spec = do
                         [ ECTAGen.keyed DeclaredUsers $ ECTAGen.elements [Alice, Bob]
                         , ECTAGen.keyed OtherUsers $ ECTAGen.elements [Carol]
                         ]
-            ECTAGen.sizes family
+            ECTAGen.cardinalities family
                 `shouldBe` Right (Map.fromList [(DeclaredUsers, 2), (OtherUsers, 1)])
             ECTAGen.pmf (ECTAGen.ungroup family)
                 `shouldBe` Right [(Alice, 1 % 4), (Bob, 1 % 4), (Carol, 1 % 2)]
@@ -715,7 +715,7 @@ spec = do
         it "preserves construction failures and rejects opaque sources" $ do
             let empty = ECTAGen.elements [] :: ECTAGen UserId
                 opaque = ECTAGen.fromGen $ pure Alice
-            ECTAGen.sizes (ECTAGen.keyed DeclaredUsers empty)
+            ECTAGen.cardinalities (ECTAGen.keyed DeclaredUsers empty)
                 `shouldBe` Left ECTAGen.EmptyGenerator
             ECTAGen.smallest empty `shouldBe` Right Nothing
             ECTAGen.countsAtSize (ECTAGen.keyed DeclaredUsers empty) (-1)
@@ -724,7 +724,7 @@ spec = do
                 `shouldBe` Left ECTAGen.EmptyGenerator
             ECTAGen.pmfAtSize empty (-1)
                 `shouldBe` Left ECTAGen.EmptyGenerator
-            ECTAGen.sizes (ECTAGen.keyed DeclaredUsers opaque)
+            ECTAGen.cardinalities (ECTAGen.keyed DeclaredUsers opaque)
                 `shouldBe` Left ECTAGen.CannotInspectOpaqueGenerator
             ECTAGen.smallest opaque
                 `shouldBe` Left ECTAGen.CannotInspectOpaqueGenerator

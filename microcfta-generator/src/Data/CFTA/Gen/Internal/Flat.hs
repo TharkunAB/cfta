@@ -164,7 +164,7 @@ chooseLanguage ::
 chooseLanguage weighted
     | Just badWeight <- firstNonPositiveWeight weighted =
         Transparent $ Left $ NonPositiveWeight badWeight
-    | Just err <- firstError weighted = Transparent $ Left err
+    | failed : _ <- [alternative | (_, alternative) <- weighted, failure alternative] = failed
     | null alternatives = Transparent $ Left EmptyGenerator
     | Just staticAlternatives <- traverse getStatic alternatives =
         Transparent $ Right $ frequencyStatic staticAlternatives
@@ -189,12 +189,11 @@ chooseLanguage weighted
         emptyAlternative (Transparent (Left EmptyGenerator)) = True
         emptyAlternative (Cyclic (Left EmptyGenerator)) = True
         emptyAlternative _ = False
-    firstError = go
-      where
-        go [] = Nothing
-        go ((_, Transparent (Left EmptyGenerator)) : rest) = go rest
-        go ((_, Transparent (Left err)) : _) = Just err
-        go (_ : rest) = go rest
+    -- The first failed alternative, finite or recursive, gives the error and
+    -- whether the failure is recursive. An empty alternative is no failure.
+    failure (Transparent (Left err)) = err /= EmptyGenerator
+    failure (Cyclic (Left err)) = err /= EmptyGenerator
+    failure _ = False
 
     getStatic (weight, Transparent (Right static)) = Just (weight, static)
     getStatic _ = Nothing

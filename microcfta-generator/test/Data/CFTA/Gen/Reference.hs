@@ -609,8 +609,9 @@ frequencyLang :: [(Integer, Lang a)] -> Lang a
 frequencyLang weighted
     | weight : _ <- [weight | (weight, _) <- weighted, weight <= 0] =
         Lang False $ Left $ NonPositiveWeight $ Weight weight
-    | err : _ <- [err | (_, Lang False (Left err)) <- weighted, err /= EmptyGenerator] =
-        Lang False $ Left err
+    -- The first failed alternative gives the error, and whether it is recursive.
+    | (recursive, err) : _ <- [(recursive, err) | (_, Lang recursive (Left err)) <- weighted, err /= EmptyGenerator] =
+        Lang recursive $ Left err
     | null live = Lang False $ Left EmptyGenerator
     | not $ any (langRecursive . snd) live =
         finiteLang $ choiceModel [(fromInteger weight, byCount model', model') | (weight, Lang _ (Right model')) <- live]

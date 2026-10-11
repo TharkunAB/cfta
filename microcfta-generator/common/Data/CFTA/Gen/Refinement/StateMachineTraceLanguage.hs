@@ -42,7 +42,6 @@ module Data.CFTA.Gen.Refinement.StateMachineTraceLanguage (
     encodeState,
     variable,
     stateRefinement,
-    solverDeclarations,
     solverAssumptions,
     tracesOfLength,
     traceAutomaton,
@@ -94,7 +93,6 @@ import Data.CFTA.Refinement.Guard (
     unconstrained,
     withActualFor,
  )
-import qualified Data.CFTA.Symbol as Symbol
 import Data.List (elemIndex)
 
 -- | Ground value types shared with the typed-expression example.
@@ -162,13 +160,6 @@ encodeState (StackState types) = foldr encodeType 0 types
 -- | Give one stack state an exact symbolic refinement.
 stateRefinement :: StackState -> Formula
 stateRefinement state = refinementFormula (.== variable (stateName state))
-
--- | Integer symbols that can occur in a stack-machine solver query.
-solverDeclarations :: [(Fixpoint.Symbol, Fixpoint.Sort)]
-solverDeclarations =
-    [ (Fixpoint.symbol name, Fixpoint.FInt)
-    | name <- [Symbol.valueName, "model", "start", "step"] <> map stateName stackStates
-    ]
 
 -- | Facts assigning each finite stack shape its compact integer encoding.
 solverAssumptions :: [Formula]

@@ -5,7 +5,7 @@ import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.TestSupport (values)
-import Data.CFTA.Gen.Refinement.TypedExpressionLanguage (nonNegative, solverDeclarations)
+import Data.CFTA.Gen.Refinement.TypedExpressionLanguage (nonNegative)
 import Data.CFTA.Refinement.Expression (true, (./=), (.==), (.>), (.>=))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 
@@ -17,7 +17,7 @@ data Candidate = Candidate
 
 compileMinimized :: [LTAGen.Refined Candidate] -> IO [Candidate]
 compileMinimized entries =
-    withZ3 solverDeclarations $ \solver -> do
+    withZ3 [] $ \solver -> do
         minimized <- LTAGen.minimizePoolOn solver similarityClass entries
         case minimized of
             Left err -> expectationFailure (show err) >> pure []

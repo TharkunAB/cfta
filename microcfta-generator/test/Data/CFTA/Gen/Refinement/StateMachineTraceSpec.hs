@@ -17,13 +17,13 @@ import Data.CFTA.Refinement.LiquidFixpoint (withZ3Assuming)
 -- | Compile one trace language with the symbolic model environment.
 compileOrFail :: LTAGen.LTAGen a -> IO (LTAGen.LTAGen a)
 compileOrFail generator =
-    withZ3Assuming solverDeclarations solverAssumptions $ \solver ->
+    withZ3Assuming [] solverAssumptions $ \solver ->
         Support.compileOrFail solver generator
 
 -- | Compile the automaton-level flagship path with the symbolic model.
 compileTraceOrFail :: Int -> IO (LTAGen.LTAGen Trace)
 compileTraceOrFail traceLength =
-    withZ3Assuming solverDeclarations solverAssumptions $ \solver -> do
+    withZ3Assuming [] solverAssumptions $ \solver -> do
         compileTracesOfLength solver traceLength >>= Support.rightOrFail
 
 spec :: Spec
@@ -63,7 +63,7 @@ spec =
             shrunk `shouldSatisfy` all traceIsValid
 
         it "compiles the hand-built trace automaton to the same language" $
-            withZ3Assuming solverDeclarations solverAssumptions $ \solver -> do
+            withZ3Assuming [] solverAssumptions $ \solver -> do
                 automaton <- compileTraceAutomaton solver 4 >>= Support.rightOrFail
                 surface <- compileTracesOfLength solver 4 >>= Support.rightOrFail
                 LTAGen.cardinality automaton `shouldBe` LTAGen.cardinality surface

@@ -294,7 +294,7 @@ known key. `keyed` does not enumerate members, so it also accepts a recursive
 transparent generator, and the caller must declare the correct key. Grouped
 generators support ordinary `fmap`, and `mapWithKey` when the function also
 needs the key. `regroupOn` changes the classification without enumerating
-values, `sizes` returns the stored cardinality of every group, and `atKey`
+values, `cardinalities` returns the stored cardinality of every group, and `atKey`
 selects one group as an ordinary conditional generator.
 
 A `Sig` classifies an operation of any arity. It has the form of a many-sorted
@@ -767,7 +767,7 @@ For the language above, unfolding that automaton twice accepts exactly the 46
 expressions produced by the hand-unrolled depth-one generator. This includes
 unary `Not`, the binary functions, and ternary `IfExpression`. `ungroup` and
 `atKey` are the exits back to an ordinary recursive generator, so bounding,
-sampling, replay, and shrinking all work as above. `sizes` has no cardinality
+sampling, replay, and shrinking all work as above. `cardinalities` has no cardinality
 to report for a recursive family; use `countAtSize` on `atKey`.
 
 `fromAutomaton` goes the other way: it reads an existing automaton as a generator
@@ -1435,7 +1435,7 @@ draws a buffer with ``allBuffers `satisfying` (\v -> v .>= 1)``, so it can prove
 the appended buffer non-empty. The property itself needs no precondition:
 
 ```haskell
-withZ3Assuming solverDeclarations solverAssumptions $ \solver -> do
+withZ3Assuming [] solverAssumptions $ \solver -> do
   Right compiled <- LTAGen.compileWith solver safePrograms
   quickCheck $ LTAGen.forAll compiled $ \program ->
     programIsSafe program && safeResult program == Just (runProgram program)

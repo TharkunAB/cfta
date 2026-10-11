@@ -98,7 +98,7 @@ module Data.CFTA.Gen (
     support,
     cardinality,
     values,
-    sizes,
+    cardinalities,
     countsAtSize,
     massesAtSize,
     countAtSize,
