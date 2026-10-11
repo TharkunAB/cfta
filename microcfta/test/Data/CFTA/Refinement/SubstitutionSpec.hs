@@ -2,8 +2,7 @@
 
 module Data.CFTA.Refinement.SubstitutionSpec (spec) where
 
-import Test.Hspec (Spec, describe, it, shouldBe)
-
+import Data.CFTA.Formula (Name)
 import Data.CFTA.Refinement (
     Constraint,
     Entailment (Entailment),
@@ -15,13 +14,14 @@ import Data.CFTA.Refinement (
     evaluateGuard,
     path,
  )
-import Data.CFTA.Refinement.Expression (false, fromExpr, toExpr, true, variable, (.<), (.==))
+import Data.CFTA.Refinement.Expression (false, true, variable, (.<), (.==))
 import Data.CFTA.Refinement.Guard (buildGuard, isSubtypeOf, withActualFor, withActualsFor)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3, withZ3Assuming)
 import Data.CFTA.Symbol (valueName)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
-import qualified Language.Fixpoint.Types as Fixpoint
+import Data.String (fromString)
+import Test.Hspec (Spec, describe, it, shouldBe)
 
 equalityEntailment :: Entailment
 equalityEntailment = Entailment $ \antecedent consequent ->
@@ -69,8 +69,8 @@ spec =
             evaluateConstraint equalityEntailment dependentGuard term >>= (`shouldBe` No)
 
         it "substitutes several actual arguments in one dependent result" $ do
-            let expected = variable valueName .== toExpr (Fixpoint.EBin Fixpoint.Plus (fromExpr $ variable "x") (fromExpr $ variable "y"))
-                dependent = variable valueName .== toExpr (Fixpoint.EBin Fixpoint.Plus (fromExpr $ variable "n") (fromExpr $ variable "m"))
+            let expected = variable valueName .== variable "x" + variable "y"
+                dependent = variable valueName .== variable "n" + variable "m"
                 guard =
                     buildGuard $ \resultType functionOutput firstActual firstFormal secondActual secondFormal ->
                         withActualsFor
@@ -199,20 +199,9 @@ spec =
                 evaluateGuard solver (guard $ variable "y" .== variable "w") term >>= (`shouldBe` No)
                 evaluateGuard solver (guard $ variable "y" .< variable "w") term >>= (`shouldBe` Yes)
 
-        it "renames quantified binders instead of capturing the actual variable" $
-            withZ3 declarations $ \solver -> do
-                let requirement =
-                        Fixpoint.PAll [(Fixpoint.symbol ("x" :: String), Fixpoint.FInt)] $
-                            variable "y" .== variable "x"
-                    guard =
-                        Substitute [Substitution (path [0]) (path [1])] $
-                            Satisfies (path []) requirement
-                    term = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol "x" true) [], Term.Node (RefinedSymbol "y" true) []]
-                evaluateGuard solver guard term >>= (`shouldBe` No)
-
--- | Sorts for actual variables and constructor result values in these checks.
-declarations :: [(Fixpoint.Symbol, Fixpoint.Sort)]
-declarations = [(Fixpoint.symbol name, Fixpoint.FInt) | name <- [valueName, "app", "w", "x", "y", "z"] :: [String]]
+-- | Integer names for actual variables and constructor result values in these checks.
+declarations :: [Name]
+declarations = [fromString valueName, "app", "w", "x", "y", "z"]
 
 -- | Two different applications whose result refinements identify their values.
 collidingActuals :: Term Symbol

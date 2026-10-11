@@ -2,9 +2,6 @@
 
 module Data.CFTA.Refinement.MinimizeSpec (spec) where
 
-import qualified Data.Set as Set
-import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList, shouldSatisfy)
-
 import Data.CFTA.Refinement (
     Automaton,
     Entailment,
@@ -42,7 +39,8 @@ import Data.CFTA.Refinement.Lattice (latticeEntailment)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Refinement.TestSupport (declarations)
 import qualified Data.CFTA.Term as Term
-import qualified Language.Fixpoint.Types as Fixpoint
+import qualified Data.Set as Set
+import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList, shouldSatisfy)
 
 spec :: Spec
 spec =
@@ -65,7 +63,7 @@ spec =
                     Right related -> do
                         let changed =
                                 nodeMapChildren
-                                    (\edge -> mkEdge (transitionLabel edge) [] (semanticConstraint $ Satisfies (path []) Fixpoint.PTrue))
+                                    (\edge -> mkEdge (transitionLabel edge) [] (semanticConstraint $ Satisfies (path []) true))
                                     similarAtoms
                         minimize changed related `shouldBe` Left StaleSimilarity
 
@@ -91,7 +89,7 @@ spec =
                     Left err -> expectationFailure $ show err
                     Right reduced -> do
                         map edgeChildren (nodeEdges reduced) `shouldMatchList` [[naturalNode], [naturalNode]]
-                        automatonAlphabet reduced `shouldSatisfy` Set.notMember (RefinedSymbol "unknown" Fixpoint.PTrue)
+                        automatonAlphabet reduced `shouldSatisfy` Set.notMember (RefinedSymbol "unknown" true)
 
         it "keeps unrelated alternatives at a removed transition's target" $
             withZ3 declarations $ \solver ->
@@ -132,7 +130,7 @@ spec =
                 checkMinimization (atomSubtyping solver) finalStateWithAlternative $ \reduced -> do
                     reduced `shouldBe` Node [otherAtom]
                     denotationAtMost solver 0 reduced
-                        >>= (`shouldBe` Right [Term.Node (RefinedSymbol "other" Fixpoint.PTrue) []])
+                        >>= (`shouldBe` Right [Term.Node (RefinedSymbol "other" true) []])
 
         it "allows multiple representatives for one target and substitutes repeated nodes together" $
             withZ3 declarations $ \solver ->
@@ -156,7 +154,7 @@ spec =
             withZ3 declarations $ \solver ->
                 checkMinimization (twoClassSubtyping solver) copiedSupertype $ \reduced -> do
                     [edgeChildren edge | edge <- nodeEdges reduced, transitionSymbol edge == "goal"]
-                        `shouldMatchList` [[Node [Transition "unknown-b" Fixpoint.PTrue [specificANode] noConstraint]], [specificBNode]]
+                        `shouldMatchList` [[Node [Transition "unknown-b" true [specificANode] noConstraint]], [specificBNode]]
                     denotationAtMost solver 2 reduced >>= (\terms -> fmap length terms `shouldBe` Right 4)
 
         it "applies M-Trans transitively over one similarity snapshot" $
@@ -252,11 +250,11 @@ twoClassSubtyping solver = refinementSubtypingOn solver classify
 
 -- | An unrefined, unconstrained leaf transition.
 plain :: Symbol -> Transition
-plain symbol = Transition symbol Fixpoint.PTrue [] noConstraint
+plain symbol = Transition symbol true [] noConstraint
 
 -- | An unrefined constructor with no constraint.
 wrap :: Symbol -> [Automaton] -> Transition
-wrap symbol children = Transition symbol Fixpoint.PTrue children noConstraint
+wrap symbol children = Transition symbol true children noConstraint
 
 unknownAtom, naturalAtom, otherAtom, specificAtom :: Transition
 unknownAtom = plain "unknown"
@@ -332,7 +330,7 @@ copiedSupertype =
 cyclicGuardRepresentative :: Automaton
 cyclicGuardRepresentative =
     Node
-        [ Transition "goal" Fixpoint.PTrue [Node [unknownAtom]] $ semanticConstraint $ Satisfies (path [0]) Fixpoint.PTrue
+        [ Transition "goal" true [Node [unknownAtom]] $ semanticConstraint $ Satisfies (path [0]) true
         , wrap "use" [recursiveNatural]
         ]
   where
