@@ -14,8 +14,22 @@ lookups and the link to the concrete array worker. `union_terminates_exact`
 derives finite termination and exact class changes. `initial_array` proves the
 source singleton initialization has this representation.
 
+`EqualityArray` verifies the caller. `classPairs_exact` proves the source's
+first-member star represents the whole class. `mergePairs_correct` composes
+all unions. `readAll_correct` proves representative readback preserves the
+partition and records exactly the requested members. `grouped_partition`
+proves the root buckets represent that partition. `complete_connected`
+derives the exact independent connected relation. `complete_groups_exact`
+retains exactly all original assignment equations.
+
+`mergeArrays_refines` and `readArrays_refines` compose actual array operations.
+`complete_terminates_exact` derives finite bounds for the whole algorithm and
+its exact output equations. No caller-level connected-component property is
+assumed. Group ordering has no effect on these equations.
+
 The functional array model specifies source reads and writes. Physical
 `STUArray` storage and machine bounds remain representation contracts. The
-complete class-iteration and output-grouping loop still requires a caller
-proof. The primitive array proof does not assume that loop computes the
-connected components.
+path-to-index map, inverse path lookup, canonical output ordering, and their
+composition with the saturation loop remain source adapters. The existing
+`EqualityNormalize.complete_matches_partition` states the canonical
+connected-partition uniqueness property needed by that final composition.
