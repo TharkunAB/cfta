@@ -33,7 +33,7 @@ import qualified Data.Set as Set
 import qualified Data.Tree as Tree
 
 import Data.CFTA.Index (ChildIndex (..), Depth (..), TransitionIndex (..))
-import Data.CFTA.Term (Term, arity, childAt, rootLabel, pattern Node)
+import Data.CFTA.Term (Term (Leaf, One, Three, Two), arity, childAt, rootLabel, pattern Node)
 
 {- | A root-relative location in a tree view.
 
@@ -171,14 +171,10 @@ termLevelsBy rows root
       where
         deeper =
             fmap
-                (\outgoing -> dedup [Node symbol children | (symbol, childKeys@(_ : _)) <- outgoing, children <- deepest childKeys])
+                ( \outgoing ->
+                    dedup [term | (symbol, childKeys@(_ : _)) <- outgoing, term <- deepestTerms current atMost shallower symbol childKeys]
+                )
                 table
-        -- Child lists whose deepest child has exactly the current depth. The
-        -- first child at that depth is fixed, so no list is produced twice.
-        deepest [] = []
-        deepest (key : keys) =
-            [child : rest | child <- current Map.! key, rest <- traverse (atMost Map.!) keys]
-                <> [child : rest | rest <- deepest keys, child <- shallower Map.! key]
 
 {- | The terms of depth at most the bound that a check accepts, from rows.
 
@@ -199,27 +195,46 @@ termsUpToBy ::
 termsUpToBy symbolOf childrenOf accept rows bound root
     | bound < 0 || Map.notMember root table = pure []
     | otherwise = do
-        leaves <- level (\keys -> [[] | null keys])
+        leaves <- level (\symbol keys -> [Leaf symbol | null keys])
         collect 1 (leaves, leaves, fmap (const []) table) (Sequence.singleton $ leaves Map.! root)
   where
     table = trimRows childrenOf rows root
     dedup = dedupUnless (all (distinctSymbols . map symbolOf) table)
 
-    level combos = Map.traverseWithKey (\key outgoing -> dedup . concat <$> traverse (candidates key) outgoing) table
+    level terms = Map.traverseWithKey (\key outgoing -> dedup . concat <$> traverse (candidates key) outgoing) table
       where
         candidates key alternative =
-            filterM (accept key alternative) [Node (symbolOf alternative) children | children <- combos (childrenOf alternative)]
+            filterM (accept key alternative) (terms (symbolOf alternative) (childrenOf alternative))
 
     collect depth (current, atMost, shallower) collected
         | depth > bound || all null current = pure (concat collected)
         | otherwise = do
-            deeper <- level (\keys -> if null keys then [] else deepest keys)
+            deeper <- level (deepestTerms current atMost shallower)
             collect (depth + 1) (deeper, Map.unionWith (++) deeper atMost, atMost) (collected :|> deeper Map.! root)
-      where
-        deepest [] = []
-        deepest (key : keys) =
-            [child : rest | child <- current Map.! key, rest <- traverse (atMost Map.!) keys]
-                <> [child : rest | rest <- deepest keys, child <- shallower Map.! key]
+
+{- | The terms of a symbol whose deepest child has exactly the current depth.
+The maps give the terms of each key of exactly the current depth, of at most
+that depth, and of at most the depth before it. The first child at the
+current depth is fixed, so no term comes twice. A term with up to three
+children is built without a list of children. No keys give no terms.
+-}
+deepestTerms ::
+    (Ord key) => Map key [Term symbol] -> Map key [Term symbol] -> Map key [Term symbol] -> symbol -> [key] -> [Term symbol]
+deepestTerms current atMost shallower symbol keys = case keys of
+    [first] -> [One symbol a | a <- current Map.! first]
+    [first, second] ->
+        [Two symbol a b | a <- current Map.! first, b <- atMost Map.! second]
+            <> [Two symbol a b | b <- current Map.! second, a <- shallower Map.! first]
+    [first, second, third] ->
+        [Three symbol a b c | a <- current Map.! first, b <- atMost Map.! second, c <- atMost Map.! third]
+            <> [Three symbol a b c | b <- current Map.! second, c <- atMost Map.! third, a <- shallower Map.! first]
+            <> [Three symbol a b c | c <- current Map.! third, b <- shallower Map.! second, a <- shallower Map.! first]
+    _ -> map (Node symbol) (childLists keys)
+  where
+    childLists [] = []
+    childLists (key : rest) =
+        [child : others | child <- current Map.! key, others <- traverse (atMost Map.!) rest]
+            <> [child : others | others <- childLists rest, child <- shallower Map.! key]
 
 {- | Whether alternatives carry pairwise distinct symbols. Then no two of
 them build the same term, so a level built from deduplicated levels has no

@@ -6,10 +6,11 @@ A leaf and a term with one, two, or three children hold their children in
 constructor fields, and a term with four or more children holds them in a
 'Seq'. A path reads a subterm with one field read or one 'Seq.lookup' for
 each child index. A term with @n@ children holds them at the indexes @0@ to
-@n - 1@. The other modules build terms through 'Node' and 'fromAssocs', and
-read children through 'child', 'childAt', 'subForest', and 'arity'. The
-module does not export the constructors, so that only this module depends on
-the representation.
+@n - 1@. Most modules build terms through 'Node', 'fromAssocs', and
+'traverseNode', and read children through 'child', 'childAt', 'subForest',
+and 'arity'. Code that builds terms of a known arity in a hot loop uses the
+constructors directly, so that no list of children is built. 'Many' must hold
+four or more children.
 
 The 'Ord' and 'Hashable' instances agree with the instances of
 'Tree.Tree' on the same term: 'Ord' compares the symbol, then the children in
@@ -19,7 +20,7 @@ number. So a set or a hash set of terms keeps the order it had with
 equality of the symbol and the child lists.
 -}
 module Data.CFTA.Term (
-    Term (Node),
+    Term (Leaf, One, Two, Three, Many, Node),
     rootLabel,
     subForest,
     arity,
@@ -27,6 +28,7 @@ module Data.CFTA.Term (
     childAt,
     adjustChild,
     fromAssocs,
+    traverseNode,
     flatten,
     foldTree,
     fromRoseTree,
@@ -188,6 +190,18 @@ fromAssocs symbol size assocs = case assocs of
     [(_, third), (_, second), (_, first)] -> Three symbol first second third
     _ ->
         Many symbol $ foldl' (\children (index, term) -> Seq.update index term children) (Seq.replicate size unfilled) assocs
+
+{- | The term of a symbol and of an action on each child, run from left to
+right. A term with up to three children gets them without a list.
+-}
+traverseNode :: (Applicative f) => (child -> f (Term symbol)) -> symbol -> [child] -> f (Term symbol)
+traverseNode f symbol children = case children of
+    [] -> pure $ Leaf symbol
+    [first] -> One symbol <$> f first
+    [first, second] -> Two symbol <$> f first <*> f second
+    [first, second, third] -> Three symbol <$> f first <*> f second <*> f third
+    _ -> Many symbol . Seq.fromList <$> traverse f children
+{-# INLINE traverseNode #-}
 
 -- | The symbols of a term in preorder, as 'Tree.flatten' gives them.
 flatten :: Term symbol -> [symbol]

@@ -643,7 +643,7 @@ been decided.
 -}
 expandPartialTermFrag :: TermFragment symbol -> EnumerateM symbol (Term (PartialSymbol symbol))
 expandPartialTermFrag (TermFragmentNode symbol children) =
-    Term.Node (ConcreteSymbol symbol) <$> mapM expandPartialTermFrag children
+    Term.traverseNode expandPartialTermFrag (ConcreteSymbol symbol) children
 expandPartialTermFrag (TermFragmentUVar uv) = do
     value <- getUVarValue uv
     case value of
@@ -655,7 +655,7 @@ expandPartialTermFrag (TermFragmentUVar uv) = do
 expandTermFragWith :: symbol -> TermFragment symbol -> EnumerateM symbol (Term symbol)
 expandTermFragWith recursionSymbol = go
   where
-    go (TermFragmentNode s ts) = Term.Node s <$> mapM go ts
+    go (TermFragmentNode s ts) = Term.traverseNode go s ts
     go (TermFragmentUVar uv) = do
         val <- getUVarValue uv
         case val of
