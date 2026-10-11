@@ -463,7 +463,10 @@ selectAt order interpret root position rank = do
             pure (State.evalState (selectUniqueAt order interpret local EmptyPath) counts, root, rank)
         else choose rank $ constructorsAt order position root
   where
-    choose _ [] = error "symbolicRanked: rank outside the retained language"
+    choose _ [] =
+        error
+            "microcfta-generator bug in Data.CFTA.Gen.Internal.Symbolic.selectAt: \
+            \a rank outside the language"
     choose remaining (constructor@(symbol, arity) : rest) = do
         let restricted = condition position constructor root
         Cardinality count <- countNode interpret restricted
@@ -529,7 +532,10 @@ selectUniqueAt ::
     State.State (Counts symbol) (Tree.Tree symbol)
 selectUniqueAt order interpret root position = choose $ constructorsAt order position root
   where
-    choose [] = error "symbolicRanked: empty singleton language"
+    choose [] =
+        error
+            "microcfta-generator bug in Data.CFTA.Gen.Internal.Symbolic.selectUniqueAt: \
+            \a language with one member has no constructor"
     choose (constructor@(symbol, arity) : rest) = do
         count <- countNode interpret $ condition position constructor root
         if count == 0

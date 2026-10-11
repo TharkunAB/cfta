@@ -394,8 +394,9 @@ contract of a parent and a condition from 'satisfying' read the measure. A
 measure does not change the generated value.
 
 Each child that the measure names must have a measure of its own: a
-refinement that fixes one integer, as 'elements' and 'leaf' give, an integer
-from 'every', or a constructor from 'measured' or 'measuredNode'. The measure
+refinement that fixes one integer, as 'elements' gives, or a 'leaf' or 'pool'
+entry whose refinement is an equality such as @(.== 0)@; an integer from
+'every'; or a constructor from 'measured' or 'measuredNode'. The measure
 of children from 'every' stays a term of their integers, so a parent's
 contract relates it without enumerating them. A child without a measure makes
 'compile' report 'InexactMeasure'. The contract and the measure must each take

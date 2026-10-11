@@ -2,10 +2,10 @@
 
 {- | The symbols of a generator's support graph.
 
-The equality engine builds its support over the user's symbols and over
-private labels of its own: the applicative spine, choices, source indexes,
-joins, keys, and recursive families. 'Label' keeps the two apart in one
-symbol type, so a support cannot collide with a user symbol and the engine
+The generator engine builds its support from the symbols of the user and
+from private labels: the applicative spine, choices, source indexes, joins,
+keys, and recursive families. 'Label' keeps the two kinds apart in one symbol
+type. So no private label can be equal to a user symbol, and the engine
 reserves no names.
 -}
 module Data.CFTA.Gen.Label (

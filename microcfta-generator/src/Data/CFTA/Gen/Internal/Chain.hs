@@ -12,10 +12,10 @@ module Data.CFTA.Gen.Internal.Chain (
     ArgStatics,
     lookupArgs,
     mapChain,
-    chainMass,
 
     -- * Finite chains
     chainLength,
+    chainMass,
     chainSupports,
     chainInspections,
     chainRootCounts,
@@ -27,9 +27,9 @@ module Data.CFTA.Gen.Internal.Chain (
     selectChain,
     chainRanks,
     joinKeysMatch,
-    recursiveChainTerms,
 
     -- * Recursive chains
+    recursiveChainTerms,
     recursiveSupports,
     recursiveInspections,
     recursiveChainIndex,

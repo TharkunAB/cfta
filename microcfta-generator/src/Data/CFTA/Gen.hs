@@ -1,12 +1,13 @@
 {- | Generators over constrained tree automata.
 
-A generator is a language of values whose support is an interned automaton
-with edges of type @symbol@. Every edge carries a
-'Data.CFTA.Constraint.Constraint': none for an ordinary tree automaton,
-equalities between child paths for an equality automaton, and guards that a
-solver decides for a liquid automaton. Every value stands for a term the
-automaton accepts, so the language is counted, replayed by rank, sampled, and
-shrunk exactly.
+A generator is a language of values. Its support is an interned automaton
+with edges of type @symbol@. Each edge carries a
+'Data.CFTA.Constraint.Constraint': no constraint for an ordinary tree
+automaton, equalities between child paths for an equality automaton, and
+guards that a solver decides for a liquid automaton. Each value of an
+inspectable generator is a term that the automaton accepts. So the generator
+can count its language, decode a value from its rank, sample, and shrink
+exactly.
 
 An ordinary generator, one over a plain tree automaton, is 'FTAGen';
 "Data.CFTA.Gen.Equality" and "Data.CFTA.Gen.Refinement" fix the other two
@@ -211,15 +212,18 @@ fromAutomatonUpToDepth = Flat.fromAutomatonUpToDepth id
 {- | Read a datatype grammar as a generator of its values.
 
 The generator is recursive when the datatype is, and finite otherwise. The
-value and its constructor term share one rank, and the codec runs only when a
-selected value is demanded. Ranks order the constructors of a type by arity,
-then in declaration order, and atomic literals in domain order. The derived
+value and its constructor term share one rank. A member is decoded only when
+its value is demanded. Ranks order the constructors of a type by arity, then
+in declaration order, and atomic literals in domain order. The derived
 grammar keeps its rows in that order, and a label is in the row of its own type
 only.
 
-The generator decodes one term per constructor when it is built. If the codec
-rejects one, the generator fails with 'UndecodableConstructor'. This happens
-for an atomic literal whose 'Show' text 'Read' does not accept.
+When the generator is built, it decodes one term for each constructor. If the
+codec rejects one, the generator fails with 'UndecodableConstructor'. This
+happens for an atomic literal whose 'Show' text 'Read' does not accept.
+
+A recursive datatype with an annotated constructor fails with
+'CannotCountConstrainedEdges'. Use 'fromDatatypeUpToDepth' for it.
 -}
 fromDatatype :: TypedFTA Constraint a -> Gen Symbol a
 fromDatatype datatype = importDatatype datatype Flat.fromAutomaton

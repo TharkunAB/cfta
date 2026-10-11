@@ -265,11 +265,11 @@ data TraceNodeKey
     | PostNode !Int
     deriving (Eq, Ord)
 
-{- | Compile one exact trace surface language as relational ECTA joins.
+{- | Compile 'tracesOfLength' for one length.
 
-Z3 decides compatibility once per live tuple of prefix and command groups.
-Dynamic counting and unranking stay in the ECTA generator layer; complete
-traces are not visited during compilation.
+Z3 decides each step once for each tuple of a prefix group and a command
+group that has members. The compiled generator counts and unranks the
+traces. Compilation does not visit complete traces.
 -}
 compileTracesOfLength ::
     Entailment ->
@@ -582,8 +582,8 @@ stateForRefinement refinement =
 
 The previous trace root is both the selected input state and the actual value
 substituted for the command's formal @model@. The command's post-state formula
-must then imply the new trace root. The constructor call has no numeric
-child indices.
+must then imply the new trace root. The guard takes the two child paths as
+arguments, so 'refinedNodeByRoots' and a 'Transition' can both use it.
 -}
 validStep :: Path -> Path -> Constraint
 validStep previous command =

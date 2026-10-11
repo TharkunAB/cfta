@@ -353,7 +353,9 @@ explain ConditionNeedsConstructor =
         [ "A condition applies to the root constructor of each term, and this"
         , "generator does not end in one: it is a product, pure, a recursive"
         , "language, an opaque source, or a source without symbols, such as"
-        , "fromIndexed, freeze, a join, upToSize, or a compiled generator."
+        , "fromIndexed or freeze. A language that the engine already built, such"
+        , "as a join, upToSize, or a compiled generator, has no root constructor"
+        , "that a condition can reach either."
         , "Fix: put the condition on a pool, a leaf, or a node, or state it as the"
         , "contract of the enclosing guarded node."
         ]

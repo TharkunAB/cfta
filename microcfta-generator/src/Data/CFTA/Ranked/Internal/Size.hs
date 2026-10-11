@@ -811,7 +811,7 @@ productSplitInt indexF indexX size = go $ takeWhile ((<= size) . fst) (sizeClass
         block = fromInteger functionCount * argumentCount
 
 {- | Add two sparse series of values by size, merging their sizes. Each series
-lists the sizes with a nonzero value, in ascending order.
+lists sizes in ascending order. A value can be zero.
 -}
 addSparse :: (Num value) => [(Size, value)] -> [(Size, value)] -> [(Size, value)]
 addSparse [] right = right

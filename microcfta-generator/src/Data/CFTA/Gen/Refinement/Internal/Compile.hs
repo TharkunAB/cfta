@@ -183,9 +183,10 @@ several children, and a choice of @pure@ values gives none. A built language
 gives the number that its members give, which 'staticRootCount' keeps: a
 source without symbols, such as 'fromIndexed' and the pools of @freeze@ and
 @samplePool@, gives none, and a join gives one for each side. A language
-without members gives one, so that it does not refuse a guard. The result is
-'NoCommonCount' when two members give different numbers, and for a recursive
-or opaque built language, whose number is not known.
+without members, or a language that failed to build, gives one, so that the
+guard does not report the failure first. The result is 'NoCommonCount' when
+two members give different numbers, and for a recursive or opaque built
+language, whose number is not known.
 -}
 rootCount :: Gen symbol a -> RootCount
 rootCount generator = case genRecipe generator of

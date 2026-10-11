@@ -54,10 +54,11 @@ data Plan a where
     changes sizes only, so the decoder does not see it.
     -}
     PlanPay :: Plan a -> Plan a
-    {- | A leaf whose decoder must remain on demand even when it is small.
+    {- | A leaf that the decoder does not tabulate, even when it is small.
 
-    Automaton enumerators use this so compiling a rank plan never constructs
-    accepted terms merely to fill the ordinary small-leaf lookup table.
+    A tabulated leaf keeps each decoded member for as long as the decoder
+    lives. Automaton imports use this leaf, so the decoder does not keep
+    the accepted terms that it decodes.
     -}
     PlanSelectOnDemand :: !Cardinality -> (Rank -> a) -> Plan a
     {- | A shared subplan with its cardinality, its compiled decoder, and its
@@ -84,8 +85,10 @@ data Plan a where
     'PlanSized' does not check that the sizes ascend. Its producers keep them
     ascending. The bounded recursive language builds the classes with
     @sizeClasses@, which gives strictly ascending sizes. The @share@ of the
-    ranked layer gives a language with one member as one class. So ranks are
-    size-major, and a smaller rank never decodes to a larger member.
+    ranked layer gives a language with one member as one class. A point
+    choice of the static layer gives its members as one class of size zero.
+    So ranks are size-major, and a smaller rank never decodes to a larger
+    member.
     A bounded size-indexed generator lowers to this plan. The other
     constructors retain their mixed-radix order.
     -}

@@ -1,36 +1,33 @@
-{- | Backend-independent finite ranked generators.
+{- | Finite languages with stable ranks, independent of the sampling backend.
 
-This is the layer below the automaton adapters. A language is compiled once
-into stable ranks; sampling, replay, and shrinking then require no knowledge
-of the support automaton or its constraint theory.
+The generator layers of this package build on this module. A language is
+compiled once. Then 'unrank', sampling, and shrinking read the compiled
+language and not the automaton that it came from.
 
-The types are defined in "Data.CFTA.Ranked.Internal"; in short:
-
-* t'Indexed' describes a finite source by its cardinality and a decoder from a
+* t'Indexed' is a finite source: a cardinality and a decoder from a
   zero-based rank. "Data.CFTA.Index" defines t'Data.CFTA.Index.Rank' and
   t'Data.CFTA.Index.Cardinality'.
 
-* t'WeightedIndexed' separates replay ranks from sampling tickets: a
-  cardinality, a total ticket weight, a decoder from a rank, and a map from a
-  ticket to its rank. Every rank must receive at least one ticket.
+* t'WeightedIndexed' is a weighted finite source. It has a cardinality, a
+  total weight, a decoder from a rank, and a map from a ticket to a rank.
+  Each rank must have at least one ticket.
 
-* t'RankedError' reports an empty language, a non-positive weight, a total
+* t'RankedError' reports an empty language, a weight below one, a total
   weight below the cardinality, a negative rank, or a rank outside the
   language.
 
-* t'GenBackend' is what a sampling backend provides: selecting a rank below a
-  cardinality or a machine 'Int' below a bound, and weighted choice among
-  backend generators.
+* t'GenBackend' is a sampling backend. It selects a rank below a
+  cardinality, an 'Int' below a bound, one of several weighted generators,
+  and one of several weighted values.
 
-* t'Ranked' is a compiled language; it is abstract here and has 'Functor' and
-  'Applicative' instances.
+* t'Ranked' is a compiled language. This module does not export its
+  constructor. It has 'Functor' and 'Applicative' instances.
 
-* t'RankedValue' is a value with its rank, as 'lowerWithRank' and
-  'smallerMembers' give it.
+* t'RankedValue' is a value with its rank. 'lowerWithRank' and
+  'smallerMembers' give these.
 
-The functions below are the public contracts. Their implementations live in
-"Data.CFTA.Ranked.Internal", which the generator layers of this package use
-directly.
+The implementations are in "Data.CFTA.Ranked.Internal". The generator layers
+of this package use that module directly.
 -}
 module Data.CFTA.Ranked (
     Indexed (..),
@@ -73,11 +70,11 @@ values do not change.
 pay :: Ranked a -> Ranked a
 pay = Internal.pay
 
-{- | Build a ranked language whose members are decoded only when selected.
+{- | Build a ranked language that decodes a member each time a caller reads it.
 
-Unlike 'fromIndexed', small sources are not tabulated while the rank decoder
-is compiled. Automaton adapters use this to keep term materialization at the
-enumeration boundary.
+'fromIndexed' tabulates a source of at most 4096 members, so the decoder
+keeps each member that it decodes. This function does not tabulate.
+Automaton imports use it.
 -}
 fromIndexedOnDemand :: Indexed a -> Either RankedError (Ranked a)
 fromIndexedOnDemand = Internal.fromIndexedOnDemand

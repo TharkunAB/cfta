@@ -20,6 +20,11 @@ Ambiguity is not counted either. The union over a node's edges counts
 accepting runs, so a node with two edges that accept a common term counts that
 term twice; such an automaton is rejected rather than miscounted.
 
+These two limits hold for 'automatonIndex' and 'automatonTermPosition', which
+take an automaton that can have cycles. 'finiteAutomaton' takes an acyclic
+graph. It counts equality constraints with intersections and symbolic counts,
+and it gives an ambiguous node the symbolic plan.
+
 The inverse of each index gives the rank, or the size and the position, of an
 accepted term. It follows the same plans as the index.
 

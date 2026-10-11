@@ -1,10 +1,10 @@
 {- | Finite languages and the builders that compose them.
 
 A t'Static' is an ECTA support paired with an t'OutcomeIndex' that counts,
-selects, decodes, and samples outcomes by rank. The basic finite combinators
-of "Data.CFTA.Gen" are one function here: pure, elements, frequency, fmap,
-application, atomic marking, and labelling. Joins, grouping, and recursion
-live in "Data.CFTA.Gen.Internal.Join", "Data.CFTA.Gen.Internal.Grouped",
+selects, decodes, and samples outcomes by rank. Each basic finite
+combinator of "Data.CFTA.Gen" is one function here: pure, elements,
+frequency, fmap, application, pay, atomic, and node. Joins, grouping, and
+recursion live in "Data.CFTA.Gen.Internal.Join", "Data.CFTA.Gen.Internal.Grouped",
 "Data.CFTA.Gen.Internal.Bucket", and "Data.CFTA.Gen.Internal.Recur". The
 sampling engine itself lives in
 "Data.CFTA.Ranked.Internal.Sampler".

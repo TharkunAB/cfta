@@ -1,7 +1,8 @@
-{- | Signature and condition syntax for ECTA generators.
+{- | Signature and key-equality syntax for the joins of a generator.
 
-'Sig' writes many-sorted operation signatures over group keys, and 'On'
-reifies key equalities between two generated values.
+A 'Sig' is a many-sorted signature of an operation over group keys. An 'On'
+is a key equality between a value of the left side and a value of the right
+side of a join.
 -}
 module Data.CFTA.Gen.Sig (
     Sig (..),
