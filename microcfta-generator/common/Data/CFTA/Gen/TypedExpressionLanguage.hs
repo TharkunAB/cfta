@@ -189,11 +189,10 @@ unaryFunctionsBySignature =
 
 {- | Function instances grouped by their complete ground signature.
 
-A 'Grouped' does not generate the signature as part of its result. The
-projected signature classifies functions into groups; matching key values tell
-joins which groups should receive equal internal labels on constrained ECTA
-paths. Conceptually, this is a compact map from each signature to the sublanguage
-of functions having that signature.
+The signature is the key of a group, not part of the value. 'ECTAGen.groupOn'
+puts each function in the group of its signature. A join reads the keys to find
+the groups whose paths it equates. So the result is a map from each signature
+to the language of the functions with that signature.
 -}
 binaryFunctionsBySignature :: Grouped BinarySignature BinaryFunctionInstance
 binaryFunctionsBySignature =
@@ -274,15 +273,14 @@ conditionalLayer children = ECTAGen.node "if" $ ECTAGen.do
 
 {- | Add one application layer and retain its result type for the next layer.
 
-The three qualified do-blocks build one 'ECTAGen.apply' join apiece. Their
-signatures carry one, two, or three argument keys. Each join matches those keys
-with the corresponding child result-type groups and retains the operation's
-result key. Finite branches are weighted by their cardinalities, so every
-expression in the combined exact-depth language remains equally likely. A
-recursive family uses equal structural alternatives instead.
+Each of the three qualified do-blocks builds one 'ECTAGen.apply' join. The
+signatures have one, two, or three argument keys. Each join matches these keys
+with the child groups of the same result type and keeps the result key of the
+operation. 'ECTAGen.uniformlyGrouped' weights each finite branch by its
+cardinality, so all expressions of one exact depth are equally likely. In a
+recursive family, the alternatives have equal weights.
 
-Keeping the result group is what lets the operation compose recursively at the
-next depth.
+The next layer reads the result key, so the layers compose.
 -}
 applicationLayer :: Grouped Type TypedExpression -> Grouped Type TypedExpression
 applicationLayer children =
@@ -295,10 +293,10 @@ applicationLayer children =
 
 {- | Exact-depth expressions grouped by result type.
 
-Retaining the result-type classification at every layer is the difference
-from an ordinary 'ECTAGen': each completed language can immediately
-serve as both typed child inputs to the following application layer, where
-matching result-type groups have their paths equated.
+Each layer keeps its groups by result type, which an ordinary 'ECTAGen' does
+not have. So the next application layer can use the layer as its typed
+children, and the join equates the paths of the groups whose result types
+match.
 -}
 depthByType :: Int -> Grouped Type TypedExpression
 depthByType 0 = literalsByType
@@ -308,10 +306,9 @@ depthByType depth
 
 {- | Return an ordinary ECTA generator after composing the requested depth.
 
-'ECTAGen.ungroup' is the boundary back to the familiar generator interface.
-It discards the path-key classification after composition and merges the
-result-type groups with their exact probability masses; the generated value is
-still only a 'TypedExpression'.
+'ECTAGen.ungroup' makes an ordinary generator from the grouped language. It
+removes the keys and merges the groups with their exact masses. The values are
+'TypedExpression' values.
 -}
 expressionGenAtDepth :: Int -> ECTAGen TypedExpression
 expressionGenAtDepth = ECTAGen.ungroup . depthByType

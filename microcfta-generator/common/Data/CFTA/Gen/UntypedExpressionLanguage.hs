@@ -1,13 +1,15 @@
 {-# LANGUAGE ApplicativeDo #-}
 {-# LANGUAGE QualifiedDo #-}
 
-{- | The ordinary-FTA member of the three-example progression.
+{- | Untyped integer expressions: the FTA example of the three example
+languages.
 
-There is only one implicit sort: every expression is an integer. An FTA needs
-to describe constructor shape, but it does not need to relate annotations on
-different paths. The ECTA flagship adds integer and Boolean result types to
-this syntax; the LTA flagship then carries those types through state-machine
-transitions.
+Every expression is an integer, so the language has one sort. An FTA describes
+the shape of the constructors and relates no annotations on different paths.
+The ECTA example, "Data.CFTA.Gen.TypedExpressionLanguage", adds integer and
+Boolean result types. The LTA example,
+"Data.CFTA.Gen.Refinement.StateMachineTraceLanguage", carries these types
+through the transitions of a state machine.
 -}
 module Data.CFTA.Gen.UntypedExpressionLanguage (
     Expression (..),
@@ -77,10 +79,9 @@ evaluate (Multiply left right) = evaluate left * evaluate right
 {- | Generate generic trees, recognize them with an ordinary FTA, and only then
 decode them as expressions.
 
-There is no semantic side condition in this example, so every ranked candidate
-is accepted. That zero-rejection case is the naive baseline for an FTA:
-it measures the cost of generating a generic tree and recognizing it rather
-than manufacturing an irrelevant predicate.
+This example has no semantic condition, so the FTA accepts every candidate.
+This generator is the naive baseline for an FTA: it measures the cost to
+generate a generic tree and to recognize it.
 -}
 naiveExpressionGen :: Int -> QC.Gen Expression
 naiveExpressionGen depth =

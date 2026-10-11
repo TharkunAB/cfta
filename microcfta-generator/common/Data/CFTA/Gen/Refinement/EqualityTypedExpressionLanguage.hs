@@ -1,13 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE PatternSynonyms #-}
 
-{- | The ECTA flagship typed-expression language represented as an LTA.
+{- | The typed expressions of "Data.CFTA.Gen.TypedExpressionLanguage", written
+as an LTA.
 
-Ground types become equality refinements over Liquid Fixpoint's distinguished
-value variable. Candidate application transitions contain every ground child
-state; guards require the children to imply the operation's expected input
-types. Pruning with Z3 therefore performs the same compatibility check as the
-ECTA's path equalities, while the accepted expression language stays identical.
+Each ground type is an equality refinement on the value variable of Liquid
+Fixpoint. An application has one candidate transition for each tuple of ground
+child states. The guard requires that each child implies the input type of the
+operation. So Z3 pruning does the same check as the path equalities of the
+ECTA, and the language of accepted expressions is the same.
 -}
 module Data.CFTA.Gen.Refinement.EqualityTypedExpressionLanguage (
     typeEquality,
