@@ -91,14 +91,69 @@ accepted and has its exact original inverse rank. `unrank_injective` excludes
 two successful ranks for one term.
 
 `source_rank_bijection` proves every accepted term has exactly one actual
-source rank in `Fin n`. It additionally requires `DecodeTotal`: every in-range
-bounded decoder call returns. This is a termination/error contract. It does
-not assume membership, uniqueness, or completeness of the returned terms.
+source rank in `Fin n`. Its local `DecodeTotal` premise states only that every
+in-range bounded decoder call returns. The later termination modules derive
+this premise from structural graph budgets and finite row semantics.
 
-The remaining top-level assumptions are therefore graph-operation and
-signed-indicator correspondence, and decoder totality with a sufficient
-bound. `SymbolicGraph.lean` proves the declarative conditioning and projection
-operations. Interned identity correspondence remains separate.
+`SymbolicVerified.rows_decode_correct` and `rows_rank_bijection` now compose
+these results with the full mutual counter theorem and
+`SymbolicIndicators.counterMeaningFromRows`. The inputs are graph rows,
+compiled guards, intersection, conditioning, and projection semantics. There
+is no assumed counter-correctness or cache-correctness contract.
+
+`SymbolicDecoderTotal` proves constructor coverage for the actual
+projection/map/dedup/sort candidate worker and full singleton decoder
+termination. `SymbolicBlocks` proves that distinct constructor blocks
+partition the accepted root language. `SymbolicSelectionTotal` proves
+termination of the actual progressively restricted child loop and general
+selector by strict descent in accepted subtree height.
+
+`SymbolicComplete.rows_full_index` gives the complete composed result. There
+is one finite bound after which actual public cardinality equals `n`, every
+rank in `Fin n` decodes, and every accepted term has exactly one actual rank
+with the exact `rankOf` inverse. No count-correctness, cache-correctness,
+component-count, or decoder-totality premise remains.
+
+`SymbolicGraphView.view_full_index` removes the semantic graph premises.
+It derives a finite list by enumeration at a structural budget and removes
+duplicate terms. It proves the list exact from independent finite-run
+acceptance. `OperationRows` checks the identities of copied synchronous
+product rows, template rows, and projected row unions. Its row checks permit
+duplicate removal and order changes. These structural checks derive exact
+intersection and conditioning and subtree projection coverage.
+
+`SymbolicStructuralBudget.acyclic_full_index` also derives the complete
+counter budget. `structuralValue` computes one plus the largest child-budget
+sum among all rows. `structural_intersection` proves that copied product
+rows cannot increase either operand's budget. The remaining inputs are
+operational row-copy identities, compiled guard interpretation, and a
+topological rank for every structural child reference. No finite-language,
+language-operation, count, cache, or decoder-totality law is assumed.
+
+`SymbolicInternedView` connects immutable row keys to the pure interning
+state. `intern_rows` proves exact canonical readback. Reservation,
+installation, and interning preserve acyclicity when all new child references
+were already issued. Numeric identities then give the topological rank.
+`growth_exact` proves that a later cache snapshot preserves every old closed
+graph language. The theorem applies to issued constructor identities.
+It does not identify an unissued lookup with the source's distinguished
+`EmptyNode`, and it does not cover recursive thunks or machine `Int` overflow.
+
+These results reduce the concrete representation obligation. They do not yet
+construct `OperationRows` for the Haskell allocation and normalization
+pipeline. That pipeline can remove empty rows and normalize constraint
+representations. Its copied raw rows must be connected to the actual stored
+rows with the corresponding cleanup and guard-equivalence proofs.
+
+`SymbolicSmartRows` proves the source node constructor's empty-child filter
+and edge deduplication preserve row membership. It also proves that an edge
+removed by the singleton-node emptiness check has numeric indicator zero.
+`source_union_filter_exact` therefore justifies the extra empty-intersection
+test in Haskell `countUnion`. `SymbolicSourceUnion` proves weighted sums
+invariant under coefficient-map permutation and proves cache-safe signed
+traversal in any order. These theorems compare numeric results and cache
+validity. They do not claim that the list model and Haskell `Map.toList`
+produce identical cache traces.
 
 ## Progress and freshness
 
@@ -107,10 +162,42 @@ expansion strictly decrease a summed structural graph budget. It proves that
 normalization preserves this budget, insertion and expansion preserve distinct
 live names, and a fresh expansion cannot create a cyclic binding.
 
-The graph budget must decrease from a parent to its complete child tuple.
-Intersection must not increase a retained domain's budget. These are structural
-graph premises. The full lexicographic measure for constructor/path work and
-the universal sufficient execution bound remain open.
+`SymbolicWork` gives explicit sufficient bounds for substitution and path
+following. It derives a strict substitution budget from the source's empty
+or single acyclic binding. `SymbolicNormalizationWork.normalize_work` proves
+that the complete actual normalizer does not increase context and path work.
+`SymbolicNormalizationTotal.normalize_total` proves successful normalization
+at fuel at least twice its weighted pending work plus one. It requires
+explicit scope for bindings and pending requirements.
+
+`SymbolicCallProgress.union_edge_budget` proves that every generated signed
+intersection key retains the source graph's structural child budget.
+`SymbolicWellFounded.counter_calls_wellFounded` covers all six recursive
+control branches. Its lexicographic measure uses the summed graph budget,
+pending context and path work, and control phase. It includes constructor
+decomposition and the constructor-variable swap. `GraphBudget` derives the
+structural graph premises for explicit finite acyclic graphs and their
+intersection, restriction, and projection operations.
+
+`SymbolicFuel` proves exact successful normalization outputs remain unchanged
+at larger bounds. `SymbolicInputScope` proves that initial edge problems,
+variable merges, and constructor expansions retain every name needed by the
+next normalizer. `SymbolicEventual` combines stable bounds for finite state
+traversals. It preserves the exact final cache as well as the count.
+
+`SymbolicCounterTotal.counter_eventual` transfers the well-founded relation
+to the actual six bounded functions. Every valid call returns one fixed value
+and final cache at every sufficiently large bound. It holds for arbitrary
+initial caches. `cardinality_total_exact` combines this termination result
+with the full semantic counter theorem. Public cardinality eventually returns
+the exact number of distinct accepted finite terms.
+
+The decoder termination proof does not require a structural decrease for
+conditioned projected identities. It uses the independent finite language's
+subtree height. Structural budgets are needed for counter termination on each
+identity created by the graph operations. The pure identity allocation and
+graph-budget bridge now has the structural results described above. The
+concrete Haskell normalization and allocation correspondence remains separate.
 
 These modules build with Lean 4.34.1. The proofs use no added axioms, `sorry`,
 or native evaluation. The finite-rank existence proof uses Lean's standard
