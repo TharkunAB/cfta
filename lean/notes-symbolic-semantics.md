@@ -45,10 +45,26 @@ the actual stateful signed fold to the number of accepted distinct candidates.
 Its recursive edge-count and exact-intersection premises remain explicit.
 `solveStep_independent` proves the actual independent-domain product branch.
 
-The complete mutual `countNode`/`solve` correctness theorem remains open.
-`CountSound` in `SymbolicBounds.lean` records this exact remaining contract:
-every successful count returns the graph cardinality and preserves the cache
-invariant.
+`SymbolicSignedSolutions.signed_coordinate_count` lifts any pointwise signed
+term identity through all other live domains and pending correlations.
+`expand_variable_count` applies it to the actual nested union and indicator
+loops. `SymbolicEdgeCounts.edgeProblem_count` proves that the exact initial
+edge problem counts its raw component terms.
+
+`SymbolicExpansionDriver`, `SymbolicCounterCache`, and `SymbolicUnification`
+prove every source branch and its recursive caller invariants.
+`SymbolicCounter.counter_correct_mutual` closes the induction for all six
+actual functions: `countNode`, `countEdge`, `solve`, `solveStep`, `unify`, and
+`expandVariable`. `counter_countSound` discharges the `CountSound` contract
+used by the decoder. `cardinality_correct` proves the public count is the
+number of distinct accepted finite terms for every successful bounded call.
+
+The remaining graph interface is `CounterMeaning`. It requires distinct
+finite graph languages, exact domain intersection, and a pointwise signed
+edge-membership identity. That identity uses the actual nested source
+coefficients, including every overlap and guard indicator. It does not
+assume any counter result. The mutual theorem also takes one fallback term
+to construct a total variable valuation for empty independent tuples.
 
 ## Source decoder and inverse
 
@@ -79,10 +95,10 @@ source rank in `Fin n`. It additionally requires `DecodeTotal`: every in-range
 bounded decoder call returns. This is a termination/error contract. It does
 not assume membership, uniqueness, or completeness of the returned terms.
 
-The remaining top-level assumptions are therefore graph-operation
-correspondence, complete mutual count correctness, and decoder totality with
-a sufficient bound. `SymbolicGraph.lean` proves the declarative conditioning
-and projection operations. Interned identity correspondence remains separate.
+The remaining top-level assumptions are therefore graph-operation and
+signed-indicator correspondence, and decoder totality with a sufficient
+bound. `SymbolicGraph.lean` proves the declarative conditioning and projection
+operations. Interned identity correspondence remains separate.
 
 ## Progress and freshness
 
