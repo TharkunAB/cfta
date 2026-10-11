@@ -144,8 +144,14 @@ instance Show Symbol where
             showParen (precedence > 10) $
                 showString "RefinedSymbol " . showsPrec 11 (unrefined symbol) . showChar ' ' . showsPrec 11 refinement
 
+{- | A literal symbol interns its text once. 'fromString' does not inline, so
+GHC keeps @fromString "add"@ as one constant, also in a pattern of a
+function that runs once per term. Inlined, the call can turn into a
+lookup in the symbol table on each call.
+-}
 instance IsString Symbol where
     fromString = Symbol . fromString
+    {-# NOINLINE fromString #-}
 
 instance Read Symbol where
     readPrec = Symbol <$> readPrec
