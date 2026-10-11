@@ -3,8 +3,6 @@
 -- | Reproduce the findings at adb1f01 after the second set of repairs.
 module Main (main) where
 
-import qualified Language.Fixpoint.Types as Fixpoint
-
 import Data.CFTA.Constraint (semanticConstraint)
 import qualified Data.CFTA.Gen.Refinement as G
 import Data.CFTA.Ranked.Internal.Decoder (Plan (..), SizeClass (..))
@@ -24,12 +22,12 @@ atomicPair solver = do
     putStrLn "Atomic pair: expected weights 9/10 and 1/10 before and after observation"
     putStrLn "Original PMF, bounded PMF, sizes"
     print $ G.pmf original
-    print $ G.pmf $ G.upToSize 2 original
+    print $ G.pmf $ G.upToSize 3 original
     print [G.sizeOfRank original rank | rank <- [0, 1]]
     observed <- G.compileWith solver $ pair $ requires (argument 0) (const true)
     putStrLn "Observed PMF, bounded PMF, sizes"
     print $ observed >>= G.pmf
-    print $ observed >>= G.pmf . G.upToSize 2
+    print $ observed >>= G.pmf . G.upToSize 3
     print $ fmap (\g -> [G.sizeOfRank g rank | rank <- [0, 1]]) observed
 
 -- | Print the concrete accepted language through depth four.
@@ -85,8 +83,8 @@ zeroProduct = do
         zeroValue :: Size.SizeIndex Int
         zeroValue = Size.sizeIndex $ PlanSized [SizeClass 0 1 (const 42) (const 42)]
         zeroZero = Size.productIndex zeroFunction zeroValue
-        zeroOne = Size.productIndex zeroFunction $ Size.constantIndex 42
-        oneZero = Size.productIndex (Size.constantIndex id) zeroValue
+        zeroOne = Size.productIndex zeroFunction $ Size.sizeIndex $ PlanSelect 1 (const 42)
+        oneZero = Size.productIndex (Size.sizeIndex $ PlanSelect 1 (const id)) zeroValue
         token = Size.Occurrence 19
         productProbe = Size.productIndex zeroFunction $ Size.probeIndexWithMinimum token $ Size.MinimumSize 1
     putStrLn "Internal zero-size products: each lookup should count one member"
@@ -104,4 +102,4 @@ main = do
         rootRemoval solver
     zeroProduct
   where
-    declarations = [(Fixpoint.symbol name, Fixpoint.FInt) | name <- ["app", "x", "y", "v"] :: [String]]
+    declarations = ["app", "x", "y", "v"]
