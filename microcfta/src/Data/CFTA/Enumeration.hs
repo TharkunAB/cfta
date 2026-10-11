@@ -9,11 +9,11 @@ when enumeration descends through an edge, those obligations descend with
 it, and when one reaches the node it names, the UVars are merged so future
 choices stay consistent. A constraint with a 'residual' beyond its
 equalities is recorded with the subterm it guards, and 'runs' hands those
-pairs to the caller to decide. An automaton with no constraint and no
-recursive binder is listed level by level without the enumeration state. A
-cyclic one always uses the enumeration state, and enumeration stops at a
-recursive binder. Only 'plainTerms' lists a cyclic graph without constraints,
-as an infinite lazy list.
+pairs to the caller to decide. 'terms' lists an automaton with no
+constraint and no recursive binder level by level, without the enumeration
+state. A cyclic one always uses the enumeration state, and enumeration stops
+at a recursive binder. Only 'plainTerms' lists a cyclic graph without
+constraints, as an infinite lazy list.
 
 Most callers use 'terms' or 'runs'. The lower-level state operations are
 exposed for pruning oracles and downstream tools that need to inspect or
@@ -43,7 +43,7 @@ module Data.CFTA.Enumeration (
     EnumerateM,
 ) where
 
-import Control.Monad (forM_, guard, mzero, unless, void, when, zipWithM)
+import Control.Monad (forM_, guard, mzero, unless, when, zipWithM)
 import Control.Monad.State.Strict (StateT (..), gets, modify')
 import Control.Monad.Trans.Class (lift)
 import qualified Data.Foldable as Foldable
@@ -560,7 +560,7 @@ enumerateOutUVar uv =
 -- | Expand the root UVar until it represents a complete term.
 enumerateFully :: (Hashable symbol, Typeable symbol) => EnumerateM symbol ()
 enumerateFully =
-    void $ enumerateFully' () noExpansionPreference (\state _ _ -> return (False, state))
+    enumerateFully' () noExpansionPreference (\state _ _ -> return (False, state))
 
 {- | Enumerate until the root term is complete, with optional oracle pruning.
 
@@ -587,12 +587,12 @@ enumerateFully' ::
     a ->
     ExpansionOrder a ->
     (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
-    EnumerateM symbol Bool
+    EnumerateM symbol ()
 enumerateFully' ost order oracle = do
     muv <- nextExpandableUVar (order ost)
     case muv of
         ExpansionStuck -> mzero
-        ExpansionDone -> return True
+        ExpansionDone -> return ()
         ExpansionNext uv ->
             let continue ost' = do
                     tf <- enumerateOutUVar uv
@@ -606,7 +606,6 @@ enumerateFully' ost order oracle = do
              in do
                     UVarUnenumerated (Just n) scs <- getUVarValue uv
                     case n of
-                        Mu _ | scs == Sequence.empty -> return True
                         Mu _ -> do
                             uv' <- getUVarRepresentative uv
                             ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt uv') . _recursionAncestry
@@ -777,8 +776,8 @@ termsPruneWith ::
     [Tree.Tree symbol]
 termsPruneWith recursionSymbol ost order oracle n =
     map fst $ flip runEnumerateM (initEnumerationState n) $ do
-        finished <- enumerateFully' ost order oracle
-        if finished then expandUVarWith recursionSymbol (intToUVar 0) else mzero
+        enumerateFully' ost order oracle
+        expandUVarWith recursionSymbol (intToUVar 0)
 
 {- | The terms of the automaton's accepting runs, each once.
 
@@ -805,31 +804,25 @@ termsWith ::
     symbol -> Node symbol -> [Tree.Tree symbol]
 termsWith recursionSymbol n
     | plain n = plainTerms n
-    | otherwise = dedup $ map fst $ runsWith recursionSymbol n
+    | otherwise = dedup $ map fst $ runs recursionSymbol n
+
+-- | Whether the automaton is an acyclic ordinary tree automaton.
+plain :: (Typeable symbol) => Node symbol -> Bool
+plain n = numNestedMu n == 0 && unconstrained n
 
 {- | The term of every accepting run, with the residual constraints the run
 must satisfy, each paired with the complete subterm it guards.
 
 Runs are listed, not distinct terms: an ambiguous automaton yields a term
 once per run, and a term is accepted when some run's obligations all hold.
-An acyclic automaton with no constraint has no obligations and is listed
-level by level as by 'terms'. The symbol stands for truncated recursion.
+An acyclic automaton with no constraint has no obligations. Its runs are
+still listed one by one, so an ambiguous one repeats a term. The symbol
+stands for truncated recursion.
 -}
 runs ::
-    (Hashable symbol, Ord symbol, Typeable symbol) =>
-    symbol -> Node symbol -> [(Tree.Tree symbol, [(Constraint, Tree.Tree symbol)])]
-runs recursionSymbol n
-    | plain n = map (,[]) (plainTerms n)
-    | otherwise = runsWith recursionSymbol n
-
--- | Whether the automaton is an acyclic ordinary tree automaton.
-plain :: (Typeable symbol) => Node symbol -> Bool
-plain n = numNestedMu n == 0 && unconstrained n
-
-runsWith ::
     (Hashable symbol, Typeable symbol) =>
     symbol -> Node symbol -> [(Tree.Tree symbol, [(Constraint, Tree.Tree symbol)])]
-runsWith recursionSymbol n =
+runs recursionSymbol n =
     map fst $ flip runEnumerateM (initEnumerationState n) $ do
         enumerateFully
         term <- expandUVarWith recursionSymbol (intToUVar 0)
