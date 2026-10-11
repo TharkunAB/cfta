@@ -129,19 +129,20 @@ observations merge, and the merged group takes the position of the first.
 reposition :: (key -> Observations) -> LTAGrouped key a -> LTAGrouped ObservationKey a
 reposition observationsOf grouped = regroupOn rekey grouped
   where
-    positions =
-        Map.fromListWith (\_ earlier -> earlier) $
-            zip (map observationsOf $ groupKeys grouped) [0 ..]
+    positions = firstPositions $ map observationsOf $ groupKeys grouped
     rekey key = ObservationKey (positions Map.! observationsOf key) (observationsOf key)
+
+-- | The index of the first appearance of each identity.
+firstPositions :: (Ord identity) => [identity] -> Map.Map identity Int
+firstPositions identities = Map.fromListWith (\_ earlier -> earlier) $ zip identities [0 ..]
+
+-- | An open key at a new position.
+atPosition :: Int -> OpenKey -> OpenKey
+atPosition position key = key{openObservations = (openObservations key){keyPosition = position}}
 
 -- | The number of child positions in an applicative spine.
 spineArity :: Gen symbol a -> Arity
-spineArity generator = case genRecipe generator of
-    Lifted _ -> 0
-    Mapped _ inner -> spineArity inner
-    Paid inner -> spineArity inner
-    Applied functions arguments -> spineArity functions + spineArity arguments
-    _ -> 1
+spineArity = Arity . length . spineRootCounts
 
 -- TODO: Consider positions that look through a choice whose alternatives all
 -- give the same number of children, so that a guard can read the children of
@@ -156,12 +157,7 @@ each part. When a part gives another number, a guard that reads the children
 by position reads the wrong ones.
 -}
 alignedSpine :: Gen symbol a -> Bool
-alignedSpine generator = case genRecipe generator of
-    Lifted _ -> True
-    Mapped _ inner -> alignedSpine inner
-    Paid inner -> alignedSpine inner
-    Applied functions arguments -> alignedSpine functions && alignedSpine arguments
-    _ -> rootCount generator == RootCount 1
+alignedSpine = all (== RootCount 1) . spineRootCounts
 
 -- | The 'rootCount' of each position of an applicative spine, as 'spineArity' counts the positions.
 spineRootCounts :: Gen symbol a -> [RootCount]
@@ -457,6 +453,31 @@ data Labelling
     = FixedLabel !Symbol
     | ComputedLabel ([Symbol] -> Either GenError Symbol)
 
+{- | The shape of a constructor over a child description: its arity, its
+leafness, the paths that its guard and its parent observe, and the paths that
+it requests of each child.
+-}
+nodeShape :: Set Path -> Labelling -> Constraint -> LTAGen a -> (Arity, Leafness, Set Path, [Set Path])
+nodeShape requested labelling constraint child = (arity, leafness, observed, childRequirements)
+  where
+    arity = spineArity child
+    -- The term of the constructor is a leaf when its child description gives no
+    -- term. When 'rootCount' gives no number, the leafness is 'Mixed', which an
+    -- observer reads as not known.
+    leafness = case rootCount child of
+        RootCount 0 -> Leaf
+        RootCount _ -> Inner
+        NoCommonCount -> Mixed
+    observed = Set.unions [requested, constraintPaths constraint, roots]
+      where
+        roots = case labelling of
+            FixedLabel _ -> Set.empty
+            ComputedLabel _ -> Set.fromList [path [index] | index <- childIndexes arity]
+    childRequirements =
+        [ Set.fromList [path suffix | target <- Set.toList observed, index : suffix <- [unPath target], index == childIndex]
+        | childIndex <- childIndexes arity
+        ]
+
 {- | Compile one guarded constructor.
 
 The children are grouped by the paths the guard reads below each position,
@@ -482,23 +503,7 @@ compileNode compiler requested labelling constraint child
                 retained <- filterGroupsM decide childGroups
                 pure $ reposition closeObservations . nodeWithKey closeLabel <$> retained
   where
-    arity = spineArity child
-    -- The term of the constructor is a leaf when its child description gives no
-    -- term. When 'rootCount' gives no number, the leafness is 'Mixed', which an
-    -- observer reads as not known.
-    leafness = case rootCount child of
-        RootCount 0 -> Leaf
-        RootCount _ -> Inner
-        NoCommonCount -> Mixed
-    observed = Set.unions [requested, constraintPaths constraint, roots]
-      where
-        roots = case labelling of
-            FixedLabel _ -> Set.empty
-            ComputedLabel _ -> Set.fromList [path [index] | index <- childIndexes arity]
-    childRequirements =
-        [ Set.fromList [path suffix | target <- Set.toList observed, index : suffix <- [unPath target], index == childIndex]
-        | childIndex <- childIndexes arity
-        ]
+    (_, leafness, _, childRequirements) = nodeShape requested labelling constraint child
     labelOf childKeys = case labelling of
         FixedLabel label -> Right label
         ComputedLabel symbolOf -> traverse rootOf childKeys >>= symbolOf
@@ -677,12 +682,8 @@ joinPositioned :: LTAGrouped [OpenKey] a -> LTAGrouped OpenKey a
 joinPositioned grouped = regroupOn rekey grouped
   where
     identity keys = let joined = joinOpenKeys keys in (openCount joined, openFormula joined)
-    positions =
-        Map.fromListWith (\_ earlier -> earlier) $
-            zip (map identity $ either (const []) Map.keys $ cardinalities grouped) [0 :: Int ..]
-    rekey keys =
-        let joined = joinOpenKeys keys
-         in joined{openObservations = (openObservations joined){keyPosition = positions Map.! identity keys}}
+    positions = firstPositions $ map identity $ either (const []) Map.keys $ cardinalities grouped
+    rekey keys = atPosition (positions Map.! identity keys) $ joinOpenKeys keys
 
 -- | The key of a bare applicative spine: no observation, and the variables of its positions joined.
 joinOpenKeys :: [OpenKey] -> OpenKey
@@ -762,11 +763,8 @@ repositionOpen :: LTAGrouped (ChoiceIndex, OpenKey) a -> LTAGrouped OpenKey a
 repositionOpen grouped = regroupOn rekey grouped
   where
     identity (_, key) = (keyObservations $ openObservations key, openCount key, openFormula key)
-    positions =
-        Map.fromListWith (\_ earlier -> earlier) $
-            zip (map identity $ either (const []) Map.keys $ cardinalities grouped) [0 :: Int ..]
-    rekey indexed@(_, key) =
-        key{openObservations = (openObservations key){keyPosition = positions Map.! identity indexed}}
+    positions = firstPositions $ map identity $ either (const []) Map.keys $ cardinalities grouped
+    rekey indexed@(_, key) = atPosition (positions Map.! identity indexed) key
 
 {- | Compile a child description of open groups as one group per tuple of child
 groups. The value of a tuple reads the variables of each position in turn.
@@ -825,23 +823,7 @@ compileOpenNode compiler requested labelling constraint child
                 retained <- filterGroupsM decide childGroups
                 pure $ retained >>= settleGroups settle . labelGroups
   where
-    arity = spineArity child
-    -- The term of the constructor is a leaf when its child description gives no
-    -- term. When 'rootCount' gives no number, the leafness is 'Mixed', which an
-    -- observer reads as not known.
-    leafness = case rootCount child of
-        RootCount 0 -> Leaf
-        RootCount _ -> Inner
-        NoCommonCount -> Mixed
-    observed = Set.unions [requested, constraintPaths constraint, roots]
-      where
-        roots = case labelling of
-            FixedLabel _ -> Set.empty
-            ComputedLabel _ -> Set.fromList [path [index] | index <- childIndexes arity]
-    childRequirements =
-        [ Set.fromList [path suffix | target <- Set.toList observed, index : suffix <- [unPath target], index == childIndex]
-        | childIndex <- childIndexes arity
-        ]
+    (arity, leafness, observed, childRequirements) = nodeShape requested labelling constraint child
     parts = conjuncts $ constraintGuard constraint
     open childKeys (ChildIndex index) = maybe False ((> 0) . openCount) $ childKeys !? index
     -- A parent reads only the root of a child that leaves variables open.
@@ -950,8 +932,8 @@ settleGroups _ (Grouped (Left err)) = Right $ Grouped $ Left err
 settleGroups settle (Grouped (Right buckets)) = do
     settled <- catMaybes <$> traverse one (Map.toAscList buckets)
     let identity key = (keyObservations $ openObservations key, openCount key, openFormula key)
-        positions = Map.fromListWith (\_ earlier -> earlier) $ zip [identity key | (key, _, _) <- settled] [0 :: Int ..]
-        positioned key = key{openObservations = (openObservations key){keyPosition = positions Map.! identity key}}
+        positions = firstPositions [identity key | (key, _, _) <- settled]
+        positioned key = atPosition (positions Map.! identity key) key
     pure $ Grouped $ mergeComponentsByKey [(positioned key, mass, static) | (key, mass, static) <- settled]
   where
     one (childKeys, KeyedBucket mass static) = fmap (build mass static) <$> settle childKeys
