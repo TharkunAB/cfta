@@ -215,6 +215,10 @@ readsThroughRecursion plan children =
   where
     reaches (Rec _) _ = True
     reaches (InternedUnion group) childPlan = any (`reaches` childPlan) (internedUnionMembers group)
+    -- An open binder can contain an enclosing reference in its outer union.
+    -- Inspect its body before nodeEdges can unfold that unresolved reference.
+    reaches node@(InternedMu mu) childPlan =
+        not (null $ freeVars node) && reaches (internedMuBody mu) childPlan
     -- A node without free references has none below it.
     reaches node childPlan =
         not (null $ freeVars node) && any (readsThroughRecursion childPlan . edgeChildren) (nodeEdges node)

@@ -5,6 +5,7 @@ module Data.CFTA.Refinement.PruneSpec (spec) where
 import Data.CFTA.Constraint (equalities)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Formula (Sort (..))
+import Data.CFTA.Interned (createMu, createUnion)
 import Data.CFTA.Refinement (
     Automaton,
     Constraint (constraintGuard),
@@ -27,6 +28,7 @@ import Data.CFTA.Refinement (
     semanticConstraint,
     transitionSymbol,
     transitionsAt,
+    validate,
     pattern Transition,
  )
 import Data.CFTA.Refinement.Expression (refinementFormula, true, variable, (.==), (.>=))
@@ -56,6 +58,34 @@ spec =
         it "keeps the language when it prunes nested semantic positions" $
             withZ3 declarations $ \solver ->
                 checkPrunedLanguage solver nestedPairs nestedPairTerms 5
+
+        it "retains guards through an open nested binder with an enclosing union reference" $ do
+            let solver = Entailment $ \_ _ -> pure Yes
+                original = createMu $ \outer ->
+                    Node
+                        [ Transition "base" true [] noConstraint
+                        , Transition
+                            "outer"
+                            true
+                            [ atomA
+                            , createMu $ \inner ->
+                                createUnion
+                                    [ outer
+                                    , Node [Transition "inner" true [atomA, inner] noConstraint]
+                                    ]
+                            ]
+                            (semanticConstraint $ Satisfies (path [1, 0]) true)
+                        ]
+                wanted =
+                    Term.Node
+                        (RefinedSymbol "outer" true)
+                        [ Term.Node (RefinedSymbol "a" true) []
+                        , Term.Node
+                            (RefinedSymbol "inner" true)
+                            [Term.Node (RefinedSymbol "a" true) [], Term.Node (RefinedSymbol "base" true) []]
+                        ]
+            validate original `shouldBe` Right ()
+            checkPrunedLanguage solver original [wanted] 1
 
         it "preserves terms with an absent path under negation" $
             withZ3 declarations $ \solver ->
