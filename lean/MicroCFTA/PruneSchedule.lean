@@ -112,6 +112,7 @@ theorem top_discharged (original discharged : Edge) (free through : Bool)
 inductive View (Node Edge : Type) where
   | empty | reference
   | branches (edges : List Edge)
+  | union (members : List Node)
   | binder (body : Node)
 
 /-- Source identity cache and recursive binders in scope. -/
@@ -128,6 +129,7 @@ structure Operations (Node Edge : Type) where
   empty : Node → Bool
   evaluate : Build Node → Edge → Except Error (List Edge × Build Node)
   node : List Edge → Node
+  union : List Node → Node
   rebuildBinder : Node → Node → Node
 
 /-- Find the newest cached result by interned identity. -/
@@ -149,6 +151,13 @@ mutual
           | none => do
               let (edges, next) ← pruneEdges ops fuel build edges
               let result := ops.node edges
+              .ok (result, { next with cache := (q, result) :: next.cache })
+      | .union members =>
+          match lookup q build.cache with
+          | some known => .ok (known, build)
+          | none => do
+              let (pruned, next) ← pruneChildren ops fuel build members
+              let result := ops.union pruned
               .ok (result, { next with cache := (q, result) :: next.cache })
       | .binder body =>
           match lookup q build.cache with
