@@ -9,12 +9,13 @@ a constructor relates the refinements of its children. Everything of
 "Data.CFTA.Gen" applies, and this module adds the refined sources, the
 guarded constructors, and the imports of the theory.
 
-A guard that the engine cannot decide without a solver defers the generator:
-its inspectors report 'SourceRequiresCompilation' until 'compile' has
-decided every guard once, with the solver, and returned an ordinary
-generator: finite, or recursive for a recursive import. A constructor without a guard needs no solver and is built at once.
-A guard of Boolean equality between subterms also defers the generator. An
-imported automaton counts Boolean equality symbolically and is built at once.
+The engine builds a constructor without a guard at once. A guard that needs
+the solver defers the generator, and so does a guard of Boolean equality
+between subterms. The inspectors of a deferred generator report
+'SourceRequiresCompilation'. 'compile' decides each guard once with the
+solver and returns an ordinary generator, which is finite, or recursive for a
+recursive import. An imported automaton does not wait for 'compile' because
+of Boolean equality: the engine counts these equalities symbolically.
 -}
 module Data.CFTA.Gen.Refinement (
     -- * Generators

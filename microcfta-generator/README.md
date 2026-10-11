@@ -309,9 +309,9 @@ arrive as an `Args` chain.
 `frequencies` chooses among grouped generators with relative weights, group by
 group, so alternated layers stay grouped. `uniformlyGrouped` combines grouped
 generators in proportion to their exact cardinalities, so every member of the
-union is equally likely. A layered language needs this. `uniformly` does the
-same for flat generators. The expressions of depth at most `n` are one such
-union, and no count is computed by hand:
+union is equally likely when each generator is uniform. A layered language
+needs this. `uniformly` does the same for flat generators. The expressions of
+depth at most `n` are one such union, and no count is computed by hand:
 
 ```haskell
 upToDepthByType 0 = literalsByType
@@ -465,15 +465,15 @@ first tests every member of strictly smaller size, in size order
 (`smallerMembers`, capped by
 `smallerMemberLimit`), so the reported counterexample is globally size-minimal
 whenever that search reaches one. After that search, `forAll` uses size-major
-structural shrinking through `shrinkRank`. For a recursive generator,
-`shrinkRank` reads its candidates from the form bounded at the current size,
-because only a bounded form gives a recursive member components to shrink.
-Every candidate is a member of
+structural shrinking through `shrinkRank`. `shrinkRank` has no candidates for
+a recursive generator. For a recursive generator, `forAll` bounds the generator
+at the size of the current member with `upToSize`, and calls `shrinkRank` on the
+bounded form. Bounding keeps the ranks. Every candidate is a member of
 the generated language, and the failing rank is printed for deterministic
 replay with `unrank`. A generator with an opaque region has no ranks at all, so
-`forAll` tests it by sampling with no shrinking. `sized` builds and compiles
-one generator per QuickCheck size (shared across samples), so layered
-generators can scale with the size parameter.
+`forAll` tests it by sampling with no shrinking. `sized` builds one
+generator for each QuickCheck size and shares it across samples, so layered
+generators can scale with the size parameter. It does not call `compile`.
 
 The greedy shrinkers of QuickCheck, Hedgehog, Hypothesis, and falsify stop at
 a local minimum. Bounded-exhaustive tools find a smallest counterexample by testing the

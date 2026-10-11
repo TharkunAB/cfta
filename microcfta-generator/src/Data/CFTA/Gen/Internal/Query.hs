@@ -1,11 +1,12 @@
 {- | The queries of an inspectable generator.
 
-Support, counts, ranks, and distributions are all read from the retained
-structure. A finite generator answers with a cardinality, a recursive one with
-one size class at a time. A query that returns 'Either' reports an opaque
+Each query reads the support, the counts, the ranks, or the distribution that
+the generator keeps. A finite generator answers with a cardinality, a
+recursive one with one size class at a time. A query that returns 'Either' reports an opaque
 generator with 'CannotInspectOpaqueGenerator'. The rank helpers without an error
 result, 'sizeOfRank', 'shrinkRank', and 'smallerMembers', return 'Nothing' or an
-empty list for an opaque generator.
+empty list for an opaque or a failed generator. 'shrinkRank' also returns an
+empty list for a recursive generator.
 -}
 module Data.CFTA.Gen.Internal.Query (
     -- * Structure
@@ -67,13 +68,17 @@ support (Transparent result) = staticSupport <$> result
 support (Cyclic result) = recursiveSupport <$> result
 support (Opaque _) = Left CannotInspectOpaqueGenerator
 
--- | Read retained source descriptions and group names as a diagnostic graph.
+{- | The source descriptions and the group names of a generator, as a graph for
+diagnostics.
+-}
 inspect :: Gen symbol a -> Either GenError (Inspection symbol)
 inspect (Transparent result) = staticInspection <$> result
 inspect (Cyclic result) = recursiveInspection <$> result
 inspect (Opaque _) = Left CannotInspectOpaqueGenerator
 
--- | Return the exact number of ranks in a transparent generator.
+{- | The number of members of a finite generator. A recursive generator gives
+'UnboundedGenerator'.
+-}
 cardinality :: Gen symbol a -> Either GenError Cardinality
 cardinality (Transparent result) =
     outcomeCardinality . staticOutcomes <$> result
@@ -96,7 +101,7 @@ countAtSize :: Gen symbol a -> Size -> Either GenError Cardinality
 countAtSize generator size =
     flip Size.countAtSize size . recursiveIndex <$> recursiveView generator
 
--- | The smallest structural size in an inspectable language.
+-- | The size of the smallest member. An empty generator gives 'Nothing'.
 minimumSize :: Gen symbol a -> Either GenError (Maybe Size)
 minimumSize generator = case recursiveView generator of
     Left EmptyGenerator -> Right Nothing
@@ -188,7 +193,7 @@ rank of a mapped import is the rank of the term it maps.
 rankOfTerm :: (Eq symbol) => Gen symbol a -> Tree.Tree symbol -> Either GenError Rank
 rankOfTerm generator = rankOf generator . fmap Label
 
--- | Return the first member in structural size and rank order.
+-- | A smallest member: the first member by size, then by rank.
 smallest :: Gen symbol a -> Either GenError (Maybe a)
 smallest (Transparent result) =
     case result of
@@ -279,7 +284,7 @@ pmf (Cyclic (Left err)) = Left err
 pmf (Cyclic (Right _)) = Left UnboundedGenerator
 pmf (Opaque _) = Left CannotInspectOpaqueGenerator
 
--- | Aggregate the exact result distribution conditional on one structural size.
+-- | The exact distribution of the values of the members of one size.
 pmfAtSize :: (Ord a) => Gen symbol a -> Size -> Either GenError [(a, Rational)]
 pmfAtSize (Transparent result) size = do
     static <- result
