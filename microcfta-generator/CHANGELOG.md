@@ -22,7 +22,8 @@ tree automata of `microcfta`, with QuickCheck integration.
   the sizes of its sides, and `pay`, which `Data.CFTA.Gen` and
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree
   and an imported term both count their nodes. The `Functor` and
-  `Applicative` laws hold for sizes. A recursion reaches its occurrence through
+  `Applicative` laws hold for sizes. A join (`match`, `relate`) adds the sizes
+  of its sides, as a product does. A recursion reaches its occurrence through
   a pay, or through a product whose other side has no member of size zero,
   and through a product or a constructor. See
   `docs/adr/0002-sizes-count-pays.md`.

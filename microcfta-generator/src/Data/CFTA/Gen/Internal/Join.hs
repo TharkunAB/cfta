@@ -36,8 +36,11 @@ import Data.CFTA.Gen.Label (ComponentIndex, GroupIndex (..), Label (..))
 import Data.CFTA.Index (
     ArgumentIndex (..),
     Cardinality,
+    ClassRank (..),
     Rank (..),
     RankOffset (..),
+    Size,
+    everyRank,
     nextOffset,
     offsetRank,
     pairRank,
@@ -45,8 +48,10 @@ import Data.CFTA.Index (
     splitRank,
  )
 import Data.CFTA.Path (path)
-import Data.CFTA.Ranked.Internal.Decoder (Plan (..), RankedValue (..))
+import Data.CFTA.Ranked.Internal.Decoder (Plan (..), RankedValue (..), SizeClass (..))
 import Data.CFTA.Ranked.Internal.Sampler
+import Data.CFTA.Ranked.Internal.Shrink (planMemberSize)
+import Data.CFTA.Ranked.Internal.Size (countAtSize, sizeClassCounts, sizeIndex)
 
 -- | One compatible key-pair bucket used to count and unrank a conditioned product.
 data JoinGroup symbol left right = JoinGroup
@@ -57,7 +62,14 @@ data JoinGroup symbol left right = JoinGroup
     -- ^ The weight of each left outcome inside its size class, as 'staticSampling' gives it.
     , joinGroupRightWeights :: !(Seq Rational)
     -- ^ The weight of each right outcome inside its size class.
+    , joinGroupLeftSizes :: !(Seq Size)
+    -- ^ The size of each left outcome. The left outcomes are in size order.
+    , joinGroupRightSizes :: !(Seq Size)
+    -- ^ The size of each right outcome. The right outcomes are in size order.
     }
+
+-- | One side of a matched group: its outcomes in size order, with the weight and the size of each.
+data JoinSide symbol a = JoinSide !(Seq (Outcome symbol a)) !(Seq Rational) !(Seq Size)
 
 -- | Join two languages on equal projected keys with one ECTA equality constraint.
 joinStatic ::
@@ -70,9 +82,10 @@ joinStatic ::
 joinStatic leftKey rightKey left right = do
     leftEntries <- keyedOutcomes leftKey left
     rightEntries <- keyedOutcomes rightKey right
+    -- Only the shared keys become join sides.
     let shared =
             Map.intersectionWith
-                (,)
+                (\lefts rights -> (joinSide lefts, joinSide rights))
                 (groupOutcomes leftEntries)
                 (groupOutcomes rightEntries)
     joinGroupedStatic left right $ map snd $ Map.toAscList shared
@@ -89,35 +102,32 @@ relateStatic ::
 relateStatic leftKey rightKey relation left right = do
     leftEntries <- keyedOutcomes leftKey left
     rightEntries <- keyedOutcomes rightKey right
-    let leftGroups = groupOutcomes leftEntries
-        rightGroups = groupOutcomes rightEntries
+    let leftGroups = joinSide <$> groupOutcomes leftEntries
+        rightGroups = joinSide <$> groupOutcomes rightEntries
         related =
-            [ (leftOutcomes, rightOutcomes)
-            | (leftGroupKey, leftOutcomes) <- Map.toAscList leftGroups
-            , (rightGroupKey, rightOutcomes) <- Map.toAscList rightGroups
+            [ (leftSide, rightSide)
+            | (leftGroupKey, leftSide) <- Map.toAscList leftGroups
+            , (rightGroupKey, rightSide) <- Map.toAscList rightGroups
             , relation leftGroupKey rightGroupKey
             ]
     joinGroupedStatic left right related
 
--- | Compile selected group products with one equality witness per product.
+{- | Compile selected group products with one equality witness per product.
+Each side of a group is in size order, as 'joinSide' gives it.
+-}
 joinGroupedStatic ::
     (Hashable symbol, Typeable symbol) =>
     Static symbol left ->
     Static symbol right ->
-    [(Seq (Rational, Outcome symbol left), Seq (Rational, Outcome symbol right))] ->
+    [(JoinSide symbol left, JoinSide symbol right)] ->
     Either GenError (Static symbol (left, right))
 joinGroupedStatic left right related =
     if null related
         then Left EmptyGenerator
         else
             let groups =
-                    [ JoinGroup
-                        groupIndex
-                        (fmap snd leftOutcomes)
-                        (fmap snd rightOutcomes)
-                        (fmap fst leftOutcomes)
-                        (fmap fst rightOutcomes)
-                    | (groupIndex, (leftOutcomes, rightOutcomes)) <-
+                    [ JoinGroup groupIndex leftOutcomes rightOutcomes leftWeights rightWeights leftSizes rightSizes
+                    | (groupIndex, (JoinSide leftOutcomes leftWeights leftSizes, JoinSide rightOutcomes rightWeights rightSizes)) <-
                         zip [0 :: GroupIndex ..] related
                     ]
                 leftNode =
@@ -182,16 +192,41 @@ joinGroupedStatic left right related =
                 , outcome <- toList $ outcomes group
                 ]
 
-{- | Enumerate a language and pair every outcome with its projected key and
-the weight of its rank inside its size class.
+{- | One side of a matched group from the outcomes of one key, in size order.
+The sort is stable, so the outcomes of one size keep their rank order.
+-}
+joinSide :: Seq (Size, Rational, Outcome symbol a) -> JoinSide symbol a
+joinSide entries =
+    JoinSide
+        ((\(_, _, outcome) -> outcome) <$> ordered)
+        ((\(_, weight, _) -> weight) <$> ordered)
+        (sizeOf <$> ordered)
+  where
+    sizes = sizeOf <$> entries
+    ordered
+        | and $ Sequence.zipWith (<=) sizes (Sequence.drop 1 sizes) = entries
+        | otherwise = Sequence.sortOn sizeOf entries
+    sizeOf (size, _, _) = size
+
+{- | Enumerate a language and pair every outcome with its projected key, the
+size of its rank, and the weight of its rank inside its size class.
 -}
 keyedOutcomes ::
     (value -> key) ->
     Static symbol value ->
-    Either GenError [(key, (Rational, Outcome symbol value))]
-keyedOutcomes key static =
-    map (\entry@(_, outcome) -> (key $ outcomeValue outcome, entry))
-        <$> enumerateWeighted static
+    Either GenError [(key, (Size, Rational, Outcome symbol value))]
+keyedOutcomes key static = do
+    weighted <- enumerateWeighted static
+    pure
+        [ (key $ outcomeValue outcome, (sizeOf rank, weight, outcome))
+        | (rank, (weight, outcome)) <- zip (everyRank $ toEnum $ length weighted) weighted
+        ]
+  where
+    outcomes = staticOutcomes static
+    -- A language of one size class needs no plan walk for each rank.
+    sizeOf = case sizeClassCounts $ outcomeSizeIndex outcomes of
+        [(size, _)] -> const size
+        _ -> planMemberSize $ outcomePlan outcomes
 
 -- | Count, select, and sample the matched groups of a two-way join.
 joinOutcomeIndex ::
@@ -204,14 +239,18 @@ joinOutcomeIndex left right groups = do
     rankSampler <- case uniformMass of
         Just _ -> pure $ uniformSampler totalOutcomes selectValue
         Nothing -> joinSampler groups
-    -- Every pair has size two. When a side has a non-uniform atomic choice,
-    -- the pairs of that size class are sampled in proportion to the product
-    -- of the weights of their two sides, as the size class of a product is.
+    -- A pair has the sizes of its two sides added, as a product has. When a
+    -- side has a non-uniform atomic choice, the pairs of one size class are
+    -- sampled in proportion to the product of the weights of their two sides,
+    -- as the size class of a product is.
     sizeSampling <-
         if isJust (snd $ staticSampling left) || isJust (snd $ staticSampling right)
             then do
-                sampler <- joinSampler weightGroups
-                pure $ Just (SampleIndex $ const sampler, Right . weight)
+                samplings <- sequence $ zipWith3 groupSampling groups sidePlans pairWeights
+                -- Build the sampler of each size class once.
+                let sampling = choiceMassSampleIndex samplings
+                    bySize = Map.fromSet (samplerAtSize sampling) (Map.keysSet classWeights)
+                pure $ Just (SampleIndex $ \size -> Map.findWithDefault (samplerAtSize sampling size) size bySize, Right . weight)
             else pure Nothing
     pure $
         ( mkOutcomeIndex
@@ -221,35 +260,57 @@ joinOutcomeIndex left right groups = do
             (leafRanks pairRanks)
             selectValue
             rankSampler
-            ( PlanChoice
-                [ ( joinGroupCardinality group
-                  , PlanAp
-                        (toEnum $ Sequence.length $ joinGroupRight group)
-                        (PlanMap (,) $ seqPlan $ joinGroupLeft group)
-                        (seqPlan $ joinGroupRight group)
-                  )
-                | group <- groups
-                ]
-            )
+            plan
         )
             { outcomeSizeSampling = sizeSampling
             }
   where
-    -- The groups with the weight of each outcome in place of its mass.
-    weightGroups =
-        [ group
-            { joinGroupLeft = Sequence.zipWith withMass (joinGroupLeftWeights group) (joinGroupLeft group)
-            , joinGroupRight = Sequence.zipWith withMass (joinGroupRightWeights group) (joinGroupRight group)
-            }
+    plan = PlanChoice [(joinGroupCardinality group, groupPlan) | (group, (_, _, groupPlan)) <- zip groups sidePlans]
+    -- The plans of the two sides of each group, and of the group.
+    sidePlans =
+        [ (leftPlan, rightPlan, PlanAp (toEnum $ Sequence.length $ joinGroupRight group) (PlanMap (,) leftPlan) rightPlan)
         | group <- groups
+        , let leftPlan = sidePlan (joinGroupLeftSizes group) (joinGroupLeft group)
+              rightPlan = sidePlan (joinGroupRightSizes group) (joinGroupRight group)
         ]
-      where
-        withMass mass outcome = outcome{outcomeMass = mass}
-    totalWeight = sum $ map joinGroupMass weightGroups
+
+    -- The size index, the weight at each size, and the weighted sampler of one group.
+    groupSampling group (leftPlan, rightPlan, groupPlan) weights = do
+        (leftMass, leftSampling) <- weightedSide (joinGroupLeftSizes group) (joinGroupLeftWeights group) (joinGroupLeft group)
+        (rightMass, rightSampling) <-
+            weightedSide (joinGroupRightSizes group) (joinGroupRightWeights group) (joinGroupRight group)
+        pure
+            ( sizeIndex groupPlan
+            , \size -> Map.findWithDefault 0 size weights
+            , productMassSampleIndex
+                (sizeIndex $ PlanMap (,) leftPlan)
+                leftMass
+                (mapSampleIndex (,) leftSampling)
+                (sizeIndex rightPlan)
+                rightMass
+                rightSampling
+            )
+    -- The weight of the pairs of each size, for each group and for all groups.
+    pairWeights = map groupPairWeights groups
+    classWeights = Map.unionsWith (+) pairWeights
+    groupPairWeights group =
+        Map.fromListWith
+            (+)
+            [ (leftSize + rightSize, leftWeight * rightWeight)
+            | (leftSize, leftWeight) <- sideWeights (joinGroupLeftSizes group) (joinGroupLeftWeights group)
+            , (rightSize, rightWeight) <- sideWeights (joinGroupRightSizes group) (joinGroupRightWeights group)
+            ]
+    sideWeights sizes weights = Map.toList $ Map.fromListWith (+) $ zip (toList sizes) (toList weights)
+    -- The weight of a pair in its size class: the product of the weights of
+    -- its sides, scaled so that the weights of a size class add up to its count.
     weight index =
-        let (_, leftOutcome, rightOutcome) = selectPairIn weightGroupsByOffset index
-         in toRational totalOutcomes * outcomeMass leftOutcome * outcomeMass rightOutcome / totalWeight
-    weightGroupsByOffset = joinGroupsByOffset weightGroups
+        let (group, leftIndex, rightIndex) = selectIndexes index
+            size = Sequence.index (joinGroupLeftSizes group) leftIndex + Sequence.index (joinGroupRightSizes group) rightIndex
+         in toRational (countAtSize joinedSizes size)
+                * Sequence.index (joinGroupLeftWeights group) leftIndex
+                * Sequence.index (joinGroupRightWeights group) rightIndex
+                / Map.findWithDefault 0 size classWeights
+    joinedSizes = sizeIndex plan
 
     totalOutcomes = sum $ map joinGroupCardinality groups
     uniformMass = case (outcomeUniformMass $ staticOutcomes left, outcomeUniformMass $ staticOutcomes right) of
@@ -304,14 +365,66 @@ joinOutcomeIndex left right groups = do
         IntMap.fromList
             [(index, entry) | entry@(_, group) <- offsetJoinGroups groups, let GroupIndex index = joinGroupIndex group]
     groupsByOffset = joinGroupsByOffset groups
-    selectPair = selectPairIn groupsByOffset
-    selectPairIn byOffset index =
-        let (group, groupIndex) = selectJoinGroup index byOffset
-            rightCardinality = toEnum $ Sequence.length $ joinGroupRight group
-            (leftIndex, rightIndex) = splitRank rightCardinality groupIndex
-            leftOutcome = Sequence.index (joinGroupLeft group) $ fromEnum leftIndex
-            rightOutcome = Sequence.index (joinGroupRight group) $ fromEnum rightIndex
-         in (group, leftOutcome, rightOutcome)
+    selectIndexes index =
+        let (group, groupIndex) = selectJoinGroup index groupsByOffset
+            (leftIndex, rightIndex) = splitRank (toEnum $ Sequence.length $ joinGroupRight group) groupIndex
+         in (group, fromEnum leftIndex, fromEnum rightIndex)
+    selectPair index =
+        let (group, leftIndex, rightIndex) = selectIndexes index
+         in (group, Sequence.index (joinGroupLeft group) leftIndex, Sequence.index (joinGroupRight group) rightIndex)
+
+{- | The plan of one side of a join group whose outcomes are in size order:
+one size class for each size, so a pair has the sizes of its two sides. A
+side of atoms of size one keeps its plain plan.
+-}
+sidePlan :: Seq Size -> Seq (Outcome symbol a) -> Plan a
+sidePlan sizes outcomes
+    | all (== 1) sizes = seqPlan outcomes
+    | otherwise =
+        PlanSized
+            [ SizeClass size (toEnum count) (\(ClassRank position) -> valueAt $ start + fromInteger position) (valueAt . (start +))
+            | (size, start, count) <- sizeRuns sizes
+            ]
+  where
+    valueAt = outcomeValue . Sequence.index outcomes
+
+{- | Sample the outcomes of one size of a join side in proportion to their
+weights, with the weight of each size. The side is in size order, so the rank
+of an outcome in its size class is its position after the first outcome of
+that size.
+-}
+weightedSide ::
+    Seq Size ->
+    Seq Rational ->
+    Seq (Outcome symbol a) ->
+    Either GenError (Size -> Rational, SampleIndex a)
+weightedSide sizes weights outcomes = do
+    samplers <- traverse classSampler $ sizeRuns sizes
+    let bySize = Map.fromList samplers
+    pure
+        ( \size -> Map.findWithDefault 0 size masses
+        , SampleIndex $ \size -> Map.findWithDefault (noClass size) size bySize
+        )
+  where
+    masses = Map.fromListWith (+) $ zip (toList sizes) (toList weights)
+    classSampler (size, start, count) =
+        (size,) <$> sequenceSampler (Sequence.zipWith withMass (slice start count weights) (slice start count outcomes))
+    slice start count = Sequence.take count . Sequence.drop start
+    withMass mass outcome = outcome{outcomeMass = mass}
+    noClass size =
+        error $
+            "microcfta-generator bug in Data.CFTA.Gen.Internal.Join.weightedSide: no outcome of size "
+                <> show size
+
+-- | The runs of one size in sizes in order: each size, its first position, and its count.
+sizeRuns :: Seq Size -> [(Size, Int, Int)]
+sizeRuns = go 0 . toList
+  where
+    go _ [] = []
+    go start (size : rest) =
+        let (same, others) = span (== size) rest
+            count = 1 + length same
+         in (size, start, count) : go (start + count) others
 
 -- | Number of pairs in one matched group.
 joinGroupCardinality :: JoinGroup symbol left right -> Cardinality
