@@ -13,6 +13,7 @@ module Data.CFTA.Refinement.Minimize (
     SimilarityPair (..),
     SimilarityError (..),
     similarity,
+    similarityWithin,
     similarityPairs,
     MinimizeError (..),
     minimize,
@@ -22,7 +23,7 @@ import Data.Bifunctor (first)
 import Data.Foldable (toList)
 import qualified Data.Graph as Graph
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (elemIndex, nub, sortOn)
+import Data.List (elemIndex, mapAccumL, nub, sortOn)
 import qualified Data.Map.Strict as Map
 import Data.Sequence (Seq (..))
 import qualified Data.Set as Set
@@ -124,7 +125,44 @@ possible direction and does not treat it as false.
 similarity :: Subtyping -> Automaton -> IO (Either SimilarityError Similarity)
 similarity subtyping automaton = case validate automaton of
     Left err -> pure $ Left $ InvalidSimilarityAutomaton err
-    Right () -> go Empty $ unorderedPairs $ locatedTransitions automaton
+    Right () -> decidePairs subtyping automaton $ unorderedPairs $ locatedTransitions automaton
+
+{- | 'similarity' for an oracle that relates only transitions of one class.
+
+The classification gives each transition a class, or 'Nothing' for a
+transition that is not compared. Only pairs of one class are asked, in the
+order of 'similarity'. So the result equals that of 'similarity' when the
+oracle answers 'No' for every other pair, as 'refinementSubtypingOn' does with
+the same classification. The cost is the sum of the squares of the class
+sizes, not the square of the number of transitions.
+-}
+similarityWithin ::
+    (Ord key) =>
+    (Transition -> Maybe key) ->
+    Subtyping ->
+    Automaton ->
+    IO (Either SimilarityError Similarity)
+similarityWithin classify subtyping automaton = case validate automaton of
+    Left err -> pure $ Left $ InvalidSimilarityAutomaton err
+    Right () -> decidePairs subtyping automaton pairs
+  where
+    classified = [(key, transition) | transition@(_, edge) <- locatedTransitions automaton, Just key <- [classify edge]]
+    -- Each transition with the transitions of its class that follow it.
+    pairs =
+        concat
+            $ snd
+            $ mapAccumL laterInClass (Map.fromListWith (flip (<>)) [(key, [transition]) | (key, transition) <- classified]) classified
+    laterInClass members (key, transition) = case Map.lookup key members of
+        Just (_ : rest) -> (Map.insert key rest members, [(transition, other) | other <- rest])
+        _ -> (members, [])
+
+-- | Ask the oracle about each pair in order, as 'similarity' describes.
+decidePairs ::
+    Subtyping ->
+    Automaton ->
+    [((TransitionId, Transition), (TransitionId, Transition))] ->
+    IO (Either SimilarityError Similarity)
+decidePairs subtyping automaton = go Empty
   where
     go related [] = pure $ Right $ Similarity automaton $ toList related
     go related (((leftId, left), (rightId, right)) : rest) = do
@@ -241,24 +279,46 @@ minimize automaton (Similarity original related) = do
     resolved <- traverse (\replaced -> Replacement replaced <$> resolve Set.empty replaced) (Map.keys dominators)
     let redirectFor pair = (addressNode $ replacedSupertype pair, addressNode $ chosenRepresentative pair)
         redirects = Map.fromListWith (<>) [(source, [destination]) | pair <- resolved, let (source, destination) = redirectFor pair]
-        applyStep (table', steps) pair
-            | source == destination && removed == retained = (Map.adjust nub source table', steps)
+        -- The states with a transition that has the state as a child. A copy
+        -- changes only these rows: in every other row it adds nothing.
+        parentsOf =
+            Map.fromListWith
+                Set.union
+                [ (child, Set.singleton state)
+                | (state, transitions) <- Map.toList table
+                , transition <- transitions
+                , child <- FTA.transitionChildren transition
+                ]
+        applyStep (table', parents, steps) pair
+            | source == destination && removed == retained = (Map.adjust nub source table', parents, steps)
             -- A copy reaches every alternative of the destination, and only the
             -- representative is similar to the removed transition.
-            | source /= destination && Map.findWithDefault [] destination table /= [retained] = (table', steps)
-            | removed `notElem` Map.findWithDefault [] source table' = (table', steps)
-            | retained `notElem` Map.findWithDefault [] destination table' = (table', steps)
+            | source /= destination && Map.findWithDefault [] destination table /= [retained] = (table', parents, steps)
+            | removed `notElem` Map.findWithDefault [] source table' = (table', parents, steps)
+            | retained `notElem` Map.findWithDefault [] destination table' = (table', parents, steps)
             | otherwise =
-                ( Map.adjust (filter (/= removed)) source $ fmap (copyAlternatives redirect) table'
+                ( Map.adjust (filter (/= removed)) source $ foldl' (flip $ Map.adjust (copyAlternatives redirect)) table' affected
+                , Map.insertWith Set.union destination (Set.fromList affected) parents
                 , steps :|> redirect
                 )
           where
             redirect@(source, destination) = redirectFor pair
             removed = current Map.! replacedSupertype pair
             retained = current Map.! chosenRepresentative pair
+            affected = Set.toList $ Map.findWithDefault Set.empty source parents
+        -- This equals @nub (transitions <> map redirect transitions)@ when the
+        -- transitions are distinct. Each row of the view is, because a node
+        -- keeps each edge once, and each step keeps its rows distinct.
         copyAlternatives (source, destination) transitions =
-            nub $ transitions <> map (redirectTransition $ Map.singleton source destination) transitions
-        (rewritten, applied) = foldl' applyStep (table, Empty) resolved
+            transitions
+                <> nub
+                    [ copy
+                    | transition <- transitions
+                    , source `elem` FTA.transitionChildren transition
+                    , let copy = redirectTransition (Map.singleton source destination) transition
+                    , copy `notElem` transitions
+                    ]
+        (rewritten, _, applied) = foldl' applyStep (table, parentsOf, Empty) resolved
         productive = productiveStates rewritten
         finiteTransition = all (`Set.member` productive) . FTA.transitionChildren
         hasFiniteDerivation chosen =

@@ -1004,6 +1004,11 @@ the automaton first and reports `InvalidSimilarityAutomaton` otherwise. A
 `StaleSimilarity` if the automaton is a different node, including when the
 relation is empty.
 
+`similarity` asks the oracle about every pair of transitions. When the oracle
+relates only transitions of one class, as `refinementSubtypingOn` does with
+its classification, `similarityWithin` with the same classification asks only
+about pairs of one class, in the same order, and gives the same result.
+
 Minimization applies a finite schedule of the paper's M-Trans rule on the
 explicit view of the graph, then interns the result, so the returned automaton
 is again a node. It resolves transitive representatives, then considers each
