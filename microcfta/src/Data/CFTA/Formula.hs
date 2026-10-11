@@ -311,7 +311,7 @@ substituteChecked replacements = inFormula (filter (\(name, term) -> term /= Var
          in (,) bindings <$> inFormula active' inner
     freshNames avoid =
         [ candidate
-        | index <- [1 :: Int ..]
+        | index <- [1 :: Integer ..]
         , let candidate = Name $ Text.pack $ "__microcfta_bound_" <> show index
         , not $ HashSet.member candidate avoid
         ]
