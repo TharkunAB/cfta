@@ -47,12 +47,11 @@ internal errors. It does not prove that every finite accepted term has a
 successful branch. It does not prove that returned terms satisfy the original
 node language or residual predicates.
 
-The remaining simulation must relate complete assignments before and after
-each actual node and edge action. The local assignment laws in
-`EnumerationCorrectness.lean` provide allocation, intersection, union,
-assimilation, node restriction, and rendering facts. They still need to be
-composed through the full traversal and its final root write. The stuck-branch
-proof also needs the pending-trie and strict subtree dependency invariants.
+`EnumerationSoundness.runs_assignment_sound` now composes backward assignment
+semantics through the full traversal and its final root write. See
+`notes-enumeration-semantics.md`. That theorem assumes a satisfying final
+assignment. Constructing such assignments remains open. The stuck-branch
+proof also needs pending-reference and strict subtree dependency invariants.
 Execution-bound sufficiency remains separate from branch rejection.
 
 Recursive markers require the documented truncation contract. A marker is
