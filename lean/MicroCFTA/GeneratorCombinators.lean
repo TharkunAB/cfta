@@ -26,6 +26,14 @@ inductive Label (Symbol : Type) where
   | apply
   | choice (branch : Nat)
   | join
+  | joinN
+  | centerKeyed
+  | argKeyed
+  | family
+  | atKey
+  | key (index : Nat)
+  | argKey (component argument : Nat)
+  | placeholder
   | leftKeyed
   | rightKeyed
   | group (index : Nat)
