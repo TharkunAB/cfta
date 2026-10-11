@@ -1,15 +1,15 @@
 -- | The term type agrees with the rose tree it replaces.
 module Data.CFTA.TermSpec (spec) where
 
-import Control.Monad (foldM)
+import Control.Monad (foldM, forM_)
 import Data.Hashable (hash)
-import Data.List ((!?))
+import Data.List (permutations, (!?))
 import qualified Data.Tree as Tree
 import Test.Hspec (Spec, describe, it, shouldBe)
-import Test.QuickCheck (Gen, choose, elements, forAll, listOf, property, sized)
+import Test.QuickCheck (Gen, choose, elements, forAll, listOf, property, sized, vectorOf)
 
 import Data.CFTA.Path (ChildIndex (ChildIndex), getPath, modifyAtPath, path)
-import Data.CFTA.Term (flatten, fromRoseTree, toRoseTree)
+import Data.CFTA.Term (flatten, fromAssocs, fromRoseTree, toRoseTree, pattern Node)
 
 spec :: Spec
 spec = describe "terms" $ do
@@ -33,6 +33,13 @@ spec = describe "terms" $ do
                     target = path indexes
                 getPath target term `shouldBe` fmap fromRoseTree (subtreeAt indexes tree)
                 getPath target (modifyAtPath (fmap succ) target term) `shouldBe` fmap (fmap succ) (getPath target term)
+
+    it "build a term from its children keyed by index in any order" $
+        property $
+            forAll (choose (0, 5) >>= (`vectorOf` roseTree)) $ \trees -> do
+                let children = map fromRoseTree trees
+                forM_ (permutations [0 .. length children - 1]) $ \order ->
+                    fromAssocs 'a' (length children) [(index, children !! index) | index <- order] `shouldBe` Node 'a' children
   where
     subtreeAt = flip $ foldM (\(Tree.Node _ children) (ChildIndex index) -> children !? index)
 

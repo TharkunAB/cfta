@@ -297,13 +297,13 @@ compileFiniteAutomaton order root
             selected <- traverse (buildGroup children) groups
             pure $ do
                 compiledGroups <- sequence selected
-                let slots = foldl' addGroup (pure Map.empty) (zip groups $ map fst compiledGroups)
+                let slots = foldl' addGroup (pure []) (zip groups $ map fst compiledGroups)
                 -- The constructor of the edge pays one, so a term counts its nodes.
                 pure
                     ( Ranked.pay $
                         -- The groups cover each child index once, so the slots
-                        -- hold the children in index order.
-                        Term.Node (edgeSymbol edge) . Map.elems <$> slots
+                        -- are the children keyed by index.
+                        Term.fromAssocs (edgeSymbol edge) (length children) <$> slots
                     , rankEdge edge $ zip groups compiledGroups
                     )
       where
@@ -313,7 +313,7 @@ compileFiniteAutomaton order root
             [] -> pure Nothing
             first : rest -> buildNode $ foldl' intersect first rest
     addGroup prefix (positions, ranked) =
-        (\values term -> foldr (`Map.insert` term) values positions) <$> prefix <*> ranked
+        (\values term -> foldr (\(ChildIndex index) -> ((index, term) :)) values positions) <$> prefix <*> ranked
     -- The groups are the digits of a mixed-radix rank, and the first group is
     -- the most significant digit. The terms of one group must be equal.
     rankEdge edge groups (Term.Node symbol terms)

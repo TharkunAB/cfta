@@ -6,10 +6,10 @@ A leaf and a term with one, two, or three children hold their children in
 constructor fields, and a term with four or more children holds them in a
 'Seq'. A path reads a subterm with one field read or one 'Seq.lookup' for
 each child index. A term with @n@ children holds them at the indexes @0@ to
-@n - 1@. The other modules build terms through 'Node', and read children
-through 'child', 'childAt', 'subForest', and 'arity'. The module does not
-export the constructors, so that only this module depends on the
-representation.
+@n - 1@. The other modules build terms through 'Node' and 'fromAssocs', and
+read children through 'child', 'childAt', 'subForest', and 'arity'. The
+module does not export the constructors, so that only this module depends on
+the representation.
 
 The 'Ord' and 'Hashable' instances agree with the instances of
 'Tree.Tree' on the same term: 'Ord' compares the symbol, then the children in
@@ -26,6 +26,7 @@ module Data.CFTA.Term (
     child,
     childAt,
     adjustChild,
+    fromAssocs,
     flatten,
     foldTree,
     fromRoseTree,
@@ -109,6 +110,10 @@ unNode (Three symbol first second third) = (symbol, [first, second, third])
 unNode (Many symbol children) = (symbol, toList children)
 {-# INLINE [0] unNode #-}
 
+-- | The placeholder of a child that a builder has not written.
+unfilled :: a
+unfilled = error "Data.CFTA.Term: a builder left a child unfilled"
+
 -- | The symbol at the root of a term.
 rootLabel :: Term symbol -> symbol
 rootLabel (Leaf symbol) = symbol
@@ -165,6 +170,24 @@ adjustChild f 1 (Three symbol first second third) = Three symbol first (f second
 adjustChild f 2 (Three symbol first second third) = Three symbol first second (f third)
 adjustChild f index (Many symbol children) = Many symbol (Seq.adjust f index children)
 adjustChild _ _ term = term
+
+{- | A term from its arity and its children keyed by child index. Each index
+from @0@ to @arity - 1@ appears once in the list.
+-}
+fromAssocs :: symbol -> Int -> [(Int, Term symbol)] -> Term symbol
+fromAssocs symbol size assocs = case assocs of
+    [] -> Leaf symbol
+    [(_, first)] -> One symbol first
+    [(0, first), (_, second)] -> Two symbol first second
+    [(_, second), (_, first)] -> Two symbol first second
+    [(0, first), (1, second), (_, third)] -> Three symbol first second third
+    [(0, first), (_, third), (_, second)] -> Three symbol first second third
+    [(1, second), (0, first), (_, third)] -> Three symbol first second third
+    [(1, second), (_, third), (_, first)] -> Three symbol first second third
+    [(_, third), (0, first), (_, second)] -> Three symbol first second third
+    [(_, third), (_, second), (_, first)] -> Three symbol first second third
+    _ ->
+        Many symbol $ foldl' (\children (index, term) -> Seq.update index term children) (Seq.replicate size unfilled) assocs
 
 -- | The symbols of a term in preorder, as 'Tree.flatten' gives them.
 flatten :: Term symbol -> [symbol]
