@@ -4,6 +4,7 @@
 module Main (main) where
 
 import Data.CFTA.Constraint (semanticConstraint)
+import Data.CFTA.Formula (Sort (IntSort))
 import qualified Data.CFTA.Gen.Refinement as G
 import Data.CFTA.Ranked.Internal.Decoder (Plan (..), SizeClass (..))
 import qualified Data.CFTA.Ranked.Internal.Size as Size
@@ -102,4 +103,4 @@ main = do
         rootRemoval solver
     zeroProduct
   where
-    declarations = ["app", "x", "y", "v"]
+    declarations = [(name, IntSort) | name <- ["app", "x", "y", "v"]]

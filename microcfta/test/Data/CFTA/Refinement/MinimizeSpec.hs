@@ -2,6 +2,7 @@
 
 module Data.CFTA.Refinement.MinimizeSpec (spec) where
 
+import Data.CFTA.Formula (Sort (IntSort))
 import Data.CFTA.Refinement (
     Automaton,
     Entailment,
@@ -205,7 +206,7 @@ spec =
         it "keeps the supertype when pruning leaves the representative's guard undecided" $
             -- Two compound actuals with the same root observation make the
             -- substitution ambiguous, so pruning keeps the guard as it is.
-            withZ3 (declarations <> ["app"]) $ \solver -> do
+            withZ3 (declarations <> [("app", IntSort)]) $ \solver -> do
                 denotationAtMost solver 4 undecidedRepresentative >>= (\terms -> fmap length terms `shouldBe` Right 1)
                 reduced <- reduce solver (atomSubtyping solver) undecidedRepresentative
                 case reduced of
