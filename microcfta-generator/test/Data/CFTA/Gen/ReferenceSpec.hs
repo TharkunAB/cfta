@@ -544,7 +544,7 @@ familyAgreement (ClosedFamily desc) =
         $ QC.tabulate "family" [kind]
         $ QC.within 5000000
         $ QC.conjoin
-        $ (Gen.sizes grouped === expectedSizes)
+        $ (Gen.cardinalities grouped === expectedSizes)
             : [ counterexample ("size " <> show size) $
                     Gen.countsAtSize grouped (Size size) === expectedCounts size
                         .&&. Gen.massesAtSize grouped (Size size) === expectedMasses size

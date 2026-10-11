@@ -220,7 +220,7 @@ spec =
                     , (Rank intCount, TBool)
                     , (Rank $ total - 1, TBool)
                     ]
-            ECTAGen.sizes (depthByType 4)
+            ECTAGen.cardinalities (depthByType 4)
                 `shouldBe` Right
                     ( Map.fromList
                         [ (TInt, Cardinality intCount)
@@ -252,7 +252,7 @@ spec =
             let expectedMass = 1 / fromIntegral (upToDepthCount 2)
                 generator = ECTAGen.ungroup $ upToDepthByType 2
             upToDepthCount 2 `shouldBe` 34380
-            ECTAGen.sizes (upToDepthByType 2)
+            ECTAGen.cardinalities (upToDepthByType 2)
                 `shouldBe` Right
                     ( Map.fromList
                         [ (TInt, 9722)

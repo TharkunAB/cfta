@@ -30,7 +30,7 @@ module Data.CFTA.Gen.Internal.Grouped (
 
     -- * Inspection
     groupKeys,
-    sizes,
+    cardinalities,
     countsAtSize,
     massesAtSize,
 ) where
@@ -344,7 +344,7 @@ uniformlyGrouped alternatives
                 | (Just count, alternative) <- zip counts alternatives
                 ]
   where
-    liveCardinality alternative = case sizes alternative of
+    liveCardinality alternative = case cardinalities alternative of
         Left EmptyGenerator -> Right Nothing
         Left err -> Left err
         Right groups ->
@@ -465,10 +465,10 @@ groupKeys (CyclicGrouped result) = either (const []) Map.keys result
 groupKeys (Grouped result) = either (const []) Map.keys result
 
 -- | Return the exact cardinality of each retained group in O(number of groups).
-sizes :: Grouped symbol key a -> Either GenError (Map.Map key Cardinality)
-sizes (CyclicGrouped (Left err)) = Left err
-sizes (CyclicGrouped _) = Left UnboundedGenerator
-sizes (Grouped result) =
+cardinalities :: Grouped symbol key a -> Either GenError (Map.Map key Cardinality)
+cardinalities (CyclicGrouped (Left err)) = Left err
+cardinalities (CyclicGrouped _) = Left UnboundedGenerator
+cardinalities (Grouped result) =
     fmap (fmap $ outcomeCardinality . staticOutcomes . keyedBucketStatic) result
 
 -- | Return the exact number of retained members in every live key at one structural size.

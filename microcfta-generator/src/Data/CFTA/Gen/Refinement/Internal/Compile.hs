@@ -325,7 +325,7 @@ compileGenOnce compiler requested generator
     -- and a recursive alternative makes the choice equal.
     uniformWeights groups
         | any recursiveGroup groups = map (const 1) groups
-        | otherwise = map (either (const 1) (countWeight . sum) . sizes) groups
+        | otherwise = map (either (const 1) (countWeight . sum) . cardinalities) groups
 
 -- | The leaf of one integer, refined as itself.
 integerSymbol :: Integer -> Symbol
@@ -351,7 +351,7 @@ recursiveGroup _ = False
 
 -- | Whether a grouped generator has no member.
 emptyGroups :: LTAGrouped key a -> Bool
-emptyGroups grouped = case sizes grouped of
+emptyGroups grouped = case cardinalities grouped of
     Left EmptyGenerator -> True
     Right groups -> all (== 0) groups
     Left _ -> False
@@ -631,7 +631,7 @@ compileOpen compiler requested generator =
                         ClosedBy symbolOf constraint child -> compileOpenNode compiler requested (ComputedLabel symbolOf) constraint child
                         _ -> pure $ Left SourceRequiresCompilation
   where
-    members grouped = case sizes grouped of
+    members grouped = case cardinalities grouped of
         Right counts -> countWeight . sum <$> traverse (uncurry pointsOf) (Map.toList counts)
         Left _ -> Right 1
     pointsOf key count = case openPoints key of
@@ -672,7 +672,7 @@ joinPositioned grouped = regroupOn rekey grouped
     identity keys = let joined = joinOpenKeys keys in (openCount joined, openFormula joined)
     positions =
         Map.fromListWith (\_ earlier -> earlier) $
-            zip (map identity $ either (const []) Map.keys $ sizes grouped) [0 :: Int ..]
+            zip (map identity $ either (const []) Map.keys $ cardinalities grouped) [0 :: Int ..]
     rekey keys =
         let joined = joinOpenKeys keys
          in joined{openObservations = (openObservations joined){keyPosition = positions Map.! identity keys}}
@@ -735,7 +735,7 @@ childLabel (RefinedSymbol (Symbol constructor) _) childKeys index =
 
 -- | The keys of the groups of a grouped generator.
 openKeys :: LTAGrouped OpenKey a -> [OpenKey]
-openKeys = either (const []) Map.keys . sizes
+openKeys = either (const []) Map.keys . cardinalities
 
 -- | The formula of each group of a tuple, with the variables of the tuple renamed apart.
 renamedFormulas :: [OpenKey] -> [Formula]
@@ -757,7 +757,7 @@ repositionOpen grouped = regroupOn rekey grouped
     identity (_, key) = (keyObservations $ openObservations key, openCount key, openFormula key)
     positions =
         Map.fromListWith (\_ earlier -> earlier) $
-            zip (map identity $ either (const []) Map.keys $ sizes grouped) [0 :: Int ..]
+            zip (map identity $ either (const []) Map.keys $ cardinalities grouped) [0 :: Int ..]
     rekey indexed@(_, key) =
         key{openObservations = (openObservations key){keyPosition = positions Map.! identity indexed}}
 

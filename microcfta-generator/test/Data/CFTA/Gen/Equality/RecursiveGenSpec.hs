@@ -115,9 +115,9 @@ spec = do
         it "declares one key for an unbounded language without enumerating it" $ do
             let family = ECTAGen.keyed True trees
                 selected = ECTAGen.atKey True family
-            ECTAGen.sizes (ECTAGen.groupOn leafCount trees)
+            ECTAGen.cardinalities (ECTAGen.groupOn leafCount trees)
                 `shouldBe` Left UnboundedGenerator
-            ECTAGen.sizes family `shouldBe` Left UnboundedGenerator
+            ECTAGen.cardinalities family `shouldBe` Left UnboundedGenerator
             traverse (ECTAGen.countAtSize selected) [1 .. 5]
                 `shouldBe` Right [3, 9, 54, 405, 3402]
             traverse (ECTAGen.unrank selected) [0 .. 50]

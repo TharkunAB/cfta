@@ -97,7 +97,7 @@ spec =
         it "counts the depth-at-most-one labeled language exactly" $ do
             ECTAGen.cardinality (ECTAGen.ungroup (expressionsUpToDepth 1))
                 `shouldBe` Right 108
-            ECTAGen.sizes (expressionsUpToDepth 1)
+            ECTAGen.cardinalities (expressionsUpToDepth 1)
                 `shouldBe` Right
                     ( Map.fromList
                         [ ((TInt, Public), 39)
@@ -114,7 +114,7 @@ spec =
                     all (faithfullyLabeled . fst) outcomes `shouldBe` True
 
         it "counts the leaking programs without enumerating them" $
-            ECTAGen.sizes (programsUpToDepth 1)
+            ECTAGen.cardinalities (programsUpToDepth 1)
                 `shouldBe` Right
                     ( Map.fromList
                         [ ((TUnit, Public), 72)
@@ -132,7 +132,7 @@ spec =
             ECTAGen.smallest (ECTAGen.atKey (TUnit, Private) (secureProgramsUpToDepth 1))
                 `shouldBe` Right Nothing
             -- Not vacuous: the enforcing print does admit the public programs.
-            ECTAGen.sizes (secureProgramsUpToDepth 1)
+            ECTAGen.cardinalities (secureProgramsUpToDepth 1)
                 `shouldBe` Right (Map.fromList [((TUnit, Public), 72)])
 
         it "shrinks a QuickCheck leak to the minimal program" $ do

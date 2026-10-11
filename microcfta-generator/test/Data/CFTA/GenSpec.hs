@@ -179,7 +179,7 @@ spec = do
             sampled <- QC.generate (FTAGen.toGenEither failed)
             (sampled, FTAGen.cardinality (FTAGen.match (id :==: id) failed (FTAGen.elements [1 :: Int])))
                 `shouldBe` (Left FTAGen.UnguardedRecursion, Left FTAGen.UnguardedRecursion)
-            FTAGen.sizes (FTAGen.groupOn id failed) `shouldBe` Left FTAGen.UnguardedRecursion
+            FTAGen.cardinalities (FTAGen.groupOn id failed) `shouldBe` Left FTAGen.UnguardedRecursion
 
         it "needs the smaller-member search to remove members before a failing one" $ do
             -- A greedy shrink loop takes the first candidate that still fails.
