@@ -53,6 +53,31 @@ import MicroCFTA.LatticeAPI
 import MicroCFTA.LatticeCumulative
 import MicroCFTA.Sampler
 
+import MicroCFTA.CoreFormula
+import MicroCFTA.CoreLattice
+import MicroCFTA.DistinctRank
+import MicroCFTA.Shrink
+import MicroCFTA.Symbolic
+import MicroCFTA.Construction
+import MicroCFTA.LatticeSelect
+import MicroCFTA.TermRepresentation
+import MicroCFTA.SearchCost
+import MicroCFTA.System
+import MicroCFTA.SizeTransport
+import MicroCFTA.LevelEnumeration
+import MicroCFTA.PublicResult
+import MicroCFTA.BoundDepth
+import MicroCFTA.OpenUnion
+import MicroCFTA.FullSyntax
+import MicroCFTA.EnumerationState
+import MicroCFTA.Generic
+import MicroCFTA.Template
+import MicroCFTA.Binding
+import MicroCFTA.PruneSchedule
+import MicroCFTA.MinimizeSchedule
+import MicroCFTA.GeneratorCombinators
+import MicroCFTA.RecipeCompile
+import MicroCFTA.SymbolicDriver
 /-!
 # Proof dependency audit
 
@@ -68,7 +93,7 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let mut checked : Nat := 0
   for (name, info) in env.constants.toList do
-    if (`MicroCFTA).isPrefixOf name && info.isTheorem then
+    if (`MicroCFTA).isPrefixOf (privateToUserName name) && info.isTheorem then
       let axioms ← collectAxioms name
       for axiomName in axioms do
         unless allowed.contains axiomName do

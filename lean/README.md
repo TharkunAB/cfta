@@ -1,38 +1,36 @@
-# microcfta Lean spike
+# microcfta formal model
 
-The full-formalization goal is active. [COVERAGE.md](COVERAGE.md) tracks the
-complete implementation scope and the remaining proof obligations. The
-reports below record earlier findings; they are not completion reports.
+[The system specification and current findings](SYSTEM.md) describe the
+language, distinct-term index, distribution, and optimization contracts.
+[API-COVERAGE.md](API-COVERAGE.md) maps all 66 source modules and exported
+function families. [COVERAGE.md](COVERAGE.md) records proof obligations.
 
-The earlier counterexamples are repaired. The formalization now also checks
-finite graph productivity, size-class weights, sparse convolution, zero-size
-splits, and integer-point closure. Two public correctness defects remain:
-bounded atomic-pair probabilities can change, and minimization can delete the
-only accepted root term. This is not a proof of the complete Haskell
-implementation. See [the current report](SECOND-REPAIRS.md).
+Current base: `origin/microcfta` at `d7f7c11`, including the merged
+core-formula extension at `9ad319d`. The branch retains its earlier repairs
+and adapts their mass transport to paid constructors. Earlier reports retain
+their original source hashes and describe historical snapshots.
 
-Current source baseline: `78387bb`, rebased onto `origin/microcfta` at
-`a232f82`. Commit `aefb1b6` adapts three retained
-regression cases to `measuredNode`. The existing findings reproduce on this
-implementation. The corrected rebase changes only measure documentation
-relative to the tested source. All 37 patches are retained. The range diff
-shows only changed README context around the leaf-count correction.
-Earlier reports retain their original source hashes.
-The initial audit used `dbc6955a9b1fe9de92acc167301342915916f307`.
+The model proves constrained grammar compilation, complete bounded language
+enumeration, a distinct-term bijection with `Fin n`, requested term
+probabilities, counted decoding, and component optimization laws. The source
+models include core and quantified formula syntax, symbolic counting,
+small-arity terms, size classes, shrinking, public failure behavior, and the
+construction, enumeration, pruning, minimization, and symbolic drivers.
+`System.grammar_bijection` and `System.grammar_probability` compose the
+reference grammar, FTA, index, and distribution results.
+
+Current Haskell counterexamples include quantified substitution changing
+meaning, a tautological observation changing bounded atomic-pair weights, and
+minimization removing the only accepted root term. A union with an enclosing
+recursive reference also has a documented term-loss limitation. See
+[SYSTEM.md](SYSTEM.md) for reproductions and proof anchors.
+
+This is not a claim that the whole Haskell implementation is verified. The
+Lean algorithms are handwritten. Some complete driver invariants, concrete runtime
+representations, and external contracts remain explicit in the coverage
+ledger. A proved reference algorithm does not prove its Haskell adapter.
+
 Toolchain: Lean 4.34.1. Dependencies: Lean's bundled `Std` and `Lean` libraries.
-
-## Results against the request
-
-| Requirement | Proved | Current implementation finding |
-| --- | --- | --- |
-| Generate every required term | Exact bounded enumeration, recursive finite-term completeness, counted plain-graph decoding, repaired `Holds` aliases, and finite integer closure with an exact point table. | Minimization can delete the initial state's only accepted term, even with an accepted representative. |
-| Correct probabilities | Weighted finite distributions, products, conditioning, duplicate-output aggregation, concrete grouping, plan normalization, and count-scaled size-class weight formulas. | A tautological observation on an atomic pair changes bounded probabilities from 9:1 to 1:1. |
-| Valid optimizations | Synchronous intersection, canonical equality classes, sparse observations, plan normalization, finite productivity, exact finite size tables, integer normalization, terminating feasibility filtering, and general Faulhaber summation. | The full minimizer, constrained enumerator, lazy table execution, and complete counting/ranking pipeline remain open. Internal product indexing requires a positive-size invariant. |
-
-See [SECOND-REPAIRS.md](SECOND-REPAIRS.md) for current findings and repair directions.
-[CONTINUATION.md](CONTINUATION.md) and [FINDINGS.md](FINDINGS.md) preserve the
-earlier audits. This continuation adds proofs and reproductions. The rebase
-also adapts retained regression cases to the new constructor API.
 
 ## Build and inspect
 
@@ -53,12 +51,16 @@ querying its default channel. The installed binary worked:
 The default target imports every proof module and runs
 [`MicroCFTA/Audit.lean`](MicroCFTA/Audit.lean). The audit checks the transitive
 axiom dependencies of every theorem in the `MicroCFTA` namespace, including
-generated theorems. It permits only `propext`, `Classical.choice`, and
+generated and private theorems. It permits only `propext`, `Classical.choice`, and
 `Quot.sound`. A placeholder proof, a native evaluation axiom, or a project
-axiom makes the build fail. A temporary theorem with `sorry` was used to verify
-that the audit rejects `sorryAx`. That temporary file is outside this project.
+axiom makes the build fail. Temporary public and private theorems with `sorry` verified that the audit
+rejects `sorryAx`. The negative probes are outside this project.
 
 ## Proof map
+
+New end-to-end and source correspondence modules are described in
+[SYSTEM.md](SYSTEM.md) and [API-COVERAGE.md](API-COVERAGE.md). The table below
+also retains the earlier component proof anchors.
 
 | File | Principal results |
 | --- | --- |
@@ -129,8 +131,8 @@ records later progress and all remaining implementation obligations.
 
 The later modules prove the general Bernoulli/Faulhaber construction,
 terminating feasibility recursion, formula-to-count pipeline, and cumulative
-polynomial sums. The final connection to the checked section-count ranker is
-still in progress. Concrete `Map` storage, variable-order retry behavior,
+polynomial sums. `LatticeSelect` now connects the stored cumulative polynomials to exact
+section counts and the recursive ranker. Concrete `Map` storage, variable-order retry behavior,
 binding freshening, and typed Fixpoint syntax remain explicit boundaries.
 
 ## Meaning of the main theorem
@@ -187,17 +189,17 @@ ecta.pdf 34572866be0bc8e86a546f712ffb2666fe641d133417a895ecbdee5d8f6e1ebf
 - The complete Lean package builds. The axiom audit passes.
 - All earlier repaired cases and the new counterexamples run inside `nix-shell`,
   with Z3 for the public cases.
-- Existing suites pass: 263 core, 182 generator, and 136 refinement examples;
-  581 total, zero failures. These passing suites do not cover the new findings.
+- Existing suites pass on `d7f7c11`: 260 core, 190 generator, and 135
+  refinement examples; 585 total, zero failures. These passing suites do not cover the new findings.
 - Fourmolu accepts the reproductions. Cabal-gild accepts both audited packages.
 
 The Haskell commands run from the repository root:
 
 ```sh
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal build lib:microcfta lib:microcfta-generator -j1'
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc lean/repro/Counterexamples.hs'
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc lean/repro/RemainingFindings.hs'
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc lean/repro/CurrentFindings.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta -package=microcfta-generator lean/repro/Counterexamples.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta -package=microcfta-generator lean/repro/RemainingFindings.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta -package=microcfta-generator lean/repro/CurrentFindings.hs'
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests microcfta-generator:gen-tests microcfta-generator:refinement-tests -j1 --test-show-details=direct'
 ```
 
@@ -214,7 +216,8 @@ add a package test suite.
    recursive product, and connect the finite sparse proofs to lazy tables.
 4. Prove the observation trie and constrained symbolic counter preserve
    language coverage, guard meaning, masses, and size classes.
-5. Verify the complete lattice eliminator and rank/select implementation.
+5. Connect the checked lattice eliminator and rank/select implementation to
+   variable-order retry and binding adapters.
 6. Establish an implementation correspondence through a translation, extraction,
    or a narrower verified core. Differential tests can support this work but
    cannot replace the correspondence proof.
