@@ -56,7 +56,7 @@ import qualified Data.CFTA.Template as Template
 | Build a grammar from supplied trees | `FTA.fromTerms` | A grammar that accepts those trees. |
 | Encode or decode one value | `Generic.encodeTerm`, `Generic.datatypeDecode` | A constructor tree or a typed value. This does not enumerate the grammar. |
 | Check membership | `FTA.accepts`, `Common.acceptsWith` | Whether a supplied tree belongs. The interned API takes a constraint interpreter. |
-| List accepted terms | `FTA.terms`, `Enumeration.terms`, `Enumeration.plainTerms`, `Enumeration.plainTermsAtMost` | Every term, by depth. `terms` solves constraints and stops at recursion; `FTA.terms` and `plainTerms` ignore constraints and give an infinite list for a recursive grammar; `plainTermsAtMost` stops at a depth. |
+| List accepted terms | `FTA.terms`, `Enumeration.terms`, `Enumeration.plainTerms`, `Enumeration.plainTermsAtMost` | Every term. `FTA.terms`, `plainTerms`, and `plainTermsAtMost` list by depth. `FTA.terms` and `plainTerms` ignore constraints and give an infinite list for a recursive grammar, and `plainTermsAtMost` stops at a depth. `terms` solves constraints and stops at recursion. For an automaton with constraints or recursion, it lists in the order of the runs, each term once. |
 | Restrict to a pattern | `Template.restrictFTA`, `Template.restrict` | A grammar for the terms that match a `Template`. |
 | List terms a check accepts | `FTA.termsUpToM` | The terms up to a depth, each checked once by a monadic predicate that sees its transition. |
 | Bound tree depth | `FTA.boundDepth` | Another grammar, restricted to trees within the bound. |
@@ -216,7 +216,8 @@ ordinary terms. `Common.toFTA` exposes each reachable node as one explicit
 state for inspection or for the explicit-state operations.
 
 `Common.Mu` describes recursive languages. Each recursive cycle must pass
-through a constructor edge; `Mu id` is not supported. `Common.toFTA` rejects
+through a constructor edge. `Mu id` is `EmptyNode`, because a recursive node
+whose body is its own variable accepts no term. `Common.toFTA` rejects
 an open recursive root.
 
 ## Use named states when you need them
@@ -302,7 +303,7 @@ q0 @root
 Each expanded state contains its transition alternatives. `Recursive` refers
 to a state on the current path. `Shared` refers to a state expanded earlier.
 Each state is expanded once. The example displays these references as
-`mu` and `ref`, and omits the plain grammar's `()` annotation. These display
+`mu` and `ref`, and does not show the `noConstraint` annotation. These display
 choices belong to the caller; `toTree` retains the original labels.
 
 `viewNode` contains the original state. `viewPath :: ViewPath` locates this
@@ -362,9 +363,11 @@ sameChildren =
 ```
 
 The alphabet can instead be an ordinary datatype. Edge construction needs
-`Hashable` and `Typeable` for type-safe hash-consing; building a node from
-existing edges needs only `Typeable`, and inspecting an existing node needs
-neither. Operations that rebuild edges, such as intersection and reduction,
+`Hashable` and `Typeable` for type-safe hash-consing, and enumeration also
+needs `Ord`. Building a node from existing edges needs only `Typeable`.
+Reading the fields of an edge needs no constraint. Reading the edges of a node
+with `nodeEdges` needs both `Hashable` and `Typeable`, because it unfolds a
+`Mu`. Operations that rebuild edges, such as intersection and reduction,
 therefore carry both constraints. `termsWith` takes the value to use when
 recursion is truncated, so the datatype does not need an `IsString` instance:
 
@@ -373,7 +376,7 @@ import Data.Hashable (Hashable)
 import GHC.Generics (Generic)
 
 data NatSymbol = Zero | Succ | Recursion
-  deriving (Eq, Generic, Show)
+  deriving (Eq, Ord, Generic, Show)
 
 instance Hashable NatSymbol
 
@@ -445,6 +448,7 @@ The renderer can choose domain names because node labels retain the nodes:
 module Main (main) where
 
 import Data.List (intercalate)
+import qualified Data.Set as Set
 import Data.Tree (drawTree)
 
 import qualified Data.CFTA.Equality as ECTA
@@ -487,7 +491,7 @@ renderEdge edge = ECTA.edgeSymbol edge <> constraints
         Nothing -> " [false]"
         Just [] -> ""
         Just classes -> " [" <> intercalate ", " (map renderClass classes) <> "]"
-    renderClass = intercalate " = " . map renderPath . unPathEClass
+    renderClass = intercalate " = " . map renderPath . Set.toAscList . unPathEClass
     renderPath target = case unPath target of
         [] -> "root"
         indexes -> intercalate "." $ map show indexes
@@ -601,8 +605,9 @@ The oracle's state is threaded down each nondeterministic branch separately,
 which is what makes deferred checks work. When a check cannot be settled
 because the fragment still holds an unexpanded hole, park it in that state
 under the hole's `getUVarRepresentative`, and settle it when the oracle is
-called with `Left fragment` for that UVar. That call always happens before the
-branch completes.
+called with `Left fragment` for that UVar. That call happens before the branch
+completes, except for a hole that holds an unconstrained `Mu`. Enumeration
+does not call the oracle for such a hole.
 
 `termsPruneWith` takes the truncated-recursion symbol explicitly, as
 `termsWith` does, so an alphabet without an `IsString` instance can prune
@@ -1133,10 +1138,12 @@ scaling only the count:
 
 The last two rows are about one and a half times what the mutable tables of
 `microecta` 0.1.0.0 retain. A HAMT node has more overhead per entry than a
-slot in a flat mutable table. In exchange, the tables are thread safe, and the
-core benchmark takes 0.30s and allocates 2,161 MB, against 0.77s and 4,765 MB
-with `microecta` 0.1.0.0. Adding only the stored shape to the old cache gives
-0.69s and 4,317 MB, so most of the gain comes from the immutable maps. The
+slot in a flat mutable table. In exchange, the tables are thread safe. The
+first measurement of the core benchmark, with GHC 9.12.2 and multiplier `1`,
+gave 0.30s and 2,161 MB allocated, against 0.77s and 4,765 MB with `microecta`
+0.1.0.0. The allocation cuts that the CHANGELOG records came after that
+measurement. Adding only the stored shape to the old cache gave 0.69s and
+4,317 MB, so most of the gain comes from the immutable maps. The
 tables are read far more often than written, and a pure lookup in a HAMT is
 faster than an IO-boxed probe into a cuckoo table.
 
@@ -1265,7 +1272,6 @@ cabal build microcfta
 cabal test microcfta:unit-tests
 ```
 
-`-j1` keeps an optimized build of the core inside a small machine's memory.
 To reproduce the compile-time memory budget CI enforces:
 
 ```sh

@@ -28,9 +28,9 @@ the constraints that it uses:
 
 - `Data.CFTA.Equality` propagates path equalities by reduction and solves them
   by unification during enumeration.
-- `Data.CFTA.Refinement` prunes semantic guards by intersecting and splitting
-  nodes along only the positions each guard inspects. The authoritative result
-  remains an LTA. Residual positive equalities stay on its transitions as
+- `Data.CFTA.Refinement` prunes semantic guards. It intersects and splits
+  nodes only at the positions that a guard reads. The result is again an
+  LTA. Residual positive equalities stay on its transitions as
   equality classes; constraints outside that fragment stay as guards.
 - `Data.CFTA.Refinement.Guard` builds refinement-labelled transitions whose
   guards name the constructor arguments and use the paper's complete Boolean
@@ -69,8 +69,8 @@ cabal run cfta-safe-division
 cabal run cfta-automaton-interop
 ```
 
-These examples count values without a pool, and results of children through
-bounded recursion:
+These examples count symbolic values without a pool. Some of them also read
+the results of children through bounded recursion:
 
 ```sh
 cabal run cfta-bounded-reads
