@@ -38,20 +38,20 @@ A node is a set of alternatives, and enumeration reads them back:
 
 >>> let choices = Node [Edge "a" [], Edge "b" []] :: Node Symbol
 >>> terms choices
-[Node {rootLabel = "a", subForest = []},Node {rootLabel = "b", subForest = []}]
+[Node "a" [],Node "b" []]
 
 'intersect' keeps what both accept:
 
 >>> let other = Node [Edge "b" [], Edge "c" []] :: Node Symbol
 >>> terms (intersect choices other)
-[Node {rootLabel = "b", subForest = []}]
+[Node "b" []]
 
 An equality constraint ties two positions together, which is what an ECTA has
 that an ordinary tree automaton does not:
 
 >>> let alts = Node [Edge "a" [], Edge "b" []] :: Node Symbol
 >>> terms (Node [mkEdge "p" [alts, alts] (equalityConstraint $ mkEqConstraints [[path [0], path [1]]])])
-[Node {rootLabel = "p", subForest = [Node {rootLabel = "a", subForest = []},Node {rootLabel = "a", subForest = []}]},Node {rootLabel = "p", subForest = [Node {rootLabel = "b", subForest = []},Node {rootLabel = "b", subForest = []}]}]
+[Node "p" [Node "a" [],Node "a" []],Node "p" [Node "b" [],Node "b" []]]
 
 Templates restrict that language without discarding its constraints. Here the
 right child fixes the hole on the left because the edge requires equality:
@@ -59,7 +59,7 @@ right child fixes the hole on the left because the edge requires equality:
 >>> let pairs = Node [mkEdge "pair" [alts, alts] (equalityConstraint $ mkEqConstraints [[path [0], path [1]]])]
 >>> let rightIsA = TemplateNode "pair" [Hole, TemplateNode "a" []]
 >>> terms (termsMatching rightIsA pairs)
-[Node {rootLabel = "pair", subForest = [Node {rootLabel = "a", subForest = []},Node {rootLabel = "a", subForest = []}]}]
+[Node "pair" [Node "a" [],Node "a" []]]
 
 An algebraic datatype works as the alphabet too; no string conversion is
 involved. 'termsWith' takes the symbol to use if enumeration truncates at
@@ -69,7 +69,7 @@ recursion:
 >>> instance Hashable NatSymbol
 >>> let zeroOrOne = Node [Edge Zero [], Edge Succ [Node [Edge Zero []]]] :: Node NatSymbol
 >>> termsWith Recursion zeroOrOne
-[Node {rootLabel = Zero, subForest = []},Node {rootLabel = Succ, subForest = [Node {rootLabel = Zero, subForest = []}]}]
+[Node Zero [],Node Succ [Node Zero []]]
 
 Recursive automata are represented with 'createMu'. Internally nodes and edges
 are hash-consed, so equality and memoized operations can use compact identities
@@ -107,9 +107,9 @@ module Data.CFTA.Equality (
 
     >>> let nat = createMu (\r -> Node [Edge "z" [], Edge "s" [r]]) :: Node Symbol
     >>> terms nat
-    [Node {rootLabel = "Mu", subForest = []}]
+    [Node "Mu" []]
     >>> terms (unfoldBounded 2 nat)
-    [Node {rootLabel = "z", subForest = []},Node {rootLabel = "s", subForest = [Node {rootLabel = "z", subForest = []}]}]
+    [Node "z" [],Node "s" [Node "z" []]]
     -}
     module Data.CFTA.Enumeration,
     UVar,
