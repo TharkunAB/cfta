@@ -288,8 +288,9 @@ compileFiniteAutomaton order root
                 -- The constructor of the edge pays one, so a term counts its nodes.
                 pure
                     ( Ranked.pay $
-                        (\values -> Tree.Node (edgeSymbol edge) [values Map.! index | index <- childIndexes (Arity (length children))])
-                            <$> slots
+                        -- The groups cover each child index once, so the slots
+                        -- hold the children in index order.
+                        Tree.Node (edgeSymbol edge) . Map.elems <$> slots
                     , rankEdge edge $ zip groups compiledGroups
                     )
       where
