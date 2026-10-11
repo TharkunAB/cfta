@@ -90,7 +90,6 @@ import Data.CFTA.Refinement.Guard (
     descendant,
     isSubtypeOf,
     root,
-    unconstrained,
     withActualFor,
  )
 import Data.List (elemIndex)
@@ -177,7 +176,7 @@ data TracePrefix = TracePrefix
 -- | Empty trace prefix before the public value is decoded.
 initialTracePrefix :: LTAGen.LTAGen TracePrefix
 initialTracePrefix =
-    LTAGen.refinedNode "start" (const $ stateRefinement emptyState) unconstrained start
+    LTAGen.refinedNode "start" (const $ stateRefinement emptyState) noConstraint start
   where
     start = LTAGen.pure (TracePrefix id emptyState) :: LTAGen.LTAGen TracePrefix
 
@@ -688,7 +687,7 @@ popOutput TBool = popBoolOutput
 -- | Present one command schema through the compositional generator DSL.
 contractGenerator :: CommandContract -> LTAGen.LTAGen Command
 contractGenerator CommandContract{contractSymbol, contractCommand, contractInputSpace, contractPostState} =
-    LTAGen.refinedNode contractSymbol (const contractInputSpace) unconstrained $ LTAGen.do
+    LTAGen.refinedNode contractSymbol (const contractInputSpace) noConstraint $ LTAGen.do
         _formalState <- LTAGen.leaf () "model" (const stateRange)
         _postState <- LTAGen.leaf () "post-state" (const contractPostState)
         LTAGen.pure contractCommand

@@ -48,7 +48,6 @@ import Data.CFTA.Refinement.Guard (
     isSubtypeOf,
     notGuard,
     requires,
-    unconstrained,
  )
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
@@ -389,7 +388,7 @@ spec = do
             withZ3 declarations $ \solver -> do
                 let digits = LTAGen.every `LTAGen.satisfying` (\v -> 0 .<= v .&& v .<= 9) :: LTAGen.LTAGen Integer
                     below = LTAGen.refinedNode "p" (const true) (\n -> descendant n [0] `requires` (.>= 5)) (LTAGen.node "n" digits)
-                    byRoots = LTAGen.refinedNodeByRoots "r" (const $ const true) unconstrained digits
+                    byRoots = LTAGen.refinedNodeByRoots "r" (const $ const true) noConstraint digits
                 belowRead <- LTAGen.compileWith solver below
                 roots <- LTAGen.compileWith solver byRoots
                 either isIntegerLeafRead (const False) belowRead `shouldBe` True

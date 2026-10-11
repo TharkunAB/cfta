@@ -37,10 +37,10 @@ import Data.CFTA.Constraint (
 import Data.CFTA.Refinement.Verdict (
     Entailment,
     Verdict (..),
-    andM,
+    andVerdicts,
     entailsWithBindings,
     negateVerdict,
-    orM,
+    orVerdicts,
  )
 import Data.CFTA.Symbol (Formula, Symbol (RefinedSymbol, Symbol), liquidOrder, valueName)
 
@@ -229,9 +229,9 @@ evaluateGuardWithSame entailment observedAt sameAt guard = go guard
                 evaluateWith substitutions $ Substitute additions $ Not inner
         _ -> negateVerdict <$> evaluateWith substitutions nested
     evaluateWith substitutions (And guards) =
-        andM (map (evaluateWith substitutions) guards)
+        andVerdicts (map (evaluateWith substitutions) guards)
     evaluateWith substitutions (Or guards) =
-        orM (map (evaluateWith substitutions) guards)
+        orVerdicts (map (evaluateWith substitutions) guards)
 
 -- | Evaluate both the ECTA equality classes and liquid guard of a transition.
 evaluateConstraint :: Entailment -> Constraint -> Tree.Tree Symbol -> IO Verdict
