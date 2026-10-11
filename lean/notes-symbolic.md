@@ -49,6 +49,12 @@ connects interned Haskell edge identity and `intersectEdge` to that interface.
 
 ## Solver branches and remaining driver proof
 
+The full bounded operational counter and rank driver is now in
+`MicroCFTA/SymbolicDriver.lean`. Its count, decoder, inverse, overlap, nested
+constraint, and negation examples are checked. See
+[notes-symbolic-driver.md](notes-symbolic-driver.md) for its exact scope.
+The remaining general driver proof obligations below still apply.
+
 `countEdge` applies the signed guard interpretation to independent child
 domains and the generated path obligations. `solve` normalizes the problem
 before it consults the context cache. The cache key contains every remaining
