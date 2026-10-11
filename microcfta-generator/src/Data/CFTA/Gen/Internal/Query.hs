@@ -116,18 +116,17 @@ unrank (Transparent result) index = do
     pure $ outcomeValueAt outcomes index
 unrank (Cyclic result) index = do
     recursive <- result
-    let recursiveIndex' = recursiveIndex recursive
-    case (minimumMemberSize recursiveIndex', sizeClassOf recursiveIndex' index) of
-        (NoFiniteMember, _) -> Left $ SelectionOutOfRange index 0
-        (_, Just (SizedRank size position)) ->
-            pure $ rankedValue $ sizeClassSelect recursiveIndex' size position
-        (_, Nothing) ->
-            Left
-                $ SelectionOutOfRange index
-                $ sum
-                $ map snd
-                $ sizeClassCounts recursiveIndex'
+    classMember (recursiveIndex recursive) (recursiveIndex recursive) index
 unrank (Opaque _) _ = Left CannotInspectOpaqueGenerator
+
+{- | The member at a size-major rank. The first index gives the size class of
+the rank, and the second index gives the member of that class.
+-}
+classMember :: SizeIndex a -> SizeIndex b -> Rank -> Either GenError b
+classMember ranks members index = case (minimumMemberSize ranks, sizeClassOf ranks index) of
+    (NoFiniteMember, _) -> Left $ SelectionOutOfRange index 0
+    (_, Just (SizedRank size position)) -> Right $ rankedValue $ sizeClassSelect members size position
+    (_, Nothing) -> Left $ SelectionOutOfRange index $ sum $ map snd $ sizeClassCounts ranks
 
 {- | The term of one member by rank.
 
@@ -141,11 +140,7 @@ termAt (Transparent result) index = do
 termAt (Cyclic result) index = do
     recursive <- result
     terms <- maybe (Left CannotInspectRecursiveGenerator) (Right . recursiveTermIndex) $ recursiveTerm recursive
-    let recursiveIndex' = recursiveIndex recursive
-    case (minimumMemberSize recursiveIndex', sizeClassOf recursiveIndex' index) of
-        (NoFiniteMember, _) -> Left $ SelectionOutOfRange index 0
-        (_, Just (SizedRank size position)) -> pure $ rankedValue $ sizeClassSelect terms size position
-        (_, Nothing) -> Left $ SelectionOutOfRange index $ sum $ map snd $ sizeClassCounts recursiveIndex'
+    classMember (recursiveIndex recursive) terms index
 termAt (Opaque _) _ = Left CannotInspectOpaqueGenerator
 
 {- | The ranks whose term is the given engine term, in ascending order.

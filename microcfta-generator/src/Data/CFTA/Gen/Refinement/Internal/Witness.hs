@@ -16,6 +16,7 @@ import qualified Data.Map.Strict as Map
 import qualified Data.Tree as Tree
 
 import Data.CFTA.Refinement
+import Data.CFTA.Refinement.Verdict (andVerdicts)
 
 -- | One complete generated node with its label, guard, and children.
 data Witness = Witness
@@ -42,26 +43,10 @@ A witness fixes every transition and every child, so only a guard can
 reject it.
 -}
 checkWitness :: Entailment -> Witness -> IO Verdict
-checkWitness entailment witness = do
-    childrenVerdict <- checkChildren (witnessChildren witness)
-    case childrenVerdict of
-        No -> pure No
-        _ -> do
-            constraintVerdict <- evaluateConstraint entailment (witnessConstraint witness) (witnessTerm witness)
-            pure $ andVerdicts childrenVerdict constraintVerdict
-  where
-    checkChildren [] = pure Yes
-    checkChildren (child : rest) = do
-        childVerdict <- checkWitness entailment child
-        case childVerdict of
-            No -> pure No
-            _ -> andVerdicts childVerdict <$> checkChildren rest
-
-    andVerdicts No _ = No
-    andVerdicts _ No = No
-    andVerdicts Unknown _ = Unknown
-    andVerdicts _ Unknown = Unknown
-    andVerdicts Yes Yes = Yes
+checkWitness entailment witness =
+    andVerdicts $
+        map (checkWitness entailment) (witnessChildren witness)
+            <> [evaluateConstraint entailment (witnessConstraint witness) (witnessTerm witness)]
 
 {- | Cache exact refinement queries for one compilation run.
 

@@ -314,18 +314,23 @@ compileGenOnce compiler requested generator
                 \an integer leaf reached it, but compileGen sends such a leaf to compileOpen"
   where
     -- A choice of the compiled alternatives, with one weight for each.
-    choose weights groups =
-        reposition (keyObservations . snd) $
-            frequencies
-                [ (weight, regroupOn (index,) grouped)
-                | (index :: ChoiceIndex, (weight, grouped)) <- zip [0 ..] $ zip weights groups
-                , not $ emptyGroups grouped
-                ]
+    choose weights groups = reposition (keyObservations . snd) $ chooseGroups $ zip weights groups
     -- The weights of 'uniformly': each finite alternative weighs its members,
     -- and a recursive alternative makes the choice equal.
     uniformWeights groups
         | any recursiveGroup groups = map (const 1) groups
         | otherwise = map (either (const 1) (countWeight . sum) . cardinalities) groups
+
+{- | A choice of compiled alternatives, each group keyed by its choice index. An
+empty alternative is left out.
+-}
+chooseGroups :: (Ord key) => [(Weight, LTAGrouped key a)] -> LTAGrouped (ChoiceIndex, key) a
+chooseGroups weighted =
+    frequencies
+        [ (weight, regroupOn (index,) grouped)
+        | (index :: ChoiceIndex, (weight, grouped)) <- zip [0 ..] weighted
+        , not $ emptyGroups grouped
+        ]
 
 -- | The leaf of one integer, refined as itself.
 integerSymbol :: Integer -> Symbol
@@ -612,13 +617,7 @@ compileOpen compiler requested generator =
                                         , key : _ <- filter (isNothing . openPoints) keys ->
                                             Left $ fromLeft UnboundedGenerator $ countPoints integerLabel (openCount key) (openFormula key)
                                     _ -> Right ()
-                                pure
-                                    $ repositionOpen
-                                    $ frequencies
-                                        [ (weight, regroupOn (index,) grouped)
-                                        | (index :: ChoiceIndex, (weight, grouped)) <- zip [0 ..] weighted
-                                        , not $ emptyGroups grouped
-                                        ]
+                                pure $ repositionOpen $ chooseGroups weighted
                         Uniform alternatives -> do
                             compiled <- traverse (compileOpen compiler requested) alternatives
                             pure $ do
@@ -629,13 +628,7 @@ compileOpen compiler requested generator =
                                 weights <- case filter (not . emptyGroups) groups of
                                     _ : _ : _ | not $ any recursiveGroup groups -> traverse members groups
                                     _ -> Right $ map (const 1) groups
-                                pure
-                                    $ repositionOpen
-                                    $ frequencies
-                                        [ (weight, regroupOn (index,) grouped)
-                                        | (index :: ChoiceIndex, (weight, grouped)) <- zip [0 ..] $ zip weights groups
-                                        , not $ emptyGroups grouped
-                                        ]
+                                pure $ repositionOpen $ chooseGroups $ zip weights groups
                         Closed symbol constraint child -> compileOpenNode compiler requested (FixedLabel symbol) constraint child
                         ClosedBy symbolOf constraint child -> compileOpenNode compiler requested (ComputedLabel symbolOf) constraint child
                         _ ->

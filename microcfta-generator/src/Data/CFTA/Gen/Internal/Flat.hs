@@ -239,22 +239,14 @@ match ::
     Gen symbol left ->
     Gen symbol right ->
     Gen symbol (left, right)
-match _ (Transparent (Left err)) _ = Transparent $ Left err
-match _ _ (Transparent (Left err)) = Transparent $ Left err
-match _ (Cyclic (Left err)) _ = Transparent $ Left err
-match _ _ (Cyclic (Left err)) = Transparent $ Left err
-match _ (Cyclic _) _ = Transparent $ Left UnboundedGenerator
-match _ _ (Cyclic _) = Transparent $ Left UnboundedGenerator
-match condition (Transparent (Right left)) (Transparent (Right right)) =
-    withKeys condition $ \leftKey rightKey ->
-        Transparent $ joinStatic leftKey rightKey left right
-match condition left right =
-    withKeys condition $ \leftKey rightKey ->
-        let generatedPairs = liftA2 (liftA2 (,)) (lower left) (lower right)
-            matches (Left _) = True
-            matches (Right (leftValue, rightValue)) =
-                leftKey leftValue == rightKey rightValue
-         in Opaque $ generatedPairs `QC.suchThat` matches
+match condition left right = case joinSides left right of
+    Left err -> Transparent $ Left err
+    Right (Just (leftStatic, rightStatic)) ->
+        withKeys condition $ \leftKey rightKey ->
+            Transparent $ joinStatic leftKey rightKey leftStatic rightStatic
+    Right Nothing ->
+        withKeys condition $ \leftKey rightKey ->
+            opaquePairs (\leftValue rightValue -> leftKey leftValue == rightKey rightValue) left right
 
 -- | Generate two values whose projected keys satisfy a relation.
 relate ::
@@ -265,20 +257,36 @@ relate ::
     Gen symbol left ->
     Gen symbol right ->
     Gen symbol (left, right)
-relate _ _ _ (Transparent (Left err)) _ = Transparent $ Left err
-relate _ _ _ _ (Transparent (Left err)) = Transparent $ Left err
-relate _ _ _ (Cyclic (Left err)) _ = Transparent $ Left err
-relate _ _ _ _ (Cyclic (Left err)) = Transparent $ Left err
-relate _ _ _ (Cyclic _) _ = Transparent $ Left UnboundedGenerator
-relate _ _ _ _ (Cyclic _) = Transparent $ Left UnboundedGenerator
-relate leftKey rightKey relation (Transparent (Right left)) (Transparent (Right right)) =
-    Transparent $ relateStatic leftKey rightKey relation left right
-relate leftKey rightKey relation left right =
-    let generatedPairs = liftA2 (liftA2 (,)) (lower left) (lower right)
-        related (Left _) = True
-        related (Right (leftValue, rightValue)) =
-            relation (leftKey leftValue) (rightKey rightValue)
-     in Opaque $ generatedPairs `QC.suchThat` related
+relate leftKey rightKey relation left right = case joinSides left right of
+    Left err -> Transparent $ Left err
+    Right (Just (leftStatic, rightStatic)) ->
+        Transparent $ relateStatic leftKey rightKey relation leftStatic rightStatic
+    Right Nothing ->
+        opaquePairs (\leftValue rightValue -> relation (leftKey leftValue) (rightKey rightValue)) left right
+
+{- | The two finite sides of a join, the error that empties it, or 'Nothing'
+when a side is opaque. A failed side wins over an opaque one, and the left
+side is checked first.
+-}
+joinSides :: Gen symbol left -> Gen symbol right -> Either GenError (Maybe (Static symbol left, Static symbol right))
+joinSides left right
+    | Transparent (Left err) <- left = Left err
+    | Transparent (Left err) <- right = Left err
+    | Cyclic (Left err) <- left = Left err
+    | Cyclic (Left err) <- right = Left err
+    | Cyclic _ <- left = Left UnboundedGenerator
+    | Cyclic _ <- right = Left UnboundedGenerator
+    | Transparent (Right leftStatic) <- left
+    , Transparent (Right rightStatic) <- right =
+        Right $ Just (leftStatic, rightStatic)
+    | otherwise = Right Nothing
+
+-- | The pairs of two generators with an opaque side, sampled until the pair passes the test.
+opaquePairs :: (left -> right -> Bool) -> Gen symbol left -> Gen symbol right -> Gen symbol (left, right)
+opaquePairs keep left right = Opaque $ liftA2 (liftA2 (,)) (lower left) (lower right) `QC.suchThat` kept
+  where
+    kept (Left _) = True
+    kept (Right (leftValue, rightValue)) = keep leftValue rightValue
 
 -- | Compile an effectful relation between two finite inspectable languages.
 relateM ::

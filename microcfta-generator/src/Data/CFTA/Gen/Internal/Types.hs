@@ -270,34 +270,29 @@ instance (Hashable symbol, Typeable symbol) => NodeLayer symbol (Grouped symbol 
 nodeWithKey ::
     (Hashable symbol, Typeable symbol) =>
     (key -> symbol) -> Grouped symbol key a -> Grouped symbol key a
-nodeWithKey symbolOf (Grouped result) =
-    Grouped $ fmap (Map.mapWithKey labelBucket) result
-  where
-    labelBucket key bucket =
-        bucket
-            { keyedBucketStatic =
-                labelStatic (symbolOf key) $ keyedBucketStatic bucket
-            }
-nodeWithKey symbolOf (CyclicGrouped result) =
-    CyclicGrouped $ fmap (Map.mapWithKey labelGroup) result
-  where
-    labelGroup key group =
-        group
-            { keyedRecursiveLanguage =
-                labelRecursive (symbolOf key) $ keyedRecursiveLanguage group
-            , keyedRecursiveMasses = payMassIndex (groupMinimum group) $ keyedRecursiveMasses group
-            }
+nodeWithKey symbolOf = payGroupsWith (labelStatic . symbolOf) (labelRecursive . symbolOf)
 
 -- | 'pay' for every group of a grouped generator: every member is one larger.
 payGrouped :: Grouped symbol key a -> Grouped symbol key a
-payGrouped (Grouped result) =
-    Grouped $ fmap (fmap $ \bucket -> bucket{keyedBucketStatic = payStatic $ keyedBucketStatic bucket}) result
-payGrouped (CyclicGrouped result) =
-    CyclicGrouped $ fmap (fmap payGroup) result
+payGrouped = payGroupsWith (const payStatic) (const payRecursive)
+
+{- | Change every group of a family with a function that pays one. Every member
+is one larger, so the masses of a recursive group move up one size.
+-}
+payGroupsWith ::
+    (key -> Static symbol a -> Static symbol a) ->
+    (key -> Recursive symbol a -> Recursive symbol a) ->
+    Grouped symbol key a ->
+    Grouped symbol key a
+payGroupsWith static _ (Grouped result) =
+    Grouped $
+        fmap (Map.mapWithKey $ \key bucket -> bucket{keyedBucketStatic = static key $ keyedBucketStatic bucket}) result
+payGroupsWith _ recursive (CyclicGrouped result) =
+    CyclicGrouped $ fmap (Map.mapWithKey payGroup) result
   where
-    payGroup group =
+    payGroup key group =
         group
-            { keyedRecursiveLanguage = payRecursive $ keyedRecursiveLanguage group
+            { keyedRecursiveLanguage = recursive key $ keyedRecursiveLanguage group
             , keyedRecursiveMasses = payMassIndex (groupMinimum group) $ keyedRecursiveMasses group
             }
 
