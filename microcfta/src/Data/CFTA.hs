@@ -2,11 +2,11 @@
 
 {- | Ordinary finite-state tree automata.
 
-An FTA has a finite set of states and ranked transitions. The @constraint@ parameter
-is only a transition annotation. An ordinary FTA ('PlainFTA') carries
-'noConstraint' on every transition, and an interned automaton converts to and
-from an FTA of 'Constraint' annotations. Other annotations are for a layer that
-adds its own data, such as the refinement of a constructor.
+An FTA has a finite set of states and ranked transitions. Each transition has
+an annotation of the type @constraint@. A 'PlainFTA' is an FTA with
+'Constraint' annotations, and an interned automaton converts to and from one.
+An ordinary FTA has 'noConstraint' on every transition. A layer can use another
+annotation type for its own data, such as the refinement of a constructor.
 
 Cycles are valid and describe infinite tree languages. Consumers that require
 a finite language can inspect 'cycleState'. 'intersect' constructs the standard
@@ -94,7 +94,7 @@ data FTA state symbol constraint = FTA
     }
     deriving (Eq, Show, Functor)
 
--- | An ordinary FTA with no transition constraints.
+-- | An FTA whose annotations are 'Constraint's. An ordinary FTA has 'noConstraint' on every transition.
 type PlainFTA state symbol = FTA state symbol Constraint
 
 -- | A state in the product of two tree automata.

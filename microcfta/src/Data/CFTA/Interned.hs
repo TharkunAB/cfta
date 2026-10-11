@@ -2,8 +2,8 @@
 
 Every edge carries a 'Constraint': none for an ordinary automaton, path
 equalities for an equality automaton, and a guard for a liquid automaton.
-Nodes and edges retain canonical identities. Every alphabet runs the same
-code.
+Each node and each edge has one identity. The operations are the same for
+every symbol type.
 -}
 module Data.CFTA.Interned (
     -- * Nodes and edges

@@ -241,8 +241,8 @@ oneAccepted = fmap (`accepts` Tree.Node "successor" [Tree.Node "zero" []]) natur
 ```
 
 An automaton checks symbol arities and child-state references at construction.
-Cycles are valid. `PlainFTA state symbol` is `FTA state symbol Constraint`. Its transitions carry
-`noConstraint`.
+Cycles are valid. `PlainFTA state symbol` is `FTA state symbol Constraint`.
+An ordinary automaton has `noConstraint` on every transition.
 
 `Data.CFTA.intersect` constructs reachable product states and pairs the
 input annotations. Apply `dropConstraints` to the result of two plain FTAs before

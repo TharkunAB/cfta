@@ -55,8 +55,6 @@ import Data.CFTA.Equality.Constraint (fitsArity)
 import Data.CFTA.Index (Arity (..))
 import Data.CFTA.Interned.Memo
 
--- Mu node table
-
 {- | The identity of an interned node.
 
 The interning cache gives each new node a fresh identity. Identities are
@@ -571,7 +569,7 @@ modifyNode _ _ = error "modifyNode: unexpected empty, recursive, or unresolved n
 
 -- Mu
 
-{- | Pattern only a Mu constructor
+{- | Build or match a recursive node.
 
 When we go underneath a Mu constructor, we need to bind the corresponding Rec node to something: that's why pattern
 matching on 'Mu' yields a function. Code that wants to traverse the term as-is should match on the interned
@@ -587,7 +585,7 @@ will run in O(1) time:
 >   -- { expand view pattern }
 > foo node | Just f <- matchMu node = createMu f
 >   -- { case for @InternedMu mu@ }
-> foo (InternedMu mu) | Just f <- matchMu (InternedMu m) = createMu f
+> foo (InternedMu mu) | Just f <- matchMu (InternedMu mu) = createMu f
 >   -- { definition of matchMu }
 > foo (InternedMu mu) = let f = \n' ->
 >                          if | n' == Rec (RecUnint (numNestedMu (internedMuBody mu))) ->
@@ -595,7 +593,7 @@ will run in O(1) time:
 >                            | n' == Rec RecDepth ->
 >                                internedMuDepthShape mu
 >                            | otherwise ->
->                                substFree (internedMuId mu) n' (internedMuBody mu)
+>                                substFree (RecInt (internedMuId mu)) n' (internedMuBody mu)
 >                       in createMu f
 >   -- { definition of createMu }
 > foo (InternedMu mu) =
@@ -603,8 +601,8 @@ will run in O(1) time:
 >       bodyAtDepth = g RecDepth
 >   in internNode $ UninternedMu bodyAtDepth (g (RecUnint (numNestedMu bodyAtDepth))) g
 
-Before calling `intern`, `createMu` computes and stores both the body at
-`RecDepth` and its ordinary shape in the `UninternedMu`. The stored depth probe
+Before calling 'intern', 'createMu' computes and stores both the body at
+'RecDepth' and its ordinary shape in the 'UninternedMu'. The stored depth probe
 is reused to choose the shape placeholder, so the body function is evaluated
 twice in total. 'matchMu' reuses both forms, so rebuilding an unchanged 'Mu'
 stays @O(1)@. Equality, hashing, and identification do not invoke the function

@@ -29,7 +29,9 @@ import Data.CFTA.Symbol (Formula)
 data Verdict = Yes | No | Unknown
     deriving (Eq, Show)
 
-{- | The imperative entailment boundary used by the pure automaton structure.
+{- | A solver that decides whether one refinement implies another, under
+bindings of fresh value names to declared names. The automaton operations are
+pure and call it for every semantic question.
 
 Each binding pairs a fresh value name with a declared name of the same sort.
 The binding does not assert equality between the two values.
