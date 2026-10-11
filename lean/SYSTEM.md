@@ -91,7 +91,12 @@ cache flow. `SymbolicGraph` proves exact conditioning and projection coverage.
 `SymbolicCounter.counter_correct_mutual` proves all six counter functions and
 both caches. `SymbolicIndicators.counterMeaningFromRows` derives its semantic
 interface from compiled guards and exact graph rows. `SymbolicCounterTotal` derives sufficient execution bounds and total stable
-results for the complete counter. Total decoding remains an obligation.
+results for the complete counter. `SymbolicComplete.rows_full_index` now
+derives total decoding and the complete distinct-term bijection with `Fin n`.
+`SymbolicStructuralBudget.acyclic_full_index` derives language and budget laws
+from copied operational rows and a topological rank. Pure interned allocation
+and readback preserve that rank and every old closed language. Concrete
+smart-constructor cleanup and runtime correspondence remain explicit.
 `Shrink` models every finite plan constructor and proves candidate validity,
 strict rank decrease, non-growing size, and complete smaller-size traversal.
 `TermRepresentation` proves the new small-arity representation round trips,
