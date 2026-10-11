@@ -33,7 +33,7 @@ import qualified Data.Set as Set
 import qualified Data.Tree as Tree
 
 import Data.CFTA.Index (ChildIndex (..), Depth (..), TransitionIndex (..))
-import Data.CFTA.Term (Term, pattern Node)
+import Data.CFTA.Term (Term, arity, childAt, rootLabel, pattern Node)
 
 {- | A root-relative location in a tree view.
 
@@ -291,8 +291,8 @@ acceptsBy ::
     m Bool
 acceptsBy outgoing symbolOf childrenOf check = unshared
   where
-    matches (Node symbol children) alternative =
-        symbolOf alternative == symbol && length (childrenOf alternative) == length children
+    matches term alternative =
+        symbolOf alternative == rootLabel term && length (childrenOf alternative) == arity term
 
     -- The alternatives of a row from the first one that matches a subterm.
     fromMatch _ [] = []
@@ -301,16 +301,19 @@ acceptsBy outgoing symbolOf childrenOf check = unshared
         | otherwise = fromMatch term rest
 
     -- No other visit reaches this subterm, so its result needs no table.
-    unshared key term@(Node _ children) = case fromMatch term (outgoing key) of
+    -- The alternative matched, so the children have the keys of its child
+    -- list, in order.
+    unshared key term = case fromMatch term (outgoing key) of
         [] -> pure False
         alternative : rest -> case fromMatch term rest of
             [] ->
-                childrenAccept (childrenOf alternative) children >>= \accepted ->
+                childrenAccept (childrenOf alternative) 0 term >>= \accepted ->
                     if accepted then check key alternative term else pure False
             _ -> State.evalStateT (shared key (positioned term)) Map.empty
-    childrenAccept (key : keys) (child : rest) =
-        unshared key child >>= \accepted -> if accepted then childrenAccept keys rest else pure False
-    childrenAccept _ _ = pure True
+    childrenAccept (key : keys) index term =
+        unshared key (childAt index term) >>= \accepted ->
+            if accepted then childrenAccept keys (index + 1) term else pure False
+    childrenAccept [] _ _ = pure True
 
     -- This subterm is at or below a subterm that two or more alternatives
     -- match. The table holds the result of each position and key.
