@@ -40,3 +40,43 @@ or size. `fourmolu` and `cabal-gild --mode=check` pass for the touched files.
 the old metadata branch. It does not describe the repaired source.
 The new theorem covers this observation/product/merge path; it does not
 establish every source record or the complete refinement compiler invariant.
+
+`ObservationMass.lean` extends the result to arbitrary positive observation
+partitions on both sides. `split_expansion` proves exact weighted-member
+coverage of normalized buckets. `split_uniform` proves that their internal
+weights retain the original key. `pair_expansion` derives full independent
+product coverage from the actual bucket mass and count-scaled weight fields.
+`pair_uniform` proves that a relation on observation keys has one result for
+every member of a product bucket. `restrict_group` therefore justifies the
+source's one guard decision per bucket. `guarded_distribution` proves that
+partitioning, pairing, guarding, and merging gives the original product
+conditioned on the key relation. The result applies to unbounded outcome
+masses and separately to retained within-size masses. Correct construction
+of the observation keys and correct solver verdicts remain separate premises.
+
+`guarded_record_count`, `guarded_record_live`, and `guarded_record_exact`
+connect these bucket fields to a constructed decoder/sampler record. The
+count equals the number of admitted input member pairs. Every valid replay
+rank has positive sampled mass and decodes to its sampled value. No admitted
+pair is removed. Equal decoded values remain separate member occurrences.
+
+`GuardedSampling.lean` uses the concrete `Observation.key` and
+`key_homogeneous` theorem. It builds the observation partitions and runs the
+actual three-valued `selectDecided` control loop. `selected_members` preserves
+the exact admitted term multiset. `selected_distribution` gives the original
+weighted term distribution conditioned on its complete-term guard verdict.
+`compile_live` derives the completed record invariant. `unknown_is_error`
+proves that any original source term with an unknown guard result makes
+compilation fail, rather than produce an incomplete successful language.
+
+For an input that already has one occurrence per distinct term,
+`selectedIndex` constructs a `DistinctRank.Index` directly from the compiled
+decoder's member list. `decoder_selectedIndex` and `count_selectedIndex`
+connect the actual decoder and stored count to that finite bijection. The
+input uniqueness condition is explicit. General generator member sources
+can intentionally contain equal terms and do not satisfy that condition.
+
+This complete finite observation-and-guard path still differs from the full
+heterogeneous Haskell recipe compiler. The term input must come from the
+source construction; recursive recipes, open integer readers, term views,
+and operation signatures have their separate models and correspondence work.
