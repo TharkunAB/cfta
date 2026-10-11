@@ -29,15 +29,17 @@ witnessTerm :: Witness -> Tree.Tree Symbol
 witnessTerm Witness{witnessLabel, witnessChildren} =
     Tree.Node witnessLabel (map witnessTerm witnessChildren)
 
--- | A compiled term needs no further constraints on its singleton witness.
+{- | The witness of a term that the engine already accepted. No node of the
+witness has a constraint.
+-}
 termWitness :: Tree.Tree Symbol -> Witness
 termWitness (Tree.Node label childTerms) =
     Witness label noConstraint $ map termWitness childTerms
 
-{- | Check one generated witness directly against its own liquid guards.
+{- | Check a witness and its children against their guards.
 
-A generated witness already fixes every transition and child, so structural
-recognition cannot reject it; only child validity and guards can.
+A witness fixes every transition and every child, so only a guard can
+reject it.
 -}
 checkWitness :: Entailment -> Witness -> IO Verdict
 checkWitness entailment witness = do
@@ -63,18 +65,16 @@ checkWitness entailment witness = do
 
 {- | Cache exact refinement queries for one compilation run.
 
-Applicative generator products repeat the same local liquid obligations across
-many complete witnesses. In the benchmark cells @lta-automaton@ and @lta-do@,
-87% and 97% of the requests repeat an earlier request of the same compile. The
-entailment boundary is deterministic for a fixed solver environment, so one
-verdict can safely serve every identical request during this compile without
-making the cache part of the public API.
+The products of a generator send the solver the same query for many
+witnesses. In the benchmark cells @lta-automaton@ and @lta-do@, 87% and 97%
+of the queries of one compilation repeat an earlier query. A fixed solver
+environment gives the same verdict for the same query, so the cache returns
+the first verdict for each repeat. Each compilation has its own cache.
 
-The cache also stores 'Unknown' verdicts. That is safe, because 'Unknown' is
-the conservative answer, and the cache makes it the same for every repeat in
-one compile. Each Z3 query has the time limit of the solver, and a query at
-the limit raises 'TimeLimitReached' instead of giving 'Unknown'. In the test
-suite and in the benchmark cells, Z3 gave no 'Unknown'.
+The cache also keeps 'Unknown' verdicts. 'Unknown' is the conservative
+answer, and the cache gives the same answer for each repeat. A Z3 query that
+reaches the time limit raises 'TimeLimitReached' and gives no verdict. Z3 gave
+no 'Unknown' in the test suite or in the benchmark cells.
 -}
 cacheEntailment :: Entailment -> IO Entailment
 cacheEntailment underlying = do

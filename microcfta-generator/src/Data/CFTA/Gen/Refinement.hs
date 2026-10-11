@@ -5,7 +5,7 @@
 
 A refinement generator is a generator over 'Symbol' and
 'Constraint': every constructor carries a refinement, and the guard of
-a constructor relates the refinements of its children. Everything of
+a constructor relates the refinements of its children. All of
 "Data.CFTA.Gen" applies, and this module adds the refined sources, the
 guarded constructors, and the imports of the theory.
 
@@ -158,16 +158,19 @@ unbounded type, such as 'Integer', needs conditions that bound it:
 
 @n <- every @Integer `satisfying` (\\v -> 0 .<= v .&& v .< 1000000)@
 
-On this leaf, a condition narrows the values, and a contract of 'guarded' keeps
-the tuples of values that it admits. 'compile' counts them without enumeration,
-by counting integer points. The solver still decides the parts of a guard that
-read no value of 'every'. Inside one group, 'compile' ranks the tuples in
-increasing lexicographic order, with the leaves of 'every' as the digits from
-left to right and the tuple as the fastest part of the rank. Groups are ordered
-by their keys, so ranks in different groups are not ordered by their integers. A
-condition and a contract must be linear. They read a value as its integer,
-'toLiteral', so compare it with a 'literal', as in
-@\\c -> c ./= literal Red@. Arithmetic on these integers is exact: it does
+A condition on this leaf narrows its values. A contract of 'guarded' keeps
+the tuples of values that it admits. 'compile' counts these tuples as integer
+points and does not enumerate them. The solver still decides the parts of a
+guard that read no value of 'every'.
+
+In one group, the ranks of the tuples follow increasing lexicographic order,
+with the leaves of 'every' as the digits from left to right. The tuple is the
+least significant part of the rank. 'compile' orders the groups by their
+keys, so the ranks in different groups do not follow the integers.
+
+A condition and a contract must be linear. They read a value as its integer,
+'toLiteral', so compare a value with a 'literal', as in
+@\\c -> c ./= literal Red@. Arithmetic on these integers is exact and does
 not wrap around. A term names each value by its integer.
 -}
 every :: forall a. (Literal a) => LTAGen a
@@ -229,15 +232,15 @@ checkPool solver entries =
         verdict <- entails solver (refinementFormula (.== literal member)) (refinementFormula refinement)
         pure [member | verdict /= Yes]
 
-{- | Retain the most specific semantic representatives in each similarity
-class through the core LTA @Similarity@ and @Minimize@ procedures.
+{- | Keep the most specific entries of each class of a pool.
 
-The pool is represented as a one-node LTA whose transition refinements are the
-entry annotations. The projection supplies the non-liquid type class used by
-'refinementSubtypingOn'. Within one class, a subtype replaces its supertype;
-equivalent refinements keep the earlier entry. Incomparable entries remain.
-This operation is opt-in: ordinary QuickCheck pools should keep syntactically
-distinct values when broad coverage matters more than semantic representatives.
+The function reads the pool as an LTA with one node and one transition for
+each entry, and applies the @Similarity@ and @Minimize@ procedures of the
+core. The key function gives the class of each entry, as for
+'refinementSubtypingOn'. In one class, an entry whose refinement implies the
+refinement of another entry removes that other entry. Of two equivalent
+entries, the earlier entry stays. An entry that is not comparable with the
+other entries stays. Use 'pool' or 'namedPool' to keep every entry.
 -}
 minimizePoolOn ::
     (Eq key) =>

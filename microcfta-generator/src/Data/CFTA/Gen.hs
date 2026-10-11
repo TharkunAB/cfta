@@ -189,9 +189,9 @@ size. The count sums over accepting runs. An ambiguous automaton is therefore
 rejected with 'AmbiguousAutomaton', and one with equality constraints with
 'CannotCountConstrainedEdges'.
 
-The values are the accepted terms, so a bounded generator keeps full
-inspection. The bounded form keeps the terms, the support, and the inspection
-graph. 'support', 'inspect', 'termAt', and 'ranksOf' work on it.
+The values are the accepted terms. The form that 'upToSize' bounds
+keeps the terms, the support, and the inspection graph, so 'support',
+'inspect', 'termAt', and 'ranksOf' work on it.
 -}
 fromAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol) =>
@@ -214,9 +214,7 @@ fromAutomatonUpToDepth = Flat.fromAutomatonUpToDepth id
 The generator is recursive when the datatype is, and finite otherwise. The
 value and its constructor term share one rank. A member is decoded only when
 its value is demanded. Ranks order the constructors of a type by arity, then
-in declaration order, and atomic literals in domain order. The derived
-grammar keeps its rows in that order, and a label is in the row of its own type
-only.
+in declaration order. They order atomic literals in domain order.
 
 When the generator is built, it decodes one term for each constructor. If the
 codec rejects one, the generator fails with 'UndecodableConstructor'. This
@@ -230,9 +228,8 @@ fromDatatype datatype = importDatatype datatype Flat.fromAutomaton
 
 {- | The least rank of a datatype value in a generator from 'fromDatatype' or
 'fromDatatypeUpToDepth'. The codec of the type encodes the value as a
-constructor term. 'ranksOf' lists the ranks of a term in ascending order, so
-this is its first rank. A value that the generator does not give has
-'TermNotInLanguage'.
+constructor term, and the result is the first rank that 'ranksOf' gives for
+that term. A value that is not in the language gives 'TermNotInLanguage'.
 -}
 rankOfValue :: (HasFTA a) => Gen Symbol a -> a -> Either GenError Rank
 rankOfValue generator = rankOfTerm generator . fmap (fromString . constructorLabel) . encodeTerm

@@ -159,8 +159,9 @@ engine, and not a term written by hand; @rankOfTerm@ reads the terms that an
 imported automaton accepts. One term can have several ranks, because a node
 label removes the choice wrapper of its alternatives. A recursive generator
 gives the size-major ranks of 'unrank'. The ranking follows the private
-labels and checks the symbols where it can. 'termAt' checks each other rank,
-so a term with other user symbols has no rank.
+labels, and it checks the user symbols where it can. For a rank whose symbols
+it did not check, 'ranksOf' compares the term that 'termAt' gives with the
+given term. So a term with other user symbols has no rank.
 -}
 ranksOf :: (Eq symbol) => Gen symbol a -> Tree.Tree (Label symbol) -> Either GenError [Rank]
 ranksOf generator term = map checkedRank . filter checked <$> candidates generator

@@ -1,9 +1,10 @@
 {- | The failures every generator layer reports.
 
-Each constructor names one way a generator cannot be built, inspected,
-compiled, or sampled. The derived 'Show' names the case; 'explain' says what
-it means and which combinator resolves it. The three facades re-export this
-type, so a caller sees one vocabulary.
+Each constructor names one way in which the library cannot build, inspect,
+compile, or sample a generator. The derived 'Show' names the case. 'explain'
+says what the case means and which combinator fixes it. "Data.CFTA.Gen" and
+each module that re-exports it export this type, so all theories report the
+same errors.
 -}
 module Data.CFTA.Gen.Error (
     GenError (..),
@@ -97,7 +98,9 @@ data GenError
       MissingRootObservation
     | -- | The source observations do not decide an equality constraint.
       RelationalEqualityUnsupported !EqConstraints
-    | -- | The sparse relational shortcut cannot inspect complete subtrees.
+    | {- | A guard compares two compound subtrees, and the observations of the
+      compiler do not decide the comparison.
+      -}
       RelationalSyntacticEqualityUnsupported !Guard
     | -- | A guard remained after pruning that the symbolic ranker cannot count.
       ResidualGuard !Guard
@@ -137,9 +140,8 @@ orFail = either (fail . explain) pure
 
 {- | What one failure means, and what to do about it.
 
-Written for the person who hit it: the first line says what the generator
-could not do in the vocabulary of the library, and the rest says which
-combinator resolves it.
+The text is for the user of the library. The first line says what the
+generator cannot do. The other lines say which combinator fixes it.
 -}
 explain :: GenError -> String
 explain EmptyGenerator =
@@ -337,13 +339,13 @@ explain (RelationalSyntacticEqualityUnsupported _) =
     guidance
         [ "The source observations do not decide this syntactic equality."
         , "Fix: use fromAutomatonUpToDepth for ordinary bounded subtree equality."
-        , "Scoped equality on compound subtrees stays unsupported by the compiler."
+        , "The compiler does not support scoped equality on compound subtrees."
         ]
 explain (ResidualGuard guard) =
     guidance
         [ "The guard " <> show guard <> " remained after pruning, and the symbolic"
-        , "ranker cannot count it. Scoped equality on compound subtrees stays"
-        , "unsupported by the compiler. validOutcomes reads an import through the"
+        , "ranker cannot count it. The compiler does not support scoped equality"
+        , "on compound subtrees. validOutcomes reads an import through the"
         , "same pruning, so it reports the same error."
         , "Fix: write the guard of the imported automaton without scoped equality"
         , "on compound subtrees."
