@@ -16,9 +16,9 @@ main = do
                 , E.Edge "wrap" [E.Mu $ \_ -> E.union [outer, E.Node [E.Edge "b" []]]]
                 ]
         wanted = Term.Node "wrap" [Term.Node "a" []]
-    putStrLn "The declared grammar contains wrap(a); source union discards the enclosing reference."
+    putStrLn "The declared grammar contains wrap(a); union must retain the enclosing reference."
     print $ E.plainTermsAtMost 2 grammar
     print $ E.accepts grammar wanted
     if E.accepts grammar wanted
-        then error "The recorded union limitation no longer reproduces."
-        else pure ()
+        then pure ()
+        else error "Union discarded the enclosing recursive reference."
