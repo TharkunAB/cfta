@@ -85,8 +85,13 @@ in a wall-clock complexity claim. `Decoder`, `PlanVariants`, `SizedRank`, and
 `Symbolic` proves overlap-safe union counting and local equality solver laws.
 `SymbolicDriver` ports the mutual counting, normalization, selection, and inverse
 ranking operations with both caches. Its complete examples exercise equality,
-overlap, and rejection. Its full context/cache invariant remains a proof
-obligation.
+overlap, and rejection. `SymbolicNormalization` proves solution equivalence.
+`SymbolicSelection` proves successful select/rank inversion with identical
+cache flow. `SymbolicGraph` proves exact conditioning and projection coverage.
+`SymbolicCounter.counter_correct_mutual` proves all six counter functions and
+both caches. `SymbolicIndicators.counterMeaningFromRows` derives its semantic
+interface from compiled guards and exact graph rows. `SymbolicCounterTotal` derives sufficient execution bounds and total stable
+results for the complete counter. Total decoding remains an obligation.
 `Shrink` models every finite plan constructor and proves candidate validity,
 strict rank decrease, non-growing size, and complete smaller-size traversal.
 `TermRepresentation` proves the new small-arity representation round trips,
@@ -98,8 +103,8 @@ five patterns, including cyclic graphs. `Binding` verifies the free-environment
 cache key and closed-substitution shortcut. `EnumerationState` ports the
 suspended-constraint caller and its recursion-marker behavior. `PruneSchedule`
 ports pruning decisions, fallback, caching, and binder scheduling.
-`MinimizeSchedule` implements the actual similarity/rewrite schedule and
-proves its accepted-root failure.
+`MinimizeSchedule` implements the actual similarity/rewrite schedule. It
+proves the historical accepted-root failure and the repaired root invariant.
 
 Ordinary generator combinators retain members, including repeated values and
 sometimes repeated constructor terms. Automaton imports instead count distinct
@@ -124,7 +129,7 @@ function family a semantic role. [COVERAGE.md](COVERAGE.md) records proof and
 implementation correspondence obligations. A source port, a theorem about
 that port, and a proved correspondence to Haskell execution are separate.
 
-## Current implementation comparisons
+## Implementation comparisons and repairs
 
 ### Quantified substitution can change meaning
 
@@ -138,7 +143,11 @@ The original formula is `forall x:Int. x() = 0`. The replacement is
 `No`, while the substituted formula gets `Yes`. Its free-name set changes from
 empty to `{x}`. See [FormulaCapture.hs](repro/FormulaCapture.hs). The extended
 syntax proof records the failing source operation separately from the
-capture-avoiding substitution specification.
+capture-avoiding substitution specification. The source now renames function
+heads, substitutes nullary applications as values, and preserves repeated
+binder shadowing. `substituteChecked` reports a non-name replacement for a
+non-nullary function head, which the named-head syntax cannot represent.
+The Z3 reproduction now requires the repaired `No` result.
 
 ### Observing an atomic pair changes bounded weights
 
@@ -153,7 +162,10 @@ is [CurrentFindings.hs](repro/CurrentFindings.hs). The existing
 `RecipeCompile.atomic_pair_metadata_counterexample` proves the failure
 through the actual singleton/pair/merge metadata rules.
 `SizeMass.atomic_pair_count_fallback_changes_probability` also proves the
-numerical difference independently. This defect is not repaired here.
+numerical difference independently. The repair retains `staticSampling` within-size weights for atomic members too.
+`MassRetention.atomic_observed_pair_distribution` proves preservation for an
+arbitrary positive atomic distribution and valid sibling.
+`recursive_atomic_policy` proves agreement with the existing recursive rule.
 
 ### Minimization can remove the only accepted root term
 
@@ -168,19 +180,25 @@ after pruning. Both `minimize` and `reduce` then change `[b]` to `[]`.
 `MinimizeSchedule.full_schedule_loses_all_root_terms` proves the failure
 through the complete executable schedule. The earlier
 `Productivity.RootDeletion.root_deletion_counterexample` proves the denotation
-difference independently. This violates even nonemptiness preservation, in addition to the
-complete-language requirement. It is not repaired here.
+difference independently. This violated even nonemptiness preservation. The repair installs the selected
+root representative and checks its accepted derivation after every scheduled
+rewrite has completed. `MinimizeSchedule.minimize_preserves_root_representative`
+connects the complete repaired entrypoint to the original term or a surviving
+accepted representative. Exact term equality remains a stronger contract.
 
 ### Union inside a nested binder can discard the enclosing reference
 
-The source documents this limitation. For `A = a | wrap(B)` and `B = A | b`,
+The baseline source documented this limitation. For `A = a | wrap(B)` and `B = A | b`,
 `union` reads no alternatives from the open reference to `A`. The constructed
 language becomes `{a, wrap(b)}` and omits `wrap(a)`.
 
 [OpenUnion.hs](repro/OpenUnion.hs) reproduces the actual constructor behavior.
-`OpenUnion.enclosing_reference_loses_term` proves the lost finite term. This
-case needs an explicit restriction or an implementation change before general
-language-union laws apply to open recursive operands.
+`OpenUnion.enclosing_reference_loses_term` proves the lost finite term. The repair retains open
+operands in `InternedUnion` and resolves epsilon alternatives after binding.
+`EpsilonUnion.collect_exact` proves that the terminating depth-first closure
+retains all and only the accepted finite terms of its finite input graph.
+The source tests include nested binders, epsilon cycles, conversion, and
+intersection. See [notes-epsilon-union.md](notes-epsilon-union.md).
 
 ## Rebase integration repairs
 
@@ -196,7 +214,7 @@ transport law, and `stale_mass_counterexample` proves why the old keys fail.
 The retained regression fixtures and reproductions now use the current
 constructor sizes, `Term` representation, and sorted core-formula declarations.
 No new package test suite was added. The existing core, generator, and
-refinement suites pass in `nix-shell`: 260, 190, and 135 examples, respectively.
+refinement suites pass in `nix-shell`: 273, 190, and 135 examples, respectively.
 Existing property examples also run their configured generated cases.
 
 An independent temporary source probe compared 5,000 finite grammars against

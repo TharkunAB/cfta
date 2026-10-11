@@ -19,11 +19,20 @@ construction, enumeration, pruning, minimization, and symbolic drivers.
 `System.grammar_bijection` and `System.grammar_probability` compose the
 reference grammar, FTA, index, and distribution results.
 
-Current Haskell counterexamples include quantified substitution changing
-meaning, a tautological observation changing bounded atomic-pair weights, and
-minimization removing the only accepted root term. A union with an enclosing
-recursive reference also has a documented term-loss limitation. See
-[SYSTEM.md](SYSTEM.md) for reproductions and proof anchors.
+The four recorded implementation failures now have source repairs and checked
+regressions: quantified substitution, observed atomic weights, accepted root
+representatives, and open recursive unions. Historical counterexamples remain
+separate from the repair theorems. See [SYSTEM.md](SYSTEM.md).
+
+The later source proofs include the complete mutual symbolic counter and its
+termination, compiled guard indicators, adaptive cached acceptance, typed
+single and mutual recursive sampling records, the suspended enumeration
+caller's storage invariant, recursive binder substitution, and the equality
+parent-array completion loop. See the [symbolic notes](notes-symbolic-semantics.md),
+[indicator notes](notes-constraint-indicators.md), [acceptance notes](notes-acceptance.md),
+[recursive source notes](notes-recursive-source.md), [keyed source notes](notes-keyed-source.md),
+[enumeration notes](notes-enumeration-driver.md), [binder notes](notes-binder-language.md),
+and [array notes](notes-array-union-find.md).
 
 This is not a claim that the whole Haskell implementation is verified. The
 Lean algorithms are handwritten. Some complete driver invariants, concrete runtime
@@ -133,7 +142,9 @@ The later modules prove the general Bernoulli/Faulhaber construction,
 terminating feasibility recursion, formula-to-count pipeline, and cumulative
 polynomial sums. `LatticeSelect` now connects the stored cumulative polynomials to exact
 section counts and the recursive ranker. Concrete `Map` storage, variable-order retry behavior,
-binding freshening, and typed Fixpoint syntax remain explicit boundaries.
+recursive graph binding, and concrete Fixpoint serialization remain explicit boundaries.
+Full formula freshening and typed syntax lowering are proved in the later
+`Formula*` modules; see [formula correctness](notes-formula-correctness.md).
 
 ## Meaning of the main theorem
 
@@ -153,12 +164,12 @@ The SMT solver and concrete refinement evaluator are outside the language
 proof. Guards have a supplied Boolean interpretation there. `Guards.lean`
 states the atomic-decision and observation requirements. `Observation` and
 `ObservationGraph` now derive coverage and homogeneity from executable sparse
-plans and graph specialization. Substitution, ambiguous actuals, runtime
-interning, and recursive pruning still require caller proofs.
+plans and graph specialization. The full substitution algorithm is now proved. Ambiguous actual handling, runtime
+interning, and the recursive pruning driver still require caller proofs.
 
 Other remaining boundaries include recursive binder conversion, concrete
 interning and union-find callers, lazy size-table execution, machine-integer
-conversions, callback contracts, the random backend, and the full shrinker.
+conversions, callback contracts, the random backend, and concrete shrinker record wiring.
 The state algorithms, finite size recurrences, and lattice binary search have
 checked executable proofs. The strict-smaller relation is covered by the
 size-retention proofs. The Lean definitions are handwritten algorithms. There
@@ -189,8 +200,10 @@ ecta.pdf 34572866be0bc8e86a546f712ffb2666fe641d133417a895ecbdee5d8f6e1ebf
 - The complete Lean package builds. The axiom audit passes.
 - All earlier repaired cases and the new counterexamples run inside `nix-shell`,
   with Z3 for the public cases.
-- Existing suites pass on `d7f7c11`: 260 core, 190 generator, and 135
-  refinement examples; 585 total, zero failures. These passing suites do not cover the new findings.
+- Existing suites pass after the four repairs: 273 core, 190 generator, and 135
+  refinement examples; 598 total, zero failures. The added cases extend existing
+  suites. The final fresh-name counter change also passes the focused formula
+  suite and the repaired Z3 capture probe.
 - Fourmolu accepts the reproductions. Cabal-gild accepts both audited packages.
 
 The Haskell commands run from the repository root:
@@ -209,9 +222,10 @@ add a package test suite.
 
 ## Next proof obligations
 
-1. Preserve atomic source masses across observed pair groups and bounded sampling.
-2. Preserve an accepted representative at the initial state. Verify the full
-   minimization schedule, including guard reads and changing graph snapshots.
+1. Connect the checked finite sampler records to every heterogeneous recipe and
+   support callback. Atomic observed masses are repaired and proved.
+2. Connect the proved root-representative schedule to concrete graph conversion
+   and guard validation. The root deletion defect is repaired.
 3. Prove the recursive size-table invariants, including positive size at each
    recursive product, and connect the finite sparse proofs to lazy tables.
 4. Prove the observation trie and constrained symbolic counter preserve
