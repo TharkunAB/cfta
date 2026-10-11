@@ -35,13 +35,15 @@ module Data.CFTA.Formula (
     iff,
     freeNames,
     substitute,
+    substituteChecked,
+    SubstitutionError (..),
     renderFormula,
     renderTerm,
 ) where
 
 import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable (..))
-import Data.List (intercalate)
+import Data.List (intercalate, nub)
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Data.String (IsString (..))
@@ -249,48 +251,64 @@ termNames term = case term of
     Ite condition yes no -> namesIn condition <> termNames yes <> termNames no
     Cast inner _ -> termNames inner
 
-{- | Replace names of values by terms, all at once.
+-- | A replacement that cannot be applied to the named-function syntax.
+data SubstitutionError = UnsupportedFunctionReplacement !Name !Term
+    deriving (Eq, Ord, Show)
+
+{- | Replace names by terms, all at once.
 
 For a name with more than one replacement, the first replacement applies. A
 replacement of a name by the same name is ignored, and so is a replacement of
 a name that a quantifier binds. A bound name that occurs in a replacement
-gets a fresh name, so that the replacement is not captured. The names of
-applied functions do not change. The result is not simplified.
+gets a fresh name, so that the replacement is not captured. A nullary
+application is a named value. A non-nullary function name can be replaced
+only by a 'Var', because 'App' requires a name as its head. An unsupported
+function replacement raises an error; use 'substituteChecked' to handle it.
+The result is not simplified.
 -}
 substitute :: [(Name, Term)] -> Formula -> Formula
-substitute replacements = inFormula (filter (\(name, term) -> term /= Var name) replacements)
+substitute replacements = either (error . ("Data.CFTA.Formula.substitute: " <>) . show) id . substituteChecked replacements
+
+-- | Substitute simultaneously, or report an unsupported function replacement.
+substituteChecked :: [(Name, Term)] -> Formula -> Either SubstitutionError Formula
+substituteChecked replacements = inFormula (filter (\(name, term) -> term /= Var name) replacements)
   where
     inFormula active formula = case formula of
-        And parts -> And $ map (inFormula active) parts
-        Or parts -> Or $ map (inFormula active) parts
-        Not inner -> Not $ inFormula active inner
-        Atom relation left right -> Atom relation (inTerm active left) (inTerm active right)
-        Forall bound inner -> uncurry Forall $ underBinders active bound inner
-        Exists bound inner -> uncurry Exists $ underBinders active bound inner
-        _ -> formula
+        And parts -> And <$> traverse (inFormula active) parts
+        Or parts -> Or <$> traverse (inFormula active) parts
+        Not inner -> Not <$> inFormula active inner
+        Atom relation left right -> Atom relation <$> inTerm active left <*> inTerm active right
+        Forall bound inner -> uncurry Forall <$> underBinders active bound inner
+        Exists bound inner -> uncurry Exists <$> underBinders active bound inner
+        _ -> Right formula
     inTerm active term = case term of
-        Var name -> fromMaybe term $ lookup name active
-        App function arguments -> App function $ map (inTerm active) arguments
-        Neg inner -> Neg $ inTerm active inner
-        Add left right -> Add (inTerm active left) (inTerm active right)
-        Sub left right -> Sub (inTerm active left) (inTerm active right)
-        Mul left right -> Mul (inTerm active left) (inTerm active right)
-        Div left right -> Div (inTerm active left) (inTerm active right)
-        Mod left right -> Mod (inTerm active left) (inTerm active right)
-        Ite condition yes no -> Ite (inFormula active condition) (inTerm active yes) (inTerm active no)
-        Cast inner sort -> Cast (inTerm active inner) sort
-        Lit _ -> term
+        Var name -> Right $ fromMaybe term $ lookup name active
+        App function [] -> Right $ fromMaybe term $ lookup function active
+        App function arguments -> case lookup function active of
+            Nothing -> App function <$> traverse (inTerm active) arguments
+            Just (Var renamed) -> App renamed <$> traverse (inTerm active) arguments
+            Just replacement -> Left $ UnsupportedFunctionReplacement function replacement
+        Neg inner -> Neg <$> inTerm active inner
+        Add left right -> Add <$> inTerm active left <*> inTerm active right
+        Sub left right -> Sub <$> inTerm active left <*> inTerm active right
+        Mul left right -> Mul <$> inTerm active left <*> inTerm active right
+        Div left right -> Div <$> inTerm active left <*> inTerm active right
+        Mod left right -> Mod <$> inTerm active left <*> inTerm active right
+        Ite condition yes no -> Ite <$> inFormula active condition <*> inTerm active yes <*> inTerm active no
+        Cast inner sort -> (`Cast` sort) <$> inTerm active inner
+        Lit _ -> Right term
     -- The replacements of the bound names stop, and a bound name that a
     -- replacement mentions becomes the first fresh name.
     underBinders active bound inner =
         let kept = [(name, term) | (name, term) <- active, name `notElem` map fst bound]
             captured = foldMap (termNames . snd) kept
-            avoid = captured <> namesIn inner <> HashSet.fromList (map fst bound)
-            renamed = zipWith rename bound (freshNames avoid)
-            rename (name, sort) fresh
-                | HashSet.member name captured = ((fresh, sort), [(name, Var fresh)])
-                | otherwise = ((name, sort), [])
-         in (map fst renamed, inFormula (concatMap snd renamed <> kept) inner)
+            avoid = captured <> namesIn inner <> HashSet.fromList (map fst bound <> map fst kept)
+            -- Repeated binders keep one name, so the last binder still shadows
+            -- the earlier binders of that name.
+            renamed = zip (filter (`HashSet.member` captured) $ nub $ map fst bound) (freshNames avoid)
+            bindings = [(fromMaybe name $ lookup name renamed, sort) | (name, sort) <- bound]
+            active' = [(name, Var fresh) | (name, fresh) <- renamed] <> kept
+         in (,) bindings <$> inFormula active' inner
     freshNames avoid =
         [ candidate
         | index <- [1 :: Int ..]

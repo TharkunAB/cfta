@@ -3,6 +3,7 @@
 module Data.CFTA.Refinement.SubstitutionSpec (spec) where
 
 import Data.CFTA.Formula (Formula (Forall), Name, Sort (..))
+import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Refinement (
     Constraint,
     Entailment (Entailment),
@@ -10,6 +11,7 @@ import Data.CFTA.Refinement (
     Substitution (Substitution),
     Symbol (RefinedSymbol),
     Verdict (..),
+    entails,
     evaluateConstraint,
     evaluateGuard,
     path,
@@ -36,6 +38,63 @@ dependentGuard =
 spec :: Spec
 spec =
     describe "dependent LTA guards" $ do
+        describe "formula substitution" $ do
+            it "renames a bound nullary application without introducing a free name" $ do
+                let original = Formula.Forall [("x", IntSort)] $ Formula.Atom Formula.Eq (Formula.App "x" []) (Formula.Lit 0)
+                    rewritten = Formula.substitute [("unused", Formula.Var "x")] original
+                    expected =
+                        Formula.Forall [("__microcfta_bound_1", IntSort)] $
+                            Formula.Atom Formula.Eq (Formula.Var "__microcfta_bound_1") (Formula.Lit 0)
+                rewritten `shouldBe` expected
+                Formula.freeNames rewritten `shouldBe` []
+                withZ3Assuming [("x", IntSort)] [Formula.Atom Formula.Eq (Formula.Var "x") (Formula.Lit 0)] $ \solver -> do
+                    entails solver true original >>= (`shouldBe` No)
+                    entails solver true rewritten >>= (`shouldBe` No)
+
+            it "substitutes a nullary application as a named value" $ do
+                Formula.substitute [("x", Formula.Lit 4)] (Formula.Atom Formula.Eq (Formula.App "x" []) (Formula.Var "x"))
+                    `shouldBe` Formula.Atom Formula.Eq (Formula.Lit 4) (Formula.Lit 4)
+
+            it "renames a function head and substitutes its arguments simultaneously" $ do
+                Formula.substitute
+                    [("f", Formula.Var "g"), ("g", Formula.Var "h"), ("x", Formula.Lit 4)]
+                    (Formula.Atom Formula.Eq (Formula.App "f" [Formula.Var "x"]) (Formula.App "g" [Formula.Var "x"]))
+                    `shouldBe` Formula.Atom Formula.Eq (Formula.App "g" [Formula.Lit 4]) (Formula.App "h" [Formula.Lit 4])
+
+            it "reports a replacement that the named function syntax cannot apply" $ do
+                Formula.substituteChecked
+                    [("f", Formula.Lit 4)]
+                    (Formula.Atom Formula.Eq (Formula.App "f" [Formula.Lit 0]) (Formula.Lit 0))
+                    `shouldBe` Left (Formula.UnsupportedFunctionReplacement "f" $ Formula.Lit 4)
+
+            it "ignores an unsupported replacement where a function binder shadows it" $ do
+                let original =
+                        Formula.Forall [("f", FunctionSort [IntSort] IntSort)] $
+                            Formula.Atom Formula.Eq (Formula.App "f" [Formula.Lit 0]) (Formula.Lit 0)
+                Formula.substituteChecked [("f", Formula.Lit 4)] original `shouldBe` Right original
+
+            it "renames a captured bound function at each application head" $ do
+                let original =
+                        Formula.Forall [("f", FunctionSort [IntSort] IntSort)] $
+                            Formula.Atom Formula.Eq (Formula.App "f" [Formula.Lit 0]) (Formula.App "g" [Formula.Lit 0])
+                    expected =
+                        Formula.Forall [("__microcfta_bound_1", FunctionSort [IntSort] IntSort)] $
+                            Formula.Atom Formula.Eq (Formula.App "__microcfta_bound_1" [Formula.Lit 0]) (Formula.App "f" [Formula.Lit 0])
+                Formula.substitute [("g", Formula.Var "f")] original `shouldBe` expected
+
+            it "keeps the last of repeated binders effective after renaming" $ do
+                let original = Formula.Forall [("x", IntSort), ("x", IntSort)] $ Formula.Atom Formula.Eq (Formula.Var "x") (Formula.Lit 0)
+                    expected =
+                        Formula.Forall [("__microcfta_bound_1", IntSort), ("__microcfta_bound_1", IntSort)] $
+                            Formula.Atom Formula.Eq (Formula.Var "__microcfta_bound_1") (Formula.Lit 0)
+                Formula.substitute [("unused", Formula.Var "x")] original `shouldBe` expected
+
+            it "keeps the first nonidentity replacement for a duplicate name" $ do
+                Formula.substitute
+                    [("x", Formula.Var "x"), ("x", Formula.Lit 1), ("x", Formula.Lit 2)]
+                    (Formula.Atom Formula.Eq (Formula.App "x" []) (Formula.Var "x"))
+                    `shouldBe` Formula.Atom Formula.Eq (Formula.Lit 1) (Formula.Lit 1)
+
         it "substitutes the actual argument for the formal in the result type" $ do
             let expected = variable valueName .== variable "x"
                 dependent = variable valueName .== variable "n"

@@ -13,15 +13,15 @@ main :: IO ()
 main = do
     let original = Forall [("x", IntSort)] (Atom Eq (App "x" []) (Lit 0))
         rewritten = substitute [("unused", Var "x")] original
-        expected = Forall [("__microcfta_bound_1", IntSort)] (Atom Eq (App "x" []) (Lit 0))
+        expected = Forall [("__microcfta_bound_1", IntSort)] (Atom Eq (Var "__microcfta_bound_1") (Lit 0))
     unless (rewritten == expected) $ fail "The source substitution result changed."
-    unless (null (freeNames original) && freeNames rewritten == ["x"]) $
-        fail "The source free-name change did not occur."
+    unless (null (freeNames original) && null (freeNames rewritten)) $
+        fail "Substitution introduced a free name."
     withZ3Assuming [("x", IntSort)] [Atom Eq (Var "x") (Lit 0)] $ \solver -> do
         before <- entails solver Top original
         after <- entails solver Top rewritten
-        unless (before == No && after == Yes)
+        unless (before == No && after == No)
             $ fail
-            $ "Expected (No,Yes), received " <> show (before, after)
-        putStrLn "Confirmed: substitution for an absent name changes the formula from No to Yes."
+            $ "Expected (No,No), received " <> show (before, after)
+        putStrLn "Confirmed: substitution preserves the closed formula and its No verdict."
         print rewritten
