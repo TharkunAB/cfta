@@ -318,6 +318,12 @@ import MicroCFTA.MinimizeParentIndex
 import MicroCFTA.RecursiveFieldCombinators
 import MicroCFTA.RecursiveFieldBounds
 import MicroCFTA.RecursiveNaryFieldBounds
+import MicroCFTA.RecursiveNaryFields
+import MicroCFTA.RecursiveNaryInverse
+import MicroCFTA.RecursiveNaryCandidates
+import MicroCFTA.RecursiveNaryCausality
+import MicroCFTA.RecursiveNaryQuery
+import MicroCFTA.RecursiveNaryExamples
 /-!
 # Proof dependency audit
 

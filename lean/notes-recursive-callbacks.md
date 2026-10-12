@@ -94,8 +94,10 @@ whole recursive inverse correctness property is an input premise.
 
 The recursive syntax here has binary choices. The source also has arbitrary
 n-way choices with branch labels above one. `RecursiveNaryChoice` proves
-the local n-way adapter from child producer laws. A complete n-way recursive
-syntax extension remains a separate statement. Mutually
+the local n-way adapter from child producer laws. The later
+`RecursiveNaryBody`, `RecursiveNaryInverse`, `RecursiveNaryCausality`, and
+`RecursiveNaryQuery` modules prove the complete n-way body and inverse.
+See [the n-ary notes](notes-recursive-nary-body.md). Mutually
 recursive heterogeneous runtime families, diagnostic inspection graphs,
 refinement-imported callback wiring, and physical lazy tables remain outside
 this single-knot theorem.
