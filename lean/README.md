@@ -19,15 +19,19 @@ construction, enumeration, pruning, minimization, and symbolic drivers.
 `System.grammar_bijection` and `System.grammar_probability` compose the
 reference grammar, FTA, index, and distribution results.
 
-The five recorded implementation failures now have source repairs and checked
+The eleven recorded implementation failures now have source repairs and checked
 regressions: quantified substitution, observed atomic weights, accepted root
-representatives, open recursive unions, and pruning through open nested binders. Historical counterexamples remain
+representatives, open recursive unions, pruning through open nested binders,
+closing grouped private alternatives, recursive term boundaries, and grouped
+function spines, unsafe sparse substitution decisions in pruning and compilation,
+unbounded conjunction growth during equality reduction, and interference between
+independent semantic guards. Historical counterexamples remain
 separate from the repair theorems. See [SYSTEM.md](SYSTEM.md).
 
 The later source proofs include complete symbolic count/select/rank execution
 and its distinct-term bijection, compiled guard indicators, three-valued cached
 acceptance, typed single and mutual recursive sampling records, enumeration
-assignment construction, run soundness and constructive full expansion,
+soundness, completeness and final rendering,
 successful recursive pruning, total cyclic binder construction, exact support
 constructors, and the full indexed-array equality normalization loop. See the [symbolic notes](notes-symbolic-semantics.md),
 [indicator notes](notes-constraint-indicators.md), [acceptance notes](notes-acceptance.md),
@@ -36,7 +40,7 @@ constructors, and the full indexed-array equality normalization loop. See the [s
 [array notes](notes-array-union-find.md), [pruning notes](notes-prune-correctness.md),
 [lattice retry notes](notes-lattice-retry.md), [cyclic conversion notes](notes-binder-compile.md),
 [equality reduction notes](notes-equality-reduction.md),
-[full expansion notes](notes-enumeration-construction.md),
+[exact enumeration notes](notes-enumeration-exact.md),
 [support graph notes](notes-support-graph.md), and
 [actual-table notes](notes-actual-quotient.md).
 

@@ -53,10 +53,12 @@ under that contract. This contract is not assumed for the mathematical
 soundness theorem. It is stronger than stability on repeated identical
 queries and is not inferred from solver soundness.
 
-The source table adapter must still construct the required name map and
-domain/lifting evidence for all conflicting signature groups and nested
-scopes. The transport module proves the logical and decision-level result;
-it does not treat those remaining internal premises as discharged.
+`SourceScopeQueries`, `SourceSortedQueries`, and `SourceHoldsQueries` now
+construct the required maps and domain evidence for read-equivalent sparse
+cells, including conflicting names and complete nested queries. The
+sparse-to-complete identity quotient remains a separate transport problem.
+The proved mathematical equivalence does not imply exact operational
+verdict agreement for the backend behavior shown here.
 
 Validation: `lake build MicroCFTA.SourceAliasTransport` succeeds with the
 pinned toolchain. All counterexamples use kernel reduction. The source repro

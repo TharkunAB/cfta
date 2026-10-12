@@ -28,8 +28,8 @@ semantic correctness is not assumed as a theorem about Haskell.
   or unavailable variable.
 - `strict_dependency_stuck_impossible` proves that a finite nonempty set of
   strict subtree dependencies cannot all be blocked under a complete finite
-  tree assignment. Applying this to every reachable scheduler state still
-  requires the slot and dependency invariants.
+  tree assignment. `EnumerationProgress` derives the required slot and
+  dependency facts for the actual reachable caller states.
 - `allocate_exact`, `allocated_supply`, and `allocated_slot` prove the fresh
   slot update and preservation of the supply/length invariant.
 - `bound_is_not_empty` distinguishes an execution bound from branch rejection.
@@ -67,16 +67,17 @@ tries are required to identify these representations.
 
 The source has no explicit fuel parameter. The model uses bounds for recursive
 execution and union-find lookup. Insufficient fuel returns a distinct error;
-it does not produce an empty success result. The model does not yet prove a
-sufficient bound for every reachable source execution.
+it does not produce an empty success result. `EnumerationExact` now constructs
+a sufficient stable bound for every accepted finite term under the complete
+graph and exact-intersection contracts.
 
 The source checks only inherited path arity in `enumerateEdge`. Its new local
 equality classes already satisfy the `mkEdge` arity invariant. The model keeps
 this order. A graph supplied directly to the model must meet the same invariant.
 
-No complete preservation proof yet composes the union-find forest, slot
-assimilation, all scheduler steps, and final rendering. The local proofs and
-executable driver make those remaining obligations concrete. The source's
-ordinary unbounded level enumerator is modeled separately in
-`LevelEnumeration.lean`; the stateful constrained driver deliberately
-produces truncated recursion markers.
+`EnumerationExact.runs_exact` now composes union-find storage, assimilation,
+scheduler invariants, expansion, and final rendering. It proves exact finite
+term support after returned residual checks. Its graph contracts still need
+the source adapters. The ordinary unbounded level enumerator is modeled in
+`LevelEnumeration.lean`. Diagnostic recursion markers retain their separate
+contract. See [notes-enumeration-exact.md](notes-enumeration-exact.md).

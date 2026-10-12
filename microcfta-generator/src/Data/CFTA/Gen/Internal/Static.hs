@@ -226,8 +226,9 @@ data TermView symbol
     | -- | The children under a node label.
       LabelledView [Term (Label symbol)]
 
-{- | The ranks or positions of a view, for a language whose terms have no
-private label at their root: each view of such a term is the term itself.
+{- | The ranks or positions of a view, for a language whose term roots are
+kept whole by both constructor closing and function-side application.
+Each view of such a term retains the term itself.
 -}
 leafRanks :: (Term (Label symbol) -> [rank]) -> TermView symbol -> [rank]
 leafRanks ranksOfTerm view = case view of

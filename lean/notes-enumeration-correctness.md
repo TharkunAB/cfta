@@ -59,20 +59,12 @@ does not admit diagnostic recursion markers.
 
 ## Source boundaries and remaining proof obligations
 
-The full `runs` soundness and completeness theorem is not yet proved. The
-primitive preservation laws do not establish the entire scheduler invariant.
-In particular, `enumerateOut` stores its completed fragment into the selected
-root after recursive child enumeration. The proof must establish that the
-scheduler selected a live representative with no incoming suspended
-references. It must then show that child allocation, union, assimilation, and
-node merging cannot alias or modify that protected root before the final
-write. The terminal-equality merge loop must restore the invariant that only
-representatives have live slots. Storage bounds alone do not imply these facts.
-
-The scheduler's `stuck` rejection also needs the reachable-state facts that
-turn all blocked work into strict subtree dependencies. The existing
-`strict_dependency_stuck_impossible` theorem applies once those facts are
-established. It does not establish them itself.
+`EnumerationExact.runs_exact` now proves full finite-term soundness and
+completeness of the initialized executable driver. The supporting modules
+derive protected roots, exact final writes, restored canonical slots,
+no-stuck scheduling, decreasing work, graph-bearing references, and rendering.
+No internal state invariant is an input to that initialized equivalence.
+See [notes-enumeration-exact.md](notes-enumeration-exact.md).
 
 The raw Lean `Graph` accepts arbitrary edge tries. Actual `mkEdge` rejects
 contradictory classes and classes that exceed the edge arity. `enumerateEdge`
@@ -89,8 +81,8 @@ also be connected to the corresponding graph views. The model's recursive
 view records an exposed body; it does not distinguish every interned source
 constructor.
 
-Finite execution fuel reports errors. A total correctness theorem must supply
-sufficient fuel rather than identify fuel failure with an empty language.
+`runs_complete_eventually` now supplies sufficient stable execution bounds.
+It does not identify fuel failure with an empty language.
 Residual guards remain paired with their fragments until the caller checks
 them. The ordinary diagnostic enumerator truncates repeated recursion and
 can emit markers. Full finite recursive-language completeness belongs to the

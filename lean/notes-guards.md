@@ -103,11 +103,11 @@ every term. `bf0c370` repairs this case, including its retained substitution
 variant. `Productivity.lean` proves the local below-check is sufficient when
 combined with structural productivity on the same graph snapshot.
 
-A different root-deletion case remains: the representative is accepted but
-the initial state loses its only accepted alternative. Both `minimize` and
-`reduce` fail when pruning retains the other root guard. See
-[the current report](SECOND-REPAIRS.md) and
-`Productivity.RootDeletion.root_deletion_counterexample`.
+A later root-deletion case selected an accepted representative but removed
+the initial state's only accepted alternative. The current source repairs it.
+`MinimizeSchedule` proves the repaired accepted-root invariant.
+`Productivity.RootDeletion.root_deletion_counterexample` and
+[SECOND-REPAIRS.md](SECOND-REPAIRS.md) retain the historical failure.
 
 ## Paper obligations
 
@@ -130,8 +130,9 @@ does not use those paper claims as axioms.
 The historical loss of outcome weights in `groupBuilt` is repaired in the current
 source: it reads `outcomeMass`, computes a common denominator, and uses the
 scaled weights. `ae6b97b` retains top-level atomic size. `8fa39f0` repairs the
-non-atomic and nested atomic size cases. An observed atomic pair still loses
-its relative weights during bounded sampling; the current report records it.
+non-atomic and nested atomic size cases. The later observed atomic-pair defect
+is also repaired. `MassRetention` proves its retained within-size weights;
+[SYSTEM.md](SYSTEM.md) records the source comparison and validation.
 
 Reflexive `Same p p` is excluded from the positive equality cache, so its path
 existence condition remains a residual. A proof or implementation that replaces

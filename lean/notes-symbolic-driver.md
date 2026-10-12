@@ -85,21 +85,17 @@ substitution following, and renaming. Failure of a bound is explicit. No
 universal sufficient bound is proved for all acyclic inputs. No polynomial
 time or space claim is made for arbitrary overlapping constraints.
 
-## What remains unproved
+## Current composed proof and remaining boundary
 
-The port is executable and source-specific. It is not yet a proof that every
-source execution produces a bijective term ranker. Remaining global proofs
-must establish all of the following together:
+The later modules derive the listed domain, binding, freshness, semantic
+count, normalization, termination, cache, conditioning, selection, and inverse
+laws. `SymbolicTotalAPI.allocated_total_api` proves the complete distinct index
+from allocation histories and copied operational rows. `SymbolicPublicAdapter`
+connects the count-once shared-cache API and its error behavior. The results
+apply to every input that meets the stated structural representation checks.
 
-1. Preservation of domain, binding, occurs-check, and fresh-name invariants.
-2. Assignment-count preservation through every normalization and expansion.
-3. Termination on every supported finite graph.
-4. Correct count reuse across every normalized context and graph identity.
-5. Exact source graph conditioning and projection at every selected prefix.
-6. The general count/selection/inverse theorem for all supported input graphs.
-7. Correspondence between these pure definitions and the Haskell implementation.
-
-The independent exact-language index in `DistinctRank.lean` states the desired
-bijection for all valid finite inputs. The source-driver examples here check
-that this concrete symbolic algorithm meets it on the listed cases. Those are
-different proof claims and remain separate.
+Concrete Haskell correspondence remains separate. It includes typed cache
+selection, interned payload readback, machine bounds, and runtime operations.
+The Lean algorithms are handwritten ports. See
+[notes-symbolic-semantics.md](notes-symbolic-semantics.md) for the composed
+proofs, operational cost bounds, and exact remaining source checks.
