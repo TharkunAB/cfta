@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 00:33 CEST**.
+Updated: **2026-10-13 00:55 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **583 jobs and 29,665 theorem dependency
+The full Lean development passes **609 jobs and 30,140 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -228,10 +228,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **583 jobs; 29,665 theorem dependency checks**.
+- Latest integrated Lean audit: **609 jobs; 30,140 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-family-discovery-audit.log`.
+  Log: `/tmp/mcfta-raw-leaf-pending-origin-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -279,7 +279,11 @@ but do not prove it for every runtime execution.
    pruning, duplicate rows, and empty propagation. Physical parent rebuilding
    and finite recursive child edits now derive normalized readback, completion,
    and a common cache for exact replay. Physical leaf intersection and
-   projected union adapters remain.
+   projected union readback are proved for canonical admitted guards.
+   Source arity checks now derive admission. A separate normalization phase
+   proves progress for raw initial guards and constructor rejection. Whole
+   stateful pass composition remains: a finite cache cannot supply a pure
+   constructor interface for every possible future request.
    See [the growth notes](lean/notes-finite-reduction-growth.md) and
    [projected leaf schedules](lean/notes-equality-leaf-projection.md).
 2. **Nested binder identity after normalization erases a fresh outer
@@ -295,13 +299,19 @@ but do not prove it for every runtime execution.
    Separate source-derived classes now cover independent nested callbacks,
    two-level erased outer references, and arbitrary-depth binders that keep
    each enclosing reference through a live root edge. The last class permits
-   every binder to use the same symbol. Mixed dependencies remain open.
+   every binder to use the same symbol. A combined source grammar now places
+   these mechanisms inside one pending execution. General mixed dependencies
+   remain open. For arbitrary syntax, every hypothetical pending result now
+   has a derived earlier reservation with complete probes. Every identity
+   and recursive reference in either probe, including stored Mu bodies and
+   probes, predates that reservation. General absent-reference replay is
+   the remaining completion step.
    Full nested constructor traces now derive
    coherent caches, complete child provenance, outgoing edge residency,
    cache growth, and issued-reference history. No closed-input collision
    was established.
    See [the nested-construction notes](lean/notes-interned-nested-construction.md)
-   and [retained-reference completion](lean/notes-interned-retained-completion.md).
+   and [pending-origin proofs](lean/notes-interned-pending-origins.md).
 3. **Remaining recursive runtime records and nested-builder composition.**
    Typed nested-join families, decoder/mass records, inverse callbacks, and
    public occurrence guards are proved. Complete recursive support assembly,
@@ -312,7 +322,9 @@ but do not prove it for every runtime execution.
    Arbitrary opaque inspection descriptors remain.
    The construction-query repair prevents the concrete payload observation
    mismatch. The final family table check rejects stale keys and minima;
-   typed constructor programs pass without changed results. Builders can still run
+   typed constructor programs pass without changed results. Construction
+   marker provenance now composes with the complete typed record, including
+   its exact public support query. Builders can still run
    under different placeholder contexts; one fixed typed schema does not
    prove that arbitrary Haskell builders preserve their shape and errors.
 4. **Concrete runtime and external correspondence.** Physical interning,

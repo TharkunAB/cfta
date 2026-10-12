@@ -22,6 +22,14 @@ core-formula changes at `9ad319d`. The current semantic specification and
 implementation findings are in [SYSTEM.md](SYSTEM.md). All 66 source modules
 are inventoried in [API-COVERAGE.md](API-COVERAGE.md).
 
+The latest physical equality work derives admitted leaf readback, identity,
+intersection, and projection union. A normalization phase handles arbitrary
+initial outer guard syntax. The stateful pass still needs finite-request
+composition. Full nested syntax now derives pending-reservation origins and
+complete old probe footprints. The remaining general completion step is
+absent-reference replay. The shallow-cache gate has a derived source rank;
+its extension to arbitrary nested Mu records remains open.
+
 The upstream base includes the seventeen earlier repairs. This continuation
 also repairs same-scope identity-replacement precedence and recursive
 construction payload queries. Formula substitution

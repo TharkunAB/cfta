@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 00:33 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 00:55 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -64,10 +64,10 @@ self-reference removal from recursive unions.
   `/tmp/mcfta-construction-query-full.log`. After the grouped-discovery check,
   all generator and refinement cases pass in
   `/tmp/mcfta-family-discovery-validation.log`. Core source is unchanged.
-- Latest integrated Lean build: **583 jobs; 29,665 theorem dependency checks**.
+- Latest integrated Lean build: **609 jobs; 30,140 theorem dependency checks**.
   This includes projected leaf schedules, nested first-run completion,
   stored shallow unfolding, and construction-query provenance.
-  Log: `/tmp/mcfta-family-discovery-audit.log`.
+  Log: `/tmp/mcfta-raw-leaf-pending-origin-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -207,7 +207,11 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   with nested domains. Projected leaf occurrences have a separate weight
   bound for the full schedule. Their physical normalized-parent adapter and
   recursive finite child transformations now compose in a generated common
-  cache. Physical leaf intersection and projected union adapters remain.
+  cache. Physical leaf intersection and projected union now have exact
+  readback for canonical admitted inputs. Source checks derive admission;
+  raw initial guards have a separate proved progress phase. Whole stateful
+  pass composition must use finite completed requests, not a globally closed
+  finite cache.
   Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
@@ -218,6 +222,11 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   Full nested stored-Mu preparation now preserves cache and record invariants.
   Cached free metadata derives exact source binding restriction. General
   strict unfolding rank and language correspondence still need composition.
+  A concrete `UnfoldingRank` now follows from actual stored records when all
+  completed Mu bodies in the cache have depth zero. It derives completion
+  and eventual fuel equality without a supplied rank or decrease law.
+  A reachable-only version is active so unrelated deep cached records need
+  not exclude that fragment.
 - Fresh-outer-dependent nested binder identity remains incomplete in general.
   Empty-child erasure now derives complete-record reuse. Every successful
   nested syntax execution replays exactly after cache growth. First execution
@@ -226,8 +235,12 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   A marked syntax fragment now proves first-run completion and complete
   payload coverage without assuming success. Further independent, erased-edge,
   and retained-reference classes also derive first-run completion. The last
-  covers arbitrary depth with the same symbol at every binder. General mixed
-  retained and erased dependencies remain open.
+  covers arbitrary depth with the same symbol at every binder. The combined
+  grammar now composes retained ancestors with independent and erased-body
+  subprograms inside pending contexts. Full-syntax pending-origin and identity
+  footprint theorems derive the exact earlier reservation and old complete
+  probes for any hypothetical alias. General absent-reference trace replay
+  across changed nested local identities remains open.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
   Full recursive support assembly, weighted flags, and absent-term errors
@@ -288,13 +301,17 @@ explicitly requests publication later.
    diagnostic inspection, both sampler branches, runtime flags, and missing
    terms. Arbitrary context-dependent Haskell builder schemas remain a
    separate source contract.
-3. Prove first execution of closed nested syntax cannot read a pending key.
-   Successful replay, empty-child erasure, retained dependencies, and original
-   independence are proved. Marked first-run completion is proved; arbitrary
-   overlapping root markers and normalized binder or union roots remain.
-4. Establish source unfolding ranks and general explicit reduction fixed-point
-   termination, or retain a concrete counterexample if one is found.
-5. Keep runtime/source correspondence separate from executable Lean proofs.
+3. Complete the absent-reference replay argument for full nested syntax.
+   Pending origins and complete old probe footprints are now derived without
+   a syntax-fragment premise. See `notes-interned-pending-origins.md` and
+   `notes-interned-node-footprint.md`.
+4. Compose physical edit, require, leaf product, and projected union through
+   their actual state transitions. Use finite completed-request replay.
+   Preserve the derived raw-guard normalization phase and its strict rank.
+   General nested equality fixed-point termination remains separate.
+5. Extend the concrete shallow unfolding rank from the whole-cache fragment
+   to reachable stored values, then address arbitrary nested Mu bodies.
+6. Keep runtime/source correspondence separate from executable Lean proofs.
    Update the coverage ledger and handoff at each validation checkpoint.
 
 Address Matti in English and timestamp messages. Preserve unrelated work.

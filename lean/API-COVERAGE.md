@@ -179,6 +179,18 @@ preflight and returned calls under correct external responses. Its induced
 sort interpretation agrees with the independent integer model on the
 complete embedded arithmetic core.
 
+### Physical source adapters
+
+Recent physical equality adapters derive nullary row admission, exact cache
+readback, whole-node identity, Cartesian intersection, and projection union.
+The source constructor checks imply the admitted canonical carrier. Raw
+initial guards have a separate strict normalization-phase rank. Complete
+stateful pass composition still requires finite completed-request replay.
+For recursive constructors, full-syntax pending-origin and identity-footprint
+proofs now identify the actual earlier reservation and complete probes.
+General absent-reference replay remains open. The shallow-cache gate has a
+concrete derived unfolding rank; arbitrary nested cached bodies remain open.
+
 ## Error and boundary ledger
 
 Errors are not accepted terms and must not be counted as such. A successful
