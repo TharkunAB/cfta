@@ -1593,62 +1593,69 @@ With `optionConditionals`, a solution can be a conditional `if c t e`.
 
 The `hegel` benchmark runs recreated versions of the paper's RQ1 queries.
 The paper does not print its specifications, so the queries follow its
-one-line descriptions over a list library with precise specifications.
+one-line descriptions over small libraries with precise specifications,
+one library for each group of queries.
 
 | Query | Size | Seconds | Solution |
 |---|---:|---:|---|
-| Nth1 | 4 | 62.9 | `set (set l i (nth l j)) j (nth l i)` |
-| RevApp1 | 2 | 0.6 | `append (rev l) l` |
+| Nth1 | 4 | 0.2 | `set (set l i (nth l j)) j (nth l i)` |
+| Nth2 | 7 | 1.6 | `set (set (rev l) j (nth (rev l) i)) i (nth (rev l) j)` |
+| Nth3 | 6 | 22.2 | `set (set l i (incr (nth l j))) j (incr (nth l i))` |
+| RevApp1 | 2 | 0.7 | `append (rev l) l` |
 | RevApp2 | 2 | 0.9 | `rev (append l l)` |
-| RevApp3 | 2 | 0.6 | `append l (rev l)` |
-| RevZip1 | 2 | 8.1 | `zip (rev f) s` |
-| RevZip2 | 2 | 8.2 | `zip f (rev s)` |
-| RevZip3 | 2 | 8.7 | `rev (zip f s)` |
-| SplitAt1 | 4 | 69.0 | `pair (take n l) (drop n (drop m l))` |
-| SplitAt2 | 3 | 23.2 | `splitAt (sub n m) (drop m l)` |
-| SplitAt3 | 5 | 175.0 | `pair (take n l) (drop n (drop (sub n m) l))` |
-| Nth_Incr1 | 2 | 1.8 | `nth l (incr n)` |
-| Nth_Incr2 | 2 | 1.8 | `nth l (decr n)` |
-| Nth_Incr3 | 2 | 2.6 | `incr (nth l n)` |
-| AppendN1 | 2 | 2.1 | `append (take n l) l` |
-| AppendN3 | 4 | 16.1 | `append (drop (length (drop n l)) l) l` |
-| AppendN2 | 3 | 10.5 | `if (isZero n) l (append (take (decr n) l) l)` |
-| LookRange1 | 1 | 2.2 | `if (elem k ks) (lookup k ks vs) d` |
-| LookRange2 | 1 | 2.4 | `if (elem k ks) (lookup k ks vs) (last vs)` |
-| LookRange3 | 1 | 2.4 | `if (elem k ks) (lookup k ks vs) (head vs)` |
-| Map1 | 2 | 1.6 | `map incr (map f l)` |
+| RevApp3 | 2 | 0.7 | `append l (rev l)` |
+| RevZip1 | 2 | 9.1 | `zip (rev f) s` |
+| RevZip2 | 2 | 9.0 | `zip f (rev s)` |
+| RevZip3 | 2 | 9.1 | `rev (zip f s)` |
+| SplitAt1 | 4 | 65.9 | `pair (take n l) (drop n (drop m l))` |
+| SplitAt2 | 3 | 22.0 | `splitAt (sub n m) (drop m l)` |
+| SplitAt3 | 5 | 171.2 | `pair (take n l) (drop n (drop (sub n m) l))` |
+| SplitStr1 | 2 | 0.1 | `splitAt (indexOf c s) s` |
+| SplitStr2 | 5 | 1.4 | `pair (drop (indexOf c s) s) (take (indexOf c s) s)` |
+| SplitStr3 | 6 | 2.8 | `pair (take (indexOf c s) s) (cons c (drop (indexOf c s) s))` |
+| Nth_Incr1 | 2 | 1.7 | `nth l (incr n)` |
+| Nth_Incr2 | 2 | 1.7 | `nth l (decr n)` |
+| Nth_Incr3 | 2 | 2.5 | `incr (nth l n)` |
+| AppendN1 | 2 | 2.0 | `append (take n l) l` |
+| AppendN3 | 4 | 15.7 | `append (drop (length (drop n l)) l) l` |
+| AppendN2 | 3 | 10.0 | `if (isZero n) l (append (take (decr n) l) l)` |
+| LookRange1 | 1 | 2.0 | `if (elem k ks) (lookup k ks vs) d` |
+| LookRange2 | 1 | 2.3 | `if (elem k ks) (lookup k ks vs) (last vs)` |
+| LookRange3 | 1 | 2.3 | `if (elem k ks) (lookup k ks vs) (head vs)` |
+| Map1 | 2 | 1.4 | `map incr (map f l)` |
 | Map2 | 2 | 1.4 | `map decr (map f l)` |
 | Map3 | | timeout | |
 | MapDouble1 | 2 | 0.0 | `map g (map f l)` |
 | MapDouble2 | 2 | 0.0 | `map f (map g l)` |
 | MapDouble3 | 2 | 0.0 | `map f (map f l)` |
 | ApplyNAdd1 | 2 | 1.8 | `add m (applyN f n m)` |
-| ApplyNAdd2 | 3 | 10.8 | `add m (applyN f (incr n) m)` |
-| ApplyNAdd3 | 4 | 34.9 | `add m (incr (applyN f (incr n) m))` |
+| ApplyNAdd2 | 3 | 10.6 | `add m (applyN f (incr n) m)` |
+| ApplyNAdd3 | 4 | 34.1 | `add m (incr (applyN f (incr n) m))` |
 | ApplyNInv1 | 3 | 0.2 | `filter f (map h (map g l))` |
 | ApplyNInv2 | 3 | 0.2 | `map h (map g (filter f l))` |
 | ApplyNInv3 | 5 | 0.6 | `map h (map g (filter f (map h (map g l))))` |
 | ApplyList1 | 2 | 0.1 | `if (null fl) s (apply (head fl) s)` |
 | ApplyList2 | 2 | 0.1 | `if (null fl) s (apply (last fl) s)` |
 | ApplyList3 | 4 | 0.1 | `apply (last fl) (apply (head fl) s)` |
-| CEdge1 | 3 | 12.0 | `and (elem src l) (elem tgt l)` |
-| CEdge2 | 3 | 11.8 | `or (elem src l) (elem tgt l)` |
-| CEdge3 | 4 | 21.7 | `and (elem src l) (not (elem tgt l))` |
+| CEdge1 | 3 | 11.5 | `and (elem src l) (elem tgt l)` |
+| CEdge2 | 3 | 11.5 | `or (elem src l) (elem tgt l)` |
+| CEdge3 | 4 | 21.0 | `and (elem src l) (not (elem tgt l))` |
 
-The size counts the applications before the conditional. The times are from
-one run at `-O2` on the development machine, with the paper's limit of 180
-seconds and a limit of one second for each solver query; 36 of the 37
-queries solve. Nth1 and the higher-order queries state facts about every
-index with a quantifier, and the solver cannot decide many of those queries;
-an undecided query counts as failed. Map3 times out: the intermediate list
+The size counts the applications before the conditional. The search stops
+at size 5, at size 7 for Nth2, and at size 6 for Nth3 and SplitStr3. The
+times are from one run at `-O2` on the development machine, with the paper's
+limit of 180 seconds and a limit of one second for each solver query; 41 of
+the 42 queries solve, with a mean of 11.0 seconds. Nth1 to Nth3 and the
+higher-order queries state facts about every index with a quantifier, and
+the solver cannot decide many of those solver queries; an undecided solver
+query counts as failed. Map3 times out: the intermediate list
 `map incr (map f l)` needs a qualifier that no instance of the library or the
 goal gives. The ApplyNInv queries state their results as terms of the
 measures `mapM` and `filt`, because a statement of which elements the result
 has needs existential quantifiers. Without similarity and minimization
-(`-S`), 17 of the 21
-first-order queries solve within 60 seconds; with them, 19 of 21. The
-paper's mean is 7.6 seconds over its 42 queries; its specifications
-differ, so the times are not a direct comparison.
+(`-S`), 17 of the 21 first-order queries solve within 60 seconds; with them,
+19 of 21. The paper's mean is 7.6 seconds over its 42 queries; its
+specifications differ, so the times are not a direct comparison.
 
 ```
 cabal bench hegel --benchmark-options='Hegel 180 8G'

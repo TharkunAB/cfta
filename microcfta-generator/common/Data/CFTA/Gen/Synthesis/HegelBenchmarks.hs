@@ -32,6 +32,7 @@ module Data.CFTA.Gen.Synthesis.HegelBenchmarks (
     booleanLibrary,
     lookupLibrary,
     arrayLibrary,
+    stringLibrary,
     functionLibrary,
 
     -- * Benchmarks
@@ -303,6 +304,23 @@ arrayLibrary =
         )
     ]
 
+-- | The first index of a character in a string, or the length of the string.
+stringLibrary :: [Component]
+stringLibrary =
+    [
+        ( "indexOf"
+        , "c"
+            .: plain char
+            --> "s"
+            .: plain string
+            --> refined int (\v -> v .== measure "idx" [var "c", var "s"] .&& 0 .<= v .&& v .<= len (var "s"))
+        )
+    ]
+
+char, string :: Type
+char = TCons "Char" []
+string = TCons "List" [char]
+
 {- | Every index of the first list except the given ones has the element of
 the second list at it.
 -}
@@ -409,10 +427,82 @@ data LiquidBenchmark = LiquidBenchmark
 -- | The recreated queries.
 liquidBenchmarks :: [LiquidBenchmark]
 liquidBenchmarks =
-    [ benchmark
+    [ bounded 7
+        $ benchmark
+            "Nth2"
+            "Swap the elements at indexes i and j of the reverse of l"
+            (indexing <> functions ["rev"])
+            [("i", index), ("j", refined int (\v -> 0 .<= v .&& v .< len l .&& v ./= var "i")), ("l", plain listA)]
+        $ refined
+            listA
+            ( \v ->
+                len v
+                    .== len l
+                    .&& at v (var "i")
+                    .== at l (len l - 1 - var "j")
+                    .&& at v (var "j")
+                    .== at l (len l - 1 - var "i")
+                    .&& Forall
+                        [(Name "k", IntSort)]
+                        ( var "k"
+                            .== var "i"
+                            .|| var "k"
+                            .== var "j"
+                            .|| var "k"
+                            .< 0
+                            .|| var "k"
+                            .>= len l
+                            .|| at v (var "k")
+                            .== at l (len l - 1 - var "k")
+                        )
+            )
+    , bounded 6
+        $ benchmark
+            "Nth3"
+            "Increment the elements at indexes i and j of l, and swap them"
+            (indexing <> functions ["incr"])
+            [("i", index), ("j", refined int (\v -> 0 .<= v .&& v .< len l .&& v ./= var "i")), ("l", plain intList)]
+        $ refined
+            intList
+            ( \v ->
+                len v .== len l .&& at v (var "i") .== at l (var "j")
+                    + 1 .&& at v (var "j") .== at l (var "i")
+                    + 1 .&& keeps v l [var "i", var "j"]
+            )
+    , benchmark
+        "SplitStr1"
+        "Split s at the character c"
+        strings
+        splitting
+        $ refined (TCons "Pair" [string, string]) (\v -> len (proj1 v) .== position .&& len (proj2 v) .== len s - position)
+    , benchmark
+        "SplitStr2"
+        "Split s at the character c, and swap the parts"
+        strings
+        splitting
+        $ refined
+            (TCons "Pair" [string, string])
+            ( \v ->
+                len (proj1 v) .== len s
+                    - position
+                        .&& len (proj2 v)
+                        .== position
+                        .&& (position .< len s ==> hd (proj1 v) .== at s position)
+                        .&& (position .>= 1 ==> hd (proj2 v) .== hd s)
+            )
+    , bounded 6
+        $ benchmark
+            "SplitStr3"
+            "Split s at the character c, and put c in front of the second part"
+            strings
+            splitting
+        $ refined
+            (TCons "Pair" [string, string])
+            (\v -> len (proj1 v) .== position .&& len (proj2 v) .== len s - position + 1 .&& hd (proj2 v) .== var "c")
+    , benchmark
         "Nth1"
         "Swap the elements at indexes i and j of l"
-        (listLibrary <> arrayLibrary)
+        indexing
         [("i", index), ("j", refined int (\v -> 0 .<= v .&& v .< len l .&& v ./= var "i")), ("l", plain listA)]
         $ refined
             listA
@@ -594,6 +684,16 @@ liquidBenchmarks =
     benchmark name description library arguments goal = LiquidBenchmark name description library False (LiquidQuery arguments goal) 5
     starred name description library arguments goal = LiquidBenchmark name description library True (LiquidQuery arguments goal) 5
     index = refined int (\v -> 0 .<= v .&& v .< len l)
+    bounded bound query = query{liquidBound = bound}
+    position = measure "idx" [var "c", s]
+    indexing = [component | component@(name, _) <- listLibrary, name == "nth"] <> arrayLibrary
+    strings =
+        [ component
+        | component@(name, _) <- listLibrary <> pairLibrary
+        , name `elem` ["take", "drop", "cons", "splitAt", "fst", "snd", "pair"]
+        ]
+            <> stringLibrary
+    splitting = [("c", plain char), ("s", plain string)]
     functions names = [component | component@(name, _) <- functionLibrary, name `elem` names]
     mapping = functions ["map", "compose", "incr", "decr", "rev"]
     mappingTwice = functions ["map", "compose", "apply"]
