@@ -100,7 +100,9 @@ theorem view_decided_exact [DecidableEq Formula] (formulas : Formulas Formula) (
 /-- Run the actual source sparse guard on a finite graph variant. -/
 def variantVerdict [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
     (guard : Guard Formula) (variant : ObservationGraph.Variant State Name Formula) : Guards.Verdict :=
-  evaluateGuardWithShape formulas solver (queryObservations variant.view) guard
+  PruneSchedule.safeVerdict
+    (!(ambiguous (queryObservations variant.view) (sameShape formulas (queryObservations variant.view) []) guard).isEmpty)
+    (evaluateGuardWithShape formulas solver (queryObservations variant.view) guard)
 
 /-- Build source candidates from the exact finite-plan graph specialization. -/
 def candidates [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
@@ -153,19 +155,21 @@ theorem prune_exact [DecidableEq Formula] (formulas : Formulas Formula) (solver 
   · intro candidate member proved term
     obtain ⟨variant, present, rfl⟩ := List.mem_map.mp member
     change variantVerdict formulas solver guard variant = .yes at proved
+    have proved := (PruneSchedule.safeVerdict_yes _ _).mp proved |>.2
     constructor
     · intro accepted
       have view := (ObservationGraph.specialize_exact automaton (SourceGuardPlan.plan guard) state variant present term accepted).2
       have decision := view_decided_exact formulas solver guard variant.view term view (noConflict variant present)
-        (by change variantVerdict formulas solver guard variant ≠ .unknown; rw [proved]; decide)
+        (by rw [proved]; decide)
       exact ⟨accepted, decision.symm.trans proved⟩
     · exact And.left
   · intro candidate member disproved term ⟨accepted, guardYes⟩
     obtain ⟨variant, present, rfl⟩ := List.mem_map.mp member
     change variantVerdict formulas solver guard variant = .no at disproved
+    have disproved := (PruneSchedule.safeVerdict_no _ _).mp disproved |>.2
     have view := (ObservationGraph.specialize_exact automaton (SourceGuardPlan.plan guard) state variant present term accepted).2
     have decision := view_decided_exact formulas solver guard variant.view term view (noConflict variant present)
-      (by change variantVerdict formulas solver guard variant ≠ .unknown; rw [disproved]; decide)
+      (by rw [disproved]; decide)
     have impossible := disproved.symm.trans (decision.trans guardYes)
     cases impossible
 

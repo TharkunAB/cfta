@@ -89,7 +89,7 @@ def candidates [DecidableEq Symbol] [DecidableEq Refinement]
     (guard : Guards.Guard (Atom Refinement)) (state : State) (ambiguous : Variant State Symbol Refinement → Bool) :
     List (PruneSchedule.Candidate (ObservationGraph.Node State (Label Symbol Refinement))) :=
   (specialize automaton (planBudget (guardPlan guard)) (guardPlan guard) state).map
-    (fun variant => ⟨variant.node, variantVerdict queries guard variant, ambiguous variant⟩)
+    (fun variant => ⟨variant.node, safeVerdict (ambiguous variant) (variantVerdict queries guard variant), ambiguous variant⟩)
 
 /-- Execute the source check on the concrete specialized graph, retaining the full guarded root on fallback. -/
 def prune [DecidableEq Symbol] [DecidableEq Refinement]
@@ -122,12 +122,14 @@ theorem prune_exact [DecidableEq Symbol] [DecidableEq Refinement]
       exact ⟨_, List.mem_map.mpr ⟨variant, member, rfl⟩, run, proved⟩
   · intro candidate member proved term
     obtain ⟨variant, present, rfl⟩ := List.mem_map.mp member
+    have proved := (safeVerdict_yes _ _).mp proved |>.2
     constructor
     · intro accepted
       exact ⟨accepted, (variantVerdict_correct automaton queries guard state variant present term accepted).symm.trans proved⟩
     · exact And.left
   · intro candidate member disproved term ⟨accepted, proved⟩
     obtain ⟨variant, present, rfl⟩ := List.mem_map.mp member
+    have disproved := (safeVerdict_no _ _).mp disproved |>.2
     have exactQuery := variantVerdict_correct automaton queries guard state variant present term accepted
     have impossible := disproved.symm.trans (exactQuery.trans proved)
     cases impossible
@@ -165,6 +167,7 @@ theorem prune_semantic_exact [DecidableEq Symbol] [DecidableEq Refinement]
       exact ⟨_, List.mem_map.mpr ⟨variant, member, rfl⟩, run, proved⟩
   · intro candidate member proved term
     obtain ⟨variant, present, rfl⟩ := List.mem_map.mp member
+    have proved := (safeVerdict_yes _ _).mp proved |>.2
     constructor
     · intro accepted
       have decision : verdict queries guard term = .yes :=
@@ -173,6 +176,7 @@ theorem prune_semantic_exact [DecidableEq Symbol] [DecidableEq Refinement]
     · exact And.left
   · intro candidate member disproved term ⟨accepted, proved⟩
     obtain ⟨variant, present, rfl⟩ := List.mem_map.mp member
+    have disproved := (safeVerdict_no _ _).mp disproved |>.2
     have decision : verdict queries guard term = .no :=
       (variantVerdict_correct automaton queries guard state variant present term accepted).symm.trans disproved
     have falseGuard : test term ≠ true := by simpa [decision, Guards.Supports] using sound term

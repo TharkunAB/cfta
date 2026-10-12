@@ -395,7 +395,7 @@ def pruneMemo [DecidableEq State] [DecidableEq Symbol] [DecidableEq Refinement]
     Except PruneSchedule.Error (List (ObservationGraph.Node State (Label Symbol Refinement)) × Memo State Symbol Refinement) :=
   let specialized := specializeMemo automaton (planSize (guardPlan guard)) (guardPlan guard) state memo
   let candidates := specialized.1.map (fun variant =>
-    (⟨variant.node, variantVerdict queries guard variant, ambiguous variant⟩ : PruneSchedule.Candidate _))
+    (⟨variant.node, PruneSchedule.safeVerdict (ambiguous variant) (variantVerdict queries guard variant), ambiguous variant⟩ : PruneSchedule.Candidate _))
   match PruneSchedule.check (guardedRoot automaton state test) [] candidates with
   | .error error => .error error
   | .ok result => .ok (result, specialized.2)
@@ -412,7 +412,7 @@ theorem pruneMemo_exact [DecidableEq State] [DecidableEq Symbol] [DecidableEq Re
       AcceptsNode automaton (guardedRoot automaton state test) term) ∧ ValidMemo automaton next ∧ Extends memo next := by
   let variants := (specializeMemo automaton (sizeOf (guardPlan guard)) (guardPlan guard) state memo).1
   let candidates : List (PruneSchedule.Candidate (ObservationGraph.Node State (Label Symbol Refinement))) :=
-    variants.map (fun variant => ⟨variant.node, variantVerdict queries guard variant, ambiguous variant⟩)
+    variants.map (fun variant => ⟨variant.node, PruneSchedule.safeVerdict (ambiguous variant) (variantVerdict queries guard variant), ambiguous variant⟩)
   have specialized := specializeMemo_exact automaton (guardPlan guard) state memo valid
   cases checked : PruneSchedule.check (guardedRoot automaton state test) [] candidates with
   | error failure =>
@@ -440,6 +440,7 @@ theorem pruneMemo_exact [DecidableEq State] [DecidableEq Symbol] [DecidableEq Re
           exact ⟨_, List.mem_map.mpr ⟨variant, present, rfl⟩, run, proved⟩
       · intro candidate member proved term
         obtain ⟨variant, present, rfl⟩ := List.mem_map.mp member
+        have proved := (PruneSchedule.safeVerdict_yes _ _).mp proved |>.2
         constructor
         · intro accepted
           have decision : verdict queries guard term = .yes :=
@@ -448,6 +449,7 @@ theorem pruneMemo_exact [DecidableEq State] [DecidableEq Symbol] [DecidableEq Re
         · exact And.left
       · intro candidate member disproved term ⟨accepted, proved⟩
         obtain ⟨variant, present, rfl⟩ := List.mem_map.mp member
+        have disproved := (PruneSchedule.safeVerdict_no _ _).mp disproved |>.2
         have decision : verdict queries guard term = .no :=
           (memo_verdict_exact automaton queries guard state memo valid variant present term accepted).symm.trans disproved
         have falseGuard : test term ≠ true := by simpa [decision, Guards.Supports] using sound term
