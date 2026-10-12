@@ -471,6 +471,44 @@ check the empty cases and a productive nested recursive grammar. Depths zero
 through three give 1, 3, 7, and 15 distinct terms. Every decoded rank has its
 inverse. All 614 suite examples pass. See [the closure notes](notes-lexical-binder-closure.md).
 
+### Self-dependent measures can lose valid expressions
+
+A leaf with refinement `v == v` does not define one integer. The public
+`definingTerm` extractor nevertheless returns `v`, as its syntax contract
+permits. Two generator callers treated that result as an exact measure.
+Pairing this leaf with a symbolic integer `x` and adding the measures
+produced `v == v + x`. A parent guard could then disagree with complete-term
+validation: the complete path retained `(0,1)`, while symbolic compilation
+returned an empty generator. No reserved name was supplied by the caller.
+
+Both callers now reject fallback terms that mention the refined value.
+The singleton `onlyPoint` branch retains priority. A used inexact child
+measure reports `InexactMeasure`; unavailable parent extraction reports
+`IntegerLeafRead`. The public syntactic extractor is unchanged.
+`DefiningTerm.termOf_exact` derives existence and uniqueness for every
+accepted extraction. `ParentGuardFormula` uses that result to derive the
+parent formula without assuming target satisfiability.
+[SelfDependentMeasure.hs](repro/SelfDependentMeasure.hs) checks both parent
+guard forms, listed and symbolic children, independent measures, and the
+singleton-first case. See [the finding](notes-self-dependent-measure.md).
+
+### Recursive open group positioning can throw a partial-map exception
+
+Put a choice between a productive recursive import and bounded symbolic
+integers below a constructor. Both `uniformly` and `oneof` raised `Map.!`
+during compilation. `repositionOpen` built its position table through
+`cardinalities`, which cannot return counts for recursive groups. It
+replaced that error with an empty key list, then indexed the empty table.
+
+`repositionOpen` and the analogous `joinPositioned` now use `groupKeys`.
+The keys remain available when the language has no finite cardinality.
+The open closure still reports its existing `UnboundedGenerator` result.
+This repair does not add recursive symbolic integer closure.
+`GroupPositions.regroup_lookup` derives a valid lookup for every retained
+key. The map fold preserves first positions and duplicate identities.
+[RecursiveOpenPositions.hs](repro/RecursiveOpenPositions.hs) checks the
+public error path. See [the position notes](notes-group-positions.md).
+
 ## Rebase integration repairs
 
 The previous weight repair introduced `keyedBucketMasses`. New upstream
@@ -485,7 +523,8 @@ transport law, and `stale_mass_counterexample` proves why the old keys fail.
 The retained regression fixtures and reproductions now use the current
 constructor sizes, `Term` representation, and sorted core-formula declarations.
 No new package test suite was added. The existing core, generator, and
-refinement suites pass in `nix-shell`: 282, 194, and 138 examples, respectively.
+refinement suites pass in `nix-shell`: 282, 194, and 142 examples, respectively.
+This includes the later measure and recursive-positioning regressions.
 Existing property examples also run their configured generated cases.
 
 An independent temporary source probe compared 5,000 finite grammars against
@@ -546,3 +585,10 @@ Haskell laziness, machine conversions, external solver answers, random draws,
 and user codecs have explicit contracts. Some internal driver invariants
 remain proof obligations in the coverage ledger. Passing regression tests or
 an axiom audit does not discharge those obligations.
+
+The actual identity supply stores signed machine words. Its identities are
+distinct within one full word period, including its negative half. A full
+wrap repeats the initial identity. `InternedIdentityWords` proves both
+facts. Global freshness therefore requires a bounded allocation lifetime
+and linearizable atomic draws. This is a representation boundary, not a
+reproduced practical failure. See [the identity notes](notes-interned-identity-words.md).
