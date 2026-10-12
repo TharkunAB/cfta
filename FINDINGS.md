@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 01:38 CEST**.
+Updated: **2026-10-13 01:55 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **670 jobs and 31,341 theorem dependency
+The full Lean development passes **700 jobs and 31,615 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -228,10 +228,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **670 jobs; 31,341 theorem dependency checks**.
+- Latest integrated Lean audit: **700 jobs; 31,615 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-complete-require-normalized-combination-audit.log`.
+  Log: `/tmp/mcfta-runtime-cache-selective-flat-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -289,9 +289,14 @@ but do not prove it for every runtime execution.
    Finite occurrence compilation and actual child workers derive complete
    payload availability and readback. Finite raw intersection and projection
    union now derive exact complete records in generated later caches.
-   Complete recursive required-path correspondence is proved. Physical path
-   projection derives completion and payload availability. Endpoint projection,
-   simultaneous edits, and whole stateful schedule composition remain open.
+   Complete required-path and simultaneous recursive edit correspondence is
+   proved. Actual endpoint projection and first-seeded target folds return
+   exact finite leaf records. A composition gap was found: proof preparation
+   cannot become the next runtime cache because later allocations can diverge.
+   Raw leaf pullback and dead-row trimming repair this gap. They reconstruct
+   exact outputs in the actual runtime cache, preserve leaf endpoints, and
+   retain the occurrence progress measure. Whole stateful schedule composition
+   remains open. See [runtime trimming](lean/notes-equality-leaf-runtime-trim.md).
    See [the growth notes](lean/notes-finite-reduction-growth.md) and
    [projected leaf schedules](lean/notes-equality-leaf-projection.md).
 2. **Nested binder identity after normalization erases a fresh outer
@@ -318,8 +323,9 @@ but do not prove it for every runtime execution.
    completion at arbitrary depth with nested independent live children.
    Structural erasure now propagates through node, union, and binder contexts.
    Mixed retained active frames and normalized erased subprograms complete
-   from their actual earlier traces. Selective dependencies and erasure caused
-   only by union collapse or cleanup remain open. General absent-reference
+   from their actual earlier traces. Selective immediate-parent erasure now
+   preserves older ancestors and derives first completion. Arbitrary ancestor
+   subsets and erasure caused only by union collapse or cleanup remain open. General absent-reference
    replay is the remaining completion step.
    Full nested constructor traces now derive
    coherent caches, complete child provenance, outgoing edge residency,
