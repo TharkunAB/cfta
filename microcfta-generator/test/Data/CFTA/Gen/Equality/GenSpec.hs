@@ -251,8 +251,9 @@ spec = do
                                 (Left err, _) -> expectationFailure $ show err
                                 (_, Left err) -> expectationFailure $ show err
                     inspectionLabels fromAutomaton `shouldBe` Right []
-                    check $ ECTAGen.upToSize 6 $ label fromAutomaton
-                    check $ label $ ECTAGen.upToSize 6 fromAutomaton
+                    -- The import counts private recursion roots as ordinary nodes.
+                    check $ ECTAGen.upToSize 8 $ label fromAutomaton
+                    check $ label $ ECTAGen.upToSize 8 fromAutomaton
                     ranksBack ECTAGen.rankOfTerm fromAutomaton [0 .. 5]
 
         it "retains matching keys in key and source order with the conditioned product PMF" $ do

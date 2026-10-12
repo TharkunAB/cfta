@@ -701,8 +701,14 @@ spec = do
                 nested depth = if depth == 0 then ECTAGen.node "e" literal else step (nested (depth - 1))
                 -- The term e(or(t, lit)), wrapped forty times around t = e(lit).
                 deep base =
-                    iterate (\term -> Term.Node (ECTAGen.Label "e") [Term.Node (ECTAGen.Label "or") (term : Term.subForest base)]) base
+                    iterate
+                        (\term -> wrap $ Term.Node (ECTAGen.Label "e") [Term.Node (ECTAGen.Label "or") (term : Term.subForest body)])
+                        base
                         !! 40
+                  where
+                    (wrap, body) = case base of
+                        Term.Node ECTAGen.Recursion [member] -> (\term -> Term.Node ECTAGen.Recursion [term], member)
+                        _ -> (id, base)
             mapM_
                 ( \generator -> do
                     term <- either (fail . show) (pure . deep) $ ECTAGen.termAt generator 0

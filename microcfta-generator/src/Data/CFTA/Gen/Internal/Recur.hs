@@ -23,7 +23,7 @@ import Data.Sequence (Seq (..))
 import Data.Typeable (Typeable)
 import System.IO.Unsafe (unsafePerformIO)
 
-import Data.CFTA.Equality (Node (EmptyNode), createMu)
+import Data.CFTA.Equality (Edge (Edge), Node (EmptyNode, Node), createMu)
 import Data.CFTA.Gen.Error
 import Data.CFTA.Gen.Internal.Inspection
 import Data.CFTA.Gen.Internal.Recursive
@@ -78,6 +78,10 @@ atomic (Opaque _) = Transparent $ Left CannotInspectOpaqueGenerator
 
 Each occurrence of the argument must be guarded, as the Haddock of 'pay'
 says. Otherwise the result is 'UnguardedRecursion'.
+
+Each recursive engine term has a private 'Recursion' root. It keeps a member
+whole when a constructor closes an enclosing layer. The root does not change
+the member's value, size, rank, or probability. @surface@ removes it.
 -}
 recur ::
     (Hashable symbol, Typeable symbol) =>
@@ -117,8 +121,8 @@ recur build
         either (const emptySampleIndex) recursiveSampling $
             bodyOf (Cyclic $ Right $ placeholder EmptyNode tied self)
 
-    -- The terms tie as the counts do: the body reads the terms and the
-    -- positions of the occurrence from the language being defined.
+    -- Each member keeps a private root at the recursive boundary. A label or
+    -- application treats an occurrence and a closed recursive member alike.
     termsOfBody terms =
         either (const Nothing) recursiveTerm $
             bodyOf (Cyclic $ Right $ (placeholder EmptyNode tied tiedSampling){recursiveTerm = Just terms})
@@ -126,21 +130,31 @@ recur build
     tiedTerms = RecursiveTerms tiedTermIndex tiedPositions
       where
         tiedTermIndex = fixIndex occurrenceMinimum $ \self ->
-            maybe emptyIndex recursiveTermIndex $ termsOfBody $ RecursiveTerms self tiedPositions
+            mapIndex (\body -> Term.Node Recursion [body])
+                $ maybe emptyIndex recursiveTermIndex
+                $ termsOfBody
+                $ RecursiveTerms self tiedPositions
 
-        tiedPositions view = maybe [] (`recursiveTermPositions` view) bodyTerms
+        tiedPositions = leafRanks $ \term -> case term of
+            Term.Node Recursion [body] -> maybe [] (`recursiveTermPositions` WholeTerm body) bodyTerms
+            _ -> []
 
     inspection = Inspection name graph
       where
         name = either (const Nothing) (inspectionName . recursiveInspection) probed
         graph = createMu $ \self ->
-            either (const EmptyNode) (inspectionGraph . recursiveInspection)
-                $ bodyOf
-                $ Cyclic
-                $ Right
-                $ (placeholder EmptyNode tied tiedSampling)
-                    { recursiveInspection = Inspection name self
-                    }
+            Node
+                [ Edge
+                    (plainSymbol Recursion)
+                    [ either (const EmptyNode) (inspectionGraph . recursiveInspection)
+                        $ bodyOf
+                        $ Cyclic
+                        $ Right
+                        $ (placeholder EmptyNode tied tiedSampling)
+                            { recursiveInspection = Inspection name self
+                            }
+                    ]
+                ]
 
     -- Built against a probe rather than the knot: reading whether the
     -- occurrence is used, and whether it is guarded, must not count
@@ -183,8 +197,13 @@ recur build
                         inspection
       where
         automaton = createMu $ \self ->
-            either (const EmptyNode) recursiveSupport $
-                bodyOf (Cyclic $ Right $ placeholder self tied tiedSampling)
+            Node
+                [ Edge
+                    Recursion
+                    [ either (const EmptyNode) recursiveSupport $
+                        bodyOf (Cyclic $ Right $ placeholder self tied tiedSampling)
+                    ]
+                ]
 
 {- | Build a recursive grouped family from its own languages.
 
