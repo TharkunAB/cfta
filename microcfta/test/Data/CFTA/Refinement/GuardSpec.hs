@@ -6,26 +6,30 @@ import Control.Exception (IOException, evaluate, try)
 import Data.CFTA.Constraint (contractTermName)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Formula (Formula (Forall), Sort (..))
+import Data.CFTA.Path (getPath)
 import Data.CFTA.Refinement (
     Automaton,
     Entailment (entails),
-    Guard (Bottom, Entails, Holds, Not, Or, Same, Satisfies, Substitute),
+    Guard (And, Bottom, Entails, Holds, Not, Or, Same, Satisfies, Substitute),
     Leafness (Mixed),
     Node (Node),
     Observed (Observed),
     Substitution (Substitution),
     Symbol (RefinedSymbol),
     Verdict (..),
+    accepts,
     entailsWithBindings,
     equalityConstraint,
     evaluateConstraint,
     evaluateGuard,
     evaluateGuardWithShape,
     intersect,
+    leafnessOf,
     noConstraint,
     path,
     semanticConstraint,
     termsWith,
+    validate,
     pattern Transition,
  )
 import Data.CFTA.Refinement.Expression (false, refinementFormula, true, variable, (.&&), (.==), (.>), (.>=))
@@ -217,6 +221,55 @@ spec =
             evaluateGuard tableEntailment (scope missing) term >>= (`shouldBe` No)
             evaluateGuard tableEntailment (scope $ Not missing) term >>= (`shouldBe` Yes)
             evaluateGuard tableEntailment (scope $ Or [missing, same]) term >>= (`shouldBe` Yes)
+
+        it "keeps independent actual-value scopes when intersecting guarded languages" $
+            withZ3 [] $ \solver -> do
+                let zero = variable valueName .== 0
+                    one = variable valueName .== 1
+                    leaf name = Node [Transition name true [] noConstraint]
+                    actual refinement = Node [Transition "a" refinement [leaf "z"] noConstraint]
+                    first = Substitute [Substitution (path [0]) (path [3])] $ Satisfies (path [5]) (variable "x" .== 0)
+                    second =
+                        Substitute [Substitution (path [2]) (path [0])]
+                            $ Substitute [Substitution (path [1]) (path [4])]
+                            $ Satisfies (path [5]) (variable "y" .== 1)
+                    both = And [first, second]
+                    graph guard =
+                        Node
+                            [ Transition "root" true [actual zero, actual one, leaf "b", leaf "x", leaf "y", leaf "target"] (semanticConstraint guard)
+                            ]
+                    termLeaf name = Term.Node (RefinedSymbol name true) []
+                    termActual refinement = Term.Node (RefinedSymbol "a" refinement) [termLeaf "z"]
+                    term =
+                        Term.Node
+                            (RefinedSymbol "root" true)
+                            [termActual zero, termActual one, termLeaf "b", termLeaf "x", termLeaf "y", termLeaf "target"]
+                    observed target = do
+                        Term.Node symbol children <- getPath target term
+                        pure $ Observed symbol $ leafnessOf children
+                    guards = [first, second, both, Or [first, second], Not $ Not both, Substitute [] both, Not $ Substitute [] $ Not both]
+                    expected = [Yes, No, No, Yes, No, No, No]
+                    graphs = [graph first, graph second, intersect (graph first) (graph second)]
+                mapM (\guard -> evaluateGuard solver guard term) guards >>= (`shouldBe` expected)
+                mapM (evaluateGuardWithShape solver observed) guards >>= (`shouldBe` expected)
+                map validate graphs `shouldBe` replicate 3 (Right ())
+                mapM (\automaton -> accepts solver automaton term) graphs >>= (`shouldBe` [Yes, No, No])
+
+        it "preserves missing-path and formula-refutation behavior through Boolean polarity" $
+            withZ3 [] $ \solver -> do
+                let term = Term.Node (RefinedSymbol "root" true) []
+                    missing = Satisfies (path [0]) true
+                    unproved = Satisfies (path []) (variable "x" .== 1)
+                    guards =
+                        [ Not unproved
+                        , Not $ And [missing, unproved]
+                        , Not $ Or [missing, unproved]
+                        , Not $ And []
+                        , Not $ Or []
+                        , Not $ Not unproved
+                        , Substitute [] $ Not $ Or [missing, unproved]
+                        ]
+                mapM (\guard -> evaluateGuard solver guard term) guards >>= (`shouldBe` [No, Yes, No, No, Yes, No, No])
 
         it "rejects an equality scope whose actual or formal position is absent" $ do
             let term = Term.Node (RefinedSymbol "leaf" true) []

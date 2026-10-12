@@ -1,5 +1,9 @@
 # Complete unambiguous guard and pruning correspondence
 
+This file describes the whole-guard allocation algorithm. It is now the
+private scoped evaluator. The current public Boolean dispatcher and its
+pruning and compiler proofs are in `notes-source-boolean-entry.md`.
+
 `SourceFullGuardBridge.evaluate_equal` proves the entire source guard traversal
 across equal observation reads. It covers Top, Bottom, Same, Entails,
 Satisfies, Holds, Substitute, Not, And, and Or. It retains the outer guard's
@@ -14,7 +18,7 @@ results supply every case of the full guard proof. No premise assumes that
 an entire guard, source query, or pruning pass already preserves its result.
 
 `SourceFullGuardBridge.complete_decision` connects each decided cell to the
-public complete-term evaluator. It uses the independently proved
+historical whole-guard complete-term evaluator. It uses the independently proved
 `unambiguous_decided_exact` after transporting the cell's query. Conflicting
 names and allocated actual declarations are permitted. The earlier
 conflict-free condition is not required.
@@ -23,7 +27,8 @@ conflict-free condition is not required.
 finite graph specialization and the repaired candidate loop. Every
 successful return preserves the full confirmed term language, including the
 case which restores the original guard after ambiguity. The theorem includes
-all current guard constructors and arbitrary nested source scopes.
+all guard constructors and arbitrary nested source scopes. The current
+public entry composes these results per scoped atom in `SourceBooleanBridge`.
 `gate_unambiguous` proves that the Haskell conservative identity check, which
 uses an always-unknown comparison callback, excludes every ambiguity of the
 more precise sparse root callback used by the evaluator. Both gate sites in

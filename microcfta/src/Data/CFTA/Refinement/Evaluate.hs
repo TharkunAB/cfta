@@ -132,9 +132,27 @@ evaluateGuardWithSame ::
     ([[ResolvedSubstitution]] -> Path -> Path -> Maybe Bool) ->
     Guard ->
     IO Verdict
-evaluateGuardWithSame entailment observedAt sameAt guard = go guard
+evaluateGuardWithSame entailment observedAt sameAt = go True
   where
-    go = evaluateWith []
+    -- Boolean siblings have independent substitution scopes and actual values.
+    go positive (And guards) =
+        (if positive then andVerdicts else orVerdicts) $ map (go positive) guards
+    go positive (Or guards) =
+        (if positive then orVerdicts else andVerdicts) $ map (go positive) guards
+    go positive (Not nested) = go (not positive) nested
+    go positive (Substitute [] nested) = go positive nested
+    go positive guard =
+        evaluateScopedGuard entailment observedAt sameAt $ if positive then guard else Not guard
+
+-- | Evaluate one scoped atom with one actual-value table, preserving formula refutation.
+evaluateScopedGuard ::
+    Entailment ->
+    (Path -> Maybe Observed) ->
+    ([[ResolvedSubstitution]] -> Path -> Path -> Maybe Bool) ->
+    Guard ->
+    IO Verdict
+evaluateScopedGuard entailment observedAt sameAt guard = evaluateWith [] guard
+  where
     (freshValues, ambiguousValues) = substitutionValues observedAt (sameAt []) guard
 
     decide = decideWith []
