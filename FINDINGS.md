@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-12 23:08 CEST**.
+Updated: **2026-10-12 23:20 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired one additional sparse-substitution defect, described as row 18.
 All **620 existing Haskell examples** pass after that repair: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **482 jobs and 26,460 theorem dependency
+The full Lean development passes **489 jobs and 26,876 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -192,10 +192,10 @@ fields, and arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Final integrated Lean audit: **482 jobs; 26,460 theorem dependency checks**.
-  Its import closure includes 479 proof modules. Only `propext`,
+- Final integrated Lean audit: **489 jobs; 26,876 theorem dependency checks**.
+  Its import closure includes 486 proof modules. Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-runtime-support-progress-audit.log`.
+  Log: `/tmp/mcfta-inspection-uniform-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -246,7 +246,8 @@ but do not prove it for every runtime execution.
    Typed nested-join families, decoder/mass records, inverse callbacks, and
    public occurrence guards are proved. Complete recursive support assembly,
    weighted flags, and absent term fields now compose with those bodies.
-   Diagnostic inspection and unweighted sampler input contracts remain.
+   Diagnostic inspection and both sampler branches are now derived from
+   local source records. Arbitrary opaque inspection descriptors remain.
    Builders can run
    under different placeholder contexts; one fixed typed schema does not
    prove that arbitrary Haskell builders preserve their shape and errors.

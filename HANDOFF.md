@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 23:08 CEST (Europe/Stockholm)**.
+Updated: **2026-10-12 23:20 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -61,10 +61,10 @@ self-reference removal from recursive unions.
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
   `/tmp/mcfta-scope-precedence-full.log`.
-- Final integrated Lean build: **482 jobs; 26,460 theorem dependency checks**.
+- Final integrated Lean build: **489 jobs; 26,876 theorem dependency checks**.
   This includes the new finite leaf progress, runtime metadata, and shared
   support-binder proofs. Further active modules are not yet integrated.
-  Log: `/tmp/mcfta-runtime-support-progress-audit.log`.
+  Log: `/tmp/mcfta-inspection-uniform-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -177,8 +177,9 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
   independence cases are proved; no closed-input source defect is known.
 - Typed recursive join composition and public query laws are now proved.
   Full recursive support assembly, weighted flags, and absent-term errors
-  now connect to those bodies. Diagnostic inspection and unweighted sampler
-  input contracts are in progress.
+  now connect to those bodies. Diagnostic inspection and both sampler
+  branches are also derived from local source records. Opaque external
+  descriptors retain their own contracts.
   Arbitrary Haskell builders can change schema between placeholder contexts.
 - General accepted ambiguous sparse-to-complete query transport is open.
   The existing table alignment preserves identity flags and declarations;
@@ -217,9 +218,10 @@ explicitly requests publication later.
 
 1. Derive the accepted ambiguous-scope forward environment relation. The
    precise missing contracts are in `notes-substitution-policies.md`.
-2. Complete diagnostic inspection and unweighted sampler input contracts
-   for the checked join bodies. Support, runtime flags, and missing-term
-   dispatch are now integrated.
+2. Preserve the complete typed family connections now proved for support,
+   diagnostic inspection, both sampler branches, runtime flags, and missing
+   terms. Arbitrary context-dependent Haskell builder schemas remain a
+   separate source contract.
 3. Handle nested binder key identity when normalization erases a fresh outer
    dependency. Retained dependencies and original independence are proved.
 4. Establish source unfolding ranks and general explicit reduction fixed-point

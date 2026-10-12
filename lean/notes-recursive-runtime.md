@@ -80,6 +80,21 @@ marker. `dispatched_family_exact` then proves that either source sampler
 route equals the full derived family sampler. It does not assume a desired
 whole-family probability result.
 
+`RecursiveRuntimeExamples` checks both sampler routes through concrete typed
+families with a delayed recursive join. The unweighted result retains four
+distinct ranks with probabilities one quarter, even when pairs of ranks have
+equal values. Explicit nine-to-one retained masses remain nine-to-one within
+both size classes. Further checks cover probe/term phase availability, weight
+promotion from a dropped key, and absent-term error precedence.
+
+`BoundedRecursiveDispatch` keeps the finite-wrapper inverse branch separate
+from the recursive one. `boundedStatic` installs an empty finite candidate
+callback when recursive terms are absent. Therefore public `ranksOf` returns
+an empty list and `rankOf` reports `TermNotInLanguage`. Term selection still
+reports unavailable terms. With a callback present, the public checked-rank
+filter and least-rank theorem remain unchanged. `family_exact` connects this
+finite-wrapper behavior to all bounded family term preimages.
+
 The source locations are `Gen/Internal/Join.hs`, `Chain.hs`, `Recursive.hs`,
 `Recur.hs`, and `Query.hs`. These are pure field and dispatch adapters. They
 do not model evaluation of arbitrary Haskell body functions, source exceptions

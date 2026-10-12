@@ -141,9 +141,13 @@ accept exactly the independently compiled finite term derivations.
 `RecursiveJoinRuntime` and `RecursiveRuntimeDispatch` connect both weight
 flags, optional callback fields, bounded queries, and source error precedence.
 `RecursiveRuntimeOrigins` derives those metadata fields from primitive inputs
-across separate probe and term rebuilds. Full diagnostic inspection,
-unweighted sampler input contracts, and changing runtime builder schemas
-remain adapters.
+across separate probe and term rebuilds. `RecursiveJoinInspectionBody`
+derives separate diagnostic assembly and names from local descriptors.
+`RecursiveUniformRuntime` and `RecursiveRuntimeVerified` derive both sampler
+branches from constructor-level finite input laws. `BoundedRecursiveDispatch`
+preserves the finite wrapper's empty-rank behavior when terms are missing.
+Opaque inspection descriptors and changing runtime builder schemas remain
+adapters.
 The current sparse pruning policy is also distinct from the older upfront
 blanket guard in `BooleanGuardPrune` and `FullGuardPrune`. `CurrentGuardPrune` models the evaluator-first loop and proves unambiguous
 cell exactness. These results do not prove general accepted ambiguous source

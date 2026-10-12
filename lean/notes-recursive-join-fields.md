@@ -184,16 +184,17 @@ Lean-to-Haskell refinement theorem. No Haskell source changed for this work.
 
 ## Remaining integration boundary
 
-`recursiveJoin` also constructs support, inspection, and weighted flags.
-`SupportJoin` proves the local support wrapper language. The composition
-modules do not yet connect the complete recursive support or inspection
-record to each compiled join body. The retained mass and ranked sampler
-laws are proved, but the source Boolean weighted-dispatch flags are not
-part of this body interface.
+`RecursiveJoinSupportFamily.family_exact` now connects the actual shared
+support binder to the complete independent term-family language.
+`RecursiveJoinInspectionBody` compiles the separate named diagnostic knot
+and derives its constructor invariants. See
+[the support and inspection notes](notes-recursive-join-support-inspection.md)
+for finite-leaf premises, exact theorem scope, and graph representation
+boundaries.
 
-The Haskell term adapter returns `Nothing` if the operation or any argument
-has no term field. These modules model the successful branch with every
-term field present. They do not model arbitrary schema changes when a
-Haskell grouped builder is evaluated in different recursive contexts.
-Host integer overflow and Haskell lazy-knot productivity remain outside
-these finite, total Lean records.
+The retained mass and ranked sampler laws are proved here. Weighted flags
+and absent term fields use the separate runtime modules. This body
+interface models the successful branch with every term field present.
+It does not establish arbitrary schema stability when the Haskell builder
+runs in different recursive contexts. Host integer overflow and Haskell
+lazy-knot productivity remain outside these finite, total Lean records.

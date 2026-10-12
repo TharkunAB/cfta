@@ -93,7 +93,9 @@ notes](notes-recursive-join-guards.md) derive the required family guards
 from the original source metadata. The [runtime notes](notes-recursive-runtime.md)
 connect source weight flags, optional terms, and query errors to those families.
 `RecursiveJoinSupportFamily` derives their shared-binder support languages
-from independently compiled term derivations.
+from independently compiled term derivations. The [support and inspection
+notes](notes-recursive-join-support-inspection.md) describe the separate named
+diagnostic graph and its constructor proofs.
 The [fresh-probe notes](notes-interned-fresh-probe-keys.md) separate the
 proved nested-binder key cases from the remaining normalization-erasure case.
 
