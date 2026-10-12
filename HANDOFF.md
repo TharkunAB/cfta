@@ -1,6 +1,15 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 10:45 CEST (Europe/Stockholm)**.
+Updated: **2026-10-12 12:17 CEST (Europe/Stockholm)**.
+
+**Publication:** the user explicitly requested a push. The committed branch
+through `b672913e85ca9bba9e751b2f7a788b9c35221562` was pushed to
+`origin/spike/microcfta-lean-soundness` at 12:17 CEST. The rebased update used
+an exact lease on `adb1f012b336ba0d1673f8fd7f310ad75bdfaf04`; that old remote
+tip is retained in `backup/lean-before-rebase-20261010-1857`. A documentation
+commit follows to record publication. All proof additions listed below
+remain uncommitted and local. Do not mistake the pushed branch for a copy
+of those files.
 
 **Restart checkpoint:** the user requested completion of `HANDOFF.md` and
 `FINDINGS.md`, then a restart. Proof work is frozen. The latest proof commit
@@ -32,7 +41,8 @@ and an end to this run. A later request to finish followed while the
 documents were being completed.
 
 Use `microcfta` as the base. The earlier `tidy/core-formula` instruction was
-superseded after that PR merged. Do not push or deploy. No persistent goal
+superseded after that PR merged. The user authorized this publication.
+Future pushes and deployment still require a request. No persistent goal
 was created. Do not create one without a user request.
 
 ## Workspace and Git
@@ -333,7 +343,8 @@ is not publication. Read back any new post and verify its ID and content.
 - Address Matti in English. Begin every user-facing message with the current
   `[YYYY-MM-DD HH:MM]` timestamp in Europe/Stockholm.
 - Give material progress updates during long work. Do not ask permission
-  again for authorized local work. No push is authorized.
+  again for authorized local work. The requested checkpoint push is complete;
+  do not infer authorization to publish later proof work.
 - User explicitly permits bounded parallel subagents. Preserve file ownership.
 - Use `rg` first. Batch independent reads. Keep mutations and dependent builds
   sequential. Do not run blocking waits longer than 60 seconds.
