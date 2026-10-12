@@ -5,11 +5,12 @@ language, distinct-term index, distribution, and optimization contracts.
 [API-COVERAGE.md](API-COVERAGE.md) maps all 66 source modules and exported
 function families. [COVERAGE.md](COVERAGE.md) records proof obligations.
 
-Current base: `origin/microcfta` at `bbeb7be`, including the merged
-core-formula extension at `9ad319d` and the single-pass reduction and LTA
-scaling changes in PRs #89 and #90. The branch retains its earlier repairs
-and adapts their mass transport to paid constructors. Earlier reports retain
-their original source hashes and describe historical snapshots.
+Current base: `origin/microcfta` at `de910ea`, including the merged
+core-formula extension, the optimization changes, and the merged findings
+repairs through PR #96. Production Haskell is identical to this base. The
+rebase retained every proof and reproduction while retiring superseded
+source patches. Earlier reports retain their original source hashes and
+describe historical snapshots.
 
 The model proves constrained grammar compilation, complete bounded language
 enumeration, a distinct-term bijection with `Fin n`, requested term
@@ -72,6 +73,11 @@ The [keyed alignment notes](notes-keyed-term-alignment.md) and
 [keyed callback notes](notes-keyed-callbacks.md) extend these results to
 finite mutually recursive key families. They retain separate key masses,
 actual private member wrappers, and complete per-key global inverses.
+The [flat keyed-family notes](notes-keyed-nary.md) extend the mutual-family
+results to any finite branch count. They include retained mass, complete
+inverse queries, and empty/singleton merge dispatch. The [original guard
+notes](notes-keyed-nary-guards.md) derive size and term-growth checks from
+label-aware syntax before value lowering.
 The [dispatcher notes](notes-static-dispatch.md) cover all finite sampling and
 bucket-merge flag branches. The [similarity notes](notes-similarity-within.md)
 and [parent-index notes](notes-minimize-parent-index.md) verify the new
@@ -248,10 +254,9 @@ ecta.pdf 34572866be0bc8e86a546f712ffb2666fe641d133417a895ecbdee5d8f6e1ebf
 - The complete Lean package builds. The axiom audit passes.
 - All earlier repaired cases and the new counterexamples run inside `nix-shell`,
   with Z3 for the public cases.
-- Existing suites pass after the five repairs: 274 core, 190 generator, and 135
-  refinement examples; 599 total, zero failures. The added cases extend existing
-  suites. The final fresh-name counter change also passes the focused formula
-  suite and the repaired Z3 capture probe.
+- Existing suites pass on `de910ea`: 284 core, 194 generator, and 142
+  refinement examples; 620 total, zero failures. The log is
+  `/tmp/mcfta-de910ea-full.log`. No production source changed in this continuation.
 - Fourmolu accepts the reproductions. Cabal-gild accepts both audited packages.
 
 The Haskell commands run from the repository root:

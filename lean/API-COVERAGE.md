@@ -2,9 +2,9 @@
 
 This inventory covers all 66 Haskell source modules under `microcfta/src` and
 `microcfta-generator/src`. It includes exposed internal modules and the three
-private modules. It uses the source rebased on `origin/microcfta` at `bbeb7be`, which includes
-the `tidy/core-formula` work, the formula syntax extension, and PRs #89/#90
-for single-pass reduction and LTA scaling.
+private modules. It uses the source rebased on `origin/microcfta` at `de910ea`, which includes
+the `tidy/core-formula` work, optimization changes, and the findings repairs
+through PR #96. Production Haskell is identical to the upstream base.
 The model names below refer to files in `MicroCFTA/`.
 
 A checked executable model is a Lean implementation with semantic theorems.
@@ -107,6 +107,17 @@ its support has one term rank. See `notes-distinct-rank.md`.
 | `Data.CFTA.Ranked.Internal.Shrink` — minimum, member size, structural candidates, full smaller-size stream | `Shrink.smallest_correct`, `shrink_safe`, `no_infinite_shrink_chain`, and `mem_smallerMembers` cover all finite constructors. The stream is complete, duplicate-free, and size-ordered. Counts/radices, ascending sized classes, and shared-cache agreement are representation invariants. See `notes-shrink.md`; finite source checks support correspondence without replacing proofs. |
 | `Data.CFTA.Ranked.Internal.Size` — size indices/counts, positions/offsets, sparse arithmetic, occurrences, fixed points, bounds | `Sparse`, `ZeroSize`, `RecursiveSize`, `SizedRank`, `PlanVariants`, `MinimumSize`, and `Shrink` prove class arithmetic and ranks. `RecursionProbe`, `OccurrenceGuard`, `MinimumWitness` and `PublicRecursion` derive probe convergence, minimum witnesses, occurrence guards and public dispatch. `GroupedProbe` and `GroupedMinimum` handle finite key discovery. Arbitrary callback regularity, nested runtime knot construction, machine conversion and lazy storage remain boundaries. |
 | `Data.CFTA.Ranked.QuickCheck` — backend adapter, ranked samples and property shrinking | `Sampler` gives exact draw/rank coherence; `Shrink` gives structural candidate safety. The QuickCheck PRNG and property runner are external. This layer uses its supplied shrinker and does not itself add the generator layer's full smaller-size stream. |
+
+### Flat mutually recursive family adapters
+
+For `Gen.Internal.Recur`, `Recursive`, and `Query`, the `KeyedNary*` modules
+extend typed family composition to arbitrary flat choices. They derive all
+four grouped-record fields, callback equations, complete bounded inverses,
+and candidate bounds, order, and distinctness. `KeyedNaryDispatch` follows
+`mergeRecursiveGroups`, including its bare singleton case.
+`KeyedNaryGuards` derives the source's combined rejection check from the
+original label-aware syntax. Key identity and local finite callback
+contracts remain explicit. These member laws do not quotient equal terms.
 
 ## Error and boundary ledger
 

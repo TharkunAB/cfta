@@ -17,12 +17,12 @@ established. A theorem whose main algorithmic obligation is a premise
 does not close that obligation. An implementation counterexample prevents a
 soundness claim for that path; it does not remove that path from the scope.
 
-Source baseline: `origin/microcfta` at `bbeb7be`. This includes the merged
+Source baseline: `origin/microcfta` at `de910ea`. This includes the merged
 core-formula changes at `9ad319d`. The current semantic specification and
 implementation findings are in [SYSTEM.md](SYSTEM.md). All 66 source modules
 are inventoried in [API-COVERAGE.md](API-COVERAGE.md).
 
-The branch now repairs seventeen recorded failures. Formula substitution
+The upstream base includes repairs for the seventeen recorded failures. Formula substitution
 preserves bound application names. Observed atomic members retain their
 within-size weights. Minimization installs and checks accepted root
 representatives. Open unions retain epsilon operands. Pruning inspects stored open binder bodies before following recursive reads.
@@ -38,7 +38,7 @@ Recursive observation groups retain their size indexes during key filtering.
 Bounded construction now exposes retained binder cycles with the visited closure.
 Measure callers now reject self-dependent extracted values.
 Open group positioning now reads recursive keys without a cardinality query.
-Existing suites pass 282 core, 194 generator, and 142 refinement examples. Historical
+Existing suites pass 284 core, 194 generator, and 142 refinement examples on `de910ea`. Historical
 counterexamples remain checked against their explicitly named baseline
 models. The positive repair theorems are separate.
 
@@ -63,6 +63,23 @@ models. The positive repair theorems are separate.
 | Symbolic generation: `Gen.Internal.Symbolic` | `Symbolic`: executable distinct-intersection signed map, arbitrary-overlap union count, equality contexts, resolution, substitution, constructor expansion, projection, singleton shortcut and block ranking. `SymbolicDriver`: full bounded mutual count/normalize/expand/select/rank driver and graph/context caches. | `SymbolicCounter` now proves all six counter functions and both caches. `SymbolicIndicators` derives signed graph semantics from compiled guards and guarded rows. `SymbolicMeaning` derives successful acceptedness, rank inverses and injectivity. `SymbolicCounterTotal` derives sufficient execution bounds and total stable results for all six counter functions. `SymbolicComplete` proves total decoding and the full distinct `Fin n` index. `SymbolicStructuralBudget` derives semantic and budget laws from acyclic copied rows. Pure interned readback, allocation rank and old-language stability are proved. `SymbolicAllocatedGraph` closes smart-constructor cleanup and allocation-derived indexing. `SymbolicTotalAPI` adds total inverse/rejection. `SymbolicCacheIndependence` proves worker answer independence and concurrent shared-cache validity. `SymbolicPublicAdapter` proves count-once public callbacks and all rank/empty errors. `SymbolicSelectionCost` bounds outer count requests by output size and constructor vocabulary; `SymbolicUnionCost` bounds exponential overlap preprocessing. `SourceSymbolicIndex` and `SourceSymbolicStableIndex` connect actual successful guard compilation to one fixed exact source index and requested term weights. `FiniteAutomatonDriver` and `SourceFiniteAutomaton` derive the mixed compact/symbolic cache driver, source equality parsing and normalization, overlap gate, structural termination, exact public ranks and empty errors. Concrete runtime correspondence remains. |
 | Refinement compilation: `Gen.Refinement.Internal.Compile`, `Witness` | Alias, retained-size, finite closure and per-size mass foundations. `SizeTransport`: paid constructors preserve class/mass alignment. `RecipeCompile`: actual recipe routing, root/spine checks, error precedence, hole consumption, integer closure and source atomic-pair metadata counterexample. | `ObservationMass` and `GuardedSampling` derive complete observation products, guard filtering, counts, replay and conditioned distribution. `IntegerLiteral` derives singleton parsing, counting and decoding for every literal. `IntegerTermCodec` proves whole-term rank/decode inverses from actual filling/extraction. `IntegerLabelCodec` instantiates source labels; `OpenIntegerReaders` derives bare-spine hole counts and coordinate order. `IntegerTermViews` proves all three term-view inverses for each original outcome. `ImportObservations` derives exact observation maps, partition coverage, disjoint groups, and decoder composition. `StaticCandidateRanks` derives finite constructor candidate discovery and exact combined point ranks. `OpenIntegerKeys` proves coordinate renaming, disjoint tuple blocks, joined formulas, and product counts. `StaticCompositeCandidateRanks` covers chain/join callbacks and arbitrary-length choice offsets. `CompiledIntegerSpine` derives actual singleton keyed-join terms, hole counts, and exact ranks from generated recipes. `LatticeDeclaredNames` derives formula scope from successful parsing. `ParentIntegerSettlement` derives finite parent counts and conditioned masses from actual child tables and parent filtering. `IntegerCandidateEnvelope` derives candidate-oracle completeness from actual decoder order. `DefiningTerm` derives exact singleton semantics for accepted measures. `ParentGuardFormula` derives parent guard translation from those target refinements. `OpenChoiceRouting` derives finite point weights, branch retention, and source error precedence. `GroupPositions` derives complete first-position lookups for finite and recursive keys. `OpenGroupComposition` derives repeated-key finite merge, heterogeneous widths, parent-labelled ranks, retained counts and conditioned mass. `OpenGroupedApplication` derives finite multi-group applicative pair enumeration, unique concatenated keys, actual JoinN terms, complete filled ranks, coordinate splits, count/mass products, and parent settlement. `FinalObservationRanks` and `FinalObservationMass` derive final observation regrouping, nested frequency wrappers, all view preimages, rank-aligned mass records, normalized event probabilities, and errors. `FiniteSizeFields`, `FiniteSizeSampling`, `FiniteSizeSeries`, `IntegerSizeClosure`, `OpenGroupedSize`, and `FinalSizeFields` derive finite class positions, actual weight callbacks, sparse mass arithmetic, integer-width shifts, and final merge sampling. General recursive composition, arbitrary imported-record flag dispatch, and runtime record wiring remain. |
 | Public APIs: `CFTA`, `Equality`, `Refinement`, `Gen`, `Gen.Equality`, `Gen.Refinement`, `Gen.Do`, `Gen.Label`, `Gen.Sig`, `Gen.Error`, `Inspection`, `Ranked` | All 66 modules and export families mapped in `API-COVERAGE`. `PublicResult`: finite/recursive/opaque distinctions, rank errors and exact decided witness filtering. `System`: constrained grammar, distinct Fin n ranks and requested probabilities composed. | Close wrapper, error and callback correspondence to the handwritten models. Member ranks and distinct-term ranks have different contracts. |
+
+### Arbitrary-branch mutual-family integration
+
+`KeyedNaryAlignment`, `KeyedNaryMass`, and `KeyedNarySource` preserve complete
+ordered source records for flat mass-weighted choices in mutual families.
+`KeyedNaryFields`, `KeyedNaryInverse`, `KeyedNaryCausality`, and
+`KeyedNaryQuery` prove all-view candidate and bounded inverse laws.
+`KeyedNaryDispatch` distinguishes a bare singleton merge from raw choice.
+`KeyedGuards` and `KeyedNaryGuards` connect original occurrence metadata to
+the public size and term-growth checks. All eleven modules, including the
+kernel examples, are imported by the aggregate dependency audit.
+
+This closes the flat-choice adapter gap for the typed keyed algebra. Local
+finite-leaf contracts, arbitrary runtime builder schemas, concrete key
+representations, and Haskell extraction remain explicit boundaries.
+See [the family notes](notes-keyed-nary.md) and
+[the guard notes](notes-keyed-nary-guards.md).
 
 ## Evidence and boundaries
 

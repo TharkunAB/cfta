@@ -336,6 +336,17 @@ import MicroCFTA.KeyedCallbackCausality
 import MicroCFTA.KeyedCallbackQuery
 import MicroCFTA.KeyedCallbackExamples
 import MicroCFTA.GroupedMergeAssociativity
+import MicroCFTA.KeyedGuards
+import MicroCFTA.KeyedNaryAlignment
+import MicroCFTA.KeyedNaryMass
+import MicroCFTA.KeyedNarySource
+import MicroCFTA.KeyedNaryFields
+import MicroCFTA.KeyedNaryInverse
+import MicroCFTA.KeyedNaryCausality
+import MicroCFTA.KeyedNaryQuery
+import MicroCFTA.KeyedNaryDispatch
+import MicroCFTA.KeyedNaryGuards
+import MicroCFTA.KeyedNaryExamples
 /-!
 # Proof dependency audit
 

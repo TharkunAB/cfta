@@ -2,7 +2,7 @@
 
 ## Specification
 
-The source baseline is `origin/microcfta` at `bbeb7be`. This includes the merged
+The source baseline is `origin/microcfta` at `de910ea`. This includes the merged
 core-formula changes at `9ad319d`. The proof branch retains its earlier fixes.
 It includes single-pass reduction and LTA scaling from PRs #89 and #90.
 It adds the integration repairs described below. Nothing is pushed.
@@ -302,6 +302,31 @@ has the same decoded member as concatenating the alternatives in order.
 `DecoderDispatchCost` derives a lookup bound of `ceil(log2 k)` comparisons
 for `k` positive branches. This excludes table construction, machine
 arithmetic, and the selected branch's own decoding cost.
+
+### Arbitrary-branch mutual families
+
+`KeyedNaryAlignment`, `KeyedNaryMass`, and `KeyedNarySource` connect
+independent typed value, term, and correlated records for any finite branch
+count. The flat source compiler uses mass-weighted `GroupedRecord.merge`.
+Its ordered members, retained mass, value sampler, and ranked sampler equal
+the lowering. These laws derive the simultaneous family equations from the
+computed minimum and size guards.
+
+`KeyedNaryFields`, `KeyedNaryInverse`, and `KeyedNaryCausality` derive
+all-view inverse correctness and the callback equation. Local finite-leaf
+contracts remain explicit. Bounds, ordering, and distinct positions cover
+false candidates as well as checked candidates. `KeyedNaryQuery` connects
+the public replay filter to the independent bounded grouped decoder.
+Every matching rank is returned. Equal terms can still have several member
+ranks.
+
+`KeyedNaryDispatch` retains the bare child for a singleton same-key merge.
+Raw singleton choice instead adds `Choice 0`. `KeyedNaryGuards` reads the
+original typed body: label and pay both add size, but only label supplies
+constructor term growth. The public Boolean check discharges the semantic
+family guards without reconstructing labels from the value lowering.
+See [the family notes](notes-keyed-nary.md) and
+[the guard notes](notes-keyed-nary-guards.md).
 
 ## Implementation comparisons and repairs
 
@@ -652,7 +677,7 @@ transport law, and `stale_mass_counterexample` proves why the old keys fail.
 The retained regression fixtures and reproductions now use the current
 constructor sizes, `Term` representation, and sorted core-formula declarations.
 No new package test suite was added. The existing core, generator, and
-refinement suites pass in `nix-shell`: 282, 194, and 142 examples, respectively.
+refinement suites pass on `de910ea` in `nix-shell`: 284, 194, and 142 examples, respectively.
 This includes the later measure and recursive-positioning regressions.
 Existing property examples also run their configured generated cases.
 

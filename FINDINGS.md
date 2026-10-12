@@ -1,13 +1,17 @@
 # Current formalization findings
 
-Updated: **2026-10-12 12:17 CEST**.
+Updated: **2026-10-12 22:02 CEST**.
 
-The branch repairs **17 recorded source defects**. The latest full Haskell
-run passes **618 examples**. The committed Lean development passes **437
-build jobs and 24,376 theorem dependency checks**. Additional completed
-keyed-n-ary and recursive-join proofs are still uncommitted and outside that
-aggregate audit. See [HANDOFF.md](HANDOFF.md) for their exact state.
+The formalization is rebased onto `origin/microcfta` at `de910ea`. The
+upstream base contains the findings repairs. Production Haskell is identical
+to that base. All **620 existing Haskell examples** pass: 284 core, 194
+generator, and 142 refinement examples.
 
+The pending keyed-n-ary proofs now pass the aggregate build: **448 jobs and
+24,893 theorem dependency checks**. The broken recursive-join record bridge
+has a passing targeted build. Whole-body join composition and adapters for
+changed upstream substitution and equality behavior are in progress.
+See [HANDOFF.md](HANDOFF.md) for the checkpoint.
 This is the current report. [lean/FINDINGS.md](lean/FINDINGS.md) records the
 initial historical findings against an older revision. Its historical
 "proposed repair" and "no production fixes" statements do not describe the
@@ -16,12 +20,11 @@ counterexamples, repair arguments, and implementation comparisons.
 
 ## Baseline and required contract
 
-The branch is `spike/microcfta-lean-soundness`. The implementation base is
-`origin/microcfta` at `bbeb7be`, including merged core-formula work and PRs
-#89 and #90. The last proof checkpoint is `bc6a978`. At the user's request, the branch
-through documentation checkpoint `b672913` was pushed at 12:17 CEST. The
-uncommitted proof additions remain local. See [HANDOFF.md](HANDOFF.md).
-
+The continuation branch is `formalization/microcfta-resume-20261012`.
+Its implementation base is `origin/microcfta` at `de910ea`, including the
+merged findings repairs through PR #96. The previous proof branch remains
+unchanged. Backup `backup/lean-before-microcfta-20261012-2200` and the retained
+stash preserve the pre-rebase work. Nothing from this continuation is pushed.
 For a constrained language, compilation and enumeration must contain every
 valid finite term and no invalid term. A finite FTA language with `n`
 distinct terms must have exactly `n` ranks, with both decoder/inverse laws.
@@ -47,7 +50,7 @@ both ranks. This is a contract distinction, not a new decoder defect.
 Each row has a retained source reproduction and a corresponding formal
 counterexample, repair theorem, or operational model. Older per-repair test
 totals in the linked reports describe their historical checkpoints. The
-current combined suite total is 618.
+current combined suite total is 620.
 
 | # | Failure before the repair | Current behavior and evidence |
 | --- | --- | --- |
@@ -143,8 +146,8 @@ ranks. It includes arbitrary-branch single-root bodies and binary-choice
 mutual key families. `GroupedMergeAssociativity` preserves the complete
 ordered member and rank-probability fields under regrouping.
 
-Completed work awaiting aggregate integration extends those results to
-arbitrary-branch mutual families. The new dispatch proof distinguishes bare
+The aggregate audit now includes those results for arbitrary-branch mutual
+families. The new dispatch proof distinguishes bare
 singleton grouped merges from raw singleton choices that add `Choice 0`.
 The original typed guard proof distinguishes a user label from a plain pay.
 Both add size; only the label supplies the corresponding term-growth guard.
@@ -163,11 +166,16 @@ theorem cannot substitute for that integration. See
 
 ## Evidence and its limits
 
-- Latest full source suites: **618 passing examples**, after rebasing onto
-  `bbeb7be`. No production source changed afterward.
-- Latest committed aggregate Lean audit: **437 jobs; 24,376 theorem dependency
-  checks**. Only the standard Lean axioms `propext`, `Classical.choice`, and
-  `Quot.sound` are allowed. Uncommitted additions have separate targeted builds.
+- Latest full source suites: **620 passing examples**, after rebasing onto
+  `de910ea`. Log: `/tmp/mcfta-de910ea-full.log`.
+- Latest integrated Lean audit: **448 jobs; 24,893 theorem dependency checks**.
+  Only `propext`, `Classical.choice`, and `Quot.sound` are allowed.
+  Log: `/tmp/mcfta-keyed-integrated-audit.log`.
+- The retained formula capture, nested compiler capture, recursive equality,
+  and open-union reproductions pass on the new base. The independent two-key
+  recurrence again checks all eight classes and 285 inverse ranks, including
+  exact masses, conditional probabilities, and support acceptance.
+  Log: `/tmp/mcfta-de910ea-focused.log`.
 - Independent source probes covered 5,000 finite grammars; 1,536 mixed
   grouping/recursion descriptions; nine automaton-import variants; 144
   weighted descriptions across nine size bounds; and 2,080 bounded recursive
