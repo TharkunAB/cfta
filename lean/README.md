@@ -54,6 +54,12 @@ contracts from the actual guard and ambiguity gates. See the
 [cyclic index notes](notes-source-cyclic-automaton.md). Final finite observation
 merging also connects ranks to retained probability mass. See the
 [observation merge notes](notes-final-observation-merge.md).
+The [finite size-field notes](notes-finite-size-fields.md) connect those
+records to exact class weights, sparse mass tables, and class samplers.
+The [recursive alignment notes](notes-recursive-term-alignment.md) connect
+typed recursive value and term indexes at every class and bounded rank.
+The [fresh-probe notes](notes-interned-fresh-probe-keys.md) separate the
+proved nested-binder key cases from the remaining normalization-erasure case.
 
 This is not a claim that the whole Haskell implementation is verified. The
 Lean algorithms are handwritten. Some complete driver invariants, concrete runtime
