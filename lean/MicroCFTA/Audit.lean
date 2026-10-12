@@ -324,6 +324,17 @@ import MicroCFTA.RecursiveNaryCandidates
 import MicroCFTA.RecursiveNaryCausality
 import MicroCFTA.RecursiveNaryQuery
 import MicroCFTA.RecursiveNaryExamples
+import MicroCFTA.KeyedTermAlignment
+import MicroCFTA.KeyedTermMass
+import MicroCFTA.KeyedSourceUnfolding
+import MicroCFTA.KeyedSamplerUnfolding
+import MicroCFTA.KeyedTermBoundary
+import MicroCFTA.KeyedTermCodes
+import MicroCFTA.KeyedCallbackFields
+import MicroCFTA.KeyedCallbackInverse
+import MicroCFTA.KeyedCallbackCausality
+import MicroCFTA.KeyedCallbackQuery
+import MicroCFTA.KeyedCallbackExamples
 /-!
 # Proof dependency audit
 
