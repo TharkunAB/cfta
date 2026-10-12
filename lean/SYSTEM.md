@@ -145,6 +145,14 @@ It cannot satisfy the requested exact-language optimization contract in
 general, even after the root-deletion defect is repaired. The supplied paper's
 Section 4.2 uses this weaker representative contract.
 
+The pool wrapper also starts a new uniform distribution over retained entries.
+It does not transfer discarded entries' mass to a representative. In the
+checked three-entry example, the original similarity classes have masses
+`2/3` and `1/3`; the minimized representatives have masses `1/2` and `1/2`.
+`PoolMinimization` proves this behavior and its distinction from preserving
+class probability. The public reproduction agrees with the model.
+See [the pool distribution notes](notes-pool-minimization.md).
+
 `GeneratorCombinators` derives finite member counts, mixed-radix rank selection,
 key partition coverage, conditioned join probabilities, and bucket mass
 restoration. `groupOn` deliberately gives each member size one, as the source
