@@ -234,6 +234,24 @@ Every supplied finite term has a further bound for its inverse answer.
 actual decode returns that exact supplied term. All these results use the
 same executable counter, decoder, and inverse workers.
 
+`SymbolicCacheIndependence` proves that every actual selector and inverse
+worker returns the same observed result from any two valid count snapshots.
+The final caches can differ. Its read/publication history permits atomic
+replacement from a stale immutable snapshot. Every finite interleaving keeps
+both published and captured caches valid. Discarded concurrent additions can
+require later recomputation, but they cannot change a query result.
+
+`SymbolicPublicAdapter` models the actual `symbolicRanked` boundary through
+`fromIndexedOnDemand`. Empty languages return `EmptyRanked`. A successful
+compiled object has the exact positive cardinality and initial shared count
+snapshot. Public negative and upper-bound errors occur before selection.
+Selection and inverse callbacks terminate from every valid snapshot.
+`select_inverse` connects their actual results and cache state.
+`select_agrees` and `inverse_agrees` connect the shared-cache callbacks to the
+verified lower-level API. A compiled inverse eventually returns `Nothing`
+for every nonmember. The lower-level counter and empty `Fin 0` semantics do
+not imply that the public API constructs an empty `Ranked` object.
+
 `SymbolicSmartRows` proves the source node constructor's empty-child filter
 and edge deduplication preserve row membership. It also proves that an edge
 removed by the singleton-node emptiness check has numeric indicator zero.
