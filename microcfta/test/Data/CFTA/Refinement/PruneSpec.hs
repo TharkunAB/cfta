@@ -183,6 +183,29 @@ spec =
                         equivalentTermSets before after `shouldBe` True
                         reduced `shouldBe` compoundActuals
 
+        it "retains nested scopes when complete actual identities change ambient substitution" $
+            withZ3 [] $ \solver -> do
+                let zero = refinementFormula (\v -> v .== 0)
+                    actual = Node [Transition "a" zero [leafNode "z"] noConstraint]
+                    scope =
+                        Substitute [Substitution (path [2]) (path [0])]
+                            $ Substitute [Substitution (path [0]) (path [3]), Substitution (path [1]) (path [4])]
+                            $ Satisfies (path [5]) (refinementFormula $ \_ -> variable "x" .== 0)
+                    original =
+                        Node
+                            [ Transition
+                                "root"
+                                true
+                                [actual, actual, leafNode "b", leafNode "x", leafNode "y", leafNode "target"]
+                                (semanticConstraint scope)
+                            ]
+                    leaf name = Term.Node (RefinedSymbol name true) []
+                    actualTerm = Term.Node (RefinedSymbol "a" zero) [leaf "z"]
+                    rejected = Term.Node (RefinedSymbol "root" true) [actualTerm, actualTerm, leaf "b", leaf "x", leaf "y", leaf "target"]
+                accepts solver original rejected >>= (`shouldBe` No)
+                checkPrunedLanguage solver original [rejected] 0
+                prune solver original >>= (`shouldBe` Right original)
+
         it "reports solver uncertainty when actual identities are known" $ do
             result <- prune (Entailment $ \_ _ -> pure Unknown) $ optionalDescendant $ Satisfies (path [0]) true
             case result of
