@@ -257,6 +257,11 @@ import MicroCFTA.GroupPositions
 import MicroCFTA.AutomatonAmbiguity
 import MicroCFTA.RecursiveCheckedRanks
 import MicroCFTA.InternedBinderRebuild
+import MicroCFTA.CompactGroups
+import MicroCFTA.CompactChildSlots
+import MicroCFTA.InternedSubstitution
+import MicroCFTA.CanonicalClasses
+import MicroCFTA.OpenGroupComposition
 /-!
 # Proof dependency audit
 
