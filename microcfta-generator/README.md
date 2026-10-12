@@ -1567,9 +1567,18 @@ with a heap and a time limit:
 cabal bench hectare --benchmark-options='hplus 300 8G'
 ```
 
-With the paper's limit of 300 seconds, 40 of the 45 Hoogle+ queries are
-solved, 82% within 7 seconds; the paper reports 43 of 45 and 84%. The five
-other queries need programs of size 7 or 9.
+The paper reports 43 of 45 queries within 300 seconds, 84% within 7 seconds.
+On the development machine (one core), the original code, built with its
+own toolchain (GHC 8.10.7) and run with one capability, solves 41 of 45, 36
+within 7 seconds. This module builds the same automata, size by size, and
+stops the reduction at 30 rounds as the original does. It also solves 41 of
+45, 37 within 7 seconds, with a median of 0.29 seconds against 0.49 seconds,
+and takes 0.71 times the original's time over the 41 queries (geometric
+mean). The other four queries need programs of size 7 or 9; neither solves
+them. On the Stack Overflow suite (19 queries, with the components that the
+original adds for it) with a limit of 600 seconds, both solve the same 13
+queries, and this module takes 0.82 times the original's time (geometric
+mean).
 
 ### Hegel: refinement-typed synthesis on liquid tree automata
 
