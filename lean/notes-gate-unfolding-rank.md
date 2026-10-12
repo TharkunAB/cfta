@@ -270,3 +270,33 @@ request. Its source execution always completes and cannot return pending.
 decrease together, with no success, fuel, singleton, or output-rank
 hypothesis. The full cached representation inputs come from the earlier
 nested executor invariants. The focused target builds 166 jobs.
+
+`InternedShallowHeap` proves that depth-zero prepared bodies introduce no
+new Mu payload. Every later Mu record is an unchanged earlier record.
+Thus actual unfolding preserves the representation fragment in which every
+completed cache Mu has cached body depth zero.
+`InternedShallowGateRank` packages actual values and cache states with
+these invariants. Its view uses the original ordered stored edge children.
+Its unfolding operation executes the complete stored-body adapter and
+derives successful return and invariant preservation.
+
+`ranking` is a concrete `ConstrainedRecursionGate.UnfoldingRank` for that
+fragment. The user supplies no rank, decrease, fuel, or callback outcome
+law. The proof works for every constraint-test predicate. Cached depth and
+free-set emptiness match the actual stored metadata. `eventually_exact`
+connects the resulting unbounded gate to every sufficiently large fuel
+instrumentation. The full cache restriction is explicit: every completed
+Mu in that cache must have body depth zero. This theorem does not apply to
+an arbitrary cache that also contains deeper Mu records.
+
+`InternedShallowGateExample` constructs an open raw Mu through the actual
+two-probe source executor. It derives all certified node fields and cache
+invariants. The raw wrapper contains external reference 999 and has actual
+head rank one. Its actual prepared unfolding exposes that reference and
+has head rank zero. The certified source fragment is therefore inhabited
+by an open Mu that takes the gate's unfolding branch.
+
+The certified example target builds 169 jobs. The combined isolated audit
+checks 7,772 theorem dependencies. Arbitrary open nested-Mu unfolding still
+needs a general rank and first-run completion argument; it is not covered
+by this shallow-cache fragment.
