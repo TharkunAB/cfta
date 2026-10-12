@@ -2,6 +2,7 @@
 
 module Data.CFTA.Refinement.MinimizeSpec (spec) where
 
+import Control.Monad ((>=>))
 import Data.CFTA.Formula (Sort (IntSort))
 import Data.CFTA.Refinement (
     Automaton,
@@ -138,9 +139,9 @@ spec =
             withZ3 declarations $ \solver -> do
                 denotationAtMost solver 1 rootWithRejectedAlternative
                     >>= (`shouldBe` Right [Term.Node (transitionLabel unknownAtom) []])
-                checkMinimization (atomSubtyping solver) rootWithRejectedAlternative $ \reduced ->
-                    denotationAtMost solver 1 reduced
-                        >>= (`shouldBe` Right [Term.Node (transitionLabel naturalAtom) []])
+                checkMinimization (atomSubtyping solver) rootWithRejectedAlternative $
+                    denotationAtMost solver 1
+                        >=> (`shouldBe` Right [Term.Node (transitionLabel naturalAtom) []])
 
         it "keeps each root representative after multiple scheduled removals" $
             withZ3 declarations $ \solver ->

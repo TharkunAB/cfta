@@ -135,7 +135,7 @@ recur build
                 $ termsOfBody
                 $ RecursiveTerms self tiedPositions
 
-        tiedPositions = leafRanks $ \term -> case term of
+        tiedPositions = leafRanks $ \case
             Term.Node Recursion [body] -> maybe [] (`recursiveTermPositions` WholeTerm body) bodyTerms
             _ -> []
 

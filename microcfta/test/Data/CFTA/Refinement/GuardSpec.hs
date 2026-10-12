@@ -249,7 +249,7 @@ spec =
                         pure $ Observed symbol $ leafnessOf children
                     guards = [first, second, both, Or [first, second], Not $ Not both, Substitute [] both, Not $ Substitute [] $ Not both]
                     expected = [Yes, No, No, Yes, No, No, No]
-                    graphs = [graph first, graph second, intersect (graph first) (graph second)]
+                    graphs = [graph first, graph second, graph first `intersect` graph second]
                 mapM (\guard -> evaluateGuard solver guard term) guards >>= (`shouldBe` expected)
                 mapM (evaluateGuardWithShape solver observed) guards >>= (`shouldBe` expected)
                 map validate graphs `shouldBe` replicate 3 (Right ())

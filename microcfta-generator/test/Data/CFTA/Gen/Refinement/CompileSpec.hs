@@ -529,7 +529,7 @@ spec = do
     describe "integer leaves" $ do
         it "reports recursive open groups without losing their position keys" $ do
             let graph = Mu $ \self -> Node [Transition "a" true [] noConstraint, Transition "f" true [self] noConstraint]
-                recursive = const (0 :: Integer) <$> LTAGen.fromAutomaton graph
+                recursive = (0 :: Integer) <$ LTAGen.fromAutomaton graph
                 digits = LTAGen.every `LTAGen.satisfying` (\v -> 1 .<= v .&& v .<= 2)
                 applied = (+) <$> recursive <*> digits
                 choices =
