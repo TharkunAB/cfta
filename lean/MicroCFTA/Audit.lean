@@ -172,6 +172,32 @@ import MicroCFTA.SymbolicPublicAdapter
 import MicroCFTA.EnumerationTermination
 import MicroCFTA.SupportJoin
 import MicroCFTA.SourceGuardRefinement
+import MicroCFTA.SourceGuardPlan
+import MicroCFTA.SymbolicSelectionCost
+import MicroCFTA.SymbolicUnionCost
+import MicroCFTA.SymbolRelabel
+import MicroCFTA.SupportSpine
+import MicroCFTA.SupportClosing
+import MicroCFTA.EnumerationExact
+import MicroCFTA.FullGuardPrune
+import MicroCFTA.SupportAlternatives
+import MicroCFTA.EnumerationLanguage
+import MicroCFTA.SourceAliasTransport
+import MicroCFTA.IntersectDomain
+import MicroCFTA.IntersectExamples
+import MicroCFTA.EnumerationEquality
+import MicroCFTA.SourceFreshTables
+import MicroCFTA.SourceActualAssumptions
+import MicroCFTA.EnumerationBoundedRows
+import MicroCFTA.EnumerationInternedRows
+import MicroCFTA.SourceSemanticNames
+import MicroCFTA.IntersectSoundness
+import MicroCFTA.IntersectInput
+import MicroCFTA.RecursiveSupportBoundary
+import MicroCFTA.SupportSpineAlternatives
+import MicroCFTA.SourceSortedQueries
+import MicroCFTA.SourceHoldsQueries
+import MicroCFTA.IntersectReset
 /-!
 # Proof dependency audit
 
