@@ -357,8 +357,8 @@ MicroCFTA theorem dependencies with only `propext`, `Classical.choice`, and
 `Quot.sound` permitted.
 
 A separate Haskell source probe rejects equality of body and probe head
-ranks. Let `c x = createMu (\\own -> Node [Edge "c" [own,x]])` and let
-`n = createMu (\\self -> createUnion [c self,c (Rec RecDepth)])`. Its actual
+ranks. Let `c x = createMu (\own -> Node [Edge "c" [own,x]])` and let
+`n = createMu (\self -> createUnion [c self,c (Rec RecDepth)])`. Its actual
 body, depth probe, and ordinary probe have head ranks `[0,1,0]`. Unfolding
 still decreases rank from one to zero. Probe aliasing merges the two union
 members in the depth probe. Thus a general proof must account for probe
@@ -367,3 +367,95 @@ normalization. The temporary source probe is
 stored Mu occurrences in 20,000 generated expressions, including probe
 records. It found no body head rank greater than both probe head ranks.
 This is diagnostic evidence, not a proof of that proposed bound.
+
+### Open nested records with preserved root symbols (2026-10-13)
+
+`InternedStoredMarkedCompletion` derives first-run completion from original
+stored edge metadata. `PreparedMarked` permits open nested Mu at arbitrary
+depth. Each open binder has an ordinary body with a nullary edge. All root
+edges of that body use one symbol. A nested binder uses a symbol different
+from its enclosing binders. Closed records still stop preparation.
+
+`encoded_signatures` proves exact symbol and arity preservation from stored
+edges to the actual prepared syntax. `encode_tagged` derives the source
+marker conditions through every stored constructor. `execute_complete`
+then applies the existing source marker completion theorem in a complete
+cache. It requires actual available inputs and replacements. It does not
+assume the result of a probe, a canonical key inequality, completion, or an
+output rank. `unfold_complete_decreases` combines that derived completion
+with the existing source root-guard rank law.
+
+`InternedStoredMarkedExample` derives these conditions from an actual
+source execution. The queried outer Mu is open. Its ordinary body contains
+another open Mu, with an actual nullary marker edge. The derived unfolding
+completes and strictly decreases head rank. This example is outside both
+the depth-zero and the closed-nested-record completion fragments. The
+focused build passed 174 jobs. The isolated axiom audit checked 8,211
+MicroCFTA theorem dependencies with only the three standard axioms allowed.
+
+The general rank theorem remains open. The current result still requires
+root union paths to stop before Mu. It does not admit arbitrary consecutive
+leading Mu records. Marker separation also remains a restriction on open
+nested reconstruction. This new result is a completion and one-step rank
+law. It does not assert that the marker predicate is preserved by repeated
+unfolding with the original recursive record as replacement.
+
+### Executable head-rank growth and the callback contract (2026-10-13)
+
+**The following callback violates the documented constructor precondition.**
+`createMuDontCleanup` requires its callback to commute with `substFree`
+renaming. An unused raw nested wrapper does not satisfy this requirement:
+source substitution rebuilds it with smart cleanup and removes the wrapper.
+Thus this example refutes a rank law over unrestricted executable inputs.
+It does not refute the law for callbacks that satisfy the source contract.
+
+Let `c x` retain two nested binders around an ordinary node whose children
+are both bound references, `x`, and external reference 999. Let the outer
+callback return `createUnion [c self,c (createMuDontCleanup (const self))]`.
+After actual substitution, the raw wrapper disappears. The two union
+members become one canonical record. Singleton normalization exposes its
+two leading binders. Haskell gives head ranks `[1,2,1,0]` and cached maximum
+depths `[4,6,7,7]`. The original record is open and unconstrained. A separate
+source check confirms that the callback renaming equation is false.
+Temporary source probes are `/tmp/mcfta-gate-raw-head-stutter.hs` and
+`/tmp/mcfta-gate-raw-head-growth.hs`.
+
+`InternedGateHeadGrowth` kernel-checks the actual source construction and
+stored substitution for the first step: `(head,depth)` changes from `(1,4)`
+to `(2,6)`. Both records remain open. Its original `Facts` and `Available`
+properties come from full source construction. The focused build passed
+162 jobs. Existing shallow and guarded rank theorems remain valid because
+the example does not satisfy their body restrictions.
+
+### Free-reference occurrence costs (2026-10-13)
+
+`InternedFreeOccurrenceRank` computes the number of Mu records on each
+actual path to a free reference. Ordinary nodes and unions add no cost.
+A Mu removes occurrences of its bound name and adds one to other costs.
+The executable candidate rank is the least retained cost. The proofs show
+that these occurrence names equal the actual cached free names, that the
+minimum is attained and bounds every occurrence, and that every actual
+open Mu has a positive rank.
+
+`InternedFreeOccurrenceNormalization` proves source operator laws for this
+candidate. Ordinary cache readback retains the exact surviving occurrence
+list. Every live source edge retains each original occurrence and cost.
+All source union branches retain operand occurrence costs, including
+singleton collapse and complete canonical cache hits. Root self-reference
+filtering retains other names and costs. Smart cleanup does not increase
+the candidate rank of an open record.
+
+`InternedFreeOccurrenceRankExamples` checks cost `3 -> 2` on the actual
+head-rank growth example. It also checks costs `2 -> 1 -> 0` on the earlier
+nested union reconstruction. A finite Haskell probe checked 85,890 eligible
+open unconstrained Mu records in 10,000 generated programs, including
+nested and probe records. Each tested unfolding decreased the candidate
+cost. This test is diagnostic evidence only.
+
+The focused builds passed 151 jobs for the occurrence definitions, 152 for
+normalization laws, and 164 for the source examples. The isolated audit
+checked 8,418 MicroCFTA theorem dependencies with only the three standard
+axioms allowed. No general source unfolding decrease or totality theorem
+uses this candidate yet. The remaining proof must relate actual canonical
+Mu readback, its stored body, and both probes. In particular, `Coherent`
+alone supplies no body/probe occurrence-cost correspondence.
