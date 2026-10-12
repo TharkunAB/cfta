@@ -459,3 +459,42 @@ axioms allowed. No general source unfolding decrease or totality theorem
 uses this candidate yet. The remaining proof must relate actual canonical
 Mu readback, its stored body, and both probes. In particular, `Coherent`
 alone supplies no body/probe occurrence-cost correspondence.
+
+### Derived body/probe costs through actual storage and readback (2026-10-13)
+
+Six modules establish body/probe correspondence for an ordinary callback
+fragment. `InternedFreeOccurrenceNode` proves the exact occurrence profile
+of source node normalization, including removed edges. `InternedFlatProbeCosts`
+uses the existing template compiler for one ordinary edge whose children
+are the supplied reference followed by fixed captured records. Captured
+records can contain Mu at arbitrary depth. It proves exact compiler
+correspondence, including the current root self-filter. For a name different
+from the supplied reference, occurrence costs depend only on the captures.
+At least one of the two distinct source placeholders therefore preserves
+each external body occurrence and its cost. No probe equation is assumed.
+
+`InternedFlatProbeSchedule` derives cache facts along the actual source
+probe order. The actual depth probe selects the ordinary placeholder. The
+actual reservation supplies the body reference. Each fresh stored Mu
+occurrence has a predecessor cost in one of its actual probes.
+
+`InternedFlatProbeHeap` proves this relation for fresh completion and cache
+hits. It preserves earlier completed payloads and derives the relation for
+each new payload before storage. `InternedFlatProbeTrace` derives the heap
+relation, full record facts, and payload coverage from empty caches through
+any finite history of these constructors. The history permits arbitrary
+earlier available records as captures. It does not assume the desired heap
+relation as an initial premise.
+
+`InternedFlatProbeAbsence` derives a useful consequence from such a source
+history. Every free name of a stored Mu occurs in at least one actual probe.
+A name absent from both probes is absent from that Mu. If it differs from
+the bound name, it is also absent from the actual stored body.
+
+The focused build passed 178 jobs. The isolated audit checked 8,463
+MicroCFTA theorem dependencies with only the three standard axioms allowed.
+The exact remaining restriction is the callback shape: one ordinary edge
+with the argument and fixed captures. These results do not cover a callback
+that constructs a new nested binder which depends on its argument. They do
+not infer an empty body from empty free-name sets or prove general gate
+termination.
