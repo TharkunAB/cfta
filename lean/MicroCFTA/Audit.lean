@@ -262,6 +262,14 @@ import MicroCFTA.CompactChildSlots
 import MicroCFTA.InternedSubstitution
 import MicroCFTA.CanonicalClasses
 import MicroCFTA.OpenGroupComposition
+import MicroCFTA.PoolMinimization
+import MicroCFTA.InternedBinderProtocol
+import MicroCFTA.CompactEdgeRanks
+import MicroCFTA.SourcePlanPositions
+import MicroCFTA.CompactIndexChoice
+import MicroCFTA.FiniteAutomatonDriver
+import MicroCFTA.InternedConstructorTemplates
+import MicroCFTA.OpenGroupedApplication
 /-!
 # Proof dependency audit
 
