@@ -99,7 +99,10 @@ and readback preserve that rank and every old closed language.
 `SymbolicTotalAPI.allocated_total_api` includes smart-constructor cleanup,
 normalized rows, hash joins, and total inverse ranking. Shared-cache worker
 answers, stale-snapshot publication, and the public count-once callbacks have
-separate proofs. Concrete runtime correspondence remains explicit.
+separate proofs. `SourceSymbolicIndex` composes successful source constraint
+compilation with these workers. `SourceSymbolicStableIndex` derives one fixed
+index that all sufficiently complete executions share. Requested term weights
+attach to that decoder order. Concrete runtime correspondence remains explicit.
 `Shrink` models every finite plan constructor and proves candidate validity,
 strict rank decrease, non-growing size, and complete smaller-size traversal.
 `TermRepresentation` proves the new small-arity representation round trips,
@@ -117,8 +120,9 @@ execution bounds from complete graph and exact-intersection contracts.
 Source constructor, equality-product, and bounded-row adapters derive those
 contracts. `EnumerationBuilderFastPaths` derives the finite memo traversal, both interning
 caches, identity sorting/deduplication, terminal fast paths, and exact bounded
-language. `EnumerationBinderExposure` proves same-depth closed self-unfolding
-and exact successful rows. Finite binder identities, same-depth memo integration,
+language. `EnumerationBinderExposure` proves closed self-unfolding
+and exact successful rows. `LexicalBinderClosure` derives finite lexical
+closure and terminating visited row exposure. Runtime binder identities,
 and host storage remain separate.
 `IntersectConstruction.constructed_intersection_total` proves that the complete
 recursive intersection schedule terminates with exactly the common input
@@ -445,6 +449,25 @@ selection normalizes the retained groups. Existing regressions and
 [RecursiveGroupFilter.hs](repro/RecursiveGroupFilter.hs) check size classes,
 bounded values, and inverse ranks. All 613 suite examples pass.
 
+### Bounded construction loops on retained empty binder cycles
+
+`createMuDontCleanup id` and a retained nested forwarding binder are closed
+public inputs with empty least languages. Their `nodeEdges` calls returned
+empty immediately. The old `boundDepth 0` calls exceeded a one-second limit.
+The separate root-Mu branch unfolded at the same depth before memoization.
+
+The source now exposes every interned root through `nodeEdges`. Its visited
+closure resolves epsilon cycles before bounded recursion visits constructor
+children. The repair preserves the depth consumed by each constructor.
+`LexicalBinderClosure` derives a finite request inventory from closed syntax
+and proves exact visited row exposure. Runtime binder interning and
+alpha-renaming remain explicit representation interfaces.
+
+The existing regression and [BoundRetainedBinders.hs](repro/BoundRetainedBinders.hs)
+check the empty cases and a productive nested recursive grammar. Depths zero
+through three give 1, 3, 7, and 15 distinct terms. Every decoded rank has its
+inverse. All 614 suite examples pass. See [the closure notes](notes-lexical-binder-closure.md).
+
 ## Rebase integration repairs
 
 The previous weight repair introduced `keyedBucketMasses`. New upstream
@@ -459,7 +482,7 @@ transport law, and `stale_mass_counterexample` proves why the old keys fail.
 The retained regression fixtures and reproductions now use the current
 constructor sizes, `Term` representation, and sorted core-formula declarations.
 No new package test suite was added. The existing core, generator, and
-refinement suites pass in `nix-shell`: 281, 194, and 138 examples, respectively.
+refinement suites pass in `nix-shell`: 282, 194, and 138 examples, respectively.
 Existing property examples also run their configured generated cases.
 
 An independent temporary source probe compared 5,000 finite grammars against
