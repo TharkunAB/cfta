@@ -38,9 +38,38 @@ of both input languages for every finite term. Separate executed examples
 show that a repeated pair stops before free-variable lookup, and that a raw
 open pair without an enclosing binder reports the explicit missing-name error.
 
-These are operational and binding invariants. They do not yet prove global
-language equivalence or totality of this cyclic source schedule. The closed
-environment reset clears the remembered pairs before the cutoff check.
-A termination proof must use the structure of closed descendants as well
-as the finite set of intersection pairs. Payload lookup, cached free-variable
-sets, and typed memoization remain explicit representation interfaces.
+`IntersectSoundness.lean` proves whole-language inclusion for every successful
+bounded execution. `InputMeaning` states independent constructor, union, and
+binder language equations. It also states the meaning of a closed input copy.
+It does not assume the meaning of intersection. The proof follows both workers,
+preserves the meaning of every enclosing pair, and uses least-language
+induction for each generated binder. It includes the closed-environment reset.
+`top_sound` states that every accepted output term belongs to both inputs.
+
+`IntersectCompleteness.lean` proves the reverse inclusion. It uses the combined
+rank of two finite input derivations, then the execution bound. A binder unfold
+strictly decreases the derivation rank. This permits induction through each
+generated least binder. `run_complete` covers every schedule branch, including
+resets and remembered-pair cutoffs.
+
+`IntersectInput.lean` defines independent finite input derivations. These
+derivations use input rows, unions, and binder bodies. They do not mention
+intersection. `finiteInputMeaning` derives the language equations required by
+soundness. `finiteRankedInput` derives the rank laws required by completeness.
+`finite_intersection_exact` proves that every successful top-level output has
+exactly the common input language. Its representation premises are canonical
+identities, valid reachable payloads, and exact copying of closed inputs.
+It does not assume language correctness of intersection or termination.
+
+`IntersectProgress.lean` proves that all recursive calls between environment
+resets form a well-founded relation. The measure counts remaining binder pairs,
+then structural constructor and union weight, then the canonical-order phase.
+The local weight stops at binders. Each new binder pair strictly decreases the
+first component.
+
+Termination remains open. Language equivalence now holds for every completed
+execution against independent least input semantics. The closed-environment
+reset clears remembered pairs before the cutoff check.
+A termination proof must also measure the structure of closed descendants.
+Payload lookup, cached free-variable sets, closed-copy semantics, finite input
+weights, and typed memoization remain explicit representation interfaces.
