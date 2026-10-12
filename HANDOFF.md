@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 23:50 CEST (Europe/Stockholm)**.
+Updated: **2026-10-12 23:57 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -61,10 +61,10 @@ self-reference removal from recursive unions.
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
   `/tmp/mcfta-scope-precedence-full.log`.
-- Latest integrated Lean build: **532 jobs; 28,096 theorem dependency checks**.
+- Latest integrated Lean build: **533 jobs; 28,127 theorem dependency checks**.
   This includes the new finite leaf progress, runtime metadata, and shared
   support-binder proofs. Further active modules are not yet integrated.
-  Log: `/tmp/mcfta-nested-provenance-integer-audit.log`.
+  Log: `/tmp/mcfta-leaf-forest-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -167,8 +167,9 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
 
 - General termination of explicit equality/pruning fixed points on finite
   DAGs remains open. Finite language size is insufficient. The retained
-  six-round example grows representation size. Finite leaf alternatives now
-  have a proved structural progress measure. Arbitrary nested intersections
+  six-round example grows representation size. Complete canonical leaf
+  forests now have a proved bound for simultaneous class edits and empty
+  propagation. The 4,096-input source comparison passes. Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
   at the same path. LexicalGateRank now derives head-binder decrease for

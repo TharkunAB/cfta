@@ -431,6 +431,7 @@ import MicroCFTA.InternedNestedProvenance
 import MicroCFTA.InternedGateReconstructionExamples
 import MicroCFTA.SourceReadLogicalIntegerAdapter
 import MicroCFTA.SourceReadLogicalIntegerCore
+import MicroCFTA.FiniteLeafForestProgress
 /-!
 # Proof dependency audit
 

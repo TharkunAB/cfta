@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-12 23:50 CEST**.
+Updated: **2026-10-12 23:57 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired one additional sparse-substitution defect, described as row 18.
 All **620 existing Haskell examples** pass after that repair: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **532 jobs and 28,096 theorem dependency
+The full Lean development passes **533 jobs and 28,127 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -233,8 +233,9 @@ but do not prove it for every runtime execution.
    loops still require a representation-level termination argument. A checked
    six-round example grows nodes and rows while preserving a singleton
    language. Semantic finiteness and decreasing language size are insufficient.
-   Finite leaf alternatives now have a derived termination measure and a
-   generated source guard inventory. Nested source intersection can return to
+   Complete canonical leaf forests now have a derived pass bound, including
+   simultaneous class edits and empty propagation. The source guard inventory
+   is generated from the initial atoms. Nested source intersection can return to
    an earlier identity when its operands alternate. This rules out a general
    schedule-independent measure. No cycle of the fixed equality schedule was
    established.

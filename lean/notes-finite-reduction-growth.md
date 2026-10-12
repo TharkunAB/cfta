@@ -101,6 +101,31 @@ to the finite product. The theorem covers canonical residual alternatives at
 one leaf symbol. It does not include nested children, path edits, or the
 separate equality field.
 
+`FiniteLeafForestProgress` extends this result to complete forests of
+canonical leaf alternatives at one symbol. Each equality path selects an
+existing direct child. Each class reads all other projections from the same
+old forest. The implementation uses the source's seeded right fold and
+simultaneous coordinate updates. Complete schedules retain their right-fold
+class order, empty-constraint shortcut, contradiction branch, and empty
+propagation. The progress proof also allows overlapping selected classes.
+
+For an inventory of length `N`, a leaf's natural potential is
+`closureCount * (N + 1) + N - rowCount`. The forest potential is the sum
+over its children. Every changed coordinate strictly decreases this value;
+unchanged coordinates keep it. Thus every changing pass strictly decreases
+the forest potential. `source_terminates` derives a fixed point within at
+most the initial forest potential plus one passes. The finite guard inventory
+and its size come from `SourceLeafRowProgress`, rather than a supplied bound.
+This counts passes. It does not bound the cost of one source intersection.
+
+The focused source probe `/tmp/mcfta-leaf-forest-progress.hs` checks 4,096
+canonical three-child forests over three original guard atoms. It compares
+each public pass with exact simultaneous source snapshot edits. It checks
+the strict potential, empty propagation, and derived pass bound. All checks
+pass; the largest case needs two changing passes. The probe uses the actual
+canonical edge identities to identify rows. It is source evidence for this
+fragment, not a proof of general nested reduction or physical cache identity.
+
 ## Alternating nested operands can cycle
 
 The source reproduction now also checks a stronger obstruction. Let `A`
