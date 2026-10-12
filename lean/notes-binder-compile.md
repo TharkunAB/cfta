@@ -26,13 +26,20 @@ in another strongly connected component cannot return to a bound state in the
 parent component. `component_shared_exact` derives the source sharing law.
 The theorem uses the mathematical mutual-reachability definition of a component.
 
-The current compiler binds each visited active state before cleanup. The source
-uses SCCs to skip unnecessary binders before construction. Its exact finite
-component tables, cycle test after each binding, lazy per-context maps, reference
-allocation and `createMu` callback substitution still require correspondence.
-No theorem identifies the reference compiler with those source operations by
-assumption. `BinderSubstitution` supplies the local substitution law, and
-`StateMap` supplies injective state renaming.
+`BinderSchedule.build` follows the source decision to omit a binder at an
+unmarked state. `build_exact` proves exact meaning for every successful
+construction, for any cycle test. `BinderTermination` supplies stable execution
+bounds from an active-set decrease and a structural rank.
+`BinderCycles.cycle_ranked` derives that rank by counting reachable active
+states. `cycles_closed_total` proves total, stable, exact conversion when the
+cycle detector marks every actual cycle. Extra marked states are harmless.
 
-Validation: the pinned `lake build MicroCFTA.BinderComponents` succeeds. The
+The source's `Data.Graph` SCC adapter must establish that cycle contract in
+each reduced component. Exact component tables, lazy per-context maps,
+reference allocation and `createMu` callback substitution still require
+correspondence. No theorem identifies those source operations with the model
+by assuming the final language law. `BinderSubstitution` supplies the local
+substitution theorem, and `StateMap` supplies injective state renaming.
+
+Validation: the pinned `lake build MicroCFTA.BinderCycles` succeeds. The
 modules contain no proof placeholders or additional axioms.
