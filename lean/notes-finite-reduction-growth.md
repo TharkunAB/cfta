@@ -78,6 +78,54 @@ count therefore do not supply a strict decreasing measure for this loop.
 The existing two-pass theorem for three single-row leaf residuals does not
 extend to these nested alternative domains.
 
+## A finite leaf progress measure
+
+`FiniteRowIntersection` proves termination for arbitrary Cartesian narrowing
+of finite alternative sets when individual row conjunction is associative,
+commutative, and idempotent. It retains the source self-intersection shortcut.
+The operand can change after each pass. The proof does not require whole-set
+absorption or decreasing edge counts.
+
+The first measure is the number of rows in the upward closure of the
+alternative set. Intersection can only remove closure members. If the
+closure stays equal, every existing alternative remains. Each changing step
+then adds an alternative. The lexicographic pair of closure count and missing
+alternative count strictly decreases.
+
+`SourceLeafRowProgress` derives the row algebra from the actual guard
+normalizer and structural comparator. It generates the finite inventory
+from all subsets of the original outer atoms. Its size is `2 ^ atomCount`
+before duplicate removal. No supplied finite bound or absorption law is
+required. `source_product_members` connects Cartesian source guard generation
+to the finite product. The theorem covers canonical residual alternatives at
+one leaf symbol. It does not include nested children, path edits, or the
+separate equality field.
+
+## Alternating nested operands can cycle
+
+The source reproduction now also checks a stronger obstruction. Let `A`
+have two leaf rows with distinct true guards. Let `B` have a third true guard.
+Set `Z = intersect A B` and `W = intersect A Z`. Their row counts are two and
+three. With `wrap X = Node [Edge "f" [X]]`, define:
+
+```text
+P = union [wrap W, wrap A]
+R = union [wrap A, wrap B]
+Q = wrap A
+```
+
+Then `intersect P R` differs from `P`, but
+`intersect (intersect P R) Q == P`. The parent row counts are `2, 3, 2`.
+Both changing steps preserve the singleton language and contain no binders
+or free references. The original source identities return after two steps.
+
+Thus no strict measure can cover every changing intersection with arbitrary
+operands at all finite nesting depths. The leaf progress theorem cannot be
+applied to child-node intersection as if it were associative conjunction.
+This is not a counterexample to one fixed equality-reduction schedule: the
+two operands differ. The source schedule must supply an additional invariant
+that excludes these alternating transitions.
+
 ## Remaining proof obligation
 
 A proof must bound the actual interned representations and exclude cycles
@@ -89,7 +137,8 @@ eventual repetition. It would not establish the identity fixed point that
 The unresolved step is a strict progress relation for nested row sets under
 path projection unions, simultaneous class edits, required-path filtering,
 Cartesian intersection, and the closed self-intersection shortcut. No
-general measure or cycle has been established. The guarded recursive case
+cycle of the fixed source equality schedule has been established. The
+arbitrary-operand cycle above excludes a schedule-independent measure. The guarded recursive case
 and completed-execution preservation theorems remain separate results.
 
 `EqualityTermination.mkEqConstraints_terminates` proves termination of

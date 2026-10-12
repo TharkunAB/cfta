@@ -228,7 +228,11 @@ but do not prove it for every runtime execution.
    loops still require a representation-level termination argument. A checked
    six-round example grows nodes and rows while preserving a singleton
    language. Semantic finiteness and decreasing language size are insufficient.
-   No general proof or acyclic nontermination counterexample was established.
+   Finite leaf alternatives now have a derived termination measure and a
+   generated source guard inventory. Nested source intersection can return to
+   an earlier identity when its operands alternate. This rules out a general
+   schedule-independent measure. No cycle of the fixed equality schedule was
+   established.
    See [the growth notes](lean/notes-finite-reduction-growth.md).
 2. **Nested binder identity after normalization erases a fresh outer
    dependency.** Retained dependencies separate pending keys. Original

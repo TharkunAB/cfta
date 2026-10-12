@@ -91,6 +91,26 @@ checkAbsorption = do
     print ("absorption", once == twice, length (Equality.nodeEdges once), length (Equality.nodeEdges twice))
     unless (once /= twice) $ fail "The source representation now satisfies this absorption case."
 
+-- | Alternating operands can restore an earlier nested representation.
+checkAlternatingOperands :: IO ()
+checkAlternatingOperands = do
+    let firstLeaf = Equality.union [leaf (Not Bottom), leaf (Or [Top])]
+        secondLeaf = leaf (Not (Not Top))
+        once = Equality.intersect firstLeaf secondLeaf
+        twice = Equality.intersect firstLeaf once
+        wrap child = Equality.Node [Equality.Edge "f" [child]]
+        before = Equality.union [wrap twice, wrap firstLeaf]
+        firstOperand = Equality.union [wrap firstLeaf, wrap secondLeaf]
+        after = Equality.intersect before firstOperand
+        returned = Equality.intersect after (wrap firstLeaf)
+    print
+        ( "alternating-operands"
+        , before /= after
+        , returned == before
+        , map (length . Equality.nodeEdges) [before, after, returned]
+        )
+    unless (before /= after && returned == before) $ fail "The nested alternating intersection cycle did not reproduce."
+
 -- | Check each pass and return its first structural fixed point.
 walk :: Int -> [Equality.Node String] -> IO [Equality.Node String]
 walk count nodes = do
@@ -114,6 +134,7 @@ walk count nodes = do
 main :: IO ()
 main = do
     checkAbsorption
+    checkAlternatingOperands
     expected <- walk 0 initial
     let publicPass = Equality.reduceEqConstraints classes Equality.EmptyConstraints
     unless (publicPass initial == pass initial) $ fail "The public single pass differs from the instrumented pass."
