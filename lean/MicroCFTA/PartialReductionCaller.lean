@@ -143,11 +143,11 @@ theorem combine_exact (inherited classes : Constraints) (term : Term Symbol) :
 theorem combine_finishes (inherited classes : Constraints) : combine inherited classes ≠ .timeout :=
   EqualityTermination.mkEqConstraints_terminates (inherited ++ classes)
 
-/-- Process one source edge after its local equality loop completes. -/
+/-- Process one source edge after one local equality pass. -/
 def process [DecidableEq Node] (ops : Operations Node Symbol)
-    (recurse : Constraints → Node → Option Node) (fuel : Nat) (inherited : Constraints)
+    (recurse : Constraints → Node → Option Node) (inherited : Constraints)
     (row : Row Node Symbol) : Option (Row Node Symbol) := do
-  let narrowed ← EqualityReduction.reduce ops.narrow row.classes inherited fuel row.children
+  let narrowed := EqualityReduction.pass ops.narrow row.classes inherited row.children
   let children ← match combine inherited row.classes with
     | .timeout => none
     | .contradiction => some (narrowed.map (fun _ => ops.narrow.empty))
@@ -163,57 +163,56 @@ def run [DecidableEq Node] (ops : Operations Node Symbol) : Nat → Constraints 
       | .binder => some (ops.rebuildBinder node)
       | .reference => none
       | .ordinary rows =>
-          (walk (fun _ => process ops (run ops fuel) fuel inherited) 0 rows).map (ops.modify node)
+          (walk (fun _ => process ops (run ops fuel) inherited) 0 rows).map (ops.modify node)
 
 /-- Each processed edge retains its exact guarded meaning under inherited equalities. -/
 theorem process_exact [DecidableEq Node] (ops : Operations Node Symbol) (laws : Laws ops)
     (recurse : Constraints → Node → Option Node)
     (recursive : ∀ inherited before after, recurse inherited before = some after → ∀ term,
       Satisfies term inherited → (ops.narrow.meaning after term ↔ ops.narrow.meaning before term))
-    (fuel : Nat) (inherited : Constraints) (before after : Row Node Symbol)
-    (done : process ops recurse fuel inherited before = some after) (term : Term Symbol)
+    (inherited : Constraints) (before after : Row Node Symbol)
+    (done : process ops recurse inherited before = some after) (term : Term Symbol)
     (inheritedSat : Satisfies term inherited) :
     RowAccepts ops.narrow.meaning after term ↔ RowAccepts ops.narrow.meaning before term := by
-  cases narrowed : EqualityReduction.reduce ops.narrow before.classes inherited fuel before.children with
-  | none => simp [process, narrowed] at done
-  | some nodes =>
-      cases combined : combine inherited before.classes with
-      | timeout => exact False.elim (combine_finishes inherited before.classes combined)
-      | contradiction =>
-          have same : after = { before with children := nodes.map (fun _ => ops.narrow.empty) } := by
-            simpa [process, narrowed, combined] using done.symm
+  let nodes := EqualityReduction.pass ops.narrow before.classes inherited before.children
+  cases combined : combine inherited before.classes with
+  | timeout => exact False.elim (combine_finishes inherited before.classes combined)
+  | contradiction =>
+      have same : after = { before with children := nodes.map (fun _ => ops.narrow.empty) } := by
+        simpa [process, combined] using done.symm
+      subst after
+      have noGuard : ¬before.guard term := by
+        intro guard
+        have impossible := (combine_exact inherited before.classes term).mpr ⟨inheritedSat, before.guarded term guard⟩
+        simp [combined, RunSat] at impossible
+      cases term
+      simp [RowAccepts, noGuard]
+  | normalized classes =>
+      cases walked : walk (fun index => recurse (eqConstraintsDescend index classes)) 0
+          (EqualityReduction.pass ops.narrow before.classes inherited before.children) with
+      | none => simp [process, combined, walked] at done
+      | some children =>
+          have same : after = { before with children } := by
+            simpa [process, combined, walked] using done.symm
           subst after
-          have noGuard : ¬before.guard term := by
-            intro guard
-            have impossible := (combine_exact inherited before.classes term).mpr ⟨inheritedSat, before.guarded term guard⟩
-            simp [combined, RunSat] at impossible
-          cases term
-          simp [RowAccepts, noGuard]
-      | normalized classes =>
-          cases walked : walk (fun index => recurse (eqConstraintsDescend index classes)) 0 nodes with
-          | none => simp [process, narrowed, combined, walked] at done
-          | some children =>
-              have same : after = { before with children } := by
-                simpa [process, narrowed, combined, walked] using done.symm
-              subst after
-              cases term with
-              | node label terms =>
-                  by_cases guard : before.guard (.node label terms)
-                  · have localSat := before.guarded _ guard
-                    have combinedSat : Satisfies (.node label terms) classes := by
-                      have result := (combine_exact inherited before.classes (.node label terms)).mpr ⟨inheritedSat, localSat⟩
-                      simpa [combined, RunSat] using result
-                    have walkedExact := walk_forest ops.narrow.meaning _ 0 nodes children terms walked (by
-                      intro index child found old fresh called
-                      exact recursive (eqConstraintsDescend index classes) old fresh (by simpa using called) child
-                        (eqConstraintsDescend_sound label terms index child found classes combinedSat))
-                    have narrowedExact := constrained_reduce_exact ops.narrow laws.narrow before.classes inherited
-                      before.active fuel before.children nodes narrowed (.node label terms)
-                    have forestExact : All₂ ops.narrow.meaning nodes terms ↔ All₂ ops.narrow.meaning before.children terms := by
-                      simpa only [Forest, localSat, inheritedSat, and_true] using narrowedExact
-                    simp only [RowAccepts, guard, and_true]
-                    exact and_congr_right (fun _ => walkedExact.trans forestExact)
-                  · simp [RowAccepts, guard]
+          cases term with
+          | node label terms =>
+              by_cases guard : before.guard (.node label terms)
+              · have localSat := before.guarded _ guard
+                have combinedSat : Satisfies (.node label terms) classes := by
+                  have result := (combine_exact inherited before.classes (.node label terms)).mpr ⟨inheritedSat, localSat⟩
+                  simpa [combined, RunSat] using result
+                have walkedExact := walk_forest ops.narrow.meaning _ 0 nodes children terms walked (by
+                  intro index child found old fresh called
+                  exact recursive (eqConstraintsDescend index classes) old fresh (by simpa using called) child
+                    (eqConstraintsDescend_sound label terms index child found classes combinedSat))
+                have narrowedExact := constrained_pass_exact ops.narrow laws.narrow before.classes inherited
+                  before.active before.children (.node label terms)
+                have forestExact : All₂ ops.narrow.meaning nodes terms ↔ All₂ ops.narrow.meaning before.children terms := by
+                  simpa only [Forest, localSat, inheritedSat, and_true] using narrowedExact
+                simp only [RowAccepts, guard, and_true]
+                exact and_congr_right (fun _ => walkedExact.trans forestExact)
+              · simp [RowAccepts, guard]
 
 /-- Every completed caller execution preserves the complete inherited language. -/
 theorem run_exact [DecidableEq Node] (ops : Operations Node Symbol) (laws : Laws ops)
@@ -235,14 +234,14 @@ theorem run_exact [DecidableEq Node] (ops : Operations Node Symbol) (laws : Laws
           exact laws.binder before viewed term
       | reference => simp [run, viewed] at done
       | ordinary rows =>
-          cases walked : walk (fun _ => process ops (run ops fuel) fuel inherited) 0 rows with
+          cases walked : walk (fun _ => process ops (run ops fuel) inherited) 0 rows with
           | none => simp [run, viewed, walked] at done
           | some changed =>
               have same : ops.modify before changed = after := by simpa [run, viewed, walked] using done
               rw [← same, laws.modify before rows viewed, laws.ordinary before rows viewed]
               have related := walk_relation _
                 (fun original final => RowAccepts ops.narrow.meaning final term ↔ RowAccepts ops.narrow.meaning original term)
-                (fun _ original final completed => process_exact ops laws (run ops fuel) ih fuel inherited
+                (fun _ original final completed => process_exact ops laws (run ops fuel) ih inherited
                   original final completed term satisfied) 0 rows changed walked
               exact rows_transport ops.narrow.meaning rows changed term related
 
@@ -284,27 +283,26 @@ theorem walk_replay (first second : Nat → α → Option β)
               subst after
               simp [walk, stable index head value called, ih (index + 1) values rest]
 
-/-- Larger child and local-loop bounds retain the same processed source row. -/
+/-- Replaying completed child calls retains the same processed source row. -/
 theorem process_replay [DecidableEq Node] (ops : Operations Node Symbol)
     (first second : Constraints → Node → Option Node)
     (stable : ∀ classes before after, first classes before = some after → second classes before = some after)
-    (fuel extra : Nat) (inherited : Constraints) (before after : Row Node Symbol)
-    (done : process ops first fuel inherited before = some after) :
-    process ops second (fuel + extra) inherited before = some after := by
-  cases narrowed : EqualityReduction.reduce ops.narrow before.classes inherited fuel before.children with
-  | none => simp [process, narrowed] at done
-  | some nodes =>
-      have replay := loop_replay ops.narrow before.classes inherited fuel before.children nodes narrowed extra
-      cases combined : combine inherited before.classes with
-      | timeout => simp [process, narrowed, combined] at done
-      | contradiction => simpa [process, narrowed, replay, combined] using done
-      | normalized classes =>
-          cases walked : walk (fun index => first (eqConstraintsDescend index classes)) 0 nodes with
-          | none => simp [process, narrowed, combined, walked] at done
-          | some children =>
-              have walkAgain := walk_replay _ (fun index => second (eqConstraintsDescend index classes))
-                (fun index input output => stable (eqConstraintsDescend index classes) input output) 0 nodes children walked
-              simpa [process, narrowed, replay, combined, walked, walkAgain] using done
+    (inherited : Constraints) (before after : Row Node Symbol)
+    (done : process ops first inherited before = some after) :
+    process ops second inherited before = some after := by
+  let nodes := EqualityReduction.pass ops.narrow before.classes inherited before.children
+  cases combined : combine inherited before.classes with
+  | timeout => simp [process, combined] at done
+  | contradiction => simpa [process, combined] using done
+  | normalized classes =>
+      cases walked : walk (fun index => first (eqConstraintsDescend index classes)) 0
+        (EqualityReduction.pass ops.narrow before.classes inherited before.children) with
+      | none => simp [process, combined, walked] at done
+      | some children =>
+          have walkAgain := walk_replay _ (fun index => second (eqConstraintsDescend index classes))
+            (fun index input output => stable (eqConstraintsDescend index classes) input output) 0 nodes children walked
+          dsimp only [nodes] at walkAgain
+          simpa [process, combined, walked, walkAgain] using done
 
 /-- Every completed caller run has the same result at every larger bound. -/
 theorem run_replay [DecidableEq Node] (ops : Operations Node Symbol)
@@ -318,12 +316,12 @@ theorem run_replay [DecidableEq Node] (ops : Operations Node Symbol)
       | empty | binder | union => simpa [run, Nat.succ_add, viewed] using done
       | reference => simp [run, viewed] at done
       | ordinary rows =>
-          cases walked : walk (fun _ => process ops (run ops fuel) fuel inherited) 0 rows with
+          cases walked : walk (fun _ => process ops (run ops fuel) inherited) 0 rows with
           | none => simp [run, viewed, walked] at done
           | some changed =>
-              have again := walk_replay _ (fun _ => process ops (run ops (fuel + extra)) (fuel + extra) inherited)
+              have again := walk_replay _ (fun _ => process ops (run ops (fuel + extra)) inherited)
                 (fun _ original final completed => process_replay ops (run ops fuel) (run ops (fuel + extra))
-                  ih fuel extra inherited original final completed) 0 rows changed walked
+                  ih inherited original final completed) 0 rows changed walked
               simpa [run, Nat.succ_add, viewed, walked, again] using done
 
 /-- Repeat completed public passes until source node identities stop changing. -/

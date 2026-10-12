@@ -6,8 +6,9 @@ import MicroCFTA.SymbolicSmartRows
 
 This model follows `reduceEqConstraints`: select safe local classes, require
 their paths, edit every class in right-fold order, propagate empty children,
-and repeat until the child identities stop changing. Primitive graph actions
-have separate local contracts. No contract assumes correctness of a pass or
+and return after one pass. The separate repeated worker models explicit
+`fixUnbounded` callers, including pruning. Primitive graph actions have
+separate local contracts. No contract assumes correctness of a pass or
 of its repeated execution.
 -/
 
@@ -245,5 +246,21 @@ theorem constrained_reduce_exact [DecidableEq Node] (ops : Operations Node Symbo
       (fun paths member => class_nonroot paths (active paths member) term (localSat paths member))
       fuel before after completed term ⟨localSat, inheritedSat⟩
     exact ⟨exact.mpr accepted, localSat, inheritedSat⟩
+
+/-- The current public single pass retains both original constraint sets. -/
+theorem constrained_pass_exact [DecidableEq Node] (ops : Operations Node Symbol) (laws : Laws ops)
+    (localClasses inherited : Constraints) (active : Active localClasses) (before : List Node)
+    (term : Term Symbol) :
+    (Forest ops (pass ops localClasses inherited before) term ∧ Satisfies term localClasses ∧ Satisfies term inherited) ↔
+      Forest ops before term ∧ Satisfies term localClasses ∧ Satisfies term inherited := by
+  constructor
+  · rintro ⟨accepted, localSat, inheritedSat⟩
+    exact ⟨(pass_exact ops laws localClasses inherited active
+      (fun paths member => class_nonroot paths (active paths member) term (localSat paths member))
+      before term ⟨localSat, inheritedSat⟩).mp accepted, localSat, inheritedSat⟩
+  · rintro ⟨accepted, localSat, inheritedSat⟩
+    exact ⟨(pass_exact ops laws localClasses inherited active
+      (fun paths member => class_nonroot paths (active paths member) term (localSat paths member))
+      before term ⟨localSat, inheritedSat⟩).mpr accepted, localSat, inheritedSat⟩
 
 end MicroCFTA.EqualityReduction

@@ -1,7 +1,9 @@
 # Finite equality reduction and structural progress
 
 `repro/FiniteReductionGrowth.hs` checks a finite acyclic example against the
-public `reduceEqConstraints` operation. It reaches a structural fixed point
+public `reduceEqConstraints` operation and its explicit `fixUnbounded`
+caller. The public operation now performs one pass, following PR #89.
+The explicit repetition reaches a structural fixed point
 after six changing rounds. This is a terminating example, not a new defect.
 It excludes several proposed termination measures.
 
@@ -42,8 +44,9 @@ The observed values of `edgeCount` and `nodeCount` are:
 | 6 | 86 | 92 | 33 | 34 |
 
 The next pass returns the same node identities. The fixture separately
-forces the public operation, compares its result with the instrumented
-schedule, and checks that the result is a fixed point.
+checks the public single pass against the instrumented pass. It then forces
+the explicit public fixed-point iteration, compares it with the instrumented
+schedule, and checks its stability.
 
 The instrumented pass follows the source class order and computes all class
 projections from the same input forest. It then applies the path-local
@@ -100,9 +103,10 @@ establish progress for the eligible acyclic domains.
 `EqualityReduction.constrained_reduce_exact` and the
 `PartialReductionCaller` theorems establish preservation for completed
 executions. Their primitive source adapters and the existence of a sufficient
-execution bound remain separate obligations. The source still uses an
-unbounded identity fixed point for eligible classes. Repeated outer calls
-to `reducePartially` require a separate termination argument as well.
+execution bound remain separate obligations. The pruning caller still uses an
+unbounded identity fixed point for eligible classes. `reduceEqConstraints`
+and each local edge of `reducePartially` now perform one pass. Repeated outer
+calls to `reducePartially` require a separate termination argument as well.
 
 ## Validation
 
@@ -114,5 +118,5 @@ nix-shell --run 'cabal exec -- runghc -package=microcfta lean/repro/FiniteReduct
 ```
 
 The diagnostic limits its copied schedule to twelve rounds and gives the
-public call five seconds. These are diagnostic limits. The source operation
+public call five seconds. These are diagnostic limits. The explicit source fixed-point operation
 has no such limit.

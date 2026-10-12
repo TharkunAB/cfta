@@ -28,7 +28,9 @@ propagates structural empty children. Each class computes all its projected
 intersections before it applies its edits. The model retains the source's
 first-element seed and right-fold order in `intersectList`.
 
-`pass_exact` derives preservation for one complete pass. `reduce` repeats the
+`pass_exact` derives preservation for one complete pass.
+`constrained_pass_exact` retains both original constraint sets. This is the
+current public `reduceEqConstraints` behavior after PR #89. `reduce` repeats the
 pass until child identities stop changing. `constrained_reduce_exact` proves
 that every completed repeated reduction preserves exactly the forest terms
 satisfying the original local and inherited constraints. It derives the
