@@ -17,6 +17,7 @@ module Data.CFTA.Interned.Operations (
     dropEdgeConstraints,
     dropConstraints,
     intersect,
+    mergeAlternatives,
     withoutRedundantEdges,
     intersectEdge,
     fixUnbounded,
@@ -26,6 +27,7 @@ module Data.CFTA.Interned.Operations (
 
 import Control.Monad.State.Strict (State, evalState, get, modify')
 import Data.Coerce (coerce)
+import Data.Containers.ListUtils (nubOrd)
 import Data.Functor.Identity (Identity (..))
 import qualified Data.HashMap.Lazy as HashMap
 import Data.Hashable (Hashable (..))
@@ -33,7 +35,7 @@ import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
 import Data.IntSet (IntSet)
 import qualified Data.IntSet as IntSet
-import Data.List (compareLength, partition, (!?))
+import Data.List (compareLength, partition, transpose, (!?))
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Monoid (Sum (..))
@@ -42,7 +44,7 @@ import qualified Data.Set as Set
 import System.IO.Unsafe (unsafePerformIO)
 import Type.Reflection (Typeable)
 
-import Data.CFTA.Constraint (Constraint (..), conjoinConstraints)
+import Data.CFTA.Constraint (Constraint (..), conjoinConstraints, noConstraint)
 import Data.CFTA.Index (Depth (..))
 import Data.CFTA.Internal.Tree (acceptsBy, adjustAt)
 import Data.CFTA.Interned.Memo
@@ -510,6 +512,82 @@ intersectOpenEdge input =
             (edgeConstraint l `conjoinConstraints` edgeConstraint r)
 
 -- Union
+
+-- | Tables for 'mergeAlternatives'.
+genericMergeAlternativesCache :: TypeableMemoCache
+genericMergeAlternativesCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE genericMergeAlternativesCache #-}
+
+{- | A node with at most one edge for each symbol and number of children, which
+accepts every term of the given node and possibly more.
+
+The edges with one symbol and number of children become one edge, whose
+children are the unions of their children, and the merge goes on into the
+children. A merged edge has no constraint. For edges with at most one child
+the merge accepts the same terms; for edges with more children it also
+accepts the terms that take each child from a different edge. A recursive
+node and a reference stay as they are.
+
+An intersection with a merged node pairs each edge with at most one edge, so
+it costs as much as the smaller side, where the intersection of two unions of
+many edges with one symbol costs their product.
+-}
+mergeAlternatives :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
+{-# INLINEABLE mergeAlternatives #-}
+mergeAlternatives = memoTypeableWith @symbol genericMergeAlternativesCache go
+  where
+    go node@(InternedNode payload)
+        | null (freeVars node) =
+            Node
+                [ case group of
+                    [edge] -> setChildren edge (map mergeAlternatives (edgeChildren edge))
+                    edge : _ -> Edge (edgeSymbol edge) (map mergedUnion (transpose (map edgeChildren group)))
+                    [] -> error "mergeAlternatives: empty group"
+                | group <- HashMap.elems groups
+                ]
+      where
+        groups =
+            HashMap.fromListWith
+                (flip (<>))
+                [((edgeSymbol edge, length (edgeChildren edge)), [edge]) | edge <- internedNodeEdges payload]
+    go node = node
+
+    -- The union of the children at one position. A recursive node among them
+    -- stays a recursive node, and the children that it accepts go: a union
+    -- would unfold it, and each intersection with that unfolding would
+    -- unfold it again.
+    mergedUnion children = case nubOrd kept of
+        [single] -> single
+        others -> mergeAlternatives (union others)
+      where
+        recursive = [child | child@(InternedMu _) <- children, null (freeVars child)]
+        kept = [child | child <- children, child `elem` recursive || not (any (`accepts` child) recursive)]
+        accepts big small = null (freeVars small) && subsumes big small
+
+{- | Whether the first closed node accepts every term of the second. The test
+is structural and can answer no for a node that does accept every term: an
+edge of the first node must have the symbol of an edge of the second, no
+constraint, and children that accept the children of that edge. A pair that
+the test meets again below itself counts as accepted, as for the greatest
+fixed point of the recursive nodes.
+-}
+subsumes :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol -> Bool
+subsumes = go Set.empty
+  where
+    go :: Set (NodeId, NodeId) -> Node symbol -> Node symbol -> Bool
+    go _ _ EmptyNode = True
+    go _ EmptyNode _ = False
+    go above b s
+        | b == s = True
+        | Set.member pair above = True
+        | otherwise = all (\edge -> any (covers (Set.insert pair above) edge) (nodeEdges b)) (nodeEdges s)
+      where
+        pair = (nodeIdentity b, nodeIdentity s)
+    covers above narrow wide =
+        edgeSymbol wide == edgeSymbol narrow
+            && length (edgeChildren wide) == length (edgeChildren narrow)
+            && edgeConstraint wide == noConstraint
+            && and (zipWith (go above) (edgeChildren wide) (edgeChildren narrow))
 
 {- | Union automata without discarding open recursive references.
 
