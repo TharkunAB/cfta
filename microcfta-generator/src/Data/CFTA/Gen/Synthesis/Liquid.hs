@@ -696,8 +696,9 @@ The other names of an atom from the library are its formal parameters. Each
 is replaced by each query argument of a matching base type, and an atom with a
 formal parameter that no argument matches is left out. A second set replaces
 an integer formal parameter also by a compound term of the goal, as @n - 1@
-from @len v == n - 1 + len l@, and a function formal parameter by a compound
-term that the goal applies, so that an intermediate term keeps what the
+from @len v == n - 1 + len l@, a function formal parameter by a compound
+term that the goal applies, and another formal parameter by a goal term of
+a projection of its type, so that an intermediate term keeps what the
 library says about it. For each query argument
 @x@, @v == x@ is a qualifier of its base type. As in the liquid types of the
 paper's title, a refinement is a conjunction of qualifiers, so there are
@@ -767,13 +768,23 @@ qualifiers components query =
     isFunction TFun{} = True
     isFunction _ = False
     -- A term of the goal that does not mention the value, as @n - 1@, can
-    -- also take the place of an integer formal, and one that the goal
-    -- applies, as @hd fl@ in @ap(hd fl, s)@, of a function formal.
+    -- also take the place of an integer formal, one that the goal applies,
+    -- as @hd fl@ in @ap(hd fl, s)@, of a function formal, and one whose
+    -- measure a component's result is, as @mapM(g, l)@ for @map@, of a
+    -- formal of that result's type.
     fromTerms base
         | base == TCons "Int" [] = nub $ fromArguments base <> goalTerms
         | isFunction base =
             nub $ fromArguments base <> [function | Formula.App (Name "ap") [function, _] <- goalTerms, isCompound function]
-        | otherwise = fromArguments base
+        | otherwise =
+            nub $
+                fromArguments base
+                    <> [ term
+                       | term@(Formula.App function _) <- goalTerms
+                       , (projection, typ) <- projectionTypes
+                       , function == projection
+                       , isJust (unify Map.empty typ base)
+                       ]
     goalTerms =
         [ term
         | RBase _ refinement <- [liquidGoal query]

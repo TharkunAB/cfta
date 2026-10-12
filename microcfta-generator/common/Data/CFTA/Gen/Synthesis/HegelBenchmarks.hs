@@ -13,7 +13,8 @@ and @lst@ (its first and last elements), @mem@ (one when an element is in a
 list, and zero otherwise), @at@ (the element at an index), @idx@ (the index
 of an element in a list), @proj1@ and @proj2@ (the parts of a pair), @ap@
 (the application of a function value to an argument), and @iter@ (a function
-applied to a value a number of times). A Boolean is an integer that is zero or one.
+applied to a value a number of times), and @mapM@ and @filt@ (a list mapped
+by a function and a list filtered by a predicate). A Boolean is an integer that is zero or one.
 
 As in the paper, each query has its own library: the list functions, and the
 functions of its group, as pairs or Booleans. A goal must rule out the
@@ -71,6 +72,8 @@ measures =
     , ("proj2", 1)
     , ("ap", 2)
     , ("iter", 3)
+    , ("mapM", 2)
+    , ("filt", 2)
     ]
 
 -- Types and measures
@@ -361,6 +364,22 @@ functionLibrary =
     , ("head", "xs" .: nonEmpty listA --> refined a (\v -> v .== hd (var "xs") .&& mem v (var "xs") .== 1))
     , ("last", "xs" .: nonEmpty listA --> refined a (\v -> v .== lst (var "xs") .&& mem v (var "xs") .== 1))
     , ("null", "xs" .: plain listA --> refined bool (\v -> truth v (len (var "xs") .== 0)))
+    ,
+        ( "mapE"
+        , "f"
+            .: plain (a ~> b)
+            --> "xs"
+            .: plain listA
+            --> refined (TCons "List" [b]) (\v -> v .== measure "mapM" [var "f", var "xs"] .&& len v .== len (var "xs"))
+        )
+    ,
+        ( "filter"
+        , "p"
+            .: plain (a ~> bool)
+            --> "xs"
+            .: plain listA
+            --> refined listA (\v -> v .== measure "filt" [var "p", var "xs"] .&& len v .<= len (var "xs"))
+        )
     ]
   where
     b = TVar "b"
@@ -536,6 +555,12 @@ liquidBenchmarks =
         refined int (\v -> v .== measure "iter" [var "f", var "n" + 1, var "m"] + var "m")
     , benchmark "ApplyNAdd3" "Apply f on m, n+1 times, and add m+1" iterating applyN $
         refined int (\v -> v .== measure "iter" [var "f", var "n" + 1, var "m"] + var "m" + 1)
+    , benchmark "ApplyNInv1" "Apply g and h on l, and filter using f" filtering inverse $
+        refined listA (\v -> v .== filt (var "f") (mapped (var "h") (mapped (var "g") l)))
+    , benchmark "ApplyNInv2" "Filter l using f, and apply g and h" filtering inverse $
+        refined listA (\v -> v .== mapped (var "h") (mapped (var "g") (filt (var "f") l)))
+    , benchmark "ApplyNInv3" "Apply g and h on l, filter using f, and apply g and h" filtering inverse $
+        refined listA (\v -> v .== mapped (var "h") (mapped (var "g") (filt (var "f") (mapped (var "h") (mapped (var "g") l)))))
     , starred
         "ApplyList1"
         "Apply the head of fl on s"
@@ -574,6 +599,11 @@ liquidBenchmarks =
     mappingTwice = functions ["map", "compose", "apply"]
     iterating = functions ["applyN", "add", "incr"]
     applying = functions ["head", "last", "apply", "null"]
+    -- The map of this group states its result as a term of mapM.
+    filtering = [(if name == "mapE" then "map" else name, typ) | (name, typ) <- functions ["mapE", "filter"]]
+    inverse = [("f", plain (a ~> bool)), ("g", plain (a ~> a)), ("h", plain (a ~> a)), ("l", plain listA)]
+    mapped function list = measure "mapM" [function, list]
+    filt predicate list = measure "filt" [predicate, list]
     applyN = [("f", plain (int ~> int)), ("n", nat), ("m", plain int)]
     lookups = listLibrary <> booleanLibrary <> lookupLibrary
     keyed = [("k", plain int), ("ks", plain intList), ("vs", refined listA (\v -> len v .== len (var "ks") .&& len v .>= 1))]
