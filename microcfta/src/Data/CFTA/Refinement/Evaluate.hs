@@ -132,9 +132,27 @@ evaluateGuardWithSame ::
     ([[ResolvedSubstitution]] -> Path -> Path -> Maybe Bool) ->
     Guard ->
     IO Verdict
-evaluateGuardWithSame entailment observedAt sameAt guard = go guard
+evaluateGuardWithSame entailment observedAt sameAt = go True
   where
-    go = evaluateWith []
+    -- Boolean siblings have independent substitution scopes and actual values.
+    go positive (And guards) =
+        (if positive then andVerdicts else orVerdicts) $ map (go positive) guards
+    go positive (Or guards) =
+        (if positive then orVerdicts else andVerdicts) $ map (go positive) guards
+    go positive (Not nested) = go (not positive) nested
+    go positive (Substitute [] nested) = go positive nested
+    go positive guard =
+        evaluateScopedGuard entailment observedAt sameAt $ if positive then guard else Not guard
+
+-- | Evaluate one scoped atom with one actual-value table, preserving formula refutation.
+evaluateScopedGuard ::
+    Entailment ->
+    (Path -> Maybe Observed) ->
+    ([[ResolvedSubstitution]] -> Path -> Path -> Maybe Bool) ->
+    Guard ->
+    IO Verdict
+evaluateScopedGuard entailment observedAt sameAt guard = evaluateWith [] guard
+  where
     (freshValues, ambiguousValues) = substitutionValues observedAt (sameAt []) guard
 
     decide = decideWith []
@@ -193,11 +211,20 @@ evaluateGuardWithSame entailment observedAt sameAt guard = go guard
         case traverse observedAt targets of
             Just observations ->
                 let formals = [fromString (contractTermName index) | index <- map ArgumentIndex [0 .. length targets - 1]]
+                    -- Two names of one path name one term, so they are equal.
+                    firstNames = Map.fromListWith (\_ earlier -> earlier) $ zip targets formals
+                    aliases =
+                        [ Formula.Atom Formula.Eq (Formula.Var formal) (Formula.Var first)
+                        | (target, formal) <- zip targets formals
+                        , let first = firstNames Map.! target
+                        , first /= formal
+                        ]
                     assumed =
-                        Formula.conjunction
+                        Formula.conjunction $
                             [ Formula.substitute [(refinementValueName, Formula.Var formal)] refinement
                             | (formal, Observed (RefinedSymbol _ refinement) _) <- zip formals observations
                             ]
+                                <> aliases
                  in decideWith
                         [(formal, refinementValueName) | formal <- formals]
                         substitutions

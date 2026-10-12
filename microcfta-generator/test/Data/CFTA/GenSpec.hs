@@ -9,19 +9,22 @@ module Data.CFTA.GenSpec (spec) where
 
 import Control.Exception (evaluate)
 import Data.Either (fromRight)
+import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.List (nub)
 import Data.Proxy (Proxy (Proxy))
+import qualified Data.Set as Set
 import Data.String (fromString)
 import Data.Typeable (typeRep)
 import GHC.Generics (Generic)
 import System.Timeout (timeout)
-import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
+import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldReturn, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
 import qualified Test.QuickCheck as QC
 
 import Control.Monad (void)
 import qualified Data.CFTA as Automaton
 import Data.CFTA.Constraint (noConstraint)
+import qualified Data.CFTA.Enumeration as Enumeration
 import Data.CFTA.Gen (On ((:==:)))
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import qualified Data.CFTA.Gen.QuickCheck as FTAGen
@@ -328,6 +331,120 @@ spec = do
                         `shouldBe` False
                 (Left err, _) -> expectationFailure $ show err
                 (_, Left err) -> expectationFailure $ show err
+
+        it "closes every retained applicative alternative after grouping" $ do
+            let source :: FTAGen.FTAGen String (Int, Int)
+                source = (,) <$> FTAGen.elements [0, 1] <*> FTAGen.elements [0, 1]
+                generator = FTAGen.ungroup $ FTAGen.node "group" $ FTAGen.groupOn (\(a, b) -> (a + b) `mod` 2) source
+                marker = FTAGen.Label "unused-recursion-marker"
+            FTAGen.cardinality generator `shouldBe` Right 4
+            case (FTAGen.support generator, FTAGen.inspect generator, traverse (FTAGen.termAt generator) [0 .. 3]) of
+                (Right support, Right inspection, Right terms) -> do
+                    Set.fromList (Enumeration.termsWith marker support) `shouldBe` Set.fromList terms
+                    let inspectionTerms =
+                            Enumeration.termsWith
+                                (FTAGen.InspectionSymbol marker Nothing)
+                                (FTAGen.inspectionGraph inspection)
+                    Set.fromList (map (fmap FTAGen.originalSymbol) inspectionTerms) `shouldBe` Set.fromList terms
+                (Left err, _, _) -> expectationFailure $ show err
+                (_, Left err, _) -> expectationFailure $ show err
+                (_, _, Left err) -> expectationFailure $ show err
+
+        it "filters recursive keys without losing their size classes or replay" $ do
+            let recursive :: FTAGen.FTAGen String Int
+                recursive = FTAGen.recur $ \self -> FTAGen.oneof [FTAGen.leaf 0 "zero", FTAGen.node "succ" $ (+ 1) <$> self]
+                groups = FTAGen.oneofGrouped [FTAGen.keyed "keep" recursive, FTAGen.keyed "drop" $ FTAGen.leaf 99 "discarded"]
+            calls <- newIORef []
+            result <-
+                FTAGen.filterGroupsM
+                    (\key -> modifyIORef' calls (<> [key]) >> pure (Right $ key == "keep" :: Either String Bool))
+                    groups
+            readIORef calls `shouldReturn` ["drop", "keep"]
+            case result of
+                Left err -> expectationFailure err
+                Right retained -> do
+                    FTAGen.cardinality (FTAGen.atKey "drop" retained) `shouldBe` Left FTAGen.EmptyGenerator
+                    let generator = FTAGen.ungroup retained
+                    FTAGen.isRecursive generator `shouldBe` True
+                    map (FTAGen.countAtSize generator) [0 .. 4] `shouldBe` map (FTAGen.countAtSize recursive) [0 .. 4]
+                    FTAGen.values (FTAGen.upToSize 4 generator) `shouldBe` Right [0, 1, 2, 3]
+                    (traverse (FTAGen.termAt generator) [0 .. 3] >>= traverse (FTAGen.rankOf generator)) `shouldBe` Right [0 .. 3]
+            empty <- FTAGen.filterGroupsM (const $ pure $ Right False :: String -> IO (Either String Bool)) groups
+            fmap (FTAGen.cardinality . FTAGen.ungroup) empty `shouldBe` Right (Left FTAGen.EmptyGenerator)
+            failure <- FTAGen.filterGroupsM (\key -> pure $ Left key) groups
+            either Just (const Nothing) failure `shouldBe` Just "drop"
+
+        it "closes grouped function spines without mixing alternative children" $ do
+            let retain = FTAGen.atKey () . FTAGen.groupOn (const ())
+                source :: FTAGen.FTAGen String Int
+                source = pure id <*> FTAGen.elements [0, 1]
+                correlated =
+                    uncurry (+)
+                        <$> FTAGen.atKey
+                            True
+                            (FTAGen.groupOn (uncurry (==)) $ (,) <$> FTAGen.elements [0, 1] <*> FTAGen.elements [0, 1])
+                sources =
+                    [ retain source
+                    , (+) <$> retain source <*> FTAGen.elements [10, 11]
+                    , retain $ (+) <$> retain source <*> FTAGen.elements [10, 11]
+                    , correlated
+                    , retain $ pure 0
+                    , retain $ FTAGen.elements [0, 1]
+                    , retain $ FTAGen.oneof [pure 0, source, FTAGen.leaf 2 "atom"]
+                    ]
+                check functions = do
+                    let generator = FTAGen.node "outer" $ (+) <$> functions <*> FTAGen.elements [100]
+                        terms = FTAGen.cardinality generator >>= traverse (FTAGen.termAt generator) . everyRank
+                        marker = FTAGen.Label "unused-recursion-marker"
+                    case (FTAGen.support generator, FTAGen.inspect generator, terms) of
+                        (Right support, Right inspection, Right selected) -> do
+                            Set.fromList (Enumeration.termsWith marker support) `shouldBe` Set.fromList selected
+                            let inspected =
+                                    Enumeration.termsWith
+                                        (FTAGen.InspectionSymbol marker Nothing)
+                                        (FTAGen.inspectionGraph inspection)
+                            Set.fromList (map (fmap FTAGen.originalSymbol) inspected) `shouldBe` Set.fromList selected
+                            mapM_
+                                (\(rank, term) -> FTAGen.ranksOf generator term `shouldSatisfy` either (const False) (rank `elem`))
+                                (zip [0 ..] selected)
+                        (Left err, _, _) -> expectationFailure $ show err
+                        (_, Left err, _) -> expectationFailure $ show err
+                        (_, _, Left err) -> expectationFailure $ show err
+            mapM_ check sources
+
+        it "keeps recursive members whole when labels close choices and applicative spines" $ do
+            let chain :: FTAGen.FTAGen String Int
+                chain = FTAGen.recur $ \self -> FTAGen.oneof [pure 0, FTAGen.node "s" $ (+ 1) <$> self]
+                spine :: FTAGen.FTAGen String Int
+                spine = FTAGen.recur $ \self -> (+) <$> FTAGen.oneof [pure 0, self] <*> FTAGen.elements [1, 2]
+                apply generator = FTAGen.node "outer" $ (+) <$> generator <*> FTAGen.elements [10]
+                check generator = do
+                    let bounded = FTAGen.upToSize 4 generator
+                    case (FTAGen.cardinality bounded, FTAGen.support bounded, FTAGen.inspect bounded) of
+                        (Right count, Right support, Right inspection) ->
+                            mapM_
+                                ( \rank -> case FTAGen.termAt bounded rank of
+                                    Left err -> expectationFailure $ show err
+                                    Right term -> do
+                                        acceptsPlain support term `shouldBe` True
+                                        Common.acceptsWith
+                                            (\_ _ -> True)
+                                            (FTAGen.inspectionGraph inspection)
+                                            (fmap (\symbol -> FTAGen.InspectionSymbol symbol Nothing) term)
+                                            `shouldBe` True
+                                        FTAGen.ranksOf bounded term `shouldSatisfy` either (const False) (rank `elem`)
+                                )
+                                (everyRank count)
+                        (Left err, _, _) -> expectationFailure $ show err
+                        (_, Left err, _) -> expectationFailure $ show err
+                        (_, _, Left err) -> expectationFailure $ show err
+            traverse (FTAGen.unrank $ FTAGen.upToSize 3 chain) [0 .. 3] `shouldBe` Right [0, 1, 2, 3]
+            mapM_ check $
+                [chain, spine]
+                    <> [ wrap generator
+                       | generator <- [chain, spine]
+                       , wrap <- [FTAGen.node "outer", apply, FTAGen.node "outer" . FTAGen.upToSize 3, apply . FTAGen.upToSize 3]
+                       ]
 
     describe "ordinary FTA compilation" $ do
         it "indexes recursive runs by size and bounds them by depth" $ do

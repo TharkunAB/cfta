@@ -2,8 +2,9 @@
 
 'similarity' asks a 'Subtyping' oracle to order transitions. 'minimize' then
 applies one deterministic schedule of M-Trans on the explicit view of the
-graph, keeps the original automaton whenever a step would lose a finite
-derivation, and interns the result again.
+graph, skips a step that could change the answer of a guard, keeps the
+original automaton whenever a step would lose a finite derivation, and interns
+the result again.
 -}
 module Data.CFTA.Refinement.Minimize (
     TransitionId (..),
@@ -23,16 +24,17 @@ import Data.Bifunctor (first)
 import Data.Foldable (toList)
 import qualified Data.Graph as Graph
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (elemIndex, mapAccumL, nub, sortOn)
+import Data.List (elemIndex, mapAccumL, nub, sortOn, (!?))
 import qualified Data.Map.Strict as Map
 import Data.Sequence (Seq (..))
 import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Index (TransitionIndex (..))
+import Data.CFTA.Index (ChildIndex (..), TransitionIndex (..))
 import Data.CFTA.Interned (InternedState (..), NodeId (..), fromFTA, nodeIdentity)
+import Data.CFTA.Path (Path, unPath)
 
-import Data.CFTA.Constraint (Constraint)
+import Data.CFTA.Constraint (Constraint (..), Guard (..), constraintPaths, guardPaths, noConstraint)
 import Data.CFTA.Refinement.Automaton (
     Automaton,
     AutomatonError (CyclicGuardReference),
@@ -228,7 +230,8 @@ Each selected supertype transition is considered once. A step keeps existing
 incoming alternatives, adds copies with all occurrences of the removed target
 replaced together, then removes only the selected original transition. Later
 steps can copy alternatives added by earlier steps. Equal transitions are
-deduplicated. The root stays the root.
+deduplicated. A removed root alternative also installs its representative at
+the root. The root stays the root.
 
 A copy replaces the node of the supertype by the node of the representative,
 so it reaches every alternative of that node. The similarity pair relates
@@ -247,8 +250,28 @@ that the language stays equal does not apply. A globally minimal automaton
 would need the exact similarity relation, and the solver can answer
 @Unknown@.
 
+A step changes the terms of the supertype's node in every place where that
+node occurs, so a guard that reads such a place must keep its answer. The
+representative has the stronger refinement when the oracle orders
+refinements, as 'refinementSubtypingOn' does. So the schedule skips a step
+unless each guard reads the node only at the end of a path, in 'Satisfies',
+'Holds', or the antecedent of an 'Entails' that is not negated. A 'Same', the
+consequent of an 'Entails', a negated 'Entails', a substitution, or an
+equality class that reads the node or a term that contains it would change
+its answer.
+
+A step also needs a representative with an accepted term. A structural
+derivation is an accepted term only when no constraint at or below the
+representative can reject it, and 'minimize' has no solver to decide a
+constraint. So the schedule skips a step whose representative has a
+constraint at or below it. 'Data.CFTA.Refinement.Prune.prune' removes the
+semantic part of each guard that it decides, so after pruning this skips the
+representatives with an undecided guard, a 'Same', or an equality class at or
+below them.
+
 The original automaton is retained if dependencies become unsafe, a
-representative loses its finite structural derivations, the last finite root
+representative loses its finite structural derivations, an installed root
+representative has no finite unconstrained derivation, the last finite root
 derivation is lost, or a guard would inspect a recursive node. Unproductive
 transitions are removed after a successful schedule.
 -}
@@ -289,23 +312,39 @@ minimize automaton (Similarity original related) = do
                 , transition <- transitions
                 , child <- FTA.transitionChildren transition
                 ]
-        applyStep (table', parents, steps) pair
-            | source == destination && removed == retained = (Map.adjust nub source table', parents, steps)
+        applyStep (table', parents, steps, roots) pair
+            | source == destination && removed == retained = (Map.adjust nub source table', parents, steps, roots)
             -- A copy reaches every alternative of the destination, and only the
             -- representative is similar to the removed transition.
-            | source /= destination && Map.findWithDefault [] destination table /= [retained] = (table', parents, steps)
-            | removed `notElem` Map.findWithDefault [] source table' = (table', parents, steps)
-            | retained `notElem` Map.findWithDefault [] destination table' = (table', parents, steps)
+            | source /= destination && Map.findWithDefault [] destination table /= [retained] = (table', parents, steps, roots)
+            | removed `notElem` Map.findWithDefault [] source table' = (table', parents, steps, roots)
+            | retained `notElem` Map.findWithDefault [] destination table' = (table', parents, steps, roots)
+            -- The step changes the terms of the source in every context, so
+            -- each guard that reads the source must keep its answer.
+            | not $ keepsGuards table' source = (table', parents, steps, roots)
+            -- Without a solver, a representative has an accepted term only when
+            -- no constraint at or below it can reject its structural terms.
+            | not $ unconstrainedBelow table' retained = (table', parents, steps, roots)
             | otherwise =
-                ( Map.adjust (filter (/= removed)) source $ foldl' (flip $ Map.adjust (copyAlternatives redirect)) table' affected
-                , Map.insertWith Set.union destination (Set.fromList affected) parents
+                ( Map.adjust replaceRemoved source $ foldl' (flip $ Map.adjust (copyAlternatives redirect)) table' affected
+                , updatedParents
                 , steps :|> redirect
+                , if source == initial then Set.insert (chosenRepresentative pair) roots else roots
                 )
           where
             redirect@(source, destination) = redirectFor pair
             removed = current Map.! replacedSupertype pair
             retained = current Map.! chosenRepresentative pair
             affected = Set.toList $ Map.findWithDefault Set.empty source parents
+            -- Installing a root representative adds its child links to the index.
+            updatedParents =
+                foldl'
+                    (\known child -> Map.insertWith Set.union child (Set.singleton source) known)
+                    (Map.insertWith Set.union destination (Set.fromList affected) parents)
+                    (if source == initial then FTA.transitionChildren retained else [])
+            replaceRemoved transitions =
+                let remaining = filter (/= removed) transitions
+                 in if source == initial then nub (retained : remaining) else remaining
         -- This equals @nub (transitions <> map redirect transitions)@ when the
         -- transitions are distinct. Each row of the view is, because a node
         -- keeps each edge once, and each step keeps its rows distinct.
@@ -318,15 +357,28 @@ minimize automaton (Similarity original related) = do
                     , let copy = redirectTransition (Map.singleton source destination) transition
                     , copy `notElem` transitions
                     ]
-        (rewritten, _, applied) = foldl' applyStep (table, parentsOf, Empty) resolved
+        (rewritten, _, applied, rootRepresentatives) = foldl' applyStep (table, parentsOf, Empty, Set.empty) resolved
         productive = productiveStates rewritten
         finiteTransition = all (`Set.member` productive) . FTA.transitionChildren
+        pruned = fmap (filter finiteTransition) rewritten
+        unconstrainedProductive = productiveStates $ fmap (filter $ (== noConstraint) . FTA.transitionConstraint) pruned
         hasFiniteDerivation chosen =
             any
                 ( \transition ->
                     transition `elem` Map.findWithDefault [] (addressNode chosen) rewritten && finiteTransition transition
                 )
-                (foldl' (flip copyAlternatives) [current Map.! chosen] applied)
+                (representativeCopies chosen)
+        representativeCopies chosen = foldl' (flip copyAlternatives) [current Map.! chosen] applied
+        -- Recheck the complete schedule: a later step can change the children
+        -- or remove a transition installed at the root by an earlier step.
+        hasAcceptedRootRepresentative chosen =
+            any
+                ( \transition ->
+                    transition `elem` Map.findWithDefault [] initial pruned
+                        && FTA.transitionConstraint transition == noConstraint
+                        && all (`Set.member` unconstrainedProductive) (FTA.transitionChildren transition)
+                )
+                (representativeCopies chosen)
         representatives = Set.toAscList $ Set.fromList $ map chosenRepresentative resolved
         losesFinal = Set.member initial (productiveStates table) && Set.notMember initial productive
         -- A state depends on the states of its redirects and of its transitions' children.
@@ -349,9 +401,12 @@ minimize automaton (Similarity original related) = do
                         Graph.dfs
                             dependencies
                             [start | child <- FTA.transitionChildren $ current Map.! chosenRepresentative pair, Just start <- [vertexOf child]]
-    if any dependsOnRemovedTarget resolved || not (all hasFiniteDerivation representatives) || losesFinal
+    if any dependsOnRemovedTarget resolved
+        || not (all hasFiniteDerivation representatives)
+        || not (all hasAcceptedRootRepresentative rootRepresentatives)
+        || losesFinal
         then Right automaton
-        else case FTA.mkFTA initial (Map.toList $ fmap (filter finiteTransition) rewritten) of
+        else case FTA.mkFTA initial (Map.toList pruned) of
             Left err -> Left $ InvalidMinimizedAutomaton $ fromViewError err
             Right minimizedView ->
                 let minimized = fromFTA minimizedView
@@ -384,6 +439,101 @@ minimize automaton (Similarity original related) = do
         transition{FTA.transitionChildren = map redirect $ FTA.transitionChildren transition}
       where
         redirect state = Map.findWithDefault state state redirects
+
+    -- Whether a transition and every transition below it have no constraint.
+    unconstrainedBelow :: Map.Map InternedState [ViewTransition] -> ViewTransition -> Bool
+    unconstrainedBelow rows transition =
+        all ((== noConstraint) . FTA.transitionConstraint) $
+            transition : concat [Map.findWithDefault [] state rows | state <- Set.toList below]
+      where
+        below = grow $ Set.fromList $ FTA.transitionChildren transition
+        grow known =
+            let next =
+                    known
+                        <> Set.fromList
+                            [child | state <- Set.toList known, edge <- Map.findWithDefault [] state rows, child <- FTA.transitionChildren edge]
+             in if next == known then known else grow next
+
+    -- Whether each guard keeps its answer when the terms of the state change
+    -- to terms of a representative with a stronger refinement. A guard can read
+    -- the state only at the end of a path, and only where 'guardReads' calls
+    -- the read monotone. A structural read must not contain the state.
+    keepsGuards :: Map.Map InternedState [ViewTransition] -> InternedState -> Bool
+    keepsGuards rows state = all (all keeps) $ Map.elems rows
+      where
+        -- The states whose terms can contain a term of the state.
+        containing = grow $ Set.singleton state
+          where
+            grow known =
+                let next = known <> Map.keysSet (Map.filter (any $ any (`Set.member` known) . FTA.transitionChildren) rows)
+                 in if next == known then known else grow next
+        keeps transition = all readable $ Set.toList $ constraintPaths constraint
+          where
+            constraint = FTA.transitionConstraint transition
+            GuardReads{monotoneReads, sensitiveReads, structuralReads} = guardReads $ constraintGuard constraint
+            structural = structuralReads <> constraintPaths constraint{constraintGuard = Top}
+            readable target =
+                let levels = statesAlong transition target
+                    end = if null levels then Set.empty else last levels
+                    subterm = if null levels then Set.fromList (FTA.transitionChildren transition) else end
+                 in Set.notMember state (Set.unions $ drop 1 $ reverse levels)
+                        && ( Set.notMember state end
+                                || ( Set.member target monotoneReads
+                                        && Set.notMember target sensitiveReads
+                                        && Set.notMember target structural
+                                   )
+                           )
+                        && (Set.notMember target structural || Set.disjoint subterm containing)
+        -- The states at each nonempty prefix of a path below a transition.
+        statesAlong transition target = case unPath target of
+            [] -> []
+            ChildIndex index : rest -> scanl descend (Set.fromList $ toList $ FTA.transitionChildren transition !? index) rest
+        descend states (ChildIndex index) =
+            Set.fromList
+                [ child
+                | known <- Set.toList states
+                , edge <- Map.findWithDefault [] known rows
+                , Just child <- [FTA.transitionChildren edge !? index]
+                ]
+
+{- | The paths of a guard by how a stronger refinement of the term at a path
+changes the answer.
+
+'Satisfies' and 'Holds' assume the refinements of their terms, and their
+negations ask the refinements to refute the formula, so a stronger refinement
+keeps both answers: these reads are monotone. The antecedent of a positive
+'Entails' is monotone too. Its consequent is a conclusion, and a negated
+'Entails' negates the answer, so these reads are sensitive. 'Same' compares
+whole terms, and a substitution renames the terms below it, so their reads
+are structural.
+-}
+guardReads :: Guard -> GuardReads
+guardReads = go True
+  where
+    go positive guard = case guard of
+        Satisfies target _ -> mempty{monotoneReads = Set.singleton target}
+        Holds targets _ -> mempty{monotoneReads = Set.fromList targets}
+        Entails antecedent consequent
+            | positive -> mempty{monotoneReads = Set.singleton antecedent, sensitiveReads = Set.singleton consequent}
+            | otherwise -> mempty{sensitiveReads = Set.fromList [antecedent, consequent]}
+        Not nested -> go (not positive) nested
+        And guards -> foldMap (go positive) guards
+        Or guards -> foldMap (go positive) guards
+        _ -> mempty{structuralReads = guardPaths guard}
+
+-- | The paths of a guard by the kind of read, as 'guardReads' gives them.
+data GuardReads = GuardReads
+    { monotoneReads :: Set.Set Path
+    , sensitiveReads :: Set.Set Path
+    , structuralReads :: Set.Set Path
+    }
+
+instance Semigroup GuardReads where
+    GuardReads monotone sensitive structural <> GuardReads monotone' sensitive' structural' =
+        GuardReads (monotone <> monotone') (sensitive <> sensitive') (structural <> structural')
+
+instance Monoid GuardReads where
+    mempty = GuardReads Set.empty Set.empty Set.empty
 
 -- | Every unordered pair of distinct list elements, preserving first-seen order.
 unorderedPairs :: [a] -> [(a, a)]

@@ -37,8 +37,11 @@ module Data.CFTA.Gen.Internal.Static (
     userTerm,
     applyStatic,
     frequencyStatic,
+    frequencyStaticWithMasses,
+    pairStaticWithMasses,
     mapStatic,
     atomicStatic,
+    resizedStatic,
     labelStatic,
     labelStaticMatching,
     payStatic,
@@ -80,6 +83,7 @@ import Data.CFTA.Index (
     ClassRank (..),
     Rank (..),
     RankOffset (..),
+    Size,
     Weight,
     everyRank,
     hasRank,
@@ -101,7 +105,15 @@ import Data.CFTA.Ranked.Internal.Decoder (
     sharedChoiceBound,
  )
 import Data.CFTA.Ranked.Internal.Sampler
-import Data.CFTA.Ranked.Internal.Size (MinimumSize (..), SizeIndex (minimumMemberSize), payIndex, sizeIndex)
+import Data.CFTA.Ranked.Internal.Shrink (planMemberSize)
+import Data.CFTA.Ranked.Internal.Size (
+    MinimumSize (..),
+    SizeIndex (minimumMemberSize, sizeClassCounts),
+    countAtSize,
+    mapIndex,
+    payIndex,
+    sizeIndex,
+ )
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -214,8 +226,9 @@ data TermView symbol
     | -- | The children under a node label.
       LabelledView [Term (Label symbol)]
 
-{- | The ranks or positions of a view, for a language whose terms have no
-private label at their root: each view of such a term is the term itself.
+{- | The ranks or positions of a view, for a language whose term roots are
+kept whole by both constructor closing and function-side application.
+Each view of such a term retains the term itself.
 -}
 leafRanks :: (Term (Label symbol) -> [rank]) -> TermView symbol -> [rank]
 leafRanks ranksOfTerm view = case view of
@@ -371,7 +384,8 @@ indexedStaticWithLabels label indexed =
 
 Its term is a private 'Placeholder', which a theory fills when it compiles. The
 support is one leaf with the given symbol, which describes the values that
-can fill the placeholder.
+can fill the placeholder. The placeholder is not a source choice, so it has
+size zero. The theory gives the size of the values that fill it.
 -}
 holeStatic :: (Hashable symbol, Typeable symbol) => symbol -> a -> Static symbol a
 holeStatic summary value =
@@ -393,7 +407,7 @@ holeStatic summary value =
             )
             (const value)
             (uniformSampler 1 $ const value)
-            (PlanSelect 1 $ const value)
+            (PlanSized [SizeClass 0 1 (const value) (const value)])
         )
         False
         (Inspection Nothing $ Node [Edge (plainSymbol $ Label summary) []])
@@ -409,23 +423,24 @@ outcomes. To rank a term, the language ranks the outcome structurally, then
 gives the symbols at the placeholder leaves of the outcome, in order, to the
 given function, which gives the rank of the point and the point. The rewrite
 of the outcome for the point must then give the term, which checks every
-symbol of the term.
+symbol of the term. Every point has the given size.
 -}
 pointsStatic ::
     (Hashable symbol, Typeable symbol) =>
+    Size ->
     (p -> Term (Label symbol) -> Term (Label symbol)) ->
     ([symbol] -> Maybe (Rank, p)) ->
     Indexed p ->
     Static symbol (p -> a) ->
     Static symbol a
-pointsStatic rewrite rankPoint pointSource functions =
+pointsStatic size rewrite rankPoint pointSource functions =
     applied
         { staticSupport = staticSupport functions
         , staticOutcomes = (staticOutcomes applied){outcomeSelect = select, outcomeRanks = ranks}
         , staticInspection = staticInspection functions
         }
   where
-    applied = applyStatic functions $ pointChoice pointSource
+    applied = applyStatic functions $ resizedStatic size $ indexedStatic pointSource
     select index = do
         outcome <- outcomeSelect (staticOutcomes applied) index
         let point = indexedSelect pointSource $ snd $ splitRank (indexedCardinality pointSource) index
@@ -452,24 +467,6 @@ pointsStatic rewrite rankPoint pointSource functions =
         | otherwise = Nothing
     holes (Term.Node Placeholder []) (Term.Node (Label symbol) []) = Just [symbol]
     holes (Term.Node _ children) (Term.Node _ filled) = holesIn children filled
-
-{- | The choice of one point of an indexed source, of size zero. The point
-gives the values of placeholder leaves, and each leaf pays for itself, so the
-choice adds no size. The ranks and the decoder are those of 'indexedStatic'.
--}
-pointChoice :: (Hashable symbol, Typeable symbol) => Indexed p -> Static symbol p
-pointChoice source =
-    static{staticOutcomes = (staticOutcomes static){outcomePlan = plan, outcomeSizeIndex = sizeIndex plan}}
-  where
-    static = indexedStatic source
-    plan =
-        PlanSized
-            [ SizeClass
-                0
-                (indexedCardinality source)
-                (\(ClassRank position) -> indexedSelect source $ Rank position)
-                (indexedSelect source . Rank . toInteger)
-            ]
 
 {- | Retain a shared ranked term compiler and its exact equality support.
 
@@ -622,6 +619,98 @@ applyStatic functions values =
                 (pairRank valueCardinality)
                 (outcomeRanks functionOutcomes functionView)
                 (outcomeRanks valueOutcomes (WholeTerm argument))
+
+{- | 'frequencyStatic' for alternatives that come with their weight in each
+size class, on the scale of member counts, when it is not their member count.
+
+Inside a size class these weights choose the alternative, and the alternative
+keeps its own weights inside it. A weight of the result keeps the convention
+of 'staticSampling': the weights of a size class add up to its member count.
+'Nothing' is the member count of the alternative.
+-}
+frequencyStaticWithMasses ::
+    (Hashable symbol, Typeable symbol) =>
+    [(Weight, Maybe (Size -> Rational), Static symbol a)] -> Static symbol a
+frequencyStaticWithMasses alternatives =
+    merged{staticOutcomes = (staticOutcomes merged){outcomeSizeSampling = Just (sampling, weightAt)}}
+  where
+    merged = frequencyStatic [(weight, alternative) | (weight, _, alternative) <- alternatives]
+    indexOf = outcomeSizeIndex . staticOutcomes
+    weighted =
+        [ (alternative, fromMaybe (toRational . countAtSize (indexOf alternative)) masses)
+        | (_, masses, alternative) <- alternatives
+        ]
+    sampling =
+        choiceMassSampleIndex
+            [(indexOf alternative, massAt, fst $ staticSampling alternative) | (alternative, massAt) <- weighted]
+    -- The count of the size class, times the share of the alternative in the
+    -- class, times the share of the member in the alternative.
+    weightAt rank = do
+        let size = planMemberSize (outcomePlan $ staticOutcomes merged) rank
+            (offset, alternative, massAt) = branchOf rank
+            total = sum [mass size | (_, mass) <- weighted]
+            inside = toRational $ countAtSize (indexOf alternative) size
+        memberWeight <- maybe (Right 1) ($ rebaseRank offset rank) $ snd $ staticSampling alternative
+        pure $ toRational (countAtSize (indexOf merged) size) * massAt size / total * memberWeight / inside
+    branchOf rank =
+        last
+            [ (offset, alternative, massAt)
+            | (offset, (alternative, massAt)) <- zip offsets weighted
+            , let RankOffset first = offset
+            , let Rank value = rank
+            , first <= value
+            ]
+    offsets = map fst $ offsetAlternatives [(1, alternative) | (alternative, _) <- weighted]
+
+{- | Give a pair of two languages the sampler and the weights that follow the
+weights of its parts in each size class, when a part has weights of its own.
+
+The pair has the ranks of a join over an operation of size zero: a rank pairs
+a rank of the left with a rank of the right, the right as the less significant
+part, and the size of a member is the sum of the sizes of its parts. Inside a
+size class, the weights of the parts choose the split of the size, and each
+part keeps its own weights inside its size class. A weight of the result keeps
+the convention of 'staticSampling'. 'Nothing' is the member count of a part.
+-}
+pairStaticWithMasses ::
+    Maybe (Size -> Rational) ->
+    Static symbol left ->
+    Maybe (Size -> Rational) ->
+    Static symbol right ->
+    Static symbol (left, right) ->
+    Static symbol (left, right)
+pairStaticWithMasses leftMasses left rightMasses right pair =
+    pair{staticOutcomes = (staticOutcomes pair){outcomeSizeSampling = Just (sampling, weightAt)}}
+  where
+    indexOf = outcomeSizeIndex . staticOutcomes
+    massOf masses part = fromMaybe (toRational . countAtSize (indexOf part)) masses
+    leftMass = massOf leftMasses left
+    rightMass = massOf rightMasses right
+    sampling =
+        productMassSampleIndex
+            (mapIndex (,) $ indexOf left)
+            leftMass
+            (mapSampleIndex (,) $ fst $ staticSampling left)
+            (indexOf right)
+            rightMass
+            (fst $ staticSampling right)
+    -- The count of the size class, times the share of the split of the size in
+    -- the class, times the share of each part's member in its own size class.
+    weightAt rank = do
+        let (leftRank, rightRank) = splitRank (outcomeCardinality $ staticOutcomes right) rank
+            leftSize = sizeOf left leftRank
+            rightSize = sizeOf right rightRank
+        leftWeight <- maybe (Right 1) ($ leftRank) $ snd $ staticSampling left
+        rightWeight <- maybe (Right 1) ($ rightRank) $ snd $ staticSampling right
+        let size = leftSize + rightSize
+            splits = sum [leftMass split * rightMass (size - split) | (split, _) <- sizeClassCounts (indexOf left), split <= size]
+            share part partSize weight = weight / toRational (countAtSize (indexOf part) partSize)
+        pure $
+            toRational (countAtSize (indexOf pair) size)
+                * (leftMass leftSize * rightMass rightSize / splits)
+                * share left leftSize leftWeight
+                * share right rightSize rightWeight
+    sizeOf part = planMemberSize $ outcomePlan $ staticOutcomes part
 
 -- | Concatenate weighted alternatives with stable rank offsets.
 frequencyStatic ::
@@ -799,6 +888,32 @@ atomicStatic static =
         case compiledWeightedSampler outcomes of
             Just sampler -> sampler
             Nothing -> outcomeSampler outcomes
+
+{- | Give every outcome of a finite language one size.
+
+A language that is rebuilt from the terms of its members counts the source
+choices of the rebuilt terms, which need not be the choices that made the
+members. 'Data.CFTA.Gen.Refinement.Internal.Compile' rebuilds a member when a
+guard reads it, and gives the rebuilt member the size that it had.
+-}
+resizedStatic :: Size -> Static symbol a -> Static symbol a
+resizedStatic size static =
+    static
+        { staticOutcomes =
+            mkOutcomeIndex
+                count
+                (outcomeUniformMass outcomes)
+                (outcomeSelect outcomes)
+                (outcomeRanks outcomes)
+                (outcomeValueAt outcomes)
+                (outcomeSampler outcomes)
+                ( PlanSized
+                    [SizeClass size count (\(ClassRank rank) -> outcomeValueAt outcomes $ Rank rank) (outcomeValueAt outcomes . toEnum)]
+                )
+        }
+  where
+    outcomes = staticOutcomes static
+    count = outcomeCardinality outcomes
 
 {- | Close an applicative or grouped child layer with one user-facing node
 label.

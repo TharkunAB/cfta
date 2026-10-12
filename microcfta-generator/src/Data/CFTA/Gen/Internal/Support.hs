@@ -89,6 +89,7 @@ relabel rename root = State.evalState (visit Map.empty root) Map.empty
                                 )
                                 Map.empty
                     Core.InternedNode payload -> Node <$> traverse (copyEdge environment) (Core.internedNodeEdges payload)
+                    Core.InternedUnion payload -> Core.createUnion <$> traverse (visit environment) (Core.internedUnionMembers payload)
                 State.modify' $ Map.insert node copied
                 pure copied
     copyEdge environment edge = do
@@ -225,8 +226,15 @@ labelSupportWith original symbol support@(Node edges)
     , JoinN <- original (edgeSymbol edge) =
         Node [mkEdge symbol (edgeChildren edge) (edgeConstraint edge)]
     | isPureSupport original support = Node [Edge symbol []]
-    | Just arguments <- applicationSupportChildren original support =
-        Node [Edge symbol (toList arguments)]
+    | Just alternatives <- applicationSupportChildren original support =
+        Node [Edge symbol (toList arguments) | arguments <- alternatives]
+    | _ : _ : _ <- edges
+    , any (isClosingEdge original) edges =
+        Node
+            [ labelled
+            | edge <- edges
+            , labelled <- rootEdges $ labelSupportWith original symbol $ Node [edge]
+            ]
     | otherwise = Node [Edge symbol [support]]
 labelSupportWith original symbol support@(Mu _) = labelSupportWith original symbol $ unfoldOuterRec support
 labelSupportWith _ symbol support = Node [Edge symbol [support]]
@@ -236,24 +244,43 @@ rootEdges :: (Typeable other) => Node other -> [Edge other]
 rootEdges (Node edges) = edges
 rootEdges _ = []
 
--- | Recognize the children of one private applicative support spine.
+-- | Recognize roots whose private scaffolding the term callback removes.
+isClosingEdge :: (other -> Label symbol) -> Edge other -> Bool
+isClosingEdge original edge = case original (edgeSymbol edge) of
+    Pure -> True
+    Apply -> True
+    Choice _ -> True
+    JoinN -> True
+    _ -> False
+
+-- | Recognize the child sequences of one private applicative support spine.
 applicationSupportChildren ::
-    (Typeable other) =>
-    (other -> Label symbol) -> Node other -> Maybe (Seq (Node other))
+    (Hashable other, Typeable other) =>
+    (other -> Label symbol) -> Node other -> Maybe [Seq (Node other)]
 applicationSupportChildren original (Node [edge])
     | Apply <- original (edgeSymbol edge)
     , unconstrainedEdge edge
     , [functions, argument] <- edgeChildren edge =
-        Just $ applicationLeftSupport original functions :|> argument
+        Just [arguments :|> argument | arguments <- applicationLeftSupport original functions]
 applicationSupportChildren _ _ = Nothing
 
--- | Flatten the already-applied left portion of a support spine.
+-- | Flatten each left-spine alternative without mixing its children with another.
 applicationLeftSupport ::
-    (Typeable other) => (other -> Label symbol) -> Node other -> Seq (Node other)
+    (Hashable other, Typeable other) => (other -> Label symbol) -> Node other -> [Seq (Node other)]
 applicationLeftSupport original support
-    | isPureSupport original support = Empty
-    | Just arguments <- applicationSupportChildren original support = arguments
-    | otherwise = Sequence.singleton support
+    | isPureSupport original support = [Empty]
+    | Just alternatives <- applicationSupportChildren original support = alternatives
+    | Node edges@(_ : _ : _) <- support
+    , any (isSpineEdge original) edges =
+        concatMap (applicationLeftSupport original . Node . pure) edges
+    | otherwise = [Sequence.singleton support]
+
+-- | Recognize roots that an application flattens on its function side.
+isSpineEdge :: (other -> Label symbol) -> Edge other -> Bool
+isSpineEdge original edge = case original (edgeSymbol edge) of
+    Pure -> True
+    Apply -> True
+    _ -> False
 
 -- | Whether a support node is the nullary private applicative identity.
 isPureSupport :: (Typeable other) => (other -> Label symbol) -> Node other -> Bool

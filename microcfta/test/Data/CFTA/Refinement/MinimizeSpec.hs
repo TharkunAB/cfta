@@ -2,13 +2,16 @@
 
 module Data.CFTA.Refinement.MinimizeSpec (spec) where
 
+import Control.Monad ((>=>))
+import Data.CFTA.Formula (Sort (IntSort))
 import Data.CFTA.Refinement (
     Automaton,
     Entailment,
-    Guard (Satisfies),
+    Guard (Entails, Not, Same, Satisfies, Substitute),
     MinimizeError (StaleSimilarity),
     Node (Mu, Node),
     SimilarityPair (SimilarityPair),
+    Substitution (Substitution),
     Subtyping (..),
     Symbol (RefinedSymbol),
     Transition,
@@ -32,7 +35,7 @@ import Data.CFTA.Refinement (
     transitionSymbol,
     pattern Transition,
  )
-import Data.CFTA.Refinement.Expression (refinementFormula, true, (./=), (.==), (.>=))
+import Data.CFTA.Refinement.Expression (false, refinementFormula, true, (./=), (.==), (.>=))
 import Data.CFTA.Refinement.Guard (requires)
 import qualified Data.CFTA.Refinement.Guard as Guard
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
@@ -118,19 +121,33 @@ spec =
                     accepts latticeEntailment result (divide 0 0) >>= (`shouldBe` No)
                     accepts latticeEntailment result (divide 0 1) >>= (`shouldBe` Yes)
 
-        it "does not strand the root during minimization" $
+        it "installs the chosen representative when removing the only root transition" $
             withZ3 declarations $ \solver -> do
                 inferred <- similarity (atomSubtyping solver) finalStateSupertype
                 case inferred of
                     Left err -> expectationFailure $ show err
-                    Right related -> minimize finalStateSupertype related `shouldBe` Right finalStateSupertype
+                    Right related -> minimize finalStateSupertype related `shouldBe` Right naturalNode
 
         it "can remove a root transition when another root derivation remains" $
             withZ3 declarations $ \solver ->
                 checkMinimization (atomSubtyping solver) finalStateWithAlternative $ \reduced -> do
-                    reduced `shouldBe` Node [otherAtom]
+                    reduced `shouldBe` Node [naturalAtom, otherAtom]
                     denotationAtMost solver 0 reduced
-                        >>= (`shouldBe` Right [Term.Node (RefinedSymbol "other" true) []])
+                        >>= (`shouldBe` Right [Term.Node (transitionLabel naturalAtom) [], Term.Node (transitionLabel otherAtom) []])
+
+        it "keeps an accepted root representative when the other root alternative rejects every term" $
+            withZ3 declarations $ \solver -> do
+                denotationAtMost solver 1 rootWithRejectedAlternative
+                    >>= (`shouldBe` Right [Term.Node (transitionLabel unknownAtom) []])
+                checkMinimization (atomSubtyping solver) rootWithRejectedAlternative $
+                    denotationAtMost solver 1
+                        >=> (`shouldBe` Right [Term.Node (transitionLabel naturalAtom) []])
+
+        it "keeps each root representative after multiple scheduled removals" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (twoClassSubtyping solver) multipleRootRepresentatives $ \reduced -> do
+                    map transitionSymbol (nodeEdges reduced) `shouldMatchList` ["pair", "specific-a", "specific-b"]
+                    denotationAtMost solver 1 reduced >>= (\terms -> fmap length terms `shouldBe` Right 3)
 
         it "allows multiple representatives for one target and substitutes repeated nodes together" $
             withZ3 declarations $ \solver ->
@@ -188,6 +205,34 @@ spec =
         it "retains a batch whose copied guard would inspect a recursive node" $
             withZ3 declarations $ \solver ->
                 checkRetainedBatch solver (atomSubtyping solver) cyclicGuardRepresentative 2
+
+        it "retains a batch whose redirect would make children equal under a disequality" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (atomSubtyping solver) disequalChildren 1
+
+        it "retains a batch whose redirect would strengthen the consequent of an entailment" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (atomSubtyping solver) entailedChild 2
+
+        it "retains a batch whose representative has a guard that rejects its terms" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (atomSubtyping solver) rejectedRepresentative 1
+
+        it "keeps the supertype when pruning leaves the representative's guard undecided" $
+            -- Two compound actuals with the same root observation make the
+            -- substitution ambiguous, so pruning keeps the guard as it is.
+            withZ3 (declarations <> [("app", IntSort)]) $ \solver -> do
+                denotationAtMost solver 4 undecidedRepresentative >>= (\terms -> fmap length terms `shouldBe` Right 1)
+                reduced <- reduce solver (atomSubtyping solver) undecidedRepresentative
+                case reduced of
+                    Left err -> expectationFailure $ show err
+                    Right result -> denotationAtMost solver 4 result >>= (\terms -> fmap length terms `shouldBe` Right 1)
+
+        it "applies a redirect that a guard reads only through a refinement it assumes" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (atomSubtyping solver) assumedChild $ \reduced -> do
+                    map edgeChildren (nodeEdges reduced) `shouldMatchList` [[naturalNode], [naturalNode]]
+                    denotationAtMost solver 1 reduced >>= (\terms -> fmap length terms `shouldBe` Right 2)
 
 -- | Inspect a successful schedule while reporting inference failures.
 checkMinimization :: Subtyping -> Automaton -> (Automaton -> IO ()) -> IO ()
@@ -297,6 +342,19 @@ finalStateSupertype = Node [wrap "unknown" [naturalNode]]
 finalStateWithAlternative :: Automaton
 finalStateWithAlternative = Node [wrap "unknown" [naturalNode], otherAtom]
 
+-- | A structurally productive alternative rejects all terms after root removal.
+rootWithRejectedAlternative :: Automaton
+rootWithRejectedAlternative =
+    Node
+        [ unknownAtom
+        , Transition "f" true [naturalNode] $ semanticConstraint $ Satisfies (path []) false
+        ]
+
+-- | Two root alternatives use different representatives in the same schedule.
+multipleRootRepresentatives :: Automaton
+multipleRootRepresentatives =
+    Node [plain "unknown-a", plain "unknown-b", wrap "pair" [specificANode, specificBNode]]
+
 -- | Two removed transitions share a node but use different representatives.
 multipleRepresentatives :: Automaton
 multipleRepresentatives =
@@ -337,6 +395,66 @@ cyclicGuardRepresentative =
     recursiveNatural = Mu $ \self -> Node [Transition "natural" natural [zeroOrLoop self] noConstraint]
     zeroOrLoop self = Node [plain "zero", wrap "loop" [self]]
     natural = refinementFormula (\v -> v .>= 0)
+
+-- | The redirect of the unknown child would make both children natural.
+disequalChildren :: Automaton
+disequalChildren =
+    Node
+        [ Transition "pair" true [naturalNode, Node [unknownAtom]]
+            $ semanticConstraint
+            $ Not
+            $ Same (path [0]) (path [1])
+        ]
+
+-- | The redirect of the unknown child would make the entailment from the other child fail.
+entailedChild :: Automaton
+entailedChild =
+    Node
+        [ Transition "implied" true [Node [otherAtom], Node [unknownAtom]]
+            $ semanticConstraint
+            $ Entails (path [0]) (path [1])
+        , wrap "use-natural" [naturalNode]
+        ]
+
+-- | The guard assumes the refinement of the child, so the natural child also satisfies it.
+assumedChild :: Automaton
+assumedChild =
+    Node
+        [ Transition "checked" true [Node [unknownAtom]] $ semanticConstraint $ Satisfies (path [0]) true
+        , wrap "use-natural" [naturalNode]
+        ]
+
+-- | The natural representative rejects every term, so only the unknown child gives a term.
+rejectedRepresentative :: Automaton
+rejectedRepresentative =
+    Node
+        [ wrap
+            "f"
+            [ Node
+                [Transition "natural" (refinementFormula (\v -> v .>= 0)) [] $ semanticConstraint $ Satisfies (path []) false]
+            ]
+        , wrap "f" [Node [unknownAtom]]
+        ]
+
+-- | The natural representative rejects every term through a substitution that pruning cannot decide.
+undecidedRepresentative :: Automaton
+undecidedRepresentative =
+    Node
+        [ wrap
+            "f"
+            [ Node
+                [Transition "natural" (refinementFormula (\v -> v .>= 0)) [compound "u", compound "v", leaf "x", leaf "y"] rejecting]
+            ]
+        , wrap "f" [Node [unknownAtom]]
+        ]
+  where
+    compound symbol = Node [wrap "app" [leaf symbol]]
+    leaf symbol = Node [plain symbol]
+    rejecting =
+        semanticConstraint $
+            Substitute
+                [Substitution (path [0]) (path [2]), Substitution (path [1]) (path [3])]
+                (Satisfies (path []) false)
 
 -- | Three program nodes ordered exact-zero <: natural <: unknown.
 transitiveSimilarAtoms :: Automaton

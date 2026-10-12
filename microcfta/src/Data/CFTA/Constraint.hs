@@ -84,7 +84,8 @@ data Guard
       Satisfies !Path !Formula
     | {- | Require a formula about the terms at the paths. The formula names the
       term at the path with index @i@ by 'contractTermName' @i@, and each term's
-      refinement is assumed for its name.
+      refinement is assumed for its name. Two indexes with the same path name
+      the same term.
       -}
       Holds ![Path] !Formula
     | -- | Apply actual-for-formal substitutions before checking a guard.
@@ -97,7 +98,7 @@ data Guard
       And ![Guard]
     | -- | Logical disjunction.
       Or ![Guard]
-    deriving (Eq, Show, Generic)
+    deriving (Eq, Ord, Show, Generic)
 
 instance Hashable Guard
 
@@ -262,7 +263,7 @@ data Substitution = Substitution
     { substitutionActual :: !Path
     , substitutionFormal :: !Path
     }
-    deriving (Eq, Show, Generic)
+    deriving (Eq, Ord, Show, Generic)
 
 instance Hashable Substitution
 
@@ -306,13 +307,13 @@ constraintPaths :: Constraint -> Set Path
 constraintPaths Constraint{constraintEqualities, constraintGuard} =
     maybe Set.empty Set.unions (equalityClasses constraintEqualities) <> guardPaths constraintGuard
 
--- | Conjoin two complete guards.
+-- | Conjoin guards with one sorted list of distinct outer conjuncts.
 combineGuards :: Guard -> Guard -> Guard
-combineGuards Top right = right
-combineGuards left Top = left
-combineGuards left right
-    | left == right = left
-    | otherwise = And [left, right]
+combineGuards left right = conjoin $ Set.toAscList $ Set.fromList $ conjuncts left <> conjuncts right
+  where
+    conjuncts Top = []
+    conjuncts (And guards) = concatMap conjuncts guards
+    conjuncts guard = [guard]
 
 -- | Split independently reducible semantic conjuncts from syntactic equality.
 splitGuard :: Guard -> (Guard, Guard)

@@ -33,10 +33,12 @@ import Data.CFTA.Equality.Constraint (EqConstraints (EmptyConstraints))
 import Data.CFTA.Equality.Operations (reduceEdgeIntersection)
 import Data.CFTA.Interned (
     InternedMu (internedMuBody, internedMuId),
+    InternedUnion (internedUnionMembers),
     Node (..),
     NodeId (..),
     RecNodeId (RecInt),
     createMu,
+    createUnion,
     edgeChildren,
     edgeConstraint,
     edgeSymbol,
@@ -125,6 +127,7 @@ pruneNode entailment node = do
         Nothing -> do
             pruned <- case node of
                 InternedMu mu -> pruneMu entailment node mu
+                InternedUnion group -> createUnion <$> traverse (pruneNode entailment) (internedUnionMembers group)
                 _ -> Node . concat <$> traverse (pruneEdge entailment) (nodeEdges node)
             modify' $ \build -> build{prunedNodes = IntMap.insert ident pruned (prunedNodes build)}
             pure pruned
@@ -174,12 +177,16 @@ pruneSemantic entailment edge
 
     check retained [] = pure $ toList retained
     check retained ((specialized, resolved) : rest) = do
+        -- Complete identities can change the ambient names used by nested scopes.
         verdict <-
-            liftIO $
-                evaluateGuardWithShape
-                    entailment
-                    (`Map.lookup` resolved)
-                    semanticGuard
+            if hasAmbiguousActuals resolved
+                then pure Unknown
+                else
+                    liftIO $
+                        evaluateGuardWithShape
+                            entailment
+                            (`Map.lookup` resolved)
+                            semanticGuard
         case verdict of
             Yes -> check (retained :|> setGuard residualGuard specialized) rest
             No -> check retained rest
@@ -211,6 +218,11 @@ readsThroughRecursion plan children =
         ]
   where
     reaches (Rec _) _ = True
+    reaches (InternedUnion group) childPlan = any (`reaches` childPlan) (internedUnionMembers group)
+    -- An open binder can contain an enclosing reference in its outer union.
+    -- Inspect its body before nodeEdges can unfold that unresolved reference.
+    reaches node@(InternedMu mu) childPlan =
+        not (null $ freeVars node) && reaches (internedMuBody mu) childPlan
     -- A node without free references has none below it.
     reaches node childPlan =
         not (null $ freeVars node) && any (readsThroughRecursion childPlan . edgeChildren) (nodeEdges node)

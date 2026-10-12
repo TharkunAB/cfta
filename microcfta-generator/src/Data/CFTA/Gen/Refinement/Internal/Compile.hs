@@ -45,20 +45,29 @@ import Unsafe.Coerce (unsafeCoerce)
 
 import Data.CFTA.Equality.Constraint (EqConstraints (EmptyConstraints))
 import Data.CFTA.Gen
-import Data.CFTA.Gen.Internal.Bucket (KeyedBucket (..), mergeComponentsByKey)
+import Data.CFTA.Gen.Internal.Bucket (
+    KeyedBucket (..),
+    MassIndex (..),
+    mergeComponentsByKey,
+    pairMassIndex,
+    payMassIndex,
+ )
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import Data.CFTA.Gen.Internal.Grouped (groupKeys)
 import Data.CFTA.Gen.Internal.Static (
     Outcome (outcomeMass),
-    OutcomeIndex (outcomeSelect),
+    OutcomeIndex (outcomeSelect, outcomeSizeIndex),
     RootCount (..),
-    Static (staticOutcomes, staticRootCount),
+    Static (staticAtomic, staticOutcomes, staticRootCount),
     addRootCounts,
+    atomicStatic,
     commonRootCount,
     holeStatic,
     labelStaticMatching,
     mapStatic,
     pointsStatic,
+    resizedStatic,
+    staticSampling,
  )
 import Data.CFTA.Gen.Internal.Types (Gen (..), Grouped (..), Language (..), Recipe (..), payGrouped)
 import Data.CFTA.Gen.Label (ChoiceIndex)
@@ -68,13 +77,13 @@ import Data.CFTA.Index (
     Cardinality (..),
     Depth (..),
     Rank (..),
-    Size (..),
     VarIndex (..),
     Weight (..),
     childIndexes,
     countWeight,
     everyRank,
  )
+import Data.CFTA.Ranked.Internal.Size (minimumMemberSize)
 import Data.CFTA.Refinement
 import Data.CFTA.Refinement.Expression (
     definingTerm,
@@ -367,9 +376,11 @@ emptyGroups grouped = case cardinalities grouped of
 Without observations the language is one group, and so is a language whose
 members have no root, such as 'fromIndexed'. With observations every member
 is read back with its term; a member's term is the user's part of the
-engine's labelled term. A member read back keeps its size, which can differ
-from the number of nodes of its term: a pay adds no node, and an atom of
-several nodes has size one.
+engine's labelled term. A member keeps its mass, its size, and its weight
+inside its size class. The groups carry these weights to the merges that join
+them again, so a guard that reads the language keeps its distribution inside a
+size class. The pairs of the children of a node keep them too, and so do the
+groups that close their integer points.
 -}
 groupBuilt :: Set Path -> LTAGen a -> Either GenError (LTAGrouped ObservationKey a)
 groupBuilt requested generator
@@ -386,18 +397,19 @@ groupBuilt requested generator
             $ reposition keyObservations
             $ frequencies
                 [ ( Weight $ numerator (mass * fromInteger scale)
-                  , keyed (ObservationKey rank $ observe forest) (rebuildAt size forest value)
+                  , keyedMember rank size (ObservationKey rank $ observe forest) (rebuild size forest value)
                   )
-                | (rank, (mass, value, forest, size)) <- zip [0 ..] members
+                | (rank, (mass, size, value, forest)) <- zip [0 ..] members
                 ]
   where
-    -- Each member keeps its own mass, so an 'atomic' choice keeps its distribution.
+    -- Each member keeps its own mass and its own size, so an 'atomic' choice
+    -- keeps its distribution and every member keeps its size class.
     member rank =
         (,,,)
             <$> massAt rank
+            <*> pure (sizeOfRank generator rank)
             <*> unrank generator rank
             <*> (surface <$> termAt generator rank)
-            <*> maybe (Left EmptyGenerator) Right (sizeOfRank generator rank)
     massAt rank = case genLanguage generator of
         TransparentLanguage result -> do
             static <- result
@@ -405,12 +417,33 @@ groupBuilt requested generator
         _ -> Left UnboundedGenerator
     observe [term] = Map.fromList [(target, observation) | target <- Set.toList requested, Just observation <- [labelAt target term]]
     observe _ = Map.empty
-    rebuild [Term.Node label children] value = node label $ withChildren children value
-    rebuild forest value = withChildren forest value
-    -- An atom keeps the term of the member and has size one, and each pay
-    -- above it adds one. A member of size zero has no node.
-    rebuildAt (Size 0) forest value = rebuild forest value
-    rebuildAt (Size size) forest value = iterate pay (atomic $ rebuild forest value) !! fromInteger (size - 1)
+    -- A rebuilt term counts the source choices of its own nodes, which need not
+    -- be the choices that made the member, so the member takes its own size. A
+    -- member of an atomic source is rebuilt atomic: inside a size class, a
+    -- choice weighs an atomic member by its mass and other members by count.
+    rebuild size forest value = keepSize size $ case forest of
+        [Term.Node label children] -> node label $ withChildren children value
+        _ -> withChildren forest value
+    keepSize size rebuilt = case (size, genLanguage rebuilt) of
+        (Just original, TransparentLanguage result) ->
+            Gen Built $ TransparentLanguage $ resizedStatic original . (if atomicSource then atomicStatic else id) <$> result
+        _ -> rebuilt
+    atomicSource = case genLanguage generator of
+        TransparentLanguage (Right static) -> staticAtomic static
+        _ -> False
+    -- A member keeps its weight inside its size class in the source, so the
+    -- merges of the groups keep the source's distribution inside a size class.
+    -- A later product is not atomic, so atomic members also need this weight.
+    keyedMember rank size key rebuilt = case (sourceWeight, size, genLanguage rebuilt) of
+        (Just weightOf, Just memberSize, TransparentLanguage result) ->
+            Grouped $ do
+                static <- result
+                weight <- weightOf $ toEnum rank
+                pure $ Map.singleton key $ KeyedBucket 1 static $ Just $ MassIndex [(memberSize, weight)]
+        _ -> keyed key rebuilt
+    sourceWeight = case genLanguage generator of
+        TransparentLanguage (Right static) -> snd $ staticSampling static
+        _ -> Nothing
 
     -- The label at one path of a term, and whether it is a leaf.
     labelAt :: Path -> Term Symbol -> Maybe Observed
@@ -676,7 +709,7 @@ joinPositioned :: LTAGrouped [OpenKey] a -> LTAGrouped OpenKey a
 joinPositioned grouped = regroupOn rekey grouped
   where
     identity keys = let joined = joinOpenKeys keys in (openCount joined, openFormula joined)
-    positions = firstPositions $ map identity $ either (const []) Map.keys $ cardinalities grouped
+    positions = firstPositions $ map identity $ groupKeys grouped
     rekey keys = atPosition (positions Map.! identity keys) $ joinOpenKeys keys
 
 -- | The key of a bare applicative spine: no observation, and the variables of its positions joined.
@@ -757,7 +790,7 @@ repositionOpen :: LTAGrouped (ChoiceIndex, OpenKey) a -> LTAGrouped OpenKey a
 repositionOpen grouped = regroupOn rekey grouped
   where
     identity (_, key) = (keyObservations $ openObservations key, openCount key, openFormula key)
-    positions = firstPositions $ map identity $ either (const []) Map.keys $ cardinalities grouped
+    positions = firstPositions $ map identity $ groupKeys grouped
     rekey indexed@(_, key) = atPosition (positions Map.! identity indexed) key
 
 {- | Compile a child description of open groups as one group per tuple of child
@@ -876,16 +909,27 @@ compileOpenNode compiler requested labelling constraint child
     labelGroups (Grouped result) = Grouped $ Map.mapWithKey labelBucket <$> result
     labelGroups cyclic = nodeWithKey closeLabel cyclic
     labelBucket childKeys bucket =
-        bucket{keyedBucketStatic = labelStaticMatching (fills label) label $ keyedBucketStatic bucket}
+        bucket
+            { keyedBucketStatic = labelStaticMatching (fills label) label originalStatic
+            , keyedBucketMasses = payMassIndex sourceMinimum <$> keyedBucketMasses bucket
+            }
       where
         label = closeLabel childKeys
+        originalStatic = keyedBucketStatic bucket
+        sourceMinimum = minimumMemberSize $ outcomeSizeIndex $ staticOutcomes originalStatic
     fills label@(RefinedSymbol symbol _) found@(RefinedSymbol foundSymbol _)
         | symbolic label = foundSymbol == symbol
         | otherwise = found == label
     settle childKeys = do
         let label@(RefinedSymbol _ labelRefinement) = closeLabel childKeys
             total = sum $ map openCount childKeys
-            termOf refinement = (literal <$> onlyPoint valueName refinement) <|> definingTerm refinement
+            -- A defining term must determine its value independently of that value.
+            termOf refinement =
+                (literal <$> onlyPoint valueName refinement) <|> do
+                    term <- definingTerm refinement
+                    if valueName `elem` freeNames (term .== 0)
+                        then Nothing
+                        else Just term
             targetTerm part target = maybe (Left $ IntegerLeafRead $ Just part) Right $ case unPath target of
                 [] -> termOf labelRefinement
                 [index] -> termOf . (\(RefinedSymbol _ refinement) -> refinement) =<< renamedRoot childKeys index
@@ -926,13 +970,19 @@ settleGroups _ (Grouped (Left err)) = Right $ Grouped $ Left err
 settleGroups settle (Grouped (Right buckets)) = do
     settled <- catMaybes <$> traverse one (Map.toAscList buckets)
     let identity key = (keyObservations $ openObservations key, openCount key, openFormula key)
-        positions = firstPositions [identity key | (key, _, _) <- settled]
+        positions = firstPositions [identity key | (key, _) <- settled]
         positioned key = atPosition (positions Map.! identity key) key
-    pure $ Grouped $ mergeComponentsByKey [(positioned key, mass, static) | (key, mass, static) <- settled]
+    pure $ Grouped $ mergeComponentsByKey [(positioned key, bucket) | (key, bucket) <- settled]
   where
-    one (childKeys, KeyedBucket mass static) = fmap (build mass static) <$> settle childKeys
-    build mass static (key, kept, Nothing) = (key, mass * kept, static)
-    build mass static (key, kept, Just found) = (key, mass * kept, mapStatic const $ closePoints found static)
+    one (childKeys, bucket) = fmap (build (sum $ map openCount childKeys) bucket) <$> settle childKeys
+    build _ bucket (key, kept, Nothing) = (key, bucket{keyedBucketMass = keyedBucketMass bucket * kept})
+    build variables (KeyedBucket mass static masses) (key, kept, Just found) =
+        ( key
+        , KeyedBucket
+            (mass * kept)
+            (mapStatic const $ closePoints variables found static)
+            (closedMasses variables found <$> masses)
+        )
 
 {- | Close every open group by the integer points of its formula, for a parent
 that reads no variable.
@@ -944,20 +994,26 @@ closeOpen (Grouped (Right buckets)) = do
     closed <- catMaybes <$> traverse one (Map.toAscList buckets)
     pure $ Grouped $ mergeComponentsByKey closed
   where
-    one (key, KeyedBucket mass static)
-        | openCount key == 0 = Right $ Just (openObservations key, mass, mapStatic ($ []) static)
+    one (key, bucket@(KeyedBucket mass static masses))
+        | openCount key == 0 = Right $ Just (openObservations key, bucket{keyedBucketStatic = mapStatic ($ []) static})
         | otherwise = do
             found <- countPoints integerLabel (openCount key) (openFormula key)
             pure $
                 if pointCount found == 0
                     then Nothing
-                    else Just (openObservations key, mass, closePoints found static)
+                    else
+                        Just
+                            ( openObservations key
+                            , KeyedBucket mass (closePoints (openCount key) found static) (closedMasses (openCount key) found <$> masses)
+                            )
 
-{- | Apply the outcomes of an open group to the integer points of its formula.
-A term ranks by the integers at its placeholder leaves.
+{- | Apply the outcomes of an open group to the integer points of its formula,
+over the given number of variables. A term ranks by the integers at its
+placeholder leaves. Each integer of a point is one source choice, as each
+member of 'elements' is, so a point has one size for each variable.
 -}
-closePoints :: Points -> Static Symbol ([Integer] -> a) -> Static Symbol a
-closePoints found = pointsStatic fillHoles rankPoint (Indexed (pointCount found) (pointAt found))
+closePoints :: Int -> Points -> Static Symbol ([Integer] -> a) -> Static Symbol a
+closePoints variables found = pointsStatic (fromIntegral variables) fillHoles rankPoint (Indexed (pointCount found) (pointAt found))
   where
     rankPoint symbols = do
         point <- traverse leafValue symbols
@@ -965,6 +1021,13 @@ closePoints found = pointsStatic fillHoles rankPoint (Indexed (pointCount found)
         pure (rank, point)
       where
         leafValue (RefinedSymbol _ refinement) = onlyPoint valueName refinement
+
+{- | The weights of a group in each size class after 'closePoints' over the
+given number of variables. Every member takes each point, and a point has one
+size for each variable.
+-}
+closedMasses :: Int -> Points -> MassIndex -> MassIndex
+closedMasses variables found masses = pairMassIndex masses $ MassIndex [(fromIntegral variables, toRational $ pointCount found)]
 
 {- | Replace the placeholder leaves of a term, in order, by the leaves of the
 integers of a point, and make each label that names open variables exact.
@@ -1090,6 +1153,7 @@ splitByObservations requested root
     | otherwise = case root of
         Node edges -> mergeParts $ concatMap splitEdge edges
         Mu _ -> splitByObservations requested $ unfoldOuterRec root
+        InternedUnion _ -> splitByObservations requested $ Node $ nodeEdges root
         _ -> []
   where
     observesRoot = Set.member (path []) requested

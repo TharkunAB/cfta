@@ -480,7 +480,7 @@ measuredNode symbol guardBuilder measure child
                 substitute
                     [ (contractTermName index, term)
                     | (index, RefinedSymbol _ refinement) <- zip [0 ..] roots
-                    , Just term <- [(literal <$> onlyPoint valueName refinement) <|> definingTerm refinement]
+                    , Just term <- [termOf refinement]
                     ]
                     (refinementFormula (.== measureTerm measure))
          in case onlyPoint valueName formula of
@@ -489,6 +489,14 @@ measuredNode symbol guardBuilder measure child
                     | any (`elem` map (contractTermName . ArgumentIndex) [0 .. fromEnum (measureArity measure) - 1]) (freeNames formula) ->
                         Left $ InexactMeasure symbol
                     | otherwise -> Right $ RefinedSymbol symbol formula
+
+    -- Read a singleton or a defining term that does not depend on its own value.
+    termOf refinement =
+        (literal <$> onlyPoint valueName refinement) <|> do
+            term <- definingTerm refinement
+            if valueName `elem` freeNames (term .== 0)
+                then Nothing
+                else Just term
 
 {- | Close a child description with a constructor whose refinement is computed
 from the labels of its children.

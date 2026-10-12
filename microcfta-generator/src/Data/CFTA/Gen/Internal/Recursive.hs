@@ -44,7 +44,17 @@ import Data.Typeable (Typeable)
 
 import Data.CFTA.Equality (Edge (Edge), Node (Node))
 import Data.CFTA.Gen.Error (GenError (..))
-import Data.CFTA.Gen.Internal.Bucket (KeyedBucket (..))
+import Data.CFTA.Gen.Internal.Bucket (
+    KeyedBucket (..),
+    MassIndex (..),
+    atomicMassIndex,
+    countMassIndex,
+    emptyMassIndex,
+    massAtSize,
+    payMassIndex,
+    productMassIndex,
+    sumMassIndexes,
+ )
 import Data.CFTA.Gen.Internal.Inspection
 import Data.CFTA.Gen.Internal.Static
 import Data.CFTA.Gen.Internal.Support (labelSupport, labelTerm)
@@ -53,25 +63,20 @@ import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size, every
 import Data.CFTA.Ranked.Internal.Decoder (MinimumSize (..), Plan (..), RankedValue (..), SizeClass (..))
 import Data.CFTA.Ranked.Internal.Sampler
 import Data.CFTA.Ranked.Internal.Size (
-    SizeIndex (minimumMemberSize, sizeClassCounts, sizeClassSelect),
+    SizeIndex (minimumMemberSize, sizeClassSelect),
     SizedRank (..),
-    addSparse,
     choiceIndex,
     choicePosition,
     constructorIndex,
-    fromMinimum,
     mapIndex,
     mapIndexWithRank,
-    mulSparse,
     payIndex,
-    payMinimum,
     planPosition,
     productIndex,
     productPosition,
     sizeClassOf,
     sizeClasses,
     sizeMajorRank,
-    valueAtSize,
  )
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -462,13 +467,16 @@ keyedRecursiveFromBuckets buckets = fmap fromBucket buckets
         bucketCount = outcomeCardinality $ staticOutcomes static
         -- The members of an atomic bucket have one size: one, or more under a pay.
         masses
+            | Just weights <- keyedBucketMasses bucket = weights
             | staticAtomic static
             , MinimumSize size <- minimumMemberSize $ recursiveIndex recursive =
                 atomicMassIndex size $ toRational totalCount * keyedBucketMass bucket
             | otherwise = countMassIndex $ recursiveIndex recursive
         massWeighted =
-            staticAtomic static
-                && toRational totalCount * keyedBucketMass bucket /= toRational bucketCount
+            isJust (keyedBucketMasses bucket)
+                || ( staticAtomic static
+                        && toRational totalCount * keyedBucketMass bucket /= toRational bucketCount
+                   )
 
 {- | Merge recursive groups sharing a key into one alternative each.
 
@@ -500,50 +508,6 @@ mergeRecursiveGroups alternatives =
         | alternative <- alternatives
         ]
 
-{- | A memoized unnormalized mass for sizes in ascending order. Sizes without
-members are left out. A product and a pay start at their minimum size.
--}
-newtype MassIndex = MassIndex [(Size, Rational)]
-
--- | Read one size, returning zero outside the sizes with mass.
-massAtSize :: MassIndex -> Size -> Rational
-massAtSize (MassIndex masses) = valueAtSize masses
-
 -- | Read one recursive group's mass at a size.
 keyedRecursiveMassAtSize :: KeyedRecursive symbol a -> Size -> Rational
 keyedRecursiveMassAtSize recursive = massAtSize $ keyedRecursiveMasses recursive
-
--- | A language with no members at any size.
-emptyMassIndex :: MassIndex
-emptyMassIndex = MassIndex []
-
--- | Structural counts interpreted as unnormalized uniform mass.
-countMassIndex :: SizeIndex a -> MassIndex
-countMassIndex index =
-    MassIndex [(size, toRational count) | (size, count) <- sizeClassCounts index]
-
--- | One finite atom's complete mass at its size.
-atomicMassIndex :: Size -> Rational -> MassIndex
-atomicMassIndex size mass = MassIndex [(size, mass) | mass > 0]
-
--- | Add alternative masses by size.
-sumMassIndexes :: [MassIndex] -> MassIndex
-sumMassIndexes indexes = MassIndex $ foldr (\(MassIndex masses) -> addSparse masses) [] indexes
-
-{- | Convolve two mass series: the sizes of a pair add, and the masses
-multiply. The masses start with the smallest size of the product, the sum of
-the minimum sizes of its sides, before the convolution is read, as the size
-counts of a product do. So a recursive knot of masses gives its smallest sizes
-before the product is computed.
--}
-productMassIndex :: MinimumSize -> MassIndex -> MassIndex -> MassIndex
-productMassIndex smallest (MassIndex left) (MassIndex right) =
-    MassIndex $ fromMinimum smallest $ mulSparse left right
-
-{- | The masses of a pay: each size is one larger. Given the minimum size of
-the inner language, the masses start with its smallest size before the inner
-masses are read, as the counts of a pay do.
--}
-payMassIndex :: MinimumSize -> MassIndex -> MassIndex
-payMassIndex smallest (MassIndex masses) =
-    MassIndex $ fromMinimum (payMinimum smallest) [(size + 1, mass) | (size, mass) <- masses]

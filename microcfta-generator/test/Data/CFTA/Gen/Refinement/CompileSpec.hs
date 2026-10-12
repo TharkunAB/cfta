@@ -13,18 +13,25 @@ import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import Data.CFTA.Formula (Name, Sort (..))
+import qualified Data.CFTA.Formula as Formula
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.TestSupport (compileOrFail, massesByRank, rightOrFail, values)
 import Data.CFTA.Gen.Refinement.TypedExpressionLanguage (nonNegative)
 import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
+import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Refinement (
     Entailment (Entailment),
-    Guard (Bottom),
+    Guard (Bottom, Holds, Satisfies),
     Node (Mu, Node),
     Symbol (RefinedSymbol),
     Verdict (Yes),
+    contractTermName,
+    createUnion,
     noConstraint,
     nodeCount,
+    path,
+    union,
+    validate,
     pattern Transition,
  )
 import Data.CFTA.Refinement.Expression (
@@ -32,6 +39,7 @@ import Data.CFTA.Refinement.Expression (
     literal,
     refinementFormula,
     true,
+    variable,
     (.&&),
     (./=),
     (.<),
@@ -135,9 +143,192 @@ spec = do
                         LTAGen.atomic $
                             LTAGen.frequency [(9, LTAGen.leaf (0 :: Int) "a" (exact 0)), (1, LTAGen.leaf 1 "b" (exact 1))]
                     pair guard = LTAGen.refinedNode "pair" (const true) guard $ (,) <$> weighted <*> LTAGen.elements [7 :: Int]
+                    expected = [((0, 7), 9 % 10), ((1, 7), 1 % 10)]
+                    sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
+                    repeated generator = LTAGen.recur $ \rest -> LTAGen.oneof [(: []) <$> generator, (:) <$> generator <*> rest]
                 forM_ [pair (\left _ -> left `requires` nonNegative), pair (\_ right -> right `requires` nonNegative)] $ \generator -> do
                     compiled <- compileOrFail solver generator
                     massesByRank compiled `shouldBe` [(0, 9 % 10), (1, 1 % 10)]
+                    LTAGen.pmf (LTAGen.upToSize 3 compiled) `shouldBe` Right expected
+                    sampled (LTAGen.upToSize 3 compiled) `shouldBe` expected
+                    forM_ [3, 6] $ \size ->
+                        LTAGen.pmfAtSize (repeated compiled) size `shouldBe` LTAGen.pmfAtSize (repeated $ pair noConstraint) size
+
+        it "keeps the sizes of an atomic choice whether or not a guard reads it" $
+            withZ3 declarations $ \solver -> do
+                -- Each member of the atom has size one, also the member whose
+                -- term has two nodes.
+                let atom =
+                        LTAGen.atomic $
+                            LTAGen.oneof [LTAGen.leaf (0 :: Int) "a" (const true), LTAGen.node "wrap" $ LTAGen.leaf 1 "b" (const true)]
+                    outer guard = LTAGen.refinedNode "outer" (const true) guard atom
+                compiled <- compileOrFail solver $ outer (`requires` const true)
+                map (LTAGen.sizeOfRank compiled) [0, 1] `shouldBe` map (LTAGen.sizeOfRank $ outer noConstraint) [0, 1]
+                LTAGen.pmf (LTAGen.upToSize 2 compiled) `shouldBe` Right [(0, 1 % 2), (1, 1 % 2)]
+                map (LTAGen.smallerMembers compiled) [0, 1] `shouldBe` [[], []]
+
+        it "keeps the sizes of a built source whether or not a guard reads it" $
+            withZ3 declarations $ \solver -> do
+                -- Behind keyed and ungroup a language is a built source. A node
+                -- adds one to the size and a product adds the sizes of its
+                -- parts, so a member's size is not the number of its nodes.
+                let choice = LTAGen.oneof [LTAGen.leaf (0 :: Int) "a" (const true), LTAGen.node "wrap" $ LTAGen.leaf 1 "b" (const true)]
+                    built = LTAGen.ungroup $ LTAGen.keyed () choice
+                    outer guard = LTAGen.refinedNode "outer" (const true) guard built
+                    paired =
+                        LTAGen.ungroup
+                            $ LTAGen.keyed ()
+                            $ LTAGen.node "pair"
+                            $ (,) <$> LTAGen.atomic choice <*> LTAGen.leaf (7 :: Int) "c" (const true)
+                    outerPair guard = LTAGen.refinedNode "outer" (const true) guard paired
+                compiled <- compileOrFail solver $ outer (`requires` const true)
+                map (LTAGen.sizeOfRank compiled) [0, 1] `shouldBe` map (fmap (+ 1) . LTAGen.sizeOfRank built) [0, 1]
+                LTAGen.pmf (LTAGen.upToSize 2 compiled) `shouldBe` LTAGen.pmf (LTAGen.upToSize 2 $ outer noConstraint)
+                map (LTAGen.smallerMembers compiled) [0, 1] `shouldBe` [[], [LTAGen.RankedValue 0 0]]
+                compiledPair <- compileOrFail solver $ outerPair (`requires` const true)
+                map (LTAGen.sizeOfRank compiledPair) [0, 1] `shouldBe` map (fmap (+ 1) . LTAGen.sizeOfRank paired) [0, 1]
+                LTAGen.pmf (LTAGen.upToSize 4 compiledPair) `shouldBe` LTAGen.pmf (LTAGen.upToSize 4 $ outerPair noConstraint)
+
+        it "keeps the sizes of a node with several children when a guard reads one" $
+            withZ3 declarations $ \solver -> do
+                -- Pairing the children is not a source choice, so each member
+                -- has the size of its children together.
+                let choice = LTAGen.oneof [LTAGen.leaf (0 :: Int) "a" (const true), LTAGen.node "w" $ LTAGen.leaf 1 "b" (const true)]
+                    leafC = LTAGen.leaf (7 :: Int) "c" (const true)
+                    pair = (,) <$> choice <*> leafC
+                    triple = (,,) <$> choice <*> leafC <*> leafC
+                    readsChild = Satisfies (path [0]) true
+                compiledPair <- compileOrFail solver $ LTAGen.refinedNode "n" (const true) readsChild pair
+                map (LTAGen.sizeOfRank compiledPair) [0, 1] `shouldBe` map (LTAGen.sizeOfRank $ LTAGen.node "n" pair) [0, 1]
+                LTAGen.cardinality (LTAGen.upToSize 4 compiledPair) `shouldBe` Right 2
+                compiledTriple <- compileOrFail solver $ LTAGen.refinedNode "n" (const true) readsChild triple
+                map (LTAGen.sizeOfRank compiledTriple) [0, 1] `shouldBe` map (LTAGen.sizeOfRank $ LTAGen.node "n" triple) [0, 1]
+
+        it "keeps the weights inside a size class of a built source whether or not a guard reads it" $
+            withZ3 declarations $ \solver -> do
+                -- The weights of the atomic choice decide inside the size class
+                -- two. A guard that reads the child of each member puts a(..)
+                -- and wrap(b) into different groups, across p and q, so the
+                -- groups have these weights and not their member counts.
+                let weighted =
+                        LTAGen.atomic $
+                            LTAGen.frequency
+                                [(1, LTAGen.leaf (0 :: Int) "a" (const true)), (3, LTAGen.node "wrap" $ LTAGen.leaf 1 "b" (const true))]
+                    tagged label = LTAGen.node label $ (,) <$> weighted <*> LTAGen.leaf (7 :: Int) "c" (const true)
+                    built = LTAGen.ungroup $ LTAGen.keyed () $ LTAGen.oneof [tagged "p", tagged "q"]
+                    outer guard = LTAGen.refinedNode "outer" (const true) guard built
+                    expected = [((0, 7), 1 % 4), ((1, 7), 3 % 4)]
+                    sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
+                LTAGen.pmf (LTAGen.upToSize 4 $ outer noConstraint) `shouldBe` Right expected
+                forM_ [Satisfies (path [0]) true, Satisfies (path [0, 0]) true] $ \guard -> do
+                    compiled <- compileOrFail solver $ outer guard
+                    LTAGen.pmf (LTAGen.upToSize 4 compiled) `shouldBe` Right expected
+                    sampled (LTAGen.upToSize 4 compiled) `shouldBe` expected
+
+        it "keeps the weights of each size class when the groups of a built source have several sizes" $
+            withZ3 declarations $ \solver -> do
+                -- Each group of a(..) and of wrap(b) has one member of size one
+                -- and one of size two. The weights of the atom are 1:3 at size
+                -- one and 3:1 at size two.
+                let atom weightA weightB =
+                        LTAGen.atomic $
+                            LTAGen.frequency
+                                [(weightA, LTAGen.leaf (0 :: Int) "a" (const true)), (weightB, LTAGen.node "wrap" $ LTAGen.leaf 1 "b" (const true))]
+                    built =
+                        LTAGen.ungroup
+                            $ LTAGen.keyed ()
+                            $ LTAGen.oneof
+                                [ LTAGen.node "p" $ Left <$> atom 1 3
+                                , LTAGen.node "q" $ fmap Right $ (,) <$> atom 3 1 <*> LTAGen.leaf (7 :: Int) "c" (const true)
+                                ]
+                    outer guard = LTAGen.refinedNode "outer" (const true) guard built
+                    expected = [(Left 0, 1 % 8), (Left 1, 3 % 8), (Right (0, 7), 3 % 8), (Right (1, 7), 1 % 8)]
+                    sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
+                LTAGen.pmf (LTAGen.upToSize 4 $ outer noConstraint) `shouldBe` Right expected
+                compiled <- compileOrFail solver $ outer $ Satisfies (path [0, 0]) true
+                LTAGen.pmf (LTAGen.upToSize 4 compiled) `shouldBe` Right expected
+                sampled (LTAGen.upToSize 4 compiled) `shouldBe` expected
+
+        it "keeps the weights inside a size class when a guard reads one child of a pair" $
+            withZ3 declarations $ \solver -> do
+                -- A member of size three splits as one and two, or as two and
+                -- one. The weights of the left groups differ by size class, so
+                -- they choose the split, and each part keeps its weights.
+                let atom weightA weightB =
+                        LTAGen.atomic $
+                            LTAGen.frequency
+                                [(weightA, LTAGen.leaf (0 :: Int) "a" (const true)), (weightB, LTAGen.node "wrap" $ LTAGen.leaf 1 "b" (const true))]
+                    left =
+                        LTAGen.ungroup
+                            $ LTAGen.keyed ()
+                            $ LTAGen.oneof
+                                [ LTAGen.node "p" $ Left <$> atom 1 3
+                                , LTAGen.node "q" $ fmap Right $ (,) <$> atom 3 1 <*> LTAGen.leaf (7 :: Int) "c" (const true)
+                                ]
+                    right =
+                        LTAGen.oneof
+                            [ LTAGen.leaf (5 :: Int) "x" (const true)
+                            , LTAGen.node "y" $ (+) <$> LTAGen.leaf 6 "z" (const true) <*> LTAGen.leaf 0 "o" (const true)
+                            ]
+                    outer guard = LTAGen.refinedNode "outer" (const true) guard $ (,) <$> left <*> right
+                    sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
+                    expected = LTAGen.pmf $ LTAGen.upToSize 6 $ outer noConstraint
+                compiled <- compileOrFail solver $ outer $ Satisfies (path [0, 0]) true
+                LTAGen.pmf (LTAGen.upToSize 6 compiled) `shouldBe` expected
+                Right (sampled $ LTAGen.upToSize 6 compiled) `shouldBe` expected
+                LTAGen.pmf compiled `shouldBe` LTAGen.pmf (outer noConstraint)
+
+        it "keeps the weights inside a size class when a node closes an integer leaf beside a guarded child" $
+            withZ3 declarations $ \solver -> do
+                -- The node closes the integer leaf of each tuple of groups.
+                -- The choices of the leaf have two and three points, so each
+                -- closed group weighs its points and its own weights.
+                let atom weightA weightB =
+                        LTAGen.atomic $
+                            LTAGen.frequency
+                                [(weightA, LTAGen.leaf (0 :: Int) "a" (const true)), (weightB, LTAGen.node "wrap" $ LTAGen.leaf 1 "b" (const true))]
+                    left =
+                        LTAGen.ungroup
+                            $ LTAGen.keyed ()
+                            $ LTAGen.oneof
+                                [ LTAGen.node "p" $ Left <$> atom 1 3
+                                , LTAGen.node "q" $ fmap Right $ (,) <$> atom 3 1 <*> LTAGen.leaf (7 :: Int) "c" (const true)
+                                ]
+                    digits :: Integer -> Integer -> LTAGen.LTAGen Integer
+                    digits low high = LTAGen.every `LTAGen.satisfying` (\v -> literal low .<= v .&& v .<= literal high)
+                    right = LTAGen.oneof [digits 8 9, digits 1 3]
+                    outer guard = LTAGen.refinedNode "outer" (const true) guard $ (,) <$> left <*> right
+                    sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
+                plain <- compileOrFail solver $ outer noConstraint
+                compiled <- compileOrFail solver $ outer $ Satisfies (path [0, 0]) true
+                let expected = LTAGen.pmf $ LTAGen.upToSize 4 plain
+                LTAGen.pmf (LTAGen.upToSize 4 compiled) `shouldBe` expected
+                Right (sampled $ LTAGen.upToSize 4 compiled) `shouldBe` expected
+                LTAGen.pmf compiled `shouldBe` LTAGen.pmf plain
+
+        it "keeps the weights inside a size class when the top closes the integer leaf of a measure" $
+            withZ3 declarations $ \solver -> do
+                -- The guard keeps the members with the atom a, which weighs 1
+                -- against 3. The measure of each node is its integer leaf, so
+                -- the leaf stays open until the top closes it. The choice must
+                -- weigh the kept members as it does for listed integers.
+                let atom = LTAGen.atomic $ LTAGen.frequency [(1, LTAGen.leaf (0 :: Int) "a" (.== 0)), (3, LTAGen.leaf 1 "b" (.== 1))]
+                    left = LTAGen.ungroup $ LTAGen.keyed () $ LTAGen.oneof [LTAGen.node "p" atom, LTAGen.node "q" $ (+ 10) <$> atom]
+                    keepsA = Satisfies (path [0, 0]) (refinementFormula (.== 0))
+                    choice :: LTAGen.LTAGen Integer -> LTAGen.LTAGen (Int, Integer)
+                    choice digit =
+                        LTAGen.oneof
+                            [ LTAGen.measuredNode "outer" keepsA (\_ d -> d) $ (,) <$> left <*> digit
+                            , LTAGen.measuredNode "other" noConstraint (\_ d -> d) $
+                                (,) <$> LTAGen.leaf 5 "x" (const true) <*> digit
+                            ]
+                    sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
+                open <- compileOrFail solver $ choice $ LTAGen.every `LTAGen.satisfying` (\v -> 8 .<= v .&& v .<= 9)
+                closed <- compileOrFail solver $ choice $ LTAGen.elements [8, 9]
+                let expected = LTAGen.pmf $ LTAGen.upToSize 4 closed
+                LTAGen.pmf (LTAGen.upToSize 4 open) `shouldBe` expected
+                Right (sampled $ LTAGen.upToSize 4 open) `shouldBe` expected
+                LTAGen.pmf open `shouldBe` LTAGen.pmf closed
 
         it "refuses a guard that reads the children of a choice of products" $
             withZ3 declarations $ \solver -> do
@@ -303,6 +494,26 @@ spec = do
             fmap (map Term.rootLabel) (compiled >>= LTAGen.values)
                 `shouldBe` Right [RefinedSymbol "interned-a" (refinementFormula (.== 0)), RefinedSymbol "interned-b" (refinementFormula (.== 1))]
 
+        it "keeps imported epsilon-union terms when a parent requests observations" $
+            withZ3 declarations $ \solver -> do
+                let leaf name = Node [Transition name true [] noConstraint]
+                    epsilon = Mu $ \self -> createUnion [self, leaf "a"]
+                    grammars = [epsilon, createUnion [epsilon, leaf "b"]]
+                    guards =
+                        [ \child -> child `requires` const true
+                        , \child -> anyOf [child `requires` const true, descendant child [0] `requires` const true]
+                        ]
+                forM_ grammars $ \graph -> do
+                    validate graph `shouldBe` Right ()
+                    let imported = LTAGen.fromAutomaton graph
+                        expected = LTAGen.upToSize 4 imported
+                    forM_ guards $ \guard -> do
+                        compiled <- compileOrFail solver $ LTAGen.refinedNode "wrap" (const true) guard imported
+                        let bounded = LTAGen.upToSize 5 compiled
+                        LTAGen.cardinality bounded `shouldBe` LTAGen.cardinality expected
+                        sort (values bounded) `shouldBe` sort (values expected)
+                        unranked bounded (allRanks bounded) `shouldBe` []
+
         it "give an empty language for an import that its condition empties" $ do
             -- The pruned automaton is empty, and reading it used to throw.
             let zero = Node [Transition "n" (refinementFormula (.== 0)) [] noConstraint]
@@ -310,6 +521,20 @@ spec = do
             compiled <- LTAGen.compileWith latticeEntailment emptied
             checked <- LTAGen.validOutcomes latticeEntailment emptied
             (LTAGen.cardinality <$> compiled, checked) `shouldBe` (Right (Left LTAGen.EmptyGenerator), Right [])
+
+        it "keeps recursive import size classes when a parent observes its root" $
+            withZ3 declarations $ \solver -> do
+                let leaf name = Node [Transition name true [] noConstraint]
+                    productive = Mu $ \self -> Node [Transition "a" true [] noConstraint, Transition "f" true [self] noConstraint]
+                forM_ [productive, union [productive, leaf "b"]] $ \graph -> do
+                    let imported = LTAGen.fromAutomaton graph
+                        wrapped = LTAGen.refinedNode "wrap" (const true) (\child -> child `requires` const true) imported
+                    compiled <- compileOrFail solver wrapped
+                    map (LTAGen.countAtSize compiled) [1 .. 5]
+                        `shouldBe` (Right 0 : map (LTAGen.countAtSize imported) [1 .. 4])
+                    let bounded = LTAGen.upToSize 5 compiled
+                    sort (values bounded) `shouldBe` sort (values $ LTAGen.upToSize 4 imported)
+                    unranked bounded (allRanks bounded) `shouldBe` []
 
         it "compile a choice of a recursive import and a deferred node" $ do
             -- The deferred node makes compile read the choice, and the import gives a recursive group.
@@ -324,6 +549,21 @@ spec = do
             map (LTAGen.countAtSize compiled) [1, 2] `shouldBe` [Right 1, Right 1]
 
     describe "integer leaves" $ do
+        it "reports recursive open groups without losing their position keys" $ do
+            let graph = Mu $ \self -> Node [Transition "a" true [] noConstraint, Transition "f" true [self] noConstraint]
+                recursive = (0 :: Integer) <$ LTAGen.fromAutomaton graph
+                digits = LTAGen.every `LTAGen.satisfying` (\v -> 1 .<= v .&& v .<= 2)
+                applied = (+) <$> recursive <*> digits
+                choices =
+                    [ LTAGen.uniformly [recursive, digits]
+                    , LTAGen.oneof [recursive, digits]
+                    , LTAGen.uniformly [applied, digits]
+                    , LTAGen.oneof [applied, digits]
+                    ]
+            forM_ choices $ \choice -> do
+                compiled <- LTAGen.compileWith latticeEntailment $ LTAGen.node "p" choice
+                fmap LTAGen.cardinality compiled `shouldBe` Right (Left LTAGen.UnboundedGenerator)
+
         it "pay one for a constructor above a closed group of integer leaves" $ do
             -- The guard closes the leaf, so the node above it has no point to
             -- select, and it pays one as every constructor does.
@@ -333,6 +573,23 @@ spec = do
             outer <- compileOrFail latticeEntailment $ LTAGen.node "q" closed
             map (LTAGen.sizeOfRank outer) [0, 1] `shouldBe` map (fmap (+ 1) . LTAGen.sizeOfRank inner) [0, 1]
             map (LTAGen.sizeOfRank inner) [0, 1] `shouldBe` [Just 2, Just 2]
+
+        it "count one source choice for each integer leaf, wherever a constructor closes it" $ do
+            -- A node without a measure closes its leaf. A measure keeps the leaf
+            -- open, so the parent closes the two leaves together. Each leaf is
+            -- one source choice, as a member of elements is.
+            let digit = LTAGen.every `LTAGen.satisfying` (\v -> 8 .<= v .&& v .<= 9) :: LTAGen.LTAGen Integer
+                closedAtOnce = LTAGen.node "m"
+                keptOpen = LTAGen.measuredNode "m" noConstraint id
+                pair inner leaf = LTAGen.node "n" $ (,) <$> inner leaf <*> inner leaf
+                sizes generator = map (LTAGen.sizeOfRank generator) [0 .. 3]
+            listed <- compileOrFail latticeEntailment $ pair closedAtOnce $ LTAGen.elements [8, 9]
+            atOnce <- compileOrFail latticeEntailment $ pair closedAtOnce digit
+            open <- compileOrFail latticeEntailment $ pair keptOpen digit
+            sizes atOnce `shouldBe` sizes listed
+            sizes open `shouldBe` sizes listed
+            LTAGen.pmf (LTAGen.upToSize 2 atOnce) `shouldBe` LTAGen.pmf (LTAGen.upToSize 2 listed)
+            LTAGen.pmf (LTAGen.upToSize 2 open) `shouldBe` LTAGen.pmf (LTAGen.upToSize 2 listed)
 
         it "compile uniformly over integer leaves, weighted by their points" $ do
             let leaves :: Integer -> Integer -> LTAGen.LTAGen Integer
@@ -414,6 +671,49 @@ spec = do
                     mapped = fmap (* 2) $ LTAGen.measured "m" (const true) id three
                 compiled <- compileOrFail solver $ mapped `LTAGen.satisfying` (.== 3)
                 values compiled `shouldBe` [6]
+
+        it "reject self-dependent child measures before translating parent conditions" $
+            withZ3 declarations $ \solver -> do
+                let bad = LTAGen.leaf (0 :: Integer) "self" (\v -> v .== v)
+                    symbolic = LTAGen.every `LTAGen.satisfying` (\v -> 0 .<= v .&& v .<= 1)
+                    inner digit = LTAGen.measuredNode "m" noConstraint (+) $ (,) <$> bad <*> digit
+                    guards = [Satisfies (path [0]) Formula.Bottom, Holds [path [0]] Formula.Bottom]
+                forM_ [symbolic, LTAGen.elements [0, 1 :: Integer]] $ \digit ->
+                    forM_ guards $ \guard -> do
+                        let generator = LTAGen.refinedNode "p" (const true) guard $ inner digit
+                        result <- LTAGen.compileWith solver generator
+                        fmap LTAGen.cardinality result `shouldBe` Left (LTAGen.InexactMeasure "m")
+                        LTAGen.validOutcomes solver generator >>= (`shouldBe` Left (LTAGen.InexactMeasure "m"))
+
+        it "retain independent symbolic measures through both parent condition forms" $
+            withZ3 declarations $ \solver -> do
+                let zero = LTAGen.leaf (0 :: Integer) "zero" (.== 0)
+                    digit = LTAGen.every `LTAGen.satisfying` (\v -> 0 .<= v .&& v .<= 1) :: LTAGen.LTAGen Integer
+                    inner = LTAGen.measuredNode "m" noConstraint (+) $ (,) <$> zero <*> digit
+                    guards =
+                        [ Satisfies (path [0]) $ refinementFormula (.== 1)
+                        , Holds [path [0]] $ variable (contractTermName 0) .== 1
+                        ]
+                forM_ guards $ \guard -> do
+                    let generator = LTAGen.refinedNode "p" (const true) guard inner
+                    compiled <- compileOrFail solver generator
+                    values compiled `shouldBe` [(0, 1)]
+                    LTAGen.validOutcomes solver generator >>= (`shouldBe` Right [(0, 1)])
+
+        it "prefer exact singleton values before rejecting a self-dependent defining expression" $
+            withZ3 declarations $ \solver -> do
+                let singleton = LTAGen.leaf (7 :: Integer) "singleton" (\v -> v .== v * 0 + 3)
+                    digit = LTAGen.every `LTAGen.satisfying` (\v -> 0 .<= v .&& v .<= 1) :: LTAGen.LTAGen Integer
+                    inner = LTAGen.measuredNode "m" noConstraint (+) $ (,) <$> singleton <*> digit
+                    guards =
+                        [ Satisfies (path [0]) $ refinementFormula (.== 3)
+                        , Holds [path [0]] $ variable (contractTermName 0) .== 3
+                        ]
+                forM_ guards $ \guard -> do
+                    let generator = LTAGen.refinedNode "p" (const true) guard inner
+                    compiled <- compileOrFail solver generator
+                    values compiled `shouldBe` [(7, 0)]
+                    LTAGen.validOutcomes solver generator >>= (`shouldBe` Right [(7, 0)])
   where
     isIntegerLeafRead err = case err of
         LTAGen.IntegerLeafRead _ -> True
