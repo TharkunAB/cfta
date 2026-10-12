@@ -29,6 +29,7 @@ inductive Label (Symbol : Type) where
   | joinN
   | centerKeyed
   | argKeyed
+  | recursion
   | family
   | atKey
   | key (index : Nat)
