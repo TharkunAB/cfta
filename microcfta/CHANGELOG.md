@@ -147,9 +147,14 @@ remains a separate ECTA-only package.
   symbol itself rather than on its hash.
 - `terms` truncates at recursion and lists an unconstrained node through
   the shared enumerator, so each such term appears once.
-- `reduceEqConstraints` repeats its pass over an edge's classes until the
-  children stop changing, so its result is a fixpoint. One pass could leave
-  children that a second call narrowed further.
+- `reduceEqConstraints` makes one pass over an edge's classes, as in the ECTA
+  paper. In `microecta` it repeats the pass until the children stop
+  changing. Each new pass reads new nodes and misses the intersection memo,
+  so that fixpoint made the term search of the ECTA paper (Hectare) about
+  100 times slower. One pass can leave children that a second pass narrows
+  further: iterate
+  `reducePartially`, as `reduceFully` does, to get a fixpoint. `prune`
+  iterates the reduction of each transition.
 - The term-search application layer is not part of the library.
 - The `Pretty` class and the path-trie `Ord` instance are gone; `show` the
   constraint, or compare equality classes by their path lists.

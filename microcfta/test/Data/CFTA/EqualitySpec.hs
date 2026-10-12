@@ -349,18 +349,18 @@ spec = do
                     termsTo depth (fixUnbounded reducePartially n) `shouldBe` termsTo depth n
                     termsTo depth (reduceFully n) `shouldBe` termsTo depth n
 
-        it "reducing a constraint is idempotent: buggy input 6/27/21" $ do
+        it "iterated reduction of a constraint reaches a fixpoint: buggy input 6/27/21" $ do
+            -- One pass is not idempotent on this input.
             let (ecs, ns) = bug062721NonIdempotentEqConstraintReduction
-                ns' = reduceEqConstraints ecs EmptyConstraints ns
+                ns' = fixUnbounded (reduceEqConstraints ecs EmptyConstraints) ns
             ns' `shouldBe` reduceEqConstraints ecs EmptyConstraints ns'
 
-        -- One pass does not establish this. The reduction repeats its pass
-        -- until the children stop changing, and that fixpoint does.
+        -- One pass does not establish this. The fixpoint of the passes does.
         it "saturated reduction means, for everything at a path, there is something matching at the other paths" $
             let liveConstrainedEdge :: Gen (Edge Symbol)
                 liveConstrainedEdge =
                     arbitrary `suchThatMap` \edge ->
-                        let reduced = reduceEdgeIntersection EmptyConstraints edge
+                        let reduced = fixUnbounded (reduceEdgeIntersection EmptyConstraints) edge
                          in if reduced /= emptyEdge (edgeSymbol reduced) && edgeConstraint reduced /= noConstraint
                                 then Just reduced
                                 else Nothing
