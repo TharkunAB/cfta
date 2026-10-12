@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 00:24 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 00:33 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -58,16 +58,16 @@ self-reference removal from recursive unions.
 
 ## Verified checkpoints
 
-- Existing Haskell suites on `de910ea` plus both local repairs: **620 passing
+- Existing Haskell suites on `de910ea` plus the local repairs: **620 passing
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
-  `/tmp/mcfta-construction-query-full.log`. After the finite-return correction,
+  `/tmp/mcfta-construction-query-full.log`. After the grouped-discovery check,
   all generator and refinement cases pass in
-  `/tmp/mcfta-construction-query-final.log`. Core source is unchanged.
-- Latest integrated Lean build: **576 jobs; 29,362 theorem dependency checks**.
+  `/tmp/mcfta-family-discovery-validation.log`. Core source is unchanged.
+- Latest integrated Lean build: **583 jobs; 29,665 theorem dependency checks**.
   This includes projected leaf schedules, nested first-run completion,
   stored shallow unfolding, and construction-query provenance.
-  Log: `/tmp/mcfta-construction-query-retained-audit.log`.
+  Log: `/tmp/mcfta-family-discovery-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -94,7 +94,7 @@ nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests mic
 
 Use Nix for Haskell. The PATH addition selects the coherent linker/GMP
 setup. Nix lock access requires escalation. Fourmolu and both audited package Cabal-gild checks pass. No Cabal file
-changed. The local production changes are the two repairs below. Do not rerun the whole Haskell suite
+changed. The local production changes are the three repairs below. Do not rerun the whole Haskell suite
 without a new source change or finding.
 
 ## Completed proof work
@@ -187,6 +187,15 @@ callback, and nested selected-key completion. See
 `lean/notes-recursive-construction-queries.md` for the source correspondence
 and remaining arbitrary-callback boundary.
 
+## New source repair: stale grouped discovery minima
+
+Row 20 retains a public callback whose finite base changes after initial key
+discovery. The source previously returned minimum zero with no size-zero
+member. It now compares the final probe table with the accumulated table and
+reports `InconsistentRecursiveFamily` on disagreement. `GroupedProbeValidation`
+derives the actual fixed-point condition and proves unchanged results for
+monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
+
 ## Remaining proof boundaries
 
 - General termination of explicit equality/pruning fixed points on finite
@@ -196,8 +205,9 @@ and remaining arbitrary-callback boundary.
   class edits and empty propagation. Both 4,096-input source comparisons pass.
   Disjoint binary direct-root classes stabilize in one changing pass even
   with nested domains. Projected leaf occurrences have a separate weight
-  bound for the full schedule. Their physical normalized-parent adapter is
-  proved; recursive child transformations still need composition.
+  bound for the full schedule. Their physical normalized-parent adapter and
+  recursive finite child transformations now compose in a generated common
+  cache. Physical leaf intersection and projected union adapters remain.
   Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
@@ -205,7 +215,9 @@ and remaining arbitrary-callback boundary.
   the full lexical reconstruction. Actual smart-node and nonsingleton-union
   branches are proved. Actual stored shallow bodies now derive normalization,
   successful substitution preparation, and strict head-rank decrease.
-  General nested open-Mu preparation and unfolding still need composition.
+  Full nested stored-Mu preparation now preserves cache and record invariants.
+  Cached free metadata derives exact source binding restriction. General
+  strict unfolding rank and language correspondence still need composition.
 - Fresh-outer-dependent nested binder identity remains incomplete in general.
   Empty-child erasure now derives complete-record reuse. Every successful
   nested syntax execution replays exactly after cache growth. First execution

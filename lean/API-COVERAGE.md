@@ -7,6 +7,8 @@ the `tidy/core-formula` work, optimization changes, and the findings repairs
 through PR #96. Local repairs reject uncertain identity-precedence changes
 within one substitution scope and payload queries of unfinished recursive
 construction occurrences.
+Grouped recursion also checks that the final body has its discovered keys
+and minimum sizes before returning a tied family.
 The model names below refer to files in `MicroCFTA/`.
 
 A checked executable model is a Lean implementation with semantic theorems.
@@ -152,6 +154,8 @@ phase-independent query rejection. Completion deletes only its owning token,
 including the finite return path. This repairs a public callback whose
 count and term records disagreed with its support. Opaque inspection
 descriptors and arbitrary changing runtime builder schemas remain adapters.
+`GroupedProbeValidation` derives final body-table equality from the source
+check and proves that constructor programs retain their least-attained minima.
 `RecursiveCompleteRecord` builds the supported views together and
 proves that their family laws refer to the same checked compiler.
 `RecursivePlainApplication` adds ordinary application with a derived
@@ -188,6 +192,7 @@ solver result. The actual facade sometimes represents an empty generator as
 | Rank/value selection | Negative rank, rank beyond cardinality, `TermNotInLanguage`. No invalid rank may decode. Callback bounds remain caller obligations for indexed sources. |
 | Availability | Opaque inspection, unbounded finite query, recursive term inspection without a retained term index, deferred source requiring compilation. These do not assert that the source language is empty. |
 | Unsupported recursion | Weighted recursive alternatives, recursive operation family, constrained cyclic imports, ambiguous cyclic imports, unguarded recursion, bounded unresolved recursive occurrence. These are explicit limits of the current compiler, including on mathematically meaningful languages. |
+| Construction consistency | `QueriedRecursiveOccurrence` rejects reads of temporary recursive payloads. `InconsistentRecursiveFamily` rejects discovered keys or minima absent from the final body. Neither error denotes an empty language. |
 | Structural/codec validation | Invalid support, wrong arity, open references, recursive guard reads, missing root observation, child forest with other than one term, undecodable constructor, datatype derivation errors. Reject before relying on the corresponding representation invariant. |
 | Logical/solver uncertainty | `SolverUnknown`, timeout, pruning/similarity/minimization failures, unresolved relational equality or syntactic equality, residual guards. Unknown is not a proof of rejection and must not produce a successful incomplete enumeration. |
 | Integer/refinement support | Uncountable/unsupported lattice expressions, integer leaf reads that cannot be compiled, inexact measures, root condition applied to a non-constructor. The supported syntax and domain must be explicit. |

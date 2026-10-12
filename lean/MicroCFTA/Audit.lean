@@ -475,6 +475,13 @@ import MicroCFTA.InternedNestedRootReferences
 import MicroCFTA.InternedRetainedConstruction
 import MicroCFTA.InternedRetainedCompletion
 import MicroCFTA.InternedRetainedExamples
+import MicroCFTA.InternedStoredSubstitution
+import MicroCFTA.InternedStoredSubstitutionScope
+import MicroCFTA.InternedStoredSubstitutionBindings
+import MicroCFTA.EqualityLeafProjectionWorkers
+import MicroCFTA.EqualityLeafProjectionWorkerCompletion
+import MicroCFTA.EqualityLeafProjectionReplay
+import MicroCFTA.GroupedProbeValidation
 /-!
 # Proof dependency audit
 

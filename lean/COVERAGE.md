@@ -44,6 +44,8 @@ Open group positioning now reads recursive keys without a cardinality query.
 Unfinished recursive occurrences keep independent construction tokens.
 Payload queries reject them consistently across rebuilding phases. Nested
 completion preserves enclosing tokens and removes the completed token.
+Grouped recursion validates the discovered table against its final probe.
+Typed constructor programs pass this check with their previous exact minima.
 Existing suites pass 284 core, 194 generator, and 142 refinement examples on `de910ea`. Historical
 counterexamples remain checked against their explicitly named baseline
 models. The positive repair theorems are separate.

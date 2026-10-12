@@ -1,14 +1,14 @@
 # Current formalization findings
 
-Updated: **2026-10-13 00:24 CEST**.
+Updated: **2026-10-13 00:33 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
-and repaired two additional defects, described as rows 18 and 19.
+and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **576 jobs and 29,362 theorem dependency
+The full Lean development passes **583 jobs and 29,665 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -49,7 +49,7 @@ both ranks. This is a contract distinction, not a new decoder defect.
 
 ## Repaired source defects
 
-Rows 1–17 describe earlier repairs now merged upstream. Rows 18 and 19 are
+Rows 1–17 describe earlier repairs now merged upstream. Rows 18 through 20 are
 local repairs on top of `de910ea`. Each row has a retained source reproduction and a corresponding formal
 counterexample, repair theorem, or operational model. Older per-repair test
 totals in the linked reports describe their historical checkpoints. The
@@ -76,6 +76,7 @@ current combined suite total is 620.
 | 17 | Recursive open group positioning queried cardinalities, built an empty position map, and raised `Map.!`. | Read the available group keys directly. Unsupported recursive integer closure now returns its existing explicit error. [Reproduction](lean/repro/RecursiveOpenPositions.hs); `GroupPositions`. |
 | 18 | In one substitution scope, merging equal actual identities could remove the first identity replacement and expose a later replacement for the same formal. Sparse evaluation returned `Yes`, pruning admitted a rejected term, and compilation produced one invalid tuple. | Return `Unknown` when an uncertain identity replacement has a later duplicate formal. Pruning retains the guard; compilation returns `SolverUnknown`. The existing [guard/pruning reproduction](lean/repro/NestedScopeCapture.hs) and [compiler reproduction](lean/repro/NestedCompileCapture.hs) now check both nested and same-scope cases. `SameScopeIdentityCapture` retains the pre-repair witness; `SourceSubstitutionPrecedence` proves the new check. |
 | 19 | A recursive callback could inspect temporary support and select different bodies during count, term, and support rebuilds. The public bounded generator returned four terms that its support rejected. | Keep construction tokens separate from size flags. Reject payload queries until the definition completes. Nested definitions retain enclosing tokens; both recursive and finite return paths remove their own token. `RecursiveConstructionQueries` proves marker provenance, stable rejection, and completed query behavior. The existing recursive-member case in `GenSpec.hs` checks the original callback, fourteen query paths, and nested-family completion. See [the construction-query notes](lean/notes-recursive-construction-queries.md). |
+| 20 | Grouped key discovery retained an earlier minimum after a callback changed its base. `minimumSize` returned zero although counts were `[0,1,1,1]` and the smallest member had size one. | Compare the final probe's keys and minima with the accumulated discovery table. Return `InconsistentRecursiveFamily` on disagreement. `GroupedProbeValidation` derives a true body fixed point for every successful check and proves that constructor programs retain their previous least-attained minima. The existing recursive-member test retains the public callback. See [the discovery-validation notes](lean/notes-grouped-probe-validation.md). |
 
 The private `Recursion` repair changes engine-term shape. User values,
 surface terms, original generator counts, distributions, and rank order
@@ -146,6 +147,9 @@ callback and the nested selected-key completion case.
 
 This repairs the observed payload-query mismatch. It does not establish
 regularity of every arbitrary callback or monotonicity of key discovery.
+An empty family has no active records to reject. A callback can observe that
+initial state and change its finite base after keys appear. Row 20 validates
+the final discovered table before the source returns a tied family.
 
 ## Behavior that does not satisfy the stronger requested contract
 
@@ -216,18 +220,18 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
 
 ## Evidence and its limits
 
-- Latest source suites: **620 passing examples**, on `de910ea` plus both
+- Latest source suites: **620 passing examples**, on `de910ea` plus the local
   repairs. The full run is `/tmp/mcfta-construction-query-full.log`.
-  After the finite-return correction, all 194 generator and 142 refinement
-  examples pass in `/tmp/mcfta-construction-query-final.log`. Core is unchanged.
+  After the grouped-discovery check, all 194 generator and 142 refinement
+  examples pass in `/tmp/mcfta-family-discovery-validation.log`. Core is unchanged.
 - Repaired nested and same-scope source probes both report `(No,Unknown)`
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **576 jobs; 29,362 theorem dependency checks**.
+- Latest integrated Lean audit: **583 jobs; 29,665 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-construction-query-retained-audit.log`.
+  Log: `/tmp/mcfta-family-discovery-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -273,7 +277,9 @@ but do not prove it for every runtime execution.
    argument; a retained source example needs two changing passes. Projected
    leaf occurrences now have a derived schedule bound, including ancestor
    pruning, duplicate rows, and empty propagation. Physical parent rebuilding
-   derives normalized readback; recursive child-edit composition remains.
+   and finite recursive child edits now derive normalized readback, completion,
+   and a common cache for exact replay. Physical leaf intersection and
+   projected union adapters remain.
    See [the growth notes](lean/notes-finite-reduction-growth.md) and
    [projected leaf schedules](lean/notes-equality-leaf-projection.md).
 2. **Nested binder identity after normalization erases a fresh outer
@@ -305,7 +311,8 @@ but do not prove it for every runtime execution.
    the derived plain-input invariant and exact source weight rules.
    Arbitrary opaque inspection descriptors remain.
    The construction-query repair prevents the concrete payload observation
-   mismatch. Builders can still run
+   mismatch. The final family table check rejects stale keys and minima;
+   typed constructor programs pass without changed results. Builders can still run
    under different placeholder contexts; one fixed typed schema does not
    prove that arbitrary Haskell builders preserve their shape and errors.
 4. **Concrete runtime and external correspondence.** Physical interning,
