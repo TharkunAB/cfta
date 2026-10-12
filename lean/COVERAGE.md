@@ -29,14 +29,22 @@ sentinel requests and derives whole-node identity from the accepted row set.
 Physical Cartesian intersection derives exact raw readback and strict rank
 decrease. Its generated finite carrier preserves initial raw guard syntax.
 Finite occurrence compilation and recursive workers derive complete payload
-availability and readback. The stateful pass still needs composition. Full nested syntax now
-derives pending-reservation origins, complete old probe footprints, pending
+availability and readback. Ordinary occurrence trees now have exact complete
+recursive required-path correspondence. Physical leaf
+intersection and projection union have finite-cache record correspondence;
+physical path projection derives completion and available payloads. Endpoint
+projection, simultaneous edit, and schedule composition remain open.
+Full nested construction derives pending-reservation origins, complete old probe footprints, pending
 preservation, and earlier readback of old identities. The remaining general
 completion step is general absent-reference replay; recursive erased-edge
-construction already completes at arbitrary depth. The unfolding rank now depends
-only on reachable shallow values. Unrelated deep cache records are allowed;
+construction already completes at arbitrary depth. Structural erasure and
+mixed retained/erased source contexts also derive first completion.
+The unfolding rank depends only on reachable shallow values.
+Unrelated deep cache records are allowed;
 arbitrary nested Mu bodies remain open. Separate actual completion and strict
 decrease results allow arbitrary-depth closed Mu children in ordinary bodies.
+Source marker provenance also admits open nested records for one-step
+completion and decrease. General repeated unfolding remains unresolved.
 
 The upstream base includes the seventeen earlier repairs. This continuation
 also repairs same-scope identity-replacement precedence and recursive

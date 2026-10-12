@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 01:19 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 01:38 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -64,10 +64,10 @@ self-reference removal from recursive unions.
   `/tmp/mcfta-construction-query-full.log`. After the grouped-discovery check,
   all generator and refinement cases pass in
   `/tmp/mcfta-family-discovery-validation.log`. Core source is unchanged.
-- Latest integrated Lean build: **638 jobs; 30,710 theorem dependency checks**.
+- Latest integrated Lean build: **670 jobs; 31,341 theorem dependency checks**.
   This includes projected leaf schedules, nested first-run completion,
   stored shallow unfolding, and construction-query provenance.
-  Log: `/tmp/mcfta-raw-inventory-complete-worker-audit.log`.
+  Log: `/tmp/mcfta-complete-require-normalized-combination-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -215,8 +215,12 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   and strict rank decrease now follow for raw inputs. A finite raw inventory
   retains initial syntax and every later canonical conjunction. Finite
   occurrence compilation and actual recursive workers now derive complete
-  payload availability and readback. Whole stateful pass composition remains
-  in progress.
+  payload availability and readback. Finite raw leaf intersection and union
+  now derive complete-record correspondence in generated later caches.
+  The complete recursive required-path worker corresponds to retained
+  occurrences without an assumed worker law. Physical path projection now
+  derives completion and payload availability. Endpoint projection,
+  simultaneous edit, and full stateful schedule composition remain in progress.
   Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
@@ -234,7 +238,14 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   records in the same cache. Reachable Mu bodies must still have depth zero.
   A separate actual completion and strict-decrease theorem permits arbitrarily
   deep closed nested Mu records inside an ordinary body. General open nested
-  preparation remains unresolved.
+  preparation remains unresolved. Source marker provenance also derives
+  one-step completion and rank decrease through open nested Mu records.
+  It does not prove closure of the marker condition under repeated unfolding.
+  A separate unrestricted executor example increases head rank. Its callback
+  violates the documented substitution-parametricity precondition, so it is
+  not an admissible-callback defect. Actual free-reference occurrence costs
+  now have normalization laws. General Mu body/probe cost correspondence
+  remains open. See `notes-gate-unfolding-rank.md`.
 - Fresh-outer-dependent nested binder identity remains incomplete in general.
   Empty-child erasure now derives complete-record reuse. Every successful
   nested syntax execution replays exactly after cache growth. First execution
@@ -251,7 +262,11 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   dense identity tables. A later resident old identity has the exact complete
   payload from before the pending interval. Recursive erased-edge construction
   now completes at arbitrary depth, including nested live children independent
-  of the changed slot. General absent-reference trace replay
+  of the changed slot. Structural erasure now propagates through arbitrary
+  node, union, and binder contexts. A mixed first-run theorem combines retained
+  active frames with subprograms that read and erase enclosing inputs.
+  Selective retained/erased dependencies and union- or cleanup-induced erasure
+  remain open. General absent-reference trace replay
   across changed nested local identities remains open.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
