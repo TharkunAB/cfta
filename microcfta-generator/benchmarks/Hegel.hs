@@ -89,7 +89,7 @@ runSuite variant seconds heap benchmarks = do
 quantified refinements can run long; at the limit it counts as undecided.
 -}
 queryLimit :: Int
-queryLimit = 1000
+queryLimit = 100
 
 -- | Synthesize one query and print its row.
 runQuery :: Bool -> String -> String -> Int -> IO ()
