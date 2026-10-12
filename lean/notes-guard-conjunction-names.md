@@ -1,6 +1,8 @@
 # Global name allocation survives conjunction normalization
 
-`GuardConjunctionNames.lean` completes the public evaluator proof for the
+`GuardConjunctionNames.lean` proves the historical whole-guard entry, now the
+private scoped helper. `SourceBooleanEntry.normalize_evaluate` proves the
+repaired public dispatcher. The allocation result below remains valid for
 outer conjunction normalization in `GuardConjunction`. It proves membership
 preservation for paths, actual paths, symbol-sensitive paths, and literal
 requirements. `orderedPaths_ext` connects the source comparison-based path
@@ -19,7 +21,7 @@ are list equalities, not only set or mathematical formula equivalences.
 Duplicate removal and requirement reordering cannot change fresh spellings.
 
 `evaluateGuardWithSame_normalize` combines those tables with the complete
-fixed-table guard traversal theorem. Both public wrappers follow:
+fixed-table guard traversal theorem. Both historical public wrappers follow:
 `evaluateGuard_normalize` and `evaluateGuardWithShape_normalize`. They retain
 Yes, No, and Unknown for any stable pure solver callback. They need no solver
 renaming contract because the actual names and query formulas stay equal.

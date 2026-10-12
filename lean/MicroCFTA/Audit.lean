@@ -210,6 +210,9 @@ import MicroCFTA.FullGuardPruneStable
 import MicroCFTA.GuardConjunctionNames
 import MicroCFTA.PruneTerminationGrowth
 import MicroCFTA.EnumerationBuilderFastPaths
+import MicroCFTA.BooleanGuardPrune
+import MicroCFTA.BooleanGuardCompile
+import MicroCFTA.SourceConstraintConjunction
 /-!
 # Proof dependency audit
 
