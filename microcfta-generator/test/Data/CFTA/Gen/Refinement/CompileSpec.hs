@@ -25,9 +25,11 @@ import Data.CFTA.Refinement (
     Substitution (..),
     Symbol (RefinedSymbol),
     Verdict (Yes),
+    createUnion,
     noConstraint,
     nodeCount,
     path,
+    validate,
     pattern Transition,
  )
 import Data.CFTA.Refinement.Expression (
@@ -504,6 +506,26 @@ spec = do
                     (LTAGen.fromAutomatonUpToDepth 0 (Node [first', second']) `LTAGen.satisfying` (.>= 0))
             fmap (map Term.rootLabel) (compiled >>= LTAGen.values)
                 `shouldBe` Right [RefinedSymbol "interned-a" (refinementFormula (.== 0)), RefinedSymbol "interned-b" (refinementFormula (.== 1))]
+
+        it "keeps imported epsilon-union terms when a parent requests observations" $
+            withZ3 declarations $ \solver -> do
+                let leaf name = Node [Transition name true [] noConstraint]
+                    epsilon = Mu $ \self -> createUnion [self, leaf "a"]
+                    grammars = [epsilon, createUnion [epsilon, leaf "b"]]
+                    guards =
+                        [ \child -> child `requires` const true
+                        , \child -> anyOf [child `requires` const true, descendant child [0] `requires` const true]
+                        ]
+                forM_ grammars $ \graph -> do
+                    validate graph `shouldBe` Right ()
+                    let imported = LTAGen.fromAutomaton graph
+                        expected = LTAGen.upToSize 4 imported
+                    forM_ guards $ \guard -> do
+                        compiled <- compileOrFail solver $ LTAGen.refinedNode "wrap" (const true) guard imported
+                        let bounded = LTAGen.upToSize 5 compiled
+                        LTAGen.cardinality bounded `shouldBe` LTAGen.cardinality expected
+                        sort (values bounded) `shouldBe` sort (values expected)
+                        unranked bounded (allRanks bounded) `shouldBe` []
 
         it "give an empty language for an import that its condition empties" $ do
             -- The pruned automaton is empty, and reading it used to throw.

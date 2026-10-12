@@ -1154,6 +1154,7 @@ splitByObservations requested root
     | otherwise = case root of
         Node edges -> mergeParts $ concatMap splitEdge edges
         Mu _ -> splitByObservations requested $ unfoldOuterRec root
+        InternedUnion _ -> splitByObservations requested $ Node $ nodeEdges root
         _ -> []
   where
     observesRoot = Set.member (path []) requested
