@@ -79,7 +79,7 @@ import Control.Exception (try)
 import Control.Monad (filterM, foldM, unless, when)
 import Data.Char (isAlphaNum, isDigit, isLower, isSpace)
 import Data.IORef (modifyIORef', newIORef, readIORef)
-import Data.List (intercalate, nub)
+import Data.List (inits, intercalate, nub, tails)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, fromMaybe, isJust)
@@ -938,7 +938,10 @@ an integer formal parameter also by a compound term of the goal, as @n - 1@
 from @len v == n - 1 + len l@, a function formal parameter by a compound
 term that the goal applies, and another formal parameter by a goal term of
 a projection of its type, so that an intermediate term keeps what the
-library says about it. For each query argument
+library says about it. Each atom of the goal also gives the atom without a
+constant offset on a side of a comparison, as @at v k == ap f x@ from
+@at v k == ap f x + 1@: a term before a last step such as @map incr@ has that
+weaker goal. For each query argument
 @x@, @v == x@ is a qualifier of its base type. As in the liquid types of the
 paper's title, a refinement is a conjunction of qualifiers, so there are
 finitely many refinements of each base type.
@@ -991,6 +994,11 @@ qualifiers components query =
     direct =
         [(base, atom) | (_, RBase base refinement) <- liquidArguments query, atom <- atoms refinement]
             <> [(base, atom) | RBase base refinement <- [liquidGoal query], atom <- atoms refinement]
+            <> [ (base, weakened)
+               | RBase base refinement <- [liquidGoal query]
+               , atom <- atoms refinement
+               , weakened <- withoutOffsets atom
+               ]
             <> [(base, Atom Formula.Eq (Formula.Var value) (Formula.Var name)) | (name, base) <- arguments]
             <> [ (baseOf typ, qualifier)
                | (name, typ) <- constants
@@ -1062,6 +1070,26 @@ simplifyQualifiers entailment candidates = do
     entails = entailsWithBindings entailment []
     simplify (base, Or parts) = (,) base . Formula.disjunction <$> filterM (\part -> (/= Yes) <$> entails Top (Not part)) parts
     simplify candidate = pure candidate
+
+{- | The formula without one constant offset, in each place where a
+comparison that mentions the value has one on a side: @at v k == ap f x + 1@
+gives @at v k == ap f x@.
+-}
+withoutOffsets :: Formula -> [Formula]
+withoutOffsets formula = case formula of
+    Atom relation left right
+        | value `elem` Formula.freeNames formula ->
+            [Atom relation left' right | left' <- unoffset left] <> [Atom relation left right' | right' <- unoffset right]
+    And parts -> And <$> inOne parts
+    Or parts -> Or <$> inOne parts
+    Not inner -> Not <$> withoutOffsets inner
+    Forall bound inner -> Forall bound <$> withoutOffsets inner
+    _ -> []
+  where
+    unoffset (Formula.Add term (Formula.Lit _)) = [term]
+    unoffset (Formula.Sub term (Formula.Lit _)) = [term]
+    unoffset _ = []
+    inOne parts = [before <> (part' : after) | (before, part : after) <- zip (inits parts) (tails parts), part' <- withoutOffsets part]
 
 -- | The atoms of a formula, outside quantifiers.
 atomsOf :: Formula -> [Formula]
