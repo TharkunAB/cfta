@@ -42,23 +42,7 @@ module Data.CFTA.Gen.Synthesis.HegelBenchmarks (
 
 import Data.Text (Text)
 
-import Data.CFTA.Formula (Formula (Forall), Name (..), Sort (IntSort))
-
-import Data.CFTA.Gen.Synthesis (Type (..), (~>))
 import Data.CFTA.Gen.Synthesis.Liquid
-import Data.CFTA.Refinement.Expression (
-    Expr,
-    lnot,
-    variable,
-    (.&&),
-    (./=),
-    (.<),
-    (.<=),
-    (.==),
-    (.>),
-    (.>=),
-    (.||),
- )
 
 -- | The measures with their arities.
 measures :: [(Text, Int)]
@@ -77,339 +61,139 @@ measures =
     , ("filt", 2)
     ]
 
--- Types and measures
+-- | Components with their refinement types in the syntax of 'parseRType'.
+components :: [(Text, Text)] -> [Component]
+components = map (fmap rtype)
 
-a, int, bool, listA, intList :: Type
-a = TVar "a"
-int = TCons "Int" []
-bool = TCons "Bool" []
-listA = TCons "List" [a]
-intList = TCons "List" [int]
-
--- | A pair of lists of @a@.
-pairOfLists :: Type
-pairOfLists = TCons "Pair" [listA, listA]
-
-len, hd, lst, proj1, proj2 :: Expr -> Expr
-len e = measure "len" [e]
-hd e = measure "hd" [e]
-lst e = measure "lst" [e]
-proj1 e = measure "proj1" [e]
-proj2 e = measure "proj2" [e]
-
-mem, at :: Expr -> Expr -> Expr
-mem x xs = measure "mem" [x, xs]
-at xs i = measure "at" [xs, i]
-
-infixr 1 ==>
-
--- | Implication.
-(==>) :: Formula -> Formula -> Formula
-p ==> q = lnot p .|| q
-
--- | Equivalence.
-(<=>) :: Formula -> Formula -> Formula
-p <=> q = (p ==> q) .&& (q ==> p)
-
--- | A name of the logic, for the parameters that refinements mention.
-var :: String -> Expr
-var = variable
-
--- | A natural number.
-nat :: RType
-nat = refined int (.>= 0)
-
--- | A list that is not empty.
-nonEmpty :: Type -> RType
-nonEmpty typ = refined typ (\v -> len v .>= 1)
-
--- | A Boolean that holds exactly when the formula does.
-truth :: Expr -> Formula -> Formula
-truth v formula = (v .== 1 .|| v .== 0) .&& ((v .== 1) <=> formula)
+-- | A refinement type in the syntax of 'parseRType'. A parse error stops the program.
+rtype :: Text -> RType
+rtype = either error id . parseRType
 
 -- The library
 
 -- | List functions with precise refinements over the measures.
 listLibrary :: [Component]
 listLibrary =
-    [ ("nil", refined listA (\v -> len v .== 0))
-    , ("zero", refined int (.== 0))
-    ,
-        ( "cons"
-        , "x"
-            .: plain a
-            --> "xs"
-            .: plain listA
-            --> refined
-                listA
-                ( \v ->
-                    len v .== len xs
-                        + 1 .&& hd v .== x .&& mem x v .== 1 .&& (len xs .== 0 ==> lst v .== x) .&& (len xs .>= 1 ==> lst v .== lst xs)
-                )
-        )
-    ,
-        ( "append"
-        , "xs"
-            .: plain listA
-            --> "ys"
-            .: plain listA
-            --> refined
-                listA
-                ( \v ->
-                    len v .== len xs
-                        + len ys
-                            .&& (len xs .>= 1 ==> hd v .== hd xs .&& at v (len xs - 1) .== lst xs)
-                            .&& (len ys .>= 1 ==> lst v .== lst ys)
-                            .&& (len xs .== 0 .&& len ys .>= 1 ==> hd v .== hd ys)
-                            .&& (len ys .== 0 .&& len xs .>= 1 ==> lst v .== lst xs)
-                )
-        )
-    ,
-        ( "rev"
-        , "xs"
-            .: plain listA
-            --> refined listA (\v -> len v .== len xs .&& (len xs .>= 1 ==> hd v .== lst xs .&& lst v .== hd xs))
-        )
-    ,
-        ( "take"
-        , "n"
-            .: nat
-            --> "xs"
-            .: plain listA
-            --> refined
-                listA
-                ( \v ->
-                    (n .<= len xs ==> len v .== n) .&& (n .> len xs ==> len v .== len xs) .&& (n .>= 1 .&& len xs .>= 1 ==> hd v .== hd xs)
-                )
-        )
-    ,
-        ( "drop"
-        , "n"
-            .: nat
-            --> "xs"
-            .: plain listA
-            --> refined
-                listA
-                ( \v ->
-                    (n .<= len xs ==> len v .== len xs - n)
-                        .&& (n .> len xs ==> len v .== 0)
-                        .&& (n .< len xs ==> lst v .== lst xs .&& hd v .== at xs n)
-                )
-        )
-    , ("length", "xs" .: plain listA --> refined int (\v -> v .== len xs))
-    , ("incr", "x" .: plain int --> refined int (\v -> v .== x + 1))
-    , ("decr", "x" .: plain int --> refined int (\v -> v .== x - 1))
-    , ("sub", "x" .: plain int --> "y" .: plain int --> refined int (\v -> v .== x - var "y"))
-    , ("head", "xs" .: nonEmpty listA --> refined a (\v -> v .== hd xs .&& mem v xs .== 1))
-    , ("last", "xs" .: nonEmpty listA --> refined a (\v -> v .== lst xs .&& mem v xs .== 1))
-    , ("tail", "xs" .: nonEmpty listA --> refined listA (\v -> len v .== len xs - 1 .&& (len xs .>= 2 ==> lst v .== lst xs)))
-    ,
-        ( "nth"
-        , "xs"
-            .: plain listA
-            --> "i"
-            .: refined int (\v -> 0 .<= v .&& v .< len xs)
-            --> refined a (\v -> v .== at xs (var "i") .&& mem v xs .== 1)
-        )
-    ]
-  where
-    x = var "x"
-    xs = var "xs"
-    ys = var "ys"
-    n = var "n"
+    components
+        [ ("nil", "{v:[a] | len v = 0}")
+        , ("zero", "{v:Int | v = 0}")
+        ,
+            ( "cons"
+            , "x:a -> xs:[a] -> {v:[a] | len v = len xs + 1 && hd v = x && mem x v = 1"
+                <> " && (len xs = 0 => lst v = x) && (len xs >= 1 => lst v = lst xs)}"
+            )
+        ,
+            ( "append"
+            , "xs:[a] -> ys:[a] -> {v:[a] | len v = len xs + len ys"
+                <> " && (len xs >= 1 => hd v = hd xs && at v (len xs - 1) = lst xs)"
+                <> " && (len ys >= 1 => lst v = lst ys)"
+                <> " && (len xs = 0 && len ys >= 1 => hd v = hd ys)"
+                <> " && (len ys = 0 && len xs >= 1 => lst v = lst xs)}"
+            )
+        , ("rev", "xs:[a] -> {v:[a] | len v = len xs && (len xs >= 1 => hd v = lst xs && lst v = hd xs)}")
+        ,
+            ( "take"
+            , "n:{v:Int | v >= 0} -> xs:[a] -> {v:[a] | (n <= len xs => len v = n) && (n > len xs => len v = len xs)"
+                <> " && (n >= 1 && len xs >= 1 => hd v = hd xs)}"
+            )
+        ,
+            ( "drop"
+            , "n:{v:Int | v >= 0} -> xs:[a] -> {v:[a] | (n <= len xs => len v = len xs - n)"
+                <> " && (n > len xs => len v = 0) && (n < len xs => lst v = lst xs && hd v = at xs n)}"
+            )
+        , ("length", "xs:[a] -> {v:Int | v = len xs}")
+        , ("incr", "x:Int -> {v:Int | v = x + 1}")
+        , ("decr", "x:Int -> {v:Int | v = x - 1}")
+        , ("sub", "x:Int -> y:Int -> {v:Int | v = x - y}")
+        , ("head", "xs:{v:[a] | len v >= 1} -> {v:a | v = hd xs && mem v xs = 1}")
+        , ("last", "xs:{v:[a] | len v >= 1} -> {v:a | v = lst xs && mem v xs = 1}")
+        , ("tail", "xs:{v:[a] | len v >= 1} -> {v:[a] | len v = len xs - 1 && (len xs >= 2 => lst v = lst xs)}")
+        , ("nth", "xs:[a] -> i:{v:Int | 0 <= v && v < len xs} -> {v:a | v = at xs i && mem v xs = 1}")
+        ]
 
 -- | Pairs of lists, with @splitAt@ and @zip@.
 pairLibrary :: [Component]
 pairLibrary =
-    [
-        ( "splitAt"
-        , "n"
-            .: nat
-            --> "xs"
-            .: plain listA
-            --> refined
-                pairOfLists
-                ( \v ->
-                    (n .<= len xs ==> len (proj1 v) .== n .&& len (proj2 v) .== len xs - n)
-                        .&& (n .> len xs ==> len (proj1 v) .== len xs .&& len (proj2 v) .== 0)
-                        .&& (n .< len xs ==> hd (proj2 v) .== at xs n .&& lst (proj2 v) .== lst xs)
-                )
-        )
-    , ("fst", "p" .: plain pairOfLists --> refined listA (\v -> v .== proj1 (var "p")))
-    , ("snd", "p" .: plain pairOfLists --> refined listA (\v -> v .== proj2 (var "p")))
-    ,
-        ( "pair"
-        , "f" .: plain listA --> "s" .: plain listA --> refined pairOfLists (\v -> proj1 v .== var "f" .&& proj2 v .== var "s")
-        )
-    ,
-        ( "zip"
-        , "xs"
-            .: plain listA
-            --> "ys"
-            .: plain listA
-            --> refined
-                (TCons "List" [TCons "Pair" [a, a]])
-                ( \v ->
-                    (len xs .<= len ys ==> len v .== len xs)
-                        .&& (len xs .> len ys ==> len v .== len ys)
-                        .&& (len xs .>= 1 .&& len ys .>= 1 ==> proj1 (hd v) .== hd xs .&& proj2 (hd v) .== hd ys)
-                        .&& (len xs .== len ys .&& len xs .>= 1 ==> proj1 (lst v) .== lst xs .&& proj2 (lst v) .== lst ys)
-                )
-        )
-    ]
-  where
-    xs = var "xs"
-    ys = var "ys"
-    n = var "n"
+    components
+        [
+            ( "splitAt"
+            , "n:{v:Int | v >= 0} -> xs:[a]"
+                <> " -> {v:([a], [a]) | (n <= len xs => len (proj1 v) = n && len (proj2 v) = len xs - n)"
+                <> " && (n > len xs => len (proj1 v) = len xs && len (proj2 v) = 0)"
+                <> " && (n < len xs => hd (proj2 v) = at xs n && lst (proj2 v) = lst xs)}"
+            )
+        , ("fst", "p:([a], [a]) -> {v:[a] | v = proj1 p}")
+        , ("snd", "p:([a], [a]) -> {v:[a] | v = proj2 p}")
+        , ("pair", "f:[a] -> s:[a] -> {v:([a], [a]) | proj1 v = f && proj2 v = s}")
+        ,
+            ( "zip"
+            , "xs:[a] -> ys:[a] -> {v:[(a, a)] | (len xs <= len ys => len v = len xs)"
+                <> " && (len xs > len ys => len v = len ys)"
+                <> " && (len xs >= 1 && len ys >= 1 => proj1 (hd v) = hd xs && proj2 (hd v) = hd ys)"
+                <> " && (len xs = len ys && len xs >= 1 => proj1 (lst v) = lst xs && proj2 (lst v) = lst ys)}"
+            )
+        ]
 
 -- | Booleans, and membership in a list.
 booleanLibrary :: [Component]
 booleanLibrary =
-    [ ("elem", "x" .: plain a --> "xs" .: plain listA --> refined bool (\v -> truth v (mem (var "x") (var "xs") .== 1)))
-    , ("and", "p" .: plain bool --> "q" .: plain bool --> refined bool (\v -> truth v (var "p" .== 1 .&& var "q" .== 1)))
-    , ("or", "p" .: plain bool --> "q" .: plain bool --> refined bool (\v -> truth v (var "p" .== 1 .|| var "q" .== 1)))
-    , ("not", "p" .: plain bool --> refined bool (\v -> truth v (var "p" .== 0)))
-    ]
+    components
+        [ ("elem", "x:a -> xs:[a] -> {v:Bool | v <=> mem x xs = 1}")
+        , ("and", "p:Bool -> q:Bool -> {v:Bool | v <=> p = 1 && q = 1}")
+        , ("or", "p:Bool -> q:Bool -> {v:Bool | v <=> p = 1 || q = 1}")
+        , ("not", "p:Bool -> {v:Bool | v <=> p = 0}")
+        ]
 
 -- | A test of zero, and the lookup of a key in a list of keys with a list of values.
 lookupLibrary :: [Component]
 lookupLibrary =
-    [ ("isZero", "x" .: plain int --> refined bool (\v -> truth v (var "x" .== 0)))
-    ,
-        ( "lookup"
-        , "k"
-            .: plain int
-            --> "ks"
-            .: plain intList
-            --> "vs"
-            .: refined listA (\v -> len v .== len (var "ks"))
-            --> refined a (\v -> v .== at (var "vs") (measure "idx" [var "k", var "ks"]))
-        )
-    ]
+    components
+        [ ("isZero", "x:Int -> {v:Bool | v <=> x = 0}")
+        , ("lookup", "k:Int -> ks:[Int] -> vs:{v:[a] | len v = len ks} -> {v:a | v = at vs (idx k ks)}")
+        ]
 
 {- | The update of a list at an index. The frame condition is a quantified
 formula: every other index keeps its element.
 -}
 arrayLibrary :: [Component]
 arrayLibrary =
-    [
-        ( "set"
-        , "xs"
-            .: plain listA
-            --> "i"
-            .: refined int (\v -> 0 .<= v .&& v .< len (var "xs"))
-            --> "x"
-            .: plain a
-            --> refined listA (\v -> len v .== len (var "xs") .&& at v (var "i") .== var "x" .&& keeps v (var "xs") [var "i"])
-        )
-    ]
+    components
+        [
+            ( "set"
+            , "xs:[a] -> i:{v:Int | 0 <= v && v < len xs} -> x:a"
+                <> " -> {v:[a] | len v = len xs && at v i = x && forall k. k = i || at v k = at xs k}"
+            )
+        ]
 
 -- | The first index of a character in a string, or the length of the string.
 stringLibrary :: [Component]
 stringLibrary =
-    [
-        ( "indexOf"
-        , "c"
-            .: plain char
-            --> "s"
-            .: plain string
-            --> refined int (\v -> v .== measure "idx" [var "c", var "s"] .&& 0 .<= v .&& v .<= len (var "s"))
-        )
-    ]
-
-char, string :: Type
-char = TCons "Char" []
-string = TCons "List" [char]
-
-{- | Every index of the first list except the given ones has the element of
-the second list at it.
--}
-keeps :: Expr -> Expr -> [Expr] -> Formula
-keeps new old excepted =
-    Forall
-        [(Name "k", IntSort)]
-        (foldr (\index rest -> var "k" .== index .|| rest) (at new (var "k") .== at old (var "k")) excepted)
+    components
+        [("indexOf", "c:Char -> s:[Char] -> {v:Int | v = idx c s && 0 <= v && v <= len s}")]
 
 {- | Higher-order functions over function values, with @ap@ for application.
 Each group of queries takes the functions it names from this list.
 -}
 functionLibrary :: [Component]
 functionLibrary =
-    [
-        ( "map"
-        , "f"
-            .: plain (a ~> b)
-            --> "xs"
-            .: plain listA
-            --> refined
-                (TCons "List" [b])
-                (\v -> len v .== len (var "xs") .&& everywhere (\k -> at v k .== ap (var "f") (at (var "xs") k)))
-        )
-    ,
-        ( "compose"
-        , "f"
-            .: plain (b ~> c)
-            --> "g"
-            .: plain (a ~> b)
-            --> refined (a ~> c) (\v -> everywhere (\x -> ap v x .== ap (var "f") (ap (var "g") x)))
-        )
-    , ("apply", "f" .: plain (a ~> b) --> "x" .: plain a --> refined b (\v -> v .== ap (var "f") (var "x")))
-    ,
-        ( "applyN"
-        , "f"
-            .: plain (int ~> int)
-            --> "n"
-            .: nat
-            --> "x"
-            .: plain int
-            --> refined int (\v -> v .== measure "iter" [var "f", var "n", var "x"])
-        )
-    , ("add", "x" .: plain int --> "y" .: plain int --> refined int (\v -> v .== var "x" + var "y"))
-    , ("incr", "x" .: plain int --> refined int (\v -> v .== var "x" + 1))
-    , ("decr", "x" .: plain int --> refined int (\v -> v .== var "x" - 1))
-    ,
-        ( "rev"
-        , "xs"
-            .: plain listA
-            --> refined
-                listA
-                ( \v ->
-                    len v
-                        .== len (var "xs")
-                        .&& everywhere (\k -> 0 .<= k .&& k .< len (var "xs") ==> at v k .== at (var "xs") (len (var "xs") - 1 - k))
-                )
-        )
-    , ("head", "xs" .: nonEmpty listA --> refined a (\v -> v .== hd (var "xs") .&& mem v (var "xs") .== 1))
-    , ("last", "xs" .: nonEmpty listA --> refined a (\v -> v .== lst (var "xs") .&& mem v (var "xs") .== 1))
-    , ("null", "xs" .: plain listA --> refined bool (\v -> truth v (len (var "xs") .== 0)))
-    ,
-        ( "mapE"
-        , "f"
-            .: plain (a ~> b)
-            --> "xs"
-            .: plain listA
-            --> refined (TCons "List" [b]) (\v -> v .== measure "mapM" [var "f", var "xs"] .&& len v .== len (var "xs"))
-        )
-    ,
-        ( "filter"
-        , "p"
-            .: plain (a ~> bool)
-            --> "xs"
-            .: plain listA
-            --> refined listA (\v -> v .== measure "filt" [var "p", var "xs"] .&& len v .<= len (var "xs"))
-        )
-    ]
-  where
-    b = TVar "b"
-    c = TVar "c"
-
--- | The application of a function value to an argument.
-ap :: Expr -> Expr -> Expr
-ap function argument = measure "ap" [function, argument]
-
--- | A formula for every integer, given as a function of the bound name.
-everywhere :: (Expr -> Formula) -> Formula
-everywhere body = Forall [(Name "k", IntSort)] (body (var "k"))
+    components
+        [ ("map", "f:(a -> b) -> xs:[a] -> {v:[b] | len v = len xs && forall k. at v k = ap f (at xs k)}")
+        , ("compose", "f:(b -> c) -> g:(a -> b) -> {v:a -> c | forall k. ap v k = ap f (ap g k)}")
+        , ("apply", "f:(a -> b) -> x:a -> {v:b | v = ap f x}")
+        , ("applyN", "f:(Int -> Int) -> n:{v:Int | v >= 0} -> x:Int -> {v:Int | v = iter f n x}")
+        , ("add", "x:Int -> y:Int -> {v:Int | v = x + y}")
+        , ("incr", "x:Int -> {v:Int | v = x + 1}")
+        , ("decr", "x:Int -> {v:Int | v = x - 1}")
+        ,
+            ( "rev"
+            , "xs:[a] -> {v:[a] | len v = len xs && forall k. 0 <= k && k < len xs => at v k = at xs (len xs - 1 - k)}"
+            )
+        , ("head", "xs:{v:[a] | len v >= 1} -> {v:a | v = hd xs && mem v xs = 1}")
+        , ("last", "xs:{v:[a] | len v >= 1} -> {v:a | v = lst xs && mem v xs = 1}")
+        , ("null", "xs:[a] -> {v:Bool | v <=> len xs = 0}")
+        , ("mapE", "f:(a -> b) -> xs:[a] -> {v:[b] | v = mapM f xs && len v = len xs}")
+        , ("filter", "p:(a -> Bool) -> xs:[a] -> {v:[a] | v = filt p xs && len v <= len xs}")
+        ]
 
 -- Benchmarks
 
@@ -432,260 +216,196 @@ liquidBenchmarks =
             "Nth2"
             "Swap the elements at indexes i and j of the reverse of l"
             (indexing <> functions ["rev"])
-            [("i", index), ("j", refined int (\v -> 0 .<= v .&& v .< len l .&& v ./= var "i")), ("l", plain listA)]
-        $ refined
-            listA
-            ( \v ->
-                len v
-                    .== len l
-                    .&& at v (var "i")
-                    .== at l (len l - 1 - var "j")
-                    .&& at v (var "j")
-                    .== at l (len l - 1 - var "i")
-                    .&& Forall
-                        [(Name "k", IntSort)]
-                        ( var "k"
-                            .== var "i"
-                            .|| var "k"
-                            .== var "j"
-                            .|| var "k"
-                            .< 0
-                            .|| var "k"
-                            .>= len l
-                            .|| at v (var "k")
-                            .== at l (len l - 1 - var "k")
-                        )
-            )
+        $ "i:{v:Int | 0 <= v && v < len l} -> j:{v:Int | 0 <= v && v < len l && v /= i} -> l:[a]"
+            <> " -> {v:[a] | len v = len l && at v i = at l (len l - 1 - j) && at v j = at l (len l - 1 - i)"
+            <> " && forall k. k = i || k = j || k < 0 || k >= len l || at v k = at l (len l - 1 - k)}"
     , bounded 6
         $ benchmark
             "Nth3"
             "Increment the elements at indexes i and j of l, and swap them"
             (indexing <> functions ["incr"])
-            [("i", index), ("j", refined int (\v -> 0 .<= v .&& v .< len l .&& v ./= var "i")), ("l", plain intList)]
-        $ refined
-            intList
-            ( \v ->
-                len v .== len l .&& at v (var "i") .== at l (var "j")
-                    + 1 .&& at v (var "j") .== at l (var "i")
-                    + 1 .&& keeps v l [var "i", var "j"]
-            )
+        $ "i:{v:Int | 0 <= v && v < len l} -> j:{v:Int | 0 <= v && v < len l && v /= i} -> l:[Int]"
+            <> " -> {v:[Int] | len v = len l && at v i = at l j + 1 && at v j = at l i + 1"
+            <> " && forall k. k = i || k = j || at v k = at l k}"
     , benchmark
         "SplitStr1"
         "Split s at the character c"
         strings
-        splitting
-        $ refined (TCons "Pair" [string, string]) (\v -> len (proj1 v) .== position .&& len (proj2 v) .== len s - position)
-    , benchmark
-        "SplitStr2"
-        "Split s at the character c, and swap the parts"
-        strings
-        splitting
-        $ refined
-            (TCons "Pair" [string, string])
-            ( \v ->
-                len (proj1 v) .== len s
-                    - position
-                        .&& len (proj2 v)
-                        .== position
-                        .&& (position .< len s ==> hd (proj1 v) .== at s position)
-                        .&& (position .>= 1 ==> hd (proj2 v) .== hd s)
-            )
+        "c:Char -> s:[Char] -> {v:([Char], [Char]) | len (proj1 v) = idx c s && len (proj2 v) = len s - idx c s}"
+    , benchmark "SplitStr2" "Split s at the character c, and swap the parts" strings $
+        "c:Char -> s:[Char] -> {v:([Char], [Char]) | len (proj1 v) = len s - idx c s && len (proj2 v) = idx c s"
+            <> " && (idx c s < len s => hd (proj1 v) = at s (idx c s)) && (idx c s >= 1 => hd (proj2 v) = hd s)}"
     , bounded 6
-        $ benchmark
-            "SplitStr3"
-            "Split s at the character c, and put c in front of the second part"
-            strings
-            splitting
-        $ refined
-            (TCons "Pair" [string, string])
-            (\v -> len (proj1 v) .== position .&& len (proj2 v) .== len s - position + 1 .&& hd (proj2 v) .== var "c")
+        $ benchmark "SplitStr3" "Split s at the character c, and put c in front of the second part" strings
+        $ "c:Char -> s:[Char] -> {v:([Char], [Char]) | len (proj1 v) = idx c s"
+            <> " && len (proj2 v) = len s - idx c s + 1 && hd (proj2 v) = c}"
+    , benchmark "Nth1" "Swap the elements at indexes i and j of l" indexing $
+        "i:{v:Int | 0 <= v && v < len l} -> j:{v:Int | 0 <= v && v < len l && v /= i} -> l:[a]"
+            <> " -> {v:[a] | len v = len l && at v i = at l j && at v j = at l i"
+            <> " && forall k. k = i || k = j || at v k = at l k}"
     , benchmark
-        "Nth1"
-        "Swap the elements at indexes i and j of l"
-        indexing
-        [("i", index), ("j", refined int (\v -> 0 .<= v .&& v .< len l .&& v ./= var "i")), ("l", plain listA)]
-        $ refined
-            listA
-            ( \v ->
-                len v
-                    .== len l
-                    .&& at v (var "i")
-                    .== at l (var "j")
-                    .&& at v (var "j")
-                    .== at l (var "i")
-                    .&& keeps v l [var "i", var "j"]
-            )
-    , benchmark "RevApp1" "Reverse l and append to itself" lists [("l", nonEmpty listA)] $
-        refined listA (\v -> len v .== len l + len l .&& hd v .== lst l .&& lst v .== lst l)
-    , benchmark "RevApp2" "Append l to itself and reverse" lists [("l", nonEmpty listA)] $
-        refined listA (\v -> len v .== len l + len l .&& hd v .== lst l .&& lst v .== hd l)
-    , benchmark "RevApp3" "Reverse l, append l, and reverse" lists [("l", nonEmpty listA)] $
-        refined listA (\v -> len v .== len l + len l .&& hd v .== hd l .&& lst v .== hd l)
-    , benchmark "RevZip1" "Reverse f and zip it with s" pairs sameLength $
-        refined pairList (\v -> len v .== len f .&& proj1 (hd v) .== lst f .&& proj2 (hd v) .== hd s)
-    , benchmark "RevZip2" "Reverse s and zip f with it" pairs sameLength $
-        refined pairList (\v -> len v .== len f .&& proj1 (hd v) .== hd f .&& proj2 (hd v) .== lst s)
-    , benchmark "RevZip3" "Zip f and s, and reverse" pairs sameLength $
-        refined pairList (\v -> len v .== len f .&& proj1 (hd v) .== lst f .&& proj2 (hd v) .== lst s)
+        "RevApp1"
+        "Reverse l and append to itself"
+        lists
+        "l:{v:[a] | len v >= 1} -> {v:[a] | len v = len l + len l && hd v = lst l && lst v = lst l}"
     , benchmark
-        "SplitAt1"
-        "Split l at index n; drop m elements from the second part (the motivating query)"
-        pairs
-        [("n", refined int (.>= 1)), ("m", nat), ("l", refined listA (\v -> var "n" + var "m" .< len v))]
-        $ refined
-            pairOfLists
-            ( \v ->
-                len (proj1 v) .== var "n" .&& hd (proj1 v) .== hd l .&& len (proj2 v) .== len l
-                    - var "n"
-                    - var "m" .&& lst (proj2 v) .== lst l
-            )
+        "RevApp2"
+        "Append l to itself and reverse"
+        lists
+        "l:{v:[a] | len v >= 1} -> {v:[a] | len v = len l + len l && hd v = lst l && lst v = hd l}"
     , benchmark
-        "SplitAt2"
-        "Split l at index n; drop m elements from the first part"
-        pairs
-        [("n", nat), ("m", refined int (\v -> v .>= 0 .&& v .<= var "n")), ("l", refined listA (\v -> var "n" .<= len v))]
-        $ refined pairOfLists (\v -> len (proj1 v) .== var "n" - var "m" .&& len (proj2 v) .== len l - var "n")
-    , benchmark
-        "SplitAt3"
-        "Split l at index n; drop (n-m) elements from the second part"
-        pairs
-        [ ("n", refined int (.>= 1))
-        , ("m", refined int (\v -> v .>= 0 .&& v .<= var "n"))
-        , ("l", refined listA (\v -> var "n" + var "n" - var "m" .< len v))
-        ]
-        $ refined
-            pairOfLists
-            ( \v ->
-                len (proj1 v) .== var "n" .&& hd (proj1 v) .== hd l .&& len (proj2 v) .== len l
-                    - var "n"
-                    - (var "n" - var "m") .&& lst (proj2 v) .== lst l
-            )
+        "RevApp3"
+        "Reverse l, append l, and reverse"
+        lists
+        "l:{v:[a] | len v >= 1} -> {v:[a] | len v = len l + len l && hd v = hd l && lst v = hd l}"
+    , benchmark "RevZip1" "Reverse f and zip it with s" pairs $
+        "f:{v:[a] | len v >= 1} -> s:{v:[a] | len v = len f}"
+            <> " -> {v:[(a, a)] | len v = len f && proj1 (hd v) = lst f && proj2 (hd v) = hd s}"
+    , benchmark "RevZip2" "Reverse s and zip f with it" pairs $
+        "f:{v:[a] | len v >= 1} -> s:{v:[a] | len v = len f}"
+            <> " -> {v:[(a, a)] | len v = len f && proj1 (hd v) = hd f && proj2 (hd v) = lst s}"
+    , benchmark "RevZip3" "Zip f and s, and reverse" pairs $
+        "f:{v:[a] | len v >= 1} -> s:{v:[a] | len v = len f}"
+            <> " -> {v:[(a, a)] | len v = len f && proj1 (hd v) = lst f && proj2 (hd v) = lst s}"
+    , benchmark "SplitAt1" "Split l at index n; drop m elements from the second part (the motivating query)" pairs $
+        "n:{v:Int | v >= 1} -> m:{v:Int | v >= 0} -> l:{v:[a] | n + m < len v}"
+            <> " -> {v:([a], [a]) | len (proj1 v) = n && hd (proj1 v) = hd l && len (proj2 v) = len l - n - m"
+            <> " && lst (proj2 v) = lst l}"
+    , benchmark "SplitAt2" "Split l at index n; drop m elements from the first part" pairs $
+        "n:{v:Int | v >= 0} -> m:{v:Int | v >= 0 && v <= n} -> l:{v:[a] | n <= len v}"
+            <> " -> {v:([a], [a]) | len (proj1 v) = n - m && len (proj2 v) = len l - n}"
+    , benchmark "SplitAt3" "Split l at index n; drop (n-m) elements from the second part" pairs $
+        "n:{v:Int | v >= 1} -> m:{v:Int | v >= 0 && v <= n} -> l:{v:[a] | n + n - m < len v}"
+            <> " -> {v:([a], [a]) | len (proj1 v) = n && hd (proj1 v) = hd l && len (proj2 v) = len l - n - (n - m)"
+            <> " && lst (proj2 v) = lst l}"
     , benchmark
         "Nth_Incr1"
         "Return the (n+1)th element of l"
         lists
-        [("n", nat), ("l", refined listA (\v -> var "n" + 1 .< len v))]
-        $ refined a (\v -> v .== at l (var "n" + 1))
+        "n:{v:Int | v >= 0} -> l:{v:[a] | n + 1 < len v} -> {v:a | v = at l (n + 1)}"
     , benchmark
         "Nth_Incr2"
         "Return the (n-1)th element of l"
         lists
-        [("n", refined int (.>= 1)), ("l", refined listA (\v -> var "n" .< len v))]
-        $ refined a (\v -> v .== at l (var "n" - 1))
+        "n:{v:Int | v >= 1} -> l:{v:[a] | n < len v} -> {v:a | v = at l (n - 1)}"
     , benchmark
         "Nth_Incr3"
         "Return the nth element of l and increment it"
         lists
-        [("n", nat), ("l", refined intList (\v -> var "n" .< len v))]
-        $ refined int (\v -> v .== at l (var "n") + 1)
+        "n:{v:Int | v >= 0} -> l:{v:[Int] | n < len v} -> {v:Int | v = at l n + 1}"
     , benchmark
         "AppendN1"
         "Append the first n elements to l"
         lists
-        [("n", nat), ("l", refined listA (\v -> len v .>= 1 .&& var "n" .<= len v))]
-        $ refined listA (\v -> len v .== var "n" + len l .&& lst v .== lst l)
+        "n:{v:Int | v >= 0} -> l:{v:[a] | len v >= 1 && n <= len v} -> {v:[a] | len v = n + len l && lst v = lst l}"
+    , benchmark "AppendN3" "Append the last n elements to l" lists $
+        "n:{v:Int | v >= 1} -> l:{v:[a] | n <= len v}"
+            <> " -> {v:[a] | len v = n + len l && at v (n - 1) = lst l && lst v = lst l}"
+    , starred "AppendN2" "Append the first (n-1) elements to l" (listLibrary <> lookupLibrary) $
+        "n:{v:Int | v >= 0} -> l:{v:[a] | len v >= 1 && n <= len v}"
+            <> " -> {v:[a] | (n >= 1 => len v = n - 1 + len l) && (n = 0 => v = l) && lst v = lst l}"
+    , starred "LookRange1" "Lookup k in the values, else return d" lookups $
+        "k:Int -> ks:[Int] -> vs:{v:[a] | len v = len ks && len v >= 1} -> d:a"
+            <> " -> {v:a | (mem k ks = 1 => v = at vs (idx k ks)) && (mem k ks /= 1 => v = d)}"
+    , starred "LookRange2" "Lookup k in the values, else return the last value" lookups $
+        "k:Int -> ks:[Int] -> vs:{v:[a] | len v = len ks && len v >= 1}"
+            <> " -> {v:a | (mem k ks = 1 => v = at vs (idx k ks)) && (mem k ks /= 1 => v = lst vs)}"
+    , starred "LookRange3" "Lookup k in the values, else return the first value" lookups $
+        "k:Int -> ks:[Int] -> vs:{v:[a] | len v = len ks && len v >= 1}"
+            <> " -> {v:a | (mem k ks = 1 => v = at vs (idx k ks)) && (mem k ks /= 1 => v = hd vs)}"
     , benchmark
-        "AppendN3"
-        "Append the last n elements to l"
-        lists
-        [("n", refined int (.>= 1)), ("l", refined listA (\v -> var "n" .<= len v))]
-        $ refined listA (\v -> len v .== var "n" + len l .&& at v (var "n" - 1) .== lst l .&& lst v .== lst l)
-    , starred
-        "AppendN2"
-        "Append the first (n-1) elements to l"
-        (listLibrary <> lookupLibrary)
-        [("n", nat), ("l", refined listA (\v -> len v .>= 1 .&& var "n" .<= len v))]
-        $ refined
-            listA
-            (\v -> (var "n" .>= 1 ==> len v .== var "n" - 1 + len l) .&& (var "n" .== 0 ==> v .== l) .&& lst v .== lst l)
-    , starred "LookRange1" "Lookup k in the values, else return d" lookups (keyed <> [("d", plain a)]) $
-        refined a (\v -> found v .&& (mem (var "k") (var "ks") ./= 1 ==> v .== var "d"))
-    , starred "LookRange2" "Lookup k in the values, else return the last value" lookups keyed $
-        refined a (\v -> found v .&& (mem (var "k") (var "ks") ./= 1 ==> v .== lst (var "vs")))
-    , starred "LookRange3" "Lookup k in the values, else return the first value" lookups keyed $
-        refined a (\v -> found v .&& (mem (var "k") (var "ks") ./= 1 ==> v .== hd (var "vs")))
-    , benchmark "Map1" "Map f on l and increment each element" mapping [("f", plain (int ~> int)), ("l", plain intList)] $
-        refined intList (\v -> len v .== len l .&& everywhere (\k -> at v k .== ap (var "f") (at l k) + 1))
-    , benchmark "Map2" "Map f on l and decrement each element" mapping [("f", plain (int ~> int)), ("l", plain intList)] $
-        refined intList (\v -> len v .== len l .&& everywhere (\k -> at v k .== ap (var "f") (at l k) - 1))
-    , benchmark
-        "Map3"
-        "Map f on l, increment each element, and reverse"
+        "Map1"
+        "Map f on l and increment each element"
         mapping
-        [("f", plain (int ~> int)), ("l", plain intList)]
-        $ refined
-            intList
-            ( \v -> len v .== len l .&& everywhere (\k -> 0 .<= k .&& k .< len l ==> at v k .== ap (var "f") (at l (len l - 1 - k)) + 1)
-            )
+        "f:(Int -> Int) -> l:[Int] -> {v:[Int] | len v = len l && forall k. at v k = ap f (at l k) + 1}"
+    , benchmark
+        "Map2"
+        "Map f on l and decrement each element"
+        mapping
+        "f:(Int -> Int) -> l:[Int] -> {v:[Int] | len v = len l && forall k. at v k = ap f (at l k) - 1}"
+    , benchmark "Map3" "Map f on l, increment each element, and reverse" mapping $
+        "f:(Int -> Int) -> l:[Int]"
+            <> " -> {v:[Int] | len v = len l"
+            <> " && forall k. 0 <= k && k < len l => at v k = ap f (at l (len l - 1 - k)) + 1}"
     , benchmark
         "MapDouble1"
         "Map f followed by g"
         mappingTwice
-        [("f", plain (a ~> TVar "b")), ("g", plain (TVar "b" ~> TVar "c")), ("l", plain listA)]
-        $ refined
-            (TCons "List" [TVar "c"])
-            (\v -> len v .== len l .&& everywhere (\k -> at v k .== ap (var "g") (ap (var "f") (at l k))))
+        "f:(a -> b) -> g:(b -> c) -> l:[a] -> {v:[c] | len v = len l && forall k. at v k = ap g (ap f (at l k))}"
     , benchmark
         "MapDouble2"
         "Map g followed by f"
         mappingTwice
-        [("f", plain (TVar "b" ~> TVar "c")), ("g", plain (a ~> TVar "b")), ("l", plain listA)]
-        $ refined
-            (TCons "List" [TVar "c"])
-            (\v -> len v .== len l .&& everywhere (\k -> at v k .== ap (var "f") (ap (var "g") (at l k))))
+        "f:(b -> c) -> g:(a -> b) -> l:[a] -> {v:[c] | len v = len l && forall k. at v k = ap f (ap g (at l k))}"
     , benchmark
         "MapDouble3"
         "Map the composition of f with itself on l"
         mappingTwice
-        [("f", plain (a ~> a)), ("l", plain listA)]
-        $ refined listA (\v -> len v .== len l .&& everywhere (\k -> at v k .== ap (var "f") (ap (var "f") (at l k))))
-    , benchmark "ApplyNAdd1" "Apply f on m, n times, and add m" iterating applyN $
-        refined int (\v -> v .== measure "iter" [var "f", var "n", var "m"] + var "m")
-    , benchmark "ApplyNAdd2" "Apply f on m, n+1 times, and add m" iterating applyN $
-        refined int (\v -> v .== measure "iter" [var "f", var "n" + 1, var "m"] + var "m")
-    , benchmark "ApplyNAdd3" "Apply f on m, n+1 times, and add m+1" iterating applyN $
-        refined int (\v -> v .== measure "iter" [var "f", var "n" + 1, var "m"] + var "m" + 1)
-    , benchmark "ApplyNInv1" "Apply g and h on l, and filter using f" filtering inverse $
-        refined listA (\v -> v .== filt (var "f") (mapped (var "h") (mapped (var "g") l)))
-    , benchmark "ApplyNInv2" "Filter l using f, and apply g and h" filtering inverse $
-        refined listA (\v -> v .== mapped (var "h") (mapped (var "g") (filt (var "f") l)))
-    , benchmark "ApplyNInv3" "Apply g and h on l, filter using f, and apply g and h" filtering inverse $
-        refined listA (\v -> v .== mapped (var "h") (mapped (var "g") (filt (var "f") (mapped (var "h") (mapped (var "g") l)))))
+        "f:(a -> a) -> l:[a] -> {v:[a] | len v = len l && forall k. at v k = ap f (ap f (at l k))}"
+    , benchmark
+        "ApplyNAdd1"
+        "Apply f on m, n times, and add m"
+        iterating
+        "f:(Int -> Int) -> n:{v:Int | v >= 0} -> m:Int -> {v:Int | v = iter f n m + m}"
+    , benchmark
+        "ApplyNAdd2"
+        "Apply f on m, n+1 times, and add m"
+        iterating
+        "f:(Int -> Int) -> n:{v:Int | v >= 0} -> m:Int -> {v:Int | v = iter f (n + 1) m + m}"
+    , benchmark
+        "ApplyNAdd3"
+        "Apply f on m, n+1 times, and add m+1"
+        iterating
+        "f:(Int -> Int) -> n:{v:Int | v >= 0} -> m:Int -> {v:Int | v = iter f (n + 1) m + m + 1}"
+    , benchmark
+        "ApplyNInv1"
+        "Apply g and h on l, and filter using f"
+        filtering
+        "f:(a -> Bool) -> g:(a -> a) -> h:(a -> a) -> l:[a] -> {v:[a] | v = filt f (mapM h (mapM g l))}"
+    , benchmark
+        "ApplyNInv2"
+        "Filter l using f, and apply g and h"
+        filtering
+        "f:(a -> Bool) -> g:(a -> a) -> h:(a -> a) -> l:[a] -> {v:[a] | v = mapM h (mapM g (filt f l))}"
+    , benchmark "ApplyNInv3" "Apply g and h on l, filter using f, and apply g and h" filtering $
+        "f:(a -> Bool) -> g:(a -> a) -> h:(a -> a) -> l:[a]"
+            <> " -> {v:[a] | v = mapM h (mapM g (filt f (mapM h (mapM g l))))}"
     , starred
         "ApplyList1"
         "Apply the head of fl on s"
         applying
-        [("fl", refined (TCons "List" [a ~> a]) (\v -> len v .>= 0)), ("s", plain a)]
-        $ refined
-            a
-            (\v -> (len (var "fl") .>= 1 ==> v .== ap (hd (var "fl")) (var "s")) .&& (len (var "fl") .== 0 ==> v .== var "s"))
+        "fl:{v:[a -> a] | len v >= 0} -> s:a -> {v:a | (len fl >= 1 => v = ap (hd fl) s) && (len fl = 0 => v = s)}"
     , starred
         "ApplyList2"
         "Apply the last element of fl on s"
         applying
-        [("fl", refined (TCons "List" [a ~> a]) (\v -> len v .>= 0)), ("s", plain a)]
-        $ refined
-            a
-            (\v -> (len (var "fl") .>= 1 ==> v .== ap (lst (var "fl")) (var "s")) .&& (len (var "fl") .== 0 ==> v .== var "s"))
+        "fl:{v:[a -> a] | len v >= 0} -> s:a -> {v:a | (len fl >= 1 => v = ap (lst fl) s) && (len fl = 0 => v = s)}"
     , benchmark
         "ApplyList3"
         "Apply the first and then the last function of fl on s"
         applying
-        [("fl", nonEmpty (TCons "List" [a ~> a])), ("s", plain a)]
-        $ refined a (\v -> v .== ap (lst (var "fl")) (ap (hd (var "fl")) (var "s")))
-    , benchmark "CEdge1" "True if src and tgt both are in l" booleans edge $
-        refined bool (\v -> truth v (mem src l .== 1 .&& mem tgt l .== 1))
-    , benchmark "CEdge2" "True if src or tgt is in l" booleans edge $
-        refined bool (\v -> truth v (mem src l .== 1 .|| mem tgt l .== 1))
-    , benchmark "CEdge3" "True if src is, but tgt is not in l" booleans edge $
-        refined bool (\v -> truth v (mem src l .== 1 .&& mem tgt l ./= 1))
+        "fl:{v:[a -> a] | len v >= 1} -> s:a -> {v:a | v = ap (lst fl) (ap (hd fl) s)}"
+    , benchmark
+        "CEdge1"
+        "True if src and tgt both are in l"
+        booleans
+        "src:Int -> tgt:Int -> l:[Int] -> {v:Bool | v <=> mem src l = 1 && mem tgt l = 1}"
+    , benchmark
+        "CEdge2"
+        "True if src or tgt is in l"
+        booleans
+        "src:Int -> tgt:Int -> l:[Int] -> {v:Bool | v <=> mem src l = 1 || mem tgt l = 1}"
+    , benchmark
+        "CEdge3"
+        "True if src is, but tgt is not in l"
+        booleans
+        "src:Int -> tgt:Int -> l:[Int] -> {v:Bool | v <=> mem src l = 1 && mem tgt l /= 1}"
     ]
   where
-    benchmark name description library arguments goal = LiquidBenchmark name description library False (LiquidQuery arguments goal) 5
-    starred name description library arguments goal = LiquidBenchmark name description library True (LiquidQuery arguments goal) 5
-    index = refined int (\v -> 0 .<= v .&& v .< len l)
-    bounded bound query = query{liquidBound = bound}
-    position = measure "idx" [var "c", s]
+    benchmark name description library signature = LiquidBenchmark name description library False (query signature) 5
+    starred name description library signature = LiquidBenchmark name description library True (query signature) 5
+    query = either error id . parseQuery
+    bounded bound entry = entry{liquidBound = bound}
     indexing = [component | component@(name, _) <- listLibrary, name == "nth"] <> arrayLibrary
     strings =
         [ component
@@ -693,7 +413,6 @@ liquidBenchmarks =
         , name `elem` ["take", "drop", "cons", "splitAt", "fst", "snd", "pair"]
         ]
             <> stringLibrary
-    splitting = [("c", plain char), ("s", plain string)]
     functions names = [component | component@(name, _) <- functionLibrary, name `elem` names]
     mapping = functions ["map", "compose", "incr", "decr", "rev"]
     mappingTwice = functions ["map", "compose", "apply"]
@@ -701,21 +420,7 @@ liquidBenchmarks =
     applying = functions ["head", "last", "apply", "null"]
     -- The map of this group states its result as a term of mapM.
     filtering = [(if name == "mapE" then "map" else name, typ) | (name, typ) <- functions ["mapE", "filter"]]
-    inverse = [("f", plain (a ~> bool)), ("g", plain (a ~> a)), ("h", plain (a ~> a)), ("l", plain listA)]
-    mapped function list = measure "mapM" [function, list]
-    filt predicate list = measure "filt" [predicate, list]
-    applyN = [("f", plain (int ~> int)), ("n", nat), ("m", plain int)]
     lookups = listLibrary <> booleanLibrary <> lookupLibrary
-    keyed = [("k", plain int), ("ks", plain intList), ("vs", refined listA (\v -> len v .== len (var "ks") .&& len v .>= 1))]
-    found v = mem (var "k") (var "ks") .== 1 ==> v .== at (var "vs") (measure "idx" [var "k", var "ks"])
     lists = listLibrary
     pairs = listLibrary <> pairLibrary
     booleans = listLibrary <> booleanLibrary
-    l = var "l"
-    f = var "f"
-    s = var "s"
-    src = var "src"
-    tgt = var "tgt"
-    pairList = TCons "List" [TCons "Pair" [a, a]]
-    sameLength = [("f", nonEmpty listA), ("s", refined listA (\v -> len v .== len f))]
-    edge = [("src", plain int), ("tgt", plain int), ("l", plain intList)]
