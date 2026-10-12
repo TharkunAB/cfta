@@ -1580,6 +1580,16 @@ original adds for it) with a limit of 600 seconds, both solve the same 13
 queries, and this module takes 0.82 times the original's time (geometric
 mean).
 
+Three of the ten queries that neither solves have no solution as the suite
+writes them. The expected program of containsEdge applies `elem` without the
+`Eq Int` dictionary that the Hoogle+ encoding gives it, so the program has
+size 11, not 9. removeMax expects a component `(Data.Eq./=)_Ord` that no
+library has. splitStr has no expected program. The expected programs of the
+other seven are in their program spaces: a search with only the components
+of each program finds it at its size in seconds. With the whole library, a
+reduction round at sizes 7 to 9 takes minutes, and none finishes within an
+hour.
+
 ### Hegel: refinement-typed synthesis on liquid tree automata
 
 `Data.CFTA.Gen.Synthesis.Liquid` is Hegel, the synthesizer of Mishra and
