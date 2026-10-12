@@ -20,6 +20,13 @@ positive extraction depends only on outer atoms, so source conjunction
 preserves admission. The restricted carrier retains associativity,
 commutativity, and the individual-row self law.
 
+`EqualityLeafProjectionAdmittedSource` proves the converse. For a canonical
+guard with empty stored equalities, the actual arity-zero check implies the
+admission condition. `fitsLeaf_source` connects the natural-path view to
+the signed source test. `admitted_iff` proves both directions, and
+`fromSource` packages a surviving row without changing its guard. The
+carrier adds no admission restriction beyond these source constructor checks.
+
 These conditions concern source representation. They are not solver truth
 conditions. For example, an admitted residual can be `Not Top` or an outer
 conjunction containing Bottom and another non-positive atom. Such rows can
@@ -44,7 +51,8 @@ canonical guards and all 36 pairwise conjunctions. It also checks literal
 Bottom removal and rejection of a positive equality between absent nullary
 children. The log is `/tmp/mcfta-leaf-admission.log`.
 
-The physical intersection product and projection-union equations still need
-composition with this leaf constructor. These modules establish admission,
-exact decoding, and the whole-node identity branch. They do not establish
-a state-independent pure constructor interface for all cache histories.
+The [physical product and union proofs](notes-equality-leaf-product-union.md)
+now compose these leaf constructors. The [raw-guard progress proof](notes-noncanonical-leaf-progress.md)
+covers initial syntax outside the canonical carrier. Whole stateful pass
+composition remains explicit; no finite cache is assumed to contain every
+possible future constructor request.
