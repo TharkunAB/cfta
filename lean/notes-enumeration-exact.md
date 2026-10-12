@@ -11,11 +11,18 @@ initialized `EnumerationState.runs` action:
 work at every larger bound. The proof constructs existence of a sufficient
 bound. It does not state a closed-form numeric bound.
 
+`EnumerationLanguage.accepted_iff` maps the complete graph to the existing
+guarded `Language.Automaton`. `bounded_terms_exact` identifies the finite list
+at each term height. `runs_uniform_height_bound` gives one sufficient driver
+bound for every accepted term up to that height. The same equivalence holds
+at every larger driver bound.
+
 The theorem requires `CompleteGraph` and `IntersectionCorrect`. These are
 graph-interface contracts. `CompleteGraph` excludes recursive marker views
 and requires canonical edge tries with valid child indices.
 `IntersectionCorrect` requires the exact accepted-language intersection law.
-The concrete source graph adapter must establish both contracts. Recursive
+The constructor adapter below derives both contracts from source row
+readback. Recursive
 truncation markers retain their diagnostic contract and are not finite terms
 accepted by this theorem.
 
@@ -49,16 +56,56 @@ execution semantics then proves initial acceptance.
 
 ## Remaining source boundary
 
+`EnumerationConstructors` models `mkEdge` contradiction and maximum-index
+checks, the empty-child sentinel, and `mkNode` filtering. Every surviving row
+has valid equality tries and valid child indices. Constructor-only node
+readback therefore gives `CompleteGraph`. The readback relation permits
+source identity deduplication and reordering. The module also proves that
+`setChildren` preserves validity when the arity stays equal.
+
+`EnumerationIntersection.joinedRows_member` proves that the actual
+constructor-key hash join and equal-arity branch produce exactly the guarded
+product rows. `HashRows.product` accounts for the closed self-intersection
+shortcut and removal of false guards and empty children.
+`intersection_correct` derives the language intersection law.
+`EnumerationIntersection.runs_exact` uses these constructor and row contracts
+in place of the two semantic graph premises.
+
+`EnumerationEquality` derives canonical trie readback, equality conjunction,
+and contradiction from the proved source equality normalizer.
+`edgeView_conjoin` combines this equality result with residual conjunction.
+`edgeView_contradiction` proves that a rejected equality conjunction has a
+false product guard. The nontrivial-class premise holds for normalized source
+classes; empty and singleton input classes must first pass normalization.
+
+`EnumerationBoundedRows` implements the constructor part of `boundDepth`.
+It copies ordered children, retains symbols and constraints, filters leaves
+at the last level, and removes rows with empty bounded children. It derives
+`CompleteGraph` from valid source edges. `accepted_exact` proves exact source
+acceptance at the specified height, including empty-child removal.
+`boundedMeet` intersects the source states at the smaller remaining height.
+The source hash-row contract derives its intersection law.
+`EnumerationBoundedRows.runs_exact` composes this construction with the actual
+driver. It needs no assumed bounded-graph language or complete-node invariant.
+Its identity table represents memo keys with a decoding left inverse. Actual
+interning can merge equal rows; mapping those shared identities remains a
+separate representation proof.
+
 This theorem identifies finite-term support. It does not remove duplicate
 derivations or assign a probability to the source output list. Those counts,
 ranks, and probabilities require their own source correspondence.
 
-Concrete bounded graph construction, graph intersection, mutable storage,
-Haskell laziness, and runtime termination remain source-adapter obligations.
+Binder-to-constructor row conversion, interned identity and cache readback,
+residual-guard conjunction, mutable storage, Haskell laziness, and runtime
+termination remain source-adapter obligations. The source `boundDepth`
+worker unfolds `Mu` at the same depth and emits only constructor nodes or
+empty nodes. Its `Rec` arm reports an error. The finite graph theorem starts
+after this binder-to-row correspondence; it does not prove that runtime arm
+unreachable from every public Haskell input.
 The theorem applies to the executable Lean state machine once those
 interfaces are established. It does not claim that the Haskell compiler or
 runtime has been verified.
 
-Validation: `lake -d lean build MicroCFTA.EnumerationExact`. The modules use
+Validation: `lake -d lean build MicroCFTA.EnumerationBoundedRows`. The modules use
 the Lean kernel and existing `Std` definitions. They contain no omitted
 proofs, axioms, or native evaluation proofs.
