@@ -52,7 +52,7 @@ There is no theorem equating complete `compileGen` or `compileOpen` output with 
 - Requested-path propagation, `partRequirements`, observation reconstruction, key positioning, map ordering, and the complete regrouping algorithms.
 - Formula construction in `integerDomain`, `renamedFormulas`, `partFormula`, `joinOpenKeys`, and open-node contracts. Variable offsets and tuple-reader splits need a proof that they use the same order as hole filling.
 - Open-choice member weights, unbounded-choice rejection, and the complete finite workers in `settleGroups` and `closeOpen`.
-- `exactLabel`, `onlyPoint`, `rankPoint`, and `pointsStatic` term-view matching and inverse ranks. The finite lattice tuple rank theorem alone does not prove these term-level inverses.
+- The complete `outcomeRanks` candidate search and the SpineView/LabelledView projections. `IntegerLiteral` proves canonical literal singleton construction and reading. `IntegerTermCodec` and `IntegerLabelCodec` derive WholeTerm fill/read and tuple-rank inverses. `OpenIntegerReaders` derives hole counts and coordinate order for bare applicative spines. See `notes-integer-term-codec.md`.
 - Composition of import bounds, solver pruning, observation partitions, and final source reconstruction in `compileImport`.
 - Complete distribution preservation through all combinations of observation grouping, products, settlement, and merging. The recorded atomic counterexample concerns the historical source. The repaired finite path has general distribution proofs, but a complete heterogeneous compiler theorem remains open.
 
