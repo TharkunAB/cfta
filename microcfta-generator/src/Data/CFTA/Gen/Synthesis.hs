@@ -38,6 +38,7 @@ module Data.CFTA.Gen.Synthesis (
     (~>),
     typeVariables,
     parseType,
+    typeParser,
     renderType,
 
     -- * Libraries and queries
@@ -83,17 +84,13 @@ import Text.ParserCombinators.ReadP (
     between,
     char,
     choice,
-    eof,
     many,
     many1,
     munch,
     munch1,
     option,
-    readP_to_S,
     satisfy,
     sepBy1,
-    skipSpaces,
-    string,
     (+++),
     (<++),
  )
@@ -101,6 +98,7 @@ import Text.ParserCombinators.ReadP (
 import Data.CFTA.Equality
 import Data.CFTA.Gen.Equality (ECTAGen)
 import qualified Data.CFTA.Gen.Equality as ECTAGen
+import Data.CFTA.Gen.Synthesis.Internal.Syntax (lexeme, parseWhole, token)
 import Data.CFTA.Index (Depth)
 import Data.CFTA.Symbol (Symbol (Symbol), symbolText)
 import Data.CFTA.Term (Term)
@@ -145,7 +143,9 @@ can contain \@, so that a dictionary can be a type of its own.
 parseType :: Text -> Either String Type
 parseType = parseWhole "type" typeParser
 
--- | The parser of 'parseType'.
+{- | The parser of 'parseType', for the parsers of larger syntax, such as the
+refinement types of "Data.CFTA.Gen.Synthesis.Liquid".
+-}
 typeParser :: ReadP Type
 typeParser = constrained +++ function
   where
@@ -291,21 +291,6 @@ programParser = foldl1 App <$> many1 (lexeme atom)
         guard $ not $ isAlphaNum (last operator) || last operator `elem` ("_'" :: String)
         pure ("(" <> operator <> ")")
     nameCharacter c = not (isSpace c) && c `notElem` ("()" :: String)
-
--- | Run a parser on all of the text. The error names the kind of text.
-parseWhole :: String -> ReadP a -> Text -> Either String a
-parseWhole kind parser text = case map fst $ readP_to_S (parser <* skipSpaces <* eof) (Text.unpack text) of
-    [result] -> Right result
-    [] -> Left ("cannot parse the " <> kind <> " " <> show text)
-    _ -> Left ("the " <> kind <> " " <> show text <> " has more than one parse")
-
--- | A parser that skips the spaces before it.
-lexeme :: ReadP a -> ReadP a
-lexeme parser = skipSpaces *> parser
-
--- | A parser of a string after spaces.
-token :: String -> ReadP String
-token = lexeme . string
 
 -- | Every program that replaces each representative by a member of its group.
 expand :: Library -> Program -> [Program]

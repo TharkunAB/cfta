@@ -56,10 +56,13 @@ module Data.CFTA.Gen.Synthesis.Liquid (
     (-->),
     measure,
     baseOf,
+    parseRType,
+    renderRType,
 
     -- * Libraries and queries
     Component,
     LiquidQuery (..),
+    parseQuery,
 
     -- * Synthesis
     Reduction (..),
@@ -73,9 +76,10 @@ module Data.CFTA.Gen.Synthesis.Liquid (
 
 import Control.Applicative ((<|>))
 import Control.Exception (try)
-import Control.Monad (filterM, foldM, when)
+import Control.Monad (filterM, foldM, unless, when)
+import Data.Char (isAlphaNum, isDigit, isLower, isSpace)
 import Data.IORef (modifyIORef', newIORef, readIORef)
-import Data.List (nub)
+import Data.List (intercalate, nub)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, fromMaybe, isJust)
@@ -83,10 +87,26 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Clock (getMonotonicTime)
 import System.IO (hPutStrLn, stderr)
+import Text.ParserCombinators.ReadP (
+    ReadP,
+    between,
+    chainl1,
+    look,
+    many1,
+    munch,
+    munch1,
+    option,
+    pfail,
+    satisfy,
+    (+++),
+ )
+import qualified Text.ParserCombinators.ReadP as ReadP
 
 import Data.CFTA.Formula (Formula (..), Name (..), Sort (IntSort))
 import qualified Data.CFTA.Formula as Formula
-import Data.CFTA.Gen.Synthesis (Type (..))
+import Data.CFTA.Gen.Synthesis (Type (..), typeParser)
+import qualified Data.CFTA.Gen.Synthesis as Synthesis
+import Data.CFTA.Gen.Synthesis.Internal.Syntax (lexeme, parseWhole, token)
 import Data.CFTA.Index (ArgumentIndex (..))
 import Data.CFTA.Refinement (
     Automaton,
@@ -111,7 +131,23 @@ import Data.CFTA.Refinement (
     pattern Transition,
  )
 import qualified Data.CFTA.Refinement as Refinement
-import Data.CFTA.Refinement.Expression (Expr, Refinement, fromExpr, refinementFormula, toExpr)
+import Data.CFTA.Refinement.Expression (
+    Expr,
+    Refinement,
+    fromExpr,
+    lnot,
+    refinementFormula,
+    toExpr,
+    variable,
+    (.&&),
+    (./=),
+    (.<),
+    (.<=),
+    (.==),
+    (.>),
+    (.>=),
+    (.||),
+ )
 import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..))
 import Data.CFTA.Symbol (Symbol (Symbol), symbolText, valueName)
 import Data.CFTA.Term (Term)
@@ -169,6 +205,209 @@ data LiquidQuery = LiquidQuery
     , liquidGoal :: RType
     }
     deriving (Show)
+
+{- | Parse a query as a function signature in the syntax of 'parseRType': the
+parameters are the arguments, and the result is the goal, as in
+@l:{v:[a] | len v >= 1} -> i:Int -> {v:a | v = at l i}@.
+-}
+parseQuery :: Text -> Either String LiquidQuery
+parseQuery text = (\typ -> LiquidQuery (parametersOf typ) (resultOf typ)) <$> parseRType text
+
+-- Syntax
+
+{- | Parse a refinement type in the syntax of LiquidHaskell. The type
+@x:T -> R@ is a dependent function type: the parameter @x@ has the type @T@,
+and the result @R@ can mention @x@. The arrow associates to the right, and
+each parameter has a name. The type @{v:B | p}@ is the base type @B@ with the
+refinement @p@ of its value @v@. A base type has the syntax of
+'Data.CFTA.Gen.Synthesis.parseType', and a base type without braces has no
+refinement. Put the function type of a parameter in parentheses, as in
+@f:(a -> b)@.
+
+A refinement compares terms with @=@ (or @==@), @\/=@, @\<@, @\<=@, @>@,
+and @>=@. The formula @true@ always holds, and @false@ never holds. A
+refinement combines formulas with @not@, @&&@, @||@, @=>@ (implication), and
+@\<=>@ (equivalence). Each operator in this list binds more strongly than
+the next. The formula @forall k. p@ holds for every integer @k@. Its body
+continues to the end of the parentheses or braces around it. A term is an
+integer, a name, a measure applied to its arguments, as in
+@at xs (len xs - 1)@, or a sum, a difference, or a product, with the
+precedences of Haskell.
+
+A Boolean is an integer that is zero or one. So @{v:Bool | v \<=> p}@ means
+that @v@ is one or zero, and that it is one exactly when @p@ holds.
+-}
+parseRType :: Text -> Either String RType
+parseRType = parseWhole "refinement type" rtypeParser
+
+-- | The parser of 'parseRType'.
+rtypeParser :: ReadP RType
+rtypeParser = arrow +++ base
+  where
+    arrow = do
+        name <- identifier
+        _ <- token ":"
+        parameter <- base
+        _ <- token "->"
+        RArrow (Text.pack name) parameter <$> rtypeParser
+    base = braces +++ (plain <$> typeParser)
+    braces = between (token "{") (token "}") $ do
+        binder <- identifier
+        _ <- token ":"
+        typ <- typeParser
+        _ <- token "|"
+        let resolve name = variable (if name == binder then valueName else name)
+            boolean = do
+                unless (typ == TCons "Bool" []) pfail
+                keyword binder
+                operator "<=>"
+                truth (variable valueName) <$> formulaParser resolve
+        RBase typ <$> (boolean +++ formulaParser resolve)
+
+-- | The parser of a refinement. The function gives the term of each name.
+formulaParser :: (String -> Expr) -> ReadP Formula
+formulaParser resolve = equivalence
+  where
+    equivalence = do
+        left <- implication
+        option left ((left <=>) <$> (operator "<=>" *> implication))
+    implication = do
+        left <- disjunctive
+        option left ((left ==>) <$> (operator "=>" *> implication))
+    disjunctive = do
+        left <- conjunctive
+        option left ((left .||) <$> (operator "||" *> disjunctive))
+    conjunctive = do
+        left <- unary
+        option left ((left .&&) <$> (operator "&&" *> conjunctive))
+    unary =
+        ReadP.choice
+            [ lnot <$> (keyword "not" *> unary)
+            , Top <$ keyword "true"
+            , Bottom <$ keyword "false"
+            , quantified
+            , comparison
+            , between (token "(") (token ")") equivalence
+            ]
+    quantified = do
+        keyword "forall"
+        names <- many1 identifier
+        _ <- token "."
+        body <- formulaParser (\name -> if name `elem` names then variable name else resolve name)
+        -- The body continues to the end of the parentheses or braces around it.
+        rest <- look
+        unless (all (`elem` (")}" :: String)) (take 1 (dropWhile isSpace rest))) pfail
+        pure $ Forall [(Name (Text.pack name), IntSort) | name <- names] body
+    comparison = do
+        left <- additive
+        relation <-
+            ReadP.choice
+                [ (.==) <$ (operator "=" +++ operator "==")
+                , (./=) <$ operator "/="
+                , (.<) <$ operator "<"
+                , (.<=) <$ operator "<="
+                , (.>) <$ operator ">"
+                , (.>=) <$ operator ">="
+                ]
+        relation left <$> additive
+    additive = chainl1 multiplicative (((+) <$ operator "+") +++ ((-) <$ operator "-"))
+    multiplicative = chainl1 measured ((*) <$ operator "*")
+    measured = (measure . Text.pack <$> identifier <*> many1 atomic) +++ atomic
+    atomic =
+        ReadP.choice
+            [ fromInteger . read <$> lexeme (munch1 isDigit)
+            , resolve <$> identifier
+            , between (token "(") (token ")") additive
+            ]
+
+-- | A name of the syntax of 'parseRType' that is not a keyword.
+identifier :: ReadP String
+identifier = do
+    name <- word
+    when (name `elem` ["not", "forall", "true", "false"]) pfail
+    pure name
+
+-- | A keyword of the syntax of 'parseRType'.
+keyword :: String -> ReadP ()
+keyword expected = do
+    name <- word
+    unless (name == expected) pfail
+
+-- | A lowercase letter, and then letters, digits, underscores, and primes, after spaces.
+word :: ReadP String
+word = lexeme $ (:) <$> satisfy isLower <*> munch (\c -> isAlphaNum c || c `elem` ("_'" :: String))
+
+{- | An operator after spaces. The operator characters run together, so that
+@\<=@ is not @\<@.
+-}
+operator :: String -> ReadP ()
+operator expected = do
+    found <- lexeme $ munch1 (`elem` ("=<>/&|+-*" :: String))
+    unless (found == expected) pfail
+
+infixr 1 ==>
+
+-- | Implication.
+(==>) :: Formula -> Formula -> Formula
+p ==> q = lnot p .|| q
+
+-- | Equivalence.
+(<=>) :: Formula -> Formula -> Formula
+p <=> q = (p ==> q) .&& (q ==> p)
+
+-- | A Boolean that holds exactly when the formula does.
+truth :: Expr -> Formula -> Formula
+truth v formula = (v .== 1 .|| v .== 0) .&& ((v .== 1) <=> formula)
+
+{- | A refinement type in the syntax of 'parseRType', with @v@ for the value of
+each refinement. For a type that 'parseRType' gives, 'parseRType' reads the
+result back to the same type if the type has no other name @v@.
+-}
+renderRType :: RType -> String
+renderRType typ = case typ of
+    RArrow name parameter result -> Text.unpack name <> ":" <> renderParameter parameter <> " -> " <> renderRType result
+    RBase base Top -> Synthesis.renderType base
+    RBase base formula -> "{v:" <> Synthesis.renderType base <> " | " <> formulaText 0 formula <> "}"
+  where
+    renderParameter parameter = case parameter of
+        RBase TFun{} Top -> "(" <> renderRType parameter <> ")"
+        RArrow{} -> "(" <> renderRType parameter <> ")"
+        RBase{} -> renderRType parameter
+    -- The precedence is 0 for any formula, 1 for a part of a conjunction or
+    -- a disjunction, and 2 for the formula of a negation.
+    formulaText :: Int -> Formula -> String
+    formulaText context formula = case formula of
+        Top -> "true"
+        Bottom -> "false"
+        Atom relation left right -> termText 0 left <> " " <> relationText relation <> " " <> termText 0 right
+        Not inner -> "not " <> formulaText 2 inner
+        And parts -> parenthesize (context > 0) $ intercalate " && " (map (formulaText 1) parts)
+        Or parts -> parenthesize (context > 0) $ intercalate " || " (map (formulaText 1) parts)
+        Forall bound inner -> parenthesize (context > 0) $ "forall " <> names bound <> ". " <> formulaText 0 inner
+        Exists bound inner -> parenthesize (context > 0) $ "exists " <> names bound <> ". " <> formulaText 0 inner
+    names bound = unwords [Text.unpack name | (Name name, _) <- bound]
+    relationText relation = case relation of
+        Formula.Eq -> "="
+        Formula.Ne -> "/="
+        Formula.Lt -> "<"
+        Formula.Le -> "<="
+        Formula.Gt -> ">"
+        Formula.Ge -> ">="
+    -- The precedence is 0 for any term, 6 and 7 for the operands of a sum, 7
+    -- and 8 for the operands of a product, and 10 for the argument of a
+    -- measure.
+    termText :: Int -> Formula.Term -> String
+    termText context term = case term of
+        Formula.Var name | name == value -> "v"
+        Formula.Var (Name name) -> Text.unpack name
+        Formula.Lit constant -> show constant
+        Formula.App (Name name) arguments -> parenthesize (context > 9) $ unwords (Text.unpack name : map (termText 10) arguments)
+        Formula.Add left right -> parenthesize (context > 6) $ termText 6 left <> " + " <> termText 7 right
+        Formula.Sub left right -> parenthesize (context > 6) $ termText 6 left <> " - " <> termText 7 right
+        Formula.Mul left right -> parenthesize (context > 7) $ termText 7 left <> " * " <> termText 8 right
+        _ -> "(" <> Formula.renderTerm term <> ")"
+    parenthesize True text = "(" <> text <> ")"
+    parenthesize False text = text
 
 -- Synthesis
 

@@ -32,8 +32,10 @@ tree automata of `microcfta`, with QuickCheck integration.
 - `Data.CFTA.Gen.Synthesis.Liquid`: Hegel, the refinement-typed component
   synthesizer of the LTA paper, with liquid qualifiers, the paper's prune,
   similarity, and minimization, conditionals at the goal, and function values
-  applied by the measure `ap`. The `hegel` benchmark runs recreated versions
-  of the paper's RQ1 queries and its ablations.
+  applied by the measure `ap`. `parseRType` and `parseQuery` read refinement
+  types and queries in the syntax of LiquidHaskell, and `renderRType` prints
+  them. The `hegel` benchmark runs recreated versions of the paper's RQ1
+  queries and its ablations.
 - Sizes count pays, as in FEAT: `pure` has size zero, an atom one, `<*>` adds
   the sizes of its sides, and `pay`, which `Data.CFTA.Gen` and
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree
