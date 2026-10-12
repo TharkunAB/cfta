@@ -2,8 +2,9 @@
 
 ## Specification
 
-The source baseline is `origin/microcfta` at `d7f7c11`. This includes the merged
+The source baseline is `origin/microcfta` at `bbeb7be`. This includes the merged
 core-formula changes at `9ad319d`. The proof branch retains its earlier fixes.
+It includes single-pass reduction and LTA scaling from PRs #89 and #90.
 It adds the integration repairs described below. Nothing is pushed.
 
 A language is a set of finite ordered terms. A run is one derivation of a term.
@@ -155,7 +156,13 @@ language. It starts from a finite payload completion trace, exact cached free va
 canonical identities, and independent input semantics. Finite identities and
 direct payload sizes follow from the trace. Closed-root reachability,
 reset descent, and sufficient stable execution bounds are derived.
-`MinimizeSchedule` implements the actual similarity/rewrite schedule. It
+`MinimizeSchedule` implements the full-table similarity/rewrite schedule.
+`SimilarityWithin` proves that the classified optimization retains the exact
+ordered eligible pairs and inference errors. `MinimizeParentIndex` proves
+that indexed copies retain the complete schedule result, including the root
+ledger and repeated final representative copies. The index must include the
+new child links of every installed root representative. The rebase includes
+that update. See [the parent-index notes](notes-minimize-parent-index.md). It
 proves the historical accepted-root failure and the repaired root invariant.
 
 Ordinary generator combinators retain members, including repeated values and
@@ -220,6 +227,15 @@ recursive runtime families remain separate. See
 It proves exact class decoding and all-view inversion, order, bounds, and
 distinct positions from child producer laws. It does not extend the recursive
 body syntax. See [the choice notes](notes-recursive-nary-choice.md).
+The later `RecursiveNaryBody`, `RecursiveNaryMass`, `RecursiveNaryRankMass`,
+and `RecursiveNarySource` modules extend the full forward body algebra to
+arbitrary branch counts. `RecursiveChoiceAssociativity` connects flat source
+choices to the lowering without changing any ordered ranked distribution.
+The n-ary inverse knot remains a separate connection. See
+[the n-ary body notes](notes-recursive-nary-body.md).
+`StaticSamplingDispatch` and `BucketMergeDispatch` derive all finite flag
+branches, including atomic priority, uniform callback omission, retained
+class masses, singleton preservation, and the positive atomic size condition.
 
 `InternedFreshProbeKeys` derives pending-key separation when a normalized
 inner probe retains the fresh outer reference. It also derives memo replay
@@ -234,7 +250,9 @@ permutation of the complete rank interval. Their count sum equals the
 original count. `PartialReductionCaller` proves exact inherited equality
 descent and every completed repetition of the source reduction pass. It
 also proves that larger execution bounds preserve completed results.
-General reduction fixed-point termination remains open.
+The public equality worker and each local caller edge now take one pass.
+Pruning explicitly repeats the edge operation. General termination of that
+fixed point and repeated whole-node reduction remains open.
 The [finite reduction witness](notes-finite-reduction-growth.md) reaches a
 fixed point after six changing rounds while each child language remains a
 singleton. Its row counts increase. This excludes language cardinality and
