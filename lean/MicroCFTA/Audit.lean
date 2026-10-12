@@ -295,6 +295,8 @@ import MicroCFTA.IntegerSizeClosure
 import MicroCFTA.OpenGroupedSize
 import MicroCFTA.FinalSizeFields
 import MicroCFTA.RecursiveTermAlignment
+import MicroCFTA.RecursiveTermMass
+import MicroCFTA.RecursiveRankMass
 /-!
 # Proof dependency audit
 
