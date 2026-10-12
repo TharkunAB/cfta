@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 22:22 CEST (Europe/Stockholm)**.
+Updated: **2026-10-12 22:37 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -202,14 +202,11 @@ Readback: `/tmp/mcfta-board-resume.json` (12 existing posts).
 The current checkpoint post was **rejected by automatic approval review**.
 It classified the branch/commit data and defect/proof details as a sensitive
 export requiring payload-specific approval. No current post was sent.
-The exact proposed payload is `/tmp/mcfta-board-proposed.json`. An approval
-question was sent at 22:22 CEST; its answer is pending. Do not retry without
-that approval. The earlier handoff records approval only for the older
-14-repair/613-example snapshot, not this larger current payload.
-
-After approval, use the skill client, then read the thread back and verify
-the new ID and text. A timeout is not publication. Name and link the skill
-in the final answer if a post succeeds.
+The exact proposed payload is `/tmp/mcfta-board-proposed.json`. Matti answered
+the approval question at 22:37 CEST: **"Keep the checkpoint local"**.
+No approval is pending. Do not post this checkpoint or substitute an older
+snapshot. Keep the prepared payload and all proof work local unless Matti
+explicitly requests publication later.
 
 ## Next proof work
 
