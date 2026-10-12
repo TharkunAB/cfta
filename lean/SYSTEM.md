@@ -117,7 +117,9 @@ execution bounds from complete graph and exact-intersection contracts.
 Source constructor, equality-product, and bounded-row adapters derive those
 contracts. `EnumerationBuilderFastPaths` derives the finite memo traversal, both interning
 caches, identity sorting/deduplication, terminal fast paths, and exact bounded
-language. Binder exposure and host storage remain separate.
+language. `EnumerationBinderExposure` proves same-depth closed self-unfolding
+and exact successful rows. Finite binder identities, same-depth memo integration,
+and host storage remain separate.
 `IntersectConstruction.constructed_intersection_total` proves that the complete
 recursive intersection schedule terminates with exactly the common input
 language. It starts from a finite payload completion trace, exact cached free variables,
@@ -149,6 +151,21 @@ still need their implementation correspondence.
 function family a semantic role. [COVERAGE.md](COVERAGE.md) records proof and
 implementation correspondence obligations. A source port, a theorem about
 that port, and a proved correspondence to Haskell execution are separate.
+
+The source query adapter now has an executable pure model in `SolverAdapter`.
+It derives declaration coverage and the counterexample query, and it proves
+sound returned verdicts from correct external solver answers. It retains
+preflight Unknown, timed-out Unknown, rejected-query errors, and context
+replacement as distinct cases. `RefinementValidation` proves finite located
+traversal, base-symbol arity checks, and every signed guard-path endpoint.
+Cycle detection and host IO remain explicit interfaces.
+
+`DecoderDispatch` proves the actual cumulative offset builder and compiled
+half-table dispatch. Zero-count branches remove no member. Every valid rank
+has the same decoded member as concatenating the alternatives in order.
+`DecoderDispatchCost` derives a lookup bound of `ceil(log2 k)` comparisons
+for `k` positive branches. This excludes table construction, machine
+arithmetic, and the selected branch's own decoding cost.
 
 ## Implementation comparisons and repairs
 
@@ -366,6 +383,33 @@ The original whole-guard entry remains a model of the current private scoped
 helper. Its historical public wrapper names do not describe the repaired
 public dispatcher.
 
+### Recursive equality reduction expands equivalent domains
+
+Let `A = mu x. (a | f x | x)` and `B = mu x. (a | f x)`. Both accept
+`f* a`. A triple with children `[A,B,A]`, constrained equal, caused one public
+`reducePartially` call to exceed the retained three-second limit. Completed
+internal passes increased binder depths from `[1,1,1]` to `[3,2,3]`,
+`[6,4,6]`, and `[14,9,14]`. This is confirmed representation growth;
+unbounded nontermination was not proved. The example is a closed equality
+FTA. The LTA validator rejects its cyclic equality targets.
+
+The source now skips narrowing a class when any path crosses recursion or
+its endpoint contains recursion. It retains the original equality constraint.
+The repaired [reproduction](repro/RecursiveReduction.hs) completes and checks
+accepted equal triples, rejected unequal triples, and bounded enumeration.
+An existing structural test now expects recursive children to stay folded.
+Acyclic sibling domains still narrow. All 610 suite examples pass.
+
+`RecursiveReductionBarrier` proves exact gate selection, bounded path descent,
+unchanged constrained language for completed reduction, and immediate
+stability when all classes are blocked. `RecursiveReductionSourceOrder`
+proves that the former finite three-leaf guard-growth family reaches a
+structural fixed point within two passes. Its comparator laws are derived
+from the actual source guard and formula order. General finite-DAG reduction
+termination remains open. See the [source findings](notes-recursive-reduction-growth.md),
+[barrier proofs](notes-recursive-reduction-barrier.md), and
+[structural order proofs](notes-structural-order.md).
+
 ## Rebase integration repairs
 
 The previous weight repair introduced `keyedBucketMasses`. New upstream
@@ -380,7 +424,7 @@ transport law, and `stale_mass_counterexample` proves why the old keys fail.
 The retained regression fixtures and reproductions now use the current
 constructor sizes, `Term` representation, and sorted core-formula declarations.
 No new package test suite was added. The existing core, generator, and
-refinement suites pass in `nix-shell`: 279, 193, and 136 examples, respectively.
+refinement suites pass in `nix-shell`: 281, 193, and 136 examples, respectively.
 Existing property examples also run their configured generated cases.
 
 An independent temporary source probe compared 5,000 finite grammars against

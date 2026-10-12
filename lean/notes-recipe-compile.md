@@ -35,13 +35,13 @@ The model of `chooseGroups` stops before `frequencies`. Weight validation, recur
 
 ## Observation metadata and the confirmed distribution defect
 
-`observedMember` follows `groupBuilt` after a member has been read. It retains that member's mass and size. For an atomic source, `sourceWeight` is `Nothing`, so the rebuilt bucket has no explicit per-size mass. For a non-atomic source, it carries the available within-size weight.
+`observedMember` follows the historical `groupBuilt` branch before the weight repair, after a member has been read. It retains that member's mass and size. For an atomic source, `sourceWeight` is `Nothing`, so the rebuilt bucket has no explicit per-size mass. For a non-atomic source, it carries the available within-size weight.
 
 `pairBucket` follows `Gen/Internal/Grouped.hs`. Pairing multiplies outer masses and cardinalities, adds sizes, and makes the result non-atomic. It creates explicit per-size metadata only when one input already has it. `bucketSizeMass` follows `bucketMassIndex` in `Gen/Internal/Bucket.hs`: missing metadata defaults to count. `mergedSizeMasses` specializes the merge to components at one common size. It gives branch masses for that size. It is not the complete map merge or static sampler.
 
-`atomic_pair_metadata_counterexample` checks the full metadata path for two observed atomic members with probabilities `9/10` and `1/10`. Pair each member with one ordinary leaf, then pay for the parent. Both outputs retain size three. Their unbounded first probability remains `9/10`. Both products have no explicit per-size mass and are non-atomic, so the common-size merge gives first probability `1/2`. This is the mechanism exercised by `atomicPair` in `repro/CurrentFindings.hs`. The source defect is unchanged.
+`atomic_pair_metadata_counterexample` checks the full metadata path for two observed atomic members with probabilities `9/10` and `1/10`. Pair each member with one ordinary leaf, then pay for the parent. Both outputs retain size three. Their unbounded first probability remains `9/10`. Both products have no explicit per-size mass and are non-atomic, so the common-size merge gives first probability `1/2`. This is the mechanism exercised by `atomicPair` in `repro/CurrentFindings.hs`. The current source retains the per-rank weight for atomic members. `MassRetention` proves the repaired path; `SizeTransport` proves the subsequent constructor-size shifts. This counterexample remains a check of the historical branch.
 
-`observation_grouping_probability` composes the earlier `SizeMass.split_merge_probability` theorem. It proves event-probability preservation when grouping retains the complete positive member distribution. `observation_scale_probability` proves that the common nonzero rational scaling does not change normalized probabilities. Neither theorem states that all `groupBuilt` consumers retain the required metadata. The counterexample proves otherwise.
+`observation_grouping_probability` composes the earlier `SizeMass.split_merge_probability` theorem. It proves event-probability preservation when grouping retains the complete positive member distribution. `observation_scale_probability` proves that the common nonzero rational scaling does not change normalized probabilities. Neither theorem states that all `groupBuilt` consumers retain the required metadata. `ObservationMass` and `GuardedSampling` prove the repaired finite partition/product/filter/merge path and its complete records. Heterogeneous recipe composition remains separate.
 
 ## Remaining compiler obligations
 
@@ -54,7 +54,7 @@ There is no theorem equating complete `compileGen` or `compileOpen` output with 
 - Open-choice member weights, unbounded-choice rejection, and the complete finite workers in `settleGroups` and `closeOpen`.
 - `exactLabel`, `onlyPoint`, `rankPoint`, and `pointsStatic` term-view matching and inverse ranks. The finite lattice tuple rank theorem alone does not prove these term-level inverses.
 - Composition of import bounds, solver pruning, observation partitions, and final source reconstruction in `compileImport`.
-- Complete distribution preservation through all combinations of observation grouping, products, settlement, and merging. The recorded atomic counterexample rules out an unconditional theorem for the current source.
+- Complete distribution preservation through all combinations of observation grouping, products, settlement, and merging. The recorded atomic counterexample concerns the historical source. The repaired finite path has general distribution proofs, but a complete heterogeneous compiler theorem remains open.
 
 Error payloads are reduced to categories or uninterpreted natural numbers. Counts and positions use unbounded naturals where Haskell sometimes uses `Int`. Rational arithmetic is exact. This is a source transcription with checked local laws, not extraction or verification of the compiled Haskell program.
 
