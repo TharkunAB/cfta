@@ -422,15 +422,28 @@ The source now exposes an `InternedUnion` with the existing finite
 `nodeEdges` epsilon closure and uses the ordinary constructor split.
 Both whole-root and nested requested observations preserve the imports.
 The existing suite regression and [ImportUnion.hs](repro/ImportUnion.hs)
-retain the examples. All 611 suite examples pass. Concrete observation-key
-partition correspondence is still being connected to the existing exact
-specialization model.
+retain the examples. The repair passed all 611 suite examples.
+`ImportObservations` derives exact requested paths, child-map readback,
+observation keys, complete partition coverage, and disjoint group languages.
+It composes the local distinct decoders. Binder and epsilon row exposure
+remain explicit interfaces to the existing graph proofs.
+
+### Observed recursive imports lose their size indexes
 
 A separate productive-recursion import reaches `filterGroupsM` with a valid
 finite map of recursive observation groups. That function's finite-only
-accessor rejects it as `UnboundedGenerator`. The recursive key-filter repair
-and its record-preservation proof are in progress. This is a separate defect
-from the missing union branch.
+accessor rejected it as `UnboundedGenerator`. The source now filters the
+ascending key map directly. It retains each complete recursive record and
+its original tied program. Internal calls can still reach a key that the
+filter removes from the public map.
+
+`RecursiveGroupFilter` proves exact retained keys, ascending order,
+at-most-once callbacks, first-error behavior, and complete-record equality.
+Counts, decoders, samplers, masses, and metadata remain unchanged within
+each retained group. This does not assert unchanged probabilities after
+selection normalizes the retained groups. Existing regressions and
+[RecursiveGroupFilter.hs](repro/RecursiveGroupFilter.hs) check size classes,
+bounded values, and inverse ranks. All 613 suite examples pass.
 
 ## Rebase integration repairs
 
@@ -446,7 +459,7 @@ transport law, and `stale_mass_counterexample` proves why the old keys fail.
 The retained regression fixtures and reproductions now use the current
 constructor sizes, `Term` representation, and sorted core-formula declarations.
 No new package test suite was added. The existing core, generator, and
-refinement suites pass in `nix-shell`: 281, 193, and 137 examples, respectively.
+refinement suites pass in `nix-shell`: 281, 194, and 138 examples, respectively.
 Existing property examples also run their configured generated cases.
 
 An independent temporary source probe compared 5,000 finite grammars against

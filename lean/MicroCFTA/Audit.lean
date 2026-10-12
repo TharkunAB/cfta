@@ -225,6 +225,11 @@ import MicroCFTA.IntegerLabelCodec
 import MicroCFTA.OpenIntegerReaders
 import MicroCFTA.SourceGuardSplit
 import MicroCFTA.DecoderMachineBounds
+import MicroCFTA.ImportObservations
+import MicroCFTA.RecursiveGroupFilter
+import MicroCFTA.SourceEqualityGuards
+import MicroCFTA.IntegerTermViews
+import MicroCFTA.SourceIndicatorCompiler
 /-!
 # Proof dependency audit
 
