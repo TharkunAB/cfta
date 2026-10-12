@@ -122,8 +122,11 @@ contracts. `EnumerationBuilderFastPaths` derives the finite memo traversal, both
 caches, identity sorting/deduplication, terminal fast paths, and exact bounded
 language. `EnumerationBinderExposure` proves closed self-unfolding
 and exact successful rows. `LexicalBinderClosure` derives finite lexical
-closure and terminating visited row exposure. Runtime binder identities,
-and host storage remain separate.
+closure and terminating visited row exposure. `LexicalExposureLanguage`
+proves that those rows have exactly the least binder language.
+`LexicalBoundedBuilder` connects them to the memoized constructor builder.
+Runtime binder identities, alpha-renaming, cleanup, and host storage remain
+separate.
 `IntersectConstruction.constructed_intersection_total` proves that the complete
 recursive intersection schedule terminates with exactly the common input
 language. It starts from a finite payload completion trace, exact cached free variables,

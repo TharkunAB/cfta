@@ -237,6 +237,17 @@ import MicroCFTA.OpenIntegerKeys
 import MicroCFTA.LexicalBinderClosure
 import MicroCFTA.SourceSymbolicStableIndex
 import MicroCFTA.SamplerMachineBounds
+import MicroCFTA.OpenIntegerSource
+import MicroCFTA.StaticCompositeCandidateRanks
+import MicroCFTA.LexicalExposureLanguage
+import MicroCFTA.LexicalBoundedBuilder
+import MicroCFTA.CheckedRankQueries
+import MicroCFTA.CompiledIntegerSpine
+import MicroCFTA.LatticeDeclaredNames
+import MicroCFTA.ParentIntegerSettlement
+import MicroCFTA.StaticCheckedRanks
+import MicroCFTA.IntegerCandidateEnvelope
+import MicroCFTA.StaticRankQueryExact
 /-!
 # Proof dependency audit
 
