@@ -20,8 +20,9 @@ import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Refinement (
     Entailment (Entailment),
-    Guard (Bottom, Satisfies),
+    Guard (Bottom, Satisfies, Substitute),
     Node (Mu, Node),
+    Substitution (..),
     Symbol (RefinedSymbol),
     Verdict (Yes),
     noConstraint,
@@ -34,6 +35,7 @@ import Data.CFTA.Refinement.Expression (
     literal,
     refinementFormula,
     true,
+    variable,
     (.&&),
     (./=),
     (.<),
@@ -67,6 +69,21 @@ nonZero v = v ./= 0
 spec :: Spec
 spec = do
     describe "solver compilation" $ do
+        it "does not discharge ambiguous nested substitutions from sparse observations" $
+            withZ3 [] $ \solver -> do
+                let atom name = LTAGen.leaf (0 :: Int) name (const true)
+                    actual = LTAGen.refinedNode "a" (.== 0) noConstraint $ atom "z"
+                    guard =
+                        Substitute [Substitution (path [2]) (path [0])]
+                            $ Substitute [Substitution (path [0]) (path [3]), Substitution (path [1]) (path [4])]
+                            $ Satisfies (path [5]) (variable "x" .== 0)
+                    generator =
+                        LTAGen.refinedNode "root" (const true) guard $
+                            (,,,,,) <$> actual <*> actual <*> atom "b" <*> atom "x" <*> atom "y" <*> atom "target"
+                LTAGen.validOutcomes solver generator >>= (`shouldBe` Right [])
+                result <- LTAGen.compileWith solver generator
+                fmap LTAGen.cardinality result `shouldBe` Left LTAGen.SolverUnknown
+
         it "preserves source order when observation keys have another order" $
             withZ3 declarations $ \solver -> do
                 let atoms :: LTAGen.LTAGen Int

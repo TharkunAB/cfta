@@ -85,6 +85,7 @@ import Data.CFTA.Index (
  )
 import Data.CFTA.Ranked.Internal.Size (minimumMemberSize)
 import Data.CFTA.Refinement
+import Data.CFTA.Refinement.Evaluate (substitutionValues)
 import Data.CFTA.Refinement.Expression (
     definingTerm,
     freeNames,
@@ -1049,32 +1050,38 @@ conjuncts guard = [guard]
 
 -- | Decide one guard from the leafness of the constructor and the already-grouped child observations.
 constraintDecision :: Entailment -> Symbol -> Leafness -> Constraint -> [ObservationKey] -> IO (Either GenError Bool)
-constraintDecision entailment label leafness constraint childKeys = do
-    verdict <- decide $ constraintAsGuard constraint
-    case verdict of
-        Yes -> pure $ Right True
-        No -> pure $ Right False
-        -- Sparse observations cannot decide an equality of complete subtrees.
-        -- Report that only when the rest of the guard is decided: otherwise
-        -- the solver could not decide the rest.
-        Unknown -> do
-            semantic <- decide $ fst $ splitGuard $ constraintGuard constraint
-            -- With a solver that answers every query, the guard is decided when
-            -- the observations decide its equalities: then only the solver left
-            -- it undecided. This also covers an equality under 'Or' or 'Not'.
-            answered <- traverse (\answer -> decideWith (Entailment $ \_ _ -> pure answer) $ constraintAsGuard constraint) [Yes, No]
-            pure $ case semantic of
-                Unknown -> Left SolverUnknown
-                _
-                    | Unknown `notElem` answered -> Left SolverUnknown
-                    -- An equality reads a node whose members are leaves and non-leaves.
-                    | any unknownLeaf $ guardPaths $ snd $ splitGuard $ constraintGuard constraint ->
-                        Left ChildNotOneTerm
-                    | constraintEqualities constraint /= EmptyConstraints ->
-                        Left $ RelationalEqualityUnsupported $ constraintEqualities constraint
-                    | containsSame (constraintGuard constraint) ->
-                        Left $ RelationalSyntacticEqualityUnsupported $ constraintGuard constraint
-                    | otherwise -> Left SolverUnknown
+constraintDecision entailment label leafness constraint childKeys
+    -- Nested substitution can give a complete actual an ambient name that
+    -- the sparse observation replaces with a fresh name. Keep that query
+    -- unresolved until its complete identities are known.
+    | not . Set.null . snd $ substitutionValues (`Map.lookup` observations) (\_ _ -> Nothing) (constraintAsGuard constraint) =
+        pure $ Left SolverUnknown
+    | otherwise = do
+        verdict <- decide $ constraintAsGuard constraint
+        case verdict of
+            Yes -> pure $ Right True
+            No -> pure $ Right False
+            -- Sparse observations cannot decide an equality of complete subtrees.
+            -- Report that only when the rest of the guard is decided: otherwise
+            -- the solver could not decide the rest.
+            Unknown -> do
+                semantic <- decide $ fst $ splitGuard $ constraintGuard constraint
+                -- With a solver that answers every query, the guard is decided when
+                -- the observations decide its equalities: then only the solver left
+                -- it undecided. This also covers an equality under 'Or' or 'Not'.
+                answered <- traverse (\answer -> decideWith (Entailment $ \_ _ -> pure answer) $ constraintAsGuard constraint) [Yes, No]
+                pure $ case semantic of
+                    Unknown -> Left SolverUnknown
+                    _
+                        | Unknown `notElem` answered -> Left SolverUnknown
+                        -- An equality reads a node whose members are leaves and non-leaves.
+                        | any unknownLeaf $ guardPaths $ snd $ splitGuard $ constraintGuard constraint ->
+                            Left ChildNotOneTerm
+                        | constraintEqualities constraint /= EmptyConstraints ->
+                            Left $ RelationalEqualityUnsupported $ constraintEqualities constraint
+                        | containsSame (constraintGuard constraint) ->
+                            Left $ RelationalSyntacticEqualityUnsupported $ constraintGuard constraint
+                        | otherwise -> Left SolverUnknown
   where
     observations = completeObservations label leafness childKeys
     unknownLeaf target = case Map.lookup target observations of
