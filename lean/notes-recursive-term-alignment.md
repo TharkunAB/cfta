@@ -79,10 +79,12 @@ The GHC lazy knot and runtime table representation still need correspondence.
 One root can have heterogeneous intermediate application types. This is not
 a proof of arbitrary mutually recursive heterogeneous runtime families.
 
-This module proves forward index alignment. The full inverse callback for
-arbitrary recursive bodies, all term views, and its checked-symbol flags
-remains separate. The earlier `RecursiveCheckedRanks` results cover local
-product, pay, and choice flags and complete guarded unary families.
+The later [recursive callback modules](notes-recursive-callbacks.md) derive
+the complete inverse for this binary-choice body algebra. They cover all
+three views, checked flags, class positions, bounded global ranks, ascending
+order, and duplicate-free callback results. They construct the count and
+root-table correspondence from this forward compiler. Other recursive
+runtime families still have separate boundaries.
 
 Validation: the focused pinned Lean build passes with 24 jobs. The aggregate
 audit checks these results with every other proof. No Haskell source changed.

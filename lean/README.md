@@ -58,6 +58,11 @@ The [finite size-field notes](notes-finite-size-fields.md) connect those
 records to exact class weights, sparse mass tables, and class samplers.
 The [recursive alignment notes](notes-recursive-term-alignment.md) connect
 typed recursive value and term indexes at every class and bounded rank.
+The [recursive callback notes](notes-recursive-callbacks.md) connect the
+actual inverse workers to those tables for the single-knot binary-choice
+body algebra, including ordering, uniqueness, and exact ranked probabilities.
+The [arbitrary-choice notes](notes-recursive-nary-choice.md) cover the local
+ordered list adapter and its recursive child producers.
 The [fresh-probe notes](notes-interned-fresh-probe-keys.md) separate the
 proved nested-binder key cases from the remaining normalization-erasure case.
 
