@@ -13,6 +13,7 @@ import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import Data.CFTA.Formula (Name, Sort (..))
+import qualified Data.CFTA.Formula as Formula
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.TestSupport (compileOrFail, massesByRank, rightOrFail, values)
 import Data.CFTA.Gen.Refinement.TypedExpressionLanguage (nonNegative)
@@ -20,11 +21,12 @@ import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Refinement (
     Entailment (Entailment),
-    Guard (Bottom, Satisfies, Substitute),
+    Guard (Bottom, Holds, Satisfies, Substitute),
     Node (Mu, Node),
     Substitution (..),
     Symbol (RefinedSymbol),
     Verdict (Yes),
+    contractTermName,
     createUnion,
     noConstraint,
     nodeCount,
@@ -669,6 +671,49 @@ spec = do
                     mapped = fmap (* 2) $ LTAGen.measured "m" (const true) id three
                 compiled <- compileOrFail solver $ mapped `LTAGen.satisfying` (.== 3)
                 values compiled `shouldBe` [6]
+
+        it "reject self-dependent child measures before translating parent conditions" $
+            withZ3 declarations $ \solver -> do
+                let bad = LTAGen.leaf (0 :: Integer) "self" (\v -> v .== v)
+                    symbolic = LTAGen.every `LTAGen.satisfying` (\v -> 0 .<= v .&& v .<= 1)
+                    inner digit = LTAGen.measuredNode "m" noConstraint (+) $ (,) <$> bad <*> digit
+                    guards = [Satisfies (path [0]) Formula.Bottom, Holds [path [0]] Formula.Bottom]
+                forM_ [symbolic, LTAGen.elements [0, 1 :: Integer]] $ \digit ->
+                    forM_ guards $ \guard -> do
+                        let generator = LTAGen.refinedNode "p" (const true) guard $ inner digit
+                        result <- LTAGen.compileWith solver generator
+                        fmap LTAGen.cardinality result `shouldBe` Left (LTAGen.InexactMeasure "m")
+                        LTAGen.validOutcomes solver generator >>= (`shouldBe` Left (LTAGen.InexactMeasure "m"))
+
+        it "retain independent symbolic measures through both parent condition forms" $
+            withZ3 declarations $ \solver -> do
+                let zero = LTAGen.leaf (0 :: Integer) "zero" (.== 0)
+                    digit = LTAGen.every `LTAGen.satisfying` (\v -> 0 .<= v .&& v .<= 1) :: LTAGen.LTAGen Integer
+                    inner = LTAGen.measuredNode "m" noConstraint (+) $ (,) <$> zero <*> digit
+                    guards =
+                        [ Satisfies (path [0]) $ refinementFormula (.== 1)
+                        , Holds [path [0]] $ variable (contractTermName 0) .== 1
+                        ]
+                forM_ guards $ \guard -> do
+                    let generator = LTAGen.refinedNode "p" (const true) guard inner
+                    compiled <- compileOrFail solver generator
+                    values compiled `shouldBe` [(0, 1)]
+                    LTAGen.validOutcomes solver generator >>= (`shouldBe` Right [(0, 1)])
+
+        it "prefer exact singleton values before rejecting a self-dependent defining expression" $
+            withZ3 declarations $ \solver -> do
+                let singleton = LTAGen.leaf (7 :: Integer) "singleton" (\v -> v .== v * 0 + 3)
+                    digit = LTAGen.every `LTAGen.satisfying` (\v -> 0 .<= v .&& v .<= 1) :: LTAGen.LTAGen Integer
+                    inner = LTAGen.measuredNode "m" noConstraint (+) $ (,) <$> singleton <*> digit
+                    guards =
+                        [ Satisfies (path [0]) $ refinementFormula (.== 3)
+                        , Holds [path [0]] $ variable (contractTermName 0) .== 3
+                        ]
+                forM_ guards $ \guard -> do
+                    let generator = LTAGen.refinedNode "p" (const true) guard inner
+                    compiled <- compileOrFail solver generator
+                    values compiled `shouldBe` [(7, 0)]
+                    LTAGen.validOutcomes solver generator >>= (`shouldBe` Right [(7, 0)])
   where
     isIntegerLeafRead err = case err of
         LTAGen.IntegerLeafRead _ -> True
