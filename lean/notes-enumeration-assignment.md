@@ -45,10 +45,11 @@ transition-preservation premise.
 
 ## Remaining obligations
 
-No-loss still needs constructive local executions, fresh witness extensions,
-successful required intersections, whole-caller execution existence, and
-sufficient fuel bounds. The successful-run theorem does not establish these
-properties. Concrete source graph and mutable representation correspondence
-remain separate obligations.
+`EnumerationConstruction.enumerateNode_complete` now constructs local
+executions, fresh witness extensions, and successful required intersections.
+See `notes-enumeration-construction.md`. Whole-caller execution existence and
+sufficient bounds for it and its final renderers remain open. The
+successful-run theorem does not establish these properties. Concrete source
+graph and mutable representation correspondence remain separate obligations.
 
 Validation: `lake -d lean build MicroCFTA.EnumerationAssignment`.
