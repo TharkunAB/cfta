@@ -54,6 +54,13 @@ remain nonuniform. `retainedLive` accepts sparse mass functions that are
 positive only at live sizes; an unused empty-class mass does not affect any
 field.
 
+`GroupedMergeAssociativity` proves exact equivalence between a flat merge
+and a merge whose suffix is grouped. Counts determine the rank offsets.
+Key masses determine the probabilities. The theorem preserves the ordered
+decoder members and complete rank/value/mass runs. Empty and singleton
+classes retain their correct behavior. This is a local source-field theorem;
+the flat n-ary body adapter must still instantiate it.
+
 `KeyedTermMass.family_values` and `family_terms` derive this relation at every
 key and size. `ranked_values` and `ranked_terms` then prove equality of the
 full rank/value/mass and rank/term/mass distributions. The bounded results

@@ -335,6 +335,7 @@ import MicroCFTA.KeyedCallbackInverse
 import MicroCFTA.KeyedCallbackCausality
 import MicroCFTA.KeyedCallbackQuery
 import MicroCFTA.KeyedCallbackExamples
+import MicroCFTA.GroupedMergeAssociativity
 /-!
 # Proof dependency audit
 
