@@ -411,6 +411,10 @@ import MicroCFTA.CurrentGuardLogicalPrune
 import MicroCFTA.SourceKnownHoldsTransport
 import MicroCFTA.SourceQuotientRefutations
 import MicroCFTA.CurrentGuardLogicalComplete
+import MicroCFTA.SourceReadLogicalDomains
+import MicroCFTA.SourceReadLogicalQueries
+import MicroCFTA.SourceReadLogicalGuards
+import MicroCFTA.CurrentReadLogicalPrune
 /-!
 # Proof dependency audit
 
