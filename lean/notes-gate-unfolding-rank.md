@@ -223,3 +223,34 @@ The stored-body target builds 158 jobs. The combined isolated audit checks
 records in the substituted body. Their preparation, normalized
 reconstruction, and possible operand identity collisions remain separate
 obligations. No complete source `UnfoldingRank` is claimed yet.
+
+`InternedStoredSubstitution` adds an executable adapter for the remaining
+open nested-Mu preparation branch. It traverses actual stored records.
+Closed records become immutable captured inputs. Reference leaves use the
+actual optional replacement map. Open Mu records become smart nested
+constructors with the original binder reference mapped to the nearest
+local slot. The adapter uses the existing complete constructor executor.
+It derives cache histories, record provenance, flat unions, and stored
+self-filter invariants. A reported pending outcome names an actual missing
+canonical payload. Repeating a successful binding in a later state returns
+the same record without allocation.
+
+`InternedStoredSubstitutionScope` proves that every encoded input slot is
+in bounds. Canonical lookup returns the exact original immutable record.
+It proves the closed no-effect shortcut, external optional replacement,
+nearest local binder lookup, and ordered child and edge lengths.
+`InternedStoredSubstitutionBindings` derives the source environment
+restriction from actual cached free metadata. Equal relevant free bindings
+give the same complete execution. Restriction to the original free set
+preserves all constructor effects and pending outcomes. Together with
+successful replay, this proves the two properties used by the source
+per-binder substitution memoization optimization.
+
+The nested example now prepares each actual stored body after the previous
+unfolding. Its head ranks remain two, one, and zero. Its cached maximum
+depths remain two, three, and three. This removes that example's earlier
+dependence on reapplying the original source callback syntax.
+
+The binding-restriction target builds 164 jobs. The combined isolated audit
+checks 7,611 theorem dependencies. The adapter's full language theorem and
+the general strict rank for open nested reconstruction remain unproved.
