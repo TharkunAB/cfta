@@ -1560,7 +1560,7 @@ not fix keeps the node of all types, so the import cannot count such a
 space; `programsOfSizeUpToDepth` bounds the typed terms by a depth.
 
 The `hectare` benchmark runs the Hoogle+ suite of the paper (45 queries,
-291 components) and the Stack Overflow suite, each query in its own process
+284 components) and the Stack Overflow suite, each query in its own process
 with a heap and a time limit:
 
 ```

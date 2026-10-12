@@ -2,7 +2,7 @@
 
 {- | The Hoogle+ component library and benchmark queries of the ECTA paper.
 
-The components are the 291 Hoogle+ components of Guo et al., /Program
+The components are the 284 Hoogle+ components of Guo et al., /Program
 Synthesis by Type-Guided Abstraction Refinement/ (POPL 2020), as Hectare
 imported them, and the seven components that Hectare adds for the queries
 from Stack Overflow. The queries are the Hoogle+ benchmarks and the Stack
@@ -122,7 +122,7 @@ typ = either error id . parseType
 program :: Text -> Program
 program = either error id . parseProgram
 
--- | The 291 Hoogle+ components.
+-- | The 284 Hoogle+ components.
 hooglePlusComponents :: [(Text, Type)]
 hooglePlusComponents =
     components
