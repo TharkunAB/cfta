@@ -80,6 +80,7 @@ module Data.CFTA.Refinement (
     SimilarityPair (..),
     SimilarityError (..),
     similarity,
+    similarityWithin,
     similarityPairs,
     MinimizeError (..),
     minimize,

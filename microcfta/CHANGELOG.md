@@ -29,7 +29,8 @@ remains a separate ECTA-only package.
   `Node Symbol`, built with the interned constructors;
   the module re-exports `Data.CFTA.Interned`. It has the paper's Boolean guard
   language, actual-for-formal position substitution, transition-level semantic
-  pruning, similarity, minimization, recursive nodes under the acyclic-guard
+  pruning, similarity (`similarityWithin` asks only about transitions of one
+  class), minimization, recursive nodes under the acyclic-guard
   restriction checked by `validate`, a bounded reference denotation on the
   shared enumerator, and the Z3 entailment in
   `Data.CFTA.Refinement.LiquidFixpoint`, which declares every free name as an
