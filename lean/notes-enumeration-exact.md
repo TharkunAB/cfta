@@ -91,6 +91,17 @@ Its identity table represents memo keys with a decoding left inverse. Actual
 interning can merge equal rows; mapping those shared identities remains a
 separate representation proof.
 
+`EnumerationSharedRows` removes that injective-identity requirement. Its
+row readback permits multiple memo keys to name the same runtime identity.
+It derives bounded acceptance and exact driver support from those copied
+rows. `EnumerationInternedRows` supplies the concrete `Cache.intern` step:
+cache hits and misses return the requested immutable row key, valid keys
+preserve `CompleteGraph`, and later cache growth preserves all already issued
+child reads. `step_final_readback` proves the constructor's row equation at a
+later cache snapshot. The premise covers only children read by that one
+step. A full bounded-worker trace must compose these scoped steps; a finite
+cache is not assumed to contain outputs for every possible depth bound.
+
 This theorem identifies finite-term support. It does not remove duplicate
 derivations or assign a probability to the source output list. Those counts,
 ranks, and probabilities require their own source correspondence.
@@ -106,6 +117,6 @@ The theorem applies to the executable Lean state machine once those
 interfaces are established. It does not claim that the Haskell compiler or
 runtime has been verified.
 
-Validation: `lake -d lean build MicroCFTA.EnumerationBoundedRows`. The modules use
+Validation: `lake -d lean build MicroCFTA.EnumerationInternedRows`. The modules use
 the Lean kernel and existing `Std` definitions. They contain no omitted
 proofs, axioms, or native evaluation proofs.
