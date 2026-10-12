@@ -230,6 +230,13 @@ import MicroCFTA.RecursiveGroupFilter
 import MicroCFTA.SourceEqualityGuards
 import MicroCFTA.IntegerTermViews
 import MicroCFTA.SourceIndicatorCompiler
+import MicroCFTA.SourceSymbolicIndex
+import MicroCFTA.SamplerDispatchCost
+import MicroCFTA.StaticCandidateRanks
+import MicroCFTA.OpenIntegerKeys
+import MicroCFTA.LexicalBinderClosure
+import MicroCFTA.SourceSymbolicStableIndex
+import MicroCFTA.SamplerMachineBounds
 /-!
 # Proof dependency audit
 
