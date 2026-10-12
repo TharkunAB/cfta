@@ -349,6 +349,40 @@ spec = do
                 (_, Left err, _) -> expectationFailure $ show err
                 (_, _, Left err) -> expectationFailure $ show err
 
+        it "keeps recursive members whole when labels close choices and applicative spines" $ do
+            let chain :: FTAGen.FTAGen String Int
+                chain = FTAGen.recur $ \self -> FTAGen.oneof [pure 0, FTAGen.node "s" $ (+ 1) <$> self]
+                spine :: FTAGen.FTAGen String Int
+                spine = FTAGen.recur $ \self -> (+) <$> FTAGen.oneof [pure 0, self] <*> FTAGen.elements [1, 2]
+                apply generator = FTAGen.node "outer" $ (+) <$> generator <*> FTAGen.elements [10]
+                check generator = do
+                    let bounded = FTAGen.upToSize 4 generator
+                    case (FTAGen.cardinality bounded, FTAGen.support bounded, FTAGen.inspect bounded) of
+                        (Right count, Right support, Right inspection) ->
+                            mapM_
+                                ( \rank -> case FTAGen.termAt bounded rank of
+                                    Left err -> expectationFailure $ show err
+                                    Right term -> do
+                                        acceptsPlain support term `shouldBe` True
+                                        Common.acceptsWith
+                                            (\_ _ -> True)
+                                            (FTAGen.inspectionGraph inspection)
+                                            (fmap (\symbol -> FTAGen.InspectionSymbol symbol Nothing) term)
+                                            `shouldBe` True
+                                        FTAGen.ranksOf bounded term `shouldSatisfy` either (const False) (rank `elem`)
+                                )
+                                (everyRank count)
+                        (Left err, _, _) -> expectationFailure $ show err
+                        (_, Left err, _) -> expectationFailure $ show err
+                        (_, _, Left err) -> expectationFailure $ show err
+            traverse (FTAGen.unrank $ FTAGen.upToSize 3 chain) [0 .. 3] `shouldBe` Right [0, 1, 2, 3]
+            mapM_ check $
+                [chain, spine]
+                    <> [ wrap generator
+                       | generator <- [chain, spine]
+                       , wrap <- [FTAGen.node "outer", apply, FTAGen.node "outer" . FTAGen.upToSize 3, apply . FTAGen.upToSize 3]
+                       ]
+
     describe "ordinary FTA compilation" $ do
         it "indexes recursive runs by size and bounds them by depth" $ do
             let rows = [((), [Automaton.Transition "z" [] noConstraint, Automaton.Transition "s" [()] noConstraint])]

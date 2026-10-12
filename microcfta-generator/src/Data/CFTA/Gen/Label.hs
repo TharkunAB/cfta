@@ -49,6 +49,8 @@ data Label symbol
       RightKeyed
     | -- | One argument of an n-way join, with its key.
       ArgKeyed
+    | -- | One recursive member, kept whole when a constructor closes its parent.
+      Recursion
     | -- | One key-labelled alternative of a recursive family.
       Family
     | -- | A recursive family restricted to one key.
