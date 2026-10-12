@@ -109,8 +109,9 @@ remains a separate ECTA-only package.
 - LTA pruning narrows equal positions to their intersection through that
   reduction, specializes nodes bottom up and shares each result by node
   identity, and prunes a recursive node to a fixed point. It keeps an edge
-  whose substitution actuals are ambiguous, because the sparse evaluation of
-  nested scopes is not exact for them. Each Boolean operand of a guard has its
+  whose guard the sparse evaluation cannot decide: two actuals with the same
+  name and refinement, which can be equal or different terms, whose name an
+  enclosing substitution scope renames. Each Boolean operand of a guard has its
   own substitution scope, and a combined guard flattens, sorts, and removes
   duplicate conjuncts. Minimization runs
   the paper's M-Trans on the explicit view and interns the result. It keeps

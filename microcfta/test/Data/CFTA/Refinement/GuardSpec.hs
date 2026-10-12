@@ -255,6 +255,23 @@ spec =
                 map validate graphs `shouldBe` replicate 3 (Right ())
                 mapM (\automaton -> accepts solver automaton term) graphs >>= (`shouldBe` [Yes, No, No])
 
+        it "decides equal compound actuals from observations unless an enclosing scope renames them" $
+            withZ3 [] $ \solver -> do
+                let zero = variable valueName .== 0
+                    termLeaf name = Term.Node (RefinedSymbol name true) []
+                    actual = Term.Node (RefinedSymbol "a" zero) [termLeaf "z"]
+                    term = Term.Node (RefinedSymbol "root" true) [actual, actual, termLeaf "b", termLeaf "x", termLeaf "y", termLeaf "target"]
+                    observed target = do
+                        Term.Node symbol children <- getPath target term
+                        pure $ Observed symbol $ leafnessOf children
+                    inner =
+                        Substitute [Substitution (path [0]) (path [3]), Substitution (path [1]) (path [4])] $
+                            Satisfies (path [5]) (variable "x" .== 0)
+                    -- The enclosing scope renames a, the name of both actuals.
+                    nested = Substitute [Substitution (path [2]) (path [0])] inner
+                mapM (\guard -> evaluateGuard solver guard term) [inner, nested] >>= (`shouldBe` [Yes, No])
+                mapM (evaluateGuardWithShape solver observed) [inner, nested] >>= (`shouldBe` [Yes, Unknown])
+
         it "preserves missing-path and formula-refutation behavior through Boolean polarity" $
             withZ3 [] $ \solver -> do
                 let term = Term.Node (RefinedSymbol "root" true) []
