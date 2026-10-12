@@ -56,13 +56,17 @@ composes these derived invariants through the complete actual caller.
 `runs_assignment_sound` starts at the real initialized state and includes the
 actual root and residual renderers. Under a satisfying final assignment, it
 proves acceptance of the returned term and every returned residual predicate.
-The final assignment remains an explicit premise. Its existence has not been
-derived from the returned rendered term and residual checks.
+The stronger `EnumerationAssignment.runs_sound` constructs the final equation
+assignment. It uses the returned residual checks to establish its guard
+restrictions. That theorem has no final-assignment premise. See
+`notes-enumeration-assignment.md`.
 
 No-loss still needs a constructive execution proof from each accepted term,
 fresh-variable witness extension, sufficient execution bounds, and exclusion
 of an unjustified stuck branch. A satisfying final assignment and successful
 execution are premises of the current backward theorem. They are not proofs
-of those remaining obligations.
+of those remaining obligations. `findExpandable_not_stuck` now excludes the
+blocked scheduler result under a satisfying assignment and derived proper
+constraints. Branch construction and sufficient bounds remain open.
 
 Validation: `lake -d lean build MicroCFTA.EnumerationSoundness`.
