@@ -203,6 +203,10 @@ recursion boundary and all duplicate member occurrences. The proof covers
 complete bounded prefixes as well as each size class. General recursive
 inverse callbacks and runtime knot construction remain separate. See
 [the recursive alignment notes](notes-recursive-term-alignment.md).
+`RecursiveTermMass` and `RecursiveRankMass` also derive the independent
+value and term probability fields. They preserve each sampled rank and its
+exact mass before value projection, including duplicate members and bounded
+class prefixes.
 
 `InternedFreshProbeKeys` derives pending-key separation when a normalized
 inner probe retains the fresh outer reference. It also derives memo replay
@@ -218,6 +222,10 @@ original count. `PartialReductionCaller` proves exact inherited equality
 descent and every completed repetition of the source reduction pass. It
 also proves that larger execution bounds preserve completed results.
 General reduction fixed-point termination remains open.
+The [finite reduction witness](notes-finite-reduction-growth.md) reaches a
+fixed point after six changing rounds while each child language remains a
+singleton. Its row counts increase. This excludes language cardinality and
+row-count descent as termination arguments. It does not establish a cycle.
 
 `GuardBuilders` and `ContractAssembly` derive standard argument arities,
 consecutive paths, transition checks, conjunct selection, and capture-free

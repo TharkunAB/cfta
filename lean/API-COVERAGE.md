@@ -135,8 +135,7 @@ These drivers expose errors, callbacks, caches, and operational choices.
 They are more than abstract contracts. Their local theorems and composed
 examples do not establish every whole-driver invariant.
 
-The principal remaining positive proofs are finite binder-identity integration, heterogeneous recipe/value/support preservation, recursive source
-adapters, and concrete representation correspondence. The initialized
+The principal remaining positive proofs are finite binder-identity integration, heterogeneous runtime-family/support preservation, recursive inverse callbacks, and concrete representation correspondence. `RecursiveTermAlignment`, `RecursiveTermMass`, and `RecursiveRankMass` derive value/term counts, exact forward ranks, and full ranked probability fields for typed single-knot products, choices, maps, pays, and labels, including bounded prefixes. The initialized
 enumeration driver now has finite-term soundness, constructive completeness,
 final rendering, and sufficient stable execution bounds. The cyclic binder
 builder also has total language-preserving construction under complete

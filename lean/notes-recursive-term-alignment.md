@@ -45,6 +45,27 @@ The kernel examples use a binary tree body with two recursive arguments.
 At size five it has two ranks. Both values are `3`, but their constructor
 terms differ. Equal user values do not require rank collapse.
 
+## Probability and replay masses
+
+`RecursiveTermMass` projects the exact recursive probability recurrence.
+The independently built value and term samplers are the two marginals of
+the correlated sampler. This includes their complete bounded prefixes.
+Choices and product splits use class counts. Finite atomic sources retain
+their internal distributions.
+
+Equal value distributions alone could conceal a change in rank weights.
+`RecursiveRankMass` therefore proves equality before discarding ranks.
+It follows the actual choice-part filter, including offsets advanced past
+skipped branches, product radices, maps, and every recursive class.
+`bounded_rank_masses` proves that the value and term samplers assign the
+same exact mass to each structural rank.
+
+`ranked_projection` combines rank-mass equality with decoder replay. The
+result fixes the full ranked distribution even when values repeat.
+`ranked_values`, `ranked_terms`, and their bounded versions derive the actual
+rank/value/mass and rank/term/mass fields from the correlated record. No
+injectivity assumption on user values or constructor terms is required.
+
 ## Boundaries
 
 Finite inputs retain correlated values and terms in one `FiniteSource.Source`.
@@ -63,5 +84,5 @@ arbitrary recursive bodies, all term views, and its checked-symbol flags
 remains separate. The earlier `RecursiveCheckedRanks` results cover local
 product, pay, and choice flags and complete guarded unary families.
 
-Validation: the focused pinned Lean build passes with 22 jobs. The aggregate
+Validation: the focused pinned Lean build passes with 24 jobs. The aggregate
 audit checks these results with every other proof. No Haskell source changed.
