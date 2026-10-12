@@ -36,8 +36,8 @@ This model uses nonnegative unbounded positions. Source `Natural` to `Int`
 conversion and signed machine arity arithmetic require representable input
 bounds. The signed-path validation modules describe negative positions, but
 this module does not silently extend its results past the source word limit.
-The `contract` builder's conjunct flattening, free-name selection, and formula
-renumbering remain a separate formula-construction adapter. Whole automaton
-validation remains the `RefinementValidation` result.
+`ContractAssembly` proves the `contract` builder's conjunct flattening,
+free-name selection, compact renumbering, and resulting arity gate. Whole
+automaton validation remains the `RefinementValidation` result.
 
 The pinned Lean target passes all five build jobs. No Haskell source changed.
