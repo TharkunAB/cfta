@@ -37,6 +37,8 @@ module Data.CFTA.Gen.Synthesis (
     Type (..),
     (~>),
     typeVariables,
+    parseType,
+    renderType,
 
     -- * Libraries and queries
     Library (..),
@@ -45,6 +47,7 @@ module Data.CFTA.Gen.Synthesis (
 
     -- * Programs
     Program (..),
+    parseProgram,
     renderProgram,
     expand,
     representative,
@@ -64,14 +67,36 @@ module Data.CFTA.Gen.Synthesis (
     programsOfSizeUpToDepth,
 ) where
 
+import Control.Monad (guard)
+import Data.Bifunctor (first)
+import Data.Char (isAlphaNum, isLower, isSpace, isUpper)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Hashable (Hashable)
-import Data.List (permutations)
+import Data.List (intercalate, permutations)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Generics (Generic)
+import Text.ParserCombinators.ReadP (
+    ReadP,
+    between,
+    char,
+    choice,
+    eof,
+    many,
+    many1,
+    munch,
+    munch1,
+    option,
+    readP_to_S,
+    satisfy,
+    sepBy1,
+    skipSpaces,
+    string,
+    (+++),
+    (<++),
+ )
 
 import Data.CFTA.Equality
 import Data.CFTA.Gen.Equality (ECTAGen)
@@ -107,6 +132,78 @@ typeVariables = nubOrd . go
     go (TVar name) = [name]
     go (TFun argument result) = go argument <> go result
     go (TCons _ arguments) = concatMap go arguments
+
+{- | Parse a type in Haskell syntax. A lowercase name is a type variable. A
+capitalized name with its arguments is a type constructor, as in
+@Either a b@. The type @[t]@ is the constructor @List@, @(a, b)@ is @Pair@,
+and @()@ is @Unit@. The arrow @->@ is a function type, and it associates to
+the right. A class constraint uses the encoding of Hoogle+: @Eq a => t@ is
+the function type from the dictionary @\@\@hplusTC\@\@Eq a@ to @t@, and
+@(Eq a, Show b) => t@ takes the dictionaries in the written order. A name
+can contain \@, so that a dictionary can be a type of its own.
+-}
+parseType :: Text -> Either String Type
+parseType = parseWhole "type" typeParser
+
+-- | The parser of 'parseType'.
+typeParser :: ReadP Type
+typeParser = constrained +++ function
+  where
+    constrained = do
+        dictionaries <- context <* token "=>"
+        (\body -> foldr TFun body dictionaries) <$> typeParser
+    context = (pure <$> constraint) +++ between (token "(") (token ")") (sepBy1 constraint (token ","))
+    constraint = TCons . (classPrefix <>) <$> constructorName <*> many atomic
+    function = do
+        argument <- applied
+        option argument (TFun argument <$> (token "->" *> typeParser))
+    applied = (TCons <$> constructorName <*> many1 atomic) +++ atomic
+    atomic =
+        choice
+            [ TVar <$> name isLower
+            , (`TCons` []) <$> constructorName
+            , TCons "Unit" [] <$ (token "(" *> token ")")
+            , (\element -> TCons "List" [element]) <$> between (token "[") (token "]") typeParser
+            , between (token "(") (token ")") $ do
+                firstType <- typeParser
+                option firstType ((\secondType -> TCons "Pair" [firstType, secondType]) <$> (token "," *> typeParser))
+            ]
+    constructorName = name (\c -> isUpper c || c == '@')
+    name isStart = lexeme $ Text.pack <$> ((:) <$> satisfy isStart <*> munch isNameCharacter)
+    isNameCharacter c = isAlphaNum c || c `elem` ("_'@" :: String)
+
+{- | A type in the syntax of 'parseType'. 'parseType' reads the result back
+to the same type when each name is valid in that syntax.
+-}
+renderType :: Type -> String
+renderType = go 0
+  where
+    -- The precedence is 0 for any type, 1 for the argument of a function
+    -- type, and 2 for the argument of a type constructor.
+    go :: Int -> Type -> String
+    go precedence typ = case typ of
+        TVar name -> Text.unpack name
+        TCons "List" [element] -> "[" <> go 0 element <> "]"
+        TCons "Pair" [firstType, secondType] -> "(" <> go 0 firstType <> ", " <> go 0 secondType <> ")"
+        TCons "Unit" [] -> "()"
+        TCons name [] -> Text.unpack name
+        TCons name arguments -> parenthesize (precedence > 1) $ applied name arguments
+        TFun argument result -> parenthesize (precedence > 0) $ case constraints typ of
+            ([], _) -> go 1 argument <> " -> " <> go 0 result
+            ([constraint], body) -> constraint <> " => " <> go 0 body
+            (several, body) -> "(" <> intercalate ", " several <> ") => " <> go 0 body
+    applied name arguments = unwords (Text.unpack name : map (go 2) arguments)
+    -- The class constraints at the start of a type, and the rest of the type.
+    constraints (TFun (TCons name arguments) result)
+        | Just className <- Text.stripPrefix classPrefix name =
+            first (applied className arguments :) (constraints result)
+    constraints typ = ([], typ)
+    parenthesize True text = "(" <> text <> ")"
+    parenthesize False text = text
+
+-- | The prefix of the type constructor of a class dictionary in Hoogle+.
+classPrefix :: Text
+classPrefix = "@@hplusTC@@"
 
 -- Libraries and queries
 
@@ -171,6 +268,44 @@ renderProgram = go False
             goFunction function <> " " <> go True argument
     goFunction (Var name) = Text.unpack name
     goFunction applied = go False applied
+
+{- | Parse a program in Haskell syntax: names and their applications, as in
+@map f (filter p xs)@. Application associates to the left. A name is a run
+of characters without spaces and parentheses, such as
+@Data.Maybe.fromMaybe@ or @$@. An operator in parentheses is part of a
+name, as in @(Data.Bool.&&)@, and the name can continue after the
+parenthesis, as in @(Data.Eq.\/=)_Ord@. Other parentheses group.
+'parseProgram' reads the result of 'renderProgram' back to the same program.
+-}
+parseProgram :: Text -> Either String Program
+parseProgram = parseWhole "program" programParser
+
+-- | The parser of 'parseProgram'.
+programParser :: ReadP Program
+programParser = foldl1 App <$> many1 (lexeme atom)
+  where
+    atom = (Var . Text.pack <$> name) <++ between (char '(') (lexeme (char ')')) programParser
+    name = ((<>) <$> parenthesizedOperator <*> munch nameCharacter) +++ munch1 nameCharacter
+    parenthesizedOperator = do
+        operator <- between (char '(') (char ')') (munch1 nameCharacter)
+        guard $ not $ isAlphaNum (last operator) || last operator `elem` ("_'" :: String)
+        pure ("(" <> operator <> ")")
+    nameCharacter c = not (isSpace c) && c `notElem` ("()" :: String)
+
+-- | Run a parser on all of the text. The error names the kind of text.
+parseWhole :: String -> ReadP a -> Text -> Either String a
+parseWhole kind parser text = case map fst $ readP_to_S (parser <* skipSpaces <* eof) (Text.unpack text) of
+    [result] -> Right result
+    [] -> Left ("cannot parse the " <> kind <> " " <> show text)
+    _ -> Left ("the " <> kind <> " " <> show text <> " has more than one parse")
+
+-- | A parser that skips the spaces before it.
+lexeme :: ReadP a -> ReadP a
+lexeme parser = skipSpaces *> parser
+
+-- | A parser of a string after spaces.
+token :: String -> ReadP String
+token = lexeme . string
 
 -- | Every program that replaces each representative by a member of its group.
 expand :: Library -> Program -> [Program]

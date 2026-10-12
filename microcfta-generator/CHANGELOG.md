@@ -25,8 +25,10 @@ tree automata of `microcfta`, with QuickCheck integration.
 - `Data.CFTA.Gen.Synthesis`: Hectare, the type-directed component
   synthesizer of the ECTA paper. `synthesize` lists the programs of a query
   by size; `programsOfSize` and `programsOfSizeUpToDepth` read the program
-  space of a size as a generator. The `hectare` benchmark runs the paper's
-  Hoogle+ and Stack Overflow suites.
+  space of a size as a generator. `parseType` and `parseProgram` read types
+  and programs in Haskell syntax, and `renderType` and `renderProgram` print
+  them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
+  suites.
 - `Data.CFTA.Gen.Synthesis.Liquid`: Hegel, the refinement-typed component
   synthesizer of the LTA paper, with liquid qualifiers, the paper's prune,
   similarity, and minimization, conditionals at the goal, and function values
