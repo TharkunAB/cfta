@@ -57,8 +57,13 @@ withComponents components =
         [ ("$", TFun (TFun (TVar "a") (TVar "b")) (TFun (TVar "a") (TVar "b")))
         , ("id", TFun (TVar "a") (TVar "a"))
         ]
-        [ (listFunctions, ["Nil"])
-        , (maybeFunctions, ["Data.Maybe.Nothing"])
+        -- The original code means to apply the Maybe functions to anything
+        -- but Nothing, but its rule selects components by their names, and the
+        -- components are group representatives, so the rule selects none:
+        -- no Maybe function heads a term of size two. This library does the
+        -- same, so its program spaces equal the original's, size by size.
+        [ (listFunctions, Just ["Nil"])
+        , (maybeFunctions, Nothing)
         ]
   where
     listFunctions =

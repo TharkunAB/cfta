@@ -116,10 +116,10 @@ data Library = Library
     -- ^ Each group: its representative, the type, and its members in source order.
     , libraryArgumentOnly :: [(Text, Type)]
     -- ^ Components that only appear as an argument, such as @($)@ and @id@.
-    , libraryAvoid :: [([Text], [Text])]
-    {- ^ Pruning rules: a function of the first list is not applied to a
-    component of the second list as its whole argument, such as @head@ to
-    @Nil@.
+    , libraryAvoid :: [([Text], Maybe [Text])]
+    {- ^ Pruning rules for terms of size two: a function of the first list is
+    not applied to a component of the second list, such as @head@ to @Nil@.
+    With 'Nothing', the functions head no term of size two.
     -}
     }
     deriving (Show)
@@ -129,12 +129,12 @@ an argument and the pruning rules. Components of one type form one group,
 whose representative is @f@ and its index; a pruning rule names members, and
 it applies to their groups.
 -}
-library :: [(Text, Type)] -> [(Text, Type)] -> [([Text], [Text])] -> Library
+library :: [(Text, Type)] -> [(Text, Type)] -> [([Text], Maybe [Text])] -> Library
 library components argumentOnly avoid =
     Library
         { libraryGroups = [(representativeOf index, typ, members) | (index, (typ, members)) <- zip [0 :: Int ..] groups]
         , libraryArgumentOnly = argumentOnly
-        , libraryAvoid = [(map toRepresentative functions, map toRepresentative arguments) | (functions, arguments) <- avoid]
+        , libraryAvoid = [(map toRepresentative functions, map toRepresentative <$> arguments) | (functions, arguments) <- avoid]
         }
   where
     groups = foldr addMember [] (reverse components)
@@ -327,7 +327,7 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNode $ queryGo
             types
             (Node [edge | (name, edge) <- components, name `elem` functions])
             (union [without arguments, anyArgument, argumentOnly])
-        | (functions, arguments) <- libraryAvoid lib
+        | (functions, Just arguments) <- libraryAvoid lib
         ]
             <> [application types (union [without restricted, anyArgument]) (union $ termsOfSize True 1)]
     termsOfSize _ size' =
