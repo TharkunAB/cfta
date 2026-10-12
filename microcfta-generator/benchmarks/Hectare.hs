@@ -158,7 +158,7 @@ profileQuery name size = case find ((== Text.pack name) . benchmarkName . fst) (
         end <- getMonotonicTime
         printf "round %d: %.3f s, %d nodes, %d edges\n" count (end - start) nodes (edgeCount next)
         hFlush stdout
-        if next == node then pure next else rounds (count + 1) next
+        if next == node || count + 1 >= reductionRounds then pure next else rounds (count + 1) next
 
 {- | The programs of one size of a query as a generator: the count, the rank
 of the expected solution, a check that the ranks list the programs of the

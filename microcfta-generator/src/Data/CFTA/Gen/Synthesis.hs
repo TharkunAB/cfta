@@ -53,6 +53,7 @@ module Data.CFTA.Gen.Synthesis (
     typeNode,
     rawSearchSpace,
     reduceFully,
+    reductionRounds,
     searchSpace,
     programsIn,
     solutionsOfSize,
@@ -268,9 +269,26 @@ ofType :: Node Symbol -> Node Symbol -> Node Symbol
 ofType candidates goal =
     Node [mkEdge "filter" [goal, candidates] (equalityConstraint $ mkEqConstraints [[path [0], path [1, 0]]])]
 
--- | Propagate the constraints and remove the redundant edges until nothing changes.
+{- | Propagate the constraints and remove the redundant edges until nothing
+changes, for at most 'reductionRounds' rounds, as the paper does. At some
+sizes the rounds do not converge: on takeNdropM at size 7 the automaton
+stays near 3,400 nodes, and the enumeration of the bounded result finds the
+solution. Reduction does not change the language, so the bound only stops
+earlier.
+-}
 reduceFully :: Node Symbol -> Node Symbol
-reduceFully = fixUnbounded (withoutRedundantEdges . reducePartially)
+reduceFully = go reductionRounds
+  where
+    go 0 node = node
+    go rounds node
+        | next == node = node
+        | otherwise = go (rounds - 1) next
+      where
+        next = withoutRedundantEdges (reducePartially node)
+
+-- | The bound of 'reduceFully' on reduction rounds: 30, as in the paper.
+reductionRounds :: Int
+reductionRounds = 30
 
 {- | The automaton of the programs of a size that use every argument of the
 query once and have the goal type, reduced and refolded. A size counts the
