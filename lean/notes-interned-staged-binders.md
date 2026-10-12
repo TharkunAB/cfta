@@ -38,8 +38,9 @@ then derives complete key-to-record coherence from empty caches. It does not
 assume that the resulting graph has the desired invariant.
 
 `dependencies_complete` proves that all staged dependency payloads have
-completed before the enclosing Mu starts. `body_pending_safe` derives that
-its remaining body computation cannot request a Mu record. A captured Mu is
+completed before the enclosing Mu starts. `normalized_body_pending_safe` derives that
+its body computation, including root self-reference removal, cannot request
+a Mu record. A captured Mu is
 already a complete value; reading it does not issue another Mu request.
 This is the specific reason that pending-key collisions cannot occur in
 this fragment.

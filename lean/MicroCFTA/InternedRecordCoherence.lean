@@ -243,6 +243,19 @@ theorem compile_correct [DecidableEq (EdgeKey Symbol Guard)] (template : Templat
     Coherent (run (compile template argument) state).2 ∧ Covered pending (run (compile template argument) state).2 :=
   run_correct _ _ (compile_safe template argument) coherent covered
 
+/-- Self-reference removal certifies every union reconstruction request. -/
+theorem withoutSelfReference_safe (name : Reference) (body : Value Symbol Guard) :
+    Safe (withoutSelfReference name body) := by
+  cases body <;> simp only [withoutSelfReference]
+  all_goals first | trivial | split <;> first | exact makeUnion_safe _ | trivial
+
+/-- Normalized binder bodies retain complete cache records. -/
+theorem compileBody_correct [DecidableEq (EdgeKey Symbol Guard)] (template : Template Symbol Guard)
+    (name : Reference) (state : InternedConstructorTemplates.State Symbol Guard)
+    (coherent : Coherent state) (covered : Covered pending state) :
+    Coherent (run (compileBody template name) state).2 ∧ Covered pending (run (compileBody template name) state).2 :=
+  run_correct _ _ (safe_bind _ _ (compile_safe template (.reference name)) (withoutSelfReference_safe name)) coherent covered
+
 /-- Reserving a Mu identity adds one explicit pending slot and preserves all existing records. -/
 theorem reserve_correct (key : NodeKey) (state : InternedConstructorTemplates.State Symbol Guard)
     (coherent : Coherent state) (covered : Covered pending state) :
@@ -291,9 +304,9 @@ theorem probes_correct [DecidableEq (EdgeKey Symbol Guard)] (template : Template
     (state : InternedConstructorTemplates.State Symbol Guard) (coherent : Coherent state)
     (covered : Covered pending state) :
     Coherent (probes template state).2 ∧ Covered pending (probes template state).2 := by
-  have first := compile_correct template (.reference .depth) state coherent covered
-  exact compile_correct template
-    (.reference (.uninterned (run (compile template (.reference .depth)) state).1.depth)) _ first.1 first.2
+  have first := compileBody_correct template .depth state coherent covered
+  exact compileBody_correct template
+    (.uninterned (run (compileBody template .depth) state).1.depth) _ first.1 first.2
 
 /-- Actual Mu completion retains its probe key, canonical identity, and complete body record. -/
 theorem finishMu_correct [DecidableEq (EdgeKey Symbol Guard)] (template : Template Symbol Guard)
@@ -306,11 +319,11 @@ theorem finishMu_correct [DecidableEq (EdgeKey Symbol Guard)] (template : Templa
   | none =>
       let entry := Cache.intern state.nodes (muKey depthShape ordinaryShape)
       let allocated := {state with nodes := entry.2}
-      let body := run (compile template (.reference (.interned entry.1.identity))) allocated
+      let body := run (compileBody template (.interned entry.1.identity)) allocated
       have reserved := reserve_correct (muKey depthShape ordinaryShape) state coherent covered
-      have built := compile_correct template (.reference (.interned entry.1.identity)) allocated reserved.1 reserved.2
+      have built := compileBody_correct template (.interned entry.1.identity) allocated reserved.1 reserved.2
       have grown := (InternedConstructorTemplates.run_correct
-        (compile template (.reference (.interned entry.1.identity))) allocated reserved.1.valid).2
+        (compileBody template (.interned entry.1.identity)) allocated reserved.1.valid).2
       have stored : body.2.nodes.table (muKey depthShape ordinaryShape) = some entry.1 :=
         grown.nodes _ _ (Cache.intern_correct _ _ coherent.valid.2).2.1
       have completed := complete_correct (muKey depthShape ordinaryShape) entry.1

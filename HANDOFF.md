@@ -19,7 +19,8 @@ The required properties remain:
 
 Continue within this scope. Local proof work and source repairs are
 permitted. No push or deployment was requested for this continuation.
-No persistent goal exists. Do not create one without a user request.
+An active user-requested goal requires continued work until the formalization
+is complete. Record repairs in `FINDINGS.md`. Do not stop at a proof checkpoint.
 
 ## Repository and rebase
 

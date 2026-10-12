@@ -325,6 +325,52 @@ def compileEdges (templates : List (EdgeTemplate Symbol Guard)) (argument : Valu
 termination_by sizeOf templates
 end
 
+/-- Remove the binder's own bare reference only from a union at the body root. -/
+def withoutSelfReference (name : Reference) (body : Value Symbol Guard) : Work Symbol Guard (Value Symbol Guard) :=
+  match body with
+  | .union _ members _ _ =>
+      if members.any (fun member => member.referenceOf == .ref name) then
+        makeUnion (members.filter (fun member => member.referenceOf != .ref name))
+      else .pure body
+  | _ => .pure body
+
+/-- Reference identity selects exactly the bare self operand. -/
+theorem referenceOf_self_iff (name : Reference) (value : Value Symbol Guard) :
+    value.referenceOf = .ref name ↔ value = .reference name := by
+  cases value <;> simp [Value.referenceOf]
+
+/-- The body filter retains every operand except the selected bare reference. -/
+theorem withoutSelfReference_members (name : Reference) (members : List (Value Symbol Guard))
+    (value : Value Symbol Guard) :
+    value ∈ members.filter (fun member => member.referenceOf != .ref name) ↔
+      value ∈ members ∧ value ≠ .reference name := by
+  simp only [List.mem_filter, bne_iff_ne]
+  exact and_congr_right fun _ => not_congr (referenceOf_self_iff name value)
+
+/-- A root union without the selected operand uses the original record without effects. -/
+theorem withoutSelfReference_absent (name : Reference) (entry : Interned NodeKey)
+    (members : List (Value Symbol Guard)) (depth : Nat) (free : List Reference)
+    (absent : .reference name ∉ members) :
+    withoutSelfReference name (.union entry members depth free) = .pure (.union entry members depth free) := by
+  simp only [withoutSelfReference]
+  rw [ite_eq_right_iff]
+  intro present
+  exfalso
+  apply absent
+  obtain ⟨member, found, same⟩ := List.any_eq_true.mp present
+  exact (referenceOf_self_iff name member).mp (beq_iff_eq.mp same) ▸ found
+
+/-- Normalize the callback result before each probe and before storing the binder body. -/
+def compileBody (template : Template Symbol Guard) (name : Reference) : Work Symbol Guard (Value Symbol Guard) :=
+  (compile template (.reference name)).bind (withoutSelfReference name)
+
+/-- Rebuilding a normalized binder body reuses its complete records and both counters. -/
+theorem compileBody_replay [DecidableEq (EdgeKey Symbol Guard)] (template : Template Symbol Guard)
+    (name : Reference) (before after : State Symbol Guard) (valid : Valid before)
+    (growth : Grows (run (compileBody template name) before).2 after) :
+    run (compileBody template name) after = ((run (compileBody template name) before).1, after) :=
+  replay (compileBody template name) before after valid growth
+
 /-- Repeated ordinary constructor templates retain their complete canonical result through both caches. -/
 theorem compile_replay [DecidableEq (EdgeKey Symbol Guard)] (template : Template Symbol Guard)
     (argument : Value Symbol Guard) (before after : State Symbol Guard) (valid : Valid before)
@@ -412,6 +458,17 @@ theorem compileEdges_ordinary (templates : List (EdgeTemplate Symbol Guard)) (ar
 termination_by sizeOf templates
 end
 
+/-- Removing a bare self reference does not request a binder key. -/
+theorem withoutSelfReference_ordinary (name : Reference) (body : Value Symbol Guard) :
+    Ordinary (withoutSelfReference name body) := by
+  cases body <;> simp only [withoutSelfReference]
+  all_goals first | trivial | split <;> first | exact makeUnion_ordinary _ | trivial
+
+/-- Body normalization preserves the absence of pending binder requests. -/
+theorem compileBody_ordinary (template : Template Symbol Guard) (name : Reference) :
+    Ordinary (compileBody template name) :=
+  ordinary_bind _ _ (compile_ordinary template (.reference name)) (withoutSelfReference_ordinary name)
+
 /-- All ordinary body effects leave a pending binder's record slot unchanged. -/
 theorem run_preserves_mu [DecidableEq (EdgeKey Symbol Guard)] (work : Work Symbol Guard Result)
     (state : State Symbol Guard) (ordinary : Ordinary work) (probes : MuKey NodeRef) :
@@ -435,34 +492,40 @@ theorem compile_preserves_mu [DecidableEq (EdgeKey Symbol Guard)] (template : Te
     (run (compile template argument) state).2.nodeRecords (.mu probes) = state.nodeRecords (.mu probes) :=
   run_preserves_mu _ _ (compile_ordinary template argument) probes
 
+/-- The normalized body leaves its reserved binder record slot unchanged. -/
+theorem compileBody_preserves_mu [DecidableEq (EdgeKey Symbol Guard)] (template : Template Symbol Guard)
+    (name : Reference) (state : State Symbol Guard) (probes : MuKey NodeRef) :
+    (run (compileBody template name) state).2.nodeRecords (.mu probes) = state.nodeRecords (.mu probes) :=
+  run_preserves_mu _ _ (compileBody_ordinary template name) probes
+
 /-- Evaluate the source depth probe, then the ordinary probe at that cached depth. -/
 def probes [DecidableEq (EdgeKey Symbol Guard)] (template : Template Symbol Guard) (state : State Symbol Guard) :
     (Value Symbol Guard × Value Symbol Guard) × State Symbol Guard :=
-  let first := run (compile template (.reference .depth)) state
-  let second := run (compile template (.reference (.uninterned first.1.depth))) first.2
+  let first := run (compileBody template .depth) state
+  let second := run (compileBody template (.uninterned first.1.depth)) first.2
   ((first.1, second.1), second.2)
 
 /-- Both generated probe executions preserve all earlier cache entries. -/
 theorem probes_correct [DecidableEq (EdgeKey Symbol Guard)] (template : Template Symbol Guard)
     (state : State Symbol Guard) (valid : Valid state) : Valid (probes template state).2 ∧ Grows state (probes template state).2 := by
-  have first := run_correct (compile template (.reference .depth)) state valid
+  have first := run_correct (compileBody template .depth) state valid
   have second := run_correct
-    (compile template (.reference (.uninterned (run (compile template (.reference .depth)) state).1.depth))) _ first.1
+    (compileBody template (.uninterned (run (compileBody template .depth) state).1.depth)) _ first.1
   exact ⟨second.1, grows_trans first.2 second.2⟩
 
 /-- Rebuilding the generated probe programs reproduces both complete probe records without allocations. -/
 theorem probes_replay [DecidableEq (EdgeKey Symbol Guard)] (template : Template Symbol Guard)
     (before after : State Symbol Guard) (valid : Valid before) (growth : Grows (probes template before).2 after) :
     probes template after = ((probes template before).1, after) := by
-  let first := run (compile template (.reference .depth)) before
-  let second := run (compile template (.reference (.uninterned first.1.depth))) first.2
+  let first := run (compileBody template .depth) before
+  let second := run (compileBody template (.uninterned first.1.depth)) first.2
   have firstValid : Valid first.2 := (run_correct _ _ valid).1
   have secondGrows : Grows first.2 second.2 := (run_correct _ _ firstValid).2
-  have firstReplay := compile_replay template (.reference .depth) before after valid (grows_trans secondGrows growth)
-  have secondReplay := compile_replay template (.reference (.uninterned first.1.depth)) first.2 after firstValid growth
+  have firstReplay := compileBody_replay template .depth before after valid (grows_trans secondGrows growth)
+  have secondReplay := compileBody_replay template (.uninterned first.1.depth) first.2 after firstValid growth
   simp only [probes, firstReplay]
-  change ((first.1, (run (compile template (.reference (.uninterned first.1.depth))) after).1),
-    (run (compile template (.reference (.uninterned first.1.depth))) after).2) = _
+  change ((first.1, (run (compileBody template (.uninterned first.1.depth)) after).1),
+    (run (compileBody template (.uninterned first.1.depth)) after).2) = _
   rw [secondReplay]
 
 /-- Construct the binder key from the source references of both stored probe records. -/
@@ -478,7 +541,7 @@ def finishMu [DecidableEq (EdgeKey Symbol Guard)] (template : Template Symbol Gu
   | none =>
       let entry := Cache.intern state.nodes key
       let allocated := {state with nodes := entry.2}
-      let body := run (compile template (.reference (.interned entry.1.identity))) allocated
+      let body := run (compileBody template (.interned entry.1.identity)) allocated
       let candidate := Value.mu entry.1 body.1 depthShape ordinaryShape
       let records := keepFirst body.2.nodeRecords key candidate
       ((records key).getD candidate, {body.2 with nodeRecords := records})
@@ -497,7 +560,7 @@ theorem finishMu_correct [DecidableEq (EdgeKey Symbol Guard)] (template : Templa
       have allocatedValid : Valid allocated := ⟨valid.1, (Cache.intern_correct _ _ valid.2).1⟩
       have allocatedGrows : Grows state allocated :=
         ⟨extends_refl _, InternedBinderProtocol.intern_grows _ _, extends_refl _, extends_refl _⟩
-      have body := run_correct (compile template (.reference (.interned entry.1.identity))) allocated allocatedValid
+      have body := run_correct (compileBody template (.interned entry.1.identity)) allocated allocatedValid
       refine ⟨body.1, grows_trans allocatedGrows (grows_trans body.2 ?_)⟩
       exact ⟨extends_refl _, extends_refl _, extends_refl _, keepFirst_extends _ _ _⟩
 
@@ -511,7 +574,7 @@ theorem finishMu_stored [DecidableEq (EdgeKey Symbol Guard)] (template : Templat
   | none =>
       simp only [finishMu, found]
       obtain ⟨stored, present⟩ := keepFirst_present
-        (run (compile template (.reference (.interned (Cache.intern state.nodes (muKey depthShape ordinaryShape)).1.identity)))
+        (run (compileBody template (.interned (Cache.intern state.nodes (muKey depthShape ordinaryShape)).1.identity))
           {state with nodes := (Cache.intern state.nodes (muKey depthShape ordinaryShape)).2}).2.nodeRecords
         (muKey depthShape ordinaryShape) _
       rw [present]
@@ -522,10 +585,10 @@ theorem finishMu_miss [DecidableEq (EdgeKey Symbol Guard)] (template : Template 
     (depthShape ordinaryShape : Value Symbol Guard) (state : State Symbol Guard)
     (missing : state.nodeRecords (muKey depthShape ordinaryShape) = none) :
     let entry := Cache.intern state.nodes (muKey depthShape ordinaryShape)
-    let body := run (compile template (.reference (.interned entry.1.identity))) {state with nodes := entry.2}
+    let body := run (compileBody template (.interned entry.1.identity)) {state with nodes := entry.2}
     (finishMu template depthShape ordinaryShape state).1 = .mu entry.1 body.1 depthShape ordinaryShape := by
-  have unchanged := compile_preserves_mu template
-    (.reference (.interned (Cache.intern state.nodes (muKey depthShape ordinaryShape)).1.identity))
+  have unchanged := compileBody_preserves_mu template
+    (.interned (Cache.intern state.nodes (muKey depthShape ordinaryShape)).1.identity)
     {state with nodes := (Cache.intern state.nodes (muKey depthShape ordinaryShape)).2}
     ⟨depthShape.referenceOf, ordinaryShape.referenceOf⟩
   have absent := unchanged.trans missing
@@ -721,6 +784,22 @@ theorem unary_two_cache_example :
     let template : Template Nat Unit := .node [.mk 0 () [.argument]]
     let result := createMu template empty
     result.1.depth = 1 ∧ result.1.free = [] ∧ result.2.edges.next = 3 ∧ result.2.nodes.next = 4 := by
+  cbv
+
+/-- Root self removal gives the same canonical recursive record as the body without that operand. -/
+theorem self_union_canonical_example :
+    let body : Template Nat Unit := .node [.mk 0 () [.argument]]
+    let withSelf := createMu (.union [.argument, body]) empty
+    let withoutSelf := createMu body withSelf.2
+    withSelf.1 = withoutSelf.1 ∧ withSelf.1.depth = 1 ∧ withSelf.1.free = [] := by
+  cbv
+
+/-- An unused binder becomes its remaining ordinary node after the source root filter. -/
+theorem self_union_cleanup_example :
+    let body : Template Nat Unit := .union [.argument, .node [.mk 0 () []]]
+    let result := createMu body empty
+    result.1.depth = 0 ∧ result.1.free = [] ∧
+      (match result.1 with | .node _ _ _ _ => True | _ => False) := by
   cbv
 
 end MicroCFTA.InternedConstructorTemplates

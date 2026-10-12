@@ -207,6 +207,13 @@ theorem body_pending_safe [DecidableEq (EdgeKey Symbol Guard)] (body : Skeleton 
     (run (compile (instantiate body captures) argument) state).2.nodeRecords (.mu pending) = state.nodeRecords (.mu pending) :=
   compile_preserves_mu (instantiate body captures) argument state pending
 
+/-- The current source body filter also leaves the pending binder slot unchanged. -/
+theorem normalized_body_pending_safe [DecidableEq (EdgeKey Symbol Guard)] (body : Skeleton Symbol Guard)
+    (captures : List (Value Symbol Guard)) (name : Reference)
+    (state : InternedConstructorTemplates.State Symbol Guard) (pending : MuKey NodeRef) :
+    (run (compileBody (instantiate body captures) name) state).2.nodeRecords (.mu pending) = state.nodeRecords (.mu pending) :=
+  compileBody_preserves_mu (instantiate body captures) name state pending
+
 mutual
 /-- The finite request family consists of the program and its recursively generated dependencies. -/
 def family (program : Program Symbol Guard) : List (Program Symbol Guard) :=

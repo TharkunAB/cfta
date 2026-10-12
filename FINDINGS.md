@@ -106,6 +106,14 @@ Retained size masses also move when constructors pay a size unit. Earlier
 integration omitted those shifts in two paths. The source and transport
 proofs now preserve the member/mass alignment.
 
+The constructor record model omitted the current root self-reference filter.
+`compileBody` now applies it at both probes and at the reserved binder identity.
+The coherence, pending-record, and replay proofs include that reconstruction.
+Kernel checks show that a recursive body with an added bare self operand
+returns the same canonical record as the body without it. A second check
+covers cleanup to an ordinary node. This repairs a source-correspondence
+omission in the formalization; it is not a new Haskell defect.
+
 ## Behavior that does not satisfy the stronger requested contract
 
 **Similarity minimization preserves representatives, not every original
