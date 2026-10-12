@@ -55,7 +55,8 @@ from derived pending-reference and strict fragment dependency invariants.
 It proves acceptance when the returned residual predicates hold. See
 `notes-enumeration-assignment.md`. The proper-constraint invariant also
 excludes the blocked scheduler result under a satisfying assignment.
-Execution-bound sufficiency remains separate from branch rejection.
+`EnumerationExact.runs_exact` now proves existence at sufficient bounds and
+exact finite-term support. See `notes-enumeration-exact.md`.
 
 Recursive markers require the documented truncation contract. A marker is
 not an accepted finite term. New edge equality classes require the source

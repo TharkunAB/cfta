@@ -44,8 +44,10 @@ assignment satisfies the final state and still assigns that term to root zero.
 The proof derives all internal scheduler and state conditions. It assumes no
 execution step or termination measure law.
 
-Final renderer existence remains open. The remaining invariant must exclude
-reachable pure equality holes that have no stored graph restriction. The
-existing fragment dependency ordering then supplies finite rendering bounds.
+`EnumerationRenderability` now excludes reachable pure equality holes.
+`EnumerationRendering` constructs the final renderers from this provenance
+and the derived fragment dependency ordering. `EnumerationExact.runs_exact`
+combines caller and renderer existence into exact finite-term support.
+See `notes-enumeration-exact.md` for the theorem and its source boundary.
 
-Validation: `lake -d lean build MicroCFTA.EnumerationTermination`.
+Validation: `lake -d lean build MicroCFTA.EnumerationExact`.
