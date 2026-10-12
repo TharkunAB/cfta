@@ -147,3 +147,79 @@ unfolding decreases head rank. Its log is
 The descendant-retention target builds 149 jobs. The combined isolated
 axiom audit checks 7,106 theorem dependencies with only the three allowed
 foundational axioms.
+
+`InternedNormalizationFree` proves the source free-name equations through
+actual normalization. Canonical ordinary nodes retain exactly the names
+from their surviving children. Live ordinary edges retain all input child
+names. Every source union branch retains exactly its operands' names,
+including identity deduplication, singleton collapse, ordinary edge merge,
+and canonical cache readback. Root self-reference filtering preserves each
+other name. Smart cleanup preserves the exact free-name list. Their
+composition preserves each completed binder's external free names. A
+retained free name excludes EmptyNode; this statement does not imply an
+inhabited term language.
+
+These equations use the coherent records, actual edge residency, and live
+edges already derived from the nested executor. They do not assume the
+final normalization equations. The general substitution worker still needs
+to derive the corresponding name relation between its input and output.
+The focused target builds 150 jobs. The expanded isolated dependency audit
+checks 7,126 theorem dependencies.
+
+`InternedUnionHeadGuard` proves that ordinary constructor guards survive
+every source union branch, including singleton collapse. Its template
+theorem permits an arbitrary recursive replacement below those guards.
+`InternedPreparedSubstitution` prepares the source closed-record shortcut,
+reference lookup, ordered child plans, edge reconstruction, and source node
+and union reconstruction directly from stored values. An open nested Mu
+returns `none` to mark the unsupported adapter branch. This is not a source
+error or a fuel limit. Closed Mu records use the actual closed shortcut.
+Actual cached depth zero proves that preparation succeeds.
+
+`InternedUnionNormalForm` derives flat immediate union members from the
+complete nested executor. It covers successful and pending outcomes. It
+starts from empty caches without a final-shape assumption.
+`InternedNormalizationDepth` proves bounds on actual cached depth through
+ordinary edge removal and all source union branches. The current root
+self-reference filter cannot increase this depth. These are normalization
+equations. They do not make cached maximum depth an unfolding rank.
+
+`InternedShallowGate.normalized_unfold_decreases` combines these results.
+For an open body with cached depth zero, the actual source self filter
+derives the required guard and preserves depth zero. Preparation therefore
+succeeds, and the resulting source constructor computation has head rank
+zero for every available replacement. The caller supplies no result-rank,
+plan-success, singleton, or guard hypothesis. Flatness and record
+availability come from the complete source executor.
+
+This theorem starts at the actual callback body and executes its source
+self filter. General stored-Mu unfolding still needs the stored-body
+normalization invariant and the open nested-Mu substitution branch. It does
+not yet instantiate a complete source gate `UnfoldingRank`.
+The shallow target builds 156 jobs. Its isolated audit checks 7,235 theorem
+dependencies with only the allowed foundational axioms.
+
+`InternedStoredSelfFilter` and `InternedStoredBodyInvariant` close the
+stored-body normalization boundary for this shallow fragment. The complete
+nested source executor derives the body property for every stored Mu,
+including records completed before a later pending outcome. It uses the
+actual self filter on both probes and on the allocated callback body.
+`stored_unfold_decreases` now starts with a stored open Mu whose actual
+body has cached depth zero. It derives the guard from the source cache
+invariants, derives preparation success, and proves strict head-rank
+decrease for substitution of that very Mu into its stored body.
+`built_record_unfold_decreases` discharges all representation premises
+for every completed record of an empty-cache source execution.
+
+A closed constructor expression contains an open inner Mu with actual
+head ranks one and zero. `fixture_actual_ranks` checks that expression in
+Lean. The same stored-inner-body trace passes against Haskell
+`unfoldOuterRec` in `/tmp/mcfta-gate-stored-shallow.hs`. Its observed body
+depth is zero and its inner free-variable set is nonempty. This is a
+nonvacuous instance of the source fragment.
+
+The stored-body target builds 158 jobs. The combined isolated audit checks
+7,350 theorem dependencies. The remaining general case has open nested Mu
+records in the substituted body. Their preparation, normalized
+reconstruction, and possible operand identity collisions remain separate
+obligations. No complete source `UnfoldingRank` is claimed yet.
