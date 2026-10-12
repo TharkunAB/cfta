@@ -300,3 +300,32 @@ The certified example target builds 169 jobs. The combined isolated audit
 checks 7,772 theorem dependencies. Arbitrary open nested-Mu unfolding still
 needs a general rank and first-run completion argument; it is not covered
 by this shallow-cache fragment.
+
+`InternedShallowValues` and `InternedShallowExecution` remove that
+whole-cache restriction. `ShallowValue` requires depth-zero Mu bodies only
+along the actual queried value's ordinary children and union members.
+Exact canonical edge child lists and union member readback preserve this
+property. Binder-free prepared execution preserves it through every source
+constructor effect. Actual shallow unfolding therefore preserves the
+reachable property in an arbitrary coherent cache.
+
+`InternedReachableGateRank` supplies the resulting concrete source
+`UnfoldingRank`. Its carrier retains actual cache state, record provenance,
+flat unions, stored self filtering, and the reachable property of its
+current value. It imposes no depth restriction on unrelated cache records.
+Actual unfolding completes, preserves the carrier, and decreases the head
+rank. The derived unbounded gate and eventual fuel agreement apply to this
+larger fragment.
+
+`InternedReachableGateExample` executes a nested source constructor and
+selects its actual inner Mu. The same completed cache contains the outer
+Mu with positive body Mu depth. `deeper_cache` proves that the old global
+restriction fails. The selected inner query is open and its actual
+unfolding has head ranks one and zero. `mixed_ranked` proves the total gate
+and eventual fuel theorem for that concrete query in the mixed cache.
+
+The reachable example target builds 173 jobs. The combined isolated audit
+checks 7,952 theorem dependencies. The remaining restriction concerns the
+queried value: each reachable Mu must still have cached body depth zero.
+An actual Mu whose body contains another Mu is outside this proved gate
+domain. Its general normalized reconstruction rank remains open.
