@@ -177,6 +177,25 @@ normalization on copied guards, and the concrete runtime table operations.
 The pure row and allocation theorems state the checks precisely. They do
 not turn those runtime checks into machine-checked GHC implementation proofs.
 
+`SymbolicEqualityBridge` now connects normalized PCS classes to the symbolic
+common-subtree interpretation. The nontrivial-class invariant is necessary:
+raw PCS singletons impose no condition, while reflexive `Same` guards require
+an existing path. Completed equality normalization preserves the indicator.
+`conjoined_constraint_score` proves that recompiling the normalized source
+conjunction gives the exact product of both input indicators. It includes
+the `combineGuards` truth and identical-operand simplifications. The equality
+normalization proof retains its explicit successful-completion condition.
+
+`SymbolicSignedPaths` models the source signed path lookup and `fitsArity`.
+It proves that a failed arity check cannot remove a valid equality-constrained
+term and that successful checked paths decode to natural indices unchanged.
+`packedLookup_exact` connects the signed lookup to packed term storage.
+For guards that retain negative indices, `encode_lookup` and `encode_class`
+use an out-of-range sentinel under a proved constructor-arity bound.
+`accepted_arityBound` derives that bound from graph rows. The proof explicitly
+rejects negative reflexive paths. A concrete theorem shows why applying
+`Int.toNat` without checking the sign changes semantics.
+
 `SymbolicSmartRows` proves the source node constructor's empty-child filter
 and edge deduplication preserve row membership. It also proves that an edge
 removed by the singleton-node emptiness check has numeric indicator zero.
