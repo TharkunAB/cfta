@@ -287,6 +287,14 @@ import MicroCFTA.ConstructorProbeWorklist
 import MicroCFTA.ConstructorProbeContexts
 import MicroCFTA.RecursiveUnambiguous
 import MicroCFTA.SourceCyclicAutomaton
+import MicroCFTA.InternedFreshProbeKeys
+import MicroCFTA.FiniteSizeFields
+import MicroCFTA.FiniteSizeSampling
+import MicroCFTA.FiniteSizeSeries
+import MicroCFTA.IntegerSizeClosure
+import MicroCFTA.OpenGroupedSize
+import MicroCFTA.FinalSizeFields
+import MicroCFTA.RecursiveTermAlignment
 /-!
 # Proof dependency audit
 

@@ -191,6 +191,26 @@ member rank with its probability mass. Rank offsets use counts; branch
 probabilities use the retained masses. Every query preimage is preserved,
 including repeated values and repeated projected terms.
 
+The finite size-field modules now derive the corresponding class positions,
+member weight callbacks, sparse mass tables, and samplers. The proofs include
+zero-size product splits, paid shifts, variable-width integer closure, and
+final observation merging. The same-size atomic merge has its own probability
+law. See [the size-field notes](notes-finite-size-fields.md).
+
+`RecursiveTermAlignment` derives matching value and term index positions for
+typed recursive products, choices, labels, and pays. It retains the private
+recursion boundary and all duplicate member occurrences. The proof covers
+complete bounded prefixes as well as each size class. General recursive
+inverse callbacks and runtime knot construction remain separate. See
+[the recursive alignment notes](notes-recursive-term-alignment.md).
+
+`InternedFreshProbeKeys` derives pending-key separation when a normalized
+inner probe retains the fresh outer reference. It also derives memo replay
+when the outer variable was absent from the original free-variable set.
+Normalization can erase an original dependency. That case still requires
+an exact nested substitution identity proof. No closed-input collision was
+established. See [the fresh-probe notes](notes-interned-fresh-probe-keys.md).
+
 `SourcePlanPositions` and `SourcePlanPartition` prove both directions between
 finite original ranks and size-class positions. All classes together form a
 permutation of the complete rank interval. Their count sum equals the
