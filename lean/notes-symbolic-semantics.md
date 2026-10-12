@@ -169,6 +169,15 @@ occurrences. `hashJoin_member` proves that every equal-key pair is emitted
 and no unequal-key pair is emitted. `hashJoin_length` retains multiplicity.
 The map is keyed by the complete symbol key; the proof does not equate a
 hash collision with key equality.
+`clusters_permutation` also proves that restoring grouped source edge lists
+only permutes a duplicate-free node's alternatives. It cannot remove or
+repeat an edge.
+
+`SymbolicCanonicalOrder` models the source recursive operand swap. One swap
+suffices to reach the minimum/maximum identity pair. Both call directions
+then use the same complete key and result, without requiring a commutative
+body. Valid first-writer memo tables preserve that result. Equal stored
+identities also identify the exact payload key, by the interning invariant.
 
 The remaining Haskell correspondence checks are concrete. They include the
 identity map for the distinguished `EmptyNode`, typed cache selection,
@@ -195,6 +204,35 @@ use an out-of-range sentinel under a proved constructor-arity bound.
 `accepted_arityBound` derives that bound from graph rows. The proof explicitly
 rejects negative reflexive paths. A concrete theorem shows why applying
 `Int.toNat` without checking the sign changes semantics.
+
+`SymbolicRankSoundness` proves the reverse membership direction of the actual
+inverse API. Every successful child and constructor rank retains a nonempty
+language whose terms have the requested subtree. `rankOf_sound` proves that
+returning a rank implies membership. `rankOf_rejects_nonmember` proves that a
+completed inverse on a nonmember returns `Nothing`. `rankOf_checked_inverse`
+also proves every returned rank is in range and decodes to the supplied term
+once the full finite decoder bound has been reached.
+
+That reverse direction needs exact projection at the empty root path.
+Conservative projection alone would permit a singleton shortcut on an empty
+root language. `closed_rootProjection` derives the stronger root fact from
+the actual cleaned row-union view. This is a proof-interface requirement,
+not a defect in the source root projection.
+
+`SymbolicRankCache.ranking_preserves` covers all inverse results, including
+`Nothing` after partial traversal. Rejected terms can share their count cache
+with later calls. `SymbolicRankTotal.rankOf_eventual` proves stable successful
+termination for every supplied finite term. Its induction descends through
+that term and through finite constructor lists. `rankOf_eventually_rejects`
+therefore rejects nonmembers without an execution-success premise.
+
+`SymbolicTotalAPI.allocated_total_api` composes the complete result from
+constructor allocation histories, copied operation rows, and compiled
+guards. One common bound covers cardinality and every valid finite index.
+Every supplied finite term has a further bound for its inverse answer.
+`Nothing` then means nonmembership. A returned integer is in range and its
+actual decode returns that exact supplied term. All these results use the
+same executable counter, decoder, and inverse workers.
 
 `SymbolicSmartRows` proves the source node constructor's empty-child filter
 and edge deduplication preserve row membership. It also proves that an edge

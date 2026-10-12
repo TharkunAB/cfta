@@ -66,4 +66,46 @@ theorem hashJoin_length [DecidableEq Key] (key : Row → Key) (join : Row → Ro
       (left.map fun first => (right.filter fun second => decide (key first = key second)).length).sum := by
   simp [hashJoin, List.length_flatMap, bucket_length]
 
+/-- Reading a source cluster restores the original within-key row order. -/
+theorem cluster_bucket_exact [DecidableEq Key] (key : Row → Key) (rows : List Row) (sought : Key) :
+    (build key (fun _ => []) rows sought).reverse = rows.filter (fun row => decide (sought = key row)) := by
+  simp [build_exact]
+
+/-- Enumerate distinct complete keys and restore each bucket's original order. -/
+def clusters [DecidableEq Key] (key : Row → Key) (rows : List Row) : List (List Row) :=
+  ((rows.map key).eraseDups).map fun sought => (build key (fun _ => []) rows sought).reverse
+
+/-- Hash clustering contains exactly the original alternatives. -/
+theorem clusters_member [DecidableEq Key] (key : Row → Key) (rows : List Row) (row : Row) :
+    row ∈ (clusters key rows).flatten ↔ row ∈ rows := by
+  simp only [clusters, ← List.flatMap_def, cluster_bucket_exact, List.mem_flatMap,
+    List.mem_eraseDups, List.mem_map, List.mem_filter, decide_eq_true_eq]
+  constructor
+  · rintro ⟨_, _, member, _⟩
+    exact member
+  · intro member
+    exact ⟨key row, ⟨row, member, rfl⟩, member, rfl⟩
+
+/-- Distinct source edge identities occur in exactly one restored cluster. -/
+theorem clusters_distinct [DecidableEq Key] (key : Row → Key) (rows : List Row) (distinct : rows.Nodup) :
+    (clusters key rows).flatten.Nodup := by
+  simp only [clusters, ← List.flatMap_def, cluster_bucket_exact]
+  apply List.pairwise_flatMap.mpr
+  constructor
+  · intro sought _
+    exact distinct.filter _
+  · apply (SymbolicDriver.eraseDups_nodup (rows.map key)).imp
+    intro first second different left leftMember right rightMember same
+    subst right
+    have leftKey := (List.mem_filter.mp leftMember).2
+    have rightKey := (List.mem_filter.mp rightMember).2
+    simp only [decide_eq_true_eq] at leftKey rightKey
+    exact different (leftKey.trans rightKey.symm)
+
+/-- On the source node invariant, grouping only permutes alternatives; it never drops or repeats one. -/
+theorem clusters_permutation [DecidableEq Key] (key : Row → Key) (rows : List Row) (distinct : rows.Nodup) :
+    (clusters key rows).flatten.Perm rows := by
+  classical
+  exact (List.perm_ext_iff_of_nodup (clusters_distinct key rows distinct) distinct).mpr (clusters_member key rows)
+
 end MicroCFTA.SymbolicHashJoin
