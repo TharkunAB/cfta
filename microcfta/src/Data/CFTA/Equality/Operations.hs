@@ -33,6 +33,7 @@ import Data.CFTA.Interned.Memo (
     newTypeableMemoCache,
  )
 import Data.CFTA.Path (ChildIndex (..), Path (..), Pathable (..))
+import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Template (Template (..), restrict)
 import Data.CFTA.Term (Term)
 
@@ -124,7 +125,8 @@ reducePartially' constraints node =
     reduceWithInheritedEcs :: EqConstraints -> [Node symbol] -> [Node symbol]
     reduceWithInheritedEcs EqContradiction children = map (const EmptyNode) children
     reduceWithInheritedEcs inheritedEcs children = zipWith (\i -> reducePartially' (eqConstraintsDescend inheritedEcs i)) [0 ..] children
-{-# NOINLINE reducePartially' #-}
+{-# INLINEABLE reducePartially' #-}
+{-# SPECIALIZE reducePartially' :: EqConstraints -> Node Symbol -> Node Symbol #-}
 
 genericReduceEdgeIntersectionCache :: TypeableMemoCache
 genericReduceEdgeIntersectionCache = unsafePerformIO newTypeableMemoCache
@@ -146,7 +148,8 @@ reduceEdgeIntersection constraints edge =
             (edgeSymbol e)
             (reduceEqConstraints (equalities (edgeConstraint e)) ecs (edgeChildren e))
             (edgeConstraint e)
-{-# NOINLINE reduceEdgeIntersection #-}
+{-# INLINEABLE reduceEdgeIntersection #-}
+{-# SPECIALIZE reduceEdgeIntersection :: EqConstraints -> Edge Symbol -> Edge Symbol #-}
 
 {- | Apply the local equality classes to a child list. Make every child empty
 when the local and inherited classes contradict each other.
