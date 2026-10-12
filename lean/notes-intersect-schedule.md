@@ -67,12 +67,25 @@ then structural constructor and union weight, then the canonical-order phase.
 The local weight stops at binders. Each new binder pair strictly decreases the
 first component.
 
-Termination remains open. Language equivalence now holds for every completed
-execution against independent least input semantics. The closed-environment
-reset clears remembered pairs before the cutoff check.
-A termination proof must also measure the structure of closed descendants.
-Payload lookup, cached free-variable sets, closed-copy semantics, finite input
-weights, and typed memoization remain explicit representation interfaces.
+`IntersectTotal.lean` proves totality under independent finite input structure.
+`InputBounds` supplies a finite list of possible pairs, the local constructor
+weight, a size that strictly decreases through direct payload containment, and
+a bound on closed-root reachability. Each reachable payload is either that
+closed root or strictly smaller. These premises describe the inputs. They do
+not refer to intersection execution.
+
+The proof derives environment coverage and protection of each enclosing root
+pair. A reference lookup cannot restore both roots because the earlier cutoff
+would stop that call. A closed-environment reset therefore strictly decreases
+the combined root size. Every other recursive call decreases the local measure.
+`call_eventual` proves termination of both workers. `finite_intersection_total`
+combines this with exact independent finite input semantics. It gives one
+stable, exact result at every sufficiently large bound.
+
+The remaining source bridge must derive these finite lexical-payload contracts
+from the smart constructors and their identity allocation. Payload lookup,
+cached free-variable sets, closed-copy semantics, finite input structure, and
+typed memoization remain explicit representation interfaces.
 
 `IntersectReset.lean` proves why that representation requirement is necessary.
 Its deliberate countermodel uses cyclic binder payloads instead of `RecInt`

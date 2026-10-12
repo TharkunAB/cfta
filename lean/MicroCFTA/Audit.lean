@@ -198,6 +198,8 @@ import MicroCFTA.SupportSpineAlternatives
 import MicroCFTA.SourceSortedQueries
 import MicroCFTA.SourceHoldsQueries
 import MicroCFTA.IntersectReset
+import MicroCFTA.IntersectTotal
+import MicroCFTA.SourceLogicalNames
 /-!
 # Proof dependency audit
 
