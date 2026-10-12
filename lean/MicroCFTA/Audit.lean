@@ -213,6 +213,10 @@ import MicroCFTA.EnumerationBuilderFastPaths
 import MicroCFTA.BooleanGuardPrune
 import MicroCFTA.BooleanGuardCompile
 import MicroCFTA.SourceConstraintConjunction
+import MicroCFTA.GuardStructuralOrder
+import MicroCFTA.RecursiveReductionBarrier
+import MicroCFTA.RecursiveReductionSourceOrder
+import MicroCFTA.EnumerationBinderExposure
 /-!
 # Proof dependency audit
 

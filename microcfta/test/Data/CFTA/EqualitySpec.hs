@@ -336,6 +336,38 @@ spec = do
             forM_ [0 .. 4] $ \depth ->
                 shallowTerms depth (fixUnbounded reducePartially n) `shouldBe` shallowTerms depth n
 
+        it "keeps recursive equality classes without repeating epsilon-union intersections" $ do
+            let leaf = Node [Edge "a" []] :: Node Symbol
+                step child = Node [Edge "f" [child]]
+                withEpsilon = Mu $ \r -> union [leaf, step r, r]
+                withoutEpsilon = Mu $ \r -> union [leaf, step r]
+                children = [withEpsilon, withoutEpsilon, withEpsilon]
+                direct = [path [0], path [1], path [2]]
+                below = [path [0, 0], path [1, 0], path [2, 0]]
+            forM_ [(children, direct), (map step children, direct), (children, below), (map step children, below)] $ \(domains, paths) -> do
+                let original = Node [mkEdge "triple" domains (equalityConstraint $ mkEqConstraints [paths])]
+                result <- timeout 2000000 $ do
+                    let onePass = reducePartially original
+                        reduced = fixUnbounded reducePartially original
+                    _ <- evaluate (nodeCount onePass + nodeCount reduced)
+                    pure reduced
+                case result of
+                    Nothing -> expectationFailure "recursive equality narrowing did not finish"
+                    Just reduced -> do
+                        reduced `shouldBe` original
+                        forM_ [0 .. 4] $ \depth ->
+                            shallowTerms depth reduced `shouldBe` shallowTerms depth original
+
+        it "narrows an acyclic sibling domain beside a recursive domain" $ do
+            let leaf = Node [Edge "a" []] :: Node Symbol
+                recursive = Mu $ \r -> Node [Edge "a" [], Edge "f" [r]]
+                alternatives = Node [Edge "a" [], Edge "b" []]
+                classes = equalityConstraint $ mkEqConstraints [[path [0, 1], path [1]]]
+                original = Node [mkEdge "pair" [Node [Edge "fork" [recursive, alternatives]], leaf] classes]
+                expected = Node [mkEdge "pair" [Node [Edge "fork" [recursive, leaf]], leaf] classes]
+            reducePartially original `shouldBe` expected
+            shallowTerms 4 expected `shouldBe` shallowTerms 4 original
+
         it "stops on classes over recursive children" $
             -- 'reducePartially'' never enters a 'Mu', so only the fixpoint in
             -- 'reduceEqConstraints' and repeated rounds can run forever. Each
@@ -418,13 +450,12 @@ spec = do
         it "unfolding a mu node once unfolds it once" $
             unfoldOuterRec infiniteFNode `shouldBe` (Node [Edge "f" [infiniteFNode]])
 
-        it "recursive terms are unrolled to the depth of the constraints and no more" $
+        it "keeps recursive children folded when equality paths reach inside them" $
             let ecs = (mkEqConstraints [[path [0, 0, 0, 0], path [1, 0, 0]]])
                 ns = [infiniteFNode, infiniteFNode]
                 ns' = reduceEqConstraints ecs EmptyConstraints ns
                 ns'' = reduceEqConstraints ecs EmptyConstraints ns'
-                f n = Node [Edge "f" [n]]
-             in (ns' == ns'') && ns' == [f $ f $ f $ f infiniteFNode, f $ f $ f infiniteFNode] `shouldBe` True
+             in (ns', ns'') `shouldBe` (ns, ns)
 
         it "refold folds the simplest unrolled input" $
             refold (Node [Edge "f" [infiniteFNode]]) `shouldBe` infiniteFNode
