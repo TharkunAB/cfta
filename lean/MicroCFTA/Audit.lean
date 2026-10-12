@@ -273,6 +273,14 @@ import MicroCFTA.OpenGroupedApplication
 import MicroCFTA.SourcePlanPartition
 import MicroCFTA.PartialReductionCaller
 import MicroCFTA.InternedRecordCoherence
+import MicroCFTA.InternedStagedBinders
+import MicroCFTA.DatatypeDecoder
+import MicroCFTA.FinalObservationRanks
+import MicroCFTA.FinalObservationMass
+import MicroCFTA.SourceFiniteBackend
+import MicroCFTA.SourceCompactGuards
+import MicroCFTA.SourceFiniteAutomaton
+import MicroCFTA.GuardBuilders
 /-!
 # Proof dependency audit
 
