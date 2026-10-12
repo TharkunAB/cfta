@@ -136,8 +136,10 @@ fragment and its parent closure. Its closed `pointsStatic` records are
 non-atomic. The regular final-merge theorem applies to that path and to
 merges with retained mass tables. The separate atomic theorem covers the
 source's common-size atomic branch once its constructor flags select that
-branch. This module does not extract the complete flag dispatcher for every
-arbitrary imported `Static` value.
+branch. The later `StaticSamplingDispatch` and `BucketMergeDispatch`
+modules extract every flag branch and derive this selection from constructor
+provenance. See [the dispatcher notes](notes-static-dispatch.md). Arbitrary
+imported records still need coherent local fields.
 
 The rank and class proofs are finite. They do not add a new proof of lazy
 recursive mass-table productivity. The source's shared-choice threshold

@@ -5,8 +5,9 @@ language, distinct-term index, distribution, and optimization contracts.
 [API-COVERAGE.md](API-COVERAGE.md) maps all 66 source modules and exported
 function families. [COVERAGE.md](COVERAGE.md) records proof obligations.
 
-Current base: `origin/microcfta` at `d7f7c11`, including the merged
-core-formula extension at `9ad319d`. The branch retains its earlier repairs
+Current base: `origin/microcfta` at `bbeb7be`, including the merged
+core-formula extension at `9ad319d` and the single-pass reduction and LTA
+scaling changes in PRs #89 and #90. The branch retains its earlier repairs
 and adapts their mass transport to paid constructors. Earlier reports retain
 their original source hashes and describe historical snapshots.
 
@@ -63,6 +64,12 @@ actual inverse workers to those tables for the single-knot binary-choice
 body algebra, including ordering, uniqueness, and exact ranked probabilities.
 The [arbitrary-choice notes](notes-recursive-nary-choice.md) cover the local
 ordered list adapter and its recursive child producers.
+The [n-ary body notes](notes-recursive-nary-body.md) extend the full forward
+compiler, guards, decoder, and ranked mass fields to arbitrary branch counts.
+The [dispatcher notes](notes-static-dispatch.md) cover all finite sampling and
+bucket-merge flag branches. The [similarity notes](notes-similarity-within.md)
+and [parent-index notes](notes-minimize-parent-index.md) verify the new
+minimization optimizations.
 The [fresh-probe notes](notes-interned-fresh-probe-keys.md) separate the
 proved nested-binder key cases from the remaining normalization-erasure case.
 

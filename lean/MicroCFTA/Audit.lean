@@ -306,6 +306,18 @@ import MicroCFTA.RecursiveCallbackCompleteness
 import MicroCFTA.RecursiveCallbackDistinct
 import MicroCFTA.RecursiveCallbackAPI
 import MicroCFTA.RecursiveNaryChoice
+import MicroCFTA.RecursiveChoiceAssociativity
+import MicroCFTA.RecursiveNaryBody
+import MicroCFTA.RecursiveNaryMass
+import MicroCFTA.RecursiveNaryRankMass
+import MicroCFTA.RecursiveNarySource
+import MicroCFTA.StaticSamplingDispatch
+import MicroCFTA.BucketMergeDispatch
+import MicroCFTA.SimilarityWithin
+import MicroCFTA.MinimizeParentIndex
+import MicroCFTA.RecursiveFieldCombinators
+import MicroCFTA.RecursiveFieldBounds
+import MicroCFTA.RecursiveNaryFieldBounds
 /-!
 # Proof dependency audit
 
