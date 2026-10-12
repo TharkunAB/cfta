@@ -13,6 +13,23 @@ cache facts and complete result availability. The optional failure branch
 records an unsupported recursive or open union root. The ordinary input
 proof excludes that branch; this module does not model recursive unfolding.
 
-The next step proves that a represented occurrence with leaf endpoints
-projects to a represented finite raw leaf. The result will use the actual
-projection-union correspondence. No global finite-cache closure is assumed.
+`EqualityLeafProjectionPathInputs` derives selected child representations
+from original occurrence endpoints. `PathTransport` follows actual closed
+row requests. `PathExact` proves that every leaf endpoint projects to a
+finite raw leaf with exactly the returned complete record. Missing paths
+return the empty leaf. No read law is supplied by the caller.
+
+`EqualityLeafProjectionTargetFold` copies the source's first-seeded right
+fold of physical intersection operands. It derives exact finite-carrier
+correspondence, including the empty list and singleton shortcut.
+
+`EqualityRawLeafPullback` removes temporary proof-cache preparation. Every
+finite leaf row passes source admission. Its key must therefore occur in
+the returned node. Residency of that complete node forces every requested
+row and its parent constructor to be cache hits in the runtime cache.
+The proof needs no common extension of divergent caches.
+
+`EqualityLeafProjectionRuntimeLeaves` applies this result to actual endpoint
+reads and target folds. Their finite representations replay in the actual
+output cache. A subsequent runtime operation uses that cache directly.
+Whole class and schedule composition remains the next step.
