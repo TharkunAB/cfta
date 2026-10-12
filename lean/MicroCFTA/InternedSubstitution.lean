@@ -94,7 +94,7 @@ def run (next : Nat) (environment : Environment (Payload Symbol))
   | .binder name body =>
       let fresh := allocate next name body environment
       let result := run (fresh + 1) (localBindings name fresh body environment) body
-      (cleanup (.binder fresh result.1), result.2)
+      (cleanup (.binder fresh (BinderSelfUnion.withoutSelf fresh result.1)), result.2)
 termination_by sizeOf shape
 
 /-- Rebuild child plans in order and pass each resulting supply to the next child. -/
@@ -183,7 +183,7 @@ theorem run_exact (shape : Shape (Payload Symbol)) (next : Nat) (semantic : Env 
       · simpa only [run, closed, ↓reduceIte] using
           closed_semantics (.binder name body) semantic environment (List.isEmpty_iff.mp closed)
       · simp only [run, closed, Bool.false_eq_true, ↓reduceIte]
-        rw [cleanup_exact]
+        rw [BinderSelfUnion.cleanup_exact]
         simp only [meaning]
         apply least_congr
         intro value term
@@ -268,6 +268,7 @@ theorem run_free (shape : Shape (Payload Symbol)) (next : Nat)
       · intro reference member
         simp only [run, closed, Bool.false_eq_true, ↓reduceIte] at member
         have before := IntersectSchedule.cleanup_free _ reference member
+        rw [BinderSelfUnion.binder_free_exact] at before
         have outside : reference ∈ free (run (allocate next name body environment + 1)
             (localBindings name (allocate next name body environment) body environment) body).1 ∧
             reference ≠ allocate next name body environment := by simpa [free] using before
@@ -519,6 +520,13 @@ theorem issued_distinct (shape : Shape (Payload Symbol)) (next : Nat)
 /-- An outer free reference remains free when a nested binder previously used the same name. -/
 theorem open_replacement_not_captured :
     (run 0 (single 1 (.ref 0 : Shape (Payload Symbol))) (.binder 0 (.ref 1))).1 = .ref 0 := by
-  simp [run, free, allocate, replacementNames, ceiling, bound, localBindings, restrict, single, cleanup]
+  simp [run, free, allocate, replacementNames, ceiling, bound, localBindings, restrict, single, BinderSelfUnion.withoutSelf, cleanup]
+
+/-- Rebuilding an open binder removes its bare self alternative before unused-binder cleanup. -/
+theorem root_self_removed (payload : Payload Symbol) :
+    (run 0 (single 1 (.branch payload [])) (.binder 0 (.alternatives [.ref 0, .ref 1]))).1 =
+      .alternatives [.branch payload []] := by
+  simp [run, runForest, free, freeList, allocate, replacementNames, ceiling, bound, boundList,
+    localBindings, restrict, single, BinderSelfUnion.withoutSelf, BinderSelfUnion.isSelf, cleanup]
 
 end MicroCFTA.InternedSubstitution

@@ -47,6 +47,26 @@ theorem withoutSelf_unchanged (name : Nat) (members : List (Shape Item))
   have different : member ≠ .ref name := fun same => absent (same ▸ present)
   cases member <;> simp_all [isSelf]
 
+/-- Removing root self operands preserves every free reference outside the binder. -/
+theorem filtered_free (name : Nat) (members : List (Shape Item)) :
+    (freeList (members.filter (fun member => !isSelf name member))).filter (· != name) =
+      (freeList members).filter (· != name) := by
+  induction members with
+  | nil => rfl
+  | cons first rest ih =>
+      by_cases self : isSelf name first = true
+      · have same := (isSelf_iff name first).mp self
+        subst first
+        simpa [isSelf, freeList, free] using ih
+      · have different : isSelf name first = false := Bool.eq_false_iff.mpr self
+        simp [different, freeList, List.filter_append, ih]
+
+/-- Cached binder free names are unchanged by the current root filter. -/
+theorem binder_free_exact (name : Nat) (body : Shape Item) :
+    free (.binder name (withoutSelf name body)) = free (.binder name body) := by
+  cases body <;> try rfl
+  exact filtered_free name _
+
 /-- A candidate language is closed under the original body exactly when it
 is closed under the filtered body. The deleted operand contributes only the
 candidate language itself. -/

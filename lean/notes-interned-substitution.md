@@ -11,7 +11,8 @@ unchanged. A reference reads its replacement once and does not traverse the
 inserted value. Constructor and union children retain their order. At a
 binder, the worker restricts the external environment to that binder's free
 references, overrides the old local reference, recursively rebuilds the body,
-and applies the two `createMu` cleanup cases. Unlike the earlier one-binder
+removes its bare self-reference from root alternatives, and applies the two
+`createMu` cleanup cases. Unlike the earlier one-binder
 adapter, nested body plans execute the same recursive worker.
 
 ## Finite allocation
@@ -43,7 +44,9 @@ The main induction compares each rebuilt body under its new local language
 with the original body under its old local language. `local_semantics`
 derives that equality from actual environment lookups and the computed
 capture-avoidance condition. The binder case then uses least-language
-congruence and the proved cleanup equations. It makes no recursive assumption
+congruence, the root-union language law, and the proved cleanup equations.
+`BinderSelfUnion.binder_free_exact` proves that the filter also preserves the
+complete free-reference list after binding. It makes no recursive assumption
 that outer replacement references are closed.
 
 `run_free` proves that the result introduces no free name beyond the names
@@ -79,6 +82,6 @@ and finite allocation in one worker call do not prove that property. The
 `LexicalBoundedBuilder.RowsCorrespond` representation interface remains open.
 
 Validation on 2026-10-12: the pinned toolchain builds
-`MicroCFTA.InternedSubstitution` and its dependencies (76 jobs). The theorem
+`MicroCFTA.InternedSubstitution` and its dependencies (77 jobs). The theorem
 audit uses only standard Lean axioms. No axioms, incomplete proofs, or Haskell
 changes were added.

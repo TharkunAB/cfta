@@ -112,7 +112,10 @@ The coherence, pending-record, and replay proofs include that reconstruction.
 Kernel checks show that a recursive body with an added bare self operand
 returns the same canonical record as the body without it. A second check
 covers cleanup to an ordinary node. This repairs a source-correspondence
-omission in the formalization; it is not a new Haskell defect.
+omission in the formalization; it is not a new Haskell defect. The lexical
+`InternedBinderRebuild` and full `InternedSubstitution` worker now apply the
+same filter. Their capture-avoidance, exact-language, free-reference, and
+finite-allocation results remain proved.
 
 ## Behavior that does not satisfy the stronger requested contract
 

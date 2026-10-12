@@ -1,5 +1,6 @@
 import MicroCFTA.LexicalExposureLanguage
 import MicroCFTA.IntersectSchedule
+import MicroCFTA.BinderSelfUnion
 
 /-!
 # Closed substitution through a rebuilt source binder
@@ -57,7 +58,7 @@ def localBindings (name fresh : Nat) (body : Shape Item) (environment : Environm
 /-- Execute the source binder reconstruction at its selected new identity. -/
 def rebuildAt (name fresh : Nat) (body : Shape (Payload Symbol))
     (environment : Environment (Payload Symbol)) : Shape (Payload Symbol) :=
-  cleanup (.binder fresh (substitute (localBindings name fresh body environment) body))
+  cleanup (.binder fresh (BinderSelfUnion.withoutSelf fresh (substitute (localBindings name fresh body environment) body)))
 
 /-- The source returns a closed binder unchanged before it constructs any new binder. -/
 def rebuild (name : Nat) (body : Shape (Payload Symbol))
@@ -114,7 +115,7 @@ theorem rebuildAt_exact (semantic : Env Symbol) (name fresh : Nat)
     (boundUnused : fresh ∉ bound body) :
     meaning semantic (rebuildAt name fresh body environment) =
       meaning semantic (substitute environment (.binder name body)) := by
-  rw [rebuildAt, cleanup_exact]
+  rw [rebuildAt, BinderSelfUnion.cleanup_exact]
   rw [substitution_exact (.binder name body) semantic environment (by
     intro binder member reference replacement found
     simp [closed reference replacement found])]
@@ -167,7 +168,8 @@ theorem rebuildAt_closed (name fresh : Nat) (body : Shape (Payload Symbol))
   apply List.eq_nil_iff_forall_not_mem.mpr
   intro reference member
   have before := IntersectSchedule.cleanup_free
-    (.binder fresh (substitute (localBindings name fresh body environment) body)) reference member
+    (.binder fresh (BinderSelfUnion.withoutSelf fresh (substitute (localBindings name fresh body environment) body))) reference member
+  rw [BinderSelfUnion.binder_free_exact] at before
   have outside : reference ∈ free (substitute (localBindings name fresh body environment) body) ∧
       reference ≠ fresh := by simpa [free] using before
   exact outside.2 (localBindings_resolved name fresh body environment closed resolved reference outside.1)
