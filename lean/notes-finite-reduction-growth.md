@@ -126,6 +126,23 @@ pass; the largest case needs two changing passes. The probe uses the actual
 canonical edge identities to identify rows. It is source evidence for this
 fragment, not a proof of general nested reduction or physical cache identity.
 
+`FiniteLeafSymbolsProgress` removes the single-symbol restriction. A node
+has a separate alternative set for every symbol in a finite alphabet. The
+self-intersection test still compares the whole node. If only one symbol's
+rows agree, the source computes their Cartesian product unless the whole
+nodes agree. The proof retains this distinction and derives progress for
+each child-symbol coordinate. Summing those potentials gives the same
+explicit pass bound for complete multi-symbol leaf forests. Empty means
+that every symbol column is empty. A second source probe checks 4,096
+two-symbol forests and their exact whole-node shortcuts; it passes.
+
+`EqualityFixedPairs` proves a separate nested fragment: disjoint binary
+classes at direct child roots stabilize after one changing pass. Node
+intersection needs only commutativity and the self shortcut. It need not
+be associative. A binary class below a projected union does not satisfy
+that one-pass property. See [the fixed-pair notes](notes-equality-fixed-pairs.md)
+for the source boundary example and exact schedule assumptions.
+
 ## Alternating nested operands can cycle
 
 The source reproduction now also checks a stronger obstruction. Let `A`

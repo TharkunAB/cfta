@@ -432,6 +432,8 @@ import MicroCFTA.InternedGateReconstructionExamples
 import MicroCFTA.SourceReadLogicalIntegerAdapter
 import MicroCFTA.SourceReadLogicalIntegerCore
 import MicroCFTA.FiniteLeafForestProgress
+import MicroCFTA.FiniteLeafSymbolsProgress
+import MicroCFTA.EqualityFixedPairs
 /-!
 # Proof dependency audit
 
