@@ -3,10 +3,11 @@ import MicroCFTA.BinderSubstitution
 /-!
 # Closed binder exposure for bounded enumeration
 
-The source unfolds Mu at the current depth. It substitutes the closed binder
-for its own free reference before it exposes constructor rows. This module
-checks that operation and its finite exposure worker. Fuel exhaustion remains
-separate from the unreachable raw-reference error.
+The source nodeEdges closure unfolds Mu without consuming constructor depth.
+It substitutes the closed binder for its own free reference before it exposes
+constructor rows. This module checks that primitive operation and a finite
+fuel worker. LexicalBinderClosure derives the finite visited closure domain.
+Fuel exhaustion here remains separate from the unreachable raw-reference error.
 -/
 namespace MicroCFTA.EnumerationBinderExposure
 open Language Binding BinderLanguage
