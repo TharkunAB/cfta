@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 23:20 CEST (Europe/Stockholm)**.
+Updated: **2026-10-12 23:32 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -61,10 +61,10 @@ self-reference removal from recursive unions.
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
   `/tmp/mcfta-scope-precedence-full.log`.
-- Final integrated Lean build: **489 jobs; 26,876 theorem dependency checks**.
+- Final integrated Lean build: **509 jobs; 27,494 theorem dependency checks**.
   This includes the new finite leaf progress, runtime metadata, and shared
   support-binder proofs. Further active modules are not yet integrated.
-  Log: `/tmp/mcfta-inspection-uniform-audit.log`.
+  Log: `/tmp/mcfta-complete-record-quotient-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -171,7 +171,10 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
   have a proved structural progress measure. Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
-  at the same path. A path-length argument alone does not prove termination.
+  at the same path. LexicalGateRank now derives head-binder decrease for
+  the full lexical reconstruction. Actual smart-node and nonsingleton-union
+  branches are proved. Normalized singleton unions need the remaining
+  source construction invariant.
 - Fresh-outer-dependent nested binder identity is incomplete when
   normalization erases the dependency. The retained-reference and original
   independence cases are proved; no closed-input source defect is known.
@@ -181,12 +184,13 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
   branches are also derived from local source records. Opaque external
   descriptors retain their own contracts.
   Arbitrary Haskell builders can change schema between placeholder contexts.
-- General accepted ambiguous sparse-to-complete query transport is open.
-  The existing table alignment preserves identity flags and declarations;
-  it cannot express the actual many-to-one quotient. A forward environment
-  relation must preserve first-nonidentity lookup under both scope checks.
-  Logical positive entailment and exact backend verdicts are different
-  obligations. Timeout-limited Z3 has no assumed identification-stability law.
+- Full accepted ambiguous sparse Yes transport is proved through the actual
+  identity quotient, including nested scopes, both guard polarities, Holds,
+  and the current finite pruning loop. It establishes logical safety.
+  No-refutation and logical completeness are in progress. Planned-read
+  spelling transport still uses its lossless backend contract. A sound
+  callback can give sparse Yes and complete Unknown; exact backend language
+  equality does not follow from logical safety.
 - Runtime interning, identity lifetime, containers, machine words,
   concurrency, lazy productivity, solver IO, PRNGs, and user codecs remain
   explicit correspondence contracts. There is no verified Haskell-to-Lean
@@ -216,8 +220,9 @@ explicitly requests publication later.
 
 ## Next proof work
 
-1. Derive the accepted ambiguous-scope forward environment relation. The
-   precise missing contracts are in `notes-substitution-policies.md`.
+1. Complete No-refutation and logical pruning completeness. Keep restored
+   backend-confirmed edges and logical validity separate. The positive
+   identity quotient is proved. See `notes-substitution-policies.md`.
 2. Preserve the complete typed family connections now proved for support,
    diagnostic inspection, both sampler branches, runtime flags, and missing
    terms. Arbitrary context-dependent Haskell builder schemas remain a

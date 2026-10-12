@@ -95,9 +95,15 @@ connect source weight flags, optional terms, and query errors to those families.
 `RecursiveJoinSupportFamily` derives their shared-binder support languages
 from independently compiled term derivations. The [support and inspection
 notes](notes-recursive-join-support-inspection.md) describe the separate named
-diagnostic graph and its constructor proofs.
+diagnostic graph and its constructor proofs. The [complete-record
+notes](notes-recursive-complete-record.md) connect all these fields to one
+checked program.
 The [fresh-probe notes](notes-interned-fresh-probe-keys.md) separate the
 proved nested-binder key cases from the remaining normalization-erasure case.
+The [probe provenance notes](notes-interned-probe-provenance.md) derive the
+probe premises from constructor traces. The [gate rank
+notes](notes-gate-unfolding-rank.md) distinguish lexical termination from
+remaining smart-union source cases.
 
 This is not a claim that the whole Haskell implementation is verified. The
 Lean algorithms are handwritten. Some complete driver invariants, concrete runtime

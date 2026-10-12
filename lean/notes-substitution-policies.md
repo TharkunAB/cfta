@@ -50,32 +50,55 @@ concrete repaired Unknown verdict, including a previously retained prefix.
 `BooleanGuardPrune` and `FullGuardPruneStable` retain the older blanket-gate
 models. Their unconditional gate is not current source behavior.
 
-## Remaining identity-quotient obligation
+## Derived logical identity-quotient transport
 
-`SourceIdentityMap.names` already constructs the many-to-one sparse-to-complete
-name map. `ActualQuotient` proves the actual identity classes. The remaining
-proof must transport a complete query environment through every accepted
-resolved scope under both runtime checks.
+`SourceQuotientEnvironment` gives a noninjective scope relation. It preserves
+first-nonidentity lookup. It uses both executed scope checks to control new
+identity entries and enclosing renames. `SourceIdentityQuotient` derives that
+relation from actual sparse and complete allocation tables. It permits an
+unknown identity to become known and a fresh declaration to disappear.
 
-The existing `SourceResolvedTables.Aligned` relation requires unchanged
-identity flags and mapped declarations. It cannot express an unknown sparse
-identity becoming known or a fresh declaration disappearing. The existing
-`SourceScopeEnvironment.environment_commutes` theorem requires injectivity.
-The actual identity quotient need not be injective. A replacement relation
-must preserve formal lookup after identity removal and track which fresh
-actual values later scopes can read. Both runtime checks constrain exactly
-these scope interactions, but the full derived forward-query lemma remains
-open. Sorted declaration domains and positional Holds aliases must also be
-included.
+`SourceQuotientQueries.entails_yes` transports positive entailment through
+accepted resolved scope stacks. It includes all actual assumptions and both
+ambient and generated sort domains. `entails_yes_unrestricted` composes
+`SourceEntailment.identify_yes` directly. `SourceQuotientHolds` adds positional
+declarations, refinement assumptions, and aliases for repeated target paths.
+These proofs require no injectivity premise and no unambiguous-table premise.
 
-Once that forward query relation is derived, `SourceEntailment.identify_yes`
-can transport logical positive entailment. It does not prove that the complete
-solver returns Yes: a sound solver can still return Unknown. The existing
-`SourceQueryTransport.Stable` contract covers two-way, lossless name transport.
-It does not cover a many-to-one quotient. Exact confirmed-language preservation
-on all accepted ambiguous cells therefore also needs an explicit one-way
-backend verdict contract, or a stronger verified backend. No such property
-is claimed for timeout-limited Z3 execution.
+`SourceKnownIdentityMap` constructs a reverse map for the active known actuals.
+`SourceKnownQueryTransport.solver_no_logical` extracts known identity flags
+from the source No gate and proves negative Entails transport. It does not
+assume a general reverse quotient theorem. `SourceQuotientGuards.worker_yes`
+and `public_yes` compose these results through every guard constructor and
+either polarity. Negative Entails refutes entailment. Negative Satisfies and
+Holds entail the negated formula, as the source does.
+
+`SourceQuotientExample` is an accepted ambiguous guard. Its sparse evaluator
+returns Yes. Its complete evaluator returns Unknown with the same proved
+sound callback. `logical_complete` and `guard_logical` prove its complete
+query and guard judgments. Thus solver soundness does not imply exact complete
+backend Yes preservation. This is a backend-contract counterexample, not a
+new Haskell defect.
+
+`SourceCurrentReadTransport` and `SourceCurrentReadBridge` extend the existing
+lossless table-name correspondence to ambiguous tables and the repaired
+worker. They derive equality of identity flags and both runtime checks.
+`CurrentGuardLogicalPrune.prune_sound` proves that every returned term belongs
+to the original automaton and satisfies the complete logical guard. The
+source still evaluates each candidate before checking ambiguity on Unknown.
+`SourceCompleteLogical` handles the original guarded edge on fallback.
+`compile_retained` gives logical safety for successful compiler retention.
+
+The exact-term sparse-to-complete logical theorem requires only the stated
+formula interpretation laws and solver soundness. The finite planned-read
+adapter also uses `SourceQueryTransport.Stable` for lossless fresh spelling
+changes: refinement-only placeholder names can change the avoid list.
+This contract is separate from many-to-one actual identification. No exact
+verdict stability under that quotient is assumed or proved. Exact confirmed
+backend-language preservation on all accepted ambiguous cells still requires
+a suitable backend contract. No such contract is established for timeout-
+limited Z3 execution. The logical pruning theorem is one-way safety, not
+logical completeness or equality with complete backend-confirmed membership.
 
 Validation uses the pinned Lean toolchain. The current Haskell suites retain
 620 examples. Existing nested-scope repro files also cover the same-scope

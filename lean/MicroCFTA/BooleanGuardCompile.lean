@@ -7,8 +7,9 @@ import MicroCFTA.RecipeCompile
 
 The current compiler classifies the precise runtime evaluator result. Its
 diagnostic probes cannot turn an Unknown result into successful filtering.
-The proved sparse-to-complete transport still requires an unambiguous table.
-This is an explicit proof premise, not a current compiler precheck.
+Exact verdict transport here requires an unambiguous table. This is an
+explicit proof premise, not a current compiler precheck. Logical safety for
+accepted ambiguous cells is proved in `CurrentGuardLogicalPrune`.
 -/
 namespace MicroCFTA.BooleanGuardCompile
 open FullSyntax SourceFormula SourceGuards SourceObservations

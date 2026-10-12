@@ -396,6 +396,18 @@ import MicroCFTA.InternedConstructionProvenance
 import MicroCFTA.RankedGateCompletion
 import MicroCFTA.LexicalGateRank
 import MicroCFTA.InternedGateRank
+import MicroCFTA.SourceQuotientEnvironment
+import MicroCFTA.SourceIdentityQuotient
+import MicroCFTA.SourceQuotientQueries
+import MicroCFTA.SourceQuotientHolds
+import MicroCFTA.SourceKnownIdentityMap
+import MicroCFTA.SourceKnownQueryTransport
+import MicroCFTA.SourceQuotientGuards
+import MicroCFTA.SourceCurrentReadTransport
+import MicroCFTA.SourceCurrentReadBridge
+import MicroCFTA.SourceCompleteLogical
+import MicroCFTA.SourceQuotientExample
+import MicroCFTA.CurrentGuardLogicalPrune
 /-!
 # Proof dependency audit
 

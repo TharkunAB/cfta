@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-12 23:20 CEST**.
+Updated: **2026-10-12 23:32 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired one additional sparse-substitution defect, described as row 18.
 All **620 existing Haskell examples** pass after that repair: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **489 jobs and 26,876 theorem dependency
+The full Lean development passes **509 jobs and 27,494 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -178,8 +178,10 @@ all-view and bounded global decoder preimages. Original occurrence metadata
 supplies the public guards. Candidate bounds include false flags. Callback
 and public rank lists are ordered and have no duplicate positions under
 their local finite-leaf contracts. Ordinary `Apply` remains a separate constructor.
-Full support/inspection assembly, weighted-dispatch flags, absent term
-fields, and arbitrary runtime schema changes remain open. See
+Support, diagnostic inspection, both sampling routes, weight flags, and
+absent-term branches now have constructor-derived adapters.
+`RecursiveCompleteRecord` ties these fields and the original occurrence
+checks to one checked program. Arbitrary runtime schema changes remain open. See
 [the join notes](lean/notes-recursive-join-fields.md).
 
 ## Evidence and its limits
@@ -192,10 +194,10 @@ fields, and arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Final integrated Lean audit: **489 jobs; 26,876 theorem dependency checks**.
-  Its import closure includes 486 proof modules. Only `propext`,
+- Final integrated Lean audit: **509 jobs; 27,494 theorem dependency checks**.
+  Its import closure includes 506 proof modules. Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-inspection-uniform-audit.log`.
+  Log: `/tmp/mcfta-complete-record-quotient-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -240,7 +242,9 @@ but do not prove it for every runtime execution.
 2. **Nested binder identity after normalization erases a fresh outer
    dependency.** Retained dependencies separate pending keys. Original
    independence permits cache reuse. Those results do not yet establish the
-   complete erased-dependency case. No closed-input collision was established.
+   complete erased-dependency case. Constructor traces now derive probe
+   residency and issued-reference provenance. No closed-input collision was
+   established.
    See [the fresh-probe notes](lean/notes-interned-fresh-probe-keys.md).
 3. **Remaining recursive runtime records and nested-builder composition.**
    Typed nested-join families, decoder/mass records, inverse callbacks, and
@@ -257,12 +261,15 @@ but do not prove it for every runtime execution.
    codecs/callbacks need their stated contracts. Global identity freshness
    requires a bounded allocation lifetime and linearizable draws.
 
-5. **General accepted ambiguous sparse transport.** The two reproduced
-   identity failures are repaired. A complete proof still needs a one-way
-   environment relation through accepted scopes when actual names merge.
-   Existing injective renaming contracts do not establish this result.
-   Exact backend verdict preservation also needs a contract for
-   identification, including solver `Unknown` and timeout behavior.
+5. **Guard completeness and exact backend verdicts.** The many-to-one
+   environment relation is now derived through both executed scope checks.
+   Full sparse guard Yes implies complete logical satisfaction. Current
+   pruning and successful compiler retention inherit that safety result.
+   Logical completeness remains separate. Planned-read spelling transport
+   uses its existing backend contract. A checked accepted ambiguous example
+   returns sparse Yes and complete Unknown with one sound callback. Thus
+   soundness does not give exact backend-confirmed language equality.
+   See [the substitution notes](lean/notes-substitution-policies.md).
 
 These obligations prevent a whole-implementation verification claim. They
 are separate from the repaired concrete failures and the proved component

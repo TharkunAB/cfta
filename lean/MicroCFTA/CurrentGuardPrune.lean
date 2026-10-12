@@ -6,8 +6,8 @@ import MicroCFTA.SourceSubstitutionPrecedence
 
 The source evaluates the sparse guard first. Ambiguity affects only an
 Unknown result. Exactness below covers specialization cells whose actual
-table is unambiguous. General accepted ambiguous cells require the missing
-one-way query transport; there is no source precheck for that premise.
+table is unambiguous. `CurrentGuardLogicalPrune` covers logical safety for accepted ambiguous
+cells. Exact complete backend verdicts remain a separate contract.
 -/
 namespace MicroCFTA.CurrentGuardPrune
 open FullSyntax SourceFormula SourceGuards SourceObservations FullGuardPrune
