@@ -65,7 +65,9 @@ body algebra, including ordering, uniqueness, and exact ranked probabilities.
 The [arbitrary-choice notes](notes-recursive-nary-choice.md) cover the local
 ordered list adapter and its recursive child producers.
 The [n-ary body notes](notes-recursive-nary-body.md) extend the full forward
-compiler, guards, decoder, and ranked mass fields to arbitrary branch counts.
+compiler, guards, decoder, inverse, and ranked mass fields to arbitrary branch
+counts. Their callback proof includes the source knot equation and exact
+bounded global rank queries.
 The [dispatcher notes](notes-static-dispatch.md) cover all finite sampling and
 bucket-merge flag branches. The [similarity notes](notes-similarity-within.md)
 and [parent-index notes](notes-minimize-parent-index.md) verify the new

@@ -45,13 +45,52 @@ paired equations. They do not assume count, selector, or mass knot equations
 as postconditions. Equal member lists also give decoder equality at every
 valid and invalid rank.
 
-The completed binary-body inverse remains in `RecursiveCallbackAPI.lean`.
-`RecursiveNaryChoice.lean` proves a local arbitrary-choice inverse from child
-field contracts. These modules do not yet prove the inverse of this complete
-n-ary recursive syntax. A direct binary callback translation is insufficient:
-`LabelledView` removes private wrappers, and a flat source branch number does
-not equal a nested binary path. A complete inverse requires a corresponding
-n-ary callback interpreter and its forest-height termination proof.
+`RecursiveFieldCombinators.lean` reuses the existing pay, application, and
+label callback proofs through finite child fields. A finite field has a
+finite class at each size. Its set of sizes can be unbounded.
+`RecursiveFieldBounds.lean` and `RecursiveNaryFieldBounds.lean` restrict the
+required child inverse laws to the height of the current requested forest.
+The root induction supplies these local laws. It does not assume a complete
+inverse law for the recursive knot.
+
+`RecursiveNaryFields.lean` compiles the complete typed n-ary body into these
+source fields. Its class tables agree with the independent term compiler.
+`RecursiveNaryInverse.lean` supplies the recursive root counts and selector
+from the actual value and term indexes. It proves that the requested forest
+height gives enough recursion fuel. Every true checked row is a decoder
+preimage. Every decoder preimage occurs with a true flag in all three views.
+
+`RecursiveNaryCandidates.lean` proves bounds, order, and distinct positions
+for all candidate rows. These results include false flags.
+`RecursiveNaryCausality.lean` proves exact row-list equality for any two fuel
+amounts that cover the requested height. It then derives the source callback
+equation without a fuel parameter. The theorem preserves false flags and
+original row order. A private recursive root consumes one level of the
+requested forest. All body operations request forests no taller than their
+input. A malformed root request returns no rows.
+
+`RecursiveNaryQuery.lean` connects this source callback to the final replay
+filter. It proves exact class and bounded global inverse results. The final
+queries retain source order and have no duplicate positions. The rank range
+uses the actual value-index class counts and their size-major prefixes.
+
+`RecursiveNaryExamples.lean` checks complete private terms from branch two
+in every view. It also records a necessary contract distinction. The body
+`label N (choice [pure, occurrence, occurrence])` has two size-two members
+with the same constructor term. A label removes the private choice wrappers.
+Both source ranks remain valid, and the inverse returns both. Generator
+member ranks therefore need not be a distinct-term quotient. The separate
+`fromAutomaton` distinct-term path carries the one-rank-per-term contract.
+
+A temporary Haskell comparison checked a three-branch public recursive
+generator against an independent exact-rational recurrence. The branches
+were a 9:1 atomic choice, a twice-paid leaf, and a binary recursive node.
+The eight size classes had 132 members in total. The comparison checked
+every bounded and unbounded value decoder, term decoder, and inverse rank.
+It also checked class and bounded probability distributions and support
+acceptance. The middle branch had empty early classes. This check passed
+on `bbeb7be` with the local source repairs. It supplements the proofs; it
+does not establish Haskell-to-Lean extraction.
 
 The syntax has one recursive root. It does not model mutually recursive
 heterogeneous runtime families. It also does not prove Haskell lazy

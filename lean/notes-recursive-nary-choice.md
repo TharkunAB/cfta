@@ -55,8 +55,10 @@ inside an ambiguous child.
 This module closes the local arbitrary-arity `choiceTerms` adapter. It does
 not add an arbitrary-arity constructor to `RecursiveTermAlignment.Recipe`
 or `RecursiveCallbackTermination.Recipe`. Those recursive body languages
-still contain binary choices. Thus this result does not establish a new
-full recursive knot with arbitrary-arity choice nodes inside its body.
+still contain binary choices. The later `RecursiveNaryBody`, `RecursiveNaryInverse`,
+`RecursiveNaryCausality`, and `RecursiveNaryQuery` modules close the full
+single-knot arbitrary-arity syntax and its actual inverse. See
+[the n-ary body notes](notes-recursive-nary-body.md).
 It also does not prove arbitrary mutually recursive heterogeneous runtime
 families. Natural ranks and branch indices retain the existing boundary
 with runtime numeric conversions and lazy storage.

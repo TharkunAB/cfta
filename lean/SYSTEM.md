@@ -231,8 +231,12 @@ The later `RecursiveNaryBody`, `RecursiveNaryMass`, `RecursiveNaryRankMass`,
 and `RecursiveNarySource` modules extend the full forward body algebra to
 arbitrary branch counts. `RecursiveChoiceAssociativity` connects flat source
 choices to the lowering without changing any ordered ranked distribution.
-The n-ary inverse knot remains a separate connection. See
-[the n-ary body notes](notes-recursive-nary-body.md).
+`RecursiveNaryInverse` derives complete all-view callbacks from local finite
+leaves. `RecursiveNaryCandidates` derives bounds, order, and distinctness.
+`RecursiveNaryCausality` proves exact stabilization at the requested forest
+height and the source callback knot equation, including false flags.
+`RecursiveNaryQuery` proves complete bounded global inverses, ascending
+order, and distinct ranks. See [the n-ary body notes](notes-recursive-nary-body.md).
 `StaticSamplingDispatch` and `BucketMergeDispatch` derive all finite flag
 branches, including atomic priority, uniform callback omission, retained
 class masses, singleton preservation, and the positive atomic size condition.
