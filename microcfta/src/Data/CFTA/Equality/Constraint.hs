@@ -15,7 +15,7 @@ module Data.CFTA.Equality.Constraint (
     PathEClass (PathEClass, ..),
     unPathEClass,
     hasSubsumingMember,
-    EqConstraints (.., EmptyConstraints),
+    EqConstraints (EqConstraints, EqContradiction, EmptyConstraints),
     unsafeGetEclasses,
     isContradicting,
     mkEqConstraints,
@@ -42,8 +42,10 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 
 import Data.CFTA.Index (Arity (..))
+import Data.CFTA.Interned.Cache (Cache, freshCacheWith, intern, newIdSupply)
 import Data.CFTA.Interned.Memo (memo2)
 import Data.CFTA.Path (ChildIndex (..), Path (..), isStrictSubpath)
+import System.IO.Unsafe (unsafePerformIO)
 
 -----------------------------------------------------------------------
 -------------------------------- Paths --------------------------------
@@ -252,19 +254,57 @@ completedSubsumptionOrdering pec1 pec2
 ---------- Equality constraints
 --------------------------------
 
--- | Equality constraints attached to an ECTA edge.
+{- | Equality classes over paths into an edge's children, or a contradiction.
+
+A set of classes is interned: equal sets of classes have one identity, so
+equality and hashing take constant time. The reduction memoizes on these
+values, and each memo lookup hashes its key and compares it on a hit. The
+order is still the order of the classes, so the order of edges does not
+depend on the order in which the process interned their constraints.
+-}
 data EqConstraints
-    = {- | Equality classes over paths into the edge's children. Sorted by
-      'mkEqConstraints'; the constructor itself does not sort.
-      -}
-      EqConstraints [PathEClass]
+    = InternedEqConstraints {-# UNPACK #-} !Int [PathEClass]
     | -- | The classes forced a path to equal one of its strict subpaths.
       EqContradiction
-    deriving (Eq, Ord, Show)
+
+{- | Equality classes over paths into the edge's children. Sorted by
+'mkEqConstraints'; the pattern itself does not sort.
+-}
+pattern EqConstraints :: [PathEClass] -> EqConstraints
+pattern EqConstraints eclasses <- InternedEqConstraints _ eclasses
+  where
+    EqConstraints eclasses = internEqConstraints eclasses
+
+{-# COMPLETE EqConstraints, EqContradiction #-}
+
+eqConstraintsCache :: Cache [PathEClass] EqConstraints
+eqConstraintsCache = unsafePerformIO (newIdSupply >>= freshCacheWith)
+{-# NOINLINE eqConstraintsCache #-}
+
+-- | The one value of a set of classes.
+internEqConstraints :: [PathEClass] -> EqConstraints
+internEqConstraints = intern eqConstraintsCache InternedEqConstraints
+
+instance Eq EqConstraints where
+    InternedEqConstraints left _ == InternedEqConstraints right _ = left == right
+    EqContradiction == EqContradiction = True
+    _ == _ = False
+
+instance Ord EqConstraints where
+    compare (InternedEqConstraints left leftClasses) (InternedEqConstraints right rightClasses)
+        | left == right = EQ
+        | otherwise = compare leftClasses rightClasses
+    compare InternedEqConstraints{} EqContradiction = LT
+    compare EqContradiction InternedEqConstraints{} = GT
+    compare EqContradiction EqContradiction = EQ
+
+instance Show EqConstraints where
+    showsPrec precedence (EqConstraints eclasses) = showParen (precedence > 10) $ showString "EqConstraints " . showsPrec 11 eclasses
+    showsPrec _ EqContradiction = showString "EqContradiction"
 
 instance Hashable EqConstraints where
-    hashWithSalt salt (EqConstraints eclasses) =
-        salt `hashWithSalt` (0 :: Int) `hashWithSalt` eclasses
+    hashWithSalt salt (InternedEqConstraints identity _) =
+        salt `hashWithSalt` (0 :: Int) `hashWithSalt` identity
     hashWithSalt salt EqContradiction =
         salt `hashWithSalt` (1 :: Int)
 
@@ -427,16 +467,23 @@ they no longer constrain anything after the descent.
 eqConstraintsDescend :: EqConstraints -> ChildIndex -> EqConstraints
 eqConstraintsDescend EqContradiction _ = EqContradiction
 eqConstraintsDescend EmptyConstraints _ = EmptyConstraints
-eqConstraintsDescend (EqConstraints sourceEclasses) i = case mapMaybe (`pathEClassDescendNontrivial` i) sourceEclasses of
-    [] -> EmptyConstraints
-    [eclass] -> EqConstraints [eclass]
-    eclasses -> EqConstraints $ sort eclasses
+eqConstraintsDescend constraints i = eqConstraintsDescendMemo constraints i
+
+-- | 'eqConstraintsDescend' of a set of classes, memoized on its identity.
+eqConstraintsDescendMemo :: EqConstraints -> ChildIndex -> EqConstraints
+eqConstraintsDescendMemo = memo2 descend
   where
+    descend EqContradiction _ = EqContradiction
+    descend (EqConstraints sourceEclasses) i = case mapMaybe (`pathEClassDescendNontrivial` i) sourceEclasses of
+        [] -> EmptyConstraints
+        [eclass] -> EqConstraints [eclass]
+        eclasses -> EqConstraints $ sort eclasses
     pathEClassDescendNontrivial (PathEClass' pt _ _) childIndex =
         let pt' = pathTrieDescend pt childIndex
          in if pathTrieHasAtLeastTwoPaths pt'
                 then Just (mkPathEClassFromPathTrie pt')
                 else Nothing
+{-# NOINLINE eqConstraintsDescendMemo #-}
 
 -- | Equality classes sorted for constraint propagation, if not contradictory.
 subsumptionOrderedEclasses :: EqConstraints -> Maybe [PathEClass]
