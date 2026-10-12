@@ -373,6 +373,14 @@ import MicroCFTA.RecursiveJoinQuery
 import MicroCFTA.RecursiveJoinFamilyExamples
 import MicroCFTA.FiniteRowIntersection
 import MicroCFTA.SourceLeafRowProgress
+import MicroCFTA.RecursiveJoinRuntime
+import MicroCFTA.RecursiveRuntimeDispatch
+import MicroCFTA.RecursiveRuntimeOrigins
+import MicroCFTA.RecursiveJoinSupportSemantics
+import MicroCFTA.RecursiveJoinSupportView
+import MicroCFTA.RecursiveJoinSupportBody
+import MicroCFTA.RecursiveJoinSupportFamily
+import MicroCFTA.RecursiveJoinSupportExamples
 /-!
 # Proof dependency audit
 

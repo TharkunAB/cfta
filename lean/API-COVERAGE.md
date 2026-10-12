@@ -134,8 +134,16 @@ from local finite-leaf candidate contracts. `RecursiveJoinGuards` supplies
 the original combined occurrence check. These laws retain `JoinN` wrappers;
 they do not substitute ordinary `Apply` trees for join terms.
 
-Full recursive support/inspection assembly, weighted-dispatch flags,
-absent term fields, and changing runtime builder schemas remain adapters.
+`RecursiveJoinSupportView`, `RecursiveJoinSupportBody`, and
+`RecursiveJoinSupportFamily` derive complete support assembly from the typed
+constructors. The actual shared `Family` binder and `AtKey` restrictions
+accept exactly the independently compiled finite term derivations.
+`RecursiveJoinRuntime` and `RecursiveRuntimeDispatch` connect both weight
+flags, optional callback fields, bounded queries, and source error precedence.
+`RecursiveRuntimeOrigins` derives those metadata fields from primitive inputs
+across separate probe and term rebuilds. Full diagnostic inspection,
+unweighted sampler input contracts, and changing runtime builder schemas
+remain adapters.
 The current sparse pruning policy is also distinct from the older upfront
 blanket guard in `BooleanGuardPrune` and `FullGuardPrune`. `CurrentGuardPrune` models the evaluator-first loop and proves unambiguous
 cell exactness. These results do not prove general accepted ambiguous source

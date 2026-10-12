@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 22:37 CEST (Europe/Stockholm)**.
+Updated: **2026-10-12 23:08 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -61,9 +61,10 @@ self-reference removal from recursive unions.
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
   `/tmp/mcfta-scope-precedence-full.log`.
-- Final integrated Lean build: **472 jobs; 26,011 theorem dependency checks**.
-  All **469 proof modules** occur in the audit import closure.
-  Log: `/tmp/mcfta-resume-final-audit.log`.
+- Final integrated Lean build: **482 jobs; 26,460 theorem dependency checks**.
+  This includes the new finite leaf progress, runtime metadata, and shared
+  support-binder proofs. Further active modules are not yet integrated.
+  Log: `/tmp/mcfta-runtime-support-progress-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -166,15 +167,18 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
 
 - General termination of explicit equality/pruning fixed points on finite
   DAGs remains open. Finite language size is insufficient. The retained
-  six-round example grows representation size.
+  six-round example grows representation size. Finite leaf alternatives now
+  have a proved structural progress measure. Arbitrary nested intersections
+  can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
   at the same path. A path-length argument alone does not prove termination.
 - Fresh-outer-dependent nested binder identity is incomplete when
   normalization erases the dependency. The retained-reference and original
   independence cases are proved; no closed-input source defect is known.
 - Typed recursive join composition and public query laws are now proved.
-  Full recursive support/inspection assembly, weighted-dispatch flags, and
-  the absent-term-field error branch still need connection to these bodies.
+  Full recursive support assembly, weighted flags, and absent-term errors
+  now connect to those bodies. Diagnostic inspection and unweighted sampler
+  input contracts are in progress.
   Arbitrary Haskell builders can change schema between placeholder contexts.
 - General accepted ambiguous sparse-to-complete query transport is open.
   The existing table alignment preserves identity flags and declarations;
@@ -213,8 +217,9 @@ explicitly requests publication later.
 
 1. Derive the accepted ambiguous-scope forward environment relation. The
    precise missing contracts are in `notes-substitution-policies.md`.
-2. Compose full recursive support, inspection, weighted flags, and missing
-   term-field error dispatch with the checked join bodies.
+2. Complete diagnostic inspection and unweighted sampler input contracts
+   for the checked join bodies. Support, runtime flags, and missing-term
+   dispatch are now integrated.
 3. Handle nested binder key identity when normalization erases a fresh outer
    dependency. Retained dependencies and original independence are proved.
 4. Establish source unfolding ranks and general explicit reduction fixed-point

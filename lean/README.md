@@ -90,7 +90,10 @@ The [recursive join notes](notes-recursive-join-fields.md) cover nested
 heterogeneous join bodies, mutual-family probabilities, full inverse
 callbacks, and public bounded queries. The [join guard
 notes](notes-recursive-join-guards.md) derive the required family guards
-from the original source metadata.
+from the original source metadata. The [runtime notes](notes-recursive-runtime.md)
+connect source weight flags, optional terms, and query errors to those families.
+`RecursiveJoinSupportFamily` derives their shared-binder support languages
+from independently compiled term derivations.
 The [fresh-probe notes](notes-interned-fresh-probe-keys.md) separate the
 proved nested-binder key cases from the remaining normalization-erasure case.
 
