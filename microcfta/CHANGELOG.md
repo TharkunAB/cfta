@@ -88,7 +88,9 @@ remains a separate ECTA-only package.
   `Symbol`/`EqConstraints` instantiation has its own memo tables, and the
   equality reduction restricts and edits every required path of an edge in
   one traversal, which cut a further 15% of instructions and 17% of
-  allocation on that suite.
+  allocation on that suite. An `EqConstraints` value is interned, so its
+  equality and hash take constant time, and its descent into a child is
+  memoized; on Hectare this cut 4% to 7% of instructions.
 - The refinement layer's `denotationAtMost` runs on the shared enumerator: a
   positive `Same` guard is a path equality solved by unification, so an
   equality-guarded pair costs milliseconds instead of a quadratic candidate
