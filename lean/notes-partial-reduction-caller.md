@@ -2,7 +2,8 @@
 
 `PartialReductionCaller` models the schedule in
 `Data.CFTA.Equality.Operations.reducePartially'`. It uses the previously proved
-`EqualityReduction.reduce` worker for each edge. The caller then combines the
+`EqualityReduction.pass` worker once for each edge. This matches the
+single-pass change merged in `microcfta` at `bbeb7be`. The caller then combines the
 inherited classes with the original edge classes, descends that result by
 child position, recursively reduces the narrowed children, and modifies the
 original ordinary node. Every rebuilt edge retains its label and full guard.
@@ -25,15 +26,16 @@ then imply the exact descended child equalities through
 `eqConstraintsDescend_sound`. No whole-child-forest preservation premise
 replaces this traversal proof.
 
-`process_exact` composes this result with the completed local narrowing loop.
+`process_exact` composes this result with the single local narrowing pass.
 `run_exact` proves the complete caller by execution-bound induction.
 `public_exact` starts with the source empty inherited constraint. It proves
 that every complete term is accepted after a completed pass if and only if
 it was accepted before that pass. `fixpoint_exact` proves the same result
 for every completed repetition of those passes to an identity fixed point.
 
-`loop_replay`, `process_replay`, and `run_replay` prove that every larger
-execution bound returns the same completed result. Bounds instrument the
+`process_replay` and `run_replay` prove that every larger traversal bound
+returns the same completed result. `loop_replay` remains a separate result
+for callers that explicitly iterate a local pass. Bounds instrument the
 unbounded source recursion. A failed instrument run does not prove that
 the source language is empty or that the source cannot terminate.
 
@@ -47,7 +49,8 @@ the semantic components of that adapter. Sparse path operations, interned
 row readback, memo storage, and the runtime binder reconstruction remain
 separate representation contracts.
 
-This module does not prove general termination of either the local equality
-fixed point or repeated whole-node passes. It closes the inherited caller's
+This caller has no local equality fixed point. General termination of
+explicit edge fixed points in pruning and repeated whole-node passes remains
+open. It closes the inherited caller's
 preservation obligation for completed execution. The pinned Lean build
 passes. No Haskell source changed.

@@ -110,13 +110,15 @@ walk count nodes = do
             pure nodes
         else if count == 12 then fail "The diagnostic exceeded its round bound." else walk (count + 1) next
 
--- | Compare the instrumented schedule with the public fixed-point operation.
+-- | Compare one public pass and its explicit fixed point with the instrumented schedule.
 main :: IO ()
 main = do
     checkAbsorption
     expected <- walk 0 initial
+    let publicPass = Equality.reduceEqConstraints classes Equality.EmptyConstraints
+    unless (publicPass initial == pass initial) $ fail "The public single pass differs from the instrumented pass."
     result <- timeout 5000000 $ do
-        let reduced = Equality.reduceEqConstraints classes Equality.EmptyConstraints initial
+        let reduced = Equality.fixUnbounded publicPass initial
         _ <- evaluate (sum (map Equality.edgeCount reduced))
         pure reduced
     case result of
