@@ -1,5 +1,8 @@
 # Formalization findings
 
+For the current consolidated report, see [../FINDINGS.md](../FINDINGS.md).
+The text below preserves the initial source snapshot and its evidence.
+
 This is the historical report. The three exact cases below are repaired by
 `b7b1a95`, `cb770b0`, and `ae6b97b`. They were rerun successfully after pulling
 those fixes. [CONTINUATION.md](CONTINUATION.md) records the next audit, whose
