@@ -347,6 +347,9 @@ import MicroCFTA.KeyedNaryQuery
 import MicroCFTA.KeyedNaryDispatch
 import MicroCFTA.KeyedNaryGuards
 import MicroCFTA.KeyedNaryExamples
+import MicroCFTA.BinderSelfUnion
+import MicroCFTA.ConstrainedRecursionGate
+import MicroCFTA.EqualityIdentityMemo
 /-!
 # Proof dependency audit
 

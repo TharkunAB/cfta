@@ -255,7 +255,8 @@ theorem self_binder_empty (environment : Env Symbol) (name : Nat) :
     exact accepted (fun _ => False) (fun _ => id)
   · intro impossible; exact impossible.elim
 
-/-- The two cleanup cases in the source's `createMu` smart constructor. -/
+/-- The unused/self-binder cleanup in `createMu`. The preceding root-union
+filter in current `createMuDontCleanup` is proved in `BinderSelfUnion`. -/
 def cleanup : Shape (Payload Symbol) → Shape (Payload Symbol)
   | .binder name body =>
       if name ∉ free body then body

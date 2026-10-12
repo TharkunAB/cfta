@@ -2,11 +2,14 @@ import MicroCFTA.EqualityReduction
 import MicroCFTA.GuardConjunction
 
 /-!
-# Recursive barriers in equality reduction
+# Previous recursive barriers in equality reduction
 
 The gate reads node tags and cached recursion metadata. It never unfolds a
 binder. Every recursive call consumes a child index. Classes rejected by the
 gate remain in the edge constraint and are still checked at membership.
+This is the earlier conservative gate. The current source gate is modeled
+in `ConstrainedRecursionGate`. It also permits some binder unfoldings, so
+its termination does not follow from path length alone.
 -/
 namespace MicroCFTA.RecursiveReductionBarrier
 open Language EqualityNormalize EqualityReduction

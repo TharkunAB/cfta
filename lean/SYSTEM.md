@@ -554,23 +554,31 @@ internal passes increased binder depths from `[1,1,1]` to `[3,2,3]`,
 unbounded nontermination was not proved. The example is a closed equality
 FTA. The LTA validator rejects its cyclic equality targets.
 
-The source now skips narrowing a class when any path crosses recursion or
-its endpoint contains recursion. It retains the original equality constraint.
-The repaired [reproduction](repro/RecursiveReduction.hs) completes and checks
-accepted equal triples, rejected unequal triples, and bounded enumeration.
-An existing structural test now expects recursive children to stay folded.
-Acyclic sibling domains still narrow. All 610 suite examples pass.
+The current source blocks recursive nodes with constraints, references,
+and explicit unions. It permits closed unconstrained binders. An open
+unconstrained binder unfolds at the same path. The original equality
+constraint stays attached. `createMuDontCleanup` also removes its own bare
+reference from a root union. This removes the redundant epsilon alternative
+in `A`. The retained [reproduction](repro/RecursiveReduction.hs) passes on
+`de910ea`, including identity stability and bounded language equality.
 
-`RecursiveReductionBarrier` proves exact gate selection, bounded path descent,
-unchanged constrained language for completed reduction, and immediate
-stability when all classes are blocked. `RecursiveReductionSourceOrder`
-proves that the former finite three-leaf guard-growth family reaches a
-structural fixed point within two passes. Its comparator laws are derived
-from the actual source guard and formula order. General finite-DAG reduction
-termination remains open. See the [source findings](notes-recursive-reduction-growth.md),
-[barrier proofs](notes-recursive-reduction-barrier.md), and
-[structural order proofs](notes-structural-order.md).
+`ConstrainedRecursionGate` models the current dispatch and ordered short
+circuit. Completed bounded results are stable. The total worker uses path
+length and an explicit rank for same-path open-binder unfolding. Deriving
+that rank for actual interned nodes remains open. Its completed one-pass
+language law uses the existing primitive reduction laws.
+`RecursiveReductionBarrier` retains the earlier, more conservative gate.
+Its path-only termination theorem does not describe the current source.
 
+`BinderSelfUnion` proves exact least-language preservation when root union
+alternatives lose the bare bound reference. References below constructors
+or other binders remain. `EqualityIdentityMemo` proves identity equality,
+allocation-independent structural ordering, and semantic descent/conjunction
+memo laws under the existing cache invariants. Runtime trie coherence,
+identity storage, and general reduction fixed-point termination remain open.
+`RecursiveReductionSourceOrder` still proves two-pass stabilization of the
+finite three-leaf guard-growth example. See
+[the current equality notes](notes-current-recursive-equality.md).
 ### Observed imports can drop every explicit-union term
 
 The closed automaton `mu r. (r | a)` accepts exactly `a`. Its union with

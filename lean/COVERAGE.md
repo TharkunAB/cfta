@@ -32,7 +32,7 @@ Grouped function spines retain each alternative's correlated children.
 Ambiguous sparse actuals cannot discharge a guard in pruning or compilation.
 Canonical conjunctions stop the reproduced acyclic equality-reduction loop.
 The public Boolean guard entry now allocates each outer operand independently.
-Recursive equality classes now remain enforced without repeated recursive narrowing.
+Recursive equality classes remain enforced when the current constrained-recursion gate skips narrowing.
 Observed imports now expose explicit union alternatives instead of dropping them.
 Recursive observation groups retain their size indexes during key filtering.
 Bounded construction now exposes retained binder cycles with the visited closure.
@@ -80,6 +80,16 @@ finite-leaf contracts, arbitrary runtime builder schemas, concrete key
 representations, and Haskell extraction remain explicit boundaries.
 See [the family notes](notes-keyed-nary.md) and
 [the guard notes](notes-keyed-nary-guards.md).
+
+### Current equality and binder normalization
+
+`ConstrainedRecursionGate` models `meetsConstrainedMu`, including same-path
+unfolding of open unconstrained binders. A total worker is checked under an
+explicit decreasing unfolding rank; the actual source rank is still open.
+`BinderSelfUnion` proves exact least-language preservation of the root
+self-reference filter. `EqualityIdentityMemo` verifies identity equality,
+structural ordering, and memoized descent/conjunction under cache invariants.
+See [the current equality notes](notes-current-recursive-equality.md).
 
 ## Evidence and boundaries
 

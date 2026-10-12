@@ -82,6 +82,8 @@ The [dispatcher notes](notes-static-dispatch.md) cover all finite sampling and
 bucket-merge flag branches. The [similarity notes](notes-similarity-within.md)
 and [parent-index notes](notes-minimize-parent-index.md) verify the new
 minimization optimizations.
+The [current equality notes](notes-current-recursive-equality.md) cover the
+revised recursion gate, root self-reference removal, and constraint identities.
 The [fresh-probe notes](notes-interned-fresh-probe-keys.md) separate the
 proved nested-binder key cases from the remaining normalization-erasure case.
 
