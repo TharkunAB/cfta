@@ -37,7 +37,10 @@ every returned rank is valid and decodes to the requested projected term.
 `decode_injective` gives distinct projected terms at distinct tuple ranks
 for this original outcome. `integer_rank_decode` uses the actual source
 integer symbol and the proved singleton reader. `reader_rank_decode` also
-derives template validity and the hole count from the actual bare reader.
+derives template validity and the hole count for the ordinary Apply reference
+tree of the bare reader. The actual grouped compiler instead uses keyed
+JoinN terms. Generic view theorems cover those typed private labels, but the
+reader template alone does not establish that compiler adapter.
 User-label specialization can be arbitrary: the inverse reads coordinate
 leaves and the final check verifies all projected labels. Its successful
 formula semantics and exceptions remain in `IntegerLabelCodec`.

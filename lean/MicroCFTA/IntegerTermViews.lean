@@ -543,7 +543,7 @@ theorem label_count (literal : Int → Symbol) (symbol : Symbol) (term : Term (L
   simpa [count, adapt, adaptLabel, RecipeCompile.holes, forestCount, project] using
     project_count literal .labelled term valid
 
-/-- The typed private constructor tree produced by the existing bare-spine reader. -/
+/-- The typed ordinary-application reference tree for the existing bare-spine reader. -/
 def template : OpenIntegerReaders.Reader α → Term (Label Symbol)
   | .pure _ => .node .pure []
   | .integer => .node .placeholder []
@@ -560,7 +560,7 @@ theorem template_adapt (reader : OpenIntegerReaders.Reader α) :
   | app functions arguments left right => simp [template, adapt, adaptForest, adaptLabel,
       OpenIntegerReaders.template, left, right]
 
-/-- The source reader constructs the shape needed by every view proof. -/
+/-- The reference reader tree satisfies the shape needed by every view proof. -/
 theorem template_valid (reader : OpenIntegerReaders.Reader α) : Valid (template (Symbol := Symbol) reader) := by
   induction reader with
   | pure value => exact pure_valid
@@ -568,7 +568,7 @@ theorem template_valid (reader : OpenIntegerReaders.Reader α) : Valid (template
   | map transform inner ih | pay inner ih => exact ih
   | app functions arguments left right => exact apply_valid _ _ left right
 
-/-- The actual key count is also the hole count of the typed source template. -/
+/-- The source key count is also the hole count of the typed reference template. -/
 theorem template_count (reader : OpenIntegerReaders.Reader α) :
     count (template (Symbol := Symbol) reader) = OpenIntegerReaders.width reader := by
   rw [count, template_adapt, OpenIntegerReaders.template_holes]
@@ -584,7 +584,7 @@ theorem integer_rank_decode (specialize : List Int → IntegerLabelCodec.Symbol 
   rank_decode IntegerLabelCodec.integerSymbol specialize IntegerLabelCodec.leafValue
     IntegerLabelCodec.leafValue_integer names formula points success view original valid dimension rank
 
-/-- Bare open spines discharge the view shape and hole-count obligations from their constructors. -/
+/-- The reference applicative tree discharges shape and hole-count obligations from its constructors. -/
 theorem reader_rank_decode (specialize : List Int → IntegerLabelCodec.Symbol → IntegerLabelCodec.Symbol)
     (names : List FullSyntax.Name) (formula : FullSyntax.Formula) (points : LatticeAPI.Points)
     (success : LatticeAPI.points names (FullSyntax.lowerFormula formula) = .ok points)
