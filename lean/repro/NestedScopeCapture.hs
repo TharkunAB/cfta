@@ -3,7 +3,7 @@
 -- | Compare sparse and complete identity scopes through nested substitution.
 module Main (main) where
 
-import Control.Monad (unless)
+import Control.Monad (forM_, unless)
 import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Path (getPath)
 import Data.CFTA.Refinement
@@ -22,13 +22,24 @@ guard =
         $ Substitute [Substitution (path [0]) (path [3]), Substitution (path [1]) (path [4])]
         $ Satisfies (path [5]) (Formula.Atom Formula.Eq (Formula.Var "x") (Formula.Lit 0))
 
+-- | Removing an uncertain identity can expose a repeated formal in one scope.
+repeated :: Guard
+repeated =
+    Substitute [Substitution (path [0]) (path [0]), Substitution (path [1]) (path [4]), Substitution (path [2]) (path [0])] $
+        Satisfies (path [5]) (Formula.Atom Formula.Eq (Formula.Var "a") (Formula.Lit 0))
+
 -- | This grammar has one underlying term before its root guard is checked.
-grammar :: Automaton
-grammar =
+grammar :: Guard -> Automaton
+grammar constraint =
     let leaf name = Node [Transition name Formula.Top [] noConstraint]
         actual = Node [Transition "a" zero [leaf "z"] noConstraint]
      in Node
-            [Transition "root" Formula.Top [actual, actual, leaf "b", leaf "x", leaf "y", leaf "target"] (semanticConstraint guard)]
+            [ Transition
+                "root"
+                Formula.Top
+                [actual, actual, leaf "b", leaf "x", leaf "y", leaf "target"]
+                (semanticConstraint constraint)
+            ]
 
 -- | The source complete term has two equal inner actuals.
 candidate :: Term.Term Symbol
@@ -43,15 +54,16 @@ main = withZ3 [] $ \solver -> do
     let observed target = do
             Term.Node symbol children <- getPath target candidate
             pure $ Observed symbol (leafnessOf children)
-    complete <- evaluateGuard solver guard candidate
-    sparse <- evaluateGuardWithShape solver observed guard
-    print (complete, sparse)
-    original <- accepts solver grammar candidate
-    result <- prune solver grammar
-    case result of
-        Left err -> fail $ show err
-        Right pruned -> do
-            rewritten <- accepts solver pruned candidate
-            print (original, rewritten)
-            unless (original == rewritten) $
-                fail "Pruning changed acceptance of the nested-substitution term."
+    forM_ [guard, repeated] $ \constraint -> do
+        complete <- evaluateGuard solver constraint candidate
+        sparse <- evaluateGuardWithShape solver observed constraint
+        print (complete, sparse)
+        original <- accepts solver (grammar constraint) candidate
+        result <- prune solver (grammar constraint)
+        case result of
+            Left err -> fail $ show err
+            Right pruned -> do
+                rewritten <- accepts solver pruned candidate
+                print (original, rewritten)
+                unless (original == rewritten) $
+                    fail "Pruning changed acceptance of the nested-substitution term."

@@ -6,8 +6,9 @@ import MicroCFTA.ObservationGraph
 This module ports the control flow in `Refinement.Prune`. `ObservationGraph`
 implements the finite specialization operation. Here a candidate stores the
 result of its query and the ambiguity check. The source stops at the first
-unknown result. An ambiguity gate supplies Unknown before any query whose
-actual identities are unresolved. It restores the complete original edge.
+unknown result. An ambiguous Unknown restores the complete original edge.
+`safeVerdict` and `protect` retain the historical blanket gate. The current
+source passes the runtime evaluator verdict directly to `check`.
 
 The recursive scheduler uses explicit fuel. Fuel exhaustion means that the
 model has not established termination. It does not mean an empty language.
@@ -25,7 +26,7 @@ structure Candidate (Edge : Type) where
   ambiguous : Bool
   deriving Repr
 
-/-- Ambiguous actual identities require the original complete guard. -/
+/-- The historical blanket gate converts every ambiguous candidate to Unknown. -/
 def safeVerdict (ambiguous : Bool) (queried : Verdict) : Verdict :=
   if ambiguous then .unknown else queried
 
@@ -37,7 +38,7 @@ theorem safeVerdict_no (ambiguous : Bool) (queried : Verdict) :
     safeVerdict ambiguous queried = .no ↔ ambiguous = false ∧ queried = .no := by
   cases ambiguous <;> simp [safeVerdict]
 
-/-- Apply the source ambiguity gate before the candidate loop. -/
+/-- Apply the historical blanket ambiguity gate before the candidate loop. -/
 def protect (candidate : Candidate Edge) : Candidate Edge :=
   { candidate with verdict := safeVerdict candidate.ambiguous candidate.verdict }
 

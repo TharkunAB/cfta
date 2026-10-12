@@ -1,6 +1,8 @@
 # Refinement recipe compiler correspondence
 
-`MicroCFTA/RecipeCompile.lean` follows `microcfta-generator/src/Data/CFTA/Gen/Refinement/Internal/Compile.hs` at `d7f7c11`. It models the compiler's control decisions and selected metadata transformations. It does not model the complete output of `compileGen`. In particular, it does not assume an unspecified compiler is exact and then derive exactness from that assumption.
+`MicroCFTA/RecipeCompile.lean` follows `microcfta-generator/src/Data/CFTA/Gen/Refinement/Internal/Compile.hs` at `d7f7c11`. The guard classification was refreshed against `de910ea`: it uses the runtime
+verdict directly and has no blanket ambiguity precheck. It models the
+compiler's control decisions and selected metadata transformations. It does not model the complete output of `compileGen`. In particular, it does not assume an unspecified compiler is exact and then derive exactness from that assumption.
 
 ## Control decisions
 

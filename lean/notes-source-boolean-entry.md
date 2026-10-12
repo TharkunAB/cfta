@@ -1,6 +1,8 @@
 # Independent Boolean operands in the public guard evaluator
 
-`SourceBooleanEntry` is the current executable public entry model. It follows
+`SourceBooleanEntry` records the public Boolean dispatcher before the later
+substitution safeguards. `SourceSubstitutionPrecedence` is the current entry
+and proves equality on complete terms and unambiguous sparse cells. It follows
 `Refinement/Evaluate.hs` after the conjunction repair. `evaluate` dispatches
 outer And, Or, and Not by polarity. It bypasses empty Substitute nodes. Each
 other guard enters `evaluateScoped` once. A negative atom enters as Not atom.
@@ -9,7 +11,7 @@ runs the existing scoped worker from an empty substitution stack.
 
 `scoped_eq` proves that signing does not change allocation and gives exactly
 the worker's pushed polarity. Nonempty Substitute nodes remain opaque to the
-entry dispatcher. Their nested scope semantics have not changed. In
+entry dispatcher. The later safeguards can return Unknown at nested scope entry. In
 particular, this repair does not assert distributivity through a nonempty
 substitution or equate negative formula entailment with verdict negation.
 
@@ -29,9 +31,11 @@ across equal planned reads. It reuses the complete scoped query proofs.
 `complete_decision` connects a decided sparse cell to every complete term
 with those reads. Conflicting actual names and fresh declarations are allowed.
 
-`BooleanGuardPrune` is the current graph candidate and pruning model. Its
+`BooleanGuardPrune` retains the historical blanket gate. Its
 variant query and fallback guard use `SourceBooleanEntry`. The global
-always-unknown identity callback remains the source conservative gate.
+always-unknown identity callback is an unconditional gate in that model.
+Current source uses it only after an Unknown verdict. `CurrentGuardPrune`
+models the current call order and proves exactness for unambiguous cells.
 `prune_exact` proves confirmed-language preservation for every successful
 candidate pass, including restoration of the original guard on ambiguity.
 It composes the actual candidate loop and exact finite observation graph
@@ -41,8 +45,8 @@ their separately stated proof obligations.
 `BooleanGuardCompile.decision` combines the current sparse entry and the
 source compiler's error precedence. `classification` proves that diagnostic
 probes cannot turn Unknown into a successful filter result. `decision_exact`
-and `retain_iff` prove that every successful cell decision retains exactly its
-confirmed terms. Read agreement is explicit. This result does not assert that
+and `retain_iff` prove exact retention on unambiguous cells. That condition is
+a proof premise, not a compiler precheck. Read agreement is explicit. This result does not assert that
 the complete recipe compiler constructs its grouping keys correctly.
 
 Grouping transport in both callers retains the explicit
@@ -52,9 +56,9 @@ has not been proved to meet that contract. Ambient declarations, assumptions,
 name collisions, timeouts, and IO exceptions remain backend boundaries.
 
 The old definitions stay available with a precise role.
-`SourceGuards.evaluateWith` remains the current private scoped worker.
+`SourceGuards.evaluateWith` is the worker before both substitution safeguards.
 `SourceGuards.evaluateGuardWithSame` is the historical public whole-guard
-entry and the exact current private `evaluateScopedGuard` helper.
+entry and the earlier private `evaluateScopedGuard` helper.
 `SourceObservations.evaluateGuard` and `evaluateGuardWithShape` are wrappers
 for that historical entry. `SourceFullGuardBridge`,
 `GuardConjunctionNames`, `FullGuardPrune`, and `FullGuardPruneStable` prove
@@ -71,7 +75,7 @@ independent complete evaluation. `edgeView_conjoin` combines that result with
 the actual equality-class normalizer. This discharges the residual guard
 conjunction premise of the constructor product used by enumeration.
 
-Aggregate validation passes 310 jobs. The dependency audit checks 16,603
+At the earlier checkpoint, aggregate validation passed 310 jobs. The dependency audit checks 16,603
 theorem declarations and permits only the standard Lean foundation axioms.
 The existing Haskell suites pass 279 core, 193 generator, and 136 refinement
 examples. The source reproduction is `repro/ConjoinScope.hs`.

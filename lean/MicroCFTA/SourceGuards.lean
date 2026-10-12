@@ -7,6 +7,8 @@ import MicroCFTA.Language
 Formula operations are an explicit interface. Guard traversal, observations,
 actual identity grouping, fresh-name allocation, and ambiguity tracking follow
 `Refinement.Evaluate`. Formula substitution is verified separately.
+`evaluateWith` retains the worker before `d6b8837` for regression witnesses.
+`SourceEnclosingRenames` adds the current enclosing-renaming check.
 -/
 namespace MicroCFTA.SourceGuards
 open Guards

@@ -1,12 +1,13 @@
 import MicroCFTA.GuardConjunction
 
 /-!
-# Current public guard entry
+# Public Boolean dispatcher before the enclosing-renaming check
 
 Outer Boolean operands allocate independent actual-value tables. Nonempty
 substitutions keep the scoped evaluator and its complete nested table.
 `SourceGuards.evaluateGuardWithSame` is the historical whole-guard entry. It
-also describes the current private `evaluateScopedGuard` helper exactly.
+describes the private helper before `d6b8837`. `SourceEnclosingRenames`
+executes the current helper and proves complete-term agreement.
 -/
 namespace MicroCFTA.SourceBooleanEntry
 open SourceGuards SourceObservations
@@ -16,7 +17,7 @@ open Guards (Verdict negate)
 def signed (positive : Bool) (guard : Guard Formula) : Guard Formula :=
   if positive then guard else .not guard
 
-/-- The current private helper retains the original scoped evaluator. -/
+/-- The preceding private helper retains the original scoped evaluator. -/
 def evaluateScoped [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
     (observed : Observations Formula)
     (sameAt : List (List (Resolved Formula)) → Path → Path → Option Bool)

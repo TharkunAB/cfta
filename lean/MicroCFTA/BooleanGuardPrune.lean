@@ -2,11 +2,12 @@ import MicroCFTA.FullGuardPruneStable
 import MicroCFTA.SourceBooleanBridge
 
 /-!
-# Current Boolean guard entry in candidate pruning
+# Historical blanket ambiguity gate in candidate pruning
 
-The repaired ambiguity gate and exact source query transport remove the old
-conflict-free restriction. Exact confirmed-language preservation still needs
-the stated backend name-transport contract.
+This model retains the earlier unconditional ambiguity gate. The current
+source evaluates first and uses ambiguity only after Unknown.
+`CurrentGuardPrune` models that policy and states its remaining proof scope.
+Exact preservation also needs the stated backend name-transport contract.
 -/
 namespace MicroCFTA.BooleanGuardPrune
 open FullSyntax SourceFormula SourceGuards SourceObservations FullGuardPrune

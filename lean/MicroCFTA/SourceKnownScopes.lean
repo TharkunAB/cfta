@@ -3,8 +3,9 @@ import MicroCFTA.SourceQueryTransport
 /-!
 # Unambiguous source scopes retain known identity flags
 
-The repaired sparse gate excludes the ambiguous table before any query.
-Every successfully resolved nested scope then has all identity flags set.
+An empty ambiguity table makes every successfully resolved nested scope
+retain known identity flags. This is a proof condition. The current source
+does not impose a blanket ambiguity precheck.
 -/
 namespace MicroCFTA.SourceKnownScopes
 open SourceGuards SourceObservations

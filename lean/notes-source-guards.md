@@ -7,6 +7,10 @@ models every supporting actual-identity table operation in
 representative selection, conflicts, fresh declarations, ambiguity,
 substitution resolution, simultaneous scope order, ambient assumptions, and
 scoped solver bindings. Holds aliases repeated paths to their first formal.
+Its worker retains the version before `d6b8837`.
+`SourceEnclosingRenames` models that upstream enclosing-scope check.
+`SourceSubstitutionPrecedence` supplies the current additional same-scope
+identity-precedence check. Both reuse the same allocation and resolution code.
 
 The evaluator uses a polarity parameter for the source's pushed-negation
 cases. Satisfies and Holds negate the requirement formula. Missing positions

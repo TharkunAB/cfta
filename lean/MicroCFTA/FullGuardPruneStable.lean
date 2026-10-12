@@ -1,9 +1,9 @@
 import MicroCFTA.SourceFullGuardBridge
 
 /-!
-# Full guarded candidate pruning with allocated identity conflicts
+# Historical guarded candidate pruning with allocated identity conflicts
 
-The repaired ambiguity gate and exact source query transport remove the old
+The historical blanket ambiguity gate and exact query transport remove the old
 conflict-free restriction. Exact confirmed-language preservation still needs
 the stated backend name-transport contract.
 -/
