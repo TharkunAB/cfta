@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 23:38 CEST (Europe/Stockholm)**.
+Updated: **2026-10-12 23:46 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -27,8 +27,8 @@ is complete. Record repairs in `FINDINGS.md`. Do not stop at a proof checkpoint.
 - Repository: `/home/tritlo/Code/mcfta`; Ubuntu/WSL2, Bash.
 - Branch: `formalization/microcfta-resume-20261012`.
 - Base: `origin/microcfta`, `de910ea` (merged findings fixes through PR #96).
-- Latest earlier proof integration checkpoint: `41bafa7`. The next local
-  commit integrates the No/refutation and logical-completeness proofs.
+- Earlier proof integration checkpoint: `2c469d4`. Subsequent local commits
+  add logical read transport, plain application, and nested constructor replay.
 - Other continuation commits: `3d3724f` (keyed families), `ee29250`
   (current equality), `840185a` (total substitution), and `d783309`
   (same-scope source repair and proofs).
@@ -61,10 +61,10 @@ self-reference removal from recursive unions.
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
   `/tmp/mcfta-scope-precedence-full.log`.
-- Latest integrated Lean build: **512 jobs; 27,539 theorem dependency checks**.
+- Latest integrated Lean build: **523 jobs; 27,900 theorem dependency checks**.
   This includes the new finite leaf progress, runtime metadata, and shared
   support-binder proofs. Further active modules are not yet integrated.
-  Log: `/tmp/mcfta-quotient-completeness-full.log`.
+  Log: `/tmp/mcfta-nested-read-prune-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -175,13 +175,15 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
   the full lexical reconstruction. Actual smart-node and nonsingleton-union
   branches are proved. Normalized singleton unions need the remaining
   source construction invariant.
-- Fresh-outer-dependent nested binder identity is incomplete when
-  normalization erases the dependency. The retained-reference and original
-  independence cases are proved; no closed-input source defect is known.
+- Fresh-outer-dependent nested binder identity remains incomplete in general.
+  Empty-child erasure now derives complete-record reuse. Every successful
+  nested syntax execution replays exactly after cache growth. First execution
+  still needs a closed-input no-pending theorem. No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
   Full recursive support assembly, weighted flags, and absent-term errors
   now connect to those bodies. Diagnostic inspection and both sampler
-  branches are also derived from local source records. Opaque external
+  branches are also derived from local source records. Plain application now
+  combines all views and derives its distinct source weight rules. Opaque external
   descriptors retain their own contracts.
   Arbitrary Haskell builders can change schema between placeholder contexts.
 - Full accepted ambiguous sparse Yes transport is proved through the actual
@@ -190,7 +192,9 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
   No-refutation and successful compiler logical exactness are proved.
   Successful pruning retains all original backend-confirmed terms. Logical
   completeness of an original-edge fallback needs explicit backend adequacy.
-  Planned-read spelling transport still uses its lossless backend contract. A sound
+  Logical planned-read transport for unrestricted ambient values now needs
+  no exact backend spelling contract. General sort domains use an explicit
+  compatibility condition for differing avoid lists. A sound
   callback can give sparse Yes and complete Unknown; exact backend language
   equality does not follow from logical safety.
 - Runtime interning, identity lifetime, containers, machine words,
@@ -222,16 +226,17 @@ explicitly requests publication later.
 
 ## Next proof work
 
-1. Derive logical planned-read transport without assuming exact backend
-   spelling stability. Keep restored backend-confirmed edges and logical
-   validity separate. Both identity-quotient polarities are proved. See
-   `notes-quotient-completeness.md`.
+1. Connect the proved logical planned-read transport to the concrete solver
+   adapter's induced formula interpretation. Preserve actual sort lowering
+   and conservative preflight Unknown. Keep restored backend-confirmed edges
+   and logical validity separate. See `notes-source-read-logical.md`.
 2. Preserve the complete typed family connections now proved for support,
    diagnostic inspection, both sampler branches, runtime flags, and missing
    terms. Arbitrary context-dependent Haskell builder schemas remain a
    separate source contract.
-3. Handle nested binder key identity when normalization erases a fresh outer
-   dependency. Retained dependencies and original independence are proved.
+3. Prove first execution of closed nested syntax cannot read a pending key.
+   Successful replay, empty-child erasure, retained dependencies, and original
+   independence are proved.
 4. Establish source unfolding ranks and general explicit reduction fixed-point
    termination, or retain a concrete counterexample if one is found.
 5. Keep runtime/source correspondence separate from executable Lean proofs.

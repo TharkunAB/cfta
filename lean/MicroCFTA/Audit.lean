@@ -417,6 +417,11 @@ import MicroCFTA.SourceReadLogicalGuards
 import MicroCFTA.RecursivePlainApplication
 import MicroCFTA.RecursivePlainApplicationExamples
 import MicroCFTA.CurrentReadLogicalPrune
+import MicroCFTA.InternedNestedConstruction
+import MicroCFTA.InternedNestedConstructionGrowth
+import MicroCFTA.InternedNestedConstructionReplay
+import MicroCFTA.InternedErasedEdgeReplay
+import MicroCFTA.InternedNestedConstructionExamples
 /-!
 # Proof dependency audit
 

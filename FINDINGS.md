@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-12 23:38 CEST**.
+Updated: **2026-10-12 23:46 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired one additional sparse-substitution defect, described as row 18.
 All **620 existing Haskell examples** pass after that repair: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **512 jobs and 27,539 theorem dependency
+The full Lean development passes **523 jobs and 27,900 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -241,17 +241,21 @@ but do not prove it for every runtime execution.
    See [the growth notes](lean/notes-finite-reduction-growth.md).
 2. **Nested binder identity after normalization erases a fresh outer
    dependency.** Retained dependencies separate pending keys. Original
-   independence permits cache reuse. Those results do not yet establish the
-   complete erased-dependency case. Constructor traces now derive probe
-   residency and issued-reference provenance. No closed-input collision was
-   established.
-   See [the fresh-probe notes](lean/notes-interned-fresh-probe-keys.md).
+   independence permits cache reuse. Erasure through an empty child now
+   derives exact complete-record reuse under changed outer bindings.
+   Arbitrary successful nested syntax executions replay without allocation
+   after cache growth. First execution still needs a proof that no closed
+   input reads a pending record. Constructor traces derive probe residency
+   and issued-reference provenance. No closed-input collision was established.
+   See [the nested-construction notes](lean/notes-interned-nested-construction.md).
 3. **Remaining recursive runtime records and nested-builder composition.**
    Typed nested-join families, decoder/mass records, inverse callbacks, and
    public occurrence guards are proved. Complete recursive support assembly,
    weighted flags, and absent term fields now compose with those bodies.
    Diagnostic inspection and both sampler branches are now derived from
-   local source records. Arbitrary opaque inspection descriptors remain.
+   local source records. Ordinary application now composes all views under
+   the derived plain-input invariant and exact source weight rules.
+   Arbitrary opaque inspection descriptors remain.
    Builders can run
    under different placeholder contexts; one fixed typed schema does not
    prove that arbitrary Haskell builders preserve their shape and errors.
@@ -269,11 +273,13 @@ but do not prove it for every runtime execution.
    retains every original backend-confirmed term. A completed candidate pass
    retains every logically valid term; restoring the original guarded edge
    requires a complete backend Yes. Successful compiler classification is
-   equivalent to logical validity. Planned-read spelling transport still
-   uses its existing backend contract. A checked accepted ambiguous example
+   equivalent to logical validity. Logical planned-read transport no longer
+   requires stable backend verdicts for unrestricted ambient values. More
+   general sort domains use an explicit compatibility condition for names
+   present in only one avoid list. A checked accepted ambiguous example
    returns sparse Yes and complete Unknown with one sound callback. Thus
    soundness does not give exact backend-confirmed language equality.
-   See [the completeness notes](lean/notes-quotient-completeness.md).
+   See [the logical read-transport notes](lean/notes-source-read-logical.md).
 
 These obligations prevent a whole-implementation verification claim. They
 are separate from the repaired concrete failures and the proved component

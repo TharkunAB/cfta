@@ -149,6 +149,8 @@ preserves the finite wrapper's empty-rank behavior when terms are missing.
 Opaque inspection descriptors and changing runtime builder schemas remain
 adapters. `RecursiveCompleteRecord` builds the supported views together and
 proves that their family laws refer to the same checked compiler.
+`RecursivePlainApplication` adds ordinary application with a derived
+mass-free source invariant and the exact plain weight and term-field rules.
 The current sparse pruning policy is also distinct from the older upfront
 blanket guard in `BooleanGuardPrune` and `FullGuardPrune`. `CurrentGuardPrune` models the evaluator-first loop and proves unambiguous
 cell exactness. `SourceQuotientGuards` derives full accepted ambiguous
@@ -159,7 +161,10 @@ the actual finite pruning loop and compiler retention.
 `CurrentGuardLogicalComplete` proves successful compiler logical exactness
 and retention of every original backend-confirmed term after pruning.
 Logical completeness of an original-edge fallback requires explicit backend
-adequacy. Planned-read spelling transport retains its separate contract.
+adequacy. `SourceReadLogicalGuards` removes exact spelling stability from
+logical transport. `CurrentReadLogicalPrune` derives pruning safety,
+confirmed-term retention, and successful compiler logical exactness for
+unrestricted ambient values. Formula sorts still use their interpretation.
 
 ## Error and boundary ledger
 
