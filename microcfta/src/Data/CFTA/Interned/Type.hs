@@ -291,6 +291,7 @@ instance Eq (Node symbol) where
     Rec l == Rec r = l == r
     EmptyNode == EmptyNode = True
     _ == _ = False
+    {-# INLINE (==) #-}
 
 instance (Show symbol) => Show (Node symbol) where
     show (InternedNode node) = "(Node " <> show (internedNodeEdges node) <> ")"
@@ -713,6 +714,9 @@ Precondition: the function must be parametric in the choice of variable names:
 
 The function is applied twice: to 'RecDepth' to find the depth, and to the placeholder. The precondition makes the two
 results agree. The node determines its placeholder, so interning can use the shape as a key.
+
+A union at the root of the body loses an operand that is the binder's own reference, so the shape does not depend on
+that operand.
 -}
 {-# INLINEABLE createMuDontCleanup #-}
 createMuDontCleanup ::
@@ -724,8 +728,18 @@ createMuDontCleanup f =
             (g (RecUnint (numNestedMu bodyAtDepth)))
             g
   where
-    g = f . Rec
+    g variable = withoutSelfReference (Rec variable) (f (Rec variable))
     bodyAtDepth = g RecDepth
+
+    -- A union at the root of the body that names the binder adds no term,
+    -- because the binder accepts the least fixed point. Dropping the operand
+    -- gives the same body, and so the same node, as the union without it.
+    withoutSelfReference self body@(InternedUnion payload)
+        | self `elem` members = createUnion (filter (/= self) members)
+        | otherwise = body
+      where
+        members = internedUnionMembers payload
+    withoutSelfReference _ body = body
 
 {- | Match on a 'Mu' node
 

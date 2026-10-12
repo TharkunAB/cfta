@@ -230,6 +230,11 @@ spec = do
                 Left err -> expectationFailure $ show err
                 Right graph -> Set.fromList (plainTermsAtMost 4 $ fromFTA graph) `shouldBe` Set.fromList expected
 
+        it "drops a binder's own reference at the root of its body" $ do
+            let leaf = Node [Edge "a" []] :: Node Symbol
+                step child = Node [Edge "f" [child]]
+            Mu (\r -> union [leaf, step r, r]) `shouldBe` Mu (\r -> union [leaf, step r])
+
         it "takes the least fixed point through epsilon cycles" $ do
             let a = Node [Edge "a" []] :: Node Symbol
                 self = Mu $ \r -> union [r, a]
@@ -425,6 +430,26 @@ spec = do
                 ns'' = reduceEqConstraints ecs EmptyConstraints ns'
                 f n = Node [Edge "f" [n]]
              in (ns' == ns'') && ns' == [f $ f $ f $ f infiniteFNode, f $ f $ f infiniteFNode] `shouldBe` True
+
+        it "reduction stops on a domain with an epsilon reference to its binder" $ do
+            let leaf = Node [Edge "a" []] :: Node Symbol
+                step child = Node [Edge "f" [child]]
+                withEpsilon = Mu $ \r -> union [leaf, step r, r]
+                withoutEpsilon = Mu $ \r -> union [leaf, step r]
+                children = [withEpsilon, withoutEpsilon, withEpsilon]
+                direct = [path [0], path [1], path [2]]
+                below = [path [0, 0], path [1, 0], path [2, 0]]
+            forM_ [(children, direct), (map step children, direct), (children, below), (map step children, below)] $ \(domains, paths) -> do
+                let original = Node [mkEdge "triple" domains (equalityConstraint $ mkEqConstraints [paths])]
+                result <- timeout 2000000 $ do
+                    let reduced = fixUnbounded reducePartially original
+                    _ <- evaluate (nodeCount reduced)
+                    pure reduced
+                case result of
+                    Nothing -> expectationFailure "recursive equality narrowing did not finish"
+                    Just reduced ->
+                        forM_ [0 .. 4] $ \depth ->
+                            shallowTerms depth reduced `shouldBe` shallowTerms depth original
 
         it "refold folds the simplest unrolled input" $
             refold (Node [Edge "f" [infiniteFNode]]) `shouldBe` infiniteFNode

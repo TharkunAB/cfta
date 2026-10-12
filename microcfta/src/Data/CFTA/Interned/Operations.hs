@@ -33,7 +33,7 @@ import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
 import Data.IntSet (IntSet)
 import qualified Data.IntSet as IntSet
-import Data.List (compareLength, (!?))
+import Data.List (compareLength, partition, (!?))
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Monoid (Sum (..))
@@ -146,14 +146,19 @@ unfoldOuterRec = memoTypeableWith @symbol unfoldOuterRecCache go
 
 {- | Outgoing alternatives after finite closure of recursive and union references.
 
-An open union must be bound before this view can expose its alternatives.
-An unresolved union reference is an error, not an empty language.
+An ordinary node and a 'Mu' that unfolds to one give their edges directly.
+Other nodes take the closure through unfoldings and union operands. An open
+union must be bound before this view can expose its alternatives. An
+unresolved union reference is an error, not an empty language.
 -}
 {-# INLINEABLE nodeEdges #-}
 nodeEdges ::
     (Hashable symbol, Typeable symbol) => Node symbol -> [Edge symbol]
 nodeEdges (InternedNode node) = internedNodeEdges node
+nodeEdges EmptyNode = []
 nodeEdges (Rec _) = []
+nodeEdges node@(InternedMu _)
+    | InternedNode unfolded <- unfoldOuterRec node = internedNodeEdges unfolded
 nodeEdges root = Set.toList $ Set.fromList $ collect IntSet.empty [root]
   where
     collect _ [] = []
@@ -508,15 +513,23 @@ intersectOpenEdge input =
 
 {- | Union automata without discarding open recursive references.
 
-Closed operands concatenate their outgoing alternatives. Open operands retain
-a union node until substitution supplies the referenced automata. A union
-does not add a constructor to any accepted term.
+A closed operand and an ordinary node give their outgoing alternatives, and
+the union concatenates them. A reference, and an open operand that is not an
+ordinary node, has no alternatives until its binder closes. The union keeps
+such operands in a union node until substitution supplies the referenced
+automata. A binder drops a reference to itself at the root of its body, as
+the least fixed point does. A union does not add a constructor to any
+accepted term.
 -}
 {-# INLINEABLE union #-}
 union :: (Hashable symbol, Typeable symbol) => [Node symbol] -> Node symbol
 union nodes
-    | all (Set.null . freeVars) nodes = Node $ concatMap nodeEdges nodes
-    | otherwise = createUnion nodes
+    | all hasEdges nodes = Node (concatMap nodeEdges nodes)
+    | otherwise = createUnion (Node (concatMap nodeEdges ready) : deferred)
+  where
+    (ready, deferred) = partition hasEdges nodes
+    hasEdges (InternedNode _) = True
+    hasEdges node = Set.null (freeVars node)
 
 {- | Recognize a term with an explicit pure constraint interpreter.
 
