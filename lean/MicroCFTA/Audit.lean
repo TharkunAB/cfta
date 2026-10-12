@@ -270,6 +270,7 @@ import MicroCFTA.CompactIndexChoice
 import MicroCFTA.FiniteAutomatonDriver
 import MicroCFTA.InternedConstructorTemplates
 import MicroCFTA.OpenGroupedApplication
+import MicroCFTA.SourcePlanPartition
 /-!
 # Proof dependency audit
 

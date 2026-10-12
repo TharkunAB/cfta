@@ -46,3 +46,17 @@ worker follows one rank and uses child counts. This module makes no claim
 that the source materializes those lists, and gives no new runtime bound.
 Kernel examples cover pure, paid alternatives, and paid products.
 The pinned Lean build passes. No Haskell source changed.
+
+`SourcePlanPartition` closes the reverse direction. `member_position` derives
+the size of every independently listed member. `class_size_unique` excludes
+membership in two size classes. `class_nodup` excludes repeated ranks within
+one class. `position_class_lookup` then proves exact conversion from every
+stored class position back to itself. `position_iff_lookup` exposes both
+inverse directions without an assumed partition invariant.
+
+`maxSize` computes a structural finite upper bound. `class_size_bound` proves
+that no nonempty class occurs above it. `allRanks_perm` proves that traversing
+all classes through that bound gives a permutation of `List.range (count
+plan)`. `class_count_total` derives equality of the complete size-count sum
+and the original count. Empty classes and zero-size members are included.
+The example `[1, 0, 3, 2]` checks the distinct size-major order of a product.
