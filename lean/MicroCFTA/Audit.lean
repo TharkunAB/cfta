@@ -414,6 +414,8 @@ import MicroCFTA.CurrentGuardLogicalComplete
 import MicroCFTA.SourceReadLogicalDomains
 import MicroCFTA.SourceReadLogicalQueries
 import MicroCFTA.SourceReadLogicalGuards
+import MicroCFTA.RecursivePlainApplication
+import MicroCFTA.RecursivePlainApplicationExamples
 import MicroCFTA.CurrentReadLogicalPrune
 /-!
 # Proof dependency audit

@@ -27,10 +27,23 @@ records equal the independently established versions. The delayed member
 has the original global inverse rank and belongs to this record's support.
 The computed runtime flags retain both mass weighting and terms at each key.
 
-These results cover the stated typed constructor fragment. Ordinary
-application has separate support, callback, and occurrence adapters; its
-plain `Recursive` runtime record is distinct from keyed mass metadata and
-is not an additional constructor of this combined record yet. Arbitrary
+`RecursivePlainApplication` adds ordinary application to these complete
+records. Its `Plain` invariant excludes retained key mass in every plain
+recursive environment. Application combines the two weight flags directly
+and requires both term callbacks. It does not use keyed-join promotion.
+The local unweighted probability laws follow from both operands. All four
+record views use the same `Apply` compiler. Plain occurrence, map, pay,
+label, and choice preserve this invariant. Family assembly has no retained
+key-mass flag and uses exactly the disjunction of its body weight flags.
+
+`RecursivePlainApplicationExamples` checks a delayed application inside a
+mutual family. The probe has no term callback; the term rebuild supplies it.
+After two size units, the delayed member has value one and mass one. The
+focused Haskell probe `/tmp/mcfta-plain-application.hs` checks the corresponding
+mutual values, uniform and nine-to-one product probabilities, every inverse
+rank, and support acceptance. It passed in the project Nix environment.
+
+These results cover the stated typed constructor fragment. Arbitrary
 Haskell builders that change shape across probe contexts remain outside the
 fixed typed program. Physical sharing, IO, and graph interning retain their
 separate implementation contracts.
