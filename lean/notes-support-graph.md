@@ -34,3 +34,29 @@ The graph-closing proof must retain source guards when it changes a root label.
 
 Validation: `lake -d lean build MicroCFTA.SupportJoin` and the aggregate axiom
 audit. There are no proof placeholders or new axioms.
+
+## Closing finite layers
+
+`SupportSpine.flatten_exact` proves that graph-side application flattening
+and term-side flattening have the same ordered forest language. Arbitrary
+recursive operand supports remain intact. Base labels exclude private Pure
+and Apply because those labels select other source cases.
+
+`SupportRoot.closeJoin_exact` proves graph/callback agreement when a user
+label closes an n-way join. The source retains the original constraints.
+Every join equality reads nonempty paths, so changing the root label preserves
+its truth. A general root-replacement theorem makes this requirement explicit.
+
+`SupportClosing.close_exact` composes pure, application, joined, ordinary, and
+nested choice layers. Choice indices use their actual input positions. Closing
+concatenates every alternative's labelled roots. Both directions of the
+language theorem are proved by induction. Empty choices denote the empty
+language even when source smart constructors use a different empty shape.
+
+This closes finite outer-layer graph/callback agreement for those constructor
+forms. The `Valid` conditions check private-label classification and spine
+shape. Public heterogeneous records must establish that their stored support
+has the represented form. Outer recursive binders, arbitrary mixed private
+edge lists, explicit epsilon unions, and the source interning representation
+still require their adapters. Recursive operands inside the proved finite
+layers are already interpreted by the full least-language semantics.
