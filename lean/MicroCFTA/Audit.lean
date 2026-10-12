@@ -217,6 +217,10 @@ import MicroCFTA.GuardStructuralOrder
 import MicroCFTA.RecursiveReductionBarrier
 import MicroCFTA.RecursiveReductionSourceOrder
 import MicroCFTA.EnumerationBinderExposure
+import MicroCFTA.RefinementValidation
+import MicroCFTA.SolverAdapter
+import MicroCFTA.DecoderDispatch
+import MicroCFTA.DecoderDispatchCost
 /-!
 # Proof dependency audit
 

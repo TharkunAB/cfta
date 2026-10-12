@@ -19,13 +19,14 @@ construction, enumeration, pruning, minimization, and symbolic drivers.
 `System.grammar_bijection` and `System.grammar_probability` compose the
 reference grammar, FTA, index, and distribution results.
 
-The eleven recorded implementation failures now have source repairs and checked
+The twelve recorded implementation failures now have source repairs and checked
 regressions: quantified substitution, observed atomic weights, accepted root
 representatives, open recursive unions, pruning through open nested binders,
 closing grouped private alternatives, recursive term boundaries, and grouped
 function spines, unsafe sparse substitution decisions in pruning and compilation,
 unbounded conjunction growth during equality reduction, and interference between
-independent semantic guards. Historical counterexamples remain
+independent semantic guards, and repeated expansion of recursive equality
+domains. Historical counterexamples remain
 separate from the repair theorems. See [SYSTEM.md](SYSTEM.md).
 
 The later source proofs include complete symbolic count/select/rank execution
