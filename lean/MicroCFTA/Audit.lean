@@ -508,6 +508,18 @@ import MicroCFTA.EqualityLeafProjectionUnion
 import MicroCFTA.FiniteFilteredRowProgress
 import MicroCFTA.NoncanonicalLeafProgress
 import MicroCFTA.SourceNoncanonicalLeafProgress
+import MicroCFTA.EqualityLeafProjectionCompile
+import MicroCFTA.EqualityLeafProjectionLeafWorkers
+import MicroCFTA.EqualityLeafProjectionWorkerReadback
+import MicroCFTA.EqualityRawLeafConstruction
+import MicroCFTA.EqualityRawLeafIdentity
+import MicroCFTA.InternedNestedPendingPreservation
+import MicroCFTA.InternedNestedDenseIdentities
+import MicroCFTA.InternedNestedOldRecords
+import MicroCFTA.InternedShallowValues
+import MicroCFTA.InternedShallowExecution
+import MicroCFTA.InternedReachableGateRank
+import MicroCFTA.InternedReachableGateExample
 /-!
 # Proof dependency audit
 

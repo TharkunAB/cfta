@@ -24,11 +24,15 @@ are inventoried in [API-COVERAGE.md](API-COVERAGE.md).
 
 The latest physical equality work derives admitted leaf readback, identity,
 intersection, and projection union. A normalization phase handles arbitrary
-initial outer guard syntax. The stateful pass still needs finite-request
-composition. Full nested syntax now derives pending-reservation origins and
-complete old probe footprints. The remaining general completion step is
-absent-reference replay. The shallow-cache gate has a derived source rank;
-its extension to arbitrary nested Mu records remains open.
+initial outer guard syntax. Physical raw construction preserves rejected
+sentinel requests and derives whole-node identity from the accepted row set.
+Finite occurrence compilation and recursive workers derive completed-cache
+readback. The stateful pass still needs composition. Full nested syntax now
+derives pending-reservation origins, complete old probe footprints, pending
+preservation, and earlier readback of old identities. The remaining general
+completion step is absent-reference replay. The unfolding rank now depends
+only on reachable shallow values. Unrelated deep cache records are allowed;
+arbitrary nested Mu bodies remain open.
 
 The upstream base includes the seventeen earlier repairs. This continuation
 also repairs same-scope identity-replacement precedence and recursive

@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 00:55 CEST**.
+Updated: **2026-10-13 01:07 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **609 jobs and 30,140 theorem dependency
+The full Lean development passes **621 jobs and 30,413 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -228,10 +228,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **609 jobs; 30,140 theorem dependency checks**.
+- Latest integrated Lean audit: **621 jobs; 30,413 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-raw-leaf-pending-origin-audit.log`.
+  Log: `/tmp/mcfta-raw-identity-reachable-gate-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -281,9 +281,11 @@ but do not prove it for every runtime execution.
    and a common cache for exact replay. Physical leaf intersection and
    projected union readback are proved for canonical admitted guards.
    Source arity checks now derive admission. A separate normalization phase
-   proves progress for raw initial guards and constructor rejection. Whole
-   stateful pass composition remains: a finite cache cannot supply a pure
-   constructor interface for every possible future request.
+   proves progress for raw initial guards and constructor rejection. Physical
+   raw construction now preserves rejected sentinel allocations and derives
+   exact readback and whole-node identity from accepted row sets. Finite
+   occurrence compilation and actual child workers derive local completed-cache
+   readback. Whole stateful pass composition remains in progress.
    See [the growth notes](lean/notes-finite-reduction-growth.md) and
    [projected leaf schedules](lean/notes-equality-leaf-projection.md).
 2. **Nested binder identity after normalization erases a fresh outer
@@ -304,8 +306,10 @@ but do not prove it for every runtime execution.
    remain open. For arbitrary syntax, every hypothetical pending result now
    has a derived earlier reservation with complete probes. Every identity
    and recursive reference in either probe, including stored Mu bodies and
-   probes, predates that reservation. General absent-reference replay is
-   the remaining completion step.
+   probes, predates that reservation. Full syntax preserves pending slots and
+   dense identity tables. A later resident old identity has the exact complete
+   earlier payload. General absent-reference replay is the remaining
+   completion step.
    Full nested constructor traces now derive
    coherent caches, complete child provenance, outgoing edge residency,
    cache growth, and issued-reference history. No closed-input collision

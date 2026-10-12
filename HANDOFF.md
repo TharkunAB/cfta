@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 00:55 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 01:07 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -64,10 +64,10 @@ self-reference removal from recursive unions.
   `/tmp/mcfta-construction-query-full.log`. After the grouped-discovery check,
   all generator and refinement cases pass in
   `/tmp/mcfta-family-discovery-validation.log`. Core source is unchanged.
-- Latest integrated Lean build: **609 jobs; 30,140 theorem dependency checks**.
+- Latest integrated Lean build: **621 jobs; 30,413 theorem dependency checks**.
   This includes projected leaf schedules, nested first-run completion,
   stored shallow unfolding, and construction-query provenance.
-  Log: `/tmp/mcfta-raw-leaf-pending-origin-audit.log`.
+  Log: `/tmp/mcfta-raw-identity-reachable-gate-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -209,9 +209,11 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   recursive finite child transformations now compose in a generated common
   cache. Physical leaf intersection and projected union now have exact
   readback for canonical admitted inputs. Source checks derive admission;
-  raw initial guards have a separate proved progress phase. Whole stateful
-  pass composition must use finite completed requests, not a globally closed
-  finite cache.
+  raw initial guards have a separate proved progress phase. Their physical
+  constructor preserves rejected sentinel allocations and derives exact raw
+  readback and the whole-node identity shortcut. Finite occurrence compilation
+  and actual recursive workers now derive completed-cache readback. Whole
+  stateful pass composition remains in progress.
   Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
@@ -225,8 +227,8 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   A concrete `UnfoldingRank` now follows from actual stored records when all
   completed Mu bodies in the cache have depth zero. It derives completion
   and eventual fuel equality without a supplied rank or decrease law.
-  A reachable-only version is active so unrelated deep cached records need
-  not exclude that fragment.
+  The reachable-only version now derives these results with unrelated deep
+  records in the same cache. Reachable Mu bodies must still have depth zero.
 - Fresh-outer-dependent nested binder identity remains incomplete in general.
   Empty-child erasure now derives complete-record reuse. Every successful
   nested syntax execution replays exactly after cache growth. First execution
@@ -239,7 +241,9 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   grammar now composes retained ancestors with independent and erased-body
   subprograms inside pending contexts. Full-syntax pending-origin and identity
   footprint theorems derive the exact earlier reservation and old complete
-  probes for any hypothetical alias. General absent-reference trace replay
+  probes for any hypothetical alias. All syntax preserves pending slots and
+  dense identity tables. A later resident old identity has the exact complete
+  payload from before the pending interval. General absent-reference trace replay
   across changed nested local identities remains open.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
@@ -309,8 +313,8 @@ explicitly requests publication later.
    their actual state transitions. Use finite completed-request replay.
    Preserve the derived raw-guard normalization phase and its strict rank.
    General nested equality fixed-point termination remains separate.
-5. Extend the concrete shallow unfolding rank from the whole-cache fragment
-   to reachable stored values, then address arbitrary nested Mu bodies.
+5. Extend the proved reachable-value unfolding rank to arbitrary nested Mu
+   bodies. Unrelated deep cache entries are already permitted.
 6. Keep runtime/source correspondence separate from executable Lean proofs.
    Update the coverage ledger and handoff at each validation checkpoint.
 
