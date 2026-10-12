@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 00:01 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 00:24 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -47,8 +47,9 @@ patches under `microcfta/` and `microcfta-generator/` were retired because
 upstream contains the revised repairs. Mixed commits retained their proof
 and reproduction changes. Verification before new work confirmed every
 tracked proof byte matched the previous branch. Production Haskell matched `origin/microcfta` exactly after the rebase.
-The new local source repair described below changes only
-`microcfta/src/Data/CFTA/Refinement/Evaluate.hs`.
+The local repairs change sparse substitution in
+`microcfta/src/Data/CFTA/Refinement/Evaluate.hs` and recursive construction
+queries in `microcfta-generator/src/Data/CFTA/Gen/`.
 
 Do not replay the old source fixes over this base. In particular, upstream
 changed total formula substitution, sparse nested-scope decisions, the
@@ -57,14 +58,16 @@ self-reference removal from recursive unions.
 
 ## Verified checkpoints
 
-- Existing Haskell suites on `de910ea` plus the new repair: **620 passing
+- Existing Haskell suites on `de910ea` plus both local repairs: **620 passing
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
-  `/tmp/mcfta-scope-precedence-full.log`.
-- Latest integrated Lean build: **544 jobs; 28,365 theorem dependency checks**.
-  This includes the new finite leaf progress, runtime metadata, and shared
-  support-binder proofs. Further active modules are not yet integrated.
-  Log: `/tmp/mcfta-marked-completion-forest-audit.log`.
+  `/tmp/mcfta-construction-query-full.log`. After the finite-return correction,
+  all generator and refinement cases pass in
+  `/tmp/mcfta-construction-query-final.log`. Core source is unchanged.
+- Latest integrated Lean build: **576 jobs; 29,362 theorem dependency checks**.
+  This includes projected leaf schedules, nested first-run completion,
+  stored shallow unfolding, and construction-query provenance.
+  Log: `/tmp/mcfta-construction-query-retained-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -91,7 +94,7 @@ nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests mic
 
 Use Nix for Haskell. The PATH addition selects the coherent linker/GMP
 setup. Nix lock access requires escalation. Fourmolu and both audited package Cabal-gild checks pass. No Cabal file
-changed. The only new production change is the evaluator repair below. Do not rerun the whole Haskell suite
+changed. The local production changes are the two repairs below. Do not rerun the whole Haskell suite
 without a new source change or finding.
 
 ## Completed proof work
@@ -134,8 +137,13 @@ checks ambiguity only after Unknown. Its general language theorem requires
 unambiguous specialization cells. Earlier blanket-gate modules remain
 historical. See `notes-substitution-policies.md`.
 
-The committed aggregate passes. Further nested-construction, gate-rank,
-and logical read-transport modules are active and are not yet integrated.
+The aggregate includes the independent, erased-edge, and retained-reference
+nested completion proofs. The last class covers arbitrary nesting depth with
+one symbol, using actual live enclosing references instead of fresh marker
+symbols. Stored shallow Mu unfolding now derives its preparation and strict
+head-rank decrease from source constructor invariants. Projected leaf equality
+schedules have a derived pass bound and physical normalized-parent readback.
+The more general cases remain active.
 
 ## New source repair: duplicate-formal identity precedence
 
@@ -163,6 +171,22 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
 `/tmp/mcfta-same-scope-compile.log` before repair;
 `/tmp/mcfta-scope-precedence-repaired.log` afterward.
 
+## New source repair: recursive construction queries
+
+Row 19 in `FINDINGS.md` retains a public callback that inspected temporary
+support and returned inconsistent record fields. The repair adds independent
+construction tokens to recursive records. Queries reject active placeholders.
+Completion removes the owning token and keeps enclosing tokens. This applies
+to both cyclic and unused-occurrence return paths. The latter is needed when
+a nested family selects a closed key from an outer definition.
+
+`RecursiveConstructionQueries` proves exact marker provenance, stable query
+rejection, nested completion, and unchanged completed payloads. The existing
+GenSpec recursive-member case checks fourteen observations, the original
+callback, and nested selected-key completion. See
+`lean/notes-recursive-construction-queries.md` for the source correspondence
+and remaining arbitrary-callback boundary.
+
 ## Remaining proof boundaries
 
 - General termination of explicit equality/pruning fixed points on finite
@@ -171,22 +195,27 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
   forests with multiple symbols now have a proved bound for simultaneous
   class edits and empty propagation. Both 4,096-input source comparisons pass.
   Disjoint binary direct-root classes stabilize in one changing pass even
-  with nested domains. Projected paths do not have that one-pass property.
+  with nested domains. Projected leaf occurrences have a separate weight
+  bound for the full schedule. Their physical normalized-parent adapter is
+  proved; recursive child transformations still need composition.
   Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
   at the same path. LexicalGateRank now derives head-binder decrease for
   the full lexical reconstruction. Actual smart-node and nonsingleton-union
-  branches are proved. Normalized singleton unions need the remaining
-  source construction invariant.
+  branches are proved. Actual stored shallow bodies now derive normalization,
+  successful substitution preparation, and strict head-rank decrease.
+  General nested open-Mu preparation and unfolding still need composition.
 - Fresh-outer-dependent nested binder identity remains incomplete in general.
   Empty-child erasure now derives complete-record reuse. Every successful
   nested syntax execution replays exactly after cache growth. First execution
   still needs a closed-input no-pending theorem. Full nested traces now derive
   coherent caches, child provenance, edge residency, and issued-name history.
   A marked syntax fragment now proves first-run completion and complete
-  payload coverage without assuming success. It requires preserved nullary
-  root markers distinct from active ancestor markers; siblings may reuse them.
+  payload coverage without assuming success. Further independent, erased-edge,
+  and retained-reference classes also derive first-run completion. The last
+  covers arbitrary depth with the same symbol at every binder. General mixed
+  retained and erased dependencies remain open.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
   Full recursive support assembly, weighted flags, and absent-term errors
@@ -194,7 +223,8 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
   branches are also derived from local source records. Plain application now
   combines all views and derives its distinct source weight rules. Opaque external
   descriptors retain their own contracts.
-  Arbitrary Haskell builders can change schema between placeholder contexts.
+  The construction-query repair blocks the reproduced payload mismatch.
+  Arbitrary Haskell builders still need schema and key-discovery regularity.
 - Full accepted ambiguous sparse Yes transport is proved through the actual
   identity quotient, including nested scopes, both guard polarities, Holds,
   and the current finite pruning loop. It establishes logical safety.

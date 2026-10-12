@@ -23,7 +23,8 @@ implementation findings are in [SYSTEM.md](SYSTEM.md). All 66 source modules
 are inventoried in [API-COVERAGE.md](API-COVERAGE.md).
 
 The upstream base includes the seventeen earlier repairs. This continuation
-also repairs same-scope identity-replacement precedence. Formula substitution
+also repairs same-scope identity-replacement precedence and recursive
+construction payload queries. Formula substitution
 preserves bound application names. Observed atomic members retain their
 within-size weights. Minimization installs and checks accepted root
 representatives. Open unions retain epsilon operands. Pruning inspects stored open binder bodies before following recursive reads.
@@ -40,6 +41,9 @@ Recursive observation groups retain their size indexes during key filtering.
 Bounded construction now exposes retained binder cycles with the visited closure.
 Measure callers now reject self-dependent extracted values.
 Open group positioning now reads recursive keys without a cardinality query.
+Unfinished recursive occurrences keep independent construction tokens.
+Payload queries reject them consistently across rebuilding phases. Nested
+completion preserves enclosing tokens and removes the completed token.
 Existing suites pass 284 core, 194 generator, and 142 refinement examples on `de910ea`. Historical
 counterexamples remain checked against their explicitly named baseline
 models. The positive repair theorems are separate.

@@ -4,8 +4,9 @@ This inventory covers all 66 Haskell source modules under `microcfta/src` and
 `microcfta-generator/src`. It includes exposed internal modules and the three
 private modules. It uses the source rebased on `origin/microcfta` at `de910ea`, which includes
 the `tidy/core-formula` work, optimization changes, and the findings repairs
-through PR #96. A local evaluator repair also rejects uncertain identity-precedence changes
-within one substitution scope.
+through PR #96. Local repairs reject uncertain identity-precedence changes
+within one substitution scope and payload queries of unfinished recursive
+construction occurrences.
 The model names below refer to files in `MicroCFTA/`.
 
 A checked executable model is a Lean implementation with semantic theorems.
@@ -146,8 +147,12 @@ derives separate diagnostic assembly and names from local descriptors.
 `RecursiveUniformRuntime` and `RecursiveRuntimeVerified` derive both sampler
 branches from constructor-level finite input laws. `BoundedRecursiveDispatch`
 preserves the finite wrapper's empty-rank behavior when terms are missing.
-Opaque inspection descriptors and changing runtime builder schemas remain
-adapters. `RecursiveCompleteRecord` builds the supported views together and
+`RecursiveConstructionQueries` derives exact active-token provenance and
+phase-independent query rejection. Completion deletes only its owning token,
+including the finite return path. This repairs a public callback whose
+count and term records disagreed with its support. Opaque inspection
+descriptors and arbitrary changing runtime builder schemas remain adapters.
+`RecursiveCompleteRecord` builds the supported views together and
 proves that their family laws refer to the same checked compiler.
 `RecursivePlainApplication` adds ordinary application with a derived
 mass-free source invariant and the exact plain weight and term-field rules.

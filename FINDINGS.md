@@ -1,14 +1,14 @@
 # Current formalization findings
 
-Updated: **2026-10-13 00:01 CEST**.
+Updated: **2026-10-13 00:24 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
-and repaired one additional sparse-substitution defect, described as row 18.
-All **620 existing Haskell examples** pass after that repair: 284 core, 194
+and repaired two additional defects, described as rows 18 and 19.
+All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **544 jobs and 28,365 theorem dependency
+The full Lean development passes **576 jobs and 29,362 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -49,8 +49,8 @@ both ranks. This is a contract distinction, not a new decoder defect.
 
 ## Repaired source defects
 
-Rows 1–17 describe earlier repairs now merged upstream. Row 18 is a new
-local repair on top of `de910ea`. Each row has a retained source reproduction and a corresponding formal
+Rows 1–17 describe earlier repairs now merged upstream. Rows 18 and 19 are
+local repairs on top of `de910ea`. Each row has a retained source reproduction and a corresponding formal
 counterexample, repair theorem, or operational model. Older per-repair test
 totals in the linked reports describe their historical checkpoints. The
 current combined suite total is 620.
@@ -75,6 +75,7 @@ current combined suite total is 620.
 | 16 | A syntactic extraction such as `v == v` could be treated as an exact integer measure and remove valid expressions. | Reject fallback measures that depend on the refined value. Preserve exact singleton extraction priority. [Reproduction](lean/repro/SelfDependentMeasure.hs); `DefiningTerm`, `ParentGuardFormula`. |
 | 17 | Recursive open group positioning queried cardinalities, built an empty position map, and raised `Map.!`. | Read the available group keys directly. Unsupported recursive integer closure now returns its existing explicit error. [Reproduction](lean/repro/RecursiveOpenPositions.hs); `GroupPositions`. |
 | 18 | In one substitution scope, merging equal actual identities could remove the first identity replacement and expose a later replacement for the same formal. Sparse evaluation returned `Yes`, pruning admitted a rejected term, and compilation produced one invalid tuple. | Return `Unknown` when an uncertain identity replacement has a later duplicate formal. Pruning retains the guard; compilation returns `SolverUnknown`. The existing [guard/pruning reproduction](lean/repro/NestedScopeCapture.hs) and [compiler reproduction](lean/repro/NestedCompileCapture.hs) now check both nested and same-scope cases. `SameScopeIdentityCapture` retains the pre-repair witness; `SourceSubstitutionPrecedence` proves the new check. |
+| 19 | A recursive callback could inspect temporary support and select different bodies during count, term, and support rebuilds. The public bounded generator returned four terms that its support rejected. | Keep construction tokens separate from size flags. Reject payload queries until the definition completes. Nested definitions retain enclosing tokens; both recursive and finite return paths remove their own token. `RecursiveConstructionQueries` proves marker provenance, stable rejection, and completed query behavior. The existing recursive-member case in `GenSpec.hs` checks the original callback, fourteen query paths, and nested-family completion. See [the construction-query notes](lean/notes-recursive-construction-queries.md). |
 
 The private `Recursion` repair changes engine-term shape. User values,
 surface terms, original generator counts, distributions, and rank order
@@ -116,6 +117,35 @@ omission in the formalization; it is not a new Haskell defect. The lexical
 `InternedBinderRebuild` and full `InternedSubstitution` worker now apply the
 same filter. Their capture-avoidance, exact-language, free-reference, and
 finite-allocation results remain proved.
+
+## Recursive construction query repair
+
+The pre-repair reproduction uses only public operations:
+
+```haskell
+recur $ \self -> case support self of
+  Right EmptyNode -> oneof [pure 0, node "step" ((+ 1) <$> self)]
+  _ -> leaf 99 "wrong"
+```
+
+Before the repair, the bound-three generator had four ranks and values zero through three,
+each with probability one quarter. Its support rejects all four returned
+engine terms. Count, sampling, and term rebuilds expose EmptyNode through
+the placeholder; support reconstruction exposes its live recursive node.
+The original public guardedness test accepts the body. The public API does
+not state that a builder must avoid inspecting its argument.
+
+The repair makes `support self` return `QueriedRecursiveOccurrence` in every
+rebuild. The callback consistently returns the finite value 99. Its term
+belongs to the returned support. Independent construction tokens remain
+present during closed probes, which deliberately clear size-index flags.
+The reproduction and pre-repair output are `/tmp/mcfta-context-builder.hs`
+and `/tmp/mcfta-context-builder.log`; the repaired result is in
+`/tmp/mcfta-context-builder-repaired.log`. The existing suite retains the
+callback and the nested selected-key completion case.
+
+This repairs the observed payload-query mismatch. It does not establish
+regularity of every arbitrary callback or monotonicity of key discovery.
 
 ## Behavior that does not satisfy the stronger requested contract
 
@@ -186,18 +216,18 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
 
 ## Evidence and its limits
 
-- Latest full source suites: **620 passing examples**, on `de910ea` plus
-  the same-scope precedence repair. Existing cases cover safe flat scopes,
-  nested renaming, uncertain identities, and repeated formals.
-  Log: `/tmp/mcfta-scope-precedence-full.log`.
+- Latest source suites: **620 passing examples**, on `de910ea` plus both
+  repairs. The full run is `/tmp/mcfta-construction-query-full.log`.
+  After the finite-return correction, all 194 generator and 142 refinement
+  examples pass in `/tmp/mcfta-construction-query-final.log`. Core is unchanged.
 - Repaired nested and same-scope source probes both report `(No,Unknown)`
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Final integrated Lean audit: **509 jobs; 27,494 theorem dependency checks**.
-  Its import closure includes 506 proof modules. Only `propext`,
+- Latest integrated Lean audit: **576 jobs; 29,362 theorem dependency checks**.
+  Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-complete-record-quotient-audit.log`.
+  Log: `/tmp/mcfta-construction-query-retained-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -240,8 +270,12 @@ but do not prove it for every runtime execution.
    schedule-independent measure. No cycle of the fixed equality schedule was
    established. Disjoint binary direct-child classes stabilize after one
    changing pass, including nested domains. Projected paths need a separate
-   argument; a retained source example needs two changing passes.
-   See [the growth notes](lean/notes-finite-reduction-growth.md).
+   argument; a retained source example needs two changing passes. Projected
+   leaf occurrences now have a derived schedule bound, including ancestor
+   pruning, duplicate rows, and empty propagation. Physical parent rebuilding
+   derives normalized readback; recursive child-edit composition remains.
+   See [the growth notes](lean/notes-finite-reduction-growth.md) and
+   [projected leaf schedules](lean/notes-equality-leaf-projection.md).
 2. **Nested binder identity after normalization erases a fresh outer
    dependency.** Retained dependencies separate pending keys. Original
    independence permits cache reuse. Erasure through an empty child now
@@ -252,12 +286,16 @@ but do not prove it for every runtime execution.
    first-run completion. Binder bodies preserve a nullary root marker;
    nested binders avoid active ancestor markers. Siblings may reuse markers.
    The theorem derives complete coverage and replay without assuming success.
+   Separate source-derived classes now cover independent nested callbacks,
+   two-level erased outer references, and arbitrary-depth binders that keep
+   each enclosing reference through a live root edge. The last class permits
+   every binder to use the same symbol. Mixed dependencies remain open.
    Full nested constructor traces now derive
    coherent caches, complete child provenance, outgoing edge residency,
    cache growth, and issued-reference history. No closed-input collision
    was established.
    See [the nested-construction notes](lean/notes-interned-nested-construction.md)
-   and [marked completion](lean/notes-interned-marked-completion.md).
+   and [retained-reference completion](lean/notes-interned-retained-completion.md).
 3. **Remaining recursive runtime records and nested-builder composition.**
    Typed nested-join families, decoder/mass records, inverse callbacks, and
    public occurrence guards are proved. Complete recursive support assembly,
@@ -266,7 +304,8 @@ but do not prove it for every runtime execution.
    local source records. Ordinary application now composes all views under
    the derived plain-input invariant and exact source weight rules.
    Arbitrary opaque inspection descriptors remain.
-   Builders can run
+   The construction-query repair prevents the concrete payload observation
+   mismatch. Builders can still run
    under different placeholder contexts; one fixed typed schema does not
    prove that arbitrary Haskell builders preserve their shape and errors.
 4. **Concrete runtime and external correspondence.** Physical interning,

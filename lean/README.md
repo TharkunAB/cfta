@@ -7,8 +7,8 @@ function families. [COVERAGE.md](COVERAGE.md) records proof obligations.
 
 Current base: `origin/microcfta` at `de910ea`, including the merged
 core-formula extension, the optimization changes, and the merged findings
-repairs through PR #96. The only new production change rejects an uncertain identity replacement
-that could expose a later replacement of the same formal name. The
+repairs through PR #96. Local repairs reject uncertain identity replacement
+and payload queries of unfinished recursive occurrences. The
 rebase retained every proof and reproduction while retiring superseded
 source patches. Earlier reports retain their original source hashes and
 describe historical snapshots.
@@ -22,7 +22,7 @@ construction, enumeration, pruning, minimization, and symbolic drivers.
 `System.grammar_bijection` and `System.grammar_probability` compose the
 reference grammar, FTA, index, and distribution results.
 
-Eighteen recorded implementation failures now have source repairs and checked
+Nineteen recorded implementation failures now have source repairs and checked
 regressions: quantified substitution, observed atomic weights, accepted root
 representatives, open recursive unions, pruning through open nested binders,
 closing grouped private alternatives, recursive term boundaries, and grouped
@@ -32,7 +32,8 @@ independent semantic guards, repeated expansion of recursive equality
 domains, explicit unions lost during observed imports, and rejected recursive
 observation groups, bounded traversal of retained empty binder cycles,
 self-dependent measure extraction, recursive open group positioning, and
-same-scope identity-replacement precedence.
+same-scope identity-replacement precedence, and inconsistent recursive
+payload queries during reconstruction.
 Historical counterexamples remain
 separate from the repair theorems. See [SYSTEM.md](SYSTEM.md).
 
