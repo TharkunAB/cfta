@@ -67,6 +67,12 @@ spec =
                     (Formula.Atom Formula.Eq (Formula.App "f" [Formula.Lit 0]) (Formula.Lit 0))
                     `shouldBe` Left (Formula.UnsupportedFunctionReplacement "f" $ Formula.Lit 4)
 
+            it "leaves the applications of a function name whose replacement is not a name" $
+                Formula.substitute
+                    [("f", Formula.Lit 4), ("x", Formula.Lit 1)]
+                    (Formula.Atom Formula.Eq (Formula.App "f" [Formula.Var "x"]) (Formula.Lit 0))
+                    `shouldBe` Formula.Atom Formula.Eq (Formula.App "f" [Formula.Lit 1]) (Formula.Lit 0)
+
             it "ignores an unsupported replacement where a function binder shadows it" $ do
                 let original =
                         Formula.Forall [("f", FunctionSort [IntSort] IntSort)] $

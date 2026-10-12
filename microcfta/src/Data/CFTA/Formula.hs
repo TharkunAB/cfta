@@ -41,6 +41,7 @@ module Data.CFTA.Formula (
     renderTerm,
 ) where
 
+import Data.Functor.Identity (Identity (..))
 import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable (..))
 import Data.List (intercalate, nub)
@@ -262,16 +263,29 @@ replacement of a name by the same name is ignored, and so is a replacement of
 a name that a quantifier binds. A bound name that occurs in a replacement
 gets a fresh name, so that the replacement is not captured. A nullary
 application is a named value. A non-nullary function name can be replaced
-only by a 'Var', because 'App' requires a name as its head. An unsupported
-function replacement raises an error; use 'substituteChecked' to handle it.
-The result is not simplified.
+only by a 'Var', because 'App' requires a name as its head. A replacement of
+a function name by another term leaves the applications of that name as they
+are; use 'substituteChecked' to find such a replacement. The result is not
+simplified.
 -}
 substitute :: [(Name, Term)] -> Formula -> Formula
-substitute replacements = either (error . ("Data.CFTA.Formula.substitute: " <>) . show) id . substituteChecked replacements
+substitute replacements = runIdentity . substituteWith (\function _ arguments -> Identity (App function arguments)) replacements
 
 -- | Substitute simultaneously, or report an unsupported function replacement.
 substituteChecked :: [(Name, Term)] -> Formula -> Either SubstitutionError Formula
-substituteChecked replacements = inFormula (filter (\(name, term) -> term /= Var name) replacements)
+substituteChecked = substituteWith (\function replacement _ -> Left (UnsupportedFunctionReplacement function replacement))
+
+{- | Substitute simultaneously. The function decides an application whose
+function name has a replacement that is not a name; it gets the name, the
+replacement, and the substituted arguments.
+-}
+substituteWith ::
+    (Monad effect) =>
+    (Name -> Term -> [Term] -> effect Term) ->
+    [(Name, Term)] ->
+    Formula ->
+    effect Formula
+substituteWith unsupported replacements = inFormula (filter (\(name, term) -> term /= Var name) replacements)
   where
     inFormula active formula = case formula of
         And parts -> And <$> traverse (inFormula active) parts
@@ -280,14 +294,14 @@ substituteChecked replacements = inFormula (filter (\(name, term) -> term /= Var
         Atom relation left right -> Atom relation <$> inTerm active left <*> inTerm active right
         Forall bound inner -> uncurry Forall <$> underBinders active bound inner
         Exists bound inner -> uncurry Exists <$> underBinders active bound inner
-        _ -> Right formula
+        _ -> pure formula
     inTerm active term = case term of
-        Var name -> Right $ fromMaybe term $ lookup name active
-        App function [] -> Right $ fromMaybe term $ lookup function active
+        Var name -> pure $ fromMaybe term $ lookup name active
+        App function [] -> pure $ fromMaybe term $ lookup function active
         App function arguments -> case lookup function active of
             Nothing -> App function <$> traverse (inTerm active) arguments
             Just (Var renamed) -> App renamed <$> traverse (inTerm active) arguments
-            Just replacement -> Left $ UnsupportedFunctionReplacement function replacement
+            Just replacement -> unsupported function replacement =<< traverse (inTerm active) arguments
         Neg inner -> Neg <$> inTerm active inner
         Add left right -> Add <$> inTerm active left <*> inTerm active right
         Sub left right -> Sub <$> inTerm active left <*> inTerm active right
@@ -296,7 +310,7 @@ substituteChecked replacements = inFormula (filter (\(name, term) -> term /= Var
         Mod left right -> Mod <$> inTerm active left <*> inTerm active right
         Ite condition yes no -> Ite <$> inFormula active condition <*> inTerm active yes <*> inTerm active no
         Cast inner sort -> (`Cast` sort) <$> inTerm active inner
-        Lit _ -> Right term
+        Lit _ -> pure term
     -- The replacements of the bound names stop, and a bound name that a
     -- replacement mentions becomes the first fresh name.
     underBinders active bound inner =
