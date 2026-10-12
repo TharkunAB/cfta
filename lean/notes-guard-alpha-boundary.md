@@ -24,10 +24,20 @@ the same `(Yes,Unknown)` pair with the current Haskell public evaluator.
 
 This is not evidence that pruning accepts a mathematically invalid liquid
 term. Both requirements are valid Top entailments. It is also not a defect
-claim about the supplied Z3 implementation. The counterexample separates two
+claim of an unsound result from the supplied Z3 implementation. The counterexample separates two
 specifications: preservation of mathematical liquid meaning and exact
 preservation of the public evaluator's confirmed Yes/Unknown behavior.
 Soundness alone cannot establish the latter across fresh-name changes.
+
+The same repro also uses the supplied `withZ3` backend with the unused ambient
+declaration `__microcfta_actual_0 : Int`. It prints `(Unknown,Yes)`. The first
+query allocates that name. `freshDeclaration` rejects a generated name which
+already exists in the backend's ambient declaration set, so the query returns
+Unknown. The second term makes the guard allocator skip that name, and Z3
+proves the Top query. The guard allocator's avoid set does not include unused
+ambient backend declarations. This is a conservative completeness boundary.
+It does not admit an invalid term. Exact operational name invariance needs an
+ambient-declaration compatibility condition as well as solver stability.
 
 `SourceAliasTransport.lean` states the distinction precisely.
 `decideWith_alias_sound` transports the actual source No-to-Unknown decision
@@ -51,4 +61,5 @@ it does not treat those remaining internal premises as discharged.
 Validation: `lake build MicroCFTA.SourceAliasTransport` succeeds with the
 pinned toolchain. All counterexamples use kernel reduction. The source repro
 runs under `nix-shell` with `cabal exec -- runghc -package=microcfta`; it printed
-`(Yes,Unknown)`. Fourmolu formatted the new repro. No production code changed.
+`(Yes,Unknown)` and `(Unknown,Yes)`. Fourmolu formatted the repro. No production
+code changed.
