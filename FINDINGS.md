@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-12 23:57 CEST**.
+Updated: **2026-10-13 00:01 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired one additional sparse-substitution defect, described as row 18.
 All **620 existing Haskell examples** pass after that repair: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **533 jobs and 28,127 theorem dependency
+The full Lean development passes **544 jobs and 28,365 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -233,12 +233,14 @@ but do not prove it for every runtime execution.
    loops still require a representation-level termination argument. A checked
    six-round example grows nodes and rows while preserving a singleton
    language. Semantic finiteness and decreasing language size are insufficient.
-   Complete canonical leaf forests now have a derived pass bound, including
+   Complete multi-symbol leaf forests now have a derived pass bound, including
    simultaneous class edits and empty propagation. The source guard inventory
    is generated from the initial atoms. Nested source intersection can return to
    an earlier identity when its operands alternate. This rules out a general
    schedule-independent measure. No cycle of the fixed equality schedule was
-   established.
+   established. Disjoint binary direct-child classes stabilize after one
+   changing pass, including nested domains. Projected paths need a separate
+   argument; a retained source example needs two changing passes.
    See [the growth notes](lean/notes-finite-reduction-growth.md).
 2. **Nested binder identity after normalization erases a fresh outer
    dependency.** Retained dependencies separate pending keys. Original
@@ -246,11 +248,16 @@ but do not prove it for every runtime execution.
    derives exact complete-record reuse under changed outer bindings.
    Arbitrary successful nested syntax executions replay without allocation
    after cache growth. First execution still needs a proof that no closed
-   input reads a pending record. Full nested constructor traces now derive
+   input reads a pending record. A syntax-derived marked fragment now proves
+   first-run completion. Binder bodies preserve a nullary root marker;
+   nested binders avoid active ancestor markers. Siblings may reuse markers.
+   The theorem derives complete coverage and replay without assuming success.
+   Full nested constructor traces now derive
    coherent caches, complete child provenance, outgoing edge residency,
    cache growth, and issued-reference history. No closed-input collision
    was established.
-   See [the nested-construction notes](lean/notes-interned-nested-construction.md).
+   See [the nested-construction notes](lean/notes-interned-nested-construction.md)
+   and [marked completion](lean/notes-interned-marked-completion.md).
 3. **Remaining recursive runtime records and nested-builder composition.**
    Typed nested-join families, decoder/mass records, inverse callbacks, and
    public occurrence guards are proved. Complete recursive support assembly,

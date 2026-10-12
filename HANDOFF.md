@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 23:57 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 00:01 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -61,10 +61,10 @@ self-reference removal from recursive unions.
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
   `/tmp/mcfta-scope-precedence-full.log`.
-- Latest integrated Lean build: **533 jobs; 28,127 theorem dependency checks**.
+- Latest integrated Lean build: **544 jobs; 28,365 theorem dependency checks**.
   This includes the new finite leaf progress, runtime metadata, and shared
   support-binder proofs. Further active modules are not yet integrated.
-  Log: `/tmp/mcfta-leaf-forest-audit.log`.
+  Log: `/tmp/mcfta-marked-completion-forest-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -168,8 +168,11 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
 - General termination of explicit equality/pruning fixed points on finite
   DAGs remains open. Finite language size is insufficient. The retained
   six-round example grows representation size. Complete canonical leaf
-  forests now have a proved bound for simultaneous class edits and empty
-  propagation. The 4,096-input source comparison passes. Arbitrary nested intersections
+  forests with multiple symbols now have a proved bound for simultaneous
+  class edits and empty propagation. Both 4,096-input source comparisons pass.
+  Disjoint binary direct-root classes stabilize in one changing pass even
+  with nested domains. Projected paths do not have that one-pass property.
+  Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
   at the same path. LexicalGateRank now derives head-binder decrease for
@@ -181,6 +184,9 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
   nested syntax execution replays exactly after cache growth. First execution
   still needs a closed-input no-pending theorem. Full nested traces now derive
   coherent caches, child provenance, edge residency, and issued-name history.
+  A marked syntax fragment now proves first-run completion and complete
+  payload coverage without assuming success. It requires preserved nullary
+  root markers distinct from active ancestor markers; siblings may reuse them.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
   Full recursive support assembly, weighted flags, and absent-term errors
@@ -242,7 +248,8 @@ explicitly requests publication later.
    separate source contract.
 3. Prove first execution of closed nested syntax cannot read a pending key.
    Successful replay, empty-child erasure, retained dependencies, and original
-   independence are proved.
+   independence are proved. Marked first-run completion is proved; arbitrary
+   overlapping root markers and normalized binder or union roots remain.
 4. Establish source unfolding ranks and general explicit reduction fixed-point
    termination, or retain a concrete counterexample if one is found.
 5. Keep runtime/source correspondence separate from executable Lean proofs.

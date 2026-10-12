@@ -439,6 +439,10 @@ import MicroCFTA.InternedHeadReference
 import MicroCFTA.InternedBinderRetention
 import MicroCFTA.InternedLiveEdges
 import MicroCFTA.InternedUnionDescendants
+import MicroCFTA.InternedNestedRootLabels
+import MicroCFTA.InternedMarkedConstruction
+import MicroCFTA.InternedMarkedCompletion
+import MicroCFTA.InternedMarkedExamples
 /-!
 # Proof dependency audit
 
