@@ -390,6 +390,12 @@ import MicroCFTA.RecursiveRuntimeExamples
 import MicroCFTA.BoundedRecursiveDispatch
 import MicroCFTA.RecursiveCompleteRecord
 import MicroCFTA.RecursiveCompleteExample
+import MicroCFTA.InternedProbeProvenance
+import MicroCFTA.InternedTemplateProvenance
+import MicroCFTA.InternedConstructionProvenance
+import MicroCFTA.RankedGateCompletion
+import MicroCFTA.LexicalGateRank
+import MicroCFTA.InternedGateRank
 /-!
 # Proof dependency audit
 
