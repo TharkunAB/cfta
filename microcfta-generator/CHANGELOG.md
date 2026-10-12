@@ -23,7 +23,9 @@ tree automata of `microcfta`, with QuickCheck integration.
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree
   and an imported term both count their nodes. The `Functor` and
   `Applicative` laws hold for sizes. A join (`match`, `relate`) adds the sizes
-  of its sides, as a product does. A recursion must reach each occurrence
+  of its sides, as a product does. Each integer of `every` adds one, as a
+  member of `elements` does, wherever a constructor closes it. A recursion
+  must reach each occurrence
   through a pay, or through a product whose other side has no member of size
   zero. It must also pass through a product or a constructor. See
   `docs/adr/0002-sizes-count-pays.md`.
@@ -49,8 +51,9 @@ tree automata of `microcfta`, with QuickCheck integration.
 - `Data.CFTA.Gen.Equality`: `ECTAGen`, symbol-text order for imports,
   and equality constraints from `Data.CFTA.Equality`. The engine's
   `support` and `termAt` return graphs and terms over `Data.CFTA.Gen.Label`,
-  which wraps user symbols in `Label` and types the private labels;
-  `surface` reads the user's term back.
+  which wraps user symbols in `Label` and types the private labels; a
+  recursive member has a private `Recursion` root. `surface` reads the user's
+  term back.
 - `Data.CFTA.Gen.Refinement`: `LTAGen`. Its sources are `elements`, which
   infers the exact refinement of each integer; `every`, a leaf of every value
   of a type with a `Literal` instance, such as `Integer`, `Word8`, `Char`,
@@ -63,8 +66,10 @@ tree automata of `microcfta`, with QuickCheck integration.
   refinements. `measured` closes a constructor with a contract and a measure:
   the integer of each constructed term, as a term of the measures of its
   children, which becomes the constructor's refinement and stays a term of
-  children from `every`. `measuredNode` takes a positional guard in place of
-  the contract. `recurUpTo` unfolds a recursive description a bounded number
+  children from `every`. A refinement whose defining term mentions the value
+  itself, such as `v .== v`, gives no exact measure, and `compile` reports
+  `InexactMeasure` for it.
+  `measuredNode` takes a positional guard in place of the contract. `recurUpTo` unfolds a recursive description a bounded number
   of times. The module also has liquid automaton and datatype imports,
   `minimizePoolOn`, `compile` with Z3, `compileAssuming`, `compileWith`, and
   `validOutcomes`.

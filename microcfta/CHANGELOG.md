@@ -50,7 +50,9 @@ remains a separate ECTA-only package.
   types, `Bool`, `Char`, `Ordering`, and `()`, and for enumerations through
   `Enumerated`. `literal` writes a value as a term. `substitute` replaces named values by terms,
   `definingTerm` reads the term of a formula `v .== t`, and `freeNames` lists
-  the names of a formula.
+  the names of a formula. `substitute` renames a bound name together with the
+  nullary applications that refer to it, and it replaces a function head only
+  by a name; `substituteChecked` reports any other replacement.
 - `Data.CFTA.Refinement.Lattice`: the exact number of integer points of a
   linear formula over bounded variables, the point at each rank in
   lexicographic order, and the rank of each point, without enumeration. The formula becomes a signed sum
@@ -103,8 +105,13 @@ remains a separate ECTA-only package.
   constraint.
 - LTA pruning narrows equal positions to their intersection through that
   reduction, specializes nodes bottom up and shares each result by node
-  identity, and prunes a recursive node to a fixed point. Minimization runs
-  the paper's M-Trans on the explicit view and interns the result. There is no
+  identity, and prunes a recursive node to a fixed point. It keeps an edge
+  whose substitution actuals are ambiguous, because the sparse evaluation of
+  nested scopes is not exact for them. Each Boolean operand of a guard has its
+  own substitution scope, and a combined guard flattens, sorts, and removes
+  duplicate conjuncts. Minimization runs
+  the paper's M-Trans on the explicit view and interns the result. It keeps
+  the representative of the root's class at the root. There is no
   separate state type, syntax module, or lowering to an equality automaton:
   residual positive equalities stay on the transition as its `equalities`.
 - One vocabulary across the layers: membership is `accepts` (`acceptsWith`
