@@ -6,6 +6,7 @@ module Main (main) where
 import Control.Monad (unless)
 import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Refinement
+import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import qualified Data.CFTA.Term as Term
 
 -- | This callback proves only Top conclusions and never returns a false result.
@@ -45,3 +46,9 @@ main = do
     print (first, second)
     unless (first == Yes && second == Unknown) $
         fail "Expected the source evaluator to preserve the callback's spelling-sensitive uncertainty."
+    withZ3 [("__microcfta_actual_0", Formula.IntSort)] $ \z3 -> do
+        ordinaryVerdict <- evaluateGuard z3 guard ordinary
+        reservedVerdict <- evaluateGuard z3 guard reserved
+        print (ordinaryVerdict, reservedVerdict)
+        unless (ordinaryVerdict == Unknown && reservedVerdict == Yes) $
+            fail "Expected the supplied solver to reject an already-declared generated name."
