@@ -228,6 +228,13 @@ labelSupportWith original symbol support@(Node edges)
     | isPureSupport original support = Node [Edge symbol []]
     | Just arguments <- applicationSupportChildren original support =
         Node [Edge symbol (toList arguments)]
+    | _ : _ : _ <- edges
+    , any (isClosingEdge original) edges =
+        Node
+            [ labelled
+            | edge <- edges
+            , labelled <- rootEdges $ labelSupportWith original symbol $ Node [edge]
+            ]
     | otherwise = Node [Edge symbol [support]]
 labelSupportWith original symbol support@(Mu _) = labelSupportWith original symbol $ unfoldOuterRec support
 labelSupportWith _ symbol support = Node [Edge symbol [support]]
@@ -236,6 +243,15 @@ labelSupportWith _ symbol support = Node [Edge symbol [support]]
 rootEdges :: (Typeable other) => Node other -> [Edge other]
 rootEdges (Node edges) = edges
 rootEdges _ = []
+
+-- | Recognize roots whose private scaffolding the term callback removes.
+isClosingEdge :: (other -> Label symbol) -> Edge other -> Bool
+isClosingEdge original edge = case original (edgeSymbol edge) of
+    Pure -> True
+    Apply -> True
+    Choice _ -> True
+    JoinN -> True
+    _ -> False
 
 -- | Recognize the children of one private applicative support spine.
 applicationSupportChildren ::

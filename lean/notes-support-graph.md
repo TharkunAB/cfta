@@ -26,11 +26,10 @@ Inspection labels must use the same representation at both occurrences of
 each argument key. The pure shape model omits edge interning order because
 these theorems describe term membership, not member rank order.
 
-Remaining support obligations include graph relabelling, all graph-closing
-cases of `labelSupportWith`, recursive unfolding in that function, and the
-heterogeneous generator records that select these constructors. `SupportTerms`
-already proves the corresponding term-closing and surface-projection laws.
-The graph-closing proof must retain source guards when it changes a root label.
+The later sections prove finite graph closing, including retained guards.
+`SymbolRelabel` proves cyclic graph copying under a local guard transport law.
+Recursive unfolding in `labelSupportWith` and heterogeneous generator records
+still need source adapters. `SupportTerms` proves surface projection.
 
 Validation: `lake -d lean build MicroCFTA.SupportJoin` and the aggregate axiom
 audit. There are no proof placeholders or new axioms.
@@ -60,3 +59,27 @@ has the represented form. Outer recursive binders, arbitrary mixed private
 edge lists, explicit epsilon unions, and the source interning representation
 still require their adapters. Recursive operands inside the proved finite
 layers are already interpreted by the full least-language semantics.
+
+## Repaired grouped application alternatives
+
+The finite public record adapter exposed a source defect. `groupOn` builds
+its support from retained outcome roots. A group can therefore contain two
+private Apply edges. The old `labelSupportWith` recognized only a singleton
+Apply edge. It wrapped the whole multi-edge node. `labelTermWith` flattened
+each decoded Apply term instead. The resulting support rejected the decoded
+terms and accepted terms with an extra private Apply node.
+
+The source now distributes closing over multiple alternatives when any root
+has a closing private label. Ordinary roots retain the existing compact
+wrapper. Single-edge recognition and retained constraints use the existing
+cases. The same function repairs the inspection graph.
+
+`SupportAlternatives.closeNode_exact` proves exact callback-image semantics
+for this distribution. `old_closing_loses_term` proves the old mismatch with
+two retained indexed pairs. `repaired_closing_accepts` proves the recovered
+term. The general theorem also covers mixed supported root forms.
+
+`lean/repro/GroupedSupport.hs` and the existing generator suite check the
+public grouped-pair case. Both compare the complete support and inspection
+term sets with all four decoder terms. The temporary conformance probe is
+`/tmp/microcfta-support-conformance.hs`.
