@@ -199,7 +199,13 @@ import MicroCFTA.SourceSortedQueries
 import MicroCFTA.SourceHoldsQueries
 import MicroCFTA.IntersectReset
 import MicroCFTA.IntersectTotal
+import MicroCFTA.IntersectStructure
 import MicroCFTA.SourceLogicalNames
+import MicroCFTA.SourceIdentityMap
+import MicroCFTA.NestedScopeCapture
+import MicroCFTA.PruneAmbiguity
+import MicroCFTA.EnumerationBuilderLanguage
+import MicroCFTA.IntersectConstruction
 /-!
 # Proof dependency audit
 

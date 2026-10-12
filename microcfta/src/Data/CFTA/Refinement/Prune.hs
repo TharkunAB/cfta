@@ -177,12 +177,16 @@ pruneSemantic entailment edge
 
     check retained [] = pure $ toList retained
     check retained ((specialized, resolved) : rest) = do
+        -- Complete identities can change the ambient names used by nested scopes.
         verdict <-
-            liftIO $
-                evaluateGuardWithShape
-                    entailment
-                    (`Map.lookup` resolved)
-                    semanticGuard
+            if hasAmbiguousActuals resolved
+                then pure Unknown
+                else
+                    liftIO $
+                        evaluateGuardWithShape
+                            entailment
+                            (`Map.lookup` resolved)
+                            semanticGuard
         case verdict of
             Yes -> check (retained :|> setGuard residualGuard specialized) rest
             No -> check retained rest
