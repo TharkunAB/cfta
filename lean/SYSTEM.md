@@ -200,13 +200,26 @@ law. See [the size-field notes](notes-finite-size-fields.md).
 `RecursiveTermAlignment` derives matching value and term index positions for
 typed recursive products, choices, labels, and pays. It retains the private
 recursion boundary and all duplicate member occurrences. The proof covers
-complete bounded prefixes as well as each size class. General recursive
-inverse callbacks and runtime knot construction remain separate. See
+complete bounded prefixes as well as each size class. See
 [the recursive alignment notes](notes-recursive-term-alignment.md).
 `RecursiveTermMass` and `RecursiveRankMass` also derive the independent
 value and term probability fields. They preserve each sampled rank and its
 exact mass before value projection, including duplicate members and bounded
 class prefixes.
+The later callback modules prove the exact inverse for the typed single-knot
+binary-choice body algebra. The actual all-view callback terminates and
+retains checked flags, order, and distinct positions. Its class tables and
+root equation come from the independent forward compiler.
+`RecursiveCallbackAPI` proves complete bounded global inverse ranks and the
+public checked-flag filter. `RecursiveSourceUnfolding` and
+`RecursiveSamplerUnfolding` prove the full ordered class and sampler knot
+equations from the source size guard. Concrete lazy evaluation and other
+recursive runtime families remain separate. See
+[the callback notes](notes-recursive-callbacks.md).
+`RecursiveNaryChoice` also derives the local arbitrary-branch choice adapter.
+It proves exact class decoding and all-view inversion, order, bounds, and
+distinct positions from child producer laws. It does not extend the recursive
+body syntax. See [the choice notes](notes-recursive-nary-choice.md).
 
 `InternedFreshProbeKeys` derives pending-key separation when a normalized
 inner probe retains the fresh outer reference. It also derives memo replay

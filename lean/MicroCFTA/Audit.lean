@@ -297,6 +297,15 @@ import MicroCFTA.FinalSizeFields
 import MicroCFTA.RecursiveTermAlignment
 import MicroCFTA.RecursiveTermMass
 import MicroCFTA.RecursiveRankMass
+import MicroCFTA.RecursiveSourceUnfolding
+import MicroCFTA.RecursiveSamplerUnfolding
+import MicroCFTA.RecursiveCallbackTermination
+import MicroCFTA.RecursiveCallbackTables
+import MicroCFTA.RecursiveCallbackAlignment
+import MicroCFTA.RecursiveCallbackCompleteness
+import MicroCFTA.RecursiveCallbackDistinct
+import MicroCFTA.RecursiveCallbackAPI
+import MicroCFTA.RecursiveNaryChoice
 /-!
 # Proof dependency audit
 
