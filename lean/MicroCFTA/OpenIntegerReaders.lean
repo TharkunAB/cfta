@@ -5,7 +5,9 @@ import MicroCFTA.IntegerTermCodec
 
 The source joins function keys before argument keys. Its reader splits the
 point after the variables of the function keys. Hole filling traverses the
-same function term before the argument term. User maps can repeat values;
+same function term before the argument term. The template here is an ordinary
+Apply reference tree. The grouped compiler uses keyed JoinN trees instead.
+User maps can repeat values;
 no inverse law for a user function is required here.
 -/
 namespace MicroCFTA.OpenIntegerReaders
@@ -29,7 +31,7 @@ def counts : Reader α → List Nat
 /-- The source openCount sum at each spine. -/
 def width (reader : Reader α) : Nat := (counts reader).sum
 
-/-- Private Pure and Apply tags do not consume integer coordinates. -/
+/-- Ordinary Pure/Apply reference template for coordinate order; not the grouped compiler term. -/
 def template : Reader α → Term (FillLabel Symbol)
   | .pure _ => .node (.internal 0) []
   | .integer => .node .placeholder []
@@ -55,7 +57,7 @@ theorem template_valid (reader : Reader α) : IntegerTermCodec.LeafHoles (templa
   | map transform inner ih | pay inner ih => exact ih
   | app functions arguments left right => simp [template, IntegerTermCodec.LeafHoles, left, right]
 
-/-- The source key count equals the number of placeholders in the actual generated spine. -/
+/-- The source key count equals the number of placeholders in the reference applicative tree. -/
 theorem template_holes (reader : Reader α) : holes (template (Symbol := Symbol) reader) = width reader := by
   induction reader with
   | pure value => simp [template, width, counts, holes, forestHoles]

@@ -55,8 +55,9 @@ integer labels and singleton reader. It assumes no term-codec inverse.
 
 `OpenIntegerReaders` models the typed Lifted, Integers, Mapped, Paid, and
 Applied cases of a bare open spine. `template_valid` derives that every
-placeholder is a leaf. `template_holes` derives the key count from the actual
-generated template. `source_split` and `fill_reader_split` prove that the
+placeholder is a leaf. `template_holes` derives the key count in an ordinary
+Apply reference template. The actual grouped compiler pairs buckets through
+keyed JoinN terms, so this template is not its concrete term output. `source_split` and `fill_reader_split` prove that the
 function-key prefix used by `compileOpenSpine` selects exactly the coordinates
 consumed by its function term. `fill_extract` derives the whole coordinate
 order. `evaluate_total` excludes the source empty-point integer exception
@@ -70,9 +71,9 @@ ranks across such outcomes. The source uses outcome-major pair ranks, with
 the point rank changing fastest.
 
 The remaining adapters are concrete. The complete `outcomeRanks` candidate
-search must offer each relevant original outcome. SpineView and LabelledView
-also require the source private-label projections before extraction; this
-module proves WholeTerm only. The complete compiler must retain hole counts
+search must offer each relevant original outcome. `IntegerTermViews` now proves the private-label projections and extraction
+for SpineView and LabelledView as well. `CompiledIntegerSpine` supplies the
+actual keyed-join template and callback adapter for one-group open spines. The complete compiler must retain hole counts
 and coordinate ordering through regrouping, choices, user constructors,
 computed labels, and the formula renaming offsets. The reader proof covers
 the listed bare-spine cases. It does not prove that arbitrary OpenKey records
