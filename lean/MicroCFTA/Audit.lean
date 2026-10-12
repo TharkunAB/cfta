@@ -388,6 +388,8 @@ import MicroCFTA.RecursiveUniformRuntime
 import MicroCFTA.RecursiveRuntimeVerified
 import MicroCFTA.RecursiveRuntimeExamples
 import MicroCFTA.BoundedRecursiveDispatch
+import MicroCFTA.RecursiveCompleteRecord
+import MicroCFTA.RecursiveCompleteExample
 /-!
 # Proof dependency audit
 
