@@ -422,6 +422,13 @@ import MicroCFTA.InternedNestedConstructionGrowth
 import MicroCFTA.InternedNestedConstructionReplay
 import MicroCFTA.InternedErasedEdgeReplay
 import MicroCFTA.InternedNestedConstructionExamples
+import MicroCFTA.InternedUnionSeparation
+import MicroCFTA.InternedEdgeResidency
+import MicroCFTA.InternedUnionRetention
+import MicroCFTA.InternedNestedFacts
+import MicroCFTA.InternedNestedRequestFacts
+import MicroCFTA.InternedNestedProvenance
+import MicroCFTA.InternedGateReconstructionExamples
 import MicroCFTA.SourceReadLogicalIntegerAdapter
 import MicroCFTA.SourceReadLogicalIntegerCore
 /-!

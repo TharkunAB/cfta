@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 23:46 CEST (Europe/Stockholm)**.
+Updated: **2026-10-12 23:50 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -61,10 +61,10 @@ self-reference removal from recursive unions.
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
   `/tmp/mcfta-scope-precedence-full.log`.
-- Latest integrated Lean build: **523 jobs; 27,900 theorem dependency checks**.
+- Latest integrated Lean build: **532 jobs; 28,096 theorem dependency checks**.
   This includes the new finite leaf progress, runtime metadata, and shared
   support-binder proofs. Further active modules are not yet integrated.
-  Log: `/tmp/mcfta-nested-read-prune-audit.log`.
+  Log: `/tmp/mcfta-nested-provenance-integer-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -178,7 +178,9 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
 - Fresh-outer-dependent nested binder identity remains incomplete in general.
   Empty-child erasure now derives complete-record reuse. Every successful
   nested syntax execution replays exactly after cache growth. First execution
-  still needs a closed-input no-pending theorem. No source defect is known.
+  still needs a closed-input no-pending theorem. Full nested traces now derive
+  coherent caches, child provenance, edge residency, and issued-name history.
+  No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
   Full recursive support assembly, weighted flags, and absent-term errors
   now connect to those bodies. Diagnostic inspection and both sampler
@@ -197,6 +199,9 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
   compatibility condition for differing avoid lists. A sound
   callback can give sparse Yes and complete Unknown; exact backend language
   equality does not follow from logical safety.
+  The all-Int solver adapter now derives the required soundness from returned
+  calls and correct external responses. It preserves actual sort lowering
+  and preflight Unknown. Arithmetic-core semantics agree with integerModel.
 - Runtime interning, identity lifetime, containers, machine words,
   concurrency, lazy productivity, solver IO, PRNGs, and user codecs remain
   explicit correspondence contracts. There is no verified Haskell-to-Lean
@@ -226,10 +231,10 @@ explicitly requests publication later.
 
 ## Next proof work
 
-1. Connect the proved logical planned-read transport to the concrete solver
-   adapter's induced formula interpretation. Preserve actual sort lowering
-   and conservative preflight Unknown. Keep restored backend-confirmed edges
-   and logical validity separate. See `notes-source-read-logical.md`.
+1. Preserve the proved all-Int solver-adapter connection, actual sort lowering,
+   and conservative preflight Unknown. External responses and returned-call
+   coverage remain explicit contracts. Keep restored backend-confirmed edges
+   and logical validity separate. See `notes-source-read-integer-adapter.md`.
 2. Preserve the complete typed family connections now proved for support,
    diagnostic inspection, both sampler branches, runtime flags, and missing
    terms. Arbitrary context-dependent Haskell builder schemas remain a

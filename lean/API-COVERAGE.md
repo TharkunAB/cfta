@@ -165,6 +165,10 @@ adequacy. `SourceReadLogicalGuards` removes exact spelling stability from
 logical transport. `CurrentReadLogicalPrune` derives pruning safety,
 confirmed-term retention, and successful compiler logical exactness for
 unrestricted ambient values. Formula sorts still use their interpretation.
+`SourceReadLogicalIntegerAdapter` derives this soundness from actual adapter
+preflight and returned calls under correct external responses. Its induced
+sort interpretation agrees with the independent integer model on the
+complete embedded arithmetic core.
 
 ## Error and boundary ledger
 

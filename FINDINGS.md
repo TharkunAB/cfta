@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-12 23:46 CEST**.
+Updated: **2026-10-12 23:50 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired one additional sparse-substitution defect, described as row 18.
 All **620 existing Haskell examples** pass after that repair: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **523 jobs and 27,900 theorem dependency
+The full Lean development passes **532 jobs and 28,096 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -245,8 +245,10 @@ but do not prove it for every runtime execution.
    derives exact complete-record reuse under changed outer bindings.
    Arbitrary successful nested syntax executions replay without allocation
    after cache growth. First execution still needs a proof that no closed
-   input reads a pending record. Constructor traces derive probe residency
-   and issued-reference provenance. No closed-input collision was established.
+   input reads a pending record. Full nested constructor traces now derive
+   coherent caches, complete child provenance, outgoing edge residency,
+   cache growth, and issued-reference history. No closed-input collision
+   was established.
    See [the nested-construction notes](lean/notes-interned-nested-construction.md).
 3. **Remaining recursive runtime records and nested-builder composition.**
    Typed nested-join families, decoder/mass records, inverse callbacks, and
@@ -279,6 +281,10 @@ but do not prove it for every runtime execution.
    present in only one avoid list. A checked accepted ambiguous example
    returns sparse Yes and complete Unknown with one sound callback. Thus
    soundness does not give exact backend-confirmed language equality.
+   The all-Int solver adapter now supplies these soundness premises from
+   actual preflight and returned results, conditional on external response
+   correctness. Sort lowering uses its induced interpretation. The embedded
+   arithmetic core agrees with the independent integer interpretation.
    See [the logical read-transport notes](lean/notes-source-read-logical.md).
 
 These obligations prevent a whole-implementation verification claim. They

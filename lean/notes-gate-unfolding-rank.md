@@ -61,3 +61,56 @@ finite checks do not establish the remaining general invariant.
 The pinned Lean 4.34.1 build of `MicroCFTA.InternedGateRank` completes 134
 jobs. The source probe log is `/tmp/mcfta-gate-head-rank.log`. No Haskell
 source changed.
+
+The source reconstruction invariants now extend beyond that first
+checkpoint. `InternedUnionSeparation` proves that identity deduplication
+retains a representative of every operand. Two different surviving
+identities prevent singleton collapse. Cached Mu depth is monotone along
+actual semantic child paths. A nested binder whose body retains an outer
+binder has strictly greater cached depth, so the two canonical identities
+differ. Stored Mu probes do not participate in that child-path proof.
+
+`InternedEdgeResidency` adds the required link from each stored ordinary
+node's edge payloads to the canonical edge table. It derives exact edge
+and child readback on node-cache hits. It proves retention below a live
+edge through empty-child removal, ordering, identity deduplication, and
+cache readback. `InternedUnionRetention` proves that a Mu operand survives
+union reconstruction as an actual stored descendant. That operand prevents
+the all-ordinary merge. Singleton return and existing union-cache hits are
+included.
+
+`InternedNestedFacts`, `InternedNestedRequestFacts`, and
+`InternedNestedProvenance` derive these record invariants from the complete
+`InternedNestedConstruction.Syntax` executor. The proof covers ordinary
+nodes, unions, lexical variables, dynamically nested binders, both probes,
+identity reservation, body construction, first-writer completion, and raw
+or smart cleanup. `closed_verified` starts from empty tables and an empty
+environment. It supplies coherent records, complete child provenance,
+outgoing edge residency, table growth, and issued-reference history. A
+successful result is available in its actual final state. A pending-key
+outcome preserves the invariants at its actual stopping state. The theorem
+does not assume that pending outcomes are impossible.
+
+`InternedGateReconstructionExamples` executes an open nested union from
+these constructors. Its head ranks are 2, 1, and 0. Its cached maximum Mu
+depths are 2, 3, and 3. Thus cached maximum depth cannot replace head rank.
+The same trace is checked with actual Haskell `unfoldOuterRec` in the
+temporary probe. The Lean example reapplies the scoped constructor body;
+it does not prove general stored-plan substitution equivalence.
+
+These additions derive source trace inputs for the separation laws. The
+general rank still requires occurrence preservation through all normalized
+reconstruction branches and exclusion of collisions between distinct
+rebuilt operands. No complete source `UnfoldingRank` is claimed yet.
+
+The combined reconstruction target builds 147 jobs. Its isolated axiom
+audit is `/tmp/mcfta-gate-source-provenance-audit.lean`. The focused build
+log is `/tmp/mcfta-gate-source-provenance-build.log`.
+
+`InternedNestedCoverage` proves payload coverage for every successful
+nested execution. The theorem allows arbitrary earlier pending keys.
+Reservation adds the binder's actual key. Successful completion installs
+that payload and removes only the extra allowance. A completed empty-table
+run has `Covered []`: every installed identity has a complete record.
+This is conditional on successful return. It does not exclude pending
+outcomes or replace the separate first-run completion proof.
