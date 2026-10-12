@@ -31,5 +31,12 @@ Concrete `nubOrd`, `Text` conversion, binding freshening in scoped entailment,
 machine indexes, and map storage remain representation obligations. The
 proof does not assert that retries make every integer formula countable.
 
+`LatticeSingleton` checks the separate `onlyPoint` API. It uses the actual
+one-variable point compiler, count-one test, and rank-zero polynomial decoder.
+`onlyPoint_sound` proves that every returned integer is the unique solution.
+`onlyPoint_exact` proves the converse after successful point compilation.
+Unsupported syntax can still return no value even when it has a mathematical
+solution. It does not produce an incorrect singleton value.
+
 Validation: `lake build MicroCFTA.LatticeRetry` succeeds with the pinned
 toolchain. There are no proof placeholders or additional axioms.
