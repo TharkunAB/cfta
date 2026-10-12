@@ -248,9 +248,7 @@ boundDepth maximumDepth root = evalState (go maximumDepth root) Map.empty
             case Map.lookup (remaining, nodeIdentity node) known of
                 Just bounded -> pure bounded
                 Nothing -> do
-                    bounded <- case node of
-                        Mu _ -> go remaining (unfoldOuterRec node)
-                        _ -> Node <$> traverse edge (filter (\e -> remaining > 0 || null (edgeChildren e)) (nodeEdges node))
+                    bounded <- Node <$> traverse edge (filter (\e -> remaining > 0 || null (edgeChildren e)) (nodeEdges node))
                     modify' (Map.insert (remaining, nodeIdentity node) bounded)
                     pure bounded
       where

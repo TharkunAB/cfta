@@ -647,6 +647,24 @@ spec = do
         it "keeping a redundant Mu is what createMuDontCleanup is for" $
             numNestedMu (createMuDontCleanup (\_r -> Node [Edge "f" []]) :: Node Symbol) `shouldBe` 1
 
+        it "bounds retained epsilon binder cycles through their constructor closure" $ do
+            let empty =
+                    [ createMuDontCleanup id
+                    , createMuDontCleanup $ \outer -> createMuDontCleanup $ const outer
+                    ] ::
+                        [Node Symbol]
+                leaf = Node [Edge "a" []] :: Node Symbol
+                productive = Mu $ \outer -> Mu $ \inner -> union [outer, inner, leaf, Node [Edge "f" [outer], Edge "g" [inner]]]
+                expected depth
+                    | depth < 0 = []
+                    | otherwise = Term.Node "a" [] : [Term.Node symbol [child] | symbol <- ["f", "g"], child <- expected (depth - 1)]
+            forM_ [-1 .. 2] $ \depth -> do
+                forM_ empty $ \node -> do
+                    freeVars node `shouldBe` Set.empty
+                    nodeEdges node `shouldBe` []
+                    timeout 2000000 (evaluate $ boundDepth depth node) `shouldReturn` Just EmptyNode
+                terms (boundDepth depth productive) `shouldMatchList` expected depth
+
     describe "nested Mu" $
         it "references to different Mu nodes are not confused" $ do
             -- Two nodes with very similar structure
