@@ -322,7 +322,9 @@ synthesize entailment options components query = do
         catMaybes
             <$> traverse
                 realize
-                (map argumentLeaf (liquidArguments query) <> [componentLeaf component | component@(_, typ) <- components, firstOrder typ])
+                ( map argumentLeaf (liquidArguments query)
+                    <> [componentLeaf component | component@(_, typ) <- components, valued components query typ]
+                )
     go 1 (Map.singleton 0 leaves)
   where
     heads =
@@ -398,6 +400,19 @@ firstOrder typ = case typ of
   where
     isFunctionType TFun{} = True
     isFunctionType _ = False
+
+{- | Whether a component is a leaf: a constant, or a function value of
+'firstOrder' type when a head of the library or the query takes a function.
+Without such a head, a function value has no use.
+-}
+valued :: [Component] -> LiquidQuery -> RType -> Bool
+valued components query typ = case typ of
+    RBase{} -> True
+    RArrow{} -> firstOrder typ && any takesFunction (components <> liquidArguments query)
+  where
+    takesFunction (_, head') = any (isFunction . baseOf . snd) (parametersOf head')
+    isFunction TFun{} = True
+    isFunction _ = False
 
 {- | The value of a component as a function: a name of the logic for each
 component.
@@ -745,7 +760,7 @@ qualifiers components query =
     atoms = filter (elem value . Formula.freeNames) . conjuncts
     arguments = [(Name name, baseOf typ) | (name, typ) <- liquidArguments query]
     -- The components as function values: their names and types.
-    constants = [(functionConstant name, typ) | (name, typ@RArrow{}) <- components, firstOrder typ]
+    constants = [(functionConstant name, typ) | (name, typ@RArrow{}) <- components, valued components query typ]
     fromArguments base =
         [Formula.Var name | (name, actual) <- arguments, isJust (unify Map.empty base actual)]
             <> [Formula.Var name | isFunction base, (name, typ) <- constants, isJust (unify Map.empty base (baseOf typ))]
