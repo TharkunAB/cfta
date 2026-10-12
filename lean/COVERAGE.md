@@ -22,14 +22,16 @@ core-formula changes at `9ad319d`. The current semantic specification and
 implementation findings are in [SYSTEM.md](SYSTEM.md). All 66 source modules
 are inventoried in [API-COVERAGE.md](API-COVERAGE.md).
 
-The upstream base includes repairs for the seventeen recorded failures. Formula substitution
+The upstream base includes the seventeen earlier repairs. This continuation
+also repairs same-scope identity-replacement precedence. Formula substitution
 preserves bound application names. Observed atomic members retain their
 within-size weights. Minimization installs and checks accepted root
 representatives. Open unions retain epsilon operands. Pruning inspects stored open binder bodies before following recursive reads.
 Grouped private alternatives now close in agreement with decoder terms.
 Recursive members retain one private boundary in every structural record.
 Grouped function spines retain each alternative's correlated children.
-Ambiguous sparse actuals cannot discharge a guard in pruning or compilation.
+The evaluator rejects uncertain enclosing renames and identity-precedence
+changes before sparse substitution can discharge their guards.
 Canonical conjunctions stop the reproduced acyclic equality-reduction loop.
 The public Boolean guard entry now allocates each outer operand independently.
 Recursive equality classes remain enforced when the current constrained-recursion gate skips narrowing.
@@ -90,6 +92,28 @@ explicit decreasing unfolding rank; the actual source rank is still open.
 self-reference filter. `EqualityIdentityMemo` verifies identity equality,
 structural ordering, and memoized descent/conjunction under cache invariants.
 See [the current equality notes](notes-current-recursive-equality.md).
+
+### Recursive joins and current sparse decisions
+
+The `RecursiveJoin*` modules now compose heterogeneous and nested joins
+inside full typed mutual-family bodies. They derive independent record
+projections, exact ranked probabilities, minimum tables, source equations,
+mutual inverse callbacks, and public bounded decoder preimages. Candidate
+bounds/order/distinctness include false flags. Public queries preserve
+ascending distinct ranks under local finite-leaf callback contracts.
+`RecursiveJoinGuards` derives family guards from the original public
+occurrence metadata. Full support/inspection and weighted-flag assembly,
+missing term fields, and arbitrary runtime schema changes remain open.
+
+The current sparse evaluator differs from the older blanket-ambiguity
+policy. `SourceEnclosingRenames` records upstream's precise check.
+`SourceSubstitutionPrecedence` adds the proved same-scope repair.
+`CurrentGuardPrune` models the evaluator-first candidate loop and proves
+exactness for unambiguous specialization cells. General accepted ambiguous
+sparse-to-complete transport is still open.
+The older `FullGuardPrune`, `BooleanGuardPrune`, and memoized candidate
+adapters use a more conservative upfront check. Their preservation results
+do not establish that missing current-source transport law.
 
 ## Evidence and boundaries
 

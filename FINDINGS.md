@@ -1,17 +1,19 @@
 # Current formalization findings
 
-Updated: **2026-10-12 22:02 CEST**.
+Updated: **2026-10-12 22:21 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
-upstream base contains the findings repairs. Production Haskell is identical
-to that base. All **620 existing Haskell examples** pass: 284 core, 194
+upstream base contains the earlier findings repairs. This continuation found
+and repaired one additional sparse-substitution defect, described as row 18.
+All **620 existing Haskell examples** pass after that repair: 284 core, 194
 generator, and 142 refinement examples.
 
-The pending keyed-n-ary proofs now pass the aggregate build: **448 jobs and
-24,893 theorem dependency checks**. The broken recursive-join record bridge
-has a passing targeted build. Whole-body join composition and adapters for
-changed upstream substitution and equality behavior are in progress.
-See [HANDOFF.md](HANDOFF.md) for the checkpoint.
+The full Lean development passes **472 jobs and 26,011 theorem dependency
+checks**. All previously pending keyed-n-ary and recursive-join files are
+integrated. New proofs cover nested heterogeneous join families, exact
+public ranks and probabilities, original occurrence metadata, and the
+changed upstream substitution and equality policies. See
+[HANDOFF.md](HANDOFF.md) for the checkpoint and remaining work.
 This is the current report. [lean/FINDINGS.md](lean/FINDINGS.md) records the
 initial historical findings against an older revision. Its historical
 "proposed repair" and "no production fixes" statements do not describe the
@@ -47,7 +49,8 @@ both ranks. This is a contract distinction, not a new decoder defect.
 
 ## Repaired source defects
 
-Each row has a retained source reproduction and a corresponding formal
+Rows 1–17 describe earlier repairs now merged upstream. Row 18 is a new
+local repair on top of `de910ea`. Each row has a retained source reproduction and a corresponding formal
 counterexample, repair theorem, or operational model. Older per-repair test
 totals in the linked reports describe their historical checkpoints. The
 current combined suite total is 620.
@@ -62,7 +65,7 @@ current combined suite total is 620.
 | 6 | Closing grouped applications could produce support graphs that rejected every decoded term. | Close every retained private alternative and preserve the complete callback image. [Reproduction](lean/repro/GroupedSupport.hs); `SupportAlternatives`. |
 | 7 | Constructor and application closing could remove private nodes across a recursive occurrence boundary. | Use one private `Recursion` boundary consistently in support, inspection, terms, and inverse ranking. [Reproduction](lean/repro/RecursiveSupport.hs); `RecursiveSupportBoundary`. |
 | 8 | Grouped function spines could lose correlation between their retained child alternatives. | Preserve correlated function prefixes while closing the support and inspection graphs. [Reproduction](lean/repro/GroupedSpine.hs); `SupportSpineAlternatives`. |
-| 9 | Sparse nested substitution could discharge a guard that complete evaluation rejected, admitting an invalid term. | Retain the guard during pruning and return `SolverUnknown` during ambiguous compilation. This does not assert an empty language. [Pruning reproduction](lean/repro/NestedScopeCapture.hs), [compiler reproduction](lean/repro/NestedCompileCapture.hs); `PruneAmbiguity`. |
+| 9 | Sparse nested substitution could discharge a guard that complete evaluation rejected, admitting an invalid term. | Retain the guard and return `SolverUnknown` for the reproduced enclosing-name conflict. Safe flat ambiguous scopes can compile. This does not assert an empty language. [Pruning reproduction](lean/repro/NestedScopeCapture.hs), [compiler reproduction](lean/repro/NestedCompileCapture.hs); `PruneAmbiguity`, `SourceEnclosingRenames`. |
 | 10 | Equivalent conjunctions grew from size 9 to 29 to 89 during repeated acyclic equality reduction. | Flatten outer conjunctions, remove `Top`, sort, and deduplicate while preserving scopes. The retained case stabilizes. [Reproduction](lean/repro/PruneConjunction.hs); `GuardConjunction`. |
 | 11 | Combining independently interpreted guards could change an operand's meaning and admit a term rejected by an input automaton. | Allocate each outer Boolean operand independently and preserve nonempty substitution scopes. The reproduction now reports `[Yes, No, No]`. [Reproduction](lean/repro/ConjoinScope.hs); `SourceBooleanEntry`. |
 | 12 | Recursive equality narrowing repeatedly expanded equivalent domains and exceeded the retained runtime limit. | Block constrained recursion while retaining the original equality constraint. The current binder constructor also removes its bare self-reference from root unions. [Reproduction](lean/repro/RecursiveReduction.hs); `ConstrainedRecursionGate`, `BinderSelfUnion`. General nontermination of the old example was not proved. |
@@ -71,6 +74,7 @@ current combined suite total is 620.
 | 15 | `boundDepth` could loop on retained empty binder cycles even though their outer-edge closure was empty. | Use visited `nodeEdges` exposure uniformly before recursing into constructor children. [Reproduction](lean/repro/BoundRetainedBinders.hs); `LexicalBinderClosure`. |
 | 16 | A syntactic extraction such as `v == v` could be treated as an exact integer measure and remove valid expressions. | Reject fallback measures that depend on the refined value. Preserve exact singleton extraction priority. [Reproduction](lean/repro/SelfDependentMeasure.hs); `DefiningTerm`, `ParentGuardFormula`. |
 | 17 | Recursive open group positioning queried cardinalities, built an empty position map, and raised `Map.!`. | Read the available group keys directly. Unsupported recursive integer closure now returns its existing explicit error. [Reproduction](lean/repro/RecursiveOpenPositions.hs); `GroupPositions`. |
+| 18 | In one substitution scope, merging equal actual identities could remove the first identity replacement and expose a later replacement for the same formal. Sparse evaluation returned `Yes`, pruning admitted a rejected term, and compilation produced one invalid tuple. | Return `Unknown` when an uncertain identity replacement has a later duplicate formal. Pruning retains the guard; compilation returns `SolverUnknown`. The existing [guard/pruning reproduction](lean/repro/NestedScopeCapture.hs) and [compiler reproduction](lean/repro/NestedCompileCapture.hs) now check both nested and same-scope cases. `SameScopeIdentityCapture` retains the pre-repair witness; `SourceSubstitutionPrecedence` proves the new check. |
 
 The private `Recursion` repair changes engine-term shape. User values,
 surface terms, original generator counts, distributions, and rank order
@@ -95,7 +99,7 @@ creates child links. The rebase integration now adds those parent-index
 entries. Otherwise a later indexed copy could miss an inserted edge.
 `MinimizeParentIndex` proves complete schedule equivalence and the required
 metadata invariant. This is an integration obligation; it is not counted as
-an eighteenth independently reproduced public defect. See
+a separately reproduced public defect. See
 [the parent-index notes](lean/notes-minimize-parent-index.md).
 
 Retained size masses also move when constructors pay a size unit. Earlier
@@ -154,23 +158,33 @@ Both add size; only the label supplies the corresponding term-growth guard.
 See [the n-ary notes](lean/notes-keyed-nary.md) and
 [guard notes](lean/notes-keyed-nary-guards.md).
 
-The new local recursive-join adapter proves the actual `JoinN`, `CenterKeyed`,
-and `ArgKeyed` structures for all arities, including zero. It preserves
-heterogeneous argument values and their matching term ranks. It also proves
-the source prefix-count/argument schedule, exact all-view callbacks, and
-bounds/order/distinctness for false and true candidates. `RecursiveJoinMass` also has a separate passing build. The direct
-record-to-selector bridge has an unresolved Lean error and is not complete.
-Integration into the whole recursive body syntax is still outstanding. The ordinary `Apply`
-theorem cannot substitute for that integration. See
+The recursive-join adapter now composes the actual `JoinN`, `CenterKeyed`,
+and `ArgKeyed` structures through typed nested joins and mutual families.
+It preserves heterogeneous argument values, aligned term ranks, retained
+masses, and complete ranked samplers. The record-to-selector bridge is
+complete. Mutual callback induction and the public replay filter establish
+all-view and bounded global decoder preimages. Original occurrence metadata
+supplies the public guards. Candidate bounds include false flags. Callback
+and public rank lists are ordered and have no duplicate positions under
+their local finite-leaf contracts. Ordinary `Apply` remains a separate constructor.
+Full support/inspection assembly, weighted-dispatch flags, absent term
+fields, and arbitrary runtime schema changes remain open. See
 [the join notes](lean/notes-recursive-join-fields.md).
 
 ## Evidence and its limits
 
-- Latest full source suites: **620 passing examples**, after rebasing onto
-  `de910ea`. Log: `/tmp/mcfta-de910ea-full.log`.
-- Latest integrated Lean audit: **448 jobs; 24,893 theorem dependency checks**.
-  Only `propext`, `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-keyed-integrated-audit.log`.
+- Latest full source suites: **620 passing examples**, on `de910ea` plus
+  the same-scope precedence repair. Existing cases cover safe flat scopes,
+  nested renaming, uncertain identities, and repeated formals.
+  Log: `/tmp/mcfta-scope-precedence-full.log`.
+- Repaired nested and same-scope source probes both report `(No,Unknown)`
+  for complete/sparse evaluation, `(No,No)` before/after pruning, and
+  `Right []` versus compiler `Left SolverUnknown`.
+  Log: `/tmp/mcfta-scope-precedence-repaired.log`.
+- Final integrated Lean audit: **472 jobs; 26,011 theorem dependency checks**.
+  All 469 proof modules are in its import closure. Only `propext`,
+  `Classical.choice`, and `Quot.sound` are allowed.
+  Log: `/tmp/mcfta-resume-final-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -180,9 +194,11 @@ theorem cannot substitute for that integration. See
   grouping/recursion descriptions; nine automaton-import variants; 144
   weighted descriptions across nine size bounds; and 2,080 bounded recursive
   intersection comparisons.
-- Recent independent exact-rational recurrences checked 132 single-root,
-  254 two-key, and 285 delayed-third-branch member inverses, their probability
-  tables, and support acceptance.
+- The new heterogeneous `Bool`/expression join recurrence checks eight
+  classes and 37 member inverses, exact masses, and support acceptance.
+  Log: `/tmp/mcfta-heterogeneous-join-replay.log`.
+- Earlier exact-rational recurrences checked 132 single-root and 254 two-key
+  member inverses. The 285-rank delayed-third-branch probe was rerun above.
 - Shared equality FTAs with `2^60` and `2^80` distinct terms passed exact
   counting and distant decode/rank round trips without enumerating their
   language. These are feasibility checks, not general benchmarks.
@@ -211,9 +227,10 @@ but do not prove it for every runtime execution.
    independence permits cache reuse. Those results do not yet establish the
    complete erased-dependency case. No closed-input collision was established.
    See [the fresh-probe notes](lean/notes-interned-fresh-probe-keys.md).
-3. **Complete recursive grouped-join and nested-builder composition.** Local
-   join fields are proved. The whole typed body constructor and remaining
-   runtime record/inspection paths still need composition. Builders can run
+3. **Remaining recursive runtime records and nested-builder composition.**
+   Typed nested-join families, decoder/mass records, inverse callbacks, and
+   public occurrence guards are proved. Complete recursive support/inspection
+   assembly, weighted flags, and absent term fields still need composition. Builders can run
    under different placeholder contexts; one fixed typed schema does not
    prove that arbitrary Haskell builders preserve their shape and errors.
 4. **Concrete runtime and external correspondence.** Physical interning,
@@ -221,6 +238,13 @@ but do not prove it for every runtime execution.
    concurrency, Haskell lazy productivity, solver IO, random draws, and user
    codecs/callbacks need their stated contracts. Global identity freshness
    requires a bounded allocation lifetime and linearizable draws.
+
+5. **General accepted ambiguous sparse transport.** The two reproduced
+   identity failures are repaired. A complete proof still needs a one-way
+   environment relation through accepted scopes when actual names merge.
+   Existing injective renaming contracts do not establish this result.
+   Exact backend verdict preservation also needs a contract for
+   identification, including solver `Unknown` and timeout behavior.
 
 These obligations prevent a whole-implementation verification claim. They
 are separate from the repaired concrete failures and the proved component

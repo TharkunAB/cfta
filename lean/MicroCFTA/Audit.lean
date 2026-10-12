@@ -350,6 +350,27 @@ import MicroCFTA.KeyedNaryExamples
 import MicroCFTA.BinderSelfUnion
 import MicroCFTA.ConstrainedRecursionGate
 import MicroCFTA.EqualityIdentityMemo
+import MicroCFTA.FormulaTotalSubstitution
+import MicroCFTA.IntegerLabelTotalSubstitution
+import MicroCFTA.SourceEnclosingRenames
+import MicroCFTA.SameScopeIdentityCapture
+import MicroCFTA.SourceSubstitutionPrecedence
+import MicroCFTA.CurrentGuardPrune
+import MicroCFTA.RecursiveJoinFields
+import MicroCFTA.RecursiveJoinCallbacks
+import MicroCFTA.RecursiveJoinLocal
+import MicroCFTA.RecursiveJoinTyped
+import MicroCFTA.RecursiveJoinExamples
+import MicroCFTA.RecursiveJoinMass
+import MicroCFTA.RecursiveJoinRecordBridge
+import MicroCFTA.RecursiveJoinComposition
+import MicroCFTA.RecursiveJoinFamily
+import MicroCFTA.RecursiveJoinCompiledFields
+import MicroCFTA.RecursiveJoinBodyFields
+import MicroCFTA.RecursiveJoinInverse
+import MicroCFTA.RecursiveJoinGuards
+import MicroCFTA.RecursiveJoinQuery
+import MicroCFTA.RecursiveJoinFamilyExamples
 /-!
 # Proof dependency audit
 

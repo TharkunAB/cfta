@@ -7,7 +7,8 @@ function families. [COVERAGE.md](COVERAGE.md) records proof obligations.
 
 Current base: `origin/microcfta` at `de910ea`, including the merged
 core-formula extension, the optimization changes, and the merged findings
-repairs through PR #96. Production Haskell is identical to this base. The
+repairs through PR #96. The only new production change rejects an uncertain identity replacement
+that could expose a later replacement of the same formal name. The
 rebase retained every proof and reproduction while retiring superseded
 source patches. Earlier reports retain their original source hashes and
 describe historical snapshots.
@@ -21,7 +22,7 @@ construction, enumeration, pruning, minimization, and symbolic drivers.
 `System.grammar_bijection` and `System.grammar_probability` compose the
 reference grammar, FTA, index, and distribution results.
 
-Seventeen recorded implementation failures now have source repairs and checked
+Eighteen recorded implementation failures now have source repairs and checked
 regressions: quantified substitution, observed atomic weights, accepted root
 representatives, open recursive unions, pruning through open nested binders,
 closing grouped private alternatives, recursive term boundaries, and grouped
@@ -30,7 +31,8 @@ unbounded conjunction growth during equality reduction, and interference between
 independent semantic guards, repeated expansion of recursive equality
 domains, explicit unions lost during observed imports, and rejected recursive
 observation groups, bounded traversal of retained empty binder cycles,
-self-dependent measure extraction, and recursive open group positioning.
+self-dependent measure extraction, recursive open group positioning, and
+same-scope identity-replacement precedence.
 Historical counterexamples remain
 separate from the repair theorems. See [SYSTEM.md](SYSTEM.md).
 
@@ -84,6 +86,11 @@ and [parent-index notes](notes-minimize-parent-index.md) verify the new
 minimization optimizations.
 The [current equality notes](notes-current-recursive-equality.md) cover the
 revised recursion gate, root self-reference removal, and constraint identities.
+The [recursive join notes](notes-recursive-join-fields.md) cover nested
+heterogeneous join bodies, mutual-family probabilities, full inverse
+callbacks, and public bounded queries. The [join guard
+notes](notes-recursive-join-guards.md) derive the required family guards
+from the original source metadata.
 The [fresh-probe notes](notes-interned-fresh-probe-keys.md) separate the
 proved nested-binder key cases from the remaining normalization-erasure case.
 
@@ -236,7 +243,7 @@ is no verified translation connecting all Haskell code to them.
 The term semantics follows the supplied LTA paper's Figure 6 and the ECTA
 paper's finite-term denotation. ECTA reduction requires exact language
 preservation. LTA similarity minimization deliberately removes terms and needs
-a weaker representative-preservation property. The current root-deletion
+a weaker representative-preservation property. The historical root-deletion
 counterexample violates even nonemptiness preservation.
 
 The supplied LTA appendix's Lemmas 2 and 3 have proof headings without proof
@@ -258,7 +265,8 @@ ecta.pdf 34572866be0bc8e86a546f712ffb2666fe641d133417a895ecbdee5d8f6e1ebf
   with Z3 for the public cases.
 - Existing suites pass on `de910ea`: 284 core, 194 generator, and 142
   refinement examples; 620 total, zero failures. The log is
-  `/tmp/mcfta-de910ea-full.log`. No production source changed in this continuation.
+  `/tmp/mcfta-scope-precedence-full.log`. Existing scope cases were extended
+  for the new evaluator repair.
 - Fourmolu accepts the reproductions. Cabal-gild accepts both audited packages.
 
 The Haskell commands run from the repository root:

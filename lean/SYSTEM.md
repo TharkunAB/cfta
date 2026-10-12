@@ -328,6 +328,38 @@ family guards without reconstructing labels from the value lowering.
 See [the family notes](notes-keyed-nary.md) and
 [the guard notes](notes-keyed-nary-guards.md).
 
+### Composite recursive grouped joins
+
+`RecursiveJoinMass` and `RecursiveJoinRecordBridge` connect the source's
+heterogeneous product fold to independent grouped records. The four record
+fields retain mass, ordered members, value sampling, and ranked sampling.
+`RecursiveJoinComposition` composes typed leaves, maps, pays, labels,
+applications, flat choices, and nested joins. Its join term is the actual
+`JoinN`/`CenterKeyed`/`ArgKeyed` structure. Ordinary application still uses
+`Apply`.
+
+`RecursiveJoinFamily` derives independent family projections, complete
+valid ranks, bounded ranked sampling, common minima, and the untruncated
+source equations. `RecursiveJoinBodyFields` derives local selector and
+inverse laws from the body constructors. `RecursiveJoinInverse` closes
+the mutual callback induction at the decreasing requested forest height.
+`RecursiveJoinQuery` connects the checked-flag replay filter and bounded
+global ranks to every matching independent decoder result. The complete
+family preserves candidate bounds, order, and distinct positions, including
+false flags. Public bounded queries retain ascending distinct ranks. These
+properties require only the propagated finite-leaf callback contracts.
+`RecursiveJoinGuards` retains original label-aware metadata and derives
+the family guards from the actual public rejection check. Nullary joins
+retain operation metadata; nonempty joins follow the source product fold.
+
+The source comparison includes a temporary public `Bool`/expression join
+probe. An independent recurrence checks eight classes, 37 inverse ranks,
+exact rational masses, and support acceptance. Full recursive support and
+inspection assembly, weighted-dispatch flags, absent term fields, and
+arbitrary runtime schema changes remain separate obligations. See
+[the join notes](notes-recursive-join-fields.md) and
+[the original metadata notes](notes-recursive-join-guards.md).
+
 ## Implementation comparisons and repairs
 
 ### Quantified substitution can change meaning
@@ -347,6 +379,14 @@ heads, substitutes nullary applications as values, and preserves repeated
 binder shadowing. `substituteChecked` reports a non-name replacement for a
 non-nullary function head, which the named-head syntax cannot represent.
 The Z3 reproduction now requires the repaired `No` result.
+
+Upstream `092b56d` makes public `substitute` total. An unsupported function
+head stays unchanged while its arguments are substituted. Checked
+substitution traverses the arguments before reporting the unsupported head.
+`FormulaTotalSubstitution` proves agreement on checked success and records
+a counterexample to arbitrary simultaneous function-value substitution.
+`IntegerLabelTotalSubstitution` connects the actual total label adapter to
+the checked adapter on successful inputs.
 
 ### Observing an atomic pair changes bounded weights
 
@@ -486,19 +526,37 @@ names and returns Yes. Complete evaluation merges the actuals, applies both
 scopes, and requires `b = 0` from the ambient assumption `a = 0`. It returns No.
 
 Pruning previously discharged that guard and admitted the rejected term.
-The generator compiler had the same defect: `validOutcomes` returns no values,
-while compilation produced one invalid tuple. Pruning now retains the original
-guard before an ambiguous sparse query. Compilation reports `SolverUnknown`.
-This error does not mean an empty language. A valid ambiguous group can require
-more precise identity splitting or complete-member checking before compilation.
+The generator compiler had the same defect. Upstream `d6b8837` replaced the
+blanket compiler ambiguity gate with an evaluator check: an uncertain actual
+whose name is renamed by an enclosing scope yields `Unknown`. Safe flat
+scopes can still compile. `SourceEnclosingRenames` records that policy.
 
-`NestedScopeCapture` proves the original sparse Yes and complete No with a
-proved sound integer callback. `PruneAmbiguity` proves restoration for every
-successful ambiguous candidate pass. The full and memoized candidate models
-include the gate. The compiler model checks its error precedence.
-See [the proof and repair notes](notes-nested-scope-capture.md),
-[NestedScopeCapture.hs](repro/NestedScopeCapture.hs), and
-[NestedCompileCapture.hs](repro/NestedCompileCapture.hs).
+A further same-scope defect remained on `de910ea`. Use replacements
+`a0 -> a`, `a1 -> y`, and `b -> a`, then require `a = 0`. The first two
+actuals are equal non-leaf terms named `a` with refinement `value = 0`.
+Sparse evaluation gives them fresh names and returns `Yes`. Complete
+evaluation removes the first replacement as an identity, exposes `b -> a`,
+and returns `No`. Actual Z3 probes showed that pruning admitted the term and
+compilation produced one invalid tuple despite `validOutcomes = Right []`.
+
+The local repair adds `ambiguousIdentityPrecedence`. It rejects an uncertain
+literal identity replacement when a later entry has the same formal name.
+The result is `Unknown`; pruning retains the guard and compilation reports
+`SolverUnknown`. Unique formal names and known identities do not trigger
+this new check. Formula substitution keeps its existing first-nonidentity
+semantics. `SameScopeIdentityCapture` checks the old counterexample;
+`SourceSubstitutionPrecedence` models the repaired worker and public entry.
+`CurrentGuardPrune` follows the evaluator-first source candidate loop. Its
+exact-language theorem requires unambiguous specialization cells. The
+corresponding formula, guard, and compiler models retain explicit
+scope/solver requirements. No theorem claims complete sparse transport for
+all ambiguous groups.
+
+The existing [guard/pruning reproduction](repro/NestedScopeCapture.hs) and
+[compiler reproduction](repro/NestedCompileCapture.hs) check both cases.
+All 620 existing suite examples pass after extending their existing scope
+cases. The repaired probes report complete `No`, sparse `Unknown`, unchanged
+rejection after pruning, and compiler `SolverUnknown`.
 
 ### Equality reduction can grow equivalent guards without stopping
 
