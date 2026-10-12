@@ -9,6 +9,9 @@ limit. Each row of the CSV gives the query, the outcome (@solved@,
 the entailment queries, the states before and after reduction at the last
 size, and the first solution.
 
+With no arguments, it runs one small query of five groups with 60 seconds and
+a heap of 2 GB each, so that @cabal bench@ stays short.
+
 > hegel [all | -P | -S | -All] [seconds] [heap]
 > hegel --query NAME REDUCTION seconds
 > hegel --trace NAME REDUCTION seconds
@@ -41,10 +44,10 @@ main = do
         ["--query", name, reduction, seconds] -> runQuery False name reduction (read seconds)
         ["--trace", name, reduction, seconds] -> runQuery True name reduction (read seconds)
         ["--generator", name] -> generatorQuery name
-        [] -> runSuite "all" 180 "8G"
-        [reduction] -> runSuite reduction 180 "8G"
-        [reduction, seconds] -> runSuite reduction (read seconds) "8G"
-        [reduction, seconds, heap] -> runSuite reduction (read seconds) heap
+        [] -> runSuite "all" 60 "2G" smoke
+        [reduction] -> runSuite reduction 180 "8G" liquidBenchmarks
+        [reduction, seconds] -> runSuite reduction (read seconds) "8G" liquidBenchmarks
+        [reduction, seconds, heap] -> runSuite reduction (read seconds) heap liquidBenchmarks
         _ -> fail "usage: hegel [all | -P | -S | -All] [seconds] [heap]"
 
 -- | The reduction steps of a variant of the paper.
@@ -55,12 +58,20 @@ reductionOf variant = case variant of
     "-All" -> Reduction False False
     _ -> Reduction True True
 
+-- | One small query of five groups.
+smoke :: [LiquidBenchmark]
+smoke =
+    [ benchmark
+    | benchmark <- liquidBenchmarks
+    , liquidName benchmark `elem` ["RevApp1", "Nth_Incr1", "LookRange1", "MapDouble1", "ApplyList1"]
+    ]
+
 -- | Run each query in a child process and print one row for each.
-runSuite :: String -> Int -> String -> IO ()
-runSuite variant seconds heap = do
+runSuite :: String -> Int -> String -> [LiquidBenchmark] -> IO ()
+runSuite variant seconds heap benchmarks = do
     executable <- getExecutablePath
     putStrLn "query,outcome,size,seconds,queries,undecided,states,reduced,solution"
-    mapM_ (runChild executable) liquidBenchmarks
+    mapM_ (runChild executable) benchmarks
   where
     runChild executable benchmark = do
         let name = Text.unpack $ liquidName benchmark

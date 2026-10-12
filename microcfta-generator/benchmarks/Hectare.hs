@@ -9,7 +9,10 @@ Each row of the CSV gives the query, the outcome (@solved@, @unsolved@,
 @timeout@, or @crash@), the size of the solution, the seconds to the
 solution, and the number of programs listed before it.
 
-> hectare [hplus | stackoverflow | all] [seconds] [heap]
+With no arguments, it runs three small Hoogle+ queries with 30 seconds and a
+heap of 2 GB each, so that @cabal bench@ stays short.
+
+> hectare [hplus | stackoverflow | all | smoke] [seconds] [heap]
 > hectare --query NAME [seconds]
 > hectare --profile NAME SIZE
 > hectare --generator NAME SIZE [DEPTH]
@@ -42,7 +45,7 @@ main = do
         ["--profile", name, size] -> profileQuery name (read size)
         ["--generator", name, size] -> generatorQuery name (read size) Nothing
         ["--generator", name, size, depth] -> generatorQuery name (read size) (Just (read depth))
-        [] -> runSuite "hplus" 60 "8G"
+        [] -> runSuite "smoke" 30 "2G"
         [suite] -> runSuite suite 60 "8G"
         [suite, seconds] -> runSuite suite (read seconds) "8G"
         [suite, seconds, heap] -> runSuite suite (read seconds) heap
@@ -54,6 +57,7 @@ suiteQueries suite = case suite of
     "hplus" -> hplus
     "stackoverflow" -> stackOverflow
     "all" -> hplus <> stackOverflow
+    "smoke" -> [query | query@(benchmark, _) <- hplus, benchmarkName benchmark `elem` ["map", "firstMatch", "headRest"]]
     _ -> []
   where
     hplus = [(benchmark, hooglePlus) | benchmark <- hooglePlusBenchmarks]
