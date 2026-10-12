@@ -53,7 +53,8 @@ The full bounded operational counter and rank driver is now in
 `MicroCFTA/SymbolicDriver.lean`. Its count, decoder, inverse, overlap, nested
 constraint, and negation examples are checked. See
 [notes-symbolic-driver.md](notes-symbolic-driver.md) for its exact scope.
-The remaining general driver proof obligations below still apply.
+The later composed proofs discharge the internal obligations listed below.
+See [notes-symbolic-semantics.md](notes-symbolic-semantics.md) for current coverage.
 
 `countEdge` applies the signed guard interpretation to independent child
 domains and the generated path obligations. `solve` normalizes the problem
@@ -76,19 +77,10 @@ edge's path obligations and processes the alternatives by inclusion-exclusion.
 The fresh names must not collide with live domains or bindings. Normalization
 then renumbers the domains and removes the bindings.
 
-The module proves the listed local semantic laws. It does **not** prove the
-complete mutually recursive `countNode`/`countEdge`/`solve`/`unify`/
-`expandVariable` driver. Remaining obligations are:
-
-- A termination measure for every reachable acyclic graph and normalized context.
-- Preservation of live-variable, acyclic-binding, and fresh-name invariants.
-- A count-preserving correspondence between context assignments before and after
-  all normalization and expansion steps.
-- Correct reuse of counts under graph identities and normalized context keys.
-- Correctness of the concrete graph rewrite in `condition` against `conditioned`.
-- Composition of successive subtree selections and `rankAt` offsets into the full
-  distinct-term inverse. `selectBlock_correct` proves the block-selection step.
-- Equivalence of the pure count interpretation and the `IORef` cache implementation.
+This module contains the local laws. The complete counter, normalizer,
+selection, and inverse theorems now use them in `SymbolicTotalAPI`.
+`SymbolicCacheIndependence` and `SymbolicPublicAdapter` prove the shared-cache
+API. Concrete runtime representations and source readback remain boundaries.
 
 The shortcut theorem uses the actual upper-bound relation of `project`. It
 shows that every existing subtree of an accepted term equals the unique

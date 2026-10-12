@@ -23,10 +23,11 @@ The finite source leaves already establish their record invariants. A retained
 mass is an explicit positive input from a bucket or preceding grouped operation.
 These modules do not yet derive that input for every finite grouping adapter.
 The typed body is also not an extraction of arbitrary Haskell key functions or
-nested recursive builders. In particular, the complete public grouped branch
-validation, omission of unavailable map keys, enclosing occurrence flags, and
-finite-versus-recursive weight policy remain caller obligations. The theorem's
-guard premise is explicit and must not be reported as public dispatch coverage.
+nested recursive builders. `GroupedChoice` and `GroupedFlags` now prove
+public branch validation, unavailable-key omission, enclosing occurrence flags,
+and the finite-versus-recursive weight policy in their source ports. Concrete
+heterogeneous record wiring remains a caller obligation. The theorem's guard
+premise is explicit.
 
 Members retain their structural ranks even when output values repeat. A distinct
 term bijection still requires the separate source term-uniqueness invariant.

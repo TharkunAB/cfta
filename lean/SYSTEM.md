@@ -111,6 +111,19 @@ five patterns, including cyclic graphs. `Binding` verifies the free-environment
 cache key and closed-substitution shortcut. `EnumerationState` ports the
 suspended-constraint caller and its recursion-marker behavior. `PruneSchedule`
 ports pruning decisions, fallback, caching, and binder scheduling.
+`EnumerationExact.runs_exact` proves actual initialized finite-term support
+after returned residual checks. It constructs final rendering and stable
+execution bounds from complete graph and exact-intersection contracts.
+Source constructor, equality-product, and bounded-row adapters derive those
+contracts. `EnumerationBuilderFastPaths` derives the finite memo traversal, both interning
+caches, identity sorting/deduplication, terminal fast paths, and exact bounded
+language. Binder exposure and host storage remain separate.
+`IntersectConstruction.constructed_intersection_total` proves that the complete
+recursive intersection schedule terminates with exactly the common input
+language. It starts from a finite payload completion trace, exact cached free variables,
+canonical identities, and independent input semantics. Finite identities and
+direct payload sizes follow from the trace. Closed-root reachability,
+reset descent, and sufficient stable execution bounds are derived.
 `MinimizeSchedule` implements the actual similarity/rewrite schedule. It
 proves the historical accepted-root failure and the repaired root invariant.
 
@@ -224,6 +237,135 @@ The existing pruning suite checks the regression. The standalone
 retains the term after pruning. The full Nix suites pass 599 examples after
 this repair. See [the repair notes](notes-prune-reads.md).
 
+### Closing grouped applications can exclude every decoded term
+
+Grouping an applicative pair can retain two private Apply edges in one support
+node. Before the repair, `labelSupportWith` recognizes only a singleton Apply
+edge. It wraps the multi-edge node. `labelTermWith` instead removes Apply from
+each decoded term. For pairs over two indexed values, grouping by sum modulo
+two and then adding a node label produces four decoded terms that the support
+rejects. The support instead accepts four terms with an extra Apply node.
+The inspection graph has the same mismatch.
+
+The source now closes each retained alternative when a multi-edge node has
+any closing private root. Ordinary roots keep the existing compact wrapper.
+`SupportAlternatives.closeNode_exact` proves the full callback-image language;
+its checked historical counterexample and repaired witness identify the lost
+term. [GroupedSupport.hs](repro/GroupedSupport.hs) checks both public graphs.
+All 600 existing examples pass: 274 core, 191 generator, and 135 refinement.
+A separate source probe compares complete support and decoder term sets for
+3,734 finite descriptions. All comparisons pass after the repair.
+
+### Recursive term closing can cross an occurrence boundary
+
+A direct recursive constructor exposes a second graph/callback mismatch.
+For `recur (oneof [pure 0, node "s" self])`, the graph wraps its unresolved
+reference as one child. The term callback instead removes private Choice
+and Pure nodes from the selected recursive term. It produces a leaf `s`
+where the graph requires a child. A recursive application spine can cause
+the same disagreement after the language is bounded to a static source.
+
+Single `recur` now inserts a private `Recursion` root inside its binder body.
+Support, inspection, selected terms, and inverse ranking use the same root.
+The wrapper survives size bounding. Engine terms change shape; user `surface`
+terms, values, counts, masses, size classes, and rank order retain their
+semantics in the original generator. Importing the raw support counts the new
+Recursion roots as ordinary nodes, so its node-count bounds can increase.
+Grouped recursion already has its AtKey/Family boundary.
+
+`RecursiveSupportBoundary` proves the old rejection, exact wrapper inverse,
+parent/spine behavior, unchanged projection and member distribution, and
+acceptance of the complete repaired example stream. The source reproduction
+[RecursiveSupport.hs](repro/RecursiveSupport.hs) checks ten variants, their
+support and inspection membership, inverse ranks, PMF, and user surface.
+All 601 existing examples pass: 274 core, 192 generator, and 135 refinement.
+A separate sweep checks support membership of every bounded decoded term
+for 540 recursive descriptions. See [the proof notes](notes-recursive-support.md).
+
+### Grouped function spines can retain removed private roots
+
+The sixth repair closes a grouped root directly. A later application can
+also use that group as its function child. The old helper then treats the
+whole group as one argument. The term callback flattens the selected Apply
+spine. Both decoded terms of a two-element example remain outside the graph.
+
+The support helper now returns one ordered child sequence per alternative.
+It appends the new argument to each sequence and emits one labelled edge for
+each result. `SupportSpineAlternatives.close_exact` proves exact agreement
+with the callback. Checked examples prove the old loss, the repaired witness,
+and rejection of crossed pairs. [GroupedSpine.hs](repro/GroupedSpine.hs)
+checks seven public variants, including correlated and nested grouped spines,
+exact support and inspection languages, and inverse ranks.
+All 602 existing examples pass: 274 core, 193 generator, and 135 refinement.
+See [the proof notes](notes-support-spine-alternatives.md).
+
+### Sparse nested substitution can admit an invalid term
+
+Two equal inner actuals named `a` have refinement `value = 0`. An outer scope
+substitutes `b` for formal `a`. An inner scope substitutes the actuals for
+`x` and `y`, then requires `x = 0`. Sparse evaluation allocates two fresh
+names and returns Yes. Complete evaluation merges the actuals, applies both
+scopes, and requires `b = 0` from the ambient assumption `a = 0`. It returns No.
+
+Pruning previously discharged that guard and admitted the rejected term.
+The generator compiler had the same defect: `validOutcomes` returns no values,
+while compilation produced one invalid tuple. Pruning now retains the original
+guard before an ambiguous sparse query. Compilation reports `SolverUnknown`.
+This error does not mean an empty language. A valid ambiguous group can require
+more precise identity splitting or complete-member checking before compilation.
+
+`NestedScopeCapture` proves the original sparse Yes and complete No with a
+proved sound integer callback. `PruneAmbiguity` proves restoration for every
+successful ambiguous candidate pass. The full and memoized candidate models
+include the gate. The compiler model checks its error precedence.
+See [the proof and repair notes](notes-nested-scope-capture.md),
+[NestedScopeCapture.hs](repro/NestedScopeCapture.hs), and
+[NestedCompileCapture.hs](repro/NestedCompileCapture.hs).
+
+### Equality reduction can grow equivalent guards without stopping
+
+An acyclic three-leaf equality class uses three different residual guards
+which all accept the same leaf. The old conjunction constructor retained
+nested duplicate syntax. Repeated narrowing increased each guard from size
+9 to 29 to 89 and kept allocating new identities. The public pruning call
+did not finish. `PruneTerminationGrowth` proves growth for every operand order.
+
+Conjunction now flattens outer And nodes, removes Top, and sorts and removes
+duplicate conjuncts. It preserves scopes, negation, and disjunction as atoms.
+`GuardConjunction` proves normalization, absorption, and bounded atom counts.
+`GuardConjunctionNames` proves exact public evaluation and fresh-table equality.
+The source example stabilizes at size 5. A nested correlation regression
+checks that the repair does not add crossed children. All 606 existing suite
+examples pass: 277 core, 193 generator, and 136 refinement.
+This does not establish general recursive pruning termination.
+See [the proof notes](notes-prune-conjunction.md) and
+[PruneConjunction.hs](repro/PruneConjunction.hs).
+
+### Combined guards can change an operand's meaning
+
+A separate confirmed example has input guard results Yes and No, but the
+combined And guard returns Yes. Actual-name allocation originally examined
+the entire combined guard. A conflict introduced by one operand allocated a
+fresh name in the other operand and changed its nested substitution behavior.
+Actual FTA intersection then admits a term rejected by one input. Both inputs
+and the result validate. This is distinct from sparse-observation uncertainty.
+The public entry now allocates each outer Boolean operand independently. It
+keeps nonempty substitution scopes intact and makes empty substitution an
+identity. Negative atoms retain formula refutation, including missing paths.
+The retained [source reproduction](repro/ConjoinScope.hs) now returns input
+and intersection membership `[Yes, No, No]`. All 608 suite examples pass.
+
+`SourceBooleanEntry.conjunction_yes` proves independent conjunction semantics.
+`normalize_evaluate` proves canonical conjunction preserves all three verdicts.
+`SourceBooleanBridge`, `BooleanGuardPrune`, and `BooleanGuardCompile` prove
+successful current sparse decisions under the explicit backend transport
+contract. `SourceConstraintConjunction.edgeView_conjoin` supplies the actual
+residual guard law to constructor intersection. See the
+[public-entry notes](notes-source-boolean-entry.md).
+The original whole-guard entry remains a model of the current private scoped
+helper. Its historical public wrapper names do not describe the repaired
+public dispatcher.
+
 ## Rebase integration repairs
 
 The previous weight repair introduced `keyedBucketMasses`. New upstream
@@ -238,7 +380,7 @@ transport law, and `stale_mass_counterexample` proves why the old keys fail.
 The retained regression fixtures and reproductions now use the current
 constructor sizes, `Term` representation, and sorted core-formula declarations.
 No new package test suite was added. The existing core, generator, and
-refinement suites pass in `nix-shell`: 274, 190, and 135 examples, respectively.
+refinement suites pass in `nix-shell`: 279, 193, and 136 examples, respectively.
 Existing property examples also run their configured generated cases.
 
 An independent temporary source probe compared 5,000 finite grammars against
@@ -247,6 +389,15 @@ alternatives, empty child domains, child equality, and nested path equality.
 It checked every decoded rank, both set equality and cardinality, inverse
 ranking, and invalid ranks. All comparisons passed. The expected terms did
 not use FTA enumeration or rank queries.
+
+Further support checks cover 1,536 mixed grouping and recursion descriptions
+and nine automaton-import variants. All pass, with no skipped cases. A
+separate probe checks 144 weighted compilation descriptions across nine size
+bounds. It compares values, member sizes, bounded PMFs, and exact sampler
+masses through atomic, paid, and keyed products. All pass. Recursive
+intersection matches independently intersected term sets for 2,080 grammar
+pairs through depth four. These finite comparisons do not establish universal
+source correctness.
 
 A separate source probe built a shared depth-60 binary chain under an equality
 between two children. The FTA describes `2^60` distinct terms. Exact counting
@@ -272,6 +423,17 @@ bijection. The source symbolic counter and rank decoder have separate models
 and proofs. Observing an already-built finite source still enumerates every
 member in `groupBuilt`; a fast rank decoder does not remove that compilation
 cost.
+
+Soundness of an incomplete solver does not ensure identical Yes/Unknown
+results after fresh variables are renamed. `GuardAlphaBoundary` proves this
+with equal source signatures and a sound name-sensitive callback. The current
+Haskell evaluator reproduces `(Yes,Unknown)`. Both logical requirements are
+valid. Exact operational verdict preservation requires an additional
+renaming-stability contract. The supplied Z3 adapter also reproduces
+`(Unknown,Yes)` when an unused ambient declaration collides with a generated
+actual name. It rejects that declaration before asking Z3. This loses a
+confirmed result without admitting an invalid term. The allocator does not
+see the complete ambient declaration set. See [the checked boundary](notes-guard-alpha-boundary.md).
 
 The Lean sources are handwritten models and ports. There is no verified
 Haskell-to-Lean translation. Runtime containers, atomic cache operations,

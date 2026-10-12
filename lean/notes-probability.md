@@ -14,8 +14,9 @@ to explicit size annotations and a concrete key partition.
 [Decoder.lean](MicroCFTA/Decoder.lean) proves exact rank-order preservation
 under plan normalization. `SizeMass.lean` proves the count-scaled per-size
 weight formulas and concrete split/merge laws. `Sparse.lean` proves finite
-mass convolution. See [SECOND-REPAIRS.md](SECOND-REPAIRS.md) for current
-coverage and the remaining atomic-pair probability defect.
+mass convolution. `MassRetention` proves the repaired observed atomic-pair
+policy. [SYSTEM.md](SYSTEM.md) contains current findings;
+[SECOND-REPAIRS.md](SECOND-REPAIRS.md) retains the historical defect report.
 
 | Haskell code | Lean results | Scope |
 | --- | --- | --- |

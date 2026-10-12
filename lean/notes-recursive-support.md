@@ -21,7 +21,10 @@ child. Grouped recursion already has an opaque AtKey/Family boundary.
 
 The public engine terms change shape. `surface` removes the new private
 wrapper. Values, counts, masses, size classes, and member rank order retain
-their definitions. The new constructor does not pay a size unit.
+their definitions. The new constructor does not pay a size unit in the original generator.
+Importing the raw support through `fromAutomaton` counts every private root
+as an ordinary graph node. Bounds for that separate node-count language can
+therefore increase. The retained import fixture changes its bound from 6 to 8.
 
 `wrap_injective` and `unwrap_wrap` prove exact wrapper identity and inverse.
 `label_wrap` and `spine_wrap` prove the corrected parent behavior.

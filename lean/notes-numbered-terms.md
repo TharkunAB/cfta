@@ -11,8 +11,9 @@ contiguous preorder range. `numbered_positions_unique` proves that distinct
 positions cannot collide in the acceptance cache. `numbered_position_bounds`
 gives the allocated interval.
 
-The source cache also includes the automaton state in its key. Its shared and
-unshared acceptance workers still need a full cache/acceptance theorem. An
+The source cache also includes the automaton state in its key.
+`AcceptanceDispatch`, `AcceptanceEffects`, and `AcceptanceSoundness` now prove
+both workers, their caches, and sound definite verdicts. An
 external monadic guard check must have stable truth at a fixed state, edge,
 and term if memoized results are to describe a language. The source counter
 uses `Int`; the numbering correspondence requires that the term's constructor
