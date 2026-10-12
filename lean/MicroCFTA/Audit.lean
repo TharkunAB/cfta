@@ -271,6 +271,8 @@ import MicroCFTA.FiniteAutomatonDriver
 import MicroCFTA.InternedConstructorTemplates
 import MicroCFTA.OpenGroupedApplication
 import MicroCFTA.SourcePlanPartition
+import MicroCFTA.PartialReductionCaller
+import MicroCFTA.InternedRecordCoherence
 /-!
 # Proof dependency audit
 
