@@ -50,8 +50,11 @@ node language or residual predicates.
 `EnumerationSoundness.runs_assignment_sound` now composes backward assignment
 semantics through the full traversal and its final root write. See
 `notes-enumeration-semantics.md`. That theorem assumes a satisfying final
-assignment. Constructing such assignments remains open. The stuck-branch
-proof also needs pending-reference and strict subtree dependency invariants.
+assignment. `EnumerationAssignment.runs_sound` now constructs that assignment
+from derived pending-reference and strict fragment dependency invariants.
+It proves acceptance when the returned residual predicates hold. See
+`notes-enumeration-assignment.md`. The proper-constraint invariant also
+excludes the blocked scheduler result under a satisfying assignment.
 Execution-bound sufficiency remains separate from branch rejection.
 
 Recursive markers require the documented truncation contract. A marker is
