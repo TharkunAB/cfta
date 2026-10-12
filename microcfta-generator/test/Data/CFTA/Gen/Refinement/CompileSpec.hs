@@ -535,6 +535,20 @@ spec = do
             checked <- LTAGen.validOutcomes latticeEntailment emptied
             (LTAGen.cardinality <$> compiled, checked) `shouldBe` (Right (Left LTAGen.EmptyGenerator), Right [])
 
+        it "keeps recursive import size classes when a parent observes its root" $
+            withZ3 declarations $ \solver -> do
+                let leaf name = Node [Transition name true [] noConstraint]
+                    productive = Mu $ \self -> Node [Transition "a" true [] noConstraint, Transition "f" true [self] noConstraint]
+                forM_ [productive, createUnion [productive, leaf "b"]] $ \graph -> do
+                    let imported = LTAGen.fromAutomaton graph
+                        wrapped = LTAGen.refinedNode "wrap" (const true) (\child -> child `requires` const true) imported
+                    compiled <- compileOrFail solver wrapped
+                    map (LTAGen.countAtSize compiled) [1 .. 5]
+                        `shouldBe` (Right 0 : map (LTAGen.countAtSize imported) [1 .. 4])
+                    let bounded = LTAGen.upToSize 5 compiled
+                    sort (values bounded) `shouldBe` sort (values $ LTAGen.upToSize 4 imported)
+                    unranked bounded (allRanks bounded) `shouldBe` []
+
         it "compile a choice of a recursive import and a deferred node" $ do
             -- The deferred node makes compile read the choice, and the import gives a recursive group.
             let lists =

@@ -9,6 +9,7 @@ module Data.CFTA.GenSpec (spec) where
 
 import Control.Exception (evaluate)
 import Data.Either (fromRight)
+import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.List (nub)
 import Data.Proxy (Proxy (Proxy))
 import qualified Data.Set as Set
@@ -16,7 +17,7 @@ import Data.String (fromString)
 import Data.Typeable (typeRep)
 import GHC.Generics (Generic)
 import System.Timeout (timeout)
-import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
+import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldReturn, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
 import qualified Test.QuickCheck as QC
 
@@ -348,6 +349,30 @@ spec = do
                 (Left err, _, _) -> expectationFailure $ show err
                 (_, Left err, _) -> expectationFailure $ show err
                 (_, _, Left err) -> expectationFailure $ show err
+
+        it "filters recursive keys without losing their size classes or replay" $ do
+            let recursive :: FTAGen.FTAGen String Int
+                recursive = FTAGen.recur $ \self -> FTAGen.oneof [FTAGen.leaf 0 "zero", FTAGen.node "succ" $ (+ 1) <$> self]
+                groups = FTAGen.oneofGrouped [FTAGen.keyed "keep" recursive, FTAGen.keyed "drop" $ FTAGen.leaf 99 "discarded"]
+            calls <- newIORef []
+            result <-
+                FTAGen.filterGroupsM
+                    (\key -> modifyIORef' calls (<> [key]) >> pure (Right $ key == "keep" :: Either String Bool))
+                    groups
+            readIORef calls `shouldReturn` ["drop", "keep"]
+            case result of
+                Left err -> expectationFailure err
+                Right retained -> do
+                    FTAGen.cardinality (FTAGen.atKey "drop" retained) `shouldBe` Left FTAGen.EmptyGenerator
+                    let generator = FTAGen.ungroup retained
+                    FTAGen.isRecursive generator `shouldBe` True
+                    map (FTAGen.countAtSize generator) [0 .. 4] `shouldBe` map (FTAGen.countAtSize recursive) [0 .. 4]
+                    FTAGen.values (FTAGen.upToSize 4 generator) `shouldBe` Right [0, 1, 2, 3]
+                    (traverse (FTAGen.termAt generator) [0 .. 3] >>= traverse (FTAGen.rankOf generator)) `shouldBe` Right [0 .. 3]
+            empty <- FTAGen.filterGroupsM (const $ pure $ Right False :: String -> IO (Either String Bool)) groups
+            fmap (FTAGen.cardinality . FTAGen.ungroup) empty `shouldBe` Right (Left FTAGen.EmptyGenerator)
+            failure <- FTAGen.filterGroupsM (\key -> pure $ Left key) groups
+            either Just (const Nothing) failure `shouldBe` Just "drop"
 
         it "closes grouped function spines without mixing alternative children" $ do
             let retain = FTAGen.atKey () . FTAGen.groupOn (const ())

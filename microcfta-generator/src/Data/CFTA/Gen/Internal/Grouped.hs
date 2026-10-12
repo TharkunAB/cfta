@@ -446,13 +446,17 @@ relateN relation (first : rest) = do
                     remaining
 
 {- | Keep the groups whose key the predicate accepts. The predicate runs once for
-each key.
+each key. Recursive families keep their size indexes and do not enumerate members.
 -}
 filterGroupsM ::
     (Ord key, Hashable symbol, Typeable symbol) =>
     (key -> IO (Either relationError Bool)) ->
     Grouped symbol key a ->
     IO (Either relationError (Grouped symbol key a))
+filterGroupsM _ (CyclicGrouped (Left err)) = pure $ Right $ CyclicGrouped $ Left err
+filterGroupsM predicate (CyclicGrouped (Right groups)) = do
+    retained <- runExceptT $ filterM (ExceptT . predicate . fst) (Map.toAscList groups)
+    pure $ CyclicGrouped . Right . Map.fromAscList <$> retained
 filterGroupsM predicate grouped = case finiteGroups grouped of
     Left err -> pure $ Right $ Grouped $ Left err
     Right buckets -> do
