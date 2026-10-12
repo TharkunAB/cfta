@@ -20,8 +20,9 @@ actual blocked result under the stated assignment and derived shape invariant.
 `finished_free` proves that every pending slot after complete-graph termination
 is a free equality variable. `EnumerationAssignment.completed_assignment`
 now constructs complete equation assignments from this fact and the derived
-fragment dependency ordering. Execution existence, sufficient execution
-bounds, and no-loss remain open. A conditional theorem
-that excludes blocked scheduling does not establish those properties.
+fragment dependency ordering. `EnumerationTermination.initialized_complete`
+uses scheduler progress and a derived decreasing height histogram to
+construct full caller executions. `EnumerationExact.runs_exact` also includes
+final rendering. See `notes-enumeration-exact.md`.
 
 Validation: `lake -d lean build MicroCFTA.EnumerationProgress`.

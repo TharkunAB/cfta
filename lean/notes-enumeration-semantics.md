@@ -61,12 +61,11 @@ assignment. It uses the returned residual checks to establish its guard
 restrictions. That theorem has no final-assignment premise. See
 `notes-enumeration-assignment.md`.
 
-No-loss still needs a constructive execution proof from each accepted term,
-fresh-variable witness extension, sufficient execution bounds, and exclusion
-of an unjustified stuck branch. A satisfying final assignment and successful
-execution are premises of the current backward theorem. They are not proofs
-of those remaining obligations. `findExpandable_not_stuck` now excludes the
-blocked scheduler result under a satisfying assignment and derived proper
-constraints. Branch construction and sufficient bounds remain open.
+`EnumerationConstruction.enumerateNode_complete` constructs each local branch
+from an accepted term and extends only fresh witness variables.
+`EnumerationTermination.initialized_complete` constructs the whole actual
+caller and excludes blocked scheduling through derived proper constraints.
+`EnumerationExact.runs_exact` adds final rendering and proves exact finite-term
+support. See `notes-enumeration-exact.md` for the remaining source boundary.
 
 Validation: `lake -d lean build MicroCFTA.EnumerationSoundness`.
