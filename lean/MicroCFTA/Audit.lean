@@ -422,6 +422,8 @@ import MicroCFTA.InternedNestedConstructionGrowth
 import MicroCFTA.InternedNestedConstructionReplay
 import MicroCFTA.InternedErasedEdgeReplay
 import MicroCFTA.InternedNestedConstructionExamples
+import MicroCFTA.SourceReadLogicalIntegerAdapter
+import MicroCFTA.SourceReadLogicalIntegerCore
 /-!
 # Proof dependency audit
 
