@@ -40,6 +40,15 @@ query readiness from closed provenance. `finish_payload` preserves every
 generation field. The retained old observation has a checked counterexample;
 the repaired observation selects the same callback branch in every phase.
 
+`RecursiveCompleteConstruction` connects these markers to the primitive input
+inventory of the complete typed body. Maps, pays, labels, names, flat choices,
+plain application, and heterogeneous joins derive the source marker operations.
+Family completion keeps exactly the enclosing tokens reached by those bodies.
+Top-level completion derives an empty marker set. `support_query_exact`
+then composes the repaired query check with the existing exact finite-term
+support theorem. It uses the same checked body as the runtime and inverse
+records.
+
 This theorem concerns the explicit construction markers and guarded query
 operations. It does not prove regularity of every Haskell callback.
 `groupKeys` exposes the current key discovery approximation. The grouped
