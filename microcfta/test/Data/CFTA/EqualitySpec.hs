@@ -213,6 +213,50 @@ spec = do
                     HashSet.fromList (terms $ termsMatching template node)
                         `shouldBe` HashSet.fromList (filter (matchesTemplate template) $ terms node)
 
+    describe "recursive union" $ do
+        it "retains an enclosing reference through a nested binder" $ do
+            let grammar :: Node Symbol
+                grammar = Mu $ \outer ->
+                    Node [Edge "a" [], Edge "wrap" [Mu $ \_ -> union [outer, Node [Edge "b" []]]]]
+                wrap term = Term.Node "wrap" [term]
+                a = Term.Node "a" []
+                b = Term.Node "b" []
+                expected = a : concat [map (!! depth) [iterate wrap a, iterate wrap b] | depth <- [1 .. 4]]
+            Set.fromList (plainTermsAtMost 4 grammar) `shouldBe` Set.fromList expected
+            accepts grammar (wrap a) `shouldBe` True
+            accepts grammar b `shouldBe` False
+            freeVars grammar `shouldBe` Set.empty
+            case toFTA grammar of
+                Left err -> expectationFailure $ show err
+                Right graph -> Set.fromList (plainTermsAtMost 4 $ fromFTA graph) `shouldBe` Set.fromList expected
+
+        it "drops a binder's own reference at the root of its body" $ do
+            let leaf = Node [Edge "a" []] :: Node Symbol
+                step child = Node [Edge "f" [child]]
+            Mu (\r -> union [leaf, step r, r]) `shouldBe` Mu (\r -> union [leaf, step r])
+
+        it "takes the least fixed point through epsilon cycles" $ do
+            let a = Node [Edge "a" []] :: Node Symbol
+                self = Mu $ \r -> union [r, a]
+                nested = Mu $ \outer -> Mu $ \inner -> union [outer, inner, a]
+                empty = Mu (\outer -> Mu $ \inner -> union [outer, inner]) :: Node Symbol
+            completed <-
+                timeout 5000000
+                    $ evaluate
+                    $ plainTermsAtMost 3 self == [Term.Node "a" []]
+                        && plainTermsAtMost 3 nested == [Term.Node "a" []]
+                        && null (plainTermsAtMost 3 empty)
+            completed `shouldBe` Just True
+
+        it "intersects and restricts terms without adding a union constructor" $ do
+            let grammar :: Node Symbol
+                grammar = Mu $ \outer -> Node [Edge "a" [], Edge "wrap" [union [outer, Node [Edge "b" []]]]]
+                onlyA = Mu $ \self -> Node [Edge "a" [], Edge "wrap" [self]]
+                expected = take 5 $ iterate (\term -> Term.Node "wrap" [term]) (Term.Node "a" [])
+            Set.fromList (plainTermsAtMost 4 $ intersect grammar onlyA) `shouldBe` Set.fromList expected
+            Set.fromList (plainTermsAtMost 4 $ restrict (TemplateNode "wrap" [Hole]) grammar)
+                `shouldBe` Set.fromList (filter (matchesTemplate $ TemplateNode "wrap" [Hole]) $ plainTermsAtMost 4 grammar)
+
     describe "intersection" $ do
         it "intersection commutes with terms" $
             property $
@@ -386,6 +430,26 @@ spec = do
                 ns'' = reduceEqConstraints ecs EmptyConstraints ns'
                 f n = Node [Edge "f" [n]]
              in (ns' == ns'') && ns' == [f $ f $ f $ f infiniteFNode, f $ f $ f infiniteFNode] `shouldBe` True
+
+        it "reduction stops on a domain with an epsilon reference to its binder" $ do
+            let leaf = Node [Edge "a" []] :: Node Symbol
+                step child = Node [Edge "f" [child]]
+                withEpsilon = Mu $ \r -> union [leaf, step r, r]
+                withoutEpsilon = Mu $ \r -> union [leaf, step r]
+                children = [withEpsilon, withoutEpsilon, withEpsilon]
+                direct = [path [0], path [1], path [2]]
+                below = [path [0, 0], path [1, 0], path [2, 0]]
+            forM_ [(children, direct), (map step children, direct), (children, below), (map step children, below)] $ \(domains, paths) -> do
+                let original = Node [mkEdge "triple" domains (equalityConstraint $ mkEqConstraints [paths])]
+                result <- timeout 2000000 $ do
+                    let reduced = fixUnbounded reducePartially original
+                    _ <- evaluate (nodeCount reduced)
+                    pure reduced
+                case result of
+                    Nothing -> expectationFailure "recursive equality narrowing did not finish"
+                    Just reduced ->
+                        forM_ [0 .. 4] $ \depth ->
+                            shallowTerms depth reduced `shouldBe` shallowTerms depth original
 
         it "refold folds the simplest unrolled input" $
             refold (Node [Edge "f" [infiniteFNode]]) `shouldBe` infiniteFNode
@@ -608,6 +672,24 @@ spec = do
         it "keeping a redundant Mu is what createMuDontCleanup is for" $
             numNestedMu (createMuDontCleanup (\_r -> Node [Edge "f" []]) :: Node Symbol) `shouldBe` 1
 
+        it "bounds retained epsilon binder cycles through their constructor closure" $ do
+            let empty =
+                    [ createMuDontCleanup id
+                    , createMuDontCleanup $ \outer -> createMuDontCleanup $ const outer
+                    ] ::
+                        [Node Symbol]
+                leaf = Node [Edge "a" []] :: Node Symbol
+                productive = Mu $ \outer -> Mu $ \inner -> union [outer, inner, leaf, Node [Edge "f" [outer], Edge "g" [inner]]]
+                expected depth
+                    | depth < 0 = []
+                    | otherwise = Term.Node "a" [] : [Term.Node symbol [child] | symbol <- ["f", "g"], child <- expected (depth - 1)]
+            forM_ [-1 .. 2] $ \depth -> do
+                forM_ empty $ \node -> do
+                    freeVars node `shouldBe` Set.empty
+                    nodeEdges node `shouldBe` []
+                    timeout 2000000 (evaluate $ boundDepth depth node) `shouldReturn` Just EmptyNode
+                terms (boundDepth depth productive) `shouldMatchList` expected depth
+
     describe "nested Mu" $
         it "references to different Mu nodes are not confused" $ do
             -- Two nodes with very similar structure
@@ -631,6 +713,8 @@ spec = do
                         , Set.union (collectAllIds (internedMuBody mu)) (collectAllIds (internedMuShape mu))
                         ]
                 collectAllIds (Rec _) = Set.empty
+                collectAllIds (InternedUnion group) =
+                    Set.insert (internedUnionId group) $ Set.unions $ map collectAllIds $ internedUnionMembers group
 
             Set.intersection (collectAllIds n) (collectAllIds m) `shouldBe` Set.empty
 

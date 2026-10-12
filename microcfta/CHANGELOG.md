@@ -19,7 +19,10 @@ remains a separate ECTA-only package.
   Recognition, depth bounds, product intersection, union, templates, paths,
   datatype derivation with `HasFTA`, constructor annotation by name with
   `annotateConstructors`, and level-by-level enumeration with
-  `terms` and `termsUpToM` are in these modules.
+  `terms` and `termsUpToM` are in these modules. A `union` inside a binder
+  keeps a reference to an enclosing binder as a union node until the binder
+  closes; a binder's reference to itself at the root of its body adds no
+  term.
 - `Data.CFTA.Equality`: equality-constrained automata as
   `Node symbol` with `equalityConstraint` edges, with reduction, membership, template
   restriction, and enumeration with unification variables. An automaton with
