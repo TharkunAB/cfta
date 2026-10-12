@@ -22,6 +22,11 @@ tree automata of `microcfta`, with QuickCheck integration.
   counts by size, `pmf`, the structural `shrinkRank`, and `smallerMembers`. A
   generator keeps each construction failure as one `GenError`. `explain`
   describes it, and `orFail` fails with that text.
+- `Data.CFTA.Gen.Synthesis`: Hectare, the type-directed component
+  synthesizer of the ECTA paper. `synthesize` lists the programs of a query
+  by size; `programsOfSize` and `programsOfSizeUpToDepth` read the program
+  space of a size as a generator. The `hectare` benchmark runs the paper's
+  Hoogle+ and Stack Overflow suites.
 - Sizes count pays, as in FEAT: `pure` has size zero, an atom one, `<*>` adds
   the sizes of its sides, and `pay`, which `Data.CFTA.Gen` and
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree

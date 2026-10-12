@@ -1527,6 +1527,50 @@ example, which bounds a recursive datatype grammar:
 cabal run cfta-automaton-interop
 ```
 
+## Component synthesis
+
+`Data.CFTA.Gen.Synthesis` uses the automata and the generators to synthesize
+programs from a library of components, after the ECTA paper.
+
+### Hectare: type-directed synthesis on equality automata
+
+`Data.CFTA.Gen.Synthesis` is Hectare, the synthesizer of Koppel et al.,
+*Searching Entangled Program Spaces* (ICFP 2022). A query gives typed
+arguments and a goal type. The program space of one size is one
+equality-constrained automaton: a type is a term, each type variable of a
+component is the recursive node of all types, and path equalities tie an
+application's argument type to the function's parameter type.
+`reduceFully` propagates the equalities, `refold` folds the result, and the
+enumeration lists the programs of the goal type.
+
+```haskell
+import Data.CFTA.Gen.Synthesis
+
+-- map :: (a -> b) -> [a] -> [b], with one argument of each type.
+mapQuery :: Query
+mapQuery = Query [("f", TVar "a" ~> TVar "b"), ("xs", TCons "List" [TVar "a"])] (TCons "List" [TVar "b"])
+
+solutions :: Library -> [Program]
+solutions lib = synthesize lib mapQuery 3
+```
+
+`programsOfSize` reads the program space of a size as a generator: counts,
+ranks, uniform sampling, and shrinking. A type variable that the goal does
+not fix keeps the node of all types, so the import cannot count such a
+space; `programsOfSizeUpToDepth` bounds the typed terms by a depth.
+
+The `hectare` benchmark runs the Hoogle+ suite of the paper (45 queries,
+291 components) and the Stack Overflow suite, each query in its own process
+with a heap and a time limit:
+
+```
+cabal bench hectare --benchmark-options='hplus 300 8G'
+```
+
+With the paper's limit of 300 seconds, 40 of the 45 Hoogle+ queries are
+solved, 82% within 7 seconds; the paper reports 43 of 45 and 84%. The five
+other queries need programs of size 7 or 9.
+
 ## Sampling performance
 
 The example FTA and ECTA languages each have three exact uniform generators:
