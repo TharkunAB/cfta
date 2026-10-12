@@ -252,6 +252,27 @@ verified lower-level API. A compiled inverse eventually returns `Nothing`
 for every nonmember. The lower-level counter and empty `Fin 0` semantics do
 not imply that the public API constructs an empty `Ranked` object.
 
+`SymbolicSelectionCost` instruments all five actual selection workers.
+`erasure` preserves their values, errors, and exact final caches.
+`source_selection_requests` bounds each successful decode by
+`(B + 1) * nodes(term)` calls to `countNode`. Here `B` bounds the distinct
+symbol/arity candidates in each projected graph. A finite constructor
+vocabulary gives this bound. The singleton worker needs at most
+`B * nodes(term)` requests. These bounds do not depend on the number of
+accepted terms. They count requests, not machine instructions. Counter
+evaluation, graph conditioning and projection, constructor sorting, cache
+lookup, and arbitrary-precision arithmetic remain separate costs. A stored
+graph count resolves a request without changing the cache. Singleton child
+decoding restores its original snapshot, so it can repeat count work that
+an earlier isolated child already performed.
+
+`SymbolicUnionCost` measures the signed union fold's intersection requests.
+Its measured result equals the exact coefficient fold. The final map has
+at most `2^m - 1` entries for `m` alternatives. The intersection-request
+bound is also exponential. The four-alternative executable example retains
+all 15 nonempty subset intersections. These results do not give a polynomial
+bound for complete count compilation or for individual count requests.
+
 `SymbolicSmartRows` proves the source node constructor's empty-child filter
 and edge deduplication preserve row membership. It also proves that an edge
 removed by the singleton-node emptiness check has numeric indicator zero.
