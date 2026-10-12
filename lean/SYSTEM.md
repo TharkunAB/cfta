@@ -103,6 +103,22 @@ separate proofs. `SourceSymbolicIndex` composes successful source constraint
 compilation with these workers. `SourceSymbolicStableIndex` derives one fixed
 index that all sufficiently complete executions share. Requested term weights
 attach to that decoder order. Concrete runtime correspondence remains explicit.
+
+`FiniteAutomatonDriver` proves the combined compact and symbolic cache
+schedule. `SourceFiniteAutomaton` derives its guard, parser, normalization,
+overlap, backend, and termination contracts from source graph rows. The
+public result has exactly the distinct accepted terms and contiguous ranks.
+An empty result is equivalent to an empty language on the supported input
+domain. The remaining graph-readback and allocation requirements are
+representation contracts, not an assumed root compiler correctness theorem.
+
+`RecursiveUnambiguous` derives distinct size classes from the actual cyclic
+overlap gate. `SourceCyclicAutomaton` preserves the public error order and
+derives plainness, complete class counts, bounded distinct ranks, and the
+bottom-up inverse. Cyclic imports reject constrained or ambiguous rows.
+They provide exact finite size classes and bounds; an infinite language does
+not acquire a finite global cardinality.
+
 `Shrink` models every finite plan constructor and proves candidate validity,
 strict rank decrease, non-growing size, and complete smaller-size traversal.
 `TermRepresentation` proves the new small-arity representation round trips,
@@ -127,6 +143,12 @@ proves that those rows have exactly the least binder language.
 `LexicalBoundedBuilder` connects them to the memoized constructor builder.
 Runtime binder identities, alpha-renaming, cleanup, and host storage remain
 separate.
+`InternedConstructorTemplates` and `InternedRecordCoherence` derive canonical
+whole-record readback from empty-cache construction traces, including cached
+free references and binder depth. `InternedStagedBinders` derives nested
+dependency-first construction and a stable finite identity family after one
+root build. General inner callbacks that depend on a fresh enclosing reference
+still require a pending-cache-key argument.
 `IntersectConstruction.constructed_intersection_total` proves that the complete
 recursive intersection schedule terminates with exactly the common input
 language. It starts from a finite payload completion trace, exact cached free variables,
@@ -161,6 +183,29 @@ precedence, integer-hole filling, closure, and observation metadata. Its
 `atomic_pair_metadata_counterexample` derives the weight failure from those
 source metadata branches. Heterogeneous Haskell callback and value records
 still need their implementation correspondence.
+
+`OpenGroupedApplication`, `FinalObservationRanks`, and `FinalObservationMass`
+derive finite applicative grouping, integer-point closure, parent settlement,
+final observation regrouping, and nested frequency wrappers. They align each
+member rank with its probability mass. Rank offsets use counts; branch
+probabilities use the retained masses. Every query preimage is preserved,
+including repeated values and repeated projected terms.
+
+`SourcePlanPositions` and `SourcePlanPartition` prove both directions between
+finite original ranks and size-class positions. All classes together form a
+permutation of the complete rank interval. Their count sum equals the
+original count. `PartialReductionCaller` proves exact inherited equality
+descent and every completed repetition of the source reduction pass. It
+also proves that larger execution bounds preserve completed results.
+General reduction fixed-point termination remains open.
+
+`GuardBuilders` and `ContractAssembly` derive standard argument arities,
+consecutive paths, transition checks, conjunct selection, and capture-free
+compact contract names. `DatatypeDecoder` proves that hashed constructor
+lookup and full-term restoration equal direct lookup, even under hash
+collisions. The constructor-probe models prove terminating witness and
+context construction and coverage of every transition in an accepting run.
+Finite probe success still cannot prove an arbitrary user codec total.
 
 [API-COVERAGE.md](API-COVERAGE.md) assigns every source module and exported
 function family a semantic role. [COVERAGE.md](COVERAGE.md) records proof and

@@ -281,6 +281,12 @@ import MicroCFTA.SourceFiniteBackend
 import MicroCFTA.SourceCompactGuards
 import MicroCFTA.SourceFiniteAutomaton
 import MicroCFTA.GuardBuilders
+import MicroCFTA.ContractAssembly
+import MicroCFTA.ConstructorProbeWitnesses
+import MicroCFTA.ConstructorProbeWorklist
+import MicroCFTA.ConstructorProbeContexts
+import MicroCFTA.RecursiveUnambiguous
+import MicroCFTA.SourceCyclicAutomaton
 /-!
 # Proof dependency audit
 

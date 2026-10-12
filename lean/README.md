@@ -48,6 +48,13 @@ constructors, and the full indexed-array equality normalization loop. See the [s
 [support graph notes](notes-support-graph.md), and
 [actual-table notes](notes-actual-quotient.md).
 
+The source finite and cyclic FTA entry points now derive their distinct-rank
+contracts from the actual guard and ambiguity gates. See the
+[finite compiler notes](notes-source-finite-automaton.md) and
+[cyclic index notes](notes-source-cyclic-automaton.md). Final finite observation
+merging also connects ranks to retained probability mass. See the
+[observation merge notes](notes-final-observation-merge.md).
+
 This is not a claim that the whole Haskell implementation is verified. The
 Lean algorithms are handwritten. Some complete driver invariants, concrete runtime
 representations, and external contracts remain explicit in the coverage
