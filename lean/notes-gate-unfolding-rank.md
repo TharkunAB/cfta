@@ -329,3 +329,41 @@ checks 7,952 theorem dependencies. The remaining restriction concerns the
 queried value: each reachable Mu must still have cached body depth zero.
 An actual Mu whose body contains another Mu is outside this proved gate
 domain. Its general normalized reconstruction rank remains open.
+
+### Closed nested records without a numeric depth bound (2026-10-13)
+
+`InternedStoredClosedMuCompletion` derives source preparation without binder
+requests from `PreparedWithoutMu`. This predicate follows actual stored
+children. It stops at any record with an empty cached free set. Closed Mu
+records can have arbitrary nested depth. `encode_withoutMu` proves that the
+actual prepared source expression is binder-free. `execute_complete` then
+proves actual completion for every replacement environment and source state.
+
+`unfold_complete_decreases` combines this completion result with the existing
+source normalization and root-guard proof. It has no body-depth bound, fuel
+premise, successful-result premise, or assumed output rank. Its remaining
+restrictions are explicit: preparation must encounter no open nested Mu,
+and all root union paths must stop before Mu. An ordinary body satisfies the
+second restriction even when its children contain arbitrarily deep closed
+binders. General open nested reconstruction remains outside this theorem.
+
+`InternedStoredClosedMuExample` builds a source outer Mu with two closed Mu
+records inside its ordinary body. The outer query is open. Its actual body
+has cached depth two. All source cache facts come from construction from
+empty caches. The derived unfolding completes and strictly decreases its
+head rank. The earlier depth-zero body theorem cannot admit this example.
+The focused build passed 168 jobs. The isolated axiom audit checked 8,031
+MicroCFTA theorem dependencies with only `propext`, `Classical.choice`, and
+`Quot.sound` permitted.
+
+A separate Haskell source probe rejects equality of body and probe head
+ranks. Let `c x = createMu (\\own -> Node [Edge "c" [own,x]])` and let
+`n = createMu (\\self -> createUnion [c self,c (Rec RecDepth)])`. Its actual
+body, depth probe, and ordinary probe have head ranks `[0,1,0]`. Unfolding
+still decreases rank from one to zero. Probe aliasing merges the two union
+members in the depth probe. Thus a general proof must account for probe
+normalization. The temporary source probe is
+`/tmp/mcfta-gate-probe-capture.hs`. A separate finite probe checked 182,709
+stored Mu occurrences in 20,000 generated expressions, including probe
+records. It found no body head rank greater than both probe head ranks.
+This is diagnostic evidence, not a proof of that proposed bound.
