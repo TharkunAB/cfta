@@ -27,10 +27,10 @@ transport or exact agreement of an incomplete solver's Yes/Unknown verdicts.
 This completes the mathematical formula query transport needed by Entails
 and Satisfies under source-resolved nested substitutions. A caller must still
 select the corresponding observed formulas, including negative Satisfies
-requirements. The positional contract formula assembled by Holds needs its
-own generated contract-name and alias proof. Structural Same under scopes
-needs the renamed-tree identity proof. Full guard induction and the final
-pruning composition remain separate obligations.
+requirements. `SourceHoldsQueries` now covers the generated contract names
+and aliases. `SourceFullGuardBridge` and `FullGuardPruneStable` provide full
+guard induction and candidate pruning composition under an explicit backend
+name-transport stability contract.
 
 Validation: `lake build MicroCFTA.SourceScopeQueries` succeeds with the pinned
 Lean toolchain. The proof contains no admitted declarations or native proof

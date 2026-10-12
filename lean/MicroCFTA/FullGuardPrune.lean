@@ -101,7 +101,7 @@ theorem view_decided_exact [DecidableEq Formula] (formulas : Formulas Formula) (
 def variantVerdict [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
     (guard : Guard Formula) (variant : ObservationGraph.Variant State Name Formula) : Guards.Verdict :=
   PruneSchedule.safeVerdict
-    (!(ambiguous (queryObservations variant.view) (sameShape formulas (queryObservations variant.view) []) guard).isEmpty)
+    (!(ambiguous (queryObservations variant.view) (fun _ _ => none) guard).isEmpty)
     (evaluateGuardWithShape formulas solver (queryObservations variant.view) guard)
 
 /-- Build source candidates from the exact finite-plan graph specialization. -/
@@ -111,7 +111,7 @@ def candidates [DecidableEq Formula] (formulas : Formulas Formula) (solver : Ent
   (ObservationGraph.specialize automaton (ObservationGraph.planBudget (SourceGuardPlan.plan guard))
     (SourceGuardPlan.plan guard) state).map (fun variant =>
       ⟨variant.node, variantVerdict formulas solver guard variant,
-       !(ambiguous (queryObservations variant.view) (sameShape formulas (queryObservations variant.view) []) guard).isEmpty⟩)
+       !(ambiguous (queryObservations variant.view) (fun _ _ => none) guard).isEmpty⟩)
 
 /-- Execute the complete source candidate loop and preserve the original full guard on fallback. -/
 def prune [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
