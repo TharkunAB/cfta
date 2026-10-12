@@ -2,7 +2,7 @@
 
 module Data.CFTA.Refinement.PruneSpec (spec) where
 
-import Data.CFTA.Constraint (equalities)
+import Data.CFTA.Constraint (equalities, equalityConstraint)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Formula (Sort (..))
 import Data.CFTA.Refinement (
@@ -27,6 +27,7 @@ import Data.CFTA.Refinement (
     semanticConstraint,
     transitionSymbol,
     transitionsAt,
+    validate,
     pattern Transition,
  )
 import Data.CFTA.Refinement.Expression (refinementFormula, true, variable, (.==), (.>=))
@@ -36,6 +37,7 @@ import Data.CFTA.Refinement.TestSupport (declarations)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 import Data.List (permutations)
+import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList)
 
 spec :: Spec
@@ -211,6 +213,37 @@ spec =
                             map transitionSymbol (transitionsAt root $ path [0, 0]) `shouldBe` ["shared"]
                             map transitionSymbol (transitionsAt root $ path [1]) `shouldBe` ["shared"]
                         roots -> expectationFailure $ "unexpected root alternatives: " <> show roots
+
+        it "stops narrowing three equal leaves with distinct residual guards" $ do
+            let solver = Entailment $ \_ _ -> pure Yes
+                reflexive = Same (path []) (path [])
+                atom guard = Node [Transition "a" true [] (semanticConstraint guard)]
+                children = map atom [reflexive, And [reflexive, reflexive], Or [reflexive, reflexive]]
+                original = Node [Transition "triple" true children (equalityConstraint $ mkEqConstraints [[path [0], path [1], path [2]]])]
+                a = Term.Node (RefinedSymbol "a" true) []
+                term = Term.Node (RefinedSymbol "triple" true) [a, a, a]
+            validate original `shouldBe` Right ()
+            accepts solver original term >>= (`shouldBe` Yes)
+            result <- timeout 10000000 $ prune solver original
+            case result of
+                Just (Right reduced) -> do
+                    accepts solver reduced term >>= (`shouldBe` Yes)
+                    prune solver reduced >>= (`shouldBe` Right reduced)
+                other -> expectationFailure $ "expected completed pruning, got " <> show other
+
+        it "retains branch correlations when narrowing a nested equality class" $ do
+            let solver = Entailment $ \_ _ -> pure Yes
+                a = Node [Transition "a" true [] noConstraint]
+                b = Node [Transition "b" true [] noConstraint]
+                alternatives = Node [Transition "f" true [a] noConstraint, Transition "g" true [b] noConstraint]
+                other = Node [Transition "a" true [] noConstraint, Transition "b" true [] noConstraint]
+                original = Node [Transition "pair" true [alternatives, other] (equalityConstraint $ mkEqConstraints [[path [0, 0], path [1]]])]
+                leaf name = Term.Node (RefinedSymbol name true) []
+                term outer inner = Term.Node (RefinedSymbol "pair" true) [Term.Node (RefinedSymbol outer true) [leaf inner], leaf inner]
+                terms = [term "f" "a", term "g" "b", term "f" "b", term "g" "a"]
+            validate original `shouldBe` Right ()
+            traverse (accepts solver original) terms >>= (`shouldBe` [Yes, Yes, No, No])
+            checkPrunedLanguage solver original terms 2
 
         it "keeps Boolean syntactic constraints in the LTA when equality classes cannot express them" $
             withZ3 declarations $ \solver -> do
