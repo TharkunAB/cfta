@@ -148,6 +148,30 @@ import MicroCFTA.SymbolicSourceUnion
 import MicroCFTA.SymbolicStructuralBudget
 import MicroCFTA.SymbolicInternedView
 import MicroCFTA.SymbolicSmartRows
+import MicroCFTA.PruneMemo
+import MicroCFTA.BinderComponents
+import MicroCFTA.PruneDependencies
+import MicroCFTA.SymbolicAllocatedGraph
+import MicroCFTA.SymbolicHashJoin
+import MicroCFTA.PruneReads
+import MicroCFTA.PathFilter
+import MicroCFTA.EqualityNarrowing
+import MicroCFTA.EnumerationAssignment
+import MicroCFTA.SymbolicEqualityBridge
+import MicroCFTA.SymbolicSignedPaths
+import MicroCFTA.EqualityReduction
+import MicroCFTA.SymbolicCanonicalOrder
+import MicroCFTA.SymbolicTotalAPI
+import MicroCFTA.EnumerationConstruction
+import MicroCFTA.BinderCycles
+import MicroCFTA.SourceActuals
+import MicroCFTA.HeightOrder
+import MicroCFTA.LatticeSingleton
+import MicroCFTA.SourceEntailment
+import MicroCFTA.SymbolicPublicAdapter
+import MicroCFTA.EnumerationTermination
+import MicroCFTA.SupportJoin
+import MicroCFTA.SourceGuardRefinement
 /-!
 # Proof dependency audit
 

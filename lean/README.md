@@ -19,21 +19,26 @@ construction, enumeration, pruning, minimization, and symbolic drivers.
 `System.grammar_bijection` and `System.grammar_probability` compose the
 reference grammar, FTA, index, and distribution results.
 
-The four recorded implementation failures now have source repairs and checked
+The five recorded implementation failures now have source repairs and checked
 regressions: quantified substitution, observed atomic weights, accepted root
-representatives, and open recursive unions. Historical counterexamples remain
+representatives, open recursive unions, and pruning through open nested binders. Historical counterexamples remain
 separate from the repair theorems. See [SYSTEM.md](SYSTEM.md).
 
 The later source proofs include complete symbolic count/select/rank execution
 and its distinct-term bijection, compiled guard indicators, three-valued cached
 acceptance, typed single and mutual recursive sampling records, enumeration
-assignment soundness and progress, successful recursive pruning, binder
-substitution, and the full indexed-array equality normalization loop. See the [symbolic notes](notes-symbolic-semantics.md),
+assignment construction, run soundness and constructive full expansion,
+successful recursive pruning, total cyclic binder construction, exact support
+constructors, and the full indexed-array equality normalization loop. See the [symbolic notes](notes-symbolic-semantics.md),
 [indicator notes](notes-constraint-indicators.md), [acceptance notes](notes-acceptance.md),
 [recursive source notes](notes-recursive-source.md), [keyed source notes](notes-keyed-source.md),
 [enumeration notes](notes-enumeration-driver.md), [binder notes](notes-binder-language.md),
 [array notes](notes-array-union-find.md), [pruning notes](notes-prune-correctness.md),
-and [lattice retry notes](notes-lattice-retry.md).
+[lattice retry notes](notes-lattice-retry.md), [cyclic conversion notes](notes-binder-compile.md),
+[equality reduction notes](notes-equality-reduction.md),
+[full expansion notes](notes-enumeration-construction.md),
+[support graph notes](notes-support-graph.md), and
+[actual-table notes](notes-actual-quotient.md).
 
 This is not a claim that the whole Haskell implementation is verified. The
 Lean algorithms are handwritten. Some complete driver invariants, concrete runtime
@@ -204,8 +209,8 @@ ecta.pdf 34572866be0bc8e86a546f712ffb2666fe641d133417a895ecbdee5d8f6e1ebf
 - The complete Lean package builds. The axiom audit passes.
 - All earlier repaired cases and the new counterexamples run inside `nix-shell`,
   with Z3 for the public cases.
-- Existing suites pass after the four repairs: 273 core, 190 generator, and 135
-  refinement examples; 598 total, zero failures. The added cases extend existing
+- Existing suites pass after the five repairs: 274 core, 190 generator, and 135
+  refinement examples; 599 total, zero failures. The added cases extend existing
   suites. The final fresh-name counter change also passes the focused formula
   suite and the repaired Z3 capture probe.
 - Fourmolu accepts the reproductions. Cabal-gild accepts both audited packages.
@@ -230,10 +235,10 @@ add a package test suite.
    support callback. Atomic observed masses are repaired and proved.
 2. Connect the proved root-representative schedule to concrete graph conversion
    and guard validation. The root deletion defect is repaired.
-3. Prove the recursive size-table invariants, including positive size at each
-   recursive product, and connect the finite sparse proofs to lazy tables.
-4. Prove the observation trie and constrained symbolic counter preserve
-   language coverage, guard meaning, masses, and size classes.
+3. Connect proved single and mutual recursive records and size invariants to
+   heterogeneous families and lazy runtime tables.
+4. Connect rich sparse guard observations and concrete interned identities to
+   the proved pruning and complete symbolic index drivers.
 5. Connect the checked lattice eliminator and rank/select implementation to
    scoped binding and concrete container adapters.
 6. Establish an implementation correspondence through a translation, extraction,

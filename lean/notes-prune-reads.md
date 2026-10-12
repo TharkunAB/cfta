@@ -54,6 +54,8 @@ Validation:
 - The updated existing `PruneSpec` compares recognition and bounded concrete
   denotation before and after pruning.
 - The focused Nix test filter `enclosing` passes two examples with no failures.
+- The complete Nix suites pass 274 core, 190 generator and 135 refinement
+  examples, with no failures.
 - `lean/repro/PruneOpenBinder.hs` now prints `Right ()`, `Yes`, `Yes`.
 - `fourmolu` was applied to the source, existing test, and repro.
 - `cabal-gild` check passed.

@@ -95,8 +95,11 @@ results for the complete counter. `SymbolicComplete.rows_full_index` now
 derives total decoding and the complete distinct-term bijection with `Fin n`.
 `SymbolicStructuralBudget.acyclic_full_index` derives language and budget laws
 from copied operational rows and a topological rank. Pure interned allocation
-and readback preserve that rank and every old closed language. Concrete
-smart-constructor cleanup and runtime correspondence remain explicit.
+and readback preserve that rank and every old closed language.
+`SymbolicTotalAPI.allocated_total_api` includes smart-constructor cleanup,
+normalized rows, hash joins, and total inverse ranking. Shared-cache worker
+answers, stale-snapshot publication, and the public count-once callbacks have
+separate proofs. Concrete runtime correspondence remains explicit.
 `Shrink` models every finite plan constructor and proves candidate validity,
 strict rank decrease, non-growing size, and complete smaller-size traversal.
 `TermRepresentation` proves the new small-arity representation round trips,
@@ -205,6 +208,22 @@ retains all and only the accepted finite terms of its finite input graph.
 The source tests include nested binders, epsilon cycles, conversion, and
 intersection. See [notes-epsilon-union.md](notes-epsilon-union.md).
 
+### Pruning an open nested binder can crash
+
+The repaired union representation exposed a missing recursion-check case.
+For `X = base | outer(a, Y)` and `Y = X | inner(a, Y)`, a guard on `outer`
+reads `[1,0]`. The read reaches a fixed leaf. Validation returns `Right ()`
+and recognition returns `Yes`. Before the repair, pruning instead raises
+`nodeEdges: unresolved union reference` while inspecting the open binder.
+
+The source now inspects an open binder's stored body before outer-edge
+unfolding. It detects the enclosing reference and retains the guarded edge.
+`PruneReads` proves the exact repaired gate and its structural termination.
+The existing pruning suite checks the regression. The standalone
+[PruneOpenBinder.hs](repro/PruneOpenBinder.hs) now validates, recognizes, and
+retains the term after pruning. The full Nix suites pass 599 examples after
+this repair. See [the repair notes](notes-prune-reads.md).
+
 ## Rebase integration repairs
 
 The previous weight repair introduced `keyedBucketMasses`. New upstream
@@ -219,7 +238,7 @@ transport law, and `stale_mass_counterexample` proves why the old keys fail.
 The retained regression fixtures and reproductions now use the current
 constructor sizes, `Term` representation, and sorted core-formula declarations.
 No new package test suite was added. The existing core, generator, and
-refinement suites pass in `nix-shell`: 273, 190, and 135 examples, respectively.
+refinement suites pass in `nix-shell`: 274, 190, and 135 examples, respectively.
 Existing property examples also run their configured generated cases.
 
 An independent temporary source probe compared 5,000 finite grammars against
