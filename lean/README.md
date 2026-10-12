@@ -68,6 +68,10 @@ The [n-ary body notes](notes-recursive-nary-body.md) extend the full forward
 compiler, guards, decoder, inverse, and ranked mass fields to arbitrary branch
 counts. Their callback proof includes the source knot equation and exact
 bounded global rank queries.
+The [keyed alignment notes](notes-keyed-term-alignment.md) and
+[keyed callback notes](notes-keyed-callbacks.md) extend these results to
+finite mutually recursive key families. They retain separate key masses,
+actual private member wrappers, and complete per-key global inverses.
 The [dispatcher notes](notes-static-dispatch.md) cover all finite sampling and
 bucket-merge flag branches. The [similarity notes](notes-similarity-within.md)
 and [parent-index notes](notes-minimize-parent-index.md) verify the new

@@ -237,6 +237,19 @@ leaves. `RecursiveNaryCandidates` derives bounds, order, and distinctness.
 height and the source callback knot equation, including false flags.
 `RecursiveNaryQuery` proves complete bounded global inverses, ascending
 order, and distinct ranks. See [the n-ary body notes](notes-recursive-nary-body.md).
+`KeyedTermAlignment` and `KeyedTermMass` derive the corresponding fields for
+finite mutually recursive families with typed binary-choice bodies.
+`KeyedSourceUnfolding` and `KeyedSamplerUnfolding` derive the full simultaneous
+count, mass, and sampler equations from the computed minimum and guard.
+`KeyedTermBoundary` preserves the actual `AtKey` and `Family` labels.
+`KeyedTermCodes` derives total distinct key positions and exact key-restricted
+support. Its machine-label theorem states the source key-table size bound.
+The `KeyedCallback*` modules derive terminating simultaneous callback
+equations, complete class and bounded global inverses, candidate bounds,
+order, and distinctness. No whole-family inverse contract is assumed.
+Flat n-ary family choices, recursive grouped `JoinN` terms, and nested runtime
+schemas still need separate adapters. See [the keyed alignment notes](notes-keyed-term-alignment.md)
+and [callback notes](notes-keyed-callbacks.md).
 `StaticSamplingDispatch` and `BucketMergeDispatch` derive all finite flag
 branches, including atomic priority, uniform callback omission, retained
 class masses, singleton preservation, and the positive atomic size condition.
