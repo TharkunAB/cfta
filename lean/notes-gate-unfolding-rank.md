@@ -254,3 +254,19 @@ dependence on reapplying the original source callback syntax.
 The binding-restriction target builds 164 jobs. The combined isolated audit
 checks 7,611 theorem dependencies. The adapter's full language theorem and
 the general strict rank for open nested reconstruction remain unproved.
+
+`InternedStoredUnfoldingRank` lifts the constructor-guard law to the full
+stored-body adapter. A successful unfolding returns head rank zero when
+root union paths stop at ordinary constructors or unchanged references.
+Those ordinary constructors can contain arbitrary open nested Mu work.
+The proof derives the root guard from actual stored self filtering and
+flatness. This larger fragment still conditions the rank on successful
+canonical reconstruction.
+
+`InternedStoredShallowCompletion` removes that success condition for
+cached body depth zero. The prepared program then contains no dynamic Mu
+request. Its source execution always completes and cannot return pending.
+`unfold_complete_decreases` derives actual completion and strict head-rank
+decrease together, with no success, fuel, singleton, or output-rank
+hypothesis. The full cached representation inputs come from the earlier
+nested executor invariants. The focused target builds 166 jobs.
