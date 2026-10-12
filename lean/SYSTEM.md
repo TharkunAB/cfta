@@ -410,6 +410,28 @@ termination remains open. See the [source findings](notes-recursive-reduction-gr
 [barrier proofs](notes-recursive-reduction-barrier.md), and
 [structural order proofs](notes-structural-order.md).
 
+### Observed imports can drop every explicit-union term
+
+The closed automaton `mu r. (r | a)` accepts exactly `a`. Its union with
+`b` accepts `a` and `b`. Both validate and import correctly by themselves.
+When an always-accepting parent guard requests an observation, the old
+`splitByObservations` unfolds the binder into an explicit union and falls
+through to an empty result. Compilation then reports `EmptyGenerator`.
+
+The source now exposes an `InternedUnion` with the existing finite
+`nodeEdges` epsilon closure and uses the ordinary constructor split.
+Both whole-root and nested requested observations preserve the imports.
+The existing suite regression and [ImportUnion.hs](repro/ImportUnion.hs)
+retain the examples. All 611 suite examples pass. Concrete observation-key
+partition correspondence is still being connected to the existing exact
+specialization model.
+
+A separate productive-recursion import reaches `filterGroupsM` with a valid
+finite map of recursive observation groups. That function's finite-only
+accessor rejects it as `UnboundedGenerator`. The recursive key-filter repair
+and its record-preservation proof are in progress. This is a separate defect
+from the missing union branch.
+
 ## Rebase integration repairs
 
 The previous weight repair introduced `keyedBucketMasses`. New upstream
@@ -424,7 +446,7 @@ transport law, and `stale_mass_counterexample` proves why the old keys fail.
 The retained regression fixtures and reproductions now use the current
 constructor sizes, `Term` representation, and sorted core-formula declarations.
 No new package test suite was added. The existing core, generator, and
-refinement suites pass in `nix-shell`: 281, 193, and 136 examples, respectively.
+refinement suites pass in `nix-shell`: 281, 193, and 137 examples, respectively.
 Existing property examples also run their configured generated cases.
 
 An independent temporary source probe compared 5,000 finite grammars against

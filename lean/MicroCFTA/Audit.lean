@@ -221,6 +221,10 @@ import MicroCFTA.RefinementValidation
 import MicroCFTA.SolverAdapter
 import MicroCFTA.DecoderDispatch
 import MicroCFTA.DecoderDispatchCost
+import MicroCFTA.IntegerLabelCodec
+import MicroCFTA.OpenIntegerReaders
+import MicroCFTA.SourceGuardSplit
+import MicroCFTA.DecoderMachineBounds
 /-!
 # Proof dependency audit
 
