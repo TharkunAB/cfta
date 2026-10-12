@@ -1,4 +1,4 @@
-import MicroCFTA.IntersectSchedule
+import MicroCFTA.IntersectConstruction
 
 /-!
 # Executed recursive intersection examples
@@ -40,6 +40,46 @@ def unaryView : View Nat where
     | .node 4 => unaryBody 102
     | .ref name => .ref (name + 100)
     | _ => .empty
+
+/-- The recursive example has a finite completion trace despite its infinite language. -/
+def unaryPayloadTrace : PayloadTrace unaryView where
+  nodes := [.mu 2, .node 4, .ref 2, .mu 1, .node 3, .ref 1]
+  built := by
+    apply PayloadConstructed.add
+    · apply PayloadConstructed.add
+      · apply PayloadConstructed.add
+        · apply PayloadConstructed.add
+          · apply PayloadConstructed.add
+            · apply PayloadConstructed.add
+              · exact .nil
+              · simp
+              · simp [payloadChildren]
+            · simp
+            · simp [payloadChildren, unaryView]
+          · simp
+          · simp [payloadChildren, unaryView]
+        · simp
+        · simp [payloadChildren]
+      · simp
+      · simp [payloadChildren, unaryView]
+    · simp
+    · simp [payloadChildren, unaryView]
+  rows := by
+    intro name row member
+    by_cases first : name = 3
+    · subst name; simp
+    by_cases second : name = 4
+    · subst name; simp
+    simp [unaryView, first, second] at member
+  members := by intro name child member; cases member
+
+/-- A recursive reference shares its binder identity and completes before its payload. -/
+theorem unary_payload_sizes :
+    identity (.ref 1) = identity (.mu 1) ∧
+    constructionSize unaryPayloadTrace.nodes (.ref 1) = 2 ∧
+    constructionSize unaryPayloadTrace.nodes (.node 3) = 3 ∧
+    constructionSize unaryPayloadTrace.nodes (.mu 1) = 4 := by
+  decide
 
 /-- The source creates one enclosing intersection binder and reuses it at the recursive child. -/
 theorem unary_intersection_executes : run unaryView 20 {} (.mu 1) (.mu 2) = .ok (unaryShape 5) := by

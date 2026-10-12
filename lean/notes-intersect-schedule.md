@@ -82,10 +82,37 @@ the combined root size. Every other recursive call decreases the local measure.
 combines this with exact independent finite input semantics. It gives one
 stable, exact result at every sufficiently large bound.
 
-The remaining source bridge must derive these finite lexical-payload contracts
-from the smart constructors and their identity allocation. Payload lookup,
-cached free-variable sets, closed-copy semantics, finite input structure, and
-typed memoization remain explicit representation interfaces.
+`IntersectStructure.lean` derives the closed-root reachability bound. A free
+reference in a contained payload is either free at the root or has a binder
+inside that root. A closed root has no first case. Thus reference unfolding
+stays inside the finite direct payload structure. It also derives the finite
+pair universe from a finite input list and derives the local weight from the
+full payload size. `structural_intersection_total` needs only this finite input
+list and direct payload size facts in place of `InputBounds`.
+
+`IntersectConstruction.lean` derives the finite identities and direct size from
+a concrete payload completion trace. Every newly completed constructor, union,
+or binder uses previously completed direct children. A recursive reference is
+a leaf. Its tag differs from its binder's tag, but both retain the same identity.
+Reuse of an interned payload adds no construction step. Completion order is
+distinct from identity allocation order. In particular, a binder can receive
+its identity before its completed body enters the trace.
+
+`constructed_intersection_total` gives total, exact intersection from this
+finite representation. `tracedFiniteInput` derives payload-read validity from
+trace membership. `unaryPayloadTrace` checks a concrete trace for the cyclic
+unary example. `unary_payload_sizes` verifies the reference, body, and binder
+order while the reference and binder still share their source identity.
+`traced_references_bound` derives complete binder coverage when the trace
+collects the direct payloads of closed roots. `reference_then_binder_constructed`
+also permits a reference leaf followed by its same-identity binder.
+
+The remaining source bridge must connect the runtime smart constructors and
+allocator to these payload traces, coherent identities, closed root collection,
+cached free-variable equations, and exact closed-copy semantics. Typed
+memoization also remains a representation interface. No intersection language
+law, execution bound, payload size, finite pair bound, reset-descent law, or
+recursive-call invariant is an assumed premise of the trace-based result.
 
 `IntersectReset.lean` proves why that representation requirement is necessary.
 Its deliberate countermodel uses cyclic binder payloads instead of `RecInt`
