@@ -73,3 +73,11 @@ reset clears remembered pairs before the cutoff check.
 A termination proof must also measure the structure of closed descendants.
 Payload lookup, cached free-variable sets, closed-copy semantics, finite input
 weights, and typed memoization remain explicit representation interfaces.
+
+`IntersectReset.lean` proves why that representation requirement is necessary.
+Its deliberate countermodel uses cyclic binder payloads instead of `RecInt`
+references. It satisfies `FreeCorrect`, `LocalWeight`, and `FiniteInput`.
+Nevertheless, `cyclic_reset_exhausts` proves that every execution bound fails.
+`cyclic_has_no_body_weight` proves that no finite structural binder-body weight
+can represent it. This is a limitation of the current graph interface. It is
+not a counterexample produced by the source smart constructors.
