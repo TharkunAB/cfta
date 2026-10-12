@@ -7,7 +7,9 @@ import MicroCFTA.FormulaExecutable
 
 Every evaluator substitution replaces a name by a name. The checked formula
 substitution cannot reject this input, including below function applications
-and quantifiers. The total wrapper executes that checked implementation.
+and quantifiers. This wrapper executes that checked implementation.
+`FormulaTotalSubstitution.guard_substitution` proves equality with the current
+total public API for all such name pairs.
 -/
 namespace MicroCFTA.SourceFormula
 open FullSyntax FormulaSubstitution

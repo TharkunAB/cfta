@@ -7,9 +7,10 @@ import MicroCFTA.SourceFormula
 
 Generated leaves use the canonical value equality. `onlyPoint` is proved to
 read that equality for every integer. Label specialization keeps the source
-constructor name and uses checked formula substitution before singleton
-refinement replacement. A checked substitution error represents the source
-wrapper's exception; it does not represent an empty language.
+constructor name and uses a restricted checked substitution model before
+singleton refinement replacement. `IntegerLabelTotalSubstitution` models the
+current total source API and proves agreement on every checked success.
+The checked error branch is not a current source exception.
 -/
 namespace MicroCFTA.IntegerLabelCodec
 open FullSyntax
@@ -41,7 +42,7 @@ def leafValue (symbol : Symbol) : Option Int := LatticeSingleton.onlyPoint Sourc
 theorem leafValue_integer (value : Int) : leafValue (integerSymbol value) = some value :=
   IntegerLiteral.onlyPoint_literal SourceGuards.valueName value
 
-/-- Source exactLabel, with its checked-substitution failure represented explicitly. -/
+/-- The checked specialization model; success agrees with current source exactLabel. -/
 def exactLabel (point : List Int) (label : Symbol) : Except FormulaSubstitution.Error Symbol :=
   if symbolic label then do
     let named ← FormulaSubstitution.checked (replacements point) label.2

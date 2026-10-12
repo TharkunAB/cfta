@@ -34,10 +34,11 @@ or elimination.
 
 `IntegerLabelCodec.integerSymbol` and `leafValue` match the compiler's
 literal label and refinement reader. `leafValue_integer` has no premises.
-`exactLabel` executes the reserved-prefix test, ordered literal substitution,
-and optional singleton refinement replacement. A checked substitution error
-represents the source `substitute` wrapper's exception. It is not an empty
-language. `exactLabel_name` and `exactLabel_matches` prove that every
+`exactLabel` models the checked specialization domain: the reserved-prefix
+test, ordered literal substitution, and optional singleton replacement.
+The current source uses total substitution. `IntegerLabelTotalSubstitution`
+executes that policy and proves agreement for every checked success. A checked
+error is a boundary of the older model, not a current source exception. `exactLabel_name` and `exactLabel_matches` prove that every
 successful specialization retains the constructor name and passes the
 source `labelStaticMatching` predicate. `singleton_refinement_exact` proves
 that replacement by a canonical singleton preserves all one-variable integer

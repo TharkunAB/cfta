@@ -55,7 +55,7 @@ theorem term_semantics (model : Interpretation Value) (nullary : ∀ value, mode
                       simp only [evaluateTerm]
                       rw [arguments_semantics model nullary active _ replaced done env]
                       simp [assignment, found, evaluateTerm]
-              | _ => simp [term, found] at success
+              | _ => cases done : arguments active (arg :: args) <;> simp [term, found, done] at success
   | neg t | cast t sort =>
       cases done : term active t with
       | error error => simp [term, done] at success

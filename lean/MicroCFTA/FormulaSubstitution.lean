@@ -5,7 +5,8 @@ import MicroCFTA.FormulaSemantics
 
 This module follows the repaired `Formula.substituteChecked`. Applications
 with no arguments are named values. A nonempty application can rename its
-head to another name. Other replacements at that head produce an error.
+head to another name. Other replacements at that head produce an error
+after the arguments have succeeded. An argument error takes precedence.
 The historical algorithm and its counterexample remain in `FullSyntax`.
 -/
 
@@ -57,7 +58,9 @@ def term (active : List (Name × Term)) : Term → Except Error Term
       match lookup name active with
       | none => (.app name) <$> arguments active (argument :: rest)
       | some (.var renamed) => (.app renamed) <$> arguments active (argument :: rest)
-      | some replacement => .error (.unsupportedFunction name replacement)
+      | some replacement => do
+          let _ ← arguments active (argument :: rest)
+          .error (.unsupportedFunction name replacement)
   | .neg t => Term.neg <$> term active t
   | .add t u => return .add (← term active t) (← term active u)
   | .sub t u => return .sub (← term active t) (← term active u)
@@ -104,11 +107,21 @@ def checked (replacements : List (Name × Term)) (p : Formula) : Except Error Fo
 /-- Unsupported higher-order replacement fails explicitly at a nonempty named application. -/
 theorem function_replacement_rejected (active : List (Name × Term)) (name : Name)
     (argument : Term) (rest : List Term) (replacement : Term)
-    (found : lookup name active = some replacement) (nonName : ∀ other, replacement ≠ .var other) :
+    (found : lookup name active = some replacement) (nonName : ∀ other, replacement ≠ .var other)
+    (replaced : List Term) (success : arguments active (argument :: rest) = .ok replaced) :
     term active (.app name (argument :: rest)) = .error (.unsupportedFunction name replacement) := by
-  cases replacement <;> simp [term, found]
+  cases replacement <;> simp [term, found, success]
   rename_i other
   exact False.elim (nonName other rfl)
+
+/-- An argument failure precedes an unsupported outer application head. -/
+theorem argument_error_first (active : List (Name × Term)) (name : Name)
+    (argument : Term) (rest : List Term) (error : Error)
+    (failure : arguments active (argument :: rest) = .error error) :
+    term active (.app name (argument :: rest)) = .error error := by
+  cases found : lookup name active with
+  | none => simp [term, found, failure]
+  | some replacement => cases replacement <;> simp [term, found, failure]
 
 /-- The repaired result of the original integer-binder counterexample. -/
 def captureFixed : Formula :=

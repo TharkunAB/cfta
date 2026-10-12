@@ -4,9 +4,9 @@ The current source repairs the quantified substitution defects found at `d7f7c11
 
 ## Source behavior and repair
 
-`Formula.substituteChecked` retains simultaneous replacement, first matching entries, identity-entry removal, and binder shadowing. A nullary `App name []` denotes the named value and accepts the same replacement as `Var name`. A nonempty `App name arguments` accepts a `Var` replacement for its head. A non-name head replacement returns `UnsupportedFunctionReplacement name replacement`. The existing `substitute` API unwraps success and raises a descriptive error on that unsupported case.
+`Formula.substituteChecked` retains simultaneous replacement, first matching entries, identity-entry removal, and binder shadowing. A nullary `App name []` denotes the named value and accepts the same replacement as `Var name`. A nonempty `App name arguments` accepts a `Var` replacement for its head. A non-name head replacement returns `UnsupportedFunctionReplacement name replacement` after its arguments succeed. An argument failure takes precedence. The public `substitute` API is total at `092b56d`: it retains an unsupported head and substitutes its arguments.
 
-This boundary follows the syntax. `App` stores a `Name` as its head. It cannot represent applying an arbitrary function-valued `Ite`, cast, or other term. Silently ignoring such a replacement would not implement simultaneous substitution. The checked API exposes the failure. This repair does not add higher-order application syntax.
+This boundary follows the syntax. `App` stores a `Name` as its head. It cannot represent applying an arbitrary function-valued `Ite`, cast, or other term. Retaining that head does not implement arbitrary simultaneous function-value substitution. The checked API exposes the failure. This repair does not add higher-order application syntax.
 
 Binder preparation removes shadowed entries and computes the free names of the remaining replacement terms. Captured binders receive fresh names. Repeated occurrences of one bound name receive the same fresh name. This preserves the effect of the last binder in the list. Fresh targets avoid replacement free names, body free names, original binder names, and active replacement keys. The source uses unbounded `Integer` indices for its fresh stream.
 
@@ -14,7 +14,7 @@ The existing `Refinement/SubstitutionSpec.hs` now contains eight focused regress
 
 ## Complete substitution theorem
 
-`FormulaSubstitution.lean` transcribes the checked algorithm and its error branch. `FormulaSemantics.lean` proves free-name extensionality for every constructor under arbitrary primitive interpretations. This includes both sorted quantifiers, function names, division, modulo, casts, and conditional terms.
+`FormulaSubstitution.lean` transcribes the checked algorithm and its argument-first error order. `FormulaSemantics.lean` proves free-name extensionality for every constructor under arbitrary primitive interpretations. This includes both sorted quantifiers, function names, division, modulo, casts, and conditional terms.
 
 `FormulaBinders.lean` derives the properties of actual binder preparation. It proves fresh-target exclusion, uniqueness of fresh targets, injectivity on original body and binder names, and assignment transport for prepared substitutions. The universal and existential transport theorems preserve binder order and sort domains. They support repeated binder names.
 
@@ -47,3 +47,19 @@ The target model leaves the meaning of real arithmetic, division, modulo, casts,
 `lake build MicroCFTA.FormulaOrder` checks all seven new modules with the pinned Lean toolchain. The strongest theorem dependencies contain only `propext`, `Quot.sound`, and `Classical.choice`. There are no project-specific axioms or `sorry` proofs. The final Nix check runs `cabal test microcfta:unit-tests --test-options=--match=formula`: all ten selected examples pass. The repaired `FormulaCapture.hs` probe also passes. Fourmolu formats all changed Haskell files.
 
 These are source transcriptions with complete semantic proofs for their stated operations. They are not extraction or verification of the Haskell executable. The remaining boundary includes raw-AST sort validation, full comparison order laws and container implementation invariants, text/hash representation, the Liquid Fixpoint serializer, solver declarations and IO, and the external solver's primitive theory. Arbitrary higher-order term replacement cannot always succeed with the current named-head application syntax; the checked API reports that limit. `renderFormula` and `renderTerm` are presentation functions. The library does not export a parser or a rendering round-trip contract, and this model does not assign semantics to their output text.
+
+## Current total public API
+
+`FormulaTotalSubstitution` executes the total source traversal for every term
+and formula constructor. `checked_agrees` proves equality with every successful
+checked result. `checked_semantics` transfers simultaneous meaning on that
+domain. `guard_substitution` covers all name-only calls from guard evaluation.
+`unsupported_not_simultaneous` gives an interpreted counterexample outside
+that domain. `argument_error_first` proves general checked error precedence;
+`inner_error_first` checks the concrete nested-head case.
+
+`IntegerLabelTotalSubstitution` executes the current total `exactLabel` policy.
+Its `checked_agrees` theorem transfers every successful earlier checked label
+specialization. Its name and matching theorems have no success premise.
+Earlier finite settlement proofs remain restricted to checked-success labels;
+the current source can also return labels outside that domain.

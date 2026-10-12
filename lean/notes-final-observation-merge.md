@@ -98,8 +98,10 @@ The final results are:
 This result covers the finite integer `closePoints` path and its subsequent
 observation merges. It does not extract the entire `compileGen` implementation
 into Lean. Its initial finite child tables and stored point records come from
-the previous constructor proofs. Successful label specialization remains
-explicit because the source wrapper can raise a checked substitution error.
+the previous constructor proofs. Successful checked label specialization remains explicit.
+`IntegerLabelTotalSubstitution.checked_agrees` connects that restricted domain
+to the current total source policy. The source can also return labels outside
+that domain.
 The zero-width fast path has separate metadata proofs in
 `ParentIntegerSettlement`; arbitrary imported and recursive records are not
 new seed constructors here.
