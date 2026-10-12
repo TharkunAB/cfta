@@ -332,9 +332,10 @@ theorem product_empty (left : Groups) (empty : emptyGroups left = true)
     compileProduct (.ok left) right join = .ok (.finite (.error .empty)) := by
   simp [compileProduct, empty] <;> rfl
 
-/-- The exact source classification of an observation-based guard result. -/
-def constraintDecision (actual semantic allYes allNo : Guards.Verdict)
+/-- Classify a sparse result only after actual identities are known. -/
+def constraintDecision (ambiguous : Bool) (actual semantic allYes allNo : Guards.Verdict)
     (mixedLeaf equalities same : Bool) : Except Error Bool :=
+  if ambiguous then .error .solverUnknown else
   match actual with
   | .yes => .ok true
   | .no => .ok false
@@ -346,28 +347,30 @@ def constraintDecision (actual semantic allYes allNo : Guards.Verdict)
       else if same then .error .syntacticEquality
       else .error .solverUnknown
 
-/-- A successful guard keeps a group exactly when the real guard evaluation said yes. -/
-theorem constraintDecision_accept (actual semantic allYes allNo : Guards.Verdict)
+/-- Successful retention requires known actual identities and a sparse Yes. -/
+theorem constraintDecision_accept (ambiguous : Bool) (actual semantic allYes allNo : Guards.Verdict)
     (mixedLeaf equalities same : Bool) :
-    constraintDecision actual semantic allYes allNo mixedLeaf equalities same = .ok true ↔ actual = .yes := by
-  cases actual with
-  | yes => simp [constraintDecision]
-  | no => simp [constraintDecision]
-  | unknown =>
-      cases semantic <;> cases allYes <;> cases allNo <;>
-        cases mixedLeaf <;> cases equalities <;> cases same <;> simp [constraintDecision]
-
-/-- An unknown guard never becomes successful rejection or acceptance. -/
-theorem constraintDecision_unknown (semantic allYes allNo : Guards.Verdict)
-    (mixedLeaf equalities same : Bool) (answer : Bool) :
-    constraintDecision .unknown semantic allYes allNo mixedLeaf equalities same ≠ .ok answer := by
-  cases semantic <;> cases allYes <;> cases allNo <;>
+    constraintDecision ambiguous actual semantic allYes allNo mixedLeaf equalities same = .ok true ↔
+      ambiguous = false ∧ actual = .yes := by
+  cases ambiguous <;> cases actual <;> cases semantic <;> cases allYes <;> cases allNo <;>
     cases mixedLeaf <;> cases equalities <;> cases same <;> simp [constraintDecision]
 
-/-- Semantic solver uncertainty takes precedence over unavailable structural observations. -/
-theorem semantic_unknown_first (allYes allNo : Guards.Verdict) (mixedLeaf equalities same : Bool) :
-    constraintDecision .unknown .unknown allYes allNo mixedLeaf equalities same = .error .solverUnknown := by
-  simp [constraintDecision]
+/-- Unresolved identities cannot become either a retained or an empty group. -/
+theorem ambiguous_solver_unknown (actual semantic allYes allNo : Guards.Verdict)
+    (mixedLeaf equalities same : Bool) :
+    constraintDecision true actual semantic allYes allNo mixedLeaf equalities same = .error .solverUnknown := rfl
+
+/-- An unknown guard never becomes successful rejection or acceptance. -/
+theorem constraintDecision_unknown (ambiguous : Bool) (semantic allYes allNo : Guards.Verdict)
+    (mixedLeaf equalities same : Bool) (answer : Bool) :
+    constraintDecision ambiguous .unknown semantic allYes allNo mixedLeaf equalities same ≠ .ok answer := by
+  cases ambiguous <;> cases semantic <;> cases allYes <;> cases allNo <;>
+    cases mixedLeaf <;> cases equalities <;> cases same <;> simp [constraintDecision]
+
+/-- Semantic uncertainty takes precedence over unavailable structural observations. -/
+theorem semantic_unknown_first (ambiguous : Bool) (allYes allNo : Guards.Verdict) (mixedLeaf equalities same : Bool) :
+    constraintDecision ambiguous .unknown .unknown allYes allNo mixedLeaf equalities same = .error .solverUnknown := by
+  cases ambiguous <;> simp [constraintDecision]
 
 /-- User labels, integer placeholders, and the engine's private labels. -/
 inductive FillLabel (Symbol : Type) where
