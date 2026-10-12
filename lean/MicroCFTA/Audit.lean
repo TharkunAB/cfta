@@ -206,6 +206,10 @@ import MicroCFTA.NestedScopeCapture
 import MicroCFTA.PruneAmbiguity
 import MicroCFTA.EnumerationBuilderLanguage
 import MicroCFTA.IntersectConstruction
+import MicroCFTA.FullGuardPruneStable
+import MicroCFTA.GuardConjunctionNames
+import MicroCFTA.PruneTerminationGrowth
+import MicroCFTA.EnumerationBuilderFastPaths
 /-!
 # Proof dependency audit
 

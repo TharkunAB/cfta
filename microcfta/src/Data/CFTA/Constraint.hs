@@ -98,7 +98,7 @@ data Guard
       And ![Guard]
     | -- | Logical disjunction.
       Or ![Guard]
-    deriving (Eq, Show, Generic)
+    deriving (Eq, Ord, Show, Generic)
 
 instance Hashable Guard
 
@@ -263,7 +263,7 @@ data Substitution = Substitution
     { substitutionActual :: !Path
     , substitutionFormal :: !Path
     }
-    deriving (Eq, Show, Generic)
+    deriving (Eq, Ord, Show, Generic)
 
 instance Hashable Substitution
 
@@ -307,13 +307,13 @@ constraintPaths :: Constraint -> Set Path
 constraintPaths Constraint{constraintEqualities, constraintGuard} =
     maybe Set.empty Set.unions (equalityClasses constraintEqualities) <> guardPaths constraintGuard
 
--- | Conjoin two complete guards.
+-- | Conjoin guards with one sorted list of distinct outer conjuncts.
 combineGuards :: Guard -> Guard -> Guard
-combineGuards Top right = right
-combineGuards left Top = left
-combineGuards left right
-    | left == right = left
-    | otherwise = And [left, right]
+combineGuards left right = conjoin $ Set.toAscList $ Set.fromList $ conjuncts left <> conjuncts right
+  where
+    conjuncts Top = []
+    conjuncts (And guards) = concatMap conjuncts guards
+    conjuncts guard = [guard]
 
 -- | Split independently reducible semantic conjuncts from syntactic equality.
 splitGuard :: Guard -> (Guard, Guard)
