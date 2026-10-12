@@ -923,7 +923,13 @@ compileOpenNode compiler requested labelling constraint child
     settle childKeys = do
         let label@(RefinedSymbol _ labelRefinement) = closeLabel childKeys
             total = sum $ map openCount childKeys
-            termOf refinement = (literal <$> onlyPoint valueName refinement) <|> definingTerm refinement
+            -- A defining term must determine its value independently of that value.
+            termOf refinement =
+                (literal <$> onlyPoint valueName refinement) <|> do
+                    term <- definingTerm refinement
+                    if valueName `elem` freeNames (term .== 0)
+                        then Nothing
+                        else Just term
             targetTerm part target = maybe (Left $ IntegerLeafRead $ Just part) Right $ case unPath target of
                 [] -> termOf labelRefinement
                 [index] -> termOf . (\(RefinedSymbol _ refinement) -> refinement) =<< renamedRoot childKeys index
