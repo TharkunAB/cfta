@@ -434,6 +434,11 @@ import MicroCFTA.SourceReadLogicalIntegerCore
 import MicroCFTA.FiniteLeafForestProgress
 import MicroCFTA.FiniteLeafSymbolsProgress
 import MicroCFTA.EqualityFixedPairs
+import MicroCFTA.InternedNestedCoverage
+import MicroCFTA.InternedHeadReference
+import MicroCFTA.InternedBinderRetention
+import MicroCFTA.InternedLiveEdges
+import MicroCFTA.InternedUnionDescendants
 /-!
 # Proof dependency audit
 

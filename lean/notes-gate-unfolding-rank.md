@@ -114,3 +114,36 @@ that payload and removes only the extra allowance. A completed empty-table
 run has `Covered []`: every installed identity has a complete record.
 This is conditional on successful return. It does not exclude pending
 outcomes or replace the separate first-run completion proof.
+
+`InternedHeadReference` proves the head-chain free-name facts directly on
+actual stored `Value` metadata. An open stored Mu cannot have its own
+reference at the end of its head chain. The statement includes raw unused
+binders. `InternedBinderRetention` proves that smart cleanup cannot erase
+an actual Mu descendant from its body. The source root filter also cannot
+collapse a union that retains both an outer Mu and a deeper Mu containing
+it, because those actual resident identities differ.
+
+`InternedLiveEdges` derives the source empty-child invariant for every
+nested execution, including a pending outcome. Each stored ordinary edge
+has no EmptyNode child. It starts from empty tables and needs no assumed
+final liveness property. `InternedUnionDescendants` combines that result
+with canonical edge readback. Every source union branch preserves an
+actual Mu descendant from an operand, including the all-ordinary edge
+merge. Current root self-reference removal also preserves every actual Mu
+descendant, including those below constructors. These results remove the
+earlier restriction to a Mu at the root of a union operand.
+
+The remaining substitution proof must derive nonempty and free-name
+preservation while rebuilding children. It must also exclude collisions
+between distinct rebuilt operands when no directly retained outer Mu
+separates them. The general source gate rank remains open.
+
+A broader temporary Haskell probe adds raw binders, public unions, multiple
+ordinary rows, and depth-eight expressions. It checks 20,000 expressions.
+Of these, 11,921 roots are eligible open binders. Every checked source
+unfolding decreases head rank. Its log is
+`/tmp/mcfta-gate-head-rank-broad.log`. This is finite evidence only.
+
+The descendant-retention target builds 149 jobs. The combined isolated
+axiom audit checks 7,106 theorem dependencies with only the three allowed
+foundational axioms.
