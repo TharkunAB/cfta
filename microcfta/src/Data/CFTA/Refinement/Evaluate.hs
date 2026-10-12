@@ -103,6 +103,12 @@ comparison of complete subtrees at distinct positions yields 'Unknown', so an
 optimizer must reject that fast path or supply a complete-term equality
 oracle. The refinement compiler rejects it: it reports
 @RelationalSyntacticEqualityUnsupported@ for such a comparison.
+
+Two actuals with the same name and refinement, when either is not a leaf, can be
+equal or different terms. Each gets its own solver value, and a 'Yes' then also
+holds for the complete term. When an enclosing scope renames the name of such an
+actual, the complete term can name it differently, so that scope gives
+'Unknown'.
 -}
 evaluateGuardWithShape ::
     Entailment ->
@@ -233,7 +239,9 @@ evaluateScopedGuard entailment observedAt sameAt guard = evaluateWith [] guard
             Nothing -> pure No
     evaluateWith substitutions (Substitute additions nested) =
         case traverse (resolveSubstitutionWith observedAt freshValues ambiguousValues) additions of
-            Just resolved -> evaluateWith (resolved : substitutions) nested
+            Just resolved
+                | any (renamedByEnclosing substitutions) resolved -> pure Unknown
+                | otherwise -> evaluateWith (resolved : substitutions) nested
             Nothing -> pure No
     -- A 'No' for a condition or a contract only means that the refinements do
     -- not prove the formula. So negation moves down to the formula, also into
@@ -257,6 +265,23 @@ evaluateScopedGuard entailment observedAt sameAt guard = evaluateWith [] guard
         andVerdicts (map (evaluateWith substitutions) guards)
     evaluateWith substitutions (Or guards) =
         orVerdicts (map (evaluateWith substitutions) guards)
+
+{- | Whether an enclosing scope renames the name of an actual whose identity
+the observations do not decide.
+
+Such an actual gets a fresh solver value, because it can be a term that differs
+from another actual with the same name. When the two terms are equal, the
+complete evaluation gives them their common name instead, and an enclosing
+scope then renames that name. The fresh value does not take the renaming, so
+the two evaluations can differ in either direction. Without this case, every
+answer for fresh values also holds for the common name.
+-}
+renamedByEnclosing :: [[ResolvedSubstitution]] -> ResolvedSubstitution -> Bool
+renamedByEnclosing enclosing resolved =
+    not (resolvedIdentityKnown resolved) && actualName `elem` enclosingFormals
+  where
+    (_, actualName) = resolvedSymbolReplacement resolved
+    enclosingFormals = [formal | scope <- enclosing, (formal, _) <- map resolvedSymbolReplacement scope]
 
 -- | Evaluate both the ECTA equality classes and liquid guard of a transition.
 evaluateConstraint :: Entailment -> Constraint -> Term Symbol -> IO Verdict

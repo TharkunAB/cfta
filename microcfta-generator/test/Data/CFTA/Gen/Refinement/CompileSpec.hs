@@ -21,8 +21,9 @@ import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Refinement (
     Entailment (Entailment),
-    Guard (Bottom, Holds, Satisfies),
+    Guard (Bottom, Holds, Satisfies, Substitute),
     Node (Mu, Node),
+    Substitution (..),
     Symbol (RefinedSymbol),
     Verdict (Yes),
     contractTermName,
@@ -73,6 +74,28 @@ nonZero v = v ./= 0
 spec :: Spec
 spec = do
     describe "solver compilation" $ do
+        it "compiles equal compound actuals in one scope, and leaves them undecided when an enclosing scope renames them" $
+            withZ3 [] $ \solver -> do
+                let atom name = LTAGen.leaf (0 :: Int) name (const true)
+                    actual = LTAGen.refinedNode "a" (.== 0) noConstraint $ atom "z"
+                    inner =
+                        Substitute [Substitution (path [0]) (path [3]), Substitution (path [1]) (path [4])] $
+                            Satisfies (path [5]) (variable "x" .== 0)
+                    generator guard =
+                        LTAGen.refinedNode "root" (const true) guard $
+                            (,,,,,) <$> actual <*> actual <*> atom "b" <*> atom "x" <*> atom "y" <*> atom "target"
+                    compiled guard = do
+                        result <- LTAGen.compileWith solver (generator guard)
+                        pure $ result >>= \g -> LTAGen.cardinality g >>= traverse (LTAGen.unrank g) . everyRank
+                -- One scope: the observations decide the guard, as the complete terms do.
+                LTAGen.validOutcomes solver (generator inner) >>= (`shouldBe` Right [(0, 0, 0, 0, 0, 0)])
+                compiled inner >>= (`shouldBe` Right [(0, 0, 0, 0, 0, 0)])
+                -- The enclosing scope renames a, the name of both actuals: the
+                -- complete terms reject the tuple, and the observations cannot decide it.
+                let nested = Substitute [Substitution (path [2]) (path [0])] inner
+                LTAGen.validOutcomes solver (generator nested) >>= (`shouldBe` Right [])
+                compiled nested >>= (`shouldBe` Left LTAGen.SolverUnknown)
+
         it "preserves source order when observation keys have another order" $
             withZ3 declarations $ \solver -> do
                 let atoms :: LTAGen.LTAGen Int
