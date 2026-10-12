@@ -349,6 +349,44 @@ spec = do
                 (_, Left err, _) -> expectationFailure $ show err
                 (_, _, Left err) -> expectationFailure $ show err
 
+        it "closes grouped function spines without mixing alternative children" $ do
+            let retain = FTAGen.atKey () . FTAGen.groupOn (const ())
+                source :: FTAGen.FTAGen String Int
+                source = pure id <*> FTAGen.elements [0, 1]
+                correlated =
+                    uncurry (+)
+                        <$> FTAGen.atKey
+                            True
+                            (FTAGen.groupOn (uncurry (==)) $ (,) <$> FTAGen.elements [0, 1] <*> FTAGen.elements [0, 1])
+                sources =
+                    [ retain source
+                    , (+) <$> retain source <*> FTAGen.elements [10, 11]
+                    , retain $ (+) <$> retain source <*> FTAGen.elements [10, 11]
+                    , correlated
+                    , retain $ pure 0
+                    , retain $ FTAGen.elements [0, 1]
+                    , retain $ FTAGen.oneof [pure 0, source, FTAGen.leaf 2 "atom"]
+                    ]
+                check functions = do
+                    let generator = FTAGen.node "outer" $ (+) <$> functions <*> FTAGen.elements [100]
+                        terms = FTAGen.cardinality generator >>= traverse (FTAGen.termAt generator) . everyRank
+                        marker = FTAGen.Label "unused-recursion-marker"
+                    case (FTAGen.support generator, FTAGen.inspect generator, terms) of
+                        (Right support, Right inspection, Right selected) -> do
+                            Set.fromList (Enumeration.termsWith marker support) `shouldBe` Set.fromList selected
+                            let inspected =
+                                    Enumeration.termsWith
+                                        (FTAGen.InspectionSymbol marker Nothing)
+                                        (FTAGen.inspectionGraph inspection)
+                            Set.fromList (map (fmap FTAGen.originalSymbol) inspected) `shouldBe` Set.fromList selected
+                            mapM_
+                                (\(rank, term) -> FTAGen.ranksOf generator term `shouldSatisfy` either (const False) (rank `elem`))
+                                (zip [0 ..] selected)
+                        (Left err, _, _) -> expectationFailure $ show err
+                        (_, Left err, _) -> expectationFailure $ show err
+                        (_, _, Left err) -> expectationFailure $ show err
+            mapM_ check sources
+
         it "keeps recursive members whole when labels close choices and applicative spines" $ do
             let chain :: FTAGen.FTAGen String Int
                 chain = FTAGen.recur $ \self -> FTAGen.oneof [pure 0, FTAGen.node "s" $ (+ 1) <$> self]
