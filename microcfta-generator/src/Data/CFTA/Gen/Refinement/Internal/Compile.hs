@@ -709,7 +709,7 @@ joinPositioned :: LTAGrouped [OpenKey] a -> LTAGrouped OpenKey a
 joinPositioned grouped = regroupOn rekey grouped
   where
     identity keys = let joined = joinOpenKeys keys in (openCount joined, openFormula joined)
-    positions = firstPositions $ map identity $ either (const []) Map.keys $ cardinalities grouped
+    positions = firstPositions $ map identity $ groupKeys grouped
     rekey keys = atPosition (positions Map.! identity keys) $ joinOpenKeys keys
 
 -- | The key of a bare applicative spine: no observation, and the variables of its positions joined.
@@ -790,7 +790,7 @@ repositionOpen :: LTAGrouped (ChoiceIndex, OpenKey) a -> LTAGrouped OpenKey a
 repositionOpen grouped = regroupOn rekey grouped
   where
     identity (_, key) = (keyObservations $ openObservations key, openCount key, openFormula key)
-    positions = firstPositions $ map identity $ either (const []) Map.keys $ cardinalities grouped
+    positions = firstPositions $ map identity $ groupKeys grouped
     rekey indexed@(_, key) = atPosition (positions Map.! identity indexed) key
 
 {- | Compile a child description of open groups as one group per tuple of child

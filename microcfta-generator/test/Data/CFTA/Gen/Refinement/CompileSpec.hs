@@ -527,6 +527,21 @@ spec = do
             map (LTAGen.countAtSize compiled) [1, 2] `shouldBe` [Right 1, Right 1]
 
     describe "integer leaves" $ do
+        it "reports recursive open groups without losing their position keys" $ do
+            let graph = Mu $ \self -> Node [Transition "a" true [] noConstraint, Transition "f" true [self] noConstraint]
+                recursive = const (0 :: Integer) <$> LTAGen.fromAutomaton graph
+                digits = LTAGen.every `LTAGen.satisfying` (\v -> 1 .<= v .&& v .<= 2)
+                applied = (+) <$> recursive <*> digits
+                choices =
+                    [ LTAGen.uniformly [recursive, digits]
+                    , LTAGen.oneof [recursive, digits]
+                    , LTAGen.uniformly [applied, digits]
+                    , LTAGen.oneof [applied, digits]
+                    ]
+            forM_ choices $ \choice -> do
+                compiled <- LTAGen.compileWith latticeEntailment $ LTAGen.node "p" choice
+                fmap LTAGen.cardinality compiled `shouldBe` Right (Left LTAGen.UnboundedGenerator)
+
         it "pay one for a constructor above a closed group of integer leaves" $ do
             -- The guard closes the leaf, so the node above it has no point to
             -- select, and it pays one as every constructor does.
