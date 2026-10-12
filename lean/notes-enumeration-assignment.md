@@ -47,9 +47,10 @@ transition-preservation premise.
 
 `EnumerationConstruction.enumerateNode_complete` now constructs local
 executions, fresh witness extensions, and successful required intersections.
-See `notes-enumeration-construction.md`. Whole-caller execution existence and
-sufficient bounds for it and its final renderers remain open. The
-successful-run theorem does not establish these properties. Concrete source
+`EnumerationTermination.initialized_complete` also constructs whole-caller
+execution at a sufficient bound. See `notes-enumeration-construction.md`.
+Sufficient bounds for the final renderers remain open. The successful-run
+theorem does not establish renderer existence. Concrete source
 graph and mutable representation correspondence remain separate obligations.
 
 Validation: `lake -d lean build MicroCFTA.EnumerationAssignment`.
