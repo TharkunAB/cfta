@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-12 23:32 CEST (Europe/Stockholm)**.
+Updated: **2026-10-12 23:38 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -27,11 +27,11 @@ is complete. Record repairs in `FINDINGS.md`. Do not stop at a proof checkpoint.
 - Repository: `/home/tritlo/Code/mcfta`; Ubuntu/WSL2, Bash.
 - Branch: `formalization/microcfta-resume-20261012`.
 - Base: `origin/microcfta`, `de910ea` (merged findings fixes through PR #96).
-- Latest proof integration checkpoint: `34fe917`.
+- Latest earlier proof integration checkpoint: `41bafa7`. The next local
+  commit integrates the No/refutation and logical-completeness proofs.
 - Other continuation commits: `3d3724f` (keyed families), `ee29250`
   (current equality), `840185a` (total substitution), and `d783309`
   (same-scope source repair and proofs).
-- A documentation-only handoff commit follows these proof commits.
 - Previous branch `spike/microcfta-lean-soundness` remains at `c2b1c0f`.
 - Backup: `backup/lean-before-microcfta-20261012-2200`.
 - The retained stash has message `Preserve pending keyed nary and recursive
@@ -61,10 +61,10 @@ self-reference removal from recursive unions.
   examples** (284 core, 194 generator, 142 refinement). Existing cases were
   extended; no new test file was added. Log:
   `/tmp/mcfta-scope-precedence-full.log`.
-- Final integrated Lean build: **509 jobs; 27,494 theorem dependency checks**.
+- Latest integrated Lean build: **512 jobs; 27,539 theorem dependency checks**.
   This includes the new finite leaf progress, runtime metadata, and shared
   support-binder proofs. Further active modules are not yet integrated.
-  Log: `/tmp/mcfta-complete-record-quotient-audit.log`.
+  Log: `/tmp/mcfta-quotient-completeness-full.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -134,8 +134,8 @@ checks ambiguity only after Unknown. Its general language theorem requires
 unambiguous specialization cells. Earlier blanket-gate modules remain
 historical. See `notes-substitution-policies.md`.
 
-All delegated work is frozen and integrated. There are no remaining
-untracked proof files or unfinished Lean errors.
+The committed aggregate passes. Further nested-construction, gate-rank,
+and logical read-transport modules are active and are not yet integrated.
 
 ## New source repair: duplicate-formal identity precedence
 
@@ -187,8 +187,10 @@ Logs: `/tmp/mcfta-same-scope-source.log` and
 - Full accepted ambiguous sparse Yes transport is proved through the actual
   identity quotient, including nested scopes, both guard polarities, Holds,
   and the current finite pruning loop. It establishes logical safety.
-  No-refutation and logical completeness are in progress. Planned-read
-  spelling transport still uses its lossless backend contract. A sound
+  No-refutation and successful compiler logical exactness are proved.
+  Successful pruning retains all original backend-confirmed terms. Logical
+  completeness of an original-edge fallback needs explicit backend adequacy.
+  Planned-read spelling transport still uses its lossless backend contract. A sound
   callback can give sparse Yes and complete Unknown; exact backend language
   equality does not follow from logical safety.
 - Runtime interning, identity lifetime, containers, machine words,
@@ -220,9 +222,10 @@ explicitly requests publication later.
 
 ## Next proof work
 
-1. Complete No-refutation and logical pruning completeness. Keep restored
-   backend-confirmed edges and logical validity separate. The positive
-   identity quotient is proved. See `notes-substitution-policies.md`.
+1. Derive logical planned-read transport without assuming exact backend
+   spelling stability. Keep restored backend-confirmed edges and logical
+   validity separate. Both identity-quotient polarities are proved. See
+   `notes-quotient-completeness.md`.
 2. Preserve the complete typed family connections now proved for support,
    diagnostic inspection, both sampler branches, runtime flags, and missing
    terms. Arbitrary context-dependent Haskell builder schemas remain a

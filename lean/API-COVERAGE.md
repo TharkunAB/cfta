@@ -154,8 +154,12 @@ blanket guard in `BooleanGuardPrune` and `FullGuardPrune`. `CurrentGuardPrune` m
 cell exactness. `SourceQuotientGuards` derives full accepted ambiguous
 sparse Yes transport to complete logical satisfaction, using the executed
 identity map and scope checks. `CurrentGuardLogicalPrune` composes it with
-the actual finite pruning loop and compiler retention. Exact backend Yes
-preservation and logical completeness remain separate obligations.
+the actual finite pruning loop and compiler retention.
+`SourceQuotientRefutations` proves sparse No refutation for both polarities.
+`CurrentGuardLogicalComplete` proves successful compiler logical exactness
+and retention of every original backend-confirmed term after pruning.
+Logical completeness of an original-edge fallback requires explicit backend
+adequacy. Planned-read spelling transport retains its separate contract.
 
 ## Error and boundary ledger
 

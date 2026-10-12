@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-12 23:32 CEST**.
+Updated: **2026-10-12 23:38 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired one additional sparse-substitution defect, described as row 18.
 All **620 existing Haskell examples** pass after that repair: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **509 jobs and 27,494 theorem dependency
+The full Lean development passes **512 jobs and 27,539 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -265,11 +265,15 @@ but do not prove it for every runtime execution.
    environment relation is now derived through both executed scope checks.
    Full sparse guard Yes implies complete logical satisfaction. Current
    pruning and successful compiler retention inherit that safety result.
-   Logical completeness remains separate. Planned-read spelling transport
+   Sparse No now refutes complete logical satisfaction. Successful pruning
+   retains every original backend-confirmed term. A completed candidate pass
+   retains every logically valid term; restoring the original guarded edge
+   requires a complete backend Yes. Successful compiler classification is
+   equivalent to logical validity. Planned-read spelling transport still
    uses its existing backend contract. A checked accepted ambiguous example
    returns sparse Yes and complete Unknown with one sound callback. Thus
    soundness does not give exact backend-confirmed language equality.
-   See [the substitution notes](lean/notes-substitution-policies.md).
+   See [the completeness notes](lean/notes-quotient-completeness.md).
 
 These obligations prevent a whole-implementation verification claim. They
 are separate from the repaired concrete failures and the proved component
