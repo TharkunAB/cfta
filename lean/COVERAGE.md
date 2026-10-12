@@ -26,13 +26,17 @@ The latest physical equality work derives admitted leaf readback, identity,
 intersection, and projection union. A normalization phase handles arbitrary
 initial outer guard syntax. Physical raw construction preserves rejected
 sentinel requests and derives whole-node identity from the accepted row set.
-Finite occurrence compilation and recursive workers derive completed-cache
-readback. The stateful pass still needs composition. Full nested syntax now
+Physical Cartesian intersection derives exact raw readback and strict rank
+decrease. Its generated finite carrier preserves initial raw guard syntax.
+Finite occurrence compilation and recursive workers derive complete payload
+availability and readback. The stateful pass still needs composition. Full nested syntax now
 derives pending-reservation origins, complete old probe footprints, pending
 preservation, and earlier readback of old identities. The remaining general
-completion step is absent-reference replay. The unfolding rank now depends
+completion step is general absent-reference replay; recursive erased-edge
+construction already completes at arbitrary depth. The unfolding rank now depends
 only on reachable shallow values. Unrelated deep cache records are allowed;
-arbitrary nested Mu bodies remain open.
+arbitrary nested Mu bodies remain open. Separate actual completion and strict
+decrease results allow arbitrary-depth closed Mu children in ordinary bodies.
 
 The upstream base includes the seventeen earlier repairs. This continuation
 also repairs same-scope identity-replacement precedence and recursive
