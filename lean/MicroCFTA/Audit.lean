@@ -248,6 +248,15 @@ import MicroCFTA.ParentIntegerSettlement
 import MicroCFTA.StaticCheckedRanks
 import MicroCFTA.IntegerCandidateEnvelope
 import MicroCFTA.StaticRankQueryExact
+import MicroCFTA.CompositeCheckedRanks
+import MicroCFTA.InternedIdentityWords
+import MicroCFTA.DefiningTerm
+import MicroCFTA.ParentGuardFormula
+import MicroCFTA.OpenChoiceRouting
+import MicroCFTA.GroupPositions
+import MicroCFTA.AutomatonAmbiguity
+import MicroCFTA.RecursiveCheckedRanks
+import MicroCFTA.InternedBinderRebuild
 /-!
 # Proof dependency audit
 
