@@ -1529,8 +1529,8 @@ cabal run cfta-automaton-interop
 
 ## Component synthesis
 
-`Data.CFTA.Gen.Synthesis` uses the automata and the generators to synthesize
-programs from a library of components, after the ECTA paper.
+Two modules use the automata and the generators to synthesize programs from
+a library of components, after two papers.
 
 ### Hectare: type-directed synthesis on equality automata
 
@@ -1570,6 +1570,75 @@ cabal bench hectare --benchmark-options='hplus 300 8G'
 With the paper's limit of 300 seconds, 40 of the 45 Hoogle+ queries are
 solved, 82% within 7 seconds; the paper reports 43 of 45 and 84%. The five
 other queries need programs of size 7 or 9.
+
+### Hegel: refinement-typed synthesis on liquid tree automata
+
+`Data.CFTA.Gen.Synthesis.Liquid` is Hegel, the synthesizer of Mishra and
+Jagannathan, *Liquid Tree Automata* (2026). Components and the goal have
+refinement types. Each round of Algorithm 1 adds the applications of one
+more size, `prune` removes the applications whose arguments do not satisfy
+the parameters' refinements, and `similarity` with `minimize` keeps the most
+specific term of each refinement. A refinement is a conjunction of
+qualifiers from the library and the query, so similarity is a subset test.
+With `optionConditionals`, a solution can be a conditional `if c t e`.
+
+The `hegel` benchmark runs recreated versions of the paper's RQ1 queries.
+The paper does not print its specifications, so the queries follow its
+one-line descriptions over a list library with precise specifications.
+
+| Query | Size | Seconds | Solution |
+|---|---:|---:|---|
+| Nth1 | 4 | 64.9 | `set (set l i (nth l j)) j (nth l i)` |
+| RevApp1 | 2 | 0.6 | `append (rev l) l` |
+| RevApp2 | 2 | 0.9 | `rev (append l l)` |
+| RevApp3 | 2 | 0.7 | `append l (rev l)` |
+| RevZip1 | 2 | 8.8 | `zip (rev f) s` |
+| RevZip2 | 2 | 9.1 | `zip f (rev s)` |
+| RevZip3 | 2 | 8.3 | `rev (zip f s)` |
+| SplitAt1 | 4 | 69.4 | `pair (take n l) (drop n (drop m l))` |
+| SplitAt2 | 3 | 21.4 | `splitAt (sub n m) (drop m l)` |
+| SplitAt3 | 5 | 172.6 | `pair (take n l) (drop n (drop (sub n m) l))` |
+| Nth_Incr1 | 2 | 1.7 | `nth l (incr n)` |
+| Nth_Incr2 | 2 | 1.8 | `nth l (decr n)` |
+| Nth_Incr3 | 2 | 2.6 | `incr (nth l n)` |
+| AppendN1 | 2 | 2.0 | `append (take n l) l` |
+| AppendN3 | 4 | 15.9 | `append (drop (length (drop n l)) l) l` |
+| AppendN2 | 3 | 10.1 | `if (isZero n) l (append (take (decr n) l) l)` |
+| LookRange1 | 1 | 2.0 | `if (elem k ks) (lookup k ks vs) d` |
+| LookRange2 | 1 | 2.4 | `if (elem k ks) (lookup k ks vs) (last vs)` |
+| LookRange3 | 1 | 2.3 | `if (elem k ks) (lookup k ks vs) (head vs)` |
+| Map1 | 2 | 1.4 | `map incr (map f l)` |
+| Map2 | 2 | 1.4 | `map decr (map f l)` |
+| Map3 | | timeout | |
+| MapDouble1 | 2 | 0.0 | `map g (map f l)` |
+| MapDouble2 | 2 | 0.0 | `map f (map g l)` |
+| MapDouble3 | 2 | 0.0 | `map f (map f l)` |
+| ApplyNAdd1 | 2 | 2.2 | `add m (applyN f n m)` |
+| ApplyNAdd2 | 3 | 10.7 | `add m (applyN f (incr n) m)` |
+| ApplyNAdd3 | 4 | 34.4 | `add m (incr (applyN f (incr n) m))` |
+| ApplyList1 | 2 | 0.1 | `if (null fl) s (apply (head fl) s)` |
+| ApplyList2 | 2 | 0.1 | `if (null fl) s (apply (last fl) s)` |
+| ApplyList3 | 4 | 0.1 | `apply (last fl) (apply (head fl) s)` |
+| CEdge1 | 3 | 11.5 | `and (elem src l) (elem tgt l)` |
+| CEdge2 | 3 | 12.2 | `or (elem src l) (elem tgt l)` |
+| CEdge3 | 4 | 21.6 | `and (elem src l) (not (elem tgt l))` |
+
+The size counts the applications before the conditional. The times are from
+one run at `-O2` on the development machine, with the paper's limit of 180
+seconds and a limit of one second for each solver query; 33 of the 34
+queries solve. Nth1 and the higher-order queries state facts about every
+index with a quantifier, and the solver cannot decide many of those queries;
+an undecided query counts as failed. Map3 times out: the intermediate list
+`map incr (map f l)` needs a qualifier that no instance of the library or the
+goal gives. Without similarity and minimization (`-S`), 17 of the 21
+first-order queries solve within 60 seconds; with them, 19 of 21. The
+paper's mean is 7.6 seconds over its 42 queries; its specifications
+differ, so the times are not a direct comparison.
+
+```
+cabal bench hegel --benchmark-options='Hegel 180 8G'
+```
+
 
 ## Sampling performance
 

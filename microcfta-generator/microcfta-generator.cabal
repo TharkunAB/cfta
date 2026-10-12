@@ -97,6 +97,7 @@ library
     Data.CFTA.Gen.Refinement.QuickCheck
     Data.CFTA.Gen.Sig
     Data.CFTA.Gen.Synthesis
+    Data.CFTA.Gen.Synthesis.Liquid
     Data.CFTA.Ranked
     Data.CFTA.Ranked.Internal
     Data.CFTA.Ranked.Internal.Decoder
@@ -456,4 +457,26 @@ benchmark hectare
     microcfta-generator,
     process >=1.6 && <1.7,
     QuickCheck >=2.14 && <2.19,
+    text >=2.1 && <2.2,
+
+benchmark hegel
+  import: warnings, extensions
+  type: exitcode-stdio-1.0
+  main-is: Hegel.hs
+  hs-source-dirs:
+    benchmarks
+    common
+
+  ghc-options:
+    -rtsopts
+    -with-rtsopts=-M8G
+
+  other-modules:
+    Data.CFTA.Gen.Synthesis.HegelBenchmarks
+
+  build-depends:
+    base >=4.22 && <4.23,
+    microcfta,
+    microcfta-generator,
+    process >=1.6 && <1.7,
     text >=2.1 && <2.2,
