@@ -11,6 +11,7 @@ import Control.Exception (evaluate)
 import Data.Either (fromRight)
 import Data.List (nub)
 import Data.Proxy (Proxy (Proxy))
+import qualified Data.Set as Set
 import Data.String (fromString)
 import Data.Typeable (typeRep)
 import GHC.Generics (Generic)
@@ -22,6 +23,7 @@ import qualified Test.QuickCheck as QC
 import Control.Monad (void)
 import qualified Data.CFTA as Automaton
 import Data.CFTA.Constraint (noConstraint)
+import qualified Data.CFTA.Enumeration as Enumeration
 import Data.CFTA.Gen (On ((:==:)))
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import qualified Data.CFTA.Gen.QuickCheck as FTAGen
@@ -328,6 +330,24 @@ spec = do
                         `shouldBe` False
                 (Left err, _) -> expectationFailure $ show err
                 (_, Left err) -> expectationFailure $ show err
+
+        it "closes every retained applicative alternative after grouping" $ do
+            let source :: FTAGen.FTAGen String (Int, Int)
+                source = (,) <$> FTAGen.elements [0, 1] <*> FTAGen.elements [0, 1]
+                generator = FTAGen.ungroup $ FTAGen.node "group" $ FTAGen.groupOn (\(a, b) -> (a + b) `mod` 2) source
+                marker = FTAGen.Label "unused-recursion-marker"
+            FTAGen.cardinality generator `shouldBe` Right 4
+            case (FTAGen.support generator, FTAGen.inspect generator, traverse (FTAGen.termAt generator) [0 .. 3]) of
+                (Right support, Right inspection, Right terms) -> do
+                    Set.fromList (Enumeration.termsWith marker support) `shouldBe` Set.fromList terms
+                    let inspectionTerms =
+                            Enumeration.termsWith
+                                (FTAGen.InspectionSymbol marker Nothing)
+                                (FTAGen.inspectionGraph inspection)
+                    Set.fromList (map (fmap FTAGen.originalSymbol) inspectionTerms) `shouldBe` Set.fromList terms
+                (Left err, _, _) -> expectationFailure $ show err
+                (_, Left err, _) -> expectationFailure $ show err
+                (_, _, Left err) -> expectationFailure $ show err
 
     describe "ordinary FTA compilation" $ do
         it "indexes recursive runs by size and bounds them by depth" $ do
