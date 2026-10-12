@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-12 10:45 CEST**.
+Updated: **2026-10-12 12:17 CEST**.
 
 The branch repairs **17 recorded source defects**. The latest full Haskell
 run passes **618 examples**. The committed Lean development passes **437
@@ -18,7 +18,9 @@ counterexamples, repair arguments, and implementation comparisons.
 
 The branch is `spike/microcfta-lean-soundness`. The implementation base is
 `origin/microcfta` at `bbeb7be`, including merged core-formula work and PRs
-#89 and #90. The last proof checkpoint is `bc6a978`. Nothing has been pushed.
+#89 and #90. The last proof checkpoint is `bc6a978`. At the user's request, the branch
+through documentation checkpoint `b672913` was pushed at 12:17 CEST. The
+uncommitted proof additions remain local. See [HANDOFF.md](HANDOFF.md).
 
 For a constrained language, compilation and enumeration must contain every
 valid finite term and no invalid term. A finite FTA language with `n`
