@@ -6,6 +6,7 @@ module Data.CFTA.Gen.ReferenceSpec (spec) where
 import Data.List (sort)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (listToMaybe)
+import qualified Data.Set as Set
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
@@ -16,8 +17,10 @@ import Data.CFTA.Equality (numNestedMu, plainTermsAtMost, terms)
 import Data.CFTA.Gen (GenError (..))
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Reference
-import Data.CFTA.Index (Cardinality (..), Rank, Size (..), everyRank)
+import Data.CFTA.Index (Cardinality (..), Rank (..), Size (..), everyRank)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
+import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.Term (Term)
 
 -- | A closed random description.
 newtype Closed = Closed Desc
@@ -335,36 +338,25 @@ shrinkAutomaton = \case
 
 {- | An imported automaton gives every term that the core lists, once: the
 count, the values, and the inverse of each rank. A recursive import counts
-by size, the number of term nodes, and ranks by size first.
+by size, the number of term nodes, and ranks by size first. An acyclic import
+whose nodes have a different symbol for each alternative has a compact plan,
+which counts term nodes too.
 -}
 importAgreement :: RandomAutomaton -> Property
 importAgreement (RandomAutomaton automaton) =
     counterexample (show automaton)
         $ QC.within 5000000
         $ if numNestedMu node == 0
-            then finiteAgreement (Gen.fromAutomaton node) (terms node)
+            then finiteAgreement (distinctSymbols automaton) (Gen.fromAutomaton node) (terms node)
             else
                 QC.conjoin $
                     recursiveAgreement
                         : [ counterexample ("depth " <> show depth) $
-                                finiteAgreement (Gen.fromAutomatonUpToDepth depth node) (plainTermsAtMost depth node)
+                                finiteAgreement True (Gen.fromAutomatonUpToDepth depth node) (plainTermsAtMost depth node)
                           | depth <- [0 .. 2]
                           ]
   where
     node = automatonNode automaton
-    finiteAgreement generator found
-        | null found = Gen.cardinality generator === Left EmptyGenerator
-        | otherwise =
-            QC.conjoin $
-                (Gen.cardinality generator === Right (Cardinality total))
-                    : [fmap sort (Gen.values generator) === Right (sort found) | total <= listBound]
-                        <> [ counterexample ("rank " <> show rank) $ case Gen.unrank generator rank of
-                                Left err -> counterexample (show err) False
-                                Right term -> Gen.rankOfTerm generator term === Right rank .&&. term `elem` found
-                           | rank <- take rankBound $ everyRank $ Cardinality total
-                           ]
-      where
-        total = toInteger $ length found
     recursiveGenerator = Gen.fromAutomaton node
     recursiveAgreement =
         QC.conjoin $
@@ -384,6 +376,75 @@ importAgreement (RandomAutomaton automaton) =
                        | rank <- take rankBound [0 ..]
                        , maybe True (<= Size sizeBound) $ Gen.sizeOfRank recursiveGenerator rank
                        ]
+
+{- | A finite import gives every term that the core lists, once. If the flag
+is set, the size of a term is its number of nodes: in the counts by size, in
+the size of each rank, and in each bound on the size. The last ranks of a
+bound are the members of its largest size.
+-}
+finiteAgreement :: Bool -> Gen.Gen Symbol (Term Symbol) -> [Term Symbol] -> Property
+finiteAgreement countsNodes generator found
+    | null found = Gen.cardinality generator === Left EmptyGenerator
+    | not countsNodes = rankAgreement False generator found firstRanks
+    | otherwise =
+        QC.conjoin $
+            rankAgreement True generator found firstRanks
+                : [ counterexample ("size " <> show size) $
+                        Gen.countAtSize generator (Size size) === Right (Cardinality $ toInteger $ length $ filter ((== size) . nodes) found)
+                  | size <- [0 .. largest]
+                  ]
+                    <> [ counterexample ("bound " <> show bound) $
+                            rankAgreement
+                                True
+                                (Gen.upToSize (Size bound) generator)
+                                (filter ((<= bound) . nodes) found)
+                                (\total -> [max 0 (total - toInteger rankBound) .. total - 1])
+                       | bound <- [1 .. largest]
+                       ]
+  where
+    largest = maximum $ map nodes found
+    firstRanks total = [0 .. if total <= listBound then total - 1 else toInteger rankBound - 1]
+
+{- | The count and the values of a finite generator, and the inverse of the
+selected ranks, against the terms that it must give. If the flag is set, the
+size of each selected rank is the number of nodes of its term. The function
+selects the ranks from the number of terms.
+-}
+rankAgreement :: Bool -> Gen.Gen Symbol (Term Symbol) -> [Term Symbol] -> (Integer -> [Integer]) -> Property
+rankAgreement countsNodes generator found selected
+    | null found = Gen.cardinality generator === Left EmptyGenerator
+    | otherwise =
+        QC.conjoin $
+            (Gen.cardinality generator === Right (Cardinality total))
+                : [fmap sort (Gen.values generator) === Right (sort found) | total <= listBound]
+                    <> [ counterexample ("rank " <> show rank) $ case Gen.unrank generator rank of
+                            Left err -> counterexample (show err) False
+                            Right term ->
+                                QC.conjoin $
+                                    [Gen.rankOfTerm generator term === Right rank, QC.property $ term `elem` found]
+                                        <> [Gen.sizeOfRank generator rank === Just (Size $ nodes term) | countsNodes]
+                       | rank <- map Rank $ selected total
+                       ]
+  where
+    total = toInteger $ length found
+
+{- | Whether every node of an automaton has a different symbol for each
+alternative. An acyclic import of such an automaton has a compact plan, whose
+size of a term is its number of nodes. A symbolic plan gives every term size
+one.
+-}
+distinctSymbols :: Automaton -> Bool
+distinctSymbols = \case
+    States edges ->
+        let symbols = [symbol | AutomatonEdge symbol _ _ <- edges]
+         in length symbols == Set.size (Set.fromList symbols)
+                && and [all distinctSymbols children | AutomatonEdge _ children _ <- edges]
+    Loop body -> distinctSymbols body
+    Back _ -> True
+
+-- | The number of nodes of a term.
+nodes :: Term Symbol -> Integer
+nodes = toInteger . length
 
 -- | The largest size that a property reads.
 sizeBound :: Integer
@@ -516,6 +577,12 @@ spec = describe "the engine against the reference model" $ modifyMaxSuccess (con
     it "gives the sizes, the counts, and the key masses of a grouped model" $ QC.property familyAgreement
 
     it "imports every term of an automaton once" $ QC.property importAgreement
+
+    it "gives a group of equal children its size once for each child" $
+        let leaf symbol = AutomatonEdge (Text.pack symbol) [] False
+            child = States [leaf "a", AutomatonEdge (Text.pack "f") [States [leaf "a"]] False]
+            node = automatonNode $ States [AutomatonEdge (Text.pack "g") [child, child] True]
+         in QC.once $ finiteAgreement True (Gen.fromAutomaton node) (terms node)
 
     describe "the Functor and Applicative laws" $ do
         it "identity: pure id <*> v is v, rank by rank" $ QC.property $ \(Small v) ->

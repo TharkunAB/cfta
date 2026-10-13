@@ -49,9 +49,11 @@ this cost model guards recursion and keeps every size class finite.
   term in common, for example under a constructor that removes their choice
   wrappers. That term would then have infinitely many ranks.
   `oneof [leaf, node "s" t]` is guarded.
-- Two imports keep a size that is not their number of nodes. A symbolic
-  acyclic import is one atom per term, of size one. A compact acyclic import
-  counts the shared subterm of a group of equal children once.
+- A compact acyclic import gives a term its number of nodes. It selects one
+  term for a group of equal children, and a scale multiplies the size of that
+  term by the number of children in the group, so its ranks do not change. A
+  symbolic acyclic import keeps a size that is not its number of nodes: it is
+  one atom per term, of size one.
 
 ## Discussion points
 

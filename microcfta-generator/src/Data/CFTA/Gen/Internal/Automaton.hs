@@ -196,10 +196,12 @@ rank plans.
 
 A node gets a compact plan when its alternatives accept no common term and its
 equalities relate direct children only. Equal child positions then select one
-term from the intersection of their languages. A node gets a symbolic plan,
-with symbolic equality contexts and intersection counts, when an equality path
-goes below a direct child, when a constraint has a residual Boolean equality,
-or when two alternatives share a symbol and accept a common term.
+term from the intersection of their languages, and the term pays its size once
+for each position. So the size of a term is its number of nodes. A node gets
+a symbolic plan, with symbolic equality contexts and intersection counts, when
+an equality path goes below a direct child, when a constraint has a residual
+Boolean equality, or when two alternatives share a symbol and accept a common
+term.
 
 Both plans order the constructors by arity, then by the given key, so nullary
 constructors come first and rank shrinking moves toward leaves. In a compact
@@ -312,8 +314,12 @@ compileFiniteAutomaton order root
         case [child | (index, child) <- zip [0 ..] children, index `elem` positions] of
             [] -> pure Nothing
             first : rest -> buildNode $ foldl' intersect first rest
+    -- A group holds its term at each of its positions, so the term pays its
+    -- size once for each position.
     addGroup prefix (positions, ranked) =
-        (\values term -> foldr (\(ChildIndex index) -> ((index, term) :)) values positions) <$> prefix <*> ranked
+        (\values term -> foldr (\(ChildIndex index) -> ((index, term) :)) values positions)
+            <$> prefix
+            <*> Ranked.scale (length positions) ranked
     -- The groups are the digits of a mixed-radix rank, and the first group is
     -- the most significant digit. The terms of one group must be equal.
     rankEdge edge groups (Term.Node symbol terms)

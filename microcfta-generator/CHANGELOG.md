@@ -40,7 +40,10 @@ tree automata of `microcfta`, with QuickCheck integration.
 - Imported automata: `fromAutomaton` reads an acyclic automaton as a finite
   generator with one rank per distinct term, counted symbolically where
   alternatives overlap or equalities reach below direct children, and a
-  cyclic automaton as a recursive generator counted by size.
+  cyclic automaton as a recursive generator counted by size. On the compact
+  plan, the size of an imported term is its number of nodes: a group of
+  equal children pays the size of its term once for each position. A
+  symbolic count gives each term size one.
   `fromAutomatonUpToDepth` bounds first. `fromDatatype` and
   `fromDatatypeUpToDepth` read derived grammars of any theory, and report
   `UndecodableConstructor` when the codec rejects a term of the grammar.
