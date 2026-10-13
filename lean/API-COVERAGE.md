@@ -2,13 +2,20 @@
 
 This inventory covers all 66 Haskell source modules under `microcfta/src` and
 `microcfta-generator/src`. It includes exposed internal modules and the three
-private modules. It uses the source rebased on `origin/microcfta` at `de910ea`, which includes
+private modules. It uses the source rebased on `origin/microcfta` at `8ac24bb`, which includes
 the `tidy/core-formula` work, optimization changes, and the findings repairs
-through PR #96. Local repairs reject uncertain identity-precedence changes
+through PR #97. Local repairs reject uncertain identity-precedence changes
 within one substitution scope and payload queries of unfinished recursive
 construction occurrences.
 Grouped recursion also checks that the final body has its discovered keys
 and minimum sizes before returning a tied family.
+PR #97 inserts `mergeAlternatives` into every equality peer projection.
+The new `MergedProjectionBound` includes this step for the complete physical
+projected-leaf schedule. General recursive merge correspondence remains open;
+see [merged narrowing](notes-merged-narrowing.md). Full nested free-name
+semantics and the complete-record heap invariant are now source-derived;
+see [free names](notes-interned-free-names.md).
+
 The model names below refer to files in `MicroCFTA/`.
 
 A checked executable model is a Lean implementation with semantic theorems.

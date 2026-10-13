@@ -1,15 +1,17 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 04:16 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 04:27 CEST (Europe/Stockholm)**.
 
 ## Read first
 
 The formalization is **not complete**. Matti requested this restart checkpoint
 because the chat became unreliable. Continue the same full task. Do not replace
 it with a smaller fragment, a theorem-count target, or a documentation task.
-The latest proof checkpoint is **`d630667`**. Its complete audit passes:
-**818 jobs; 33,080 theorem dependency checks**. All proof files from the parallel
-work are committed and imported by `lean/MicroCFTA/Audit.lean`.
+The latest committed proof checkpoint is **`dc4928c`**. Its complete audit
+passes **846 jobs; 33,461 theorem dependency checks**. It includes full free-name
+semantics, recursive probe dependencies, and the complete merged projected-leaf
+schedule. The source repair is committed as `b9fde4a`. Inspect the live working
+tree before proceeding; preserve every current proof and source repair.
 
 Read this file, root `FINDINGS.md`, and the linked notes before new proof work.
 Root `FINDINGS.md` is the current report. `lean/FINDINGS.md` is historical.
@@ -36,6 +38,13 @@ The required properties remain:
 5. Compare executable Lean definitions with the current Haskell implementation.
    State representation and external contracts explicitly.
 
+**Usage stop:** Matti instructed: "If the usage reaches 1% or less, you
+should stop (so we don't use credits)". This means weekly allowance remaining.
+Check current account rate-limit reports regularly. Stop all workers and work
+at 1% remaining or less. `/tmp/mcfta-weekly-usage.py` prints the latest local
+weekly report and exits 99 at the threshold. Do not treat missing or stale
+usage data as permission to spend credits.
+
 Local proof work, focused source diagnostics, and necessary source repairs are
 authorized. **Keep everything local. Do not push, deploy, or post to the board.**
 Matti explicitly answered the previous publication question: **"Keep the
@@ -52,13 +61,13 @@ honest proof boundaries; passing examples are not a general theorem.
 
 - Repository: `/home/tritlo/Code/mcfta`; Ubuntu/WSL2; Bash.
 - Branch: `formalization/microcfta-resume-20261012`.
-- Correct implementation base: **`origin/microcfta`, `de910ea`**. This overrides
+- Correct implementation base: **`origin/microcfta`, `8ac24bb`**. This overrides
   older memory about `tidy/core-formula`.
-- Latest proof commit: **`d630667`**. Earlier checkpoints: `5fffa19` (paired self
-  filtering and binary projected progress), `9379798` (observed absence replay),
-  `eb25dd9` (callback and cleanup emptiness).
-- The next commit after `d630667` contains these refreshed restart documents.
-  Use `git log -1` for its ID; a document cannot contain its own commit ID.
+- Latest committed proof: **`dc4928c`**. New supporting checkpoints are
+  `721ff6d` (full free names) and `76da95a` (probe dependency and source replay). The earlier `d630667` proof checkpoint
+  rebased to `447ec5c`; its documentation checkpoint rebased to `8dc288a`.
+- Restart backup: `backup/formalization-before-refresh-20261013-0418` at
+  `2aacf4f`. The refresh rebased all 267 local commits without conflicts.
 - Previous branch `spike/microcfta-lean-soundness` remains at `c2b1c0f`.
 - Backup branch: `backup/lean-before-microcfta-20261012-2200`.
 - Keep both retained stashes. The newest is `Preserve pending keyed nary and
@@ -67,18 +76,21 @@ honest proof boundaries; passing examples are not a general theorem.
 - All proof workers were asked to freeze for this handoff. Do not assume an old
   worker or process is still running; inspect live state before relying on it.
 
-The rebase replayed 175 proof/documentation commits. Old Haskell repairs were
+The earlier rebase replayed 175 proof/documentation commits. The latest
+refresh preserved all 267 local commits and added upstream PR #97. Old Haskell repairs were
 retired because the base contains revised upstream fixes. Do not replay those
-patches. The three current local production repairs are:
+patches. The current local production repairs are:
 
 | Commit | Repair |
 | --- | --- |
-| `d783309` | Sparse substitution returns Unknown when removing an uncertain identity replacement could expose a later duplicate formal. |
-| `14500e3` | Construction tokens reject payload queries inside unfinished recursive generator callbacks. Later proof work also repaired token removal on the finite return path. |
-| `0333e7a` | Grouped discovery checks final keys and minima and returns InconsistentRecursiveFamily on disagreement. |
+| `faac0c9` | Sparse substitution returns Unknown when removing an uncertain identity replacement could expose a later duplicate formal. |
+| `a38660f` | Construction tokens reject payload queries inside unfinished recursive generator callbacks. Later proof work also repaired token removal on the finite return path. |
+| `4fd133f` | Grouped discovery checks final keys and minima and returns InconsistentRecursiveFamily on disagreement. |
 
-The current proof work made no further production Haskell changes. Root
-`FINDINGS.md` rows 18–20 explain these repairs and their evidence.
+Local commit `b9fde4a` supplies the fourth repair. It stops `mergeAlternatives` from recursively merging the same
+union of recursive boundaries. The direct and wrapped-union witnesses now
+complete. Root `FINDINGS.md` row 21 and `lean/notes-merged-narrowing.md` record
+the reproduction, repair, and new source-correspondence obligations.
 
 Before new repository work, inspect status and refresh the correct remote base.
 The continuation branch has no tracking branch. The previous successful command
@@ -95,11 +107,12 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build MicroCFTA.InternedNestedProfiles
 ```
 
-Latest complete audit: `/tmp/mcfta-restart-20261013-audit.log`.
+Latest complete audit: `/tmp/mcfta-20261013-final-audit.log`.
 It checks every imported theorem against the allowlist `propext`,
 `Classical.choice`, and `Quot.sound`. It rejects omitted proofs, native evaluation
 axioms, and custom axioms. The count is validation evidence, not a coverage
-percentage. All 60 new Lean modules after `5fffa19` are integrated in `d630667`.
+percentage. All prior proofs and all new proof modules are imported by
+`Audit.lean` in `dc4928c`.
 
 Use Nix for Haskell. Nix store/lock access needs escalation. Select the coherent
 linker/GMP environment with the PATH prefix below.
@@ -109,12 +122,15 @@ nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests mic
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta /tmp/PROBE.hs'
 ```
 
-All **620 existing examples** passed after the repairs: 284 core, 194 generator,
-142 refinement. Full log: `/tmp/mcfta-construction-query-full.log`. After repair
-20, generator and refinement suites passed again in
-`/tmp/mcfta-family-discovery-validation.log`; core source was unchanged.
-Fourmolu and Cabal-gild checks passed. No Cabal file changed. Do not repeat all
-Haskell tests for proof-only work without a new reason.
+All **620 existing examples** passed after the latest recursive-merge repair:
+284 core, 194 generator, 142 refinement. Log:
+`/tmp/mcfta-20261013-merge-repair-tests.log`. Fourmolu checks passed for both
+changed source files. No Cabal file changed. Do not rerun these suites without
+a new source change or unresolved failure.
+
+The focused merge witnesses are in `lean/repro/MergedNarrowing.hs`; validation
+log: `/tmp/mcfta-merged-narrowing-validation.log`. Earlier construction-query
+and family-discovery logs remain useful historical evidence.
 
 Other retained evidence:
 
@@ -199,41 +215,70 @@ Read:
 - `lean/notes-interned-boundary-transport.md`
 - `lean/notes-interned-literal-observations.md`
 
-## Immediate next proof: complete free-name semantics
+## Full free-name semantics and the next boundary proof
 
-Three new support modules are complete and audited:
-`InternedFreeNameDecoder`, `InternedFreeNameHeap`, and
-`InternedFreeNameConstructors`. **The global free-name heap theorem is not yet
-proved. The pure free-name interpreter has not been written.**
+`InternedFreeNameSemantics` now defines the full pure interpreter and proves
+arbitrary external-name map naturality. Nodes use root profiles for empty-child
+decisions. Both raw and smart binders remove the symbolic local. `InternedFreeNameForm`
+derives fixed captures and optional-argument membership with captured aliases.
 
-1. Define a full Syntax free-name interpreter. Use the existing root-profile
-   interpreter for node empty-child decisions. Union combines free names.
-   Both raw and smart binders remove the symbolic local; `cleanup_free` already
-   proves exact free-field preservation.
-2. Prove external-name map naturality and the fixed-captures/optional-argument
-   form. Retain noninjective maps and captured probe aliases.
-3. Prove the full source mutual induction and establish `FreeNameHeap` from
-   empty caches. `Decoder.candidate_decoded` handles the three actual calls;
-   `Heap.hit_free` handles canonical hits; `Constructors` gives actual node,
-   union, and callback membership laws.
-4. Use this with the existing origin and boundary lemmas for the remaining
-   dynamic-Mu observed replay. It is support for general no-pending, not a
-   substitute for that theorem. Pure nonempty-capture keys still need exact
-   identity replay; opaque keys need the joint Mu-boundary argument.
+`InternedNestedFreeNames.build_free`, `buildMany_free`, and `buildEdges_free`
+prove exact free-name membership for actual complete results, and preserve
+`InternedFreeNameHeap.Heap` through complete and pending executions.
+`closed_heap` derives the invariant from empty source caches.
+`InternedSourceFreeNames.closed_free_empty` proves every completed closed
+result has no free names.
 
-The desired joint boundary fact relates an old smart unused-body result to
-both earlier normalized probes. A temporary mirror search found no failure
-in 275,563 closed terms and 1,358,140 active cutoffs (eight resource skips).
-That is finite model evidence only. Do not promote it to an assumption.
+`InternedFreeNameMuOrigins.closed_origins` retains both semantic tables at
+the historical source prefix of each actual stored Mu. The exact three calls
+then give `InternedStoredFreeNameBoundary.closed_reference_absent`: an old
+free-name bound on the actual body excludes fresh literal boundaries in both
+original probes. This applies even if the containing closed run ends pending.
+See `lean/notes-interned-free-names.md`.
+
+`InternedFreeNameTransport` gives actual source free-name transport through
+arbitrary literal-name maps. `InternedProbeFreeSupport` propagates absence
+through probe dependencies. `InternedProbeDependencyAge` gives strict
+identity descent and well-founded induction on those dependencies.
+`InternedOldProbeReplay` proves exact old-hit agreement from the two local
+probe observations. The newer smart-hit case remains part of joint replay.
+
+**Next:** derive the fresh Mu-boundary half and compose the actual dynamic-Mu
+observed replay. Free-name absence does not exclude a new closed Mu identity.
+`InternedPureProfileIdentity.ordered_identity` identifies normalized pure
+values in a common state when their ordered profiles agree. Set equality is
+insufficient. `InternedPureProfileOrderBoundary` also shows that a warm Mu hit
+can retain the earlier body's order, so exact ordered syntax correspondence
+is false. Preserve these counterexamples and derive actual ordered replay.
+
+The earlier temporary mirror search found no failure of the joint boundary
+claim in 275,563 closed terms and 1,358,140 active cutoffs (eight resource
+skips). That is finite model evidence only; do not use it as an assumption.
 
 ## Equality fixed-point termination
 
-The **complete physical projected-leaf schedule** is proved. Its bound is the
+PR #97 (`8ac24bb`) inserts `mergeAlternatives` after every peer projection.
+The new `MergedProjectionBound.compiled_bound` now covers the complete
+physical merged projected-leaf schedule. `MergedRawLeafSource.worker_actual`
+derives the exact merged representation in the actual runtime cache.
+`MergedProjectionTargets`, `Class`, `Schedule`, `Pass`, and `Termination`
+compose projection, merging, seeded intersection, simultaneous edits,
+required paths, class order, and the final allocation-free fixed point.
+Group order is an explicit function with a complete-symbol premise. The
+bound remains original occurrence weight plus one. Endpoints remain leaves.
+The old `EqualityLeafProjectionRuntimeBound` is retained for the old worker.
+
+`MergedAlternativesSubsumption` proves successful coverage checks sound;
+`MergedEqualityReduction` proves constrained-language preservation with a
+merge-superset premise. General recursive merge termination and the full
+physical superset bridge still need proof. See `lean/notes-merged-narrowing.md`.
+
+The **complete physical projected-leaf schedule** is proved for both workers. Its bound is the
 original occurrence weight plus one. It includes actual endpoint reads,
 first-seeded target folds, recursive ancestor edits, required paths, class
 order, empty propagation, and the final allocation-free fixed point in the
 actual runtime cache. Endpoints must be leaf domains; ancestors can be nested.
-See `EqualityLeafProjectionRuntimeBound` and
+See `MergedProjectionBound`, `EqualityLeafProjectionRuntimeBound`, and
 `lean/notes-equality-leaf-runtime-bound.md`.
 
 The cache composition gap was repaired with raw leaf pullback and trimming of
@@ -286,8 +331,9 @@ Do not retry these disproved shortcuts:
   `Depth`/`Unint 2` captures and cache prepopulation give a real modeled unfold
   with both candidate ranks `2 -> 2`. Later ranks are `[2,2,1,0]`. This is not
   divergence. It is not yet a closed empty-environment reachability theorem.
-  Haskell confirmation and universal callback-law admissibility were not
-  established at this checkpoint.
+  Haskell now confirms the trace. Both actual probe substitution equations
+  pass, but the unrestricted renaming law fails when its old name aliases
+  the fixed depth capture. See `lean/notes-source-rank-stutter-replay.md`.
 - Exact ordered root-profile equality is false. Reversed capture order can
   hit an earlier Mu pair and return the first canonical union order. The
   corrected `/tmp/mcfta-profile-order.lean` check passes; set-based `Equivalent`

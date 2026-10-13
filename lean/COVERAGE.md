@@ -17,10 +17,18 @@ established. A theorem whose main algorithmic obligation is a premise
 does not close that obligation. An implementation counterexample prevents a
 soundness claim for that path; it does not remove that path from the scope.
 
-Source baseline: `origin/microcfta` at `de910ea`. This includes the merged
+Source baseline: `origin/microcfta` at `8ac24bb`. This includes the merged
 core-formula changes at `9ad319d`. The current semantic specification and
 implementation findings are in [SYSTEM.md](SYSTEM.md). All 66 source modules
 are inventoried in [API-COVERAGE.md](API-COVERAGE.md).
+
+Current update: PR #97 adds merged peer projections to equality narrowing.
+The new `MergedProjectionBound` covers the complete physical projected-leaf
+schedule with that operation. The previous worker retains its separate proof. Full nested
+free-name interpretation and the global decoded free-name heap are now
+proved, including historical literal-probe boundary exclusion. General
+Mu-boundary replay and first-run no-pending remain open. See root
+[FINDINGS.md](../FINDINGS.md) for current status and validation.
 
 The latest physical equality work derives admitted leaf readback, identity,
 intersection, and projection union. A normalization phase handles arbitrary

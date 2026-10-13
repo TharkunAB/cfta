@@ -1,14 +1,15 @@
 # Current formalization findings
 
-Updated: **2026-10-13 04:16 CEST**.
+Updated: **2026-10-13 04:27 CEST**.
 
-The formalization is rebased onto `origin/microcfta` at `de910ea`. The
-upstream base contains the earlier findings repairs. This continuation found
-and repaired three additional defects, described as rows 18 through 20.
+The formalization is rebased onto `origin/microcfta` at `8ac24bb`. The
+upstream base contains the earlier findings repairs and merged equality
+narrowing from PR #97. This continuation repaired four additional defects,
+described as rows 18 through 21.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **818 jobs and 33,080 theorem dependency
+The full Lean development passes **846 jobs and 33,461 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -23,8 +24,11 @@ counterexamples, repair arguments, and implementation comparisons.
 ## Baseline and required contract
 
 The continuation branch is `formalization/microcfta-resume-20261012`.
-Its implementation base is `origin/microcfta` at `de910ea`, including the
-merged findings repairs through PR #96. The previous proof branch remains
+Its implementation base is `origin/microcfta` at `8ac24bb`, including PR #97.
+The restart refreshed the remote and rebased all 267 local commits without
+conflicts. Backup `backup/formalization-before-refresh-20261013-0418` retains
+the previous checkpoint `2aacf4f`. Proof commit `721ff6d` adds full free-name
+semantics and historical probe boundaries. The previous proof branch remains
 unchanged. Backup `backup/lean-before-microcfta-20261012-2200` and the retained
 stash preserve the pre-rebase work. Nothing from this continuation is pushed.
 For a constrained language, compilation and enumeration must contain every
@@ -49,8 +53,8 @@ both ranks. This is a contract distinction, not a new decoder defect.
 
 ## Repaired source defects
 
-Rows 1–17 describe earlier repairs now merged upstream. Rows 18 through 20 are
-local repairs on top of `de910ea`. Each row has a retained source reproduction and a corresponding formal
+Rows 1–17 describe earlier repairs now merged upstream. Rows 18 through 21 are
+local repairs, now based on `8ac24bb`. Each row has a retained source reproduction and a corresponding formal
 counterexample, repair theorem, or operational model. Older per-repair test
 totals in the linked reports describe their historical checkpoints. The
 current combined suite total is 620.
@@ -77,6 +81,8 @@ current combined suite total is 620.
 | 18 | In one substitution scope, merging equal actual identities could remove the first identity replacement and expose a later replacement for the same formal. Sparse evaluation returned `Yes`, pruning admitted a rejected term, and compilation produced one invalid tuple. | Return `Unknown` when an uncertain identity replacement has a later duplicate formal. Pruning retains the guard; compilation returns `SolverUnknown`. The existing [guard/pruning reproduction](lean/repro/NestedScopeCapture.hs) and [compiler reproduction](lean/repro/NestedCompileCapture.hs) now check both nested and same-scope cases. `SameScopeIdentityCapture` retains the pre-repair witness; `SourceSubstitutionPrecedence` proves the new check. |
 | 19 | A recursive callback could inspect temporary support and select different bodies during count, term, and support rebuilds. The public bounded generator returned four terms that its support rejected. | Keep construction tokens separate from size flags. Reject payload queries until the definition completes. Nested definitions retain enclosing tokens; both recursive and finite return paths remove their own token. `RecursiveConstructionQueries` proves marker provenance, stable rejection, and completed query behavior. The existing recursive-member case in `GenSpec.hs` checks the original callback, fourteen query paths, and nested-family completion. See [the construction-query notes](lean/notes-recursive-construction-queries.md). |
 | 20 | Grouped key discovery retained an earlier minimum after a callback changed its base. `minimumSize` returned zero although counts were `[0,1,1,1]` and the smallest member had size one. | Compare the final probe's keys and minima with the accumulated discovery table. Return `InconsistentRecursiveFamily` on disagreement. `GroupedProbeValidation` derives a true body fixed point for every successful check and proves that constructor programs retain their previous least-attained minima. The existing recursive-member test retains the public callback. See [the discovery-validation notes](lean/notes-grouped-probe-validation.md). |
+
+| 21 | `mergeAlternatives` on the union of two recursive languages repeatedly unfolded the same child union. Direct recursive operands and wrapped union operands exceeded the diagnostic timeout. | Stop recursive merging at retained recursive or union boundaries. Preserve the union and its accepted terms. The direct merge and enclosing equality reduction now complete. [Reproduction](lean/repro/MergedNarrowing.hs); [proof boundaries](lean/notes-merged-narrowing.md). |
 
 The private `Recursion` repair changes engine-term shape. User values,
 surface terms, original generator counts, distributions, and rank order
@@ -220,20 +226,20 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
 
 ## Evidence and its limits
 
-- Latest source suites: **620 passing examples**, on `de910ea` plus the local
-  repairs. The full run is `/tmp/mcfta-construction-query-full.log`.
-  After the grouped-discovery check, all 194 generator and 142 refinement
-  examples pass in `/tmp/mcfta-family-discovery-validation.log`. Core is unchanged.
+- Latest source suites: **620 passing examples**, on `8ac24bb` plus the local
+  repairs, including `b9fde4a`. Log: `/tmp/mcfta-20261013-merge-repair-tests.log`.
+  Fourmolu and Cabal-gild checks pass. Both retained recursive-merge source
+  cases and both ordered-profile/rank-stutter source replays also pass.
 - Repaired nested and same-scope source probes both report `(No,Unknown)`
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **818 jobs; 33,080 theorem dependency checks**.
+- Latest integrated Lean audit: **846 jobs; 33,461 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-restart-20261013-audit.log`.
-- The retained formula capture, nested compiler capture, recursive equality,
-  and open-union reproductions pass on the new base. The independent two-key
+  Log: `/tmp/mcfta-20261013-final-audit.log`.
+- The earlier formula capture, nested compiler capture, recursive equality,
+  and open-union reproductions passed at the `de910ea` checkpoint. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
   exact masses, conditional probabilities, and support acceptance.
   Log: `/tmp/mcfta-de910ea-focused.log`.
@@ -263,9 +269,9 @@ but do not prove it for every runtime execution.
 
 ## Current proof results and remaining obligations
 
-The restart proof checkpoint is **`d630667`**. Its complete audit passes
-**818 jobs and 33,080 theorem dependency checks**. All 60 new Lean modules
-since `5fffa19` are committed and imported by the aggregate audit. The full
+The current proof checkpoint is **`dc4928c`**. Its complete audit passes
+**846 jobs and 33,461 theorem dependency checks**. All current proof modules
+are committed and imported by the aggregate audit. The full
 formalization remains incomplete. The detailed restart order, commands,
 repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).
 
@@ -318,19 +324,56 @@ includes free names inside old boundary Mu payloads. `InternedLiteralObservation
 derives empty-result agreement and forward bare-local reflection for actual
 full-Syntax calls with arbitrary same-length literal aliases. The remaining
 step is the dynamic Mu boundary/identity argument. Set equality of root
-profiles cannot establish exact canonical request replay.
+profiles cannot establish exact canonical request replay. `InternedProbeFreeSupport`
+propagates free-name absence through stored probe dependencies.
+`InternedProbeDependencyAge` proves strict identity descent and well-foundedness
+for that graph. This is not a body-unfolding rank. `InternedOldProbeReplay`
+closes the old complete-record hit case from its two smaller probe observations;
+the newer smart-Mu case still needs joint boundary transport.
 
-The next concrete support proof is **full free-name semantics and its source
-heap invariant**. `InternedFreeNameDecoder`, `InternedFreeNameHeap`, and
-`InternedFreeNameConstructors` are complete local support modules. They do not
-yet establish `FreeNameHeap` for all source runs. A pure free-name interpreter,
-its name-map law, and the full source mutual induction remain unwritten.
+**Full free-name semantics and its source heap invariant are proved.**
+`InternedFreeNameSemantics` covers all Syntax, with arbitrary external-name
+maps. `InternedFreeNameForm` derives fixed captures and an optional argument,
+including captured probe aliases. `InternedNestedFreeNames.build_free` and
+`closed_heap` follow the actual mutual source execution, including cache hits,
+fresh body calls, and pending outcomes. `InternedSourceFreeNames.closed_free_empty`
+proves that every completed closed run has no free names.
+
+`InternedFreeNameMuOrigins` retains both semantic tables at each stored Mu's
+historical source prefix. `InternedStoredFreeNameBoundary.closed_reference_absent`
+uses those origins: an old-free-name bound on the actual stored body excludes
+fresh literal boundaries in both original probes. The fresh Mu-boundary half
+remains open. See [the free-name proof](lean/notes-interned-free-names.md).
+
+`InternedPureProfileIdentity.ordered_identity` identifies available pure values
+from equal ordered profiles in a common normalized state. Its checked reverse
+union example disproves identity from set equality. The checked warm-cache
+example in `InternedPureProfileOrderBoundary` disproves exact ordered syntax
+correspondence. The next proof must derive actual ordered replay; it cannot
+replace profile equivalence by ordered equality.
 See [the special-key proof](lean/notes-interned-special-key-completion.md),
 [observed root replay](lean/notes-interned-observed-root-replay.md),
 [boundary transport](lean/notes-interned-boundary-transport.md), and
 [literal observations](lean/notes-interned-literal-observations.md).
 
 ### Equality fixed-point termination
+
+**Source baseline change:** PR #97 inserts `mergeAlternatives` after every
+peer projection. The original `EqualityLeafProjectionRuntimeBound` still
+models the previous worker. The new `MergedProjectionBound.compiled_bound`
+now proves the complete merged projected-leaf schedule. It covers physical
+row grouping, exact source edge and node requests, snapshot targets,
+simultaneous edits, class order, required paths, and the final fixed point.
+`MergedRawLeafSource.worker_actual` uses the actual runtime output cache;
+no later operation executes from a proof-prepared cache. Group iteration
+order is explicit and must include all source symbols. The bound remains
+the original occurrence weight plus one. Endpoint domains must be leaves.
+
+`MergedAlternativesSubsumption` proves soundness of successful bounded
+recursive coverage checks, including ancestor-pair reuse. `MergedEqualityReduction`
+proves full constrained-language preservation under a merge-superset contract.
+General recursive merge termination and the whole physical superset bridge
+remain open. See [merged narrowing](lean/notes-merged-narrowing.md).
 
 The complete physical **projected-leaf** schedule has a derived bound of the
 original occurrence weight plus one. It includes actual endpoint reads,
@@ -401,14 +444,14 @@ The following checked examples rule out attempted generalizations:
   modeled unfolding where both head rank and free-occurrence rank stay at 2.
   The continuation has ranks `[2,2,1,0]`. This does not establish divergence,
   closed empty-environment reachability, or universal callback admissibility.
-  Haskell confirmation was not established at this checkpoint.
+  Haskell now confirms both rank traces and the preloaded representative. The fixture fails the unrestricted callback renaming law when the old name aliases its fixed capture. See [the source replay](lean/notes-source-rank-stutter-replay.md).
 - Exact ordered root-profile correspondence is false. Reversing captured union
   operands can hit the same Mu key and return the first stored order. The
   temporary kernel check `/tmp/mcfta-profile-order.lean` passes after completing
   its inequality proof. The set-based `Equivalent` theorem remains valid.
 
 These are proof-obligation counterexamples. They do not add production defect
-rows to the twenty repaired defects above. See
+rows to the repaired defects above. See
 [the gate notes](lean/notes-gate-unfolding-rank.md) and
 [literal profile order](lean/notes-interned-literal-observations.md).
 
