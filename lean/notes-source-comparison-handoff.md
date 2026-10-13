@@ -73,13 +73,20 @@ effects. No eager preparation replaces the original execution cache.
 fuel preserves any successful Boolean and cache, without source invariant
 premises. `successful_results_eq` compares any two successful bounds.
 
-## Next proof target
+## Actual-cache semantic inclusion
 
-Derive semantic inclusion from a successful true comparison. Exact
-successful trace replay in a later cache and complete reader coverage
-support a common prepared observation. Numeric ancestor pairs require
-coherent source identities and a finite-term induction. General Mu
-totality and repeated merge-pass convergence remain separate obligations.
+`MergedComparisonSoundness.check_sound` now derives finite-term inclusion
+from a successful true comparison in its actual returned cache. It needs
+no `Ready`, warmup, recursive callback law, or coinduction premise. Source
+facts, preparation, available closed operands, and a sound interpretation
+of the clear-guard test remain explicit. A finite-term height induction
+justifies numeric ancestor reuse through coherent record identity.
+
+`MergedSourceSelectionSemantics.select_complete_exact` composes the theorem
+through the actual ordered cold child filter. It proves stable completion
+and exact union-language preservation in the actual returned cache. The
+next composition is the complete cold merge worker. General Mu totality
+and repeated merge-pass convergence remain separate obligations.
 
 ## Scope and validation
 

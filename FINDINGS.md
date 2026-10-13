@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 14:28 CEST**.
+Updated: **2026-10-13 15:06 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `4897831`.
 Upstream contains the repairs in rows 1 through 21. Row 22 records a new
@@ -11,7 +11,7 @@ follow both changes.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **905 jobs and 34,501 theorem dependency
+The full Lean development passes **919 jobs and 34,817 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -25,17 +25,18 @@ counterexamples, repair arguments, and implementation comparisons.
 
 ## Latest restart checkpoint
 
-Proof checkpoint: **`2ba84e1`**. All stable proof files are committed and
-imported by the aggregate audit. All workers are frozen. The only unfinished
-draft is `lean/MicroCFTA/MergedAdaptiveStability.lean.incomplete`; it is
-committed and excluded from the build.
+Proof checkpoint: **`22d0adc`**. Stable proof files are committed and imported
+by the working aggregate audit. Proof work continues; inspect the live working
+tree at restart. The marked draft
+`lean/MicroCFTA/MergedAdaptiveStability.lean.incomplete` is preserved unchanged.
+Its completed sibling now proves exact fuel independence.
 
-The requested upstream refresh was checked at 14:21–14:28 CEST. Both fetch
-and direct remote lookup returned `origin/microcfta` at
-`489783177b0a7fd34bb6bf205e66d7d5cce0d1fe`. The explicit rebase reported the
-continuation branch up to date. No newer remote commit was available then.
-Backup `backup/formalization-before-refresh-20261013-1423` preserves the
-checkpoint. New work remains local.
+The requested upstream refresh and explicit rebase were repeated at this
+restart. `origin/microcfta` remains at
+`489783177b0a7fd34bb6bf205e66d7d5cce0d1fe`; the branch was already up to date.
+Backup `backup/formalization-before-refresh-20261013-1435` preserves `efd0ddc`.
+The refresh changed no Lean file and left stashes and other worktrees intact.
+New work remains local.
 
 `MergedAdaptiveMerge.execute_complete` now proves the complete adaptive
 physical merge's successful execution and finite-language coverage.
@@ -44,7 +45,8 @@ smaller calls, actual current-state comparison selection, child columns,
 edge interning, and parent construction. It has no recursive correctness or
 termination premise. Prepared initial context, concrete guard interpretation,
 structural source grouping, and the outer memo wrapper remain explicit
-correspondence boundaries. Extra-fuel independence is the preserved draft.
+correspondence boundaries. `MergedAdaptiveStability.enough_eq_execute` now
+proves exact extra-fuel independence, including the returned record and cache.
 See [adaptive worker](lean/notes-merged-adaptive-worker.md).
 
 `MergedSourceComparison` now executes the ordered stateful source comparison.
@@ -53,16 +55,41 @@ See [adaptive worker](lean/notes-merged-adaptive-worker.md).
 cache effects. `MergedComparisonColdMeasure` proves that every changed
 verified cache strictly decreases the number of cold original Mu records.
 `MergedComparisonReaderReplay` proves exact completed reader replay in any
-later cache. Sufficient-fuel completion, stability, and semantic soundness
-of the full stateful comparator remain open. See
+later cache. `MergedComparisonCompletion.check_complete` now derives a
+stable sufficient-fuel bound from cold Mu records and unvisited identity
+pairs. `MergedComparisonStability` proves fuel independence of every successful
+result. `MergedComparisonReplay.check_replay` preserves the exact Boolean
+and removes all effects on replay in a later cache.
+`MergedComparisonSoundness.check_sound` now proves inclusion in the actual
+returned cache. It requires no `Ready`, warmup, recursive callback law, or
+coinduction premise. The guard interpreter and sound clear-guard test remain
+explicit. See
 [comparison restart](lean/notes-source-comparison-handoff.md).
+
+`MergedSourceExposureCoverage.actual_exact` proves reverse edge coverage and
+exact finite-term semantics in the original reader's returned cache. It needs
+no global `Ready` or warmup. `MergedSourceSelection.select_complete` then
+derives stable ordered cold child filtering with actual comparison effects.
+`MergedSourceSelectionSemantics.select_complete_exact` proves its exact
+union-language preservation in the returned cache. `MergedSourceGrouping`
+derives the structural grouping contract from executable partitioning and
+proves the source append-fold bucket equation. Cold merge composition remains
+active.
 
 `InternedOrdinaryLevelBoundary` disproves equal computed levels under
 fresh-only capture changes on actual source calls. Its checked levels change
 from 0 to 1. The closed embedding completes and stores nested probe depths
-`(1,0,1)`. It supplies no pending or divergence counterexample. The next
-constructor target is to require the ordinary mismatch to affect a live
-lexical position and compare that name with the active old key. See
+`(1,0,1)`. It supplies no pending or divergence counterexample.
+`InternedPendingLiveMismatch.closed_live_depth_mismatch` now derives a
+live lexical mismatch from any hypothetical pending run. Its later name is
+a live capture of the active ancestor and occurs in the original Depth probe.
+`InternedPendingOrdinaryOrigins.closed_capture_depth_mismatch` now retains
+the actual earlier enclosing Depth call that introduced the captured level,
+with fewer lexical inputs. `InternedOrdinaryCaptureBoundary` checks a closed
+completed example with levels `0 → 1` and the later ordinary name already in
+the original Depth probe. Support or alias alone cannot exclude the mismatch.
+The next target is to retain both exact key components and derive descent
+through the shorter producer context. See
 [literal observations](lean/notes-interned-literal-observations.md).
 
 The full formalization remains unfinished. The exact restart order,
@@ -286,10 +313,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **905 jobs; 34,501 theorem dependency checks**.
+- Latest integrated Lean audit: **919 jobs; 34,817 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-20261013-restart-final-audit.log`.
+  Log: `/tmp/mcfta-20261013-sound-selection-audit.log`.
 - The earlier formula capture, nested compiler capture, recursive equality,
   and open-union reproductions passed at the `de910ea` checkpoint. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -321,9 +348,9 @@ but do not prove it for every runtime execution.
 
 ## Current proof results and remaining obligations
 
-The current proof checkpoint is **`2ba84e1`**. Its complete audit passes
-**905 jobs and 34,501 theorem dependency checks**. All current proof modules
-are committed and imported by the aggregate audit. The full
+The current proof checkpoint is **`22d0adc`**. The integrated working audit passes
+**919 jobs and 34,817 theorem dependency checks**. Stable proof modules
+are committed and imported by the working aggregate audit. The full
 formalization remains incomplete. The detailed restart order, commands,
 repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).
 
@@ -457,7 +484,11 @@ source edge exposure for closed roots in that fragment. It returns resident
 edges with closed children, the exact final cache, preserved facts, and exact
 stability under extra proof fuel. `MergedSourceExposureLanguage` derives
 actual epsilon origins for every returned edge and proves finite-term
-soundness. Reverse edge coverage and the full stateful comparison remain open.
+soundness. `MergedSourceExposureCoverage.actual_exact` now supplies reverse
+coverage and exact language in the actual returned cache. The full ordered
+stateful comparator completes with exact fuel stability and later replay.
+Its actual-cache semantic inclusion and exact child-selection language are
+proved. Full cold merge composition remains active.
 
 `MergedPhysicalGroupRoot.grouped_root_covers` proves ordinary-root language
 coverage through actual child, edge, and parent effects. The checked column

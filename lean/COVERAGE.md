@@ -34,11 +34,20 @@ Current continuation proofs add full live lexical input replay and actual
 completed probe-choice sites. They derive guarded merge-call descent, physical
 comparison and union language, and stabilization of cold unfolding traces in
 the `PreparedWithoutMu` fragment. Closed cold edge exposure now completes,
-retains cache facts, and has a finite-term soundness proof. Actual physical
-groups and checked child-column branches have coverage proofs. Any hypothetical
-closed pending encounter now requires different computed ordinary levels at
-corresponding source bodies. That remaining case, complete stateful comparison,
-and recursive merge-worker composition remain active.
+retains cache facts, and has exact finite-term semantics in its actual returned
+cache. Ordered stateful comparison has sufficient-fuel completion, exact fuel
+stability, and successful trace replay in every later cache. The cold ordered
+child filter also has stable completion. Adaptive merge has complete language
+coverage and exact fuel independence under its prepared context. Its full
+cold-filter composition remains open. A hypothetical closed pending encounter
+now requires different computed ordinary levels at a live lexical position.
+The later name is a live capture of the active ancestor and occurs in its
+original Depth probe. Its actual earlier introduction now has a derived
+shorter lexical context. A checked closed example prevents exclusion from
+alias support alone. Stateful comparison and child selection now have
+actual-cache soundness; cold merge composition and constructor alias exclusion
+remain active. Executable source grouping also has a derived structural
+contract and an exact append-fold bucket equation.
 See root [HANDOFF.md](../HANDOFF.md) for exact theorem boundaries and evidence.
 
 The latest physical equality work derives admitted leaf readback, identity,
