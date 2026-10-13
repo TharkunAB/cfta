@@ -78,9 +78,9 @@ examples in Nix. The native reproduction passes after those suites.
 Log: `/tmp/mcfta-solver-name-repair-20261013-tests.log`.
 Fourmolu and cabal-gild pass in Nix.
 Log: `/tmp/mcfta-solver-name-repair-20261013-format.log`.
-No production test was added. The aggregate audit passes 1,140 targets and
-39,108 theorem dependency checks. Only the three standard Lean foundations
-are permitted. Log: `/tmp/mcfta-native-liquid-20261013-audit.log`.
+No production test was added. The aggregate audit passes 1,180 targets and
+39,689 theorem dependency checks. Only the three standard Lean foundations
+are permitted. Log: `/tmp/mcfta-closing-20261014-audit.log`.
 
 The codec proof models Unicode scalar values, decimal rendering, and the
 inspected serializer control flow. It does not verify the external Text,

@@ -1,134 +1,126 @@
 # Current formalization findings
 
-Updated: **2026-10-14 00:00 CEST**.
+Updated: **2026-10-14 00:31 CEST (Europe/Stockholm)**.
 
-Upstream `7989e91a` (PR #115) is the base of the requested local rebase on
-`formalization/microcfta-rebase-20261013`. Backup
-`backup/formalization-before-rebase-20261013-2315` retains `298a225b`.
-All 1,432 saved Lean-tree files retained their bytes through the rebase.
-No push, deployment, or board post is authorized. Benchmark programs,
-datasets, and workload specifications remain outside formalization scope.
+## Current result
 
-The liquid review found and repaired a second name-capture defect. Liquid
-Fixpoint serialized distinct raw names `1` and `fix$1` identically. A false
-quantified statement returned `Yes`; an independently named binder returned
-`No`. Repair **`73223201`** uses one injective safe name encoding for every
-solver-facing declaration and occurrence, including binders and functions.
-The native reproduction now returns the correct `(No,No,No,Yes)` results.
-Lean proves the historical unsound verdict, concrete encoding injectivity,
-unchanged name serialization, and preservation of full quantified meaning.
-The encoded preflight and complete public-call composition now check.
-`SourceSolverNamePublic` derives the current liquid language, order, inverse,
-and finite-outcome contracts from correct encoded external responses.
-See [the solver name note](lean/notes-solver-name-encoding.md).
-The repaired source passes all **635** existing Haskell examples in Nix.
+The main Sized contract is proved in the source models: exact distinct
+accepted terms at each node-count size, finite class evaluation, size-major
+enumeration, and both rank/unrank inverse laws. The reference, solver-decided,
+and optimized paths have the same required sequence. The latest proofs use
+the actual original-state finite map, not an assumption that the state type
+itself is finite. **Whole Haskell implementation verification remains open.**
 
-The shared `Interned.toRows` adapter now has finite traversal, exact ordered
-row/language readback, finite validated conversion, and issued-cache exposure
-proofs. Dense numbering and canonical sorting derive the exact cyclic query
-sequence. Minimum-size convergence uses only finite map keys, including when
-the identity type is infinite. The cyclic composition proves exact node-count
-classes, finite count/plan evaluation, and both rank inverses from those rows.
-See [the shared-row note](lean/notes-shared-rows.md).
+`SourceSizedFiniteKeys*` derives root/child membership from FTA validation,
+finite key restriction, exact raw rows, dense canonical order, actual trim
+keys, and complete functional and relational bounded-fold readback.
+`SourceSizedFiniteKeysDispatch.nativeSized_eq` proves exact raw-map dispatcher
+agreement, including errors and all four query functions. The raw synchronous
+product minimum calculation and its finite convergence are derived.
 
-The native overlap callback, complete scan, and compiler now agree with the
-reference under a scoped product-row contract. The physical ordinary kernel
-has exact common language, canonical retained-row readback, and stable finite
-completion. Native self/order/memo dispatch and recursive Mu/union exposure
-remain separate boundaries. An abstract product-row contract does not prove
-those native construction obligations.
+`SourceSizedFiniteKeysNativeLiquid.encoded_correct` proves independent
+mixed-sort ambient logical acceptance, original canonical order, complete
+bounded prefixes, distinctness, and both signed inverses for the actual raw
+fold. `encoded_finite` derives finite outcomes from finite external attempts.
+Unknown and unchanged exceptions remain separate. Replies need not be stable.
+External Sat/Unsat correctness and completion remain explicit contracts.
+See [finite map Sized](lean/notes-sized-finite-keys.md).
 
-The actual cyclic sampler/PMF record now has derived reciprocal masses,
-normalization, exact original-language support, signed empty-size behavior,
-and sampled inverses. No arbitrary normalized-sampler premise is assumed.
+## Repairs and retained counterexamples
 
-A new Lean/native counterexample refutes unconditional interning-independent
-cyclic rank order with a noninjective custom symbol key. Equal complete sort
-keys retain source row order. Opposite interning orders exchange size-one
-ranks while counts and both inverse laws remain correct. Commit `17b21453`
-preserves the reproduction and qualifies the source comments. It does not
-change runtime ranking behavior.
+- **`73223201`: quantified SMT name capture.** Liquid Fixpoint mapped raw
+  names `1` and `fix$1` to the same symbol. A false quantified entailment
+  returned Yes. The adapter now uses one injective safe encoding for all
+  declarations, variables, function heads, binders, and the default value name.
+  The codec, serializer control, complete quantified meaning, preflight, and
+  public liquid composition are proved. Native and Lean counterexamples
+  remain. See [solver names](lean/notes-solver-name-encoding.md).
+- **`a8b32869`: weighted-search midpoint overflow.** The former Int index sum
+  can wrap even when both indices fit. The repair uses
+  `low + (high - low) quot 2`. The repaired full search requires only a
+  representable array length. The historical 64-bit example is an arithmetic
+  boundary, not a feasible allocated-array failure. See
+  [weighted selection](lean/notes-quickcheck-frequency.md).
+- **`17b21453`: cyclic custom-key order qualification.** Equal complete sort
+  keys retain source row order. Noninjective custom symbol keys can exchange
+  ranks when interning order changes. Counts and both inverses still hold.
+  Source comments and Lean/native evidence now state the exact limit.
+- Earlier source repairs and counterexamples remain, including direct-row
+  Sized dispatch, implicit ambient fresh-name capture, recursive child unions,
+  fresh ordinary probes, and the disproved saturated-merge shortcut.
 
-The completed native/liquid checkpoint passes **1,140 build jobs and 39,108
-theorem dependency checks** using only the three permitted Lean foundations.
-The rebased source passes **285 core, 206 generator, and 144 refinement
-examples** in Nix. Fourmolu, cabal-gild, and the native reproduction pass.
-Later dispatch, weighted-backend, and equality work must receive its own
-audit before completion is claimed.
+## Other completed source bridges
 
-The new bounded import proofs follow PR #114's control flow. Only a bounded
-residual-guard error selects denotation. Negative bounds make no external
-calls. Fallback reads the original graph. Ordered guard checks preserve the
-first Unknown or exception. Timeouts retain their separate public error.
-Successful liquid denotation has the exact original accepted language below
-the source depth bound. It uses the repaired mixed-sort ambient evaluator.
-The ordinary shortcut now has exact three-table recurrence, empty-level
-stopping, distinct-symbol bypass, duplicate freedom, and depth-order proofs.
-`SourceBoundedImport.plain_correct` composes it without solver calls.
+`SourceInternedRows*` proves finite shared row traversal, ordered constraints
+and child readback, guarded language, validation, and issued-cache exposure.
+Dense numbering and finite-key minimum sizes are derived. Cyclic query and
+sampler records have exact counts, decoder positions, reciprocal masses,
+normalization, support, PMFs, and sampled rank replay. No arbitrary sampler
+normalization premise remains. Distinct terms, accepting runs, generator
+members, and aggregated PMF keys remain separate concepts.
 
-The actual finite-term rebuild now has exact sorted-row and arity-validation
-proofs. A ranked source derives successful reconstruction. Proper-subterm
-dependencies give finite compact compilation, exact counts and decoder
-positions, both inverse laws, and rejection outside the finite language.
-`SourceBoundedImport.liquid_eventual` combines these results.
-The checked proof and aggregate audit checkpoint is `274aa759`.
+`SourceInternedIntersectionDispatch*` proves ordinary native empty/self/order
+control, actual constructor effects, finite completion, and completed memo
+results with concrete execution provenance. `SourcePhysicalSharedRows*`
+connects actual cache readback and traversal to the minimum callback. The
+finite plain callback detects exactly the original operands' shared terms
+without a product-row or global child-meet premise.
 
-Observation grouping derives exact disjoint finite parts, distinct counts,
-cardinality weights, uniform term probabilities, PMF preservation, and rank
-query records. No coverage or weight invariant is assumed for the groups.
-Native interning/SCC readback, native split representation, custom decoder
-order, and whole lazy-enumeration completion remain open. The grouped
-reference and compact sorted sequences are not asserted equal to native
-custom import order. See [the bounded import note](lean/notes-bounded-import.md).
+`SourcePhysicalRecursiveRows*` proves actual repaired unfolding, precise cache
+effects, stable replay, and shared rows for `mu x. (base | step x)`. It derives
+that fragment's independent language of finite Chain terms from an available coherent
+stored knot. It does not prove construction of every knot or general Mu/union
+exposure. See [physical intersection](lean/notes-physical-intersection-rows.md).
 
-`SizedLanguageTheorem` combines the main node-count language contract:
-exact accepted classes, finite reference evaluation, complete distinct
-size-major prefixes, and both rank/unrank inverses. The optimized count and
-decoder recurrence now has a separate finite evaluation certificate in
-`SourceSizedTableEvaluation`, including ordinary and product minimum-size
-preprocessing. Direct-row optimized dispatch retains the reference sequence.
+`InternedDepthFreeProjection*` proves full-syntax free-name membership
+agreement and actual ordinary-root callback deep observations with nested
+children. General cached-depth and binder-heap induction remain open.
 
-`SourceSizedLiquidAmbientPublic.public_correct` proves the bounded contract
-against independent liquid acceptance with mixed sorts and ambient
-assumptions. It derives evaluator adequacy from individual external
-Sat/Unsat responses. The whole IO trace preserves the first Unknown or
-exception. Finite external completions give a finite public outcome,
-including errors. Repeated queries need not return the same verdict.
+`EqualityNestedUnaryAncestorRoot*` composes actual projections, target merges,
+both ancestor edits, and the root identity stop. The fixed unary/two-atom,
+one-class fragment terminates within `4 * (left + right) + 2` passes and
+retains exact output/cache for additional fuel. All marked drafts retain their
+bytes. See [the equality root proof](lean/notes-equality-nested-unary-root.md).
 
-The liquid audit found and repaired an ambient freshness defect. A free name
-that occurred only in an ambient assumption could capture a generated value
-name. Native results changed from `(Yes,No)` to `(Unknown,No)` for the
-colliding and independently renamed queries. Repair **`48024a69`** reserves
-those ambient free names. Ordinary implicit declarations and quantified
-local names retain their behavior. Both Lean and native counterexamples
-remain. The repaired preflight has an exact source traversal proof.
+Earlier bounded import, liquid denotation, finite reconstruction, observation
+groups, weights, sampling, PMFs, CPS enumeration, union-find, and memo-domain
+proofs remain. The detailed notes and API coverage ledger record their scope.
 
-Probability proofs now connect distinct Sized class queries, requested term
-weights, bounded count-weighted sampling, sampled global ranks, duplicate
-PMF aggregation, and actual finite/cyclic query dispatch. The weighted
-on-demand callback API has separate validity and positive-coverage laws.
-Its metadata-only counterexamples demonstrate documented caller obligations,
-not implementation defects. Sized sampling results are client compositions;
-there is no exported Sized sampler.
+## Remaining work and assessment
 
-The current CPS enumeration, batched suspended descent, conditional
-union-find writes, and reserved empty-domain identity bridges now check.
-Their concrete runtime boundaries remain explicit. General constructor
-completion and the older equality drafts remain secondary open targets.
+The central mathematical and source-algorithm contracts are strong. The work
+has exposed and repaired real defects. It is not yet an end-to-end proof of
+the Haskell library. The largest remaining obligations concern general
+recursive construction/exposure, pending lazy memo values and full recursive
+memo traces, native SCC/split import readback and custom decoder order,
+general equality propagation, and concrete runtime/dependency contracts.
+No verified Haskell-to-Lean extraction exists. There is no honest single
+completion percentage for these different layers.
 
-The freshness repair passed **285 core and 204 generator examples** in Nix.
-Native reproductions and formatting checks passed. No production test was
-added. See [the new proof note](lean/notes-sized-liquid-probability.md) for
-the theorem map and exact boundaries. The final aggregate audit is recorded
-in [HANDOFF.md](HANDOFF.md). Proof counts are validation evidence only.
+## Checkpoint and validation
 
-The earlier requested push is complete through **`1f982c5b`** on
-`origin/formalization/microcfta-resume-20261012`. The new continuation stays
-local. No further push, deployment, or board post is authorized.
-All previous proofs, repairs, marked drafts, stashes, and worktrees remain.
-The untracked `lean/repro/NestedUnaryTwoAtom.hs` retains its original bytes.
-Weekly allowance was **41% at 23:54 CEST**. Refresh it before further work and
-stop all work at 20% or less.
+Branch: `formalization/microcfta-rebase-20261013`.
+Upstream base: `origin/microcfta` at **`7989e91a`** (PR #115).
+The requested 374-step rebase completed without conflicts at `5d5ac947`.
+Backup `backup/formalization-before-rebase-20261013-2315` retains `298a225b`.
+All 1,432 saved Lean-tree files matched immediately after rebase. Later only
+intended coverage documents and audit imports changed among those files.
+All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
+`lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
+The final proof checkpoint is **`9207c2cf`**; later commits record this handoff.
+
+The closing Lean 4.34.1 audit passes **1,180 build targets and 39,689 theorem
+dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
+Log: `/tmp/mcfta-closing-20261014-audit.log`.
+After the SMT repair, all **635** examples passed in Nix: 285 core, 206
+generator, and 144 refinement. After the isolated midpoint repair, all 206
+generator examples passed again. Native fixtures, Fourmolu, and cabal-gild
+passed. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
+
+All proof workers are stopped at the user's request for a handoff. Weekly
+allowance was **35% at 00:31 CEST**. Refresh it before new work and stop all
+work at **20% or less**. Everything remains local: no push, deployment, or
+board post. Benchmark formalization remains excluded.
 
 ## Previous Sized checkpoint
 

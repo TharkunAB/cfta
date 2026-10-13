@@ -11,7 +11,11 @@ repairs, bounded import fallback, and shared row adapter through PR #115. Benchm
 datasets, and workload specifications are excluded from formalization.
 The [shared row note](notes-shared-rows.md) covers finite extraction, dense
 numbering, canonical order, minimum sizes, cyclic query laws, and the custom-key
-tie counterexample. Native intersection row construction remains open.
+tie counterexample. Ordinary native intersection construction, dispatch,
+completed memo provenance, and shared productivity are now proved. One
+productive stored knot has actual unfolding and shared exposure. General
+recursive construction remains open. See
+[physical construction](notes-physical-intersection-rows.md).
 The [bounded import note](notes-bounded-import.md) records the preceding work
 and its remaining native correspondence boundaries.
 Local repairs reject uncertain identity replacement
@@ -26,8 +30,20 @@ the same external SMT spelling. Repair `73223201` encodes every solver-facing
 name injectively. The [solver name note](notes-solver-name-encoding.md) records
 the Lean/native counterexample and the checked codec, preflight, quantified
 semantics, and complete public liquid composition. All 635 existing Haskell
-examples pass after the repair. The native/liquid proof batch passes 1,140
-build targets and 39,108 theorem dependency checks.
+examples pass after the repair. The closing audit passes **1,180 build targets
+and 39,689 theorem dependency checks** at proof checkpoint `9207c2cf`.
+
+The [finite map Sized proof](notes-sized-finite-keys.md) now derives the
+actual raw-map reference, decided, and optimized paths, including canonical
+order, finite class execution, all four queries, and both inverse laws.
+The original state type need not be finite.
+[Weighted selection](notes-quickcheck-frequency.md) derives the actual
+QuickCheck backend and verifies the safe midpoint repair `a8b32869`.
+All 206 generator examples passed again after that isolated repair.
+The [equality root proof](notes-equality-nested-unary-root.md) completes both
+ancestor edits and bounded iteration for its fixed unary/two-atom fragment.
+Root [HANDOFF.md](../HANDOFF.md) gives the remaining targets and exact logs.
+All work is local. Benchmark formalization remains excluded.
 
 The model proves constrained grammar compilation, complete bounded language
 enumeration, a distinct-term bijection with `Fin n`, requested term
@@ -288,6 +304,9 @@ ecta.pdf 34572866be0bc8e86a546f712ffb2666fe641d133417a895ecbdee5d8f6e1ebf
 
 ## Validation
 
+The current closing evidence is above and in root [HANDOFF.md](../HANDOFF.md).
+The following older commands and results remain historical records.
+
 - The complete Lean package builds. The axiom audit passes.
 - All earlier repaired cases and the new counterexamples run inside `nix-shell`,
   with Z3 for the public cases.
@@ -311,7 +330,10 @@ The host compiler path resolves the existing Nix/GHC `-lgmp` linker failure on
 this WSL host. The reproduction is a standalone audit artifact. It does not
 add a package test suite.
 
-## Next proof obligations
+## Earlier proof obligations
+
+Use root [HANDOFF.md](../HANDOFF.md) for the current ordered targets.
+The following list retains the earlier broad correspondence scope.
 
 1. Connect the checked finite sampler records to every heterogeneous recipe and
    support callback. Atomic observed masses are repaired and proved.

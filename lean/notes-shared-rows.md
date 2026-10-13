@@ -91,9 +91,13 @@ through physical caches: source hash join, arity check, child sequencing,
 edge creation, surviving rows, and canonical node readback. It derives
 correct common language for finite plain operands in the actual physical
 cache. `sizeOf left` gives sufficient fuel. Larger fuel retains both the
-output and final cache. Native memo/self/order dispatch and recursive
-Mu/union exposure remain separate. This kernel theorem does not discharge
-the general scoped product-row contract.
+output and final cache. The later `SourceInternedIntersectionDispatch*` and
+`SourcePhysicalSharedRows*` derive ordinary native dispatch, completed memo
+provenance, actual row traversal, and productivity without a product-row
+premise for this finite plain fragment. `SourcePhysicalRecursiveRows*` proves
+actual unfolding and shared exposure for one productive stored knot. General
+Mu/union construction and pending memo execution remain open. See
+[physical construction](notes-physical-intersection-rows.md).
 
 ## Concrete cyclic probability records
 
@@ -123,11 +127,10 @@ This finding does not refute the count or inverse laws.
 ## Validation and scope
 
 The shared-row checkpoint passed 1,123 targets and 38,793 theorem dependencies.
-The later native-gate, probability, ordinary-intersection, and solver-name
-batch passes 1,140 targets and 39,108 theorem dependencies. The audit permits
+The closing audit passes 1,180 targets and 39,689 theorem dependencies. The audit permits
 only `propext`, `Classical.choice`, and `Quot.sound`.
 Logs: `/tmp/mcfta-one-row-20261013-audit.log` and
-`/tmp/mcfta-native-liquid-20261013-audit.log`.
+`/tmp/mcfta-closing-20261014-audit.log`.
 
 The rebased source passed 285 core, 206 generator, and 144 refinement examples
 in Nix. Log: `/tmp/mcfta-one-row-20261013-tests.log`.
@@ -138,7 +141,7 @@ Log: `/tmp/mcfta-one-row-20261013-format.log`.
 No production test or benchmark formalization was added.
 
 The existing Sized, liquid, probability, and bounded import proofs remain.
-Native immutable exposure, intersection construction, complete custom-order
-fallback compilation, concrete storage, and lazy runtime execution still
+General recursive exposure/construction, complete custom-order fallback
+compilation, concrete storage, and lazy runtime execution still
 need their stated adapters. Older constructor and equality drafts remain
 secondary targets. Do not infer whole-library completion from this audit.
