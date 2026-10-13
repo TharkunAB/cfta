@@ -45,9 +45,21 @@ stable replay without allocation and an independent language of finite Chain
 terms. `shared_exposure` derives finite shared traversal and exact original
 language from the actual exposed rows.
 
-The recursive proof starts from an available coherent stored knot. It does
-not yet provide a construction witness for that premise. General Mu/union
-exposure and pending-thunk execution remain open.
+`SourcePhysicalRecursiveConstruction.source_return` now supplies the stored
+knot from actual repaired construction on empty caches. The symbols are
+arbitrary and can be equal. The exact record retains the two probe nodes,
+Mu identity 2, ordinary body identity 3, and both final counters at 4.
+`constructed` derives cache facts and availability. `source_replay` retains
+the exact constructor result without allocation through later cache growth.
+`source_unfold` derives actual unfolding and stable replay.
+
+`source_rows` composes finite shared exposure without a supplied stored-knot
+premise. `SourcePhysicalRecursiveSized.source_sized` connects those actual
+rows to one distinct chain term at every positive node-count size, finite
+class evaluation, distinct size-major prefixes, and both inverse laws.
+The shared snapshot retains the exposed physical rows and the original Mu
+child identity. Concrete lazy heaps and verified extraction remain boundaries.
+General Mu/union construction, exposure, and pending-thunk execution remain open.
 `InternedDepthFreeProjection*` separately derives full-syntax free-name
 membership and ordinary-root deep callback observations, including nested
 children. General cached-depth and binder-heap induction remain open.
