@@ -99,7 +99,10 @@ tree automata of `microcfta`, with QuickCheck integration.
   children. The result is an ordinary finite generator with exact counts,
   source-ordered ranks, and structural shrinking, and sampling makes no solver
   calls. A constructor that needs the solver, and an import whose guards the
-  engine cannot count, defer the generator until `compile`.
+  engine cannot count, defer the generator until `compile`. A bounded import
+  whose guards pruning leaves uncountable reads its bounded denotation, with
+  the solver deciding every guard on each term; only an unbounded one reports
+  `ResidualGuard`.
 - `Data.CFTA.Ranked`: finite ranks, weighted sampling, replay, and structural
   shrinking, independent of automata, with `Data.CFTA.Ranked.QuickCheck`.
 - The engine modules `Data.CFTA.Gen.Internal.*` and the ranked internals

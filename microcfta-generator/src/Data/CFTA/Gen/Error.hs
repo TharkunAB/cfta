@@ -106,7 +106,9 @@ data GenError
       compiler do not decide the comparison.
       -}
       RelationalSyntacticEqualityUnsupported !Guard
-    | -- | A guard remained after pruning that the symbolic ranker cannot count.
+    | {- | A guard remained after pruning that the symbolic ranker cannot count,
+      in an import without a depth bound.
+      -}
       ResidualGuard !Guard
     | -- | The generator contains a deferred automaton source; call @compile@ first.
       SourceRequiresCompilation
@@ -365,8 +367,10 @@ explain (ResidualGuard guard) =
         , "ranker cannot count it. The compiler does not support scoped equality"
         , "on compound subtrees. validOutcomes reads an import through the"
         , "same pruning, so it reports the same error."
-        , "Fix: write the guard of the imported automaton without scoped equality"
-        , "on compound subtrees."
+        , "Fix: bound the import with fromAutomatonUpToDepth. A bounded import"
+        , "reads its denotation, with the solver deciding every guard on each"
+        , "complete term. Or write the guard without scoped equality on compound"
+        , "subtrees."
         ]
 explain ConditionNeedsConstructor =
     guidance

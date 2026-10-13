@@ -1240,9 +1240,10 @@ The result of `compile` is an ordinary finite generator: `cardinality`,
 `unrank`, `termAt`, `rankOf`, `support`, `shrinkRank`, and `smallerMembers`
 work on it, and sampling, replay, and shrinking make no solver calls. `termAt`
 returns the engine's labelled term; `surface` reads the accepted liquid term
-under it. An undecidable guard, a guard the observations cannot decide, and a
-guard the symbolic counter cannot count are compile failures, each
-explained by `explain`; an empty language is not a failure. Ranks are
+under it. An undecidable guard and a guard the observations cannot decide
+are compile failures, each explained by `explain`; an empty language is not
+a failure. A guard the symbolic counter cannot count is a failure only in an
+import without a depth bound. Ranks are
 deterministic for a fixed generator. A changed pool, bound, or
 specification can change them.
 
@@ -1269,9 +1270,12 @@ compiled <- LTAGen.compile wrapped
 Under a guard, the pruned automaton is split by the observations the guard
 reads, so an import stays a graph until one rank is selected. An empty or
 negative-bound import is an empty source and can occur beside a nonempty
-alternative. A guard that remains after pruning and that the symbolic
-counter cannot count is reported as `ResidualGuard`. Core `denotationAtMost`
-remains an explicit bounded reference evaluator.
+alternative. A guard can remain after pruning that the symbolic counter
+cannot count. Then an import with a depth bound reads its bounded denotation,
+as core `denotationAtMost` gives it: the solver decides every guard of the
+original automaton on each complete term, and the import reads an automaton
+of exactly those terms, so its result does not depend on pruning. An import
+without a depth bound reports the guard as `ResidualGuard`.
 
 `fromDatatypeUpToDepth` accepts a derived
 `TypedFTA (Refinement, Constraint) a`. Use `annotateDatatype`, or
