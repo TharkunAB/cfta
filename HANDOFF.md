@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 02:10 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 02:22 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -64,10 +64,10 @@ self-reference removal from recursive unions.
   `/tmp/mcfta-construction-query-full.log`. After the grouped-discovery check,
   all generator and refinement cases pass in
   `/tmp/mcfta-family-discovery-validation.log`. Core source is unchanged.
-- Latest integrated Lean build: **726 jobs; 31,947 theorem dependency checks**.
+- Latest integrated Lean build: **737 jobs; 32,107 theorem dependency checks**.
   This includes projected leaf schedules, nested first-run completion,
   stored shallow unfolding, and construction-query provenance.
-  Log: `/tmp/mcfta-runtime-bound-normalization-audit.log`.
+  Log: `/tmp/mcfta-boundary-provenance-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -257,6 +257,12 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   captured records derive actual probe and stored-Mu cost correspondence.
   Full syntax now derives nonempty stored ordinary nodes and normalized union
   cardinality. Primitive empty-result and free-occurrence observations are exact.
+  Arbitrary binder-free callback syntax now derives paired execution and
+  complete two-probe occurrence-cost coverage. Captured values may contain Mu.
+  Actual source requests preserve that stored probe relation through hits and
+  misses. A separate exact boundary profile follows references and Mu entries
+  through ordinary normalization and self filtering. It retains complete
+  payload provenance. Its identities are part of the full age footprint.
   General Mu body/probe cost correspondence remains open.
   See `notes-gate-unfolding-rank.md`.
 - Fresh-outer-dependent nested binder identity remains incomplete in general.
@@ -279,12 +285,18 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   node, union, and binder contexts. A mixed first-run theorem combines retained
   active frames with subprograms that read and erase enclosing inputs.
   Selective erasure of the immediate parent while retaining older ancestors
-  now completes from actual source traces. Arbitrary ancestor subsets and
-  computed empty-child erasure now includes arbitrary discarded constructor
+  now completes from actual source traces. Computed empty-child erasure
+  now includes arbitrary discarded constructor
   effects. Root unions, self-reference filtering, and consecutive retained
-  binders have first-run completion proofs. General cleanup-induced erasure
+  binders have first-run completion proofs. Arbitrary ancestor subsets and
+  general cleanup-induced erasure
   remains open. General absent-reference trace replay
   across changed nested local identities remains open.
+  Actual successful cache misses now install the exact callback body and
+  original probes. Old outputs from new reservations can arise only from
+  the two smart cleanup branches. A closed three-binder fixture proves that
+  an unused old body need not equal either normalized probe. See
+  `notes-interned-old-body-probes.md`; this is a proof-shortcut counterexample.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
   Full recursive support assembly, weighted flags, and absent-term errors
@@ -349,10 +361,11 @@ explicitly requests publication later.
    Pending origins and complete old probe footprints are now derived without
    a syntax-fragment premise. See `notes-interned-pending-origins.md` and
    `notes-interned-node-footprint.md`.
-4. Compose physical edit, require, leaf product, and projected union through
-   their actual state transitions. Use finite completed-request replay.
-   Preserve the derived raw-guard normalization phase and its strict rank.
-   General nested equality fixed-point termination remains separate.
+4. Preserve the complete physical projected-leaf pass and runtime fixed-point
+   bound. All phases now compose through their actual caches. Extend the
+   argument to selected endpoints with nested children. The alternating-operand
+   cycle prevents an arbitrary-target rank; fixed source schedules remain the
+   general open case.
 5. Extend the proved reachable-value unfolding rank to arbitrary nested Mu
    bodies. Unrelated deep cache entries are already permitted.
 6. Keep runtime/source correspondence separate from executable Lean proofs.

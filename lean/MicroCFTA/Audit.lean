@@ -625,6 +625,17 @@ import MicroCFTA.InternedComputedErasure
 import MicroCFTA.InternedComputedBinderReplay
 import MicroCFTA.InternedComputedCompletion
 import MicroCFTA.InternedComputedCompletionExamples
+import MicroCFTA.InternedCleanupAge
+import MicroCFTA.InternedOccurrenceObservations
+import MicroCFTA.InternedBinderFreeObservations
+import MicroCFTA.InternedBinderFreeProbeCosts
+import MicroCFTA.InternedNestedMissReadback
+import MicroCFTA.InternedOldBodyProbeAliases
+import MicroCFTA.InternedBinderFreeProbeHeap
+import MicroCFTA.InternedBoundaryAtoms
+import MicroCFTA.InternedBoundaryFilter
+import MicroCFTA.InternedBoundaryProvenance
+import MicroCFTA.InternedBoundaryAge
 /-!
 # Proof dependency audit
 

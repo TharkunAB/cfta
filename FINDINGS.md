@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 02:10 CEST**.
+Updated: **2026-10-13 02:22 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **726 jobs and 31,947 theorem dependency
+The full Lean development passes **737 jobs and 32,107 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -228,10 +228,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **726 jobs; 31,947 theorem dependency checks**.
+- Latest integrated Lean audit: **737 jobs; 32,107 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-runtime-bound-normalization-audit.log`.
+  Log: `/tmp/mcfta-boundary-provenance-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -343,6 +343,13 @@ but do not prove it for every runtime execution.
    first-run completion proofs. Computed empty-child erasure also completes
    with arbitrary nested effects in discarded siblings. General absent-reference
    replay is the remaining completion step.
+   Actual successful source misses now install exactly the callback body and
+   original probes. Smart cleanup can hide a fresh entry only by returning an
+   unused body or removing a bare self reference. A checked closed three-binder
+   fixture shows that the unused old body can differ from both normalized
+   probes because the callback captures both internal probe sentinels. This
+   rejects an attempted proof shortcut; it is not a source termination defect.
+   See [the actual miss and probe notes](lean/notes-interned-old-body-probes.md).
    Full nested constructor traces now derive
    coherent caches, complete child provenance, outgoing edge residency,
    cache growth, and issued-reference history. No closed-input collision
