@@ -7,8 +7,12 @@ import MicroCFTA.EnumerationIndexSource
 import MicroCFTA.EnumerationWaitingMachine
 import MicroCFTA.EnumerationWaitingModular
 import MicroCFTA.MergedColdMergeOriginalLanguage
+import MicroCFTA.MergedComparisonOriginalLanguage
+import MicroCFTA.MergedSelectionOriginalLanguage
+import MicroCFTA.MergedExposureOriginalLanguage
 import MicroCFTA.MergedColdMergeRootBounds
 import MicroCFTA.EqualityMergedTargetDelay
+import MicroCFTA.EqualityMergedTargetFixedPoint
 import MicroCFTA.InternedPendingProducerReplay
 import MicroCFTA.InternedPendingProducerDescent
 import MicroCFTA.InternedProducerPathBoundary
