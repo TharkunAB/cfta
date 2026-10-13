@@ -646,6 +646,11 @@ import MicroCFTA.InternedUnionNonemptyMembers
 import MicroCFTA.InternedFilterEmptiness
 import MicroCFTA.InternedCallbackEmptiness
 import MicroCFTA.InternedCleanupEmptiness
+import MicroCFTA.InternedObservedAbsence
+import MicroCFTA.InternedOrdinaryAbsenceReplay
+import MicroCFTA.InternedObservedFilter
+import MicroCFTA.InternedOrdinaryCallbackReplay
+import MicroCFTA.InternedRequestAgreement
 /-!
 # Proof dependency audit
 

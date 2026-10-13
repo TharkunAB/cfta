@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 02:37 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 02:41 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -64,10 +64,10 @@ self-reference removal from recursive unions.
   `/tmp/mcfta-construction-query-full.log`. After the grouped-discovery check,
   all generator and refinement cases pass in
   `/tmp/mcfta-family-discovery-validation.log`. Core source is unchanged.
-- Latest integrated Lean build: **747 jobs; 32,240 theorem dependency checks**.
+- Latest integrated Lean build: **752 jobs; 32,270 theorem dependency checks**.
   This includes projected leaf schedules, nested first-run completion,
   stored shallow unfolding, and construction-query provenance.
-  Log: `/tmp/mcfta-callback-cleanup-emptiness-audit.log`.
+  Log: `/tmp/mcfta-observed-request-agreement-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -305,7 +305,12 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   self filtering. Smart cleanup returns EmptyNode exactly for an empty body
   or a bare reference to its reserved identity. Both facts use actual source
   traces and stored union invariants.
-  The remaining step is observed-absence replay of that actual call.
+  Ordinary constructor traces now derive exact observed-absence replay.
+  This includes normalized callbacks with allowed sentinels and arbitrary
+  captured Mu records. Completed requests with equal canonical probe keys
+  return equal complete records in a common actual cache extension.
+  The remaining step is replay through new dynamic Mu construction.
+  See `notes-interned-observed-absence.md`.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
   Full recursive support assembly, weighted flags, and absent-term errors
