@@ -60,23 +60,29 @@ correspondence boundaries. Repeated equality fixed-point termination is
 still separate. No production source file changed in this step, so the
 existing 620 Haskell example results at `c76d1ec` remain the source tests.
 
-## Paused proof: extra-fuel independence
+## Completed proof: extra-fuel independence
 
-The user requested an immediate restart handoff and upstream rebase while
-the next proof was in progress. The unfinished file is preserved as
-`MicroCFTA/MergedAdaptiveStability.lean.incomplete`. It is not imported by
-the stable modules and is not a Lean build target.
+`MicroCFTA/MergedAdaptiveStability.lean` now compiles with Lean 4.34.1.
+The build includes 345 jobs. The original unfinished draft remains unchanged
+at `MicroCFTA/MergedAdaptiveStability.lean.incomplete`. It is not imported
+by the stable modules and is not a Lean build target.
 
-The draft proves action-combinator, column, edge, group, and root
-preservation of successful traces. It then attempts `worker_refines`, which
-states that extra recursive fuel preserves the exact returned record and
-cache. The remaining Lean errors occur in its zero-fuel induction case:
-an abstract `later` fuel prevents reduction of `worker` in boundary cases
-and the open ordinary-node case. The likely next step is to split `later`
-in that induction case before handling the value constructors. This is not
-yet verified. `enough_eq_execute` follows from `worker_refines` and the
-already compiled `execute_complete` once that local proof is repaired.
+`worker_refines` proves that extra recursive fuel preserves the exact
+returned record and final cache of every successful run. Its zero-fuel
+induction case splits the later fuel before it reduces the value cases.
+The proof composes action, column, edge, group, and root trace preservation.
 
-Do not report fuel independence as proved until the draft compiles. The
-existing sufficient-fuel completion and language theorem is independent
-of this unfinished result.
+`successful_results_eq` proves that any two successful fuel choices return
+the same complete record and cache. It requires no availability, prepared
+context, guard interpretation, or grouping premises.
+
+`enough_eq_execute` proves exact equality with `execute` for every fuel at
+least the original input's ordinary height. It uses the existing prepared
+context and available-input completion premises. These results concern
+recursive fuel within one invocation. They do not prove termination of
+repeated equality fixed-point iteration.
+
+The three stability theorems use only `propext`, `Classical.choice`, and
+`Quot.sound`. The checked axiom report is
+`/tmp/mcfta-stability-axioms-20261013.log`. The preserved draft has SHA-256
+`a8f71bab5b99af984c89a793cf0f153dade7fa1163fa3f18ed14e0cd08abddc9`.

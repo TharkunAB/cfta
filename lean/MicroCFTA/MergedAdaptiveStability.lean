@@ -1,0 +1,195 @@
+import MicroCFTA.MergedAdaptiveMerge
+
+/-!
+# Successful adaptive traces are independent of extra fuel
+
+More recursive fuel preserves every successful action result, including its
+complete returned cache. Together with the derived height bound this makes
+the finite worker's result independent of the selected sufficient fuel.
+-/
+namespace MicroCFTA.MergedAdaptiveStability
+open InternedConstructorTemplates InternedProbeProvenance
+open MergedPhysicalMergeContext MergedOrdinaryHeight MergedAdaptiveEffects Language
+
+/-- Preserve every completed action result and its exact cache. -/
+def Refines (first second : Action Symbol Guard Payload) : Prop :=
+  ∀ state value after, first state = some (value, after) → second state = some (value, after)
+
+/-- The same action trivially preserves all successful traces. -/
+theorem Refines.refl (action : Action Symbol Guard Payload) : Refines action action := fun _ _ _ done => done
+
+/-- Sequencing preserves successful traces when both executed components do. -/
+theorem bind_refines (first second : Action Symbol Guard A)
+    (left right : A → Action Symbol Guard B) (head : Refines first second)
+    (tail : ∀ value, Refines (left value) (right value)) :
+    Refines (MergedAdaptiveEffects.bind first left) (MergedAdaptiveEffects.bind second right) := by
+  intro state value after done
+  cases firstDone : first state with
+  | none => simp [MergedAdaptiveEffects.bind, firstDone] at done
+  | some pair =>
+      obtain ⟨result, middle⟩ := pair
+      have tailDone : left result middle = some (value, after) := by
+        simpa only [MergedAdaptiveEffects.bind, firstDone, Option.bind_some] using done
+      simpa only [MergedAdaptiveEffects.bind, head state result middle firstDone, Option.bind_some] using
+        tail result middle value after tailDone
+
+/-- Ordered child traversal preserves every successful trace of its callback. -/
+theorem map_refines (first second : Request → Action Symbol Guard Payload)
+    (same : ∀ request, Refines (first request) (second request)) (requests : List Request) :
+    Refines (MergedAdaptiveEffects.map first requests) (MergedAdaptiveEffects.map second requests) := by
+  induction requests with
+  | nil => exact .refl _
+  | cons first rest ih =>
+      exact bind_refines _ _ _ _ (same first) (fun _ => bind_refines _ _ _ _ ih (fun _ => .refl _))
+
+/-- Concatenating row actions preserves every successful callback trace. -/
+theorem sequence_refines (first second : Request → Action Symbol Guard (List (EdgeValue Symbol Guard)))
+    (same : ∀ request, Refines (first request) (second request)) (requests : List Request) :
+    Refines (MergedAdaptiveGroups.sequence first requests) (MergedAdaptiveGroups.sequence second requests) := by
+  induction requests with
+  | nil => exact .refl _
+  | cons first rest ih =>
+      exact bind_refines _ _ _ _ (same first) (fun _ => bind_refines _ _ _ _ ih (fun _ => .refl _))
+
+noncomputable section
+local instance : DecidableEq (Value Symbol Guard) := Classical.typeDecidableEq _
+
+/-- The retained singleton and boundary branches are independent of recursive fuel. -/
+theorem retained_refines [DecidableEq (EdgeKey Symbol Guard)]
+    (first second : Value Symbol Guard → Action Symbol Guard (Value Symbol Guard))
+    (same : ∀ value, Refines (first value) (second value)) (retained : List (Value Symbol Guard)) :
+    Refines (MergedAdaptiveColumns.retainedColumn first retained) (MergedAdaptiveColumns.retainedColumn second retained) := by
+  have branches (values : List (Value Symbol Guard)) :
+      Refines (if values.any recursiveBoundary then work (makeUnion values) else MergedAdaptiveEffects.bind (work (ordinaryUnion values)) first)
+        (if values.any recursiveBoundary then work (makeUnion values) else MergedAdaptiveEffects.bind (work (ordinaryUnion values)) second) := by
+    split
+    · exact .refl _
+    · exact bind_refines _ _ _ _ (.refl _) same
+  cases retained with
+  | nil => exact branches []
+  | cons value rest =>
+      cases rest with
+      | nil => exact .refl _
+      | cons other tail => exact branches (value :: other :: tail)
+
+/-- Current-state comparison and selection do not inspect the recursive fuel. -/
+theorem column_refines [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (first second : Value Symbol Guard → Action Symbol Guard (Value Symbol Guard))
+    (same : ∀ value, Refines (first value) (second value))
+    (outputs : List (Value Symbol Guard)) (meaning : Guard → Term Symbol → Bool)
+    (unconstrained : Edge (Value Symbol Guard) Symbol → Bool) (inputs : List (Value Symbol Guard)) :
+    Refines (MergedAdaptiveColumns.column first outputs meaning unconstrained inputs)
+      (MergedAdaptiveColumns.column second outputs meaning unconstrained inputs) := by
+  intro state value after done
+  exact retained_refines first second same (MergedAdaptiveColumns.kept state outputs inputs meaning unconstrained) state value after done
+
+/-- Small-edge construction depends only on completed recursive child traces. -/
+theorem small_refines [DecidableEq (EdgeKey Symbol Guard)]
+    (first second : Value Symbol Guard → Action Symbol Guard (Value Symbol Guard))
+    (same : ∀ value, Refines (first value) (second value)) (edge : EdgeValue Symbol Guard) :
+    Refines (MergedAdaptiveEdges.small first edge) (MergedAdaptiveEdges.small second edge) :=
+  bind_refines _ _ _ _ (map_refines first second same edge.children) (fun _ => .refl _)
+
+/-- Large-edge construction depends only on completed current-state column traces. -/
+theorem large_refines [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (first second : Value Symbol Guard → Action Symbol Guard (Value Symbol Guard))
+    (same : ∀ value, Refines (first value) (second value))
+    (outputs : List (Value Symbol Guard)) (meaning : Guard → Term Symbol → Bool)
+    (unconstrained : Edge (Value Symbol Guard) Symbol → Bool) (top : Guard)
+    (edge : EdgeValue Symbol Guard) (rest : List (EdgeValue Symbol Guard)) :
+    Refines (MergedAdaptiveEdges.large first outputs meaning unconstrained top edge rest)
+      (MergedAdaptiveEdges.large second outputs meaning unconstrained top edge rest) :=
+  bind_refines _ _ _ _ (map_refines _ _ (column_refines first second same outputs meaning unconstrained) _) (fun _ => .refl _)
+
+/-- Threshold selection and exact source row counts do not inspect recursive fuel. -/
+theorem group_refines [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (first second : Value Symbol Guard → Action Symbol Guard (Value Symbol Guard))
+    (same : ∀ value, Refines (first value) (second value))
+    (outputs : List (Value Symbol Guard)) (meaning : Guard → Term Symbol → Bool)
+    (unconstrained : Edge (Value Symbol Guard) Symbol → Bool) (top : Guard) (edges : List (EdgeValue Symbol Guard)) :
+    Refines (MergedAdaptiveGroups.group first outputs meaning unconstrained top edges)
+      (MergedAdaptiveGroups.group second outputs meaning unconstrained top edges) := by
+  unfold MergedAdaptiveGroups.group
+  split
+  · exact sequence_refines _ _ (fun edge => bind_refines _ _ _ _ (small_refines first second same edge) (fun _ => .refl _)) edges
+  · cases edges with
+    | nil => exact .refl _
+    | cons edge rest => exact bind_refines _ _ _ _ (large_refines first second same outputs meaning unconstrained top edge rest) (fun _ => .refl _)
+
+/-- Actual final parent construction preserves the complete successful group trace. -/
+theorem root_refines [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (first second : Value Symbol Guard → Action Symbol Guard (Value Symbol Guard))
+    (same : ∀ value, Refines (first value) (second value))
+    (outputs : List (Value Symbol Guard)) (meaning : Guard → Term Symbol → Bool)
+    (unconstrained : Edge (Value Symbol Guard) Symbol → Bool) (top : Guard) (groups : List (List (EdgeValue Symbol Guard))) :
+    Refines (MergedAdaptiveGroups.root first outputs meaning unconstrained top groups)
+      (MergedAdaptiveGroups.root second outputs meaning unconstrained top groups) :=
+  bind_refines _ _ _ _ (sequence_refines _ _ (group_refines first second same outputs meaning unconstrained top) groups) (fun _ => .refl _)
+
+/-- Extra recursive fuel preserves every completed worker result and exact final cache. -/
+theorem worker_refines [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (grouping : List (EdgeValue Symbol Guard) → List (List (EdgeValue Symbol Guard)))
+    (outputs : List (Value Symbol Guard)) (meaning : Guard → Term Symbol → Bool)
+    (unconstrained : Edge (Value Symbol Guard) Symbol → Bool) (top : Guard)
+    (fuel later : Nat) (more : fuel ≤ later) (value : Value Symbol Guard) :
+    Refines (MergedAdaptiveMerge.worker grouping outputs meaning unconstrained top fuel value)
+      (MergedAdaptiveMerge.worker grouping outputs meaning unconstrained top later value) := by
+  induction fuel generalizing later value with
+  | zero =>
+      cases later with
+      | zero => exact .refl _
+      | succ later =>
+          cases value with
+          | empty | reference | union | mu => exact .refl _
+          | node entry edges depth free =>
+              by_cases closed : free = []
+              · intro state value after impossible
+                simp [MergedAdaptiveMerge.worker, closed] at impossible
+              · simpa only [MergedAdaptiveMerge.worker, closed, ↓reduceIte] using
+                  (Refines.refl (MergedAdaptiveEffects.pure (Value.node entry edges depth free)))
+  | succ fuel ih =>
+      cases later with
+      | zero => omega
+      | succ later =>
+          cases value with
+          | empty | reference | union | mu => exact .refl _
+          | node entry edges depth free =>
+              by_cases closed : free = []
+              · simp only [MergedAdaptiveMerge.worker, closed, ↓reduceIte]
+                exact root_refines _ _ (fun value => ih later (by omega) value) outputs meaning unconstrained top (grouping edges)
+              · simpa only [MergedAdaptiveMerge.worker, closed, ↓reduceIte] using
+                  (Refines.refl (MergedAdaptiveEffects.pure (Value.node entry edges depth free)))
+
+/-- Any two completed fuel choices return the same record and exact final cache. -/
+theorem successful_results_eq [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (grouping : List (EdgeValue Symbol Guard) → List (List (EdgeValue Symbol Guard)))
+    (outputs : List (Value Symbol Guard)) (meaning : Guard → Term Symbol → Bool)
+    (unconstrained : Edge (Value Symbol Guard) Symbol → Bool) (top : Guard)
+    (first second : Nat) (value : Value Symbol Guard) (state : State Symbol Guard)
+    (left right : Value Symbol Guard) (after final : State Symbol Guard)
+    (firstDone : MergedAdaptiveMerge.worker grouping outputs meaning unconstrained top first value state = some (left, after))
+    (secondDone : MergedAdaptiveMerge.worker grouping outputs meaning unconstrained top second value state = some (right, final)) :
+    (left, after) = (right, final) := by
+  rcases Nat.le_total first second with more | more
+  · exact Option.some.inj ((worker_refines grouping outputs meaning unconstrained top first second more value
+      state left after firstDone).symm.trans secondDone)
+  · exact Option.some.inj (firstDone.symm.trans (worker_refines grouping outputs meaning unconstrained top second first more value
+      state right final secondDone))
+
+/-- Every sufficient fuel produces the exact derived-bound result, including both constructor caches. -/
+theorem enough_eq_execute [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (grouping : List (EdgeValue Symbol Guard) → List (List (EdgeValue Symbol Guard)))
+    (groupsCorrect : ∀ edges, MergedPhysicalGroupRoot.Grouping edges (grouping edges))
+    (outputs : List (Value Symbol Guard)) (meaning : Guard → Term Symbol → Bool)
+    (unconstrained : Edge (Value Symbol Guard) Symbol → Bool)
+    (clear : ∀ edge, unconstrained edge = true → ∀ term, edge.guard term = true)
+    (top : Guard) (topTrue : ∀ term, meaning top term = true) (value : Value Symbol Guard)
+    (fuel : Nat) (enough : height value ≤ fuel) (state : State Symbol Guard)
+    (context : Context state outputs) (available : Available state value) :
+    MergedAdaptiveMerge.worker grouping outputs meaning unconstrained top fuel value state =
+      MergedAdaptiveMerge.execute grouping outputs meaning unconstrained top value state := by
+  obtain ⟨result, after, done, _⟩ := MergedAdaptiveMerge.execute_complete grouping groupsCorrect outputs meaning unconstrained clear top topTrue value state context available
+  exact (worker_refines grouping outputs meaning unconstrained top (height value) fuel enough value state result after done).trans done.symm
+
+end
+end MicroCFTA.MergedAdaptiveStability
