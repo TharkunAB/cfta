@@ -74,6 +74,20 @@ theorem source_valid :
 theorem first_shape : (rounds 1).map (fun result => shape result.1) = some (1, [5]) := by
   cbv
 
+/-- The original source value has five parent rows over the same five-row child. -/
+theorem initial_shape : (rounds 0).map (fun result => shape result.1) = some (5, [5, 5, 5, 5, 5]) := by
+  cbv
+
+/-- This delayed target has exactly two ordinary layers. -/
+theorem ordinary_height : MergedOrdinaryHeight.height (run fixture empty).1 = 2 := by
+  cbv
+
+/-- The initial parent-group merge changes the actual root identity. -/
+theorem first_changes : (rounds 0).map (fun result => result.1.referenceOf) ≠
+    (rounds 1).map (fun result => result.1.referenceOf) := by
+  cbv
+  decide
+
 /-- The next invocation reaches and merges the formerly unchanged child. -/
 theorem second_shape : (rounds 2).map (fun result => shape result.1) = some (1, [1]) := by
   cbv

@@ -55,6 +55,14 @@ first-writer retention, copy/growth, bounded memo-key identity, exact maintained
 indexes, and unchanged scheduler selection. Signed waiting updates derive all
 intermediate bounds from the initial/final counts. Raw runtime primitives,
 concrete containers, typed families, and machine-range bounds remain explicit.
+Original cold-cache language transport is now proved. Exposure, comparison,
+selection, and merging have pre-effect semantic statements. Complete root
+row bounds include arbitrary source bucket order. Repeated source merging
+on finite ordinary trees reaches an exact value-and-cache fixed point
+within original ordinary height. General equality schedules still need
+intervening intersection/edit progress. Exact indexed producer paths and
+pending callback equations strengthen constructor provenance; general
+paired-key descent remains open.
 See root [HANDOFF.md](../HANDOFF.md) for exact theorem boundaries and evidence.
 
 The latest physical equality work derives admitted leaf readback, identity,

@@ -1,14 +1,14 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 15:41 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 16:13 CEST (Europe/Stockholm)**.
 
 ## Read first
 
 The formalization is **not complete**. Matti requested this restart checkpoint
 because the chat became unreliable. Continue the same full task. Do not replace
 it with a smaller fragment, a theorem-count target, or a documentation task.
-The latest committed proof checkpoint is **`7139f24`** after the new upstream
-rebase and PR adaptations. The integrated audit passes **942 jobs; 35,400 theorem dependency checks**. New proofs give
+The latest committed proof checkpoint is **`0732ca2`** after the new upstream
+rebase and PR adaptations. The integrated audit passes **970 jobs; 35,732 theorem dependency checks**. New proofs give
 ordered stateful comparison completion, exact fuel stability and replay,
 exact cold-reader semantics in the returned cache, adaptive fuel independence,
 cold child-selection completion and exact language, derived source grouping,
@@ -43,8 +43,8 @@ Every Lean file is identical to that backup, including all counterexamples
 and the marked draft. Existing stashes and other worktrees were untouched.
 Fetch again at restart because more patches can arrive later.
 
-Latest full validation: **942 jobs; 35,400 theorem dependency checks**.
-Log: `/tmp/mcfta-20261013-pr102-103-audit.log`.
+Latest full validation: **970 jobs; 35,732 theorem dependency checks**.
+Log: `/tmp/mcfta-20261013-target-fixed-point-audit.log`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
 All **620 Haskell examples** passed after the latest source rebase.
 Log: `/tmp/mcfta-20261013-pr102-103-tests.log`.
@@ -63,11 +63,33 @@ bounds. The source workers retain their earlier algorithms. Read
 `lean/notes-enumeration-indexes.md`. Native GHC primitives, concrete containers,
 typed cache partition, and runtime range bounds remain explicit.
 
-**Active proof work:** general constructor producer provenance, cold-cache
-language transport, and nested equality fixed-point termination. Inspect
+**Active proof work:** paired constructor probe replay and the complete
+nested equality schedule, including intersections and endpoint edits. Inspect
 workers before editing their files. A shorter producer with only one Depth
 callback does not yet supply a paired mismatch. See
 `lean/notes-pending-producer-descent.md`.
+
+Latest semantic results extend cold merging to the original input language.
+`MergedColdGraphTransport.accepts_stable` equates original/later finite
+languages without requiring equal newly allocated identities. Exposure,
+comparison, selection, and full merge now have original-cache semantic
+bridges. `MergedColdMergeRootBounds` derives the complete per-key row bound
+under arbitrary bucket order and exact final root reconstruction.
+
+`EqualityMergedTargetFixedPoint.fixed_point_complete` proves that repeated
+source merging on finite ordinary trees reaches an exact value-and-cache
+fixed point within original ordinary height. The two-changing-pass fixture
+is kernel checked and matches the native source. This does not prove the
+full equality schedule: intersections and endpoint edits still intervene.
+Read `lean/notes-equality-merged-target.md` and
+`lean/notes-cold-graph-transport.md`.
+
+Constructor provenance now retains exact capture indices, source paths,
+environment suffixes, earlier completed ancestor copies, and the actual
+pending enclosing ordinary callback. The key is still absent before that
+producer. A checked closed fixture shows that a live target on the path
+can be erased from the producer's returned value. Keep execution effects.
+Read `lean/notes-pending-producer-calls.md`. General no-pending is open.
 
 Earlier proof checkpoints (pre-rebase hashes remain in backups):
 
@@ -165,7 +187,7 @@ The fixture-guided mirror checked 14,916 variants, skipped seven for resource
 limits, observed 12,903 level-changing traces, and found no pending readback.
 Files: `/tmp/mcfta-pending-level-search.py` and its `.log`.
 The checked fixtures and exact statements are committed in Lean.
-The local weekly monitor last reported **79% remaining**. Refresh
+The local weekly monitor last reported **75% remaining**. Refresh
 it at restart; stop all work at 1% or less. Do not rely on this snapshot.
 
 ## Full objective and authorization
@@ -276,7 +298,7 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build MicroCFTA.InternedNestedProfiles
 ```
 
-Latest complete audit: `/tmp/mcfta-20261013-pr102-103-audit.log`.
+Latest complete audit: `/tmp/mcfta-20261013-target-fixed-point-audit.log`.
 It checks every imported theorem against the allowlist `propext`,
 `Classical.choice`, and `Quot.sound`. It rejects omitted proofs, native evaluation
 axioms, and custom axioms. The count is validation evidence, not a coverage

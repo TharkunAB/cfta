@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 15:41 CEST**.
+Updated: **2026-10-13 16:13 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `9508eb3`.
 Upstream contains the repairs in rows 1 through 21. Row 22 records a new
@@ -11,7 +11,7 @@ follow both changes.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **942 jobs and 35,400 theorem dependency
+The full Lean development passes **970 jobs and 35,732 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -25,7 +25,7 @@ counterexamples, repair arguments, and implementation comparisons.
 
 ## Latest restart checkpoint
 
-Proof checkpoint: **`7139f24`**. Stable proof files are committed and imported
+Proof checkpoint: **`0732ca2`**. Stable proof files are committed and imported
 by the working aggregate audit. Proof work continues; inspect the live working
 tree at restart. The marked draft
 `lean/MicroCFTA/MergedAdaptiveStability.lean.incomplete` is preserved unchanged.
@@ -71,6 +71,31 @@ values, and 32,768 concurrent readbacks across eight workers. Logs:
 `/tmp/mcfta-20261013-pr102-103-tests.log` and
 `/tmp/mcfta-flat-memo-probe.log`. These checks do not prove native publication
 or arbitrary concurrent execution correctness.
+
+`MergedColdGraphTransport.accepts_stable` now proves exact finite-language
+transport between original and later cold caches. Fresh ordinary identities
+may differ. `MergedColdMergeOriginalLanguage` covers each original input
+term in the actual returned merge result. The exposure, comparison, and
+selection bridges also use the original pre-effect languages.
+
+`MergedColdMergeRootBounds` derives at most four rows per symbol/arity key
+for the whole returned root, including arbitrary source bucket order and
+canonical node readback. `EqualityMergedTargetFixedPoint.fixed_point_complete`
+then proves an exact value-and-cache fixed point after at most the original
+ordinary height of repeated merges on finite ordinary trees. No recursive
+callback, finite-universe, or supplied root-bound premise remains. The
+checked nested fixture needs two changing passes; native Haskell agrees.
+The complete equality schedule still needs a bound for intervening
+intersections and endpoint edits. See
+[repeated merging](lean/notes-equality-merged-target.md).
+
+`InternedPendingProducerDescent.closed_enclosing_pending` now retains the
+same joint-key mismatch and the exact indexed producer occurrence. It
+derives the producer's completed Depth call, pending ordinary call, shorter
+captures, source path, and strictly earlier missing-key cut. A checked
+closed fixture shows why source-path liveness does not imply liveness of
+the returned producer value. General paired mismatch descent remains open.
+See [producer calls](lean/notes-pending-producer-calls.md).
 
 `MergedAdaptiveMerge.execute_complete` now proves the complete adaptive
 physical merge's successful execution and finite-language coverage.
@@ -359,10 +384,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **942 jobs; 35,400 theorem dependency checks**.
+- Latest integrated Lean audit: **970 jobs; 35,732 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-20261013-pr102-103-audit.log`.
+  Log: `/tmp/mcfta-20261013-target-fixed-point-audit.log`.
 - The earlier formula capture, nested compiler capture, recursive equality,
   and open-union reproductions passed at the `de910ea` checkpoint. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -394,8 +419,8 @@ but do not prove it for every runtime execution.
 
 ## Current proof results and remaining obligations
 
-The current proof checkpoint is **`7139f24`**. The integrated working audit passes
-**942 jobs and 35,400 theorem dependency checks**. Stable proof modules
+The current proof checkpoint is **`0732ca2`**. The integrated working audit passes
+**970 jobs and 35,732 theorem dependency checks**. Stable proof modules
 are committed and imported by the working aggregate audit. The full
 formalization remains incomplete. The detailed restart order, commands,
 repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).
