@@ -65,7 +65,7 @@ import Data.CFTA.Term (Term)
 -- | Return the ECTA support of an inspectable generator.
 support :: Gen symbol a -> Either GenError (Node (Label symbol))
 support (Transparent result) = staticSupport <$> result
-support (Cyclic result) = recursiveSupport <$> result
+support (Cyclic result) = recursiveSupport <$> (result >>= queryRecursive)
 support (Opaque _) = Left CannotInspectOpaqueGenerator
 
 {- | The source descriptions and the group names of a generator, as a graph for
@@ -73,7 +73,7 @@ diagnostics.
 -}
 inspect :: Gen symbol a -> Either GenError (Inspection symbol)
 inspect (Transparent result) = staticInspection <$> result
-inspect (Cyclic result) = recursiveInspection <$> result
+inspect (Cyclic result) = recursiveInspection <$> (result >>= queryRecursive)
 inspect (Opaque _) = Left CannotInspectOpaqueGenerator
 
 {- | The number of members of a finite generator. A recursive generator gives
@@ -95,11 +95,11 @@ values generator = do
 -- | The number of members of one size, for any inspectable generator.
 countAtSize :: Gen symbol a -> Size -> Either GenError Cardinality
 countAtSize generator size =
-    flip Size.countAtSize size . recursiveIndex <$> recursiveView generator
+    flip Size.countAtSize size . recursiveIndex <$> (recursiveView generator >>= queryRecursive)
 
 -- | The size of the smallest member. An empty generator gives 'Nothing'.
 minimumSize :: Gen symbol a -> Either GenError (Maybe Size)
-minimumSize generator = case recursiveView generator of
+minimumSize generator = case recursiveView generator >>= queryRecursive of
     Left EmptyGenerator -> Right Nothing
     Left err -> Left err
     Right recursive -> Right $ case minimumMemberSize $ recursiveIndex recursive of
@@ -115,7 +115,7 @@ unrank (Transparent result) index = do
     checkIndex (outcomeCardinality outcomes) index
     pure $ outcomeValueAt outcomes index
 unrank (Cyclic result) index = do
-    recursive <- result
+    recursive <- result >>= queryRecursive
     classMember (recursiveIndex recursive) (recursiveIndex recursive) index
 unrank (Opaque _) _ = Left CannotInspectOpaqueGenerator
 
@@ -138,7 +138,7 @@ termAt (Transparent result) index = do
     static <- result
     outcomeTerm <$> outcomeSelect (staticOutcomes static) index
 termAt (Cyclic result) index = do
-    recursive <- result
+    recursive <- result >>= queryRecursive
     terms <- maybe (Left CannotInspectRecursiveGenerator) (Right . recursiveTermIndex) $ recursiveTerm recursive
     classMember (recursiveIndex recursive) terms index
 termAt (Opaque _) _ = Left CannotInspectOpaqueGenerator
@@ -162,7 +162,7 @@ ranksOf generator term = map checkedRank . filter checked <$> candidates generat
         static <- result
         pure $ outcomeRanks (staticOutcomes static) $ WholeTerm term
     candidates (Cyclic result) = do
-        recursive <- result
+        recursive <- result >>= queryRecursive
         maybe (Left CannotInspectRecursiveGenerator) Right $ recursivePositions recursive $ WholeTerm term
     candidates (Opaque _) = Left CannotInspectOpaqueGenerator
 
@@ -208,8 +208,9 @@ smallest (Opaque _) = Left CannotInspectOpaqueGenerator
 'pay' or a constructor one more.
 -}
 sizeOfRank :: Gen symbol a -> Rank -> Maybe Size
-sizeOfRank (Cyclic (Right recursive)) rank =
-    rankSize <$> sizeClassOf (recursiveIndex recursive) rank
+sizeOfRank (Cyclic (Right recursive)) rank
+    | Right ready <- queryRecursive recursive =
+        rankSize <$> sizeClassOf (recursiveIndex ready) rank
 sizeOfRank (Transparent (Right static)) rank
     | hasRank (outcomeCardinality outcomes) rank =
         Just $ planMemberSize (outcomePlan outcomes) rank
@@ -241,7 +242,8 @@ smallerMembers (Transparent (Right static)) rank
 -- 'sizeClassSelect' reports is the plan's own, and the two differ whenever a
 -- size class came from a finite bucket.
 smallerMembers (Cyclic (Right recursive)) rank
-    | Just (SizedRank size _) <- sizeClassOf index rank =
+    | Right _ <- queryRecursive recursive
+    , Just (SizedRank size _) <- sizeClassOf index rank =
         [ RankedValue (classMemberRank offset classRank) (rankedValue $ sizeClassSelect index smallerSize classRank)
         | ((smallerSize, Cardinality count), offset) <-
             zip (takeWhile ((< size) . fst) $ sizeClassCounts index) (scanl nextOffset 0 $ map snd $ sizeClassCounts index)
@@ -298,7 +300,7 @@ pmfAtSize (Transparent result) size = do
                         $ Map.toAscList
                         $ Map.fromListWith (+) [(value, mass) | (mass, value) <- normalized]
 pmfAtSize (Cyclic result) size = do
-    recursive <- result
+    recursive <- result >>= queryRecursive
     if Size.countAtSize (recursiveIndex recursive) size <= 0
         then Right []
         else Right $ exactPmfAtSize (recursiveSampling recursive) size

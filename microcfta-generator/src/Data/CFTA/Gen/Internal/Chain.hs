@@ -35,8 +35,10 @@ module Data.CFTA.Gen.Internal.Chain (
     recursiveChainProduct,
     recursiveChainWeighted,
     recursiveChainMassWeighted,
+    recursiveChainConstruction,
 ) where
 
+import qualified Data.IntSet as IntSet
 import Data.Kind (Type)
 import Data.List (sort)
 import qualified Data.Map.Strict as Map
@@ -379,3 +381,7 @@ recursiveChainWeighted = or . chainToList (recursiveWeighted . keyedRecursiveLan
 recursiveChainMassWeighted ::
     ArgChain (KeyedRecursive symbol) operation result -> Bool
 recursiveChainMassWeighted = or . chainToList keyedRecursiveMassWeighted
+
+-- | The active construction occurrences reached by the recursive arguments.
+recursiveChainConstruction :: ArgChain (KeyedRecursive symbol) operation result -> IntSet.IntSet
+recursiveChainConstruction = IntSet.unions . chainToList (recursiveConstruction . keyedRecursiveLanguage)

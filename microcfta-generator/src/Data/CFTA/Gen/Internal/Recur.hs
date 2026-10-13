@@ -18,6 +18,7 @@ import Control.Monad (when)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
 import Data.IORef (IORef, atomicModifyIORef', newIORef)
+import qualified Data.IntSet as IntSet
 import qualified Data.Map.Strict as Map
 import Data.Sequence (Seq (..))
 import Data.Typeable (Typeable)
@@ -50,7 +51,6 @@ import Data.CFTA.Ranked.Internal.Size (
     minimumMemberSize,
     minimumOf,
     probeIndexWithMinimum,
-    reachesOccurrence,
     sameOccurrences,
     sizeClassOf,
     usesOccurrence,
@@ -64,7 +64,7 @@ atomic (Transparent result) = Transparent $ atomicStatic <$> result
 atomic (Cyclic result) =
     Transparent $ do
         recursive <- result
-        if reachesOccurrence $ recursiveIndex recursive
+        if not $ IntSet.null $ recursiveConstruction recursive
             then Left BoundedRecursiveOccurrence
             else case largestMemberSize $ recursiveIndex recursive of
                 -- The sizes end, so the bound keeps every member. A bounded
@@ -78,6 +78,10 @@ atomic (Opaque _) = Transparent $ Left CannotInspectOpaqueGenerator
 
 Each occurrence of the argument must be guarded, as the Haddock of 'pay'
 says. Otherwise the result is 'UnguardedRecursion'.
+
+Compose the argument with generator operations. Query the completed result
+outside the body. Queries that inspect an unfinished occurrence return
+'QueriedRecursiveOccurrence'; its construction placeholders are not a language.
 
 Each recursive engine term has a private 'Recursion' root. It keeps a member
 whole when a constructor closes an enclosing layer. The root does not change
@@ -97,10 +101,13 @@ recur build
     -- and handing it back keeps everything a finite generator can do.
     | Right viewed <- probed
     , not $ usesOccurrence token $ recursiveIndex viewed =
-        probeBody
+        case probeBody of
+            Cyclic body -> probeBody{genLanguage = CyclicLanguage $ closeConstruction constructionToken <$> body}
+            _ -> probeBody
     | otherwise = Cyclic result
   where
     token = freshToken build
+    Occurrence constructionToken = token
 
     -- The body is built against placeholders to tie counts and sampling, to
     -- check its shape, and to create the recursive support. Each build is one
@@ -110,7 +117,7 @@ recur build
     -- The placeholders stand for the occurrence, so bounding one is bounding
     -- the language that is still being defined.
     placeholder supportNode index sampling =
-        Recursive supportNode index sampling False Nothing (plainInspection supportNode)
+        Recursive supportNode index sampling False Nothing (plainInspection supportNode) (IntSet.singleton constructionToken)
 
     tied = fixIndex occurrenceMinimum $ \self ->
         either (const emptyIndex) recursiveIndex $
@@ -195,6 +202,7 @@ recur build
                         (recursiveWeighted body)
                         (tiedTerms <$ bodyTerms)
                         inspection
+                        (IntSet.delete constructionToken $ recursiveConstruction body)
       where
         automaton = createMu $ \self ->
             Node
@@ -214,6 +222,11 @@ far, each with the least size of its members found so far, so a nested
 must reach finitely many keys. A key function that makes a new key from each
 key, such as @regroupOn (+ 1)@ on the occurrence, makes the key set infinite,
 and then 'recurGrouped' does not return.
+
+Queries that inspect unfinished occurrences return 'QueriedRecursiveOccurrence'.
+Query the completed family outside the body.
+The final body must have the discovered keys and minimum sizes. A body that
+changes them returns 'InconsistentRecursiveFamily'.
 -}
 recurGrouped ::
     (Ord key, Hashable symbol, Typeable symbol) =>
@@ -225,10 +238,17 @@ recurGrouped build
     | Left err <- probed = Grouped $ Left err
     | Right groups <- probed
     , not $ any (usesOccurrence token . recursiveIndex . keyedRecursiveLanguage) groups =
-        probeBody
+        case probeBody of
+            CyclicGrouped bodies ->
+                CyclicGrouped $
+                    fmap
+                        (fmap (\group -> group{keyedRecursiveLanguage = closeConstruction constructionToken $ keyedRecursiveLanguage group}))
+                        bodies
+            _ -> probeBody
     | otherwise = CyclicGrouped result
   where
     token = freshToken build
+    Occurrence constructionToken = token
 
     bodyGroups placeholders = recursiveGroups $ build $ CyclicGrouped $ Right placeholders
 
@@ -239,7 +259,7 @@ recurGrouped build
     -- the family that is still being defined.
     placeholder supportNode index sampling masses =
         KeyedRecursive
-            (Recursive supportNode index sampling False Nothing $ plainInspection supportNode)
+            (Recursive supportNode index sampling False Nothing (plainInspection supportNode) (IntSet.singleton constructionToken))
             masses
             False
     noMass = emptyMassIndex
@@ -396,6 +416,8 @@ recurGrouped build
         probedBodies <- probed
         when (any (isUnguarded token . recursiveIndex . keyedRecursiveLanguage) probedBodies) $
             Left UnguardedRecursion
+        when (fmap minimumOfGroup probedBodies /= keyMinimums) $
+            Left InconsistentRecursiveFamily
         when (Map.null minimumSizes) $ Left EmptyGenerator
         let familyMassWeighted = any keyedRecursiveMassWeighted bodies
             familyWeighted =
@@ -414,6 +436,11 @@ recurGrouped build
                             ( Inspection
                                 (nameForKey key)
                                 (restrictToKeyWith labelKey (positionOf key) inspectionFamily)
+                            )
+                            ( IntSet.delete constructionToken
+                                $ IntSet.unions
+                                $ map (recursiveConstruction . keyedRecursiveLanguage)
+                                $ Map.elems probedBodies
                             )
                         )
                         (massAt key)
@@ -511,11 +538,16 @@ upToSize :: Size -> Gen symbol a -> Gen symbol a
 upToSize bound (Cyclic result) =
     Transparent $ do
         recursive <- result
-        if reachesOccurrence $ recursiveIndex recursive
+        if not $ IntSet.null $ recursiveConstruction recursive
             then Left BoundedRecursiveOccurrence
             else boundedStatic bound recursive
 upToSize bound (Transparent result) = Transparent $ result >>= boundedFinite bound
 upToSize _ opaque = opaque
+
+-- | Remove only the completed definition's construction marker.
+closeConstruction :: Int -> Recursive symbol a -> Recursive symbol a
+closeConstruction token recursive =
+    recursive{recursiveConstruction = IntSet.delete token $ recursiveConstruction recursive}
 
 -- | Restrict a finite language to its members of size at most the bound.
 boundedFinite :: Size -> Static symbol a -> Either GenError (Static symbol a)

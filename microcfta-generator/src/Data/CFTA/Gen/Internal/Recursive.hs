@@ -8,6 +8,7 @@ module Data.CFTA.Gen.Internal.Recursive (
     -- * Recursive languages
     Recursive (..),
     RecursiveTerms (..),
+    queryRecursive,
     recursiveFromStatic,
     staticTerms,
     productTerms,
@@ -35,6 +36,7 @@ module Data.CFTA.Gen.Internal.Recursive (
 ) where
 
 import Data.Hashable (Hashable)
+import qualified Data.IntSet as IntSet
 import Data.List (sort, (!?))
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust)
@@ -109,7 +111,15 @@ data Recursive symbol a = Recursive
     -}
     , recursiveInspection :: Inspection symbol
     -- ^ A lazy diagnostic graph with occurrence labels and source values.
+    , recursiveConstruction :: IntSet.IntSet
+    -- ^ Active construction occurrences. Public queries cannot read their placeholders.
     }
+
+-- | Reject queries of a recursive language whose construction is incomplete.
+queryRecursive :: Recursive symbol a -> Either GenError (Recursive symbol a)
+queryRecursive recursive
+    | IntSet.null $ recursiveConstruction recursive = Right recursive
+    | otherwise = Left QueriedRecursiveOccurrence
 
 {- | The terms of a recursive language.
 
@@ -138,6 +148,7 @@ recursiveFromStatic static =
         (isJust weight)
         (Just $ staticTerms static)
         (staticInspection static)
+        IntSet.empty
   where
     (sampling, weight) = staticSampling static
 
@@ -436,6 +447,7 @@ choiceRecursive sampling weighted alternatives =
         weighted
         (choiceTerms (map recursiveIndex alternatives) <$> traverse recursiveTerm alternatives)
         (choiceInspection $ map recursiveInspection alternatives)
+        (IntSet.unions $ map recursiveConstruction alternatives)
 
 -- | Put a complete recursive language under one key.
 keyedRecursive :: Recursive symbol a -> KeyedRecursive symbol a

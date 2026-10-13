@@ -54,7 +54,6 @@ module Data.CFTA.Ranked.Internal.Size (
     sameOccurrences,
     isUnguarded,
     usesOccurrence,
-    reachesOccurrence,
     sizeIndex,
     countAtSize,
     sizeClassOf,
@@ -169,12 +168,6 @@ a recursive one.
 -}
 usesOccurrence :: Occurrence -> SizeIndex a -> Bool
 usesOccurrence (Occurrence token) = IntSet.member token . usedOccurrences
-
-{- | Whether a language reaches the probe of any recursion. Such a language
-depends on a definition that is not tied yet.
--}
-reachesOccurrence :: SizeIndex a -> Bool
-reachesOccurrence = not . IntSet.null . usedOccurrences
 
 -- | The number of members of one size, zero outside the counted sizes.
 countAtSize :: SizeIndex a -> Size -> Cardinality

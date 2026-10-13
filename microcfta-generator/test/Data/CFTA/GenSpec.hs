@@ -11,6 +11,7 @@ import Control.Exception (evaluate)
 import Data.Either (fromRight)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.List (nub)
+import Data.Maybe (isNothing)
 import Data.Proxy (Proxy (Proxy))
 import qualified Data.Set as Set
 import Data.String (fromString)
@@ -417,6 +418,44 @@ spec = do
                 chain = FTAGen.recur $ \self -> FTAGen.oneof [pure 0, FTAGen.node "s" $ (+ 1) <$> self]
                 spine :: FTAGen.FTAGen String Int
                 spine = FTAGen.recur $ \self -> (+) <$> FTAGen.oneof [pure 0, self] <*> FTAGen.elements [1, 2]
+                blocked result = either (== FTAGen.QueriedRecursiveOccurrence) (const False) result
+                observeSelf checks = FTAGen.recur $ \self ->
+                    FTAGen.oneof [pure (if checks self then 0 else 100), FTAGen.node "s" $ (+ 1) <$> self]
+                observations =
+                    [ blocked . FTAGen.support
+                    , blocked . FTAGen.inspect
+                    , \self -> blocked $ FTAGen.countAtSize self 0
+                    , blocked . FTAGen.minimumSize
+                    , \self -> blocked $ FTAGen.unrank self 0
+                    , \self -> blocked $ FTAGen.termAt self 0
+                    , \self -> blocked $ FTAGen.ranksOf self (Term.Node FTAGen.Pure [])
+                    , \self -> blocked $ FTAGen.pmfAtSize self 0
+                    , \self -> blocked $ FTAGen.countsAtSize (FTAGen.keyed () self) 0
+                    , \self -> blocked $ FTAGen.massesAtSize (FTAGen.keyed () self) 0
+                    , \self -> isNothing (FTAGen.sizeOfRank self 0) && null (FTAGen.smallerMembers self 0)
+                    , \self ->
+                        blocked $ FTAGen.support $ FTAGen.recur $ \inner ->
+                            FTAGen.oneof [pure 0, FTAGen.node "i" inner, FTAGen.node "o" self]
+                    , \self -> FTAGen.cardinality (FTAGen.upToSize 1 self) == Left FTAGen.BoundedRecursiveOccurrence
+                    , \self -> FTAGen.cardinality (FTAGen.atomic self) == Left FTAGen.BoundedRecursiveOccurrence
+                    ]
+                inspected = map observeSelf observations
+                changing = FTAGen.recur $ \self -> case FTAGen.support self of
+                    Right Common.EmptyNode -> FTAGen.oneof [pure 0, FTAGen.node "s" $ (+ 1) <$> self]
+                    _ -> FTAGen.leaf 99 "wrong"
+                selected = FTAGen.recur $ \outer -> FTAGen.atKey False $ FTAGen.recurGrouped $ \self ->
+                    FTAGen.oneofGrouped
+                        [ FTAGen.keyed False (pure 0)
+                        , FTAGen.keyed True (FTAGen.node "outer" outer)
+                        , FTAGen.keyed True (FTAGen.node "next" $ FTAGen.atKey True self)
+                        ]
+                changingMinimum = FTAGen.recurGrouped $ \self ->
+                    FTAGen.oneofGrouped
+                        [ FTAGen.keyed False $ case FTAGen.countsAtSize self 0 of
+                            Right counts | null counts -> pure (0 :: Int)
+                            _ -> FTAGen.leaf 1 "base"
+                        , FTAGen.keyed False (FTAGen.node "step" $ (+ 1) <$> FTAGen.atKey False self)
+                        ]
                 apply generator = FTAGen.node "outer" $ (+) <$> generator <*> FTAGen.elements [10]
                 check generator = do
                     let bounded = FTAGen.upToSize 4 generator
@@ -439,8 +478,18 @@ spec = do
                         (_, Left err, _) -> expectationFailure $ show err
                         (_, _, Left err) -> expectationFailure $ show err
             traverse (FTAGen.unrank $ FTAGen.upToSize 3 chain) [0 .. 3] `shouldBe` Right [0, 1, 2, 3]
+            map (\generator -> traverse (FTAGen.unrank $ FTAGen.upToSize 3 generator) [0 .. 3]) inspected
+                `shouldBe` replicate (length inspected) (Right [0, 1, 2, 3])
+            FTAGen.values changing `shouldBe` Right [99]
+            FTAGen.countAtSize selected 0 `shouldBe` Right 1
+            FTAGen.minimumSize selected `shouldBe` Right (Just 0)
+            FTAGen.minimumSize (FTAGen.atKey False changingMinimum)
+                `shouldBe` Left FTAGen.InconsistentRecursiveFamily
+            FTAGen.countsAtSize changingMinimum 0
+                `shouldBe` Left FTAGen.InconsistentRecursiveFamily
             mapM_ check $
-                [chain, spine]
+                [chain, spine, changing, selected]
+                    <> inspected
                     <> [ wrap generator
                        | generator <- [chain, spine]
                        , wrap <- [FTAGen.node "outer", apply, FTAGen.node "outer" . FTAGen.upToSize 3, apply . FTAGen.upToSize 3]

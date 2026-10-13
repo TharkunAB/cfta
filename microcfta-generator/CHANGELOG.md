@@ -12,7 +12,11 @@ tree automata of `microcfta`, with QuickCheck integration.
   `namedElements`, `fromIndexed`, and `fromGen`. `node` closes a constructor,
   and `frequency` and `oneof` choose. `match` and `relate` join two generators,
   and the grouped layer joins more with `Sig` signatures and `apply`. `recur`,
-  `atomic`, and `upToSize` make and bound recursive languages. The exact
+  `atomic`, and `upToSize` make and bound recursive languages. A recursive
+  body composes its occurrence: a query of an unfinished occurrence reports
+  `QueriedRecursiveOccurrence`, and a `recurGrouped` body that changes its
+  keys or minimum sizes after discovery reports
+  `InconsistentRecursiveFamily`. The exact
   inspectors are `cardinality`, `values`, `unrank`, `termAt` with its inverses
   `rankOf` and `ranksOf`, `support`, `inspect` with `drawInspection`, the
   counts by size, `pmf`, the structural `shrinkRank`, and `smallerMembers`. A

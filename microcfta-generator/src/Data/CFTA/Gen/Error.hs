@@ -78,6 +78,10 @@ data GenError
       computing.
       -}
       BoundedRecursiveOccurrence
+    | -- | A public query tried to read a recursive construction placeholder.
+      QueriedRecursiveOccurrence
+    | -- | A recursive family changed its discovered keys or minimum sizes.
+      InconsistentRecursiveFamily
     | -- | The support is not a valid automaton.
       InvalidSupport !AutomatonError
     | {- | The codec of a datatype rejects a term of its own grammar that
@@ -276,6 +280,20 @@ explain BoundedRecursiveOccurrence =
         , "Fix: bound or close the language outside the knot, as in"
         , "upToSize n (recur ...), and keep only finite atomic choices inside the"
         , "body."
+        ]
+explain QueriedRecursiveOccurrence =
+    guidance
+        [ "A query read a recursive occurrence while its language was still being built."
+        , "Its temporary support, terms, counts, and sampling fields are incomplete."
+        , "Fix: compose the occurrence inside the body and query the completed"
+        , "result of recur or recurGrouped outside the body."
+        ]
+explain InconsistentRecursiveFamily =
+    guidance
+        [ "A recursive family changed its keys or minimum sizes after discovery."
+        , "The accumulated discovery table does not describe the final body."
+        , "Fix: construct each key with the same generator operations in every"
+        , "body evaluation. Query the completed family outside recurGrouped."
         ]
 explain (InvalidSupport (GuardArityMismatch (Symbol symbol) childrenCount argumentCount)) =
     guidance

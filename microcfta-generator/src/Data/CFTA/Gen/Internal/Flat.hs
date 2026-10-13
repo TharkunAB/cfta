@@ -52,6 +52,7 @@ import Data.CFTA.Ranked.Internal.Sampler (GenBackend (frequencyGen), choiceSampl
 import Data.CFTA.Ranked.Internal.Size (mapIndex)
 import Data.CFTA.Ranked.QuickCheck (QuickCheckBackend (..))
 import Data.CFTA.Term (Term)
+import qualified Data.IntSet as IntSet
 
 -- | Interpret a reified condition as one key projection per side.
 withKeys ::
@@ -117,6 +118,7 @@ readAutomaton order root
                 False
                 (Just $ RecursiveTerms (mapIndex (fmap Label) index) $ leafRanks positions)
                 (plainInspection supportNode)
+                IntSet.empty
   where
     supportNode = relabel Label root
     -- The term of a member is the accepted user term under 'Label', and the
