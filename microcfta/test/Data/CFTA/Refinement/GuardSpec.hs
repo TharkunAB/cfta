@@ -255,7 +255,7 @@ spec =
                 map validate graphs `shouldBe` replicate 3 (Right ())
                 mapM (\automaton -> accepts solver automaton term) graphs >>= (`shouldBe` [Yes, No, No])
 
-        it "decides equal compound actuals from observations unless an enclosing scope renames them" $
+        it "decides equal compound actuals unless their identities change substitution precedence" $
             withZ3 [] $ \solver -> do
                 let zero = variable valueName .== 0
                     termLeaf name = Term.Node (RefinedSymbol name true) []
@@ -269,8 +269,16 @@ spec =
                             Satisfies (path [5]) (variable "x" .== 0)
                     -- The enclosing scope renames a, the name of both actuals.
                     nested = Substitute [Substitution (path [2]) (path [0])] inner
-                mapM (\guard -> evaluateGuard solver guard term) [inner, nested] >>= (`shouldBe` [Yes, No])
-                mapM (evaluateGuardWithShape solver observed) [inner, nested] >>= (`shouldBe` [Yes, Unknown])
+                    identityScope rest =
+                        Substitute ([Substitution (path [0]) (path [0]), Substitution (path [1]) (path [4])] <> rest) $
+                            Satisfies (path [5]) (variable "a" .== 0)
+                    identity = identityScope []
+                    repeated = identityScope [Substitution (path [2]) (path [0])]
+                    -- A second identity replacement does not change precedence.
+                    twice = identityScope [Substitution (path [0]) (path [0])]
+                    guards = [inner, nested, identity, repeated, twice]
+                mapM (\guard -> evaluateGuard solver guard term) guards >>= (`shouldBe` [Yes, No, Yes, No, Yes])
+                mapM (evaluateGuardWithShape solver observed) guards >>= (`shouldBe` [Yes, Unknown, Yes, Unknown, Yes])
 
         it "preserves missing-path and formula-refutation behavior through Boolean polarity" $
             withZ3 [] $ \solver -> do
