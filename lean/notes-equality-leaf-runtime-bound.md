@@ -1,5 +1,11 @@
 # Runtime bound for projected leaf equality passes
 
+Source scope: this note describes the worker before PR #97 (`de910ea`).
+The current `8ac24bb` worker merges each peer projection before intersection.
+The component theorems remain proved. `MergedProjectionBound` now provides
+the separate complete physical projected-leaf proof for that operation.
+General nested endpoints remain outside that result. See [merged narrowing](notes-merged-narrowing.md).
+
 `EqualityLeafProjectionRuntimeBound.compiled_bound` proves termination of a
 fixed normalized equality schedule on finite ordinary occurrence forests
 whose selected endpoints are leaf domains. The bound is the original

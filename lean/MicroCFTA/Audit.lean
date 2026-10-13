@@ -727,6 +727,23 @@ import MicroCFTA.InternedFreeNameMuOrigins
 import MicroCFTA.InternedStoredFreeNameBoundary
 import MicroCFTA.InternedPureProfileIdentity
 import MicroCFTA.InternedPureProfileOrderBoundary
+import MicroCFTA.InternedProbeFreeSupport
+import MicroCFTA.InternedProbeDependencyAge
+import MicroCFTA.InternedFreeNameTransport
+import MicroCFTA.InternedOldProbeReplay
+import MicroCFTA.MergedAlternativesSubsumption
+import MicroCFTA.MergedAlternativesGroups
+import MicroCFTA.MergedAlternativesRecursion
+import MicroCFTA.MergedEqualityReduction
+import MicroCFTA.MergedRawLeaves
+import MicroCFTA.MergedRowGroups
+import MicroCFTA.MergedRawLeafSource
+import MicroCFTA.MergedProjectionTargets
+import MicroCFTA.MergedProjectionClass
+import MicroCFTA.MergedProjectionSchedule
+import MicroCFTA.MergedProjectionPass
+import MicroCFTA.MergedProjectionTermination
+import MicroCFTA.MergedProjectionBound
 import MicroCFTA.InternedSourceRankStutter
 /-!
 # Proof dependency audit

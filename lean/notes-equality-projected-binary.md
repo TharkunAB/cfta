@@ -1,5 +1,11 @@
 # Progress for one projected binary class
 
+Source scope: this note describes the worker before PR #97 (`de910ea`).
+The current `8ac24bb` worker merges each peer projection before intersection.
+The component theorems remain proved. `MergedProjectionBound` now provides
+the separate complete physical projected-leaf proof for that operation.
+General nested endpoints remain outside that result. See [merged narrowing](notes-merged-narrowing.md).
+
 `EqualityFixedProjectionInvariant.post_first_expands` proves that each
 original endpoint occurrence retains all its rows after the first
 reciprocal binary edit. Projection takes the union of the occurrence rows.
