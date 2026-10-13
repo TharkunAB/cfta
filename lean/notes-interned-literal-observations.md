@@ -112,10 +112,31 @@ evidence, separate from the Lean proofs. The temporary implementation and
 log are `/tmp/mcfta-pending-level-search.py` and
 `/tmp/mcfta-pending-level-search.log`.
 
-The next proof target is a live ordinary-level mismatch. The current
-`closed_mismatch` can select a changed ordinary input that the encountered
-binder does not retain. Live-input readiness should strengthen that witness
-to a different pair of ordinary names at a live lexical position. The later
-name must then belong to the actual old Depth probe's free set. Compare this
-name with the active ancestor's original key. Do not assume that all computed
-ordinary levels are equal; the new checked fixture refutes that premise.
+`InternedPendingLiveMismatch.closed_live_mismatch` now selects a different
+pair of ordinary names at a live position of the encountered binder. Its
+route uses the exact earlier and current lexical input lists. The abstract
+atoms retain distinct position indices even when reference pairs repeat.
+A live fresh name
+would occur in the old Depth probe and violate its identity bound. This
+excludes fresh inputs and the active ancestor's own fresh local from the
+witness. The selected ordinary crossing retains its source body, position,
+actual computed level, and chronological cache history.
+
+`closed_live_depth_mismatch` retains the two completed Depth calls of that
+same source body. Their depths differ. The later ordinary name belongs to
+the active ancestor's original Depth probe and is already a live captured
+input of the ancestor. It therefore occurs in the ancestor's original input
+list. If its level differs from the ancestor's original computed level, the
+name also occurs in the original ordinary probe. Both key components are
+the actual completed probes retained by the active source origin.
+
+The remaining case must account for this ordinary alias with a live capture
+outside the active ancestor. A fresh-only change can alter a computed level,
+as the checked fixture shows. The new theorem requires the changed later
+level to occur in the ancestor's original captures and original Depth probe.
+Neither the level-change fixture nor the live-mismatch theorem establishes
+a pending counterexample. General closed no-pending remains open.
+
+Pinned Lean 4.34.1 builds `InternedPendingLiveMismatch` in 274 jobs. Its
+isolated dependency audit checks 9,203 imported theorems and permits only
+`propext`, `Classical.choice`, and `Quot.sound`. No Haskell source changes.
