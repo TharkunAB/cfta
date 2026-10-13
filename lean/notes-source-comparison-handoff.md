@@ -1,8 +1,8 @@
 # Ordered physical comparison checkpoint
 
-The five new comparator modules compile. The full sufficient-fuel
-termination theorem remains unfinished. No module contains a partial
-proof or an admitted theorem.
+The ordered comparator now has sufficient-fuel completion and exact
+successful-result stability. No stable module contains a partial proof
+or an admitted theorem.
 
 ## Current implementation and proofs
 
@@ -50,29 +50,36 @@ an eager warmup. `collect_replay` and `canonical_replay` expose the same
 result for the closure reader. These proofs compare only one actual
 allocation history and its later extensions.
 
-## Next proof target
+## Derived completion and fuel independence
 
-Prove sufficient-fuel completion and exact result stability for the full
-ordered `check`. Use the lexicographic pair:
+`MergedComparisonCompletion.check_complete` proves that all sufficiently
+large bounds return the same Boolean and exact final cache. It derives
+the initial Mu inventory from the actual source cache. It requires source
+`Facts`, `Prepared`, and available closed operands. It has no recursive
+termination premise. The proof uses the lexicographic pair:
 
 1. `coldCount originals state`.
 2. The number of issued numeric identity pairs outside the ancestor list.
 
-Every completed reader or earlier sibling comparison preserves the
-fixed Mu domain. If its cache changes, `check_verified.progress` and
-`progress_lt` decrease the first measure. If the cache is unchanged, a
-fresh parent pair enters the ancestor list and decreases the second.
-Finite edge and child lists supply the remaining local inductions.
-Available closed nonempty operands have resident canonical identities
-below the current node counter; derive their pair membership from that
-source bound. Combine the finite reader bounds and recursive bounds with
-fuel stability to obtain one sufficient bound for the actual ordered
-execution.
+Every completed reader or earlier sibling comparison preserves the fixed
+Mu domain. A changed cache decreases the first measure. An unchanged
+cache and a fresh ancestor pair decrease the second. `identity_closed`
+derives pair membership from actual source residency and the issued
+counter. Finite ordered child, cover, and row traversals combine stable
+bounds along the actual execution. Failed covers retain their cache
+effects. No eager preparation replaces the original execution cache.
 
-The executable comparator and preservation proofs are ready for this
-step. No full comparator termination, semantic soundness of this
-stateful comparator, arbitrary Mu totality, or repeated merge-pass
-convergence is claimed.
+`MergedComparisonStability.check_stable` independently proves that extra
+fuel preserves any successful Boolean and cache, without source invariant
+premises. `successful_results_eq` compares any two successful bounds.
+
+## Next proof target
+
+Derive semantic inclusion from a successful true comparison. Exact
+successful trace replay in a later cache and complete reader coverage
+support a common prepared observation. Numeric ancestor pairs require
+coherent source identities and a finite-term induction. General Mu
+totality and repeated merge-pass convergence remain separate obligations.
 
 ## Scope and validation
 
