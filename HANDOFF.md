@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 01:55 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 02:10 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -64,10 +64,10 @@ self-reference removal from recursive unions.
   `/tmp/mcfta-construction-query-full.log`. After the grouped-discovery check,
   all generator and refinement cases pass in
   `/tmp/mcfta-family-discovery-validation.log`. Core source is unchanged.
-- Latest integrated Lean build: **700 jobs; 31,615 theorem dependency checks**.
+- Latest integrated Lean build: **726 jobs; 31,947 theorem dependency checks**.
   This includes projected leaf schedules, nested first-run completion,
   stored shallow unfolding, and construction-query provenance.
-  Log: `/tmp/mcfta-runtime-cache-selective-flat-audit.log`.
+  Log: `/tmp/mcfta-runtime-bound-normalization-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -223,7 +223,13 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   Raw leaf pullback and occurrence trimming remove temporary proof-cache
   allocations. The next runtime pass can use its actual preceding cache.
   Trimming preserves leaf endpoints and the occurrence progress measure.
-  Full stateful schedule composition remains in progress.
+  The complete physical class schedule and pass now compose. Repeated passes
+  reach an allocation-free physical fixed point within the initial occurrence
+  weight plus one. Normalized source constraints derive proper paths. Ordinary
+  records derive the recursion-filter fast path. Source operand ordering and
+  ordinary union cache effects have exact correspondence proofs. See
+  `notes-equality-leaf-runtime-bound.md`. The existing 4,096-forest source
+  comparison and 1,156 raw leaf pairs pass again after these model repairs.
   Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
 - The new recursive equality gate can unfold an open unconstrained binder
@@ -249,6 +255,8 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   not an admissible-callback defect. Actual free-reference occurrence costs
   now have normalization laws. Fixed ordinary callbacks with arbitrary
   captured records derive actual probe and stored-Mu cost correspondence.
+  Full syntax now derives nonempty stored ordinary nodes and normalized union
+  cardinality. Primitive empty-result and free-occurrence observations are exact.
   General Mu body/probe cost correspondence remains open.
   See `notes-gate-unfolding-rank.md`.
 - Fresh-outer-dependent nested binder identity remains incomplete in general.
@@ -272,7 +280,10 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   active frames with subprograms that read and erase enclosing inputs.
   Selective erasure of the immediate parent while retaining older ancestors
   now completes from actual source traces. Arbitrary ancestor subsets and
-  union- or cleanup-induced erasure remain open. General absent-reference trace replay
+  computed empty-child erasure now includes arbitrary discarded constructor
+  effects. Root unions, self-reference filtering, and consecutive retained
+  binders have first-run completion proofs. General cleanup-induced erasure
+  remains open. General absent-reference trace replay
   across changed nested local identities remains open.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.

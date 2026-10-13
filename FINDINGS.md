@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 01:55 CEST**.
+Updated: **2026-10-13 02:10 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **700 jobs and 31,615 theorem dependency
+The full Lean development passes **726 jobs and 31,947 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -228,10 +228,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **700 jobs; 31,615 theorem dependency checks**.
+- Latest integrated Lean audit: **726 jobs; 31,947 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-runtime-cache-selective-flat-audit.log`.
+  Log: `/tmp/mcfta-runtime-bound-normalization-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -295,8 +295,21 @@ but do not prove it for every runtime execution.
    cannot become the next runtime cache because later allocations can diverge.
    Raw leaf pullback and dead-row trimming repair this gap. They reconstruct
    exact outputs in the actual runtime cache, preserve leaf endpoints, and
-   retain the occurrence progress measure. Whole stateful schedule composition
-   remains open. See [runtime trimming](lean/notes-equality-leaf-runtime-trim.md).
+   retain the occurrence progress measure. Complete stateful class and pass
+   composition now proves termination within the initial occurrence weight
+   plus one. The result is an allocation-free physical fixed point in the
+   actual runtime cache. Source normalization derives proper paths. Ordinary
+   metadata derives the recursion-filter fast path.
+   The source comparison also found an omitted node-identity operand ordering
+   step in the physical intersection model. The model now retains that order
+   and its constructor effects. The path model now calls the exact ordinary
+   source union branch. Its equality with constructor union is proved for
+   complete normal operands. These were formalization gaps, not source defects.
+   The 4,096 projected forests and 1,156 raw leaf source pairs pass again.
+   Logs: `/tmp/mcfta-runtime-bound-source-check.log` and
+   `/tmp/mcfta-runtime-raw-orientation-source-check.log`.
+   See [the runtime bound](lean/notes-equality-leaf-runtime-bound.md) and
+   [runtime trimming](lean/notes-equality-leaf-runtime-trim.md).
    See [the growth notes](lean/notes-finite-reduction-growth.md) and
    [projected leaf schedules](lean/notes-equality-leaf-projection.md).
 2. **Nested binder identity after normalization erases a fresh outer
@@ -325,7 +338,10 @@ but do not prove it for every runtime execution.
    Mixed retained active frames and normalized erased subprograms complete
    from their actual earlier traces. Selective immediate-parent erasure now
    preserves older ancestors and derives first completion. Arbitrary ancestor
-   subsets and erasure caused only by union collapse or cleanup remain open. General absent-reference
+   subsets and general cleanup-induced erasure remain open. Root unions,
+   self-reference filtering, and consecutive retained binders now have
+   first-run completion proofs. Computed empty-child erasure also completes
+   with arbitrary nested effects in discarded siblings. General absent-reference
    replay is the remaining completion step.
    Full nested constructor traces now derive
    coherent caches, complete child provenance, outgoing edge residency,
