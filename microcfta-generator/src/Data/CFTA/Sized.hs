@@ -11,8 +11,8 @@ of the child states at smaller sizes, because each child of a term has fewer
 nodes than the term. So a cycle in the automaton cannot make a query loop,
 and an empty class says nothing about the classes after it.
 
-The order is the order of the count table of the cyclic import
-('Data.CFTA.Gen.fromAutomaton'):
+The order uses the original graph rows and the nested products of the count
+table shared with the cyclic import ('Data.CFTA.Gen.fromAutomaton'):
 
 * The transitions of a state are sorted by their arity, their symbol, and the
   canonical classes of their child states, so the order does not depend on
@@ -24,8 +24,9 @@ The order is the order of the count table of the cyclic import
   left-major.
 * A term that several transitions accept keeps its first place.
 
-Where that import accepts the automaton (no constraint and no ambiguity), it
-gives each term the same size and class rank as this module.
+The count table reads these original rows. Importing through interned nodes
+can trim dead edges or remove duplicate edges. Those changes can change
+canonical row order even when they preserve the language.
 
 Equality constraints are checked on each term that their transition builds,
 so the classes are exact. A guard beyond equality constraints has no decision
@@ -37,8 +38,8 @@ classes of each state for later queries. It is slow for large classes.
 every guard, so it needs no pruning: it is the exact route for a liquid
 automaton whose guards pruning did not discharge.
 'sized' gives the same sequence. It counts, ranks, and unranks with the count
-table of the cyclic import when the automaton has no constraint and that
-import accepts it, and it uses the reference otherwise.
+table when the automaton has no constraint and its rows are unambiguous.
+It uses the reference otherwise.
 -}
 module Data.CFTA.Sized (
     Sized,
@@ -52,23 +53,22 @@ module Data.CFTA.Sized (
     rankOfSize,
 ) where
 
-import Control.Monad (filterM, foldM)
+import Control.Monad (filterM, foldM, void)
 import Control.Monad.Except (runExceptT, throwError)
 import Control.Monad.IO.Class (liftIO)
 import Data.Containers.ListUtils (nubOrd)
-import Data.Hashable (Hashable)
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn)
+import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn, tails)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (listToMaybe)
-import Data.Typeable (Typeable)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalitiesHold, noConstraint, residual)
-import Data.CFTA.Gen.Internal.Automaton (automatonIndex, automatonTermPosition, canonicalClasses)
+import Data.CFTA.Gen.Internal.Automaton (canonicalClasses)
+import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Size (..))
-import Data.CFTA.Interned (NodeId (..), fromFTA)
+import Data.CFTA.Interned (NodeId (..))
 import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
 import Data.CFTA.Ranked.Internal.Size (SizedRank (..), countAtSize, sizeClassSelect)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
@@ -99,28 +99,62 @@ The result is 'ResidualGuard' when a transition that the initial state can
 reach has a guard beyond equality constraints.
 -}
 sized ::
-    (Ord state, Ord symbol, Hashable symbol, Typeable symbol) =>
+    (Ord state, Ord symbol) =>
     FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
 sized automaton
     | all (all ((== noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable automaton)
-    , Right index <- automatonIndex id root =
-        let count = countAtSize index
+    , unambiguousRows rows =
+        let index = Ordinary.tableIndex initial rows
+            count = countAtSize index
             unrank size (ClassRank rank)
                 | rank >= 0 && Cardinality rank < count size =
                     Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
                 | otherwise = Nothing
-            position = automatonTermPosition id root
+            position = Ordinary.tablePosition initial rows
          in Right
                 Sized
                     { sizedTerms = \size -> [term | rank <- everyClassRank (count size), Just term <- [unrank size rank]]
                     , sizedCount = count
                     , sizedUnrank = unrank
-                    , sizedRank = either (const Nothing) (\(SizedRank size rank) -> Just (size, rank)) . position
+                    , sizedRank = fmap (\(SizedRank size rank) -> (size, rank)) . position
                     }
     | otherwise = sizedReference automaton
   where
-    root = fromFTA automaton
+    initial = FTA.initialState automaton
+    rows = Map.map (map void) $ sortedRows automaton
     everyClassRank (Cardinality total) = map ClassRank [0 .. total - 1]
+
+{- | Whether each term has at most one run in the rows.
+
+The synchronous product accepts the common terms of each pair of states.
+Two alternatives overlap when every pair of child states is productive.
+-}
+unambiguousRows :: (Ord state, Eq symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
+unambiguousRows rows =
+    not $
+        or
+            [ FTA.transitionSymbol left == FTA.transitionSymbol right
+                && length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
+                && all (`Map.member` productive) (zip (FTA.transitionChildren left) (FTA.transitionChildren right))
+            | alternatives <- Map.elems rows
+            , left : rest <- tails alternatives
+            , right <- rest
+            ]
+  where
+    productive = Ordinary.minimumSizes products
+    products =
+        Map.fromList
+            [ ( (leftState, rightState)
+              , [ FTA.Transition (FTA.transitionSymbol left) (zip (FTA.transitionChildren left) (FTA.transitionChildren right)) ()
+                | left <- leftRows
+                , right <- rightRows
+                , FTA.transitionSymbol left == FTA.transitionSymbol right
+                , length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
+                ]
+              )
+            | (leftState, leftRows) <- Map.toList rows
+            , (rightState, rightRows) <- Map.toList rows
+            ]
 
 {- | The size classes of an automaton, each built from its definition.
 
