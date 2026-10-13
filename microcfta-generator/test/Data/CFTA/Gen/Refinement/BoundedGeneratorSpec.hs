@@ -280,7 +280,7 @@ spec = do
                     LTAGen.cardinality compiled `shouldBe` Right count
                     denotationAtMost solver 2 oracle `shouldDenote` termsOf compiled
 
-        it "reports unsupported scoped equality while retaining the core denotation" $ do
+        it "reads the bounded denotation of a scoped equality that pruning cannot discharge" $ do
             let a = Term.Node (RefinedSymbol "a" true) []
                 b = Term.Node (RefinedSymbol "b" true) []
                 wrapped = Term.Node (RefinedSymbol "wrap" true) [a]
@@ -295,9 +295,14 @@ spec = do
                 denotationAtMost unusedEntailment 2 automaton `shouldDenote` expected
                 result <- LTAGen.compileWith unusedEntailment source
                 case result of
+                    Left err -> expectationFailure $ "unexpected scoped equality failure: " <> show err
+                    Right compiled -> sort (values compiled) `shouldBe` sort expected
+                -- Without a depth bound there is no finite denotation to read.
+                unbounded <- LTAGen.compileWith unusedEntailment $ LTAGen.fromAutomaton automaton
+                case unbounded of
                     Left (LTAGen.ResidualGuard residual) -> residual `shouldBe` scoped
                     Left err -> expectationFailure $ "unexpected scoped equality failure: " <> show err
-                    Right _ -> expectationFailure "an unsupported scoped equality was silently compiled"
+                    Right _ -> expectationFailure "an unbounded scoped equality was compiled"
 
         it "keeps a large imported language compact without forcing source values" $ do
             result <- timeout 60000000 $ do
@@ -436,7 +441,7 @@ spec = do
                 LTAGen.cardinality compiled `shouldBe` Right count
                 denotationAtMost solver 2 automaton `shouldDenote` termsOf compiled
 
-        it "reports unavailable compound actual identities without changing the core language" $
+        it "reads the bounded denotation when compound actual identities are unavailable" $
             withZ3 ([(name, IntSort) | name <- [fromString valueName, "x", "y", "app", "known"]]) $ \solver -> do
                 let guard =
                         Substitute
@@ -448,12 +453,12 @@ spec = do
                             [ Transition "pair" true [known, known, Node [plain "x" []], Node [plain "y" []]] $
                                 semanticConstraint guard
                             ]
-                denotationAtMost solver 2 automaton >>= (\result -> fmap length result `shouldBe` Right 3)
+                denoted <- denotationAtMost solver 2 automaton
+                fmap length denoted `shouldBe` Right 3
                 result <- LTAGen.compileWith solver $ LTAGen.fromAutomatonUpToDepth 2 automaton
                 case result of
-                    Left (LTAGen.ResidualGuard residual) -> residual `shouldBe` guard
                     Left err -> expectationFailure $ show err
-                    Right _ -> expectationFailure "unavailable compound identity was silently compiled"
+                    Right compiled -> Right (sort $ values compiled) `shouldBe` fmap sort denoted
 
         it "reports an undecidable full-term guard" $ do
             let automaton = pairsWith $ semanticConstraint $ Satisfies (path [0]) true

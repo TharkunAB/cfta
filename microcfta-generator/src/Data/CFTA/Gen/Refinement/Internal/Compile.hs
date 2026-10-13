@@ -43,6 +43,7 @@ import qualified Data.Text as Text
 import System.Mem.StableName (StableName, eqStableName, hashStableName, makeStableName)
 import Unsafe.Coerce (unsafeCoerce)
 
+import qualified Data.CFTA as FTA (fromTerms)
 import Data.CFTA.Equality.Constraint (EqConstraints (EmptyConstraints))
 import Data.CFTA.Gen
 import Data.CFTA.Gen.Internal.Bucket (
@@ -1111,8 +1112,14 @@ completeObservations label leafness childKeys =
 The automaton is bounded, pruned with the solver, and split into one
 sub-automaton per tuple of requested observations. Each part is read by the
 engine, which counts it symbolically where alternatives overlap or guards of
-Boolean equality remain. A guard the symbolic counter cannot count is
-reported before any part is read.
+Boolean equality remain.
+
+Pruning can leave a guard that the symbolic counter cannot count. A bounded
+import then reads its bounded denotation ('denotationAtMost'): the solver
+decides every guard of the original automaton on each complete term, and the
+import reads an automaton of exactly those terms. So pruning is not needed
+for the result. An unbounded import has no finite denotation, and it reports
+the guard as 'ResidualGuard' before any part is read.
 -}
 compileImport ::
     (Ord key) =>
@@ -1126,20 +1133,34 @@ compileImport entailment requested bound order automaton
     | Just depth <- bound, depth < 0 = pure $ Right $ frequencies []
     | otherwise = do
         pruned <- prune entailment $ maybe id boundDepth bound automaton
-        pure $ do
-            reduced <- first pruningError pruned
-            mapM_ (first ResidualGuard . constraintIndicators . edgeConstraint) $ concat $ IntMap.elems $ reachable reduced
-            -- The parts are sorted by their observations, which order by
-            -- symbol text and refinement, so the ranks do not depend on the
-            -- order in which the process interned the edges.
-            pure $
-                uniformlyGrouped
-                    [ keyed (ObservationKey position observations) $ Flat.fromAutomaton order part
-                    | (position, (observations, part)) <- zip [0 ..] $ sortOn fst $ splitByObservations requested reduced
-                    ]
+        case first pruningError pruned >>= discharged of
+            Left (ResidualGuard guard) | Just depth <- bound -> denoted depth guard
+            result -> pure $ grouped <$> result
   where
     pruningError (PruneUnknown _) = SolverUnknown
     pruningError err = InvalidPruning err
+
+    discharged reduced =
+        reduced
+            <$ mapM_ (first ResidualGuard . constraintIndicators . edgeConstraint) (concat $ IntMap.elems $ reachable reduced)
+
+    -- The parts are sorted by their observations, which order by symbol text
+    -- and refinement, so the ranks do not depend on the order in which the
+    -- process interned the edges.
+    grouped reduced =
+        uniformlyGrouped
+            [ keyed (ObservationKey position observations) $ Flat.fromAutomaton order part
+            | (position, (observations, part)) <- zip [0 ..] $ sortOn fst $ splitByObservations requested reduced
+            ]
+
+    -- The terms of the bounded denotation of the original automaton, as an
+    -- automaton without guards. The guard stays the error if those terms do
+    -- not make one automaton.
+    denoted depth guard = do
+        accepted <- denotationAtMost entailment depth automaton
+        pure $ case accepted of
+            Left (DenotationUnknown _ _) -> Left SolverUnknown
+            Right denotation -> either (const $ Left $ ResidualGuard guard) (Right . grouped . fromFTA) (FTA.fromTerms denotation)
 
 {- | Partition the language of an automaton by the labels at the requested paths.
 
