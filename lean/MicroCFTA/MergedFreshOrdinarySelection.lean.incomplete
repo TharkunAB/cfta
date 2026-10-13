@@ -1,0 +1,133 @@
+import MicroCFTA.MergedFreshOrdinaryComparison
+import MicroCFTA.MergedSourceSelection
+
+/-!
+# Unfinished child selection with repaired cold comparisons
+
+The proposed filter executes the repaired comparator. The proof text for
+`any_eq` exceeds the kernel heartbeat limit. This draft is excluded from
+the aggregate build. No completed selection correspondence is claimed.
+-/
+namespace MicroCFTA.MergedFreshOrdinarySelection
+open InternedConstructorTemplates InternedProbeProvenance InternedNestedFacts InternedNestedProvenance
+open MergedPhysicalWarmup MergedSourceComparison MergedComparisonFacts MergedComparisonCompletion
+open MergedColdReaderClosedInputs MergedPhysicalGroupColumns
+
+/-- Try recursive covers in order and retain each comparison's exact cache. -/
+def anyAccepts [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (clear : Guard → Bool) (fuel : Nat) (narrow : Value Symbol Guard) :
+    List (Value Symbol Guard) → State Symbol Guard → Result Symbol Guard Bool
+  | [], state => .done false state
+  | wide :: rest, state =>
+      if narrow.free = [] then
+        (MergedFreshOrdinaryComparison.check clear fuel [] wide narrow state).bind fun accepted after =>
+          if accepted then .done true after else anyAccepts clear fuel narrow rest after
+      else .done false state
+
+/-- Retain closed Mu operands and children for which all original Mu comparisons fail. -/
+def retain [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (clear : Guard → Bool) (fuel : Nat) (recursive : List (Value Symbol Guard)) :
+    List (Value Symbol Guard) → State Symbol Guard → Result Symbol Guard (List (Value Symbol Guard))
+  | [], state => .done [] state
+  | child :: rest, state =>
+      if closedMu child then
+        (retain clear fuel recursive rest state).bind fun retained after => .done (child :: retained) after
+      else
+        (anyAccepts clear fuel child recursive state).bind fun covered after =>
+          (retain clear fuel recursive rest after).bind fun retained final =>
+            .done (if covered then retained else child :: retained) final
+
+/-- Complete the source filter before removing repeated canonical identities. -/
+def select [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (clear : Guard → Bool) (fuel : Nat) (inputs : List (Value Symbol Guard))
+    (state : State Symbol Guard) : Result Symbol Guard (List (Value Symbol Guard)) :=
+  (retain clear fuel (inputs.filter closedMu) inputs state).bind fun retained after =>
+    .done (distinctNodes retained) after
+
+/-- A repaired comparison transfers its continuation only at an actual successful return. -/
+theorem compare_bind_eq [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (clear : Guard → Bool) (fuel : Nat) (wide narrow : Value Symbol Guard) (state : State Symbol Guard)
+    (facts : Facts state) (prepared : Prepared state) (wideInput : Available state wide) (narrowInput : Available state narrow)
+    (wideClosed : wide.free = []) (narrowClosed : narrow.free = [])
+    (first second : Bool → State Symbol Guard → Result Symbol Guard Output)
+    (same : ∀ accepted after, check clear fuel [] wide narrow state = .done accepted after → first accepted after = second accepted after) :
+    (MergedFreshOrdinaryComparison.check clear fuel [] wide narrow state).bind first =
+      (check clear fuel [] wide narrow state).bind second := by
+  rw [MergedFreshOrdinaryComparison.check_eq clear fuel [] wide narrow state facts prepared wideInput narrowInput wideClosed narrowClosed]
+  cases done : check clear fuel [] wide narrow state with
+  | failed => rfl
+  | done accepted after => exact same accepted after done
+
+/-- A completed comparison retains the exact context needed by the next cover. -/
+theorem compare_context [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (clear : Guard → Bool) (fuel : Nat) (wide narrow : Value Symbol Guard) (rest : List (Value Symbol Guard))
+    (state after : State Symbol Guard) (facts : Facts state) (prepared : Prepared state)
+    (wideInput : Available state wide) (narrowInput : Available state narrow) (restInputs : Values state rest)
+    (wideClosed : wide.free = []) (narrowClosed : narrow.free = [])
+    (done : check clear fuel [] wide narrow state = .done false after) :
+    Facts after ∧ Prepared after ∧ Available after narrow ∧ Values after rest := by
+  have effect := (check_verified clear fuel [] wide narrow state facts prepared wideInput narrowInput wideClosed narrowClosed).effect done
+  exact ⟨effect.facts, prepared.preserve effect.unchanged,
+    narrowInput.grows state after effect.growth effect.history,
+    fun value member => (restInputs value member).grows state after effect.growth effect.history⟩
+
+/-- Every ordered recursive cover test has the original result and exact cache. -/
+theorem any_eq [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (clear : Guard → Bool) (fuel : Nat) (narrow : Value Symbol Guard) (wides : List (Value Symbol Guard))
+    (state : State Symbol Guard) (facts : Facts state) (prepared : Prepared state)
+    (narrowInput : Available state narrow) (wideInputs : Values state wides) (wideClosed : ClosedValues wides) :
+    anyAccepts clear fuel narrow wides state = MergedSourceSelection.anyAccepts clear fuel narrow wides state := by
+  induction wides generalizing state with
+  | nil => rfl
+  | cons wide rest ih =>
+      simp only [anyAccepts, MergedSourceSelection.anyAccepts]
+      split
+      · rename_i closed
+        apply compare_bind_eq clear fuel wide narrow state facts prepared
+          (wideInputs wide List.mem_cons_self) narrowInput (wideClosed wide List.mem_cons_self) closed
+        intro accepted after done
+        cases accepted with
+        | true => rfl
+        | false =>
+            obtain ⟨afterFacts, afterPrepared, afterNarrow, afterWides⟩ :=
+              compare_context clear fuel wide narrow rest state after facts prepared (wideInputs wide List.mem_cons_self)
+                narrowInput (fun value member => wideInputs value (List.mem_cons_of_mem _ member))
+                (wideClosed wide List.mem_cons_self) closed done
+            exact ih after afterFacts afterPrepared afterNarrow afterWides
+              (fun value member => wideClosed value (List.mem_cons_of_mem _ member))
+      · rfl
+
+/-- Retained and discarded children preserve every earlier comparison effect after repair. -/
+theorem retain_eq [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (clear : Guard → Bool) (fuel : Nat) (recursive inputs : List (Value Symbol Guard))
+    (state : State Symbol Guard) (facts : Facts state) (prepared : Prepared state)
+    (recInputs : Values state recursive) (recClosed : ClosedValues recursive) (available : Values state inputs) :
+    retain clear fuel recursive inputs state = MergedSourceSelection.retain clear fuel recursive inputs state := by
+  induction inputs generalizing state with
+  | nil => rfl
+  | cons child rest ih =>
+      simp only [retain, MergedSourceSelection.retain]
+      split
+      · rw [ih state facts prepared recInputs (fun value member => available value (List.mem_cons_of_mem _ member))]
+      · rw [any_eq clear fuel child recursive state facts prepared (available child List.mem_cons_self) recInputs recClosed]
+        have checked := MergedSourceSelection.any_verified clear fuel child recursive state facts prepared
+          (available child List.mem_cons_self) recInputs recClosed
+        cases done : MergedSourceSelection.anyAccepts clear fuel child recursive state with
+        | failed => rfl
+        | done covered after =>
+            have effect := checked.effect done
+            simp only [Result.bind]
+            rw [ih after effect.facts (prepared.preserve effect.unchanged)
+              (fun value member => (recInputs value member).grows state after effect.growth effect.history)
+              (fun value member => (available value (List.mem_cons_of_mem _ member)).grows state after effect.growth effect.history)]
+
+/-- Actual prepared child selection retains the exact selected list and physical cache after repair. -/
+theorem select_eq [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (clear : Guard → Bool) (fuel : Nat) (inputs : List (Value Symbol Guard)) (state : State Symbol Guard)
+    (facts : Facts state) (prepared : Prepared state) (available : Values state inputs) :
+    select clear fuel inputs state = MergedSourceSelection.select clear fuel inputs state := by
+  simp only [select, MergedSourceSelection.select]
+  rw [retain_eq clear fuel (inputs.filter closedMu) inputs state facts prepared
+    (fun value member => available value (List.mem_filter.mp member).1) (MergedSourceSelection.recursive_closed inputs) available]
+
+end MicroCFTA.MergedFreshOrdinarySelection
