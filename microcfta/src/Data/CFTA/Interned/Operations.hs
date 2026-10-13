@@ -420,22 +420,29 @@ mkIntersectionDom free recInt =
 emptyIntersectionDom :: (Typeable symbol) => IntersectionDom symbol
 emptyIntersectionDom = mkIntersectionDom IntMap.empty Set.empty
 
--- | Tables for node intersection in a recursive environment.
-genericIntersectOpenCache :: TypeableMemoCache
-genericIntersectOpenCache = unsafePerformIO newTypeableMemoCache
+{- | Tables for node intersection in a recursive environment. The key is the
+identity of the domain and the memo keys of the two nodes.
+-}
+genericIntersectOpenCache :: FlatMemoCache
+genericIntersectOpenCache = unsafePerformIO newFlatMemoCache
 {-# NOINLINE genericIntersectOpenCache #-}
 
--- | Intersect two nodes under the same recursive environment.
+{- | Intersect two nodes under the same recursive environment.
+
+A node without a memo key is a placeholder. The intersection does not
+memoize a pair with a placeholder.
+-}
 intersectOpen ::
     forall symbol.
     (Hashable symbol, Typeable symbol) =>
     (IntersectionDom symbol, Node symbol, Node symbol) -> Node symbol
 {-# INLINEABLE intersectOpen #-}
-intersectOpen input =
-    memoTypeableWith @symbol genericIntersectOpenCache worker input
+intersectOpen (domain, left, right) =
+    case (nodeMemoKey left, nodeMemoKey right) of
+        (Just leftKey, Just rightKey) ->
+            memoFlatTypeableWith @symbol genericIntersectOpenCache (idIdent domain) leftKey rightKey (onNode domain left right)
+        _ -> onNode domain left right
   where
-    worker (dom, left, right) = onNode dom left right
-
     onNode ::
         IntersectionDom symbol -> Node symbol -> Node symbol -> Node symbol
     onNode !dom l r =

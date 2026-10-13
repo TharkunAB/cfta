@@ -90,13 +90,16 @@ remains a separate ECTA-only package.
   removes the `equivalence` dependency. Over the core benchmark suite this
   cut allocation by 46% and instructions by 41%. The unfolding of each
   recursive node is shared, so repeated listings of a `Mu` do not rebuild it.
-  The intersection memo hashes its recursive environment once, the common
+  The intersection memo interns its recursive environment, the common
   `Symbol`/`EqConstraints` instantiation has its own memo tables, and the
   equality reduction restricts and edits every required path of an edge in
   one traversal, which cut a further 15% of instructions and 17% of
   allocation on that suite. An `EqConstraints` value is interned, so its
   equality and hash take constant time, and its descent into a child is
-  memoized; on Hectare this cut 4% to 7% of instructions.
+  memoized; on Hectare this cut 4% to 7% of instructions. The edge and node
+  intersection memos keep integer keys in an open-addressing table,
+  `Data.CFTA.Interned.FlatMemo`, in place of a hash map; on Hectare this cut
+  24% of the time of two reduction rounds and 11% of the listing time.
 - The refinement layer's `denotationAtMost` runs on the shared enumerator: a
   positive `Same` guard is a path equality solved by unification, so an
   equality-guarded pair costs milliseconds instead of a quadratic candidate
