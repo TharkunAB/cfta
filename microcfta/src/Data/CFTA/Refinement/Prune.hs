@@ -42,7 +42,7 @@ import Data.CFTA.Interned (
     edgeChildren,
     edgeConstraint,
     edgeSymbol,
-    fixUnbounded,
+    fixWithin,
     freeVars,
     mkEdge,
     nodeEdges,
@@ -108,6 +108,12 @@ Successful combinations become specialized nodes. Failed combinations are
 removed. The returned automaton keeps its equality classes and any guard the
 sparse observations cannot decide. This is the paper's semantic-intersection
 rule, expressed as node splitting without materializing an accepted tree.
+
+Each fixed point of pruning, the narrowing of one transition and the prunes
+of one recursive node, takes at most 'pruneRounds' passes, so pruning always
+ends. Each pass keeps the language. When a budget runs out, the automaton
+keeps the guards that it has not discharged, and enumeration and 'accepts'
+check them.
 -}
 prune :: Entailment -> Automaton -> IO (Either PruneError Automaton)
 prune entailment automaton = case validate automaton of
@@ -116,17 +122,29 @@ prune entailment automaton = case validate automaton of
         runExceptT $
             evalStateT (pruneNode entailment automaton) (PruneBuild IntMap.empty Map.empty IntMap.empty)
 
+{- | The most passes of each fixed point of pruning: the narrowing of one
+transition, and the prunes of one recursive node.
+-}
+pruneRounds :: Int
+pruneRounds = 64
+
 -- | Prune one node, sharing the result through the node's identity.
 pruneNode :: Entailment -> Automaton -> PruneM Automaton
-pruneNode _ EmptyNode = pure EmptyNode
-pruneNode _ node@(Rec _) = pure node
-pruneNode entailment node = do
+pruneNode entailment = pruneNodeWithin entailment pruneRounds
+
+{- | Prune one node, sharing the result through the node's identity. A
+recursive node is pruned at most the given number of times.
+-}
+pruneNodeWithin :: Entailment -> Int -> Automaton -> PruneM Automaton
+pruneNodeWithin _ _ EmptyNode = pure EmptyNode
+pruneNodeWithin _ _ node@(Rec _) = pure node
+pruneNodeWithin entailment rounds node = do
     known <- gets (IntMap.lookup ident . prunedNodes)
     case known of
         Just pruned -> pure pruned
         Nothing -> do
             pruned <- case node of
-                InternedMu mu -> pruneMu entailment node mu
+                InternedMu mu -> pruneMu entailment rounds node mu
                 InternedUnion group -> createUnion <$> traverse (pruneNode entailment) (internedUnionMembers group)
                 _ -> Node . concat <$> traverse (pruneEdge entailment) (nodeEdges node)
             modify' $ \build -> build{prunedNodes = IntMap.insert ident pruned (prunedNodes build)}
@@ -134,28 +152,33 @@ pruneNode entailment node = do
   where
     NodeId ident = nodeIdentity node
 
-{- | Prune the body of a recursive node to a fixed point.
+{- | Prune the body of a recursive node to a fixed point, at most the given
+number of times.
 
 The body is pruned with its recursive reference left in place. If that
 changed the node, the rebuilt node is pruned again, because a guard in the
-body may observe through the reference.
+body may observe through the reference. When the rounds run out, the last
+rebuilt node is the result. It has the language of the node, and it keeps the
+guards that read through the reference.
 -}
-pruneMu :: Entailment -> Automaton -> InternedMu Symbol -> PruneM Automaton
-pruneMu entailment node mu = do
+pruneMu :: Entailment -> Int -> Automaton -> InternedMu Symbol -> PruneM Automaton
+pruneMu entailment rounds node mu = do
     let NodeId ident = internedMuId mu
     modify' $ \build -> build{binders = IntMap.insert ident node (binders build)}
     body <- pruneNode entailment (internedMuBody mu)
     let rebuilt = createMu $ \self -> substFree (RecInt (internedMuId mu)) self body
-    if rebuilt == node then pure node else pruneNode entailment rebuilt
+    if rebuilt == node || rounds <= 1 then pure rebuilt else pruneNodeWithin entailment (rounds - 1) rebuilt
 
 {- | Prune the children of one transition, narrow them by its equalities to a
-fixpoint, then discharge its guard. One pass of the narrowing can miss an
-empty child that a later pass finds.
+fixpoint (at most 'pruneRounds' passes), then discharge its guard. One pass
+of the narrowing can miss an empty child that a later pass finds.
 -}
 pruneEdge :: Entailment -> Transition -> PruneM [Transition]
 pruneEdge entailment edge = do
     children <- traverse (pruneNode entailment) (edgeChildren edge)
-    let narrowed = fixUnbounded (reduceEdgeIntersection EmptyConstraints) $ mkEdge (edgeSymbol edge) children (edgeConstraint edge)
+    let narrowed =
+            fixWithin pruneRounds (reduceEdgeIntersection EmptyConstraints) $
+                mkEdge (edgeSymbol edge) children (edgeConstraint edge)
     if EmptyNode `elem` edgeChildren narrowed
         then pure []
         else pruneSemantic entailment narrowed
