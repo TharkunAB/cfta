@@ -56,16 +56,42 @@ excludes the later missing-record condition. It does not assume that the
 later binder completes. `InternedLiveInputSupport.not_pending_of_fresh_changes`
 derives that agreement when every different lexical input is a fresh interned
 name and the later depth probe was already available before those names.
+`InternedLiveSiteReadiness.site_not_pending` obtains the earlier binder from
+an actual completed enclosing trace and a chosen Depth/ordinary route. Its
+remaining comparison premise pairs the two literal name lists: each pair
+is equal, or its later name is fresh. The route retains each actual ordinary
+level. It does not replace ordinary locals by Depth.
 
-General pending-site exclusion remains open. An earlier completed trace must
-supply the corresponding site with agreement on its live inputs. Choosing
-Depth at every crossed binder can change a live ordinary-probe local.
-Matching the callback choices must also account for their computed ordinary
-levels. The old final probe alone does not show that all crossed locals are
-absent. No theorem here assumes equal ordered profiles or equality between
-a stored body and either one of its probes.
+`InternedPendingSourceOrigins.closed_encounter` now derives the active
+ancestor's source body and captured inputs. Its origin retains the completed
+raw Depth-body call, both normalized probes, the missing reservation cut,
+and the earlier available probe records. Its descendant path records each
+actual Depth, ordinary, or fresh callback entry and the corresponding cache
+growth. The proof follows the actual stopped source execution.
 
-Pinned Lean 4.34.1 builds the live-input support target in 265 jobs. The
+`InternedActiveSourceReplay.Origin.completed_representative` obtains an
+earlier completed source site from that origin. It keeps the same source
+body and probe choice at each position. It selects Depth for fresh entries.
+`Crossing.interned_after` proves that each crossed fresh name is at least as
+new as the active ancestor. It does not classify ordinary locals as fresh.
+
+`InternedPendingOrdinaryMismatch.closed_mismatch` proves a necessary
+condition for a pending closed run. Its actual path and earlier source
+representative must contain corresponding ordinary entries with different
+computed levels. `closed_depth_mismatch` exposes the two completed Depth
+callbacks of the same source body, their full source contexts, their unequal
+cached depths, and their ordered cache histories. These are derived source
+witnesses, not assumed callback laws.
+
+General pending-site exclusion remains open. The remaining case concerns
+different ordinary levels that still produce the active old probe key.
+The old final probe alone does not show that all crossed locals are absent.
+The existing closed probe-cost fixture has body/probe depths `(1, 0, 0)`.
+A general equality between those depths is therefore false. No theorem here
+assumes equal ordered profiles or equality between a stored body and either
+one of its probes.
+
+Pinned Lean 4.34.1 builds the pending ordinary-mismatch target in 273 jobs. The
 isolated checks for full live-input replay and pending-readback exclusion
 use only `propext`, `Classical.choice`, and `Quot.sound`. These modules
 change no Haskell source.
