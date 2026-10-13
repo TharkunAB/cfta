@@ -94,6 +94,7 @@ Audit input: `/tmp/mcfta-equality-nested-unary-axioms-20261013.lean`.
 Audit log: `/tmp/mcfta-equality-nested-unary-axioms-20261013.log`.
 
 `lean/repro/NestedUnaryTwoAtom.hs` retains the native source comparison.
+The fixture is local-only and untracked. It is not a new committed test.
 It checks all 256 pairs of singleton endpoint masks and 4,096 deterministic
 pairs of groups with three original occurrences per side. Every completed
 source pass agrees with the generated row transition. Every represented
@@ -101,7 +102,9 @@ target is unchanged by the current merger. The maximum observed number
 of changing passes is two. This finite execution check supports source
 alignment; it is not a replacement for the remaining ancestor lift.
 
-The Nix result is in `/tmp/mcfta-nested-two-atom.log`:
+The original Nix result is in `/tmp/mcfta-nested-two-atom.log`.
+The exact retained and formatted file also passed. Its log is
+`/tmp/mcfta-nested-unary-retained.log`:
 
 ```text
 ("nested-two-atom",4352,"maximum-changing-passes",2)
