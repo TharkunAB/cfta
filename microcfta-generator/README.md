@@ -1568,27 +1568,31 @@ cabal bench hectare --benchmark-options='hplus 300 8G'
 ```
 
 The paper reports 43 of 45 queries within 300 seconds, 84% within 7 seconds.
-On the development machine (one core), the original code, built with its
-own toolchain (GHC 8.10.7) and run with one capability, solves 41 of 45, 36
+On the development machine (one core), the original code, built with its own
+toolchain (GHC 8.10.7) and run with one capability, solves 41 of 45, 36
 within 7 seconds. This module builds the same automata, size by size, and
-stops the reduction at 30 rounds as the original does. It also solves 41 of
-45, 37 within 7 seconds, with a median of 0.29 seconds against 0.49 seconds,
-and takes 0.71 times the original's time over the 41 queries (geometric
-mean). The other four queries need programs of size 7 or 9; neither solves
-them. On the Stack Overflow suite (19 queries, with the components that the
-original adds for it) with a limit of 600 seconds, both solve the same 13
-queries, and this module takes 0.82 times the original's time (geometric
-mean).
+stops the reduction at 30 rounds as the original does. It solves 43 of 45,
+40 within 7 seconds, with a median of 0.07 seconds against 0.49 seconds, and
+takes 0.20 times the original's time over the 41 queries that both solve
+(geometric mean). It also solves both and multiAppPair, at size 7, in 25 and
+23 seconds: the reduction narrows equal paths by a set that merges the
+alternatives of one symbol, so it does not build their products. On the
+Stack Overflow suite (19 queries, with the components that the original adds
+for it) with a limit of 600 seconds, both solve the same 13 queries, 7
+within 7 seconds against 4, and this module takes 0.20 times the original's
+time (geometric mean). splitOn is the one query where the original is
+faster: 220 seconds against 373.
 
-Three of the ten queries that neither solves have no solution as the suite
-writes them. The expected program of containsEdge applies `elem` without the
-`Eq Int` dictionary that the Hoogle+ encoding gives it, so the program has
-size 11, not 9. removeMax expects a component `(Data.Eq./=)_Ord` that no
-library has. splitStr has no expected program. The expected programs of the
-other seven are in their program spaces: a search with only the components
-of each program finds it at its size in seconds. With the whole library, a
-reduction round at sizes 7 to 9 takes minutes, and none finishes within an
-hour.
+Three of the eight queries that this module does not solve have no solution
+as the suite writes them. The expected program of containsEdge applies
+`elem` without the `Eq Int` dictionary that the Hoogle+ encoding gives it,
+so the program has size 11, not 9. removeMax expects a component
+`(Data.Eq./=)_Ord` that no library has. splitStr has no expected program.
+The expected programs of the other five (lessThanNTimes, transpose,
+partition, matchedKeys, and applyNthNTimes) are in their program spaces: a
+search with only the components of each program finds it at its size in
+seconds. With the whole library, each reaches the limit of 600 seconds or
+of the 8 GB heap.
 
 ### Hegel: refinement-typed synthesis on liquid tree automata
 
@@ -1610,52 +1614,52 @@ one library for each group of queries.
 |---|---:|---:|---|
 | Nth1 | 4 | 0.2 | `set (set l i (nth l j)) j (nth l i)` |
 | Nth2 | 7 | 1.5 | `set (set (rev l) j (nth (rev l) i)) i (nth (rev l) j)` |
-| Nth3 | 6 | 31.7 | `set (set l i (incr (nth l j))) j (incr (nth l i))` |
-| RevApp1 | 2 | 0.7 | `append (rev l) l` |
+| Nth3 | 6 | 30.3 | `set (set l i (incr (nth l j))) j (incr (nth l i))` |
+| RevApp1 | 2 | 0.6 | `append (rev l) l` |
 | RevApp2 | 2 | 0.9 | `rev (append l l)` |
-| RevApp3 | 2 | 0.7 | `append l (rev l)` |
+| RevApp3 | 2 | 0.6 | `append l (rev l)` |
 | RevZip1 | 2 | 8.5 | `zip (rev f) s` |
-| RevZip2 | 2 | 8.7 | `zip f (rev s)` |
-| RevZip3 | 2 | 8.7 | `rev (zip f s)` |
-| SplitAt1 | 4 | 61.6 | `pair (take n l) (drop n (drop m l))` |
-| SplitAt2 | 3 | 21.4 | `splitAt (sub n m) (drop m l)` |
-| SplitAt3 | 5 | 170.9 | `pair (take n l) (drop n (drop (sub n m) l))` |
+| RevZip2 | 2 | 8.5 | `zip f (rev s)` |
+| RevZip3 | 2 | 8.4 | `rev (zip f s)` |
+| SplitAt1 | 4 | 61.2 | `pair (take n l) (drop n (drop m l))` |
+| SplitAt2 | 3 | 20.4 | `splitAt (sub n m) (drop m l)` |
+| SplitAt3 | 5 | 165.6 | `pair (take n l) (drop n (drop (sub n m) l))` |
 | SplitStr1 | 2 | 0.1 | `splitAt (indexOf c s) s` |
-| SplitStr2 | 5 | 1.3 | `pair (drop (indexOf c s) s) (take (indexOf c s) s)` |
-| SplitStr3 | 6 | 2.8 | `pair (take (indexOf c s) s) (cons c (drop (indexOf c s) s))` |
-| Nth_Incr1 | 2 | 1.8 | `nth l (incr n)` |
-| Nth_Incr2 | 2 | 1.8 | `nth l (decr n)` |
+| SplitStr2 | 5 | 1.2 | `pair (drop (indexOf c s) s) (take (indexOf c s) s)` |
+| SplitStr3 | 6 | 2.7 | `pair (take (indexOf c s) s) (cons c (drop (indexOf c s) s))` |
+| Nth_Incr1 | 2 | 1.7 | `nth l (incr n)` |
+| Nth_Incr2 | 2 | 1.7 | `nth l (decr n)` |
 | Nth_Incr3 | 2 | 2.5 | `incr (nth l n)` |
-| AppendN1 | 2 | 2.3 | `append (take n l) l` |
-| AppendN3 | 4 | 16.4 | `append (drop (length (drop n l)) l) l` |
-| AppendN2 | 3 | 10.2 | `if (isZero n) l (append (take (decr n) l) l)` |
+| AppendN1 | 2 | 2.1 | `append (take n l) l` |
+| AppendN3 | 4 | 15.7 | `append (drop (length (drop n l)) l) l` |
+| AppendN2 | 3 | 10.1 | `if (isZero n) l (append (take (decr n) l) l)` |
 | LookRange1 | 1 | 2.1 | `if (elem k ks) (lookup k ks vs) d` |
-| LookRange2 | 1 | 2.3 | `if (elem k ks) (lookup k ks vs) (last vs)` |
-| LookRange3 | 1 | 2.3 | `if (elem k ks) (lookup k ks vs) (head vs)` |
-| Map1 | 2 | 1.5 | `map incr (map f l)` |
+| LookRange2 | 1 | 2.4 | `if (elem k ks) (lookup k ks vs) (last vs)` |
+| LookRange3 | 1 | 2.4 | `if (elem k ks) (lookup k ks vs) (head vs)` |
+| Map1 | 2 | 1.6 | `map incr (map f l)` |
 | Map2 | 2 | 1.4 | `map decr (map f l)` |
-| Map3 | 3 | 80.0 | `map incr (map f (rev l))` |
+| Map3 | 3 | 66.6 | `map incr (map f (rev l))` |
 | MapDouble1 | 2 | 0.0 | `map g (map f l)` |
 | MapDouble2 | 2 | 0.0 | `map f (map g l)` |
 | MapDouble3 | 2 | 0.0 | `map f (map f l)` |
-| ApplyNAdd1 | 2 | 2.0 | `add m (applyN f n m)` |
-| ApplyNAdd2 | 3 | 11.0 | `add m (applyN f (incr n) m)` |
-| ApplyNAdd3 | 4 | 35.7 | `add m (incr (applyN f (incr n) m))` |
+| ApplyNAdd1 | 2 | 1.8 | `add m (applyN f n m)` |
+| ApplyNAdd2 | 3 | 10.5 | `add m (applyN f (incr n) m)` |
+| ApplyNAdd3 | 4 | 34.0 | `add m (incr (applyN f (incr n) m))` |
 | ApplyNInv1 | 3 | 0.2 | `filter f (map h (map g l))` |
 | ApplyNInv2 | 3 | 0.2 | `map h (map g (filter f l))` |
 | ApplyNInv3 | 5 | 0.6 | `map h (map g (filter f (map h (map g l))))` |
 | ApplyList1 | 2 | 0.1 | `if (null fl) s (apply (head fl) s)` |
 | ApplyList2 | 2 | 0.1 | `if (null fl) s (apply (last fl) s)` |
 | ApplyList3 | 4 | 0.1 | `apply (last fl) (apply (head fl) s)` |
-| CEdge1 | 3 | 11.9 | `and (elem src l) (elem tgt l)` |
-| CEdge2 | 3 | 12.1 | `or (elem src l) (elem tgt l)` |
-| CEdge3 | 4 | 21.7 | `and (elem src l) (not (elem tgt l))` |
+| CEdge1 | 3 | 11.8 | `and (elem src l) (elem tgt l)` |
+| CEdge2 | 3 | 11.4 | `or (elem src l) (elem tgt l)` |
+| CEdge3 | 4 | 20.9 | `and (elem src l) (not (elem tgt l))` |
 
 The size counts the applications before the conditional. The search stops at
 size 5, at size 7 for Nth2, and at size 6 for Nth3 and SplitStr3. The times
 are from one run at `-O2` on the development machine, with the paper's limit
 of 180 seconds and a limit of 100 milliseconds for each solver query; all 42
-queries solve, with a mean of 12.9 seconds. Nth1 to Nth3 and the higher-order
+queries solve, with a mean of 12.2 seconds. Nth1 to Nth3 and the higher-order
 queries state facts about every index with a quantifier, and the solver
 cannot decide many of those solver queries; an undecided solver query counts
 as failed. Z3 often gives up on such a query only at the limit, so the limit
