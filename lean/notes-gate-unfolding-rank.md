@@ -664,3 +664,123 @@ that equality for arbitrary dynamic callbacks.
 
 The focused build passes (178 jobs). The combined isolated axiom audit
 checks 8,815 theorem dependencies with the same foundational allowlist.
+
+## Syntax-derived two-probe profiles (2026-10-13 03:09)
+
+`InternedProfileSemantics` interprets every constructor expression as either
+an opaque root or a list of literal root references. The proof covers all
+nested binders. Arbitrary external name maps commute with this interpreter,
+including maps that identify distinct captured names.
+
+`InternedProfileCallbackForm` derives the form of every callback result from
+one symbolic execution. A pure result contains fixed captured names and
+optionally the supplied argument. `InternedProfileOrigins` proves that each
+fixed name comes from a lexical input. No callback equation is assumed.
+
+`InternedTwoProbeProfiles` distinguishes empty and direct-self results with
+two distinct normalized probes. `InternedProbeDecoder` recovers the complete
+smart result profile from those probes. It retains captures that equal a
+probe name. `InternedProfileEquivalence` proves that normalization and the
+decoder use only opacity and set membership. `InternedSyntaxProbeDecoder`
+then derives the decoder equation for every expression in the pure model.
+
+These proofs do not yet establish correspondence with the source cache.
+That proof must preserve the decoded profile for each complete stored Mu
+and use it at actual cache hits. The focused build passes (120 jobs). The
+combined isolated axiom audit checks 8,965 theorem dependencies with the
+same foundational allowlist.
+
+## Complete source profile correspondence (2026-10-13 03:21)
+
+`InternedNestedProfiles.build_profile` proves root profile correspondence
+for arbitrary complete constructor syntax. The same mutual induction
+preserves `InternedProfileHeap.Heap` through completed and pending outcomes.
+`closed_heap` establishes that invariant from empty source caches.
+`closed_profile` identifies every actual completed output with the pure
+syntax interpretation, up to opacity and reference-set equality.
+
+The invariant relates each stored Mu's actual smart cleanup result to the
+decoder of its two canonical probe records. A hit obtains the exact stored
+probes from coherent resident identity. A miss executes the fresh body and
+derives the candidate invariant from all three recursive body proofs. The
+proof uses actual reservation freshness and pending-slot preservation.
+
+The primitive bridges cover source edge readback, ordinary empty-child
+selection, union flattening and identity deduplication, root self filtering,
+and smart cleanup. There is no binder-free restriction, finite-depth bound,
+assumed callback equation, or assumed final profile condition. Pending
+outcomes remain possible in this theorem. It therefore does not establish
+general first-construction completion or strict unfolding rank.
+
+The focused build passes (216 jobs). The combined isolated axiom audit
+checks 9,103 theorem dependencies with the same foundational allowlist.
+
+## Exact reachable body tags (2026-10-13 03:28)
+
+`InternedStoredProbeTags.closed_empty_body` proves that every stored body
+from arbitrary closed source execution is EmptyNode exactly when both of
+its canonical probes are EmptyNode. `closed_self_body` proves that a body
+is its exact reserved reference exactly when the probes are `RecDepth` and
+`RecUnint 0`. `closed_finish_empty` combines these equivalences with the
+actual smart cleanup branches.
+
+`InternedSourceProbeTags.source_calls` derives the equivalences from the
+original three completed callback calls. `InternedProfileMuOrigins`
+supplies those calls and their verified initial table for every stored
+payload. The statement covers records in both completed and pending outer
+executions. It assumes no body/probe relation or callback equation.
+
+The focused build passes (221 jobs). The combined isolated axiom audit
+checks 9,131 theorem dependencies with the same foundational allowlist.
+These tag laws do not prove that an
+old smart result has two old probe boundaries. That joint observation
+property remains separate from root-profile correspondence and is needed
+by the general completion argument.
+
+## The exact cost invariant does not extend to all nested callbacks (2026-10-13 03:46)
+
+`InternedNestedProbeCostBoundary` gives a checked callback with two captured
+sentinels. A discarded edge constructs an unused smart binder. The live
+branch constructs a used inner binder. The actual outer body has external
+costs `(RecDepth, 1)` and `(RecUnint 0, 1)`. Both probes have those names only
+at cost zero. `not_exact_probe_coverage` refutes the unrestricted exact-cost
+predecessor claim. The earlier binder-free theorem retains its restriction.
+
+`InternedClosedProbeCostBoundary` obtains the same record during a closed
+source-model run. Two enclosing binders supply the sentinels in their
+probe calls. An empty enclosing edge discards the result. The complete
+cache retains the counterexample at identity 19. `not_flat_probe_heap`
+refutes `InternedFlatProbeHeap.Heap` as a general closed-cache invariant.
+`complete_empty` proves that this closed expression completes with EmptyNode.
+
+The focused Haskell diagnostic `/tmp/mcfta-cost-probe-masked-alias.hs`
+confirms the open captured-sentinel case in the Nix environment. It also
+confirms both equations that substitute the actual fresh outer name with
+the stored probe names. These checks do not establish the documented
+equation for every pair of arbitrary captured and supplied names. The
+closed-cache statement is kernel checked in the source executor model.
+
+This is an obstruction to an auxiliary cost proof. It is not a constrained
+gate divergence witness and does not refute the joint boundary-absence
+property. The focused build passes (179 jobs). The combined isolated axiom
+audit checks 9,354 theorem dependencies with the same foundational allowlist.
+
+## Pure canonical probes supply an actual gate rank (2026-10-13 03:58)
+
+`InternedPureProbeGate` proves that a pure actual profile has cached Mu
+depth zero. The source-derived recursive profile invariant then proves
+that a stored Mu with two pure probes has an actual depth-zero body.
+`closed_unfold_decreases` derives completion of the actual stored-body
+unfolding and strict head-rank decrease for that open Mu.
+
+`InternedProbeOpacity.closed_probes` proves that the two probes are either
+both pure or both opaque. It uses their original verified source calls and
+the full syntax map law. `closed_depth_pure_unfold` therefore needs only a
+pure depth probe. `closed_pure_level` derives its ordinary placeholder
+level as zero. The original source expression has no nesting restriction.
+No body-depth, callback-success, or output-rank premise is supplied.
+
+This closes the pure-probe case of the general gate argument. It does not
+close arbitrary opaque probes. The focused build passes (223 jobs). The
+combined isolated axiom audit checks 9,365 theorem dependencies with the
+same foundational allowlist.
