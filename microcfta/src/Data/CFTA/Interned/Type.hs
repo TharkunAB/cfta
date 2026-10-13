@@ -23,6 +23,7 @@ module Data.CFTA.Interned.Type (
     IntersectId,
     pattern IntersectId,
     nodeIdentity,
+    nodeMemoKey,
     numNestedMu,
     substFree,
     freeVars,
@@ -363,6 +364,20 @@ nodeIdentity (InternedNode node) = internedNodeId node
 nodeIdentity (InternedUnion alternatives) = internedUnionId alternatives
 nodeIdentity (Rec (RecInt i)) = i
 nodeIdentity _ = error "nodeIdentity: unexpected empty or unresolved node"
+
+{- | The integer that names a node in a memo key, if the node has one.
+
+Different nodes give different integers. A reference that is not a 'RecInt'
+gives no integer. Such a reference is a placeholder while a node is built.
+-}
+{-# INLINE nodeMemoKey #-}
+nodeMemoKey :: Node symbol -> Maybe Int
+nodeMemoKey EmptyNode = Just (-1)
+nodeMemoKey (InternedNode MkInternedNode{internedNodeId = NodeId i}) = Just (4 * i)
+nodeMemoKey (InternedMu MkInternedMu{internedMuId = NodeId i}) = Just (4 * i + 1)
+nodeMemoKey (InternedUnion MkInternedUnion{internedUnionId = NodeId i}) = Just (4 * i + 2)
+nodeMemoKey (Rec (RecInt (NodeId i))) = Just (4 * i + 3)
+nodeMemoKey (Rec _) = Nothing
 
 {- | Replace an edge's children while preserving its symbol and constraints.
 
