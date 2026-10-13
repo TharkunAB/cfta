@@ -1,4 +1,10 @@
 import Lean
+import MicroCFTA.FlatMemoPublication
+import MicroCFTA.FlatMemoProbeLayout
+import MicroCFTA.IntersectionFlatMemoKeyPhysical
+import MicroCFTA.EnumerationIndexSelection
+import MicroCFTA.EnumerationIndexSource
+import MicroCFTA.EnumerationWaitingMachine
 import MicroCFTA.InternedRequestFreeReadback
 import MicroCFTA.InternedFreeAbsenceConstructors
 import MicroCFTA.InternedFreeAbsenceReplay
