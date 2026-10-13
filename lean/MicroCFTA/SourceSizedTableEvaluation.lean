@@ -79,6 +79,9 @@ theorem public_components [DecidableEq State] [DecidableEq Formula] [Ord (Label 
     (input : Input State (Label Formula) (Constraint Formula)) :
     (∃ classes, CanonicalClasses.canonical (graph input) = some classes ∧
       sortedRows input = sortRows input classes) ∧
+    (∃ fuel, MinimumSize.sweep (ordinaryRows (sortedRows input)) input.states
+        (MinimumSize.sweeps (ordinaryRows (sortedRows input)) input.states fuel (fun _ => none)) =
+      MinimumSize.sweeps (ordinaryRows (sortedRows input)) input.states fuel (fun _ => none)) ∧
     (∃ fuel, MinimumSize.sweep
         (Language.intersect (ordinaryRows (sortedRows input)) (ordinaryRows (sortedRows input)))
         (SourceSizedDispatchGraph.pairs input.states)
@@ -92,6 +95,7 @@ theorem public_components [DecidableEq State] [DecidableEq Formula] [Ord (Label 
       (countAt (ordinaryRows (sortedRows input)) size state)
       (compileAt (ordinaryRows (sortedRows input)) size state) :=
   ⟨sortedRows_completed input,
+    MinimumSize.minimumSizes_terminates _ input.states input.complete,
     SourceSizedDispatchGraph.gate_minimum_terminates _ input.states input.complete,
     fun size state => finite_bound _ size state⟩
 
