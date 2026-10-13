@@ -405,20 +405,30 @@ genericIntersectionDomCache :: CacheFamily
 genericIntersectionDomCache = unsafePerformIO newCacheFamily
 {-# NOINLINE genericIntersectionDomCache #-}
 
--- | Build a domain, interned. Both containers list their elements in key order, a canonical form.
+{- | Build a domain, interned. Both containers list their elements in key order, a canonical form.
+
+The empty domain is 'emptyIntersectionDom'. Every other domain gets the
+identity from its cache plus one, so no domain shares the identity of the
+empty domain.
+-}
 {-# INLINEABLE mkIntersectionDom #-}
 mkIntersectionDom ::
     forall symbol. (Typeable symbol) => IntMap (Node symbol) -> Set IntersectId -> IntersectionDom symbol
-mkIntersectionDom free recInt =
-    intern
-        (selectCache @symbol genericIntersectionDomCache (newIdSupply >>= freshCacheWith))
-        (\identity _ -> ID free recInt identity)
-        (IntMap.toList free, Set.toList recInt)
+mkIntersectionDom free recInt
+    | IntMap.null free, Set.null recInt = emptyIntersectionDom
+    | otherwise =
+        intern
+            (selectCache @symbol genericIntersectionDomCache (newIdSupply >>= freshCacheWith))
+            (\identity _ -> ID free recInt (identity + 1))
+            (IntMap.toList free, Set.toList recInt)
 
--- | An intersection environment with no free or pending variables.
-{-# INLINEABLE emptyIntersectionDom #-}
-emptyIntersectionDom :: (Typeable symbol) => IntersectionDom symbol
-emptyIntersectionDom = mkIntersectionDom IntMap.empty Set.empty
+{- | An intersection environment with no free or pending variables.
+
+Its identity is 0. It is one constant for all symbol types, so each top-level
+'intersect' uses it without a lookup.
+-}
+emptyIntersectionDom :: IntersectionDom symbol
+emptyIntersectionDom = ID IntMap.empty Set.empty 0
 
 {- | Tables for node intersection in a recursive environment. The key is the
 identity of the domain and the memo keys of the two nodes.
