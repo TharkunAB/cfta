@@ -47,7 +47,7 @@ environment; see `/tmp/mcfta-20261013-profile-order-source.log`. This staged
 open fixture captures the two sentinels explicitly. It does not establish
 closed empty-environment reachability or the universal callback contract.
 
-Validation: Lean 4.34.1 completes the full audit with 846 jobs and 33,461
+Validation: Lean 4.34.1 completes the full audit with 849 jobs and 33,472
 theorem dependency checks. The allowed axioms are `propext`,
 `Classical.choice`, and `Quot.sound`. This validates the stated theorems;
 it does not prove general no-pending or Haskell extraction.

@@ -744,6 +744,9 @@ import MicroCFTA.MergedProjectionSchedule
 import MicroCFTA.MergedProjectionPass
 import MicroCFTA.MergedProjectionTermination
 import MicroCFTA.MergedProjectionBound
+import MicroCFTA.MergedProjectionOrder
+import MicroCFTA.MergedRawLeafLanguage
+import MicroCFTA.MergedSubsumptionTermination
 import MicroCFTA.InternedSourceRankStutter
 /-!
 # Proof dependency audit

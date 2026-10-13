@@ -183,7 +183,20 @@ This covers the physical merged leaf worker and schedule. It does not prove
 unrestricted recursive merging or nested-endpoint fixed schedules. The
 finite semantic graph view, host evaluation, containers, and Haskell extraction
 remain separate correspondence obligations. The full Lean audit passes
-846 jobs and 33,461 theorem dependency checks.
+849 jobs and 33,472 theorem dependency checks.
+
+`MergedProjectionOrder.observed_complete` derives a complete symbol order
+directly from actual outgoing rows. `same_record` proves that any two complete
+orders produce the same full merged record in a common valid cache.
+`MergedRawLeafLanguage.worker_covers` derives language coverage from the
+physical input and output rows for every nullary guard interpreter that
+accepts Top. The general recursive physical coverage bridge remains open.
+
+`MergedSubsumptionTermination.check_saturated` proves that the executable
+coverage checker stabilizes once its fuel reaches the number of remaining
+pairs in a complete finite inventory. The proof removes each new pair and
+adds it to the ancestor list. Establishing such an inventory for arbitrary
+physical recursive unfolding remains a separate source obligation.
 
 Keep the earlier nonassociativity and schedule counterexamples. Do not claim
 that an old schedule replay still reproduces the new merged-target schedule.
