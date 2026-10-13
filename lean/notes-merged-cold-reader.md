@@ -65,6 +65,12 @@ stable fuel, complete record facts, preparation, cache growth, issued-name
 history, absence of new Mu records, and returned edge residency. These
 properties apply to the exact cache returned by the reader.
 
+`MergedSourceExposureLanguage.nodeEdges_origins` proves that every returned
+edge comes from an actual epsilon path in the returned cache or any later
+extension. Each cold unfolding on that path replays with its exact result.
+`nodeEdges_sound` therefore proves that the reader cannot introduce an
+accepted finite term. The reverse edge-coverage direction remains open.
+
 ## Checked examples
 
 `MergedSourceExposureExample` executes four source branches in Lean:
