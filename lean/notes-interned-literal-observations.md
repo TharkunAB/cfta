@@ -169,3 +169,27 @@ scope. Thus a changed ordinary level can alias an original live capture
 in closed execution. This example does not reuse the pending ancestor key
 and does not refute the no-pending claim. A proof must use more than the
 changed level and its membership in the original probe.
+
+`InternedPendingJointKey.closed_site` retains both exact old probe records
+at the same current source site. The current Depth callback returns the
+ancestor's original Depth value. The current ordinary callback uses that
+value's actual depth and returns the ancestor's original ordinary value.
+`Site.capture_equivalent` decodes both observations and proves equality
+of all live captured-name memberships, including Depth and the original
+ordinary sentinel. It does not discard either key component.
+
+`InternedPendingJointKeyMismatch.closed_joint_mismatch` keeps this site,
+its actual earlier completed representative, both earlier callbacks, the
+live changed position, and the shorter producer history in one witness.
+The earlier pair already has a complete record at the ancestor's missing
+reservation cut. At least one of its two reference components must therefore
+differ from the ancestor's original pair. The current pair equals both
+ancestor components exactly. This is a stronger restriction than the old
+free-name support witness. It does not yet transport the mismatch to the
+shorter producer context.
+
+`InternedPendingJointKeyBoundary.closed_different_pairs` checks the concrete
+closed alias example. Both actual inner probe references differ from the
+ancestor's original references at slot 93. The fixture satisfies the ordinary
+support observation but not the exact joint-key premise. General closed
+no-pending still requires excluding the full joint-key mismatch witness.
