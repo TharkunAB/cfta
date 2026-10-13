@@ -47,6 +47,8 @@ import Type.Reflection (Typeable)
 import Data.CFTA.Constraint (Constraint (..), conjoinConstraints, noConstraint)
 import Data.CFTA.Index (Depth (..))
 import Data.CFTA.Internal.Tree (acceptsBy, adjustAt)
+import Data.CFTA.Interned.Cache (CacheFamily, freshCacheWith, intern, newCacheFamily, newIdSupply, selectCache)
+import Data.CFTA.Interned.FlatMemo (FlatMemoCache, memoFlatTypeableWith, newFlatMemoCache)
 import Data.CFTA.Interned.Memo
 import Data.CFTA.Interned.Type
 import Data.CFTA.Path (ChildIndex (..), Path (ConsPath, EmptyPath), Pathable (..))
@@ -388,21 +390,34 @@ data IntersectionDom symbol = ID
     -- ^ Value of all free variables inside the term, by the 'NodeId' of their 'Mu' (so that we can unfold when necessary)
     , idRecInt :: Set IntersectId
     -- ^ Intersection problems we encountered previously (to avoid infinite unrolling)
-    , idHash :: !Int
-    -- ^ Hash of the two fields, computed once: every memo lookup hashes the domain.
+    , idIdent :: !Int
+    -- ^ The identity of the domain: equal domains have one identity.
     }
-    deriving (Eq)
+
+instance Eq (IntersectionDom symbol) where
+    left == right = idIdent left == idIdent right
 
 instance Hashable (IntersectionDom symbol) where
-    hashWithSalt s dom = hashWithSalt s (idHash dom)
+    hashWithSalt s dom = hashWithSalt s (idIdent dom)
 
--- | Build a domain and its hash. Both containers list their elements in key order, a canonical form.
-mkIntersectionDom :: IntMap (Node symbol) -> Set IntersectId -> IntersectionDom symbol
-mkIntersectionDom free recInt = ID free recInt (hash (IntMap.toList free, Set.toList recInt))
+-- | Tables that give equal intersection domains one identity.
+genericIntersectionDomCache :: CacheFamily
+genericIntersectionDomCache = unsafePerformIO newCacheFamily
+{-# NOINLINE genericIntersectionDomCache #-}
+
+-- | Build a domain, interned. Both containers list their elements in key order, a canonical form.
+{-# INLINEABLE mkIntersectionDom #-}
+mkIntersectionDom ::
+    forall symbol. (Typeable symbol) => IntMap (Node symbol) -> Set IntersectId -> IntersectionDom symbol
+mkIntersectionDom free recInt =
+    intern
+        (selectCache @symbol genericIntersectionDomCache (newIdSupply >>= freshCacheWith))
+        (\identity _ -> ID free recInt identity)
+        (IntMap.toList free, Set.toList recInt)
 
 -- | An intersection environment with no free or pending variables.
 {-# INLINEABLE emptyIntersectionDom #-}
-emptyIntersectionDom :: IntersectionDom symbol
+emptyIntersectionDom :: (Typeable symbol) => IntersectionDom symbol
 emptyIntersectionDom = mkIntersectionDom IntMap.empty Set.empty
 
 -- | Tables for node intersection in a recursive environment.
@@ -486,9 +501,11 @@ intersectOpen input =
             | otherwise =
                 n
 
--- | Tables for edge intersection in a recursive environment.
-genericIntersectOpenEdgeCache :: TypeableMemoCache
-genericIntersectOpenEdgeCache = unsafePerformIO newTypeableMemoCache
+{- | Tables for edge intersection in a recursive environment. The key is the
+identities of the domain and of the two edges.
+-}
+genericIntersectOpenEdgeCache :: FlatMemoCache
+genericIntersectOpenEdgeCache = unsafePerformIO newFlatMemoCache
 {-# NOINLINE genericIntersectOpenEdgeCache #-}
 
 -- | Intersect two edges under the same recursive environment.
@@ -497,11 +514,14 @@ intersectOpenEdge ::
     (Hashable symbol, Typeable symbol) =>
     (IntersectionDom symbol, Edge symbol, Edge symbol) -> Edge symbol
 {-# INLINEABLE intersectOpenEdge #-}
-intersectOpenEdge input =
-    memoTypeableWith @symbol genericIntersectOpenEdgeCache worker input
+intersectOpenEdge (domain, left, right) =
+    memoFlatTypeableWith @symbol
+        genericIntersectOpenEdgeCache
+        (idIdent domain)
+        (coerce (edgeId left))
+        (coerce (edgeId right))
+        (onEdge domain left right)
   where
-    worker (dom, left, right) = onEdge dom left right
-
     onEdge ::
         IntersectionDom symbol -> Edge symbol -> Edge symbol -> Edge symbol
     onEdge _ l r | length (edgeChildren l) /= length (edgeChildren r) = emptyEdge (edgeSymbol l)
