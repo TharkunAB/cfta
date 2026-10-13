@@ -71,7 +71,8 @@ tree automata of `microcfta`, with QuickCheck integration.
   query ends, also on cyclic, ambiguous, and equality-constrained automata,
   and an empty class says nothing about later classes. `sizedReference`
   builds each class from smaller ones; `sized` gives the same sequence with
-  the count table of the cyclic import where that import applies. A guard
+  the count table, read from the original rows, when the automaton has no
+  constraint and no ambiguity. A guard
   beyond equality constraints is `ResidualGuard`. `sizedUpTo` builds the
   classes up to a size bound with a solver that decides every guard on each
   built term, so a liquid automaton has an exact route that needs no

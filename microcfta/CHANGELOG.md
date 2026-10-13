@@ -22,7 +22,9 @@ remains a separate ECTA-only package.
   `terms` and `termsUpToM` are in these modules. A `union` inside a binder
   keeps a reference to an enclosing binder as a union node until the binder
   closes; a binder's reference to itself at the root of its body adds no
-  term.
+  term. A binder probes its body with a placeholder above every placeholder
+  that the body captures, so a closed nested binder does not wait on a
+  reference it captured.
 - `Data.CFTA.Equality`: equality-constrained automata as
   `Node symbol` with `equalityConstraint` edges, with reduction, membership, template
   restriction, and enumeration with unification variables. An automaton with
@@ -43,7 +45,9 @@ remains a separate ECTA-only package.
   restriction checked by `validate`, a bounded reference denotation on the
   shared enumerator, and the Z3 entailment in
   `Data.CFTA.Refinement.LiquidFixpoint`, which declares every free name as an
-  integer. `Data.CFTA.Refinement.Guard` builds transitions from guards that
+  integer. A fresh value name of a binding must not be a declared name or a
+  free name of an ambient assumption; otherwise the query is `Unknown`.
+  `Data.CFTA.Refinement.Guard` builds transitions from guards that
   name the constructor arguments, `contract` states a formula about the
   children's values, and `measureTerm` reads the measure of a constructed
   term from the measures of its children.
@@ -190,7 +194,9 @@ remains a separate ECTA-only package.
   edge with every edge of the same symbol. A child union that holds a
   recursive or a union node is not merged further, so the merge of two
   recursive languages ends. On Hectare this makes two rounds of a size-7
-  query about 50 times faster.
+  query about 50 times faster. Such a child union stays a union node, so a
+  later pass does not unfold it again, and repeated equality reduction and
+  pruning reach a fixed point.
 - The term-search application layer is not part of the library.
 - The `Pretty` class and the path-trie `Ord` instance are gone; `show` the
   constraint, or compare equality classes by their path lists.

@@ -43,8 +43,9 @@ buffer length. Each query declares as an integer every free name that the
 declarations do not give a sort, including 'valueName' and term symbols that
 become actual values in a position substitution. Declare a name to give it
 another sort, such as a 'FunctionSort' for an uninterpreted function. A fresh
-value name of a binding gets the sort of the name that it stands for, and it
-must not be one of the declared names; otherwise the query gives 'Unknown'.
+value name of a binding gets the sort of the name that it stands for. It must
+not be a declared name or a free name in an ambient assumption; otherwise
+the query gives 'Unknown'.
 
 Each query has the time limit 'defaultTimeLimit'. A query that reaches the
 limit raises 'TimeLimitReached'. 'withZ3Timeout' sets another limit.
@@ -86,6 +87,7 @@ withZ3Timeout milliseconds sorted assumptions action =
         | otherwise = (valueSymbol, Fixpoint.FInt) : given
     known = HashSet.fromList $ map fst declarations
     solverAssumptions = map toFixpoint assumptions
+    reserved = HashSet.union known $ foldMap Fixpoint.exprSymbolsSet solverAssumptions
 
     config = defConfig{solver = Z3, smtTimeout = Just milliseconds}
 
@@ -142,7 +144,7 @@ withZ3Timeout milliseconds sorted assumptions action =
             SMT.makeContextNoLog config
 
         freshDeclaration (fresh, original)
-            | HashSet.member (nameSymbol fresh) known = Nothing
+            | HashSet.member (nameSymbol fresh) reserved = Nothing
             | otherwise = Just (nameSymbol fresh, fromMaybe Fixpoint.FInt $ lookup (nameSymbol original) declarations)
 
         responseVerdict (SMTTypes.Unsat, _) = pure Yes

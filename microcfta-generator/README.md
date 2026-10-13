@@ -211,8 +211,9 @@ Each query ends, also on a cyclic, ambiguous, or equality-constrained
 automaton, and an empty size class says nothing about the classes after it.
 `sizedReference` builds each class from the classes of the child states at
 smaller sizes and checks the equality constraints on each term. `sized`
-gives the same sequence, and it uses the count table of `fromAutomaton` when
-the automaton has no constraint and no ambiguity. A guard beyond equality
+gives the same sequence, and it uses the count table of `fromAutomaton`, read
+from the original rows, when the automaton has no constraint and no
+ambiguity. A guard beyond equality
 constraints is `ResidualGuard`. `sizedUpTo` builds the classes up to a size
 bound with a solver that decides every guard on each term, as
 `denotationAtMost` does by depth, so it also takes a liquid automaton whose

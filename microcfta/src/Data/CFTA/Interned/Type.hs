@@ -90,10 +90,10 @@ data RecNodeId
       RecUnint MuDepth
     | {- | Placeholder variable for depth calculations
 
-      The depth of a term does not depend on the choice of variable. 'createMu'
-      first applies the body to 'RecDepth' to find the depth, which selects the
-      'RecUnint' placeholder. The 'Mu' node also keeps the body at 'RecDepth' as
-      'internedMuDepthShape', which is part of its interning key: it tells a
+      'createMu' first applies the body to 'RecDepth'. Its depth and free
+      ordinary references select a fresh 'RecUnint' placeholder. The 'Mu'
+      node also keeps the body at 'RecDepth' as 'internedMuDepthShape', which
+      is part of its interning key: it tells a
       binder that uses its variable from a redundant nested binder.
       -}
       RecDepth
@@ -240,7 +240,7 @@ data InternedMu symbol = MkInternedMu
 
     Invariant, when the function given to 'Mu' is parametric in its variable:
 
-    >    substFree (RecInt internedMuId) (Rec (RecUnint (numNestedMu internedMuBody))) internedMuBody
+    >    substFree (RecInt internedMuId) (Rec (muPlaceholder internedMuDepthShape)) internedMuBody
     > == internedMuShape
     -}
     , internedMuDepthShape :: !(Node symbol)
@@ -479,24 +479,9 @@ identifyNode i (UninternedMu depthShape s n) =
         MkInternedMu
             { internedMuId = i
             , internedMuBody = n (RecInt i)
-            , -- In order to establish the invariant for internedMuShape, we need to know
-              --
-              -- >    substFree (RecInt internedMuId) (Rec (RecUnint (numNestedMu internedMuBody))) internedMuBody
-              -- > == internedMuShape
-              --
-              -- This follows from parametricity:
-              --
-              -- >    internedMuShape
-              -- >      -- { definition of internedMuShape in 'createMuDontCleanup' }
-              -- > == n (RecUnint (numNestedMu (n RecDepth)))
-              -- >      -- { by parametricity, depth is independent of the variable number }
-              -- > == n (RecUnint (numNestedMu (n (RecInt i))))
-              -- >      -- { parametricity again }
-              -- > == substFree (RecInt i) (Rec (RecUnint (numNestedMu (n (RecInt i))))) (n (RecInt i))
-              -- >      -- { definition of internedMuId and internedMuBody }
-              -- > == substFree (RecInt internedMuId) (Rec (RecUnint (numNestedMu internedMuBody))) internedMuBody
-              --
-              -- QED.
+            , -- Keep the exact ordinary observation used in the interning key.
+              -- Smart cleanup can change depth between callback executions.
+              -- Readback must use the placeholder selected from depthShape.
               internedMuShape = s
             , internedMuDepthShape = depthShape
             }
@@ -646,7 +631,7 @@ An identity function
 
 > foo (Mu f) = Mu f
 
-will run in O(1) time:
+reuses the cached body observations:
 
 > foo (Mu f) = Mu f
 >   -- { expand view pattern }
@@ -655,7 +640,7 @@ will run in O(1) time:
 > foo (InternedMu mu) | Just f <- matchMu (InternedMu mu) = createMu f
 >   -- { definition of matchMu }
 > foo (InternedMu mu) = let f = \n' ->
->                          if | n' == Rec (RecUnint (numNestedMu (internedMuBody mu))) ->
+>                          if | n' == Rec (muPlaceholder (internedMuDepthShape mu)) ->
 >                                internedMuShape mu
 >                            | n' == Rec RecDepth ->
 >                                internedMuDepthShape mu
@@ -666,14 +651,15 @@ will run in O(1) time:
 > foo (InternedMu mu) =
 >   let g = f . Rec
 >       bodyAtDepth = g RecDepth
->   in internNode $ UninternedMu bodyAtDepth (g (RecUnint (numNestedMu bodyAtDepth))) g
+>   in internNode $ UninternedMu bodyAtDepth (g (muPlaceholder bodyAtDepth)) g
 
 Before calling 'intern', 'createMu' computes and stores both the body at
 'RecDepth' and its ordinary shape in the 'UninternedMu'. The stored depth probe
 is reused to choose the shape placeholder, so the body function is evaluated
 twice in total. 'matchMu' reuses both forms, so rebuilding an unchanged 'Mu'
-stays @O(1)@. Equality, hashing, and identification do not invoke the function
-inside the interning cache.
+does not evaluate the original body function again. Placeholder selection
+scans the free references of the cached depth observation. Equality, hashing,
+and identification do not invoke the function inside the interning cache.
 -}
 pattern Mu ::
     (Hashable symbol, Typeable symbol) =>
@@ -710,8 +696,10 @@ Interning a 'Mu' is what assigns the identity its body refers to, so the redunda
 afterwards. This is that first half, exported for tests that need to observe a redundant node before it is dropped.
 
 Interning needs the shape of the body before the node has a 'NodeId'. The shape is the body applied to the placeholder
-@'RecUnint' ('numNestedMu' bodyAtDepth)@. The placeholder holds the maximum number of nested 'Mu' nodes in the body, so
-a nested binder gets a different placeholder. For example, the placeholders of @r@ and @r'@ differ in
+selected by 'muPlaceholder'. Its level is at least the depth of the probe
+and exceeds every free ordinary level in that probe. The choice avoids
+aliases with those captured references.
+For example, the placeholders of @r@ and @r'@ differ in
 
 > -- f (f (f ... (g (g (g ... a)))))
 > Mu $ \r -> Node [
@@ -727,8 +715,9 @@ Precondition: the function must be parametric in the choice of variable names:
 
 > substFree i (Rec j) (f i) == f j
 
-The function is applied twice: to 'RecDepth' to find the depth, and to the placeholder. The precondition makes the two
-results agree. The node determines its placeholder, so interning can use the shape as a key.
+The function is applied to 'RecDepth' and to the selected ordinary placeholder.
+Smart cleanup can give these observations different nested depths. The stored
+depth observation determines the ordinary placeholder for construction and readback.
 
 A union at the root of the body loses an operand that is the binder's own reference, so the shape does not depend on
 that operand.
@@ -740,7 +729,7 @@ createMuDontCleanup f =
     internNode $
         UninternedMu
             bodyAtDepth
-            (g (RecUnint (numNestedMu bodyAtDepth)))
+            (g (muPlaceholder bodyAtDepth))
             g
   where
     g variable = withoutSelfReference (Rec variable) (f (Rec variable))
@@ -756,6 +745,13 @@ createMuDontCleanup f =
         members = internedUnionMembers payload
     withoutSelfReference _ body = body
 
+-- | Choose a probe outside the depth observation's free ordinary references.
+muPlaceholder :: Node symbol -> RecNodeId
+muPlaceholder bodyAtDepth = RecUnint $ Set.foldr above (numNestedMu bodyAtDepth) (freeVars bodyAtDepth)
+  where
+    above (RecUnint level) candidate = max (level + 1) candidate
+    above _ candidate = candidate
+
 {- | Match on a 'Mu' node
 
 Implementation note: 'createMu' and 'matchMu' interact in non-trivial ways; see docs of the 'Mu' pattern synonym
@@ -767,7 +763,7 @@ matchMu ::
     Node symbol -> Maybe (Node symbol -> Node symbol)
 matchMu (InternedMu mu) = Just $ \n' ->
     if
-        | n' == Rec (RecUnint (numNestedMu (internedMuBody mu))) ->
+        | n' == Rec (muPlaceholder (internedMuDepthShape mu)) ->
             -- Special case justified by the invariant on 'internedMuShape'
             internedMuShape mu
         | n' == Rec RecDepth ->
