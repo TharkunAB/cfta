@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 01:08 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 01:36 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -10,8 +10,9 @@ component note for the chosen target. Root findings and this handoff supersede
 older next-target statements. `lean/FINDINGS.md` retains historical findings.
 
 The current continuation refreshed upstream and completed the finite optimized
-Sized inverse proof and recursive knot construction. **No background proof worker is active.**
-The latest proof checkpoint is **`93f3cbaa`**. A later documentation commit
+Sized inverse proof, recursive knot construction, and first-order shared rows.
+**No background proof worker is active.**
+The latest proof checkpoint is **`e9214aa6`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -36,7 +37,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **35% at 01:08 CEST**. This is a historical value.
+The last observed value was **34% at 01:37 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -200,17 +201,40 @@ construction for arbitrary symbols, including equal symbols. It retains the exac
 record and both final counters. Construction replay, actual unfolding, and shared
 rows follow without a stored-knot premise. `SourcePhysicalRecursiveSized.source_sized`
 proves singleton positive-size classes, finite evaluation, size order, and both
-inverses for those source-derived rows. General Mu/union construction and exposure
-remain open.
+inverses for those source-derived rows.
+
+`InternedFreshOrdinaryFirstOrderCompletion` now proves actual repaired first-run
+completion for one binder with an arbitrary binder-free body. Captured values,
+finite constructor trees, and unions are allowed. `InternedBinderFreeDepthBound`
+bounds the actual callback depth. `InternedFreshOrdinaryFirstOrderHeap` derives
+the prepared heap from empty-cache construction. No prior successful run or
+stored-knot witness is assumed. Nested binder requests remain excluded.
+
+`SourceFirstOrderExposure.source_read` derives finite actual cold row exposure,
+the exact returned cache, resident closed children, stable extra fuel, and
+original guarded language. `MergedPreparedReaderEffects` proves that every
+later read in a `Ready` cache retains the exact input cache, for all fuel and
+all outcomes. `SourcePreparedSharedRows*` derives finite shared traversal from
+actual issued identities and exact physical guarded language for closed
+available ordinary, Mu, and union records.
+
+`SourceFirstOrderSharedRows.source_sized` composes repaired construction,
+explicit finite inventory warmup, and shared traversal with exact distinct
+node-count classes, finite class evaluation, size-order prefixes, bounded
+coverage, and both inverse laws. Warmup is a proof construction. Native
+`reachable` does not run that warmup. Equality of their allocation orders and
+raw tables is not proved. Read `lean/notes-first-order-shared-rows.md` before
+extending this boundary.
 See `lean/notes-physical-intersection-rows.md` and `lean/notes-shared-rows.md`.
 
 ## Remaining priorities
 
-1. Extend physical recursive construction and exposure toward general Mu/union
-   and the native cyclic product-row boundary. The single-knot empty-cache
-   construction witness and its exact Sized classes are complete. Do not repeat
-   that fragment proof. Keep actual cache effects and finite execution in the statements.
-   The raw-map Sized contract is already proved; do not redo it.
+1. Prove the actual stateful cold shared traversal without assuming a fixed
+   exposure heap. Retain each `nodeEdges` cache effect and visited identity.
+   Derive finite execution, then connect native cyclic product rows. First-order
+   construction, finite cold single-root reads, and warmed shared rows are now
+   proved. Do not repeat a fixed-snapshot language proof or assume warmup keeps
+   native cold allocation order. The raw-map Sized contract is already proved.
 2. Complete repaired cached-depth/deep heap induction. `InternedDepthFreeProjection*`
    now proves full-syntax free-name membership and ordinary-root callback deep
    observations with nested children. `callback_observed` derives observations
@@ -259,10 +283,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,185 jobs and 39,846 theorem dependency checks**.
+The current build passes **1,193 jobs and 39,907 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-recursive-20261014-audit.log`.
+Log: `/tmp/mcfta-first-order-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -296,6 +320,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `e9214aa6` | First-order source completion, finite cold exposure, prepared shared rows, and exact size classes. |
 | `93f3cbaa` | Actual recursive knot construction, shared rows, and exact Sized classes. |
 | `51242646` | Finite optimized inverse queries on original map keys. |
 | `9207c2cf` | Actual single-knot unfolding and shared rows. |

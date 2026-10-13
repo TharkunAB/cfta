@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 01:08 CEST**, upstream `f59c198d`.
-The latest proof commit is `93f3cbaa`. No background proof worker is active.
+Current checkpoint: **2026-10-14 01:37 CEST**, upstream `f59c198d`.
+The latest proof commit is `e9214aa6`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -44,9 +44,15 @@ memo provenance, shared traversal, and minimum callbacks are now proved.
 The productive single-knot fragment now has actual empty-cache construction,
 exact returned records and counters, stable replay, unfolding, and shared exposure.
 `SourcePhysicalRecursiveSized` derives its singleton positive-size classes, finite
-evaluation, size order, and both inverses. General Mu/union construction, pending
-memo values, and complete recursive
-memo-effect traces remain open. Free-name projection and ordinary-root deep
+evaluation, size order, and both inverses. The first-order extension now derives
+actual repaired construction, a prepared heap, finite cold single-root exposure,
+and fixed-cache shared rows for arbitrary binder-free trees and unions.
+`SourceFirstOrderSharedRows.source_sized` proves exact distinct size classes,
+finite evaluation, size order, bounded coverage, and both inverses after explicit
+finite warmup. Native cold shared traversal allocation order remains open.
+See [first-order shared rows](notes-first-order-shared-rows.md).
+Nested binder construction, native cyclic product rows, pending memo values,
+and complete recursive memo-effect traces remain open. Free-name projection and ordinary-root deep
 observations are derived; general cached-depth and binder-heap induction
 remain open. See [physical construction](notes-physical-intersection-rows.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
@@ -59,7 +65,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,185 targets and 39,846 theorem dependency checks**
+The current audit passes **1,193 targets and 39,907 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

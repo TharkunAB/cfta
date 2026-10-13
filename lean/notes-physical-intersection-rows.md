@@ -59,11 +59,16 @@ rows to one distinct chain term at every positive node-count size, finite
 class evaluation, distinct size-major prefixes, and both inverse laws.
 The shared snapshot retains the exposed physical rows and the original Mu
 child identity. Concrete lazy heaps and verified extraction remain boundaries.
-General Mu/union construction, exposure, and pending-thunk execution remain open.
+The first-order extension derives actual construction and finite cold exposure
+for arbitrary binder-free trees and unions inside one outer binder. It derives
+a prepared heap, fixed-cache shared traversal, exact guarded language, and the
+full reference Sized laws after explicit warmup. Native cold shared traversal,
+nested binder construction, cyclic product rows, and pending-thunk execution
+remain open. See [first-order shared rows](notes-first-order-shared-rows.md).
 `InternedDepthFreeProjection*` separately derives full-syntax free-name
 membership and ordinary-root deep callback observations, including nested
 children. General cached-depth and binder-heap induction remain open.
 
-Checkpoints: `70795677`, `0bc6806e`, `aca84882`, `7e942dde`, `9207c2cf`, and `93f3cbaa`.
-The closing audit passes 1,185 targets and 39,846 theorem dependency checks.
-Log: `/tmp/mcfta-recursive-20261014-audit.log`.
+Checkpoints: `70795677`, `0bc6806e`, `aca84882`, `7e942dde`, `9207c2cf`, `93f3cbaa`, and `e9214aa6`.
+The closing audit passes 1,193 targets and 39,907 theorem dependency checks.
+Log: `/tmp/mcfta-first-order-20261014-audit.log`.
