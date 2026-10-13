@@ -51,6 +51,26 @@ retains the canonical reference sequence. No opaque product-gate premise
 remains. This gate uses explicit graph intersection; it does not depend on
 native interned recursive construction.
 
+## Finite optimized rank queries
+
+`TablePositionCountBound.positions_congr` proves that ranking a finite term
+reads no count above that term's node count. This includes child products,
+failed child lookups, last-write selection, and offsets for earlier transitions
+that do not accept the input term. The result does not require correct count
+values to establish its size bound.
+
+`TablePositionFiniteEvaluation.finite_rank` constructs a finite count inventory
+and finite child maps. Every count has a finite recurrence derivation. The map
+worker reads only that inventory and returns exactly `TablePosition.positionsOf`,
+including failure. The graph can be cyclic and the state type can be infinite.
+
+`SourceSizedFiniteKeysRankEvaluation.raw_finite` derives the inventory from the
+actual original map keys and canonical rows. `native_rank_laws` identifies its
+root result with the actual optimized public query and both signed inverse
+laws. The optimized branch's ordinary constraint scan and product gate remain
+explicit premises. This proof does not replace the source worker with an eager
+Haskell implementation. Concrete lazy heap scheduling remains a runtime boundary.
+
 Checkpoints: `5f79d22e` and `bc7599d4`. The closing audit passes 1,180 targets
 and 39,689 theorem dependency checks using only the three permitted Lean
 foundations.

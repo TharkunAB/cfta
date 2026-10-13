@@ -2,6 +2,9 @@ import Lean
 import MicroCFTA.SourceSizedFiniteKeysDispatchGate
 import MicroCFTA.SourceSizedFiniteKeysDispatchScans
 import MicroCFTA.SourceSizedFiniteKeysDispatchApi
+import MicroCFTA.TablePositionCountBound
+import MicroCFTA.TablePositionFiniteEvaluation
+import MicroCFTA.SourceSizedFiniteKeysRankEvaluation
 import MicroCFTA.InternedDepthFreeProjection
 import MicroCFTA.InternedDepthFreeProjectionSource
 import MicroCFTA.InternedDepthFreeProjectionCallback
