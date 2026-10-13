@@ -52,6 +52,7 @@ import Data.CFTA.Ranked.Internal.Decoder (Plan (..), RankedValue (..), SizeClass
 import Data.CFTA.Ranked.Internal.Sampler
 import Data.CFTA.Ranked.Internal.Shrink (planMemberSize)
 import Data.CFTA.Ranked.Internal.Size (countAtSize, sizeClassCounts, sizeIndex)
+import qualified Data.IntSet as IntSet
 
 -- | One compatible key-pair bucket used to count and unrank a conditioned product.
 data JoinGroup symbol left right = JoinGroup
@@ -638,6 +639,7 @@ recursiveJoin componentIndex operation arguments =
             joinedWeighted
             (recursiveTerm operationRecursive >>= \terms -> recursiveChainTerms componentIndex operationIndex terms arguments)
             (joinInspection componentIndex (recursiveInspection operationRecursive) $ recursiveInspections arguments)
+            (IntSet.union (recursiveConstruction operationRecursive) $ recursiveChainConstruction arguments)
         )
         joinedMasses
         joinedMassWeighted

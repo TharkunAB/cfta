@@ -57,6 +57,7 @@ import Data.CFTA.Constraint (
  )
 import Data.CFTA.Term (Term)
 import Data.Hashable (Hashable)
+import qualified Data.IntSet as IntSet
 import Data.Kind (Type)
 import Data.List (find)
 import qualified Data.Map.Strict as Map
@@ -366,6 +367,7 @@ applyLanguages functions values = case (functions, values) of
                                 [ Edge (plainSymbol Apply) [inspectionGraph $ recursiveInspection left, inspectionGraph $ recursiveInspection right]
                                 ]
                         )
+                        (IntSet.union (recursiveConstruction left) (recursiveConstruction right))
         | otherwise ->
             Opaque $ liftA2 (<*>) (lower functions) (lower values)
 

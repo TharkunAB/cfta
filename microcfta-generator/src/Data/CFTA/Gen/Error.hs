@@ -78,6 +78,8 @@ data GenError
       computing.
       -}
       BoundedRecursiveOccurrence
+    | -- | A public query tried to read a recursive construction placeholder.
+      QueriedRecursiveOccurrence
     | -- | The support is not a valid automaton.
       InvalidSupport !AutomatonError
     | {- | The codec of a datatype rejects a term of its own grammar that
@@ -276,6 +278,13 @@ explain BoundedRecursiveOccurrence =
         , "Fix: bound or close the language outside the knot, as in"
         , "upToSize n (recur ...), and keep only finite atomic choices inside the"
         , "body."
+        ]
+explain QueriedRecursiveOccurrence =
+    guidance
+        [ "A query read a recursive occurrence while its language was still being built."
+        , "Its temporary support, terms, counts, and sampling fields are incomplete."
+        , "Fix: compose the occurrence inside the body and query the completed"
+        , "result of recur or recurGrouped outside the body."
         ]
 explain (InvalidSupport (GuardArityMismatch (Symbol symbol) childrenCount argumentCount)) =
     guidance

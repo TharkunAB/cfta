@@ -37,7 +37,7 @@ module Data.CFTA.Gen.Internal.Grouped (
 
 import Control.Monad (filterM)
 import Control.Monad.Except (ExceptT (..), runExceptT)
-import Data.Foldable (toList)
+import Data.Foldable (toList, traverse_)
 import Data.Hashable (Hashable)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust)
@@ -480,10 +480,10 @@ cardinalities = fmap (fmap $ outcomeCardinality . staticOutcomes . keyedBucketSt
 size is not in the map.
 -}
 countsAtSize :: Grouped symbol key a -> Size -> Either GenError (Map.Map key Cardinality)
-countsAtSize (CyclicGrouped result) size =
-    Map.filter (> 0)
-        . fmap (\group -> Size.countAtSize (recursiveIndex $ keyedRecursiveLanguage group) size)
-        <$> result
+countsAtSize (CyclicGrouped result) size = do
+    groups <- result
+    languages <- traverse (queryRecursive . keyedRecursiveLanguage) groups
+    pure $ Map.filter (> 0) $ fmap (\language -> Size.countAtSize (recursiveIndex language) size) languages
 countsAtSize (Grouped result) size =
     Map.filter (> 0)
         . fmap (\bucket -> Size.countAtSize (outcomeSizeIndex $ staticOutcomes $ keyedBucketStatic bucket) size)
@@ -500,6 +500,7 @@ it does not.
 massesAtSize :: Grouped symbol key a -> Size -> Either GenError (Map.Map key Rational)
 massesAtSize (CyclicGrouped result) size = do
     groups <- result
+    traverse_ (queryRecursive . keyedRecursiveLanguage) groups
     let positive = Map.filter (> 0) $ fmap (`keyedRecursiveMassAtSize` size) groups
         total = sum positive
     pure $
