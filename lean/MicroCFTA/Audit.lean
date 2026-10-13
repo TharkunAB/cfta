@@ -21,6 +21,17 @@ import MicroCFTA.InternedActiveSourceOrigins
 import MicroCFTA.InternedPendingSourceOrigins
 import MicroCFTA.InternedActiveSourceReplay
 import MicroCFTA.InternedPendingOrdinaryMismatch
+import MicroCFTA.InternedOrdinaryLevelBoundary
+import MicroCFTA.MergedAdaptiveEffects
+import MicroCFTA.MergedAdaptiveColumns
+import MicroCFTA.MergedAdaptiveEdges
+import MicroCFTA.MergedAdaptiveGroups
+import MicroCFTA.MergedAdaptiveMerge
+import MicroCFTA.MergedSourceComparison
+import MicroCFTA.MergedComparisonWarmProgress
+import MicroCFTA.MergedComparisonColdMeasure
+import MicroCFTA.MergedComparisonFacts
+import MicroCFTA.MergedComparisonReaderReplay
 import MicroCFTA.MergedPhysicalGroupCalls
 import MicroCFTA.MergedPhysicalGroupEdges
 import MicroCFTA.MergedPhysicalGroup
