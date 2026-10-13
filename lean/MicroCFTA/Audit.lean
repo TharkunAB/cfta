@@ -5,6 +5,13 @@ import MicroCFTA.IntersectionFlatMemoKeyPhysical
 import MicroCFTA.EnumerationIndexSelection
 import MicroCFTA.EnumerationIndexSource
 import MicroCFTA.EnumerationWaitingMachine
+import MicroCFTA.EnumerationWaitingModular
+import MicroCFTA.MergedColdMergeOriginalLanguage
+import MicroCFTA.MergedColdMergeRootBounds
+import MicroCFTA.EqualityMergedTargetDelay
+import MicroCFTA.InternedPendingProducerReplay
+import MicroCFTA.InternedPendingProducerDescent
+import MicroCFTA.InternedProducerPathBoundary
 import MicroCFTA.InternedRequestFreeReadback
 import MicroCFTA.InternedFreeAbsenceConstructors
 import MicroCFTA.InternedFreeAbsenceReplay
