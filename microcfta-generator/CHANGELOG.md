@@ -55,7 +55,10 @@ tree automata of `microcfta`, with QuickCheck integration.
   and an empty class says nothing about later classes. `sizedReference`
   builds each class from smaller ones; `sized` gives the same sequence with
   the count table of the cyclic import where that import applies. A guard
-  beyond equality constraints is `ResidualGuard`.
+  beyond equality constraints is `ResidualGuard`. `sizedUpTo` builds the
+  classes up to a size bound with a solver that decides every guard on each
+  built term, so a liquid automaton has an exact route that needs no
+  pruning; a guard the solver cannot decide is `GuardUnknown`.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `microcfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
