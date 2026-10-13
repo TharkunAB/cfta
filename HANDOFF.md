@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 02:22 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 02:31 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -64,10 +64,10 @@ self-reference removal from recursive unions.
   `/tmp/mcfta-construction-query-full.log`. After the grouped-discovery check,
   all generator and refinement cases pass in
   `/tmp/mcfta-family-discovery-validation.log`. Core source is unchanged.
-- Latest integrated Lean build: **737 jobs; 32,107 theorem dependency checks**.
+- Latest integrated Lean build: **743 jobs; 32,195 theorem dependency checks**.
   This includes projected leaf schedules, nested first-run completion,
   stored shallow unfolding, and construction-query provenance.
-  Log: `/tmp/mcfta-boundary-provenance-audit.log`.
+  Log: `/tmp/mcfta-pending-old-call-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -297,6 +297,11 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   the two smart cleanup branches. A closed three-binder fixture proves that
   an unused old body need not equal either normalized probe. See
   `notes-interned-old-body-probes.md`; this is a proof-shortcut counterexample.
+  A hypothetical unrestricted pending call now exposes its actual callback,
+  an active fresh ancestor reference in its lexical inputs, and both exact
+  probe results already available before that reference was allocated.
+  Forbidden boundary predicates pass through the smart unused-body branch.
+  The remaining step is observed-absence replay of that actual call.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.
   Full recursive support assembly, weighted flags, and absent-term errors

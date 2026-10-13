@@ -636,6 +636,12 @@ import MicroCFTA.InternedBoundaryAtoms
 import MicroCFTA.InternedBoundaryFilter
 import MicroCFTA.InternedBoundaryProvenance
 import MicroCFTA.InternedBoundaryAge
+import MicroCFTA.InternedBoundaryShape
+import MicroCFTA.InternedBoundaryCleanup
+import MicroCFTA.InternedPendingScopes
+import MicroCFTA.InternedPendingEncounter
+import MicroCFTA.InternedPendingOldCall
+import MicroCFTA.EqualityFixedSaturationCounterexample
 /-!
 # Proof dependency audit
 

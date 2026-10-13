@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 02:22 CEST**.
+Updated: **2026-10-13 02:31 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **737 jobs and 32,107 theorem dependency
+The full Lean development passes **743 jobs and 32,195 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -228,10 +228,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **737 jobs; 32,107 theorem dependency checks**.
+- Latest integrated Lean audit: **743 jobs; 32,195 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-boundary-provenance-audit.log`.
+  Log: `/tmp/mcfta-pending-old-call-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -312,6 +312,12 @@ but do not prove it for every runtime execution.
    [runtime trimming](lean/notes-equality-leaf-runtime-trim.md).
    See [the growth notes](lean/notes-finite-reduction-growth.md) and
    [projected leaf schedules](lean/notes-equality-leaf-projection.md).
+   A stronger checked nested cycle has equal recursive Cartesian-closure
+   images at every step. Thus a rank for arbitrary targets within one such
+   image also cannot prove the remaining fixed schedule. The public Haskell
+   reproduction agrees with the kernel-checked finite algebra. The targets
+   alternate; this still does not establish a fixed-schedule cycle. See
+   [the closure-image counterexample](lean/notes-equality-saturation-fiber.md).
 2. **Nested binder identity after normalization erases a fresh outer
    dependency.** Retained dependencies separate pending keys. Original
    independence permits cache reuse. Erasure through an empty child now
@@ -350,6 +356,11 @@ but do not prove it for every runtime execution.
    probes because the callback captures both internal probe sentinels. This
    rejects an attempted proof shortcut; it is not a source termination defect.
    See [the actual miss and probe notes](lean/notes-interned-old-body-probes.md).
+   Any hypothetical unrestricted pending execution now exposes an actual
+   callback that captures a fresh ancestor reference while both completed
+   probe values were available before that reference's allocation. This is
+   a derived necessary condition, not a proof that pending calls are absent.
+   See [the exact pending-call witness](lean/notes-interned-pending-encounter.md).
    Full nested constructor traces now derive
    coherent caches, complete child provenance, outgoing edge residency,
    cache growth, and issued-reference history. No closed-input collision
