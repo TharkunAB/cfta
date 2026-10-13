@@ -140,3 +140,32 @@ a pending counterexample. General closed no-pending remains open.
 Pinned Lean 4.34.1 builds `InternedPendingLiveMismatch` in 274 jobs. Its
 isolated dependency audit checks 9,203 imported theorems and permits only
 `propext`, `Classical.choice`, and `Quot.sound`. No Haskell source changes.
+
+`InternedPendingOrdinaryOrigins.closed_capture_depth_mismatch` now derives
+the earlier introduction of the aliased ordinary capture from the stopped
+closed source execution. The witness retains three completed Depth calls:
+the two same-body calls with different depths, and an enclosing call whose
+depth equals the later depth. The enclosing call finishes before the active
+ancestor's original source start. Its captured input list is strictly shorter
+than the ancestor's captured input list. All three calls retain their actual
+source contexts and cache histories.
+
+The proof carries ordinary introduction histories through actual Depth,
+ordinary, and fresh entries. It preserves them for each active reservation.
+`encounter_live_mismatch_of` retains this extra origin invariant during live
+mismatch extraction. The existing live-mismatch statements are unchanged.
+The shorter input list is a lexical bound. It does not prove that the same
+mismatch recurs at that shorter source context. That additional decrease
+obligation remains open. The isolated origin audit checks 9,219 imported
+theorems against the same three permitted axioms.
+
+`InternedOrdinaryCaptureBoundary` checks a further limit on this argument.
+Its closed expression retains an extra ordinary capture in an ancestor's
+union. At slot 93, the inner Depth level changes from zero to one, and
+Unint 1 already occurs in the ancestor's original Depth-probe free set.
+`closed_alias` proves these observations by kernel reduction. `complete`
+proves that the whole closed run completes. All references are in lexical
+scope. Thus a changed ordinary level can alias an original live capture
+in closed execution. This example does not reuse the pending ancestor key
+and does not refute the no-pending claim. A proof must use more than the
+changed level and its membership in the original probe.

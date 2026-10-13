@@ -77,12 +77,19 @@ theorem routeAtoms_changed [DecidableEq (EdgeKey Symbol Guard)] (origin : Origin
     · obtain ⟨name, _, same⟩ := List.mem_map.mp tail
       exact False.elim (different (by rw [← same]))
 
-/-- A pending encounter supplies a live ordinary mismatch retained by the active ancestor's original Depth probe. -/
-theorem encounter_live_mismatch [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (final : State Symbol Guard)
-    (encounter : InternedPendingSourceOrigins.Encounter key final) :
+/-- Live mismatch extraction preserves any fact about the selected active origin. -/
+theorem encounter_live_mismatch_of [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (final : State Symbol Guard)
+    (condition : Origin Symbol Guard key → Prop)
+    (encounter : ∃ origin : Origin Symbol Guard key, ∃ smart body names before depth afterDepth ordinary crossings,
+      condition origin ∧ Context before names ∧ Path origin.body origin.localNames (.binder smart body) names crossings ∧
+      Grows origin.allocated before ∧
+      (∀ crossing ∈ crossings, Grows origin.allocated crossing.before ∧ Grows crossing.start before) ∧
+      callback body (names.map Value.reference) .depth before = .done depth afterDepth ∧
+      callback body (names.map Value.reference) (.uninterned depth.depth) afterDepth = .done ordinary final ∧
+      Available final depth ∧ Available final ordinary ∧ key = muKey depth ordinary ∧ IsPending key final) :
     ∃ origin : Origin Symbol Guard key, ∃ smart body names,
       ∃ current : List (Crossing Symbol Guard), ∃ earlier : List (InternedProbeChoiceSites.Crossing Symbol Guard),
-        Path origin.body origin.localNames (.binder smart body) names current ∧
+        condition origin ∧ Path origin.body origin.localNames (.binder smart body) names current ∧
         earlier.map (fun crossing => (crossing.body, crossing.ordinary)) =
           current.map (fun crossing => (crossing.body, Crossing.probeChoice crossing)) ∧
         (∀ crossing ∈ current, Grows origin.allocated crossing.before ∧ Grows crossing.start final) ∧
@@ -96,7 +103,7 @@ theorem encounter_live_mismatch [DecidableEq (EdgeKey Symbol Guard)] (key : Node
           .uninterned level ∈ origin.depth.free := by
   classical
   obtain ⟨origin, smart, body, names, before, depth, afterDepth, ordinary, current,
-    context, path, initial, currentTraces, depthDone, ordinaryDone, depthAvailable, ordinaryAvailable, sameKey, pending⟩ := encounter
+    conditionHolds, context, path, initial, currentTraces, depthDone, ordinaryDone, depthAvailable, ordinaryAvailable, sameKey, pending⟩ := encounter
   have depthContext : Context afterDepth names := by
     simpa only [depthDone, Outcome.state] using context.callback body .depth (depth_available before)
   have finalContext : Context final names := by
@@ -158,11 +165,34 @@ theorem encounter_live_mismatch [DecidableEq (EdgeKey Symbol Guard)] (key : Node
     have earlier := issued_free_below origin.cut.nodes origin.cutContext.normal.facts.coherent.valid.2
       origin.depth origin.depthAvailable.issued identity present
     omega
-  · exact ⟨origin, smart, body, names, current, earlier, path, descriptors,
+  · exact ⟨origin, smart, body, names, current, earlier, conditionHolds, path, descriptors,
       fun crossing member => ⟨(currentTraces crossing member).1, grows_trans (currentTraces crossing member).2 later⟩,
       earlierTraces, atom.2, old, actual, level, oldAt, actualAt, bodies, flag, named, unequal,
       (Prod.ext atomSame rfl : atom = ((.uninterned old.depth.depth, .uninterned level), atom.2)) ▸ live,
       supported (.uninterned level) (by intro impossible; cases impossible) (by rw [atomSame])⟩
+
+/-- A pending encounter supplies a live ordinary mismatch retained by the active ancestor's original Depth probe. -/
+theorem encounter_live_mismatch [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (final : State Symbol Guard)
+    (encounter : InternedPendingSourceOrigins.Encounter key final) :
+    ∃ origin : Origin Symbol Guard key, ∃ smart body names,
+      ∃ current : List (Crossing Symbol Guard), ∃ earlier : List (InternedProbeChoiceSites.Crossing Symbol Guard),
+        Path origin.body origin.localNames (.binder smart body) names current ∧
+        earlier.map (fun crossing => (crossing.body, crossing.ordinary)) =
+          current.map (fun crossing => (crossing.body, Crossing.probeChoice crossing)) ∧
+        (∀ crossing ∈ current, Grows origin.allocated crossing.before ∧ Grows crossing.start final) ∧
+        (∀ crossing ∈ earlier, Grows origin.before crossing.before ∧ Grows crossing.afterDepth origin.cut) ∧
+        ∃ (index : Nat) (previous : InternedProbeChoiceSites.Crossing Symbol Guard) (actual : Crossing Symbol Guard) (level : Nat),
+          earlier[index]? = some previous ∧ current[index]? = some actual ∧
+          previous.body = actual.body ∧ previous.ordinary = true ∧ actual.name = .uninterned level ∧
+          previous.depth.depth ≠ level ∧
+          ((.uninterned previous.depth.depth, .uninterned level), index) ∈
+            liveInputs (.binder smart body) (routeAtoms origin earlier current).zipIdx ∧
+          .uninterned level ∈ origin.depth.free := by
+  obtain ⟨origin, smart, body, names, before, depth, afterDepth, ordinary, current, rest⟩ := encounter
+  obtain ⟨origin, smart, body, names, current, earlier, _, result⟩ :=
+    encounter_live_mismatch_of key final (fun _ => True)
+      ⟨origin, smart, body, names, before, depth, afterDepth, ordinary, current, True.intro, rest⟩
+  exact ⟨origin, smart, body, names, current, earlier, result⟩
 
 /-- Closed execution derives the live mismatch and its actual old-probe support without admission premises. -/
 theorem closed_live_mismatch [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
