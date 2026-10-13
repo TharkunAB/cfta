@@ -36,6 +36,13 @@ unchanged for every term and every guard. `public_known` preserves every
 verdict on unambiguous sparse cells. The nested and same-scope witnesses both
 return Unknown in the repaired sparse evaluator; complete evaluation is No.
 
+The current scan matches upstream `c4b4f97`, included in `4897831`. It rejects
+a later replacement only when that replacement is not a literal identity.
+`identity_only` and `append_identity` prove that repeated literal identities
+do not introduce an ambiguity rejection. The former local scan rejected
+these safe cases too. The existing upstream guard test confirms sparse and
+complete Yes for `a->a, y->a, a->a` with equal compound actuals.
+
 `BooleanGuardCompile` now classifies the repaired evaluator verdict directly.
 Yes and No are the only successful classifications. Unknown remains an error.
 `same_scope_compiler_unknown` checks the repaired witness. Its general
@@ -57,6 +64,16 @@ first-nonidentity lookup. It uses both executed scope checks to control new
 identity entries and enclosing renames. `SourceIdentityQuotient` derives that
 relation from actual sparse and complete allocation tables. It permits an
 unknown identity to become known and a fresh declaration to disappear.
+
+The refined scan needs the allocator's original-name coherence. If one
+actual keeps its original name, every actual with that name keeps it.
+`SourceIdentityQuotient.logical_coherent` derives this property from the
+conflict table. `resolved_coherent` and `SourceQuotientQueries.stack_coherent`
+carry it to every executed scope. After an earlier replacement becomes an
+identity, later replacements at the same formal are therefore also identities.
+`scope_environment` uses this fact to preserve first-nonidentity lookup.
+The source query and pruning theorems derive this invariant internally.
+They do not require a new client contract.
 
 `SourceQuotientQueries.entails_yes` transports positive entailment through
 accepted resolved scope stacks. It includes all actual assumptions and both

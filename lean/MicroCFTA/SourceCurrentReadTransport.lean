@@ -102,7 +102,8 @@ theorem precedence (renamed : List (Name × Name)) (first second : Scope)
   induction paired with
   | nil => rfl
   | @cons first second rest other head tail ih =>
-      have same := any_metadata renamed rest other tail (fun symbol _ => decide (symbol.1 = first.symbolReplacement.1))
+      have same := any_metadata renamed rest other tail (fun symbol _ =>
+        decide (symbol.1 = first.symbolReplacement.1) && decide (symbol.2 ≠ symbol.1))
       simp only [SourceSubstitutionPrecedence.ambiguousIdentityPrecedence, head.2.1, head.2.2.2, ih, same]
 
 /-- Enclosing literal formal names stay identical under the lossless table map. -/

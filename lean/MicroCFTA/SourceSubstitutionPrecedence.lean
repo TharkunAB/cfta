@@ -5,8 +5,8 @@ import MicroCFTA.SameScopeIdentityCapture
 
 A complete actual can turn the first sparse replacement of a formal into an
 identity. The formula API removes identities before first-match lookup. The
-new source check rejects an uncertain identity-shaped entry when a later
-entry uses the same formal. It also retains the enclosing-renaming check.
+source check rejects an uncertain identity-shaped entry when a later
+non-identity entry uses the same formal. It retains the enclosing-renaming check.
 -/
 namespace MicroCFTA.SourceSubstitutionPrecedence
 open SourceGuards SourceObservations SourceGuardRefinement
@@ -17,7 +17,8 @@ def ambiguousIdentityPrecedence : List (Resolved Formula) → Bool
   | [] => false
   | first :: rest =>
       (!first.identityKnown && decide (first.symbolReplacement.1 = first.symbolReplacement.2) &&
-        rest.any (fun later => decide (later.symbolReplacement.1 = first.symbolReplacement.1))) ||
+        rest.any (fun later => decide (later.symbolReplacement.1 = first.symbolReplacement.1) &&
+          decide (later.symbolReplacement.2 ≠ later.symbolReplacement.1))) ||
       ambiguousIdentityPrecedence rest
 
 /-- The list scan excludes exactly the ordered pairs that can change identity precedence. -/
@@ -25,13 +26,22 @@ theorem precedence_false_iff (entries : List (Resolved Formula)) :
     ambiguousIdentityPrecedence entries = false ↔
       entries.Pairwise (fun first later => first.identityKnown = true ∨
         first.symbolReplacement.1 ≠ first.symbolReplacement.2 ∨
-        later.symbolReplacement.1 ≠ first.symbolReplacement.1) := by
+        later.symbolReplacement.1 ≠ first.symbolReplacement.1 ∨
+        later.symbolReplacement.2 = later.symbolReplacement.1) := by
   induction entries with
   | nil => simp [ambiguousIdentityPrecedence]
   | cons first rest ih =>
       cases known : first.identityKnown <;>
         by_cases same : first.symbolReplacement.1 = first.symbolReplacement.2 <;>
         simp [ambiguousIdentityPrecedence, known, same, ih, List.pairwise_cons, List.any_eq_false]
+      intro _
+      constructor
+      · intro all entry member
+        by_cases equal : entry.symbolReplacement.1 = first.symbolReplacement.2
+        · exact Or.inr (all entry member equal)
+        · exact Or.inl equal
+      · intro all entry member equal
+        exact (all entry member).resolve_left (fun different => different equal)
 
 /-- Complete actual identities leave the source behavior unchanged. -/
 theorem known_precedence (entries : List (Resolved Formula))
@@ -53,7 +63,27 @@ theorem distinct_formals (entries : List (Resolved Formula))
   apply (precedence_false_iff entries).mpr
   have pairs : entries.Pairwise (fun first later => first.symbolReplacement.1 ≠ later.symbolReplacement.1) := by
     simpa only [List.Nodup, List.pairwise_map] using unique
-  exact pairs.imp (fun different => Or.inr (Or.inr (Ne.symm different)))
+  exact pairs.imp (fun different => Or.inr (Or.inr (Or.inl (Ne.symm different))))
+
+/-- Literal identity scopes stay accepted even when actual identities are unknown. -/
+theorem identity_only (entries : List (Resolved Formula))
+    (identities : ∀ entry ∈ entries, entry.symbolReplacement.2 = entry.symbolReplacement.1) :
+    ambiguousIdentityPrecedence entries = false := by
+  apply (precedence_false_iff entries).mpr
+  induction entries with
+  | nil => exact .nil
+  | cons first rest ih =>
+      apply List.pairwise_cons.mpr
+      exact ⟨fun later member => Or.inr (Or.inr (Or.inr (identities later (by simp [member])))),
+        ih (fun entry member => identities entry (by simp [member]))⟩
+
+/-- Appending a literal identity does not change the source precedence check. -/
+theorem append_identity (entries : List (Resolved Formula)) (entry : Resolved Formula)
+    (identity : entry.symbolReplacement.2 = entry.symbolReplacement.1) :
+    ambiguousIdentityPrecedence (entries ++ [entry]) = ambiguousIdentityPrecedence entries := by
+  induction entries with
+  | nil => simp [ambiguousIdentityPrecedence]
+  | cons first rest ih => simp [ambiguousIdentityPrecedence, identity, List.any_append, ih]
 
 /-- The repaired worker executes the existing syntax traversal with the new scope check. -/
 def evaluateWith (formulas : Formulas Formula) (solver : Entailment Formula) (observed : Observations Formula)

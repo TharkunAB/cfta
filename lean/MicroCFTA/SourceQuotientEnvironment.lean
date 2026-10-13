@@ -56,13 +56,14 @@ theorem environment_absent (model : Interpretation Value) (env : Name → Value)
       have tail := ih (fun row member => absent row (by simp [member]))
       by_cases identity : entry.1 = entry.2 <;> simp [identity, Ne.symm different, tail]
 
-/-- The accepted list check forbids a later formal after a quotient removes an earlier active entry. -/
-theorem later_formal_absent (ambient : List Name) (old new : Resolved Formula) (rest : Scope)
+/-- A removed entry can expose only literal identities at the same formal. -/
+theorem later_formal_identity (ambient : List Name) (old new : Resolved Formula) (rest : Scope)
     (paired : Pair ambient old new)
     (accepted : SourceSubstitutionPrecedence.ambiguousIdentityPrecedence (old :: rest) = false)
     (active : old.replacement.1 ≠ old.replacement.2)
     (identity : new.replacement.1 = new.replacement.2) :
-    ∀ later ∈ rest, later.symbolReplacement.1 ≠ old.replacement.1 := by
+    ∀ later ∈ rest, later.symbolReplacement.1 ≠ old.replacement.1 ∨
+      later.symbolReplacement.2 = later.symbolReplacement.1 := by
   have changed := identity_changed paired active identity
   have pairs := (SourceSubstitutionPrecedence.precedence_false_iff (old :: rest)).mp accepted
   have first := (List.pairwise_cons.mp pairs).1
@@ -80,10 +81,62 @@ theorem paired_formals (paired : Language.All₂ (Pair ambient) old new) :
   | nil => rfl
   | cons head tail ih => simp [head.newFormal, ih]
 
+/-- Ordered paired lists provide a corresponding right member for every left member. -/
+theorem member_left {α β : Type} {relation : α → β → Prop} {left : List α} {right : List β}
+    (paired : Language.All₂ relation left right) (entry : α) (member : entry ∈ left) :
+    ∃ other ∈ right, relation entry other := by
+  induction paired with
+  | nil => simp at member
+  | @cons a b as bs head tail ih =>
+      rcases List.mem_cons.mp member with rfl | remaining
+      · exact ⟨b, by simp, head⟩
+      · obtain ⟨other, present, related⟩ := ih remaining
+        exact ⟨other, by simp [present], related⟩
+
+/-- Ordered paired lists provide a corresponding left member for every right member. -/
+theorem member_right {α β : Type} {relation : α → β → Prop} {left : List α} {right : List β}
+    (paired : Language.All₂ relation left right) (entry : β) (member : entry ∈ right) :
+    ∃ other ∈ left, relation other entry := by
+  induction paired with
+  | nil => simp at member
+  | @cons a b as bs head tail ih =>
+      rcases List.mem_cons.mp member with rfl | remaining
+      · exact ⟨a, by simp, head⟩
+      · obtain ⟨other, present, related⟩ := ih remaining
+        exact ⟨other, by simp [present], related⟩
+
+/-- The allocator retains an original name for all actuals with that name or for none. -/
+def Coherent (scope : Scope) : Prop :=
+  ∀ first ∈ scope, ∀ second ∈ scope,
+    first.replacement.2 = first.symbolReplacement.2 →
+    first.symbolReplacement.2 = second.symbolReplacement.2 →
+    second.replacement.2 = second.symbolReplacement.2
+
+/-- Restricting a scope retains the allocation invariant. -/
+theorem coherent_subset (coherent : Coherent scope) (subset : smaller ⊆ scope) : Coherent smaller := by
+  intro first fm second sm original same
+  exact coherent first (subset fm) second (subset sm) original same
+
+/-- Entries at the queried formal are inert when all their replacements are identities. -/
+theorem environment_neutral (model : Interpretation Value) (env : Name → Value)
+    (entries : List (Name × Name)) (name : Name)
+    (neutral : ∀ entry ∈ entries, entry.1 = name → entry.2 = name) :
+    renamedEnvironment model env entries name = env name := by
+  induction entries with
+  | nil => rfl
+  | cons entry rest ih =>
+      rw [environment_cons]
+      have tail := ih (fun row member => neutral row (by simp [member]))
+      by_cases same : entry.1 = name
+      · have identity := same.trans (neutral entry (by simp) same).symm
+        simp [identity, tail]
+      · simp [Ne.symm same, tail]
+
 /-- One accepted simultaneous scope preserves every ambient value under related actual values. -/
 theorem scope_environment (model : Interpretation Value) (ambient : List Name)
     (first second : Name → Value) (old new : Scope)
     (paired : Language.All₂ (Pair ambient) old new)
+    (coherent : Coherent new)
     (accepted : SourceSubstitutionPrecedence.ambiguousIdentityPrecedence old = false)
     (base : FormulaSemantics.Agree ambient first second)
     (actuals : Language.All₂ (fun a b => first a.replacement.2 = second b.replacement.2) old new)
@@ -98,7 +151,8 @@ theorem scope_environment (model : Interpretation Value) (ambient : List Name)
           have safeRest : SourceSubstitutionPrecedence.ambiguousIdentityPrecedence oldRest = false := by
             simpa only [SourceSubstitutionPrecedence.ambiguousIdentityPrecedence, Bool.or_eq_false_iff] using
               (show _ ∧ _ from Bool.or_eq_false_iff.mp accepted).2
-          have tailEqual := ih safeRest restValues
+          have tailCoherent := coherent_subset coherent (fun _ member => List.mem_cons_of_mem _ member)
+          have tailEqual := ih tailCoherent safeRest restValues
           change renamedEnvironment model first
             ((old.replacement.1, old.replacement.2) :: oldRest.map Resolved.replacement) name =
             renamedEnvironment model second
@@ -109,19 +163,25 @@ theorem scope_environment (model : Interpretation Value) (ambient : List Name)
             simp only [oldIdentity, newIdentity, ↓reduceIte]
             exact tailEqual
           · by_cases newIdentity : new.replacement.1 = new.replacement.2
-            · have laterAbsent := later_formal_absent ambient old new oldRest head accepted oldIdentity newIdentity
-              have newAbsent : ∀ entry ∈ newRest.map Resolved.replacement, entry.1 ≠ old.replacement.1 := by
-                intro entry member
+            · have laterIdentity := later_formal_identity ambient old new oldRest head accepted oldIdentity newIdentity
+              have newNeutral : ∀ entry ∈ newRest.map Resolved.replacement,
+                  entry.1 = old.replacement.1 → entry.2 = old.replacement.1 := by
+                intro entry member same
                 obtain ⟨row, rowMember, rfl⟩ := List.mem_map.mp member
-                have mapped : row.replacement.1 ∈ newRest.map (fun entry => entry.replacement.1) :=
-                  List.mem_map.mpr ⟨row, rowMember, rfl⟩
-                rw [paired_formals tail] at mapped
-                obtain ⟨source, present, equal⟩ := List.mem_map.mp mapped
-                exact equal ▸ laterAbsent source present
+                obtain ⟨source, present, pair⟩ := member_right tail row rowMember
+                have formal : source.symbolReplacement.1 = old.replacement.1 := pair.newFormal.symm.trans same
+                have literal := (laterIdentity source present).resolve_left (fun different => different formal)
+                have original : new.replacement.2 = new.symbolReplacement.2 := by
+                  rw [head.symbols, ← newIdentity, head.newFormal, (identity_changed head oldIdentity newIdentity).2]
+                have sameName : new.symbolReplacement.2 = row.symbolReplacement.2 := by
+                  rw [head.symbols, pair.symbols, literal, formal, head.oldFormal,
+                    (identity_changed head oldIdentity newIdentity).2]
+                have rowOriginal := coherent new (by simp) row (by simp [rowMember]) original sameName
+                rw [rowOriginal, pair.symbols, literal, formal]
               simp only [oldIdentity, newIdentity, ↓reduceIte]
               by_cases matching : name = old.replacement.1
               · subst name
-                rw [ite_eq_left rfl, environment_absent model second _ _ newAbsent]
+                rw [ite_eq_left rfl, environment_neutral model second _ _ newNeutral]
                 simpa [← newIdentity, head.oldFormal, head.newFormal] using values
               · simp only [matching, ↓reduceIte]
                 exact tailEqual
@@ -154,30 +214,6 @@ theorem scopes_absent (model : Interpretation Value) (env : Name → Value) (sco
       · intro pair member
         obtain ⟨entry, present, rfl⟩ := List.mem_map.mp member
         exact absent scope (by simp) entry present
-
-/-- Ordered paired lists provide a corresponding right member for every left member. -/
-theorem member_left {α β : Type} {relation : α → β → Prop} {left : List α} {right : List β}
-    (paired : Language.All₂ relation left right) (entry : α) (member : entry ∈ left) :
-    ∃ other ∈ right, relation entry other := by
-  induction paired with
-  | nil => simp at member
-  | @cons a b as bs head tail ih =>
-      rcases List.mem_cons.mp member with rfl | remaining
-      · exact ⟨b, by simp, head⟩
-      · obtain ⟨other, present, related⟩ := ih remaining
-        exact ⟨other, by simp [present], related⟩
-
-/-- Ordered paired lists provide a corresponding left member for every right member. -/
-theorem member_right {α β : Type} {relation : α → β → Prop} {left : List α} {right : List β}
-    (paired : Language.All₂ relation left right) (entry : β) (member : entry ∈ right) :
-    ∃ other ∈ left, relation other entry := by
-  induction paired with
-  | nil => simp at member
-  | @cons a b as bs head tail ih =>
-      rcases List.mem_cons.mp member with rfl | remaining
-      · exact ⟨a, by simp, head⟩
-      · obtain ⟨other, present, related⟩ := ih remaining
-        exact ⟨other, by simp [present], related⟩
 
 /-- Two ordered relations combine at each corresponding list position. -/
 theorem combine_relations (paired : Language.All₂ first left right) (related : Language.All₂ second left right) :
@@ -238,6 +274,7 @@ theorem actual_after_outer (model : Interpretation Value) (ambient : List Name)
 theorem scopes_environment (model : Interpretation Value) (ambient : List Name)
     (first second : Name → Value) (old new : List Scope)
     (paired : Language.All₂ (Language.All₂ (Pair ambient)) old new)
+    (coherent : ∀ scope ∈ new, Coherent scope)
     (accepted : Accepted old) (base : FormulaSemantics.Agree ambient first second)
     (actuals : Language.All₂ (Language.All₂ (fun a b => first a.replacement.2 = second b.replacement.2)) old new) :
     FormulaSemantics.Agree ambient (scopeEnvironment model first old) (scopeEnvironment model second new) := by
@@ -246,7 +283,7 @@ theorem scopes_environment (model : Interpretation Value) (ambient : List Name)
   | @cons old new outer other head tail ih =>
       cases actuals with
       | cons values restValues =>
-          have outerValues := ih accepted.2.2 restValues
+          have outerValues := ih (fun scope member => coherent scope (by simp [member])) accepted.2.2 restValues
           have rowValues : Language.All₂ (fun a b =>
               scopeEnvironment model first outer a.replacement.2 = scopeEnvironment model second other b.replacement.2) old new := by
             have together := combine_relations head values
@@ -257,12 +294,13 @@ theorem scopes_environment (model : Interpretation Value) (ambient : List Name)
             simpa using no
           intro name member
           simp only [scopeEnvironment, List.foldr_cons]
-          exact scope_environment model ambient _ _ old new head accepted.1 outerValues rowValues name member
+          exact scope_environment model ambient _ _ old new head (coherent _ (by simp)) accepted.1 outerValues rowValues name member
 
 /-- Source formula semantics carries the derived forward scope relation through every constructor. -/
 theorem scoped_formula (model : Interpretation Value) (nullary : ∀ value, model.apply value [] = value)
     (ambient : List Name) (first second : Name → Value) (old new : List Scope)
     (paired : Language.All₂ (Language.All₂ (Pair ambient)) old new)
+    (coherent : ∀ scope ∈ new, Coherent scope)
     (accepted : Accepted old) (base : FormulaSemantics.Agree ambient first second)
     (actuals : Language.All₂ (Language.All₂ (fun a b => first a.replacement.2 = second b.replacement.2)) old new)
     (formula : Formula) (names : ∀ name ∈ formulaNames formula, name ∈ ambient) :
@@ -271,6 +309,6 @@ theorem scoped_formula (model : Interpretation Value) (nullary : ∀ value, mode
   rw [scopes_semantics model nullary, scopes_semantics model nullary]
   apply FormulaSemantics.formula_ext
   intro name member
-  exact scopes_environment model ambient first second old new paired accepted base actuals name (names name member)
+  exact scopes_environment model ambient first second old new paired coherent accepted base actuals name (names name member)
 
 end MicroCFTA.SourceQuotientEnvironment

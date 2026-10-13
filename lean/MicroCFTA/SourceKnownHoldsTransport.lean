@@ -58,7 +58,7 @@ theorem scoped_contract_value (model : Interpretation Value) (term : Language.Te
       scopeEnvironment model env old (SourceGuards.contractName index) := by
   have paired := SourceKnownQueryTransport.stack_pair model term guard recipes old new oldFound newFound known env
   by_cases used : SourceGuards.contractName index ∈ SourceGuards.usedNames operations (observe term) guard
-  · exact scopes_environment model _ _ env new old paired.1 (known_accepted new (complete_known term guard recipes new newFound))
+  · exact scopes_environment model _ _ env new old paired.1 (stack_coherent term guard _ recipes old oldFound) (known_accepted new (complete_known term guard recipes new newFound))
       (SourceKnownIdentityMap.ambient_values model term guard env) paired.2 _ used
   · rw [scopes_absent, scopes_absent, contract_value]
     · intro scope member entry present same
@@ -89,7 +89,7 @@ theorem contract_backward (model : Interpretation Value) (nullary : ∀ value, m
     have names := SourceHoldsQueries.observed_names guard (observe term) targets requested values found value member name free
     have used := SourceSemanticNames.ambient_used operations (observe term) guard name names
     have paired := SourceKnownQueryTransport.stack_pair model term guard recipes old new oldFound newFound known env
-    exact scopes_environment model _ _ env new old paired.1 (known_accepted new (complete_known term guard recipes new newFound))
+    exact scopes_environment model _ _ env new old paired.1 (stack_coherent term guard _ recipes old oldFound) (known_accepted new (complete_known term guard recipes new newFound))
       (SourceKnownIdentityMap.ambient_values model term guard env) paired.2 name used
   · intro index bounded
     exact scoped_contract_value model term guard recipes old new oldFound newFound known env index

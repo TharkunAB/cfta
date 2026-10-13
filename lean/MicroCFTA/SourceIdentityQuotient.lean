@@ -128,6 +128,19 @@ theorem logical_original (term : Language.Term (Label Formula)) (guard : Guard F
       have different : binding.1 ≠ actual.name := fun equal => fresh (equal ▸ used)
       simp [logicalName, found, different]
 
+/-- Keeping one original actual name keeps all actuals with that name. -/
+theorem logical_coherent (term : Language.Term (Label Formula)) (guard : Guard Formula)
+    (sameAt : Path → Path → Option Bool) (first second : Actual Formula)
+    (left : first ∈ actuals (observe term) guard) (right : second ∈ actuals (observe term) guard)
+    (original : logicalName operations (observe term) sameAt guard first = first.name)
+    (same : first.name = second.name) :
+    logicalName operations (observe term) sameAt guard second = second.name := by
+  have absent := (logical_original term guard sameAt first left).mp original
+  have representative := unallocated_same_class operations (observe term) sameAt guard first second left right absent same
+  apply (logical_original term guard sameAt second right).mpr
+  rw [← representative]
+  exact absent
+
 /-- An actual whose fresh declaration disappears is explicitly marked identity-unknown in the sparse table. -/
 theorem becomes_original_unknown (term : Language.Term (Label Formula)) (guard : Guard Formula)
     (actual : Actual Formula) (member : actual ∈ actuals (observe term) guard)
@@ -172,6 +185,27 @@ theorem resolved_row (term : Language.Term (Label Formula)) (guard : Guard Formu
   constructor
   · exact of_decide_eq_true
   · exact decide_eq_true
+
+/-- Successful resolutions share the allocator's original-name invariant. -/
+theorem resolved_coherent (term : Language.Term (Label Formula)) (guard : Guard Formula)
+    (sameAt : Path → Path → Option Bool) (first second : Substitution)
+    (left : first.actual ∈ actualPaths guard) (right : second.actual ∈ actualPaths guard)
+    (a b : Resolved Formula)
+    (firstFound : resolve operations (observe term)
+      (substitutionValues operations (observe term) sameAt guard).1
+      (substitutionValues operations (observe term) sameAt guard).2 first = some a)
+    (secondFound : resolve operations (observe term)
+      (substitutionValues operations (observe term) sameAt guard).1
+      (substitutionValues operations (observe term) sameAt guard).2 second = some b)
+    (original : a.replacement.2 = a.symbolReplacement.2)
+    (same : a.symbolReplacement.2 = b.symbolReplacement.2) : b.replacement.2 = b.symbolReplacement.2 := by
+  obtain ⟨actual, formal, atActual, atFormal⟩ := SourceActuals.resolve_exists operations (observe term) _ _ first a firstFound
+  obtain ⟨other, otherFormal, atOther, atOtherFormal⟩ := SourceActuals.resolve_exists operations (observe term) _ _ second b secondFound
+  rw [resolved_row term guard sameAt first actual formal left atActual atFormal a firstFound] at original same
+  rw [resolved_row term guard sameAt second other otherFormal right atOther atOtherFormal b secondFound] at same ⊢
+  exact logical_coherent term guard sameAt _ _
+    (actual_member (observe term) guard first.actual actual left atActual)
+    (actual_member (observe term) guard second.actual other right atOther) original same
 
 /-- Source resolution derives every local invariant needed by forward environment transport. -/
 theorem resolve_pair (term : Language.Term (Label Formula)) (guard : Guard Formula)

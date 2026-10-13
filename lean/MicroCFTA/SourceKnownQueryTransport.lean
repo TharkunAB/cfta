@@ -130,7 +130,7 @@ theorem formula_backward (model : Interpretation Value) (nullary : ∀ value, mo
     Holds model (SourceKnownIdentityMap.lift model term guard env) (SourceGuards.applySubstitutions operations new formula) ↔
       Holds model env (SourceGuards.applySubstitutions operations old formula) := by
   have paired := stack_pair model term guard recipes old new oldFound newFound known env
-  exact scoped_formula model nullary _ _ env new old paired.1 (known_accepted new (complete_known term guard recipes new newFound))
+  exact scoped_formula model nullary _ _ env new old paired.1 (stack_coherent term guard _ recipes old oldFound) (known_accepted new (complete_known term guard recipes new newFound))
     (SourceKnownIdentityMap.ambient_values model term guard env) paired.2 formula names
 
 /-- Ambient actual assumptions also reverse under known active identities. -/

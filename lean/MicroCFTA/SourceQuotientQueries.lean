@@ -95,6 +95,54 @@ theorem resolve_relation (term : Language.Term (Label Formula)) (guard : Guard F
       exact .cons (each entry (by simp) _ _ a b)
         (ih (fun value member => each value (by simp [member])) _ _ c d)
 
+/-- Each resolved row comes from a retained source substitution. -/
+theorem resolve_member (term : Language.Term (Label Formula)) (guard : Guard Formula)
+    (sameAt : Path → Path → Option Bool) (recipe : Recipe) (scope : Scope)
+    (found : resolve term guard sameAt recipe = some scope)
+    (row : Resolved Formula) (member : row ∈ scope) :
+    ∃ entry ∈ recipe, SourceGuards.resolve operations (observe term)
+      (SourceGuards.substitutionValues operations (observe term) sameAt guard).1
+      (SourceGuards.substitutionValues operations (observe term) sameAt guard).2 entry = some row := by
+  induction recipe generalizing scope with
+  | nil => simp [resolve, SourceGuards.resolveMany] at found; subst scope; simp at member
+  | cons entry rest ih =>
+      cases head : SourceGuards.resolve operations (observe term)
+          (SourceGuards.substitutionValues operations (observe term) sameAt guard).1
+          (SourceGuards.substitutionValues operations (observe term) sameAt guard).2 entry with
+      | none => simp [resolve, SourceGuards.resolveMany, head] at found
+      | some value =>
+          cases tail : resolve term guard sameAt rest with
+          | none => simp only [resolve] at tail; simp [resolve, SourceGuards.resolveMany, head, tail] at found
+          | some values =>
+              have tailExpanded := tail
+              simp only [resolve] at tailExpanded
+              have equal : scope = value :: values := by
+                simpa [resolve, SourceGuards.resolveMany, head, tailExpanded] using found.symm
+              subst scope
+              rcases List.mem_cons.mp member with rfl | remaining
+              · exact ⟨entry, by simp, head⟩
+              · obtain ⟨source, present, sourceFound⟩ := ih values tail remaining
+                exact ⟨source, by simp [present], sourceFound⟩
+
+/-- Actual scope resolution derives original-name coherence for any identity table. -/
+theorem resolve_coherent (term : Language.Term (Label Formula)) (guard : Guard Formula)
+    (sameAt : Path → Path → Option Bool) (recipe : Recipe) (scope : Scope)
+    (found : resolve term guard sameAt recipe = some scope) (requested : Requested guard recipe) :
+    Coherent scope := by
+  intro first left second right original same
+  obtain ⟨a, am, af⟩ := resolve_member term guard sameAt recipe scope found first left
+  obtain ⟨b, bm, bf⟩ := resolve_member term guard sameAt recipe scope found second right
+  exact resolved_coherent term guard sameAt a b (requested a am).1 (requested b bm).1
+    first second af bf original same
+
+/-- Every recorded scope inherits coherence from its actual allocator execution. -/
+theorem stack_coherent (term : Language.Term (Label Formula)) (guard : Guard Formula)
+    (sameAt : Path → Path → Option Bool) (recipes : List Recipe) (scopes : List Scope)
+    (found : Resolves term guard sameAt recipes scopes) : ∀ scope ∈ scopes, Coherent scope := by
+  intro scope member
+  obtain ⟨recipe, _, success, requested⟩ := member_right found scope member
+  exact resolve_coherent term guard sameAt recipe scope success requested
+
 /-- Two successful source stacks lift any local record relation in source order. -/
 theorem stack_relation (term : Language.Term (Label Formula)) (guard : Guard Formula)
     (first second : Path → Path → Option Bool) (recipes : List Recipe) (old new : List Scope)
@@ -142,7 +190,8 @@ theorem formula_forward (model : Interpretation Value) (nullary : ∀ value, mod
       (SourceGuards.applySubstitutions operations old formula) ↔
       Holds model env (SourceGuards.applySubstitutions operations new formula) := by
   have paired := stack_pair model term guard recipes old new oldFound newFound env
-  exact scoped_formula model nullary _ _ env old new paired.1 accepted (ambient_values model term guard env)
+  exact scoped_formula model nullary _ _ env old new paired.1
+    (stack_coherent term guard _ recipes new newFound) accepted (ambient_values model term guard env)
     paired.2 formula names
 
 /-- Every source actual assumption is transported by the actual value correspondence. -/
