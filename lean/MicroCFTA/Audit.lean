@@ -16,6 +16,10 @@ import MicroCFTA.EqualityMergedTargetFixedPoint
 import MicroCFTA.InternedPendingProducerReplay
 import MicroCFTA.InternedPendingProducerDescent
 import MicroCFTA.InternedProducerPathBoundary
+import MicroCFTA.InternedClosedPendingBoundary
+import MicroCFTA.InternedPairedPendingBoundary
+import MicroCFTA.InternedPairedRouteBoundary
+import MicroCFTA.InternedPairedProbeReplay
 import MicroCFTA.InternedRequestFreeReadback
 import MicroCFTA.InternedFreeAbsenceConstructors
 import MicroCFTA.InternedFreeAbsenceReplay
