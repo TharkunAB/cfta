@@ -1,0 +1,7 @@
+Continue the microcfta formalization in /home/tritlo/Code/mcfta. Read root HANDOFF.md and FINDINGS.md first, then the notes they link. The full task remains unfinished: keep working until the formalization is complete, work around issues, and record fixes in FINDINGS.md. Do not substitute a smaller fragment or theorem-count target.
+
+Resume branch formalization/microcfta-resume-20261012. The correct implementation base is microcfta, not tidy/core-formula. Proof checkpoint d630667 passed the complete Lean audit: 818 jobs and 33,080 theorem dependency checks. Inspect the live Git state and refresh origin/microcfta while preserving all local commits, stashes, and other worktrees. Do not replay source fixes already merged upstream.
+
+The handoff gives exact completed results and next obligations. Start with full free-name semantics and its source heap invariant, then use the source origins and boundary lemmas toward general nested-constructor no-pending. General nested equality fixed-schedule termination and opaque-probe unfolding remain open. Preserve the checked counterexamples; do not assume the disproved rank, ordered-profile, or per-probe body-equality shortcuts.
+
+Keep everything local: no push, deployment, or board post. Use the pinned Lean toolchain and Nix commands in HANDOFF.md. Keep source correspondence and external contracts explicit. Address me as Matti, timestamp responses, and give only brief material updates. Do the work without asking whether to continue.

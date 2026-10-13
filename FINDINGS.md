@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 02:48 CEST**.
+Updated: **2026-10-13 04:16 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **758 jobs and 32,330 theorem dependency
+The full Lean development passes **818 jobs and 33,080 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -228,10 +228,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **758 jobs; 32,330 theorem dependency checks**.
+- Latest integrated Lean audit: **818 jobs; 33,080 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-paired-filter-binary-projection-audit.log`.
+  Log: `/tmp/mcfta-restart-20261013-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -261,172 +261,181 @@ checks their logical dependencies; it does not verify Haskell-to-Lean
 translation. Source reproductions and finite probes support correspondence
 but do not prove it for every runtime execution.
 
-## Remaining hard proof obligations
+## Current proof results and remaining obligations
 
-1. **General finite-DAG equality fixed-point termination.** Explicit caller
-   loops still require a representation-level termination argument. A checked
-   six-round example grows nodes and rows while preserving a singleton
-   language. Semantic finiteness and decreasing language size are insufficient.
-   Complete multi-symbol leaf forests now have a derived pass bound, including
-   simultaneous class edits and empty propagation. The source guard inventory
-   is generated from the initial atoms. Nested source intersection can return to
-   an earlier identity when its operands alternate. This rules out a general
-   schedule-independent measure. No cycle of the fixed equality schedule was
-   established. Disjoint binary direct-child classes stabilize after one
-   changing pass, including nested domains. Projected paths need a separate
-   argument; a retained source example needs two changing passes. Projected
-   leaf occurrences now have a derived schedule bound, including ancestor
-   pruning, duplicate rows, and empty propagation. Physical parent rebuilding
-   and finite recursive child edits now derive normalized readback, completion,
-   and a common cache for exact replay. Physical leaf intersection and
-   projected union readback are proved for canonical admitted guards.
-   Source arity checks now derive admission. A separate normalization phase
-   proves progress for raw initial guards and constructor rejection. Physical
-   raw construction now preserves rejected sentinel allocations and derives
-   exact readback and whole-node identity from accepted row sets. Physical
-   Cartesian intersection now derives raw readback and strict rank decrease.
-   The finite raw inventory retains original syntax and later canonical guards.
-   Finite occurrence compilation and actual child workers derive complete
-   payload availability and readback. Finite raw intersection and projection
-   union now derive exact complete records in generated later caches.
-   Complete required-path and simultaneous recursive edit correspondence is
-   proved. Actual endpoint projection and first-seeded target folds return
-   exact finite leaf records. A composition gap was found: proof preparation
-   cannot become the next runtime cache because later allocations can diverge.
-   Raw leaf pullback and dead-row trimming repair this gap. They reconstruct
-   exact outputs in the actual runtime cache, preserve leaf endpoints, and
-   retain the occurrence progress measure. Complete stateful class and pass
-   composition now proves termination within the initial occurrence weight
-   plus one. The result is an allocation-free physical fixed point in the
-   actual runtime cache. Source normalization derives proper paths. Ordinary
-   metadata derives the recursion-filter fast path.
-   The source comparison also found an omitted node-identity operand ordering
-   step in the physical intersection model. The model now retains that order
-   and its constructor effects. The path model now calls the exact ordinary
-   source union branch. Its equality with constructor union is proved for
-   complete normal operands. These were formalization gaps, not source defects.
-   The 4,096 projected forests and 1,156 raw leaf source pairs pass again.
-   Logs: `/tmp/mcfta-runtime-bound-source-check.log` and
-   `/tmp/mcfta-runtime-raw-orientation-source-check.log`.
-   See [the runtime bound](lean/notes-equality-leaf-runtime-bound.md) and
-   [runtime trimming](lean/notes-equality-leaf-runtime-trim.md).
-   See [the growth notes](lean/notes-finite-reduction-growth.md) and
-   [projected leaf schedules](lean/notes-equality-leaf-projection.md).
-   A stronger checked nested cycle has equal recursive Cartesian-closure
-   images at every step. Thus a rank for arbitrary targets within one such
-   image also cannot prove the remaining fixed schedule. The public Haskell
-   reproduction agrees with the kernel-checked finite algebra. The targets
-   alternate; this still does not establish a fixed-schedule cycle. See
-   [the closure-image counterexample](lean/notes-equality-saturation-fiber.md).
-   One fixed binary projected class now has a different invariant: each
-   original occurrence retains rows after the first reciprocal pass.
-   Missing occurrence-row pairs in a finite complete inventory give a pass
-   bound. Nested endpoint rows are allowed. The physical source adapter,
-   ancestor deletion, larger classes, and interacting schedules remain open.
-   See [the binary projected-class proof](lean/notes-equality-projected-binary.md).
-2. **Nested binder identity after normalization erases a fresh outer
-   dependency.** Retained dependencies separate pending keys. Original
-   independence permits cache reuse. Erasure through an empty child now
-   derives exact complete-record reuse under changed outer bindings.
-   Arbitrary successful nested syntax executions replay without allocation
-   after cache growth. First execution still needs a proof that no closed
-   input reads a pending record. A syntax-derived marked fragment now proves
-   first-run completion. Binder bodies preserve a nullary root marker;
-   nested binders avoid active ancestor markers. Siblings may reuse markers.
-   The theorem derives complete coverage and replay without assuming success.
-   Separate source-derived classes now cover independent nested callbacks,
-   two-level erased outer references, and arbitrary-depth binders that keep
-   each enclosing reference through a live root edge. The last class permits
-   every binder to use the same symbol. A combined source grammar now places
-   these mechanisms inside one pending execution. General mixed dependencies
-   remain open. For arbitrary syntax, every hypothetical pending result now
-   has a derived earlier reservation with complete probes. Every identity
-   and recursive reference in either probe, including stored Mu bodies and
-   probes, predates that reservation. Full syntax preserves pending slots and
-   dense identity tables. A later resident old identity has the exact complete
-   earlier payload. A recursive erased-edge grammar now derives first
-   completion at arbitrary depth with nested independent live children.
-   Structural erasure now propagates through node, union, and binder contexts.
-   Mixed retained active frames and normalized erased subprograms complete
-   from their actual earlier traces. Selective immediate-parent erasure now
-   preserves older ancestors and derives first completion. Arbitrary ancestor
-   subsets and general cleanup-induced erasure remain open. Root unions,
-   self-reference filtering, and consecutive retained binders now have
-   first-run completion proofs. Computed empty-child erasure also completes
-   with arbitrary nested effects in discarded siblings. General absent-reference
-   replay is the remaining completion step.
-   Actual successful source misses now install exactly the callback body and
-   original probes. Smart cleanup can hide a fresh entry only by returning an
-   unused body or removing a bare self reference. A checked closed three-binder
-   fixture shows that the unused old body can differ from both normalized
-   probes because the callback captures both internal probe sentinels. This
-   rejects an attempted proof shortcut; it is not a source termination defect.
-   See [the actual miss and probe notes](lean/notes-interned-old-body-probes.md).
-   Any hypothetical unrestricted pending execution now exposes an actual
-   callback that captures a fresh ancestor reference while both completed
-   probe values were available before that reference's allocation. This is
-   a derived necessary condition, not a proof that pending calls are absent.
-   Root self filtering preserves empty status for arbitrary nested source
-   callbacks. Smart cleanup returns EmptyNode exactly for an empty body or
-   a bare self reference. These local facts remove filter assumptions from
-   the remaining comparison of actual callback traces.
-   Ordinary source constructors and allowed-sentinel filters now derive
-   exact record replay from observed boundary absence. Equal canonical
-   keys also determine equal completed Mu request results in a common
-   actual cache extension. Exact bare-reference union classification and
-   paired root-filter laws now cover the local deleting branches. The union
-   fusion equation retains all original source cache effects. New dynamic
-   Mu construction remains open.
-   See [the observed-absence notes](lean/notes-interned-observed-absence.md).
-   See [the exact pending-call witness](lean/notes-interned-pending-encounter.md).
-   Full nested constructor traces now derive
-   coherent caches, complete child provenance, outgoing edge residency,
-   cache growth, and issued-reference history. No closed-input collision
-   was established.
-   See [the nested-construction notes](lean/notes-interned-nested-construction.md)
-   and [pending-origin proofs](lean/notes-interned-pending-origins.md).
-3. **Remaining recursive runtime records and nested-builder composition.**
-   Typed nested-join families, decoder/mass records, inverse callbacks, and
-   public occurrence guards are proved. Complete recursive support assembly,
-   weighted flags, and absent term fields now compose with those bodies.
-   Diagnostic inspection and both sampler branches are now derived from
-   local source records. Ordinary application now composes all views under
-   the derived plain-input invariant and exact source weight rules.
-   Arbitrary opaque inspection descriptors remain.
-   The construction-query repair prevents the concrete payload observation
-   mismatch. The final family table check rejects stale keys and minima;
-   typed constructor programs pass without changed results. Construction
-   marker provenance now composes with the complete typed record, including
-   its exact public support query. Builders can still run
-   under different placeholder contexts; one fixed typed schema does not
-   prove that arbitrary Haskell builders preserve their shape and errors.
-4. **Concrete runtime and external correspondence.** Physical interning,
-   identity allocation lifetimes, containers, machine-word storage,
-   concurrency, Haskell lazy productivity, solver IO, random draws, and user
-   codecs/callbacks need their stated contracts. Global identity freshness
-   requires a bounded allocation lifetime and linearizable draws.
+The restart proof checkpoint is **`d630667`**. Its complete audit passes
+**818 jobs and 33,080 theorem dependency checks**. All 60 new Lean modules
+since `5fffa19` are committed and imported by the aggregate audit. The full
+formalization remains incomplete. The detailed restart order, commands,
+repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).
 
-5. **Guard completeness and exact backend verdicts.** The many-to-one
-   environment relation is now derived through both executed scope checks.
-   Full sparse guard Yes implies complete logical satisfaction. Current
-   pruning and successful compiler retention inherit that safety result.
-   Sparse No now refutes complete logical satisfaction. Successful pruning
-   retains every original backend-confirmed term. A completed candidate pass
-   retains every logically valid term; restoring the original guarded edge
-   requires a complete backend Yes. Successful compiler classification is
-   equivalent to logical validity. Logical planned-read transport no longer
-   requires stable backend verdicts for unrestricted ambient values. More
-   general sort domains use an explicit compatibility condition for names
-   present in only one avoid list. A checked accepted ambiguous example
-   returns sparse Yes and complete Unknown with one sound callback. Thus
-   soundness does not give exact backend-confirmed language equality.
-   The all-Int solver adapter now supplies these soundness premises from
-   actual preflight and returned results, conditional on external response
-   correctness. Sort lowering uses its induced interpretation. The embedded
-   arithmetic core agrees with the independent integer interpretation.
-   See [the logical read-transport notes](lean/notes-source-read-logical.md).
+### Full nested source profiles and exact stored body tags
 
-These obligations prevent a whole-implementation verification claim. They
-are separate from the repaired concrete failures and the proved component
-properties. The immediate restart actions and file ownership are in
-[HANDOFF.md](HANDOFF.md).
+`InternedNestedProfiles` proves root-profile correspondence and the decoded
+Mu-profile heap invariant for arbitrary full constructor `Syntax`. It covers
+actual ordinary constructors, root self filtering, both probes, fresh-body
+execution, smart/raw cleanup, canonical cache hits, and pending outcomes.
+There is no binder-free restriction or assumed callback equation. Profiles
+retain opacity and the set of literal root references. They do not retain
+ordinary structure, Mu identities, or canonical union order.
+
+`InternedStoredMuOrigins`, `InternedNestedMuOrigins`, and
+`InternedProfileMuOrigins` derive the actual original source expression,
+captured environment, three normalized calls, reservation, and historical
+invariants for every completed stored Mu. The enclosing execution may itself
+stop at another pending key.
+
+`InternedStoredProbeTags` then proves:
+
+- A stored body is EmptyNode exactly when both probes are EmptyNode.
+- A stored body is its own reserved reference exactly when the probes are
+  `RecDepth` and `RecUnint 0`.
+- Smart cleanup returns EmptyNode exactly in those two key cases.
+
+These are source-derived statements about all stored records, not finite
+sample conclusions. See [the source profile notes](lean/notes-interned-root-profile-source.md),
+[verified origins](lean/notes-interned-profile-reflection.md), and the dated
+03:21/03:28 results in [the gate notes](lean/notes-gate-unfolding-rank.md).
+
+### General constructor completion remains open for other keys
+
+`InternedSpecialKeyCompletion.closed_safe` excludes pending readback at
+`(Empty, Empty)` and `(Depth, Unint 0)` for **unrestricted closed Syntax**.
+It has no admission grammar, callback-law, or whole-run-success premise.
+The proof obtains earlier completed nested sites from the actual depth-body
+trace. `InternedProfileReferenceInputs` derives the required invariance under
+arbitrary literal-reference aliases.
+
+`InternedPendingProfileBoundary.closed_remaining` restricts any remaining
+hypothetical encounter to two opaque probes, or two pure probes with nonempty
+fixed captured root references. `InternedPendingOldCall` independently retains
+the active fresh ancestor reference and both exact probe records already
+available before that ancestor reservation.
+
+Exact local replay now covers ordinary nodes, unions, root filtering, and
+cleanup through actual common cache extensions. `InternedBoundaryFreeAge`
+includes free names inside old boundary Mu payloads. `InternedLiteralObservations`
+derives empty-result agreement and forward bare-local reflection for actual
+full-Syntax calls with arbitrary same-length literal aliases. The remaining
+step is the dynamic Mu boundary/identity argument. Set equality of root
+profiles cannot establish exact canonical request replay.
+
+The next concrete support proof is **full free-name semantics and its source
+heap invariant**. `InternedFreeNameDecoder`, `InternedFreeNameHeap`, and
+`InternedFreeNameConstructors` are complete local support modules. They do not
+yet establish `FreeNameHeap` for all source runs. A pure free-name interpreter,
+its name-map law, and the full source mutual induction remain unwritten.
+See [the special-key proof](lean/notes-interned-special-key-completion.md),
+[observed root replay](lean/notes-interned-observed-root-replay.md),
+[boundary transport](lean/notes-interned-boundary-transport.md), and
+[literal observations](lean/notes-interned-literal-observations.md).
+
+### Equality fixed-point termination
+
+The complete physical **projected-leaf** schedule has a derived bound of the
+original occurrence weight plus one. It includes actual endpoint reads,
+first-seeded target folds, recursive ancestor edits, required paths, class
+order, empty propagation, and an allocation-free final fixed point in the
+actual runtime cache. Endpoint domains must be leaves; ancestors may be nested.
+Raw guard normalization and rejected constructor allocations are included.
+
+Two source-correspondence gaps were repaired in the formalization. Raw leaf
+pullback and dead-row trimming prevent proof-prepared caches from becoming
+runtime inputs. The physical intersection model now includes the source's
+ordinary-node identity orientation. The path worker uses the exact ordinary
+source union branch. These were model repairs, not additional Haskell defects.
+The 4,096 projected forests and 1,156 raw leaf source pairs pass again. See
+[the runtime bound](lean/notes-equality-leaf-runtime-bound.md) and
+[runtime trimming](lean/notes-equality-leaf-runtime-trim.md).
+
+For one fixed **binary projected class**, `EqualityFixedProjectionInvariant`
+proves that every original occurrence retains its rows after the first
+reciprocal pass. `EqualityFixedProjectionTermination.run_bounded` counts missing
+occurrence-row pairs in a finite complete inventory. Nested endpoint rows are
+allowed. Its premises include a static commutative row relation with admitted
+diagonals. The physical adapter, disappearing-ancestor phase, raw normalization,
+and interaction with other classes still need composition. A public Haskell
+probe with nested endpoints takes four changing passes and agrees with this
+invariant. See [the binary-class proof](lean/notes-equality-projected-binary.md).
+
+The general nested fixed schedule remains open. New checked obstructions are:
+
+- `EqualityFixedMultiplePeers`: a convergent three-peer source-shaped example
+  removes a row after the first pass. Binary occurrence growth does not extend
+  directly to larger classes. Its separate abstract Steiner cycle shows that
+  commutativity/idempotence alone are insufficient; it is not a source cycle.
+- `EqualityFixedDegreeCounterexample`: the five-degree source leaf table has a
+  nonassociative mutually reachable narrowing component. Public Haskell confirms
+  the table and witness. Such components cannot be assumed to be semilattices.
+- Earlier `EqualityFixedSaturationCounterexample`: alternating targets can
+  return to an earlier representation even with the same recursive closure
+  image. An arbitrary-target rank is unavailable.
+
+`EqualityFixedRowProfile` derives local Boolean row behavior when higher
+profiles agree. `EqualityFixedProfileMaximum` proves a removable maximum for
+one finite powerset layer over a strict-ranked row base. These results do not
+supply arbitrary nested lifting. Synchronized higher-profile induction is a
+candidate next route. No cycle of the actual fixed source schedule is proved.
+
+### Recursive gate rank: pure probes complete, opaque probes remain
+
+`InternedPureProbeGate` and `InternedProbeOpacity` derive actual stored-body
+unfolding completion and strict head-rank decrease from a pure depth probe.
+The second probe is also pure, its level is zero, and the actual body depth is
+zero. The original source syntax may have arbitrary nesting. Earlier shallow,
+reachable-only, closed-nested, and marker one-step results retain their scopes.
+The general case with **opaque probes** remains open.
+
+The following checked examples rule out attempted generalizations:
+
+- `InternedOldBodyProbeAliases`: a smart unused old body can differ from both
+  normalized probes because captured sentinels are filtered differently.
+- `InternedNestedProbeCostBoundary` and `InternedClosedProbeCostBoundary`:
+  exact free-occurrence cost coverage fails in a completed closed source-model
+  cache at slot 19. The body has external sentinel costs 1; both probes have
+  those names only at cost 0. The closed program returns EmptyNode. The existing
+  `FlatProbeHeap` theorem must retain its restricted scope. Haskell confirms the
+  open fixture and both actual-own-to-probe substitution equations.
+- `InternedSourceRankStutter`: staged scoped source-model construction with
+  explicit `Depth`/`Unint 2` captures and cache prepopulation gives an actual
+  modeled unfolding where both head rank and free-occurrence rank stay at 2.
+  The continuation has ranks `[2,2,1,0]`. This does not establish divergence,
+  closed empty-environment reachability, or universal callback admissibility.
+  Haskell confirmation was not established at this checkpoint.
+- Exact ordered root-profile correspondence is false. Reversing captured union
+  operands can hit the same Mu key and return the first stored order. The
+  temporary kernel check `/tmp/mcfta-profile-order.lean` passes after completing
+  its inequality proof. The set-based `Equivalent` theorem remains valid.
+
+These are proof-obligation counterexamples. They do not add production defect
+rows to the twenty repaired defects above. See
+[the gate notes](lean/notes-gate-unfolding-rank.md) and
+[literal profile order](lean/notes-interned-literal-observations.md).
+
+### Other remaining source contracts
+
+Typed nested-join families now connect support, diagnostics, both sampling
+routes, weights, flags, complete inverse queries, and original occurrence
+metadata. `RecursiveCompleteRecord` assembles those fields. Arbitrary opaque
+Haskell builder schemas, key-discovery behavior, codecs, and lazy productivity
+still require their stated contracts. Generator members remain distinct from
+unique accepted FTA terms.
+
+Full sparse Yes transports to complete logical satisfaction. Current pruning
+and successful compiler classification inherit logical safety and exactness on
+the success domain. A sound name-sensitive backend can still return sparse Yes
+and complete Unknown. Exact backend-confirmed language equality requires
+backend adequacy. The all-Int adapter derives its laws from correctly returned
+external responses. See [logical read transport](lean/notes-source-read-logical.md)
+and [the integer adapter](lean/notes-source-read-integer-adapter.md).
+
+Runtime identity lifetimes, machine words, host containers, concurrency, lazy
+productivity, solver IO, PRNGs, and user codecs retain explicit correspondence
+contracts. There is no verified Haskell-to-Lean extraction. Similarity
+minimization preserves representatives, and pool minimization starts a new
+uniform distribution; neither implies exact term/mass preservation under the
+stronger requested contract.
+
+These boundaries prevent a whole-implementation verification claim. Resume
+from [HANDOFF.md](HANDOFF.md), using [NEXT-PROMPT.md](NEXT-PROMPT.md). Keep the
+proof checkpoint, source fixes, and all restart material local.
