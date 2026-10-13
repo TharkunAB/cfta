@@ -69,7 +69,42 @@ properties apply to the exact cache returned by the reader.
 edge comes from an actual epsilon path in the returned cache or any later
 extension. Each cold unfolding on that path replays with its exact result.
 `nodeEdges_sound` therefore proves that the reader cannot introduce an
-accepted finite term. The reverse edge-coverage direction remains open.
+accepted finite term.
+
+## Exact edge and language coverage
+
+`MergedSourceExposureCoverage.actual_exact` proves the reverse direction
+for each successful cold read in this fragment. It uses the exact cache
+returned by the original reader. A complete physical edge occurs in the returned list
+if and only if an actual finite epsilon path from the input root reaches
+an ordinary record that contains it. A finite term is accepted at the
+input root if and only if one returned edge accepts that term. Edge
+acceptance retains the exact ordered children and the full guard.
+
+`collect_certificate` proves the required closure property for the actual
+ordered worklist. The certificate contains each newly visited record,
+covers every requested root, covers the successors of its records, and
+retains all their constructor edges. It also retains successor availability.
+Numeric visited identities identify
+complete payloads because the source records are coherent. The proof
+includes duplicate visits, epsilon cycles, and canonical edge ordering.
+It does not assume a separately supplied finite future-state inventory.
+
+The proof first replays the original successful reader in its returned
+cache. Replay gives the exact edge list with no cache effect. Each completed
+unfolding in this replay must also have no cache effect: the worklist suffix
+preserves its intermediate cache into the final cache, and unfolding replay
+therefore fixes the earlier result in the initial cache. The certificate
+needs no global `Ready` premise and no warmup.
+
+`nodeEdges_exact` applies to any later cache with retained source facts,
+preparation, and input availability. `observation_exact` additionally
+constructs a later globally prepared observation cache when another proof
+needs it. Neither theorem changes the original execution or its allocation
+history. The result requires a successful reader
+outcome. `MergedColdReaderFacts.read_closed` supplies that outcome for
+available closed roots. No arbitrary open-reference or open-nested-Mu
+totality claim follows.
 
 ## Checked examples
 
@@ -102,3 +137,7 @@ The pinned Lean 4.34.1 build checks `MicroCFTA.MergedSourceExposureExample`
 and all five supporting reader modules. The isolated imported-theorem
 audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
 The validation transcript is `/tmp/mcfta-merged-cold-reader-audit.log`.
+
+The reverse coverage module passes the pinned Lean build and the same
+imported-theorem axiom audit. Its focused audit log is
+`/tmp/mcfta-reverse-reader-audit.log`.
