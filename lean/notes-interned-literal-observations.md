@@ -31,6 +31,41 @@ body returns `[U0, Depth]`. The existing set-based `Equivalent` theorem
 holds. Exact list equality does not hold. Both actual calls complete.
 This is a proof boundary, not a source termination counterexample.
 
-The focused build completes 240 jobs with Lean 4.34.1. The isolated audit
-checks 8,841 theorem dependencies. Both checks pass. No Haskell source
-changed for this proof.
+`InternedFreeAbsenceReplay.build_related` now proves full raw source replay
+when one changed interned name is absent from the first result's free set.
+Both compared calls must have completed in a common coherent cache. The
+recursive case reads absence from both actual request probes. It then
+compares the smaller source bodies and reuses the canonical request.
+
+`InternedFreshCallbackBoundary.callback_clear_of_raw_absent` transports
+boundary absence from an actual fresh callback to an actual sentinel
+callback when the raw fresh body omits its local. It permits target aliases.
+It does not require equality of the two filtered callback results. The case
+where the fresh filter deletes a root local from a union remains separate.
+
+`InternedLiveInputReplay.build_same` compares several changed lexical inputs
+at once. Abstract atoms identify the input positions before actual reference
+aliases occur. The pure free-name interpreter selects the live atoms. Only
+those atoms must have equal references. The full mutual proof also compares
+ordered child results and surviving edge records. The binder step compares
+both actual normalized probes and then reuses the complete request.
+
+`InternedLiveInputReadiness.not_pending_after_probes` uses an earlier completed
+binder and the later call's two completed probes. Agreement on live inputs
+excludes the later missing-record condition. It does not assume that the
+later binder completes. `InternedLiveInputSupport.not_pending_of_fresh_changes`
+derives that agreement when every different lexical input is a fresh interned
+name and the later depth probe was already available before those names.
+
+General pending-site exclusion remains open. An earlier completed trace must
+supply the corresponding site with agreement on its live inputs. Choosing
+Depth at every crossed binder can change a live ordinary-probe local.
+Matching the callback choices must also account for their computed ordinary
+levels. The old final probe alone does not show that all crossed locals are
+absent. No theorem here assumes equal ordered profiles or equality between
+a stored body and either one of its probes.
+
+Pinned Lean 4.34.1 builds the live-input support target in 265 jobs. The
+isolated checks for full live-input replay and pending-readback exclusion
+use only `propext`, `Classical.choice`, and `Quot.sound`. These modules
+change no Haskell source.
