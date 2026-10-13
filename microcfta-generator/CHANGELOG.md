@@ -22,6 +22,20 @@ tree automata of `microcfta`, with QuickCheck integration.
   counts by size, `pmf`, the structural `shrinkRank`, and `smallerMembers`. A
   generator keeps each construction failure as one `GenError`. `explain`
   describes it, and `orFail` fails with that text.
+- `Data.CFTA.Gen.Synthesis`: Hectare, the type-directed component
+  synthesizer of the ECTA paper. `synthesize` lists the programs of a query
+  by size; `programsOfSize` and `programsOfSizeUpToDepth` read the program
+  space of a size as a generator. `parseType` and `parseProgram` read types
+  and programs in Haskell syntax, and `renderType` and `renderProgram` print
+  them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
+  suites.
+- `Data.CFTA.Gen.Synthesis.Liquid`: Hegel, the refinement-typed component
+  synthesizer of the LTA paper, with liquid qualifiers, the paper's prune,
+  similarity, and minimization, conditionals at the goal, and function values
+  applied by the measure `ap`. `parseRType` and `parseQuery` read refinement
+  types and queries in the syntax of LiquidHaskell, and `renderRType` prints
+  them. The `hegel` benchmark runs recreated versions of the paper's RQ1
+  queries and its ablations.
 - Sizes count pays, as in FEAT: `pure` has size zero, an atom one, `<*>` adds
   the sizes of its sides, and `pay`, which `Data.CFTA.Gen` and
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree

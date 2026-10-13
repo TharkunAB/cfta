@@ -1578,6 +1578,158 @@ example, which bounds a recursive datatype grammar:
 cabal run cfta-automaton-interop
 ```
 
+## Component synthesis
+
+Two modules use the automata and the generators to synthesize programs from
+a library of components, after two papers.
+
+### Hectare: type-directed synthesis on equality automata
+
+`Data.CFTA.Gen.Synthesis` is Hectare, the synthesizer of Koppel et al.,
+*Searching Entangled Program Spaces* (ICFP 2022). A query gives typed
+arguments and a goal type. The program space of one size is one
+equality-constrained automaton: a type is a term, each type variable of a
+component is the recursive node of all types, and path equalities tie an
+application's argument type to the function's parameter type.
+`reduceFully` propagates the equalities, `refold` folds the result, and the
+enumeration lists the programs of the goal type.
+
+```haskell
+import Data.CFTA.Gen.Synthesis
+
+-- map :: (a -> b) -> [a] -> [b], with one argument of each type.
+mapQuery :: Query
+mapQuery = Query [("f", TVar "a" ~> TVar "b"), ("xs", TCons "List" [TVar "a"])] (TCons "List" [TVar "b"])
+
+solutions :: Library -> [Program]
+solutions lib = synthesize lib mapQuery 3
+```
+
+`programsOfSize` reads the program space of a size as a generator: counts,
+ranks, uniform sampling, and shrinking. A type variable that the goal does
+not fix keeps the node of all types, so the import cannot count such a
+space; `programsOfSizeUpToDepth` bounds the typed terms by a depth.
+
+The `hectare` benchmark runs the Hoogle+ suite of the paper (45 queries,
+284 components) and the Stack Overflow suite, each query in its own process
+with a heap and a time limit:
+
+```
+cabal bench hectare --benchmark-options='hplus 300 8G'
+```
+
+The paper reports 43 of 45 queries within 300 seconds, 84% within 7 seconds.
+On the development machine (one core), the original code, built with its own
+toolchain (GHC 8.10.7) and run with one capability, solves 41 of 45, 36
+within 7 seconds. This module builds the same automata, size by size, and
+stops the reduction at 30 rounds as the original does. It solves 43 of 45,
+41 within 7 seconds, with a median of 0.06 seconds against 0.49 seconds, and
+takes 0.19 times the original's time over the 41 queries that both solve
+(geometric mean). It also solves both and multiAppPair, at size 7, in 21 and
+20 seconds: the reduction narrows equal paths by a set that merges the
+alternatives of one symbol, so it does not build their products. On the
+Stack Overflow suite (19 queries, with the components that the original adds
+for it) with a limit of 600 seconds, both solve the same 13 queries, 7
+within 7 seconds against 4, and this module takes 0.17 times the original's
+time (geometric mean). splitOn is the one query where the original is
+faster: 220 seconds against 349.
+
+Three of the eight queries that this module does not solve have no solution
+as the suite writes them. The expected program of containsEdge applies
+`elem` without the `Eq Int` dictionary that the Hoogle+ encoding gives it,
+so the program has size 11, not 9. removeMax expects a component
+`(Data.Eq./=)_Ord` that no library has. splitStr has no expected program.
+The expected programs of the other five (lessThanNTimes, transpose,
+partition, matchedKeys, and applyNthNTimes) are in their program spaces: a
+search with only the components of each program finds it at its size in
+seconds. With the whole library, each reaches the limit of 600 seconds or
+of the 8 GB heap.
+
+### Hegel: refinement-typed synthesis on liquid tree automata
+
+`Data.CFTA.Gen.Synthesis.Liquid` is Hegel, the synthesizer of Mishra and
+Jagannathan, *Liquid Tree Automata* (2026). Components and the goal have
+refinement types. Each round of Algorithm 1 adds the applications of one
+more size, `prune` removes the applications whose arguments do not satisfy
+the parameters' refinements, and `similarity` with `minimize` keeps the most
+specific term of each refinement. A refinement is a conjunction of
+qualifiers from the library and the query, so similarity is a subset test.
+With `optionConditionals`, a solution can be a conditional `if c t e`.
+
+The `hegel` benchmark runs recreated versions of the paper's RQ1 queries.
+The paper does not print its specifications, so the queries follow its
+one-line descriptions over small libraries with precise specifications,
+one library for each group of queries.
+
+| Query | Size | Seconds | Solution |
+|---|---:|---:|---|
+| Nth1 | 4 | 0.2 | `set (set l i (nth l j)) j (nth l i)` |
+| Nth2 | 7 | 1.5 | `set (set (rev l) j (nth (rev l) i)) i (nth (rev l) j)` |
+| Nth3 | 6 | 29.2 | `set (set l i (incr (nth l j))) j (incr (nth l i))` |
+| RevApp1 | 2 | 0.6 | `append (rev l) l` |
+| RevApp2 | 2 | 0.8 | `rev (append l l)` |
+| RevApp3 | 2 | 0.6 | `append l (rev l)` |
+| RevZip1 | 2 | 8.1 | `zip (rev f) s` |
+| RevZip2 | 2 | 8.2 | `zip f (rev s)` |
+| RevZip3 | 2 | 8.0 | `rev (zip f s)` |
+| SplitAt1 | 4 | 58.6 | `pair (take n l) (drop n (drop m l))` |
+| SplitAt2 | 3 | 19.7 | `splitAt (sub n m) (drop m l)` |
+| SplitAt3 | 5 | 159.2 | `pair (take n l) (drop n (drop (sub n m) l))` |
+| SplitStr1 | 2 | 0.1 | `splitAt (indexOf c s) s` |
+| SplitStr2 | 5 | 1.2 | `pair (drop (indexOf c s) s) (take (indexOf c s) s)` |
+| SplitStr3 | 6 | 2.6 | `pair (take (indexOf c s) s) (cons c (drop (indexOf c s) s))` |
+| Nth_Incr1 | 2 | 1.7 | `nth l (incr n)` |
+| Nth_Incr2 | 2 | 1.7 | `nth l (decr n)` |
+| Nth_Incr3 | 2 | 2.4 | `incr (nth l n)` |
+| AppendN1 | 2 | 2.0 | `append (take n l) l` |
+| AppendN3 | 4 | 15.4 | `append (drop (length (drop n l)) l) l` |
+| AppendN2 | 3 | 9.7 | `if (isZero n) l (append (take (decr n) l) l)` |
+| LookRange1 | 1 | 2.0 | `if (elem k ks) (lookup k ks vs) d` |
+| LookRange2 | 1 | 2.3 | `if (elem k ks) (lookup k ks vs) (last vs)` |
+| LookRange3 | 1 | 2.2 | `if (elem k ks) (lookup k ks vs) (head vs)` |
+| Map1 | 2 | 1.4 | `map incr (map f l)` |
+| Map2 | 2 | 1.4 | `map decr (map f l)` |
+| Map3 | 3 | 85.6 | `map incr (map f (rev l))` |
+| MapDouble1 | 2 | 0.0 | `map g (map f l)` |
+| MapDouble2 | 2 | 0.0 | `map f (map g l)` |
+| MapDouble3 | 2 | 0.0 | `map f (map f l)` |
+| ApplyNAdd1 | 2 | 1.7 | `add m (applyN f n m)` |
+| ApplyNAdd2 | 3 | 10.2 | `add m (applyN f (incr n) m)` |
+| ApplyNAdd3 | 4 | 32.7 | `add m (incr (applyN f (incr n) m))` |
+| ApplyNInv1 | 3 | 0.2 | `filter f (map h (map g l))` |
+| ApplyNInv2 | 3 | 0.2 | `map h (map g (filter f l))` |
+| ApplyNInv3 | 5 | 0.6 | `map h (map g (filter f (map h (map g l))))` |
+| ApplyList1 | 2 | 0.1 | `if (null fl) s (apply (head fl) s)` |
+| ApplyList2 | 2 | 0.1 | `if (null fl) s (apply (last fl) s)` |
+| ApplyList3 | 4 | 0.1 | `apply (last fl) (apply (head fl) s)` |
+| CEdge1 | 3 | 11.1 | `and (elem src l) (elem tgt l)` |
+| CEdge2 | 3 | 11.0 | `or (elem src l) (elem tgt l)` |
+| CEdge3 | 4 | 20.0 | `and (elem src l) (not (elem tgt l))` |
+
+The size counts the applications before the conditional. The search stops at
+size 5, at size 7 for Nth2, and at size 6 for Nth3 and SplitStr3. The times
+are from one run at `-O2` on the development machine, with the paper's limit
+of 180 seconds and a limit of 100 milliseconds for each solver query; all 42
+queries solve, with a mean of 12.3 seconds. Nth1 to Nth3 and the higher-order
+queries state facts about every index with a quantifier, and the solver
+cannot decide many of those solver queries; an undecided solver query counts
+as failed. Z3 often gives up on such a query only at the limit, so the limit
+sets the time of Map3: with one second, its search at size 3 does not end
+within an hour. Map3 also needs a qualifier for its intermediate list
+`map f (rev l)`: the goal without its `+ 1`. For that reason the qualifiers
+include each atom of the goal without a constant offset. The ApplyNInv queries state their
+results as terms of the measures `mapM` and `filt`, because a statement of
+which elements the result has needs existential quantifiers. Without
+similarity and minimization (`-S`), 17 of the 21 first-order queries solve
+within 60 seconds; with them, 19 of 21. The paper's mean is 7.6 seconds over
+its 42 queries; its specifications differ, so the times are not a direct
+comparison.
+
+```
+cabal bench hegel --benchmark-options='Hegel 180 8G'
+```
+
+
 ## Sampling performance
 
 The example FTA and ECTA languages each have three exact uniform generators:
