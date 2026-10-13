@@ -31,7 +31,7 @@ fuel stability, replay, and actual-cache semantic preservation. The complete
 cold merge worker now derives completion and language coverage with concrete
 grouping, plus exact two-fuel stability. Any hypothetical closed pending run
 retains a live ordinary mismatch, its shorter source producer, both exact
-current probe keys, and the earlier completed pair. General constructor
+current probe keys, and the earlier completed pair. The old constructor's general completion claim is refuted. Repaired
 completion and nested equality fixed-point termination remain open.
 Original cold-cache language transport is now proved. Exposure, comparison,
 selection, and merging have pre-effect semantic statements. Complete root
@@ -47,7 +47,10 @@ placeholder above the Depth observation's free ordinary names and uses the
 same stored observation for readback. `InternedFreshOrdinaryConstruction`
 proves freshness, minimality, and matching readback. Kernel computations
 verify both repaired fixtures. Native probes and 620 source examples pass.
-General repaired completion and semantic heaps remain open. Earlier
+Repaired Facts, normalization, source origins, stored readback, root profiles,
+and free-name semantic heaps are now derived. Closed completed outputs have
+no free names. The source chooser fold agrees under explicit machine bounds.
+General repaired completion and unrestricted source correspondence remain open. Earlier
 ordinary-name-specific theorems describe the preserved old executor and
 need a new bridge before they establish repaired-source correspondence.
 See [the repair](notes-fresh-ordinary-candidate.md) and root

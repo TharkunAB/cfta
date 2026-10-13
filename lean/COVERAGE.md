@@ -70,7 +70,10 @@ placeholder above the Depth observation's free ordinary names and uses the
 same stored observation for readback. `InternedFreshOrdinaryConstruction`
 proves freshness, minimality, and matching readback. Kernel computations
 verify both repaired fixtures. Native probes and 620 source examples pass.
-General repaired completion and semantic heaps remain open. Earlier
+Repaired Facts, normalization, source origins, stored readback, root profiles,
+and free-name semantic heaps are now derived. Closed completed outputs have
+no free names. The source chooser fold agrees under explicit machine bounds.
+General repaired completion and unrestricted source correspondence remain open. Earlier
 ordinary-name-specific theorems describe the preserved old executor and
 need a new bridge before they establish repaired-source correspondence.
 See [the repair](notes-fresh-ordinary-candidate.md) and root

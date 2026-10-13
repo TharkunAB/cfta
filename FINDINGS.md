@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 16:46 CEST**.
+Updated: **2026-10-13 16:58 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `9508eb3`.
 Upstream contains the repairs in rows 1 through 21. Row 22 records a new
@@ -12,7 +12,7 @@ follow both changes.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **976 jobs and 36,106 theorem dependency
+The full Lean development passes **993 jobs and 36,250 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -26,7 +26,7 @@ counterexamples, repair arguments, and implementation comparisons.
 
 ## Latest restart checkpoint
 
-Proof checkpoint: **`71a69c5`**. Stable proof files are committed and imported
+Proof checkpoint: **`2dec05e`**. Stable proof files are committed and imported
 by the working aggregate audit. Proof work continues; inspect the live working
 tree at restart. The marked draft
 `lean/MicroCFTA/MergedAdaptiveStability.lean.incomplete` is preserved unchanged.
@@ -100,11 +100,30 @@ placeholder above every free ordinary level in the actual Depth observation.
 `matchMu` uses the same stored observation. Both failing fixtures complete in
 the repaired Lean executor. All five native probes and all 620 existing examples
 pass with the repair. Chooser freshness and exact readback are proved. General
-repaired completion, semantic heaps, and source correspondence remain open.
+repaired completion and unrestricted source correspondence remain open.
 The old executor and all its proofs remain baseline evidence. Do not apply its
 ordinary-name-specific results to the repair without a new bridge. See
 [closed pending](lean/notes-paired-pending-boundary.md) and
 [the repair](lean/notes-fresh-ordinary-candidate.md).
+
+The repaired executor now derives Facts, normalization, actual stored origins,
+complete probe readback, root profiles, and free-name heaps from execution.
+`InternedFreshOrdinarySourceFreeNames.closed_free_empty` proves that every
+completed closed result has no free names. Its callback theorem identifies
+the actual syntax-derived captures; the selected level exceeds every ordinary
+capture. The source set fold and signed-word calculation agree under one
+explicit selected-result bound. These proofs retain pending outcomes and all
+discarded effects. They do not establish general completion. See
+[record invariants](lean/notes-fresh-ordinary-records.md),
+[root profiles](lean/notes-fresh-ordinary-profiles.md), and
+[free names](lean/notes-fresh-ordinary-free-names.md).
+
+`MergedColdMergeReplay.source_execute_replay` proves that a completed source
+merge reruns with its original fuels in any later cache and returns the exact
+same record without effects. Its original facts, preparation, available input,
+and later record growth are explicit. It needs no warmup or recursive replay
+premise. The source comparator still reruns; it has no memo table. See
+[merge replay](lean/notes-cold-merge-replay.md).
 
 `InternedPendingProducerDescent.closed_enclosing_pending` retains the
 same joint-key mismatch and the exact indexed producer occurrence. It
@@ -403,10 +422,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **976 jobs; 36,106 theorem dependency checks**.
+- Latest integrated Lean audit: **993 jobs; 36,250 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-20261013-fresh-ordinary-integrated-audit.log`.
+  Log: `/tmp/mcfta-20261013-fresh-semantics-audit.log`.
 - The earlier formula capture, nested compiler capture, recursive equality,
   and open-union reproductions passed at the `de910ea` checkpoint. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -438,8 +457,8 @@ but do not prove it for every runtime execution.
 
 ## Current proof results and remaining obligations
 
-The current proof checkpoint is **`71a69c5`**. The integrated working audit passes
-**976 jobs and 36,106 theorem dependency checks**. Stable proof modules
+The current proof checkpoint is **`2dec05e`**. The integrated working audit passes
+**993 jobs and 36,250 theorem dependency checks**. Stable proof modules
 are committed and imported by the working aggregate audit. The full
 formalization remains incomplete. The detailed restart order, commands,
 repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).
@@ -472,7 +491,11 @@ sample conclusions. See [the source profile notes](lean/notes-interned-root-prof
 [verified origins](lean/notes-interned-profile-reflection.md), and the dated
 03:21/03:28 results in [the gate notes](lean/notes-gate-unfolding-rank.md).
 
-### General constructor completion remains open for other keys
+### Preserved baseline constructor results
+
+These modules describe the preserved old executor. Its general completion
+claim is now refuted by the closed pending example in row 23. The repaired
+executor has separate semantic heaps and still needs a general completion proof.
 
 `InternedSpecialKeyCompletion.closed_safe` excludes pending readback at
 `(Empty, Empty)` and `(Depth, Unint 0)` for **unrestricted closed Syntax**.

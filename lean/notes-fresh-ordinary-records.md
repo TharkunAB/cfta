@@ -43,8 +43,10 @@ assert substitution correctness for every other matcher argument.
 All these results account for the effects of discarded children. None infers
 that an ordinary name absent from a returned value was absent from discarded
 computations. The earlier `InternedProducerPathBoundary` remains relevant.
-General repaired no-pending and the policy-specific semantic profile and
-free-name heaps remain separate obligations.
+The repaired Normal, profile heap, and free-name heap now have separate
+full-execution proofs. See [profiles](notes-fresh-ordinary-profiles.md) and
+[free names](notes-fresh-ordinary-free-names.md). General repaired no-pending
+remains open.
 
 The five new modules build with Lean 4.34.1. The readback target passes
 194 jobs. The focused audit checks 8,130 theorem dependencies and permits

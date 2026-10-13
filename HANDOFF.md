@@ -1,14 +1,14 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 16:46 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 16:58 CEST (Europe/Stockholm)**.
 
 ## Read first
 
 The formalization is **not complete**. Matti requested this restart checkpoint
 because the chat became unreliable. Continue the same full task. Do not replace
 it with a smaller fragment, a theorem-count target, or a documentation task.
-The latest committed proof checkpoint is **`71a69c5`** after the new upstream
-rebase and PR adaptations. The integrated audit passes **976 jobs; 36,106 theorem dependency checks**. New proofs give
+The latest committed proof checkpoint is **`2dec05e`** after the new upstream
+rebase and PR adaptations. The integrated audit passes **993 jobs; 36,250 theorem dependency checks**. New proofs give
 ordered stateful comparison completion, exact fuel stability and replay,
 exact cold-reader semantics in the returned cache, adaptive fuel independence,
 cold child-selection completion and exact language, derived source grouping,
@@ -44,8 +44,8 @@ Immediately after rebase, every Lean file matched that backup, including all cou
 and the marked draft. Existing stashes and other worktrees were untouched.
 Fetch again at restart because more patches can arrive later.
 
-Latest full validation: **976 jobs; 36,106 theorem dependency checks**.
-Log: `/tmp/mcfta-20261013-fresh-ordinary-integrated-audit.log`.
+Latest full validation: **993 jobs; 36,250 theorem dependency checks**.
+Log: `/tmp/mcfta-20261013-fresh-semantics-audit.log`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
 All **620 Haskell examples** passed with both local source repairs.
 Log: `/tmp/mcfta-fresh-probe-620-tests.log`. All five native constructor probes
@@ -82,12 +82,31 @@ placeholder above every free ordinary level in the actual Depth observation.
 `matchMu` uses the same stored observation. Both failing fixtures complete in
 the repaired Lean executor. All five native probes and all 620 existing examples
 pass with the repair. Chooser freshness and exact readback are proved. General
-repaired completion, semantic heaps, and source correspondence remain open.
+repaired completion and unrestricted source correspondence remain open.
 The old executor and all its proofs remain baseline evidence. Do not apply its
 ordinary-name-specific results to the repair without a new bridge. See
 [closed pending](lean/notes-paired-pending-boundary.md) and
 [the repair](lean/notes-fresh-ordinary-candidate.md).
 
+
+The repaired executor now derives Facts, normalization, actual stored origins,
+complete probe readback, root profiles, and free-name heaps from execution.
+`InternedFreshOrdinarySourceFreeNames.closed_free_empty` proves that every
+completed closed result has no free names. Its callback theorem identifies
+the actual syntax-derived captures; the selected level exceeds every ordinary
+capture. The source set fold and signed-word calculation agree under one
+explicit selected-result bound. These proofs retain pending outcomes and all
+discarded effects. They do not establish general completion. See
+[record invariants](lean/notes-fresh-ordinary-records.md),
+[root profiles](lean/notes-fresh-ordinary-profiles.md), and
+[free names](lean/notes-fresh-ordinary-free-names.md).
+
+`MergedColdMergeReplay.source_execute_replay` proves that a completed source
+merge reruns with its original fuels in any later cache and returns the exact
+same record without effects. Its original facts, preparation, available input,
+and later record growth are explicit. It needs no warmup or recursive replay
+premise. The source comparator still reruns; it has no memo table. See
+[merge replay](lean/notes-cold-merge-replay.md).
 
 Latest semantic results extend cold merging to the original input language.
 `MergedColdGraphTransport.accepts_stable` equates original/later finite
@@ -180,8 +199,9 @@ replacement for the full objective.
    Use these results in comparison and cold merge proofs.
 4. **Repaired closed constructor completion.** Start with
    `InternedFreshOrdinaryConstruction` and `InternedFreshOrdinaryExamples`.
-   Derive the new executor's Facts, callback origins, profile/free-name heaps,
-   and replay before a general completion argument. Account for discarded
+   Facts, normalization, callback origins, readback, and profile/free-name
+   heaps are now derived. Continue general completion and source substitution
+   correspondence. Account for discarded
    construction effects; returned-value freshness alone is insufficient.
    The source fix and native evidence are described above. The following
    results describe the preserved old protocol. Read
@@ -214,7 +234,7 @@ The fixture-guided mirror checked 14,916 variants, skipped seven for resource
 limits, observed 12,903 level-changing traces, and found no pending readback.
 Files: `/tmp/mcfta-pending-level-search.py` and its `.log`.
 The checked fixtures and exact statements are committed in Lean.
-The local weekly monitor last reported **71% remaining**. Refresh
+The local weekly monitor last reported **69% remaining**. Refresh
 it at restart; stop all work at 1% or less. Do not rely on this snapshot.
 
 ## Full objective and authorization
@@ -325,7 +345,7 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build MicroCFTA.InternedNestedProfiles
 ```
 
-Latest complete audit: `/tmp/mcfta-20261013-fresh-ordinary-integrated-audit.log`.
+Latest complete audit: `/tmp/mcfta-20261013-fresh-semantics-audit.log`.
 It checks every imported theorem against the allowlist `propext`,
 `Classical.choice`, and `Quot.sound`. It rejects omitted proofs, native evaluation
 axioms, and custom axioms. The count is validation evidence, not a coverage

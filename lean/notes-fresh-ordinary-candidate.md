@@ -72,11 +72,15 @@ finds a pending result. Logs:
 Freshness against returned free names does not cover every ordinary name
 used by discarded computations. `InternedProducerPathBoundary` still
 demonstrates that difference. The search above tests this concern but does
-not prove it harmless. General closed completion, language preservation,
-and all cache invariants for the candidate remain separate obligations.
+not prove it harmless. General closed completion and complete language preservation remain separate
+obligations. Repaired cache facts, normalization, source origins, root profiles,
+and free-name semantic heaps are now proved. See
+[record facts](notes-fresh-ordinary-records.md) and
+[free-name semantics](notes-fresh-ordinary-free-names.md).
 
 Existing binder heap and callback proofs use the old ordinary name
 `Unint d.depth`. They must be generalized to the chosen name or rederived
-before they establish source correspondence for the candidate. The natural
+before they establish source correspondence for the repair. The new modules
+now supply the repaired profile/free-name heaps and stored-probe readback. The natural
 number chooser proof also leaves the source machine-integer range condition
 explicit. No universal repair theorem follows from the fixture checks.
