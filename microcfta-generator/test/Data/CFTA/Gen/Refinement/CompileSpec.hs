@@ -74,7 +74,7 @@ nonZero v = v ./= 0
 spec :: Spec
 spec = do
     describe "solver compilation" $ do
-        it "compiles equal compound actuals in one scope, and leaves them undecided when an enclosing scope renames them" $
+        it "compiles equal compound actuals unless their identities change substitution precedence" $
             withZ3 [] $ \solver -> do
                 let atom name = LTAGen.leaf (0 :: Int) name (const true)
                     actual = LTAGen.refinedNode "a" (.== 0) noConstraint $ atom "z"
@@ -95,6 +95,13 @@ spec = do
                 let nested = Substitute [Substitution (path [2]) (path [0])] inner
                 LTAGen.validOutcomes solver (generator nested) >>= (`shouldBe` Right [])
                 compiled nested >>= (`shouldBe` Left LTAGen.SolverUnknown)
+                let identityScope rest =
+                        Substitute ([Substitution (path [0]) (path [0]), Substitution (path [1]) (path [4])] <> rest) $
+                            Satisfies (path [5]) (variable "a" .== 0)
+                compiled (identityScope []) >>= (`shouldBe` Right [(0, 0, 0, 0, 0, 0)])
+                let repeated = identityScope [Substitution (path [2]) (path [0])]
+                LTAGen.validOutcomes solver (generator repeated) >>= (`shouldBe` Right [])
+                compiled repeated >>= (`shouldBe` Left LTAGen.SolverUnknown)
 
         it "preserves source order when observation keys have another order" $
             withZ3 declarations $ \solver -> do

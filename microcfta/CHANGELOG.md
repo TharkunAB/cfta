@@ -112,7 +112,9 @@ remains a separate ECTA-only package.
   identity, and prunes a recursive node to a fixed point. It keeps an edge
   whose guard the sparse evaluation cannot decide: two actuals with the same
   name and refinement, which can be equal or different terms, whose name an
-  enclosing substitution scope renames. Each Boolean operand of a guard has its
+  enclosing substitution scope renames. It also keeps an edge where such an
+  actual replaces a formal name by itself before a non-identity replacement
+  of that name in the same scope. Each Boolean operand of a guard has its
   own substitution scope, and a combined guard flattens, sorts, and removes
   duplicate conjuncts. Minimization runs
   the paper's M-Trans on the explicit view and interns the result. It keeps

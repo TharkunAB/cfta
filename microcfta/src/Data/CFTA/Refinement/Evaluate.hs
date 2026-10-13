@@ -240,7 +240,7 @@ evaluateScopedGuard entailment observedAt sameAt guard = evaluateWith [] guard
     evaluateWith substitutions (Substitute additions nested) =
         case traverse (resolveSubstitutionWith observedAt freshValues ambiguousValues) additions of
             Just resolved
-                | any (renamedByEnclosing substitutions) resolved -> pure Unknown
+                | any (renamedByEnclosing substitutions) resolved || ambiguousIdentityPrecedence resolved -> pure Unknown
                 | otherwise -> evaluateWith (resolved : substitutions) nested
             Nothing -> pure No
     -- A 'No' for a condition or a contract only means that the refinements do
@@ -273,8 +273,7 @@ Such an actual gets a fresh solver value, because it can be a term that differs
 from another actual with the same name. When the two terms are equal, the
 complete evaluation gives them their common name instead, and an enclosing
 scope then renames that name. The fresh value does not take the renaming, so
-the two evaluations can differ in either direction. Without this case, every
-answer for fresh values also holds for the common name.
+the two evaluations can differ in either direction.
 -}
 renamedByEnclosing :: [[ResolvedSubstitution]] -> ResolvedSubstitution -> Bool
 renamedByEnclosing enclosing resolved =
@@ -282,6 +281,29 @@ renamedByEnclosing enclosing resolved =
   where
     (_, actualName) = resolvedSymbolReplacement resolved
     enclosingFormals = [formal | scope <- enclosing, (formal, _) <- map resolvedSymbolReplacement scope]
+
+{- | Whether one scope replaces a formal name by itself, with an actual whose
+identity the observations do not decide, before a non-identity replacement of
+the same formal name.
+
+The first non-identity replacement of a formal name takes precedence. The
+sparse evaluation gives the undecided actual a fresh value, so its replacement
+takes precedence. When the actuals are equal, the complete evaluation keeps
+their name and removes the identity replacement, so the later replacement
+takes precedence. A later identity replacement does not take precedence in
+either evaluation.
+-}
+ambiguousIdentityPrecedence :: [ResolvedSubstitution] -> Bool
+ambiguousIdentityPrecedence [] = False
+ambiguousIdentityPrecedence (resolved : rest) =
+    ( not (resolvedIdentityKnown resolved)
+        && formal == actual
+        && any (replacesFormal . resolvedSymbolReplacement) rest
+    )
+        || ambiguousIdentityPrecedence rest
+  where
+    (formal, actual) = resolvedSymbolReplacement resolved
+    replacesFormal (later, replacement) = later == formal && replacement /= formal
 
 -- | Evaluate both the ECTA equality classes and liquid guard of a transition.
 evaluateConstraint :: Entailment -> Constraint -> Term Symbol -> IO Verdict
