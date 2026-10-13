@@ -1,6 +1,15 @@
 # Full formalization coverage
 
-Current continuation: **2026-10-13 22:32 CEST**, upstream `2200117` unchanged.
+Current continuation: **2026-10-13 23:08 CEST**, upstream `a915177c`.
+Local merge `76a82a70` preserves the published proof history. The new bounded
+import work covers exact residual dispatch, constrained liquid denotation,
+ordered finite reconstruction, derived arity validation, finite compact
+count/rank compilation, observation partitions, cardinality weights, sampling,
+and PMFs. See [the bounded import note](notes-bounded-import.md).
+Native interning, split representation, custom import order, and whole lazy
+enumeration completion remain boundaries. Benchmark programs, datasets, and
+workload specifications are excluded from formalization.
+
 `SizedLanguageTheorem` combines exact node-count acceptance, finite reference
 classes, complete distinct size-major prefixes, and both rank inverses.
 `SourceSizedTableEvaluation` separately proves finite optimized count/plan
@@ -22,7 +31,7 @@ Sized sampling results describe verified client compositions, not a new API.
 CPS enumeration, batched descent, conditional union-find writes, and reserved
 zero-domain memo keys now have checked source algorithm bridges.
 
-The final audit passes **1,084 jobs and 38,123 theorem dependency checks**
+The current audit passes **1,106 jobs and 38,508 theorem dependency checks**
 with only the three standard Lean axioms. The ambient repair passed
 **285 core and 204 generator examples** in Nix. Formatting and native
 reproductions passed. No production test was added. Concrete containers,
@@ -31,8 +40,9 @@ extraction remain boundaries. Older constructor and equality targets remain.
 
 Read [the main proof note](notes-sized-liquid-probability.md),
 [the Sized note](notes-source-sized.md), root [HANDOFF.md](../HANDOFF.md), and
-[FINDINGS.md](../FINDINGS.md). The user authorized publication to
-`formalization/microcfta-resume-20261012`. No deployment or board post.
+[FINDINGS.md](../FINDINGS.md). The earlier requested publication is complete
+through `1f982c5b`. The new `formalization/microcfta-library-20261013` branch
+stays local. No further push, deployment, or board post is authorized.
 
 ## Objective and completion rule
 
@@ -51,9 +61,9 @@ established. A theorem whose main algorithmic obligation is a premise
 does not close that obligation. An implementation counterexample prevents a
 soundness claim for that path; it does not remove that path from the scope.
 
-Source baseline: `origin/microcfta` at `2200117`. This includes the merged
+Source baseline: `origin/microcfta` at `a915177c`. This includes the merged
 core-formula changes at `9ad319d`. The detailed semantic specification is in
-[SYSTEM.md](SYSTEM.md); root findings record the current changes. All 68 source modules
+[SYSTEM.md](SYSTEM.md); root findings record the current changes. All 71 source modules
 are inventoried in [API-COVERAGE.md](API-COVERAGE.md).
 
 Current update: PR #97 adds merged peer projections to equality narrowing.

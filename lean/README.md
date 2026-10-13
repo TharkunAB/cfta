@@ -2,12 +2,16 @@
 
 [The system specification and current findings](SYSTEM.md) describe the
 language, distinct-term index, distribution, and optimization contracts.
-[API-COVERAGE.md](API-COVERAGE.md) maps all 66 source modules and exported
+[API-COVERAGE.md](API-COVERAGE.md) maps all 71 source modules and exported
 function families. [COVERAGE.md](COVERAGE.md) records proof obligations.
 
-Current base: `origin/microcfta` at `de910ea`, including the merged
+Current base: `origin/microcfta` at `a915177c`, including the merged
 core-formula extension, the optimization changes, and the merged findings
-repairs through PR #96. Local repairs reject uncertain identity replacement
+repairs and bounded import fallback through PR #114. Benchmark programs,
+datasets, and workload specifications are excluded from formalization.
+The new [bounded import note](notes-bounded-import.md) gives the exact proof
+scope and remaining native correspondence boundaries.
+Local repairs reject uncertain identity replacement
 and payload queries of unfinished recursive occurrences. Grouped recursion
 also rejects discovery tables that disagree with the final body. The
 rebase retained every proof and reproduction while retiring superseded

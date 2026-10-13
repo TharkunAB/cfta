@@ -1,11 +1,12 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 22:31 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 23:08 CEST (Europe/Stockholm)**.
 
 ## Current result and read order
 
 Read `NEXT-PROMPT.md`, this file, root `FINDINGS.md`,
-`lean/notes-source-sized.md`, and `lean/notes-sized-liquid-probability.md`.
+`lean/notes-source-sized.md`, `lean/notes-sized-liquid-probability.md`, and
+`lean/notes-bounded-import.md`.
 The root findings are current. `lean/FINDINGS.md`
 and older dated component notes are historical.
 
@@ -29,6 +30,21 @@ The CPS, batched descent, conditional union-find, and reserved zero-domain
 source bridges are now checked. The proof note gives their exact scope.
 The optimized interned core remains intact.
 
+The new upstream import fallback is merged locally at `76a82a70` from
+`origin/microcfta` at `a915177c`. The new proofs cover ordered residual scans,
+the exact fallback call route, complete constrained denotation effects,
+ordered finite reconstruction, arity validation, finite compact compilation,
+observation partitions, rank records, sampling, and PMFs.
+`SourceBoundedImport.liquid_eventual` composes actual ambient denotation with
+successful reconstruction and exact compact language. It derives the build
+success from ranked source rows. Native interned/SCC readback, native split
+representation, and custom import decoder order remain explicit boundaries.
+The ordinary denotation shortcut now has its three-table recurrence, exact
+empty-level stopping sequence, distinct-symbol gate, duplicate freedom, and
+depth order proved. `SourceBoundedImport.plain_correct` composes that branch
+with reconstruction and compact compilation without solver calls.
+Do not formalize benchmark programs, datasets, or workload specifications.
+
 The earlier Sized proof commits remain:
 
 | Commit | Result |
@@ -42,19 +58,22 @@ The earlier Sized proof commits remain:
 | `be183d58` | Actual canonical preprocessing and public exact-size/query contracts. |
 | `54290671` | Exact successful operational traces with varying evaluator replies. |
 
-The new proof checkpoint is `2f56d916`; the final audit commit is `4f4ca498`.
-Use `git log` for the later documentation commit.
+The earlier main-language checkpoint is `2f56d916`; its audit commit is
+`4f4ca498`. The new bounded-import proof and aggregate audit checkpoint is
+`274aa759`. Its preceding commits are `a13bdb03` (finite reconstruction),
+`5ba5b81b` (liquid denotation), `2872ead6` (ordinary shortcut), and `c4c028ef`
+(observation groups, ranks, and probabilities). Use `git log` for the later
+documentation commit.
 Backup `backup/formalization-before-push-20261013-2200`
 preserves the earlier `6515243b` checkpoint.
 Do not confuse the earlier checked checkpoint `f10fa11` with the new result.
 
 ## Authorization and allowance
 
-The user explicitly requested **Push** for this continuation. The earlier
-checkpoint `6515243b` was pushed to
-`origin/formalization/microcfta-resume-20261012`. The checked continuation
-uses that same publication branch. Check its tracking head for publication
-status. Do not force-update the separate historical
+The user requested **Push** earlier. That publication is complete through
+`1f982c5b` on `origin/formalization/microcfta-resume-20261012`.
+The new continuation uses `formalization/microcfta-library-20261013` and stays
+local. Do not push it without a new request. Do not force-update the historical
 `origin/formalization/microcfta` branch. **No deployment, messages, or board posts**.
 After this requested publication, further pushes require a new request.
 Keep the optimized interned core. Do not update memory or create an ADR without
@@ -68,7 +87,7 @@ python3 /tmp/mcfta-weekly-usage.py
 ```
 
 Stop every worker and all work immediately at **1% remaining or less**.
-The last observed value was **52% at 22:31 CEST**. Treat it as historical.
+The last observed value was **48% at 23:08 CEST**. Treat it as historical.
 Check `observed_at`. The script reads 10,080-minute windows from local logs
 under `~/.codex/sessions/2026/10/13`; update that date on a later restart.
 It exits 99 at the threshold and 2 if usage is unavailable. Missing or stale
@@ -77,14 +96,17 @@ data is not permission to use credits.
 ## Repository and preservation
 
 Repository: `/home/tritlo/Code/mcfta`, Ubuntu/WSL2, Bash.
-Branch: `formalization/microcfta-resume-20261012`.
-Upstream: `origin/microcfta` at **`2200117`**.
-The latest `git pull --ff-only origin microcfta` reported `Already up to date.`
-The final upstream fetch still reports `2200117`.
-No rebase was needed. The starting local head was `f8a3d48`.
+Branch: `formalization/microcfta-library-20261013`.
+Upstream: `origin/microcfta` at **`a915177c`**.
+The update check found PR #91 and PR #114. The fast-forward pull reported
+`Not possible to fast-forward, aborting.` A new branch and backup preserve
+published head `1f982c5b`. Merge `76a82a70` adds upstream without rewriting it.
+Backup: `backup/formalization-before-library-refresh-20261013-2246`.
+The original restart head was `f8a3d48`.
 
 Before new work, read status, log, worktrees, stashes, and allowance. Preserve
-a backup, pull the correct branch, and rebase if upstream has moved.
+a backup, and pull the correct branch. Preserve the published history when
+upstream has moved; merge on the local continuation branch when necessary.
 Preserve local repairs and resolve any source overlap against current code.
 Git metadata writes require escalation in this sandbox.
 
@@ -100,6 +122,9 @@ All other earlier proof files and marked drafts retain their bytes.
 Preserve both retained stashes and all backup branches. Leave
 `/home/tritlo/Code/microecta/lean-fixes` and
 `/tmp/mcfta-fresh-probe-20261013` untouched.
+Preserve `/tmp/mcfta-update-20261013` and its uncommitted review merge. Its
+`UPSTREAM-REVIEW.md` and `review-probes/` retain the native synthesis review
+evidence. That workload review is not a benchmark formalization target.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally **untracked**.
 
 Preserve all three marked drafts, excluded from the build:
@@ -164,9 +189,14 @@ All proof workers are stopped. No diagnostic process remains active.
    machine-size conversions, and evaluator IO traces. The handwritten models
    do not constitute verified Haskell extraction. Preserve the proved
    algorithmic contracts rather than assuming these runtime obligations away.
-2. Keep the new CPS, batched descent, union-find, and zero-domain bridges in
-   the aggregate audit. Their algorithmic correspondence is proved. Concrete
-   runtime storage and unbounded lazy forcing remain separate obligations.
+2. Connect the new bounded fallback to native import readback. Start from
+   `SourceFromTerms.build_rows` and `SourceFiniteRebuild.dependency_wellFounded`.
+   Derive the actual `fromFTA`/SCC and split readback, then preserve the supplied
+   custom order through `Flat.fromAutomaton` and final observation ranks.
+   `SourceImportGroupsCompiler` proves a sorted finite reconstruction of each
+   part; it does not identify that order with the native part decoder.
+   Complete constructor-row exposure and whole lazy enumeration still need
+   separate source contracts. Preserve the new CPS and bounded proofs.
 3. Continue the preserved constructor and equality targets below. General
    no-pending for the old constructor is refuted. General repaired first-run
    completion remains open. Saturated merge monotonicity is also refuted.
@@ -253,15 +283,18 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The aggregate audit passes **1,084 jobs and 38,123 theorem dependency checks**.
+The aggregate audit passes **1,106 jobs and 38,508 theorem dependency checks**.
 It permits only `propext`, `Classical.choice`, and `Quot.sound`.
-The log is `/tmp/mcfta-main-20261013-final-audit.log`.
+The log is `/tmp/mcfta-library-20261013-audit.log`. All 22 new proof modules
+are imported by the audit. No Haskell source was changed by the new proof work.
 Use focused targets for new work, then import finished modules into Audit.
 Do not add `sorry`, native evaluation axioms, or project axioms.
 
 The ambient freshness repair passed 285 core and 204 generator examples.
 Its log is `/tmp/mcfta-ambient-20261013-tests.log`. Fourmolu, cabal-gild, and
 both new native reproductions passed. No production test was added.
+The newly merged library source and package metadata also pass Fourmolu and
+cabal-gild checks in Nix. Log: `/tmp/mcfta-library-20261013-format.log`.
 
 The earlier Sized repair passed the full generator suite with 206 examples,
 including two temporary regression cases. The permanent suite remains at

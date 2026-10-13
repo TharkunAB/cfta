@@ -1,6 +1,36 @@
 # Current formalization findings
 
-Updated: **2026-10-13 22:31 CEST**.
+Updated: **2026-10-13 23:08 CEST**.
+
+Upstream `a915177c` is merged locally at `76a82a70` on
+`formalization/microcfta-library-20261013`. Published proof history through
+`1f982c5b` remains unchanged. Benchmark programs, datasets, and workload
+specifications are excluded from formalization at the user's request.
+
+The new bounded import proofs follow PR #114's control flow. Only a bounded
+residual-guard error selects denotation. Negative bounds make no external
+calls. Fallback reads the original graph. Ordered guard checks preserve the
+first Unknown or exception. Timeouts retain their separate public error.
+Successful liquid denotation has the exact original accepted language below
+the source depth bound. It uses the repaired mixed-sort ambient evaluator.
+The ordinary shortcut now has exact three-table recurrence, empty-level
+stopping, distinct-symbol bypass, duplicate freedom, and depth-order proofs.
+`SourceBoundedImport.plain_correct` composes it without solver calls.
+
+The actual finite-term rebuild now has exact sorted-row and arity-validation
+proofs. A ranked source derives successful reconstruction. Proper-subterm
+dependencies give finite compact compilation, exact counts and decoder
+positions, both inverse laws, and rejection outside the finite language.
+`SourceBoundedImport.liquid_eventual` combines these results.
+The checked proof and aggregate audit checkpoint is `274aa759`.
+
+Observation grouping derives exact disjoint finite parts, distinct counts,
+cardinality weights, uniform term probabilities, PMF preservation, and rank
+query records. No coverage or weight invariant is assumed for the groups.
+Native interning/SCC readback, native split representation, custom decoder
+order, and whole lazy-enumeration completion remain open. The grouped
+reference and compact sorted sequences are not asserted equal to native
+custom import order. See [the bounded import note](lean/notes-bounded-import.md).
 
 `SizedLanguageTheorem` combines the main node-count language contract:
 exact accepted classes, finite reference evaluation, complete distinct
@@ -43,13 +73,12 @@ added. See [the new proof note](lean/notes-sized-liquid-probability.md) for
 the theorem map and exact boundaries. The final aggregate audit is recorded
 in [HANDOFF.md](HANDOFF.md). Proof counts are validation evidence only.
 
-Upstream was refreshed again and remains **`2200117`**. The user authorized
-the push. Checkpoint `6515243b` is already on
-`origin/formalization/microcfta-resume-20261012`; the checked continuation
-uses that same branch. No deployment or board post is authorized.
+The earlier requested push is complete through **`1f982c5b`** on
+`origin/formalization/microcfta-resume-20261012`. The new continuation stays
+local. No further push, deployment, or board post is authorized.
 All previous proofs, repairs, marked drafts, stashes, and worktrees remain.
 The untracked `lean/repro/NestedUnaryTwoAtom.hs` retains its original bytes.
-Weekly allowance was **52% at 22:31 CEST**. Refresh it before further work and
+Weekly allowance was **48% at 23:08 CEST**. Refresh it before further work and
 stop all work at 1% or less.
 
 ## Previous Sized checkpoint
