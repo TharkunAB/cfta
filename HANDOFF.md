@@ -1,11 +1,12 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 21:56 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 22:31 CEST (Europe/Stockholm)**.
 
 ## Current result and read order
 
-Read `NEXT-PROMPT.md`, this file, root `FINDINGS.md`, and
-`lean/notes-source-sized.md`. The root findings are current. `lean/FINDINGS.md`
+Read `NEXT-PROMPT.md`, this file, root `FINDINGS.md`,
+`lean/notes-source-sized.md`, and `lean/notes-sized-liquid-probability.md`.
+The root findings are current. `lean/FINDINGS.md`
 and older dated component notes are historical.
 
 The primary `Data.CFTA.Sized` source models now prove exact accepted
@@ -15,7 +16,20 @@ same reference order through its bound and retains the first Unknown error.
 The optimized dispatcher now uses the original explicit graph rows.
 **Whole-implementation verification is still incomplete.**
 
-The repaired source and stable proofs have local commits:
+The continuation adds the combined `SizedLanguageTheorem`, direct finite
+count/plan evaluation, mixed-sort ambient liquid semantics, complete IO
+outcomes, distinct term sampling, weighted replay, and public PMF semantics.
+`SourceSizedLiquidAmbientPublic.public_correct` is the general liquid entry
+point. It derives the evaluator law from actual per-call Sat/Unsat evidence.
+Finite external attempts suffice for a finite outcome, including exceptions.
+The ambient freshness repair is `48024a69`; its repaired source preflight and
+historical counterexample are checked. The core and generator suites pass.
+
+The CPS, batched descent, conditional union-find, and reserved zero-domain
+source bridges are now checked. The proof note gives their exact scope.
+The optimized interned core remains intact.
+
+The earlier Sized proof commits remain:
 
 | Commit | Result |
 | --- | --- |
@@ -28,12 +42,21 @@ The repaired source and stable proofs have local commits:
 | `be183d58` | Actual canonical preprocessing and public exact-size/query contracts. |
 | `54290671` | Exact successful operational traces with varying evaluator replies. |
 
-A later commit integrates the aggregate audit and this restart package. Use `git log` for the exact latest documentation head.
+The new proof checkpoint is `2f56d916`; the final audit commit is `4f4ca498`.
+Use `git log` for the later documentation commit.
+Backup `backup/formalization-before-push-20261013-2200`
+preserves the earlier `6515243b` checkpoint.
 Do not confuse the earlier checked checkpoint `f10fa11` with the new result.
 
 ## Authorization and allowance
 
-Keep everything local: **no push, deployment, messages, or board posts**.
+The user explicitly requested **Push** for this continuation. The earlier
+checkpoint `6515243b` was pushed to
+`origin/formalization/microcfta-resume-20261012`. The checked continuation
+uses that same publication branch. Check its tracking head for publication
+status. Do not force-update the separate historical
+`origin/formalization/microcfta` branch. **No deployment, messages, or board posts**.
+After this requested publication, further pushes require a new request.
 Keep the optimized interned core. Do not update memory or create an ADR without
 a request. Address Matti in English. Begin each response with the actual
 current timestamp. Give brief material updates. Do not ask whether to continue.
@@ -45,7 +68,7 @@ python3 /tmp/mcfta-weekly-usage.py
 ```
 
 Stop every worker and all work immediately at **1% remaining or less**.
-The last observed value was **58% at 21:55 CEST**. Treat it as historical.
+The last observed value was **52% at 22:31 CEST**. Treat it as historical.
 Check `observed_at`. The script reads 10,080-minute windows from local logs
 under `~/.codex/sessions/2026/10/13`; update that date on a later restart.
 It exits 99 at the threshold and 2 if usage is unavailable. Missing or stale
@@ -57,6 +80,7 @@ Repository: `/home/tritlo/Code/mcfta`, Ubuntu/WSL2, Bash.
 Branch: `formalization/microcfta-resume-20261012`.
 Upstream: `origin/microcfta` at **`2200117`**.
 The latest `git pull --ff-only origin microcfta` reported `Already up to date.`
+The final upstream fetch still reports `2200117`.
 No rebase was needed. The starting local head was `f8a3d48`.
 
 Before new work, read status, log, worktrees, stashes, and allowance. Preserve
@@ -112,8 +136,9 @@ The interned construction and optimization core remains unchanged.
 
 `SourceSizedDecided*` derives the actual frozen table fold, first Unknown
 error, original trim-state inventory, full ordered class agreement, and all
-query laws. External evaluator termination and correct Yes/No decisions are
-explicit contracts. Nonpositive signed bounds return an empty table.
+query laws. The general fold retains evaluator contracts; the new ambient
+liquid proof derives those contracts from the actual adapter and external
+Sat/Unsat response evidence. Nonpositive signed bounds return an empty table.
 The relational operational proof permits different replies to repeated
 queries. Successful traces are exact under per-call adequacy. Finite
 per-call result witnesses give a finite bounded result, including errors.
@@ -134,19 +159,21 @@ All proof workers are stopped. No diagnostic process remains active.
 
 ## Remaining priorities
 
-1. Audit the concrete source correspondence boundaries of the new Sized path:
+1. Audit the concrete source correspondence boundaries of the Sized path:
    finite Map/Set representation, lawful equality/order, lazy table forcing,
    machine-size conversions, and evaluator IO traces. The handwritten models
    do not constitute verified Haskell extraction. Preserve the proved
    algorithmic contracts rather than assuming these runtime obligations away.
-2. Complete the changed source representation bridges for PRs #104–#106 and
-   #108: CPS `allBranches` with ordered branch-local state, batched suspended
-   descent, omitted redundant union-find writes, and reserved empty-domain ID
-   zero with adjusted machine bounds.
+2. Keep the new CPS, batched descent, union-find, and zero-domain bridges in
+   the aggregate audit. Their algorithmic correspondence is proved. Concrete
+   runtime storage and unbounded lazy forcing remain separate obligations.
 3. Continue the preserved constructor and equality targets below. General
    no-pending for the old constructor is refuted. General repaired first-run
    completion remains open. Saturated merge monotonicity is also refuted.
-4. Retain broader probability, support, codec, and optimization contracts.
+4. Retain the new mixed-sort liquid and PMF/sampling contracts. Solver
+   correctness/completion and lawful random backends remain explicit. The
+   public Sized sampling results describe client compositions, not a new API.
+   Continue broader support, codec, and optimization contracts.
    Distinct FTA terms, accepting runs, and generator members remain separate.
 
 ## Preserved secondary targets
@@ -226,13 +253,17 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The aggregate audit passes **1,052 jobs and 37,335 theorem dependency checks**.
+The aggregate audit passes **1,084 jobs and 38,123 theorem dependency checks**.
 It permits only `propext`, `Classical.choice`, and `Quot.sound`.
-The log is `/tmp/mcfta-sized-20261013-final-audit.log`.
+The log is `/tmp/mcfta-main-20261013-final-audit.log`.
 Use focused targets for new work, then import finished modules into Audit.
 Do not add `sorry`, native evaluation axioms, or project axioms.
 
-The new Haskell repair passed the full generator suite with 206 examples,
+The ambient freshness repair passed 285 core and 204 generator examples.
+Its log is `/tmp/mcfta-ambient-20261013-tests.log`. Fourmolu, cabal-gild, and
+both new native reproductions passed. No production test was added.
+
+The earlier Sized repair passed the full generator suite with 206 examples,
 including two temporary regression cases. The permanent suite remains at
 204 examples. The temporary patch is
 `/tmp/mcfta-resume-20261013-2123/sized-regressions.patch`.

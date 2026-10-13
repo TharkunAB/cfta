@@ -1,33 +1,38 @@
 # Full formalization coverage
 
-Current continuation: **2026-10-13 21:56 CEST**, upstream `2200117` unchanged.
-The primary `Data.CFTA.Sized` models now prove exact accepted node-count
-classes, finite reference evaluation, size-major enumeration, and both
-natural and signed distinct-term inverse laws. Successful decided tables
-have the same ordered reference classes through the bound. Unknown remains
-an error. Per-call evaluator adequacy and finite completion witnesses are explicit.
-The operational proof permits varying replies on repeated queries.
+Current continuation: **2026-10-13 22:32 CEST**, upstream `2200117` unchanged.
+`SizedLanguageTheorem` combines exact node-count acceptance, finite reference
+classes, complete distinct size-major prefixes, and both rank inverses.
+`SourceSizedTableEvaluation` separately proves finite optimized count/plan
+recursion and completed canonical, ordinary-minimum, and product-minimum
+preprocessing. Direct-row dispatch keeps the same reference sequence.
 
-Local repair `ea73724b` removes the former interned adapter from Sized queries.
-Both dead-edge trimming and duplicate-edge removal could change ranks.
-The existing optimized count table now reads the original sorted explicit
-rows. A finite graph product derives unambiguity. The interned core remains.
-`SourceSizedDispatcher.sized_eq_reference` connects both query records and
-the residual error. See [the Sized proof note](notes-source-sized.md).
+`SourceSizedLiquidAmbientPublic` derives exact bounded logical acceptance
+with mixed sorts and ambient assumptions from individual Sat/Unsat replies.
+The whole IO model preserves first Unknown and unchanged raised exceptions.
+Finite external completions suffice for a finite outcome; replies can vary.
+Repair `48024a69` rejects fresh value names captured by implicit ambient
+assumptions. Checked and native counterexamples retain the former defect.
+The repaired preflight has an exact source traversal theorem.
 
-Positive `PlanScale` now participates in the full source rank partition.
-Bounded pruning caller proofs retain explicit per-pass and recursive callback
-contracts. A 64-call budget does not prove whole-pruning termination.
+Probability proofs now cover distinct class and bounded sampling, sampled
+rank replay/inversion, requested weights, duplicate PMF aggregation, actual
+finite/cyclic PMF dispatch, and weighted callback validity/coverage.
+Sized sampling results describe verified client compositions, not a new API.
 CPS enumeration, batched descent, conditional union-find writes, and reserved
-empty-domain identity zero remain source representation targets.
+zero-domain memo keys now have checked source algorithm bridges.
 
-The aggregate audit passes 1,052 jobs and 37,335 dependency checks. The new
-source repair passed 206 generator examples, including two temporary
-regressions. The permanent test suite is unchanged. Concrete host containers,
-lazy heaps, machine conversions, solver IO, and extraction remain boundaries.
-All older proofs, counterexamples, repairs, and marked drafts are preserved.
-Read root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md).
-All work remains local.
+The final audit passes **1,084 jobs and 38,123 theorem dependency checks**
+with only the three standard Lean axioms. The ambient repair passed
+**285 core and 204 generator examples** in Nix. Formatting and native
+reproductions passed. No production test was added. Concrete containers,
+lazy heaps, machine conversions, external solver/PRNG behavior, and verified
+extraction remain boundaries. Older constructor and equality targets remain.
+
+Read [the main proof note](notes-sized-liquid-probability.md),
+[the Sized note](notes-source-sized.md), root [HANDOFF.md](../HANDOFF.md), and
+[FINDINGS.md](../FINDINGS.md). The user authorized publication to
+`formalization/microcfta-resume-20261012`. No deployment or board post.
 
 ## Objective and completion rule
 

@@ -1,6 +1,11 @@
 # Exact Sized queries on the explicit graph
 
-Updated: 2026-10-13 21:56 CEST.
+Updated: 2026-10-13 22:32 CEST.
+
+The later main theorem, liquid repair, PMF/sampling proofs, and current
+source representation bridges are in
+[the continuation note](notes-sized-liquid-probability.md).
+The Sized repair validation below records the earlier 21:56 checkpoint.
 
 The continuation starts at `f8a3d48`, on upstream `2200117`.
 `git pull --ff-only origin microcfta` reported that upstream was unchanged.
@@ -81,8 +86,8 @@ Fourmolu and cabal-gild checks passed in Nix. The Cabal pass marker is
 `/tmp/mcfta-sized-20261013-generator.log`; the direct test output reported
 206 examples and zero failures.
 
-The aggregate audit passes 1,052 jobs and 37,335 theorem dependency checks.
-It permits only `propext`, `Classical.choice`, and `Quot.sound`. Its final log is `/tmp/mcfta-sized-20261013-final-audit.log`.
+The aggregate audit passes 1,084 jobs and 38,123 theorem dependency checks.
+It permits only `propext`, `Classical.choice`, and `Quot.sound`. Its final log is `/tmp/mcfta-main-20261013-final-audit.log`.
 No new production test case was committed.
 
 The finite graph, list, comparison, and integer models are handwritten source

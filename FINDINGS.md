@@ -1,5 +1,62 @@
 # Current formalization findings
 
+Updated: **2026-10-13 22:31 CEST**.
+
+`SizedLanguageTheorem` combines the main node-count language contract:
+exact accepted classes, finite reference evaluation, complete distinct
+size-major prefixes, and both rank/unrank inverses. The optimized count and
+decoder recurrence now has a separate finite evaluation certificate in
+`SourceSizedTableEvaluation`, including ordinary and product minimum-size
+preprocessing. Direct-row optimized dispatch retains the reference sequence.
+
+`SourceSizedLiquidAmbientPublic.public_correct` proves the bounded contract
+against independent liquid acceptance with mixed sorts and ambient
+assumptions. It derives evaluator adequacy from individual external
+Sat/Unsat responses. The whole IO trace preserves the first Unknown or
+exception. Finite external completions give a finite public outcome,
+including errors. Repeated queries need not return the same verdict.
+
+The liquid audit found and repaired an ambient freshness defect. A free name
+that occurred only in an ambient assumption could capture a generated value
+name. Native results changed from `(Yes,No)` to `(Unknown,No)` for the
+colliding and independently renamed queries. Repair **`48024a69`** reserves
+those ambient free names. Ordinary implicit declarations and quantified
+local names retain their behavior. Both Lean and native counterexamples
+remain. The repaired preflight has an exact source traversal proof.
+
+Probability proofs now connect distinct Sized class queries, requested term
+weights, bounded count-weighted sampling, sampled global ranks, duplicate
+PMF aggregation, and actual finite/cyclic query dispatch. The weighted
+on-demand callback API has separate validity and positive-coverage laws.
+Its metadata-only counterexamples demonstrate documented caller obligations,
+not implementation defects. Sized sampling results are client compositions;
+there is no exported Sized sampler.
+
+The current CPS enumeration, batched suspended descent, conditional
+union-find writes, and reserved empty-domain identity bridges now check.
+Their concrete runtime boundaries remain explicit. General constructor
+completion and the older equality drafts remain secondary open targets.
+
+The freshness repair passed **285 core and 204 generator examples** in Nix.
+Native reproductions and formatting checks passed. No production test was
+added. See [the new proof note](lean/notes-sized-liquid-probability.md) for
+the theorem map and exact boundaries. The final aggregate audit is recorded
+in [HANDOFF.md](HANDOFF.md). Proof counts are validation evidence only.
+
+Upstream was refreshed again and remains **`2200117`**. The user authorized
+the push. Checkpoint `6515243b` is already on
+`origin/formalization/microcfta-resume-20261012`; the checked continuation
+uses that same branch. No deployment or board post is authorized.
+All previous proofs, repairs, marked drafts, stashes, and worktrees remain.
+The untracked `lean/repro/NestedUnaryTwoAtom.hs` retains its original bytes.
+Weekly allowance was **52% at 22:31 CEST**. Refresh it before further work and
+stop all work at 1% or less.
+
+## Previous Sized checkpoint
+
+The following 21:56 record is historical. The results above and the current
+handoff supersede its next-target and publication statements.
+
 Updated: **2026-10-13 21:56 CEST**.
 
 The primary `Data.CFTA.Sized` source models now cover exact accepted terms at
