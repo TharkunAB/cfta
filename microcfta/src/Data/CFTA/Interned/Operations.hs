@@ -572,6 +572,11 @@ most four edges instead of all matching alternatives. This bound does not apply
 below the recursive and union boundaries. A small group stays exact because a
 merge keeps more terms, and the reduction then narrows less: a narrower
 automaton is faster to enumerate.
+
+The merge is an over-approximation, not an exact transformation. Its one
+caller, the narrowing set of 'Data.CFTA.Equality.Operations.reduceEqConstraints',
+keeps the language, because enumeration and 'accepts' still check each
+equality class.
 -}
 mergeAlternatives :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
 {-# INLINEABLE mergeAlternatives #-}

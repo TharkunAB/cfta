@@ -248,7 +248,9 @@ The term language can change by design: a step replaces a supertype
 transition by the representative that the similarity set selects. So a check
 that the language stays equal does not apply. A globally minimal automaton
 would need the exact similarity relation, and the solver can answer
-@Unknown@.
+@Unknown@. Minimization is a representative selection, not an exact
+transformation, so no path that lists, counts, or ranks the accepted terms of
+an automaton uses it.
 
 A step changes the terms of the supertype's node in every place where that
 node occurs, so a guard that reads such a place must keep its answer. The

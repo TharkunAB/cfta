@@ -388,7 +388,8 @@ data ReductionError
 {- | Apply one complete LTA reduction phase.
 
 This keeps the paper's reduction order: semantic pruning, similarity inference,
-then minimization.
+then minimization. Pruning is exact, but minimization is a representative
+selection, so the result can accept fewer terms than the input.
 -}
 reduce :: Entailment -> Subtyping -> Automaton -> IO (Either ReductionError Automaton)
 reduce entailment subtyping automaton = do
