@@ -22,7 +22,9 @@ remains a separate ECTA-only package.
   `terms` and `termsUpToM` are in these modules. A `union` inside a binder
   keeps a reference to an enclosing binder as a union node until the binder
   closes; a binder's reference to itself at the root of its body adds no
-  term.
+  term. A binder probes its body with a placeholder above every placeholder
+  that the body captures, so a closed nested binder does not wait on a
+  reference it captured.
 - `Data.CFTA.Equality`: equality-constrained automata as
   `Node symbol` with `equalityConstraint` edges, with reduction, membership, template
   restriction, and enumeration with unification variables. An automaton with

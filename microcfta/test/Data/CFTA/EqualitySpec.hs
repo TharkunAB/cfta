@@ -709,7 +709,42 @@ spec = do
                     timeout 2000000 (evaluate $ boundDepth depth node) `shouldReturn` Just EmptyNode
                 terms (boundDepth depth productive) `shouldMatchList` expected depth
 
-    describe "nested Mu" $
+    describe "nested Mu" $ do
+        it "completes a closed binder whose body captures the placeholder of an enclosing binder" $ do
+            -- Formalization row 23: the probe of a nested binder aliased a
+            -- reference that the body captured, and construction did not return.
+            let row symbol children = mkNode [mkEdge symbol children noConstraint] :: Node Symbol
+                inner p q r a =
+                    createUnion
+                        [ row
+                            "2"
+                            [ createMu (\_ -> mkNode [mkEdge "0" [r] noConstraint, mkEdge "0" [q] noConstraint, mkEdge "42" [q, p] noConstraint])
+                            , EmptyNode
+                            ]
+                        , row
+                            "1"
+                            [ createMu
+                                ( \e ->
+                                    mkNode
+                                        [ mkEdge "0" [e] noConstraint
+                                        , mkEdge "0" [a] noConstraint
+                                        , mkEdge "0" [r] noConstraint
+                                        , mkEdge "0" [q] noConstraint
+                                        , mkEdge "42" [q, p] noConstraint
+                                        ]
+                                )
+                            ]
+                        ]
+                crossed p q r a c = createUnion [inner p q r a, row "9" [createMuDontCleanup (\_ -> row "11" [c, q, p]), EmptyNode]]
+                ancestor p q r a = createUnion [row "10" [createMuDontCleanup (crossed p q r a), EmptyNode], row "11" [p, q, p]]
+                closed =
+                    createMu $ \p ->
+                        createUnion
+                            [ createMuDontCleanup $ \q -> createMu $ \r -> row "3" [createMuDontCleanup (ancestor p q r), EmptyNode]
+                            , createMuDontCleanup id
+                            ]
+            result <- timeout 10000000 $ evaluate closed
+            fmap (Set.null . freeVars) result `shouldBe` Just True
         it "references to different Mu nodes are not confused" $ do
             -- Two nodes with very similar structure
             -- We are precise about evaluation order here: what we are testing is that after the first term have been
