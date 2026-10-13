@@ -36,12 +36,13 @@ that second case.
 
 The upstream repair changes the multi-operand branch:
 
-- If a retained operand satisfies `recursiveBoundary`, return `union others`.
+- If a retained operand satisfies `recursiveBoundary`, return `createUnion others`.
 - Otherwise, continue with `mergeAlternatives (union others)`.
 - Keep the singleton branch unchanged.
 
-The branch can expose a recursive union once. It does not recursively merge
-that exposure. Thus it does not reproduce the same merge request. The result
+The first repair returned `union others` without merging it again in the same
+call. The current repair retains the explicit union record with `createUnion`.
+A later merge then recognizes that boundary and leaves it unchanged. The result
 can retain multiple alternatives below that boundary. The Haddock now states
 this limit. Its edge-pairing bound applies at a merged ordinary root; it does
 not claim a bound by the smaller input or a bound below recursive boundaries.
@@ -54,6 +55,45 @@ this current five-operand branch and its finite repaired dependency tree.
 
 This repair does not prove termination of `subsumes`, recursive node exposure,
 all merge executions, or repeated equality passes. Those are separate claims.
+
+## Repeated-pass frontier repair
+
+Stopping recursion inside one merge call did not suffice. In source `4897831`,
+`union others` returned an exposed ordinary child. The next peer merge entered
+that ordinary child again. Let `S` be the union of five languages
+`A_i = mu x. {a_i(), f(x)}` and use the fixed equality class `0 = 1` on `[S, S]`.
+Every measured pass changed both node identities. Through eight passes,
+`nodeCount` was `6, 12, 18, ..., 54`; `edgeCount` was
+`20, 36, 52, ..., 148`. The actual public `Refinement.Prune.prune` call on
+`pair(S, S)` with that equality timed out after three seconds.
+
+The current one-line repair uses `createUnion others` at the recursive boundary.
+An isolated copied worker first checked the candidate against the unmodified
+source and checked the existing union gate. After the repair, the actual
+public pruning call completes. Repeated equality narrowing reaches its fixed
+point after two changing passes. Its node/edge counts are
+`(6, 20), (8, 22), (8, 22)`. Repeated merge alone reaches a fixed point after
+one change. The record changes in the second equality pass do not change the
+record counts. This is not a general termination theorem.
+
+`MergedRecursiveFrontier` retains the historical mathematical recurrence.
+Let `D = mu x. f(x)`, `D_0 = D`, and `D_(n+1) = f(D_n)`. The productive
+branches have `B_(i,0) = A_i` and
+`B_(i,n+1) = {a_i(), f(B_(i,n)), f(D_n)}`. The root has the five base leaves
+and the five edges `f(B_(i,n))`. `branch_step` derives the next branch from
+individual unary Cartesian rules. `frontier_not_fixed` proves that this model
+has no identity fixed point. `branch_language` proves that every added prefix
+preserves the finite language. These are model theorems. The complete Haskell
+intersection worker has not been extracted into this module.
+
+`lean/repro/MergedNarrowingGrowth.hs` preserves the old boundary branch and
+checks its intersections against thirteen successive recurrence equations.
+It uses source intersection and constructors. It uses ordered grouping in
+place of HashMap iteration and does not reproduce the memo table. For this
+fixture, the complete resulting records match the explicit recurrence through
+round twelve, including node count `6*n + 6` and edge count `16*n + 20`.
+The pre-repair public-call log is `/tmp/mcfta-merge-prune-five.log`; the retained
+historical replay log is `/tmp/mcfta-merged-frontier-retained.log`.
 
 ## Retained source probe
 
@@ -68,9 +108,11 @@ nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=micro
 
 The earlier two-operand probes timed out before the repair. They are historical
 evidence for the old policy. The current invocations use five recursive
-operands and assert that their five `f` edges become one. All eleven checks
-pass in both modes. Each mode checks 54 unary terms through eight `f`
-constructors and the constrained parent caller.
+operands and assert that their five `f` edges become one. All fifteen checks
+pass in both modes after the retained-union repair. Each mode checks 54 unary terms through eight `f`
+constructors and the constrained parent caller. The probe also forces the
+public pruning fixed point, checks the repeated equality fixed point, and
+checks merge stability on this recursive input.
 
 The current nullary probe uses five distinct false raw guards of the form
 `Not (Or (replicate n Top))`, for `n` from one through five. Four guards retain
@@ -79,10 +121,13 @@ merge. Five distinct guards become one Top row and admit the previously
 rejected nullary term. A singleton parent with that five-row child demonstrates
 that the small-group branch still processes its children.
 
-Fourmolu formatting passed. Both current probe modes passed in
-`/tmp/mcfta-20261013-four-edge-merge-replay.log`. All 620 existing Haskell examples
-passed after the source refresh in
-`/tmp/mcfta-20261013-upstream-refresh-tests.log`.
+Fourmolu and both active Cabal-gild checks passed. Both repaired probe modes
+passed in `/tmp/mcfta-merge-retained-boundary-repro.log`. The earlier threshold
+probe passed in `/tmp/mcfta-20261013-four-edge-merge-replay.log`. All 620 existing
+Haskell examples passed after the threshold source refresh in
+`/tmp/mcfta-20261013-upstream-refresh-tests.log`. All 620 examples also passed
+after the retained-union repair in
+`/tmp/mcfta-20261013-retained-union-tests.log`.
 
 ## Checked Lean results
 
@@ -200,7 +245,8 @@ change the branch on a represented source leaf.
 
 The current threshold modules and the downstream projection order, language,
 pass, termination, and bound modules build with Lean 4.34.1. Add the new
-`MergedAlternativesThreshold` import before claiming a complete audit pass.
+`MergedAlternativesThreshold` and `MergedRecursiveFrontier` imports before
+claiming a complete audit pass.
 
 ## Correspondence boundary after the source refresh
 

@@ -7,6 +7,9 @@ import Control.Monad (unless)
 import qualified Data.CFTA.Equality as E
 import Data.CFTA.Interned
 import Data.CFTA.Interned.Operations (mergeAlternatives)
+import qualified Data.CFTA.Refinement.Prune as Prune
+import Data.CFTA.Refinement.Verdict (Entailment (..), Verdict (..))
+import Data.CFTA.Symbol (Symbol)
 import qualified Data.CFTA.Term as T
 import System.Environment (getArgs)
 import System.IO (BufferMode (..), hSetBuffering, stdout)
@@ -31,6 +34,26 @@ check label action = do
     putStrLn (label ++ ": " ++ show result)
     unless (result == Just True) (fail label)
 
+-- | Force the public pruning caller that repeats equality reduction to a fixed point.
+checkPruning :: IO ()
+checkPruning = do
+    let recursive symbol = Mu (\self -> Node [Edge symbol [], Edge "f" [self]]) :: Node Symbol
+        source = union (map recursive ["a", "b", "c", "d", "e"])
+        classes = E.mkEqConstraints [[E.path [0], E.path [1]]]
+        original = Node [mkEdge "pair" [source, source] (equalityConstraint classes)]
+        sameTerms = [T.Leaf "a", T.One "f" (T.Leaf "e")]
+    result <- timeout 3000000 $ do
+        pruned <- Prune.prune (Entailment $ \_ _ -> pure Unknown) original
+        case pruned of
+            Left err -> fail (show err)
+            Right node ->
+                evaluate $
+                    edgeCount node > 0
+                        && all (\term -> E.accepts node (T.Two "pair" term term)) sameTerms
+                        && not (E.accepts node (T.Two "pair" (T.Leaf "a") (T.Leaf "b")))
+    putStrLn ("public pruning fixed point: " ++ show result)
+    unless (result == Just True) (fail "public pruning fixed point")
+
 -- | Replay the direct case, or the wrapped-union case with the union argument.
 main :: IO ()
 main = do
@@ -44,6 +67,7 @@ main = do
         terms = [iterate (T.One "f") (T.Leaf s) !! n | s <- "extra" : names, n <- [0 .. 8]]
         classes = E.mkEqConstraints [[E.path [0], E.path [1]]]
         reduced = E.reduceEqConstraints classes E.EmptyConstraints [source, source]
+        fixed = E.fixUnbounded (E.reduceEqConstraints classes E.EmptyConstraints) [source, source]
         guards = [Not (Or (replicate count Top)) | count <- [1 .. 5]]
         rawEdges = [mkEdge "raw" [] (semanticConstraint guard) | guard <- guards]
         rawFour = Node (take 4 rawEdges) :: Node String
@@ -65,9 +89,12 @@ main = do
     putStrLn ("input edges: " ++ show (length (nodeEdges source)))
     check "five recursive alternatives enter merge branch" (length (recursiveEdges source) == 5)
     check "merged root completed" (length (recursiveEdges merged) == 1)
+    check "retained recursive merge stays fixed" (mergeAlternatives merged == merged)
     check "sampled language preserved" (all (\t -> E.accepts source t == E.accepts merged t) terms)
     check "parent reduction completed" (length (concatMap nodeEdges reduced) <= 2 * length (nodeEdges source))
     check "parent sampled language preserved" (all (\t -> all (\n -> E.accepts n t == E.accepts source t) reduced) terms)
+    check "repeated equality reaches a fixed point" (E.reduceEqConstraints classes E.EmptyConstraints fixed == fixed)
+    check "fixed-point sampled language preserved" (all (\t -> all (\n -> E.accepts n t == E.accepts source t) fixed) terms)
     check "four distinct raw guards stay exact" (length (nodeEdges rawFour) == 4 && mergeAlternatives rawFour == rawFour)
     check "duplicate rows do not trigger merge" (duplicated == rawFour && mergeAlternatives duplicated == rawFour)
     check
@@ -80,3 +107,4 @@ main = do
     check
         "small parent visits large child"
         (not (accepts wrapped wrappedTerm) && accepts (mergeAlternatives wrapped) wrappedTerm)
+    checkPruning
