@@ -78,6 +78,17 @@ map. `replaceWord_correct` retains its sparse-count invariant. The source
 does not check the endpoint bounds. Their validity for a runtime allocation
 history remains explicit.
 
+`EnumerationWaitingModular` gives a stronger result for complete operations.
+Assimilation first copies the source constraints into the target and then
+clears the source. Its intermediate counts can exceed both endpoint counts.
+`replace_represents` proves the exact modular scan count after every raw-slot
+replacement. `assimilation_waiting` proves that both writes restore the exact
+original modular map, with no intermediate overflow premise.
+`selection_complete` needs only that each observed reference count is below
+one full word period. Negative signed counts are harmless for scheduling:
+the scheduler uses map keys and ignores stored counts. The bound prevents a
+positive count from wrapping to zero and removing a required waiting key.
+
 The four index modules build with Lean 4.34.1 in 23 jobs. The machine-counter
 module also builds with the same pinned toolchain. The isolated dependency
 audit permits only `propext`, `Classical.choice`, and `Quot.sound`. No Haskell
