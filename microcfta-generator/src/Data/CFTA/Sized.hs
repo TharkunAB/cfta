@@ -33,6 +33,9 @@ procedure here, and 'sized' rejects it.
 
 'sizedReference' builds each class that a query reads, and it keeps the
 classes of each state for later queries. It is slow for large classes.
+'sizedUpTo' builds the classes up to a size bound with a solver that decides
+every guard, so it needs no pruning: it is the exact route for a liquid
+automaton whose guards pruning did not discharge.
 'sized' gives the same sequence. It counts, ranks, and unranks with the count
 table of the cyclic import when the automaton has no constraint and that
 import accepts it, and it uses the reference otherwise.
@@ -42,12 +45,16 @@ module Data.CFTA.Sized (
     SizedError (..),
     sized,
     sizedReference,
+    sizedUpTo,
     termsOfSize,
     countOfSize,
     unrankOfSize,
     rankOfSize,
 ) where
 
+import Control.Monad (filterM, foldM)
+import Control.Monad.Except (runExceptT, throwError)
+import Control.Monad.IO.Class (liftIO)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Hashable (Hashable)
 import qualified Data.IntMap.Strict as IntMap
@@ -64,6 +71,9 @@ import Data.CFTA.Index (Cardinality (..), ClassRank (..), Size (..))
 import Data.CFTA.Interned (NodeId (..), fromFTA)
 import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
 import Data.CFTA.Ranked.Internal.Size (SizedRank (..), countAtSize, sizeClassSelect)
+import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
+import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..))
+import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -75,10 +85,12 @@ data Sized symbol = Sized
     , sizedRank :: Term symbol -> Maybe (Size, ClassRank)
     }
 
--- | Why 'sized' rejects an automaton.
+-- | Why a size class cannot be built.
 data SizedError
     = -- | A transition has a guard beyond equality constraints.
       ResidualGuard
+    | -- | The solver could not decide a constraint on a term that its transition built.
+      GuardUnknown !Constraint !(Term Symbol)
     deriving (Eq, Show)
 
 {- | The size classes of an automaton.
@@ -120,11 +132,70 @@ sizedReference automaton
     | any (any (residual . FTA.transitionConstraint)) (FTA.transitionTable $ FTA.trim automaton) = Left ResidualGuard
     | otherwise = Right $ fromClasses $ classAt $ FTA.initialState automaton
   where
-    -- The classes are those of the whole graph, as in the import. A trim
-    -- would remove the transitions with a child that accepts nothing, and
-    -- that can change the order of the classes of the other states.
-    rows = Map.map (sortOn rowKey) (FTA.transitionTable automaton)
+    rows = sortedRows automaton
 
+    -- The classes of each state from size one, built when a query reads them.
+    table = LazyMap.map (\transitions -> [classOf transitions size | size <- [1 ..]]) rows
+    classAt state (Size size)
+        | size < 1 = []
+        | otherwise = maybe [] (`genericIndex` (size - 1)) (LazyMap.lookup state table)
+    classOf transitions size =
+        nubOrd
+            [ term
+            | transition <- transitions
+            , term <- candidates classAt transition size
+            , equalitiesHold (FTA.transitionConstraint transition) term
+            ]
+
+{- | The size classes of the terms with at most the given number of nodes, with
+the solver deciding every constraint on each term that its transition builds.
+
+The classes are those of 'sizedReference' for the language of the terms up to
+the bound, and a class above the bound is empty. A guard beyond equality
+constraints is decided too, so no guard is rejected. The result is
+'GuardUnknown' when the solver cannot decide a constraint on a term. Only the
+states that the initial state can reach are decided.
+-}
+sizedUpTo ::
+    (Ord state) => Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO (Either SizedError (Sized Symbol))
+sizedUpTo entailment bound automaton = runExceptT $ do
+    table <- foldM addSize Map.empty [1 .. bound]
+    pure $ fromClasses $ \size -> Map.findWithDefault [] (FTA.initialState automaton, size) table
+  where
+    rows = sortedRows automaton
+    reached = Map.keys $ FTA.transitionTable $ FTA.trim automaton
+    -- The classes of one size, from the classes of the smaller sizes.
+    addSize table size = foldM addClass table reached
+      where
+        smaller state child = Map.findWithDefault [] (state, child) table
+        addClass built state = do
+            accepted <-
+                filterM
+                    decide
+                    [ (transition, term)
+                    | transition <- Map.findWithDefault [] state rows
+                    , term <- candidates smaller transition size
+                    ]
+            pure $ Map.insert (state, size) (nubOrd $ map snd accepted) built
+    decide (transition, term) = do
+        let constraint = FTA.transitionConstraint transition
+        verdict <- liftIO $ evaluateConstraint entailment constraint term
+        case verdict of
+            Yes -> pure True
+            No -> pure False
+            Unknown -> throwError $ GuardUnknown constraint term
+
+{- | The transitions of each state in the order of the count table of the
+cyclic import: by arity, symbol, and the canonical classes of their children.
+
+The classes are those of the whole graph, as in the import. A trim would
+remove the transitions with a child that accepts nothing, and that can change
+the order of the classes of the other states.
+-}
+sortedRows ::
+    (Ord state, Ord symbol) => FTA.FTA state symbol constraint -> Map.Map state [FTA.Transition state symbol constraint]
+sortedRows automaton = Map.map (sortOn rowKey) (FTA.transitionTable automaton)
+  where
     -- Each state has a number, so that the canonical classes can refine the rows.
     numbers = Map.fromList $ zip (Map.keys $ FTA.transitionTable automaton) [0 ..]
     number state = numbers Map.! state
@@ -145,32 +216,24 @@ sizedReference automaton
         , [classes IntMap.! number child | child <- FTA.transitionChildren transition]
         )
 
-    -- The classes of each state from size one, built when a query reads them.
-    table = LazyMap.map (\transitions -> [classOf transitions size | size <- [1 ..]]) rows
-    classAt state (Size size)
-        | size < 1 = []
-        | otherwise = maybe [] (`genericIndex` (size - 1)) (LazyMap.lookup state table)
-
-    classOf transitions size = nubOrd $ concatMap (transitionTerms size) transitions
-    transitionTerms size transition =
-        filter
-            (equalitiesHold $ FTA.transitionConstraint transition)
-            [ Term.Node (FTA.transitionSymbol transition) arguments
-            | arguments <- argumentsOf (FTA.transitionChildren transition) (size - 1)
-            ]
-
-    -- The argument lists of the children with the given total size, in the
-    -- order of the nested product: the last child varies fastest, and each
-    -- product goes through the sizes of its left side in ascending order.
-    argumentsOf children total = map reverse $ go (reverse children) total
-      where
-        go [] remaining = [[] | remaining == 0]
-        go (current : before) remaining =
-            [ term : arguments
-            | left <- [0 .. remaining]
-            , arguments <- go before left
-            , term <- classAt current (remaining - left)
-            ]
+{- | The terms of the given size that a transition builds from the classes of
+its children, before its constraint is checked, in the order of the nested
+product: the last child varies fastest, and each product goes through the
+sizes of its left side in ascending order.
+-}
+candidates :: (state -> Size -> [Term symbol]) -> FTA.Transition state symbol constraint -> Size -> [Term symbol]
+candidates classAt transition size =
+    [ Term.Node (FTA.transitionSymbol transition) (reverse arguments)
+    | arguments <- go (reverse $ FTA.transitionChildren transition) (size - 1)
+    ]
+  where
+    go [] remaining = [[] | remaining == 0]
+    go (current : before) remaining =
+        [ term : arguments
+        | left <- [0 .. remaining]
+        , arguments <- go before left
+        , term <- classAt current (remaining - left)
+        ]
 
 -- | The queries of the classes that a function lists.
 fromClasses :: (Eq symbol) => (Size -> [Term symbol]) -> Sized symbol

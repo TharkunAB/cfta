@@ -213,7 +213,10 @@ automaton, and an empty size class says nothing about the classes after it.
 smaller sizes and checks the equality constraints on each term. `sized`
 gives the same sequence, and it uses the count table of `fromAutomaton` when
 the automaton has no constraint and no ambiguity. A guard beyond equality
-constraints is `ResidualGuard`. An interned automaton enters through
+constraints is `ResidualGuard`. `sizedUpTo` builds the classes up to a size
+bound with a solver that decides every guard on each term, as
+`denotationAtMost` does by depth, so it also takes a liquid automaton whose
+guards pruning did not discharge. An interned automaton enters through
 `toFTA` of `Data.CFTA.Interned`.
 
 ```haskell

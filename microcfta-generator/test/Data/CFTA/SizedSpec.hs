@@ -16,6 +16,7 @@ import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNode, closedAutomaton)
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
 import Data.CFTA.Interned (toFTA)
+import Data.CFTA.Refinement (Entailment (Entailment))
 import Data.CFTA.Sized
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Term (Term)
@@ -48,6 +49,7 @@ spec = describe "Data.CFTA.Sized" $ do
         it "lists each accepted term of each size once, and ranks it" $ QC.property exactClasses
         it "agrees with the cyclic import wherever the import accepts the automaton" $ QC.property importAgreement
         it "gives the sequence of the reference, also where it uses the count table" $ QC.property referenceAgreement
+        it "decides the classes up to a bound as the reference builds them" $ QC.property boundedAgreement
 
 -- | The classes of size one to 'sizeBound' are the accepted terms of each size, each once, and the ranks invert.
 exactClasses :: SizedAutomaton -> Property
@@ -119,6 +121,30 @@ referenceAgreement (SizedAutomaton description) =
     graph = either (error . show) id $ toFTA $ automatonNode description
     classes = either (error . show) id $ sized graph
     reference = either (error . show) id $ sizedReference graph
+
+{- | 'sizedUpTo' decides equality constraints without the solver and gives the
+classes of 'sizedReference' up to its bound, and no term above it.
+-}
+boundedAgreement :: SizedAutomaton -> Property
+boundedAgreement (SizedAutomaton description) = QC.ioProperty $ do
+    decided <- sizedUpTo unusedEntailment (Size bound) graph
+    pure $
+        counterexample (show description) $ case decided of
+            Left err -> counterexample (show err) False
+            Right classes ->
+                QC.conjoin
+                    [ counterexample ("size " <> show size) $
+                        termsOfSize classes (Size size) === if size <= bound then termsOfSize reference (Size size) else []
+                    | size <- [1 .. sizeBound]
+                    ]
+  where
+    bound = sizeBound - 1
+    graph = either (error . show) id $ toFTA $ automatonNode description
+    reference = either (error . show) id $ sizedReference graph
+
+-- | A solver that fails when a property calls it.
+unusedEntailment :: Entailment
+unusedEntailment = Entailment $ \_ _ -> fail "unexpected solver call"
 
 -- | The largest size that a property reads.
 sizeBound :: Integer
