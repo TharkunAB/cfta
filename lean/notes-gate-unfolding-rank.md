@@ -532,3 +532,63 @@ A separate finite Haskell check tested the exact predecessor-cost inclusion
 in the two probes for 91,400 actual stored Mu occurrences from 10,000
 nested programs. It found no counterexample. The test includes probe
 records. This is diagnostic evidence only; the general proof remains open.
+
+## Compositional callback observations (2026-10-13 02:13)
+
+`InternedOccurrenceObservations` compares emptiness and every occurrence cost
+for one external reference. Actual `makeNode` and `makeUnion` preserve this
+relation. The proof uses complete canonical readback and the source-derived
+live-edge and nonempty-record invariants.
+
+`InternedBinderFreeObservations.build_same` executes the same binder-free
+source syntax in two source states. It derives completion of both calls and
+the output relation from their paired lexical inputs. It covers arbitrary
+ordinary nesting, union normalization, and cached captures of any Mu depth.
+No completed-output relation is a premise.
+
+`InternedBinderFreeProbeCosts` adds the actual root self-reference filter.
+`normalized_costs` derives exact external cost equality between the body and
+a probe with a different supplied name. `two_probe_cost` uses the actual
+ordered depth and ordinary probe calls. Every external body cost occurs in
+at least one probe. This includes captured placeholder names. The callback
+must still contain no new binder operation. Dynamic nested Mu construction
+and arbitrary Mu cache-hit body/probe correspondence remain open.
+
+The focused build passes (179 jobs). The isolated audit checks 8,545 theorem
+axiom dependencies. It admits only `propext`, `Classical.choice`, and
+`Quot.sound`.
+
+## Stored callback costs and boundary identities (2026-10-13 02:20)
+
+`InternedBinderFreeProbeHeap.binder_heap` executes the actual raw or smart
+binder schedule with an arbitrary binder-free callback. The ordered probes,
+reservation, actual body, and first-writer completion derive the stored
+`Related` invariant. Cache hits retain the earlier proof. A pending lookup
+retains the existing state invariant. This removes the prior one-edge
+callback restriction. It does not add dynamic nested binder correspondence.
+
+`InternedBoundaryAtoms` follows ordinary children and union members. It stops
+at a Mu and records its identity. It records literal reference identities.
+Actual `makeNode` and `makeUnion` have exact boundary membership laws through
+all normalization and cache-hit branches. `InternedBoundaryFilter` proves
+that the root self filter preserves every other reference and every Mu
+identity. Two distinct filters cover the original boundary set.
+
+`InternedBoundaryProvenance` derives an actual complete stored Mu payload for
+each Mu boundary. A reference boundary is exactly a zero-cost free-reference
+occurrence. This profile supports freshness and earlier-allocation checks.
+It does not contain symbol, guard, or tree shape. Profile equality therefore
+does not imply record equality or source replay.
+
+The focused builds pass (183 jobs for the heap extension and 156 jobs for
+boundary provenance). The combined isolated axiom audit checks 8,614 theorem
+dependencies. Only the three previously listed foundational axioms occur.
+
+A temporary source check at `/tmp/mcfta-captured-probe-parametricity.hs`
+examines the constant callback with captured `RecUnint 0` and `RecDepth`.
+The actual stored body differs from both normalized probe identities. The
+raw callback passes substitution from its fresh actual binder name to
+either probe name. It fails the documented law if that law includes an old
+name equal to a capture. This refutes a proposed per-probe identity lemma.
+It does not establish a source termination defect. The combined two-probe
+occurrence theorem above still applies.
