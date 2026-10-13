@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 00:31 CEST**, upstream `7989e91a`.
-The final proof commit is `9207c2cf`. All proof workers are stopped.
+Current checkpoint: **2026-10-14 00:51 CEST**, upstream `f59c198d`.
+The latest proof commit is `51242646`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -12,6 +12,13 @@ traces even when the original state type is infinite.
 `SourceSizedFiniteKeysDispatch.nativeSized_eq` proves complete raw dispatcher
 agreement, including all four queries and errors. The finite raw product
 minimum gate is derived. See [finite map Sized](notes-sized-finite-keys.md).
+
+`TablePositionCountBound` proves that optimized ranking reads no count above
+the input term's node count. `TablePositionFiniteEvaluation` constructs finite
+count and child maps with the exact original result, including failure.
+`SourceSizedFiniteKeysRankEvaluation.native_rank_laws` connects that finite
+computation to the actual public inverse and both signed inverse laws.
+The original state type need not be finite.
 
 `SourceSizedFiniteKeysNativeLiquid.encoded_correct` connects the actual raw
 fold to independent mixed-sort ambient logical acceptance and the canonical
@@ -49,15 +56,15 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The closing audit passes **1,180 targets and 39,689 theorem dependency checks**
+The current audit passes **1,183 targets and 39,767 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
-All **635 Haskell examples** passed after the solver-name repair; all 206
-generator examples passed again after the isolated midpoint repair.
-Native fixtures, Fourmolu, and cabal-gild passed. No production test was added.
+All **640 Haskell examples** passed after the upstream refresh: 288 core,
+208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new
+production test was added locally.
 See root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) for exact
 contracts, checkpoints, validation logs, and remaining priorities.
 Everything remains local. No further push, deployment, or board post is
-authorized. Stop all work at 20% weekly allowance remaining or less.
+authorized. Stop all work at 1% weekly allowance remaining or less.
 
 ## Objective and completion rule
 

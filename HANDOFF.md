@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 00:31 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 00:51 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -9,11 +9,10 @@ Then read `CONTEXT.md`, `docs/adr/0004-explicit-graph-boundary.md`, and the
 component note for the chosen target. Root findings and this handoff supersede
 older next-target statements. `lean/FINDINGS.md` retains historical findings.
 
-The user requested this handoff before the context became unsafe.
-**All three proof workers are stopped. No proof work remains in progress.**
-The final proof checkpoint is **`9207c2cf`**. The following documentation
-commit records the closing audit and these restart files. Use `git log` for
-its hash. The only intentionally untracked file is
+The current continuation refreshed upstream and completed the finite optimized
+Sized inverse proof. **No background proof worker is active.**
+The latest proof checkpoint is **`51242646`**. A later documentation commit
+records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
 ## Authorization and allowance
@@ -35,42 +34,47 @@ Monitor weekly allowance before work and regularly afterward:
 python3 /tmp/mcfta-weekly-usage.py
 ```
 
-Stop all work and workers immediately at **20% remaining or less**.
-The last observed value was **35% at 00:31 CEST**. This is a historical value.
+Stop all work and workers immediately at **1% remaining or less**.
+The latest explicit user instruction supersedes the earlier 20% threshold.
+The last observed value was **35% at 00:51 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
-current UTC date and the preceding two dates. It selects the 10,080-minute
+current UTC date, the preceding two dates, and the next date directory. The
+next directory includes logs named with the local date after midnight. It selects the 10,080-minute
 window. It exits 99 at the threshold and 2 if usage is unavailable.
 Missing or stale data is not permission to use credits.
 
 ## Repository and preservation
 
 Repository: `/home/tritlo/Code/mcfta`, Ubuntu/WSL2, Bash.
-Branch: `formalization/microcfta-rebase-20261013`.
-Upstream: `origin/microcfta` at **`7989e91a`** (PR #115, shared `toRows`).
+Branch: `formalization/microcfta-sized-20261014`.
+Upstream: `origin/microcfta` at **`f59c198d`** (PR #116, merged source repairs).
 The attempted fast-forward pull reported
 `Not possible to fast-forward, aborting.`
 The latest user instruction explicitly authorized a rebase. It supersedes
-older merge-only instructions. The 374-step rebase completed without conflicts:
+older merge-only instructions. The 398-step rebase completed after two overlap
+resolutions. Sized keeps upstream's equivalent `void` call. The changelog keeps
+the merged recursive-union explanation:
 
 ```sh
 git rebase --rebase-merges --reapply-cherry-picks --empty=keep origin/microcfta
 ```
 
-The rebase result was `5d5ac947`. Backup
-`backup/formalization-before-rebase-20261013-2315` retains `298a225b`.
-`formalization/microcfta-library-20261013` also retains that checkpoint.
-All 1,432 saved Lean-tree files matched immediately after the rebase.
-The manifest and extra fixture copy are under
-`/tmp/mcfta-rebase-20261013-2315/`. Later changes to saved files are the
-intended coverage documents and audit imports; earlier proof files retain
-their bytes. New proofs are separate files.
+The rebase result was `97d79d63`. Backup
+`backup/formalization-before-sized-refresh-20261014-0036` retains `f4b5fac1`.
+The previous continuation branch also retains that checkpoint.
+All 1,515 saved Lean-tree files matched immediately after the rebase.
+The manifest, extra fixture copy, and restart document copies are under
+`/tmp/mcfta-sized-resume-20261014-0036/`. Later changes to saved files are the
+intended coverage documents, finite-key note, and audit imports. Earlier proof
+files retain their bytes. New proofs are separate files.
 
 Before new work, inspect allowance, status, log, worktrees, and stashes.
 Preserve a backup and refresh `origin/microcfta`. If upstream moved, rebase the
 local continuation as requested. Preserve local source repairs through any
 overlap. Git metadata writes require escalation in this sandbox.
 
-Preserve the earlier backups, including
+Preserve the earlier backups and manifests, including
+`backup/formalization-before-rebase-20261013-2315` (`298a225b`),
 `backup/formalization-before-sized-resume-20261013-2123` (`f8a3d48`),
 `backup/formalization-before-push-20261013-2200` (`6515243b`), and
 `backup/formalization-before-library-refresh-20261013-2246` (`1f982c5b`).
@@ -126,6 +130,9 @@ Current entry points:
   key-pair synchronous product minimum test are derived.
 - `SourceSizedFiniteKeysDispatch.native_success`: successful optimized results
   use the original canonical reference sequence.
+- `SourceSizedFiniteKeysRankEvaluation.native_rank_laws`: a finite count inventory
+  and finite child maps return the actual optimized public inverse and satisfy
+  both signed inverse laws. Counts above the term's node count are not read.
 
 The Sized optimized gate uses explicit synchronous `Language.intersect`.
 It does not depend on native interned recursive intersection construction.
@@ -246,10 +253,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The closing build passes **1,180 jobs and 39,689 theorem dependency checks**.
+The current build passes **1,183 jobs and 39,767 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-closing-20261014-audit.log`.
+Log: `/tmp/mcfta-sized-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -265,6 +272,13 @@ for that isolated change. Log:
 `/tmp/mcfta-weighted-midpoint-20261014-tests.log`.
 No production test or benchmark formalization was added in this continuation.
 
+After the current upstream refresh, all **640** Haskell examples passed in
+Nix: 288 core, 208 generator, and 144 refinement. Fourmolu and cabal-gild pass.
+Logs: `/tmp/mcfta-sized-20261014-tests.log` and
+`/tmp/mcfta-sized-20261014-format.log`. The added upstream regressions remain.
+No new production test was added locally. The linker emitted one dynamic-symbol
+type/size warning. It did not prevent the successful test run.
+
 ```sh
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests microcfta-generator:gen-tests microcfta-generator:refinement-tests -j1 --test-show-details=direct'
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta-generator:gen-tests -j1 --test-show-details=direct'
@@ -276,6 +290,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `51242646` | Finite optimized inverse queries on original map keys. |
 | `9207c2cf` | Actual single-knot unfolding and shared rows. |
 | `7e942dde` | Free-name projection and ordinary deep observations. |
 | `bc7599d4` | Raw-map Sized dispatch and finite product minima. |

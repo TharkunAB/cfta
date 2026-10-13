@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 00:31 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 00:51 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -17,6 +17,14 @@ keys, and complete functional and relational bounded-fold readback.
 `SourceSizedFiniteKeysDispatch.nativeSized_eq` proves exact raw-map dispatcher
 agreement, including errors and all four query functions. The raw synchronous
 product minimum calculation and its finite convergence are derived.
+
+`TablePositionCountBound.positions_congr` now proves that bottom-up ranking
+reads counts only through the input term's node count. This includes earlier
+transition offsets. `TablePositionFiniteEvaluation.finite_rank` constructs
+finite count and child-state tables with the exact original rank or failure.
+`SourceSizedFiniteKeysRankEvaluation.native_rank_laws` connects that finite
+computation to the actual optimized public query and both signed inverse laws.
+The state type can be infinite. Concrete Haskell lazy scheduling remains open.
 
 `SourceSizedFiniteKeysNativeLiquid.encoded_correct` proves independent
 mixed-sort ambient logical acceptance, original canonical order, complete
@@ -99,27 +107,27 @@ completion percentage for these different layers.
 
 ## Checkpoint and validation
 
-Branch: `formalization/microcfta-rebase-20261013`.
-Upstream base: `origin/microcfta` at **`7989e91a`** (PR #115).
-The requested 374-step rebase completed without conflicts at `5d5ac947`.
-Backup `backup/formalization-before-rebase-20261013-2315` retains `298a225b`.
-All 1,432 saved Lean-tree files matched immediately after rebase. Later only
-intended coverage documents and audit imports changed among those files.
+Branch: `formalization/microcfta-sized-20261014`.
+Upstream base: `origin/microcfta` at **`f59c198d`** (PR #116).
+The 398-step rebase completed at `97d79d63`. Two overlap resolutions retain
+upstream's equivalent `void` call and merged recursive-union changelog text.
+Backup `backup/formalization-before-sized-refresh-20261014-0036` retains `f4b5fac1`.
+All 1,515 saved Lean-tree files matched immediately after rebase. Later only
+intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The final proof checkpoint is **`9207c2cf`**; later commits record this handoff.
+The latest proof checkpoint is **`51242646`**; later commits record this handoff.
 
-The closing Lean 4.34.1 audit passes **1,180 build targets and 39,689 theorem
+The current Lean 4.34.1 audit passes **1,183 build targets and 39,767 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-closing-20261014-audit.log`.
-After the SMT repair, all **635** examples passed in Nix: 285 core, 206
-generator, and 144 refinement. After the isolated midpoint repair, all 206
-generator examples passed again. Native fixtures, Fourmolu, and cabal-gild
-passed. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
+Log: `/tmp/mcfta-sized-20261014-audit.log`.
+After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
+generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
+test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-All proof workers are stopped at the user's request for a handoff. Weekly
-allowance was **35% at 00:31 CEST**. Refresh it before new work and stop all
-work at **20% or less**. Everything remains local: no push, deployment, or
+No background proof worker is active. Weekly allowance was **35% at 00:51 CEST**.
+Refresh it before new work and stop all work at **1% or less**, as the latest
+explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
 
 ## Previous Sized checkpoint
