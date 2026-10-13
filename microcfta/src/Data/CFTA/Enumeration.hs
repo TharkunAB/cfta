@@ -193,6 +193,15 @@ data EnumerationState symbol = EnumerationState
     'UVarEliminated' exactly when its UVar is not a representative;
     @findExpandableUVars@ relies on 'assimilateUvarVal' maintaining this.
     -}
+    , _expandableUVars :: !IntSet.IntSet
+    {- ^ The slots of '_uvarValues' that 'expandable' accepts. Every write of
+    a slot updates this set.
+    -}
+    , _waitingUVars :: !(IntMap.IntMap Int)
+    {- ^ For each UVar, how many suspended constraints of 'UVarUnenumerated'
+    slots name it. A UVar with no such constraint has no entry. Every write of
+    a slot updates this map.
+    -}
     , _obligations :: [(Constraint, TermFragment symbol)]
     -- ^ Constraints with a 'residual', each with the fragment it guards.
     , _recursionAncestry :: IntMap.IntMap RecursionAncestry
@@ -235,10 +244,13 @@ recursionKey n scs =
 initEnumerationState :: Node symbol -> EnumerationState symbol
 initEnumerationState n =
     let (uvg, uv) = UnionFind.nextUVar UnionFind.initUVarGen
+        value = UVarUnenumerated (Just n) Sequence.Empty
      in EnumerationState
             uvg
             (UnionFind.withInitialValues [uv])
-            (Sequence.singleton (UVarUnenumerated (Just n) Sequence.Empty))
+            (Sequence.singleton value)
+            (if expandable value then IntSet.singleton (uvarToInt uv) else IntSet.empty)
+            IntMap.empty
             []
             IntMap.empty
             HashSet.empty
@@ -268,7 +280,15 @@ nextUVar = do
 addUVarValue :: Maybe (Node symbol) -> EnumerateM symbol UVar
 addUVarValue x = do
     uv <- nextUVar
-    modify' $ \s -> s{_uvarValues = _uvarValues s :|> UVarUnenumerated x Sequence.Empty}
+    let value = UVarUnenumerated x Sequence.Empty
+    modify' $ \s ->
+        s
+            { _uvarValues = _uvarValues s :|> value
+            , _expandableUVars =
+                if expandable value
+                    then IntSet.insert (uvarToInt uv) (_expandableUVars s)
+                    else _expandableUVars s
+            }
     inheritAncestry (uvarToInt uv)
     return uv
 
@@ -304,7 +324,31 @@ before a union.
 -}
 setUVarValue :: UVar -> UVarValue symbol -> EnumerateM symbol ()
 setUVarValue uv val =
-    modify' $ \s -> s{_uvarValues = Sequence.update (uvarToInt uv) val (_uvarValues s)}
+    modify' $ \s ->
+        s
+            { _uvarValues = Sequence.update idx val (_uvarValues s)
+            , _expandableUVars =
+                if expandable val
+                    then IntSet.insert idx (_expandableUVars s)
+                    else IntSet.delete idx (_expandableUVars s)
+            , _waitingUVars =
+                count 1 val (count (-1) (Sequence.index (_uvarValues s) idx) (_waitingUVars s))
+            }
+  where
+    idx = uvarToInt uv
+    count change (UVarUnenumerated _ scs) waiting = Foldable.foldl' (\m sc -> IntMap.alter (add change) (uvarToInt (scGetUVar sc)) m) waiting scs
+    count _ _ waiting = waiting
+    add change old = case maybe change (+ change) old of
+        0 -> Nothing
+        new -> Just new
+
+{- | Whether a slot holds a node that enumeration can expand. An
+unconstrained recursive node is the base case of a recursion: expanding it
+would unfold forever with nothing to stop it.
+-}
+expandable :: UVarValue symbol -> Bool
+expandable (UVarUnenumerated (Just node) scs) = not (recursiveBoundary node && Sequence.null scs)
+expandable _ = False
 
 -- | Apply a function to the value of a UVar. Like 'setUVarValue', it writes the UVar itself.
 modifyUVarValue ::
@@ -446,43 +490,31 @@ data ExpandableUVarResult
       ExpansionNext !UVar
     deriving (Show)
 
-{- | Find every expandable UVar in one pass over the value slots.
+{- | Find every expandable UVar that no suspended constraint waits for.
 
-Slots merged into another UVar are marked 'UVarEliminated', so every live slot
-is a representative and can be considered directly. Suspended constraints may
-still name eliminated UVars; resolve only those references through the
-union-find and write their path compression back once after the scan.
+The state keeps the expandable slots and the UVars that suspended constraints
+name. Slots merged into another UVar are marked 'UVarEliminated', so every
+expandable slot is a representative. A suspended constraint may still name
+an eliminated UVar, so resolve each named UVar through the union-find and
+write the path compression back once.
 
 'Nothing' means no candidates remain. @Just empty@ means candidates exist, but
 all of them are blocked by suspended constraints.
 -}
 findExpandableUVars :: EnumerateM symbol (Maybe IntSet.IntSet)
 findExpandableUVars = do
-    values <- gets _uvarValues
+    candidates <- gets _expandableUVars
+    waiting <- gets _waitingUVars
     uf0 <- gets _uvarRepresentative
-    let (candidates, ruledOut, uf) =
-            Sequence.foldlWithIndex collect (IntSet.empty, IntSet.empty, uf0) values
+    let (ruledOut, uf) = IntMap.foldlWithKey' resolve (IntSet.empty, uf0) waiting
     modify' $ \s -> s{_uvarRepresentative = uf}
     return $
         if IntSet.null candidates
             then Nothing
             else Just (candidates IntSet.\\ ruledOut)
   where
-    collect (candidates, ruledOut, uf) i value = case value of
-        UVarUnenumerated mbContents scs ->
-            let (ruledOut', uf') = Foldable.foldl' resolve (ruledOut, uf) scs
-                candidates' = case mbContents of
-                    -- An unconstrained Mu is the recursive base case: expanding
-                    -- it would unfold forever with nothing to stop it.
-                    Just node
-                        | recursiveBoundary node, Sequence.null scs -> candidates
-                    Just _ -> IntSet.insert i candidates
-                    Nothing -> candidates
-             in (candidates', ruledOut', uf')
-        _ -> (candidates, ruledOut, uf)
-
-    resolve (ruledOut, uf) sc =
-        let (rep, uf') = UnionFind.find (scGetUVar sc) uf
+    resolve (ruledOut, uf) uv _ =
+        let (rep, uf') = UnionFind.find (intToUVar uv) uf
          in (IntSet.insert (uvarToInt rep) ruledOut, uf')
 
 {- | Which of the currently expandable UVars to expand next.
