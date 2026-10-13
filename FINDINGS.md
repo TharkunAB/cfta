@@ -1,15 +1,17 @@
 # Current formalization findings
 
-Updated: **2026-10-13 04:28 CEST**.
+Updated: **2026-10-13 14:15 CEST**.
 
-The formalization is rebased onto `origin/microcfta` at `8ac24bb`. The
-upstream base contains the earlier findings repairs and merged equality
-narrowing from PR #97. This continuation repaired four additional defects,
-described as rows 18 through 21.
+The formalization is rebased onto `origin/microcfta` at `4897831`.
+Upstream contains the repairs in rows 1 through 21. Row 22 records a new
+local repair for repeated recursive merge growth. PR #98 retains
+groups of up to four edges during merged narrowing. The source guard check
+also permits later literal identity replacements. The current proof updates
+follow both changes.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **849 jobs and 33,472 theorem dependency
+The full Lean development passes **894 jobs and 34,277 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -24,13 +26,17 @@ counterexamples, repair arguments, and implementation comparisons.
 ## Baseline and required contract
 
 The continuation branch is `formalization/microcfta-resume-20261012`.
-Its implementation base is `origin/microcfta` at `8ac24bb`, including PR #97.
-The restart refreshed the remote and rebased all 267 local commits without
-conflicts. Backup `backup/formalization-before-refresh-20261013-0418` retains
+Its implementation base is `origin/microcfta` at `4897831`, including
+PRs #97 through #101. The reset continuation rebased all 274 commits.
+Source conflicts kept the merged upstream implementations and all local proofs.
+Backup `backup/formalization-before-refresh-20261013-1306` retains the
+published checkpoint `8a80947`. The rebased proof tree initially matched it
+exactly. The earlier restart rebased 267 commits onto `8ac24bb`. Backup `backup/formalization-before-refresh-20261013-0418` retains
 the previous checkpoint `2aacf4f`. Proof commit `721ff6d` adds full free-name
 semantics and historical probe boundaries. The previous proof branch remains
 unchanged. Backup `backup/lean-before-microcfta-20261012-2200` and the retained
-stash preserve the pre-rebase work. Nothing from this continuation is pushed.
+stash preserve the pre-rebase work. Matti explicitly requested publication of checkpoint `8a80947`; it was
+pushed to `formalization/microcfta` at 04:33 CEST. New work remains local.
 For a constrained language, compilation and enumeration must contain every
 valid finite term and no invalid term. A finite FTA language with `n`
 distinct terms must have exactly `n` ranks, with both decoder/inverse laws.
@@ -53,8 +59,8 @@ both ranks. This is a contract distinction, not a new decoder defect.
 
 ## Repaired source defects
 
-Rows 1–17 describe earlier repairs now merged upstream. Rows 18 through 21 are
-local repairs, now based on `8ac24bb`. Each row has a retained source reproduction and a corresponding formal
+Rows 1 through 21 are merged upstream at `4897831`. Rows 18 through 21
+were local repairs at the earlier checkpoint. Row 22 is a new local repair. Each row has a retained source reproduction and a corresponding formal
 counterexample, repair theorem, or operational model. Older per-repair test
 totals in the linked reports describe their historical checkpoints. The
 current combined suite total is 620.
@@ -78,11 +84,11 @@ current combined suite total is 620.
 | 15 | `boundDepth` could loop on retained empty binder cycles even though their outer-edge closure was empty. | Use visited `nodeEdges` exposure uniformly before recursing into constructor children. [Reproduction](lean/repro/BoundRetainedBinders.hs); `LexicalBinderClosure`. |
 | 16 | A syntactic extraction such as `v == v` could be treated as an exact integer measure and remove valid expressions. | Reject fallback measures that depend on the refined value. Preserve exact singleton extraction priority. [Reproduction](lean/repro/SelfDependentMeasure.hs); `DefiningTerm`, `ParentGuardFormula`. |
 | 17 | Recursive open group positioning queried cardinalities, built an empty position map, and raised `Map.!`. | Read the available group keys directly. Unsupported recursive integer closure now returns its existing explicit error. [Reproduction](lean/repro/RecursiveOpenPositions.hs); `GroupPositions`. |
-| 18 | In one substitution scope, merging equal actual identities could remove the first identity replacement and expose a later replacement for the same formal. Sparse evaluation returned `Yes`, pruning admitted a rejected term, and compilation produced one invalid tuple. | Return `Unknown` when an uncertain identity replacement has a later duplicate formal. Pruning retains the guard; compilation returns `SolverUnknown`. The existing [guard/pruning reproduction](lean/repro/NestedScopeCapture.hs) and [compiler reproduction](lean/repro/NestedCompileCapture.hs) now check both nested and same-scope cases. `SameScopeIdentityCapture` retains the pre-repair witness; `SourceSubstitutionPrecedence` proves the new check. |
+| 18 | In one substitution scope, merging equal actual identities could remove the first identity replacement and expose a later replacement for the same formal. Sparse evaluation returned `Yes`, pruning admitted a rejected term, and compilation produced one invalid tuple. | Return `Unknown` when an uncertain identity replacement has a later non-identity replacement for the same formal. Later literal identities remain accepted; allocator coherence proves this refinement safe. Pruning retains the guard; compilation returns `SolverUnknown`. The existing [guard/pruning reproduction](lean/repro/NestedScopeCapture.hs) and [compiler reproduction](lean/repro/NestedCompileCapture.hs) now check both nested and same-scope cases. `SameScopeIdentityCapture` retains the pre-repair witness; `SourceSubstitutionPrecedence` proves the new check. |
 | 19 | A recursive callback could inspect temporary support and select different bodies during count, term, and support rebuilds. The public bounded generator returned four terms that its support rejected. | Keep construction tokens separate from size flags. Reject payload queries until the definition completes. Nested definitions retain enclosing tokens; both recursive and finite return paths remove their own token. `RecursiveConstructionQueries` proves marker provenance, stable rejection, and completed query behavior. The existing recursive-member case in `GenSpec.hs` checks the original callback, fourteen query paths, and nested-family completion. See [the construction-query notes](lean/notes-recursive-construction-queries.md). |
 | 20 | Grouped key discovery retained an earlier minimum after a callback changed its base. `minimumSize` returned zero although counts were `[0,1,1,1]` and the smallest member had size one. | Compare the final probe's keys and minima with the accumulated discovery table. Return `InconsistentRecursiveFamily` on disagreement. `GroupedProbeValidation` derives a true body fixed point for every successful check and proves that constructor programs retain their previous least-attained minima. The existing recursive-member test retains the public callback. See [the discovery-validation notes](lean/notes-grouped-probe-validation.md). |
-
 | 21 | `mergeAlternatives` on the union of two recursive languages repeatedly unfolded the same child union. Direct recursive operands and wrapped union operands exceeded the diagnostic timeout. | Stop recursive merging at retained recursive or union boundaries. Preserve the union and its accepted terms. The direct merge and enclosing equality reduction now complete. [Reproduction](lean/repro/MergedNarrowing.hs); [proof boundaries](lean/notes-merged-narrowing.md). |
+| 22 | The retained recursive child union was immediately unfolded into an ordinary node. Repeated equality passes on five recursive alternatives added six nodes and sixteen edges per observed pass. Public pruning exceeded the diagnostic timeout. | Use `createUnion` at the recursive-boundary return to retain the explicit union. The same public prune call completes. The retained fixture has idempotent merging and reaches an equality fixed point after two changing passes. This finite evidence does not prove general nested-schedule termination. See [merged narrowing notes](lean/notes-merged-narrowing.md) and [the source reproduction](lean/repro/MergedNarrowing.hs). |
 
 The private `Recursion` repair changes engine-term shape. User values,
 surface terms, original generator counts, distributions, and rank order
@@ -226,18 +232,18 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
 
 ## Evidence and its limits
 
-- Latest source suites: **620 passing examples**, on `8ac24bb` plus the local
-  repairs, including `b9fde4a`. Log: `/tmp/mcfta-20261013-merge-repair-tests.log`.
+- Latest source suites: **620 passing examples**, on `4897831` plus local
+  repair `c76d1ec`. Log: `/tmp/mcfta-20261013-retained-union-tests.log`.
   Fourmolu and Cabal-gild checks pass. Both retained recursive-merge source
   cases and both ordered-profile/rank-stutter source replays also pass.
 - Repaired nested and same-scope source probes both report `(No,Unknown)`
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **849 jobs; 33,472 theorem dependency checks**.
+- Latest integrated Lean audit: **894 jobs; 34,277 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-20261013-final-audit.log`.
+  Log: `/tmp/mcfta-20261013-source-origin-audit.log`.
 - The earlier formula capture, nested compiler capture, recursive equality,
   and open-union reproductions passed at the `de910ea` checkpoint. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -269,8 +275,8 @@ but do not prove it for every runtime execution.
 
 ## Current proof results and remaining obligations
 
-The current proof checkpoint is **`0b0b53d`**. Its complete audit passes
-**849 jobs and 33,472 theorem dependency checks**. All current proof modules
+The current proof checkpoint is **`fee28ff`**. Its complete audit passes
+**894 jobs and 34,277 theorem dependency checks**. All current proof modules
 are committed and imported by the aggregate audit. The full
 formalization remains incomplete. The detailed restart order, commands,
 repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).
@@ -355,6 +361,69 @@ See [the special-key proof](lean/notes-interned-special-key-completion.md),
 [observed root replay](lean/notes-interned-observed-root-replay.md),
 [boundary transport](lean/notes-interned-boundary-transport.md), and
 [literal observations](lean/notes-interned-literal-observations.md).
+
+### Live lexical replay and actual probe sites
+
+`InternedFreeAbsenceReplay` proves exact raw source replay after an interned
+free name disappears. `InternedLiveInputReplay` strengthens this to arbitrary
+literal maps that agree at the pure interpreter's live lexical positions.
+`InternedLiveInputReadiness` excludes a later pending request from an earlier
+completed matching site and the later actual completed probes. It does not
+assume the later binder completes.
+
+`InternedProbeChoiceSites` extracts actual earlier sites along chosen Depth
+or Unint callbacks. Each crossing retains its computed ordinary level and
+chronological cache-growth evidence. `InternedLiveInputSupport` derives the
+needed agreement when every changed current input is fresh and the current
+probe is an older available record. General encountered scopes can also
+have different Unint levels. Those differences remain an explicit gap.
+
+`InternedProbeChoiceSites.completed_route` now retains the exact source body
+at every crossing, as well as its probe choice and cache history. This
+supports comparison with the actual pending descendant path. Do not assume
+that a stored body's depth equals either probe's depth:
+`InternedClosedProbeCostBoundary.actual_depths` checks depths `(1, 0, 0)`
+in a record created by a closed source run. This is a boundary for the
+proposed invariant, not a source divergence counterexample.
+
+`InternedPendingOrdinaryMismatch.closed_depth_mismatch` now derives two
+completed Depth calls of the same source body with different cached depths
+from any hypothetical closed pending run. It derives the active source
+origin, both lexical routes, literal contexts, and chronological histories.
+No assumed callback equality or externally supplied origin is required.
+The remaining ordinary-level mismatch case is not yet excluded.
+
+### Physical comparison and cold execution
+
+`MergedOrdinaryHeight` and `MergedMergeTermination` give a decreasing measure
+for guarded recursive merge calls. `MergedComparisonSource` includes the
+source EmptyNode shortcuts and ordered arity checks. `MergedPhysicalWarmup`
+and `MergedPhysicalComparison` derive a finite physical inventory for the
+`PreparedWithoutMu` fragment. `MergedPhysicalLanguage` proves exact finite
+term semantics for its epsilon reader. `MergedPhysicalUnion` proves exact
+operand-union language through actual normalization and cache readback.
+
+`MergedColdExecution` and `MergedColdInventory` derive completion per unfold,
+finite cache changes, and a finite inventory for one generated chronological
+trace. They require no eager warmup and do not compare hypothetical allocation
+histories. `MergedColdReaderFacts.read_closed` now proves successful ordered
+source edge exposure for closed roots in that fragment. It returns resident
+edges with closed children, the exact final cache, preserved facts, and exact
+stability under extra proof fuel. `MergedSourceExposureLanguage` derives
+actual epsilon origins for every returned edge and proves finite-term
+soundness. Reverse edge coverage and the full stateful comparison remain open.
+
+`MergedPhysicalGroupRoot.grouped_root_covers` proves ordinary-root language
+coverage through actual child, edge, and parent effects. The checked column
+worker derives filtering soundness from physical comparison and covers
+singleton, retained recursive union, and ordinary union branches. Recursive
+certificates apply only below the parent height. Composing those certificates
+with state-specific selection in the complete worker remains active work.
+See [physical comparison](lean/notes-merged-physical-comparison.md),
+[actual union semantics](lean/notes-merged-physical-union.md), and
+[cold execution](lean/notes-merged-cold-comparison.md). The new
+[cold reader](lean/notes-merged-cold-reader.md) and
+[physical group](lean/notes-merged-physical-groups.md) notes give exact scopes.
 
 ### Equality fixed-point termination
 

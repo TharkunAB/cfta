@@ -17,7 +17,7 @@ established. A theorem whose main algorithmic obligation is a premise
 does not close that obligation. An implementation counterexample prevents a
 soundness claim for that path; it does not remove that path from the scope.
 
-Source baseline: `origin/microcfta` at `8ac24bb`. This includes the merged
+Source baseline: `origin/microcfta` at `4897831`. This includes the merged
 core-formula changes at `9ad319d`. The current semantic specification and
 implementation findings are in [SYSTEM.md](SYSTEM.md). All 66 source modules
 are inventoried in [API-COVERAGE.md](API-COVERAGE.md).
@@ -29,6 +29,17 @@ free-name interpretation and the global decoded free-name heap are now
 proved, including historical literal-probe boundary exclusion. General
 Mu-boundary replay and first-run no-pending remain open. See root
 [FINDINGS.md](../FINDINGS.md) for current status and validation.
+
+Current continuation proofs add full live lexical input replay and actual
+completed probe-choice sites. They derive guarded merge-call descent, physical
+comparison and union language, and stabilization of cold unfolding traces in
+the `PreparedWithoutMu` fragment. Closed cold edge exposure now completes,
+retains cache facts, and has a finite-term soundness proof. Actual physical
+groups and checked child-column branches have coverage proofs. Any hypothetical
+closed pending encounter now requires different computed ordinary levels at
+corresponding source bodies. That remaining case, complete stateful comparison,
+and recursive merge-worker composition remain active.
+See root [HANDOFF.md](../HANDOFF.md) for exact theorem boundaries and evidence.
 
 The latest physical equality work derives admitted leaf readback, identity,
 intersection, and projection union. A normalization phase handles arbitrary

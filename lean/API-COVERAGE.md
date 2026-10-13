@@ -2,11 +2,12 @@
 
 This inventory covers all 66 Haskell source modules under `microcfta/src` and
 `microcfta-generator/src`. It includes exposed internal modules and the three
-private modules. It uses the source rebased on `origin/microcfta` at `8ac24bb`, which includes
+private modules. It uses the source rebased on `origin/microcfta` at `4897831`, which includes
 the `tidy/core-formula` work, optimization changes, and the findings repairs
-through PR #97. Local repairs reject uncertain identity-precedence changes
+through PR #101. Upstream rejects uncertain non-identity precedence changes
 within one substitution scope and payload queries of unfinished recursive
-construction occurrences.
+construction occurrences. Local repair `c76d1ec` retains explicit recursive
+child unions so the five-alternative pruning fixture stabilizes.
 Grouped recursion also checks that the final body has its discovered keys
 and minimum sizes before returning a tied family.
 PR #97 inserts `mergeAlternatives` into every equality peer projection.
@@ -15,6 +16,17 @@ projected-leaf schedule. General recursive merge correspondence remains open;
 see [merged narrowing](notes-merged-narrowing.md). Full nested free-name
 semantics and the complete-record heap invariant are now source-derived;
 see [free names](notes-interned-free-names.md).
+
+Current continuation proofs add full live lexical input replay and actual
+completed probe-choice sites. They derive guarded merge-call descent, physical
+comparison and union language, and stabilization of cold unfolding traces in
+the `PreparedWithoutMu` fragment. Closed cold edge exposure now completes,
+retains cache facts, and has a finite-term soundness proof. Actual physical
+groups and checked child-column branches have coverage proofs. Any hypothetical
+closed pending encounter now requires different computed ordinary levels at
+corresponding source bodies. That remaining case, complete stateful comparison,
+and recursive merge-worker composition remain active.
+See root [HANDOFF.md](../HANDOFF.md) for exact theorem boundaries and evidence.
 
 The model names below refer to files in `MicroCFTA/`.
 

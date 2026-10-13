@@ -1,17 +1,20 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 04:28 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 14:15 CEST (Europe/Stockholm)**.
 
 ## Read first
 
 The formalization is **not complete**. Matti requested this restart checkpoint
 because the chat became unreliable. Continue the same full task. Do not replace
 it with a smaller fragment, a theorem-count target, or a documentation task.
-The latest committed proof checkpoint is **`0b0b53d`**. Its complete audit
-passes **849 jobs; 33,472 theorem dependency checks**. It includes full free-name
-semantics, recursive probe dependencies, and the complete merged projected-leaf
-schedule. The source repair is committed as `b9fde4a`. Inspect the live working
-tree before proceeding; preserve every current proof and source repair.
+The latest committed proof checkpoint is **`fee28ff`**. Its integrated audit
+passes **894 jobs; 34,277 theorem dependency checks**. It adds full lexical
+input replay, actual probe-choice sites, a decreasing merge-call measure,
+physical comparison and union semantics, cold unfolding stabilization,
+closed cold-reader completion and soundness, physical group construction,
+and a source-derived ordinary-depth obstruction for closed pending runs.
+The new source repair is `c76d1ec`. Inspect the live working tree before
+proceeding; more proofs can be in progress. Preserve every current result.
 
 Read this file, root `FINDINGS.md`, and the linked notes before new proof work.
 Root `FINDINGS.md` is the current report. `lean/FINDINGS.md` is historical.
@@ -46,9 +49,10 @@ weekly report and exits 99 at the threshold. Do not treat missing or stale
 usage data as permission to spend credits.
 
 Local proof work, focused source diagnostics, and necessary source repairs are
-authorized. **Keep everything local. Do not push, deploy, or post to the board.**
-Matti explicitly answered the previous publication question: **"Keep the
-checkpoint local"**. No publication approval is pending. The prepared board
+authorized. **Keep new work local. Do not push, deploy, or post to the board.**
+Matti later authorized one push to `formalization/microcfta`. Checkpoint
+`8a80947` was pushed and independently verified there at 04:33 CEST.
+That completed request does not authorize publication of new work. The prepared board
 payload `/tmp/mcfta-board-proposed.json` must remain local.
 
 Address Matti in English. Timestamp every response. He said: **"Don't give me a
@@ -61,9 +65,9 @@ honest proof boundaries; passing examples are not a general theorem.
 
 - Repository: `/home/tritlo/Code/mcfta`; Ubuntu/WSL2; Bash.
 - Branch: `formalization/microcfta-resume-20261012`.
-- Correct implementation base: **`origin/microcfta`, `8ac24bb`**. This overrides
+- Correct implementation base: **`origin/microcfta`, `4897831`**. This overrides
   older memory about `tidy/core-formula`.
-- Latest committed proof: **`0b0b53d`**. New supporting checkpoints are
+- Previous pre-reset proof: **`0b0b53d`**. Its supporting checkpoints are
   `721ff6d` (full free names) and `76da95a` (probe dependency and source replay). The earlier `d630667` proof checkpoint
   rebased to `447ec5c`; its documentation checkpoint rebased to `8dc288a`.
 - Restart backup: `backup/formalization-before-refresh-20261013-0418` at
@@ -79,7 +83,7 @@ honest proof boundaries; passing examples are not a general theorem.
 The earlier rebase replayed 175 proof/documentation commits. The latest
 refresh preserved all 267 local commits and added upstream PR #97. Old Haskell repairs were
 retired because the base contains revised upstream fixes. Do not replay those
-patches. The current local production repairs are:
+patches. The four production repairs at the pre-reset checkpoint were:
 
 | Commit | Repair |
 | --- | --- |
@@ -87,16 +91,35 @@ patches. The current local production repairs are:
 | `a38660f` | Construction tokens reject payload queries inside unfinished recursive generator callbacks. Later proof work also repaired token removal on the finite return path. |
 | `4fd133f` | Grouped discovery checks final keys and minima and returns InconsistentRecursiveFamily on disagreement. |
 
-Local commit `b9fde4a` supplies the fourth repair. It stops `mergeAlternatives` from recursively merging the same
+Historical local commit `b9fde4a` supplied the fourth repair. It stops `mergeAlternatives` from recursively merging the same
 union of recursive boundaries. The direct and wrapped-union witnesses now
 complete. Root `FINDINGS.md` row 21 and `lean/notes-merged-narrowing.md` record
 the reproduction, repair, and new source-correspondence obligations.
+
+At 13:06 CEST, the reset continuation rebased all 274 commits onto
+`origin/microcfta` at `4897831`. Backup
+`backup/formalization-before-refresh-20261013-1306` preserves `8a80947`.
+The rebased checkpoint is `d7de662`. All proof and counterexample files
+matched the backup exactly after rebase. Conflicts kept the upstream source
+and all local proofs. The Haskell packages match upstream exactly.
+Upstream PRs #99, #100, and #101 include all four repairs above. PR #98
+preserves up to four edges per merge group. The guard repair permits later
+literal identities. Current proof updates account for both policy changes.
+All 620 existing Haskell examples passed again after this refresh; see
+`/tmp/mcfta-20261013-upstream-refresh-tests.log`.
 
 Before new repository work, inspect status and refresh the correct remote base.
 The continuation branch has no tracking branch. The previous successful command
 was `git pull --ff-only origin microcfta`. If new upstream commits prevent a fast
 forward, preserve the local checkpoint and rebase carefully; do not discard it.
 Git writes need escalation in the current sandbox because `.git` is read-only.
+
+The reset continuation found another defect in the upstream boundary return.
+Calling `union` there unfolded retained recursive operands into an ordinary
+node. Five recursive alternatives then grew under repeated equality passes,
+and the actual public pruning call timed out. The local repair uses
+`createUnion` at that return. The fixture now completes and stabilizes. It is
+row 22 in `FINDINGS.md`. This is not a general convergence theorem.
 
 ## Commands and verified evidence
 
@@ -107,12 +130,12 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build MicroCFTA.InternedNestedProfiles
 ```
 
-Latest complete audit: `/tmp/mcfta-20261013-final-audit.log`.
+Latest complete audit: `/tmp/mcfta-20261013-source-origin-audit.log`.
 It checks every imported theorem against the allowlist `propext`,
 `Classical.choice`, and `Quot.sound`. It rejects omitted proofs, native evaluation
 axioms, and custom axioms. The count is validation evidence, not a coverage
-percentage. All prior proofs and all new proof modules are imported by
-`Audit.lean` in `0b0b53d`.
+percentage. The aggregate `Audit.lean` imports all proof modules in the current committed checkpoints.
+Check new working-tree files separately until they are integrated.
 
 Use Nix for Haskell. Nix store/lock access needs escalation. Select the coherent
 linker/GMP environment with the PATH prefix below.
@@ -122,10 +145,10 @@ nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests mic
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta /tmp/PROBE.hs'
 ```
 
-All **620 existing examples** passed after the latest recursive-merge repair:
+All **620 existing examples** passed after source repair `c76d1ec`:
 284 core, 194 generator, 142 refinement. Log:
-`/tmp/mcfta-20261013-merge-repair-tests.log`. Fourmolu checks passed for both
-changed source files. No Cabal file changed. Do not rerun these suites without
+`/tmp/mcfta-20261013-retained-union-tests.log`. Fourmolu checks passed for the
+changed source and reproduction files. Both active Cabal-gild checks passed. Do not rerun these suites without
 a new source change or unresolved failure.
 
 The focused merge witnesses are in `lean/repro/MergedNarrowing.hs`; validation
@@ -243,6 +266,33 @@ identity descent and well-founded induction on those dependencies.
 `InternedOldProbeReplay` proves exact old-hit agreement from the two local
 probe observations. The newer smart-hit case remains part of joint replay.
 
+`InternedRequestFreeReadback.request_free` derives returned free-name
+membership from the actual completed request and its final free-name heap.
+It covers hits, misses, and both cleanup modes. `interned_probe_absent`
+therefore excludes an absent interned name from both actual probes.
+
+`InternedFreeAbsenceReplay.build_related` now proves full-Syntax exact raw
+replay after replacing one interned literal name, when that name is absent
+from the first completed result. Both completed histories must have a common
+coherent cache extension. The proof includes node dead-edge removal, ordered
+union operands, and dynamic Mu requests. It does not assume intermediate
+replacement executions complete. The pending-site composition can require
+agreement across several lexical positions, which remains active work.
+
+`InternedLiveInputReplay.build_same` strengthens replay to arbitrary lexical
+name maps. They need agree only on the pure free-name interpreter's live
+input positions. `InternedLiveInputReadiness.not_pending_after_probes` then
+uses an earlier completed site to exclude a later pending request, without
+assuming that later binder completes. `InternedLiveInputSupport` derives the
+needed agreement when every changed current input is a fresh interned name
+and the actual current probe predates those names.
+
+`InternedProbeChoiceSites.completed_site` extracts actual earlier sites along
+any chosen Depth/Unint probe route. It retains each executed depth callback,
+its computed Unint level, and its chronological cache growth. General pending
+exclusion still needs agreement when crossed Unint levels differ. No theorem
+silently treats these sentinels as fresh interned names.
+
 **Next:** derive the fresh Mu-boundary half and compose the actual dynamic-Mu
 observed replay. Free-name absence does not exclude a new closed Mu identity.
 `InternedPureProfileIdentity.ordered_identity` identifies normalized pure
@@ -255,9 +305,66 @@ The earlier temporary mirror search found no failure of the joint boundary
 claim in 275,563 closed terms and 1,358,140 active cutoffs (eight resource
 skips). That is finite model evidence only; do not use it as an assumption.
 
+## Recursive merge and physical comparison progress
+
+`MergedMergeTermination.wellFounded` derives a decreasing ordinary-constructor
+height for guarded recursive merge calls. It does not cover the subsumption
+helper or repeated-pass convergence.
+
+`MergedPhysicalWarmup` and `MergedPhysicalComparison` derive a finite physical
+comparison inventory for stored bodies that satisfy `PreparedWithoutMu`.
+`MergedComparisonSource` matches the source EmptyNode and arity branches and
+proves both comparison completion and successful inclusion.
+`MergedPhysicalLanguage` connects that row reader to finite-run epsilon
+semantics. `MergedPhysicalUnion.makeUnion_actual` proves exact union language
+through the actual constructor and its final cache.
+
+`MergedColdExecution`, `MergedColdUnfolding`, and `MergedColdInventory` remove
+eager preparation from the chronological unfolding argument. Every query
+completes in that structural fragment. At most the initial node counter's
+number of calls can change the cache. Generated traces have a finite physical
+inventory and no infinite fresh-pair descent. The ordered cold source reader
+now has successful closed-root completion, resident edges with closed
+children, exact returned-cache facts, and extra-fuel stability in
+`MergedColdReaderFacts.read_closed`. Extraction of the full ordered stateful
+comparison remains active work. Arbitrary open nested
+Mu reconstruction is still outside this structural fragment.
+
+`MergedPhysicalGroupRoot.grouped_root_covers` derives ordinary-root language
+coverage through actual group, edge, and parent constructor effects.
+`MergedPhysicalGroupColumnWorker.checked_column_correct` covers actual
+comparison filtering and all three child-column branches. Its recursive
+certificates are restricted by ordinary height. The complete recursive
+worker still needs to construct those smaller certificates and connect
+state-specific comparison selection to the group sequence.
+
+`InternedProbeChoiceSites.completed_route` retains exact source bodies at
+crossed binders. The closed depth counterexample now checks body/probe
+depths `(1, 0, 0)` in `InternedClosedProbeCostBoundary.actual_depths`.
+Do not use equality of those depths as a general source invariant.
+`InternedPendingOrdinaryMismatch.closed_depth_mismatch` derives two actual
+completed Depth calls of the same source body with different cached depths
+from any hypothetical closed pending run. The active source origin, lexical
+routes, contexts, and cache histories are all derived. The mismatch case
+remains open.
+
+`MergedSourceExposureLanguage.nodeEdges_origins` derives an actual epsilon
+path for each returned edge in any extension of the returned cache.
+`nodeEdges_sound` excludes introduced finite terms. Reverse edge coverage
+is the remaining reader-language direction.
+
+See `lean/notes-merged-recursion-measure.md`,
+`lean/notes-merged-physical-comparison.md`,
+`lean/notes-merged-physical-union.md`, and
+`lean/notes-merged-cold-comparison.md`, `lean/notes-merged-cold-reader.md`,
+and `lean/notes-merged-physical-groups.md`.
+
 ## Equality fixed-point termination
 
 PR #97 (`8ac24bb`) inserts `mergeAlternatives` after every peer projection.
+The current model follows PR #98: up to four distinct rows stay exact;
+larger groups merge. The nullary source and complete schedule proofs use
+that literal threshold.
 The new `MergedProjectionBound.compiled_bound` now covers the complete
 physical merged projected-leaf schedule. `MergedRawLeafSource.worker_actual`
 derives the exact merged representation in the actual runtime cache.
