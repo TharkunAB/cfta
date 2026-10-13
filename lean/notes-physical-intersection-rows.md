@@ -64,6 +64,6 @@ General Mu/union construction, exposure, and pending-thunk execution remain open
 membership and ordinary-root deep callback observations, including nested
 children. General cached-depth and binder-heap induction remain open.
 
-Checkpoints: `70795677`, `0bc6806e`, `aca84882`, `7e942dde`, and `9207c2cf`.
-The closing audit passes 1,180 targets and 39,689 theorem dependency checks.
-Log: `/tmp/mcfta-closing-20261014-audit.log`.
+Checkpoints: `70795677`, `0bc6806e`, `aca84882`, `7e942dde`, `9207c2cf`, and `93f3cbaa`.
+The closing audit passes 1,185 targets and 39,846 theorem dependency checks.
+Log: `/tmp/mcfta-recursive-20261014-audit.log`.

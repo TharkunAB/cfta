@@ -72,9 +72,9 @@ explicit premises. This proof does not replace the source worker with an eager
 Haskell implementation. Concrete lazy heap scheduling remains a runtime boundary.
 
 Earlier checkpoints: `5f79d22e` and `bc7599d4`. The finite inverse proof is
-`51242646`. The current audit passes 1,183 targets and 39,767 theorem dependency
+`51242646`. The current audit passes 1,185 targets and 39,846 theorem dependency
 checks using only the three permitted Lean
 foundations.
-Log: `/tmp/mcfta-sized-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-20261014-audit.log`.
 Concrete Haskell containers, lazy heap execution, primitive machine resources,
 and external solver behavior retain their stated contracts.

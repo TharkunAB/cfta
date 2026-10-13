@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 00:51 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 01:08 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -77,8 +77,13 @@ without a product-row or global child-meet premise.
 `SourcePhysicalRecursiveRows*` proves actual repaired unfolding, precise cache
 effects, stable replay, and shared rows for `mu x. (base | step x)`. It derives
 that fragment's independent language of finite Chain terms from an available coherent
-stored knot. It does not prove construction of every knot or general Mu/union
-exposure. See [physical intersection](lean/notes-physical-intersection-rows.md).
+stored knot. `SourcePhysicalRecursiveConstruction` now supplies that knot from actual repaired
+empty-cache construction for arbitrary base and step symbols. It derives exact
+records, counters, coherent availability, constructor replay, unfolding, and shared
+rows. `SourcePhysicalRecursiveSized.source_sized` connects those source-derived
+rows to one distinct term at every positive size, finite class evaluation, distinct
+size-major prefixes, and both inverse laws. General Mu/union construction and
+exposure remain open. See [physical intersection](lean/notes-physical-intersection-rows.md).
 
 `InternedDepthFreeProjection*` proves full-syntax free-name membership
 agreement and actual ordinary-root callback deep observations with nested
@@ -116,16 +121,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`51242646`**; later commits record this handoff.
+The latest proof checkpoint is **`93f3cbaa`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,183 build targets and 39,767 theorem
+The current Lean 4.34.1 audit passes **1,185 build targets and 39,846 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-sized-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **35% at 00:51 CEST**.
+No background proof worker is active. Weekly allowance was **35% at 01:08 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

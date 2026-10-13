@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 00:51 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 01:08 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -10,8 +10,8 @@ component note for the chosen target. Root findings and this handoff supersede
 older next-target statements. `lean/FINDINGS.md` retains historical findings.
 
 The current continuation refreshed upstream and completed the finite optimized
-Sized inverse proof. **No background proof worker is active.**
-The latest proof checkpoint is **`51242646`**. A later documentation commit
+Sized inverse proof and recursive knot construction. **No background proof worker is active.**
+The latest proof checkpoint is **`93f3cbaa`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -36,7 +36,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **35% at 00:51 CEST**. This is a historical value.
+The last observed value was **35% at 01:08 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -195,15 +195,21 @@ key, so constructor-effect equality is not full memo-effect equality.
 `SourcePhysicalRecursiveRows*` now proves actual repaired unfolding, cache
 effects, stable replay, and shared rows for `mu x. (base | step x)`. It derives
 an independent language of finite Chain terms from an available coherent
-stored knot. It does not yet construct that initial knot or cover general Mu/union exposure.
+stored knot. `SourcePhysicalRecursiveConstruction` now derives that knot from actual empty-cache
+construction for arbitrary symbols, including equal symbols. It retains the exact
+record and both final counters. Construction replay, actual unfolding, and shared
+rows follow without a stored-knot premise. `SourcePhysicalRecursiveSized.source_sized`
+proves singleton positive-size classes, finite evaluation, size order, and both
+inverses for those source-derived rows. General Mu/union construction and exposure
+remain open.
 See `lean/notes-physical-intersection-rows.md` and `lean/notes-shared-rows.md`.
 
 ## Remaining priorities
 
-1. Extend physical recursive exposure and construction from the single-knot
-   proof. Start by deriving a concrete construction witness for its stored-knot
-   premises, then address general Mu/union and the native cyclic product-row
-   boundary. Keep actual cache effects and finite execution in the statements.
+1. Extend physical recursive construction and exposure toward general Mu/union
+   and the native cyclic product-row boundary. The single-knot empty-cache
+   construction witness and its exact Sized classes are complete. Do not repeat
+   that fragment proof. Keep actual cache effects and finite execution in the statements.
    The raw-map Sized contract is already proved; do not redo it.
 2. Complete repaired cached-depth/deep heap induction. `InternedDepthFreeProjection*`
    now proves full-syntax free-name membership and ordinary-root callback deep
@@ -253,10 +259,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,183 jobs and 39,767 theorem dependency checks**.
+The current build passes **1,185 jobs and 39,846 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-sized-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -290,6 +296,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `93f3cbaa` | Actual recursive knot construction, shared rows, and exact Sized classes. |
 | `51242646` | Finite optimized inverse queries on original map keys. |
 | `9207c2cf` | Actual single-knot unfolding and shared rows. |
 | `7e942dde` | Free-name projection and ordinary deep observations. |

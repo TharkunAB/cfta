@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 00:51 CEST**, upstream `f59c198d`.
-The latest proof commit is `51242646`. No background proof worker is active.
+Current checkpoint: **2026-10-14 01:08 CEST**, upstream `f59c198d`.
+The latest proof commit is `93f3cbaa`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -41,8 +41,11 @@ Repair `a8b32869` removes index-sum overflow. See
 
 Ordinary native intersection dispatch, physical cache effects, completed
 memo provenance, shared traversal, and minimum callbacks are now proved.
-A productive single-knot fragment has actual unfolding and shared exposure.
-General Mu/union construction, pending memo values, and complete recursive
+The productive single-knot fragment now has actual empty-cache construction,
+exact returned records and counters, stable replay, unfolding, and shared exposure.
+`SourcePhysicalRecursiveSized` derives its singleton positive-size classes, finite
+evaluation, size order, and both inverses. General Mu/union construction, pending
+memo values, and complete recursive
 memo-effect traces remain open. Free-name projection and ordinary-root deep
 observations are derived; general cached-depth and binder-heap induction
 remain open. See [physical construction](notes-physical-intersection-rows.md).
@@ -56,7 +59,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,183 targets and 39,767 theorem dependency checks**
+The current audit passes **1,185 targets and 39,846 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new
