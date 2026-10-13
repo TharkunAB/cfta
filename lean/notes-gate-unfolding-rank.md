@@ -592,3 +592,35 @@ either probe name. It fails the documented law if that law includes an old
 name equal to a capture. This refutes a proposed per-probe identity lemma.
 It does not establish a source termination defect. The combined two-probe
 occurrence theorem above still applies.
+
+## Exact record recovery from structural shape (2026-10-13 02:24)
+
+`InternedBoundaryShape` removes ordinary node and edge identities and cached
+metadata. It retains symbols, guards, child order, union member order,
+literal references, and Mu identities. `shape_injective` proves that equal
+shapes of two available records in one coherent linked cache imply equality
+of their complete records. The mutual proof recovers exact ordered child
+and edge payloads before it recovers each parent cache key. This bridges a
+future shape replay proof to exact source identity. It does not assert that
+arbitrary nested replay has equal shapes.
+
+The focused build passes (157 jobs). The combined isolated axiom audit
+checks 8,674 theorem dependencies with the same foundational allowlist.
+
+## Source self filtering preserves emptiness (2026-10-13 02:31)
+
+`InternedUnionNonemptyMembers` derives that every member of each stored union
+is nonempty. The proof follows arbitrary complete nested syntax from empty
+caches and covers both completed and pending outcomes.
+
+`InternedFilterEmptiness.filter_empty_iff` combines this invariant with the
+proved union cardinality and distinct-reference invariant. Removing one
+self reference from a stored union leaves a nonempty member. The source
+root self filter therefore preserves empty status for every available
+record. `InternedCallbackEmptiness.callback_empty_iff` lifts this result to
+arbitrary nested callbacks, with no binder-free or completion premise. A
+normalized callback returns EmptyNode exactly when its actual body call
+returns EmptyNode. Pending body execution cannot become an empty result.
+
+The focused build passes (170 jobs). The combined isolated axiom audit
+checks 8,797 theorem dependencies with the same foundational allowlist.
