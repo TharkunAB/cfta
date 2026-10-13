@@ -32,4 +32,9 @@ The proof needs no common extension of divergent caches.
 `EqualityLeafProjectionRuntimeLeaves` applies this result to actual endpoint
 reads and target folds. Their finite representations replay in the actual
 output cache. A subsequent runtime operation uses that cache directly.
-Whole class and schedule composition remains the next step.
+`EqualityOrdinaryUnionSource` proves exact equality between constructor union
+and the source ordinary `Operations.union` branch on represented inputs.
+The path worker now calls that source branch directly.
+
+Complete class, pass, and repeated-runtime composition is proved in
+`EqualityLeafProjectionRuntimeBound`. See [the runtime bound](notes-equality-leaf-runtime-bound.md).

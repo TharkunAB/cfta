@@ -39,7 +39,7 @@ The assumptions are six local constructor equations, not a whole-pass or
 whole-schedule commutation premise. The equations must hold for requests
 that contain duplicate and dead rows. `InternedNodeSetCongruence` supplies
 physical constructor results for those two normalization cases; connecting
-all source edit/read operations to these equations remains an adapter task.
+the later runtime proof below derives the complete physical worker connection.
 
 `EqualityLeafProjectionSchedule` computes every class target from the same
 input forest. Its target intersection keeps the first operand as the seed
@@ -86,10 +86,13 @@ not a proof that every physical source operation satisfies the adapter laws.
 
 The result covers fixed selected classes on finite ordinary ancestor trees
 whose endpoints are leaf domains. Canonical parent merging and leaf-row
-growth are included. The local source constructor/read equations remain
-explicit. The physical cache adapter must preserve the complete resident
-records and exact edge sets; node identity injectivity is not assumed for
-the occurrence representation.
+growth are included. The original abstract theorem keeps local constructor
+and read equations explicit. The later physical runtime development derives
+them from actual finite constructor and worker runs, then removes temporary
+proof allocations by raw leaf pullback and occurrence trimming. It reaches
+an allocation-free physical fixed point within the same initial potential
+plus one. See [the runtime bound](notes-equality-leaf-runtime-bound.md).
+Node identity injectivity is not assumed for occurrence representations.
 
 The proof does not cover intersection at an ancestor endpoint with nested
 children. Such an intersection can create Cartesian ancestor alternatives.
