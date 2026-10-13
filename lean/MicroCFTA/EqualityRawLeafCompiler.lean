@@ -138,7 +138,7 @@ theorem meet_record (target before : Leaf initial symbols) (built state resultSt
       exact targetRead.symm.trans (decoded.trans (choices_exact _).symm)
     exact raw_records _ _ state resultState after facts.coherent.valid resultFacts.coherent.valid afterCoherent
       meetGrowth resultGrowth same
-  · obtain ⟨rows, exactWork⟩ := EqualityRawLeafProgress.product_certified (rawChoices target) (rawChoices before)
+  · obtain ⟨rows, exactWork⟩ := EqualityRawLeafProgress.orderedProduct_certified (rawChoices target) (rawChoices before)
       state built facts.coherent builtFacts.coherent facts.linked builtFacts.linked
     have exactRun : run (meet target (run (build before) built).1) state =
         run (EqualityRawLeafConstruction.build (EqualityRawLeafConstruction.declarations rows)) targetResult.2 := by

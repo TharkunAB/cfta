@@ -19,23 +19,8 @@ noncomputable local instance : DecidableEq ConstraintKey := by classical exact i
 /-- Actual raw Cartesian construction against an empty right leaf returns EmptyNode. -/
 theorem intersect_empty (value : Value (Fin symbols) ConstraintKey) (state : State (Fin symbols) ConstraintKey) :
     (run (EqualityRawLeafProduct.intersect value .empty) state).1 = .empty := by
-  unfold EqualityRawLeafProduct.intersect
-  split
-  · rename_i same
-    have empty : value = .empty := (reference_empty value).mp same
-    subst value
-    rfl
-  · have noPairs : EqualityRawLeafProduct.cross ((nodeEdges value).map EqualityRawLeafProduct.declaration) [] = [] := by
-      unfold EqualityRawLeafProduct.cross
-      rw [SymbolicHashJoin.hashJoin_exact]
-      apply List.flatMap_eq_nil_iff.mpr
-      intro row _
-      simp
-    change (run (EqualityRawLeafConstruction.build (EqualityRawLeafProduct.cross
-      ((nodeEdges value).map EqualityRawLeafProduct.declaration) [])) state).1 = .empty
-    rw [noPairs]
-    simp [EqualityRawLeafConstruction.build, EqualityRawLeafConstruction.requests,
-      sequence, makeNode, surviving, canonicalEdges, EnumerationBuilderCaches.canonicalIds, run_bind, run]
+  rw [EqualityRawLeafProduct.intersect_empty_right]
+  rfl
 
 /-- Building a target does not change the source's empty intersection result. -/
 theorem meet_empty (target : EqualityRawLeafInventory.Leaf initial symbols) (state : State (Fin symbols) ConstraintKey) :

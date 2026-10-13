@@ -5,7 +5,8 @@ import MicroCFTA.EqualityRawLeafIdentity
 
 The source Cartesian branch reads the stored complete rows. It preserves
 the hash-join pair order, conjoins residual guards, and runs every checked
-edge request. The global identity branch keeps original raw syntax.
+edge request. The global identity branch keeps original raw syntax. The
+ordinary Cartesian branch orders both operands by their node identities.
 -/
 namespace MicroCFTA.EqualityRawLeafProduct
 open SourceGuards FullSyntax InternedConstructorTemplates InternedRecordCoherence
@@ -111,10 +112,81 @@ theorem product_read (first second : List (Fin symbols × SourceNoncanonicalLeaf
         ((declarations_member second _).mpr ⟨symbol, rightRow, rightPresent, rfl⟩)
     · exact Prod.ext rfl (congrArg Subtype.val same)
 
+/-- The source orders ordinary operands by their interned node identities. -/
+def swap (left right : Value (Fin symbols) ConstraintKey) : Bool :=
+  match left, right with
+  | .node first _ _ _, .node second _ _ _ => decide (second.identity < first.identity)
+  | _, _ => false
+
+/-- The Cartesian branch retains the exact source operand and hash-join request order. -/
+noncomputable def orderedProduct (left right : Value (Fin symbols) ConstraintKey) :
+    Work (Fin symbols) ConstraintKey (Value (Fin symbols) ConstraintKey) :=
+  if swap left right then product right left else product left right
+
+/-- Empty left operands issue no Cartesian row or node-cache request. -/
+theorem product_empty_left (value : Value (Fin symbols) ConstraintKey) : product .empty value = .pure .empty := by
+  unfold product cross
+  rw [SymbolicHashJoin.hashJoin_exact]
+  simp [nodeEdges, build, requests, EqualityLeafProjectionWorkers.sequence, Work.bind,
+    makeNode, surviving, canonicalEdges, EnumerationBuilderCaches.canonicalIds]
+
+/-- Empty right operands issue no Cartesian row or node-cache request. -/
+theorem product_empty_right (value : Value (Fin symbols) ConstraintKey) : product value .empty = .pure .empty := by
+  have noPairs : cross ((nodeEdges value).map declaration) [] = [] := by
+    unfold cross
+    rw [SymbolicHashJoin.hashJoin_exact]
+    apply List.flatMap_eq_nil_iff.mpr
+    intro row _
+    simp
+  change build (cross ((nodeEdges value).map declaration) []) = _
+  rw [noPairs]
+  simp [build, requests, EqualityLeafProjectionWorkers.sequence, Work.bind,
+    makeNode, surviving, canonicalEdges, EnumerationBuilderCaches.canonicalIds]
+
+/-- Node-identity orientation changes no decoded Cartesian result. -/
+theorem orderedProduct_read (first second : List (Fin symbols × SourceNoncanonicalLeafProgress.Raw initial))
+    (leftState rightState state : State (Fin symbols) ConstraintKey)
+    (leftCoherent : Coherent leftState) (rightCoherent : Coherent rightState) (coherent : Coherent state)
+    (leftLinked : Linked leftState) (rightLinked : Linked rightState) (linked : Linked state) :
+    read (run (orderedProduct (run (build (declarations first)) leftState).1
+      (run (build (declarations second)) rightState).1) state).1 =
+      SourceNoncanonicalLeafProgress.product (denote first) (denote second) := by
+  unfold orderedProduct
+  split
+  · rw [product_read second first rightState leftState state rightCoherent leftCoherent coherent rightLinked leftLinked linked]
+    exact SourceNoncanonicalLeafProgress.product_comm _ _
+  · exact product_read first second leftState rightState state leftCoherent rightCoherent coherent leftLinked rightLinked linked
+
 /-- The source shortcut compares complete physical node identities. -/
 noncomputable def intersect (left right : Value (Fin symbols) ConstraintKey) :
     Work (Fin symbols) ConstraintKey (Value (Fin symbols) ConstraintKey) :=
-  if left.referenceOf = right.referenceOf then .pure left else product left right
+  if left.referenceOf = right.referenceOf then .pure left else orderedProduct left right
+
+/-- The expanded model agrees with the source's first empty-left branch without allocation. -/
+theorem intersect_empty_left (value : Value (Fin symbols) ConstraintKey) : intersect .empty value = .pure .empty := by
+  unfold intersect
+  split
+  · rfl
+  · simp only [orderedProduct, swap, Bool.false_eq_true, ↓reduceIte, product_empty_left]
+
+/-- The expanded model agrees with the source's first empty-right branch without allocation. -/
+theorem intersect_empty_right (value : Value (Fin symbols) ConstraintKey) : intersect value .empty = .pure .empty := by
+  unfold intersect
+  split
+  · rename_i same
+    have empty : value = .empty := (EqualityLeafProjectionPhysical.reference_empty value).mp same
+    subst value
+    rfl
+  · cases value <;> simp only [orderedProduct, swap, Bool.false_eq_true, ↓reduceIte, product_empty_right]
+
+/-- Closed ordinary nodes use the source identity test and ascending operand orientation. -/
+theorem intersect_nodes (left right : Cache.Interned InternedBinderProtocol.NodeKey)
+    (leftEdges rightEdges : List (EdgeValue (Fin symbols) ConstraintKey)) (leftDepth rightDepth : Nat) :
+    intersect (.node left leftEdges leftDepth []) (.node right rightEdges rightDepth []) =
+      if left.identity = right.identity then .pure (.node left leftEdges leftDepth []) else
+        if right.identity < left.identity then product (.node right rightEdges rightDepth []) (.node left leftEdges leftDepth [])
+        else product (.node left leftEdges leftDepth []) (.node right rightEdges rightDepth []) := by
+  simp [intersect, orderedProduct, swap, Value.referenceOf]
 
 /-- Both physical source branches agree with the raw normalization-phase operation. -/
 theorem intersect_read (first second : List (Fin symbols × SourceNoncanonicalLeafProgress.Raw initial))
@@ -139,7 +211,7 @@ theorem intersect_read (first second : List (Fin symbols × SourceNoncanonicalLe
   · have physical := fun equal => same (identity.mp equal)
     unfold intersect
     rw [ite_eq_right physical]
-    rw [product_read first second leftState rightState state leftCoherent rightCoherent coherent leftLinked rightLinked linked]
+    rw [orderedProduct_read first second leftState rightState state leftCoherent rightCoherent coherent leftLinked rightLinked linked]
     simp only [SourceNoncanonicalLeafProgress.intersect, same, ↓reduceIte]
 
 end MicroCFTA.EqualityRawLeafProduct

@@ -66,6 +66,19 @@ theorem product_certified (first second : List (Fin symbols × SourceNoncanonica
     (physical_supported second rightState rightCoherent rightLinked)
   exact ⟨certify (cross left right) supported, congrArg build (certify_exact (cross left right) supported).symm⟩
 
+/-- Identity-oriented Cartesian requests retain exact ordered raw certificates. -/
+theorem orderedProduct_certified (first second : List (Fin symbols × SourceNoncanonicalLeafProgress.Raw initial))
+    (leftState rightState : State (Fin symbols) ConstraintKey)
+    (leftCoherent : Coherent leftState) (rightCoherent : Coherent rightState)
+    (leftLinked : Linked leftState) (rightLinked : Linked rightState) :
+    ∃ rows : List (Fin symbols × SourceNoncanonicalLeafProgress.Raw initial),
+      orderedProduct (run (build (declarations first)) leftState).1
+        (run (build (declarations second)) rightState).1 = build (declarations rows) := by
+  unfold orderedProduct
+  split
+  · exact product_certified second first rightState leftState rightCoherent leftCoherent rightLinked leftLinked
+  · exact product_certified first second leftState rightState leftCoherent rightCoherent leftLinked rightLinked
+
 /-- A changed physical source identity strictly decreases the derived raw leaf rank. -/
 theorem intersect_strict (first second : List (Fin symbols × SourceNoncanonicalLeafProgress.Raw initial))
     (leftState rightState state : State (Fin symbols) ConstraintKey)
@@ -87,7 +100,7 @@ theorem intersect_strict (first second : List (Fin symbols × SourceNoncanonical
   by_cases identity : (run (build (declarations first)) leftState).1.referenceOf =
       (run (build (declarations second)) rightState).1.referenceOf
   · exact changed (by simp only [intersect, identity, ↓reduceIte, run])
-  · obtain ⟨rows, sourceRows⟩ := product_certified first second leftState rightState
+  · obtain ⟨rows, sourceRows⟩ := orderedProduct_certified first second leftState rightState
       leftCoherent rightCoherent leftLinked rightLinked
     have exactWork : intersect (run (build (declarations first)) leftState).1
         (run (build (declarations second)) rightState).1 = build (declarations rows) := by

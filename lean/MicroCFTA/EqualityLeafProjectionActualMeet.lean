@@ -49,7 +49,8 @@ theorem raw_intersect_available (left right : Value (Fin symbols) ConstraintKey)
   unfold EqualityRawLeafProduct.intersect
   split
   · exact ⟨facts, available⟩
-  · exact EqualityRawLeafAvailability.build_available _ state facts
+  · unfold EqualityRawLeafProduct.orderedProduct
+    split <;> exact EqualityRawLeafAvailability.build_available _ state facts
 
 /-- Raw targets retain their original guard syntax and execute rejected sentinel requests. -/
 noncomputable def rawMeet (target : List (Fin symbols × SourceNoncanonicalLeafProgress.Raw initial))
@@ -89,7 +90,8 @@ theorem raw_meet_safe (target : List (Fin symbols × SourceNoncanonicalLeafProgr
   unfold EqualityRawLeafProduct.intersect
   split
   · trivial
-  · exact built _
+  · unfold EqualityRawLeafProduct.orderedProduct
+    split <;> exact built _
 
 /-- A compiled raw occurrence executes actual leaf intersections and returns a
 complete available result without an ordinary-input or primitive contract. -/
