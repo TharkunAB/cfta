@@ -1,34 +1,91 @@
 # Current formalization findings
 
-Updated: **2026-10-13 17:34 CEST**.
+Updated: **2026-10-13 21:18 CEST**.
 
-The formalization has a broad checked foundation, but **whole-library
-verification is not complete**. The remaining work includes difficult
-termination and source-correspondence proofs. This checkpoint stops work
-at Matti's request and preserves exact restart targets.
+The main language and rank algorithms have a broad checked foundation, but
+**end-to-end source verification is not complete**. Upstream now implements
+most of the requested exact-size interface and bounded preprocessing. The
+next proofs should connect those paths to the main language, termination,
+size-order, and rank/unrank theorems.
 
-The implementation is rebased onto `origin/microcfta` at **`9508eb3`**.
-All **308 local commits** replayed without conflicts. Immediately after rebase,
-every Lean file matched backup
-`backup/formalization-before-pr-refresh-20261013-1514` at `73b1c47`.
-All old proofs, counterexamples, stashes, backups, and the original marked draft
-remain preserved. PRs #102 and #103 have checked storage/index adaptations.
+The implementation is rebased onto `origin/microcfta` at **`2200117`**.
+All **339 local commits** replayed without conflicts. All **1,345 preserved
+Lean-tree files** matched their SHA-256 manifest immediately after rebase.
+Backup `backup/formalization-before-wishlist-refresh-20261013-2109` retains
+the old head `5eabb31`. The untracked fixture also has a copy under
+`/tmp/mcfta-rebase-20261013-2109/`. All proofs, counterexamples, drafts,
+stashes, backups, and other worktrees remain preserved.
 
-Latest checked proof commit: **`073c10c`**. Commit **`78d3d27`** preserves two
-new marked drafts. The final aggregate audit passes **1,026 jobs and 36,839
+Rebased checked proof commit: **`f10fa11`** (formerly `073c10c`). Commit
+**`1a8a27e`** (formerly `78d3d27`) preserves two marked drafts. The refreshed
+aggregate audit passes **1,026 jobs and 36,839
 theorem dependency checks**, with only `propext`, `Classical.choice`, and
-`Quot.sound`. Log: `/tmp/mcfta-20261013-final-restart-audit.log`.
-All **620 existing Haskell examples** pass with both local source repairs:
-284 core, 194 generator, and 142 refinement. Fourmolu and cabal-gild checks pass.
+`Quot.sound`. Log: `/tmp/mcfta-20261013-2109-rebase-lean.log`.
+All **633 existing Haskell examples** pass with both local source repairs:
+285 core, 204 generator, and 144 refinement. Test log:
+`/tmp/mcfta-20261013-2109-rebase-tests.log`. Fourmolu and cabal-gild checks pass;
+see `/tmp/mcfta-20261013-2109-rebase-format.log`.
 Counts and tests are validation evidence, not a coverage percentage.
+No Lean theorem changed in this refresh. The new source needs the bridges below.
 
 All workers are stopped. No new work was pushed, deployed, or posted.
-The latest weekly allowance snapshot was **63%**; refresh it at restart and
+The latest weekly allowance snapshot was **62% at 21:17 CEST**; refresh it at restart and
 stop all work at 1% or less. [HANDOFF.md](HANDOFF.md) records exact files,
 commands, proof boundaries, and evidence. [NEXT-PROMPT.md](NEXT-PROMPT.md)
 is the next-agent prompt.
 
-## Current coverage
+## New source: wishlist coverage and main theorem status
+
+PRs #107, #109, #110, #111, #112, and #113 address most of the source wishlist.
+The explicit-graph decision keeps the optimized interned core. It does not
+authorize or require a replacement of that core.
+
+| Main contract | New implementation | Checked foundation and next gap |
+| --- | --- | --- |
+| Exact distinct terms at size `n` | `Data.CFTA.Sized.sizedReference` builds child classes at smaller sizes, checks path equalities, and removes duplicate terms. It supports cyclic and ambiguous graphs. | `RecursiveSize` proves exact-size recurrence for plain graphs; `Language` proves guarded acceptance; `DistinctRank` proves distinct indexes. Compose a new proof for the actual equality-filtered, first-occurrence source sequence. |
+| Finite time for each requested size | The reference recurs only on smaller sizes. `sizedUpTo` folds over finitely many sizes and states. Empty classes do not stop later sizes. | Formalize these actual workers. Solver-decided completion requires each evaluator call to terminate. A proof of reference recurrence does not establish lazy source productivity or optimized adapter completion. |
+| Size order | `termsOfSize`, `countOfSize`, `rankOfSize`, and `unrankOfSize` share one class sequence. PR #111 counts repeated child positions by node multiplicity. | Compose ascending classes into the size-order theorem. Extend source size models for `PlanScale`. Existing `terms` remains depth/marker oriented; finite `fromAutomaton` retains its own rank order and symbolic size conventions. |
+| Ranking and unranking | Reference queries use the same distinct list. `sized` dispatches to the count-table decoder and bottom-up inverse where the plain unambiguous import succeeds. | Reuse `SourceCyclicAutomaton.exact_index_api`, `SourceFiniteAutomaton.exact_index_api`, and `SourceSymbolicStableIndex.stable_source_index`. Prove exact order agreement and current representation adapters for the new dispatch. |
+| Full guards at a size bound | `sizedUpTo` checks each complete candidate with `evaluateConstraint`. `Unknown` gives `GuardUnknown`; it does not reject a term silently. Returned classes above the bound are empty. | Prove successful exactness under terminating and adequate evaluator contracts. Logical solver soundness alone does not prove complete decisions. |
+
+Read [Sized.hs](microcfta-generator/src/Data/CFTA/Sized.hs) and
+[ADR 0004](docs/adr/0004-explicit-graph-boundary.md). `sizedReference` and
+`sizedUpTo` operate directly on an explicit `FTA` without pruning or binder
+construction. The optimized `sized` branch still calls `fromFTA`, then
+`automatonIndex` and `automatonTermPosition`; those read interned rows.
+The ADR identifies consolidation through `toFTA` as further work. It is not
+evidence that every optimized query already avoids the interned adapters.
+
+PR #109 adds `fixWithin` and `pruneRounds = 64`. Transition narrowing and
+repeated recursive-node pruning now have local pass limits. Original guards
+remain when the limit ends. This removes the requirement to reach an identity
+fixed point in those loops. It does not by itself prove every individual
+pass, recursive reconstruction, or solver call terminates. The explicit graph
+reference/decided size paths do not call these loops at all.
+
+PR #110 gives three source contracts in `CONTEXT.md`: exact transformation,
+over-approximation, and representative selection. The saturated-merge
+counterexample remains valid. Monotonicity of that approximation is not a
+prerequisite for the direct exact-size API. The old proof drafts remain useful
+for the interned and optimization paths; they are secondary restart targets.
+
+## New representation bridges
+
+| PR | Source change | Required proof |
+| --- | --- | --- |
+| #104 | Enumeration now uses continuation-passing backtracking. | Relate `allBranches` to the `StateT`/list machine in `EnumerationState`. Preserve ordered results, branch-local states, failure, choice, bind, and state operations before transferring `EnumerationExact.runs_exact`. |
+| #105 | One fold descends suspended constraints into every child. | Relate each resulting `IntMap` entry to `EqualityTrie.descendScs_exact`. Compose inherited/new constraints and prove the maximum-child arity check. Valid tries must exclude empty child entries. |
+| #106 | Union-find omits a compression write when the parent is already the representative. | Transfer `UnionFind.findRoot_correct` and termination through extensional forest equality. |
+| #108 | The empty intersection domain has identity zero; other domain identities are raw interned identities plus one. | Adapt `IntersectionFlatMemoKeyDomain.domain_intern_correct`, `domain_identity_exact`, and flat-key injectivity. Prove zero/successor separation and revised machine bounds. |
+| #111 | `PlanScale` and `scaleIndex` multiply a member's size by a positive factor without changing its rank or value. | Extend `SourcePlanPositions.Plan`, `position_replay`, and `SourcePlanPartition.partition_exact`. Use `CompactGroups.childGroups_nonempty` for a positive factor. Selection is restricted to valid counted sizes; quotient selection alone does not check divisibility. |
+
+The source review found no new concrete public correctness defect in these
+five changes. Their former models still check, but they do not include the
+new representation branches. `CompactEdgeRanks` count, language, and inverse
+results remain reusable; the repeated-child node-count connection needs the
+new scaling proof. No new production test was added in this refresh.
+
+## Preserved component coverage
 
 | Area | Checked result | What remains |
 | --- | --- | --- |
@@ -37,7 +94,7 @@ is the next-agent prompt.
 | Constructor repair | Facts, normalization, actual semantic origins, root profiles, free-name heaps, closed-output free-name absence, capture bounds, exact completed replay, and bounded source chooser correspondence. | General repaired first-run completion; full depth/deep heap induction; complete accepted-language and arbitrary substitution correspondence. |
 | Cold comparison and merging | Prepared cold completion, original-language coverage, exact fuel stability and successful replay. Exact repaired reader and complete comparator bridges. | The repaired selection bridge has a kernel-timeout draft; whole repaired merge composition follows it. Open nested Mu reconstruction remains outside the prepared fragment. |
 | Equality convergence | Repeated target merge reaches an exact fixed point within ordinary-tree height. A concrete nested unary two-atom endpoint loop has a derived bound. Actual-cache original ancestor replay and edit effects are proved. | Compose both ancestor/forest edits and root stopping. Generalize beyond fixed unary/two-atom/single-class fragments. |
-| New upstream optimizations | Flat memo probing/copy/growth/winner retention and bounded keys; maintained enumeration indexes and exact scheduler selection. | Native publication, concrete containers, identity lifetimes, and runtime range obligations. |
+| Upstream optimizations through PR #103 | Flat memo probing/copy/growth/winner retention and bounded keys; maintained enumeration indexes and exact scheduler selection. | The newer representation bridges above, native publication, concrete containers, identity lifetimes, and runtime range obligations. |
 
 See [COVERAGE](lean/COVERAGE.md) and [API-COVERAGE](lean/API-COVERAGE.md)
 for precise premises. External solver, random-source, codec, concurrency,
@@ -53,10 +110,11 @@ native translations exceed five seconds while forcing the root to WHNF.
 The native runs establish bounded noncompletion; the kernel separately proves
 the exact model pending result. This is row 23 in the repair ledger below.
 
-Local repair **`e0e1b37`** chooses an ordinary probe above every free ordinary
+Local repair **`fbc3097`** (formerly `e0e1b37`) chooses an ordinary probe above every free ordinary
 level of the actual Depth observation. `matchMu` uses that same stored
 observation. Both failing fixtures complete in the repaired Lean executor.
-All five native probes and all 620 existing source examples pass.
+All five native probes and 620 examples passed at the earlier checkpoint.
+The rebased combined suites now pass 633 examples.
 The old executor and counterexample remain intact.
 
 The repaired source proofs now retain all callback effects, including discarded
@@ -68,7 +126,7 @@ is still open. Read [the counterexample](lean/notes-paired-pending-boundary.md),
 [semantic contexts](lean/notes-fresh-ordinary-contexts.md), and
 [depth work](lean/notes-deep-free-depth.md).
 
-The second local repair, **`558b316`**, preserves explicit recursive child
+The second local repair, **`807e867`** (formerly `558b316`), preserves explicit recursive child
 unions and fixes the five-alternative public pruning timeout. It remains
 separate from the constructor repair. See row 22 and
 [merged narrowing](lean/notes-merged-narrowing.md).
@@ -89,6 +147,18 @@ an equality-loop cycle or prove nontermination. Preserve the
 [counterexample and explanation](lean/notes-equality-merged-monotonicity.md).
 
 ## Exact restart targets
+
+1. Prove the new `Data.CFTA.Sized` reference class worker and its four query
+   laws. Add the bounded decided path and its explicit evaluator contracts.
+2. Connect the optimized dispatch to the same sequence. Prove size-major
+   composition and the explicit-graph adapter boundary.
+3. Add positive `PlanScale` correspondence and the bounded pruning caller.
+   Complete the small representation bridges listed above where needed.
+4. Resume the preserved constructor and optimization targets below when the
+   exact path requires them or after its main contracts are complete.
+
+Detailed instructions are in `HANDOFF.md`. The previous restart targets are
+retained here as secondary work:
 
 1. Finish free-name membership projection for `InternedDepthSemantics`.
    Coherence and exact profile projection already compile. Use the local
@@ -116,7 +186,11 @@ The sections below retain the detailed repair ledger and earlier component
 results. Old constructor modules describe the preserved pre-repair executor
 unless their names explicitly start with `InternedFreshOrdinary`.
 
-## Baseline and required contract
+## Previous checkpoint and required contract
+
+The history below describes the checkpoint before PRs #104–#113. Its source
+hashes and dated checks remain historical evidence. Use the current status
+and restart priorities above for new work.
 
 The continuation branch is `formalization/microcfta-resume-20261012`.
 Its implementation base is `origin/microcfta` at `9508eb3`, including
@@ -157,7 +231,7 @@ Rows 1 through 21 are merged upstream at `4897831`. Rows 18 through 21
 were local repairs at the earlier checkpoint. Rows 22 and 23 are local repairs. Each row has a retained source reproduction and a corresponding formal
 counterexample, repair theorem, or operational model. Older per-repair test
 totals in the linked reports describe their historical checkpoints. The
-current combined suite total is 620.
+current combined suite total is 633.
 
 | # | Failure before the repair | Current behavior and evidence |
 | --- | --- | --- |

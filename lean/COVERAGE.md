@@ -1,16 +1,29 @@
 # Full formalization coverage
 
-Current restart: **2026-10-13 17:34 CEST**, checked proof `073c10c`, marked
-work `78d3d27`. The final audit passes 1,026 jobs and 36,839 dependency checks.
-The repaired constructor now has full profile/free-name heaps, historical
-semantic origins, capture bounds, and completed replay. Its full depth/deep
-heap and first-run completion remain open. Prepared repaired exposure and the
-complete comparator have exact execution bridges; selection is a marked
-kernel-timeout draft. Nested unary endpoint termination and actual-cache
-ancestor replay are checked; full root-loop composition is still a draft.
-Saturated merge monotonicity is refuted by a checked source counterexample.
-Read root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) before
-using older dated statements below. All work remains local.
+Current restart: **2026-10-13 21:17 CEST**, upstream `2200117`, checked
+proof `f10fa11`, marked drafts `1a8a27e`. All 339 local commits rebased
+without conflicts. The unchanged Lean package passes 1,026 jobs and 36,839
+dependency checks. The rebased Haskell suites pass 633 examples.
+
+**Primary next target: `Data.CFTA.Sized`.** PRs #107 and #112 add exact-size
+reference queries and solver-decided bounded queries. Prove their class
+recurrence, finite execution, distinct terms, size order, and both inverse
+laws. Then connect optimized dispatch to the same sequence. PR #111 adds
+`PlanScale`, which needs a new source size correspondence case.
+
+PR #109 replaces the pruning fixed-point loops with local budgets of 64
+calls. General identity convergence is secondary to the exact graph API.
+PRs #104–#106 and #108 need bridges for CPS enumeration, batched descent,
+conditional union-find writes, and reserved empty-domain identity zero.
+The older models below remain checked but do not automatically cover these
+source changes. ADR 0004 retains the interned core and selects explicit graphs
+for exact queries; optimized `sized` still uses `fromFTA` and `rowsOf`.
+
+All constructor, equality, merge proofs, counterexamples, and marked drafts
+are preserved. General repaired constructor completion remains open.
+Saturated merge monotonicity remains refuted. Read root
+[HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) for current
+priorities, proof boundaries, and validation. All work remains local.
 
 ## Objective and completion rule
 
@@ -29,9 +42,9 @@ established. A theorem whose main algorithmic obligation is a premise
 does not close that obligation. An implementation counterexample prevents a
 soundness claim for that path; it does not remove that path from the scope.
 
-Source baseline: `origin/microcfta` at `9508eb3`. This includes the merged
-core-formula changes at `9ad319d`. The current semantic specification and
-implementation findings are in [SYSTEM.md](SYSTEM.md). All 67 source modules
+Source baseline: `origin/microcfta` at `2200117`. This includes the merged
+core-formula changes at `9ad319d`. The detailed semantic specification is in
+[SYSTEM.md](SYSTEM.md); root findings record the current changes. All 68 source modules
 are inventoried in [API-COVERAGE.md](API-COVERAGE.md).
 
 Current update: PR #97 adds merged peer projections to equality narrowing.
@@ -232,6 +245,8 @@ verified or exempt all code that uses an external component.
 
 ## Remaining proof obligations
 
+- First prove the new `Data.CFTA.Sized` class/query API and optimized agreement,
+  as specified in root `HANDOFF.md`. Extend source size models for `PlanScale`.
 - Connect the checked lattice retry and equality normalization drivers to
   physical maps, arrays, name conversion and machine indexes.
 - Connect proved symbolic allocation, smart constructors and shared-cache
@@ -246,12 +261,13 @@ verified or exempt all code that uses an external component.
 - Prove recursive pruning and remaining heterogeneous recursive compilation
   terminate. Cyclic graph-to-binder construction now has a totality proof
   under complete cycle marking.
-- Prove the explicit unbounded identity fixed point used by pruning for
-  eligible finite equality reductions. The public equality worker itself
-  now performs one pass. The nested source witness in
+- Prove the new bounded pruning caller from exactness and completion of each
+  individual call. PR #109 removes its former unbounded fixed-point loops.
+  General unbounded identity convergence remains a separate optimization
+  question. The public equality worker performs one pass. The witness in
   [notes-finite-reduction-growth.md](notes-finite-reduction-growth.md) shows
   why finite languages, semantic descent, and the leaf guard bound do not
-  prove this result. No nonterminating acyclic source case is known here.
+  prove general convergence. No fixed-schedule acyclic cycle is known here.
 - Establish the remaining runtime, external solver, random-source, and codec
   correspondences at the stated boundaries.
 

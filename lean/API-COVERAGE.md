@@ -1,22 +1,36 @@
 # Public API and source correspondence
 
-Current restart: **2026-10-13 17:34 CEST**, checked proof `073c10c`, marked
-work `78d3d27`. The final audit passes 1,026 jobs and 36,839 dependency checks.
-The repaired constructor now has full profile/free-name heaps, historical
-semantic origins, capture bounds, and completed replay. Its full depth/deep
-heap and first-run completion remain open. Prepared repaired exposure and the
-complete comparator have exact execution bridges; selection is a marked
-kernel-timeout draft. Nested unary endpoint termination and actual-cache
-ancestor replay are checked; full root-loop composition is still a draft.
-Saturated merge monotonicity is refuted by a checked source counterexample.
-Read root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) before
-using older dated statements below. All work remains local.
+Current restart: **2026-10-13 21:17 CEST**, upstream `2200117`, checked
+proof `f10fa11`, marked drafts `1a8a27e`. All 339 local commits rebased
+without conflicts. The unchanged Lean package passes 1,026 jobs and 36,839
+dependency checks. The rebased Haskell suites pass 633 examples.
 
-This inventory covers all 67 Haskell source modules under `microcfta/src` and
+**Primary next target: `Data.CFTA.Sized`.** PRs #107 and #112 add exact-size
+reference queries and solver-decided bounded queries. Prove their class
+recurrence, finite execution, distinct terms, size order, and both inverse
+laws. Then connect optimized dispatch to the same sequence. PR #111 adds
+`PlanScale`, which needs a new source size correspondence case.
+
+PR #109 replaces the pruning fixed-point loops with local budgets of 64
+calls. General identity convergence is secondary to the exact graph API.
+PRs #104–#106 and #108 need bridges for CPS enumeration, batched descent,
+conditional union-find writes, and reserved empty-domain identity zero.
+The older models below remain checked but do not automatically cover these
+source changes. ADR 0004 retains the interned core and selects explicit graphs
+for exact queries; optimized `sized` still uses `fromFTA` and `rowsOf`.
+
+All constructor, equality, merge proofs, counterexamples, and marked drafts
+are preserved. General repaired constructor completion remains open.
+Saturated merge monotonicity remains refuted. Read root
+[HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) for current
+priorities, proof boundaries, and validation. All work remains local.
+
+This inventory covers all 68 Haskell source modules under `microcfta/src` and
 `microcfta-generator/src`. It includes exposed internal modules and the three
-private modules. It uses the source rebased on `origin/microcfta` at `9508eb3`, which includes
+private modules. It uses the source rebased on `origin/microcfta` at `2200117`, which includes
 the `tidy/core-formula` work, optimization changes, and the findings repairs
-through PR #103. PR #102 adds flat intersection memo tables and interned
+through PR #113. The following history describes the preserved models before
+the new bridges above. PR #102 adds flat intersection memo tables and interned
 intersection domains. PR #103 maintains expandable and waiting UVar indexes.
 Their storage and index models now have checked representation invariants.
 Native publication, concrete containers, and runtime range bounds remain explicit.
@@ -135,8 +149,12 @@ its support has one term rank. See `notes-distinct-rank.md`.
 
 ## Generator source modules
 
+`Data.CFTA.Sized` is the new primary exact-query boundary. The remaining
+rows describe reusable component proofs and retain their explicit premises.
+
 | Module and exported function families | Executable model or semantic contract; source boundary |
 | --- | --- |
+| `Data.CFTA.Sized` — `sized`, `sizedReference`, `sizedUpTo`, exact-size terms/count/rank/unrank | New in PRs #107 and #112. `RecursiveSize`, `SizedRank`, `DistinctRank`, and `SourceCyclicAutomaton` provide reusable foundations. No checked model yet composes the actual `candidates` order, equality filtering, first-occurrence deduplication, lazy class table, decided finite table, and optimized dispatch. The reference and decided workers use explicit graphs directly. The optimized branch still uses `fromFTA` and interned row reads. Solver termination/adequacy, Unknown errors, valid rank selection, and exact reference/optimized order agreement must remain explicit. |
 | `Data.CFTA.Gen` — sources, constructors, choices, joins/groups, recursion, queries, datatype imports, lowering | This is the public assembly of the rows below. `fromAutomaton` is distinct-term indexed; ordinary sources/combinators retain members. `fromDatatype` additionally requires its codec contract and constructor probe. `rankOfValue` composes encoding with `rankOfTerm`. No facade theorem proves every recipe/source/support/value connection at once. |
 | `Data.CFTA.Gen.Do` — applicative qualified-do operations and constrained application | `Decoder` proves map/product value semantics; `Probability` proves product masses. The overloaded `GenApply` instances select keyed application or ordinary application. Their type-level signature selection and failure text are source wiring. |
 | `Data.CFTA.Gen.Equality` — equality facade and imports | The imports route to the same acyclic compact/symbolic compiler; cyclic equality imports return `CannotCountConstrainedEdges`. `DistinctRank` and `Symbolic` state the finite target and key counting operations. The facade adds no independent semantic algorithm. |
