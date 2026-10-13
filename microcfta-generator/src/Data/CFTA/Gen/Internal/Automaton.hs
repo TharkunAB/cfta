@@ -34,6 +34,7 @@ the refinement datatype imports share.
 module Data.CFTA.Gen.Internal.Automaton (
     automatonIndex,
     automatonTermPosition,
+    canonicalClasses,
     finiteAutomaton,
     declarationOrder,
     datatypeDecoder,

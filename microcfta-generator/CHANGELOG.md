@@ -51,6 +51,17 @@ tree automata of `microcfta`, with QuickCheck integration.
   or in declaration order for a datatype, so they are the same in every run.
   `rankOfTerm` gives the rank of an accepted term, and `rankOfValue` the
   rank of a datatype value through its codec.
+- `Data.CFTA.Sized`: `termsOfSize`, `countOfSize`, `unrankOfSize`, and
+  `rankOfSize` describe the distinct terms with `n` nodes that an explicit
+  finite tree automaton accepts, as one sequence with inverse ranks. Each
+  query ends, also on cyclic, ambiguous, and equality-constrained automata,
+  and an empty class says nothing about later classes. `sizedReference`
+  builds each class from smaller ones; `sized` gives the same sequence with
+  the count table of the cyclic import where that import applies. A guard
+  beyond equality constraints is `ResidualGuard`. `sizedUpTo` builds the
+  classes up to a size bound with a solver that decides every guard on each
+  built term, so a liquid automaton has an exact route that needs no
+  pruning; a guard the solver cannot decide is `GuardUnknown`.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `microcfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
