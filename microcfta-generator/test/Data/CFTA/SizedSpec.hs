@@ -27,6 +27,12 @@ spec = describe "Data.CFTA.Sized" $ do
         let classes = fromRows "s" [("s", [leaf "a", node "g" ["s", "s"]])]
         map (countOfSize classes) [1 .. 5] `shouldBe` [1, 0, 1, 0, 2]
         termsOfSize classes 3 `shouldBe` [term "g" [term "a" [], term "a" []]]
+    it "counts and ranks a large class with the count table" $ do
+        let classes = fromRows "s" [("s", [leaf "a", node "g" ["s", "s"]])]
+            rank = ClassRank 4000000000
+        -- The binary trees with 20 inner nodes: the Catalan number C(20).
+        countOfSize classes 41 `shouldBe` 6564120420
+        fmap (rankOfSize classes) (unrankOfSize classes 41 rank) `shouldBe` Just (Just (41, rank))
     it "lists a term that two transitions accept once" $ do
         let classes = fromRows "s" [("s", [node "f" ["p"], node "f" ["q"]]), ("p", [leaf "a"]), ("q", [leaf "a"])]
         termsOfSize classes 2 `shouldBe` [term "f" [term "a" []]]
@@ -41,6 +47,7 @@ spec = describe "Data.CFTA.Sized" $ do
     modifyMaxSuccess (const 300) $ do
         it "lists each accepted term of each size once, and ranks it" $ QC.property exactClasses
         it "agrees with the cyclic import wherever the import accepts the automaton" $ QC.property importAgreement
+        it "gives the sequence of the reference, also where it uses the count table" $ QC.property referenceAgreement
 
 -- | The classes of size one to 'sizeBound' are the accepted terms of each size, each once, and the ranks invert.
 exactClasses :: SizedAutomaton -> Property
@@ -96,6 +103,22 @@ importAgreement (SizedAutomaton description) =
     root = automatonNode description
     generator = Gen.fromAutomaton root
     classes = either (error . show) id $ sized $ either (error . show) id $ toFTA root
+
+-- | 'sized' gives the classes of 'sizedReference', in the same order.
+referenceAgreement :: SizedAutomaton -> Property
+referenceAgreement (SizedAutomaton description) =
+    counterexample (show description)
+        $ QC.within 5000000
+        $ QC.conjoin
+            [ counterexample ("size " <> show size) $
+                termsOfSize classes (Size size) === termsOfSize reference (Size size)
+                    .&&. countOfSize classes (Size size) === countOfSize reference (Size size)
+            | size <- [1 .. sizeBound]
+            ]
+  where
+    graph = either (error . show) id $ toFTA $ automatonNode description
+    classes = either (error . show) id $ sized graph
+    reference = either (error . show) id $ sizedReference graph
 
 -- | The largest size that a property reads.
 sizeBound :: Integer

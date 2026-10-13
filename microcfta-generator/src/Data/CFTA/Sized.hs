@@ -31,13 +31,17 @@ Equality constraints are checked on each term that their transition builds,
 so the classes are exact. A guard beyond equality constraints has no decision
 procedure here, and 'sized' rejects it.
 
-This is the reference: it builds each class that a query reads, and it keeps
-the classes of each state for later queries. It is slow for large classes.
+'sizedReference' builds each class that a query reads, and it keeps the
+classes of each state for later queries. It is slow for large classes.
+'sized' gives the same sequence. It counts, ranks, and unranks with the count
+table of the cyclic import when the automaton has no constraint and that
+import accepts it, and it uses the reference otherwise.
 -}
 module Data.CFTA.Sized (
     Sized,
     SizedError (..),
     sized,
+    sizedReference,
     termsOfSize,
     countOfSize,
     unrankOfSize,
@@ -45,22 +49,31 @@ module Data.CFTA.Sized (
 ) where
 
 import Data.Containers.ListUtils (nubOrd)
+import Data.Hashable (Hashable)
 import qualified Data.IntMap.Strict as IntMap
 import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (listToMaybe)
+import Data.Typeable (Typeable)
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint, equalitiesHold, residual)
-import Data.CFTA.Gen.Internal.Automaton (canonicalClasses)
+import Data.CFTA.Constraint (Constraint, equalitiesHold, noConstraint, residual)
+import Data.CFTA.Gen.Internal.Automaton (automatonIndex, automatonTermPosition, canonicalClasses)
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Size (..))
-import Data.CFTA.Interned (NodeId (..))
+import Data.CFTA.Interned (NodeId (..), fromFTA)
+import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
+import Data.CFTA.Ranked.Internal.Size (SizedRank (..), countAtSize, sizeClassSelect)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
 -- | The size classes of an automaton, built on demand and kept.
-newtype Sized symbol = Sized (Size -> [Term symbol])
+data Sized symbol = Sized
+    { sizedTerms :: Size -> [Term symbol]
+    , sizedCount :: Size -> Cardinality
+    , sizedUnrank :: Size -> ClassRank -> Maybe (Term symbol)
+    , sizedRank :: Term symbol -> Maybe (Size, ClassRank)
+    }
 
 -- | Why 'sized' rejects an automaton.
 data SizedError
@@ -73,10 +86,39 @@ data SizedError
 The result is 'ResidualGuard' when a transition that the initial state can
 reach has a guard beyond equality constraints.
 -}
-sized :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
+sized ::
+    (Ord state, Ord symbol, Hashable symbol, Typeable symbol) =>
+    FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
 sized automaton
+    | all (all ((== noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable automaton)
+    , Right index <- automatonIndex id root =
+        let count = countAtSize index
+            unrank size (ClassRank rank)
+                | rank >= 0 && Cardinality rank < count size =
+                    Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
+                | otherwise = Nothing
+            position = automatonTermPosition id root
+         in Right
+                Sized
+                    { sizedTerms = \size -> [term | rank <- everyClassRank (count size), Just term <- [unrank size rank]]
+                    , sizedCount = count
+                    , sizedUnrank = unrank
+                    , sizedRank = either (const Nothing) (\(SizedRank size rank) -> Just (size, rank)) . position
+                    }
+    | otherwise = sizedReference automaton
+  where
+    root = fromFTA automaton
+    everyClassRank (Cardinality total) = map ClassRank [0 .. total - 1]
+
+{- | The size classes of an automaton, each built from its definition.
+
+The result is 'ResidualGuard' when a transition that the initial state can
+reach has a guard beyond equality constraints.
+-}
+sizedReference :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
+sizedReference automaton
     | any (any (residual . FTA.transitionConstraint)) (FTA.transitionTable $ FTA.trim automaton) = Left ResidualGuard
-    | otherwise = Right $ Sized $ classAt $ FTA.initialState automaton
+    | otherwise = Right $ fromClasses $ classAt $ FTA.initialState automaton
   where
     -- The classes are those of the whole graph, as in the import. A trim
     -- would remove the transitions with a child that accepts nothing, and
@@ -130,26 +172,35 @@ sized automaton
             , term <- classAt current (remaining - left)
             ]
 
+-- | The queries of the classes that a function lists.
+fromClasses :: (Eq symbol) => (Size -> [Term symbol]) -> Sized symbol
+fromClasses classOf =
+    Sized
+        { sizedTerms = classOf
+        , sizedCount = Cardinality . genericLength . classOf
+        , sizedUnrank = \size (ClassRank rank) ->
+            if rank < 0 then Nothing else listToMaybe $ genericDrop rank $ classOf size
+        , sizedRank = \term ->
+            let size = Size $ toInteger $ length term
+             in (,) size . ClassRank . toInteger <$> elemIndex term (classOf size)
+        }
+
 -- | The distinct accepted terms with the given number of nodes, in order.
 termsOfSize :: Sized symbol -> Size -> [Term symbol]
-termsOfSize (Sized classOf) = classOf
+termsOfSize = sizedTerms
 
 -- | The number of distinct accepted terms with the given number of nodes.
 countOfSize :: Sized symbol -> Size -> Cardinality
-countOfSize classes = Cardinality . genericLength . termsOfSize classes
+countOfSize = sizedCount
 
 {- | The term at a class rank of a size class. 'Nothing' when the rank is
 outside the class.
 -}
 unrankOfSize :: Sized symbol -> Size -> ClassRank -> Maybe (Term symbol)
-unrankOfSize classes size (ClassRank rank)
-    | rank < 0 = Nothing
-    | otherwise = listToMaybe $ genericDrop rank $ termsOfSize classes size
+unrankOfSize = sizedUnrank
 
 {- | The size of a term and its class rank. 'Nothing' when the automaton does
 not accept the term.
 -}
-rankOfSize :: (Eq symbol) => Sized symbol -> Term symbol -> Maybe (Size, ClassRank)
-rankOfSize classes term = (,) size . ClassRank . toInteger <$> elemIndex term (termsOfSize classes size)
-  where
-    size = Size $ toInteger $ length term
+rankOfSize :: Sized symbol -> Term symbol -> Maybe (Size, ClassRank)
+rankOfSize = sizedRank
