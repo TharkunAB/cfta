@@ -5,7 +5,7 @@ module Data.CFTA.Gen.Refinement.BoundedGeneratorSpec (spec) where
 import Control.Exception (throwIO)
 import Control.Monad (forM_, void)
 import Data.CFTA.Formula (Sort (..))
-import Data.CFTA.Index (Cardinality (..), Depth (..), Rank (..))
+import Data.CFTA.Index (Cardinality (..), Depth (..), Rank (..), Size (..))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 import Data.IORef (modifyIORef', newIORef, readIORef)
@@ -23,6 +23,7 @@ import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.TestSupport (massesByRank, ranks, termsOf, values)
 import qualified Data.CFTA.Generic as Datatype
+import Data.CFTA.Interned (toFTA)
 import Data.CFTA.Refinement (
     Automaton,
     Constraint,
@@ -45,7 +46,13 @@ import Data.CFTA.Refinement (
  )
 import Data.CFTA.Refinement.Expression (refinementFormula, true, variable, (.==), (.>))
 import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..), withZ3)
+import Data.CFTA.Sized (SizedError (..), sizedUpTo, termsOfSize)
 import Data.CFTA.Symbol (valueName)
+
+-- | Whether an error is a guard that the solver did not decide.
+guardUnknown :: SizedError -> Bool
+guardUnknown (GuardUnknown _ _) = True
+guardUnknown _ = False
 
 -- | Fail if an unconstrained fixture unexpectedly calls the solver.
 unusedEntailment :: Entailment
@@ -135,6 +142,19 @@ supportNodes = either (const 0) ECTA.nodeCount . LTAGen.support
 
 spec :: Spec
 spec = do
+    describe "the size classes of a liquid automaton" $ do
+        it "builds the classes of an automaton whose guard the compiler rejects" $ do
+            let scoped = Substitute [Substitution (path [0]) (path [1])] $ Same (path [0]) (path [1])
+                automaton = pairsWith $ semanticConstraint scoped
+            graph <- either (fail . show) pure $ toFTA automaton
+            classes <- sizedUpTo unusedEntailment 5 graph >>= either (fail . show) pure
+            denotation <- denotationAtMost unusedEntailment 2 automaton >>= either (fail . show) pure
+            forM_ [1 .. 6] $ \size ->
+                sort (termsOfSize classes size) `shouldBe` sort [term | term <- denotation, Size (toInteger $ length term) == size]
+        it "reports a guard that the solver cannot decide" $ do
+            graph <- either (fail . show) pure $ toFTA $ pairsWith $ semanticConstraint $ Satisfies (path [0]) true
+            result <- sizedUpTo (Entailment $ \_ _ -> pure Unknown) 3 graph
+            either guardUnknown (const False) result `shouldBe` True
     describe "liquid annotations on a derived datatype" $ do
         it "keeps the datatype codec and shrinks within the guarded language" $
             withZ3 ([(fromString valueName, IntSort)]) $ \solver -> do

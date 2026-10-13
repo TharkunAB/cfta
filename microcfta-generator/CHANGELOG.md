@@ -54,7 +54,10 @@ tree automata of `microcfta`, with QuickCheck integration.
 - Imported automata: `fromAutomaton` reads an acyclic automaton as a finite
   generator with one rank per distinct term, counted symbolically where
   alternatives overlap or equalities reach below direct children, and a
-  cyclic automaton as a recursive generator counted by size.
+  cyclic automaton as a recursive generator counted by size. On the compact
+  plan, the size of an imported term is its number of nodes: a group of
+  equal children pays the size of its term once for each position. A
+  symbolic count gives each term size one.
   `fromAutomatonUpToDepth` bounds first. `fromDatatype` and
   `fromDatatypeUpToDepth` read derived grammars of any theory, and report
   `UndecodableConstructor` when the codec rejects a term of the grammar.
@@ -62,6 +65,17 @@ tree automata of `microcfta`, with QuickCheck integration.
   or in declaration order for a datatype, so they are the same in every run.
   `rankOfTerm` gives the rank of an accepted term, and `rankOfValue` the
   rank of a datatype value through its codec.
+- `Data.CFTA.Sized`: `termsOfSize`, `countOfSize`, `unrankOfSize`, and
+  `rankOfSize` describe the distinct terms with `n` nodes that an explicit
+  finite tree automaton accepts, as one sequence with inverse ranks. Each
+  query ends, also on cyclic, ambiguous, and equality-constrained automata,
+  and an empty class says nothing about later classes. `sizedReference`
+  builds each class from smaller ones; `sized` gives the same sequence with
+  the count table of the cyclic import where that import applies. A guard
+  beyond equality constraints is `ResidualGuard`. `sizedUpTo` builds the
+  classes up to a size bound with a solver that decides every guard on each
+  built term, so a liquid automaton has an exact route that needs no
+  pruning; a guard the solver cannot decide is `GuardUnknown`.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `microcfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

@@ -34,8 +34,8 @@ import GHC.Arr (listArray, unsafeAt)
 
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), RankOffset, Size, nextOffset, offsetRank)
 
-{- | The rank structure of a language: its choices, products, maps, pays, and
-size classes.
+{- | The rank structure of a language: its choices, products, maps, pays,
+scales, and size classes.
 
 A plan keeps this structure as data, not as nested @Integer -> a@ closures.
 So 'compilePlan' can normalize the plan and compile one flat decoder, and the
@@ -56,6 +56,11 @@ data Plan a where
     changes sizes only, so the decoder does not see it.
     -}
     PlanPay :: Plan a -> Plan a
+    {- | The members of the plan, the size of each one multiplied by the
+    factor: a member that a term holds at that many positions. It changes
+    sizes only, so the decoder does not see it.
+    -}
+    PlanScale :: !Int -> Plan a -> Plan a
     {- | A leaf that the decoder does not tabulate, even when it is small.
 
     A tabulated leaf keeps each decoded member for as long as the decoder
@@ -228,6 +233,7 @@ planCardinality (PlanSelect cardinality' _) = cardinality'
 planCardinality (PlanSelectOnDemand cardinality' _) = cardinality'
 planCardinality (PlanPure _) = 1
 planCardinality (PlanPay plan) = planCardinality plan
+planCardinality (PlanScale _ plan) = planCardinality plan
 planCardinality (PlanShared cardinality' _ _ _) = cardinality'
 planCardinality (PlanMap _ plan) = planCardinality plan
 planCardinality (PlanChoice branches) = sum $ map fst branches
@@ -237,8 +243,8 @@ planCardinality (PlanSized classes) = sum $ map classCardinality classes
 
 {- | Normalize a plan: push maps into leaves and product functions, splice
 nested choices into one level, and collapse singleton choices. A pure member
-becomes a leaf of one member, and a @pay@ goes away, because sizes do not
-change a rank.
+becomes a leaf of one member, and a @pay@ and a scale go away, because sizes
+do not change a rank.
 
 Splicing preserves rank order because nested branch offsets concatenate in
 the same order as the flattened cumulative offsets.
@@ -256,6 +262,7 @@ normalizePlan (PlanAp rightCardinality planF planX) =
     PlanAp rightCardinality (normalizePlan planF) (normalizePlan planX)
 normalizePlan (PlanPure value) = PlanSelect 1 $ const value
 normalizePlan (PlanPay plan) = normalizePlan plan
+normalizePlan (PlanScale _ plan) = normalizePlan plan
 normalizePlan plan@(PlanSelect _ _) = plan
 normalizePlan plan@(PlanSelectOnDemand _ _) = plan
 normalizePlan plan@(PlanShared{}) = plan
@@ -270,6 +277,7 @@ pushMap transform (PlanSelectOnDemand cardinality' decode) =
     PlanSelectOnDemand cardinality' (transform . decode)
 pushMap transform (PlanPure value) = PlanSelect 1 $ const $ transform value
 pushMap transform (PlanPay plan) = pushMap transform plan
+pushMap transform (PlanScale _ plan) = pushMap transform plan
 pushMap transform plan@(PlanShared{}) = PlanMap transform plan
 pushMap transform (PlanChoice branches) =
     rebuildChoice $ concatMap flattenBranch branches
@@ -369,6 +377,7 @@ compileRankWith _ (PlanSelect cardinality'@(Cardinality count) decode)
 compileRankWith _ (PlanSelectOnDemand _ decode) = decode . Rank . toInteger
 compileRankWith _ plan@(PlanPure _) = unnormalized plan
 compileRankWith _ plan@(PlanPay _) = unnormalized plan
+compileRankWith _ plan@(PlanScale _ _) = unnormalized plan
 compileRankWith _ (PlanShared _ (SmallDecoder _ decode) _ _) = decode . fromIntegral
 compileRankWith _ (PlanShared _ (LargeDecoder _ decode) _ _) = decode . Rank . toInteger
 compileRankWith child (PlanMap transform plan) =
@@ -441,7 +450,7 @@ compileRankWith child (PlanAp (Cardinality rightCardinality) planF planX)
 
 {- | The decoder of a plan that 'normalizePlan' did not normalize: an error.
 
-A normalized plan has no pure member and no pay. A case of 'compileRankWith'
+A normalized plan has no pure member, no pay, and no scale. A case of 'compileRankWith'
 that gave such a plan to the child compiler would let GHC give the compiler
 one more argument, and then every decoded rank would build its decoder again:
 the benchmark cells ran six times as many instructions. A call of this

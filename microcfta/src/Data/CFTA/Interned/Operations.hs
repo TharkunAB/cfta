@@ -21,6 +21,7 @@ module Data.CFTA.Interned.Operations (
     withoutRedundantEdges,
     intersectEdge,
     fixUnbounded,
+    fixWithin,
     pathsMatching,
     requirePath,
 ) where
@@ -405,20 +406,30 @@ genericIntersectionDomCache :: CacheFamily
 genericIntersectionDomCache = unsafePerformIO newCacheFamily
 {-# NOINLINE genericIntersectionDomCache #-}
 
--- | Build a domain, interned. Both containers list their elements in key order, a canonical form.
+{- | Build a domain, interned. Both containers list their elements in key order, a canonical form.
+
+The empty domain is 'emptyIntersectionDom'. Every other domain gets the
+identity from its cache plus one, so no domain shares the identity of the
+empty domain.
+-}
 {-# INLINEABLE mkIntersectionDom #-}
 mkIntersectionDom ::
     forall symbol. (Typeable symbol) => IntMap (Node symbol) -> Set IntersectId -> IntersectionDom symbol
-mkIntersectionDom free recInt =
-    intern
-        (selectCache @symbol genericIntersectionDomCache (newIdSupply >>= freshCacheWith))
-        (\identity _ -> ID free recInt identity)
-        (IntMap.toList free, Set.toList recInt)
+mkIntersectionDom free recInt
+    | IntMap.null free, Set.null recInt = emptyIntersectionDom
+    | otherwise =
+        intern
+            (selectCache @symbol genericIntersectionDomCache (newIdSupply >>= freshCacheWith))
+            (\identity _ -> ID free recInt (identity + 1))
+            (IntMap.toList free, Set.toList recInt)
 
--- | An intersection environment with no free or pending variables.
-{-# INLINEABLE emptyIntersectionDom #-}
-emptyIntersectionDom :: (Typeable symbol) => IntersectionDom symbol
-emptyIntersectionDom = mkIntersectionDom IntMap.empty Set.empty
+{- | An intersection environment with no free or pending variables.
+
+Its identity is 0. It is one constant for all symbol types, so each top-level
+'intersect' uses it without a lookup.
+-}
+emptyIntersectionDom :: IntersectionDom symbol
+emptyIntersectionDom = ID IntMap.empty Set.empty 0
 
 {- | Tables for node intersection in a recursive environment. The key is the
 identity of the domain and the memo keys of the two nodes.
@@ -562,6 +573,11 @@ most four edges instead of all matching alternatives. This bound does not apply
 below the recursive and union boundaries. A small group stays exact because a
 merge keeps more terms, and the reduction then narrows less: a narrower
 automaton is faster to enumerate.
+
+The merge is an over-approximation, not an exact transformation. Its one
+caller, the narrowing set of 'Data.CFTA.Equality.Operations.reduceEqConstraints',
+keeps the language, because enumeration and 'accepts' still check each
+equality class.
 -}
 mergeAlternatives :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
 {-# INLINEABLE mergeAlternatives #-}
@@ -694,6 +710,16 @@ withoutRedundantEdges node = memoTypeableWith @symbol genericWithoutRedundantEdg
                     es' = filter ((`Set.member` kept) . unfolded) es
                  in if length es' == length es then n else Mu $ \r -> substFree self r (Node es')
         dropReds n = n
+
+{- | Iterate until stable, or until the function has been applied the given
+number of times. The result is the last value.
+-}
+fixWithin :: (Eq a) => Int -> (a -> a) -> a -> a
+fixWithin rounds f x
+    | rounds <= 0 || x' == x = x
+    | otherwise = fixWithin (rounds - 1) f x'
+  where
+    x' = f x
 
 -- | Iterate until stable with no iteration bound.
 fixUnbounded :: (Eq a) => (a -> a) -> a -> a

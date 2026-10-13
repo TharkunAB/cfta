@@ -13,6 +13,7 @@ import qualified Data.CFTA.Gen.ReferenceSpec
 import qualified Data.CFTA.Gen.SynthesisSpec
 import qualified Data.CFTA.GenSpec
 import qualified Data.CFTA.RankedSpec
+import qualified Data.CFTA.SizedSpec
 
 main :: IO ()
 main =
@@ -28,3 +29,4 @@ main =
         Data.CFTA.Gen.Equality.TypedExpressionGenSpec.spec
         Data.CFTA.Gen.ReferenceSpec.spec
         Data.CFTA.Gen.SynthesisSpec.spec
+        Data.CFTA.SizedSpec.spec

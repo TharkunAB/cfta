@@ -55,6 +55,7 @@ module Data.CFTA.Interned (
     dropConstraints,
     acceptsWith,
     fixUnbounded,
+    fixWithin,
     pathsMatching,
     requirePath,
 
