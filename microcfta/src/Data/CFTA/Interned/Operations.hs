@@ -518,20 +518,23 @@ genericMergeAlternativesCache :: TypeableMemoCache
 genericMergeAlternativesCache = unsafePerformIO newTypeableMemoCache
 {-# NOINLINE genericMergeAlternativesCache #-}
 
-{- | A node with few edges for each symbol and number of children, which
-accepts every term of the given node and possibly more.
+{- | Merge the alternatives of a closed ordinary node. The result accepts
+every term of the given node and possibly more.
 
 When more than four edges have one symbol and number of children, they become
-one edge, whose children are the unions of their children. Smaller groups
-stay as they are. The merge goes on into the children. A merged edge has no constraint. For edges with at most one child
-the merge accepts the same terms; for edges with more children it also
-accepts the terms that take each child from a different edge. A recursive
-node and a reference stay as they are.
+one edge, whose children are the unions of their children. Smaller groups stay
+as they are. The merge goes on into the children. An edge that stays keeps its
+constraint. A merged edge has no constraint, so it can accept more terms at any
+arity; with more than one child it can also take each child from a different
+edge. A recursive node, a union node, and a reference stay as they are. A child
+union that contains a recursive or union node is not merged further.
 
-An intersection with a merged node pairs each edge with at most four edges,
-where the intersection of two unions of many edges with one symbol costs their
-product. A small group stays exact because a merge keeps more terms, and the
-reduction then narrows less: a narrower automaton is faster to enumerate.
+At a merged ordinary node there are at most four edges for each symbol and
+number of children, so an intersection pairs each edge of the other node with at
+most four edges instead of all matching alternatives. This bound does not apply
+below the recursive and union boundaries. A small group stays exact because a
+merge keeps more terms, and the reduction then narrows less: a narrower
+automaton is faster to enumerate.
 -}
 mergeAlternatives :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
 {-# INLINEABLE mergeAlternatives #-}
@@ -559,12 +562,14 @@ mergeAlternatives = memoTypeableWith @symbol genericMergeAlternativesCache go
     smallGroup = 4
 
     -- The union of the children at one position. A recursive node among them
-    -- stays a recursive node, and the children that it accepts go: a union
-    -- would unfold it, and each intersection with that unfolding would
-    -- unfold it again.
+    -- stays a recursive node, and the children that it accepts go. Do not
+    -- merge a union of recursive boundaries: unfolding it can request the
+    -- same child union again.
     mergedUnion children = case nubOrd kept of
         [single] -> single
-        others -> mergeAlternatives (union others)
+        others
+            | any recursiveBoundary others -> union others
+            | otherwise -> mergeAlternatives (union others)
       where
         recursive = [child | child@(InternedMu _) <- children, null (freeVars child)]
         kept = [child | child <- children, child `elem` recursive || not (any (`accepts` child) recursive)]

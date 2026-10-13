@@ -197,8 +197,8 @@ reduceEqConstraints = go
 
         -- Narrow the node at each path of the class to the nodes at the other
         -- paths. The narrowing set is merged ('mergeAlternatives'): it can keep
-        -- more terms, never fewer, and its intersection costs as much as the
-        -- smaller side instead of the product of edges with one symbol.
+        -- more terms, never fewer. At a merged ordinary root, intersection
+        -- pairs each edge of the other side with at most one merged edge.
         reduceEClass :: PathEClass -> [Node symbol] -> [Node symbol]
         reduceEClass pec ns =
             editAll
