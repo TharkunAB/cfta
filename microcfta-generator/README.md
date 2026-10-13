@@ -203,6 +203,54 @@ The QuickCheck adapter adds random sampling and shrinking. For an imported
 automaton or grammar, counts and replay ranks identify distinct terms. The
 import counts an ambiguous grammar symbolically, so each term has one rank.
 
+### The terms of each size of an automaton
+
+`Data.CFTA.Sized` lists, counts, ranks, and unranks the distinct terms with
+`n` nodes that an explicit `FTA` of `microcfta` accepts, as one sequence.
+Each query ends, also on a cyclic, ambiguous, or equality-constrained
+automaton, and an empty size class says nothing about the classes after it.
+`sizedReference` builds each class from the classes of the child states at
+smaller sizes and checks the equality constraints on each term. `sized`
+gives the same sequence, and it uses the count table of `fromAutomaton` when
+the automaton has no constraint and no ambiguity. A guard beyond equality
+constraints is `ResidualGuard`. An interned automaton enters through
+`toFTA` of `Data.CFTA.Interned`.
+
+```haskell
+module Main (main) where
+
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (noConstraint)
+import Data.CFTA.Sized (countOfSize, rankOfSize, sized, termsOfSize, unrankOfSize)
+
+-- | Binary trees: a leaf, or a node with two trees.
+main :: IO ()
+main = do
+    automaton <-
+        either (fail . show) pure $
+            FTA.mkFTA "tree" [("tree", [FTA.Transition "leaf" [] noConstraint, FTA.Transition "node" ["tree", "tree"] noConstraint])]
+    classes <- either (fail . show) pure $ sized automaton
+    print [countOfSize classes size | size <- [1 .. 9]]
+    mapM_ print (termsOfSize classes 5)
+    print (countOfSize classes 41)
+    print (rankOfSize classes =<< unrankOfSize classes 41 4000000000)
+```
+
+The output is:
+
+```text
+[1,0,1,0,2,0,5,0,14]
+Node "node" [Node "leaf" [],Node "node" [Node "leaf" [],Node "leaf" []]]
+Node "node" [Node "node" [Node "leaf" [],Node "leaf" []],Node "leaf" []]
+6564120420
+Just (41,4000000000)
+```
+
+The order is the order of the count table: the transitions of a state by
+arity, symbol, and the classes of their children; the children of a
+transition by the size of the earlier children, in ascending order; and a
+term that several transitions accept at its first place.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
