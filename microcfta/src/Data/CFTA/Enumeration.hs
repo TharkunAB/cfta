@@ -43,9 +43,10 @@ module Data.CFTA.Enumeration (
     EnumerateM,
 ) where
 
-import Control.Monad (forM_, guard, mzero, unless, when, zipWithM)
-import Control.Monad.State.Strict (StateT (..), gets, modify')
-import Control.Monad.Trans.Class (lift)
+import Control.Applicative (Alternative (..))
+import Control.Monad (MonadPlus, forM_, guard, mzero, unless, when, zipWithM)
+import Control.Monad.State.Strict (MonadState, gets, modify')
+import qualified Control.Monad.State.Strict as State
 import qualified Data.Foldable as Foldable
 import Data.Hashable (Hashable (..))
 import qualified Data.IntSet as IntSet
@@ -263,8 +264,64 @@ initEnumerationState n =
 -------- Monad
 ---------------------
 
--- | Nondeterministic enumeration state monad.
-type EnumerateM symbol = StateT (EnumerationState symbol) []
+{- | Nondeterministic enumeration with one state for each branch.
+
+A computation gets the state, a success continuation, and the result of the
+branches after it. The success continuation gets a result, the new state, and
+the result of the branches after it. The branches run depth first, in the
+order of @StateT state []@, but a bind builds no intermediate list.
+-}
+newtype EnumerateM symbol a = EnumerateM
+    { runEnumerateM ::
+        forall r.
+        EnumerationState symbol ->
+        (a -> EnumerationState symbol -> r -> r) ->
+        r ->
+        r
+    }
+
+instance Functor (EnumerateM symbol) where
+    {-# INLINE fmap #-}
+    fmap f (EnumerateM m) = EnumerateM $ \s success later -> m s (success . f) later
+
+instance Applicative (EnumerateM symbol) where
+    {-# INLINE pure #-}
+    pure a = EnumerateM $ \s success later -> success a s later
+    {-# INLINE (<*>) #-}
+    EnumerateM mf <*> EnumerateM ma =
+        EnumerateM $ \s success later -> mf s (\f s' later' -> ma s' (success . f) later') later
+
+instance Monad (EnumerateM symbol) where
+    {-# INLINE (>>=) #-}
+    EnumerateM m >>= k =
+        EnumerateM $ \s success later -> m s (\a s' later' -> runEnumerateM (k a) s' success later') later
+
+instance Alternative (EnumerateM symbol) where
+    {-# INLINE empty #-}
+    empty = EnumerateM $ \_ _ later -> later
+    {-# INLINE (<|>) #-}
+    EnumerateM m <|> EnumerateM n = EnumerateM $ \s success later -> m s success (n s success later)
+
+instance MonadPlus (EnumerateM symbol)
+
+-- | A failed pattern match ends the branch.
+instance MonadFail (EnumerateM symbol) where
+    {-# INLINE fail #-}
+    fail _ = empty
+
+-- | Like @StateT@ from "Control.Monad.State.Strict", 'state' forces the pair that its function gives.
+instance MonadState (EnumerationState symbol) (EnumerateM symbol) where
+    {-# INLINE state #-}
+    state f = EnumerateM $ \s success later -> case f s of (a, s') -> success a s' later
+
+-- | One branch for each element, in order.
+branches :: [a] -> EnumerateM symbol a
+{-# INLINE branches #-}
+branches xs = EnumerateM $ \s success later -> foldr (\x rest -> success x s rest) later xs
+
+-- | The result and the final state of every branch, in order, lazily.
+allBranches :: EnumerateM symbol a -> EnumerationState symbol -> [(a, EnumerationState symbol)]
+allBranches (EnumerateM m) s = m s (\a s' rest -> (a, s') : rest) []
 
 ---------------------
 -------- UVar accessors
@@ -438,7 +495,7 @@ enumerateNode scs n =
             Sequence.Empty -> case n of
                 Mu _ -> TermFragmentUVar <$> addUVarValue (Just n)
                 InternedUnion _ -> TermFragmentUVar <$> addUVarValue (Just n)
-                Node es -> enumerateEdge scs =<< lift es
+                Node es -> enumerateEdge scs =<< branches es
                 Rec recId ->
                     error $
                         "enumerateNode: unexpected unresolved recursive reference "
@@ -555,9 +612,9 @@ nextExpandableUVar choose = do
 
 {- | Expand one UVar into a fragment.
 
-The pattern bind is deliberately failable: 'EnumerateM' fails into the list
-monad, so a UVar that is not an unexpanded node drops this branch instead of
-raising. The branch is unreachable through @enumerateFully'@, which takes its
+The pattern bind is deliberately failable: a failed match in 'EnumerateM'
+ends the branch, so a UVar that is not an unexpanded node drops this branch
+instead of raising. The branch is unreachable through @enumerateFully'@, which takes its
 UVar from 'nextExpandableUVar' and so only offers expandable UVars.
 -}
 enumerateOutUVar ::
@@ -725,7 +782,7 @@ truncatedTerms ::
     (Hashable symbol, Typeable symbol) =>
     Node symbol -> [Term (PartialSymbol symbol)]
 truncatedTerms n = map fst $
-    flip runStateT (initEnumerationState n) $ do
+    flip allBranches (initEnumerationState n) $ do
         enumerateFully
         rootTermFrag >>= expandPartialTermFrag
 
@@ -799,7 +856,7 @@ termsPruneWith ::
     Node symbol ->
     [Term symbol]
 termsPruneWith recursionSymbol ost order oracle n =
-    map fst $ flip runStateT (initEnumerationState n) $ do
+    map fst $ flip allBranches (initEnumerationState n) $ do
         enumerateFully' ost order oracle
         expandUVarWith recursionSymbol (intToUVar 0)
 
@@ -847,7 +904,7 @@ runs ::
     (Hashable symbol, Typeable symbol) =>
     symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
 runs recursionSymbol n =
-    map fst $ flip runStateT (initEnumerationState n) $ do
+    map fst $ flip allBranches (initEnumerationState n) $ do
         enumerateFully
         term <- expandUVarWith recursionSymbol (intToUVar 0)
         obligations <- gets _obligations
