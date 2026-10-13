@@ -606,12 +606,12 @@ mergeAlternatives = memoTypeableWith @symbol genericMergeAlternativesCache go
 
     -- The union of the children at one position. A recursive node among them
     -- stays a recursive node, and the children that it accepts go. Do not
-    -- merge a union of recursive boundaries: unfolding it can request the
-    -- same child union again.
+    -- merge a union of recursive boundaries. Retain its union record so a
+    -- later merge does not unfold the same recursive operands again.
     mergedUnion children = case nubOrd kept of
         [single] -> single
         others
-            | any recursiveBoundary others -> union others
+            | any recursiveBoundary others -> createUnion others
             | otherwise -> mergeAlternatives (union others)
       where
         recursive = [child | child@(InternedMu _) <- children, null (freeVars child)]

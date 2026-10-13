@@ -23,6 +23,7 @@ import Test.QuickCheck
 import Data.CFTA.Equality
 import Data.CFTA.Index (Depth)
 import Data.CFTA.Internal.UnionFind (intToUVar)
+import Data.CFTA.Interned.Operations (mergeAlternatives)
 import Data.CFTA.Symbol
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -322,6 +323,20 @@ spec = do
             intersect intTest11 intTest12 `shouldBe` Node [Edge "f" [createMu $ \r -> Node [Edge "f" [r]]]]
 
     describe "reduction" $ do
+        it "keeps the merge of recursive languages fixed under repeated narrowing" $ do
+            -- Formalization row 22: the merge unfolded its retained recursive
+            -- child union again on each pass, and equality reduction grew.
+            let loop name = Mu (\self -> Node [Edge name [], Edge "f" [self]]) :: Node Symbol
+                source = union (map loop ["a", "b", "c", "d", "e"])
+                merged = mergeAlternatives source
+                classes = mkEqConstraints [[path [0], path [1]]]
+                fixed = fixUnbounded (reduceEqConstraints classes EmptyConstraints) [source, source]
+            result <-
+                timeout 10000000
+                    $ evaluate
+                    $ mergeAlternatives merged == merged
+                        && reduceEqConstraints classes EmptyConstraints fixed == fixed
+            result `shouldBe` Just True
         it "stops a fixed point after a number of passes" $ do
             fixWithin 3 (+ (1 :: Int)) 0 `shouldBe` 3
             fixWithin 10 (min (5 :: Int) . (+ 1)) 0 `shouldBe` 5
