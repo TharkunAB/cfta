@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 14:15 CEST**.
+Updated: **2026-10-13 14:28 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `4897831`.
 Upstream contains the repairs in rows 1 through 21. Row 22 records a new
@@ -11,7 +11,7 @@ follow both changes.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **894 jobs and 34,277 theorem dependency
+The full Lean development passes **905 jobs and 34,501 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -22,6 +22,52 @@ initial historical findings against an older revision. Its historical
 "proposed repair" and "no production fixes" statements do not describe the
 current branch. [lean/SYSTEM.md](lean/SYSTEM.md) contains detailed current
 counterexamples, repair arguments, and implementation comparisons.
+
+## Latest restart checkpoint
+
+Proof checkpoint: **`2ba84e1`**. All stable proof files are committed and
+imported by the aggregate audit. All workers are frozen. The only unfinished
+draft is `lean/MicroCFTA/MergedAdaptiveStability.lean.incomplete`; it is
+committed and excluded from the build.
+
+The requested upstream refresh was checked at 14:21–14:28 CEST. Both fetch
+and direct remote lookup returned `origin/microcfta` at
+`489783177b0a7fd34bb6bf205e66d7d5cce0d1fe`. The explicit rebase reported the
+continuation branch up to date. No newer remote commit was available then.
+Backup `backup/formalization-before-refresh-20261013-1423` preserves the
+checkpoint. New work remains local.
+
+`MergedAdaptiveMerge.execute_complete` now proves the complete adaptive
+physical merge's successful execution and finite-language coverage.
+Ordinary height supplies sufficient recursive fuel. The proof derives all
+smaller calls, actual current-state comparison selection, child columns,
+edge interning, and parent construction. It has no recursive correctness or
+termination premise. Prepared initial context, concrete guard interpretation,
+structural source grouping, and the outer memo wrapper remain explicit
+correspondence boundaries. Extra-fuel independence is the preserved draft.
+See [adaptive worker](lean/notes-merged-adaptive-worker.md).
+
+`MergedSourceComparison` now executes the ordered stateful source comparison.
+`MergedComparisonFacts.check_verified` preserves facts, both histories,
+`NoNewMu`, and actual warming progress. Failed cover attempts retain their
+cache effects. `MergedComparisonColdMeasure` proves that every changed
+verified cache strictly decreases the number of cold original Mu records.
+`MergedComparisonReaderReplay` proves exact completed reader replay in any
+later cache. Sufficient-fuel completion, stability, and semantic soundness
+of the full stateful comparator remain open. See
+[comparison restart](lean/notes-source-comparison-handoff.md).
+
+`InternedOrdinaryLevelBoundary` disproves equal computed levels under
+fresh-only capture changes on actual source calls. Its checked levels change
+from 0 to 1. The closed embedding completes and stores nested probe depths
+`(1,0,1)`. It supplies no pending or divergence counterexample. The next
+constructor target is to require the ordinary mismatch to affect a live
+lexical position and compare that name with the active old key. See
+[literal observations](lean/notes-interned-literal-observations.md).
+
+The full formalization remains unfinished. The exact restart order,
+commands, draft status, proof boundaries, source checks, and preservation
+instructions are in [HANDOFF.md](HANDOFF.md).
 
 ## Baseline and required contract
 
@@ -240,10 +286,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **894 jobs; 34,277 theorem dependency checks**.
+- Latest integrated Lean audit: **905 jobs; 34,501 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-20261013-source-origin-audit.log`.
+  Log: `/tmp/mcfta-20261013-restart-final-audit.log`.
 - The earlier formula capture, nested compiler capture, recursive equality,
   and open-union reproductions passed at the `de910ea` checkpoint. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -275,8 +321,8 @@ but do not prove it for every runtime execution.
 
 ## Current proof results and remaining obligations
 
-The current proof checkpoint is **`fee28ff`**. Its complete audit passes
-**894 jobs and 34,277 theorem dependency checks**. All current proof modules
+The current proof checkpoint is **`2ba84e1`**. Its complete audit passes
+**905 jobs and 34,501 theorem dependency checks**. All current proof modules
 are committed and imported by the aggregate audit. The full
 formalization remains incomplete. The detailed restart order, commands,
 repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).
@@ -417,8 +463,9 @@ soundness. Reverse edge coverage and the full stateful comparison remain open.
 coverage through actual child, edge, and parent effects. The checked column
 worker derives filtering soundness from physical comparison and covers
 singleton, retained recursive union, and ordinary union branches. Recursive
-certificates apply only below the parent height. Composing those certificates
-with state-specific selection in the complete worker remains active work.
+certificates apply only below the parent height. The later `MergedAdaptiveMerge.execute_complete` composes those
+certificates with current-state selection and derives the complete prepared
+worker result. Its remaining source correspondence boundaries are explicit.
 See [physical comparison](lean/notes-merged-physical-comparison.md),
 [actual union semantics](lean/notes-merged-physical-union.md), and
 [cold execution](lean/notes-merged-cold-comparison.md). The new

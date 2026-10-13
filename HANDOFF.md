@@ -1,14 +1,14 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 14:15 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 14:28 CEST (Europe/Stockholm)**.
 
 ## Read first
 
 The formalization is **not complete**. Matti requested this restart checkpoint
 because the chat became unreliable. Continue the same full task. Do not replace
 it with a smaller fragment, a theorem-count target, or a documentation task.
-The latest committed proof checkpoint is **`fee28ff`**. Its integrated audit
-passes **894 jobs; 34,277 theorem dependency checks**. It adds full lexical
+The latest committed proof checkpoint is **`2ba84e1`**. Its integrated audit
+passes **905 jobs; 34,501 theorem dependency checks**. It adds full lexical
 input replay, actual probe-choice sites, a decreasing merge-call measure,
 physical comparison and union semantics, cold unfolding stabilization,
 closed cold-reader completion and soundness, physical group construction,
@@ -21,6 +21,101 @@ Root `FINDINGS.md` is the current report. `lean/FINDINGS.md` is historical.
 Dated sections in detailed notes describe successive checkpoints; later results
 can discharge an earlier section's stated gap. Use the theorem statements and
 this handoff for current scope. `NEXT-PROMPT.md` contains the restart prompt.
+
+## Immediate restart state and targets
+
+All proof workers are frozen. No proof check remains running. The working tree
+was clean at proof checkpoint `2ba84e1`. This documentation update follows it.
+All stable Lean modules are imported by `MicroCFTA/Audit.lean`. The only
+unfinished file is `lean/MicroCFTA/MergedAdaptiveStability.lean.incomplete`.
+It is committed and excluded from Lean build targets. Do not delete it.
+
+Matti requested another upstream rebase before this handoff. At 14:21–14:28
+CEST, `git pull --ff-only origin microcfta` reported already up to date.
+`git ls-remote origin refs/heads/microcfta` independently returned
+`489783177b0a7fd34bb6bf205e66d7d5cce0d1fe`.
+`git rebase origin/microcfta` then reported the continuation branch up to date.
+There were no newer commits on that remote branch to replay. Backup
+`backup/formalization-before-refresh-20261013-1423` retains `2ba84e1`.
+Fetch again at restart because more patches can arrive later.
+
+Latest full validation: **905 jobs; 34,501 theorem dependency checks**.
+Log: `/tmp/mcfta-20261013-restart-final-audit.log`.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
+The latest source tests remain **620 passing examples** at source repair
+`c76d1ec`; no Haskell source changed after that repair.
+
+Latest proof checkpoints:
+
+| Commit | Result |
+| --- | --- |
+| `47ca7f0` | Physical group, edge, column, and parent construction coverage. |
+| `6d3a7d6` | Ordered cold edge reader succeeds for closed prepared roots. |
+| `67d942b` | Closed stored body/probe depths can be `(1,0,0)`. |
+| `8dd0761` | Completed probe routes retain exact source bodies and histories. |
+| `26cbcfc` | Closed pending execution requires an actual ordinary-level mismatch. |
+| `fee28ff` | Cold reader edges have actual epsilon origins and finite-term soundness. |
+| `a15bde6` | Fresh-only captures can change an actual computed ordinary level. |
+| `40034d8` | Complete adaptive physical merge terminates and covers its input language. |
+| `2ba84e1` | Ordered comparison effects, cold progress, and exact reader replay. |
+
+Use the following proof order. These are concrete next obligations, not a
+replacement for the full objective.
+
+1. **Full ordered comparison completion and stability.** Read
+   `lean/notes-source-comparison-handoff.md`. The five stable modules are
+   `MergedSourceComparison`, `MergedComparisonWarmProgress`,
+   `MergedComparisonColdMeasure`, `MergedComparisonFacts`, and
+   `MergedComparisonReaderReplay`. `check_verified` derives facts, both
+   histories, `NoNewMu`, and warm progress for the actual ordered fuelled run.
+   Prove sufficient fuel with the lexicographic measure of the number of cold
+   original Mu records and the number of issued identity pairs outside the
+   ancestor list. Changed cache effects strictly decrease the first measure.
+   An unchanged cache with a new ancestor pair decreases the second. Keep
+   failed-cover effects and short-circuit order. Full termination and semantic
+   soundness of this stateful comparator are not yet proved.
+2. **Adaptive merge fuel independence.** Read
+   `lean/notes-merged-adaptive-worker.md`. Five stable `MergedAdaptive*` modules
+   now derive completion and language inclusion with no recursive `CallLaw`
+   premise. The derived fuel is ordinary height. Initial prepared `Context`,
+   concrete guard interpretation, structural `Grouping`, and the outer memo
+   wrapper remain correspondence boundaries. Restore the `.lean.incomplete`
+   draft to `.lean` when resuming it. Its remaining errors are in
+   `worker_refines` at zero fuel with abstract `later`; try splitting `later`
+   before the value cases. Verify this suggestion. `enough_eq_execute` depends
+   on that repair. Do not report fuel independence as proved yet.
+3. **Reverse cold-reader edge coverage.**
+   `MergedSourceExposureLanguage.nodeEdges_origins` and `nodeEdges_sound`
+   prove the forward direction in the actual returned cache and every later
+   extension. `MergedComparisonReaderReplay.nodeEdges_replay` now returns the
+   exact same edges in any later cache without allocation. Use this to prove
+   reverse coverage through a later prepared observation cache, while keeping
+   the original execution history unchanged.
+4. **General closed constructor no-pending.** Read
+   `lean/notes-interned-literal-observations.md`.
+   `InternedPendingOrdinaryMismatch.closed_depth_mismatch` derives same-body
+   completed Depth calls with different depths from a hypothetical pending
+   run. Strengthen the mismatch to a live lexical ordinary input. Its later
+   name must occur in the actual old Depth probe's free set. Compare that name
+   with the active ancestor's original key. General equal-depth transport is
+   false: `InternedOrdinaryLevelBoundary.different_actual_levels` checks
+   captures `[Depth,Depth,U0]` versus `[interned 9,Depth,U0]`, with depths 0
+   and 1. Its closed embedding stores nested depths `(1,0,1)` at slot 28 and
+   completes with an empty root. This is not a pending counterexample.
+
+The source preparation restriction remains `PreparedWithoutMu` for every
+complete Mu body. It permits closed nested Mu records of arbitrary depth.
+It excludes reconstruction through open nested Mu records. Full arbitrary Mu
+totality, general nested equality fixed-point termination, concrete runtime
+correspondence, and the other contracts below remain part of the objective.
+
+Temporary diagnostics are useful but are not durable proof prerequisites.
+The fixture-guided mirror checked 14,916 variants, skipped seven for resource
+limits, observed 12,903 level-changing traces, and found no pending readback.
+Files: `/tmp/mcfta-pending-level-search.py` and its `.log`.
+The checked fixtures and exact statements are committed in Lean.
+The local weekly monitor last reported about **89–90% remaining**. Refresh
+it at restart; stop all work at 1% or less. Do not rely on this snapshot.
 
 ## Full objective and authorization
 
@@ -77,8 +172,8 @@ honest proof boundaries; passing examples are not a general theorem.
 - Keep both retained stashes. The newest is `Preserve pending keyed nary and
   recursive join proofs before microcfta rebase`; its files were restored.
 - Leave `/home/tritlo/Code/microecta/lean-fixes` on `fix/lean-findings` untouched.
-- All proof workers were asked to freeze for this handoff. Do not assume an old
-  worker or process is still running; inspect live state before relying on it.
+- All proof workers froze for this handoff. Their final files are committed.
+  Start new workers only when the current instructions permit them.
 
 The earlier rebase replayed 175 proof/documentation commits. The latest
 refresh preserved all 267 local commits and added upstream PR #97. Old Haskell repairs were
@@ -130,7 +225,7 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build MicroCFTA.InternedNestedProfiles
 ```
 
-Latest complete audit: `/tmp/mcfta-20261013-source-origin-audit.log`.
+Latest complete audit: `/tmp/mcfta-20261013-restart-final-audit.log`.
 It checks every imported theorem against the allowlist `propext`,
 `Classical.choice`, and `Quot.sound`. It rejects omitted proofs, native evaluation
 axioms, and custom axioms. The count is validation evidence, not a coverage
@@ -334,9 +429,9 @@ Mu reconstruction is still outside this structural fragment.
 coverage through actual group, edge, and parent constructor effects.
 `MergedPhysicalGroupColumnWorker.checked_column_correct` covers actual
 comparison filtering and all three child-column branches. Its recursive
-certificates are restricted by ordinary height. The complete recursive
-worker still needs to construct those smaller certificates and connect
-state-specific comparison selection to the group sequence.
+certificates are restricted by ordinary height. The later `MergedAdaptiveMerge.execute_complete` now constructs those
+smaller certificates and connects current-state selection to group sequencing.
+Its exact initial context and source correspondence boundaries remain explicit.
 
 `InternedProbeChoiceSites.completed_route` retains exact source bodies at
 crossed binders. The closed depth counterexample now checks body/probe
@@ -379,8 +474,9 @@ The old `EqualityLeafProjectionRuntimeBound` is retained for the old worker.
 `MergedEqualityReduction` proves constrained-language preservation with a
 merge-superset premise. The physical leaf worker has a coverage theorem, and observed row order
 derives complete grouping. Coverage search saturates under a finite pair
-inventory. General recursive merge termination and the recursive physical
-superset bridge still need proof. See `lean/notes-merged-narrowing.md`.
+inventory. The adaptive prepared worker now has completion and physical language
+coverage. General source correspondence and the full cold stateful comparator
+still need proof. See `lean/notes-merged-narrowing.md`.
 
 The **complete physical projected-leaf schedule** is proved for both workers. Its bound is the
 original occurrence weight plus one. It includes actual endpoint reads,
