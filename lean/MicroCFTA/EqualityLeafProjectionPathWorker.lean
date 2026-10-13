@@ -1,4 +1,5 @@
 import MicroCFTA.EqualityRawLeafUnion
+import MicroCFTA.EqualityOrdinaryUnionSource
 
 /-!
 # Actual ordinary source path projection
@@ -13,6 +14,7 @@ open InternedConstructorTemplates InternedRecordCoherence InternedEdgeResidency 
 open EqualityLeafProjectionCompileAvailability EqualityLeafProjectionRequireAvailability
 open EqualityLeafProjectionWorkers (bindOptional bindOptional_safe bindOptional_returns Returns pure_returns)
 open EqualityLeafProjectionSyntax (Path)
+open EqualityOrdinaryUnionSource (sourceUnion)
 
 /-- Copy the source mapMaybe traversal in actual canonical edge order. -/
 def rows (project : Value Symbol Guard → Work Symbol Guard (Option (Value Symbol Guard))) (index : Nat) :
@@ -29,13 +31,13 @@ def read : Path → Value Symbol Guard → Work Symbol Guard (Option (Value Symb
   | index :: path, value => match value with
     | .empty => .pure (some .empty)
     | .node _ edges _ _ => bindOptional (rows (read path) index edges) fun values =>
-        (makeUnion values).bind fun result => .pure (some result)
+        (sourceUnion values).bind fun result => .pure (some result)
     | .reference .. | .union .. | .mu .. => .pure none
 
 /-- Source forest root projection is union; an absent child position is EmptyNode. -/
 def readForest (path : Path) (values : List (Value Symbol Guard)) : Work Symbol Guard (Option (Value Symbol Guard)) :=
   match path with
-  | [] => (makeUnion values).bind fun value => .pure (some value)
+  | [] => (sourceUnion values).bind fun value => .pure (some value)
   | index :: rest => match values[index]? with
     | none => .pure (some .empty)
     | some value => read rest value
@@ -59,7 +61,7 @@ theorem read_safe (path : Path) (value : Value Symbol Guard) : Safe (read path v
       cases value <;> first
         | trivial
         | exact bindOptional_safe _ _ (rows_safe (read path) ih index _) (fun values =>
-            safe_bind _ _ (makeUnion_safe values) (fun _ => trivial))
+            safe_bind _ _ (makeNode_safe (values.flatMap nodeEdges)) (fun _ => trivial))
 
 /-- Every ordinary child membership follows from the finite worker invariant. -/
 theorem ordinary_child (edges : List (EdgeValue Symbol Guard))
@@ -114,21 +116,20 @@ theorem read_returns [DecidableEq (EdgeKey Symbol Guard)] (path : Path) (value :
           apply bindOptional_returns _ _ state (rows_returns (read path) index edges
             (fun edge member child present current => ih child (ordinary_child edges ordinary edge member child present) current) state)
           intro values current
-          refine ⟨(run (makeUnion values) current).1, ?_⟩
+          refine ⟨(run (sourceUnion values) current).1, ?_⟩
           simp only [run_bind, run]
       | reference | union | mu => cases ordinary
 
 /-- Actual physical union preserves complete projection output payloads. -/
 theorem union_checked [DecidableEq (EdgeKey Symbol Guard)] (values : List (Value Symbol Guard))
     (state : State Symbol Guard) (facts : Facts state) (available : ChildrenAvailable state values) :
-    Checked Available ((makeUnion values).bind fun value => .pure (some value)) state := by
-  have result := makeUnion_available values state facts.coherent facts.cached available
-  have linked := makeUnion_linked values state facts.linked available
+    Checked Available ((sourceUnion values).bind fun value => .pure (some value)) state := by
+  have result := EqualityOrdinaryUnionSource.sourceUnion_available values state facts available
   simp only [Checked, run_bind, run]
-  refine ⟨⟨result.1, result.2.1, linked⟩, ?_⟩
+  refine ⟨result.1, ?_⟩
   intro value same
   cases Option.some.inj same
-  exact result.2.2
+  exact result.2
 
 /-- Ordered source projections retain every available child through later siblings. -/
 theorem rows_available [DecidableEq (EdgeKey Symbol Guard)]

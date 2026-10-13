@@ -70,8 +70,13 @@ theorem read_transport (path : Path) : Transport initial symbols path := by
               obtain ⟨middle, pairs, middleFacts, growth, order, projected⟩ :=
                 rows_transport path ih index edges state facts inputs values rowsClosed
               have unionReplay : run (makeUnion (pairs.map Prod.snd)) middle = (result, middle) := by
+                have fields := EqualityRawLeafUnion.operand_fields pairs middle middleFacts projected
+                rw [← EqualityOrdinaryUnionSource.union_run (pairs.map Prod.snd) middle middleFacts.coherent middleFacts.linked
+                  (fun value member => (fields value member).1)
+                  (fun value member => (fields value member).2.2.1)
+                  (fun value member => (fields value member).2.1)]
                 rw [order]
-                exact work_grows (makeUnion values) state middle facts.coherent.valid result unionClosed growth
+                exact work_grows (EqualityOrdinaryUnionSource.sourceUnion values) state middle facts.coherent.valid result unionClosed growth
               have completed := EqualityRawLeafUnion.union_completed pairs middle middleFacts projected
               rw [unionReplay] at completed
               exact ⟨_, EqualityRawLeafUnion.union (pairs.map Prod.fst), completed.1,

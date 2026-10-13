@@ -60,7 +60,8 @@ theorem read_nullary (index : Nat) (path : EqualityLeafProjectionSyntax.Path) (v
   | empty => rfl
   | node entry edges depth free =>
       simp only [EqualityLeafProjectionPathWorker.read, rows_nullary (read path) index edges nullary]
-      simp [EqualityLeafProjectionWorkers.bindOptional, Work.bind, makeUnion, distinctNodes]
+      simp [EqualityLeafProjectionWorkers.bindOptional, Work.bind, EqualityOrdinaryUnionSource.sourceUnion,
+        makeNode, canonicalEdges, surviving, EnumerationBuilderCaches.canonicalIds]
   | reference | union | mu => cases ordinary
 
 /-- The actual raw leaf builder derives both shape premises of proper path projection. -/
