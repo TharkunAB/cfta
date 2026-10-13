@@ -79,8 +79,31 @@ class counts/decoders, and both inverse laws with rejection.
 `SourceCyclicRowsExecution` adds the convergent minimum-size prepass before
 the finite count/plan query. The class certificate bounds recursion nesting
 by node count plus one. It is not a primitive machine-cost or lazy heap bound.
-The cyclic precheck composition still uses the reference synchronous product
-test. Equality with the actual native callback must be connected separately.
+`SourceCyclicRowsNativeGate*` now connects the actual native minimum-row
+callback and complete ambiguity scan to the reference synchronous test.
+It derives plain source readback from the real constraint precheck. A scoped
+product-row construction contract remains; no separate productivity oracle
+or global erased-heap contract is assumed. The compiler result, finite
+completion, exact size classes, and inverses transfer through this equality.
+
+`SourceInternedIntersectionRows*` executes the ordinary construction kernel
+through physical caches: source hash join, arity check, child sequencing,
+edge creation, surviving rows, and canonical node readback. It derives
+correct common language for finite plain operands in the actual physical
+cache. `sizeOf left` gives sufficient fuel. Larger fuel retains both the
+output and final cache. Native memo/self/order dispatch and recursive
+Mu/union exposure remain separate. This kernel theorem does not discharge
+the general scoped product-row contract.
+
+## Concrete cyclic probability records
+
+`SourceCyclicRowsProbability*` constructs the current cyclic sampling record
+from compiled counts and selectors. It derives the Exact backend's uniform
+selection, singleton shortcut, public PMF, empty/nonpositive-size behavior,
+normalization, reciprocal term mass, complete positive support, and sampled
+rank replay. Shared-row readback identifies these outcomes with the original
+exposed guarded heap. No sampler normalization premise is assumed.
+An arbitrary PRNG still needs its stated uniform-draw law.
 
 ## Custom-key tie counterexample and source correction
 
@@ -99,10 +122,12 @@ This finding does not refute the count or inverse laws.
 
 ## Validation and scope
 
-The aggregate Lean 4.34.1 build passes 1,123 targets. The audit checks 38,793
-theorem dependencies and permits only `propext`, `Classical.choice`, and
-`Quot.sound`. All 17 new proof modules are imported by the audit.
-Log: `/tmp/mcfta-one-row-20261013-audit.log`.
+The shared-row checkpoint passed 1,123 targets and 38,793 theorem dependencies.
+The later native-gate, probability, ordinary-intersection, and solver-name
+batch passes 1,140 targets and 39,108 theorem dependencies. The audit permits
+only `propext`, `Classical.choice`, and `Quot.sound`.
+Logs: `/tmp/mcfta-one-row-20261013-audit.log` and
+`/tmp/mcfta-native-liquid-20261013-audit.log`.
 
 The rebased source passed 285 core, 206 generator, and 144 refinement examples
 in Nix. Log: `/tmp/mcfta-one-row-20261013-tests.log`.

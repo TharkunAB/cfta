@@ -1,13 +1,15 @@
 # Full formalization coverage
 
-Current continuation: **2026-10-13 23:43 CEST**, upstream `7989e91a`.
+Current continuation: **2026-10-14 00:00 CEST**, upstream `7989e91a`.
 The requested local rebase preserves every saved proof, draft, and fixture.
 PR #115 uses one shared interned row adapter. New proofs derive its finite
 traversal, exact retained rows, guarded language, validated conversion,
 dense numbering, stable canonical order, finite-key minimum sizes, cyclic
 class evaluation, and both rank inverses. See [the shared-row note](notes-shared-rows.md).
-Native intersection construction remains open. Its explicit recursive syntax
-proof does not yet establish physical interned row readback. Equal complete
+The native ambiguity callback now agrees with the reference under a scoped
+product-row contract. Physical ordinary construction derives exact common
+language and stable finite completion. Native dispatch and general recursive
+Mu/union exposure remain open. Equal complete
 custom sort keys retain source order; a Lean/native counterexample preserves
 that qualification without changing runtime behavior.
 The earlier [bounded import proofs](notes-bounded-import.md) remain.
@@ -21,6 +23,13 @@ classes, complete distinct size-major prefixes, and both rank inverses.
 recursion and completed canonical, ordinary-minimum, and product-minimum
 preprocessing. Direct-row dispatch keeps the same reference sequence.
 
+Repair `73223201` removes a second liquid name-capture defect. Raw names
+`1` and `fix$1` previously became the same SMT name. `SourceSolverName*`
+proves concrete injectivity, unchanged name serialization, quantified
+semantics, actual encoded preflight, and the current public liquid language
+and finite-outcome contracts. Correct external encoded replies derive the
+original response law. See [the solver name note](notes-solver-name-encoding.md).
+
 `SourceSizedLiquidAmbientPublic` derives exact bounded logical acceptance
 with mixed sorts and ambient assumptions from individual Sat/Unsat replies.
 The whole IO model preserves first Unknown and unchanged raised exceptions.
@@ -32,14 +41,18 @@ The repaired preflight has an exact source traversal theorem.
 Probability proofs now cover distinct class and bounded sampling, sampled
 rank replay/inversion, requested weights, duplicate PMF aggregation, actual
 finite/cyclic PMF dispatch, and weighted callback validity/coverage.
+`SourceCyclicRowsProbability*` derives the actual cyclic record's Exact
+sampling, reciprocal masses, normalization, support, and sampled inverses
+against shared-row readback. No normalization premise is assumed.
 Sized sampling results describe verified client compositions, not a new API.
 CPS enumeration, batched descent, conditional union-find writes, and reserved
 zero-domain memo keys now have checked source algorithm bridges.
 
-The completed shared-row audit passes **1,123 jobs and 38,793 theorem dependency checks**
+The completed native/liquid batch passes **1,140 jobs and 39,108 theorem dependency checks**
 with only the three standard Lean axioms. The rebased source passed
 **285 core, 206 generator, and 144 refinement examples** in Nix. Formatting
-and native reproductions passed. New native-gate work needs a new audit.
+and native reproductions passed after the solver-name repair. Later native
+dispatch, weighted-backend, and equality work needs a new audit.
 No production test was added. Concrete containers,
 lazy heaps, machine conversions, external solver/PRNG behavior, and verified
 extraction remain boundaries. Older constructor and equality targets remain.

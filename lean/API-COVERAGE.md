@@ -1,13 +1,15 @@
 # Public API and source correspondence
 
-Current continuation: **2026-10-13 23:43 CEST**, upstream `7989e91a`.
+Current continuation: **2026-10-14 00:00 CEST**, upstream `7989e91a`.
 The requested local rebase preserves every saved proof, draft, and fixture.
 PR #115 uses one shared interned row adapter. New proofs derive its finite
 traversal, exact retained rows, guarded language, validated conversion,
 dense numbering, stable canonical order, finite-key minimum sizes, cyclic
 class evaluation, and both rank inverses. See [the shared-row note](notes-shared-rows.md).
-Native intersection construction remains open. Its explicit recursive syntax
-proof does not yet establish physical interned row readback. Equal complete
+The native ambiguity callback now agrees with the reference under a scoped
+product-row contract. Physical ordinary construction derives exact common
+language and stable finite completion. Native dispatch and general recursive
+Mu/union exposure remain open. Equal complete
 custom sort keys retain source order; a Lean/native counterexample preserves
 that qualification without changing runtime behavior.
 The earlier [bounded import proofs](notes-bounded-import.md) remain.
@@ -21,6 +23,13 @@ classes, complete distinct size-major prefixes, and both rank inverses.
 recursion and completed canonical, ordinary-minimum, and product-minimum
 preprocessing. Direct-row dispatch keeps the same reference sequence.
 
+Repair `73223201` removes a second liquid name-capture defect. Raw names
+`1` and `fix$1` previously became the same SMT name. `SourceSolverName*`
+proves concrete injectivity, unchanged name serialization, quantified
+semantics, actual encoded preflight, and the current public liquid language
+and finite-outcome contracts. Correct external encoded replies derive the
+original response law. See [the solver name note](notes-solver-name-encoding.md).
+
 `SourceSizedLiquidAmbientPublic` derives exact bounded logical acceptance
 with mixed sorts and ambient assumptions from individual Sat/Unsat replies.
 The whole IO model preserves first Unknown and unchanged raised exceptions.
@@ -32,14 +41,18 @@ The repaired preflight has an exact source traversal theorem.
 Probability proofs now cover distinct class and bounded sampling, sampled
 rank replay/inversion, requested weights, duplicate PMF aggregation, actual
 finite/cyclic PMF dispatch, and weighted callback validity/coverage.
+`SourceCyclicRowsProbability*` derives the actual cyclic record's Exact
+sampling, reciprocal masses, normalization, support, and sampled inverses
+against shared-row readback. No normalization premise is assumed.
 Sized sampling results describe verified client compositions, not a new API.
 CPS enumeration, batched descent, conditional union-find writes, and reserved
 zero-domain memo keys now have checked source algorithm bridges.
 
-The completed shared-row audit passes **1,123 jobs and 38,793 theorem dependency checks**
+The completed native/liquid batch passes **1,140 jobs and 39,108 theorem dependency checks**
 with only the three standard Lean axioms. The rebased source passed
 **285 core, 206 generator, and 144 refinement examples** in Nix. Formatting
-and native reproductions passed. New native-gate work needs a new audit.
+and native reproductions passed after the solver-name repair. Later native
+dispatch, weighted-backend, and equality work needs a new audit.
 No production test was added. Concrete containers,
 lazy heaps, machine conversions, external solver/PRNG behavior, and verified
 extraction remain boundaries. Older constructor and equality targets remain.
@@ -165,7 +178,7 @@ its support has one term rank. See `notes-distinct-rank.md`.
 | `Data.CFTA.Refinement.Expression` — public term/formula constructors, relations, refinement functions, `Literal`, `Enumerated`, defining terms | `CoreFormula` gives executable integer semantics; `CoreLattice.lowerTerm_evaluation` and `lowerFormula_evaluation` bridge supported arithmetic to the lattice. User literal codecs and the `definingTerm` recognition of an exact integer measure require source correspondence. The API's integer interpretation is distinct from arbitrary Haskell value equality. |
 | `Data.CFTA.Refinement.Guard` — root/argument/descendant paths, contracts, measures, subtype/same-term, substitutions, Boolean builders | `Language` gives path and equality semantics; `Guards`, `Holds`, and `CoreFormula` give logical semantics. `GuardBuilders` derives the standard instance arity probes, consecutive argument paths, complete `contractReach` traversal, exact transition checks, and error precedence. `ContractAssembly` derives ordered conjuncts, exact free-child selection, capture-free compact names, full sorted formula meaning and generated contract arity. Custom instances and signed machine conversions remain adapters. |
 | `Data.CFTA.Refinement.Lattice` — `points`, count/select/rank, singleton, entailment | `CoreLattice.signed_correct` and `linearTerm_correct` connect the new AST. The `Lattice*` pipeline proves supported integer arithmetic, indicators, feasibility, polynomial elimination, retained levels, and exact finite points. `LatticeSelect.points_api_exact`, `compiledPoints_exact`, and `closePoints_exact` connect a successful public points construction to stored count/dimension and the actual cumulative-polynomial selector/inverse; no valid integer tuple is dropped. `FullSyntax.signed_success_is_core` proves the successful parser excludes unsupported new syntax. `SearchCost.selected_with_cost` bounds cumulative search queries. `LatticeRetry` proves named elimination failures, bounded move-to-front retries, coordinate permutation, exact successful points and definite verdicts. Concrete maps, binding freshening, name conversion and remaining source error adapters need correspondence. Nonlinear terms, unsupported conditionals, unknown names, and unsuitable bounds are errors. |
-| `Data.CFTA.Refinement.LiquidFixpoint` — Z3 contexts, assumptions, timeout and formula translation | `FormulaLowering.term_lower`, `formula_lower`, and `checked_lower` prove full source-to-target sort/term/formula translation, including applications, casts and quantifiers. `Guards` supplies three-valued decisions. `SolverAdapter` preserves the former preparation model. `SourceSizedLiquidAmbientRepair.sourcePrepare_exact` proves current reserved-name preflight, and `SourceSizedLiquidAmbient` proves mixed-sort declarations and ambient implication. The context and whole-IO modules derive complete guard support, ordered outcomes, and exact Sized acceptance from per-call external responses. `SourceSizedLiquidAmbientCollision` retains the repaired implicit ambient-name defect. Primitive target theories, serialization, solver answers, context/process execution and measured time remain explicit contracts. |
+| `Data.CFTA.Refinement.LiquidFixpoint` — Z3 contexts, assumptions, timeout and formula translation | `FormulaLowering.term_lower`, `formula_lower`, and `checked_lower` prove full source-to-target sort/term/formula translation, including applications, casts and quantifiers. `Guards` supplies three-valued decisions. `SolverAdapter` preserves the former preparation model. `SourceSizedLiquidAmbientRepair.sourcePrepare_exact` proves reserved-name preflight, and `SourceSizedLiquidAmbient` proves mixed-sort declarations and ambient implication. `SourceSolverNameEncoding*` derives the current name codec and unchanged serializer spelling. `SourceSolverNameSemantics` preserves full quantified meaning; `SourceSolverNamePreparation*` derives actual encoded preflight, and `SourceSolverNamePublic` composes it with exact Sized terms, size order, both inverses, and finite outcomes. `SourceSolverNameCollision` preserves the repaired unsound quantified capture. The context and whole-IO modules derive complete guard support, ordered outcomes, and exact Sized acceptance from per-call external responses. `SourceSizedLiquidAmbientCollision` retains the repaired implicit ambient-name defect. Primitive target theories, the remaining external serializer/library implementation, solver answers, context/process execution and measured time remain explicit contracts. |
 | `Data.CFTA.Refinement.Minimize` — subtype adapter, complete/classified similarity, representative replacement | `MinimizeSchedule` ports the complete schedule and its historical failures. The repaired `minimize_preserves_root_representative` connects the entrypoint to the original term or an accepted representative at the selected root. Clear-transition productivity and source guard-read classification justify its checks. `SimilarityWithin` proves exact ordered eligible pairs and inference results, with candidate count Σ n(n−1)/2. `MinimizeParentIndex` derives complete parent metadata, exact indexed copies, every schedule step, and repeated final representative copies. Exact accepted-term equality is not the representative-selection contract. Concrete graph conversion, guard validation and sound subtype answers remain interfaces. |
 | `Data.CFTA.Refinement.Prune` — semantic pruning and combined reduction | `BoundedPruningFix` and `BoundedPruningCaller` prove the current signed local budgets, completed-call limits, and preserved language at budget exits. Body visits reset to 64; direct revisits decrease their local budget. Individual callback completion remains explicit. The following fuel-based models retain their separate scopes. `ObservationGraph.specialize_complete`, `specialize_exact`, and `selectSpecialized_discharges_guard` prove finite observation specialization. `PruneSchedule` ports the exact candidate loop and bottom-up cached recursive driver. `ambiguous_restores` verifies full fallback to the original edge; `unknown_errors` verifies solver-unknown failure. Fuel exhaustion is an error. `PruneCorrectness` proves successful whole-driver language preservation and cache validity. `PruneMemo` and `PruneDependencies` prove specialization-cache coverage and dependency-local transport. `PruneReads` proves the repaired recursive-read gate. `SourceGuards`, `SourceFormula` and `SourceGuardRefinement` model every source guard constructor and prove decided sparse/complete agreement when actual allocation is unambiguous. Recursive termination, ambiguous actual transport, interned primitive adapters and composition with representative minimization remain distinct obligations. |
 | `Data.CFTA.Refinement.Verdict` — verdict algebra, scoped entailment, subtype relation, directional semantic intersection | `Guards` proves the three-valued truth tables and semantic-support laws. Scoped entailment must keep fresh bindings distinct; the plain `Entailment` constructor returns `Unknown` for queries requiring bindings. Semantic intersection retains the antecedent only when it entails the consequent; it is not symmetric conjunction. Solver adequacy is an external contract. |

@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 23:43 CEST**.
+Updated: **2026-10-14 00:00 CEST**.
 
 Upstream `7989e91a` (PR #115) is the base of the requested local rebase on
 `formalization/microcfta-rebase-20261013`. Backup
@@ -8,6 +8,20 @@ Upstream `7989e91a` (PR #115) is the base of the requested local rebase on
 All 1,432 saved Lean-tree files retained their bytes through the rebase.
 No push, deployment, or board post is authorized. Benchmark programs,
 datasets, and workload specifications remain outside formalization scope.
+
+The liquid review found and repaired a second name-capture defect. Liquid
+Fixpoint serialized distinct raw names `1` and `fix$1` identically. A false
+quantified statement returned `Yes`; an independently named binder returned
+`No`. Repair **`73223201`** uses one injective safe name encoding for every
+solver-facing declaration and occurrence, including binders and functions.
+The native reproduction now returns the correct `(No,No,No,Yes)` results.
+Lean proves the historical unsound verdict, concrete encoding injectivity,
+unchanged name serialization, and preservation of full quantified meaning.
+The encoded preflight and complete public-call composition now check.
+`SourceSolverNamePublic` derives the current liquid language, order, inverse,
+and finite-outcome contracts from correct encoded external responses.
+See [the solver name note](lean/notes-solver-name-encoding.md).
+The repaired source passes all **635** existing Haskell examples in Nix.
 
 The shared `Interned.toRows` adapter now has finite traversal, exact ordered
 row/language readback, finite validated conversion, and issued-cache exposure
@@ -17,11 +31,16 @@ the identity type is infinite. The cyclic composition proves exact node-count
 classes, finite count/plan evaluation, and both rank inverses from those rows.
 See [the shared-row note](lean/notes-shared-rows.md).
 
-Native intersection remains a specific open boundary. The existing complete
-intersection proof uses explicit recursive syntax. It does not establish the
-physical interned result's `nodeEdges` exposure. The native overlap callback
-bridge and ordinary-node construction proof are the next targets. An abstract
-product-row contract does not discharge that construction obligation.
+The native overlap callback, complete scan, and compiler now agree with the
+reference under a scoped product-row contract. The physical ordinary kernel
+has exact common language, canonical retained-row readback, and stable finite
+completion. Native self/order/memo dispatch and recursive Mu/union exposure
+remain separate boundaries. An abstract product-row contract does not prove
+those native construction obligations.
+
+The actual cyclic sampler/PMF record now has derived reciprocal masses,
+normalization, exact original-language support, signed empty-size behavior,
+and sampled inverses. No arbitrary normalized-sampler premise is assumed.
 
 A new Lean/native counterexample refutes unconditional interning-independent
 cyclic rank order with a noninjective custom symbol key. Equal complete sort
@@ -30,11 +49,12 @@ ranks while counts and both inverse laws remain correct. Commit `17b21453`
 preserves the reproduction and qualifies the source comments. It does not
 change runtime ranking behavior.
 
-The completed shared-row checkpoint passes **1,123 build jobs and 38,793
+The completed native/liquid checkpoint passes **1,140 build jobs and 39,108
 theorem dependency checks** using only the three permitted Lean foundations.
 The rebased source passes **285 core, 206 generator, and 144 refinement
 examples** in Nix. Fourmolu, cabal-gild, and the native reproduction pass.
-New native-gate work must receive its own audit before completion is claimed.
+Later dispatch, weighted-backend, and equality work must receive its own
+audit before completion is claimed.
 
 The new bounded import proofs follow PR #114's control flow. Only a bounded
 residual-guard error selects denotation. Negative bounds make no external
@@ -107,7 +127,7 @@ The earlier requested push is complete through **`1f982c5b`** on
 local. No further push, deployment, or board post is authorized.
 All previous proofs, repairs, marked drafts, stashes, and worktrees remain.
 The untracked `lean/repro/NestedUnaryTwoAtom.hs` retains its original bytes.
-Weekly allowance was **44% at 23:42 CEST**. Refresh it before further work and
+Weekly allowance was **41% at 23:54 CEST**. Refresh it before further work and
 stop all work at 20% or less.
 
 ## Previous Sized checkpoint

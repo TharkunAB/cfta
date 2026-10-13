@@ -1,12 +1,13 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 23:43 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 23:58 CEST (Europe/Stockholm)**.
 
 ## Current result and read order
 
 Read `NEXT-PROMPT.md`, this file, root `FINDINGS.md`,
 `lean/notes-source-sized.md`, `lean/notes-sized-liquid-probability.md`, and
-`lean/notes-bounded-import.md`, and `lean/notes-shared-rows.md`.
+`lean/notes-bounded-import.md`, `lean/notes-shared-rows.md`, and
+`lean/notes-solver-name-encoding.md`.
 The root findings are current. `lean/FINDINGS.md`
 and older dated component notes are historical.
 
@@ -61,13 +62,30 @@ exchange ranks when interning order changes. Counts and inverses still hold.
 The preceding local proof commits are `b8171aea`, `60df5ec1`, `742aab7e`, and
 `1236869f`. Use `git log` for later native-gate work and documentation.
 
-The current cyclic composition still uses the synchronous reference overlap
-test. The next proof connects the actual native intersection/productivity
-callback to that test. Existing `IntersectTotal` proves explicit recursive
-syntax semantics. It does not derive physical interned `nodeEdges` readback.
-The ordinary-node construction branch is the next concrete proof target.
-Inspect `SourceCyclicRowsNativeGate*` and `SourceInternedIntersectionRows*`
-for work in progress before assigning or editing those files.
+`SourceCyclicRowsNativeGate*` connects the actual callback, scan, and compiler
+under a scoped product-row contract. `SourceInternedIntersectionRows*` derives
+physical ordinary-node construction, exact common language, and stable finite
+completion. Native dispatch and general Mu/union exposure remain open.
+`SourceCyclicRowsProbability*` derives the actual cyclic sampler/PMF record,
+reciprocal masses, normalization, support, and sampled rank inversion.
+The proofs need no arbitrary normalized-sampler premise.
+
+The new liquid source repair is **`73223201`**. Raw names `1` and `fix$1`
+previously serialized identically. A false quantified statement returned Yes.
+All solver-facing names now use one injective safe encoding. The checked
+codec, serializer, full quantified semantics, actual preflight, and public
+liquid composition are in `SourceSolverName*`. Use
+`SourceSolverNamePublic.public_correct` and `public_finite` for the current
+source path. Correct encoded external responses derive the original logical
+contract. The historical unsoundness and repaired behavior have Lean/native
+counterexamples. Read `lean/notes-solver-name-encoding.md`.
+
+Checkpoints: `6293da1f` (native gate), `5ca00598` (cyclic probabilities),
+`70795677` (ordinary physical intersection), `f66aaca2` and `ea951af6`
+(encoded liquid), and `64f06047` (exact ancestor edit completion).
+New `SourceInternedIntersectionDispatch*`, `SourceQuickCheckFrequency*`, and
+`EqualityNestedUnaryAncestorRoot*` work is in progress. Inspect worker and
+file status before editing those prefixes.
 
 The earlier Sized proof commits remain in the preserved backup history:
 
@@ -111,7 +129,7 @@ python3 /tmp/mcfta-weekly-usage.py
 ```
 
 Stop every worker and all work immediately at **20% remaining or less**.
-The last observed value was **44% at 23:42 CEST**. Treat it as historical.
+The last observed value was **41% at 23:55 CEST**. Treat it as historical.
 Check `observed_at`. The script reads 10,080-minute windows from local logs
 under `~/.codex/sessions/2026/10/13`; update that date on a later restart.
 It exits 99 at the threshold and 2 if usage is unavailable. Missing or stale
@@ -215,15 +233,16 @@ A new recursive body resets its budget to 64. Only a direct revisit decreases
 its local budget. Per-call and recursive callback termination remain separate.
 Do not claim that a local budget establishes whole-pruning completion.
 
-Native overlap-gate and ordinary intersection-row proofs are in progress.
+Native intersection dispatch, weighted backend, and equality root proofs are in progress.
 Check worker and process status on restart; do not assume they are stopped.
 
 ## Remaining priorities
 
-1. Connect the native cyclic overlap callback to the proved finite
-   synchronous overlap gate. Continue the ordinary-node intersection branch
-   through hash join, child operations, edge/node construction, and stored
-   readback. Do not replace this obligation with an opaque language premise.
+1. Continue native intersection self/order/memo dispatch from the checked
+   physical ordinary construction kernel. Then connect recursive Mu/union
+   exposure and the general product-row construction boundary. Per-callback
+   finite plain semantics need no global child-meet assignment. Do not replace
+   actual construction obligations with opaque semantic premises.
    Then audit the concrete source correspondence boundaries of the Sized path:
    finite Map/Set representation, lawful equality/order, lazy table forcing,
    machine-size conversions, and evaluator IO traces. The handwritten models
@@ -296,11 +315,12 @@ bound. `AncestorReplay.actual_original` replays all original child/edge/parent
 requests in the actual returned edit cache. `AncestorState.edit_stored` retains
 original finite indices. `AncestorEdit.node_complete` supplies concrete effects.
 
-Resume `EqualityNestedUnaryAncestorEditCompletion.lean.draft`. Destruct
-`node_complete` directly to retain its exact run. Rewrite with `node_eq`, apply
-`edit_stored`, and use `WorkFacts.meet_correct` at each original index. Then
-compose both forest edits and the root identity stop test. The endpoint bound
-is proved; the whole root loop is not yet composed. See
+The new `EqualityNestedUnaryAncestorEditCompletion.lean` closes the draft's
+missing lemma. It retains the exact `node_complete` run, uses `node_eq` and
+`edit_stored`, and derives each original index through `WorkFacts.meet_correct`.
+The marked draft remains byte-identical. Continue both forest edits and the
+root identity stop test in `EqualityNestedUnaryAncestorRoot*`. The endpoint
+bound is proved; the whole root loop is not yet composed. See
 `lean/notes-equality-nested-unary-ancestor-replay.md`.
 
 Generalize beyond fixed unary/two-atom and single-class fragments afterward.
@@ -323,10 +343,12 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The completed shared-row audit passes **1,123 jobs and 38,793 theorem dependency checks**.
+The completed native/liquid batch passes **1,140 jobs and 39,108 theorem dependency checks**.
 It permits only `propext`, `Classical.choice`, and `Quot.sound`.
-The log is `/tmp/mcfta-one-row-20261013-audit.log`. All 17 completed shared-row
-modules are imported. New native-gate work needs a new aggregate audit.
+The log is `/tmp/mcfta-native-liquid-20261013-audit.log`. All completed native
+gate, cyclic probability, ordinary intersection, and encoded liquid modules
+are imported. Later dispatch, weighted backend, and equality work needs a new
+aggregate audit.
 Use focused targets for new work, then import finished modules into Audit.
 Do not add `sorry`, native evaluation axioms, or project axioms.
 
@@ -336,9 +358,11 @@ Fourmolu and cabal-gild checks passed in Nix.
 Log: `/tmp/mcfta-one-row-20261013-format.log`.
 The separate-process custom-key reproduction passed.
 Log: `/tmp/mcfta-key-ties-20261013.log`.
-The only current production change qualifies ordering comments. No production
-test or benchmark formalization was added. Do not repeat these passing suites
-without a new source change or concern.
+The later solver-name repair also passes all 635 examples and its native
+fixture. Logs: `/tmp/mcfta-solver-name-repair-20261013-tests.log` and
+`/tmp/mcfta-solver-name-repair-20261013-format.log`. No production test or
+benchmark formalization was added. Do not repeat passing suites without a
+new source change or concern.
 
 The earlier Sized repair passed the full generator suite with 206 examples,
 including two temporary regression cases. The permanent suite remains at

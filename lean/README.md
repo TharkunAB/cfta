@@ -21,6 +21,14 @@ rebase retained every proof and reproduction while retiring superseded
 source patches. Earlier reports retain their original source hashes and
 describe historical snapshots.
 
+The later liquid review found quantified capture from distinct names with
+the same external SMT spelling. Repair `73223201` encodes every solver-facing
+name injectively. The [solver name note](notes-solver-name-encoding.md) records
+the Lean/native counterexample and the checked codec, preflight, quantified
+semantics, and complete public liquid composition. All 635 existing Haskell
+examples pass after the repair. The native/liquid proof batch passes 1,140
+build targets and 39,108 theorem dependency checks.
+
 The model proves constrained grammar compilation, complete bounded language
 enumeration, a distinct-term bijection with `Fin n`, requested term
 probabilities, counted decoding, and component optimization laws. The source
@@ -30,7 +38,7 @@ construction, enumeration, pruning, minimization, and symbolic drivers.
 `System.grammar_bijection` and `System.grammar_probability` compose the
 reference grammar, FTA, index, and distribution results.
 
-Twenty recorded implementation failures now have source repairs and checked
+Recorded implementation failures now have source repairs and checked
 regressions: quantified substitution, observed atomic weights, accepted root
 representatives, open recursive unions, pruning through open nested binders,
 closing grouped private alternatives, recursive term boundaries, and grouped
