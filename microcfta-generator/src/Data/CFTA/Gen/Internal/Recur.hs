@@ -225,6 +225,8 @@ and then 'recurGrouped' does not return.
 
 Queries that inspect unfinished occurrences return 'QueriedRecursiveOccurrence'.
 Query the completed family outside the body.
+The final body must have the discovered keys and minimum sizes. A body that
+changes them returns 'InconsistentRecursiveFamily'.
 -}
 recurGrouped ::
     (Ord key, Hashable symbol, Typeable symbol) =>
@@ -414,6 +416,8 @@ recurGrouped build
         probedBodies <- probed
         when (any (isUnguarded token . recursiveIndex . keyedRecursiveLanguage) probedBodies) $
             Left UnguardedRecursion
+        when (fmap minimumOfGroup probedBodies /= keyMinimums) $
+            Left InconsistentRecursiveFamily
         when (Map.null minimumSizes) $ Left EmptyGenerator
         let familyMassWeighted = any keyedRecursiveMassWeighted bodies
             familyWeighted =

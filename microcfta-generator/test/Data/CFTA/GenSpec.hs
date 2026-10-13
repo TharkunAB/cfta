@@ -449,6 +449,13 @@ spec = do
                         , FTAGen.keyed True (FTAGen.node "outer" outer)
                         , FTAGen.keyed True (FTAGen.node "next" $ FTAGen.atKey True self)
                         ]
+                changingMinimum = FTAGen.recurGrouped $ \self ->
+                    FTAGen.oneofGrouped
+                        [ FTAGen.keyed False $ case FTAGen.countsAtSize self 0 of
+                            Right counts | null counts -> pure (0 :: Int)
+                            _ -> FTAGen.leaf 1 "base"
+                        , FTAGen.keyed False (FTAGen.node "step" $ (+ 1) <$> FTAGen.atKey False self)
+                        ]
                 apply generator = FTAGen.node "outer" $ (+) <$> generator <*> FTAGen.elements [10]
                 check generator = do
                     let bounded = FTAGen.upToSize 4 generator
@@ -476,6 +483,10 @@ spec = do
             FTAGen.values changing `shouldBe` Right [99]
             FTAGen.countAtSize selected 0 `shouldBe` Right 1
             FTAGen.minimumSize selected `shouldBe` Right (Just 0)
+            FTAGen.minimumSize (FTAGen.atKey False changingMinimum)
+                `shouldBe` Left FTAGen.InconsistentRecursiveFamily
+            FTAGen.countsAtSize changingMinimum 0
+                `shouldBe` Left FTAGen.InconsistentRecursiveFamily
             mapM_ check $
                 [chain, spine, changing, selected]
                     <> inspected

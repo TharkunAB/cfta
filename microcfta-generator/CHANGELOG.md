@@ -14,7 +14,9 @@ tree automata of `microcfta`, with QuickCheck integration.
   and the grouped layer joins more with `Sig` signatures and `apply`. `recur`,
   `atomic`, and `upToSize` make and bound recursive languages. A recursive
   body composes its occurrence: a query of an unfinished occurrence reports
-  `QueriedRecursiveOccurrence`. The exact
+  `QueriedRecursiveOccurrence`, and a `recurGrouped` body that changes its
+  keys or minimum sizes after discovery reports
+  `InconsistentRecursiveFamily`. The exact
   inspectors are `cardinality`, `values`, `unrank`, `termAt` with its inverses
   `rankOf` and `ranksOf`, `support`, `inspect` with `drawInspection`, the
   counts by size, `pmf`, the structural `shrinkRank`, and `smallerMembers`. A
