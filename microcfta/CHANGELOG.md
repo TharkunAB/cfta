@@ -118,7 +118,10 @@ remains a separate ECTA-only package.
   constraint.
 - LTA pruning narrows equal positions to their intersection through that
   reduction, specializes nodes bottom up and shares each result by node
-  identity, and prunes a recursive node to a fixed point. It keeps an edge
+  identity, and prunes a recursive node to a fixed point. Each of these fixed
+  points takes at most 64 passes (`pruneRounds`), so pruning always ends; when
+  a budget runs out, the automaton keeps the guards it has not discharged,
+  and its language does not change. It keeps an edge
   whose guard the sparse evaluation cannot decide: two actuals with the same
   name and refinement, which can be equal or different terms, whose name an
   enclosing substitution scope renames. It also keeps an edge where such an

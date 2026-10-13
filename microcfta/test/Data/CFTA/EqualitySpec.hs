@@ -322,6 +322,10 @@ spec = do
             intersect intTest11 intTest12 `shouldBe` Node [Edge "f" [createMu $ \r -> Node [Edge "f" [r]]]]
 
     describe "reduction" $ do
+        it "stops a fixed point after a number of passes" $ do
+            fixWithin 3 (+ (1 :: Int)) 0 `shouldBe` 3
+            fixWithin 10 (min (5 :: Int) . (+ 1)) 0 `shouldBe` 5
+            fixWithin 0 (+ (1 :: Int)) 7 `shouldBe` 7
         it "stops on the example that needs inherited constraints" $ do
             -- The example in the comment of 'reducePartially'': without the
             -- constraints that the parent passes down, 'tau' could expand

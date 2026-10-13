@@ -21,6 +21,7 @@ module Data.CFTA.Interned.Operations (
     withoutRedundantEdges,
     intersectEdge,
     fixUnbounded,
+    fixWithin,
     pathsMatching,
     requirePath,
 ) where
@@ -704,6 +705,16 @@ withoutRedundantEdges node = memoTypeableWith @symbol genericWithoutRedundantEdg
                     es' = filter ((`Set.member` kept) . unfolded) es
                  in if length es' == length es then n else Mu $ \r -> substFree self r (Node es')
         dropReds n = n
+
+{- | Iterate until stable, or until the function has been applied the given
+number of times. The result is the last value.
+-}
+fixWithin :: (Eq a) => Int -> (a -> a) -> a -> a
+fixWithin rounds f x
+    | rounds <= 0 || x' == x = x
+    | otherwise = fixWithin (rounds - 1) f x'
+  where
+    x' = f x
 
 -- | Iterate until stable with no iteration bound.
 fixUnbounded :: (Eq a) => (a -> a) -> a -> a
