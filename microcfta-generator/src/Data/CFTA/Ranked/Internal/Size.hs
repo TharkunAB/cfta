@@ -6,7 +6,8 @@ A language's members split into size classes. Sizes follow FEAT (Duregård,
 Jansson, and Wang, "Feat: Functional Enumeration of Algebraic Types",
 Haskell 2012): the member of @pure@ has size zero, an atom has size one, a
 product adds the sizes of its function and its argument, a choice keeps the
-sizes of its alternatives, and 'payIndex' adds one. A t'SizeIndex' counts
+sizes of its alternatives, and 'payIndex' adds one. 'scaleIndex' multiplies
+the sizes by a factor. A t'SizeIndex' counts
 every class by convolution (a product of size @s@ splits into a function
 of size @a@ and an argument of size @s - a@). It selects a member of a class
 directly, and it gives the rank of the member with its value.
@@ -17,8 +18,8 @@ So the size classes do not change the meaning of a rank. 'productIndex',
 'choiceIndex', and 'fixIndex' build languages that can be recursive. A side
 of such a language can have no bound, so a mixed-radix rank is not defined.
 These indexes give the size-major rank: the rank of the member when the
-members are in size order. 'mapIndex', 'payIndex', and 'constructorIndex'
-keep the ranks of the index that they change. In both cases the rank is the
+members are in size order. 'mapIndex', 'payIndex', 'scaleIndex', and
+'constructorIndex' keep the ranks of the index that they change. In both cases the rank is the
 rank that the generator decodes: the compiled decoder of a finite plan reads
 the mixed-radix rank, and 'unrank' of a recursive generator reads the
 size-major rank.
@@ -68,6 +69,7 @@ module Data.CFTA.Ranked.Internal.Size (
     productIndex,
     choiceIndex,
     payIndex,
+    scaleIndex,
     constructorIndex,
     fixIndex,
     withKnotMetadata,
@@ -227,6 +229,7 @@ planPosition plan rank
         PlanSelectOnDemand _ _ -> Just (SizedRank 1 leafRank)
         PlanPure _ -> Just (SizedRank 0 leafRank)
         PlanPay inner -> (\(SizedRank size position) -> SizedRank (size + 1) position) <$> planPosition inner rank
+        PlanScale factor inner -> (\(SizedRank size position) -> SizedRank (fromIntegral factor * size) position) <$> planPosition inner rank
         PlanShared _ _ _ inner -> planPosition inner rank
         PlanMap _ inner -> planPosition inner rank
         PlanChoice branches -> branchPosition Empty 0 branches
@@ -337,6 +340,7 @@ sizeIndex (PlanSelectOnDemand cardinality' decode) =
     sizeIndex $ PlanSelect cardinality' decode
 sizeIndex (PlanPure value) = constantIndex value
 sizeIndex (PlanPay plan) = payIndex $ sizeIndex plan
+sizeIndex (PlanScale factor plan) = scaleIndex factor $ sizeIndex plan
 sizeIndex (PlanShared _ _ index _) = index
 sizeIndex (PlanMap transform plan) = mapIndex transform $ sizeIndex plan
 sizeIndex (PlanChoice branches) =
@@ -534,6 +538,32 @@ payIndex index =
         IntSet.empty
         (termlessOccurrences index)
         (usedOccurrences index)
+
+{- | The members of an index, the size of each one multiplied by a positive
+factor: a member that a term holds at that many positions. Ranks and values
+do not change. A size class of the result holds the members of one size class
+of the index, in the same order.
+-}
+scaleIndex :: Int -> SizeIndex a -> SizeIndex a
+scaleIndex factor index =
+    SizeIndex
+        [(scaled size, count) | (size, count) <- sizeClassCounts index]
+        (sizeClassSelect index . unscaled)
+        (sizeClassValueInt index . unscaled)
+        ( case minimumMemberSize index of
+            MinimumSize size -> MinimumSize $ scaled size
+            NoFiniteMember -> NoFiniteMember
+        )
+        ( case largestMemberSize index of
+            LargestSize size -> LargestSize $ scaled size
+            SizesDoNotEnd -> SizesDoNotEnd
+        )
+        (unguardedOccurrences index)
+        (termlessOccurrences index)
+        (usedOccurrences index)
+  where
+    scaled size = fromIntegral factor * size
+    unscaled (Size size) = Size $ size `quot` toInteger factor
 
 {- | The members of an index under a constructor: each one larger, as
 'payIndex' gives them. A constructor adds a term node, so no occurrence below

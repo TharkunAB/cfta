@@ -11,14 +11,15 @@ functions use this split:
 
 * 'smallerPlanMembers' streams every member structurally smaller than a
   rank's member, in size order, where size ('planMemberSize') counts as
-  FEAT does: @pure@ is zero, an atom one, a product the sum of its sides, and
-  a pay one more. Size classes are counted and indexed
-  directly ("Data.CFTA.Ranked.Internal.Size"), not enumerated. The stream
-  covers every strictly smaller size. 'Data.CFTA.Gen.QuickCheck.forAllWithLimit'
-  puts this stream before the structural candidates, and QuickCheck takes the
-  first candidate that fails, so for a deterministic property the loop ends at
-  a failing member of the smallest failing size, if the search reaches it. The
-  search reads at most @smallerMemberLimit@ members in each step.
+  FEAT does: @pure@ is zero, an atom one, a product the sum of its sides, a
+  pay one more, and a scale the factor times as much. Size classes are
+  counted and indexed directly ("Data.CFTA.Ranked.Internal.Size"), not
+  enumerated. The stream covers every strictly smaller size.
+  'Data.CFTA.Gen.QuickCheck.forAllWithLimit' puts this stream before the
+  structural candidates, and QuickCheck takes the first candidate that fails,
+  so for a deterministic property the loop ends at a failing member of the
+  smallest failing size, if the search reaches it. The search reads at most
+  @smallerMemberLimit@ members in each step.
   'Data.CFTA.Ranked.QuickCheck.forAll' does not use this stream.
 
 Each candidate is a rank of the plan, or a member of a size class of the
@@ -37,6 +38,8 @@ module Data.CFTA.Ranked.Internal.Shrink (
     planMemberSize,
     smallerPlanMembers,
 ) where
+
+import qualified Data.Bifunctor as Bifunctor
 
 import Data.CFTA.Index (
     Cardinality (..),
@@ -76,6 +79,7 @@ smallestPlanMember (PlanSelectOnDemand cardinality _) =
     if cardinality > 0 then Just (1, 0) else Nothing
 smallestPlanMember (PlanPure _) = Just (0, 0)
 smallestPlanMember (PlanPay plan) = (\(size, rank) -> (size + 1, rank)) <$> smallestPlanMember plan
+smallestPlanMember (PlanScale factor plan) = Bifunctor.first (fromIntegral factor *) <$> smallestPlanMember plan
 -- A shared subplan gives its smallest member from its size classes, and does
 -- not walk the subplan again. The smallest size class of a finite plan lists
 -- its members in rank order, so position zero has the least rank.
@@ -134,6 +138,7 @@ shrinkPlanRank = go
     go (PlanSelectOnDemand _ _) index = towardZero index
     go (PlanPure _) _ = []
     go (PlanPay plan) index = go plan index
+    go (PlanScale _ plan) index = go plan index
     go (PlanShared _ _ _ plan) index = go plan index
     go (PlanMap _ plan) index = go plan index
     go (PlanChoice branches) index =
@@ -175,13 +180,15 @@ holdsRank rank (offset, (branchCardinality, _)) =
 {- | The size of the member a rank decodes to.
 
 The member of @pure@ has size zero, an atom has size one, an application adds
-the sizes of its function and argument, and a pay adds one.
+the sizes of its function and argument, a pay adds one, and a scale multiplies
+the size by its factor.
 -}
 planMemberSize :: Plan a -> Rank -> Size
 planMemberSize (PlanSelect _ _) _ = 1
 planMemberSize (PlanSelectOnDemand _ _) _ = 1
 planMemberSize (PlanPure _) _ = 0
 planMemberSize (PlanPay plan) rank = 1 + planMemberSize plan rank
+planMemberSize (PlanScale factor plan) rank = fromIntegral factor * planMemberSize plan rank
 planMemberSize (PlanShared _ _ _ plan) rank = planMemberSize plan rank
 planMemberSize (PlanMap _ plan) rank = planMemberSize plan rank
 planMemberSize (PlanChoice branches) rank =

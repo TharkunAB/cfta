@@ -16,6 +16,7 @@ module Data.CFTA.Ranked.Internal (
     fromWeightedIndexedOnDemand,
     share,
     pay,
+    scale,
     fromWeighted,
     frequency,
     oneof,
@@ -55,7 +56,7 @@ import Data.CFTA.Ranked.Internal.Shrink (
     smallerPlanMembers,
     withOffsets,
  )
-import Data.CFTA.Ranked.Internal.Size (MinimumSize (..), SizeIndex (minimumMemberSize), payIndex, sizeIndex)
+import Data.CFTA.Ranked.Internal.Size (MinimumSize (..), SizeIndex (minimumMemberSize), payIndex, scaleIndex, sizeIndex)
 
 -- | A finite source addressed by a stable zero-based rank.
 data Indexed a = Indexed
@@ -242,6 +243,18 @@ pay ranked =
     ranked
         { rankedPlan = PlanPay $ rankedPlan ranked
         , rankedSizeIndex = payIndex $ rankedSizeIndex ranked
+        }
+
+{- | Multiply the size of every member by a positive factor: the size of a
+member that a term holds at that many positions, such as the one subterm of a
+group of equal children. Ranks and values do not change.
+-}
+scale :: Int -> Ranked a -> Ranked a
+scale 1 ranked = ranked
+scale factor ranked =
+    ranked
+        { rankedPlan = PlanScale factor $ rankedPlan ranked
+        , rankedSizeIndex = scaleIndex factor $ rankedSizeIndex ranked
         }
 
 {- | Build a ranked language whose members have positive relative weights.
