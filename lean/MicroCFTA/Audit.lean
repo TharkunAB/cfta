@@ -22,6 +22,8 @@ import MicroCFTA.MergedPreparedReaderEffects
 import MicroCFTA.SourcePreparedSharedRows
 import MicroCFTA.SourcePreparedSharedRowsLanguage
 import MicroCFTA.SourceFirstOrderSharedRows
+import MicroCFTA.SourceColdSharedRows
+import MicroCFTA.SourceColdSharedRowsExecution
 import MicroCFTA.EqualityNestedUnaryAncestorEditCompletion
 import MicroCFTA.EqualityNestedUnaryAncestorRootStep
 import MicroCFTA.EqualityNestedUnaryAncestorRootIdentity
