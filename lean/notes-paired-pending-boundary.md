@@ -3,7 +3,7 @@
 Updated: 2026-10-13 16:29 CEST.
 
 The unrestricted closed constructor no-pending statement is false for the
-current source executor model. `InternedClosedPendingBoundary` gives a closed
+source executor model at upstream `9508eb3`. `InternedClosedPendingBoundary` gives a closed
 expression made only from lexical variables, smart binders, raw binders,
 ordinary nodes, unions, and empty nodes. No callback inspects a reference.
 `expression_scoped` proves that every variable is in scope. `pending_result`
@@ -83,8 +83,10 @@ The log is `/tmp/mcfta-paired-pending-audit.log`.
 All earlier proofs, counterexamples, and the marked unfinished draft remain
 unchanged. This baseline adds no Haskell source change.
 
-A separate repair candidate chooses an ordinary placeholder above the
+Local repair `e0e1b37` chooses an ordinary placeholder above the
 ordinary names free in the Depth probe. Constructor readback must use that
 same choice from the stored Depth probe. Using the actual body's depth
-does not recover it. Candidate validation and proofs are separate from
-this preserved baseline counterexample.
+does not recover it. The repaired executor completes both fixtures. Native
+validation and proof boundaries are recorded in
+[the repair note](notes-fresh-ordinary-candidate.md). This counterexample
+remains evidence for the preserved pre-repair executor.
