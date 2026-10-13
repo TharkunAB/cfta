@@ -47,6 +47,7 @@ General repaired no-pending and the policy-specific semantic profile and
 free-name heaps remain separate obligations.
 
 The five new modules build with Lean 4.34.1. The readback target passes
-194 jobs. The focused audit log is
+194 jobs. The focused audit checks 8,130 theorem dependencies and permits
+only `propext`, `Classical.choice`, and `Quot.sound`. The log is
 `/tmp/mcfta-fresh-ordinary-record-audit.log`.
 The original executor, counterexamples, and marked draft remain unchanged.
