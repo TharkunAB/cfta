@@ -1,5 +1,17 @@
 # Full formalization coverage
 
+Current restart: **2026-10-13 17:34 CEST**, checked proof `073c10c`, marked
+work `78d3d27`. The final audit passes 1,026 jobs and 36,839 dependency checks.
+The repaired constructor now has full profile/free-name heaps, historical
+semantic origins, capture bounds, and completed replay. Its full depth/deep
+heap and first-run completion remain open. Prepared repaired exposure and the
+complete comparator have exact execution bridges; selection is a marked
+kernel-timeout draft. Nested unary endpoint termination and actual-cache
+ancestor replay are checked; full root-loop composition is still a draft.
+Saturated merge monotonicity is refuted by a checked source counterexample.
+Read root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) before
+using older dated statements below. All work remains local.
+
 ## Objective and completion rule
 
 Formalize the complete microcfta design in Lean. Prove that generation covers
