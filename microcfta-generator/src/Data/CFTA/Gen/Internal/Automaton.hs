@@ -77,6 +77,7 @@ import Data.CFTA.Equality (
  )
 import Data.CFTA.Equality.Constraint (EqConstraints, subsumptionOrderedEclasses, unPathEClass)
 import Data.CFTA.Index (Arity (..), Rank, childIndexes, offsetRank, pairRank)
+import Data.CFTA.Interned (InternedState (..), stateOf, toRows)
 import Data.CFTA.Path (ChildIndex (..), adjustAt, unPath)
 
 import Data.CFTA.Gen.Error (GenError (..))
@@ -121,35 +122,42 @@ automatonTermPosition order root = case automatonRows order root of
     Left err -> const $ Left err
     Right (initial, rows) -> maybe (Left TermNotInLanguage) Right . Ordinary.tablePosition initial rows
 
-{- | The identity of the root and the rows of an automaton, with the edges of
-each row in rank order.
+{- | The state of the root and the rows of an automaton, with the edges of each
+row in rank order. The rows are those of 'toRows', the adapter that 'toFTA'
+also reads, without their constraints.
 
 Fails as 'automatonIndex' does.
 -}
 automatonRows ::
     (Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Node symbol -> Either GenError (NodeId, Map.Map NodeId [FTA.Transition NodeId symbol ()])
-automatonRows _ EmptyNode = Right (NodeId 0, Map.empty)
+    (symbol -> key) ->
+    Node symbol ->
+    Either GenError (InternedState, Map.Map InternedState [FTA.Transition InternedState symbol ()])
+automatonRows _ EmptyNode = Right (EmptyState, Map.empty)
 automatonRows order root
     | not $ Set.null $ freeVars root = Left $ InvalidSupport OpenAutomaton
     | any (any constrained) alternatives = Left CannotCountConstrainedEdges
     | any (ambiguous productiveRows) alternatives = Left AmbiguousAutomaton
-    | otherwise = Right (nodeIdentity root, sortOn transitionKey <$> rows)
+    | otherwise = Right (stateOf root, sortOn transitionKey <$> rows)
   where
     alternatives = IntMap.elems (reachable root)
-    rows = Ordinary.rowsOf root
-    classes = canonicalClasses $ IntMap.fromDistinctAscList [(ident, map edgeKey row) | (NodeId ident, row) <- Map.toAscList rows]
+    -- The checks above leave no constraint to keep.
+    rows = map (\transition -> transition{FTA.transitionConstraint = ()}) <$> toRows root
+    -- Each state has a number, so that the canonical classes can refine the rows.
+    numbers = Map.fromDistinctAscList $ zip (Map.keys rows) [0 ..]
+    number state = numbers Map.! state
+    classes = canonicalClasses $ IntMap.fromDistinctAscList [(number state, map edgeKey row) | (state, row) <- Map.toAscList rows]
       where
         edgeKey transition =
             ( (length $ FTA.transitionChildren transition, order $ FTA.transitionSymbol transition)
-            , FTA.transitionChildren transition
+            , map (NodeId . number) $ FTA.transitionChildren transition
             )
     -- Transitions with one arity and key are ordered by the classes of their
     -- children, so the order does not depend on interning order.
     transitionKey transition =
         ( length $ FTA.transitionChildren transition
         , order $ FTA.transitionSymbol transition
-        , [classes IntMap.! child | NodeId child <- FTA.transitionChildren transition]
+        , [classes IntMap.! number child | child <- FTA.transitionChildren transition]
         )
 
 {- | Whether a node has two edges that accept a common term, given a test of
@@ -186,7 +194,7 @@ leave a node with edges and no finite term.
 productiveRows :: (Hashable symbol, Typeable symbol) => Node symbol -> Bool
 productiveRows node
     | null (nodeEdges node) = False
-    | otherwise = Map.member (nodeIdentity node) $ Ordinary.minimumSizes $ Ordinary.rowsOf node
+    | otherwise = Map.member (stateOf node) $ Ordinary.minimumSizes $ toRows node
 
 -- | Whether an edge carries equality constraints.
 constrained :: Edge symbol -> Bool

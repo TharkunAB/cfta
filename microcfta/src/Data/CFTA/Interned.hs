@@ -63,6 +63,8 @@ module Data.CFTA.Interned (
     InternedState (..),
     FTAViewError (..),
     toFTA,
+    toRows,
+    stateOf,
     fromFTA,
     ViewPath,
     ViewStep (..),
@@ -105,7 +107,8 @@ data FTAViewError symbol
 
 Each interned node becomes one state. The operation does not enumerate terms
 or interpret transition constraints. Use the explicit-state interface when
-an operation must retain caller-supplied state names.
+an operation must retain caller-supplied state names. The rows are those of
+'toRows', and 'FTA.mkFTA' checks them.
 -}
 toFTA ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
@@ -113,17 +116,30 @@ toFTA ::
     Either (FTAViewError symbol) (FTA.FTA InternedState symbol Constraint)
 toFTA root
     | not (Set.null $ freeVars root) = Left OpenNode
-    | otherwise = first InvalidFTA $ FTA.mkFTA (stateOf root) rows
+    | otherwise = first InvalidFTA $ FTA.mkFTA (stateOf root) (Map.toList $ toRows root)
+
+{- | The transitions of each node that a closed interned graph reaches, keyed by
+the state of the node, with their constraints unchanged.
+
+This is the one adapter from interned nodes to explicit rows: 'toFTA' checks
+these rows, and the count table of the generators reads them directly. Unlike
+'toFTA', it does not require a ranked alphabet. The initial state is
+'stateOf' the root.
+-}
+toRows ::
+    (Hashable symbol, Typeable symbol) =>
+    Node symbol ->
+    Map.Map InternedState [FTA.Transition InternedState symbol Constraint]
+toRows EmptyNode = Map.singleton EmptyState []
+toRows root =
+    Map.fromDistinctAscList
+        [(InternedState (NodeId ident), map transition edges) | (ident, edges) <- IntMap.toList (reachable root)]
   where
-    rows = case root of
-        EmptyNode -> [(EmptyState, [])]
-        _ -> [(InternedState (NodeId ident), map transition edges) | (ident, edges) <- IntMap.toList (reachable root)]
-      where
-        transition edge =
-            FTA.Transition
-                (edgeSymbol edge)
-                (map stateOf $ edgeChildren edge)
-                (edgeConstraint edge)
+    transition edge =
+        FTA.Transition
+            (edgeSymbol edge)
+            (map stateOf $ edgeChildren edge)
+            (edgeConstraint edge)
 
 {- | Expose typed state and transition labels for a closed interned grammar.
 
