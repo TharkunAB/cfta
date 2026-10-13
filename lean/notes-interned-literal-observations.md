@@ -95,3 +95,27 @@ Pinned Lean 4.34.1 builds the pending ordinary-mismatch target in 273 jobs. The
 isolated checks for full live-input replay and pending-readback exclusion
 use only `propext`, `Classical.choice`, and `Quot.sound`. These modules
 change no Haskell source.
+
+`InternedOrdinaryLevelBoundary` rejects a stronger proposed shortcut. Its
+`different_actual_levels` follows the actual outer probes and missing
+reservation. The same inner Depth callback sees captures `[Depth, Depth, U0]`
+and `[interned 9, Depth, U0]`; its cached depths are zero and one. The closed
+embedding retains nested probe depths `(1, 0, 1)` at slot 28 and completes
+with an empty root. These computations are kernel checked. Thus a fresh-only
+change of captured names can change a computed ordinary level even in this
+source construction. It is not a pending counterexample.
+
+A bounded Python mirror search built from that fixture checked 14,916
+variants, skipped seven for resource limits, and observed 12,903 traces with
+level changes. It found no pending readback. This is finite diagnostic
+evidence, separate from the Lean proofs. The temporary implementation and
+log are `/tmp/mcfta-pending-level-search.py` and
+`/tmp/mcfta-pending-level-search.log`.
+
+The next proof target is a live ordinary-level mismatch. The current
+`closed_mismatch` can select a changed ordinary input that the encountered
+binder does not retain. Live-input readiness should strengthen that witness
+to a different pair of ordinary names at a live lexical position. The later
+name must then belong to the actual old Depth probe's free set. Compare this
+name with the active ancestor's original key. Do not assume that all computed
+ordinary levels are equal; the new checked fixture refutes that premise.
