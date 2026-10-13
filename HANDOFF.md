@@ -1,14 +1,14 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 16:13 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 16:46 CEST (Europe/Stockholm)**.
 
 ## Read first
 
 The formalization is **not complete**. Matti requested this restart checkpoint
 because the chat became unreliable. Continue the same full task. Do not replace
 it with a smaller fragment, a theorem-count target, or a documentation task.
-The latest committed proof checkpoint is **`0732ca2`** after the new upstream
-rebase and PR adaptations. The integrated audit passes **970 jobs; 35,732 theorem dependency checks**. New proofs give
+The latest committed proof checkpoint is **`71a69c5`** after the new upstream
+rebase and PR adaptations. The integrated audit passes **976 jobs; 36,106 theorem dependency checks**. New proofs give
 ordered stateful comparison completion, exact fuel stability and replay,
 exact cold-reader semantics in the returned cache, adaptive fuel independence,
 cold child-selection completion and exact language, derived source grouping,
@@ -16,7 +16,8 @@ and actual ordinary-capture origins for any hypothetical closed pending run.
 The complete cold merge now has derived completion, language coverage in the
 actual returned cache, and exact two-fuel stability. Both current probe keys
 and the earlier completed pair remain in the pending mismatch witness.
-The local source repair is now `558b316` (previously `c76d1ec`). Inspect the live working tree before
+The local source repairs are `558b316` (recursive union retention, previously
+`c76d1ec`) and `e0e1b37` (fresh ordinary probes and stored-probe readback). Inspect the live working tree before
 proceeding; more proofs can be in progress. Preserve every current result.
 
 Read this file, root `FINDINGS.md`, and the linked notes before new proof work.
@@ -39,15 +40,19 @@ Matti reported new merged PRs at 15:13 CEST. After all proofs were saved,
 the branches diverged. `git rebase origin/microcfta` replayed all 308 local
 commits without conflicts. Backup
 `backup/formalization-before-pr-refresh-20261013-1514` retains `73b1c47`.
-Every Lean file is identical to that backup, including all counterexamples
+Immediately after rebase, every Lean file matched that backup, including all counterexamples
 and the marked draft. Existing stashes and other worktrees were untouched.
 Fetch again at restart because more patches can arrive later.
 
-Latest full validation: **970 jobs; 35,732 theorem dependency checks**.
-Log: `/tmp/mcfta-20261013-target-fixed-point-audit.log`.
+Latest full validation: **976 jobs; 36,106 theorem dependency checks**.
+Log: `/tmp/mcfta-20261013-fresh-ordinary-integrated-audit.log`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-All **620 Haskell examples** passed after the latest source rebase.
-Log: `/tmp/mcfta-20261013-pr102-103-tests.log`.
+All **620 Haskell examples** passed with both local source repairs.
+Log: `/tmp/mcfta-fresh-probe-620-tests.log`. All five native constructor probes
+also pass; `/tmp/mcfta-fresh-probe-validation.md` records exact commands.
+The isolated validation checkout remains at `/tmp/mcfta-fresh-probe-20261013`
+on branch `fix/microcfta-fresh-probe-local-20261013` (`5e6b0a7`).
+Fourmolu and cabal-gild checks passed.
 The flat memo probe passed 20,000 sequential growth keys, lazy reentrant
 evaluation, and 32,768 concurrent readbacks across eight workers.
 Log: `/tmp/mcfta-flat-memo-probe.log`.
@@ -63,11 +68,26 @@ bounds. The source workers retain their earlier algorithms. Read
 `lean/notes-enumeration-indexes.md`. Native GHC primitives, concrete containers,
 typed cache partition, and runtime range bounds remain explicit.
 
-**Active proof work:** paired constructor probe replay and the complete
-nested equality schedule, including intersections and endpoint edits. Inspect
-workers before editing their files. A shorter producer with only one Depth
-callback does not yet supply a paired mismatch. See
-`lean/notes-pending-producer-descent.md`.
+**Active proof work:** repaired constructor invariants and completion, exact
+completed cold-merge replay, and the complete nested equality schedule with
+intersections and endpoint edits. Inspect workers before editing their files.
+
+The old constructor protocol has a closed pending counterexample in
+`InternedClosedPendingBoundary`. Its scoped expression reaches reserved identity
+87 with both key components at node 86 and no completed payload. Two independent
+native translations time out after five seconds while forcing the root.
+This refutes the old model's universal closed completion claim; native timeout
+is bounded noncompletion evidence. Local repair `e0e1b37` chooses an ordinary
+placeholder above every free ordinary level in the actual Depth observation.
+`matchMu` uses the same stored observation. Both failing fixtures complete in
+the repaired Lean executor. All five native probes and all 620 existing examples
+pass with the repair. Chooser freshness and exact readback are proved. General
+repaired completion, semantic heaps, and source correspondence remain open.
+The old executor and all its proofs remain baseline evidence. Do not apply its
+ordinary-name-specific results to the repair without a new bridge. See
+[closed pending](lean/notes-paired-pending-boundary.md) and
+[the repair](lean/notes-fresh-ordinary-candidate.md).
+
 
 Latest semantic results extend cold merging to the original input language.
 `MergedColdGraphTransport.accepts_stable` equates original/later finite
@@ -89,7 +109,8 @@ environment suffixes, earlier completed ancestor copies, and the actual
 pending enclosing ordinary callback. The key is still absent before that
 producer. A checked closed fixture shows that a live target on the path
 can be erased from the producer's returned value. Keep execution effects.
-Read `lean/notes-pending-producer-calls.md`. General no-pending is open.
+Read `lean/notes-pending-producer-calls.md`. The old protocol's general
+no-pending claim is now refuted. Repaired no-pending remains open.
 
 Earlier proof checkpoints (pre-rebase hashes remain in backups):
 
@@ -157,7 +178,13 @@ replacement for the full objective.
    cache. `nodeEdges_exact` extends this to later caches with source facts,
    preparation, and availability. No global `Ready` or warmup is required.
    Use these results in comparison and cold merge proofs.
-4. **General closed constructor no-pending.** Read
+4. **Repaired closed constructor completion.** Start with
+   `InternedFreshOrdinaryConstruction` and `InternedFreshOrdinaryExamples`.
+   Derive the new executor's Facts, callback origins, profile/free-name heaps,
+   and replay before a general completion argument. Account for discarded
+   construction effects; returned-value freshness alone is insufficient.
+   The source fix and native evidence are described above. The following
+   results describe the preserved old protocol. Read
    `lean/notes-interned-literal-observations.md`.
    `InternedPendingLiveMismatch.closed_live_depth_mismatch` derives same-body
    completed Depth calls with different depths at a live lexical position.
@@ -168,8 +195,8 @@ replacement for the full objective.
    actual earlier introducing callback with fewer lexical inputs. The
    new `InternedOrdinaryCaptureBoundary` closed example completes while
    realizing levels `(0,1)` and the later name in the old Depth probe.
-   Support or alias alone is not a contradiction. Retain both exact pending
-   key components and derive a mismatch in the shorter producer context.
+   Support or alias alone is not a contradiction. The actual closed pending
+   example now realizes this mismatch. Preserve both exact key components.
    General equal-depth transport is
    false: `InternedOrdinaryLevelBoundary.different_actual_levels` checks
    captures `[Depth,Depth,U0]` versus `[interned 9,Depth,U0]`, with depths 0
@@ -187,7 +214,7 @@ The fixture-guided mirror checked 14,916 variants, skipped seven for resource
 limits, observed 12,903 level-changing traces, and found no pending readback.
 Files: `/tmp/mcfta-pending-level-search.py` and its `.log`.
 The checked fixtures and exact statements are committed in Lean.
-The local weekly monitor last reported **75% remaining**. Refresh
+The local weekly monitor last reported **71% remaining**. Refresh
 it at restart; stop all work at 1% or less. Do not rely on this snapshot.
 
 ## Full objective and authorization
@@ -298,7 +325,7 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build MicroCFTA.InternedNestedProfiles
 ```
 
-Latest complete audit: `/tmp/mcfta-20261013-target-fixed-point-audit.log`.
+Latest complete audit: `/tmp/mcfta-20261013-fresh-ordinary-integrated-audit.log`.
 It checks every imported theorem against the allowlist `propext`,
 `Classical.choice`, and `Quot.sound`. It rejects omitted proofs, native evaluation
 axioms, and custom axioms. The count is validation evidence, not a coverage

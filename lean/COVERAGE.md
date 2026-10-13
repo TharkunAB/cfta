@@ -27,7 +27,8 @@ The new `MergedProjectionBound` covers the complete physical projected-leaf
 schedule with that operation. The previous worker retains its separate proof. Full nested
 free-name interpretation and the global decoded free-name heap are now
 proved, including historical literal-probe boundary exclusion. General
-Mu-boundary replay and first-run no-pending remain open. See root
+Mu-boundary replay remains open. First-run no-pending is false for the
+old protocol; it remains open for the repair. See root
 [FINDINGS.md](../FINDINGS.md) for current status and validation.
 
 Current continuation proofs add full live lexical input replay and actual
@@ -62,8 +63,18 @@ on finite ordinary trees reaches an exact value-and-cache fixed point
 within original ordinary height. General equality schedules still need
 intervening intersection/edit progress. Exact indexed producer paths and
 pending callback equations strengthen constructor provenance; general
-paired-key descent remains open.
-See root [HANDOFF.md](../HANDOFF.md) for exact theorem boundaries and evidence.
+paired-key descent cannot exclude the preserved closed pending example.
+The old constructor protocol's general completion claim is now refuted by
+`InternedClosedPendingBoundary`. Local source repair `e0e1b37` selects a
+placeholder above the Depth observation's free ordinary names and uses the
+same stored observation for readback. `InternedFreshOrdinaryConstruction`
+proves freshness, minimality, and matching readback. Kernel computations
+verify both repaired fixtures. Native probes and 620 source examples pass.
+General repaired completion and semantic heaps remain open. Earlier
+ordinary-name-specific theorems describe the preserved old executor and
+need a new bridge before they establish repaired-source correspondence.
+See [the repair](notes-fresh-ordinary-candidate.md) and root
+[HANDOFF.md](../HANDOFF.md) for exact boundaries and evidence.
 
 The latest physical equality work derives admitted leaf readback, identity,
 intersection, and projection union. A normalization phase handles arbitrary
@@ -79,7 +90,7 @@ physical path projection derives completion and available payloads. Endpoint
 projection, simultaneous edit, and schedule composition remain open.
 Full nested construction derives pending-reservation origins, complete old probe footprints, pending
 preservation, and earlier readback of old identities. The remaining general
-completion step is general absent-reference replay; recursive erased-edge
+completion claim for that old executor is refuted; recursive erased-edge
 construction already completes at arbitrary depth. Structural erasure and
 mixed retained/erased source contexts also derive first completion.
 The unfolding rank depends only on reachable shallow values.

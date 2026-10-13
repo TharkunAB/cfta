@@ -40,8 +40,18 @@ on finite ordinary trees reaches an exact value-and-cache fixed point
 within original ordinary height. General equality schedules still need
 intervening intersection/edit progress. Exact indexed producer paths and
 pending callback equations strengthen constructor provenance; general
-paired-key descent remains open.
-See root [HANDOFF.md](../HANDOFF.md) for exact theorem boundaries and evidence.
+paired-key descent cannot exclude the preserved closed pending example.
+The old constructor protocol's general completion claim is now refuted by
+`InternedClosedPendingBoundary`. Local source repair `e0e1b37` selects a
+placeholder above the Depth observation's free ordinary names and uses the
+same stored observation for readback. `InternedFreshOrdinaryConstruction`
+proves freshness, minimality, and matching readback. Kernel computations
+verify both repaired fixtures. Native probes and 620 source examples pass.
+General repaired completion and semantic heaps remain open. Earlier
+ordinary-name-specific theorems describe the preserved old executor and
+need a new bridge before they establish repaired-source correspondence.
+See [the repair](notes-fresh-ordinary-candidate.md) and root
+[HANDOFF.md](../HANDOFF.md) for exact boundaries and evidence.
 
 The model names below refer to files in `MicroCFTA/`.
 

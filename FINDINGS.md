@@ -1,17 +1,18 @@
 # Current formalization findings
 
-Updated: **2026-10-13 16:13 CEST**.
+Updated: **2026-10-13 16:46 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `9508eb3`.
 Upstream contains the repairs in rows 1 through 21. Row 22 records a new
-local repair for repeated recursive merge growth. PR #98 retains
+local repair for repeated recursive merge growth. Row 23 records the local
+constructor probe repair. PR #98 retains
 groups of up to four edges during merged narrowing. The source guard check
 also permits later literal identity replacements. The current proof updates
 follow both changes.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **970 jobs and 35,732 theorem dependency
+The full Lean development passes **976 jobs and 36,106 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -25,7 +26,7 @@ counterexamples, repair arguments, and implementation comparisons.
 
 ## Latest restart checkpoint
 
-Proof checkpoint: **`0732ca2`**. Stable proof files are committed and imported
+Proof checkpoint: **`71a69c5`**. Stable proof files are committed and imported
 by the working aggregate audit. Proof work continues; inspect the live working
 tree at restart. The marked draft
 `lean/MicroCFTA/MergedAdaptiveStability.lean.incomplete` is preserved unchanged.
@@ -35,7 +36,7 @@ At 15:13–15:15 CEST, the requested refresh fetched PRs #102 and #103.
 `git pull --ff-only` could not fast-forward the local proof branch.
 The explicit rebase then replayed all 308 local commits onto `9508eb3`
 without conflicts. Backup `backup/formalization-before-pr-refresh-20261013-1514`
-retains `73b1c47`. Every Lean file is identical to that checkpoint, including
+retains `73b1c47`. Immediately after rebase, every Lean file matched that checkpoint, including
 all counterexamples and the marked draft. Stashes and other worktrees were
 untouched. The local recursive-union repair is now `558b316`. New work stays local.
 
@@ -89,12 +90,29 @@ The complete equality schedule still needs a bound for intervening
 intersections and endpoint edits. See
 [repeated merging](lean/notes-equality-merged-target.md).
 
-`InternedPendingProducerDescent.closed_enclosing_pending` now retains the
+The old constructor protocol has a closed pending counterexample in
+`InternedClosedPendingBoundary`. Its scoped expression reaches reserved identity
+87 with both key components at node 86 and no completed payload. Two independent
+native translations time out after five seconds while forcing the root.
+This refutes the old model's universal closed completion claim; native timeout
+is bounded noncompletion evidence. Local repair `e0e1b37` chooses an ordinary
+placeholder above every free ordinary level in the actual Depth observation.
+`matchMu` uses the same stored observation. Both failing fixtures complete in
+the repaired Lean executor. All five native probes and all 620 existing examples
+pass with the repair. Chooser freshness and exact readback are proved. General
+repaired completion, semantic heaps, and source correspondence remain open.
+The old executor and all its proofs remain baseline evidence. Do not apply its
+ordinary-name-specific results to the repair without a new bridge. See
+[closed pending](lean/notes-paired-pending-boundary.md) and
+[the repair](lean/notes-fresh-ordinary-candidate.md).
+
+`InternedPendingProducerDescent.closed_enclosing_pending` retains the
 same joint-key mismatch and the exact indexed producer occurrence. It
 derives the producer's completed Depth call, pending ordinary call, shorter
 captures, source path, and strictly earlier missing-key cut. A checked
 closed fixture shows why source-path liveness does not imply liveness of
-the returned producer value. General paired mismatch descent remains open.
+the returned producer value. The new counterexample realizes the remaining
+mismatch; unrestricted descent cannot exclude it for the old protocol.
 See [producer calls](lean/notes-pending-producer-calls.md).
 
 `MergedAdaptiveMerge.execute_complete` now proves the complete adaptive
@@ -158,8 +176,8 @@ the original Depth probe. Support or alias alone cannot exclude the mismatch.
 exact current key components, the earlier completed pair, the live mismatch,
 and the shorter producer history together. Full captured-name membership
 agrees with the ancestor. The earlier pair differs in at least one exact
-component. The next target is to derive an actual mismatch in the shorter
-producer context. See
+component. These baseline implications remain valid, but the closed pending
+example shows that this case cannot be excluded. See
 [literal observations](lean/notes-interned-literal-observations.md).
 
 The full formalization remains unfinished. The exact restart order,
@@ -204,7 +222,7 @@ both ranks. This is a contract distinction, not a new decoder defect.
 ## Repaired source defects
 
 Rows 1 through 21 are merged upstream at `4897831`. Rows 18 through 21
-were local repairs at the earlier checkpoint. Row 22 is a new local repair. Each row has a retained source reproduction and a corresponding formal
+were local repairs at the earlier checkpoint. Rows 22 and 23 are local repairs. Each row has a retained source reproduction and a corresponding formal
 counterexample, repair theorem, or operational model. Older per-repair test
 totals in the linked reports describe their historical checkpoints. The
 current combined suite total is 620.
@@ -233,6 +251,7 @@ current combined suite total is 620.
 | 20 | Grouped key discovery retained an earlier minimum after a callback changed its base. `minimumSize` returned zero although counts were `[0,1,1,1]` and the smallest member had size one. | Compare the final probe's keys and minima with the accumulated discovery table. Return `InconsistentRecursiveFamily` on disagreement. `GroupedProbeValidation` derives a true body fixed point for every successful check and proves that constructor programs retain their previous least-attained minima. The existing recursive-member test retains the public callback. See [the discovery-validation notes](lean/notes-grouped-probe-validation.md). |
 | 21 | `mergeAlternatives` on the union of two recursive languages repeatedly unfolded the same child union. Direct recursive operands and wrapped union operands exceeded the diagnostic timeout. | Stop recursive merging at retained recursive or union boundaries. Preserve the union and its accepted terms. The direct merge and enclosing equality reduction now complete. [Reproduction](lean/repro/MergedNarrowing.hs); [proof boundaries](lean/notes-merged-narrowing.md). |
 | 22 | The retained recursive child union was immediately unfolded into an ordinary node. Repeated equality passes on five recursive alternatives added six nodes and sixteen edges per observed pass. Public pruning exceeded the diagnostic timeout. | Use `createUnion` at the recursive-boundary return to retain the explicit union. The same public prune call completes. The retained fixture has idempotent merging and reaches an equality fixed point after two changing passes. This finite evidence does not prove general nested-schedule termination. See [merged narrowing notes](lean/notes-merged-narrowing.md) and [the source reproduction](lean/repro/MergedNarrowing.hs). |
+| 23 | A closed structural constructor program aliases a live ordinary capture and reaches a pending Mu pair. Both native translations exceed five seconds at root evaluation. | Select a placeholder above the Depth observation's free ordinary levels and reuse that choice in `matchMu`. The kernel checks the old pending slot and repaired completion. All five native probes and 620 examples pass. General repaired completion remains open. See [closed pending](lean/notes-paired-pending-boundary.md) and [repair proofs](lean/notes-fresh-ordinary-candidate.md). |
 
 The private `Recursion` repair changes engine-term shape. User values,
 surface terms, original generator counts, distributions, and rank order
@@ -384,10 +403,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **970 jobs; 35,732 theorem dependency checks**.
+- Latest integrated Lean audit: **976 jobs; 36,106 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-20261013-target-fixed-point-audit.log`.
+  Log: `/tmp/mcfta-20261013-fresh-ordinary-integrated-audit.log`.
 - The earlier formula capture, nested compiler capture, recursive equality,
   and open-union reproductions passed at the `de910ea` checkpoint. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -419,8 +438,8 @@ but do not prove it for every runtime execution.
 
 ## Current proof results and remaining obligations
 
-The current proof checkpoint is **`0732ca2`**. The integrated working audit passes
-**970 jobs and 35,732 theorem dependency checks**. Stable proof modules
+The current proof checkpoint is **`71a69c5`**. The integrated working audit passes
+**976 jobs and 36,106 theorem dependency checks**. Stable proof modules
 are committed and imported by the working aggregate audit. The full
 formalization remains incomplete. The detailed restart order, commands,
 repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).
