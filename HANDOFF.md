@@ -1,14 +1,14 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 04:27 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 04:28 CEST (Europe/Stockholm)**.
 
 ## Read first
 
 The formalization is **not complete**. Matti requested this restart checkpoint
 because the chat became unreliable. Continue the same full task. Do not replace
 it with a smaller fragment, a theorem-count target, or a documentation task.
-The latest committed proof checkpoint is **`dc4928c`**. Its complete audit
-passes **846 jobs; 33,461 theorem dependency checks**. It includes full free-name
+The latest committed proof checkpoint is **`0b0b53d`**. Its complete audit
+passes **849 jobs; 33,472 theorem dependency checks**. It includes full free-name
 semantics, recursive probe dependencies, and the complete merged projected-leaf
 schedule. The source repair is committed as `b9fde4a`. Inspect the live working
 tree before proceeding; preserve every current proof and source repair.
@@ -63,7 +63,7 @@ honest proof boundaries; passing examples are not a general theorem.
 - Branch: `formalization/microcfta-resume-20261012`.
 - Correct implementation base: **`origin/microcfta`, `8ac24bb`**. This overrides
   older memory about `tidy/core-formula`.
-- Latest committed proof: **`dc4928c`**. New supporting checkpoints are
+- Latest committed proof: **`0b0b53d`**. New supporting checkpoints are
   `721ff6d` (full free names) and `76da95a` (probe dependency and source replay). The earlier `d630667` proof checkpoint
   rebased to `447ec5c`; its documentation checkpoint rebased to `8dc288a`.
 - Restart backup: `backup/formalization-before-refresh-20261013-0418` at
@@ -112,7 +112,7 @@ It checks every imported theorem against the allowlist `propext`,
 `Classical.choice`, and `Quot.sound`. It rejects omitted proofs, native evaluation
 axioms, and custom axioms. The count is validation evidence, not a coverage
 percentage. All prior proofs and all new proof modules are imported by
-`Audit.lean` in `dc4928c`.
+`Audit.lean` in `0b0b53d`.
 
 Use Nix for Haskell. Nix store/lock access needs escalation. Select the coherent
 linker/GMP environment with the PATH prefix below.
@@ -270,8 +270,10 @@ The old `EqualityLeafProjectionRuntimeBound` is retained for the old worker.
 
 `MergedAlternativesSubsumption` proves successful coverage checks sound;
 `MergedEqualityReduction` proves constrained-language preservation with a
-merge-superset premise. General recursive merge termination and the full
-physical superset bridge still need proof. See `lean/notes-merged-narrowing.md`.
+merge-superset premise. The physical leaf worker has a coverage theorem, and observed row order
+derives complete grouping. Coverage search saturates under a finite pair
+inventory. General recursive merge termination and the recursive physical
+superset bridge still need proof. See `lean/notes-merged-narrowing.md`.
 
 The **complete physical projected-leaf schedule** is proved for both workers. Its bound is the
 original occurrence weight plus one. It includes actual endpoint reads,

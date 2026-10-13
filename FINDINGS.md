@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 04:27 CEST**.
+Updated: **2026-10-13 04:28 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `8ac24bb`. The
 upstream base contains the earlier findings repairs and merged equality
@@ -9,7 +9,7 @@ described as rows 18 through 21.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **846 jobs and 33,461 theorem dependency
+The full Lean development passes **849 jobs and 33,472 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -234,7 +234,7 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **846 jobs; 33,461 theorem dependency checks**.
+- Latest integrated Lean audit: **849 jobs; 33,472 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
   Log: `/tmp/mcfta-20261013-final-audit.log`.
@@ -269,8 +269,8 @@ but do not prove it for every runtime execution.
 
 ## Current proof results and remaining obligations
 
-The current proof checkpoint is **`dc4928c`**. Its complete audit passes
-**846 jobs and 33,461 theorem dependency checks**. All current proof modules
+The current proof checkpoint is **`0b0b53d`**. Its complete audit passes
+**849 jobs and 33,472 theorem dependency checks**. All current proof modules
 are committed and imported by the aggregate audit. The full
 formalization remains incomplete. The detailed restart order, commands,
 repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).
@@ -372,8 +372,11 @@ the original occurrence weight plus one. Endpoint domains must be leaves.
 `MergedAlternativesSubsumption` proves soundness of successful bounded
 recursive coverage checks, including ancestor-pair reuse. `MergedEqualityReduction`
 proves full constrained-language preservation under a merge-superset contract.
-General recursive merge termination and the whole physical superset bridge
-remain open. See [merged narrowing](lean/notes-merged-narrowing.md).
+The physical leaf worker now has a language-coverage theorem. Complete
+group orders give equal records in a common cache, and an observed row order
+derives completeness. Coverage search saturates under a complete finite pair
+inventory. General recursive merge termination and the recursive physical
+superset bridge remain open. See [merged narrowing](lean/notes-merged-narrowing.md).
 
 The complete physical **projected-leaf** schedule has a derived bound of the
 original occurrence weight plus one. It includes actual endpoint reads,
