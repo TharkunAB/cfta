@@ -19,6 +19,7 @@ import Data.CFTA.Refinement (
 import Data.CFTA.Refinement.Expression (false, true, variable, (.<), (.==))
 import Data.CFTA.Refinement.Guard (buildGuard, isSubtypeOf, withActualFor, withActualsFor)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3, withZ3Assuming)
+import Data.CFTA.Refinement.Verdict (entailsWithBindings)
 import Data.CFTA.Symbol (valueName)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -38,6 +39,19 @@ dependentGuard =
 spec :: Spec
 spec =
     describe "dependent LTA guards" $ do
+        it "reserves the free names of ambient assumptions for fresh values" $ do
+            -- A fresh value name that an ambient assumption names would read
+            -- that assumption, so the query is Unknown; another fresh name is
+            -- unaffected.
+            let fresh = "__microcfta_actual_0"
+                other = "__microcfta_actual_1"
+                isZero name = Formula.Atom Formula.Eq (Formula.Var name) (Formula.Lit 0)
+            results <- withZ3Assuming [] [isZero fresh] $ \solver ->
+                (,,)
+                    <$> entailsWithBindings solver [(fresh, "actual")] true (isZero fresh)
+                    <*> entailsWithBindings solver [(other, "actual")] true (isZero other)
+                    <*> entails solver true (isZero fresh)
+            results `shouldBe` (Unknown, No, Yes)
         describe "formula substitution" $ do
             it "renames a bound nullary application without introducing a free name" $ do
                 let original = Formula.Forall [("x", IntSort)] $ Formula.Atom Formula.Eq (Formula.App "x" []) (Formula.Lit 0)

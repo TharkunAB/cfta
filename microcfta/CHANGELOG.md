@@ -45,7 +45,9 @@ remains a separate ECTA-only package.
   restriction checked by `validate`, a bounded reference denotation on the
   shared enumerator, and the Z3 entailment in
   `Data.CFTA.Refinement.LiquidFixpoint`, which declares every free name as an
-  integer. `Data.CFTA.Refinement.Guard` builds transitions from guards that
+  integer. A fresh value name of a binding must not be a declared name or a
+  free name of an ambient assumption; otherwise the query is `Unknown`.
+  `Data.CFTA.Refinement.Guard` builds transitions from guards that
   name the constructor arguments, `contract` states a formula about the
   children's values, and `measureTerm` reads the measure of a constructed
   term from the measures of its children.
