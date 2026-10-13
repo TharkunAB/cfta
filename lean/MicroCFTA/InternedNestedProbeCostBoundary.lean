@@ -35,6 +35,16 @@ theorem actual_costs : observations result =
       [(.depth, 0), (.uninterned 0, 0)], [(.depth, 0), (.uninterned 0, 0)]) := by
   set_option cbv.maxSteps 5000000 in cbv
 
+/-- Cache-hit cleanup also makes both probe depths smaller than the actual body depth. -/
+def depths : Option (Nat × Nat × Nat) :=
+  match result with
+  | .done (.mu _ actual depth ordinary) _ => some (actual.depth, depth.depth, ordinary.depth)
+  | _ => none
+
+/-- The stored source depths need not agree across the three callback executions. -/
+theorem actual_depths : depths = some (1, 0, 0) := by
+  set_option cbv.maxSteps 5000000 in cbv
+
 /-- This proposed generalization requires every external body cost in at least one probe. -/
 def ExactProbeCoverage (outcome : Outcome Symbol Guard (Value Symbol Guard)) : Prop :=
   ∀ identity actual depth ordinary, observations outcome = some (identity, actual, depth, ordinary) →

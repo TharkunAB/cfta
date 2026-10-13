@@ -36,6 +36,17 @@ theorem actual_costs : selectedCosts = some (19,
   set_option maxRecDepth 20000 in
   set_option cbv.maxSteps 20000000 in cbv
 
+/-- Read all three depths from the actual complete record created by the closed source run. -/
+def selectedDepths := selected.bind fun value =>
+  match value with
+  | .mu _ body depth ordinary => some (body.depth, depth.depth, ordinary.depth)
+  | _ => none
+
+/-- Closed source execution does not restore equality between the stored body and probe depths. -/
+theorem actual_depths : selectedDepths = some (1, 0, 0) := by
+  set_option maxRecDepth 20000 in
+  set_option cbv.maxSteps 20000000 in cbv
+
 /-- The original flat-callback cost invariant is false as an unrestricted closed-cache invariant. -/
 theorem not_flat_probe_heap : ¬ InternedFlatProbeHeap.Heap result.state := by
   intro heap
