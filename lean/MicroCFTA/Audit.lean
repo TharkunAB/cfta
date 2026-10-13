@@ -716,6 +716,17 @@ import MicroCFTA.InternedUnionAlternativeClear
 import MicroCFTA.InternedFreeNameDecoder
 import MicroCFTA.InternedFreeNameHeap
 import MicroCFTA.InternedFreeNameConstructors
+import MicroCFTA.InternedFreeNameSemantics
+import MicroCFTA.InternedFreeNameForm
+import MicroCFTA.InternedFreeNameComposition
+import MicroCFTA.InternedFreeNameRequest
+import MicroCFTA.InternedNestedFreeNames
+import MicroCFTA.InternedFreeNameBoundary
+import MicroCFTA.InternedSourceFreeNames
+import MicroCFTA.InternedFreeNameMuOrigins
+import MicroCFTA.InternedStoredFreeNameBoundary
+import MicroCFTA.InternedPureProfileIdentity
+import MicroCFTA.InternedPureProfileOrderBoundary
 import MicroCFTA.InternedSourceRankStutter
 /-!
 # Proof dependency audit
