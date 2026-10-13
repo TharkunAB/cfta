@@ -1,12 +1,12 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 23:08 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 23:43 CEST (Europe/Stockholm)**.
 
 ## Current result and read order
 
 Read `NEXT-PROMPT.md`, this file, root `FINDINGS.md`,
 `lean/notes-source-sized.md`, `lean/notes-sized-liquid-probability.md`, and
-`lean/notes-bounded-import.md`.
+`lean/notes-bounded-import.md`, and `lean/notes-shared-rows.md`.
 The root findings are current. `lean/FINDINGS.md`
 and older dated component notes are historical.
 
@@ -30,8 +30,7 @@ The CPS, batched descent, conditional union-find, and reserved zero-domain
 source bridges are now checked. The proof note gives their exact scope.
 The optimized interned core remains intact.
 
-The new upstream import fallback is merged locally at `76a82a70` from
-`origin/microcfta` at `a915177c`. The new proofs cover ordered residual scans,
+The bounded import fallback from PR #114 remains proved after the rebase. The new proofs cover ordered residual scans,
 the exact fallback call route, complete constrained denotation effects,
 ordered finite reconstruction, arity validation, finite compact compilation,
 observation partitions, rank records, sampling, and PMFs.
@@ -45,7 +44,32 @@ depth order proved. `SourceBoundedImport.plain_correct` composes that branch
 with reconstruction and compact compilation without solver calls.
 Do not formalize benchmark programs, datasets, or workload specifications.
 
-The earlier Sized proof commits remain:
+The latest source is PR #115 at `7989e91a`. It replaces duplicate cyclic row
+extraction with `Interned.toRows`. The requested rebase completed at
+`5d5ac947`; all 1,432 saved Lean-tree files retained their bytes.
+The 17 new shared-row modules prove finite traversal, exact row readback,
+validated conversion, actual dense numbering, canonical stable sorting,
+finite-key minimum sizes, exact cyclic classes, and both inverse laws.
+`SourceCyclicRowsReadback` constructs the finite compiler input from actual
+completed rows. `SourceCyclicRowsExecution` includes the minimum-size prepass.
+See `lean/notes-shared-rows.md` for contracts and remaining native boundaries.
+
+The custom-key counterexample shows that equal complete transition keys
+retain source row order. Distinct symbols with the same supplied key can
+exchange ranks when interning order changes. Counts and inverses still hold.
+`17b21453` preserves Lean/native examples and corrects source comments.
+The preceding local proof commits are `b8171aea`, `60df5ec1`, `742aab7e`, and
+`1236869f`. Use `git log` for later native-gate work and documentation.
+
+The current cyclic composition still uses the synchronous reference overlap
+test. The next proof connects the actual native intersection/productivity
+callback to that test. Existing `IntersectTotal` proves explicit recursive
+syntax semantics. It does not derive physical interned `nodeEdges` readback.
+The ordinary-node construction branch is the next concrete proof target.
+Inspect `SourceCyclicRowsNativeGate*` and `SourceInternedIntersectionRows*`
+for work in progress before assigning or editing those files.
+
+The earlier Sized proof commits remain in the preserved backup history:
 
 | Commit | Result |
 | --- | --- |
@@ -72,7 +96,7 @@ Do not confuse the earlier checked checkpoint `f10fa11` with the new result.
 
 The user requested **Push** earlier. That publication is complete through
 `1f982c5b` on `origin/formalization/microcfta-resume-20261012`.
-The new continuation uses `formalization/microcfta-library-20261013` and stays
+The new continuation uses `formalization/microcfta-rebase-20261013` and stays
 local. Do not push it without a new request. Do not force-update the historical
 `origin/formalization/microcfta` branch. **No deployment, messages, or board posts**.
 After this requested publication, further pushes require a new request.
@@ -86,8 +110,8 @@ Monitor weekly allowance before work and regularly afterward:
 python3 /tmp/mcfta-weekly-usage.py
 ```
 
-Stop every worker and all work immediately at **1% remaining or less**.
-The last observed value was **48% at 23:08 CEST**. Treat it as historical.
+Stop every worker and all work immediately at **20% remaining or less**.
+The last observed value was **44% at 23:42 CEST**. Treat it as historical.
 Check `observed_at`. The script reads 10,080-minute windows from local logs
 under `~/.codex/sessions/2026/10/13`; update that date on a later restart.
 It exits 99 at the threshold and 2 if usage is unavailable. Missing or stale
@@ -96,18 +120,29 @@ data is not permission to use credits.
 ## Repository and preservation
 
 Repository: `/home/tritlo/Code/mcfta`, Ubuntu/WSL2, Bash.
-Branch: `formalization/microcfta-library-20261013`.
-Upstream: `origin/microcfta` at **`a915177c`**.
-The update check found PR #91 and PR #114. The fast-forward pull reported
-`Not possible to fast-forward, aborting.` A new branch and backup preserve
-published head `1f982c5b`. Merge `76a82a70` adds upstream without rewriting it.
-Backup: `backup/formalization-before-library-refresh-20261013-2246`.
+Branch: `formalization/microcfta-rebase-20261013`.
+Upstream: `origin/microcfta` at **`7989e91a`** (PR #115).
+The fast-forward pull reported `Not possible to fast-forward, aborting.`
+The latest user instruction explicitly requests a rebase and supersedes the
+old merge-only instruction. The 374-step rebase completed without conflicts:
+
+```sh
+git rebase --rebase-merges --reapply-cherry-picks --empty=keep origin/microcfta
+```
+
+Backup `backup/formalization-before-rebase-20261013-2315` retains `298a225b`.
+The old `formalization/microcfta-library-20261013` branch also retains it.
+The rebase result was `5d5ac947` before the new proof work. Its source delta
+from the backup was exactly the four upstream files. No proof or repair was
+lost. The manifest and extra fixture copy are under
+`/tmp/mcfta-rebase-20261013-2315/`. All 1,432 saved files matched immediately
+after rebase. Subsequent proof additions and ledger updates are separate.
 The original restart head was `f8a3d48`.
 
 Before new work, read status, log, worktrees, stashes, and allowance. Preserve
-a backup, and pull the correct branch. Preserve the published history when
-upstream has moved; merge on the local continuation branch when necessary.
-Preserve local repairs and resolve any source overlap against current code.
+a backup, and refresh the correct upstream branch. Rebase the local
+continuation when upstream has moved, as requested. Preserve every local
+repair and resolve any source overlap against current code.
 Git metadata writes require escalation in this sandbox.
 
 The new backup is `backup/formalization-before-sized-resume-20261013-2123`.
@@ -180,11 +215,16 @@ A new recursive body resets its budget to 64. Only a direct revisit decreases
 its local budget. Per-call and recursive callback termination remain separate.
 Do not claim that a local budget establishes whole-pruning completion.
 
-All proof workers are stopped. No diagnostic process remains active.
+Native overlap-gate and ordinary intersection-row proofs are in progress.
+Check worker and process status on restart; do not assume they are stopped.
 
 ## Remaining priorities
 
-1. Audit the concrete source correspondence boundaries of the Sized path:
+1. Connect the native cyclic overlap callback to the proved finite
+   synchronous overlap gate. Continue the ordinary-node intersection branch
+   through hash join, child operations, edge/node construction, and stored
+   readback. Do not replace this obligation with an opaque language premise.
+   Then audit the concrete source correspondence boundaries of the Sized path:
    finite Map/Set representation, lawful equality/order, lazy table forcing,
    machine-size conversions, and evaluator IO traces. The handwritten models
    do not constitute verified Haskell extraction. Preserve the proved
@@ -283,18 +323,22 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The aggregate audit passes **1,106 jobs and 38,508 theorem dependency checks**.
+The completed shared-row audit passes **1,123 jobs and 38,793 theorem dependency checks**.
 It permits only `propext`, `Classical.choice`, and `Quot.sound`.
-The log is `/tmp/mcfta-library-20261013-audit.log`. All 22 new proof modules
-are imported by the audit. No Haskell source was changed by the new proof work.
+The log is `/tmp/mcfta-one-row-20261013-audit.log`. All 17 completed shared-row
+modules are imported. New native-gate work needs a new aggregate audit.
 Use focused targets for new work, then import finished modules into Audit.
 Do not add `sorry`, native evaluation axioms, or project axioms.
 
-The ambient freshness repair passed 285 core and 204 generator examples.
-Its log is `/tmp/mcfta-ambient-20261013-tests.log`. Fourmolu, cabal-gild, and
-both new native reproductions passed. No production test was added.
-The newly merged library source and package metadata also pass Fourmolu and
-cabal-gild checks in Nix. Log: `/tmp/mcfta-library-20261013-format.log`.
+The rebased source passed 285 core, 206 generator, and 144 refinement examples
+in Nix. Log: `/tmp/mcfta-one-row-20261013-tests.log`.
+Fourmolu and cabal-gild checks passed in Nix.
+Log: `/tmp/mcfta-one-row-20261013-format.log`.
+The separate-process custom-key reproduction passed.
+Log: `/tmp/mcfta-key-ties-20261013.log`.
+The only current production change qualifies ordering comments. No production
+test or benchmark formalization was added. Do not repeat these passing suites
+without a new source change or concern.
 
 The earlier Sized repair passed the full generator suite with 206 examples,
 including two temporary regression cases. The permanent suite remains at

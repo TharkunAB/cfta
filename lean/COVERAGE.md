@@ -1,13 +1,18 @@
 # Full formalization coverage
 
-Current continuation: **2026-10-13 23:08 CEST**, upstream `a915177c`.
-Local merge `76a82a70` preserves the published proof history. The new bounded
-import work covers exact residual dispatch, constrained liquid denotation,
-ordered finite reconstruction, derived arity validation, finite compact
-count/rank compilation, observation partitions, cardinality weights, sampling,
-and PMFs. See [the bounded import note](notes-bounded-import.md).
-Native interning, split representation, custom import order, and whole lazy
-enumeration completion remain boundaries. Benchmark programs, datasets, and
+Current continuation: **2026-10-13 23:43 CEST**, upstream `7989e91a`.
+The requested local rebase preserves every saved proof, draft, and fixture.
+PR #115 uses one shared interned row adapter. New proofs derive its finite
+traversal, exact retained rows, guarded language, validated conversion,
+dense numbering, stable canonical order, finite-key minimum sizes, cyclic
+class evaluation, and both rank inverses. See [the shared-row note](notes-shared-rows.md).
+Native intersection construction remains open. Its explicit recursive syntax
+proof does not yet establish physical interned row readback. Equal complete
+custom sort keys retain source order; a Lean/native counterexample preserves
+that qualification without changing runtime behavior.
+The earlier [bounded import proofs](notes-bounded-import.md) remain.
+Native recursive exposure, split representation, custom import order, and
+whole lazy execution remain boundaries. Benchmark programs, datasets, and
 workload specifications are excluded from formalization.
 
 `SizedLanguageTheorem` combines exact node-count acceptance, finite reference
@@ -31,17 +36,18 @@ Sized sampling results describe verified client compositions, not a new API.
 CPS enumeration, batched descent, conditional union-find writes, and reserved
 zero-domain memo keys now have checked source algorithm bridges.
 
-The current audit passes **1,106 jobs and 38,508 theorem dependency checks**
-with only the three standard Lean axioms. The ambient repair passed
-**285 core and 204 generator examples** in Nix. Formatting and native
-reproductions passed. No production test was added. Concrete containers,
+The completed shared-row audit passes **1,123 jobs and 38,793 theorem dependency checks**
+with only the three standard Lean axioms. The rebased source passed
+**285 core, 206 generator, and 144 refinement examples** in Nix. Formatting
+and native reproductions passed. New native-gate work needs a new audit.
+No production test was added. Concrete containers,
 lazy heaps, machine conversions, external solver/PRNG behavior, and verified
 extraction remain boundaries. Older constructor and equality targets remain.
 
 Read [the main proof note](notes-sized-liquid-probability.md),
 [the Sized note](notes-source-sized.md), root [HANDOFF.md](../HANDOFF.md), and
 [FINDINGS.md](../FINDINGS.md). The earlier requested publication is complete
-through `1f982c5b`. The new `formalization/microcfta-library-20261013` branch
+through `1f982c5b`. The new `formalization/microcfta-rebase-20261013` branch
 stays local. No further push, deployment, or board post is authorized.
 
 ## Objective and completion rule
@@ -61,7 +67,7 @@ established. A theorem whose main algorithmic obligation is a premise
 does not close that obligation. An implementation counterexample prevents a
 soundness claim for that path; it does not remove that path from the scope.
 
-Source baseline: `origin/microcfta` at `a915177c`. This includes the merged
+Source baseline: `origin/microcfta` at `7989e91a`. This includes the merged
 core-formula changes at `9ad319d`. The detailed semantic specification is in
 [SYSTEM.md](SYSTEM.md); root findings record the current changes. All 71 source modules
 are inventoried in [API-COVERAGE.md](API-COVERAGE.md).

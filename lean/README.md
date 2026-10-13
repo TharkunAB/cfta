@@ -5,12 +5,15 @@ language, distinct-term index, distribution, and optimization contracts.
 [API-COVERAGE.md](API-COVERAGE.md) maps all 71 source modules and exported
 function families. [COVERAGE.md](COVERAGE.md) records proof obligations.
 
-Current base: `origin/microcfta` at `a915177c`, including the merged
+Current base: `origin/microcfta` at `7989e91a`, including the merged
 core-formula extension, the optimization changes, and the merged findings
-repairs and bounded import fallback through PR #114. Benchmark programs,
+repairs, bounded import fallback, and shared row adapter through PR #115. Benchmark programs,
 datasets, and workload specifications are excluded from formalization.
-The new [bounded import note](notes-bounded-import.md) gives the exact proof
-scope and remaining native correspondence boundaries.
+The [shared row note](notes-shared-rows.md) covers finite extraction, dense
+numbering, canonical order, minimum sizes, cyclic query laws, and the custom-key
+tie counterexample. Native intersection row construction remains open.
+The [bounded import note](notes-bounded-import.md) records the preceding work
+and its remaining native correspondence boundaries.
 Local repairs reject uncertain identity replacement
 and payload queries of unfinished recursive occurrences. Grouped recursion
 also rejects discovery tables that disagree with the final body. The

@@ -1,11 +1,40 @@
 # Current formalization findings
 
-Updated: **2026-10-13 23:08 CEST**.
+Updated: **2026-10-13 23:43 CEST**.
 
-Upstream `a915177c` is merged locally at `76a82a70` on
-`formalization/microcfta-library-20261013`. Published proof history through
-`1f982c5b` remains unchanged. Benchmark programs, datasets, and workload
-specifications are excluded from formalization at the user's request.
+Upstream `7989e91a` (PR #115) is the base of the requested local rebase on
+`formalization/microcfta-rebase-20261013`. Backup
+`backup/formalization-before-rebase-20261013-2315` retains `298a225b`.
+All 1,432 saved Lean-tree files retained their bytes through the rebase.
+No push, deployment, or board post is authorized. Benchmark programs,
+datasets, and workload specifications remain outside formalization scope.
+
+The shared `Interned.toRows` adapter now has finite traversal, exact ordered
+row/language readback, finite validated conversion, and issued-cache exposure
+proofs. Dense numbering and canonical sorting derive the exact cyclic query
+sequence. Minimum-size convergence uses only finite map keys, including when
+the identity type is infinite. The cyclic composition proves exact node-count
+classes, finite count/plan evaluation, and both rank inverses from those rows.
+See [the shared-row note](lean/notes-shared-rows.md).
+
+Native intersection remains a specific open boundary. The existing complete
+intersection proof uses explicit recursive syntax. It does not establish the
+physical interned result's `nodeEdges` exposure. The native overlap callback
+bridge and ordinary-node construction proof are the next targets. An abstract
+product-row contract does not discharge that construction obligation.
+
+A new Lean/native counterexample refutes unconditional interning-independent
+cyclic rank order with a noninjective custom symbol key. Equal complete sort
+keys retain source row order. Opposite interning orders exchange size-one
+ranks while counts and both inverse laws remain correct. Commit `17b21453`
+preserves the reproduction and qualifies the source comments. It does not
+change runtime ranking behavior.
+
+The completed shared-row checkpoint passes **1,123 build jobs and 38,793
+theorem dependency checks** using only the three permitted Lean foundations.
+The rebased source passes **285 core, 206 generator, and 144 refinement
+examples** in Nix. Fourmolu, cabal-gild, and the native reproduction pass.
+New native-gate work must receive its own audit before completion is claimed.
 
 The new bounded import proofs follow PR #114's control flow. Only a bounded
 residual-guard error selects denotation. Negative bounds make no external
@@ -78,8 +107,8 @@ The earlier requested push is complete through **`1f982c5b`** on
 local. No further push, deployment, or board post is authorized.
 All previous proofs, repairs, marked drafts, stashes, and worktrees remain.
 The untracked `lean/repro/NestedUnaryTwoAtom.hs` retains its original bytes.
-Weekly allowance was **48% at 23:08 CEST**. Refresh it before further work and
-stop all work at 1% or less.
+Weekly allowance was **44% at 23:42 CEST**. Refresh it before further work and
+stop all work at 20% or less.
 
 ## Previous Sized checkpoint
 
@@ -141,7 +170,7 @@ Nix. No new production test case was committed. Counts are validation
 evidence, not a coverage percentage.
 
 All proof workers are stopped. All work remains local. Weekly allowance was **58% at 21:55 CEST**; refresh it
-with `/tmp/mcfta-weekly-usage.py` and stop all work at 1% or less.
+with `/tmp/mcfta-weekly-usage.py` and stop all work at 20% or less.
 [HANDOFF.md](HANDOFF.md) and [NEXT-PROMPT.md](NEXT-PROMPT.md) contain the current
 restart instructions. The preserved constructor and equality work remains
 secondary to the direct exact graph contracts.
