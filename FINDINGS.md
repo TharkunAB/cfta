@@ -1,8 +1,8 @@
 # Current formalization findings
 
-Updated: **2026-10-13 15:06 CEST**.
+Updated: **2026-10-13 15:41 CEST**.
 
-The formalization is rebased onto `origin/microcfta` at `4897831`.
+The formalization is rebased onto `origin/microcfta` at `9508eb3`.
 Upstream contains the repairs in rows 1 through 21. Row 22 records a new
 local repair for repeated recursive merge growth. PR #98 retains
 groups of up to four edges during merged narrowing. The source guard check
@@ -11,7 +11,7 @@ follow both changes.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **919 jobs and 34,817 theorem dependency
+The full Lean development passes **942 jobs and 35,400 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -25,18 +25,52 @@ counterexamples, repair arguments, and implementation comparisons.
 
 ## Latest restart checkpoint
 
-Proof checkpoint: **`22d0adc`**. Stable proof files are committed and imported
+Proof checkpoint: **`7139f24`**. Stable proof files are committed and imported
 by the working aggregate audit. Proof work continues; inspect the live working
 tree at restart. The marked draft
 `lean/MicroCFTA/MergedAdaptiveStability.lean.incomplete` is preserved unchanged.
 Its completed sibling now proves exact fuel independence.
 
-The requested upstream refresh and explicit rebase were repeated at this
-restart. `origin/microcfta` remains at
-`489783177b0a7fd34bb6bf205e66d7d5cce0d1fe`; the branch was already up to date.
-Backup `backup/formalization-before-refresh-20261013-1435` preserves `efd0ddc`.
-The refresh changed no Lean file and left stashes and other worktrees intact.
-New work remains local.
+At 15:13–15:15 CEST, the requested refresh fetched PRs #102 and #103.
+`git pull --ff-only` could not fast-forward the local proof branch.
+The explicit rebase then replayed all 308 local commits onto `9508eb3`
+without conflicts. Backup `backup/formalization-before-pr-refresh-20261013-1514`
+retains `73b1c47`. Every Lean file is identical to that checkpoint, including
+all counterexamples and the marked draft. Stashes and other worktrees were
+untouched. The local recursive-union repair is now `558b316`. New work stays local.
+
+PR #102 adds `Interned.FlatMemo`, interned intersection-domain identities,
+and tagged integer node memo keys. The intersection worker itself is unchanged.
+PR #103 maintains expandable-slot and suspended-constraint waiting indexes.
+Its slot mutation paths remain initialization, append, and the common setter.
+The new representation models are checked. Flat probing terminates within
+one capacity-sized wrap. Physical insertion, copying, and locked rechecks
+retain the first winner. Word masking matches the source traversal. Layout
+arithmetic has explicit allocation bounds. Node/edge memo-key equality
+matches the old structural request under derived physical identity bounds.
+The retained 64-bit witnesses show RecInt `4611686018427387903` colliding with
+EmptyNode and node `4611686018427387904` colliding with node zero. No feasible
+coherent source trace reaching those limits was established.
+
+The enumeration indexes are exact after initialization, allocation, and
+every raw-slot write. Assimilation retains the waiting map through both
+ordered writes. The indexed scheduler has the same exact selection as the
+old scan, including `None` versus `Some []`. Canonical representatives agree;
+compression writes can differ. Signed waiting-counter updates are exact
+under bounds on the actual before-and-after counts. Those endpoint bounds
+also bound every intermediate update. No new source defect was established.
+Raw native publication, concrete containers, typed families, and runtime
+range bounds remain correspondence obligations. See
+[flat storage](lean/notes-flat-memo.md),
+[memo keys](lean/notes-intersection-flat-memo.md), and
+[enumeration indexes](lean/notes-enumeration-indexes.md).
+
+All 620 Haskell examples passed again after this rebase. The focused flat
+memo probe also passed 20,000 sequential growth/readback keys, lazy reentrant
+values, and 32,768 concurrent readbacks across eight workers. Logs:
+`/tmp/mcfta-20261013-pr102-103-tests.log` and
+`/tmp/mcfta-flat-memo-probe.log`. These checks do not prove native publication
+or arbitrary concurrent execution correctness.
 
 `MergedAdaptiveMerge.execute_complete` now proves the complete adaptive
 physical merge's successful execution and finite-language coverage.
@@ -73,8 +107,15 @@ derives stable ordered cold child filtering with actual comparison effects.
 `MergedSourceSelectionSemantics.select_complete_exact` proves its exact
 union-language preservation in the returned cache. `MergedSourceGrouping`
 derives the structural grouping contract from executable partitioning and
-proves the source append-fold bucket equation. Cold merge composition remains
-active.
+proves the source append-fold bucket equation.
+`MergedColdMergeSoundness.source_execute_complete` now composes the complete
+cold worker and proves input-language coverage in the actual returned cache
+and every later common extension. The ordinary-height recursion and one
+uniform comparison bound are derived. Both fuels preserve every successful
+exact record and cache. No initial warmup, global `Ready`, recursive `CallLaw`,
+or supplied grouping premise remains. Initial source facts, preparation,
+available input, and concrete guard laws remain explicit. The four-row group
+bound is proved separately. See [cold merge](lean/notes-source-cold-merge.md).
 
 `InternedOrdinaryLevelBoundary` disproves equal computed levels under
 fresh-only capture changes on actual source calls. Its checked levels change
@@ -88,8 +129,12 @@ the actual earlier enclosing Depth call that introduced the captured level,
 with fewer lexical inputs. `InternedOrdinaryCaptureBoundary` checks a closed
 completed example with levels `0 → 1` and the later ordinary name already in
 the original Depth probe. Support or alias alone cannot exclude the mismatch.
-The next target is to retain both exact key components and derive descent
-through the shorter producer context. See
+`InternedPendingJointKeyMismatch.closed_joint_mismatch` now retains both
+exact current key components, the earlier completed pair, the live mismatch,
+and the shorter producer history together. Full captured-name membership
+agrees with the ancestor. The earlier pair differs in at least one exact
+component. The next target is to derive an actual mismatch in the shorter
+producer context. See
 [literal observations](lean/notes-interned-literal-observations.md).
 
 The full formalization remains unfinished. The exact restart order,
@@ -99,8 +144,9 @@ instructions are in [HANDOFF.md](HANDOFF.md).
 ## Baseline and required contract
 
 The continuation branch is `formalization/microcfta-resume-20261012`.
-Its implementation base is `origin/microcfta` at `4897831`, including
-PRs #97 through #101. The reset continuation rebased all 274 commits.
+Its implementation base is `origin/microcfta` at `9508eb3`, including
+PRs #97 through #103. The latest continuation rebased all 308 commits.
+The earlier reset continuation rebased 274 commits onto `4897831`.
 Source conflicts kept the merged upstream implementations and all local proofs.
 Backup `backup/formalization-before-refresh-20261013-1306` retains the
 published checkpoint `8a80947`. The rebased proof tree initially matched it
@@ -305,18 +351,18 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
 
 ## Evidence and its limits
 
-- Latest source suites: **620 passing examples**, on `4897831` plus local
-  repair `c76d1ec`. Log: `/tmp/mcfta-20261013-retained-union-tests.log`.
+- Latest source suites: **620 passing examples**, on `9508eb3` plus local
+  repair `558b316`. Log: `/tmp/mcfta-20261013-pr102-103-tests.log`.
   Fourmolu and Cabal-gild checks pass. Both retained recursive-merge source
   cases and both ordered-profile/rank-stutter source replays also pass.
 - Repaired nested and same-scope source probes both report `(No,Unknown)`
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **919 jobs; 34,817 theorem dependency checks**.
+- Latest integrated Lean audit: **942 jobs; 35,400 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-20261013-sound-selection-audit.log`.
+  Log: `/tmp/mcfta-20261013-pr102-103-audit.log`.
 - The earlier formula capture, nested compiler capture, recursive equality,
   and open-union reproductions passed at the `de910ea` checkpoint. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -348,8 +394,8 @@ but do not prove it for every runtime execution.
 
 ## Current proof results and remaining obligations
 
-The current proof checkpoint is **`22d0adc`**. The integrated working audit passes
-**919 jobs and 34,817 theorem dependency checks**. Stable proof modules
+The current proof checkpoint is **`7139f24`**. The integrated working audit passes
+**942 jobs and 35,400 theorem dependency checks**. Stable proof modules
 are committed and imported by the working aggregate audit. The full
 formalization remains incomplete. The detailed restart order, commands,
 repository safeguards, and supporting file map are in [HANDOFF.md](HANDOFF.md).

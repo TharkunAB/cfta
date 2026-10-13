@@ -1,20 +1,22 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 15:06 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 15:41 CEST (Europe/Stockholm)**.
 
 ## Read first
 
 The formalization is **not complete**. Matti requested this restart checkpoint
 because the chat became unreliable. Continue the same full task. Do not replace
 it with a smaller fragment, a theorem-count target, or a documentation task.
-The latest committed proof checkpoint is **`22d0adc`**. The integrated working
-audit passes **919 jobs; 34,817 theorem dependency checks**. New proofs give
+The latest committed proof checkpoint is **`7139f24`** after the new upstream
+rebase and PR adaptations. The integrated audit passes **942 jobs; 35,400 theorem dependency checks**. New proofs give
 ordered stateful comparison completion, exact fuel stability and replay,
 exact cold-reader semantics in the returned cache, adaptive fuel independence,
 cold child-selection completion and exact language, derived source grouping,
 and actual ordinary-capture origins for any hypothetical closed pending run.
-Comparison soundness now holds in its actual returned cache.
-The new source repair is `c76d1ec`. Inspect the live working tree before
+The complete cold merge now has derived completion, language coverage in the
+actual returned cache, and exact two-fuel stability. Both current probe keys
+and the earlier completed pair remain in the pending mismatch witness.
+The local source repair is now `558b316` (previously `c76d1ec`). Inspect the live working tree before
 proceeding; more proofs can be in progress. Preserve every current result.
 
 Read this file, root `FINDINGS.md`, and the linked notes before new proof work.
@@ -32,23 +34,42 @@ workers before resuming. All stable Lean modules are imported by the working
 excluded from build targets. Its completed sibling now proves the requested
 fuel independence. Preserve the marked draft unchanged.
 
-At this restart, `git pull --ff-only origin microcfta` refreshed the source
-branch and reported already up to date. The fetched remote remains
-`489783177b0a7fd34bb6bf205e66d7d5cce0d1fe`.
-`git rebase origin/microcfta` then reported the continuation branch up to date.
-There were no newer commits to replay. Backup
-`backup/formalization-before-refresh-20261013-1435` retains `efd0ddc` and
-every prior proof, counterexample, and the marked draft. The Lean tree was
-unchanged by the refresh. Existing stashes and other worktrees were untouched.
+Matti reported new merged PRs at 15:13 CEST. After all proofs were saved,
+`git pull --ff-only origin microcfta` fetched `9508eb3` and stopped because
+the branches diverged. `git rebase origin/microcfta` replayed all 308 local
+commits without conflicts. Backup
+`backup/formalization-before-pr-refresh-20261013-1514` retains `73b1c47`.
+Every Lean file is identical to that backup, including all counterexamples
+and the marked draft. Existing stashes and other worktrees were untouched.
 Fetch again at restart because more patches can arrive later.
 
-Latest full validation: **919 jobs; 34,817 theorem dependency checks**.
-Log: `/tmp/mcfta-20261013-sound-selection-audit.log`.
+Latest full validation: **942 jobs; 35,400 theorem dependency checks**.
+Log: `/tmp/mcfta-20261013-pr102-103-audit.log`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-The latest source tests remain **620 passing examples** at source repair
-`c76d1ec`; no Haskell source changed after that repair.
+All **620 Haskell examples** passed after the latest source rebase.
+Log: `/tmp/mcfta-20261013-pr102-103-tests.log`.
+The flat memo probe passed 20,000 sequential growth keys, lazy reentrant
+evaluation, and 32,768 concurrent readbacks across eight workers.
+Log: `/tmp/mcfta-flat-memo-probe.log`.
 
-Latest proof checkpoints:
+**PR adaptations are checked:** `FlatMemo*` derives bounded masked probing,
+physical first-writer insertion, doubled-capacity copying, and stale-reader
+rechecks. `IntersectionFlatMemoKey*` derives bounded node/edge key equality
+and structural domain correspondence. `Enumeration*Index*` derives exact
+cached indexes from mutation history and the old scheduler's exact result.
+`EnumerationWaitingMachine` derives exact word updates from endpoint count
+bounds. The source workers retain their earlier algorithms. Read
+`lean/notes-flat-memo.md`, `lean/notes-intersection-flat-memo.md`, and
+`lean/notes-enumeration-indexes.md`. Native GHC primitives, concrete containers,
+typed cache partition, and runtime range bounds remain explicit.
+
+**Active proof work:** general constructor producer provenance, cold-cache
+language transport, and nested equality fixed-point termination. Inspect
+workers before editing their files. A shorter producer with only one Depth
+callback does not yet supply a paired mismatch. See
+`lean/notes-pending-producer-descent.md`.
+
+Earlier proof checkpoints (pre-rebase hashes remain in backups):
 
 | Commit | Result |
 | --- | --- |
@@ -72,6 +93,11 @@ Latest proof checkpoints:
 | `f9fe9f3` | Earlier ordinary-capture source calls and a checked alias boundary. |
 | `22d0adc` | Derived exact full-key grouping and source bucket equations. |
 
+Current rebased checkpoints: `9fbdc7d` retains both pending key components;
+`da2d46b` proves cold worker completion and fuel stability; `1e938d0` proves
+cold merge language coverage and the group bound; `a565693` imports all of
+them into the axiom audit.
+
 Use the following proof order. These are concrete next obligations, not a
 replacement for the full objective.
 
@@ -92,7 +118,11 @@ replacement for the full objective.
    preserves facts and all original records. `select_complete_exact` also
    proves exact union language in that returned cache. `recursive_member`
    checks the source's identity-membership shortcut. Connect this ordered
-   filter to the complete cold merge worker. The existing adaptive
+   filter to the complete cold merge worker. This composition is now proved
+   by `MergedColdMergeSoundness.source_execute_complete` and
+   `source_successful_sound`, including the actual returned cache and every
+   later common extension. `MergedColdMergeStability.worker_saturated`
+   derives one comparison bound for all sufficient ordinary bounds. The existing adaptive
    worker has derived completion, language coverage, and fuel independence.
    Initial prepared `Context`, concrete guards, structural `Grouping`, and
    outer memoization remain correspondence boundaries. Concrete grouping now
@@ -135,7 +165,7 @@ The fixture-guided mirror checked 14,916 variants, skipped seven for resource
 limits, observed 12,903 level-changing traces, and found no pending readback.
 Files: `/tmp/mcfta-pending-level-search.py` and its `.log`.
 The checked fixtures and exact statements are committed in Lean.
-The local weekly monitor last reported **84% remaining**. Refresh
+The local weekly monitor last reported **79% remaining**. Refresh
 it at restart; stop all work at 1% or less. Do not rely on this snapshot.
 
 ## Full objective and authorization
@@ -181,7 +211,7 @@ honest proof boundaries; passing examples are not a general theorem.
 
 - Repository: `/home/tritlo/Code/mcfta`; Ubuntu/WSL2; Bash.
 - Branch: `formalization/microcfta-resume-20261012`.
-- Correct implementation base: **`origin/microcfta`, `4897831`**. This overrides
+- Correct implementation base: **`origin/microcfta`, `9508eb3`**. This overrides
   older memory about `tidy/core-formula`.
 - Previous pre-reset proof: **`0b0b53d`**. Its supporting checkpoints are
   `721ff6d` (full free names) and `76da95a` (probe dependency and source replay). The earlier `d630667` proof checkpoint
@@ -193,8 +223,8 @@ honest proof boundaries; passing examples are not a general theorem.
 - Keep both retained stashes. The newest is `Preserve pending keyed nary and
   recursive join proofs before microcfta rebase`; its files were restored.
 - Leave `/home/tritlo/Code/microecta/lean-fixes` on `fix/lean-findings` untouched.
-- All proof workers froze for this handoff. Their final files are committed.
-  Start new workers only when the current instructions permit them.
+- Proof workers are active beyond the recorded checkpoint. Inspect their
+  status and ownership before editing uncommitted proof files.
 
 The earlier rebase replayed 175 proof/documentation commits. The latest
 refresh preserved all 267 local commits and added upstream PR #97. Old Haskell repairs were
@@ -246,7 +276,7 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build MicroCFTA.InternedNestedProfiles
 ```
 
-Latest complete audit: `/tmp/mcfta-20261013-sound-selection-audit.log`.
+Latest complete audit: `/tmp/mcfta-20261013-pr102-103-audit.log`.
 It checks every imported theorem against the allowlist `propext`,
 `Classical.choice`, and `Quot.sound`. It rejects omitted proofs, native evaluation
 axioms, and custom axioms. The count is validation evidence, not a coverage
@@ -261,9 +291,9 @@ nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests mic
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta /tmp/PROBE.hs'
 ```
 
-All **620 existing examples** passed after source repair `c76d1ec`:
+All **620 existing examples** passed again after the latest `9508eb3` refresh:
 284 core, 194 generator, 142 refinement. Log:
-`/tmp/mcfta-20261013-retained-union-tests.log`. Fourmolu checks passed for the
+`/tmp/mcfta-20261013-pr102-103-tests.log`. Fourmolu checks passed for the
 changed source and reproduction files. Both active Cabal-gild checks passed. Do not rerun these suites without
 a new source change or unresolved failure.
 
@@ -600,5 +630,5 @@ preserves representatives; pool minimization starts a new uniform distribution.
 Neither is an exact term/mass-preserving optimization under the stronger contract.
 
 Use `lean/SYSTEM.md`, `lean/COVERAGE.md`, and `lean/API-COVERAGE.md` for the wider
-ledger. All 66 Haskell modules occur in the API inventory. Keep theorem coverage,
+ledger. All 67 Haskell modules occur in the API inventory. Keep theorem coverage,
 source diagnostics, algorithmic costs, and external assumptions separate.
