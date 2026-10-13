@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 02:31 CEST**.
+Updated: **2026-10-13 02:37 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **743 jobs and 32,195 theorem dependency
+The full Lean development passes **747 jobs and 32,240 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -228,10 +228,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **743 jobs; 32,195 theorem dependency checks**.
+- Latest integrated Lean audit: **747 jobs; 32,240 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-pending-old-call-audit.log`.
+  Log: `/tmp/mcfta-callback-cleanup-emptiness-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -360,6 +360,10 @@ but do not prove it for every runtime execution.
    callback that captures a fresh ancestor reference while both completed
    probe values were available before that reference's allocation. This is
    a derived necessary condition, not a proof that pending calls are absent.
+   Root self filtering preserves empty status for arbitrary nested source
+   callbacks. Smart cleanup returns EmptyNode exactly for an empty body or
+   a bare self reference. These local facts remove filter assumptions from
+   the remaining comparison of actual callback traces.
    See [the exact pending-call witness](lean/notes-interned-pending-encounter.md).
    Full nested constructor traces now derive
    coherent caches, complete child provenance, outgoing edge residency,

@@ -33,6 +33,11 @@ unused body with the same absence property or removes a bare self reference.
 The theorem uses the actual callback execution and exact miss payload.
 It needs no age condition on discarded ordinary identities.
 
+`InternedCleanupEmptiness` gives the exact empty-result cases. A completed
+fresh request returns EmptyNode only when it is smart and the actual body
+returns EmptyNode or the exact newly reserved self reference. The local
+equivalence and the actual miss classification do not assume a probe law.
+
 This result exposes the remaining general completion obligation. It does
 not rule out the witnessed pending call. The origin's earlier complete
 probes must still be connected to this source call by observed-absence

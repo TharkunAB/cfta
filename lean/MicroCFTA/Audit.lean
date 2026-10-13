@@ -642,6 +642,10 @@ import MicroCFTA.InternedPendingScopes
 import MicroCFTA.InternedPendingEncounter
 import MicroCFTA.InternedPendingOldCall
 import MicroCFTA.EqualityFixedSaturationCounterexample
+import MicroCFTA.InternedUnionNonemptyMembers
+import MicroCFTA.InternedFilterEmptiness
+import MicroCFTA.InternedCallbackEmptiness
+import MicroCFTA.InternedCleanupEmptiness
 /-!
 # Proof dependency audit
 
