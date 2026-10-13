@@ -498,3 +498,37 @@ with the argument and fixed captures. These results do not cover a callback
 that constructs a new nested binder which depends on its argument. They do
 not infer an empty body from empty free-name sets or prove general gate
 termination.
+
+### Source cardinality and exact normalization profiles (2026-10-13)
+
+`InternedNonemptyRecords` derives a global constructor-shape invariant for
+arbitrary full nested syntax, on both completed and pending outcomes.
+Every stored ordinary node has an outgoing edge. Every stored union has
+at least two members with distinct reference identities. Preservation
+requires only the same initial shape invariant. Empty caches establish it
+without an input-provenance or final-shape premise. This excludes coherent
+but malformed cache records such as an ordinary node with no edges.
+
+`InternedEmptyNormalization` derives exact source empty-result equations.
+Actual node construction returns the empty identity exactly when each
+requested edge has an empty child. Actual union construction returns the
+empty identity exactly when all available operands have the empty identity.
+The union proof includes flattened operands, canonical deduplication,
+singleton return, merged ordinary edges, and stored union readback. It uses
+actual coherence, resident edges, live stored edges, and the derived
+constructor-shape invariant. It does not infer empty Mu output.
+
+`InternedFreeOccurrenceExact` proves that ordinary and union normalization
+cannot introduce an occurrence or change its binder cost. Combined with
+the earlier retention theorem, the live source union output has exactly
+the occurrence costs of its input operands. These facts provide the local
+empty and occurrence observations needed for general ordinary callback
+composition. They do not yet prove arbitrary nested binder correspondence.
+The focused builds passed 146, 156, and 153 jobs respectively. The isolated
+axiom audit checked 8,516 MicroCFTA theorem dependencies using only the
+three standard axioms.
+
+A separate finite Haskell check tested the exact predecessor-cost inclusion
+in the two probes for 91,400 actual stored Mu occurrences from 10,000
+nested programs. It found no counterexample. The test includes probe
+records. This is diagnostic evidence only; the general proof remains open.
