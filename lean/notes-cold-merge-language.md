@@ -1,5 +1,11 @@
 # Common-cache language laws for cold merge
 
+The later `MergedColdGraphTransport.accepts_stable` now proves exact raw
+cold-cache language transport. `MergedColdMergeOriginalLanguage` composes
+it with complete worker coverage. The common-cache lemmas below remain
+useful local composition laws. Their earlier missing transport obligation
+is discharged. See [original cold languages](notes-cold-graph-transport.md).
+
 `MergedColdMergeLanguage` supplies constructor and column laws for the
 cold operational worker. Every language in one law uses the same cache.
 The laws do not transport the raw graph of an earlier cold cache through

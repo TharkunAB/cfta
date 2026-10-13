@@ -42,6 +42,15 @@ existing worker proofs. Guard soundness and the Top guard interpretation
 remain explicit. Merge can widen a language, so the result claim is
 inclusion, while transport of an unchanged original record is equality.
 
+`MergedExposureOriginalLanguage.nodeEdges_exact` equates the original cold
+root language with the returned edges interpreted in the reader's actual
+final cache. `MergedComparisonOriginalLanguage.check_sound` gives inclusion
+between both original operand languages before a true comparison starts.
+`MergedSelectionOriginalLanguage.select_exact` equates the actual retained
+list language with the original input union language before any effects.
+These bridges use the proved transport theorem and the completed worker
+semantics. They require no new callback or warmup premise.
+
 The pinned Lean 4.34.1 build checks all five modules through
 `MergedColdMergeOriginalLanguage`. The isolated theorem-dependency audit
 allows only `propext`, `Classical.choice`, and `Quot.sound`. The modules do
