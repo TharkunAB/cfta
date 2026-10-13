@@ -52,7 +52,6 @@ import Data.Hashable (Hashable (..))
 import qualified Data.IntSet as IntSet
 import Data.List (compareLength, genericTake)
 import Data.Monoid (All (..))
-import Data.Semigroup (Max (..))
 import Data.Sequence (Seq ((:<|), (:|>)))
 import qualified Data.Sequence as Sequence
 import Data.String (IsString (..))
@@ -62,14 +61,11 @@ import Type.Reflection (Typeable, typeRep)
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EmptyConstraints),
     PathEClass (getPathTrie),
-    PathTrie,
-    getMaxNonemptyIndex,
-    isEmptyPathTrie,
+    PathTrie (PathTrie),
     isTerminalPathTrie,
-    pathTrieDescend,
     unsafeGetEclasses,
  )
-import Data.CFTA.Index (ChildIndex (..), Depth (..))
+import Data.CFTA.Index (Depth (..))
 import Data.CFTA.Internal.Tree (termLevelsBy)
 import Data.CFTA.Internal.UnionFind (UVar, UVarGen, UnionFind, intToUVar, uvarToInt)
 import qualified Data.CFTA.Internal.UnionFind as UnionFind
@@ -139,13 +135,22 @@ scGetPathTrie (SuspendedConstraint pt _) = pt
 scGetUVar :: SuspendedConstraint -> UVar
 scGetUVar (SuspendedConstraint _ uv) = uv
 
--- | Push suspended obligations through child index @i@ and drop empty paths.
-descendScs :: ChildIndex -> Seq SuspendedConstraint -> Seq SuspendedConstraint
-descendScs i scs =
-    Sequence.filter (not . isEmptyPathTrie . scGetPathTrie) $
-        fmap
-            (\(SuspendedConstraint pt uv) -> SuspendedConstraint (pathTrieDescend pt i) uv)
-            scs
+{- | Push suspended obligations into the children they reach, by child index.
+
+Each child gets its obligations in the order of the input. An obligation that
+reaches no child, because its paths end here, goes to no child.
+-}
+descendScs ::
+    (Foldable f) =>
+    IntMap.IntMap (Seq SuspendedConstraint) -> f SuspendedConstraint -> IntMap.IntMap (Seq SuspendedConstraint)
+descendScs = Foldable.foldl' descend
+  where
+    descend children (SuspendedConstraint (PathTrie tries) uv) =
+        IntMap.foldlWithKey'
+            (\m i pt -> IntMap.insertWith (flip (<>)) i (Sequence.singleton (SuspendedConstraint pt uv)) m)
+            children
+            tries
+    descend children _ = children
 
 -----------------------
 ------- UVarValue
@@ -518,16 +523,15 @@ enumerateEdge ::
     (Hashable symbol, Typeable symbol) =>
     Seq SuspendedConstraint -> Edge symbol -> EnumerateM symbol (TermFragment symbol)
 enumerateEdge scs e = do
-    -- With no constraints this is 'minBound', which passes the guard below,
-    -- as it should: nothing constrains how many children the edge needs.
-    let highestConstraintIndex =
-            getMax $ foldMap (\sc -> Max $ maybe (-1) (\(ChildIndex index) -> index) $ getMaxNonemptyIndex $ scGetPathTrie sc) scs
-    guard $ compareLength (edgeChildren e) highestConstraintIndex == GT
+    let inherited = descendScs IntMap.empty scs
+    -- The inherited obligations must fit the edge. Its own classes fit it.
+    guard $ maybe True (\(highest, _) -> compareLength (edgeChildren e) highest == GT) (IntMap.lookupMax inherited)
 
-    newScs <- Sequence.fromList <$> mapM pecToSuspendedConstraint (unsafeGetEclasses $ equalities $ edgeConstraint e)
-    let scs' = scs <> newScs
+    newScs <- mapM pecToSuspendedConstraint (unsafeGetEclasses $ equalities $ edgeConstraint e)
+    let children = descendScs inherited newScs
     fragment <-
-        TermFragmentNode (edgeSymbol e) <$> zipWithM (\i n -> enumerateNode (descendScs i scs') n) [0 ..] (edgeChildren e)
+        TermFragmentNode (edgeSymbol e)
+            <$> zipWithM (\i n -> enumerateNode (IntMap.findWithDefault Sequence.Empty i children) n) [0 ..] (edgeChildren e)
     when (residual (edgeConstraint e)) $
         modify' $
             \s -> s{_obligations = (edgeConstraint e, fragment) : _obligations s}
