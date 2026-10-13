@@ -34,6 +34,17 @@ theorem member_position (plan : Plan) (size rank : Nat)
       | succ size =>
           obtain ⟨part, found, same⟩ := ih size rank member
           exact ⟨⟨part.size + 1, part.rank⟩, by simp [position, found], by simpa using same⟩
+  | scale factor positive inner ih =>
+      simp only [classRanks] at member
+      split at member
+      next divisible =>
+        obtain ⟨part, found, same⟩ := ih (size / factor) rank member
+        refine ⟨⟨factor * part.size, part.rank⟩, by simp [position, found], ?_⟩
+        change factor * part.size = size
+        rw [same]
+        have := Nat.mod_add_div size factor
+        omega
+      next absent => simp at member
   | shared inner ih | map inner ih => exact ih size rank member
   | choice left right ihl ihr =>
       rcases List.mem_append.mp member with first | second
@@ -91,6 +102,11 @@ theorem class_nodup (plan : Plan) (size : Nat) : (classRanks plan size).Nodup :=
       by_cases same : size = 1 <;> simp [classRanks, same, List.nodup_range]
   | pure => by_cases same : size = 0 <;> simp [classRanks, same]
   | pay inner ih => cases size <;> simp [classRanks, ih]
+  | scale factor positive inner ih =>
+      simp only [classRanks]
+      split
+      · exact ih (size / factor)
+      · simp
   | shared inner ih | map inner ih => exact ih size
   | choice left right ihl ihr =>
       apply List.nodup_append.mpr
@@ -178,6 +194,7 @@ def maxSize : Plan → Nat
   | .select _ | .selectOnDemand _ => 1
   | .pure => 0
   | .pay inner => maxSize inner + 1
+  | .scale factor _ inner => factor * maxSize inner
   | .shared inner | .map inner => maxSize inner
   | .choice left right => max (maxSize left) (maxSize right)
   | .ap left right => maxSize left + maxSize right
@@ -201,6 +218,17 @@ theorem class_size_bound (plan : Plan) (size rank : Nat)
       cases size with
       | zero => simp [classRanks] at member
       | succ size => exact Nat.succ_le_succ (ih size rank member)
+  | scale factor positive inner ih =>
+      simp only [classRanks] at member
+      split at member
+      next divisible =>
+        have childBound := ih (size / factor) rank member
+        have scaled := Nat.mul_le_mul_left factor childBound
+        have restored : factor * (size / factor) = size := by
+          have := Nat.mod_add_div size factor
+          omega
+        simpa only [maxSize, restored] using scaled
+      next absent => simp at member
   | shared inner ih | map inner ih => exact ih size rank member
   | choice left right ihl ihr =>
       rcases List.mem_append.mp member with first | second

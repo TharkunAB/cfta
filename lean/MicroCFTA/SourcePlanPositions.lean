@@ -5,6 +5,7 @@ import MicroCFTA.PlanVariants
 
 Values are erased because planPosition reads only counts and sizes. Pure
 has size zero. Pay increments the selected size without changing its rank.
+Positive Scale multiplies each size and preserves both rank orders.
 Sized leaf rows use the existing complete bounded table model. Ordered
 choices are right-associated; each step adds the earlier class count.
 -/
@@ -18,6 +19,7 @@ inductive Plan where
   | selectOnDemand (count : Nat)
   | pure
   | pay (inner : Plan)
+  | scale (factor : Nat) (positive : 0 < factor) (inner : Plan)
   | shared (inner : Plan)
   | map (inner : Plan)
   | choice (left right : Plan)
@@ -28,7 +30,7 @@ inductive Plan where
 def count : Plan → Nat
   | .select total | .selectOnDemand total => total
   | .pure => 1
-  | .pay inner | .shared inner | .map inner => count inner
+  | .pay inner | .scale _ _ inner | .shared inner | .map inner => count inner
   | .choice left right => count left + count right
   | .ap left right => count left * count right
   | .sized classes bound => PlanVariants.count (.sized classes bound)
@@ -39,6 +41,8 @@ def classRanks : Plan → Nat → List Nat
   | .pure, size => if size = 0 then [0] else []
   | .pay _, 0 => []
   | .pay inner, size + 1 => classRanks inner size
+  | .scale factor _ inner, size =>
+      if size % factor = 0 then classRanks inner (size / factor) else []
   | .shared inner, size | .map inner, size => classRanks inner size
   | .choice left right, size => classRanks left size ++ (classRanks right size).map (count left + ·)
   | .ap left right, size =>
@@ -53,6 +57,7 @@ def position : Plan → Nat → Option Position
   | .select total, rank | .selectOnDemand total, rank => if rank < total then some ⟨1, rank⟩ else none
   | .pure, rank => if rank < 1 then some ⟨0, rank⟩ else none
   | .pay inner, rank => (position inner rank).map (fun part => ⟨part.size + 1, part.rank⟩)
+  | .scale factor _ inner, rank => (position inner rank).map (fun part => ⟨factor * part.size, part.rank⟩)
   | .shared inner, rank | .map inner, rank => position inner rank
   | .choice left right, rank =>
       if rank < count left then position left rank
@@ -76,6 +81,9 @@ theorem position_complete (plan : Plan) (rank : Nat) (valid : rank < count plan)
   | pay inner ih =>
       obtain ⟨part, found⟩ := ih rank valid
       exact ⟨⟨part.size + 1, part.rank⟩, by simp [position, found]⟩
+  | scale factor positive inner ih =>
+      obtain ⟨part, found⟩ := ih rank valid
+      exact ⟨⟨factor * part.size, part.rank⟩, by simp [position, found]⟩
   | shared inner ih | map inner ih => exact ih rank valid
   | choice left right ihl ihr =>
       by_cases first : rank < count left
@@ -103,6 +111,7 @@ theorem position_none (plan : Plan) (rank : Nat) (invalid : count plan ≤ rank)
       simp only [count] at invalid
       simp only [position, ite_eq_right (Nat.not_lt.mpr invalid)]
   | pay inner ih => simp [position, ih rank invalid]
+  | scale factor positive inner ih => simp [position, ih rank invalid]
   | shared inner ih | map inner ih => exact ih rank invalid
   | choice left right ihl ihr =>
       have first : ¬rank < count left := by simp only [count] at invalid; omega
@@ -150,6 +159,14 @@ theorem position_replay (plan : Plan) (rank : Nat) (part : Position)
           have same : part = ⟨old.size + 1, old.rank⟩ := by simpa [position, previous] using found.symm
           subst part
           exact ih rank old previous
+  | scale factor positive inner ih =>
+      cases previous : position inner rank with
+      | none => simp [position, previous] at found
+      | some old =>
+          have same : part = ⟨factor * old.size, old.rank⟩ := by
+            simpa [position, previous] using found.symm
+          subst part
+          simpa [classRanks, Nat.mul_div_cancel_left old.size positive] using ih rank old previous
   | shared inner ih | map inner ih => exact ih rank part found
   | choice left right ihl ihr =>
       simp only [position] at found
@@ -224,6 +241,11 @@ theorem class_rank_bound (plan : Plan) (size rank : Nat) (member : rank ∈ clas
       cases size with
       | zero => simp [classRanks] at member
       | succ size => exact ih size rank member
+  | scale factor positive inner ih =>
+      simp only [classRanks] at member
+      split at member
+      · exact ih (size / factor) rank member
+      · simp at member
   | shared inner ih | map inner ih => exact ih size rank member
   | choice left right ihl ihr =>
       rcases List.mem_append.mp member with first | second
