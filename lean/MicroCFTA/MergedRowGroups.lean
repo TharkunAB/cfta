@@ -8,32 +8,38 @@ HashMap iteration order. The output membership theorem does not fix that order.
 -/
 namespace MicroCFTA.MergedRowGroups
 
-/-- Keep the single distinct row, or replace multiple rows with the unconstrained row. -/
-def squash (top : Row) : List Row → List Row
-  | [] => []
-  | [row] => [row]
-  | _ :: _ :: _ => [top]
+/-- Preserve groups of at most four rows. Collapse larger groups to the unconstrained row. -/
+def squash (top : Row) (rows : List Row) : List Row :=
+  if rows.length ≤ 4 then rows else [top]
 
-/-- The source group branches in duplicate-free list form. -/
-theorem squash_member (top : Row) (rows : List Row) (distinct : rows.Nodup) (row : Row) :
+/-- The source tests whether the group has more than four edges. -/
+theorem squash_member (top : Row) (rows : List Row) (row : Row) :
     row ∈ squash top rows ↔
-      (row ∈ rows ∧ ∀ other ∈ rows, other = row) ∨
-      (row = top ∧ ∃ first ∈ rows, ∃ second ∈ rows, first ≠ second) := by
-  cases rows with
-  | nil => simp [squash]
-  | cons first rest =>
-      cases rest with
-      | nil => simp [squash, eq_comm]
-      | cons second rest =>
-          have different : first ≠ second := fun same =>
-            (List.nodup_cons.mp distinct).1 (by simp [same])
-          constructor
-          · intro member
-            have same : row = top := by simpa [squash] using member
-            exact Or.inr ⟨same, first, by simp, second, by simp, different⟩
-          · rintro (⟨_, only⟩ | ⟨rfl, _⟩)
-            · exact False.elim (different ((only first (by simp)).trans (only second (by simp)).symm))
-            · simp [squash]
+      (row ∈ rows ∧ rows.length ≤ 4) ∨ (row = top ∧ 4 < rows.length) := by
+  by_cases small : rows.length ≤ 4
+  · simp [squash, small, Nat.not_lt_of_ge small]
+  · have large : 4 < rows.length := by omega
+    simp [squash, small, large]
+
+/-- Every output group has at most four edges. -/
+theorem squash_bound (top : Row) (rows : List Row) : (squash top rows).length ≤ 4 := by
+  unfold squash
+  split <;> simp_all
+
+/-- Small groups preserve the exact original row order and spelling. -/
+theorem squash_small (top : Row) (rows : List Row) (small : rows.length ≤ 4) :
+    squash top rows = rows := by simp [squash, small]
+
+/-- Large groups contain exactly one unconstrained row. -/
+theorem squash_large (top : Row) (rows : List Row) (large : 4 < rows.length) :
+    squash top rows = [top] := by simp [squash, show ¬ rows.length ≤ 4 by omega]
+
+/-- Changing only the row representation commutes with the threshold branch. -/
+theorem squash_map (top : Row) (rows : List Row) (encode : Row → Code) :
+    squash (encode top) (rows.map encode) = (squash top rows).map encode := by
+  unfold squash
+  simp only [List.length_map]
+  split <;> rfl
 
 /-- Read the distinct complete rows at one source symbol. -/
 def rowsAt [DecidableEq Symbol] [BEq Row] (input : List (Symbol × Row)) (symbol : Symbol) : List Row :=
@@ -55,7 +61,8 @@ def grouped [DecidableEq Symbol] [BEq Row] (top : Row)
     (order : List Symbol) (input : List (Symbol × Row)) : List (Symbol × Row) :=
   order.flatMap fun symbol => (squash top (rowsAt input symbol)).map (symbol, ·)
 
-private theorem eraseDups_nodup [BEq Row] [LawfulBEq Row] (rows : List Row) : rows.eraseDups.Nodup := by
+/-- Complete-row duplicate removal returns a distinct list. -/
+theorem eraseDups_nodup [BEq Row] [LawfulBEq Row] (rows : List Row) : rows.eraseDups.Nodup := by
   cases rows with
   | nil => simp
   | cons first rest =>
@@ -66,34 +73,36 @@ private theorem eraseDups_nodup [BEq Row] [LawfulBEq Row] (rows : List Row) : ro
 termination_by rows.length
 decreasing_by exact Nat.lt_succ_of_le (List.length_filter_le ..)
 
-/-- The physical group output depends on distinct complete rows, not iteration order. -/
+/-- Grouping reads a duplicate-free list of complete rows. -/
+theorem rowsAt_nodup [DecidableEq Symbol] [BEq Row] [LawfulBEq Row]
+    (input : List (Symbol × Row)) (symbol : Symbol) : (rowsAt input symbol).Nodup :=
+  eraseDups_nodup _
+
+/-- The physical group output uses the exact four-edge threshold. -/
 theorem grouped_member [DecidableEq Symbol] [BEq Row] [LawfulBEq Row]
     (top : Row) (order : List Symbol) (input : List (Symbol × Row))
     (complete : ∀ symbol row, (symbol, row) ∈ input → symbol ∈ order)
     (symbol : Symbol) (row : Row) :
     (symbol, row) ∈ grouped top order input ↔
-      ((symbol, row) ∈ input ∧ ∀ other, (symbol, other) ∈ input → other = row) ∨
-      (row = top ∧ ∃ first second, (symbol, first) ∈ input ∧ (symbol, second) ∈ input ∧ first ≠ second) := by
-  have selection :=  squash_member top (rowsAt input symbol) (eraseDups_nodup _) row
+      ((symbol, row) ∈ input ∧ (rowsAt input symbol).length ≤ 4) ∨
+      (row = top ∧ 4 < (rowsAt input symbol).length) := by
+  have selection := squash_member top (rowsAt input symbol) row
   simp only [rowsAt_member] at selection
   constructor
   · intro member
     obtain ⟨actual, _, groupMember⟩ := List.mem_flatMap.mp member
     obtain ⟨other, rowMember, same⟩ := List.mem_map.mp groupMember
     obtain ⟨rfl, rfl⟩ := Prod.mk.inj same
-    rcases selection.mp rowMember with unique | ⟨same, first, a, second, b, different⟩
-    · exact Or.inl unique
-    · exact Or.inr ⟨same, first, second, a, b, different⟩
+    exact selection.mp rowMember
   · intro member
     have ordered : symbol ∈ order := by
-      rcases member with ⟨present, _⟩ | ⟨_, first, second, present, _⟩
+      rcases member with ⟨present, _⟩ | ⟨_, large⟩
       · exact complete symbol row present
-      · exact complete symbol first present
-    apply List.mem_flatMap.mpr
-    refine ⟨symbol, ordered, List.mem_map.mpr ⟨row, ?_, rfl⟩⟩
-    apply selection.mpr
-    rcases member with unique | ⟨same, first, second, a, b, different⟩
-    · exact Or.inl unique
-    · exact Or.inr ⟨same, first, a, second, b, different⟩
+      · cases selected : rowsAt input symbol with
+        | nil => simp [selected] at large
+        | cons first rest =>
+            exact complete symbol first ((rowsAt_member input symbol first).mp (by simp [selected]))
+    exact List.mem_flatMap.mpr ⟨symbol, ordered,
+      List.mem_map.mpr ⟨row, selection.mpr member, rfl⟩⟩
 
 end MicroCFTA.MergedRowGroups

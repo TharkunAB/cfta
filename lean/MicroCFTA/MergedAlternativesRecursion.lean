@@ -1,7 +1,10 @@
 import MicroCFTA.Language
 
 /-!
-# The recursive merge counterexample
+# Historical recursive merge counterexample
+
+This records the two-edge policy before PR98. The current four-edge threshold
+does not enter its column-union branch on this two-edge input.
 
 Let A accept a or f(A), and let B accept b or f(B). Their exposed union has
 two f edges. Merging that group requests the child union [A, B]. Before the

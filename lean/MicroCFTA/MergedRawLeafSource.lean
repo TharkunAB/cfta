@@ -92,6 +92,21 @@ def Complete (order : List (Fin symbols)) (value : Value (Fin symbols) Constrain
 theorem row_injective (first second : Row initial) (same : first.val.val = second.val.val) : first = second :=
   Subtype.ext (Subtype.ext same)
 
+/-- The physical group and finite carrier enumerate the same distinct complete rows. -/
+theorem rowsAt_perm (leaf : Leaf initial symbols) (value : Value (Fin symbols) ConstraintKey)
+    (state : State (Fin symbols) ConstraintKey) (facts : Facts state)
+    (represented : Represents build (.leaf leaf) state value) (symbol : Fin symbols) :
+    (MergedRowGroups.rowsAt (rows value) symbol).Perm
+      ((MergedRawLeaves.selected leaf symbol).map (fun row => row.val.val)) := by
+  have distinct : ((MergedRawLeaves.selected leaf symbol).map (fun row => row.val.val)).Nodup := by
+    rw [List.Nodup, List.pairwise_map]
+    exact (MergedRawLeaves.selected_distinct leaf symbol).imp
+      (fun different same => different (row_injective _ _ same))
+  apply (List.perm_ext_iff_of_nodup (MergedRowGroups.rowsAt_nodup _ _) distinct).mpr
+  intro guard
+  rw [MergedRowGroups.rowsAt_member, represented_rows leaf value state facts represented]
+  simp only [List.mem_map, MergedRawLeaves.selected_member]
+
 /-- Physical grouping selects exactly the merged finite raw predicate. -/
 theorem declarations_member (leaf : Leaf initial symbols) (value : Value (Fin symbols) ConstraintKey)
     (state : State (Fin symbols) ConstraintKey) (facts : Facts state)
@@ -101,28 +116,18 @@ theorem declarations_member (leaf : Leaf initial symbols) (value : Value (Fin sy
     (symbol, guard) ∈ declarations order value ↔
       ∃ row, MergedRawLeaves.merge leaf symbol row ∧ row.val.val = guard := by
   rw [declarations, MergedRowGroups.grouped_member _ _ _ complete]
+  have lengths := (rowsAt_perm leaf value state facts represented symbol).length_eq
+  simp only [List.length_map] at lengths
+  rw [lengths, represented_rows leaf value state facts represented]
   constructor
-  · rintro (⟨member, only⟩ | ⟨rfl, first, second, left, right, different⟩)
-    · obtain ⟨row, present, same⟩ := (represented_rows leaf value state facts represented symbol guard).mp member
-      refine ⟨row, Or.inl ⟨present, ?_⟩, same⟩
-      intro other member
-      apply row_injective
-      exact (only other.val.val ((represented_rows leaf value state facts represented symbol other.val.val).mpr
-        ⟨other, member, rfl⟩)).trans same.symm
-    · obtain ⟨leftRow, leftPresent, leftSame⟩ := (represented_rows leaf value state facts represented symbol first).mp left
-      obtain ⟨rightRow, rightPresent, rightSame⟩ := (represented_rows leaf value state facts represented symbol second).mp right
-      refine ⟨MergedRawLeaves.top initial, Or.inr ⟨rfl, leftRow, rightRow, leftPresent, rightPresent, ?_⟩, rfl⟩
-      intro same
-      exact different (leftSame.symm.trans ((congrArg (fun row : Row initial => row.val.val) same).trans rightSame))
-  · rintro ⟨row, ⟨present, only⟩ | ⟨rfl, first, second, left, right, different⟩, rfl⟩
-    · refine Or.inl ⟨(represented_rows leaf value state facts represented symbol row.val.val).mpr ⟨row, present, rfl⟩, ?_⟩
-      intro other member
-      obtain ⟨otherRow, otherPresent, same⟩ := (represented_rows leaf value state facts represented symbol other).mp member
-      exact same.symm.trans (congrArg (fun row : Row initial => row.val.val) (only otherRow otherPresent))
-    · refine Or.inr ⟨rfl, first.val.val, second.val.val,
-        (represented_rows leaf value state facts represented symbol first.val.val).mpr ⟨first, left, rfl⟩,
-        (represented_rows leaf value state facts represented symbol second.val.val).mpr ⟨second, right, rfl⟩,
-        fun same => different (row_injective first second same)⟩
+  · rintro (⟨⟨row, present, same⟩, small⟩ | ⟨rfl, large⟩)
+    · exact ⟨row, (MergedRawLeaves.merge_cases leaf symbol row).mpr (Or.inl ⟨present, small⟩), same⟩
+    · exact ⟨MergedRawLeaves.top initial,
+        (MergedRawLeaves.merge_cases leaf symbol _).mpr (Or.inr ⟨rfl, large⟩), rfl⟩
+  · rintro ⟨row, member, rfl⟩
+    rcases (MergedRawLeaves.merge_cases leaf symbol row).mp member with ⟨present, small⟩ | ⟨rfl, large⟩
+    · exact Or.inl ⟨⟨row, present, rfl⟩, small⟩
+    · exact Or.inr ⟨rfl, large⟩
 
 /-- Every output declaration already satisfies the raw nullary constructor checks. -/
 theorem declarations_admitted (leaf : Leaf initial symbols) (value : Value (Fin symbols) ConstraintKey)
@@ -259,5 +264,36 @@ theorem worker_actual (leaf : Leaf initial symbols) (value : Value (Fin symbols)
   have completed := worker_completed leaf value state facts represented order complete
   exact ⟨available.1, EqualityRawLeafPullback.represented_pullback (MergedRawLeaves.merge leaf)
     actual.2 _ available.1 completed.1 actual.1 available.2.resident completed.2.2⟩
+
+/-- The physical merged result has at most four distinct complete rows at each symbol. -/
+theorem worker_group_bound (leaf : Leaf initial symbols) (value : Value (Fin symbols) ConstraintKey)
+    (state : State (Fin symbols) ConstraintKey) (facts : Facts state)
+    (represented : Represents build (.leaf leaf) state value)
+    (order : List (Fin symbols)) (complete : Complete order value) (symbol : Fin symbols) :
+    (MergedRowGroups.rowsAt (rows (run (worker order value) state).1) symbol).length ≤ 4 := by
+  have actual := worker_actual leaf value state facts represented order complete
+  have lengths := (rowsAt_perm (MergedRawLeaves.merge leaf) (run (worker order value) state).1
+    (run (worker order value) state).2 actual.1 actual.2 symbol).length_eq
+  rw [lengths, List.length_map]
+  exact MergedRawLeaves.merged_bound leaf symbol
+
+/-- If all nullary groups have at most four rows, the worker retains the complete original node. -/
+theorem worker_small_record (leaf : Leaf initial symbols) (value : Value (Fin symbols) ConstraintKey)
+    (state : State (Fin symbols) ConstraintKey) (facts : Facts state)
+    (represented : Represents build (.leaf leaf) state value)
+    (order : List (Fin symbols)) (complete : Complete order value)
+    (small : ∀ symbol, (MergedRowGroups.rowsAt (rows value) symbol).length ≤ 4) :
+    (run (worker order value) state).1 = value := by
+  have unchanged : MergedRawLeaves.merge leaf = leaf := by
+    apply MergedRawLeaves.unchanged
+    intro symbol
+    have lengths := (rowsAt_perm leaf value state facts represented symbol).length_eq
+    simpa only [lengths, List.length_map] using small symbol
+  have actual := worker_actual leaf value state facts represented order complete
+  rw [unchanged] at actual
+  have growth := (InternedConstructorTemplates.run_correct (worker order value) state facts.coherent.valid).2
+  have old := EqualityLeafProjectionRepresentation.grows build (.leaf leaf) state _
+    facts.coherent.valid growth value represented
+  exact congrArg Prod.fst (actual.2.symm.trans old)
 
 end MicroCFTA.MergedRawLeafSource

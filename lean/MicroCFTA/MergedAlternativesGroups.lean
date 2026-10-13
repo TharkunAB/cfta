@@ -3,9 +3,9 @@ import MicroCFTA.Language
 /-!
 # Language coverage of merged alternative groups
 
-The source groups edges by symbol and arity. Singleton groups retain their
-guard. Larger groups use an unconstrained edge and the union of each child
-column. The recursive child calls have explicit language-coverage premises.
+The source groups edges by symbol and arity. Groups of at most four retain
+every root guard and recurse into each child. Larger groups use an
+unconstrained edge and the union of each child column. The recursive child calls have explicit language-coverage premises.
 This proves one group operation; it does not assume that the source recursion
 terminates or that physical interning has this semantic interpretation.
 -/
@@ -45,8 +45,8 @@ def EdgeAccepts (meaning : Node → Term Symbol → Prop) (edge : Edge Node Symb
   ∃ children, term = .node edge.label children ∧
     All₂ meaning edge.children children ∧ edge.guard term = true
 
-/-- The source singleton and multi-edge group branches. -/
-def mergeGroup (merge : Node → Node) (mergeUnion : List Node → Node) :
+/-- Historical worker before PR98: singleton retention and multi-edge collapse. -/
+def legacyMergeGroup (merge : Node → Node) (mergeUnion : List Node → Node) :
     List (Edge Node Symbol) → Option (Edge Node Symbol)
   | [] => none
   | [edge] => some {edge with children := edge.children.map merge}
@@ -60,15 +60,15 @@ def SameKey (edges : List (Edge Node Symbol)) : Prop :=
   ∀ first ∈ edges, ∀ second ∈ edges,
     first.label = second.label ∧ first.children.length = second.children.length
 
-/-- Both source group branches retain every original accepted term. -/
-theorem mergeGroup_covers (meaning : Node → Term Symbol → Prop)
+/-- Both historical group branches retain every original accepted term. -/
+theorem legacyMergeGroup_covers (meaning : Node → Term Symbol → Prop)
     (merge : Node → Node) (mergeUnion : List Node → Node)
     (mergeCovers : ∀ node term, meaning node term → meaning (merge node) term)
     (unionCovers : ∀ nodes node, node ∈ nodes → ∀ term, meaning node term → meaning (mergeUnion nodes) term)
     (edges : List (Edge Node Symbol)) (sameKey : SameKey edges)
     (original : Edge Node Symbol) (member : original ∈ edges)
     (term : Term Symbol) (accepted : EdgeAccepts meaning original term) :
-    ∃ result, mergeGroup merge mergeUnion edges = some result ∧ EdgeAccepts meaning result term := by
+    ∃ result, legacyMergeGroup merge mergeUnion edges = some result ∧ EdgeAccepts meaning result term := by
   cases edges with
   | nil => simp at member
   | cons first rest =>
@@ -92,14 +92,14 @@ theorem mergeGroup_covers (meaning : Node → Term Symbol → Prop)
               obtain ⟨node, member, accepted⟩ := accepted
               exact unionCovers nodes node member term accepted) _ children covered
 
-/-- Distinct guarded nullary alternatives can reject a term that their merged edge accepts. -/
-theorem nullary_guard_widening :
+/-- Historical two-edge collapse can enlarge a constrained nullary language. -/
+theorem legacy_nullary_guard_widening :
     let first : Edge Unit Unit := ⟨(), [], fun _ => false⟩
     let second : Edge Unit Unit := ⟨(), [], fun | .node _ children => !children.isEmpty⟩
     let term : Term Unit := .node () []
     first ≠ second ∧ ¬EdgeAccepts (fun _ _ => True) first term ∧
     ¬EdgeAccepts (fun _ _ => True) second term ∧
-    ∃ result, mergeGroup id (fun _ => ()) [first, second] = some result ∧
+    ∃ result, legacyMergeGroup id (fun _ => ()) [first, second] = some result ∧
       EdgeAccepts (fun _ _ => True) result term := by
   refine ⟨?_, ?_, ?_, _, rfl, [], rfl, .nil, rfl⟩
   · intro same
@@ -108,5 +108,69 @@ theorem nullary_guard_widening :
     cases impossible
   · simp [EdgeAccepts]
   · simp [EdgeAccepts]
+
+/-- The current source preserves at most four edges and collapses a larger group. -/
+def mergeGroup (merge : Node → Node) (mergeUnion : List Node → Node)
+    (edges : List (Edge Node Symbol)) : List (Edge Node Symbol) :=
+  if edges.length ≤ 4 then edges.map (fun edge => {edge with children := edge.children.map merge})
+  else match edges with
+  | [] => []
+  | edge :: rest => [{
+      label := edge.label
+      children := (columns ((edge :: rest).map Edge.children) edge.children.length).map mergeUnion
+      guard := fun _ => true}]
+
+/-- At a small root group every original edge and guard remains in source order. -/
+theorem mergeGroup_small (merge : Node → Node) (mergeUnion : List Node → Node)
+    (edges : List (Edge Node Symbol)) (small : edges.length ≤ 4) :
+    mergeGroup merge mergeUnion edges = edges.map (fun edge => {edge with children := edge.children.map merge}) := by
+  simp [mergeGroup, small]
+
+/-- The current root-group output satisfies the source four-edge pairing bound. -/
+theorem mergeGroup_bound (merge : Node → Node) (mergeUnion : List Node → Node)
+    (edges : List (Edge Node Symbol)) : (mergeGroup merge mergeUnion edges).length ≤ 4 := by
+  unfold mergeGroup
+  split
+  · simpa
+  · cases edges <;> simp
+
+/-- Small root groups are exact when the child transformation is the identity. -/
+theorem mergeGroup_identity (mergeUnion : List Node → Node)
+    (edges : List (Edge Node Symbol)) (small : edges.length ≤ 4) :
+    mergeGroup id mergeUnion edges = edges := by
+  rw [mergeGroup_small _ _ _ small]
+  simp
+
+/-- Both current source branches retain every original accepted term. -/
+theorem mergeGroup_covers (meaning : Node → Term Symbol → Prop)
+    (merge : Node → Node) (mergeUnion : List Node → Node)
+    (mergeCovers : ∀ node term, meaning node term → meaning (merge node) term)
+    (unionCovers : ∀ nodes node, node ∈ nodes → ∀ term, meaning node term → meaning (mergeUnion nodes) term)
+    (edges : List (Edge Node Symbol)) (sameKey : SameKey edges)
+    (original : Edge Node Symbol) (member : original ∈ edges)
+    (term : Term Symbol) (accepted : EdgeAccepts meaning original term) :
+    ∃ result ∈ mergeGroup merge mergeUnion edges, EdgeAccepts meaning result term := by
+  by_cases small : edges.length ≤ 4
+  · rw [mergeGroup_small _ _ _ small]
+    obtain ⟨children, termEqual, childRuns, guard⟩ := accepted
+    refine ⟨{original with children := original.children.map merge}, List.mem_map.mpr ⟨original, member, rfl⟩,
+      children, termEqual, ?_, guard⟩
+    exact all₂_map meaning meaning merge mergeCovers original.children children childRuns
+  · cases edges with
+    | nil => simp at member
+    | cons first rest =>
+        obtain ⟨children, termEqual, childRuns, _⟩ := accepted
+        obtain ⟨label, arity⟩ := sameKey original member first (by simp)
+        simp only [mergeGroup, small, ↓reduceIte]
+        refine ⟨⟨first.label, (columns ((first :: rest).map Edge.children) first.children.length).map mergeUnion,
+          fun _ => true⟩, by simp, children, ?_, ?_, rfl⟩
+        · simpa only [label] using termEqual
+        · have covered := columns_cover meaning
+            ((first :: rest).map Edge.children) original.children children
+            (List.mem_map.mpr ⟨original, member, rfl⟩) childRuns
+          rw [arity] at covered
+          exact all₂_map _ meaning mergeUnion (fun nodes term accepted => by
+            obtain ⟨node, member, accepted⟩ := accepted
+            exact unionCovers nodes node member term accepted) _ children covered
 
 end MicroCFTA.MergedAlternativesGroups

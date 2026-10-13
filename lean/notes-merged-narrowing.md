@@ -1,21 +1,28 @@
 # Merged equality narrowing
 
-Updated: 2026-10-13. Source refresh: `4d51f03` and `8ac24bb`.
+Updated: 2026-10-13. Current source: `4897831`, including PR98.
+Earlier checkpoints below identify the previous single-edge merge policy.
 
 ## Source change
 
 `reduceEClass` now calls `mergeAlternatives` on every peer projection before
 the target intersection. The merge groups ordinary edges by symbol and arity.
-It preserves the constraint of a singleton group. It drops the constraints of
-a larger group and unions the children at each position.
+It preserves every root edge and constraint when the group has at most four
+distinct edges. It drops the root constraints when a group has more than four
+edges and unions the children at each position. Both branches process children.
+
+A preserved small root group can still enlarge its language when a descendant
+group is merged. Exact preservation of a small group requires exact child
+transformations. Nullary small groups preserve their complete original records.
 
 This is an overapproximation. It can enlarge a language even at arity zero or
 one, because it drops constraints. The complete equality reduction can still
 preserve its language: the original edge constraints remain, and each edit
 intersects the original node with the enlarged peer target.
 
-## Repaired recursive call cycle
+## Repaired recursive call cycle and historical witness
 
+Before PR98, the smallest example used two recursive operands.
 Let `A = mu x. {a(), f(x)}` and `B = mu y. {b(), f(y)}`. Both are closed and
 productive. `union [A, B]` exposes four alternatives, including `f(A)` and
 `f(B)`. Merging those two alternatives calls `mergedUnion [A, B]`. Both
@@ -27,7 +34,7 @@ The same failure occurs when the recursive children are retained
 `InternedUnion` values. A guard that checks only `InternedMu` does not cover
 that second case.
 
-The local repair changes the multi-operand branch:
+The upstream repair changes the multi-operand branch:
 
 - If a retained operand satisfies `recursiveBoundary`, return `union others`.
 - Otherwise, continue with `mergeAlternatives (union others)`.
@@ -38,6 +45,12 @@ that exposure. Thus it does not reproduce the same merge request. The result
 can retain multiple alternatives below that boundary. The Haddock now states
 this limit. Its edge-pairing bound applies at a merged ordinary root; it does
 not claim a bound by the smaller input or a bound below recursive boundaries.
+
+PR98 now preserves that two-edge group. The retained current probe uses five
+recursive operands with different base leaves. Their five `f` alternatives
+enter the large-group branch and produce the same recursive child-union
+request. The repair remains necessary. `MergedAlternativesThreshold` records
+this current five-operand branch and its finite repaired dependency tree.
 
 This repair does not prove termination of `subsumes`, recursive node exposure,
 all merge executions, or repeated equality passes. Those are separate claims.
@@ -53,17 +66,23 @@ nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=micro
 nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta lean/repro/MergedNarrowing.hs union'
 ```
 
-Before the repair, both invocations stop at `merged root completed: Nothing`.
-After the repair, all five checks return `Just True` in both invocations.
-Each invocation compares membership of 27 unary terms, through eight `f`
-constructors. It also checks the result of a parent `reduceEqConstraints`
-call. The nullary example uses the distinct raw guards `Not Top` and
-`Not (Or [Top])`; both are false, but their merged constraint is `Top`.
+The earlier two-operand probes timed out before the repair. They are historical
+evidence for the old policy. The current invocations use five recursive
+operands and assert that their five `f` edges become one. All eleven checks
+pass in both modes. Each mode checks 54 unary terms through eight `f`
+constructors and the constrained parent caller.
 
-The core library build, both retained probe invocations, and Fourmolu checks
-passed. The focused log is `/tmp/mcfta-merged-narrowing-repro.log`. All 620 existing Haskell examples pass after the repair. Both changed
-production files pass Fourmolu; both active Cabal files pass Cabal-gild.
-Log: `/tmp/mcfta-20261013-merge-repair-tests.log`.
+The current nullary probe uses five distinct false raw guards of the form
+`Not (Or (replicate n Top))`, for `n` from one through five. Four guards retain
+the exact original node. Repeated copies of those four guards do not trigger a
+merge. Five distinct guards become one Top row and admit the previously
+rejected nullary term. A singleton parent with that five-row child demonstrates
+that the small-group branch still processes its children.
+
+Fourmolu formatting passed. Both current probe modes passed in
+`/tmp/mcfta-20261013-four-edge-merge-replay.log`. All 620 existing Haskell examples
+passed after the source refresh in
+`/tmp/mcfta-20261013-upstream-refresh-tests.log`.
 
 ## Checked Lean results
 
@@ -93,15 +112,26 @@ finite-run semantics, and the proof decreases accepted term height.
 
 - `columns_cover` derives coverage by the column unions from each original
   accepted row.
-- `mergeGroup_covers` covers both source group branches, including singleton
-  guard retention and multi-edge guard removal. It requires coverage from
-  the child merge calls. It does not assume exact child equality.
-- `nullary_guard_widening` uses distinct semantic guards and proves that its
-  two input edges differ. Both guards reject the nullary term. One guard
-  accepts a unary term, which proves the edge inequality even though this
-  term has the wrong arity for either edge. Thus duplicate-edge removal
-  cannot remove this semantic group witness. The source probe separately
-  checks the distinct raw guard syntax described above.
+- `mergeGroup_covers` covers both current branches. At most four root edges
+  keep their guards; larger groups collapse to an unconstrained edge. The
+  result is a list because a small group can retain multiple edges.
+- `mergeGroup_bound` proves at most four output edges per symbol/arity group.
+  `mergeGroup_small` gives exact root-edge retention and child transformation.
+  `mergeGroup_identity` proves exact small-group retention for identity child
+  transformations. Coverage alone does not imply exactness.
+- `legacyMergeGroup`, `legacyMergeGroup_covers`, and
+  `legacy_nullary_guard_widening` retain the previous policy and its two-edge
+  semantic witness. They do not describe PR98.
+
+`MergedAlternativesThreshold`:
+
+- `four_rows`, `five_rows`, and `duplicate_rows` check the exact boundary and
+  complete-row duplicate handling.
+- `rejecting_distinct` and `five_guard_widening` give a current semantic
+  witness with five distinct edge guards, each rejecting the nullary term.
+- `recursive_group_merges` checks that five recursive alternatives enter the
+  current merged branch. `five_without_repair` retains the resulting call
+  cycle obstruction, and `five_repaired` gives its finite dependency tree.
 
 `MergedEqualityReduction`:
 
@@ -114,7 +144,7 @@ finite-run semantics, and the proof decreases accepted term height.
 - `constrained_reduce_exact` proves the same for any completed repetition.
   It does not assert that the repetition completes.
 
-`MergedAlternativesRecursion`:
+`MergedAlternativesRecursion` retains the historical two-edge policy:
 
 - `childColumn_eq` computes the offending `[A, B]` column.
 - `legacy_no_completion` proves that the two mandatory legacy call sites
@@ -128,8 +158,12 @@ interpreter for all Haskell evaluations or an extracted interning machine.
 
 - `top` constructs the new unconstrained row inside the existing finite
   source inventory.
-- `merge` retains one exact row or replaces multiple distinct rows with Top.
-- `unique`, `support`, `unchanged`, and `idempotent` describe that row operation.
+- `selected` enumerates the distinct selected complete rows. `merge` uses the
+  literal length threshold: at most four rows stay; more than four become Top.
+- `selected_distinct`, `small_exact`, `support`, `unchanged`, and `idempotent`
+  describe the current operation. `merged_bound` proves at most four distinct
+  output rows per symbol. The previous one-row uniqueness claim is false for
+  preserved groups of two through four rows and has been removed.
 - `covers` proves semantic coverage when Top holds.
 - `merged_target_progress` reuses the derived source rank for intersection
   against the merged target. This is a local progress result.
@@ -142,7 +176,9 @@ interpreter for all Haskell evaluations or an extracted interning machine.
   identity normalization and coherent edge records.
 - `declarations_member` proves that grouping those physical records selects
   exactly `MergedRawLeaves.merge`. Grouping counts distinct raw guards, not
-  semantic guard equivalence. The singleton keeps its raw spelling.
+  semantic guard equivalence. Every small-group row keeps its raw spelling.
+  `rowsAt_perm` derives equality of the physical and finite-carrier distinct
+  row counts, so the threshold premise is not assumed.
 - `worker` executes the actual nullary `makeEdge` and `makeNode` requests.
   `worker_eq_raw` proves that no sentinel or rejected request can occur here.
 - `worker_keys` derives the exact output key set. `worker_record` derives
@@ -151,6 +187,9 @@ interpreter for all Haskell evaluations or an extracted interning machine.
 - `worker_completed` constructs a finite proof cache for the compiled output.
   `worker_actual` pulls that representation back to the actual runtime output
   cache. Thus the next runtime operation needs no proof-cache entries.
+- `worker_group_bound` proves the four-row bound on the actual returned
+  physical records. `worker_small_record` proves complete-node equality when
+  every input nullary group has at most four distinct rows.
 
 The symbol order is explicit. It must cover every physical input symbol.
 It may be the actual HashMap order. A fixed finite symbol enumeration also
@@ -159,14 +198,15 @@ not depend on the selected order. The grouping model deduplicates complete
 raw rows explicitly; the canonical-input theorem derives that this cannot
 change the branch on a represented source leaf.
 
-All seven modules build with Lean 4.34.1. Include them in the root audit
-before claiming a complete audit pass.
+The current threshold modules and the downstream projection order, language,
+pass, termination, and bound modules build with Lean 4.34.1. Add the new
+`MergedAlternativesThreshold` import before claiming a complete audit pass.
 
 ## Correspondence boundary after the source refresh
 
 The old `EqualityLeafProjectionSnapshotTargets.target` reads and intersects
 peer projections without a merge. It therefore does not model the current
-target worker on unrestricted raw leaves. For example, two different rows
+target worker on unrestricted raw leaves. For example, five different rows
 at the same nullary symbol now become one Top row before intersection.
 
 The existing raw constructor, intersection, union, finite-inventory, and
@@ -182,8 +222,9 @@ endpoints, and requires complete symbol order for physical grouping.
 This covers the physical merged leaf worker and schedule. It does not prove
 unrestricted recursive merging or nested-endpoint fixed schedules. The
 finite semantic graph view, host evaluation, containers, and Haskell extraction
-remain separate correspondence obligations. The full Lean audit passes
-849 jobs and 33,472 theorem dependency checks.
+remain separate correspondence obligations. The previous full audit passed
+849 jobs and 33,472 theorem dependency checks before this threshold refresh;
+those figures are historical evidence.
 
 `MergedProjectionOrder.observed_complete` derives a complete symbol order
 directly from actual outgoing rows. `same_record` proves that any two complete
