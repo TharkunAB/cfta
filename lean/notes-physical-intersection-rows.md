@@ -69,6 +69,6 @@ remain open. See [first-order shared rows](notes-first-order-shared-rows.md).
 membership and ordinary-root deep callback observations, including nested
 children. General cached-depth and binder-heap induction remain open.
 
-Checkpoints: `70795677`, `0bc6806e`, `aca84882`, `7e942dde`, `9207c2cf`, `93f3cbaa`, and `e9214aa6`.
-The closing audit passes 1,193 targets and 39,907 theorem dependency checks.
-Log: `/tmp/mcfta-first-order-20261014-audit.log`.
+Checkpoints: `70795677`, `0bc6806e`, `aca84882`, `7e942dde`, `9207c2cf`, `93f3cbaa`, `e9214aa6`, and `49498845`.
+The closing audit passes 1,195 targets and 39,965 theorem dependency checks.
+Log: `/tmp/mcfta-cold-shared-20261014-audit.log`.

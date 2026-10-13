@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 01:36 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 01:49 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -11,8 +11,9 @@ older next-target statements. `lean/FINDINGS.md` retains historical findings.
 
 The current continuation refreshed upstream and completed the finite optimized
 Sized inverse proof, recursive knot construction, and first-order shared rows.
+It also proves exact finite trace/executor correspondence for the stateful cold walk.
 **No background proof worker is active.**
-The latest proof checkpoint is **`e9214aa6`**. A later documentation commit
+The latest proof checkpoint is **`49498845`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -37,7 +38,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **34% at 01:37 CEST**. This is a historical value.
+The last observed value was **34% at 01:49 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -227,14 +228,26 @@ raw tables is not proved. Read `lean/notes-first-order-shared-rows.md` before
 extending this boundary.
 See `lean/notes-physical-intersection-rows.md` and `lean/notes-shared-rows.md`.
 
+
+`SourceColdSharedRows*` now models the actual stateful cold worklist without
+a fixed input heap. Each source row read retains its exact cache effects.
+Finite traces and successful executable runs correspond in both directions,
+with stable finite outer/read fuel bounds. The proofs retain coherent cache
+histories, first rows, resident closed children, distinct discovered keys, and
+closure of all new nonempty children. A finite completed trace remains a
+premise. General cold-walk termination and final-table language correspondence
+remain open. See [cold shared rows](lean/notes-cold-shared-rows.md).
+
 ## Remaining priorities
 
-1. Prove the actual stateful cold shared traversal without assuming a fixed
-   exposure heap. Retain each `nodeEdges` cache effect and visited identity.
-   Derive finite execution, then connect native cyclic product rows. First-order
-   construction, finite cold single-root reads, and warmed shared rows are now
-   proved. Do not repeat a fixed-snapshot language proof or assume warmup keeps
-   native cold allocation order. The raw-map Sized contract is already proved.
+1. Prove final-table language correspondence for `SourceColdSharedRows.Trace`.
+   Transport each actual read's root and child acceptance equations through
+   later cache growth. Derive the final output graph from `Trace.correct`,
+   `Trace.pending_done`, `Trace.closed`, and `Trace.discovery`. Then derive
+   unconditional cold-walk termination and native cyclic product rows.
+   Read `lean/notes-cold-shared-rows.md`. `Trace.finite` assumes a finite trace;
+   it does not prove general termination. Do not repeat a fixed-snapshot proof
+   or assume warmup keeps native cold allocation order. Sized is already proved.
 2. Complete repaired cached-depth/deep heap induction. `InternedDepthFreeProjection*`
    now proves full-syntax free-name membership and ordinary-root callback deep
    observations with nested children. `callback_observed` derives observations
@@ -283,10 +296,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,193 jobs and 39,907 theorem dependency checks**.
+The current build passes **1,195 jobs and 39,965 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-first-order-20261014-audit.log`.
+Log: `/tmp/mcfta-cold-shared-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -320,6 +333,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `49498845` | Exact stateful cold traces, finite executable correspondence, and discovered key closure. |
 | `e9214aa6` | First-order source completion, finite cold exposure, prepared shared rows, and exact size classes. |
 | `93f3cbaa` | Actual recursive knot construction, shared rows, and exact Sized classes. |
 | `51242646` | Finite optimized inverse queries on original map keys. |

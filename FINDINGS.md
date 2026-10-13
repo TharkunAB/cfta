@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 01:36 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 01:49 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -99,6 +99,16 @@ open, as do nested binder construction and native cyclic product rows.
 See [first-order shared rows](lean/notes-first-order-shared-rows.md) and
 [physical intersection](lean/notes-physical-intersection-rows.md).
 
+
+`SourceColdSharedRows*` now models the actual stateful cold worklist without
+a fixed input heap. Each source row read retains its exact cache effects.
+Finite traces and successful executable runs correspond in both directions,
+with stable finite outer/read fuel bounds. The proofs retain coherent cache
+histories, first rows, resident closed children, distinct discovered keys, and
+closure of all new nonempty children. A finite completed trace remains a
+premise. General cold-walk termination and final-table language correspondence
+remain open. See [cold shared rows](lean/notes-cold-shared-rows.md).
+
 `InternedDepthFreeProjection*` proves full-syntax free-name membership
 agreement and actual ordinary-root callback deep observations with nested
 children. General cached-depth and binder-heap induction remain open.
@@ -135,16 +145,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`e9214aa6`**; later commits record this handoff.
+The latest proof checkpoint is **`49498845`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,193 build targets and 39,907 theorem
+The current Lean 4.34.1 audit passes **1,195 build targets and 39,965 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-first-order-20261014-audit.log`.
+Log: `/tmp/mcfta-cold-shared-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **34% at 01:37 CEST**.
+No background proof worker is active. Weekly allowance was **34% at 01:49 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

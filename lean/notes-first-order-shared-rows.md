@@ -78,10 +78,11 @@ preparation invariant for all source syntax remains open.
 
 Warmup is explicit. The source `reachable` function does not run that warmup
 before its cold traversal. These proofs do not equate the two allocation
-orders or their raw tables. The next target is the actual stateful cold shared
-walk: retain each `nodeEdges` cache effect, record each visited identity, and
-derive finite execution without assuming a fixed heap. Then connect the
-native cyclic product rows. Do not replace this obligation with another
+orders or their raw tables. The stateful cold shared walk now has exact
+finite trace and executable correspondence. See
+[the cold worklist note](notes-cold-shared-rows.md). Final-table language
+correspondence and unconditional termination remain open. Then connect
+native cyclic product rows. Do not replace these obligations with another
 fixed-snapshot language theorem.
 
 The first-order Sized composition uses the returned row order. The existing
@@ -96,9 +97,9 @@ core is unchanged.
 
 ## Validation
 
-The aggregate Lean 4.34.1 build passes 1,193 jobs and checks dependencies of
-39,907 theorems. Only `propext`, `Classical.choice`, and `Quot.sound` are
-permitted. All eight new modules are in `MicroCFTA/Audit.lean`.
-Log: `/tmp/mcfta-first-order-20261014-audit.log`.
+The aggregate Lean 4.34.1 build passes 1,195 jobs and checks dependencies of
+39,965 theorems. Only `propext`, `Classical.choice`, and `Quot.sound` are
+permitted. The first-order and cold worklist modules are in `MicroCFTA/Audit.lean`.
+Log: `/tmp/mcfta-cold-shared-20261014-audit.log`.
 No Haskell source changed in this checkpoint. The earlier 640 passing Nix
 examples and formatting checks remain the current source validation.

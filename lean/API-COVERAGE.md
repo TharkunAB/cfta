@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 01:37 CEST**, upstream `f59c198d`.
-The latest proof commit is `e9214aa6`. No background proof worker is active.
+Current checkpoint: **2026-10-14 01:49 CEST**, upstream `f59c198d`.
+The latest proof commit is `49498845`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -51,6 +51,10 @@ and fixed-cache shared rows for arbitrary binder-free trees and unions.
 finite evaluation, size order, bounded coverage, and both inverses after explicit
 finite warmup. Native cold shared traversal allocation order remains open.
 See [first-order shared rows](notes-first-order-shared-rows.md).
+`SourceColdSharedRows*` now retains the actual stateful read effects and proves
+finite-trace/executor correspondence, first-row preservation, discovered keys,
+and new child closure. General termination and final-table language remain
+open. See [cold shared rows](notes-cold-shared-rows.md).
 Nested binder construction, native cyclic product rows, pending memo values,
 and complete recursive memo-effect traces remain open. Free-name projection and ordinary-root deep
 observations are derived; general cached-depth and binder-heap induction
@@ -65,7 +69,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,193 targets and 39,907 theorem dependency checks**
+The current audit passes **1,195 targets and 39,965 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new
