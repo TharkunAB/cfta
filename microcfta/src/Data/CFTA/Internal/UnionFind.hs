@@ -23,6 +23,7 @@ module Data.CFTA.Internal.UnionFind (
     find,
 ) where
 
+import Control.Monad (when)
 import Control.Monad.State.Strict (State, execState, get, modify', put, runState)
 import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
@@ -117,8 +118,9 @@ findRoot uv = do
             (rep, size) <- findRoot p
             -- Compress against the state the recursive call left behind,
             -- not against @m@: the rest of the chain was compressed there,
-            -- and rebuilding from @m@ would discard it.
-            modify' (setEntry uv (Parent rep))
+            -- and rebuilding from @m@ would discard it. A variable whose
+            -- parent is the root already has its entry.
+            when (p /= rep) $ modify' (setEntry uv (Parent rep))
             return (rep, size)
 
 -- | Find a variable's representative and return the path-compressed forest.
