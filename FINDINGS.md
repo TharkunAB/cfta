@@ -1,40 +1,70 @@
 # Current formalization findings
 
-Updated: **2026-10-13 21:18 CEST**.
+Updated: **2026-10-13 21:56 CEST**.
 
-The main language and rank algorithms have a broad checked foundation, but
-**end-to-end source verification is not complete**. Upstream now implements
-most of the requested exact-size interface and bounded preprocessing. The
-next proofs should connect those paths to the main language, termination,
-size-order, and rank/unrank theorems.
+The primary `Data.CFTA.Sized` source models now cover exact accepted terms at
+each node-count size, finite class evaluation, size-major prefixes, and both
+distinct-term rank/unrank inverse laws. The decided path preserves the first
+Unknown error and requires explicit per-call evaluator contracts. Replies
+to repeated queries may differ. Every successful relational trace is exact
+under per-call adequacy. Finite per-call result witnesses give a finite
+bounded result, including errors.
+**Whole-implementation verification remains incomplete.**
 
-The implementation is rebased onto `origin/microcfta` at **`2200117`**.
-All **339 local commits** replayed without conflicts. All **1,345 preserved
-Lean-tree files** matched their SHA-256 manifest immediately after rebase.
-Backup `backup/formalization-before-wishlist-refresh-20261013-2109` retains
-the old head `5eabb31`. The untracked fixture also has a copy under
-`/tmp/mcfta-rebase-20261013-2109/`. All proofs, counterexamples, drafts,
-stashes, backups, and other worktrees remain preserved.
+Upstream refresh reported no change: `origin/microcfta` remains **`2200117`**.
+The starting checkpoint `f8a3d48` is preserved on
+`backup/formalization-before-sized-resume-20261013-2123`. All earlier proofs,
+counterexamples, repairs, three marked drafts, stashes, and other worktrees
+remain. The untracked `lean/repro/NestedUnaryTwoAtom.hs` is unchanged.
 
-Rebased checked proof commit: **`f10fa11`** (formerly `073c10c`). Commit
-**`1a8a27e`** (formerly `78d3d27`) preserves two marked drafts. The refreshed
-aggregate audit passes **1,026 jobs and 36,839
-theorem dependency checks**, with only `propext`, `Classical.choice`, and
-`Quot.sound`. Log: `/tmp/mcfta-20261013-2109-rebase-lean.log`.
-All **633 existing Haskell examples** pass with both local source repairs:
-285 core, 204 generator, and 144 refinement. Test log:
-`/tmp/mcfta-20261013-2109-rebase-tests.log`. Fourmolu and cabal-gild checks pass;
-see `/tmp/mcfta-20261013-2109-rebase-format.log`.
-Counts and tests are validation evidence, not a coverage percentage.
-No Lean theorem changed in this refresh. The new source needs the bridges below.
+## Current exact-size results and repair
 
-All workers are stopped. No new work was pushed, deployed, or posted.
-The latest weekly allowance snapshot was **62% at 21:17 CEST**; refresh it at restart and
-stop all work at 1% or less. [HANDOFF.md](HANDOFF.md) records exact files,
-commands, proof boundaries, and evidence. [NEXT-PROMPT.md](NEXT-PROMPT.md)
-is the next-agent prompt.
+Two native and kernel-checked examples show that the former optimized Sized
+path changed ranks. `fromFTA` can remove dead or duplicate transitions, which
+can change canonical row order. Checking that trimming changes nothing does
+not cover the duplicate case.
 
-## New source: wishlist coverage and main theorem status
+Local repair **`ea73724b`** sends the original sorted explicit rows to the
+existing optimized count table and bottom-up inverse. It checks ambiguity
+with a finite synchronous product. Constrained or ambiguous graphs use the
+reference. The interned core remains intact. `SourceSizedDispatcher.sized_eq_reference`
+proves equality of the complete query records and residual errors for the two
+branches. This direct query path no longer depends on `fromFTA` or `rowsOf`.
+
+The checked reference recurrence includes actual candidate order, equality
+path traversal, first-occurrence duplicate removal, finite evaluation, signed
+invalid queries, and the residual scan on trimmed rows. Successful decided
+tables preserve the exact original reference order through their bound.
+Empty classes do not suppress later sizes. `SourcePlanScale` extends the
+existing partition proofs with positive repeated-child node counts.
+`BoundedPruningFix` and `BoundedPruningCaller` prove the current local loop
+bounds and preservation under explicit per-call contracts.
+
+Read [the Sized proof note](lean/notes-source-sized.md) for the theorem map,
+both order counterexamples, source repair, validation, and exact boundaries.
+The source models do not verify concrete Haskell containers, lazy heaps,
+machine conversions, solver IO, or extraction.
+
+The aggregate audit passes **1,052 jobs and 37,335 theorem dependency checks**.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
+Log: `/tmp/mcfta-sized-20261013-final-audit.log`.
+The generator suite passed **206 examples**, including two temporary
+regression cases. The permanent suite remains unchanged at 204 examples.
+Both native counterexamples are retained. Fourmolu and cabal-gild passed in
+Nix. No new production test case was committed. Counts are validation
+evidence, not a coverage percentage.
+
+All proof workers are stopped. All work remains local. Weekly allowance was **58% at 21:55 CEST**; refresh it
+with `/tmp/mcfta-weekly-usage.py` and stop all work at 1% or less.
+[HANDOFF.md](HANDOFF.md) and [NEXT-PROMPT.md](NEXT-PROMPT.md) contain the current
+restart instructions. The preserved constructor and equality work remains
+secondary to the direct exact graph contracts.
+
+## Previous restart review: source wishlist and initial proof gaps
+
+This section records the `f8a3d48` restart review before the local Sized repair.
+Its next-target statements are historical. The current results above and the
+Sized proof note supersede them.
 
 PRs #107, #109, #110, #111, #112, and #113 address most of the source wishlist.
 The explicit-graph decision keeps the optimized interned core. It does not

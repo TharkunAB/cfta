@@ -1,251 +1,155 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-13 21:18 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 21:56 CEST (Europe/Stockholm)**.
 
-## Read first
+## Current result and read order
 
-The formalization is **not complete**. This checkpoint rebases the proofs onto
-the new exact-size APIs and records the next proof targets. All proof workers
-are stopped. Do not rely on former worker names or ownership after restart.
+Read `NEXT-PROMPT.md`, this file, root `FINDINGS.md`, and
+`lean/notes-source-sized.md`. The root findings are current. `lean/FINDINGS.md`
+and older dated component notes are historical.
 
-Read `NEXT-PROMPT.md`, this file, and root `FINDINGS.md`. The root findings
-are current. `lean/FINDINGS.md` is historical. Detailed dated proof notes can
-contain earlier open obligations that later results discharge. Use actual
-theorem statements and this handoff for current scope.
+The primary `Data.CFTA.Sized` source models now prove exact accepted
+node-count classes, finite reference evaluation, size-major enumeration,
+and both distinct-term inverse laws. The solver-decided path preserves the
+same reference order through its bound and retains the first Unknown error.
+The optimized dispatcher now uses the original explicit graph rows.
+**Whole-implementation verification is still incomplete.**
 
-The rebased checked proof checkpoint is **`f10fa11`**. Commit **`1a8a27e`**
-preserves two marked drafts. The previous restart package rebased to `dc9f212`.
-Later commits update these documents. The refreshed aggregate build passed
-**1,026 jobs and 36,839 theorem dependency checks**.
-Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-The log is `/tmp/mcfta-20261013-2109-rebase-lean.log`.
-Counts are validation evidence, not a coverage percentage.
+The repaired source and stable proofs have local commits:
 
-No Lean definition or theorem changed in this refresh. The successful audit
-does not establish correspondence with the new Haskell implementations.
+| Commit | Result |
+| --- | --- |
+| `ea73724b` | Direct explicit-row Sized dispatch and both retained native order counterexamples. |
+| `54d36271` | Reference candidates, finite recurrence, equality filtering, four query laws, and canonical rows. |
+| `916df01b` | Bounded decided tables, original reference order, signed queries, and trimmed guard prechecks. |
+| `ccf49ce6` | Optimized graph dispatch, complete query-record equality, inverse laws, and checked counterexamples. |
+| `11e66bdd` | Positive PlanScale and all existing rank partition laws. |
+| `5d0c2d00` | Bounded pruning iteration and current caller preservation. |
+| `be183d58` | Actual canonical preprocessing and public exact-size/query contracts. |
+| `54290671` | Exact successful operational traces with varying evaluator replies. |
 
-## Objective and authorization
+A later commit integrates the aggregate audit and this restart package. Use `git log` for the exact latest documentation head.
+Do not confuse the earlier checked checkpoint `f10fa11` with the new result.
 
-Prioritize Matti's main contracts: generate exactly the described finite terms,
-finish each requested size class, enumerate by node-count size, and prove both
-rank/unrank inverse laws for distinct terms. Connect these results to the new
-`Data.CFTA.Sized` API. Preserve the broader probability, optimization, and
-constructor proof work. Optional optimization convergence is secondary when
-the exact graph path does not call that optimization.
-Generator members, accepting runs, and distinct FTA terms have separate laws.
+## Authorization and allowance
 
-Read `docs/adr/0004-explicit-graph-boundary.md`. The decision keeps the optimized
-interned core. Exact queries use the explicit graph as their semantic boundary.
-Do not restart a replacement of the whole interned core from the earlier wishlist.
+Keep everything local: **no push, deployment, messages, or board posts**.
+Keep the optimized interned core. Do not update memory or create an ADR without
+a request. Address Matti in English. Begin each response with the actual
+current timestamp. Give brief material updates. Do not ask whether to continue.
 
-Fix relevant implementation defects and retain counterexamples and findings.
-Keep new work local: **no push, deployment, messages, or board posts**.
-The earlier authorized push of `8a80947` is complete and does not authorize
-another push. Do not update memory or create an ADR without a request.
-Address Matti in English. Begin responses with the actual current timestamp.
-Give brief material progress updates. Work without asking whether to continue.
-
-Monitor weekly allowance. **Stop every worker and all work at 1% remaining
-or less.** The last observed allowance was **62% at 21:17 CEST**. Refresh it
-before work; this is a historical snapshot.
+Monitor weekly allowance before work and regularly afterward:
 
 ```sh
 python3 /tmp/mcfta-weekly-usage.py
 ```
 
-The script exits 99 at the threshold and 2 when usage is unavailable. It reads
-`event_msg` / `token_count` rate limits with a 10,080-minute window from local
-Codex logs. Its current directory is `~/.codex/sessions/2026/10/13`; update
-that date on a later restart. Check `observed_at` for freshness. Missing or
-stale data is not permission to consume credits.
+Stop every worker and all work immediately at **1% remaining or less**.
+The last observed value was **58% at 21:55 CEST**. Treat it as historical.
+Check `observed_at`. The script reads 10,080-minute windows from local logs
+under `~/.codex/sessions/2026/10/13`; update that date on a later restart.
+It exits 99 at the threshold and 2 if usage is unavailable. Missing or stale
+data is not permission to use credits.
 
-## Refresh and preserve
+## Repository and preservation
 
 Repository: `/home/tritlo/Code/mcfta`, Ubuntu/WSL2, Bash.
-Branch: **`formalization/microcfta-resume-20261012`**.
-Implementation base: **`origin/microcfta` at `2200117`**, including PRs #104
-through #113. Older branch and base instructions are historical.
+Branch: `formalization/microcfta-resume-20261012`.
+Upstream: `origin/microcfta` at **`2200117`**.
+The latest `git pull --ff-only origin microcfta` reported `Already up to date.`
+No rebase was needed. The starting local head was `f8a3d48`.
 
-On the latest refresh, `git pull --ff-only origin microcfta` fetched the new
-base and refused to fast-forward: `fatal: Not possible to fast-forward,
-aborting.` The authorized `git rebase origin/microcfta` then replayed all
-**339 local commits without conflicts**. All **1,345 preserved Lean-tree files**
-matched their SHA-256 manifest immediately after rebase. This includes every
-proof, counterexample, marked draft, and the untracked native fixture.
+Before new work, read status, log, worktrees, stashes, and allowance. Preserve
+a backup, pull the correct branch, and rebase if upstream has moved.
+Preserve local repairs and resolve any source overlap against current code.
+Git metadata writes require escalation in this sandbox.
 
-Before new implementation work:
+The new backup is `backup/formalization-before-sized-resume-20261013-2123`.
+The earlier backup at `5eabb31` remains
+`backup/formalization-before-wishlist-refresh-20261013-2109`.
+The manifest and extra fixture copy are under
+`/tmp/mcfta-resume-20261013-2123/`. All 1,345 earlier Lean-tree files remain.
+Only `SourcePlanPositions.lean`, `SourcePlanPartition.lean`, and `Audit.lean`
+changed during the new proof work, apart from the updated coverage ledgers.
+All other earlier proof files and marked drafts retain their bytes.
 
-1. Read status, branch, log, worktrees, stashes, and usage.
-2. Preserve the current local checkpoint and the untracked native fixture.
-3. Fetch the correct remote and rebase local work if upstream has moved.
-4. Evaluate each new source change against the coverage ledger and actual
-   executor models. Preserve every proof, counterexample, and marked draft.
+Preserve both retained stashes and all backup branches. Leave
+`/home/tritlo/Code/microecta/lean-fixes` and
+`/tmp/mcfta-fresh-probe-20261013` untouched.
+`lean/repro/NestedUnaryTwoAtom.hs` remains intentionally **untracked**.
 
-The latest pre-rebase backup is
-`backup/formalization-before-wishlist-refresh-20261013-2109` at `5eabb31`.
-The manifest and a second copy of the untracked fixture are in
-`/tmp/mcfta-rebase-20261013-2109/`.
-Keep all other `backup/*` branches and both retained stashes. Leave
-`/home/tritlo/Code/microecta/lean-fixes` on `fix/lean-findings` untouched.
-The isolated repair worktree `/tmp/mcfta-fresh-probe-20261013` remains on
-`fix/microcfta-fresh-probe-local-20261013` at `5e6b0a7`.
-Git writes need escalation because `.git` is read-only in the sandbox.
+Preserve all three marked drafts, excluded from the build:
 
-Only these source paths differ from upstream: `Interned/Operations.hs`,
-`Interned/Type.hs`, and `microcfta/CHANGELOG.md`. They contain two local repairs:
+- `MergedAdaptiveStability.lean.incomplete`, SHA-256
+  `a8f71bab5b99af984c89a793cf0f153dade7fa1163fa3f18ed14e0cd08abddc9`.
+- `MergedFreshOrdinarySelection.lean.incomplete`, with the retained `any_eq`
+  kernel-timeout problem.
+- `EqualityNestedUnaryAncestorEditCompletion.lean.draft`, which must retain
+  the exact `node_complete` result before composing edits.
 
-- **`807e867`** (formerly `558b316`) retains explicit recursive child unions. It fixes the
-  five-alternative public pruning timeout. Root findings row 22 records it.
-- **`fbc3097`** (formerly `e0e1b37`) chooses an ordinary Mu probe above the free ordinary levels
-  of the actual Depth observation. `matchMu` uses the same stored observation.
-  Root findings row 23 records the closed pending-constructor defect and repair.
+Earlier local repairs remain: `807e867` retains explicit recursive child
+unions; `fbc3097` repairs fresh ordinary Mu probes and stored readback.
+The new Sized repair is independent of those repairs.
 
-## New source and its proof impact
+## Sized proof and source map
 
-| Change | Source status | Formalization work |
-| --- | --- | --- |
-| PR #107: `Data.CFTA.Sized` | `sizedReference` supplies distinct exact-size terms, counts, and inverse queries. Cycles, overlap, and path equalities use the same finite recurrence. `sized` uses the count table where the ordinary unambiguous import succeeds. | Model the new reference worker and prove its exact class sequence. Compose the optimized branch with that sequence. No new Sized API theorem exists yet. |
-| PR #112: `sizedUpTo` | Builds classes through a bound and checks every candidate transition constraint. `Unknown` returns `GuardUnknown`; classes above the bound are empty. No pruning is called. | Prove the finite table fold and successful exactness under a terminating, adequate guard evaluator. Unknown must remain an error. |
-| PR #109: pruning budgets | `fixWithin` bounds transition narrowing to 64 calls. `pruneNodeWithin` bounds repeated rebuilding of each recursive node. Guards remain attached when a budget ends. | Prove bounded iteration from per-pass preservation and completion. A pass budget alone does not prove termination of each pass, constructor, or solver call. General identity convergence is no longer a prerequisite for these bounded loops. |
-| PR #110: transformation contracts | `CONTEXT.md` distinguishes exact transformation, over-approximation, and representative selection. | Keep these contracts separate. Existing counterexamples remain evidence against stronger claims. |
-| PR #113: explicit graph boundary | ADR 0004 selects `Data.CFTA.FTA` for exact queries and retains interned construction. | Prove the direct graph path first. `sized` still converts through `fromFTA` in its optimized branch, and the cyclic import still uses `rowsOf`. The adapter consolidation is not implemented by the ADR. |
-| PR #111: repeated child sizes | `PlanScale` counts a selected child once for each position that contains it. Values and ranks stay unchanged. | Extend source plan/size correspondence for positive scaling. Existing Lean plans have no `PlanScale` case. |
-| PRs #104–#106 and #108 | CPS enumeration, batched constraint descent, omitted redundant union-find writes, and reserved empty-domain identity. | Add the local representation bridges listed in root findings. Prior checked models have not changed automatically. |
+Read `lean/notes-source-sized.md` for the detailed theorem map and validation.
+The main entry points are `SourceSizedPreprocessing.publicSized_eq_reference`,
+`SourceSizedPreprocessing.publicSized_terms_exact`,
+`SourceSizedPreprocessing.publicSized_signed_inverses`,
+`SourceSizedPublicContracts.finite_class`,
+`SourceSizedPublicContracts.enumeration_complete`, and
+`SourceSizedDecidedPublic.public_reference_order`.
+`SourceSizedDecidedOperational.public_reference_order`, `public_finite`, and
+`public_first_unknown` cover per-call evaluator traces.
 
-The current source test suites pass **633 examples**: 285 core, 204 generator,
-and 144 refinement. The generator suite includes the new size API and four
-300-case properties. These tests do not replace the new correspondence proofs.
+The old interned import can change canonical ranks by trimming dead edges or
+removing duplicates. Both counterexamples remain in Lean and native fixtures.
+The repaired `sized` uses `Table.tableIndex` and `Table.tablePosition` on the
+same original sorted rows as the reference. Its finite product-minimum scan
+derives unambiguity. It no longer calls `fromFTA` or `rowsOf`.
+The interned construction and optimization core remains unchanged.
 
-## Files that must survive restart
+`SourceSizedDecided*` derives the actual frozen table fold, first Unknown
+error, original trim-state inventory, full ordered class agreement, and all
+query laws. External evaluator termination and correct Yes/No decisions are
+explicit contracts. Nonpositive signed bounds return an empty table.
+The relational operational proof permits different replies to repeated
+queries. Successful traces are exact under per-call adequacy. Finite
+per-call result witnesses give a finite bounded result, including errors.
+No stable reply function is required. Completion is an existence theorem
+under that explicit witness contract.
 
-All stable proof modules are committed and imported by `MicroCFTA/Audit.lean`.
-Three marked files are committed and excluded from builds:
+`SourcePlanPositions.Plan` now has positive scaling. Existing replay,
+partition, nodup, total count, and bounded size proofs include it.
+`SourcePlanScale` connects valid quotient selection and grouped node counts.
+Do not remove the valid-counted-size premise from raw source selection.
 
-| File | Status and next use |
-| --- | --- |
-| `lean/MicroCFTA/MergedAdaptiveStability.lean.incomplete` | Original marked draft. Preserve unchanged. Its completed sibling proves fuel independence. SHA-256: `a8f71bab5b99af984c89a793cf0f153dade7fa1163fa3f18ed14e0cd08abddc9`. |
-| `lean/MicroCFTA/MergedFreshOrdinarySelection.lean.incomplete` | Proposed repaired selection bridge. `any_eq` reaches a kernel timeout; `retain_eq` then lacks that constant. See the comparison note. |
-| `lean/MicroCFTA/EqualityNestedUnaryAncestorEditCompletion.lean.draft` | Unfinished semantic composition of actual ancestor edits. `complete_mono` hides the exact run needed by the proof. See the ancestor replay note. |
+`BoundedPruningFix` and `BoundedPruningCaller` cover current local budgets.
+A new recursive body resets its budget to 64. Only a direct revisit decreases
+its local budget. Per-call and recursive callback termination remain separate.
+Do not claim that a local budget establishes whole-pruning completion.
 
-`lean/repro/NestedUnaryTwoAtom.hs` is intentionally **untracked**. Preserve it
-with untracked files before rebase. It passed 4,352 native cases. It is a
-local positive diagnostic and was not committed as a new source test.
-No worker or diagnostic process remains running.
+All proof workers are stopped. No diagnostic process remains active.
 
-## What is checked
+## Remaining priorities
 
-- Independent constrained finite-term semantics, FTA acceptance, enumeration,
-  exact distinct-term indexing and inverse laws, and rational probability laws.
-- Executable enumeration and symbolic count/select/rank drivers, supported
-  lattice operations, typed recursive/mutual/n-ary families and nested joins.
-  Their representation and external premises remain explicit.
-- Formula substitution, logical guard transport, source pruning components,
-  recursive gates, and retained implementation counterexamples. Representative
-  minimization is not exact language or mass preservation.
-- PR #102 flat memo probing, copying, growth, winner retention, and bounded
-  node/domain key representation. PR #103 maintained waiting/expandable indexes,
-  source mutation updates, exact scheduler selection, and bounded word arithmetic.
-- Cold-reader completion and exact finite language; ordered comparison and child
-  selection; complete cold merge completion, coverage, exact two-fuel stability,
-  original-cache language transport, and exact successful replay in later caches.
-  The prepared fragment is explicit. It permits closed nested Mu leaves but
-  excludes reconstruction through open nested Mu records.
-- Repeated target merging reaches an exact value-and-cache fixed point within
-  ordinary height for finite ordinary trees. This is not the whole equality loop.
-- A concrete nested unary projected endpoint loop with at most two original
-  residual atoms terminates within `4 * (leftOccurrences + rightOccurrences) + 2`
-  passes. Its unions, merges, intersections, compiler, and identity test are
-  executable. Ancestor replay now uses the actual returned edit cache.
+1. Audit the concrete source correspondence boundaries of the new Sized path:
+   finite Map/Set representation, lawful equality/order, lazy table forcing,
+   machine-size conversions, and evaluator IO traces. The handwritten models
+   do not constitute verified Haskell extraction. Preserve the proved
+   algorithmic contracts rather than assuming these runtime obligations away.
+2. Complete the changed source representation bridges for PRs #104–#106 and
+   #108: CPS `allBranches` with ordered branch-local state, batched suspended
+   descent, omitted redundant union-find writes, and reserved empty-domain ID
+   zero with adjusted machine bounds.
+3. Continue the preserved constructor and equality targets below. General
+   no-pending for the old constructor is refuted. General repaired first-run
+   completion remains open. Saturated merge monotonicity is also refuted.
+4. Retain broader probability, support, codec, and optimization contracts.
+   Distinct FTA terms, accepting runs, and generator members remain separate.
 
-The full inventories are `lean/COVERAGE.md` and `lean/API-COVERAGE.md`.
-They do not assert that every Haskell path is verified.
-
-## Constructor discovery and current repair
-
-`InternedClosedPendingBoundary` **refutes universal closed completion of the
-old constructor executor**. A scoped structural program reaches pair `(86,86)`
-with reserved identity 87, absent payload, and next counter 92. No callback
-inspects its argument. Two independent native translations time out after five
-seconds at root WHNF. Native evidence is bounded noncompletion; the kernel
-separately proves the exact model pending result.
-
-The original executor and all old provenance/depth counterexamples remain.
-Do not keep trying to prove unrestricted no-pending for that executor.
-Read `lean/notes-paired-pending-boundary.md`.
-
-The local repair's two failing fixtures complete in Lean. All five native
-probes and all 620 existing Haskell examples pass. `InternedFreshOrdinary*`
-now derives cache Facts, normalization, actual source origins, exact stored
-probe readback, root profiles, free-name heaps, closed-output free-name absence,
-chosen capture bounds, source set-fold agreement, bounded signed arithmetic,
-and exact completed constructor replay. Historical semantic contexts retain
-all effects, including discarded computations.
-
-The original Depth observation has exactly the complete Mu's free ordinary
-names. Each such level is below the selected probe. This alone does not prove
-that a discarded intermediate computation avoids all relevant aliases.
-General repaired first-run completion remains open.
-
-Read these notes in order:
-
-1. `lean/notes-fresh-ordinary-candidate.md`
-2. `lean/notes-fresh-ordinary-records.md`
-3. `lean/notes-fresh-ordinary-profiles.md`
-4. `lean/notes-fresh-ordinary-free-names.md`
-5. `lean/notes-fresh-ordinary-contexts.md`
-6. `lean/notes-deep-free-depth.md`
-
-## Exact next proof targets
-
-### First: exact size classes and their rank API
-
-Start with `microcfta-generator/src/Data/CFTA/Sized.hs`. Reuse
-`RecursiveSize`, `SizedRank`, `DistinctRank`, `FTAValidation`,
-`SourceEqualityGuards`, `SourceCyclicAutomaton`, and `SourceSymbolicStableIndex`.
-Their current statements do not yet cover the new module.
-
-1. Model `candidates`, including reversed child traversal and ascending
-   left-size splits. Prove node-count exactness and strict child-size descent.
-2. Model `sizedReference`: sorted rows, equality checks, and first-occurrence
-   `nubOrd`. Prove finite class construction, no duplicates, and membership
-   iff the original graph accepts the term at that size. Derive all four
-   `fromClasses` query laws and signed invalid-size/rank behavior.
-3. Prove `sizedUpTo` by induction on size and the finite state fold. Retain the
-   original constraints and the exact Unknown error. State evaluator
-   termination and semantic adequacy explicitly. Derive empty classes above
-   the bound. Do not claim unconditional termination of an external solver.
-4. Prove that successful `sized` count-table dispatch agrees with the same
-   sequence, not only its language. Include canonical row ordering, source
-   prechecks, `fromFTA`/`rowsOf`, and valid class-rank selection. The existing
-   `SourceCyclicAutomaton.exact_index_api` is a strong component here.
-5. Expose a size-major stream theorem from the class interface. Do not stop
-   at the first empty size. Preserve the distinction from depth enumeration
-   and from finite generator ranks whose order is not size-major.
-
-After the direct graph contract, prove `toFTA` on finished closed inputs as
-the semantic adapter. Construction of arbitrary interned inputs remains its
-own theorem. The optimized Sized branch still needs its actual adapters.
-
-### Then: changed source interfaces
-
-- Extend `SourcePlanPositions.Plan`, `position_replay`, and
-  `SourcePlanPartition.partition_exact` with positive `PlanScale`.
-  `CompactGroups.childGroups_nonempty` supplies positive group multiplicity.
-  A repeated child contributes `positions.length * childNodeCount` nodes.
-- Prove `fixWithin` preserves an invariant through at most its budget of
-  completed calls. Compose existing per-pass exactness with the actual
-  bounded pruning caller. Keep individual-call termination separate.
-- Bridge CPS `allBranches` to `EnumerationState` with ordered results and
-  branch-local states. Bridge batched descent to `EqualityTrie.descendScs_exact`.
-- Bridge the omitted union-find write to the same extensional forest.
-  Reserve domain ID zero and prove nonempty raw IDs plus one remain distinct
-  and in range for `IntersectionFlatMemoKeyDomain`.
-
-### Preserved secondary targets
-
-The following work remains valid and unfinished. Resume it when required by
-the chosen exact API path or after the primary size/rank contract. General
-unbounded equality convergence is not the first restart task.
+## Preserved secondary targets
 
 ### Repaired constructor depth and completion
 
@@ -322,43 +226,32 @@ Pinned Lean: **4.34.1**.
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The final audit is green. New unfinished files are deliberately excluded.
-Use focused targets while repairing them, then import finished modules into
-`Audit.lean`. Do not add `sorry`, native evaluation axioms, or custom axioms.
+The aggregate audit passes **1,052 jobs and 37,335 theorem dependency checks**.
+It permits only `propext`, `Classical.choice`, and `Quot.sound`.
+The log is `/tmp/mcfta-sized-20261013-final-audit.log`.
+Use focused targets for new work, then import finished modules into Audit.
+Do not add `sorry`, native evaluation axioms, or project axioms.
 
-All **633 existing Haskell examples** passed in this rebased checkout with
-both local source repairs: 285 core, 204 generator, and 144 refinement.
-Fourmolu checked the changed production Haskell files. Cabal-gild checked the
-changed generator package file. Both checks passed. No new source test or
-production change was made during this refresh.
+The new Haskell repair passed the full generator suite with 206 examples,
+including two temporary regression cases. The permanent suite remains at
+204 examples. The temporary patch is
+`/tmp/mcfta-resume-20261013-2123/sized-regressions.patch`.
+Both native fixtures and both checked Lean counterexamples are committed.
+Fourmolu and cabal-gild checks passed in Nix. No new production test was committed.
 
 ```sh
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests microcfta-generator:gen-tests microcfta-generator:refinement-tests -j1 --test-show-details=direct'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta-generator:gen-tests -j1 --test-show-details=direct'
 ```
 
-Nix store access needs escalation. Do not repeat the suite without a new source
-change or unresolved concern. Relevant evidence:
+The earlier pre-continuation full source run passed 633 examples: 285 core,
+204 generator, and 144 refinement. Core and refinement were not rerun for
+the isolated Sized change. Do not report that old combined run as new evidence.
+Its log remains `/tmp/mcfta-20261013-2109-rebase-tests.log`.
+Nix store access requires escalation. Do not repeat passing tests without
+a source change or a new unresolved concern.
 
-- `/tmp/mcfta-fresh-probe-validation.md` and `/tmp/mcfta-fresh-probe-620-tests.log`
-- `/tmp/mcfta-paired-pending-source-validation.md` and `/tmp/mcfta-paired-pending-open.hs`
-- `/tmp/mcfta-flat-memo-probe.log`
-- `/tmp/mcfta-merge-monotonicity.log`
-- `lean/notes-equality-nested-unary.md` for the retained native fixture log
-- `/tmp/mcfta-20261013-2109-rebase-lean.log` for the refreshed aggregate audit
-- `/tmp/mcfta-20261013-2109-rebase-tests.log` for all 633 source examples
-- `/tmp/mcfta-20261013-2109-rebase-format.log` for formatting checks
-
-The older probe logs describe their named earlier baselines. The full suites
-above were rerun after this rebase; individual old temporary probes were not.
-
-Temporary files are supporting evidence. Durable Lean counterexamples and
-proofs are committed. Source tests and finite searches do not replace proofs.
-
-Other remaining obligations include completion of individual pruning calls,
-general unbounded equality convergence, arbitrary open nested Mu rebuilding, accepted-language and
-substitution correspondence for the repaired binder, heterogeneous runtime
-schema/support alignment, and concrete Haskell identity/container/concurrency/
-laziness/word representations. Solver answers, PRNGs, and user codecs need
-explicit external contracts. There is no verified Haskell-to-Lean extraction.
-The overall result is a broad checked foundation with unresolved integration
-and termination work, not whole-library verification.
+Runtime identity lifetimes, concrete containers, host allocation, lazy sharing,
+machine words, solver IO, PRNGs, and user codecs remain explicit boundaries.
+There is no verified Haskell-to-Lean extraction. General repaired construction,
+open nested Mu reconstruction, and whole recursive pruning remain unfinished.
+Temporary logs support the durable committed proofs and counterexamples.

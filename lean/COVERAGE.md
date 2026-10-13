@@ -1,29 +1,33 @@
 # Full formalization coverage
 
-Current restart: **2026-10-13 21:17 CEST**, upstream `2200117`, checked
-proof `f10fa11`, marked drafts `1a8a27e`. All 339 local commits rebased
-without conflicts. The unchanged Lean package passes 1,026 jobs and 36,839
-dependency checks. The rebased Haskell suites pass 633 examples.
+Current continuation: **2026-10-13 21:56 CEST**, upstream `2200117` unchanged.
+The primary `Data.CFTA.Sized` models now prove exact accepted node-count
+classes, finite reference evaluation, size-major enumeration, and both
+natural and signed distinct-term inverse laws. Successful decided tables
+have the same ordered reference classes through the bound. Unknown remains
+an error. Per-call evaluator adequacy and finite completion witnesses are explicit.
+The operational proof permits varying replies on repeated queries.
 
-**Primary next target: `Data.CFTA.Sized`.** PRs #107 and #112 add exact-size
-reference queries and solver-decided bounded queries. Prove their class
-recurrence, finite execution, distinct terms, size order, and both inverse
-laws. Then connect optimized dispatch to the same sequence. PR #111 adds
-`PlanScale`, which needs a new source size correspondence case.
+Local repair `ea73724b` removes the former interned adapter from Sized queries.
+Both dead-edge trimming and duplicate-edge removal could change ranks.
+The existing optimized count table now reads the original sorted explicit
+rows. A finite graph product derives unambiguity. The interned core remains.
+`SourceSizedDispatcher.sized_eq_reference` connects both query records and
+the residual error. See [the Sized proof note](notes-source-sized.md).
 
-PR #109 replaces the pruning fixed-point loops with local budgets of 64
-calls. General identity convergence is secondary to the exact graph API.
-PRs #104–#106 and #108 need bridges for CPS enumeration, batched descent,
-conditional union-find writes, and reserved empty-domain identity zero.
-The older models below remain checked but do not automatically cover these
-source changes. ADR 0004 retains the interned core and selects explicit graphs
-for exact queries; optimized `sized` still uses `fromFTA` and `rowsOf`.
+Positive `PlanScale` now participates in the full source rank partition.
+Bounded pruning caller proofs retain explicit per-pass and recursive callback
+contracts. A 64-call budget does not prove whole-pruning termination.
+CPS enumeration, batched descent, conditional union-find writes, and reserved
+empty-domain identity zero remain source representation targets.
 
-All constructor, equality, merge proofs, counterexamples, and marked drafts
-are preserved. General repaired constructor completion remains open.
-Saturated merge monotonicity remains refuted. Read root
-[HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) for current
-priorities, proof boundaries, and validation. All work remains local.
+The aggregate audit passes 1,052 jobs and 37,335 dependency checks. The new
+source repair passed 206 generator examples, including two temporary
+regressions. The permanent test suite is unchanged. Concrete host containers,
+lazy heaps, machine conversions, solver IO, and extraction remain boundaries.
+All older proofs, counterexamples, repairs, and marked drafts are preserved.
+Read root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md).
+All work remains local.
 
 ## Objective and completion rule
 
@@ -245,8 +249,12 @@ verified or exempt all code that uses an external component.
 
 ## Remaining proof obligations
 
-- First prove the new `Data.CFTA.Sized` class/query API and optimized agreement,
-  as specified in root `HANDOFF.md`. Extend source size models for `PlanScale`.
+- The Sized algorithmic contract and positive PlanScale are now checked.
+  Connect their explicit finite graph, class-table, and evaluator models to
+  concrete host containers, lazy heaps, lawful comparisons, machine
+  conversions, and IO traces. See `notes-source-sized.md`.
+- Finish the changed source interfaces for CPS enumeration, batched suspended
+  descent, omitted union-find writes, and reserved empty-domain identity zero.
 - Connect the checked lattice retry and equality normalization drivers to
   physical maps, arrays, name conversion and machine indexes.
 - Connect proved symbolic allocation, smart constructors and shared-cache
@@ -261,8 +269,9 @@ verified or exempt all code that uses an external component.
 - Prove recursive pruning and remaining heterogeneous recursive compilation
   terminate. Cyclic graph-to-binder construction now has a totality proof
   under complete cycle marking.
-- Prove the new bounded pruning caller from exactness and completion of each
-  individual call. PR #109 removes its former unbounded fixed-point loops.
+- The bounded pruning caller now has preservation and call-limit proofs.
+  Derive the remaining individual-call and recursive callback completion
+  contracts. PR #109 removes its former unbounded fixed-point loops.
   General unbounded identity convergence remains a separate optimization
   question. The public equality worker performs one pass. The witness in
   [notes-finite-reduction-growth.md](notes-finite-reduction-growth.md) shows

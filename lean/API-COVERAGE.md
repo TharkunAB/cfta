@@ -1,29 +1,33 @@
 # Public API and source correspondence
 
-Current restart: **2026-10-13 21:17 CEST**, upstream `2200117`, checked
-proof `f10fa11`, marked drafts `1a8a27e`. All 339 local commits rebased
-without conflicts. The unchanged Lean package passes 1,026 jobs and 36,839
-dependency checks. The rebased Haskell suites pass 633 examples.
+Current continuation: **2026-10-13 21:56 CEST**, upstream `2200117` unchanged.
+The primary `Data.CFTA.Sized` models now prove exact accepted node-count
+classes, finite reference evaluation, size-major enumeration, and both
+natural and signed distinct-term inverse laws. Successful decided tables
+have the same ordered reference classes through the bound. Unknown remains
+an error. Per-call evaluator adequacy and finite completion witnesses are explicit.
+The operational proof permits varying replies on repeated queries.
 
-**Primary next target: `Data.CFTA.Sized`.** PRs #107 and #112 add exact-size
-reference queries and solver-decided bounded queries. Prove their class
-recurrence, finite execution, distinct terms, size order, and both inverse
-laws. Then connect optimized dispatch to the same sequence. PR #111 adds
-`PlanScale`, which needs a new source size correspondence case.
+Local repair `ea73724b` removes the former interned adapter from Sized queries.
+Both dead-edge trimming and duplicate-edge removal could change ranks.
+The existing optimized count table now reads the original sorted explicit
+rows. A finite graph product derives unambiguity. The interned core remains.
+`SourceSizedDispatcher.sized_eq_reference` connects both query records and
+the residual error. See [the Sized proof note](notes-source-sized.md).
 
-PR #109 replaces the pruning fixed-point loops with local budgets of 64
-calls. General identity convergence is secondary to the exact graph API.
-PRs #104–#106 and #108 need bridges for CPS enumeration, batched descent,
-conditional union-find writes, and reserved empty-domain identity zero.
-The older models below remain checked but do not automatically cover these
-source changes. ADR 0004 retains the interned core and selects explicit graphs
-for exact queries; optimized `sized` still uses `fromFTA` and `rowsOf`.
+Positive `PlanScale` now participates in the full source rank partition.
+Bounded pruning caller proofs retain explicit per-pass and recursive callback
+contracts. A 64-call budget does not prove whole-pruning termination.
+CPS enumeration, batched descent, conditional union-find writes, and reserved
+empty-domain identity zero remain source representation targets.
 
-All constructor, equality, merge proofs, counterexamples, and marked drafts
-are preserved. General repaired constructor completion remains open.
-Saturated merge monotonicity remains refuted. Read root
-[HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) for current
-priorities, proof boundaries, and validation. All work remains local.
+The aggregate audit passes 1,052 jobs and 37,335 dependency checks. The new
+source repair passed 206 generator examples, including two temporary
+regressions. The permanent test suite is unchanged. Concrete host containers,
+lazy heaps, machine conversions, solver IO, and extraction remain boundaries.
+All older proofs, counterexamples, repairs, and marked drafts are preserved.
+Read root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md).
+All work remains local.
 
 This inventory covers all 68 Haskell source modules under `microcfta/src` and
 `microcfta-generator/src`. It includes exposed internal modules and the three
@@ -140,7 +144,7 @@ its support has one term rank. See `notes-distinct-rank.md`.
 | `Data.CFTA.Refinement.Lattice` — `points`, count/select/rank, singleton, entailment | `CoreLattice.signed_correct` and `linearTerm_correct` connect the new AST. The `Lattice*` pipeline proves supported integer arithmetic, indicators, feasibility, polynomial elimination, retained levels, and exact finite points. `LatticeSelect.points_api_exact`, `compiledPoints_exact`, and `closePoints_exact` connect a successful public points construction to stored count/dimension and the actual cumulative-polynomial selector/inverse; no valid integer tuple is dropped. `FullSyntax.signed_success_is_core` proves the successful parser excludes unsupported new syntax. `SearchCost.selected_with_cost` bounds cumulative search queries. `LatticeRetry` proves named elimination failures, bounded move-to-front retries, coordinate permutation, exact successful points and definite verdicts. Concrete maps, binding freshening, name conversion and remaining source error adapters need correspondence. Nonlinear terms, unsupported conditionals, unknown names, and unsuitable bounds are errors. |
 | `Data.CFTA.Refinement.LiquidFixpoint` — Z3 contexts, assumptions, timeout and formula translation | `FormulaLowering.term_lower`, `formula_lower`, and `checked_lower` prove full source-to-target sort/term/formula translation, including applications, casts and quantifiers. `Guards` supplies three-valued decisions. `SolverAdapter` derives actual declaration preparation, free-symbol collection, asserted counterexample semantics, response/error/timeout decisions, and sound returned verdicts from correct external answers. It kernel-checks the unused ambient-name collision. Primitive target theories, serialization, solver answers, context/process execution and measured time remain explicit contracts. |
 | `Data.CFTA.Refinement.Minimize` — subtype adapter, complete/classified similarity, representative replacement | `MinimizeSchedule` ports the complete schedule and its historical failures. The repaired `minimize_preserves_root_representative` connects the entrypoint to the original term or an accepted representative at the selected root. Clear-transition productivity and source guard-read classification justify its checks. `SimilarityWithin` proves exact ordered eligible pairs and inference results, with candidate count Σ n(n−1)/2. `MinimizeParentIndex` derives complete parent metadata, exact indexed copies, every schedule step, and repeated final representative copies. Exact accepted-term equality is not the representative-selection contract. Concrete graph conversion, guard validation and sound subtype answers remain interfaces. |
-| `Data.CFTA.Refinement.Prune` — semantic pruning and combined reduction | `ObservationGraph.specialize_complete`, `specialize_exact`, and `selectSpecialized_discharges_guard` prove finite observation specialization. `PruneSchedule` ports the exact candidate loop and bottom-up cached recursive driver. `ambiguous_restores` verifies full fallback to the original edge; `unknown_errors` verifies solver-unknown failure. Fuel exhaustion is an error. `PruneCorrectness` proves successful whole-driver language preservation and cache validity. `PruneMemo` and `PruneDependencies` prove specialization-cache coverage and dependency-local transport. `PruneReads` proves the repaired recursive-read gate. `SourceGuards`, `SourceFormula` and `SourceGuardRefinement` model every source guard constructor and prove decided sparse/complete agreement when actual allocation is unambiguous. Recursive termination, ambiguous actual transport, interned primitive adapters and composition with representative minimization remain distinct obligations. |
+| `Data.CFTA.Refinement.Prune` — semantic pruning and combined reduction | `BoundedPruningFix` and `BoundedPruningCaller` prove the current signed local budgets, completed-call limits, and preserved language at budget exits. Body visits reset to 64; direct revisits decrease their local budget. Individual callback completion remains explicit. The following fuel-based models retain their separate scopes. `ObservationGraph.specialize_complete`, `specialize_exact`, and `selectSpecialized_discharges_guard` prove finite observation specialization. `PruneSchedule` ports the exact candidate loop and bottom-up cached recursive driver. `ambiguous_restores` verifies full fallback to the original edge; `unknown_errors` verifies solver-unknown failure. Fuel exhaustion is an error. `PruneCorrectness` proves successful whole-driver language preservation and cache validity. `PruneMemo` and `PruneDependencies` prove specialization-cache coverage and dependency-local transport. `PruneReads` proves the repaired recursive-read gate. `SourceGuards`, `SourceFormula` and `SourceGuardRefinement` model every source guard constructor and prove decided sparse/complete agreement when actual allocation is unambiguous. Recursive termination, ambiguous actual transport, interned primitive adapters and composition with representative minimization remain distinct obligations. |
 | `Data.CFTA.Refinement.Verdict` — verdict algebra, scoped entailment, subtype relation, directional semantic intersection | `Guards` proves the three-valued truth tables and semantic-support laws. Scoped entailment must keep fresh bindings distinct; the plain `Entailment` constructor returns `Unknown` for queries requiring bindings. Semantic intersection retains the antecedent only when it entails the consequent; it is not symmetric conjunction. Solver adequacy is an external contract. |
 | `Data.CFTA.Simple` — reference subterm/guard interpretation, monadic acceptance/enumeration, union/intersection/depth bound | `Language` and `Guards` are the corresponding pure reference semantics. Theory callbacks supply annotation meaning. State-pair construction, list/set ordering, and monadic callback effects are source adapters. The reference's complete-term meaning is the comparison target for optimized operations. |
 | `Data.CFTA.Symbol` — interned textual/refined symbols, refinement access, erasure | `CoreFormula` models refinement syntax/meaning; `Cache` models interning identity. The source text/term constructor round trip and typed symbol cache must preserve label identity. Refinement erasure is an explicit projection, not a theorem of equal annotated languages. |
@@ -154,7 +158,7 @@ rows describe reusable component proofs and retain their explicit premises.
 
 | Module and exported function families | Executable model or semantic contract; source boundary |
 | --- | --- |
-| `Data.CFTA.Sized` — `sized`, `sizedReference`, `sizedUpTo`, exact-size terms/count/rank/unrank | New in PRs #107 and #112. `RecursiveSize`, `SizedRank`, `DistinctRank`, and `SourceCyclicAutomaton` provide reusable foundations. No checked model yet composes the actual `candidates` order, equality filtering, first-occurrence deduplication, lazy class table, decided finite table, and optimized dispatch. The reference and decided workers use explicit graphs directly. The optimized branch still uses `fromFTA` and interned row reads. Solver termination/adequacy, Unknown errors, valid rank selection, and exact reference/optimized order agreement must remain explicit. |
+| `Data.CFTA.Sized` — `sized`, `sizedReference`, `sizedUpTo`, exact-size terms/count/rank/unrank | `SourceSizedCandidates`, `SourceSizedReference`, and `SourceSizedEqualities` prove the actual candidate order, first-occurrence classes, complete path equality checks, and finite size descent. `SourceSizedQueries` proves the four-query contract, signed boundaries, both distinct-term inverse laws, and size-major prefixes. `SourceSizedDecided*` proves the frozen table fold, exact first Unknown, original reference order through the bound, and original guarded acceptance under evaluator contracts. `SourceSizedPreprocessing` proves canonical sorting, original/sorted scan invariance, public dispatch/reference query-record equality, and exact residual errors. `SourceSizedPublicContracts` composes finite public classes, exact counts, complete ordered enumeration, and distinctness. The local repaired optimized branch uses the same explicit sorted rows and a proved finite product-minimum ambiguity test. It no longer calls `fromFTA` or `rowsOf`. Host Map/Set/lazy-heap representation, lawful comparisons, machine conversions, and solver IO remain explicit boundaries. |
 | `Data.CFTA.Gen` — sources, constructors, choices, joins/groups, recursion, queries, datatype imports, lowering | This is the public assembly of the rows below. `fromAutomaton` is distinct-term indexed; ordinary sources/combinators retain members. `fromDatatype` additionally requires its codec contract and constructor probe. `rankOfValue` composes encoding with `rankOfTerm`. No facade theorem proves every recipe/source/support/value connection at once. |
 | `Data.CFTA.Gen.Do` — applicative qualified-do operations and constrained application | `Decoder` proves map/product value semantics; `Probability` proves product masses. The overloaded `GenApply` instances select keyed application or ordinary application. Their type-level signature selection and failure text are source wiring. |
 | `Data.CFTA.Gen.Equality` — equality facade and imports | The imports route to the same acyclic compact/symbolic compiler; cyclic equality imports return `CannotCountConstrainedEdges`. `DistinctRank` and `Symbolic` state the finite target and key counting operations. The facade adds no independent semantic algorithm. |
