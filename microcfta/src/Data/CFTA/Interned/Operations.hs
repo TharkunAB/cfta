@@ -518,19 +518,20 @@ genericMergeAlternativesCache :: TypeableMemoCache
 genericMergeAlternativesCache = unsafePerformIO newTypeableMemoCache
 {-# NOINLINE genericMergeAlternativesCache #-}
 
-{- | A node with at most one edge for each symbol and number of children, which
+{- | A node with few edges for each symbol and number of children, which
 accepts every term of the given node and possibly more.
 
-The edges with one symbol and number of children become one edge, whose
-children are the unions of their children, and the merge goes on into the
-children. A merged edge has no constraint. For edges with at most one child
+When more than four edges have one symbol and number of children, they become
+one edge, whose children are the unions of their children. Smaller groups
+stay as they are. The merge goes on into the children. A merged edge has no constraint. For edges with at most one child
 the merge accepts the same terms; for edges with more children it also
 accepts the terms that take each child from a different edge. A recursive
 node and a reference stay as they are.
 
-An intersection with a merged node pairs each edge with at most one edge, so
-it costs as much as the smaller side, where the intersection of two unions of
-many edges with one symbol costs their product.
+An intersection with a merged node pairs each edge with at most four edges,
+where the intersection of two unions of many edges with one symbol costs their
+product. A small group stays exact because a merge keeps more terms, and the
+reduction then narrows less: a narrower automaton is faster to enumerate.
 -}
 mergeAlternatives :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
 {-# INLINEABLE mergeAlternatives #-}
@@ -539,11 +540,13 @@ mergeAlternatives = memoTypeableWith @symbol genericMergeAlternativesCache go
     go node@(InternedNode payload)
         | null (freeVars node) =
             Node
-                [ case group of
-                    [edge] -> setChildren edge (map mergeAlternatives (edgeChildren edge))
-                    edge : _ -> Edge (edgeSymbol edge) (map mergedUnion (transpose (map edgeChildren group)))
-                    [] -> error "mergeAlternatives: empty group"
+                [ merged
                 | group <- HashMap.elems groups
+                , merged <- case group of
+                    edge : _
+                        | not (null (drop smallGroup group)) ->
+                            [Edge (edgeSymbol edge) (map mergedUnion (transpose (map edgeChildren group)))]
+                    _ -> [setChildren edge (map mergeAlternatives (edgeChildren edge)) | edge <- group]
                 ]
       where
         groups =
@@ -551,6 +554,9 @@ mergeAlternatives = memoTypeableWith @symbol genericMergeAlternativesCache go
                 (flip (<>))
                 [((edgeSymbol edge, length (edgeChildren edge)), [edge]) | edge <- internedNodeEdges payload]
     go node = node
+
+    -- A group of at most this many edges stays exact: its product costs little.
+    smallGroup = 4
 
     -- The union of the children at one position. A recursive node among them
     -- stays a recursive node, and the children that it accepts go: a union
