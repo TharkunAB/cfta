@@ -24,6 +24,9 @@ import MicroCFTA.InternedPendingOrdinaryMismatch
 import MicroCFTA.InternedPendingLiveMismatch
 import MicroCFTA.InternedPendingOrdinaryOrigins
 import MicroCFTA.InternedOrdinaryCaptureBoundary
+import MicroCFTA.InternedPendingJointKey
+import MicroCFTA.InternedPendingJointKeyMismatch
+import MicroCFTA.InternedPendingJointKeyBoundary
 import MicroCFTA.InternedOrdinaryLevelBoundary
 import MicroCFTA.MergedAdaptiveEffects
 import MicroCFTA.MergedAdaptiveColumns
@@ -46,6 +49,12 @@ import MicroCFTA.MergedSourceExposureCoverage
 import MicroCFTA.MergedSourceSelection
 import MicroCFTA.MergedSourceSelectionSemantics
 import MicroCFTA.MergedSourceGrouping
+import MicroCFTA.MergedColdMerge
+import MicroCFTA.MergedColdMergeCompletion
+import MicroCFTA.MergedColdMergeStability
+import MicroCFTA.MergedColdMergeLanguage
+import MicroCFTA.MergedColdMergeSoundness
+import MicroCFTA.MergedColdMergeBounds
 import MicroCFTA.MergedPhysicalGroupCalls
 import MicroCFTA.MergedPhysicalGroupEdges
 import MicroCFTA.MergedPhysicalGroup
