@@ -16,7 +16,7 @@ open InternedNestedConstruction InternedNestedFacts InternedNestedProvenance
 open InternedNestedMissReadback InternedNestedSpecialization InternedFreeAbsenceContext
 open InternedBinderProtocol (Reference)
 
-/-- A source site records probe choices in the order of its resulting lexical initialGrowth. -/
+/-- A source site records probe choices in the order of its resulting lexical prefix. -/
 inductive Site : Syntax Symbol Guard → Syntax Symbol Guard → List Bool → Prop where
   | here (expression) : Site expression expression []
   | node {edges symbol guard children child target choices}
@@ -26,6 +26,33 @@ inductive Site : Syntax Symbol Guard → Syntax Symbol Guard → List Bool → P
       (nested : Site child target choices) : Site (.union members) target choices
   | binder {smart body target choices} (ordinary : Bool) (nested : Site body target choices) :
       Site (.binder smart body) target (choices ++ [ordinary])
+
+/-- A route also retains the exact source body at each crossed binder. -/
+inductive Route : Syntax Symbol Guard → Syntax Symbol Guard → List (Syntax Symbol Guard × Bool) → Prop where
+  | here (expression) : Route expression expression []
+  | node {edges symbol guard children child target choices}
+      (edge : .mk symbol guard children ∈ edges) (member : child ∈ children)
+      (nested : Route child target choices) : Route (.node edges) target choices
+  | union {members child target choices} (member : child ∈ members)
+      (nested : Route child target choices) : Route (.union members) target choices
+  | binder {smart body target choices} (ordinary : Bool) (nested : Route body target choices) :
+      Route (.binder smart body) target (choices ++ [(body, ordinary)])
+
+/-- Every probe-choice site has an exact source-body route with the same flags. -/
+theorem Site.route {expression target : Syntax Symbol Guard} {choices : List Bool}
+    (site : Site expression target choices) :
+    ∃ descriptors, descriptors.map Prod.snd = choices ∧ Route expression target descriptors := by
+  induction site with
+  | here expression => exact ⟨[], rfl, .here expression⟩
+  | node edge member nested ih =>
+      obtain ⟨descriptors, flags, route⟩ := ih
+      exact ⟨descriptors, flags, .node edge member route⟩
+  | union member nested ih =>
+      obtain ⟨descriptors, flags, route⟩ := ih
+      exact ⟨descriptors, flags, .union member route⟩
+  | @binder smart body target choices ordinary nested ih =>
+      obtain ⟨descriptors, flags, route⟩ := ih
+      exact ⟨descriptors ++ [(body, ordinary)], by simp [flags], .binder ordinary route⟩
 
 /-- One actual crossing retains the depth call that determines its optional Unint argument. -/
 structure Crossing (Symbol Guard : Type) [DecidableEq (EdgeKey Symbol Guard)] where
@@ -50,7 +77,7 @@ theorem context_from_later (names : List Reference) (before after : State Symbol
   intro key entry body depth ordinary present
   exact heap key entry body depth ordinary (growth.nodeRecords key _ present)
 
-/-- A site with no crossed binder inherits the full source context at its actual initialGrowth. -/
+/-- A site with no crossed binder inherits the full source context at its actual prefix. -/
 theorem zero_site [DecidableEq (EdgeKey Symbol Guard)] {expression target : Syntax Symbol Guard}
     (site : InternedNestedTraceSites.Site expression target 0) (names : List Reference)
     (before final : State Symbol Guard) (value : Value Symbol Guard) (context : Context before names)
@@ -68,31 +95,37 @@ theorem zero_site [DecidableEq (EdgeKey Symbol Guard)] {expression target : Synt
   exact ⟨start, result, finish, done,
     context_from_later names start final ctx finalHeap (grows_trans targetGrowth suffix), initialGrowth, suffix⟩
 
-/-- Every selected probe route occurs in the actual completed enclosing execution. -/
-theorem completed_site [DecidableEq (EdgeKey Symbol Guard)]
-    {expression target : Syntax Symbol Guard} {choices : List Bool} (site : Site expression target choices)
+/-- Every selected route retains exact source bodies in the actual completed execution. -/
+theorem completed_route [DecidableEq (EdgeKey Symbol Guard)]
+    {expression target : Syntax Symbol Guard} {choices : List (Syntax Symbol Guard × Bool)}
+    (site : Route expression target choices)
     (names : List Reference) (before final : State Symbol Guard) (value : Value Symbol Guard)
     (context : Context before names)
     (completed : build expression (names.map Value.reference) before = .done value final) :
     ∃ crossings : List (Crossing Symbol Guard), ∃ start result finish,
-      crossings.map Crossing.ordinary = choices ∧
+      crossings.map (fun crossing => (crossing.body, crossing.ordinary)) = choices ∧
       build target ((crossings.map Crossing.name ++ names).map Value.reference) start = .done result finish ∧
-      Context start (crossings.map Crossing.name ++ names) ∧ Grows before start ∧ Grows finish final := by
+      Context start (crossings.map Crossing.name ++ names) ∧ Grows before start ∧ Grows finish final ∧
+      ∀ crossing ∈ crossings, Grows before crossing.before ∧ Grows crossing.afterDepth final := by
   induction site generalizing names before final value with
   | here expression =>
-      exact ⟨[], before, value, final, rfl, by simpa using completed, by simpa using context, grows_refl _, grows_refl _⟩
+      exact ⟨[], before, value, final, rfl, by simpa using completed, by simpa using context, grows_refl _, grows_refl _, by simp⟩
   | @node edges symbol guard children child target choices edge member nested ih =>
       obtain ⟨childStart, childValue, childEnd, childDone, childContext, initialGrowth, suffix⟩ :=
         zero_site (.node edge member (.here child)) names before final value context completed
-      obtain ⟨crossings, start, result, finish, flags, done, ctx, front, back⟩ :=
+      obtain ⟨crossings, start, result, finish, flags, done, ctx, front, back, traces⟩ :=
         ih names childStart childEnd childValue childContext childDone
-      exact ⟨crossings, start, result, finish, flags, done, ctx, grows_trans initialGrowth front, grows_trans back suffix⟩
+      refine ⟨crossings, start, result, finish, flags, done, ctx, grows_trans initialGrowth front, grows_trans back suffix, ?_⟩
+      intro crossing member
+      exact ⟨grows_trans initialGrowth (traces crossing member).1, grows_trans (traces crossing member).2 suffix⟩
   | @union members child target choices member nested ih =>
       obtain ⟨childStart, childValue, childEnd, childDone, childContext, initialGrowth, suffix⟩ :=
         zero_site (.union member (.here child)) names before final value context completed
-      obtain ⟨crossings, start, result, finish, flags, done, ctx, front, back⟩ :=
+      obtain ⟨crossings, start, result, finish, flags, done, ctx, front, back, traces⟩ :=
         ih names childStart childEnd childValue childContext childDone
-      exact ⟨crossings, start, result, finish, flags, done, ctx, grows_trans initialGrowth front, grows_trans back suffix⟩
+      refine ⟨crossings, start, result, finish, flags, done, ctx, grows_trans initialGrowth front, grows_trans back suffix, ?_⟩
+      intro crossing member
+      exact ⟨grows_trans initialGrowth (traces crossing member).1, grows_trans (traces crossing member).2 suffix⟩
   | @binder smart body target choices ordinary nested ih =>
       rw [build] at completed
       change ((callback body (names.map Value.reference) .depth before).bind fun depth middle =>
@@ -135,12 +168,36 @@ theorem completed_site [DecidableEq (EdgeKey Symbol Guard)]
       have filterGrowth : Grows afterRaw selectedEnd := by
         simpa only [filterDone, Outcome.state] using
           (work_correct (withoutSelfReference crossing.name raw) afterRaw afterRawContext.normal.facts.coherent.valid).2
-      obtain ⟨crossings, start, result, finish, flags, done, ctx, front, back⟩ :=
+      obtain ⟨crossings, start, result, finish, flags, done, ctx, front, back, traces⟩ :=
         ih (crossing.name :: names) selectedStart afterRaw raw localContext (by simpa only [List.map_cons] using rawDone)
       refine ⟨crossings ++ [crossing], start, result, finish, ?_, ?_, ?_, grows_trans initialGrowth front,
-        grows_trans back (grows_trans filterGrowth suffix)⟩
+        grows_trans back (grows_trans filterGrowth suffix), ?_⟩
       · simp [List.map_append, flags, crossing]
       · simpa only [List.map_append, List.map_cons, List.map_nil, List.append_assoc, List.cons_append, List.nil_append] using done
       · simpa only [List.map_append, List.map_cons, List.map_nil, List.append_assoc, List.cons_append, List.nil_append] using ctx
+      · intro selected member
+        rcases List.mem_append.mp member with nestedMember | ownMember
+        · exact ⟨grows_trans initialGrowth (traces selected nestedMember).1,
+            grows_trans (traces selected nestedMember).2 (grows_trans filterGrowth suffix)⟩
+        · have equal : selected = crossing := List.mem_singleton.mp ownMember
+          subst selected
+          exact ⟨grows_refl _, grows_trans secondGrowth finalGrowth⟩
+
+/-- Every selected probe site occurs in the actual completed enclosing execution. -/
+theorem completed_site [DecidableEq (EdgeKey Symbol Guard)]
+    {expression target : Syntax Symbol Guard} {choices : List Bool} (site : Site expression target choices)
+    (names : List Reference) (before final : State Symbol Guard) (value : Value Symbol Guard)
+    (context : Context before names)
+    (completed : build expression (names.map Value.reference) before = .done value final) :
+    ∃ crossings : List (Crossing Symbol Guard), ∃ start result finish,
+      crossings.map Crossing.ordinary = choices ∧
+      build target ((crossings.map Crossing.name ++ names).map Value.reference) start = .done result finish ∧
+      Context start (crossings.map Crossing.name ++ names) ∧ Grows before start ∧ Grows finish final ∧
+      ∀ crossing ∈ crossings, Grows before crossing.before ∧ Grows crossing.afterDepth final := by
+  obtain ⟨descriptors, flags, route⟩ := site.route
+  obtain ⟨crossings, start, result, finish, bodies, done, ctx, initial, suffix, traces⟩ :=
+    completed_route route names before final value context completed
+  refine ⟨crossings, start, result, finish, ?_, done, ctx, initial, suffix, traces⟩
+  simpa only [List.map_map, Function.comp_def] using (congrArg (List.map Prod.snd) bodies).trans flags
 
 end MicroCFTA.InternedProbeChoiceSites
