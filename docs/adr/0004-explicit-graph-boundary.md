@@ -33,8 +33,10 @@ intersection, equality reduction, and merging.
 
 ## Consequences
 
-- `toFTA` is the one adapter between the two forms. It replaces the `rowsOf`
-  snapshot that the Lean model assumes today.
+- `toRows` is the one adapter between the two forms: the transitions of each
+  reachable node, keyed by its state. `toFTA` checks these rows, and the
+  count table of the cyclic import reads them. It replaces the `rowsOf`
+  snapshot that the Lean model assumed.
 - A new exact query goes on the graph. An operation on interned nodes enters
   an exact path only as an exact transformation before `toFTA` (`CONTEXT.md`,
   "Transformations").
@@ -43,9 +45,6 @@ intersection, equality reduction, and merging.
   can change the ranks, but not the classes.
 - The UVar enumerator stays on interned nodes as the fast route for
   constrained listing. It does not define the language.
-- The cyclic import still reads its rows from interned nodes (`rowsOf`). It
-  can read the rows of `toFTA` instead, so that one adapter feeds every exact
-  query.
 
 ## Discussion points
 

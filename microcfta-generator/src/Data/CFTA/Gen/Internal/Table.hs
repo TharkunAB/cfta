@@ -1,6 +1,5 @@
 -- | Shared size indexing for ordinary, possibly recursive automata.
 module Data.CFTA.Gen.Internal.Table (
-    rowsOf,
     tableIndex,
     tablePosition,
     minimumSizes,
@@ -16,13 +15,8 @@ import Data.Maybe (mapMaybe)
 import Data.Sequence (Seq (..))
 import qualified Data.Sequence as Sequence
 
-import Data.Hashable (Hashable)
-import qualified Data.IntMap.Strict as IntMap
-import Data.Typeable (Typeable)
-
 import qualified Data.CFTA as FTA
 import Data.CFTA.Index (Size, TransitionIndex (..))
-import Data.CFTA.Interned (Node, NodeId (..), edgeChildren, edgeSymbol, nodeIdentity, reachable)
 import Data.CFTA.Ranked.Internal.Size (
     ChoiceIndex (..),
     MinimumSize (..),
@@ -40,19 +34,6 @@ import Data.CFTA.Ranked.Internal.Size (
  )
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
-
-{- | The rows of an interned graph, one per reachable node, keyed by node
-identity. Constraints are dropped; the caller checks them first. The root
-must not be the empty node.
--}
-rowsOf ::
-    (Hashable symbol, Typeable symbol) =>
-    Node symbol -> Map.Map NodeId [FTA.Transition NodeId symbol ()]
-rowsOf root =
-    Map.fromDistinctAscList
-        [ (NodeId ident, [FTA.Transition (edgeSymbol edge) (map nodeIdentity $ edgeChildren edge) () | edge <- edges])
-        | (ident, edges) <- IntMap.toList (reachable root)
-        ]
 
 {- | Index ordinary transition rows supplied by a graph adapter.
 
@@ -167,7 +148,7 @@ stateTable rows = (indexOf, prefixesOf)
 Start with no productive states and solve the least fixed point. A cycle with
 no finite base remains absent. This keeps an empty recursive index finite.
 -}
-minimumSizes :: (Ord state) => Map.Map state [FTA.Transition state symbol ()] -> Map.Map state Size
+minimumSizes :: (Ord state) => Map.Map state [FTA.Transition state symbol constraint] -> Map.Map state Size
 minimumSizes rows = converge Map.empty
   where
     converge current =
