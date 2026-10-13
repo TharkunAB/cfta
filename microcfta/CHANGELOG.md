@@ -169,7 +169,12 @@ remains a separate ECTA-only package.
   100 times slower. One pass can leave children that a second pass narrows
   further: iterate
   `reducePartially`, as `reduceFully` does, to get a fixpoint. `prune`
-  iterates the reduction of each transition.
+  iterates the reduction of each transition. The reduction narrows a path by
+  the merged nodes at the other paths of its class (`mergeAlternatives`):
+  edges with one symbol become one edge, so the narrowing can keep more terms
+  but no fewer, and an intersection no longer pairs every edge with every edge
+  of the same symbol. On Hectare this makes two rounds of a size-7 query 54
+  times faster.
 - The term-search application layer is not part of the library.
 - The `Pretty` class and the path-trie `Ord` instance are gone; `show` the
   constraint, or compare equality classes by their path lists.

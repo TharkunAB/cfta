@@ -32,6 +32,7 @@ import Data.CFTA.Interned.Memo (
     memo2TypeableWith,
     newTypeableMemoCache,
  )
+import Data.CFTA.Interned.Operations (mergeAlternatives)
 import Data.CFTA.Path (ChildIndex (..), Path (..), Pathable (..))
 import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Template (Template (..), restrict)
@@ -194,11 +195,14 @@ reduceEqConstraints = go
         intersectList [] = EmptyNode
         intersectList (n : ns) = foldr intersect n ns
 
-        -- Narrow the node at each path of the class to the nodes at the other paths.
+        -- Narrow the node at each path of the class to the nodes at the other
+        -- paths. The narrowing set is merged ('mergeAlternatives'): it can keep
+        -- more terms, never fewer, and its intersection costs as much as the
+        -- smaller side instead of the product of edges with one symbol.
         reduceEClass :: PathEClass -> [Node symbol] -> [Node symbol]
         reduceEClass pec ns =
             editAll
-                [ (p, intersect $ intersectList [getPath other ns | other <- Set.toAscList paths, other /= p])
+                [ (p, intersect $ intersectList [mergeAlternatives (getPath other ns) | other <- Set.toAscList paths, other /= p])
                 | p <- Set.toAscList paths
                 ]
                 ns
