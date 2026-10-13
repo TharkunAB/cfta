@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-13 02:41 CEST**.
+Updated: **2026-10-13 02:48 CEST**.
 
 The formalization is rebased onto `origin/microcfta` at `de910ea`. The
 upstream base contains the earlier findings repairs. This continuation found
@@ -8,7 +8,7 @@ and repaired three additional defects, described as rows 18 through 20.
 All **620 existing Haskell examples** pass after the repairs: 284 core, 194
 generator, and 142 refinement examples.
 
-The full Lean development passes **752 jobs and 32,270 theorem dependency
+The full Lean development passes **758 jobs and 32,330 theorem dependency
 checks**. All previously pending keyed-n-ary and recursive-join files are
 integrated. New proofs cover nested heterogeneous join families, exact
 public ranks and probabilities, original occurrence metadata, and the
@@ -228,10 +228,10 @@ checks to one checked program. Arbitrary runtime schema changes remain open. See
   for complete/sparse evaluation, `(No,No)` before/after pruning, and
   `Right []` versus compiler `Left SolverUnknown`.
   Log: `/tmp/mcfta-scope-precedence-repaired.log`.
-- Latest integrated Lean audit: **752 jobs; 32,270 theorem dependency checks**.
+- Latest integrated Lean audit: **758 jobs; 32,330 theorem dependency checks**.
   Only `propext`,
   `Classical.choice`, and `Quot.sound` are allowed.
-  Log: `/tmp/mcfta-observed-request-agreement-audit.log`.
+  Log: `/tmp/mcfta-paired-filter-binary-projection-audit.log`.
 - The retained formula capture, nested compiler capture, recursive equality,
   and open-union reproductions pass on the new base. The independent two-key
   recurrence again checks all eight classes and 285 inverse ranks, including
@@ -318,6 +318,12 @@ but do not prove it for every runtime execution.
    reproduction agrees with the kernel-checked finite algebra. The targets
    alternate; this still does not establish a fixed-schedule cycle. See
    [the closure-image counterexample](lean/notes-equality-saturation-fiber.md).
+   One fixed binary projected class now has a different invariant: each
+   original occurrence retains rows after the first reciprocal pass.
+   Missing occurrence-row pairs in a finite complete inventory give a pass
+   bound. Nested endpoint rows are allowed. The physical source adapter,
+   ancestor deletion, larger classes, and interacting schedules remain open.
+   See [the binary projected-class proof](lean/notes-equality-projected-binary.md).
 2. **Nested binder identity after normalization erases a fresh outer
    dependency.** Retained dependencies separate pending keys. Original
    independence permits cache reuse. Erasure through an empty child now
@@ -367,7 +373,10 @@ but do not prove it for every runtime execution.
    Ordinary source constructors and allowed-sentinel filters now derive
    exact record replay from observed boundary absence. Equal canonical
    keys also determine equal completed Mu request results in a common
-   actual cache extension. New dynamic Mu construction remains open.
+   actual cache extension. Exact bare-reference union classification and
+   paired root-filter laws now cover the local deleting branches. The union
+   fusion equation retains all original source cache effects. New dynamic
+   Mu construction remains open.
    See [the observed-absence notes](lean/notes-interned-observed-absence.md).
    See [the exact pending-call witness](lean/notes-interned-pending-encounter.md).
    Full nested constructor traces now derive

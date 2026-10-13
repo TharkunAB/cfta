@@ -651,6 +651,12 @@ import MicroCFTA.InternedOrdinaryAbsenceReplay
 import MicroCFTA.InternedObservedFilter
 import MicroCFTA.InternedOrdinaryCallbackReplay
 import MicroCFTA.InternedRequestAgreement
+import MicroCFTA.InternedFilterSelfReference
+import MicroCFTA.InternedPairedSelfFilter
+import MicroCFTA.InternedUnionReference
+import MicroCFTA.InternedUnionFilterFusion
+import MicroCFTA.EqualityFixedProjectionInvariant
+import MicroCFTA.EqualityFixedProjectionTermination
 /-!
 # Proof dependency audit
 

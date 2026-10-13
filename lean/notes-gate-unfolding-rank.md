@@ -624,3 +624,43 @@ returns EmptyNode. Pending body execution cannot become an empty result.
 
 The focused build passes (170 jobs). The combined isolated axiom audit
 checks 8,797 theorem dependencies with the same foundational allowlist.
+
+## Direct-self classification survives normalization (2026-10-13 02:40)
+
+`InternedFilterSelfReference.filter_self_iff` proves that the normalized
+result is exactly the supplied reference if and only if the original value
+is that reference. Ordinary nodes cannot return a reference. A source-flat
+union cannot return the operand that the filter removed. The proof uses
+actual canonical node and union readback.
+
+`callback_self_iff` lifts the result to arbitrary nested source callbacks,
+including pending outcomes. Together with `callback_empty_iff`, this removes
+the root self filter from both cases that can produce an empty smart Mu.
+The remaining key-level question still relates actual bodies to probes
+across different supplied reference names.
+
+The focused build passes (174 jobs). The isolated axiom audit checks 8,806
+theorem dependencies. A separate source diagnostic at
+`/tmp/mcfta-empty-self-probes.hs` checks 91,400 stored Mu records from 10,000
+finite expressions. In that sample, empty bodies correspond exactly to two
+empty probes. Direct-self bodies correspond exactly to the probe pair
+`(RecDepth, RecUnint 0)`. These finite checks do not prove the general stored
+record invariant.
+
+## Exact union and self-filter fusion (2026-10-13 02:45)
+
+`InternedUnionFilterFusion` derives the actual union payload from complete
+canonical readback. Its `fusion` equation retains the original union call
+and all of that call's cache effects. If the canonical operands contain the
+self reference and at least one other operand, the next call constructs the
+stripped canonical list. If self is absent, filtering returns the original
+record without effects. A canonical singleton self remains a bare reference.
+
+This exposes the general case in which an actual callback body first builds
+`union[own, old]` and its root filter returns `old`. The proof makes no
+binder-free assumption on how the available operands were constructed.
+It can compose with exact stripped-operand equality. It does not establish
+that equality for arbitrary dynamic callbacks.
+
+The focused build passes (178 jobs). The combined isolated axiom audit
+checks 8,815 theorem dependencies with the same foundational allowlist.

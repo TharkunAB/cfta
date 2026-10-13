@@ -40,6 +40,36 @@ theorem finish_empty_iff (smart : Bool) (entry : Interned NodeKey) (body depth o
             exact self rfl
           simp [finish, cleanup, unused, self, notEmpty, notSelf]
 
+/-- A bare reference survives recursive cleanup exactly when it names another binder. -/
+theorem finish_reference_iff (smart : Bool) (entry : Interned NodeKey)
+    (body depth ordinary : Value Symbol Guard) (name : InternedBinderProtocol.Reference) :
+    finish smart (.mu entry body depth ordinary) = .reference name ↔
+      smart = true ∧ body = .reference name ∧ name ≠ .interned entry.identity := by
+  cases smart with
+  | false => simp [finish]
+  | true =>
+      simp only [true_and]
+      by_cases unused : .interned entry.identity ∉ body.free
+      · have finished : finish true (.mu entry body depth ordinary) = body := by
+          simp [finish, cleanup, unused]
+        rw [finished]
+        constructor
+        · intro same
+          refine ⟨same, ?_⟩
+          intro equal
+          apply unused
+          rw [same, equal]
+          simp [Value.free]
+        · exact And.left
+      · have cannot : ¬ (body = .reference name ∧ name ≠ .interned entry.identity) := by
+          rintro ⟨same, different⟩
+          apply unused
+          rw [same]
+          simp [Value.free, Ne.symm different]
+        rw [iff_false_right cannot]
+        simp only [finish, cleanup, unused, ↓reduceIte]
+        split <;> simp
+
 /-- Empty reference identity is equivalent to the same two exact smart body cases. -/
 theorem finish_empty_reference_iff (smart : Bool) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard) :
     (finish smart (.mu entry body depth ordinary)).referenceOf = .empty ↔

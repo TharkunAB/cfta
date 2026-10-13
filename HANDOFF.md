@@ -1,6 +1,6 @@
 # microcfta formalization handoff
 
-Updated: **2026-10-13 02:41 CEST (Europe/Stockholm)**.
+Updated: **2026-10-13 02:48 CEST (Europe/Stockholm)**.
 
 ## Scope and authorization
 
@@ -64,10 +64,10 @@ self-reference removal from recursive unions.
   `/tmp/mcfta-construction-query-full.log`. After the grouped-discovery check,
   all generator and refinement cases pass in
   `/tmp/mcfta-family-discovery-validation.log`. Core source is unchanged.
-- Latest integrated Lean build: **752 jobs; 32,270 theorem dependency checks**.
+- Latest integrated Lean build: **758 jobs; 32,330 theorem dependency checks**.
   This includes projected leaf schedules, nested first-run completion,
   stored shallow unfolding, and construction-query provenance.
-  Log: `/tmp/mcfta-observed-request-agreement-audit.log`.
+  Log: `/tmp/mcfta-paired-filter-binary-projection-audit.log`.
 - The audit permits only `propext`, `Classical.choice`, and `Quot.sound`.
   It rejects omitted proofs, native evaluation axioms, and custom axioms.
 - Retained `FormulaCapture`, `NestedCompileCapture`, `RecursiveReduction`,
@@ -232,6 +232,12 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   comparison and 1,156 raw leaf pairs pass again after these model repairs.
   Arbitrary nested intersections
   can cycle when operands alternate; the fixed schedule remains unresolved.
+  For one fixed binary projected class, each original endpoint occurrence
+  now retains rows after the first reciprocal pass. A finite complete row
+  inventory gives a bound from missing occurrence-row pairs. This permits
+  nested endpoint rows. The source adapter, disappearing ancestors, larger
+  classes, and interacting schedules remain open. See
+  `notes-equality-projected-binary.md`.
 - The new recursive equality gate can unfold an open unconstrained binder
   at the same path. LexicalGateRank now derives head-binder decrease for
   the full lexical reconstruction. Actual smart-node and nonsingleton-union
@@ -309,7 +315,10 @@ monotone constructor programs. See `lean/notes-grouped-probe-validation.md`.
   This includes normalized callbacks with allowed sentinels and arbitrary
   captured Mu records. Completed requests with equal canonical probe keys
   return equal complete records in a common actual cache extension.
-  The remaining step is replay through new dynamic Mu construction.
+  Exact bare-reference union results and paired deleting root filters now
+  have source-derived characterizations. Union/filter fusion retains all
+  original cache effects. These local laws support the remaining replay
+  through new dynamic Mu construction.
   See `notes-interned-observed-absence.md`.
   No source defect is known.
 - Typed recursive join composition and public query laws are now proved.

@@ -43,6 +43,20 @@ dependencies with only `propext`, `Classical.choice`, and `Quot.sound`.
 These modules discharge the ordinary constructor and allowed-sentinel
 filter branches of the general source replay argument.
 
+`InternedPairedSelfFilter` proves exact agreement of two deleting root
+filters when their retained member lists agree. Ordered paired local
+references disappear, and paired equal nonlocal operands keep their order.
+If a filtered root union is clear, each retained original member is clear.
+This includes local references below an ordinary constructor.
+
+`InternedUnionReference.makeUnion_reference_iff` derives the exact bare
+reference case: at least one source input is that reference, and every
+input is empty or that reference. It uses actual coherent inputs and the
+derived lower bound of two distinct members in stored unions.
+`InternedFilterSelfReference` proves that normalization preserves the exact
+bare-self result. `InternedUnionFilterFusion` retains all original union
+effects and expresses root filtering directly on the canonical operands.
+
 The dynamic smart Mu branch remains open. In particular, its fresh local
 reference is forbidden. Root self filtering can remove that reference
 before smart cleanup returns an unused body. The normalized result can
