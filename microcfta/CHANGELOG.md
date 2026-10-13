@@ -47,6 +47,8 @@ remains a separate ECTA-only package.
   `Data.CFTA.Refinement.LiquidFixpoint`, which declares every free name as an
   integer. A fresh value name of a binding must not be a declared name or a
   free name of an ambient assumption; otherwise the query is `Unknown`.
+  Every name reaches Z3 through one injective encoding, so two distinct names
+  never become one SMT name.
   `Data.CFTA.Refinement.Guard` builds transitions from guards that
   name the constructor arguments, `contract` states a formula about the
   children's values, and `measureTerm` reads the measure of a constructed
