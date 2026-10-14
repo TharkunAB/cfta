@@ -16,8 +16,11 @@ limit, as Hectare's evaluation does. Each row gives the query, the rung, the
 outcome (@solved@, @other@ when other programs fit but not the expected one,
 @unsolved@, @timeout@, @oom@, or @crash@), the bound, the size of the first
 fit and of the expected one, the programs that Hectare proposed, the solver
-calls, the seconds, the peak memory in megabytes, whether GHC accepts the
-first fit as a program of the signature, and the first fit.
+calls, the seconds, the seconds of Hectare's construction, reduction, and
+listing and of the checks in the typechecker, the peak memory in megabytes,
+whether GHC accepts the first fit as a program of the signature, and the
+first fit. The walk itself stops at the time limit, so that a row of a
+timeout has its figures too.
 
 With no arguments, it runs three queries with the Prelude, 30 seconds and a
 heap of 2 GB each, so that @cabal bench@ stays short. The variable
@@ -224,14 +227,17 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
             firstFit <- newIORef Nothing
             solved <- newIORef Nothing
             tracing <- isJust <$> lookupEnv "HECTARE_GHC_TRACE"
-            outcome <- try . timeout (seconds * 1000000) $ withSession (importLines rung) $ \session -> do
+            -- The walk stops at the time limit; this limit is for the rest.
+            outcome <- try . timeout ((seconds + 30) * 1000000) $ withSession (importLines rung) $ \session -> do
                 candidates <- candidatesOf session (rungModules rung)
                 printf "candidates,%d\n" (length candidates)
                 hFlush stdout
                 signature <- typeOfExpression session ("undefined :: " <> signatureOf query)
+                ready <- getMonotonicTime
                 let options =
                         defaultOptions
                             { optionMaximumSize = ghcSize query
+                            , optionSeconds = Just (fromIntegral seconds - (ready - start))
                             , optionAvoid = hooglePlusAvoid
                             , optionReport = Just report
                             , optionTrace = if tracing then Just trace else Nothing
@@ -276,20 +282,26 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
                     Left HeapOverflow -> "oom"
                     Left _ -> "crash"
                     Right Nothing -> "timeout"
-                    Right (Just _) -> case (size, found) of
+                    Right (Just (statistics, _)) -> case (size, found) of
                         (Just _, _) -> "solved"
+                        _ | maybe False statisticsOutOfTime statistics -> "timeout"
                         (Nothing, Just _) -> "other"
                         (Nothing, Nothing) -> "unsolved"
-                programs, calls, checkedText :: String
-                (programs, calls, checkedText) = case outcome of
+                programs, calls, parts, checkedText :: String
+                (programs, calls, parts, checkedText) = case outcome of
                     Right (Just (Just statistics, checked)) ->
                         ( show (statisticsPrograms statistics)
                         , show (countSolverCalls (statisticsCounters statistics))
+                        , intercalate
+                            ","
+                            [ printf "%.3f" (fromIntegral (part statistics) / 1e9 :: Double)
+                            | part <- [statisticsBuildNanos, statisticsReduceNanos, statisticsListNanos, statisticsCheckNanos]
+                            ]
                         , if checked then "yes" else "no"
                         )
-                    _ -> ("-", "-", "-")
+                    _ -> ("-", "-", "-,-,-,-", "-")
             printf
-                "result,%s,%s,%s,%d,%s,%s,%s,%s,%.3f,%d,%s,%s\n"
+                "result,%s,%s,%s,%d,%s,%s,%s,%s,%.3f,%s,%d,%s,%s\n"
                 name
                 rungName'
                 outcomeText
@@ -299,6 +311,7 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
                 programs
                 calls
                 (end - start)
+                parts
                 memory
                 checkedText
                 (maybe "-" (renderProgram . fitProgram) found)
@@ -323,7 +336,8 @@ runSuite rung seconds heap jobs names = do
     queue <- newMVar queries
     output <- newMVar ()
     done <- newEmptyMVar
-    putStrLn "result,query,rung,outcome,bound,first,solved,programs,calls,seconds,memory,checked,program"
+    putStrLn
+        "result,query,rung,outcome,bound,first,solved,programs,calls,seconds,build,reduce,list,check,memory,checked,program"
     hFlush stdout
     forM_ [0 .. jobs - 1] $ \worker -> forkIO $ do
         let loop = do
@@ -344,9 +358,9 @@ runSuite rung seconds heap jobs names = do
                             writeFile (directory <> "/" <> rung <> "/" <> query <> ".log") (out <> err <> "exit " <> show code <> "\n")
                         let row = case (code, [line | line <- lines out, "result," `isPrefixOf` line]) of
                                 (_, line : _) -> line
-                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,"
-                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,"
-                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,"
+                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,"
+                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,"
+                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,"
                         withMVar output $ \() -> putStrLn row >> hFlush stdout
                         loop
         loop

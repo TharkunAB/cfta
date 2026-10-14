@@ -9,9 +9,10 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `Candidate`s, size by size, and a walk inside GHC's typechecker checks each
   one prefix by prefix with the parts of GHC's `tcCheckHoleFit`, with a trie
   of dead prefixes. `holeFor` makes a hole from skolems and givens.
-  `Options` bound the size, the fits, and the programs, carry Hectare's
-  pruning rules, and take a report after each size and a trace of each
-  program.
+  `Options` bound the size, the fits, the programs, and the seconds, carry
+  Hectare's pruning rules, and take a report after each size and a trace of
+  each program. `Statistics` give the time of Hectare's construction,
+  reduction, and listing, and of the checks.
 - `Data.CFTA.GHC.Erase`: GHC types as Hectare's first-order types, with the
   class contexts erased, and `anyResult` for the components that would fit
   every hole once erased.

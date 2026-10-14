@@ -22,8 +22,11 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   restore of the frozen unification variables, and checks only the rest. A
   prefix that fails goes into a trie of dead prefixes, so every later
   program under it is skipped without a step.
-* The walk stops after the first fits, after a size, or after a number of
-  programs.
+* The walk stops after the first fits, after a size, after a number of
+  programs, or at a deadline.
+* The figures of a search give the time of each part: Hectare's
+  construction, reduction, and listing, and the checks in the
+  typechecker.
 
 Why these types:
 
@@ -60,7 +63,8 @@ module Data.CFTA.GHC.Fits (
 ) where
 
 import Control.Applicative ((<|>))
-import Control.Monad (when)
+import Control.DeepSeq (rnf)
+import Control.Exception (evaluate)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.List (nub)
@@ -69,10 +73,14 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import qualified Data.Text as Text
+import Data.Word (Word64)
+import GHC.Clock (getMonotonicTimeNSec)
+import System.Timeout (timeout)
 
 import Data.CFTA.GHC.Erase (anyResult, erase)
 import Data.CFTA.GHC.Internal.Check
-import Data.CFTA.Gen.Synthesis (Program (..), Query (..), expand, library, solutionsOfSize)
+import Data.CFTA.Gen.Synthesis (Program (..), Query (..), expand, library, programsIn, rawSearchSpace, reduceFully)
+import Data.CFTA.Interned (refold)
 import GHC.Core.DataCon (dataConNonlinearType)
 import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
 import GHC.Core.Type (Type)
@@ -142,6 +150,10 @@ data Options = Options
     -- ^ For 'synthesizeFits': the number of fits to stop after.
     , optionMaximumPrograms :: Maybe Int
     -- ^ The number of Hectare's programs to stop after.
+    , optionSeconds :: Maybe Double
+    {- ^ The seconds to stop after. The search stops between two checks, or
+    stops the construction or the reduction of an automaton.
+    -}
     , optionAvoid :: [([Text], Maybe [Text])]
     {- ^ Hectare's pruning rules for programs of size two: a candidate of the
     first list is not applied to one of the second list (with 'Nothing': to
@@ -160,6 +172,7 @@ defaultOptions =
         { optionMaximumSize = 5
         , optionFits = 10
         , optionMaximumPrograms = Nothing
+        , optionSeconds = Nothing
         , optionAvoid = []
         , optionReport = Nothing
         , optionTrace = Nothing
@@ -181,6 +194,16 @@ data Statistics = Statistics
     , statisticsFits :: !Int
     , statisticsSize :: !Int
     -- ^ The size of the last program looked at.
+    , statisticsOutOfTime :: !Bool
+    -- ^ Whether the search stopped at the deadline.
+    , statisticsBuildNanos :: !Word64
+    -- ^ The time of Hectare's construction of the automata.
+    , statisticsReduceNanos :: !Word64
+    -- ^ The time of Hectare's reduction of the automata.
+    , statisticsListNanos :: !Word64
+    -- ^ The time to list Hectare's programs.
+    , statisticsCheckNanos :: !Word64
+    -- ^ The time of the checks in the typechecker.
     , statisticsCounters :: !Counters
     }
     deriving (Eq, Show)
@@ -202,17 +225,12 @@ figures of the search.
 streamFits :: Options -> TypedHole -> [Candidate] -> Type -> (Fit -> TcM Bool) -> TcM Statistics
 streamFits options hole candidates goal accept = do
     environment <- newEnvironment hole
+    begin <- liftIO getMonotonicTimeNSec
+    let deadline = (\seconds -> begin + round (seconds * 1e9)) <$> optionSeconds options
     case query of
-        Just hectareQuery -> do
-            let start = startWalker environment (map candidateType candidates) goal
-            let programs =
-                    [ (size, unprefix program)
-                    | size <- [1 .. optionMaximumSize options]
-                    , representative <- solutionsOfSize hectareLibrary hectareQuery size
-                    , program <- expand hectareLibrary representative
-                    ]
-            walk environment start (limit programs)
-        Nothing -> Statistics 0 0 0 0 <$> readCounters environment
+        Just hectareQuery ->
+            walk environment (startWalker environment (map candidateType candidates) goal) hectareQuery deadline
+        Nothing -> statisticsOf emptySearch <$> readCounters environment
   where
     -- Hectare's automaton has symbols of its own, as app and filter, so each
     -- name gets a prefix there.
@@ -220,7 +238,6 @@ streamFits options hole candidates goal accept = do
     unprefix program = case program of
         Var name -> Var (fromMaybe name (Text.stripPrefix "ghc:" name))
         App function argument -> App (unprefix function) (unprefix argument)
-    limit = maybe id take (optionMaximumPrograms options)
     -- The free type variables of the scope, named in order of occurrence.
     relevant = map ctEvPred (bagToList (th_relevant_cts hole))
     free = nub (filter isTyVar (tyCoVarsOfTypesList (goal : relevant <> map candidateType candidates)))
@@ -262,23 +279,62 @@ streamFits options hole candidates goal accept = do
         Map.fromListWith
             (\_ old -> old)
             [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates]
-    walk environment start = go (Search [] emptyDead 0 0 0 0 Nothing)
+    walk environment start hectareQuery deadline = sizes 1 emptySearch
       where
-        go search remaining = case remaining of
-            [] -> finish search
-            (size, program) : rest -> do
-                when (size /= searchSize search && searchSize search > 0) $ report search
-                mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
-                search' <- check environment start search{searchPrograms = searchPrograms search + 1} size program
-                more <- maybe (pure True) accept (searchLastFit search')
-                if more then go search'{searchLastFit = Nothing} rest else finish search'
+        -- Build and reduce the automaton of each size, then check its
+        -- programs: 'Data.CFTA.Gen.Synthesis.solutionsOfSize' in parts, so
+        -- that each part has its own time.
+        sizes size search
+            | size > optionMaximumSize options = finish search
+            | otherwise = do
+                (built, buildTime) <- liftIO (timed deadline (rawSearchSpace hectareLibrary hectareQuery size))
+                let search' = search{searchSize = size, searchBuild = searchBuild search + buildTime}
+                case built of
+                    Nothing -> stop search'{searchOutOfTime = True}
+                    Just raw -> do
+                        (reduced, reduceTime) <- liftIO (timed deadline (refold (reduceFully raw)))
+                        let search'' = search'{searchReduce = searchReduce search' + reduceTime}
+                        case reduced of
+                            Nothing -> stop search''{searchOutOfTime = True}
+                            Just space ->
+                                programs
+                                    size
+                                    [program | representative <- programsIn space, program <- expand hectareLibrary representative]
+                                    search''
+        programs size remaining search
+            | maybe False (searchPrograms search >=) (optionMaximumPrograms options) = stop search
+            | otherwise = do
+                (next, listTime) <- liftIO (timed Nothing (nextProgram remaining))
+                let search' = search{searchList = searchList search + listTime}
+                case next of
+                    Just (Just (program, tokens, rest)) -> do
+                        mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
+                        before <- liftIO getMonotonicTimeNSec
+                        if maybe False (before >=) deadline
+                            then stop search'{searchOutOfTime = True}
+                            else do
+                                checked <-
+                                    check environment start search'{searchPrograms = searchPrograms search' + 1} size program tokens
+                                after <- liftIO getMonotonicTimeNSec
+                                let search'' = checked{searchCheck = searchCheck checked + (after - before), searchLastFit = Nothing}
+                                more <- maybe (pure True) accept (searchLastFit checked)
+                                if more then programs size rest search'' else stop search''
+                    _ -> report search' >> sizes (size + 1) search'
+        -- The next program, with its tokens evaluated, so that the listing
+        -- has its own time.
+        nextProgram remaining = case remaining of
+            [] -> Nothing
+            representative : rest ->
+                let program = unprefix representative
+                    tokens = preorder program
+                 in rnf tokens `seq` Just (program, tokens, rest)
+        stop search = report search >> finish search
         -- Leave no unification behind: the bottom frame was frozen before
         -- the first step of the last program.
         finish search = do
             case reverse (searchStack search) of
                 frame : _ -> restore environment (frameFrozen frame)
                 [] -> pure ()
-            report search
             statisticsOf search <$> readCounters environment
         report search = case optionReport options of
             Just callback -> do
@@ -286,8 +342,17 @@ streamFits options hole candidates goal accept = do
                 liftIO (callback (searchSize search) (statisticsOf search counters))
             Nothing -> pure ()
     statisticsOf search =
-        Statistics (searchPrograms search) (searchSkipped search) (searchFits search) (searchSize search)
-    check environment start search size program
+        Statistics
+            (searchPrograms search)
+            (searchSkipped search)
+            (searchFits search)
+            (searchSize search)
+            (searchOutOfTime search)
+            (searchBuild search)
+            (searchReduce search)
+            (searchList search)
+            (searchCheck search)
+    check environment start search size program tokens
         | isDead tokens (searchDead search) = pure search{searchSkipped = searchSkipped search + 1, searchSize = size}
         | otherwise = do
             let kept = commonPrefix (map frameToken (reverse (searchStack search))) tokens
@@ -298,8 +363,6 @@ streamFits options hole candidates goal accept = do
                 frame : _ -> restore environment (frameFrozen frame)
                 [] -> pure ()
             forward environment search{searchStack = stack, searchSize = size} (drop kept tokens) kept start size program
-      where
-        tokens = preorder program
     forward environment search remaining depth start size program = case remaining of
         [] -> do
             let walker = maybe start frameWalker (headMaybe (searchStack search))
@@ -367,7 +430,32 @@ data Search = Search
     , searchSize :: !Int
     , searchLastFit :: Maybe Fit
     -- ^ The last program, when it fits.
+    , searchOutOfTime :: !Bool
+    , searchBuild :: !Word64
+    , searchReduce :: !Word64
+    , searchList :: !Word64
+    , searchCheck :: !Word64
     }
+
+-- | A search before its first program.
+emptySearch :: Search
+emptySearch = Search [] emptyDead 0 0 0 0 Nothing False 0 0 0 0
+
+{- | Evaluate a value to weak head normal form, and give the nanoseconds that
+it took; the value is 'Nothing' when the deadline comes first. Only a pure
+value is stopped: a step in 'TcM' that stops part way would leave
+unification variables filled.
+-}
+timed :: Maybe Word64 -> a -> IO (Maybe a, Word64)
+timed deadline value = do
+    begin <- getMonotonicTimeNSec
+    result <- case deadline of
+        Nothing -> Just <$> evaluate value
+        Just end
+            | begin >= end -> pure Nothing
+            | otherwise -> timeout (fromIntegral ((end - begin) `div` 1000)) (evaluate value)
+    end' <- getMonotonicTimeNSec
+    pure (result, end' - begin)
 
 -- | A trie of dead prefixes: whether the prefix so far is dead, and the longer prefixes.
 data Dead = Dead !Bool !(Map Token Dead)
