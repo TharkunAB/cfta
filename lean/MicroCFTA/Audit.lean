@@ -1417,6 +1417,13 @@ import MicroCFTA.InternedFreshOrdinaryStatefulGateTrace
 import MicroCFTA.InternedFreshOrdinaryStatefulGateGraph
 import MicroCFTA.InternedFreshOrdinaryStatefulGateClasses
 import MicroCFTA.InternedFreshOrdinaryUnfoldMemo
+import MicroCFTA.InternedFreshOrdinaryMemoGateTrace
+import MicroCFTA.InternedFreshOrdinaryMemoGateLift
+import MicroCFTA.InternedFreshOrdinaryMemoGateClasses
+import MicroCFTA.InternedSourceCrush
+import MicroCFTA.InternedSourceCrushInventory
+import MicroCFTA.SourceMemoGate
+import MicroCFTA.SourceUnconstrainedMemo
 /-!
 # Proof dependency audit
 
