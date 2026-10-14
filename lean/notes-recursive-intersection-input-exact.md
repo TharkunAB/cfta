@@ -77,8 +77,11 @@ Least successful request bounds, canonical domain equivalence, completed-frame
 running-cell origin, active-bound lifecycle, and conditional native demand
 progress are now proved in
 [request progress](notes-recursive-intersection-request-progress.md).
-Use those results and derive the body-limit invariant for compiled
-continuations. Full successful native first-run completion remains open.
+The body-limit invariant and native bound induction are now proved in
+[finite native observations](notes-recursive-intersection-native-finite.md).
+Closed original roots have a finite native return or exact pending
+constructor under checked words. Derive pending-constructor exclusion and
+output preparation for successful native first-run completion.
 
 Use these derived original input facts and finite semantic execution to
 connect the native request tree to the schedule. Preserve actual constructor

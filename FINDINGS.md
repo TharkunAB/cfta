@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 07:23 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 08:01 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -293,10 +293,33 @@ Their original completion frames restore the caller's running cells.
 `ActiveAbove` has initialization, publication, physical-effect, start, and
 completion-frame lemmas. Published handles cannot be absent. Busy is excluded
 under checked keys, strong source validity, active bounds, and the request's
-strict decrease. The body-limit invariant is not yet maintained across all
-compiled continuations. These conditional progress results do not assert
-general native first-run completion. See
+strict decrease. The all-branch compiler invariant and finite native driver
+induction are now proved below. See
 [request progress](lean/notes-recursive-intersection-request-progress.md).
+
+`compileNode_below` and `compileEdge_below` derive strict request limits and
+original scope through every branch and actual continuation. Successful
+semantic branch actions exclude unsupported control, incompatible payloads,
+and unbound references. Original binder readback excludes missing payloads.
+`WordRanges` checks machine-word bounds on actual finite yielded prefixes.
+It assumes no completed native run or sufficient fuel.
+
+`code_terminal` closes smaller-body observations by strong bound induction
+and structural code induction. It preserves strong source/memo validity after
+returns and restores caller bounds through original finish frames.
+`cold_node_terminal` starts from actual closed original available roots and
+empty memo tables. Under checked words, it derives a finite return or exact
+pending constructor. No source failure, absent handle, busy cell, or yielded
+outcome satisfies `ReturnsOrPending`. Pending retains its key, code, and state.
+No native completion, callback execution, or new provenance is supplied.
+`done_correct_of_ranges` derives guarded kernel correspondence for a return.
+
+This is not yet successful completion. Exclude pending constructors at the
+actual reached bodies and caches. Existing completion requires payload
+coverage and `PreparedWithoutMu`. Closedness alone does not establish this
+condition for open nested binders. General output preparation and physical
+product-row correspondence remain open. See
+[finite native observations](lean/notes-recursive-intersection-native-finite.md).
 
 ## Remaining work and assessment
 
@@ -320,16 +343,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`2a9cea9c`**; later commits record this handoff.
+The latest proof checkpoint is **`2129c3ed`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,272 build targets and 41,502 theorem
+The current Lean 4.34.1 audit passes **1,291 build targets and 41,663 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-native-active-20261014-audit.log`.
+Log: `/tmp/mcfta-native-returns-or-pending-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **33% at 07:23 CEST**.
+No background proof worker is active. Weekly allowance was **32% at 08:01 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

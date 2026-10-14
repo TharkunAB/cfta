@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 07:23 CEST**, upstream `f59c198d`.
-The latest proof commit is `2a9cea9c`. No background proof worker is active.
+Current checkpoint: **2026-10-14 08:01 CEST**, upstream `f59c198d`.
+The latest proof commit is `2129c3ed`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -126,8 +126,19 @@ Least successful request bounds now strictly decrease through every immediate
 call. Canonical domain allocation retains these bounds. Completed native
 source bodies leave no new running cells, and original frames restore caller
 cells. Active-bound lifecycle and conditional absent/busy exclusion are proved.
-The body-limit invariant across all compiled continuations, sufficient native
-first-run bounds, and physical product correspondence remain open. See
+All compiled branches and continuations now retain original scope and strict
+request limits. Successful semantic actions exclude explicit source failures.
+Word checks on actual finite yielded prefixes supply completed range
+certificates. Strong bound induction and structural code induction derive
+`cold_node_terminal`: a finite native return or exact pending constructor
+from closed original roots under checked words. Absent handles, busy cells,
+source failures, and yielded outcomes are excluded from `ReturnsOrPending`.
+Original completed frames derive new provenance and restore caller bounds.
+No completed native trace or body termination contract is supplied.
+General successful completion still needs pending-constructor exclusion at
+the actual reached source states. Coverage and `PreparedWithoutMu` are not
+yet derived there. Output preparation and physical product rows remain open.
+See [finite native observations](notes-recursive-intersection-native-finite.md),
 [request progress](notes-recursive-intersection-request-progress.md),
 [exact original inputs](notes-recursive-intersection-input-exact.md),
 [physical input view](notes-recursive-intersection-input-view.md),
@@ -151,7 +162,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,272 targets and 41,502 theorem dependency checks**
+The current audit passes **1,291 targets and 41,663 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

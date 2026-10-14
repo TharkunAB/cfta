@@ -97,8 +97,11 @@ results. Canonical representative readback, both independent copied-language
 directions, the complete finite input interface, and sufficient semantic
 schedule bounds are now proved in
 [exact original inputs](notes-recursive-intersection-input-exact.md).
-Connect the
-actual source requests to the semantic schedule and obtain sufficient bounds.
+All compiled request limits and native bound induction are now proved in
+[finite native observations](notes-recursive-intersection-native-finite.md).
+Closed original roots have a finite return or exact pending constructor under
+checked words. Derive pending-constructor exclusion at actual reached source
+caches and bodies for successful first-run completion.
 Preserve exact constructor/domain effects and native memo publication.
 Do not repeat completed-run correspondence or supply an execution trace as
 a replacement termination proof.

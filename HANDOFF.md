@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 07:23 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 08:01 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -33,11 +33,14 @@ The semantic schedule has a sufficient finite bound and exact product language
 for actual closed original inputs. Sufficient native first-run bounds remain open.
 Least successful semantic request bounds now decrease at every immediate call.
 Canonical source allocation retains them. Native completed frames leave no new
-running cells. Active-bound lifecycle lemmas and conditional absent/busy
-exclusion are proved. Maintaining the body limit through compiled continuations
-and deriving complete native first-run execution remain open.
+running cells. The body-limit invariant now covers every compiled branch and
+actual continuation. Strong bound induction and structural code induction
+derive a finite native return or exact pending constructor from closed original
+roots under checked word ranges. Source failures, absent handles, and busy
+cells are excluded. General successful first-run completion still needs the
+constructor pending exclusion and output preparation.
 **No background proof worker is active.**
-The latest proof checkpoint is **`2a9cea9c`**. A later documentation commit
+The latest proof checkpoint is **`2129c3ed`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -62,7 +65,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **33% at 07:23 CEST**. This is a historical value.
+The last observed value was **32% at 08:01 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -97,7 +100,8 @@ files retain their bytes. New proofs are separate files.
 Before new work, inspect allowance, status, log, worktrees, and stashes.
 Preserve a backup and refresh `origin/microcfta`. If upstream moved, rebase the
 local continuation as requested. Preserve local source repairs through any
-overlap. Git metadata writes require escalation in this sandbox.
+overlap. The latest `git pull --ff-only origin microcfta` at 07:23 CEST
+reported `Already up to date.` Git metadata writes require escalation in this sandbox.
 
 Preserve the earlier backups and manifests, including
 `backup/formalization-before-rebase-20261013-2315` (`298a225b`),
@@ -481,7 +485,7 @@ derives strict decrease for all immediate branches and ordered edge children.
 `SourceRecursiveIntersectionRequestProgress` derives physical branch-child
 decrease, initial closed-root completion certificates, and unchanged required
 fuel under actual canonical Mu allocation. Successful child execution is not
-supplied as a premise. Full compiled continuation coverage remains open.
+supplied as a premise. Full compiled continuation coverage is now proved below.
 
 `SourceRecursiveIntersectionNativeRunningBefore.Evaluation.running_before`
 and `done_running_before` show that actual completed source bodies leave no
@@ -498,44 +502,64 @@ checked keys, active bounds, and a strict request decrease. Active bounds and
 the decrease are explicit premises. Full first-run completion is not claimed.
 Read [request progress](lean/notes-recursive-intersection-request-progress.md).
 
+## All compiled limits and finite native observations
+
+`SourceRecursiveIntersectionRequestScope` retains original operands and binder
+payloads in the fixed source heap. `Below` retains this scope and strict least
+request bounds through all actual effects and available returned values.
+It excludes explicit source failures. `compileNode_below` and
+`compileEdge_below` derive it for every branch and ordered continuation.
+`successful_action` excludes incompatible branches and unbound references.
+Original binder readback excludes missing payloads after source growth.
+
+`WordRanges` checks existing machine-word bounds on actual finite yielded
+prefixes. It assumes no completed run or sufficient native bound.
+`Evaluation.bounds_of_ranges` derives the earlier range certificate.
+`code_terminal` closes smaller-body observations by strong bound induction
+and structural code induction. Requests cannot observe absent or busy cells.
+New starts weaken the bound. Original completed frames derive provenance,
+finish their own cells, and restore the caller's stronger active bound.
+
+`cold_node_terminal` derives a finite native return or exact pending constructor
+from actual closed original available roots and empty memo tables. It assumes
+checked words, source facts, and a valid domain cache. It does not assume a
+native trace, prepared output, or completed callback. `ReturnsOrPending` has
+no failure, absent, busy, or yielded case. Pending retains its exact key,
+remaining continuation, and complete native state. `done_correct_of_ranges`
+derives strong memo validity, source growth, available results, and stable
+kernel meaning for an actual return.
+
+Read [finite native observations](lean/notes-recursive-intersection-native-finite.md).
+General successful completion still needs a source proof that the actual
+optional binders cannot report pending. The existing constructor theorem
+requires coverage and `PreparedWithoutMu`. Closed roots do not by themselves
+supply preparation for open nested binders. Do not assume a no-pending callback
+contract. Product-row correspondence and output preparation remain open.
+
 ## Remaining priorities
 
-1. Use the proved physical input view, cached free-variable/closedness equations,
-   finite reachable input carrier, physical structural ranks, actual canonical
-   representatives, and proved independent copied-language equivalence. The
-   complete finite input interface and sufficient semantic schedule bounds
-   are now derived. Least request bounds and active native bounds now provide
-   the progress measure. Derive its body-limit invariant for all compiled
-   source branches and continuations, then construct finite actual native
-   evaluation. Restore caller bounds through original completion frames.
-   Carry explicit checked word ranges. Derive sufficient successful first-run
-   native bounds for the intended input scope.
-   Preserve actual constructor/domain effects and source growth. Completed native node/edge
-   correspondence, strong memo validity, exact physical/domain growth,
-   available results, stable kernel bounds, and new `Produced` are proved
-   under explicit checked word ranges. Do not repeat those proofs. Use
-   `lean/notes-recursive-intersection-request-progress.md` for the exact
-   next target. Actual completion remains a premise of the new theorems.
-   Do not replace termination with a supplied completed trace. General open
-   nested constructor completion and new-body preparation remain open.
-   Preserve publication before thunk forcing, shifted domain keys, ordered
-   tagged operands, reversed swap requests, and RecIntersect bypass. Retain
-   the current continuation and source effects when a bounded execution yields.
-   Do not treat busy as a successful result or replace the pending source
-   protocol with completed-only insertion. Full guarded kernel replay and
-   completed node/edge provenance are proved. Do not repeat them or assume purity.
-   Connect actual requests to the semantic schedule and derive a sufficient
-   bound. Stable larger bounds
-   and replay alone do not prove successful first-run completion. Use actual
-   child/row traces and canonical readback to derive
+1. Read `lean/notes-recursive-intersection-native-finite.md` first. The original
+   physical input view, exact copied language, finite semantic schedule,
+   all compiled strict request limits, active-bound maintenance, and finite
+   native return-or-pending observations are proved. Do not repeat them.
+   Derive pending exclusion for actual optional binders reached by the driver.
+   Start with `SourceRecursiveIntersectionMaybeMu.complete` and its coverage
+   and `PreparedWithoutMu` conditions. Derive the conditions for the intended
+   scope, or prove the larger open nested constructor invariant. Closed root
+   syntax alone does not give preparation. A supplied no-pending callback or
+   completed native trace does not close this obligation.
+   Derive sufficient successful first-run native bounds and actual output
+   preparation. Preserve exact source/domain effects, both memo families,
+   publication before demand, ordered tagged operands, shifted domain keys,
+   reversed swap requests, RecIntersect bypass, and original finish frames.
+   Keep word ranges explicit and retain yielded continuations and current state.
+   Use completed-run correspondence for new provenance and stable kernel meaning.
+   Use actual child/row traces and canonical returned rows to derive
    `SourceCyclicRowsNativeGate.ProductReadback.members` and `.rejected`.
-   `product_exact` then gives product language. Do not supply equivalent
-   product-row or language premises. General open nested construction still
-   needs key separation or a larger execution invariant. Derive new-body
-   preparation where it applies, or a larger cold-exposure invariant. Compose
-   the completed cold table and Sized adapters. Preserve the full input scope
-   and exact caches. Read `lean/notes-recursive-intersection-memo.md`, the
-   kernel/optional-binder/control notes, and `lean/notes-cold-shared-rows.md`.
+   Apply `product_exact` to obtain product language. Do not assume equivalent
+   language or row contracts. Derive new-body preparation, or a larger cold
+   exposure invariant, before composing the completed cold table and Sized
+   adapters. Read the optional-binder, kernel, and cold shared-row notes.
 2. Complete repaired cached-depth/deep heap induction. `InternedDepthFreeProjection*`
    now proves full-syntax free-name membership and ordinary-root callback deep
    observations with nested children. `callback_observed` derives observations
@@ -584,10 +608,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,272 jobs and 41,502 theorem dependency checks**.
+The current build passes **1,291 jobs and 41,663 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-native-active-20261014-audit.log`.
+Log: `/tmp/mcfta-native-returns-or-pending-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -621,6 +645,10 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `2129c3ed` | Exclude source failures; derive finite native return or exact pending constructor from closed original roots. |
+| `88abb29e` | Strong bound induction and structural code induction derive finite native observations without supplied completion. |
+| `08340409` | Word checks on actual finite prefixes, derived completed range certificates, and exact terminal sequencing. |
+| `9a86559c` | Original request scope and strict bounds through every compiled node/edge branch and continuation. |
 | `2a9cea9c` | Running-cell origin, original completed-frame restoration, active-bound lifecycle, and conditional node/edge demand progress. |
 | `e1ae3098` | Extensional domain execution, least successful fuel, all immediate request decreases, and actual canonical allocation correspondence. |
 | `7387845d` | Canonical input identities, both independent copied-language directions, full finite input interface, semantic schedule totality, and original view retention through growth. |

@@ -78,8 +78,8 @@ bound at or above the current source-body bound.
 Actual publication and physical/domain effects retain it. A weaker current
 bound retains it. Actual demand adds only the selected request's certified
 bound. An original completed body and finish restore the caller's stronger
-bound. These lemmas do not yet maintain the invariant through every compiled
-source branch in one complete native termination proof.
+bound. The later all-branch invariant and native bound induction compose
+these lemmas. See [finite native observations](notes-recursive-intersection-native-finite.md).
 
 `SourceRecursiveIntersectionNativeDemandProgress.node_absent_impossible` and
 `edge_absent_impossible` exclude absent observations after actual publication
@@ -90,29 +90,21 @@ lookup, demand, complete source records, and checked machine keys derive exact
 captured request identity. Active bounds and the strict request decrease
 remain explicit premises. No general native completion theorem is claimed.
 
-## Next proof target
+## Current continuation and next proof target
 
-Connect these results to the compiled source code and its continuations.
-A suitable proof invariant records that every recursive request in the
-current body has a least semantic bound below its current limit. Preserve
-that invariant through each actual effect and through every available
-returned value. Derive it for all `compileNode` and `compileEdge` branches
-from original operand scope, actual domain extension, original readback,
-ordered union/row walks, and the proved physical child decreases.
-The fixed original input view must remain valid through source growth.
+The compiled body-limit invariant and its native strong bound induction are
+now proved at `2129c3ed`. Read
+[finite native observations](notes-recursive-intersection-native-finite.md).
+`cold_node_terminal` gives a finite return or exact pending constructor from
+actual closed original roots under checked words. No source failure, absent
+handle, busy cell, or yielded outcome satisfies that result.
 
-Then construct finite native evaluation by induction on the body limit and
-source code. Use actual lookup/demand progress, weaken the enclosing active
-bound at a new start, and restore the caller's bound after the original
-finish. Use the existing completed-run correspondence to derive strong final
-validity, available results, and new provenance. Carry explicit word bounds.
-Do not supply a completed native trace as a termination premise.
-
-Actual optional-binder pending observations remain distinct from successful
-completion. General new-binder completion and preparation remain open.
-Do not convert a finite blocked observation into a successful result. Derive
-the constructor conditions needed for the intended valid input scope.
-The native product-row membership/rejection proof also remains open.
+Next exclude pending optional binders at their actual source caches and
+bodies. Derive coverage and `PreparedWithoutMu`, or the larger nested
+constructor invariant. Closed roots alone do not give preparation.
+Derive successful first-run completion, output preparation, and actual
+product-row membership/rejection. Do not supply a completed trace or a
+no-pending callback contract as a replacement source proof.
 
 ## Validation at this checkpoint
 
