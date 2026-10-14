@@ -1,18 +1,18 @@
-# microcfta
+# cfta
 
 Constrained finite tree automata for Haskell, in two packages:
 
 | Package | Purpose |
 | --- | --- |
-| [`microcfta`](microcfta/README.md) | One interned automaton engine with one constraint type for three kinds of automaton: ordinary tree automata, equality-constrained tree automata (ECTA), and liquid tree automata (LTA) with Liquid Fixpoint refinements and Z3 entailment. |
-| [`microcfta-generator`](microcfta-generator/README.md) | Ranked generation, random sampling, replay, shrinking, and QuickCheck integration for all three. |
+| [`cfta`](cfta/README.md) | One interned automaton engine with one constraint type for three kinds of automaton: ordinary tree automata, equality-constrained tree automata (ECTA), and liquid tree automata (LTA) with Liquid Fixpoint refinements and Z3 entailment. |
+| [`cfta-generator`](cfta-generator/README.md) | Ranked generation, random sampling, replay, shrinking, and QuickCheck integration for all three. |
 
 ```mermaid
 flowchart BT
-  g["microcfta-generator"] --> c["microcfta"]
+  g["cfta-generator"] --> c["cfta"]
 ```
 
-[`microcfta-ghc`](microcfta-ghc/README.md), for GHC 9.14 only, fills typed
+[`cfta-ghc`](cfta-ghc/README.md), for GHC 9.14 only, fills typed
 holes with programs that Hectare's automaton proposes and GHC's typechecker
 checks, also as a typed-hole plugin (`-fplugin=Data.CFTA.GHC.HoleFits`); it
 is the only package that depends on the `ghc` library.
@@ -46,7 +46,7 @@ positive path equalities, and an LTA has the full Boolean language of equality
 and entailment. An automaton with no constraints is enumerated by the
 plain level-by-level enumerator whatever layer built it.
 
-`microcfta-generator` owns `Data.CFTA.Ranked`, which provides exact finite
+`cfta-generator` owns `Data.CFTA.Ranked`, which provides exact finite
 ranks, backend-independent sampling, and shrinking. `Data.CFTA.Gen` compiles an
 acyclic ordinary automaton or builds one with the `FTAGen.node`/`FTAGen.do`
 syntax. `Data.CFTA.Gen.Equality` adds equality-constrained sources, equality
@@ -99,9 +99,9 @@ what each kind adds:
 
 | Automaton | Example | What becomes possible |
 | --- | --- | --- |
-| FTA | [`UntypedExpressionLanguage`](microcfta-generator/common/Data/CFTA/Gen/UntypedExpressionLanguage.hs) | Generate integer expression shapes. Every term has the one implicit sort. |
-| ECTA | [`TypedExpressionLanguage`](microcfta-generator/common/Data/CFTA/Gen/TypedExpressionLanguage.hs) | Add integers and Booleans, then equate operation signatures with child result types. |
-| LTA | [`StateMachineTraceLanguage`](microcfta-generator/common/Data/CFTA/Gen/Refinement/StateMachineTraceLanguage.hs) | Carry a typed operand stack from one command to the next and prove dependent input/output state contracts with Z3. |
+| FTA | [`UntypedExpressionLanguage`](cfta-generator/common/Data/CFTA/Gen/UntypedExpressionLanguage.hs) | Generate integer expression shapes. Every term has the one implicit sort. |
+| ECTA | [`TypedExpressionLanguage`](cfta-generator/common/Data/CFTA/Gen/TypedExpressionLanguage.hs) | Add integers and Booleans, then equate operation signatures with child result types. |
+| LTA | [`StateMachineTraceLanguage`](cfta-generator/common/Data/CFTA/Gen/Refinement/StateMachineTraceLanguage.hs) | Carry a typed operand stack from one command to the next and prove dependent input/output state contracts with Z3. |
 
 The LTA example generates a complete QuickCheck trace before executing it, as
 state-machine testing requires. `Push`, `Add`, `And`, `Equal`, `Not`, and `Pop`
@@ -110,12 +110,12 @@ next command's input space. The resulting trace is then replayed through both
 an abstract model and a separate concrete interpreter.
 
 Three smaller examples show other uses. The ECTA
-[filesystem ownership join](microcfta-generator/test/Data/CFTA/Gen/Equality/GenSpec.hs)
+[filesystem ownership join](cfta-generator/test/Data/CFTA/Gen/Equality/GenSpec.hs)
 shows flat equality conditioning, while
-[`SafeBufferLanguage`](microcfta-generator/common/Data/CFTA/Gen/Refinement/SafeBufferLanguage.hs)
+[`SafeBufferLanguage`](cfta-generator/common/Data/CFTA/Gen/Refinement/SafeBufferLanguage.hs)
 shows Z3 proving symbolic bounds and dependent append lengths before a partial
 buffer interpreter reaches QuickCheck. The more LTA-biased
-[`SizedVectorLanguage`](microcfta-generator/common/Data/CFTA/Gen/Refinement/SizedVectorLanguage.hs)
+[`SizedVectorLanguage`](cfta-generator/common/Data/CFTA/Gen/Refinement/SizedVectorLanguage.hs)
 composes `append`, `take`, `zipWith`, and safe indexing through arithmetic
 result-size refinements using the ordinary qualified-do syntax.
 
@@ -128,9 +128,9 @@ automata. `cross-layer-speed` enumerates the same languages through the
 ordinary, equality, and refinement layers so the three can be compared:
 
 ```sh
-cabal bench microcfta:micro-bench --enable-optimization=2
-cabal bench microcfta:enumeration-speed --enable-optimization=2
-cabal bench microcfta:cross-layer-speed --enable-optimization=2
+cabal bench cfta:micro-bench --enable-optimization=2
+cabal bench cfta:enumeration-speed --enable-optimization=2
+cabal bench cfta:cross-layer-speed --enable-optimization=2
 ```
 
 The three flagship languages are benchmarked against naive recognition and
@@ -144,7 +144,7 @@ fourth control benchmark generates the typed-expression language with either
 ECTA path equality or LTA integer-equality refinements, which measures the cost
 of the liquid guards. The measured tables and methodology are in
 the
-[`microcfta-generator` README](microcfta-generator/README.md#sampling-performance).
+[`cfta-generator` README](cfta-generator/README.md#sampling-performance).
 
 Generate the three flagship tables and the ECTA-versus-LTA control table from
 the repository root with:
@@ -171,7 +171,7 @@ pinned `fourmolu.yaml` and `.hlint.yaml`:
 
 ```sh
 fourmolu --mode check $(git ls-files '*.hs')
-hlint --ignore-suggestions microcfta microcfta-generator
+hlint --ignore-suggestions cfta cfta-generator
 cabal-gild --mode check */*.cabal
 ```
 
@@ -180,14 +180,14 @@ The examples in the entry-point modules are executable. Run them with
 
 ```sh
 cabal install doctest
-cabal repl --with-repl=doctest lib:microcfta
-cabal repl --with-repl=doctest lib:microcfta-generator
+cabal repl --with-repl=doctest lib:cfta
+cabal repl --with-repl=doctest lib:cfta-generator
 ```
 
 `scripts/release.sh PACKAGE --check-only` validates one package and the local
-source archive of its workspace dependency. Publish `microcfta` first, then
-`microcfta-generator`.
+source archive of its workspace dependency. Publish `cfta` first, then
+`cfta-generator`.
 
-Code that imports `Data.CFTA.*` must declare `microcfta`, and code that imports
-`Data.CFTA.Gen.*` or `Data.CFTA.Ranked.*` must declare `microcfta-generator`.
+Code that imports `Data.CFTA.*` must declare `cfta`, and code that imports
+`Data.CFTA.Gen.*` or `Data.CFTA.Ranked.*` must declare `cfta-generator`.
 Code that imports `Data.Tree` directly, for `drawTree`, must declare `containers`.
