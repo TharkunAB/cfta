@@ -24,6 +24,25 @@ theorem below_wellFounded (bound : Nat) : WellFounded (Below bound) := by
       (Prod.lex Nat.lt_wfRel ⟨Below bound, ih⟩).wf
     exact InvImage.wf (fun counts : Nat → Nat => (counts bound, counts)) pairs
 
+/-- Strict descending count comparisons compose at each fixed finite height. -/
+theorem below_trans (bound : Nat) (first middle last : Nat → Nat)
+    (one : Below bound first middle) (two : Below bound middle last) : Below bound first last := by
+  induction bound with
+  | zero => exact False.elim one
+  | succ bound ih =>
+      change Prod.Lex Nat.lt (Below bound) (first bound, first) (middle bound, middle) at one
+      change Prod.Lex Nat.lt (Below bound) (middle bound, middle) (last bound, last) at two
+      change Prod.Lex Nat.lt (Below bound) (first bound, first) (last bound, last)
+      have oneCases : first bound < middle bound ∨ first bound = middle bound ∧ Below bound first middle := Prod.lex_def.mp one
+      have twoCases : middle bound < last bound ∨ middle bound = last bound ∧ Below bound middle last := Prod.lex_def.mp two
+      rcases oneCases with less | ⟨same, less⟩
+      · rcases twoCases with later | ⟨equal, later⟩
+        · exact .left _ _ (Nat.lt_trans less later)
+        · exact .left _ _ (show first bound < last bound by omega)
+      · rcases twoCases with later | ⟨equal, later⟩
+        · exact .left _ _ (show first bound < last bound by omega)
+        · exact Prod.Lex.right' _ (show first bound ≤ last bound by omega) (ih less later)
+
 /-- One strict decrease and nonincrease at every higher height give a strict step. -/
 theorem below_of_decrease (bound : Nat) (left right : Nat → Nat) (height : Nat)
     (inside : height < bound) (strict : left height < right height)
