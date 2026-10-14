@@ -18,15 +18,19 @@ open InternedFreshOrdinaryContext InternedFreshOrdinaryActiveOrigins
 open InternedNestedCoverage (reserve_covered run_covered)
 open InternedBinderProtocol (Reference NodeKey)
 
-/-- A pending source lookup retains its actual active ancestor and full descendant route. -/
-def Encounter [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (final : State Symbol Guard) : Prop :=
-  ∃ origin : Origin Symbol Guard key, ∃ smart body environment before depth afterDepth ordinary crossings,
+/-- The encountered source call retains one specified active ancestor and its full descendant route. -/
+def AtOrigin [DecidableEq (EdgeKey Symbol Guard)] (origin : Origin Symbol Guard key) (final : State Symbol Guard) : Prop :=
+  ∃ smart body environment before depth afterDepth ordinary crossings,
     Context before environment ∧ Path origin.body origin.localInputs (.binder smart body) environment crossings ∧
     Grows origin.allocated before ∧
     (∀ crossing ∈ crossings, Grows origin.allocated crossing.before ∧ Grows crossing.start before) ∧
     InternedFreshOrdinaryFacts.callback body environment .depth before = .done depth afterDepth ∧
     InternedFreshOrdinaryFacts.callback body environment (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) afterDepth = .done ordinary final ∧
     Available final depth ∧ Available final ordinary ∧ key = muKey depth ordinary ∧ IsPending key final
+
+/-- A pending source lookup retains its actual active ancestor and full descendant route. -/
+def Encounter [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (final : State Symbol Guard) : Prop :=
+  ∃ origin : Origin Symbol Guard key, AtOrigin origin final
 
 mutual
 /-- Every stopped source expression derives the exact source origin of its active reservation. -/

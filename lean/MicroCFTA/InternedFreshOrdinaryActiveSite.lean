@@ -45,11 +45,10 @@ theorem Site.finalContext [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin 
     (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel origin.depth))
     (ordinary_available site.afterDepth (InternedFreshOrdinaryConstruction.ordinaryLevel origin.depth))
 
-/-- An actual pending encounter derives one site with both exact original ancestor records. -/
-theorem encounter_site [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (final : State Symbol Guard)
-    (encounter : InternedFreshOrdinaryActiveEncounter.Encounter key final) :
-    ∃ origin : Origin Symbol Guard key, Nonempty (Site origin final) := by
-  obtain ⟨origin, smart, body, environment, before, depth, afterDepth, ordinary, crossings,
+/-- An actual encounter retains the specified ancestor when canonical readback identifies both original probes. -/
+theorem encounter_site_at [DecidableEq (EdgeKey Symbol Guard)] (origin : Origin Symbol Guard key) (final : State Symbol Guard)
+    (encounter : InternedFreshOrdinaryActiveEncounter.AtOrigin origin final) : Nonempty (Site origin final) := by
+  obtain ⟨smart, body, environment, before, depth, afterDepth, ordinary, crossings,
     context, path, initial, traces, depthDone, ordinaryDone, depthAvailable, ordinaryAvailable, sameKey, pending⟩ := encounter
   have depthContext : Context afterDepth environment := by
     simpa only [depthDone, Outcome.state] using context.callback body .depth (depth_available before)
@@ -66,7 +65,14 @@ theorem encounter_site [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (fin
     (grows_trans initial (grows_trans depthGrowth ordinaryGrowth)) depth ordinary depthAvailable ordinaryAvailable sameKey
   subst depth
   subst ordinary
-  exact ⟨origin, ⟨⟨smart, body, environment, before, afterDepth, crossings, context, path, initial, traces, depthDone, ordinaryDone, pending⟩⟩⟩
+  exact ⟨⟨smart, body, environment, before, afterDepth, crossings, context, path, initial, traces, depthDone, ordinaryDone, pending⟩⟩
+
+/-- An actual pending encounter derives one site with both exact original ancestor records. -/
+theorem encounter_site [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (final : State Symbol Guard)
+    (encounter : InternedFreshOrdinaryActiveEncounter.Encounter key final) :
+    ∃ origin : Origin Symbol Guard key, Nonempty (Site origin final) := by
+  obtain ⟨origin, atOrigin⟩ := encounter
+  exact ⟨origin, encounter_site_at origin final atOrigin⟩
 
 /-- Every actual site retains its crossed references before the unchanged captured values. -/
 theorem Site.inputs [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin Symbol Guard key}
