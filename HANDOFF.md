@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 09:46 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 10:08 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -49,10 +49,13 @@ payloads retained before the ancestor reservation.
 Mixed-input comparison now retains arbitrary fixed captured values and derives
 an actual live ordinary mismatch from pending execution. The current level
 is an old capture below the ancestor's selected ordinary level.
+Rooted source paths now derive actual shorter producers with an exact captured
+suffix and a descendant path to the active binder. Paired producer observations
+and a contradictory recursive descent remain open.
 General successful first-run completion still needs pending exclusion and
 output preparation.
 **No background proof worker is active.**
-The latest proof checkpoint is **`74fe5ef0`**. A later documentation commit
+The latest proof checkpoint is **`878cc5d7`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -77,7 +80,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **32% at 09:45 CEST**. This is a historical value.
+The last observed value was **31% at 10:07 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -106,13 +109,13 @@ The previous continuation branch also retains that checkpoint.
 All 1,515 saved Lean-tree files matched immediately after the rebase.
 The manifest, extra fixture copy, and restart document copies are under
 `/tmp/mcfta-sized-resume-20261014-0036/`. Later changes to saved files are the
-intended coverage documents, finite-key note, and audit imports. Earlier proof
-files retain their bytes. New proofs are separate files.
+intended coverage documents, finite-key note, pending-producer descent note,
+and audit imports. Earlier proof files retain their bytes. New proofs are separate files.
 
 Before new work, inspect allowance, status, log, worktrees, and stashes.
 Preserve a backup and refresh `origin/microcfta`. If upstream moved, rebase the
 local continuation as requested. Preserve local source repairs through any
-overlap. The latest `git pull --ff-only origin microcfta` at 09:27 CEST
+overlap. The latest `git pull --ff-only origin microcfta` at 09:48 CEST
 reported `Already up to date.` Git metadata writes require escalation in this sandbox.
 
 Preserve the earlier backups and manifests, including
@@ -581,8 +584,8 @@ source facts, body availability, and complete incoming coverage. It assumes
 no callback termination or probe-equivalence contract.
 
 Read [constructor coverage](lean/notes-recursive-intersection-constructor-coverage.md)
-first. The remaining alias case needs the ordinary capture history and a
-strict source decrease for both exact old probes.
+first. Rooted ordinary capture histories are derived. The remaining alias
+case needs paired producer observations and a contradictory source descent.
 Do not infer original memo-key independence from normalized output absence.
 Old ordinary-choice mismatch results need repaired counterparts before use.
 Native successful completion, result preparation, and product rows remain open.
@@ -633,6 +636,31 @@ contains the name. `closed_mismatch` starts from actual repaired pending executi
 in empty caches. `active_pending_mismatch` connects the actual optional-binder
 call under full incoming context, body availability, and complete coverage.
 
+`939a3499` factors the active encounter at one specified origin. Canonical
+readback retains that same origin when it builds the exact pending site.
+The previous public encounter and site statements remain.
+
+`878cc5d7` derives paths from the original source call to all active reservations.
+`InternedFreshOrdinaryRootEncounter.complete_mismatch` keeps the original path
+and the actual earlier mismatch at the same origin. `ProducedAt` retains an
+actual producer body, captures, original context, completed Depth callback,
+selected `ordinaryLevel`, cache history, strict captured-prefix bound, and
+descendant path to the active binder. `Path.inputs` derives the exact captured
+suffix relation. Closed pending execution from empty inputs derives these
+producers for every old ordinary capture.
+
+`SourceRecursiveIntersectionMaybeMuHistory` derives the original lexical plan
+and rooted mismatch from the actual source call. Each old ordinary capture is
+free in the original body or has an actual shorter producer. `InternedStoredLeavesOrdinary`
+proves the required leaf-to-body free-name implication. The initial alternative
+is excluded when the original body has no ordinary free names. This condition
+is explicit and is not yet derived at all native sites. Full incoming semantic
+context, body availability, and complete coverage also remain explicit.
+
+The repaired producer-path boundary verifies that a live descendant capture
+can disappear from the enclosing producer result while its complete nested
+record stays cached. A source path does not transfer result liveness.
+
 ## Remaining priorities
 
 1. Read `lean/notes-recursive-intersection-constructor-coverage.md` first.
@@ -652,14 +680,23 @@ call under full incoming context, body availability, and complete coverage.
    Coverage at reached sites follows from earlier actual completed repaired
    source construction. It remains explicit for arbitrary supplied heaps.
    The repaired mixed-input comparison and actual live ordinary mismatch are
-   proved. Do not repeat them. Derive the root-to-origin source path. Trace the
-   ordinary name in the ancestor's captured value to either initial captures
-   or an actual prior ordinary callback with a shorter lexical prefix.
-   Retain that callback's original context, completed Depth equation, selected
-   ordinary level, and cache history. Eliminate the initial-capture alternative
-   only when the actual source scope proves it absent. Derive a strict source
-   decrease for pending exclusion. The current level bound alone does not
-   exclude the alias. Retain arbitrary fixed captured values and both probes.
+   proved. Rooted source paths and actual shorter producers are now derived.
+   Use `RootEncounter.complete_mismatch` and `ProducedAt`. Do not repeat them.
+   Construct another actual observation of the shorter producer's same body.
+   Retain its exact captured suffix, required normalized callbacks, and actual
+   chronological equations. One completed Depth callback is not a completed
+   binder or request. `ProducedAt` does not supply a pending equation for the
+   producer's whole ordinary callback. Derive those observations from actual
+   source execution. First retain the actual pending equation for the enclosing
+   producer ordinary callback along the original encounter. Then derive a new
+   mismatching producer pair or computed
+   level before using the strict captured-prefix bound. One shorter producer
+   is not a contradictory recursive descent. Read
+   `lean/notes-pending-producer-descent.md`. The repaired dead-branch boundary
+   excludes transfer of descendant liveness to the enclosing producer result.
+   Retain arbitrary fixed captured values and both actual pending-site probes.
+   Derive absence of ordinary names in actual native optional-binder bodies
+   before using `pending_mismatch_producers` without its initial alternative.
    Capture absence is not exact callback-request equality. General semantic
    context preservation on native prefixes remains open.
    Preservation of `PreparedWithoutMu` at all reached bodies is refuted by
@@ -726,10 +763,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,320 jobs and 42,130 theorem dependency checks**.
+The current build passes **1,326 jobs and 42,195 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-repaired-live-mismatch-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-root-history-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -763,6 +800,8 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `878cc5d7` | Rooted actual capture histories, shorter producers with descendant paths, stored-leaf ordinary names, actual optional-binder bridge, and repaired dead-branch boundary. |
+| `939a3499` | Keep a specified active origin through exact canonical pending-site readback. |
 | `74fe5ef0` | Actual live ordinary mismatch with retained earlier pair, capture age, original captured value, and optional-binder bridge. |
 | `8a922c58` | Exact repaired source comparison for arbitrary fixed captured values, actual child liveness, callback support, and request readiness. |
 | `3da93bb3` | Actual completed repaired source routes, earlier representatives, and different earlier request pairs with retained payloads. |

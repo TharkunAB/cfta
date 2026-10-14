@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 09:46 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 10:08 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -385,11 +385,30 @@ ancestor Depth probe, is strictly below its selected `ordinaryLevel`, and comes
 from an actual earlier captured value. `active_pending_mismatch` connects this
 result to the actual optional-binder call without supplied mismatch witnesses.
 
-Pending exclusion still needs the ordinary capture's actual source history
-and a derived strict decrease. A root-to-origin path must distinguish initial
-captured names from actual earlier ordinary callbacks. Initial captures can
-be excluded only after proving the required source scope. The level bound alone
-does not exclude ordinary aliases. Normalized output absence does not establish
+`InternedFreshOrdinaryRootEncounter.complete_mismatch` now derives the original
+source path and live mismatch at the same exact active origin. `ProducedAt`
+retains an actual earlier producer, completed Depth callback, selected ordinary
+level, full source context, chronological growth, and descendant path to the
+active binder. The captured prefix is strictly shorter. Its exact suffix
+relation follows from the path. Closed pending execution in empty caches
+derives these producers for every ordinary capture in the ancestor Depth probe.
+
+The actual optional-binder bridge now derives the original lexical root and
+an initial-body free-name or shorter-producer alternative. An ordinary name in
+the actual stored leaves is free in the original body. `pending_mismatch_producers`
+excludes that alternative under explicit absence of ordinary free names in the
+body. This condition is not yet derived at every native site. The incoming full
+semantic context also remains explicit.
+
+Pending exclusion still needs a second actual observation of the shorter
+producer's same body. A completed Depth callback supplies neither a completed
+producer binder/request nor a pending equation for its whole ordinary callback.
+The strict prefix bound does not yet form a contradictory recursive descent.
+`InternedFreshOrdinaryProducerPathBoundary` verifies that the repaired executor
+can retain a live nested capture while the enclosing producer returns empty.
+Result liveness does not follow from a descendant path. Both actual pending-site
+probes and chronological source equations must remain in the next proof.
+Normalized output absence does not establish
 independence of the original memo key. Prove a broader open
 nested constructor invariant instead of universal preparation preservation. See
 [constructor coverage](lean/notes-recursive-intersection-constructor-coverage.md).
@@ -413,19 +432,20 @@ The 398-step rebase completed at `97d79d63`. Two overlap resolutions retain
 upstream's equivalent `void` call and merged recursive-union changelog text.
 Backup `backup/formalization-before-sized-refresh-20261014-0036` retains `f4b5fac1`.
 All 1,515 saved Lean-tree files matched immediately after rebase. Later only
-intended coverage documents, the finite-key note, and audit imports changed among those files.
+intended coverage documents, the finite-key and pending-producer descent notes,
+and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`74fe5ef0`**; later commits record this handoff.
+The latest proof checkpoint is **`878cc5d7`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,320 build targets and 42,130 theorem
+The current Lean 4.34.1 audit passes **1,326 build targets and 42,195 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-repaired-live-mismatch-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-root-history-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **32% at 09:45 CEST**.
+No background proof worker is active. Weekly allowance was **31% at 10:07 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

@@ -1,5 +1,28 @@
 # Missing observation in the shorter-producer descent
 
+## Current repaired source history
+
+Checkpoint `878cc5d7` adds a rooted path and actual producer extraction for
+the repaired executor. `InternedFreshOrdinarySourceHistory.ProducedAt` retains
+the producer's same source body, captures, completed Depth callback, selected
+`ordinaryLevel`, chronological growth, and descendant path to the active binder.
+The path supplies the exact captured suffix relation and a strict length bound.
+`InternedFreshOrdinaryRootEncounter.closed_mismatch_producers` derives these
+histories from actual closed pending execution. The actual optional-binder
+bridge keeps an initial-body capture alternative. It excludes that alternative
+only under the explicit absence of ordinary free names in the original body.
+
+The second paired producer observation remains open. `ProducedAt` does not
+assert completion of the producer binder or its request. It does not retain
+an equation for the whole producer ordinary callback's pending outcome.
+Those observations must be derived from actual source execution. A shorter
+prefix alone does not produce a smaller contradictory joint-key witness.
+`InternedFreshOrdinaryProducerPathBoundary` verifies that descendant liveness
+does not transfer to the producer result under the repaired policy either.
+See [current constructor coverage](notes-recursive-intersection-constructor-coverage.md).
+
+## Historical literal-input witness
+
 The proposed descent is not yet proved. The existing joint-key witness is
 stronger than the ordinary-support fixture, but it does not contain the
 paired producer executions needed by the current replay theorems. No

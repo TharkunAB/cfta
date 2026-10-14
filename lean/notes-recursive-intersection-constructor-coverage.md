@@ -1,7 +1,7 @@
 # Actual native constructor coverage and repaired pending encounters
 
 Proof checkpoints: `83d79a1d`, `f79d0417`, `4ca51381`, `0b123bab`,
-`3da93bb3`, `8a922c58`, and `74fe5ef0`.
+`3da93bb3`, `8a922c58`, `74fe5ef0`, `939a3499`, and `878cc5d7`.
 Upstream: `f59c198d`, 2026-10-14.
 Read [finite native observations](notes-recursive-intersection-native-finite.md)
 and [actual optional binders](notes-recursive-intersection-maybe-mu.md).
@@ -249,6 +249,56 @@ derives it from the actual optional-binder call with incoming full semantic
 context, body availability, and complete coverage. No route, callback replay,
 probe equality, or ordinary mismatch is supplied.
 
+## Rooted capture histories and actual shorter producers
+
+`InternedFreshOrdinaryActiveEncounter.AtOrigin` and
+`InternedFreshOrdinaryActiveSite.encounter_site_at` keep a specified origin
+through canonical probe readback. The previous public encounter and site
+statements remain. They use the same source equations.
+
+`InternedFreshOrdinarySourceHistory.Reached` retains the path from the original
+source call and growth from every crossed callback start to the current cache.
+`Path.crossing_shorter` proves the strict captured-prefix bound.
+`Path.crossing_tail` retains the descendant path from a selected callback.
+
+`ProducedAt` contains an actual earlier producer body, captured values, source
+context, completed Depth callback, selected `ordinaryLevel`, and cache history.
+It also retains the path from the producer's ordinary body entry to the active
+binder. `Path.inputs` gives the exact captured suffix relation. The producer's
+captured prefix is strictly shorter than the active ancestor's captured prefix.
+
+`InternedFreshOrdinaryRootScope` retains this original path for every active
+reservation. `InternedFreshOrdinaryRootEncounter.complete_mismatch` follows
+actual repaired pending execution through members, edges, and callbacks.
+It derives the original path and the earlier joint mismatch at the same origin.
+`closed_mismatch_producers` excludes initial captures from empty source inputs.
+Every ordinary name in the original ancestor Depth probe has a `ProducedAt`
+witness. No source path or producer is supplied.
+
+`InternedStoredLeavesOrdinary.leaves_ordinary` proves that an ordinary name in
+an available substitution leaf is free in the original stored body. It uses
+coherent cached free-name fields and actual child availability. An interned
+Mu binder cannot remove that ordinary name.
+
+`SourceRecursiveIntersectionMaybeMu.rooted_pending_mismatch` derives the exact
+original lexical plan and rooted mismatch from actual source execution.
+`pending_capture_history` gives an initial-body free name or a `ProducedAt`
+witness for every old ordinary capture. `pending_mismatch_producers` excludes
+the initial alternative when the original body has no ordinary free names.
+The body condition remains explicit. It is not yet derived at all native sites.
+Incoming full semantic context, body availability, and complete coverage also
+remain explicit.
+
+## The producer path does not transfer result liveness
+
+`InternedFreshOrdinaryProducerPathBoundary` checks the repaired policy.
+A nested raw binder reads its outer ordinary name. An empty sibling then
+removes the enclosing edge. The nested complete record remains stored with
+that capture, while the enclosing producer returns empty. The mixed-input
+support is live at the target and empty at the producer body. All observations
+use kernel reduction. This is a counterexample to a proof shortcut, not source
+nontermination or an implementation defect.
+
 ## Next proof target and retained boundaries
 
 Exclude the full repaired encounter for the intended constructor scope.
@@ -258,14 +308,19 @@ route, different earlier pair, and live ordinary mismatch are now derived.
 Use `InternedFreshOrdinaryJointMismatch.Mismatch`. Do not repeat the
 mixed-input comparison or replace fixed captured values with literal lists.
 
-Derive the actual source history of the ordinary name in the ancestor's
-captured value. A root-to-origin source path should distinguish an ordinary
-name from the initial captured values from a name supplied by an actual
-earlier ordinary callback. Retain that callback's original context, completed
-Depth equation, selected `ordinaryLevel`, cache history, and shorter lexical
-prefix. Eliminate the initial-capture alternative only when the actual source
-scope proves it absent. Then derive the strict decrease needed for pending
-exclusion. The current strict level bound alone is not that proof.
+The original path, capture alternative, and actual shorter producer are proved.
+Use `RootEncounter.complete_mismatch`, `ProducedAt`, and the actual optional
+binder history theorems. Do not repeat this extraction.
+
+Construct another actual observation of the shorter producer's same body.
+Retain the exact captured suffix, both normalized callbacks where required,
+and chronological growth into the original cut. A completed producer Depth
+callback is not a completed producer binder or request. `ProducedAt` also does
+not assert that its whole ordinary callback has a particular pending outcome.
+Derive those source observations from actual execution before using them.
+Then derive a new mismatching producer pair or computed level and apply the
+strict captured-prefix decrease. One shorter producer does not itself prove
+recursive descent. See [the paired producer obligation](notes-pending-producer-descent.md).
 Do not assume equal computed levels across executions. Do not treat a live
 ordinary alias as impossible without checking both actual probes.
 
@@ -289,9 +344,10 @@ constructor/equality proofs and all marked drafts.
 
 ## Validation and diagnostics
 
-Pinned Lean 4.34.1 passes 1,320 jobs and 42,130 theorem dependency checks.
+Pinned Lean 4.34.1 passes 1,326 jobs and 42,195 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are used.
-Log: `/tmp/mcfta-repaired-live-mismatch-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-root-history-20261014-audit.log`.
+The live-mismatch audit passed 1,320 jobs and 42,130 checks.
 The earlier-pair audit passed 1,311 jobs and 42,066 checks.
 The active-path audit passed 1,307 jobs and 42,042 checks.
 The preparation boundary audit passed 1,303 jobs and 41,982 checks.

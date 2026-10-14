@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 09:46 CEST**, upstream `f59c198d`.
-The latest proof commit is `74fe5ef0`. No background proof worker is active.
+Current checkpoint: **2026-10-14 10:08 CEST**, upstream `f59c198d`.
+The latest proof commit is `878cc5d7`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -160,10 +160,18 @@ readiness. Actual callback free-name observations expose every live varying
 capture. Pending execution now derives an actual ordinary mismatch on the
 same earlier route. Fresh interned changes are excluded. The current level is
 free in the ancestor's old Depth probe, lies strictly below its ordinaryLevel,
-and comes from an actual captured value. General pending exclusion still needs
-that capture's source history and a derived strict decrease. Retain the initial
-capture alternative until the actual source scope excludes it. Native prefix
-preservation of the full semantic context also remains open.
+and comes from an actual captured value. Rooted source paths now derive actual
+shorter producers with full contexts, completed Depth callbacks, chosen levels,
+cache histories, descendant paths, and exact captured suffixes. Closed empty-input
+pending execution has no initial-capture alternative. Actual optional binders
+retain an initial-body free-name alternative. It is excluded only under the
+explicit absence of ordinary free names in that body, which is not yet derived
+at all native sites. A second actual observation of the shorter producer's same
+body remains open. A completed Depth callback is not a completed binder/request
+or a pending equation for the whole ordinary callback. The shorter prefix alone
+does not establish contradictory recursive descent. A repaired dead-branch
+example also excludes transfer of descendant liveness to the producer result.
+Native prefix preservation of the full semantic context remains open.
 An actual 22-step native prefix on repaired closed original source-built inputs
 refutes preservation of `PreparedWithoutMu` at every optional-binder body.
 Bounded execution of that example returns. This is a proof-invariant boundary,
@@ -194,7 +202,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,320 targets and 42,130 theorem dependency checks**
+The current audit passes **1,326 targets and 42,195 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new
