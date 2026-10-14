@@ -1,4 +1,6 @@
 import Lean
+import MicroCFTA.SourceRecursiveIntersectionProductEdgeShape
+import MicroCFTA.SourceRecursiveIntersectionProductRowView
 import MicroCFTA.SourceRecursiveIntersectionRowReplay
 import MicroCFTA.SourceRecursiveIntersectionOrdinaryProductRows
 import MicroCFTA.SourceRecursiveIntersectionProductEdgeReadback
