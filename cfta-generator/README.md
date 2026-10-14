@@ -344,7 +344,7 @@ for nested or very large languages. The `key` is the type that the classifier
 returns. The key decides which groups a join can combine, and it is not part of
 the generated `a`. Equal keys get equal internal labels on the constrained ECTA
 paths. The snippets on grouped generators come from one complete program,
-[`Data.CFTA.Gen.TypedExpressionLanguage`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/common/Data/CFTA/Gen/TypedExpressionLanguage.hs).
+[`Data.CFTA.Gen.TypedExpressionLanguage`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/common/Data/CFTA/Gen/TypedExpressionLanguage.hs).
 The other snippets in this section are sketches.
 
 `groupOn` classifies the outcomes of any transparent generator and enumerates
@@ -424,7 +424,7 @@ conditionalLayer children =
     (children :& children :& children :& ANil)
 ```
 
-[`Data.CFTA.Gen.TypedExpressionLanguage`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/common/Data/CFTA/Gen/TypedExpressionLanguage.hs)
+[`Data.CFTA.Gen.TypedExpressionLanguage`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/common/Data/CFTA/Gen/TypedExpressionLanguage.hs)
 is a support module of the tests and benchmarks. It combines unary `Not`,
 binary functions, and the ternary `IfExpression`. Its finite layers combine
 those three alternatives with `uniformlyGrouped`, so every expression remains equally likely. Its
@@ -1015,7 +1015,7 @@ a function signature names its parameters, and the do-block binds their values.
 The generator trusts a pool's refinements. It does not inspect a Haskell value
 to prove its refinement. `checkPool solver ranged` asks the solver to prove
 each refinement for its value, and returns the values that it cannot prove.
-[`LiquidPairs.hs`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/examples/LiquidPairs.hs)
+[`LiquidPairs.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/LiquidPairs.hs)
 runs this program with `checkPool`, and CI runs it with the other examples.
 `compileAssuming` adds ambient facts, such as `[variable "input" .== 2]`, that
 the solver may assume. `compileWith` takes a solver from `withZ3`, to share one
@@ -1061,7 +1061,7 @@ one on that variable. A contract can also name a child from `elements`, whose
 refinement fixes one integer. A domain that the counter cannot count gives
 `UncountableIntegers`. A guard that reads below the root of a child from
 `every`, or reads it through an equality, gives `IntegerLeafRead`.
-[`BoundedReads.hs`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/examples/BoundedReads.hs)
+[`BoundedReads.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/BoundedReads.hs)
 runs this program, and CI runs it with the other examples.
 
 `every` takes every type that integers stand for: `Integer`, `Word8`, `Char`,
@@ -1071,7 +1071,7 @@ reads a value as its integer, so it compares the value with a `literal`, as in
 `(./= literal Red)`.
 [`docs/symbolic-values.md`](../docs/symbolic-values.md) explains the types,
 what `compile` can count, and how the counter works, and
-[`TypedValues.hs`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/examples/TypedValues.hs)
+[`TypedValues.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/TypedValues.hs)
 relates a color, a brightness byte, and a flag in one contract.
 
 ### Measures and bounded recursion
@@ -1184,9 +1184,9 @@ constructor built with `measured`. Otherwise `compile` reports
 `InexactMeasure`. A parent reads only the root of a child whose integers stay
 open. `measuredNode` is `measured` with a positional guard, as `refinedNode`
 takes, in place of the contract.
-[`RedBlackTrees.hs`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/examples/RedBlackTrees.hs)
+[`RedBlackTrees.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/RedBlackTrees.hs)
 and
-[`SortedLists.hs`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/examples/SortedLists.hs)
+[`SortedLists.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/SortedLists.hs)
 run these programs, and CI runs them with the other examples.
 
 ### Construction and compilation
@@ -1284,7 +1284,7 @@ without a depth bound reports the guard as `ResidualGuard`.
 refinement and constraint for each constructor. The datatype supplies its
 fields and recursive structure; the retained codec supplies `a`. The caller
 must still justify the refinements assigned to each constructor.
-[`AutomatonInterop.hs`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/examples/AutomatonInterop.hs) derives a recursive
+[`AutomatonInterop.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/AutomatonInterop.hs) derives a recursive
 natural-number grammar, annotates it, imports it with `fromDatatypeUpToDepth`,
 keeps its positive terms with `satisfying`, and composes them with
 `elements`:
@@ -1355,7 +1355,7 @@ an error for a contract that needs complete candidates.
 
 ### Example: typed state-machine traces
 
-[`Data.CFTA.Gen.Refinement.StateMachineTraceLanguage`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/common/Data/CFTA/Gen/Refinement/StateMachineTraceLanguage.hs)
+[`Data.CFTA.Gen.Refinement.StateMachineTraceLanguage`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/common/Data/CFTA/Gen/Refinement/StateMachineTraceLanguage.hs)
 is the LTA step in the repository's worked progression. The FTA example has
 only integer expression shapes; the ECTA example adds Boolean result types;
 this example tracks those types across the steps of a trace as a stack-machine state.
@@ -1426,7 +1426,7 @@ implication or `suchThat` filter.
 The stack machine is a stateful progression, but an FTA author can still
 tabulate its bounded stack shapes by hand. The example that depends more on
 the LTA is
-[`Data.CFTA.Gen.Refinement.SizedVectorLanguage`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/common/Data/CFTA/Gen/Refinement/SizedVectorLanguage.hs): a
+[`Data.CFTA.Gen.Refinement.SizedVectorLanguage`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/common/Data/CFTA/Gen/Refinement/SizedVectorLanguage.hs): a
 dependent vector-expression language in which result sizes are arithmetic
 refinements rather than finite type tags.
 
@@ -1476,7 +1476,7 @@ stay symbolic.
 
 ### A second dependent example: safe buffer programs
 
-[`Data.CFTA.Gen.Refinement.SafeBufferLanguage`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/common/Data/CFTA/Gen/Refinement/SafeBufferLanguage.hs) gives
+[`Data.CFTA.Gen.Refinement.SafeBufferLanguage`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/common/Data/CFTA/Gen/Refinement/SafeBufferLanguage.hs) gives
 buffers and indexes symbolic integer names, records the surrounding Liquid
 environment as solver assumptions, and generates two deliberately partial
 operations:
@@ -2008,7 +2008,7 @@ optimizations to try.
 ### Equality theory cost: ECTA versus LTA
 
 The typed-expression example also has an equivalent liquid encoding in
-[`Data.CFTA.Gen.Refinement.EqualityTypedExpressionLanguage`](https://github.com/Tritlo/microecta/blob/main/cfta-generator/common/Data/CFTA/Gen/Refinement/EqualityTypedExpressionLanguage.hs).
+[`Data.CFTA.Gen.Refinement.EqualityTypedExpressionLanguage`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/common/Data/CFTA/Gen/Refinement/EqualityTypedExpressionLanguage.hs).
 `TInt` is the refinement `v = 0` and `TBool` is `v = 1`. Each application LTA
 contains candidate ground child states, and Z3 retains precisely those whose
 refinements imply the operation's expected input equalities. This expresses the
