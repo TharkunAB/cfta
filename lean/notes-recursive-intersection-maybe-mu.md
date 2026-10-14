@@ -1,5 +1,14 @@
 # Source recursive intersection binder effects
 
+Current extension: arbitrary-record source depth and completion are proved.
+The actual optional-binder substitution now derives successful execution
+without a prepared-body premise. See
+[record completion](notes-record-depth-completion.md), checkpoint `e4a011e8`.
+Earlier literal-only limits and next targets below are historical. The next
+obligation is semantic-context/depth-heap preservation on actual native
+prefixes, then successful native bounds and physical product rows.
+
+
 Proof checkpoint: `0bf65249`. Upstream: `f59c198d`, 2026-10-14.
 Source: `Interned/Operations.hs:intersectOpen`, `maybeMu`, and
 `Interned/Type.hs:createMuDontCleanup`, `substitutionPlan`.

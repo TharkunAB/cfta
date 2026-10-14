@@ -1,5 +1,14 @@
 # Actual native constructor coverage and repaired pending encounters
 
+Current extension: arbitrary-record source depth and completion are proved.
+The actual optional-binder substitution now derives successful execution
+without a prepared-body premise. See
+[record completion](notes-record-depth-completion.md), checkpoint `e4a011e8`.
+Earlier literal-only limits and next targets below are historical. The next
+obligation is semantic-context/depth-heap preservation on actual native
+prefixes, then successful native bounds and physical product rows.
+
+
 Proof checkpoints: `83d79a1d`, `f79d0417`, `4ca51381`, `0b123bab`,
 `3da93bb3`, `8a922c58`, `74fe5ef0`, `939a3499`, and `878cc5d7`.
 Upstream: `1a083040`, 2026-10-14. The rooted-history checkpoint is now

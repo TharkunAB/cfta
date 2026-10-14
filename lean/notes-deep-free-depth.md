@@ -1,5 +1,14 @@
 # Deep references and source cleanup depth
 
+Current extension: arbitrary-record source depth and completion are proved.
+The actual optional-binder substitution now derives successful execution
+without a prepared-body premise. See
+[record completion](notes-record-depth-completion.md), checkpoint `e4a011e8`.
+Earlier literal-only limits and next targets below are historical. The next
+obligation is semantic-context/depth-heap preservation on actual native
+prefixes, then successful native bounds and physical product rows.
+
+
 Current update: 2026-10-14 11:12 CEST. The full literal-input source driver is proved in
 `InternedFreshOrdinarySourceDepth`. Actual repaired ordinary-level agreement
 under projected captures is proved in `InternedFreshOrdinaryLevelReplay`.

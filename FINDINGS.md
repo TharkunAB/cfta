@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 11:28 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 11:49 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -446,6 +446,32 @@ independence of the original memo key. Prove a broader open
 nested constructor invariant instead of universal preparation preservation. See
 [constructor coverage](lean/notes-recursive-intersection-constructor-coverage.md).
 
+## Arbitrary-record constructor completion
+
+`InternedRecordDepthShape` derives exact decoded inputs from coherent available
+records. Root alternatives and deep names remain separate, including mixed
+unions. `InternedRecordDepthExecution` proves the full source induction with
+arbitrary captures. Each returned record has the predicted emptiness, cached
+depth, and deep-name membership. Every outcome retains the decoded depth heap.
+The literal-source driver is now a specialization.
+
+`InternedRecordDepthLevels` derives actual ordinary-level equality from equal
+projected record shapes. `InternedRecordDepthRoutes` follows both scoped routes.
+Their selected ordinary levels agree, which contradicts the pending encounter.
+`InternedRecordDepthCompletion.source_complete` derives successful actual
+source execution for arbitrary syntax and captured records from a complete
+coherent decoded semantic cache. No prepared-body or supplied termination
+premise is used.
+
+`SourceRecursiveIntersectionMaybeMuCompletion.complete_decoded` applies this
+result to actual stored-body substitution and arbitrary available leaves. It
+returns successful optional-binder execution and the exact context, decoded
+heap, complete coverage, available result, growth, and issued history. Proof
+checkpoints: `92746870`, `e543e630`, `cdcbb881`, and `e4a011e8`. The native caller
+still needs semantic-context/depth-heap preservation at its reached source
+sites before constructor pending can be excluded. See
+[record completion](lean/notes-record-depth-completion.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
@@ -481,18 +507,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`f095aa16`**; later commits record this handoff.
+The latest proof checkpoint is **`e4a011e8`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,332 build targets and 42,296 theorem
+The current Lean 4.34.1 audit passes **1,340 build targets and 42,373 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-literal-completion-20261014-audit.log`.
+Log: `/tmp/mcfta-maybe-mu-completion-20261014-audit.log`.
 After the current refresh, all **641** examples passed in Nix: 289 core, 208
 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **31% at 11:27 CEST**.
+No background proof worker is active. Weekly allowance was **31% at 11:48 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

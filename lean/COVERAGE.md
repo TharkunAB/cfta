@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 11:28 CEST**, upstream `1a083040`.
-The latest proof commit is `f095aa16`. No background proof worker is active.
+Current checkpoint: **2026-10-14 11:49 CEST**, upstream `1a083040`.
+The latest proof commit is `e4a011e8`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -192,19 +192,20 @@ See [constructor coverage](notes-recursive-intersection-constructor-coverage.md)
 [native completion](notes-recursive-intersection-completion.md), and
 [native correctness](notes-recursive-intersection-native-correctness.md).
 
-Native nested construction with arbitrary captured records, cyclic product rows, thunk scheduling,
-and general first-run native completion remain open. Full cached-depth/deep
-heap induction is now derived for arbitrary nested syntax with literal lexical
-inputs. `SourceDepth.closed_heap` includes pending outcomes. `arguments_depth`
-compares actual completed callbacks. `LevelReplay.callback_level` derives equal
-actual ordinary levels from equal projected literal captures. Exact captured
-suffixes are now retained. `RouteLevels.Path.projected_names` derives projected
-agreement through actual paired routes and contradicts the required ordinary
-mismatch. `ClosedCompletion.closed_complete` proves general empty-cache source
-completion. `literal_complete` extends this to literal captures in any complete
-valid decoded cache. Arbitrary fixed captured records and native context/
-decoded-heap preservation remain open. See [source depth](notes-fresh-ordinary-depth.md)
-and [physical construction](notes-physical-intersection-rows.md).
+Arbitrary-record source construction now has exact cached-depth/deep
+observations and successful completion in complete coherent decoded caches.
+`InternedRecordDepthShape` derives the complete input observations from actual
+records. `InternedRecordDepthExecution` proves the source induction; the old
+literal driver specializes it. `InternedRecordDepthLevels` and `Routes`
+derive equal actual ordinary choices along both scoped routes.
+`InternedRecordDepthCompletion.source_complete` excludes pending construction.
+`SourceRecursiveIntersectionMaybeMuCompletion.complete_decoded` composes actual
+stored substitution and arbitrary available leaves without preparation. It
+retains the semantic context, decoded depth heap, coverage, availability,
+growth, and issued history. Native semantic-prefix preservation, successful
+first-run bounds, output preparation or a broader cold-reader invariant, and
+physical product rows remain open. See
+[record completion](notes-record-depth-completion.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
 ancestor edits and bounded iteration for the fixed unary/two-atom fragment.
 General equality propagation remains open.
@@ -215,7 +216,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,332 targets and 42,296 theorem dependency checks**
+The current audit passes **1,340 targets and 42,373 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **641 Haskell examples** passed after the PR #117 refresh: 289 core,
 208 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
