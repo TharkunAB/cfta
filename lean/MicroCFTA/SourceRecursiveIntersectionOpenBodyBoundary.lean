@@ -1,4 +1,5 @@
 import MicroCFTA.InternedStoredPreparationCheck
+import MicroCFTA.InternedFreshOrdinaryContext
 import MicroCFTA.SourceRecursiveIntersectionNativeConstructorCoverage
 
 /-!
@@ -91,6 +92,21 @@ theorem source_covered : InternedRecordCoherence.Covered [] source := by
     exact finalCovered
   exact covered operands source built_done
 
+/-- Both actual builds retain normalization and the complete repaired profile and free-name heaps. -/
+theorem source_context : InternedFreshOrdinaryContext.Context source [] := by
+  have done := built_done
+  unfold built at done
+  obtain ⟨left, after, firstDone, later⟩ := InternedNestedSpecialization.bind_done _ _ _ _ done
+  have afterContext : InternedFreshOrdinaryContext.Context after [] := by
+    simpa only [firstDone, InternedNestedConstruction.Outcome.state] using
+      InternedFreshOrdinaryContext.empty_context.build (expression 1)
+  obtain ⟨right, final, secondDone, returned⟩ := InternedNestedSpecialization.bind_done _ _ _ _ later
+  have finalContext : InternedFreshOrdinaryContext.Context final [] := by
+    simpa only [secondDone, InternedNestedConstruction.Outcome.state] using afterContext.build (expression 2)
+  have same : final = source := (InternedNestedConstruction.Outcome.done.inj returned).2
+  rw [same] at finalContext
+  exact finalContext
+
 /-- Both actual source roots have empty cached free-reference lists. -/
 theorem source_closed : operands.1.free = [] ∧ operands.2.free = [] := by
   have observed : (operands.1.free.isEmpty, operands.2.free.isEmpty, source.nodes.next) = (true, true, 32) := by
@@ -172,6 +188,7 @@ theorem not_all_closed_original_prepared :
     ¬ (∀ (heap : InternedConstructorTemplates.State Nat Nat) (left right : Value Nat Nat),
       Facts heap → Available heap left → Available heap right → Original left → Original right →
       left.free = [] → right.free = [] → InternedRecordCoherence.Covered [] heap →
+      InternedFreshOrdinaryContext.Context heap [] →
       SourceRecursiveIntersectionMemo.KeySafe 64 IntersectionEmptyDomain.emptyDomain left right →
       ∀ fuel pair body next before,
       Steps 0 Nat.max fuel (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure)
@@ -180,7 +197,7 @@ theorem not_all_closed_original_prepared :
   intro preserved
   obtain ⟨pair, body, next, before, trace, covered, unprepared⟩ := reaches_unprepared
   exact unprepared (preserved source operands.1 operands.2 source_inputs.1 source_inputs.2.1 source_inputs.2.2
-    source_original.1 source_original.2 source_closed.1 source_closed.2 source_covered root_words 22 pair body next before trace covered)
+    source_original.1 source_original.2 source_closed.1 source_closed.2 source_covered source_context root_words 22 pair body next before trace covered)
 
 /-- Observe the actual bounded native return independently of preparation. -/
 def returned : Option NodeRef :=
