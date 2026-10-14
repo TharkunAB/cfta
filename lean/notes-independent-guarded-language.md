@@ -1,6 +1,6 @@
 # Independent guarded language and actual stored plans
 
-Updated: 2026-10-14 16:24 CEST. Proof checkpoints: `4457307a`, `e46d3f9e`, `e1baab1e`.
+Updated: 2026-10-14 16:42 CEST. Latest proof: `0258ae86`. Earlier support/execution checkpoints remain.
 
 ## Independent meaning
 
@@ -113,32 +113,69 @@ follows each actual read and carries the invariant to the exact final cache.
 completed closed construction. Both depth and independent-language probe heaps
 hold in the resulting finite shared table.
 
+## Soundness through growing caches and final tables
+
+`MergedFreshOrdinaryGuardedSoundness.collect_sound` follows actual ordered
+cold effects. A returned edge's independent language belongs to one original
+root. Each Mu step uses actual unfolding language equality. Cache growth does
+not define the language. `nodeEdges_sound` covers direct reads and canonical
+closure output. Skipping a visited root is sound for this inclusion.
+
+`SourceFreshOrdinaryColdGuardedSoundness.row_sound` uses actual canonical row
+replay. `language_sound` follows finite terms and declared child rows.
+`graph_sound`, `trace_graph_sound`, and `trace_table_sound` identify soundness
+for the actual final repaired graph and ascending finite table. These laws
+prove inclusion into independent root meaning. They do not prove completeness.
+
+## Native binders, heaps, and output tables
+
+`SourceRecursiveIntersectionGuardedEffects.optionalBinder_checked` proves
+actual optional-binder least language at the repeated-pair reference. It
+also covers the unused branch and all heap outcomes. The proof composes the
+exact lexical compilation with actual source execution.
+
+`SourceRecursiveIntersectionNative.Bounds.guarded_heaps` follows ordinary
+work, domain effects, reads, optional binders, checked memo hits, nested source
+bodies, completion frames, and continuations. `NativeColdGuarded.cold_node_table_sound`
+and `constructed_node_table_sound` derive finite stable native tables that
+are sound for the independent language of the returned physical value.
+The existing complete-cache, closed Original input, and checked-word scope
+remains. This is not yet the intersection language of the two inputs.
+
+## Agreement with original finite input derivations
+
+`SourceRecursiveIntersectionGuardedInput.original_meaning` proves that
+Original payload syntax has the same independent stored and copied lexical
+meaning. The interned reference environment map commutes with actual binders.
+`input_exact` derives exact finite tagged input derivations for every closed
+available original record. The existing input specification and the new
+stored interpretation therefore agree without a copy-language contract.
+
 ## Next proof
 
-Connect the actual final repaired graph and finite cold table to independent
+Prove completeness of the final repaired graph and finite table for independent
 meaning. Then derive physical `ProductReadback.members`, `.rejected`, and
-`product_exact`. Propagate the new semantic heap through native intersection effects
-where those paths construct binders. Cold/shared propagation is proved. Their older depth/free/profile heaps
-remain separate proved invariants.
+`product_exact`. Soundness and native/cold/shared semantic heap propagation
+are proved. Do not repeat them.
 
 `MergedFreshOrdinaryGraph` uses actual repaired unfolding but fixes one cache.
-Keep availability, replay, and cache growth explicit when following its
-successors. Graph acceptance is least finite-run acceptance. Equal unfolding
-equations alone do not prove completeness through unguarded epsilon cycles.
-The existing final-cache graph/table theorem and new execution theorem are
-component results. Their full independent-language transport remains open.
+Keep availability, replay, and cache growth explicit. Graph acceptance is
+least finite-run acceptance. Equal unfolding equations alone do not prove
+completeness through unguarded epsilon cycles. The new `input_exact` gives
+finite input derivations for Original records. Any rank transport through
+actual reconstruction and canonical hits must be derived before it is used.
 The raw unused-binder identity counterexample still applies.
 
 ## Validation
 
-Lean 4.34.1 passes 1,411 aggregate jobs and 43,431 theorem dependency checks.
+Lean 4.34.1 passes 1,417 aggregate jobs and 43,451 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-guarded-cold-heap-20261014-audit.log`.
+`/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
 No production Haskell source changed. Existing Nix and formatter checks remain
 applicable. The earlier proofs, counterexamples, and marked drafts remain.
 
-All 1,769 files from the previous local snapshot remain. The current Lean
-tree has 1,771 files. Only audit imports, coverage ledgers, and this note
-changed among earlier files. All earlier proof bytes and marked drafts
+All 1,771 files from the previous local snapshot remain. The current Lean
+tree has 1,777 files. Only audit imports, coverage ledgers, and three component
+notes changed among earlier files. All earlier proof bytes and marked drafts
 are unchanged. Snapshot:
-`/tmp/mcfta-guarded-cold-heap-checkpoint-20261014-1624/`.
+`/tmp/mcfta-guarded-native-soundness-checkpoint-20261014-1642/`.

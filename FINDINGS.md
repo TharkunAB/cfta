@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 16:24 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 16:42 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -37,10 +37,10 @@ See [finite map Sized](lean/notes-sized-finite-keys.md).
 ## Independent guarded meaning and actual stored compiler
 
 The current local preservation snapshot is
-`/tmp/mcfta-guarded-cold-heap-checkpoint-20261014-1624/`.
-It contains all **1,771 Lean-tree files**, root restart documents, the fixture,
-and focused/aggregate logs. All 1,769 files from the previous snapshot remain.
-Only audit imports, the two coverage ledgers, and the guarded-language note
+`/tmp/mcfta-guarded-native-soundness-checkpoint-20261014-1642/`.
+It contains all **1,777 Lean-tree files**, root restart documents, the fixture,
+and focused/aggregate logs. All 1,771 files from the previous snapshot remain.
+Only audit imports, two coverage ledgers, and three component notes
 changed among those older files. All earlier proof bytes and marked drafts
 are unchanged. No Haskell source changed in this proof checkpoint.
 
@@ -89,16 +89,40 @@ cold worklists and public `nodeEdges` reads. `Trace.guarded_heap` retains it
 through every shared row read. `constructed_cold_finite_guarded` derives the
 initial invariant from completed closed source construction and retains both
 the open-depth and independent-language heaps in the finite final table.
-This proves heap propagation. Independent graph/table language transport
-and native intersection heap propagation remain separate targets.
+This proves heap propagation. Full independent graph/table language transport
+remains open. The later native checkpoint below proves native heap propagation.
 
-Next connect the actual final repaired graph and finite cold table to this
-independent meaning. Then derive physical `ProductReadback.members`,
+`650c3f05` proves independent-language soundness of actual growing-cache
+cold worklists and public reads. Each returned guarded edge is included in
+one original root language. `SourceFreshOrdinaryColdGuardedSoundness` lifts
+this law by finite-term induction to replayed rows, the final repaired graph,
+and the actual ascending table. The visited check is sound for this direction.
+These are inclusion theorems, not completeness or full language equality.
+
+`b7201597` proves the independent least-language law for actual optional
+intersection binders at their repeated-pair reference. The unused branch has
+the same least language. `Bounds.guarded_heaps` follows actual native work,
+checked memo hits, nested source bodies, completion frames, and continuations.
+`NativeColdGuarded.cold_node_table_sound` and `constructed_node_table_sound`
+derive finite stable native cold tables with the independent semantic heap.
+Their accepted terms belong to the independent language of the returned
+physical value. Checked WordRanges, closed Original inputs, and complete
+initial caches retain their stated scope. This does not yet identify the
+returned value language with the intersection of the two input languages.
+
+`0258ae86` proves `SourceRecursiveIntersectionGuardedInput.original_meaning`.
+Original payloads have equal guarded stored and copied lexical meanings.
+`input_exact` identifies closed available original records with their exact
+finite tagged input derivations. This derives the connection to the existing
+input specification. No copy-language contract is supplied.
+
+Next prove completeness of the actual final repaired graph and cold table
+for independent meaning. Then derive physical `ProductReadback.members`,
 `.rejected`, and `product_exact`. The exact final-cache graph/table law is
 already proved, but execution correspondence alone does not supply this
 transport. Keep cache growth, availability, and leastness explicit.
 Read `lean/notes-independent-guarded-language.md` for the exact next target,
-the proposed probe invariant, and all scope distinctions.
+the proved probe invariant, and all remaining scope distinctions.
 
 ## Native heap propagation and exact final-cache guarded language
 
@@ -134,9 +158,9 @@ for arbitrary raw binders is refuted. Then derive physical
 The earlier prepared graph uses the old executor; its preparation premise
 remains valid in its stated fragment.
 
-Current audit: 1,411 jobs and 43,431 theorem dependency checks. Only
+Current audit: 1,417 jobs and 43,451 theorem dependency checks. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-guarded-cold-heap-20261014-audit.log`.
+`/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
 
 ## Finite general final tables
 
@@ -150,9 +174,9 @@ with the actual finite trace, stable outer/read bounds, semantic heaps,
 coverage, the body/probe heap, growth/history, and resident closed edges.
 No preparation, fixed future cache, or supplied trace is assumed.
 
-The aggregate audit passes 1,411 jobs and 43,431 theorem dependency checks.
+The aggregate audit passes 1,417 jobs and 43,451 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-guarded-cold-heap-20261014-audit.log`.
+`/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
 This earlier result proves finite table structure and exact row readback.
 The later native and repaired-language checkpoints below also prove native
 heap propagation and final-cache guarded row language. Initial-source
@@ -201,8 +225,8 @@ semantic/coverage and body/probe heap preservation, resident closed edges,
 and stability at all larger bounds. `constructed_read_closed` derives all
 cache premises from actual repaired empty-cache source construction.
 
-Audit: 1,411 jobs and 43,431 theorem dependency checks. Log:
-`/tmp/mcfta-guarded-cold-heap-20261014-audit.log`.
+Audit: 1,417 jobs and 43,451 theorem dependency checks. Log:
+`/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
 General shared traversal is proved below the current source heap boundary by
 `68e790f0`. Its unfinished-unfolding budget uses actual allocation-free replay. Native propagation of the body/probe heap is now proved by `9a0df4cb`.
 Initial-source language transport and physical product language remain open. See
@@ -889,7 +913,7 @@ outcome, or assumed progress law is used. `execute_heap` and `unfold_heap`
 preserve the new body/probe invariant for subsequent actual source work.
 
 The aggregate audit passes 1,381 jobs and 43,054 theorem dependency checks.
-Log: `/tmp/mcfta-guarded-cold-heap-20261014-audit.log`.
+Log: `/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
 The three permitted axioms remain `propext`, `Classical.choice`, and `Quot.sound`.
 The 14:38 restart snapshot contains 1,738 Lean-tree files, the root restart
 documents, the retained fixture, and the new source/progress audit and live
@@ -987,11 +1011,11 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`e1baab1e`**; later commits record this handoff.
+The latest proof checkpoint is **`0258ae86`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,411 build targets and 43,431 theorem
+The current Lean 4.34.1 audit passes **1,417 build targets and 43,451 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-guarded-cold-heap-20261014-audit.log`.
+Log: `/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
 After PR #119, all **642** examples passed in Nix: 289 core, 208
 generator, and 145 refinement. PR #121 changes comments only; the runtime
 checks remain applicable. Fourmolu and active-package cabal-gild passed.
@@ -999,7 +1023,7 @@ The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **28% at 16:24 CEST**.
+No background proof worker is active. Weekly allowance was **28% at 16:42 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

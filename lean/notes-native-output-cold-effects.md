@@ -1,6 +1,6 @@
 # Native output scope and general repaired cold-reader effects
 
-Updated: 2026-10-14 15:49 CEST. Latest proof checkpoint: `b3008aba`.
+Updated: 2026-10-14 16:42 CEST. Latest proof checkpoint: `0258ae86`.
 Native heap checkpoint: `9a0df4cb`. Earlier replay and counterexample checkpoints remain.
 
 ## Derived recursive scope
@@ -120,27 +120,27 @@ for arbitrary raw binders is refuted. Then derive physical
 The earlier prepared graph uses the old executor; its preparation premise
 remains valid in its stated fragment.
 
-Current audit: 1,401 jobs and 43,344 theorem dependency checks. Only
+Current audit: 1,417 jobs and 43,451 theorem dependency checks. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
+`/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
 
 ## Remaining language obligation
 
-`b3008aba` defines independent guarded stored-record and lexical meanings.
-It proves actual metadata support, normalization, cleanup, root-self filtering,
-and full nested stored-plan compilation. Its substitution and unfolding laws
-concern actual compiled plans. Actual repaired source execution and canonical
-Mu-hit language preservation remain open. Read
-[the guarded compiler note](notes-independent-guarded-language.md).
-Prove actual execution and semantic probe-heap preservation together. Then
-connect repaired final graph language to independent meaning and physical
-product row/rejection laws. Do not repeat finite native tables or their exact
-final-cache guarded readback.
+`e46d3f9e` proves actual source execution, canonical-hit independent language,
+and stored substitution/unfolding language. `e1baab1e` retains the independent
+probe heap through cold/shared traversal. `650c3f05` proves cold-read and final
+repaired graph/table soundness for independent meaning. `b7201597` derives
+actual optional-binder least language, native heap propagation, and finite
+stable native tables sound for the returned physical value. `0258ae86`
+identifies Original stored meaning with copied lexical meaning and finite
+input derivations. Read [the guarded language note](notes-independent-guarded-language.md).
+Next prove final graph/table completeness and physical product row/rejection
+laws. Soundness does not prove that every independently accepted term occurs.
+The native output language is not yet identified with input intersection.
 
 ## Validation
 
-Lean 4.34.1 passes 1,401 aggregate jobs and 43,344 theorem dependency checks.
+Lean 4.34.1 passes 1,417 aggregate jobs and 43,451 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
-No Haskell source changed. The current PR #119 Nix and active-package
-formatter checks remain valid.
+`/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
+No Haskell source changed. The PR #122 Nix and active-package formatter checks remain applicable.
