@@ -1,8 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 {- | The streamed walk of "Data.CFTA.GHC.Fits" end to end, on five easy
-Hoogle+ queries with the Prelude: each query gives its expected program,
-and GHC accepts every fit as a program of the query's signature. Also: the
+Hoogle+ queries and five queries of higher-kinded types with the Prelude:
+each query gives its expected program, and GHC accepts every fit as a
+program of the query's signature. Also: the
 fits that ignore an argument are marked, and the walk leaves the goal's
 unification variables as it found them.
 -}
@@ -39,12 +40,27 @@ queries =
   where
     query name signature arguments expected = Query name signature arguments (either error id (parseProgram expected))
 
+{- | Queries of higher-kinded types, which need the specializations of
+@fmap@, @(>>=)@, and @pure@ at the type heads of the query, under the
+signature's givens or by the instances in scope.
+-}
+higherKinded :: [Query]
+higherKinded =
+    [ query "join" "Monad m => m (m a) -> m a" ["x"] "(>>=) x id"
+    , query "fmapFst" "Functor f => f (a, b) -> f a" ["x"] "fmap fst x"
+    , query "joinMaybe" "Maybe (Maybe a) -> Maybe a" ["x"] "(>>=) x id"
+    , query "bind" "Monad m => (a -> m b) -> m a -> m b" ["f", "x"] "(>>=) x f"
+    , query "pureSingleton" "Applicative f => a -> f [a]" ["x"] "pure ((:) x [])"
+    ]
+  where
+    query name signature arguments expected = Query name signature arguments (either error id (parseProgram expected))
+
 main :: IO ()
 main = withSession ["import Prelude"] $ \session -> do
     candidates <- candidatesOf session [Import "Prelude" Nothing]
     hspec $ do
         describe "streamFits" $
-            forM_ queries $ \(Query name signature arguments expected) ->
+            forM_ (queries <> higherKinded) $ \(Query name signature arguments expected) ->
                 it ("finds the expected program of " <> name <> ", and GHC accepts its fits") $ do
                     Just typ <- typeOfExpression session ("undefined :: " <> signature)
                     found <- newIORef []

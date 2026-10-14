@@ -200,9 +200,13 @@ or the variable `GHC_LIBDIR`.
 
 ## Limits
 
-- The erased types are first-order: a component with an applied type
-  variable other than a `Foldable` or `Traversable` one (`fmap`, `pure`,
-  `(>>=)`, `traverse`) has no erased type, so Hectare never proposes it.
+- The erased types are first-order. A component with a higher-kinded type
+  variable (`fmap`, `pure`, `(>>=)`, the `Applicative` of `traverse`) gets
+  an erased type only at the type heads of the query (`Maybe` in `Maybe a`,
+  or `m` in `Monad m => m (m a) -> m a`) whose class constraints GHC's
+  solver discharges under the hole's givens; not at the list head, which
+  the list functions cover. A `Foldable` or `Traversable` variable becomes a
+  list.
 - A unification variable of the goal becomes a rigid constant in the erased
   goal, so Hectare proposes only programs that keep it abstract.
 - There is no defaulting: a program that needs `Num` defaulting is rejected.

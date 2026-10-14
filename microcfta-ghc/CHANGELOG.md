@@ -25,7 +25,11 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `programs`.
 - `Data.CFTA.GHC.Erase`: GHC types as Hectare's first-order types, with the
   class contexts erased, and `anyResult` for the components that would fit
-  every hole once erased.
+  every hole once erased. An applied rigid type variable (`f a`) erases to
+  a type constructor. `higherKinded` and `typeHeads` give the variables and
+  the heads for the specializations of `streamFits`: a component with a
+  higher-kinded type variable is proposed at each type head of the query
+  whose class constraints GHC solves under the hole's givens.
 - `Data.CFTA.GHC.Internal.Check`: one step of a program walk as a refinement
   hole fit (`tcSubTypeSigma`, GHC's fast path for insoluble equalities, and
   `simplifyTopWanteds` under `runTcSEarlyAbort` inside the hole's

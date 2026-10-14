@@ -53,6 +53,7 @@ module Data.CFTA.GHC.Internal.Check (
     startWalker,
     step,
     complete,
+    entails,
 
     -- * States
     StateKey,
@@ -105,6 +106,7 @@ import GHC.Tc.Types.Constraint (
     isSolvedWC,
     mkImplicWC,
     mkNonCanonical,
+    mkSimpleWC,
  )
 import GHC.Tc.Types.Origin (
     CtOrigin (ExprHoleOrigin),
@@ -123,7 +125,15 @@ import GHC.Tc.Utils.Monad (
     tryCaptureConstraints,
     tryTc,
  )
-import GHC.Tc.Utils.TcMType (cloneWC, cloneWantedCtEv, newOpenFlexiTyVarTy, newSkolemTyVar, newTcEvBinds, readMetaTyVar)
+import GHC.Tc.Utils.TcMType (
+    cloneWC,
+    cloneWantedCtEv,
+    newOpenFlexiTyVarTy,
+    newSkolemTyVar,
+    newTcEvBinds,
+    newWanteds,
+    readMetaTyVar,
+ )
 import GHC.Tc.Utils.TcType (
     MetaDetails (Flexi, Indirect),
     MetaInfo (..),
@@ -363,6 +373,15 @@ complete environment walker
     | null (walkerGoals walker) =
         setTcLevel (environmentLevel environment) (discardErrs (satisfiable environment walker False True))
     | otherwise = pure False
+
+{- | Whether GHC solves the predicates under the hole's givens, with the
+instances in scope, as for a complete program. The solver's unifications
+do not stay.
+-}
+entails :: Environment -> [PredType] -> TcM Bool
+entails environment predicates = setTcLevel (environmentLevel environment) . discardErrs $ do
+    evidence <- newWanteds (ExprHoleOrigin Nothing) predicates
+    satisfiable environment (Walker (metasOf predicates) (mkSimpleWC evidence) []) False True
 
 {- | Whether the wanteds of a walker can still be solved. With the last
 'True', every wanted must be solved, as for a complete program. Otherwise

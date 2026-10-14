@@ -10,7 +10,10 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
 
 * Hectare's equality-constrained automaton ("Data.CFTA.Gen.Synthesis")
   lists the programs of each size over the candidates' erased types
-  ("Data.CFTA.GHC.Erase"), smallest first, in its enumeration order.
+  ("Data.CFTA.GHC.Erase"), smallest first, in its enumeration order. A
+  candidate with a higher-kinded type variable, as @fmap@ or @(>>=)@, has
+  an erased type at each type head of the query whose class constraints GHC
+  solves under the hole's givens ('specializations').
 * Each program is checked in preorder, one leaf at a time
   ("Data.CFTA.GHC.Internal.Check"), as a refinement hole fit, with the
   parts of 'GHC.Tc.Errors.Hole.tcCheckHoleFit': 'tcSubTypeSigma' at the
@@ -76,35 +79,40 @@ module Data.CFTA.GHC.Fits (
 import Control.Applicative ((<|>))
 import Control.DeepSeq (rnf)
 import Control.Exception (evaluate)
+import Control.Monad (forM)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.List (nub)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, isJust)
+import Data.Maybe (catMaybes, fromMaybe, isJust, mapMaybe)
+import Data.Set (Set)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 import System.Timeout (timeout)
 
-import Data.CFTA.GHC.Erase (anyResult, erase)
+import Data.CFTA.GHC.Erase (anyResult, erase, higherKinded, typeHeads)
 import Data.CFTA.GHC.Internal.Check
 import Data.CFTA.Gen.Synthesis (Program (..), Query (..), expand, library, programsIn, rawSearchSpace, reduceFully)
 import Data.CFTA.Interned (refold)
+import GHC.Builtin.Types (listTyCon)
 import GHC.Core.DataCon (dataConNonlinearType)
-import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
-import GHC.Core.Type (Type)
+import GHC.Core.TyCo.FVs (tyCoVarsOfType, tyCoVarsOfTypesList)
+import GHC.Core.Type (Type, substTyWith, tyConAppTyCon_maybe)
 import GHC.Data.Bag (bagToList, emptyBag)
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
 import GHC.Tc.Types.Constraint (Implication (..), ctEvPred)
 import GHC.Tc.Types.Origin (SkolemInfoAnon (RuntimeUnkSkol))
 import GHC.Tc.Utils.Monad (TcM)
 import GHC.Tc.Utils.TcMType (newImplication, newTcEvBinds)
-import GHC.Tc.Utils.TcType (TcLevel, TcTyVar)
+import GHC.Tc.Utils.TcType (TcLevel, TcTyVar, mkSpecSigmaTy, tcSplitNestedSigmaTys)
 import GHC.Types.Id (Id, idType, isDataConWorkId_maybe, isDataConWrapId_maybe)
 import GHC.Types.Name (getOccString)
 import GHC.Types.Var (EvVar, isTyVar)
+import GHC.Types.Var.Set (elemVarSet)
 
 {- | A hole under one implication with the given skolems and givens, at the
 given level (the skolems' level): what a driver without a typechecked hole
@@ -279,19 +287,22 @@ streamFits options hole candidates goal accept = do
     environment <- newEnvironment hole
     begin <- liftIO getMonotonicTimeNSec
     let deadline = (\seconds -> begin + round (seconds * 1e9)) <$> optionSeconds options
+    erased <- concat <$> mapM (erasures environment) candidates
+    let (hectareLibrary, query) = hectare erased
     case query of
         Just hectareQuery -> do
             ignoredLeaf <- rigidLeaf environment ignored
             let start = startWalker environment (map candidateType candidates) goal
             startKey <- stateKey environment (walkerVariables start) start
-            walk environment start startKey (Map.insert ignored ignoredLeaf leaves) hectareQuery deadline
+            walk environment hectareLibrary start startKey (Map.insert ignored ignoredLeaf leaves) hectareQuery deadline
         Nothing -> statisticsOf emptySearch <$> readCounters environment
   where
     -- Hectare's automaton has symbols of its own, as app and filter, so each
-    -- name gets a prefix there.
+    -- name gets a prefix there. The k-th specialization of a candidate has
+    -- the number after a space, which no Haskell name has.
     prefix = ("ghc:" <>)
     unprefix program = case program of
-        Var name -> Var (fromMaybe name (Text.stripPrefix "ghc:" name))
+        Var name -> Var (Text.takeWhile (/= ' ') (fromMaybe name (Text.stripPrefix "ghc:" name)))
         App function argument -> App (unprefix function) (unprefix argument)
     -- The free type variables of the scope, named in order of occurrence.
     relevant = map ctEvPred (bagToList (th_relevant_cts hole))
@@ -302,33 +313,43 @@ streamFits options hole candidates goal accept = do
             | (index, variable) <- zip [0 :: Int ..] free
             ]
     rigid variable = Map.lookup variable names
-    erased =
-        [ (candidate, typ)
-        | candidate <- candidates
-        , Just typ <- [erase rigid (candidateType candidate)]
-        , candidateRequired candidate || not (anyResult typ)
-        ]
-    components =
-        [ (prefix (candidateName candidate), typ)
-        | (candidate, typ) <- erased
-        , not (candidateRequired candidate)
-        , candidateHeads candidate
-        ]
-    argumentOnly =
-        [ (prefix (candidateName candidate), typ)
-        | (candidate, typ) <- erased
-        , not (candidateRequired candidate)
-        , not (candidateHeads candidate)
-        ]
-    required = [(prefix (candidateName candidate), typ) | (candidate, typ) <- erased, candidateRequired candidate]
-    hectareLibrary =
-        library
-            components
-            argumentOnly
-            [(map prefix heads, map prefix <$> arguments) | (heads, arguments) <- optionAvoid options]
-    query
-        | length required == length (filter candidateRequired candidates) = Query required <$> erase rigid goal
-        | otherwise = Nothing
+    -- The Hectare types of a candidate, each with its name in Hectare: its
+    -- erased type, or else its specializations at the type heads of the
+    -- query.
+    erasures environment candidate = case erase rigid (candidateType candidate) of
+        Just typ -> pure [(candidate, prefix (candidateName candidate), typ) | keep candidate typ]
+        Nothing -> do
+            specialized <- specializations environment queryHeads (candidateType candidate)
+            pure
+                [ (candidate, prefix (candidateName candidate) <> " " <> Text.pack (show index), typ)
+                | (index, typ) <- zip [1 :: Int ..] (mapMaybe (erase rigid) specialized)
+                , keep candidate typ
+                ]
+    keep candidate typ = candidateRequired candidate || not (anyResult typ)
+    -- The list head is left out: the list functions already cover it (map
+    -- for fmap, concatMap for (>>=)), and its specializations would repeat
+    -- their fits.
+    queryHeads =
+        filter
+            ((/= Just listTyCon) . tyConAppTyCon_maybe)
+            (typeHeads (goal : [candidateType candidate | candidate <- candidates, candidateRequired candidate]))
+    hectare erased = (hectareLibrary, query)
+      where
+        components = [(name, typ) | (candidate, name, typ) <- erased, not (candidateRequired candidate), candidateHeads candidate]
+        argumentOnly = [(name, typ) | (candidate, name, typ) <- erased, not (candidateRequired candidate), not (candidateHeads candidate)]
+        required = [(name, typ) | (candidate, name, typ) <- erased, candidateRequired candidate]
+        hectareLibrary =
+            library
+                components
+                argumentOnly
+                [ (concatMap specializedNames heads, concatMap specializedNames <$> arguments)
+                | (heads, arguments) <- optionAvoid options
+                ]
+        -- Hectare's names of the candidates of a name, with their specializations.
+        specializedNames text = [name | (candidate, name, _) <- erased, candidateName candidate == text]
+        query
+            | length required == length (filter candidateRequired candidates) = Query required <$> erase rigid goal
+            | otherwise = Nothing
     leaves :: Map Text Leaf
     leaves =
         Map.fromListWith
@@ -336,7 +357,7 @@ streamFits options hole candidates goal accept = do
             [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates]
     -- The name of the rigid leaf: a hole, so no candidate has it.
     ignored = "_"
-    walk environment start startKey leaves' hectareQuery deadline = sizes 1 emptySearch
+    walk environment hectareLibrary start startKey leaves' hectareQuery deadline = sizes 1 emptySearch
       where
         -- Build and reduce the automaton of each size, then check its
         -- programs: 'Data.CFTA.Gen.Synthesis.solutionsOfSize' in parts, so
@@ -445,7 +466,9 @@ streamFits options hole candidates goal accept = do
                 Just known -> known <$ countKnown environment known
                 Nothing -> complete environment walker
             let search' = search{searchVerdicts = Map.insert (key, endToken) fits (searchVerdicts search)}
-            if fits
+                -- Two specializations of a candidate can give one program.
+                new = Set.notMember (preorder program) (searchReported search)
+            if fits && new
                 then do
                     -- Undo the program's steps, and check the program with
                     -- each argument subterm in turn of a fresh rigid type.
@@ -455,6 +478,7 @@ streamFits options hole candidates goal accept = do
                     pure
                         search'
                             { searchStack = []
+                            , searchReported = Set.insert (preorder program) (searchReported search)
                             , searchFits = searchFits search + 1
                             , searchLastFit = Just (Fit program size ignoresPart)
                             }
@@ -503,6 +527,27 @@ streamFits options hole candidates goal accept = do
     commonPrefix (x : xs) (y : ys) | x == y = 1 + commonPrefix xs ys
     commonPrefix _ _ = 0
     readCounters environment = liftIO (readIORef (environmentCounters environment))
+
+{- | The types of a candidate at the type heads of a query: each
+higher-kinded type variable ('higherKinded') replaced by a head, when GHC
+solves the class constraints on the heads under the hole's givens. So
+@fmap@ gets a type at @Maybe@ when the instances give @Functor Maybe@, and
+at @m@ when the signature gives @Monad m@. GHC still checks each use of the
+candidate with its own type.
+-}
+specializations :: Environment -> [Type] -> Type -> TcM [Type]
+specializations environment heads typ
+    | null higher = pure []
+    | otherwise = fmap catMaybes . forM (mapM (const heads) higher) $ \choice -> do
+        let instantiate = substTyWith higher choice
+            remaining = filter (`notElem` higher) variables
+            theta' = map instantiate theta
+            closed = [predicate | predicate <- theta', not (any (`elemVarSet` tyCoVarsOfType predicate) remaining)]
+        solved <- entails environment closed
+        pure (if solved then Just (mkSpecSigmaTy remaining theta' (instantiate rho)) else Nothing)
+  where
+    higher = higherKinded typ
+    (variables, theta, rho) = tcSplitNestedSigmaTys typ
 
 {- | Whether a program fits, from a walker: every step, then the end. The
 walker's unification variables are as before afterwards.
@@ -562,6 +607,8 @@ data Search = Search
     { searchStack :: [Frame]
     , searchDead :: Dead
     , searchVerdicts :: Map (StateKey, Token) Bool
+    , searchReported :: Set [Token]
+    -- ^ The fits so far.
     , searchPrograms :: !Int
     , searchSkipped :: !Int
     , searchFits :: !Int
@@ -577,7 +624,7 @@ data Search = Search
 
 -- | A search before its first program.
 emptySearch :: Search
-emptySearch = Search [] emptyDead Map.empty 0 0 0 0 Nothing False 0 0 0 0
+emptySearch = Search [] emptyDead Map.empty Set.empty 0 0 0 0 Nothing False 0 0 0 0
 
 {- | Evaluate a value to weak head normal form, and give the nanoseconds that
 it took; the value is 'Nothing' when the deadline comes first. Only a pure
