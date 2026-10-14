@@ -2,6 +2,57 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Exact source crush semantics and both gate memos
+
+Proofs: `0f5f465f`, `348e5adc`, and `9abb1aff`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-source-crush-both-memos.md`. This section supersedes the
+earlier visited-fold and predicate-memo composition targets.
+
+The actual visited source fold is true exactly when every physically reached
+ordinary edge passes its local constraint test. A false result has a reached
+failing edge witness. The proof derives closure, origins, and exact checks
+through the actual changing visited sets. Canonical coherence handles repeated
+identities. It includes arbitrary nested Mu and root unions. Bare references
+stop. Mu traversal reads only the stored body, not either probe. No unrelated
+cached edge must be plain. The concrete source test also gives the intended
+always-accepting guard meaning under normalized original annotations.
+
+Complete node, child, edge, path, and class graphs now carry both actual source
+memo tables beside the constructor cache. Predicate receipts extend the
+existing unfolding graphs. Each Mu read uses the proved concrete memo runner.
+Actual unfolding growth preserves earlier predicate entries. False siblings
+pass all returned tables onward. True siblings stop. Original construction
+derives complete finite source executions and both empty initial memos.
+Complete class graphs are equivalent to the original source graph. Memo
+choices retain the exact Boolean and final constructor cache. No whole-fold,
+whole-node predicate, whole-memo observation, or successful gate premise is
+supplied. These are logical call graphs with exact actual runner equations;
+they do not add an extracted executable memo backend.
+
+The audit passes 1,603 jobs and 44,981 theorem dependency checks. Only
+`propext`, `Classical.choice`, and `Quot.sound` occur. Only the old unused
+`inputs` warning remains. No production Haskell code changed. Audit log:
+`/tmp/mcfta-source-crush-both-memos-20261015-audit.log`. Snapshot:
+`/tmp/mcfta-source-crush-both-memos-checkpoint-20261015-0140/`
+(1,990 Lean-tree files and four root documents). All older proof bytes except
+audit imports, fixtures, counterexamples, marked drafts, repairs, backups,
+stashes, and other worktrees remain. Weekly allowance was 19% at 01:38 CEST;
+refresh it before work.
+
+Next carry both memo tables through the complete ordered local-class filter
+in `reduceEqConstraints`. Each class reads the original child list. Every
+class runs, including those after a blocked class; only its internal `any`
+scan stops early. Derive finite execution, exact retained class order, and
+per-occurrence gate receipts in each actual intermediate cache. Then connect
+this selection to `EqualityReduction.selectedClasses`. If that connection
+compares decisions in different constructor caches, derive the required
+growth/readback invariance; do not assume it. Keep missing fuel distinct from
+a completed Boolean. Do not repeat completed rank, crush, or memo composition
+proofs. Preserve exact Sized contracts, the unary ancestor theorem, the
+optimized interned core, and native runtime/extraction limits. Stop all work
+and workers at 1% weekly allowance or less.
+
 ## Complete memo gate graphs and concrete source predicate
 
 Proofs: `c087a4ed`, `13b10b57`, and `3602e821`. Source: `TharkunAB/cfta`,

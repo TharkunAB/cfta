@@ -1,5 +1,12 @@
 # Complete memo gate graphs and the concrete source predicate
 
+Current update (2026-10-15 01:40 CEST): `0f5f465f`, `348e5adc`, and `9abb1aff`
+complete exact physical descendant checks for the actual visited source fold
+and carry both actual memo tables through complete ordered gate graphs.
+Read [the current proof note](notes-source-crush-both-memos.md). Its next
+target is the complete ordered local-class filter. Earlier next targets below
+retain their historical context.
+
 Updated: 2026-10-15 01:23 CEST.
 Proofs: `c087a4ed`, `13b10b57`, and `3602e821`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.

@@ -1,5 +1,12 @@
 # Same-path unfolding in the current equality gate
 
+Current update (2026-10-15 01:40 CEST): `0f5f465f`, `348e5adc`, and `9abb1aff`
+complete exact physical descendant checks for the actual visited source fold
+and carry both actual memo tables through complete ordered gate graphs.
+Read [the current proof note](notes-source-crush-both-memos.md). Its next
+target is the complete ordered local-class filter. Earlier next targets below
+retain their historical context.
+
 Current update: ordered constructor-cache threading is complete in
 `ec56843a` and `512a386d`. Coherent unfolding memo calls are proved in
 `8b5ec04e`. Read [the stateful gate note](notes-stateful-gate.md).

@@ -7,6 +7,17 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Current application (2026-10-15 01:40 CEST)
+
+The actual visited fold now has an exact physical reachability theorem.
+The complete gate graphs now contain both actual memo runner equations and
+their exact finite source readback. The predicate graph extends the already
+proved unfolding graph. This reuses correspondence proofs instead of taking
+a whole-callback law. Read [the current proof note](notes-source-crush-both-memos.md).
+The remaining selection caller, native scheduling, and extraction boundaries
+stay explicit. The earlier termination discussion below records the boundary
+that existed before the independent general unfolding-rank proof.
+
 ## Useful method
 
 Lava translates executable definitions and logical refinements into Rocq.
