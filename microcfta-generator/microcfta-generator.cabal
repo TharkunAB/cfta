@@ -490,3 +490,26 @@ benchmark hegel
     microcfta-generator,
     process >=1.6 && <1.7,
     text >=2.1 && <2.2,
+
+benchmark hybrid
+  import: warnings, extensions
+  type: exitcode-stdio-1.0
+  main-is: Hybrid.hs
+  hs-source-dirs:
+    benchmarks
+    common
+
+  ghc-options:
+    -rtsopts
+    -with-rtsopts=-M8G
+
+  other-modules:
+    Data.CFTA.Gen.Synthesis.HegelBenchmarks
+    Data.CFTA.Gen.Synthesis.HooglePlus
+
+  build-depends:
+    base >=4.22 && <4.23,
+    microcfta,
+    microcfta-generator,
+    process >=1.6 && <1.7,
+    text >=2.1 && <2.2,
