@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 12:54 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 13:00 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -550,6 +550,25 @@ different result identity, and successful one-edge read. Log:
 `/tmp/mcfta-cold-measure-native-20261014.log`. See
 [native output and cold effects](lean/notes-native-output-cold-effects.md).
 
+## Direct repaired shared traversal and first-order Sized
+
+`c410bc0a` adds `SourceFreshOrdinaryColdSharedRows`. The shared worklist
+calls the repaired reader directly. `Trace.finite` and `collect_trace`
+connect exact finite relational and executable runs. `of_prepared` and
+`Trace.to_prepared` transfer earlier prepared traces in both directions,
+with identical tables and caches. `Trace.correct` retains complete semantic
+heaps, coverage, row provenance, growth/history, and closed children for
+arbitrary finite repaired traces. It requires no preparation or `NoNewMu`.
+`cold_finite` derives finite prepared repaired traversal without a trace.
+
+`SourceFirstOrderFreshColdSized.source_sized` composes actual repaired
+empty-cache first-order construction and the new repaired shared worklist.
+It derives exact finite node-count classes, distinct size order, complete
+bounded prefixes, and both inverse laws. No warmup or trace is supplied.
+The same prepared trace bridge retains existing native and solver-decided
+table compositions. General nested finite trace existence remains open.
+See [repaired cold shared rows](lean/notes-fresh-cold-shared-rows.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
@@ -612,18 +631,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`0534aad8`**; later commits record this handoff.
+The latest proof checkpoint is **`c410bc0a`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,365 build targets and 42,696 theorem
+The current Lean 4.34.1 audit passes **1,367 build targets and 42,729 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-cold-measure-boundary-20261014-audit.log`.
+Log: `/tmp/mcfta-fresh-shared-sized-20261014-audit.log`.
 After the current refresh, all **642** examples passed in Nix: 289 core, 208
 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **30% at 12:52 CEST**.
+No background proof worker is active. Weekly allowance was **30% at 13:01 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

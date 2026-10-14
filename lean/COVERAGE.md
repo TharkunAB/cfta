@@ -6,8 +6,8 @@ escape fix and its regression are retained. It is separate from the proved
 SMT-name adapter. Sized/core refinement source did not change. See the root
 handoff for backup, manifest, validation, and historical hash mapping.
 
-Current checkpoint: **2026-10-14 12:54 CEST**, upstream `c66d10ea`.
-The latest proof commit is `0534aad8`. No background proof worker is active.
+Current checkpoint: **2026-10-14 13:00 CEST**, upstream `c66d10ea`.
+The latest proof commit is `c410bc0a`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -250,6 +250,15 @@ result. `SourceColdUnfoldNewMuBoundary` refutes two proposed general measures
 with actual closed source construction: one unfolding allocates a new Mu and
 increases cached depth from 2 to 3. The reader still finishes. Live Haskell
 confirms the depth increase and successful read. This is no source defect.
+`SourceFreshOrdinaryColdSharedRows` defines the shared worklist with the
+repaired reader directly. Finite traces and actual executable runs have
+identical tables and caches. Both prepared trace bridges are derived.
+General finite traces retain complete semantic caches, coverage, row
+provenance, growth/history, and closed children without preparation.
+`SourceFirstOrderFreshColdSized.source_sized` connects actual repaired
+empty-cache first-order construction and repaired cold shared execution to
+all exact finite reference Sized laws. General nested finite trace existence
+remains open. See [repaired shared rows](notes-fresh-cold-shared-rows.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
 ancestor edits and bounded iteration for the fixed unary/two-atom fragment.
 General equality propagation remains open.
@@ -260,7 +269,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,365 targets and 42,696 theorem dependency checks**
+The current audit passes **1,367 targets and 42,729 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **642 Haskell examples** passed after the PR #119 refresh: 289 core,
 208 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.

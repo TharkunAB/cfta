@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 12:54 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 13:00 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -64,7 +64,7 @@ in complete semantic caches under explicit WordRanges. Native output scope,
 closedness, original syntax, and general bounded cold-reader effects are now
 proved. Finite repeated traversal and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`0534aad8`**. A later documentation commit
+The latest proof checkpoint is **`c410bc0a`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -89,7 +89,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **30% at 12:52 CEST**. This is a historical value.
+The last observed value was **30% at 13:01 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -857,6 +857,31 @@ different result identity, and successful one-edge read. Log:
 `/tmp/mcfta-cold-measure-native-20261014.log`. See
 [native output and cold effects](lean/notes-native-output-cold-effects.md).
 
+## Direct repaired shared traversal and first-order Sized
+
+`c410bc0a` adds `SourceFreshOrdinaryColdSharedRows`. The shared worklist
+calls the repaired reader directly. `Trace.finite` and `collect_trace`
+connect exact finite relational and executable runs. `of_prepared` and
+`Trace.to_prepared` transfer earlier prepared traces in both directions,
+with identical tables and caches. `Trace.correct` retains complete semantic
+heaps, coverage, row provenance, growth/history, and closed children for
+arbitrary finite repaired traces. It requires no preparation or `NoNewMu`.
+`cold_finite` derives finite prepared repaired traversal without a trace.
+
+`SourceFirstOrderFreshColdSized.source_sized` composes actual repaired
+empty-cache first-order construction and the new repaired shared worklist.
+It derives exact finite node-count classes, distinct size order, complete
+bounded prefixes, and both inverse laws. No warmup or trace is supplied.
+The same prepared trace bridge retains existing native and solver-decided
+table compositions. General nested finite trace existence remains open.
+See [repaired cold shared rows](lean/notes-fresh-cold-shared-rows.md).
+
+Preservation check after these proofs: all 1,707 files in the PR #119
+manifest remain present. Only the two coverage documents, audit imports, and
+stored-unfold note changed intentionally. No saved proof, counterexample,
+fixture, or marked draft changed. Report:
+`/tmp/mcfta-native-cold-effects-20261014-preservation.json`.
+
 ## Remaining priorities
 
 1. Read `lean/notes-native-successful.md`. Arbitrary-record source completion,
@@ -927,10 +952,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,365 jobs and 42,696 theorem dependency checks**.
+The current build passes **1,367 jobs and 42,729 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-cold-measure-boundary-20261014-audit.log`.
+Log: `/tmp/mcfta-fresh-shared-sized-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
