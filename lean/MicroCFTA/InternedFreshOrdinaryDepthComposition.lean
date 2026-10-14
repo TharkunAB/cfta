@@ -203,6 +203,53 @@ theorem callback_free [DecidableEq (EdgeKey Symbol Guard)] (body : Syntax Symbol
     (context.local argument argumentAvailable).inputs context.freeNames context.profiles value after done name different).trans
       (captures_free body names name).symm
 
+/-- Both actual probes determine the binder observations for any supplied symbolic body shape. -/
+theorem binder_shape [DecidableEq (EdgeKey Symbol Guard)] (smart : Bool) (bodyShape : Shape (Sum Unit Reference))
+    (depth ordinary : Value Symbol Guard) (state : State Symbol Guard)
+    (coherent : Coherent state) (available : Available state depth)
+    (depthExpected : depth.depth = bodyShape.depth)
+    (depthDeep : InternedFreshOrdinaryDepthHeap.Observed (InternedProfileCallbackForm.captures bodyShape.deep)
+      (InternedProfileCallbackForm.usesArgument bodyShape.deep) .depth depth)
+    (ordinaryDeep : InternedFreshOrdinaryDepthHeap.Observed (InternedProfileCallbackForm.captures bodyShape.deep)
+      (InternedProfileCallbackForm.usesArgument bodyShape.deep) (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) ordinary)
+    (depthFree : ∀ name, name ≠ .depth → (name ∈ depth.free ↔ name ∈
+      InternedProfileCallbackForm.captures bodyShape.free))
+    (ordinaryFree : ∀ name, name ≠ .uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth) → (name ∈ ordinary.free ↔ name ∈
+      InternedProfileCallbackForm.captures bodyShape.free)) :
+    InternedFreshOrdinaryDepthHeap.decodedDepth smart depth ordinary =
+      (InternedDepthSemantics.binder smart bodyShape).depth ∧
+    ∀ name, name ∈ InternedFreshOrdinaryDepthHeap.decodedDeep smart depth ordinary ↔
+      name ∈ (InternedDepthSemantics.binder smart bodyShape).deep := by
+  have fresh : .uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth) ∉ InternedProfileCallbackForm.captures bodyShape.deep := by
+    intro included
+    have deep := (InternedFreshOrdinaryDepthHeap.observed_other _ _ .depth depth depthDeep _ (by intro impossible; cases impossible)).mpr included
+    exact InternedFreshOrdinaryConstruction.ordinary_fresh depth
+      (InternedDeepFreeNormalization.deep_free depth state coherent available _ deep)
+  have uses : InternedFreshOrdinaryDepthHeap.usesLocal depth ordinary = InternedProfileCallbackForm.usesArgument bodyShape.deep := by
+    apply Bool.eq_iff_iff.mpr
+    simpa only [InternedFreshOrdinaryDepthHeap.usesLocal, decide_eq_true_eq] using
+      InternedFreshOrdinaryDepthHeap.observed_own _ _ _ ordinary ordinaryDeep fresh
+  have freeDecoded := InternedFreeNameDecoder.decode_observed _ depth.free ordinary.free
+    .depth (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) (by intro impossible; cases impossible) depthFree ordinaryFree
+  have deepDecoded := InternedFreeNameDecoder.decode_observed _ (deepNames depth) (deepNames ordinary)
+    .depth (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) (by intro impossible; cases impossible)
+    (InternedFreshOrdinaryDepthHeap.observed_other _ _ .depth depth depthDeep)
+    (InternedFreshOrdinaryDepthHeap.observed_other _ _ _ ordinary ordinaryDeep)
+  change InternedFreshOrdinaryDepthHeap.decodedDepth smart depth ordinary =
+    (InternedDepthSemantics.binder smart bodyShape).depth ∧ _
+  constructor
+  · simp only [InternedFreshOrdinaryDepthHeap.decodedDepth, uses, depthExpected, InternedDepthSemantics.binder,
+      hasLocal_uses]
+    split <;> simp_all
+  · intro name
+    change name ∈ InternedFreshOrdinaryDepthHeap.decodedDeep smart depth ordinary ↔
+      name ∈ (InternedDepthSemantics.binder smart bodyShape).deep
+    simp only [InternedFreshOrdinaryDepthHeap.decodedDeep, uses, InternedDepthSemantics.binder,
+      hasLocal_uses]
+    split
+    · simpa only [↓reduceIte, InternedDepthSemantics.lower, lower_captures] using freeDecoded name
+    · simpa only [↓reduceIte, InternedDepthSemantics.lower, lower_captures] using deepDecoded name
+
 /-- Both actual probes determine the richer interpreter's complete binder depth and deep names. -/
 theorem binder_decoded [DecidableEq (EdgeKey Symbol Guard)] (smart : Bool) (body : Syntax Symbol Guard)
     (names : List Reference) (depth ordinary : Value Symbol Guard) (state : State Symbol Guard)
@@ -220,35 +267,8 @@ theorem binder_decoded [DecidableEq (EdgeKey Symbol Guard)] (smart : Bool) (body
       (evaluate (.binder smart body) (names.map InternedDepthFreeProjectionSource.literal)).depth ∧
     ∀ name, name ∈ InternedFreshOrdinaryDepthHeap.decodedDeep smart depth ordinary ↔
       name ∈ (evaluate (.binder smart body) (names.map InternedDepthFreeProjectionSource.literal)).deep := by
-  have fresh : .uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth) ∉ InternedDepthFreeProjectionCallback.captured body names := by
-    intro included
-    have deep := (InternedFreshOrdinaryDepthHeap.observed_other _ _ .depth depth depthDeep _ (by intro impossible; cases impossible)).mpr included
-    exact InternedFreshOrdinaryConstruction.ordinary_fresh depth
-      (InternedDeepFreeNormalization.deep_free depth state context.normal.facts.coherent available _ deep)
-  have uses : InternedFreshOrdinaryDepthHeap.usesLocal depth ordinary = InternedDepthFreeProjectionCallback.uses body names := by
-    apply Bool.eq_iff_iff.mpr
-    simpa only [InternedFreshOrdinaryDepthHeap.usesLocal, decide_eq_true_eq] using
-      InternedFreshOrdinaryDepthHeap.observed_own _ _ _ ordinary ordinaryDeep fresh
-  have freeDecoded := InternedFreeNameDecoder.decode_observed _ depth.free ordinary.free
-    .depth (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) (by intro impossible; cases impossible) depthFree ordinaryFree
-  have deepDecoded := InternedFreeNameDecoder.decode_observed _ (deepNames depth) (deepNames ordinary)
-    .depth (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) (by intro impossible; cases impossible)
-    (InternedFreshOrdinaryDepthHeap.observed_other _ _ .depth depth depthDeep)
-    (InternedFreshOrdinaryDepthHeap.observed_other _ _ _ ordinary ordinaryDeep)
   rw [evaluate]
-  change InternedFreshOrdinaryDepthHeap.decodedDepth smart depth ordinary =
-    (InternedDepthSemantics.binder smart (InternedDepthFreeProjectionCallback.symbolic body names)).depth ∧ _
-  constructor
-  · simp only [InternedFreshOrdinaryDepthHeap.decodedDepth, uses, depthExpected, InternedDepthSemantics.binder,
-      hasLocal_uses, InternedDepthFreeProjectionCallback.uses]
-    split <;> simp_all
-  · intro name
-    change name ∈ InternedFreshOrdinaryDepthHeap.decodedDeep smart depth ordinary ↔
-      name ∈ (InternedDepthSemantics.binder smart (InternedDepthFreeProjectionCallback.symbolic body names)).deep
-    simp only [InternedFreshOrdinaryDepthHeap.decodedDeep, uses, InternedDepthSemantics.binder,
-      hasLocal_uses, InternedDepthFreeProjectionCallback.uses]
-    split
-    · simpa only [↓reduceIte, InternedDepthSemantics.lower, lower_captures] using freeDecoded name
-    · simpa only [↓reduceIte, InternedDepthSemantics.lower, lower_captures, InternedDepthFreeProjectionCallback.captured] using deepDecoded name
+  exact binder_shape smart (InternedDepthFreeProjectionCallback.symbolic body names) depth ordinary state
+    context.normal.facts.coherent available depthExpected depthDeep ordinaryDeep depthFree ordinaryFree
 
 end MicroCFTA.InternedFreshOrdinaryDepthComposition
