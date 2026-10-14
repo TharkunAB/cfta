@@ -13,8 +13,10 @@ its index, because Hegel's labels of states use the at sign, which the names
 of Hoogle+'s dictionaries contain.
 
 The parent runs each query in a child process with a heap limit and a time
-limit, first with Hegel and then with the hybrid. Each row of the CSV gives
-the library, the query, the tool, the outcome (@solved@, @unsolved@,
+limit, first with Hegel and then with the hybrid. The hybrid has 5 seconds,
+and then Hegel runs on the query; @hybrid-only@ has no fallback. Each row of
+the CSV gives the library, the query, the tool, the outcome (@solved@,
+@fallback@ when Hegel solved it after the hybrid's 5 seconds, @unsolved@,
 @timeout@, or @crash@), the applications of the solution, the seconds, the
 entailment queries, the undecided queries, and the solution.
 
@@ -22,7 +24,7 @@ With no arguments, it runs three small queries with 60 seconds and a heap of
 2 GB each, so that @cabal bench@ stays short.
 
 > hybrid [hegel | large | all] [seconds] [heap]
-> hybrid --query [hegel | hybrid | abstracting] [hegel | large] NAME seconds
+> hybrid --query [hegel | hybrid | hybrid-only | abstracting] [hegel | large] NAME seconds
 -}
 module Main (main) where
 
@@ -120,10 +122,13 @@ runQuery tool suite name seconds = case findEntry suite name of
             []
             $ \solver -> do
                 start <- getMonotonicTime
+                let hegelOptions = defaultOptions{optionMaximumSize = bound}
+                    withFallback = defaultHybridOptions{hybridFallback = Just (fallbackSeconds, hegelOptions)}
                 result <- timeout (seconds * 1000000) $ case tool of
-                    "hegel" -> hegelRow solver components query bound
-                    "hybrid" -> hybridRow solver defaultHybridOptions components query
-                    "abstracting" -> hybridRow solver defaultHybridOptions{hybridPrecise = False} components query
+                    "hegel" -> hegelRow solver hegelOptions components query
+                    "hybrid" -> hybridRow solver withFallback components query
+                    "hybrid-only" -> hybridRow solver defaultHybridOptions{hybridFallback = Nothing} components query
+                    "abstracting" -> hybridRow solver withFallback{hybridPrecise = False} components query
                     _ -> fail $ "no tool " <> tool
                 end <- getMonotonicTime
                 putStrLn $ case result of
@@ -144,26 +149,41 @@ runQuery tool suite name seconds = case findEntry suite name of
 -- | A row's outcome, the applications of the solution, the queries, the undecided queries, and the solution.
 type Row = (String, String, Int, Int, String)
 
+{- | The seconds of the hybrid before Hegel runs, in the @hybrid@ and
+@abstracting@ tools.
+-}
+fallbackSeconds :: Int
+fallbackSeconds = 5
+
 -- | Hegel on a query, with the reduction steps of the paper and a bound on the size.
-hegelRow :: Entailment -> [Component] -> LiquidQuery -> Int -> IO Row
-hegelRow solver components query bound = do
-    result <- synthesize solver defaultOptions{optionMaximumSize = bound} components query
-    case result of
-        Left err -> pure ("error", "", 0, 0, err)
-        Right outcome -> do
-            let Statistics size _ _ queries undecided = outcomeStatistics outcome
-            pure $ case outcomeSolutions outcome of
+hegelRow :: Entailment -> Options -> [Component] -> LiquidQuery -> IO Row
+hegelRow solver options components query = hegelResult <$> synthesize solver options components query
+
+-- | The row of a result of Hegel.
+hegelResult :: Either String Outcome -> Row
+hegelResult result = case result of
+    Left err -> ("error", "", 0, 0, err)
+    Right outcome ->
+        let Statistics size _ _ queries undecided = outcomeStatistics outcome
+         in case outcomeSolutions outcome of
                 first : _ -> ("solved", show size, queries, undecided, renderTerm first)
                 [] -> ("unsolved", "", queries, undecided, "")
 
--- | The hybrid on a query.
+{- | The hybrid on a query. A query that Hegel solves after the fallback has
+the outcome @fallback@, and its queries are those of both.
+-}
 hybridRow :: Entailment -> HybridOptions -> [Component] -> LiquidQuery -> IO Row
 hybridRow solver options components query = do
     outcome <- synthesizeHybrid solver options components query
     let HybridStatistics _ _ queries undecided = hybridStatistics outcome
-    pure $ case hybridSolution outcome of
-        Just program -> ("solved", show (applications program), queries, undecided, renderProgram (originalNames program))
-        Nothing -> ("unsolved", "", queries, undecided, "")
+    pure $ case (hybridSolution outcome, hybridFallbackOutcome outcome) of
+        (Just program, _) -> ("solved", show (applications program), queries, undecided, renderProgram (originalNames program))
+        (Nothing, Just result) -> case hegelResult result of
+            ("solved", size, hegelQueries, hegelUndecided, solution) ->
+                ("fallback", size, queries + hegelQueries, undecided + hegelUndecided, solution)
+            (other, size, hegelQueries, hegelUndecided, solution) ->
+                (other, size, queries + hegelQueries, undecided + hegelUndecided, solution)
+        (Nothing, Nothing) -> ("unsolved", "", queries, undecided, "")
 
 -- | The applications of a program: each head applied to its arguments counts one.
 applications :: Program -> Int
