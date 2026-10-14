@@ -50,12 +50,10 @@ is the original closed Mu, which contributes no free name.
 
 ## Next obligations
 
-Use the optional-binder support law to derive a recursive caller invariant:
-each result free name is an intersection reference from the incoming domain's
-`seen` pairs. A Mu body call adds its current pair. Its actual optional binder
-removes that pair. Ordinary rows and unions retain only returned child names.
-The empty initial domain should then derive native output closedness through
-the existing guarded kernel meaning. This invariant remains to be proved.
+Recursive seen-pair scope, native output closedness, original payload syntax,
+and general bounded cold-reader effects are now proved. See
+[native output and cold effects](notes-native-output-cold-effects.md).
+Do not repeat those results. Finite repeated traversal remains open.
 
 General single unfolding does not prove termination of repeated cold-reader
 traversal. It can add Mu records. The old `NoNewMu` inventory budget applies

@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 12:24 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:41 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -508,9 +508,27 @@ original free reference. Arbitrary stored substitution and single Mu unfolding
 now complete without preparation in complete semantic caches. They retain
 exact cache effects, semantic contexts/depth heaps, complete coverage,
 availability, and histories. A closed available record has a closed unfolding.
-Repeated repaired cold-reader termination, native output closedness, final
-cold tables, and physical product rows remain open. See
+Native output closedness is now proved below. Repeated repaired cold-reader
+termination, final cold tables, and physical product rows remain open. See
 [stored support and unfolding](lean/notes-stored-free-unfold.md).
+
+## Native result scope and general repaired cold reads
+
+`59d637f2` proves recursive result free-name scope from actual source
+execution. Returned names belong to incoming seen pairs. Mu calls extend
+that domain, and actual optional binders remove their pair. Exact guarded
+kernel meaning transfers the result to native execution. Empty-domain
+native returns are closed. `d935fe35` derives original payload syntax from
+closed coherent availability, without an output-syntax premise.
+
+`d87a4324` proves bounded repaired cold-reader effects without preparation
+or `NoNewMu`. Every outcome retains complete semantic heaps, coverage,
+growth, and issued history. Done results contain resident edges with closed
+children. Pending constructors and unresolved references are excluded.
+`cold_node_read_effects` supplies these premises from actual successful native
+first execution. Exhaustion remains possible. General repeated traversal,
+finite final cold tables, and physical product language remain open. See
+[native output and cold effects](lean/notes-native-output-cold-effects.md).
 
 ## Remaining work and assessment
 
@@ -541,7 +559,7 @@ change. Executable package source and tests match upstream. Only the retained
 four-line constructor changelog note differs. The synthesis API still has no
 complete formal source model. No benchmark specification was formalized.
 
-The unchanged Lean audit passes 1,354 jobs and 42,506 theorem checks. All 642
+The post-refresh Lean audit passed 1,354 jobs and 42,506 theorem checks. All 642
 Haskell examples pass in Nix: 289 core, 208 generator, and 145 refinement.
 Fourmolu and both active-package cabal-gild checks pass. Logs:
 `/tmp/mcfta-state-label-refresh-20261014-audit.log`,
@@ -574,18 +592,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`b1994b3f`**; later commits record this handoff.
+The latest proof checkpoint is **`d87a4324`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,354 build targets and 42,506 theorem
+The current Lean 4.34.1 audit passes **1,363 build targets and 42,587 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-state-label-refresh-20261014-audit.log`.
+Log: `/tmp/mcfta-general-cold-effects-20261014-audit.log`.
 After the current refresh, all **642** examples passed in Nix: 289 core, 208
 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **30% at 12:23 CEST**.
+No background proof worker is active. Weekly allowance was **30% at 12:41 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

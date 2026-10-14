@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 12:24 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:41 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -60,10 +60,11 @@ General closed-source completion is now proved by paired-route level agreement.
 Arbitrary captured records in a complete valid decoded cache also complete.
 The actual optional-binder substitution now derives successful execution.
 Native first-run completion is now proved for closed Original available inputs
-in complete semantic caches under explicit WordRanges. Output preparation
-and physical product language remain open.
+in complete semantic caches under explicit WordRanges. Native output scope,
+closedness, original syntax, and general bounded cold-reader effects are now
+proved. Finite repeated traversal and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`b1994b3f`**. A later documentation commit
+The latest proof checkpoint is **`d87a4324`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -88,7 +89,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **30% at 12:23 CEST**. This is a historical value.
+The last observed value was **30% at 12:41 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -785,8 +786,8 @@ Mu unfoldings now complete without preparation. They retain exact caches,
 semantic contexts and depth heaps, complete coverage, availability, growth,
 and issued history. An unfolding of a closed available record is closed.
 See [stored support and unfolding](lean/notes-stored-free-unfold.md).
-Repeated cold-reader termination and native result closedness are separate
-obligations. Do not infer `NoNewMu` from single unfolding completion.
+Native result closedness is now proved below. Repeated cold-reader termination
+remains open. Do not infer `NoNewMu` from single unfolding completion.
 
 ## PR #119 preserving refresh
 
@@ -806,7 +807,7 @@ change. Executable package source and tests match upstream. Only the retained
 four-line constructor changelog note differs. The synthesis API still has no
 complete formal source model. No benchmark specification was formalized.
 
-The unchanged Lean audit passes 1,354 jobs and 42,506 theorem checks. All 642
+The post-refresh Lean audit passed 1,354 jobs and 42,506 theorem checks. All 642
 Haskell examples pass in Nix: 289 core, 208 generator, and 145 refinement.
 Fourmolu and both active-package cabal-gild checks pass. Logs:
 `/tmp/mcfta-state-label-refresh-20261014-audit.log`,
@@ -814,6 +815,27 @@ Fourmolu and both active-package cabal-gild checks pass. Logs:
 `/tmp/mcfta-state-label-refresh-20261014-format.log`.
 Earlier refresh records and old proof hashes below are historical and remain
 in the preserved backup branches. Current single-unfold proof: `b1994b3f`.
+
+## Native result scope and general cold-reader effects
+
+`59d637f2` derives actual recursive result scope. The source proof follows
+ordered rows, child calls, Mu domain extension, optional-binder elimination,
+references, unions, and every guard. `execute_scoped` applies at every actual
+successful source return. Exact guarded kernel meaning transfers this scope
+to native results. The empty initial domain derives closed output.
+`d935fe35` derives original payload syntax from closed coherent availability.
+The existing predicate excludes probe metadata. It does not classify every
+stored probe as original syntax.
+
+`d87a4324` proves complete semantic cache and coverage retention for every
+bounded repaired cold read, with exact growth and issued history. Successful
+reads return resident edges with closed children. Closed available inputs
+cannot return pending constructors or unresolved references. Exhaustion
+remains possible. `cold_node_read_effects` derives all premises from actual
+successful first native execution under the existing word and input scope.
+No preparation or `NoNewMu` premise is used. Finite repeated traversal and
+physical product language remain open. See
+[native output and cold effects](lean/notes-native-output-cold-effects.md).
 
 ## Remaining priorities
 
@@ -827,22 +849,21 @@ in the preserved backup branches. Current single-unfold proof: `b1994b3f`.
    those completed results or replace their actual effects with contracts.
    The alternative shorter-producer descent is unclosed and unused by these
    results. Preserve its histories and counterexamples.
-2. Read `lean/notes-stored-free-unfold.md`. Derive the recursive result scope
-   from actual source execution: every returned free name is an intersection
-   reference from the incoming domain's `seen` pairs. The Mu body call adds
-   its current pair; actual `MaybeMu.free_support` removes that pair. Use the
-   empty initial domain and proved native guarded kernel meaning to derive
-   output closedness. Then prove output preparation or a broader cold-reader
-   invariant and finite final cold tables. General single unfolding now
-   completes and preserves closedness, but can add Mu records. Use actual
-   `MergedFreshOrdinaryExposure` for the repaired reader. The old
-   `MergedSourceExposure` bridge agrees only in the prepared fragment.
-   Universal preparation preservation remains refuted. Keep that actual
-   source-built counterexample and its successful native return. Derive
-   physical `ProductReadback.members` and `.rejected` from actual row traces,
-   then use `product_exact`. Do not assume equivalent product language.
-   Keep the stated word/input scope and all source, domain, memo, and
-   continuation effects. Retain the complete public Sized results.
+2. Read `lean/notes-native-output-cold-effects.md`. Recursive result scope,
+   native output closedness, original payload syntax, and general bounded
+   cold-reader effects are proved. Do not repeat these results. Prove finite
+   repeated repaired cold-reader traversal and finite final cold tables.
+   General single unfolding completes and preserves closedness, but can add
+   Mu records. `LexicalBinderClosure` derives a finite abstract inventory;
+   physical allocation and canonical replay still need a source bridge.
+   Use actual `MergedFreshOrdinaryExposure`. The old `MergedSourceExposure`
+   bridge agrees only in the prepared fragment. Universal preparation
+   preservation remains refuted. Keep that actual source-built counterexample
+   and its successful native return. Derive physical `ProductReadback.members`
+   and `.rejected` from actual row traces, then use `product_exact`. Do not
+   assume equivalent product language. Keep the stated word/input scope and
+   all source, domain, memo, and continuation effects. Retain the complete
+   public Sized results.
 3. Connect bounded import to native `fromFTA`/SCC and split readback, then
    preserve supplied custom order through final observation decoders.
    `SourceBoundedImport`, `SourceFromTerms*`, and `SourceImportGroups*` already
@@ -886,10 +907,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,354 jobs and 42,506 theorem dependency checks**.
+The current build passes **1,363 jobs and 42,587 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-state-label-refresh-20261014-audit.log`.
+Log: `/tmp/mcfta-general-cold-effects-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.

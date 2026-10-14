@@ -6,8 +6,8 @@ escape fix and its regression are retained. It is separate from the proved
 SMT-name adapter. Sized/core refinement source did not change. See the root
 handoff for backup, manifest, validation, and historical hash mapping.
 
-Current checkpoint: **2026-10-14 12:24 CEST**, upstream `c66d10ea`.
-The latest proof commit is `b1994b3f`. No background proof worker is active.
+Current checkpoint: **2026-10-14 12:41 CEST**, upstream `c66d10ea`.
+The latest proof commit is `d87a4324`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -219,8 +219,8 @@ inputs from complete semantic caches under explicit `WordRanges`. Exact
 returned caches, guarded kernel meaning, strong memo provenance, semantic
 heaps, and coverage are retained. `constructed_node_complete` derives initial
 semantic heaps and coverage from actual repaired closed source construction.
-Output preparation or a broader cold-reader invariant, a finite final cold
-table, and physical product rows remain open. See
+Native output scope and a broader bounded cold-reader invariant are now
+proved below. Finite final cold tables and physical product rows remain open. See
 [record completion](notes-record-depth-completion.md) and
 [successful native execution](notes-native-successful.md).
 `InternedFreeNameIndexedOrigins` and `InternedStoredPlanFreeSupport` derive
@@ -230,9 +230,19 @@ intersection-name elimination. `InternedFreshOrdinaryStoredFreeSupport`
 derives free names from actual replacements of original free references.
 `InternedFreshOrdinaryUnfoldCompletion` derives general stored substitution
 and single unfolding without preparation, retains complete semantic caches,
-and proves closed unfolding. Repeated cold-reader termination and native
-output closedness remain open. See
+and proves closed unfolding. Repeated cold-reader termination remains open. See
 [stored support and unfolding](notes-stored-free-unfold.md).
+`SourceRecursiveIntersectionKernelScope.execute_scoped` derives actual
+source result scope from incoming seen pairs. `NativeResultScope` derives
+native output closedness through exact guarded meaning and the empty domain.
+`OriginalOutput` derives original payload syntax from coherent availability
+and closedness. `MergedFreshOrdinaryColdEffects` proves full semantic cache,
+coverage, growth/history, resident edges, and closed children for every
+bounded repaired read without preparation or `NoNewMu`. Pending construction
+and unresolved references are excluded. `NativeColdEffects` derives these
+premises from successful native first execution. Exhaustion remains possible.
+Physical finite closure and exact product language remain open. See
+[native output and cold effects](notes-native-output-cold-effects.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
 ancestor edits and bounded iteration for the fixed unary/two-atom fragment.
 General equality propagation remains open.
@@ -243,7 +253,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,354 targets and 42,506 theorem dependency checks**
+The current audit passes **1,363 targets and 42,587 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **642 Haskell examples** passed after the PR #119 refresh: 289 core,
 208 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.
