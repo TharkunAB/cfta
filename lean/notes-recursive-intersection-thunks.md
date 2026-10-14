@@ -63,20 +63,20 @@ memo invariants from the pending table state.
 
 ## Next obligations
 
-Thread both memo families through the actual recursive body requests.
-The current `execute` and the completion body premises still use uncached
-recursion. The new lifecycle operations alone do not establish whole-caller
-memo correspondence or first-run termination. Do not treat a busy observation
-as a successful result. Preserve the original continuation and current source
-effects when a bounded execution yields. Do not publish only completed values
-as a replacement algorithm.
+The complete branch compiler and resumable native memo driver are now checked
+in `SourceRecursiveIntersectionCode`, `SourceRecursiveIntersectionCompile`,
+and `SourceRecursiveIntersectionNative*`. Every recursive instruction threads
+the two memo families. Exact request steps, continuation composition, finite
+traces, and physical-effect retention are derived. Read
+[native recursive execution](notes-recursive-intersection-native.md).
 
-Compile or interpret the source branch operations with explicit recursive
-node and edge requests. Derive agreement with the existing guarded kernel.
-Keep publication before body forcing, placeholder bypass, ordered and reversed
-requests, domain allocation, actual Mu lookup, and optional-binder effects.
-Derive sufficient bounds and completed provenance from the native execution.
-Do not assume callback purity or equivalent output language.
+Derive whole completed-run correspondence and memo provenance from those
+actual native traces. The completion helpers in this older component still
+use uncached body premises. The native driver does not yet derive `Produced`
+at every completion frame or establish whole-run validity and first-run
+termination. Preserve busy observations and original continuations. Do not
+assume callback purity, supply completion provenance, or replace native body
+execution with an uncached callback.
 
 Then derive physical input views, finite reachable payload inventories,
 `ProductReadback.members`, and `.rejected`. `product_exact` gives product
@@ -84,7 +84,7 @@ language after these obligations. General open nested constructor completion,
 new-body preparation, runtime primitives, and verified Haskell extraction
 remain open. The exact Sized and cold-table proofs remain unchanged.
 
-## Validation
+## Validation at this checkpoint
 
 All five new modules are imported by `MicroCFTA.Audit`. The pinned Lean 4.34.1
 aggregate build passes 1,228 jobs and 40,726 theorem dependency checks.

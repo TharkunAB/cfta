@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 04:35 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 05:03 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -194,10 +194,22 @@ separate node and edge families. Completed native lookup and demand agree
 with concrete stable guarded kernel replay without effects. Unresolved source
 placeholders bypass memoization. Actual kernel execution completes the original
 running cell at its exact returned source machine. These completion bodies
-still use uncached recursion. Full recursive memo scheduling, sufficient
-first-run bounds, and product language remain open. See
+still use uncached recursion. See
 [recursive memo](lean/notes-recursive-intersection-memo.md) and
 [native memo thunks](lean/notes-recursive-intersection-thunks.md).
+
+`SourceRecursiveIntersectionCode` and `SourceRecursiveIntersectionCompile`
+now compile every source branch to explicit effects and recursive requests.
+`compileNode_exact` and `compileEdge_exact` derive exact guarded kernel
+agreement for arbitrary recursive node callbacks, including cache effects
+and failures. `SourceRecursiveIntersectionNative*` now threads both memo
+families through recursive body execution. Misses publish before bodies run;
+busy hits retain their code and caches. Request steps, continuation composition,
+finite traces, and physical-effect retention are checked. Pending construction
+retains its actual installed key, new heap, and original continuation. Whole
+completed-run correspondence and memo provenance at completion frames remain
+open, as do sufficient first-run bounds and product language. See
+[native recursive execution](lean/notes-recursive-intersection-native.md).
 
 ## Remaining work and assessment
 
@@ -221,16 +233,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`6b8ceed8`**; later commits record this handoff.
+The latest proof checkpoint is **`2b6b1e2a`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,228 build targets and 40,726 theorem
+The current Lean 4.34.1 audit passes **1,235 build targets and 40,978 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-recursive-thunks-20261014-audit.log`.
+Log: `/tmp/mcfta-native-driver-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **34% at 04:35 CEST**.
+No background proof worker is active. Weekly allowance was **33% at 05:03 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

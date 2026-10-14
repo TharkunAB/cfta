@@ -79,11 +79,12 @@ physical request in every thunk phase. Publication precedes forcing. Demand,
 completion, source growth, and completed native observations preserve concrete
 provenance. Read [native memo thunks](notes-recursive-intersection-thunks.md).
 
-Thread native node and edge memo state through recursive body requests. Retain
-publication before value forcing, placeholder bypass, ordered operands,
-reversed swap requests, and actual constructor/domain effects. Derive
-correspondence with the uncached kernel from completed provenance and exact
-replay. Do not assume purity or product language.
+The complete branch compiler and recursive native driver now thread both
+memo families. Exact request steps, continuation composition, finite traces,
+and physical-effect retention are checked. Derive whole completed-run
+correspondence and memo provenance from those actual native traces. Do not
+supply provenance at completion frames or assume purity or product language.
+Read [native recursive execution](notes-recursive-intersection-native.md).
 
 Then derive the physical input view, finite reachable payload inventory,
 sufficient execution bounds, and product-row membership and rejection.

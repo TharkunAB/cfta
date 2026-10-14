@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 04:35 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 05:03 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -17,8 +17,10 @@ optional-binder substitution and constructor effects. The full uncached
 recursive caller now has derived invariants, stable bounds, literal row
 readback, complete replay, checked completed node/edge memo provenance,
 and typed pending publication, demand, completion, and exact native observations.
+The complete source branch compiler and recursive native memo driver now have
+checked request steps, retained continuations, finite traces, and physical effects.
 **No background proof worker is active.**
-The latest proof checkpoint is **`6b8ceed8`**. A later documentation commit
+The latest proof checkpoint is **`2b6b1e2a`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -43,7 +45,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **34% at 04:35 CEST**. This is a historical value.
+The last observed value was **33% at 05:03 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -327,18 +329,41 @@ pending publication, captured request identity, recursive pending observations,
 demand, completion, and retention through source growth in separate node and
 edge families. Completed native lookup and demand recover exact concrete
 kernel replay without effects. The source placeholders retain memo bypass.
-The completion body premises still use uncached execution. Full recursive
-memo scheduling and first-run termination remain open. Read
+The completion helpers still use uncached execution. Whole completed native
+run correspondence and first-run termination remain open. Read
 [recursive memo](lean/notes-recursive-intersection-memo.md) and
 [native memo thunks](lean/notes-recursive-intersection-thunks.md).
 
+## Compiled recursive native execution
+
+`SourceRecursiveIntersectionCode` and `SourceRecursiveIntersectionCompile`
+now compile every physical guarded source branch to explicit effects and
+recursive requests. `compileNode_exact` and `compileEdge_exact` derive exact
+kernel agreement for arbitrary recursive node callbacks, including complete
+cache effects and failures.
+
+`SourceRecursiveIntersectionNative*` now threads both memo families through
+recursive body execution. Misses publish and start the original thunk before
+body or child execution. Busy hits retain their code and caches. Finite fuel
+yields the exact remaining continuation and state. Request steps, continuation
+composition, actual finite traces, and retention through constructor work,
+domain entry, and optional-binder effects are checked. Pending construction
+keeps its actual installed key, returned heap, and original continuation.
+The driver does not yet derive `Produced` at completion frames or establish
+whole completed-run validity and correspondence. Read
+[native recursive execution](lean/notes-recursive-intersection-native.md).
+
 ## Remaining priorities
 
-1. Thread native node and edge memo state through recursive body execution.
-   Typed pending publication, demand, completion, source growth, captured
-   request identity, and completed native observations are proved. The current
-   completion bodies still use the uncached kernel. Use
-   `lean/notes-recursive-intersection-thunks.md` for the exact next target.
+1. Derive whole completed native execution correspondence and memo provenance
+   from actual native traces. The complete compiler and recursive memo driver
+   now thread both families. Request steps, continuation composition, finite
+   traces, and physical-effect retention are checked. The driver does not yet
+   derive `Produced` at completion frames. Use
+   `lean/notes-recursive-intersection-native.md` for the exact next target.
+   Derive well-formed nested body segments, original captured requests,
+   intermediate availability, checked machine ranges, and retained winners.
+   Do not supply completion provenance or use uncached replacement callbacks.
    Preserve publication before thunk forcing, shifted domain keys, ordered
    tagged operands, reversed swap requests, and RecIntersect bypass. Retain
    the current continuation and source effects when a bounded execution yields.
@@ -406,10 +431,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,228 jobs and 40,726 theorem dependency checks**.
+The current build passes **1,235 jobs and 40,978 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-recursive-thunks-20261014-audit.log`.
+Log: `/tmp/mcfta-native-driver-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -443,6 +468,9 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `2b6b1e2a` | Native continuation composition, exact finite traces, and retained physical effects. |
+| `6e80e732` | Resumable recursive node/edge memo driver and exact request steps. |
+| `1dbe0867` | Complete physical source branch compiler and exact guarded kernel agreement. |
 | `6b8ceed8` | Source node/edge pending request identity, demand, completion, growth, and exact completed native observations. |
 | `bb2da67b` | Typed memo publication before evaluation, recursive pending observations, and first-writer thunk retention. |
 | `be6da8b3` | Concrete guarded edge memo provenance, checked raw row keys, and stable replay. |
