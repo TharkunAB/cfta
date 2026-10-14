@@ -1424,6 +1424,13 @@ import MicroCFTA.InternedSourceCrush
 import MicroCFTA.InternedSourceCrushInventory
 import MicroCFTA.SourceMemoGate
 import MicroCFTA.SourceUnconstrainedMemo
+import MicroCFTA.InternedSourceCrushSemantics
+import MicroCFTA.InternedSourceCrushSummary
+import MicroCFTA.InternedSourceCrushCorrect
+import MicroCFTA.SourceMemoGateSemantics
+import MicroCFTA.SourcePredicateGateTrace
+import MicroCFTA.SourcePredicateGateLift
+import MicroCFTA.SourcePredicateGateClasses
 /-!
 # Proof dependency audit
 
