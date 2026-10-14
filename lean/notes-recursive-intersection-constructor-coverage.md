@@ -316,70 +316,51 @@ support is live at the target and empty at the producer body. All observations
 use kernel reduction. This is a counterexample to a proof shortcut, not source
 nontermination or an implementation defect.
 
-## New depth and level comparison
+## General closed and literal-input completion
 
-`42ce3d8a` proves the complete repaired depth/deep source induction for literal
-lexical inputs. `d0083f37` proves actual repaired ordinary-level agreement from
-equal projected literal capture lists. These results do not assert general
-pending exclusion or supply the second producer pair.
+`d2ebaddf` retains exact captured suffixes at every actual earlier route
+crossing. Existing public wrappers remain. `RouteLevels.Path.projected_names`
+compares outer crossings before nested crossings and derives equal ordinary
+choices. `ClosedCompletion.site_impossible` contradicts the live ordinary
+mismatch. `closed_complete` proves successful construction for arbitrary source
+syntax from empty captures and caches. It uses the decoded heap derived from
+actual execution, even under a hypothetical pending outcome. No preparation
+or supplied callback termination premise is used.
 
-First retain each earlier route crossing's exact captured suffix in
-`ProbeChoiceSites.completed_route`. Keep its existing public wrapper.
-Derive the corresponding current-path relation. Then establish ordinary-name
-projection agreement from outer crossings to inner crossings with
-`LevelReplay.callback_level`. Recover decoded heaps through `closed_heap`,
-`of_grows`, and actual source growth. See
-[the source depth note](notes-fresh-ordinary-depth.md). Do not repeat the
-completed source depth induction or assume projected agreement.
+`f095aa16` extends completion to literal captures in a complete cache with full
+source context and decoded depth heap. The next extension is mixed lexical
+inputs with arbitrary fixed captured records, then actual native prefix
+context/heap preservation. See [source depth](notes-fresh-ordinary-depth.md).
+Do not repeat closed/literal completion. The retained producer-descent
+alternative still lacks its second producer pair. That alternative is not
+needed for the completed literal-input proof.
 
 ## Next proof target and retained boundaries
 
-Exclude the full repaired encounter for the intended constructor scope.
-The difficult case has two exact old probe records even though the current
-callback captures the ancestor's newly reserved reference. An earlier completed
-route, different earlier pair, and live ordinary mismatch are now derived.
-Use `InternedFreshOrdinaryJointMismatch.Mismatch`. Do not repeat the
-mixed-input comparison or replace fixed captured values with literal lists.
+Extend the completed literal-input source depth, level, and route proofs to
+arbitrary fixed captured records. Native optional-binder substitution uses
+such inputs. Derive every record's root/deep/free-name and cached-depth
+observations from coherent availability. Then prove the full incoming native
+semantic context and decoded heap through actual native prefixes.
 
-The original path, capture alternative, and actual shorter producer are proved.
-Use `RootEncounter.complete_stopped_mismatch`, `PendingProducedAt`, and the
-actual optional-binder callback history theorems. Do not repeat extraction of
-the actual pending ordinary callback or whole producer binder outcome.
+Preserve exact probes, canonical readback, complete earlier requests, captured
+suffixes, and chronological effects. Do not infer original memo-key
+independence from absence in normalized output. Do not transfer descendant
+liveness to an enclosing result. The retained producer histories and
+counterexamples remain useful; their second paired descent is not required
+for the completed closed/literal scope.
 
-Construct another actual observation of the shorter producer's same body.
-Retain the exact captured suffix, both normalized callbacks where required,
-and chronological growth into the original cut. The actual pending producer
-outcomes do not supply a completed producer binder or request. Derive the
-second required observation from actual execution before using it.
-Then derive a new mismatching producer pair or computed level and apply the
-strict captured-prefix decrease. One shorter producer does not itself prove
-recursive descent. See [the paired producer obligation](notes-pending-producer-descent.md).
-Do not assume equal computed levels across executions. Do not treat a live
-ordinary alias as impossible without checking both actual probes.
-
-Do not infer independence of the original substitution memo key from absence
-in normalized output. Smart construction can erase a dependency. The retained
-normalized-erasure example remains relevant. Root profiles and free-name
-agreement do not imply equality of complete stored probe records.
-Do not reuse ordinary-choice-specific mismatch theorems for the old executor
-without proving the repaired counterpart.
-
-`PreparedWithoutMu` and complete coverage already give successful source
-completion. Coverage is derived at native sites after actual completed source
-construction. Preparation preservation is refuted above. Prove a broader
-nested constructor invariant. A supplied no-pending callback contract does
-not close the source obligation.
-
-General successful native first-run completion, output preparation, and
-physical `ProductReadback.members`/`.rejected` remain open. Preserve the exact
-reference, solver-decided, and optimized Sized results. Preserve earlier
-constructor/equality proofs and all marked drafts.
+Universal preparation preservation at native optional-binder bodies is
+refuted above. Prove a broader open nested constructor invariant. Successful
+native first-run bounds, output preparation or broader cold-reader invariants,
+and physical `ProductReadback.members`/`.rejected` remain open. Preserve all
+exact Sized paths and the older constructor/equality work and marked drafts.
 
 ## Validation and diagnostics
 
-Pinned Lean 4.34.1 passes 1,330 jobs and 42,279 theorem dependency checks.
+Pinned Lean 4.34.1 passes 1,332 jobs and 42,296 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are used.
-Log: `/tmp/mcfta-level-replay-20261014-audit.log`.
+Log: `/tmp/mcfta-literal-completion-20261014-audit.log`.
 The root-history audit passed 1,326 jobs and 42,195 checks.
 The live-mismatch audit passed 1,320 jobs and 42,130 checks.
 The earlier-pair audit passed 1,311 jobs and 42,066 checks.

@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 11:12 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 11:28 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -132,12 +132,21 @@ cached depth for any supplied names. No recursive depth/deep premise is supplied
 `d0083f37` proves actual repaired ordinary-level agreement when projected
 literal capture lists agree. `ordinaryNames` keeps each ordinary reference
 level and maps all other kinds to Depth. `callback_level` derives both cached
-depth and free-name-bound equality. The next step is to retain the exact
-captured suffix at each paired source-route crossing, then derive projected
-agreement from outer crossings to inner crossings. The earlier completed
-route conclusion currently drops those suffix relations. General pending
-exclusion, arbitrary captured records, and native context preservation remain
-open. See [source depth](lean/notes-fresh-ordinary-depth.md).
+depth and free-name-bound equality.
+
+`d2ebaddf` retains exact captured suffixes along the actual earlier route and
+proves projected agreement from outer crossings to inner crossings. The
+ordinary choices agree. This contradicts the pending encounter's required
+live ordinary mismatch. `ClosedCompletion.closed_complete` proves that every
+source expression built from empty captures and caches returns a complete
+value and its exact final cache. No supplied termination or preparation
+premise is used. `f095aa16` extends this to literal captures in any complete
+cache with a full source context and decoded depth heap.
+
+Arbitrary fixed captured records and actual native context/decoded-heap
+preservation remain open. The next step extends the new source and route
+results to those mixed inputs. Output preparation and physical product rows
+also remain open. See [source depth](lean/notes-fresh-ordinary-depth.md).
 
 `EqualityNestedUnaryAncestorRoot*` composes actual projections, target merges,
 both ancestor edits, and the root identity stop. The fixed unary/two-atom,
@@ -422,10 +431,12 @@ the exact captured suffix, strict length bound, original context, and cache
 history. The actual optional-binder bridge keeps the same initial-body
 alternative and explicit absence condition. All previous history results remain.
 
-Pending exclusion still needs a second actual observation of that same shorter
-producer body. The newly derived pending outcomes do not supply a completed
-producer binder/request or a different producer pair. The strict prefix bound
-does not yet form a contradictory recursive descent.
+The producer-descent alternative still has no second observation of that same
+shorter producer body. The strict prefix bound alone gives no contradictory
+recursive descent. Closed/literal source pending exclusion is now proved by
+actual paired-route level agreement instead. The remaining native extension
+has arbitrary fixed captured records and requires actual context and decoded-
+heap preservation.
 `InternedFreshOrdinaryProducerPathBoundary` verifies that the repaired executor
 can retain a live nested capture while the enclosing producer returns empty.
 Result liveness does not follow from a descendant path. Both actual pending-site
@@ -470,18 +481,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`d0083f37`**; later commits record this handoff.
+The latest proof checkpoint is **`f095aa16`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,330 build targets and 42,279 theorem
+The current Lean 4.34.1 audit passes **1,332 build targets and 42,296 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-level-replay-20261014-audit.log`.
+Log: `/tmp/mcfta-literal-completion-20261014-audit.log`.
 After the current refresh, all **641** examples passed in Nix: 289 core, 208
 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **31% at 11:10 CEST**.
+No background proof worker is active. Weekly allowance was **31% at 11:27 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

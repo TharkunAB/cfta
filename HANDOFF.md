@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 11:12 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 11:28 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -53,12 +53,13 @@ Rooted source paths now derive actual shorter producers with an exact captured
 suffix and a descendant path to the active binder. The strengthened rooted
 induction retains every enclosing pending callback. It derives the shorter
 producer's whole ordinary callback and binder pending outcomes at the same
-key and final cache. A second producer observation and a contradictory
-recursive descent remain open.
-General successful first-run completion still needs pending exclusion and
-output preparation.
+key and final cache. The producer-descent alternative remains unclosed.
+General closed-source completion is now proved by paired-route level agreement.
+Literal captures in a complete valid decoded cache also complete. General
+native first-run completion still needs arbitrary-record source completion,
+native prefix invariants, and output preparation.
 **No background proof worker is active.**
-The latest proof checkpoint is **`d0083f37`**. A later documentation commit
+The latest proof checkpoint is **`f095aa16`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -83,7 +84,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **31% at 11:10 CEST**. This is a historical value.
+The last observed value was **31% at 11:27 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -717,72 +718,53 @@ depth and ordinary free-name bounds are derived. The pure free-name transport
 lemma is reused; the actual source calls use the repaired executor.
 See `lean/notes-fresh-ordinary-depth.md` for the exact scope and next target.
 
+`d2ebaddf` proves general closed-source completion. `completed_scoped_route`
+retains every captured suffix; existing route/representative/pair public
+wrappers remain. The live mismatch retains the same earlier scoped route.
+`RouteLevels.Path.projected_names` compares outer callbacks before nested ones.
+It derives equal projected inputs and actual ordinary choices at every step.
+`ClosedCompletion.site_impossible` contradicts the live ordinary mismatch.
+The depth heaps at actual starts come from chronological growth and the final
+heap. `closed_not_pending` derives that final heap from closed source execution.
+`closed_complete` returns a complete value and exact cache for arbitrary source
+syntax from empty captures and caches. No prepared heap or supplied constructor
+termination contract is used.
+
+`f095aa16` extends the result to literal captures in any complete initial cache
+with full source context and decoded depth heap. `literal_not_pending` and
+`literal_complete` retain the actual returned cache. Arbitrary fixed captured
+records and native prefix invariants remain open. Do not repeat the completed
+literal route proof or pursue a producer descent for that scope.
+
 ## Remaining priorities
 
-1. Read `lean/notes-recursive-intersection-constructor-coverage.md` first.
-   The original input view and exact copied language, finite semantic schedule,
-   all compiled strict limits, active-bound maintenance, finite native
-   return-or-pending induction, actual prefix coverage, source-site and callback
-   phase extraction, and full repaired nested encounters are proved.
-   Do not repeat them. Use `InternedFreshOrdinaryActiveSite.Site` with
-   `SourceRecursiveIntersectionMaybeMu.active_pending_site`. Exclude the exact
-   joint old-probe alias despite the captured fresh ancestor reference.
-   An earlier completed route and different earlier request pair are derived.
-   Use `InternedFreshOrdinaryJointMismatch.Mismatch` and
-   `SourceRecursiveIntersectionMaybeMu.active_pending_mismatch`. Keep both
-   actual probe records and `ordinaryLevel depth`. Normalized dependency erasure
-   and profile equality are not original memo-key independence. Do not reuse
-   old ordinary-choice mismatch arguments without repaired counterparts.
-   Coverage at reached sites follows from earlier actual completed repaired
-   source construction. It remains explicit for arbitrary supplied heaps.
-   The repaired mixed-input comparison and actual live ordinary mismatch are
-   proved. Rooted source paths and actual shorter producers are now derived.
-   Use `RootEncounter.complete_stopped_mismatch` and `PendingProducedAt`.
-   Do not repeat extraction of the producer's pending ordinary callback or
-   whole binder outcome. First use the new source-depth and level results to
-   test route agreement: strengthen `ProbeChoiceSites.completed_route` to retain
-   each actual crossing's captured suffix. Preserve its old public wrapper.
-   Derive the same suffix relation from the actual current `ActiveOrigins.Path`.
-   Apply `LevelReplay.callback_level` from outer crossings to inner crossings.
-   Equal projected captured lists must be derived at each ordinary crossing;
-   Depth/fresh choices project to the same name. Derive earlier depth heaps
-   from `SourceDepth.closed_heap`, `DepthHeap.of_grows`, and actual source growth.
-   Do not claim that this route invariant or pending exclusion is already proved.
-   The shorter-producer descent remains another possible route. It needs
-   another actual observation of that same shorter producer body. Retain its exact captured suffix, required normalized
-   callbacks, and actual chronological equations. The pending producer does
-   not supply a completed binder or request. Derive a new mismatching producer
-   pair or computed level before using the strict captured-prefix bound. One shorter producer
-   is not a contradictory recursive descent. Read
-   `lean/notes-pending-producer-descent.md`. The repaired dead-branch boundary
-   excludes transfer of descendant liveness to the enclosing producer result.
-   Retain arbitrary fixed captured values and both actual pending-site probes.
-   Derive absence of ordinary names in actual native optional-binder bodies
-   before using `pending_mismatch_producers` without its initial alternative.
-   Capture absence is not exact callback-request equality. General semantic
-   context preservation on native prefixes remains open.
-   Preservation of `PreparedWithoutMu` at all reached bodies is refuted by
-   `SourceRecursiveIntersectionOpenBodyBoundary`. Prove a broader open nested
-   constructor invariant. A supplied no-pending
-   callback or completed native trace does not close the source obligation.
-   Derive sufficient successful first-run native bounds and actual output
-   preparation. Preserve exact source/domain effects, both memo families,
-   publication before demand, ordered tagged operands, shifted domain keys,
-   reversed swap requests, RecIntersect bypass, and original finish frames.
-   Keep word ranges explicit and retain yielded continuations and current state.
-   Use completed-run correspondence for new provenance and stable kernel meaning.
-   Use actual child/row traces and canonical returned rows to derive
-   `SourceCyclicRowsNativeGate.ProductReadback.members` and `.rejected`.
-   Apply `product_exact` to obtain product language. Do not assume equivalent
-   language or row contracts. Derive new-body preparation, or a larger cold
-   exposure invariant, before composing the completed cold table and Sized
-   adapters. Read the optional-binder, kernel, and cold shared-row notes.
-2. The repaired cached-depth/deep source driver is proved for arbitrary nested
-   syntax with literal inputs, `names.map Value.reference`. Do not repeat it.
-   Extend it to arbitrary captured records only where the native optional-binder
-   bridge requires that extension. Retain the incoming semantic context and
-   decoded heap. Do not equate depth correspondence with no-pending completion.
-   See `lean/notes-fresh-ordinary-depth.md`.
+1. Read `lean/notes-fresh-ordinary-depth.md` and the current constructor note.
+   General closed/literal source completion is proved. Extend the source depth,
+   projected-level, route, and completion results to mixed lexical inputs:
+   a varying reference prefix and unchanged arbitrary fixed captured records.
+   Native optional-binder substitution can capture complete Mu records. It is
+   outside `literal_complete`. Retain each fixed record's cached depth, root
+   alternatives, deep/free names, and actual profile. An opaque profile alone
+   omits root alternatives in a mixed union. Derive the input observations from
+   actual coherent available records. Do not replace them with a callback
+   termination or replay contract. Then compose with actual `maybeMu`.
+   Derive full semantic-context and decoded-heap preservation through actual
+   native prefixes. Initial complete coverage does not supply those invariants.
+   The retained producer-descent proof still lacks a second paired producer
+   observation. It is not needed for the completed literal-input proof.
+   Preserve its histories and counterexamples without repeating them.
+2. Apply the completed finite native return-or-pending theorem after excluding
+   the actual arbitrary-record constructor pending case. Keep checked word
+   ranges, exact source/domain effects, both memo families, publication before
+   demand, ordered tagged operands, shifted domain keys, reversed swaps,
+   RecIntersect bypass, original finish frames, and yielded continuations.
+   Derive successful first-run bounds and actual output preparation, or a
+   broader cold-reader invariant. Universal `PreparedWithoutMu` preservation
+   at reached native bodies is refuted by `SourceRecursiveIntersectionOpenBodyBoundary`.
+   Keep that source-built counterexample and its successful native return.
+   Derive physical `ProductReadback.members` and `.rejected` from actual row
+   traces, then use `product_exact`. Do not assume equivalent product language.
+   Retain the exact reference, solver-decided, and optimized Sized results.
 3. Connect bounded import to native `fromFTA`/SCC and split readback, then
    preserve supplied custom order through final observation decoders.
    `SourceBoundedImport`, `SourceFromTerms*`, and `SourceImportGroups*` already
@@ -824,10 +806,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,330 jobs and 42,279 theorem dependency checks**.
+The current build passes **1,332 jobs and 42,296 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-level-replay-20261014-audit.log`.
+Log: `/tmp/mcfta-literal-completion-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -872,6 +854,8 @@ Leave that unrelated baseline unchanged. No new test was added locally.
 
 | Commit | Result |
 | --- | --- |
+| `f095aa16` | Successful literal-input source construction in any complete cache with full source context and decoded depth heap. |
+| `d2ebaddf` | Exact captured suffixes, paired-route ordinary agreement, and general repaired closed-source completion. |
 | `d0083f37` | Actual repaired ordinary-level agreement from equal projected literal capture lists. |
 | `42ce3d8a` | Full nested source cached-depth/deep heap induction for literal inputs, actual callback comparison, and closed-source observations. |
 | `0f665004` | Exact enclosing pending callback equations, stopped shorter ordinary producers and whole binder outcomes, and actual optional-binder composition. |

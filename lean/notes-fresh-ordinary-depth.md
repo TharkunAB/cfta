@@ -1,6 +1,6 @@
 # Exact source normalization depth
 
-Updated: 2026-10-14 11:12 CEST.
+Updated: 2026-10-14 11:28 CEST.
 
 ## Current full source depth and level comparison
 
@@ -37,32 +37,60 @@ of the ordinary free-name bounds. It does not assume either equality.
 The pure literal free-name transport theorem is reused. The actual callback
 proof uses the repaired executor.
 
+## General repaired source completion with literal inputs
+
+`d2ebaddf` proves closed-source completion for arbitrary nested source syntax.
+`ProbeChoiceSites.completed_scoped_route` retains the exact captured suffix at
+every earlier crossing. Its previous public wrapper remains. The active
+representative and earlier-pair theorems retain the same suffix evidence.
+`JointMismatch.Mismatch` now keeps it with both actual earlier probes.
+
+`RouteLevels.Path.projected_names` follows the actual current source path from
+outer callbacks to inner callbacks. It derives projected-input agreement at
+each nested ordinary call. `crossing_name` applies `callback_level` to those
+actual completed probes. Depth/fresh choices have the same projection.
+The ordinary choices therefore agree. No level equality is supplied.
+
+`ClosedCompletion.site_impossible` contradicts the exact live ordinary
+mismatch. Actual chronological growth and `DepthHeap.of_grows` recover the
+needed decoded heaps from the final heap. `closed_not_pending` derives the
+final heap from actual closed execution, including a hypothetical pending
+outcome. `closed_complete` then derives a complete value and its exact final
+cache for every source expression built from empty captures and caches.
+No constructor termination contract, prepared-heap premise, or completed
+source execution is supplied.
+
+`f095aa16` extends this result. `literal_not_pending` and `literal_complete`
+allow arbitrary literal captures and an arbitrary initial cache with a full
+source context, decoded depth heap, and complete payload coverage. The empty
+corollaries instantiate these conditions from the proved empty invariants.
+
 ## Next source obligation
 
-Retain exact captured suffixes at all corresponding earlier and current
-route crossings. `ProbeChoiceSites.completed_route` currently returns actual
-crossings, descriptors, contexts, and cache histories, but its conclusion
-drops the capture relation at each earlier crossing. Strengthen that result
-and preserve its current public wrapper. Derive the corresponding relation
-from the actual current `ActiveOrigins.Path`.
+Extend depth/deep observations, projected-level agreement, and completion to
+mixed lexical inputs: a varying reference prefix and unchanged arbitrary
+captured records. Native optional-binder substitution can capture complete Mu
+records. It is outside the literal-input result. Keep each fixed record's
+cached depth, roots, deep names, free names, and profile observations.
+An opaque profile alone does not retain root alternatives of a mixed union.
+Derive the input relation from actual available coherent records.
 
-Then apply `callback_level` from outer crossings to inner crossings.
-Corresponding Depth/fresh choices have the same ordinary-name projection.
-Corresponding ordinary choices need equal projected captures and decoded
-heaps at their actual starts. Recover the heaps from `closed_heap` and
-`of_grows` using actual source growth. Establish the route invariant before
-claiming that the live ordinary mismatch is impossible. Do not assume equal
-levels from cached depth alone.
+Then compose the general callback result with actual `maybeMu` and prove full
+semantic-context and decoded-heap preservation on native prefixes. Initial
+complete coverage alone does not supply those invariants. Use the existing
+finite native return-or-pending theorem to derive successful first-run bounds.
+Output preparation, or a broader cold-reader invariant, and physical product
+row membership/rejection remain open. Universal preparation preservation at
+all native sites remains refuted.
 
-The retained shorter-producer descent is another possible route. Its second
-paired producer observation remains open. The new level theorem does not
-supply that observation or general pending exclusion. Arbitrary captured
-records in native optional-binder calls are outside the literal-input driver.
-Full incoming native semantic-context preservation also remains open.
+The retained producer-descent alternative has no second paired producer
+observation. Literal-input completion uses route agreement instead. Do not
+repeat the closed/literal proof or try to infer producer result liveness from
+a descendant path.
 
-The audit passes 1,330 jobs and 42,279 theorem dependency checks with only
+The audit passes 1,332 jobs and 42,296 theorem dependency checks with only
 `propext`, `Classical.choice`, and `Quot.sound`. Log:
-`/tmp/mcfta-level-replay-20261014-audit.log`.
+`/tmp/mcfta-literal-completion-20261014-audit.log`.
 A 45-second targeted mirror search completed 7,541 repaired cases with no
 pending read. Another 198 cases hit resource limits. This is diagnostic
 evidence, not a completion proof. Script and log:

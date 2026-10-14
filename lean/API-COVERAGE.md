@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 11:12 CEST**, upstream `1a083040`.
-The latest proof commit is `d0083f37`. No background proof worker is active.
+Current checkpoint: **2026-10-14 11:28 CEST**, upstream `1a083040`.
+The latest proof commit is `f095aa16`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -171,9 +171,9 @@ initial-capture alternative. Actual optional binders
 retain an initial-body free-name alternative. It is excluded only under the
 explicit absence of ordinary free names in that body, which is not yet derived
 at all native sites. A second actual observation of the shorter producer's same
-body remains open. The newly derived pending producer outcomes do not supply
-a completed producer binder/request or a new mismatching pair. The shorter prefix alone
-does not establish contradictory recursive descent. A repaired dead-branch
+body remains open for the retained producer-descent alternative. Closed and
+literal-input source completion now uses actual paired-route agreement below.
+The shorter prefix alone does not establish contradictory recursive descent. A repaired dead-branch
 example also excludes transfer of descendant liveness to the producer result.
 Native prefix preservation of the full semantic context remains open.
 An actual 22-step native prefix on repaired closed original source-built inputs
@@ -192,15 +192,18 @@ See [constructor coverage](notes-recursive-intersection-constructor-coverage.md)
 [native completion](notes-recursive-intersection-completion.md), and
 [native correctness](notes-recursive-intersection-native-correctness.md).
 
-Nested binder construction, native cyclic product rows, thunk scheduling,
+Native nested construction with arbitrary captured records, cyclic product rows, thunk scheduling,
 and general first-run native completion remain open. Full cached-depth/deep
 heap induction is now derived for arbitrary nested syntax with literal lexical
 inputs. `SourceDepth.closed_heap` includes pending outcomes. `arguments_depth`
 compares actual completed callbacks. `LevelReplay.callback_level` derives equal
-actual ordinary levels from equal projected literal captures. Exact capture
-suffixes at paired route crossings must still be retained before excluding
-the ordinary mismatch. Arbitrary captured records and native context
-preservation remain open. See [source depth](notes-fresh-ordinary-depth.md)
+actual ordinary levels from equal projected literal captures. Exact captured
+suffixes are now retained. `RouteLevels.Path.projected_names` derives projected
+agreement through actual paired routes and contradicts the required ordinary
+mismatch. `ClosedCompletion.closed_complete` proves general empty-cache source
+completion. `literal_complete` extends this to literal captures in any complete
+valid decoded cache. Arbitrary fixed captured records and native context/
+decoded-heap preservation remain open. See [source depth](notes-fresh-ordinary-depth.md)
 and [physical construction](notes-physical-intersection-rows.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
 ancestor edits and bounded iteration for the fixed unary/two-atom fragment.
@@ -212,7 +215,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,330 targets and 42,279 theorem dependency checks**
+The current audit passes **1,332 targets and 42,296 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **641 Haskell examples** passed after the PR #117 refresh: 289 core,
 208 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.

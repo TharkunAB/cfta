@@ -83,23 +83,26 @@ descendant in the producer's ordinary callback can execute before that
 producer has issued its own request. Existing growth relations record
 this order but do not supply a completed request at the earlier cut.
 
-## New depth and level comparison
+## General closed and literal-input completion
 
-`42ce3d8a` proves the complete repaired depth/deep source induction for literal
-lexical inputs. `d0083f37` proves actual repaired ordinary-level agreement from
-equal projected literal capture lists. These results do not assert general
-pending exclusion or supply the second producer pair.
+`d2ebaddf` retains exact captured suffixes at every actual earlier route
+crossing. Existing public wrappers remain. `RouteLevels.Path.projected_names`
+compares outer crossings before nested crossings and derives equal ordinary
+choices. `ClosedCompletion.site_impossible` contradicts the live ordinary
+mismatch. `closed_complete` proves successful construction for arbitrary source
+syntax from empty captures and caches. It uses the decoded heap derived from
+actual execution, even under a hypothetical pending outcome. No preparation
+or supplied callback termination premise is used.
 
-First retain each earlier route crossing's exact captured suffix in
-`ProbeChoiceSites.completed_route`. Keep its existing public wrapper.
-Derive the corresponding current-path relation. Then establish ordinary-name
-projection agreement from outer crossings to inner crossings with
-`LevelReplay.callback_level`. Recover decoded heaps through `closed_heap`,
-`of_grows`, and actual source growth. See
-[the source depth note](notes-fresh-ordinary-depth.md). Do not repeat the
-completed source depth induction or assume projected agreement.
+`f095aa16` extends completion to literal captures in a complete cache with full
+source context and decoded depth heap. The next extension is mixed lexical
+inputs with arbitrary fixed captured records, then actual native prefix
+context/heap preservation. See [source depth](notes-fresh-ordinary-depth.md).
+Do not repeat closed/literal completion. The retained producer-descent
+alternative still lacks its second producer pair. That alternative is not
+needed for the completed literal-input proof.
 
-## Next exact obligation
+## Retained producer-descent alternative
 
 For the repaired executor, start from `PendingProducedAt` and the exact
 `complete_stopped_mismatch` witness. Do not repeat extraction of the pending
