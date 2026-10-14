@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 03:37 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 04:07 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -14,9 +14,10 @@ Sized inverse proof, recursive knot construction, and first-order shared rows.
 It also proves cold traversal termination, exact returned tables, native/solver Sized composition,
 physical recursive intersection control and domain effects, and actual
 optional-binder substitution and constructor effects. The full uncached
-recursive caller now has derived invariants, stable bounds, and literal row readback.
+recursive caller now has derived invariants, stable bounds, literal row
+readback, complete replay, and checked completed node-memo provenance.
 **No background proof worker is active.**
-The latest proof checkpoint is **`95792559`**. A later documentation commit
+The latest proof checkpoint is **`bf98ccfe`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -41,7 +42,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **34% at 03:36 CEST**. This is a historical value.
+The last observed value was **34% at 04:05 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -300,27 +301,47 @@ physical rows. No product-language or equivalent row contract is supplied.
 bound for every valid input, and product language remain open. Read
 [recursive caller](lean/notes-recursive-intersection-kernel.md).
 
+## Completed replay and native memo keys
+
+`SourceRecursiveIntersectionReplay*` now derives exact completed replay
+of all guarded kernel branches after later physical and domain growth.
+`execute_replay` returns the identical value and leaves both later caches
+unchanged. `execute_larger_replay` retains it at every larger bound.
+No preparation or depth-zero restriction is added to the completed replay
+theorem. Actual earlier completion remains a premise.
+
+`SourceRecursiveIntersectionMemo` uses actual checked machine triples.
+It retains shifted domain identity, tagged ordered operands, nonnegative
+first-key range, and distinct reversed keys for unequal operands.
+`Produced` records an actual completed recursive kernel execution and
+later growth. Initialization, growth, first-writer insertion, and
+`memo_hit` are derived. A hit has current availability and finite stable
+kernel replay without allocation. Open results can be placeholders.
+Pending publication, edge provenance, and recursive memo threading remain
+open. Read [recursive memo](lean/notes-recursive-intersection-memo.md).
+
 ## Remaining priorities
 
-1. Connect native recursive node and edge memo behavior to the checked
-   caller kernel. Derive completed-result replay under later constructor
-   and domain growth. Retain pending publication, the shifted domain key,
-   ordered tagged operands, reversed swap request, and RecIntersect bypass.
-   Derive the physical input view and a finite reachable payload inventory.
-   Connect the actual requests to the semantic schedule and derive a
-   sufficient bound. Stable larger bounds alone do not prove existence.
-   Use the literal child/row traces and canonical readback to derive
+1. Extend completed provenance to native edge memo entries. Use the checked
+   guarded edge replay and existing shifted-domain `edgeKey_exact` theorem.
+   Then thread native node and edge memo state through recursive requests.
+   Preserve publication before thunk forcing, shifted domain keys, ordered
+   tagged operands, reversed swap requests, and RecIntersect bypass. Do not
+   replace the pending source protocol with completed-only insertion. Full
+   guarded kernel replay and completed node-entry provenance are proved;
+   do not repeat them or assume purity. Derive the physical input view
+   and a finite reachable payload inventory. Connect actual requests to the
+   semantic schedule and derive a sufficient bound. Stable larger bounds
+   and replay alone do not prove successful first-run completion. Use actual
+   child/row traces and canonical readback to derive
    `SourceCyclicRowsNativeGate.ProductReadback.members` and `.rejected`.
-   `product_exact` then gives product language. Do not supply another
-   product-row or language-equivalence premise. General open nested
-   construction still needs key separation or a larger execution invariant.
-   Derive preparation of new Mu bodies where it applies, or a larger cold
-   exposure invariant. Compose the already proved cold table and Sized
-   adapters. Do not repeat the completed kernel or primary Sized proofs.
-   Read `lean/notes-recursive-intersection-kernel.md`, the optional-binder
-   and control notes, and `lean/notes-cold-shared-rows.md`. Preserve the
-   full input scope and exact caches. The plain completed dispatcher does
-   not prove pending cyclic publication.
+   `product_exact` then gives product language. Do not supply equivalent
+   product-row or language premises. General open nested construction still
+   needs key separation or a larger execution invariant. Derive new-body
+   preparation where it applies, or a larger cold-exposure invariant. Compose
+   the completed cold table and Sized adapters. Preserve the full input scope
+   and exact caches. Read `lean/notes-recursive-intersection-memo.md`, the
+   kernel/optional-binder/control notes, and `lean/notes-cold-shared-rows.md`.
 2. Complete repaired cached-depth/deep heap induction. `InternedDepthFreeProjection*`
    now proves full-syntax free-name membership and ordinary-root callback deep
    observations with nested children. `callback_observed` derives observations
@@ -369,10 +390,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,218 jobs and 40,573 theorem dependency checks**.
+The current build passes **1,223 jobs and 40,615 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-recursive-kernel-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-memo-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -406,6 +427,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `bf98ccfe` | Complete guarded kernel replay and checked native-key completed node-memo provenance. |
 | `95792559` | Full uncached recursive caller invariants, stable larger bounds, and actual guarded row readback. |
 | `0bf65249` | Full nested rebinding, exact optional-binder effects, finite prepared probes, and exact pending-key classification. |
 | `2a533cc5` | Complete physical recursive guard order, semantic next-step conversion, and exact Mu-domain effects. |

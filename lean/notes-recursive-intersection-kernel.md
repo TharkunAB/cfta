@@ -76,10 +76,12 @@ contract is supplied.
 
 ## Next obligations
 
-Connect the native recursive node and edge memo wrapper. A completed kernel
-replay theorem under later physical and domain growth can supply concrete
-completed-result provenance. Keep the shifted domain identity, ordered tagged
-operands, reversed swap request, RecIntersect bypass, and pending publication.
+Completed full guarded kernel replay and native-key node-entry provenance
+are now checked at `bf98ccfe`. Hits derive exact finite replay without changing
+either later cache. Read [recursive memo](notes-recursive-intersection-memo.md).
+Next connect edge provenance and the native recursive node/edge memo wrapper.
+Keep shifted domain identity, ordered tagged operands, reversed swap requests,
+RecIntersect bypass, and pending publication before value forcing.
 
 Derive the physical input view and finite reachable payload inventory. Connect
 the actual recursive requests to the existing semantic schedule. Derive a
