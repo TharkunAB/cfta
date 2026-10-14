@@ -6,8 +6,8 @@ escape fix and its regression are retained. It is separate from the proved
 SMT-name adapter. Sized/core refinement source did not change. See the root
 handoff for backup, manifest, validation, and historical hash mapping.
 
-Current checkpoint: **2026-10-14 12:41 CEST**, upstream `c66d10ea`.
-The latest proof commit is `d87a4324`. No background proof worker is active.
+Current checkpoint: **2026-10-14 12:54 CEST**, upstream `c66d10ea`.
+The latest proof commit is `0534aad8`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -243,6 +243,13 @@ and unresolved references are excluded. `NativeColdEffects` derives these
 premises from successful native first execution. Exhaustion remains possible.
 Physical finite closure and exact product language remain open. See
 [native output and cold effects](notes-native-output-cold-effects.md).
+`MergedFreshOrdinaryColdReplay` proves validity/growth for every bounded
+repaired read, exact completed-read replay after cache growth, and larger
+bound stability. Replay requires only initial validity and an actual done
+result. `SourceColdUnfoldNewMuBoundary` refutes two proposed general measures
+with actual closed source construction: one unfolding allocates a new Mu and
+increases cached depth from 2 to 3. The reader still finishes. Live Haskell
+confirms the depth increase and successful read. This is no source defect.
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
 ancestor edits and bounded iteration for the fixed unary/two-atom fragment.
 General equality propagation remains open.
@@ -253,7 +260,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,363 targets and 42,587 theorem dependency checks**
+The current audit passes **1,365 targets and 42,696 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **642 Haskell examples** passed after the PR #119 refresh: 289 core,
 208 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.

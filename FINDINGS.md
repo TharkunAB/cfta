@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 12:41 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:54 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -530,6 +530,26 @@ first execution. Exhaustion remains possible. General repeated traversal,
 finite final cold tables, and physical product language remain open. See
 [native output and cold effects](lean/notes-native-output-cold-effects.md).
 
+## General cold replay and rejected termination measures
+
+`6e9804df` proves general repaired stored/unfolding replay, bounded reader
+validity and growth, exact ordered-row replay after final-cache growth, and
+larger-bound stability. `nodeEdges_replay_stable` combines both forms of
+stability. These results require actual completed reads and only initial
+cache validity. No preparation, closed-input, or semantic-heap premise is
+needed for replay. No successful bound is supplied for unfinished reads.
+
+`0534aad8` retains an actual source-built closed example:
+`mu x. mu y. f(x,y)`. One repaired unfolding creates a previously absent Mu
+and increases cached depth from 2 to 3. The node counter grows from 13 to 17.
+The actual cold reader still finishes. `not_noNewMu` and `depth_increases`
+exclude the initial Mu inventory and descending cached depth as general
+termination measures. Kernel evaluation proves the Lean observations.
+The live Haskell Nix reproduction confirms the depth increase, closedness,
+different result identity, and successful one-edge read. Log:
+`/tmp/mcfta-cold-measure-native-20261014.log`. See
+[native output and cold effects](lean/notes-native-output-cold-effects.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
@@ -592,18 +612,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`d87a4324`**; later commits record this handoff.
+The latest proof checkpoint is **`0534aad8`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,363 build targets and 42,587 theorem
+The current Lean 4.34.1 audit passes **1,365 build targets and 42,696 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-general-cold-effects-20261014-audit.log`.
+Log: `/tmp/mcfta-cold-measure-boundary-20261014-audit.log`.
 After the current refresh, all **642** examples passed in Nix: 289 core, 208
 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **30% at 12:41 CEST**.
+No background proof worker is active. Weekly allowance was **30% at 12:52 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

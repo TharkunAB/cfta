@@ -1,6 +1,6 @@
 # Native output scope and general repaired cold-reader effects
 
-Updated: 2026-10-14 12:41 CEST. Proof checkpoint: `d87a4324`.
+Updated: 2026-10-14 12:54 CEST. Proof checkpoints: `6e9804df` and `0534aad8`.
 
 ## Derived recursive scope
 
@@ -53,6 +53,38 @@ this reader invariant at every bound in the exact returned native cache.
 It keeps the existing complete initial cache, closed Original input, and
 checked-word scope. It assumes no output preparation or cold-read success.
 
+## Exact replay after growth
+
+`6e9804df` proves `MergedFreshOrdinaryColdReplay.collect_correct` for all
+bounded outcomes with only initial cache validity. Completed records remain
+available in the tables. Repaired stored substitution and unfolding replay
+their exact results after growth. `collect_replay` and `nodeEdges_replay`
+follow the actual ordered read and replay every completed subcall. They
+return identical ordered edges and leave the larger cache unchanged.
+Preparation, closed inputs, and semantic heaps are not premises.
+
+`collect_stable` and `nodeEdges_stable` retain exact completed results and
+caches at every larger traversal bound. `nodeEdges_replay_stable` combines
+larger bounds and later caches. These laws require an actual completed read;
+they do not supply one for a previously unfinished traversal.
+
+## Rejected measures from actual closed construction
+
+`0534aad8` adds `SourceColdUnfoldNewMuBoundary`. Actual repaired source
+construction builds `mu x. mu y. f(x,y)` from empty caches. One actual closed
+unfolding creates a new closed Mu record. Cached depth increases from 2 to 3.
+The source node counter increases from 13 to 17. The returned Mu key was
+absent in the original cache and is resident in the final cache.
+`not_noNewMu` refutes retention of the initial Mu inventory.
+`depth_increases` refutes descending cached depth as a general measure.
+The exact repaired reader still completes with one edge and node counter 18.
+
+A focused live Haskell reproduction in the Nix shell also reports depths
+`(2,3)`, closed input and output, different root/result identities, and one
+returned edge. File: `/tmp/mcfta-cold-measure-native.hs`. Log:
+`/tmp/mcfta-cold-measure-native-20261014.log`. These are counterexamples to the
+proposed measures. They are not termination counterexamples or source defects.
+
 ## Remaining obligations
 
 Exhaustion is still possible in the proved bounded result. Finite repeated
@@ -68,8 +100,8 @@ closed output, original syntax, or bounded reader safety.
 
 ## Validation
 
-Lean 4.34.1 passes 1,363 aggregate jobs and 42,587 theorem dependency checks.
+Lean 4.34.1 passes 1,365 aggregate jobs and 42,696 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-general-cold-effects-20261014-audit.log`.
+`/tmp/mcfta-cold-measure-boundary-20261014-audit.log`.
 No Haskell source changed. The current PR #119 Nix and active-package
 formatter checks remain valid.

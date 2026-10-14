@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 12:41 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:54 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -64,7 +64,7 @@ in complete semantic caches under explicit WordRanges. Native output scope,
 closedness, original syntax, and general bounded cold-reader effects are now
 proved. Finite repeated traversal and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`d87a4324`**. A later documentation commit
+The latest proof checkpoint is **`0534aad8`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -89,7 +89,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **30% at 12:41 CEST**. This is a historical value.
+The last observed value was **30% at 12:52 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -837,6 +837,26 @@ No preparation or `NoNewMu` premise is used. Finite repeated traversal and
 physical product language remain open. See
 [native output and cold effects](lean/notes-native-output-cold-effects.md).
 
+## General cold replay and rejected termination measures
+
+`6e9804df` proves general repaired stored/unfolding replay, bounded reader
+validity and growth, exact ordered-row replay after final-cache growth, and
+larger-bound stability. `nodeEdges_replay_stable` combines both forms of
+stability. These results require actual completed reads and only initial
+cache validity. No preparation, closed-input, or semantic-heap premise is
+needed for replay. No successful bound is supplied for unfinished reads.
+
+`0534aad8` retains an actual source-built closed example:
+`mu x. mu y. f(x,y)`. One repaired unfolding creates a previously absent Mu
+and increases cached depth from 2 to 3. The node counter grows from 13 to 17.
+The actual cold reader still finishes. `not_noNewMu` and `depth_increases`
+exclude the initial Mu inventory and descending cached depth as general
+termination measures. Kernel evaluation proves the Lean observations.
+The live Haskell Nix reproduction confirms the depth increase, closedness,
+different result identity, and successful one-edge read. Log:
+`/tmp/mcfta-cold-measure-native-20261014.log`. See
+[native output and cold effects](lean/notes-native-output-cold-effects.md).
+
 ## Remaining priorities
 
 1. Read `lean/notes-native-successful.md`. Arbitrary-record source completion,
@@ -907,10 +927,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,363 jobs and 42,587 theorem dependency checks**.
+The current build passes **1,365 jobs and 42,696 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-general-cold-effects-20261014-audit.log`.
+Log: `/tmp/mcfta-cold-measure-boundary-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
