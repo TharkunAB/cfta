@@ -211,4 +211,15 @@ theorem wordRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (ranges : CacheRanges bits emptyGuard conjoin code state) : WordRanges emptyGuard conjoin code state :=
   fun fuel remaining after trace => prefix_words bits emptyGuard conjoin fuel code state after remaining post clean safe valid ranges trace
 
+/-- Actual ready node calls derive all word checks from reached cache counters. -/
+theorem node_wordRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (bits : Nat) (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (request : NodeRequest Symbol Guard) (state : SourceRecursiveIntersectionThunks.State (bits + 2) Symbol Guard)
+    (valid : SourceRecursiveIntersectionThunks.Valid (bits + 2) emptyGuard conjoin state)
+    (ready : NodeReady state.machine request)
+    (ranges : CacheRanges bits emptyGuard conjoin (.node request .pure) state) :
+    WordRanges emptyGuard conjoin (.node request .pure) state :=
+  wordRanges bits emptyGuard conjoin _ state (fun after value => Available after.heap value) (by intro value; trivial)
+    (safe_requestNode request.domain request.left request.right state.machine ready) valid ranges
+
 end MicroCFTA.SourceRecursiveIntersectionNativeCapacity
