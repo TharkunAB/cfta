@@ -316,6 +316,22 @@ support is live at the target and empty at the producer body. All observations
 use kernel reduction. This is a counterexample to a proof shortcut, not source
 nontermination or an implementation defect.
 
+## New depth and level comparison
+
+`42ce3d8a` proves the complete repaired depth/deep source induction for literal
+lexical inputs. `d0083f37` proves actual repaired ordinary-level agreement from
+equal projected literal capture lists. These results do not assert general
+pending exclusion or supply the second producer pair.
+
+First retain each earlier route crossing's exact captured suffix in
+`ProbeChoiceSites.completed_route`. Keep its existing public wrapper.
+Derive the corresponding current-path relation. Then establish ordinary-name
+projection agreement from outer crossings to inner crossings with
+`LevelReplay.callback_level`. Recover decoded heaps through `closed_heap`,
+`of_grows`, and actual source growth. See
+[the source depth note](notes-fresh-ordinary-depth.md). Do not repeat the
+completed source depth induction or assume projected agreement.
+
 ## Next proof target and retained boundaries
 
 Exclude the full repaired encounter for the intended constructor scope.
@@ -361,9 +377,9 @@ constructor/equality proofs and all marked drafts.
 
 ## Validation and diagnostics
 
-Pinned Lean 4.34.1 passes 1,327 jobs and 42,228 theorem dependency checks.
+Pinned Lean 4.34.1 passes 1,330 jobs and 42,279 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are used.
-Log: `/tmp/mcfta-stopped-producer-20261014-audit.log`.
+Log: `/tmp/mcfta-level-replay-20261014-audit.log`.
 The root-history audit passed 1,326 jobs and 42,195 checks.
 The live-mismatch audit passed 1,320 jobs and 42,130 checks.
 The earlier-pair audit passed 1,311 jobs and 42,066 checks.

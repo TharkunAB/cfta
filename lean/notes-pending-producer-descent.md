@@ -83,6 +83,22 @@ descendant in the producer's ordinary callback can execute before that
 producer has issued its own request. Existing growth relations record
 this order but do not supply a completed request at the earlier cut.
 
+## New depth and level comparison
+
+`42ce3d8a` proves the complete repaired depth/deep source induction for literal
+lexical inputs. `d0083f37` proves actual repaired ordinary-level agreement from
+equal projected literal capture lists. These results do not assert general
+pending exclusion or supply the second producer pair.
+
+First retain each earlier route crossing's exact captured suffix in
+`ProbeChoiceSites.completed_route`. Keep its existing public wrapper.
+Derive the corresponding current-path relation. Then establish ordinary-name
+projection agreement from outer crossings to inner crossings with
+`LevelReplay.callback_level`. Recover decoded heaps through `closed_heap`,
+`of_grows`, and actual source growth. See
+[the source depth note](notes-fresh-ordinary-depth.md). Do not repeat the
+completed source depth induction or assume projected agreement.
+
 ## Next exact obligation
 
 For the repaired executor, start from `PendingProducedAt` and the exact

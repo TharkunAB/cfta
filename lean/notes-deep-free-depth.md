@@ -1,5 +1,11 @@
 # Deep references and source cleanup depth
 
+Current update: 2026-10-14 11:12 CEST. The full literal-input source driver is proved in
+`InternedFreshOrdinarySourceDepth`. Actual repaired ordinary-level agreement
+under projected captures is proved in `InternedFreshOrdinaryLevelReplay`.
+See [the current source depth note](notes-fresh-ordinary-depth.md).
+The following design and validation record is historical.
+
 Updated: 2026-10-13 17:25 CEST.
 
 `InternedDepthSemantics` interprets full constructor syntax with four

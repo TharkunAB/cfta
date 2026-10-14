@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 10:43 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 11:12 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -58,7 +58,7 @@ recursive descent remain open.
 General successful first-run completion still needs pending exclusion and
 output preparation.
 **No background proof worker is active.**
-The latest proof checkpoint is **`0f665004`**. A later documentation commit
+The latest proof checkpoint is **`d0083f37`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -83,7 +83,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **31% at 10:42 CEST**. This is a historical value.
+The last observed value was **31% at 11:10 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -700,6 +700,23 @@ The repaired producer-path boundary verifies that a live descendant capture
 can disappear from the enclosing producer result while its complete nested
 record stays cached. A source path does not transfer result liveness.
 
+`42ce3d8a` completes the repaired source depth/deep heap induction for arbitrary
+nested syntax with literal lexical inputs. `SourceDepth.build_depth` and the
+ordered child/edge proofs derive exact returned emptiness, cached Mu depth,
+deep names, and the decoded heap through every outcome. `callback_depth`
+derives complete normalized observations. `arguments_depth` compares actual
+completed callbacks with the same literal captures and any supplied names.
+`closed_heap` starts from empty caches and includes pending outcomes.
+`DepthHeap.of_grows` derives earlier heaps from actual complete-record retention.
+No recursive depth/deep observation contract is supplied.
+
+`d0083f37` adds `LevelReplay.callback_level`. `ordinaryNames` retains each
+ordinary level and maps every other reference kind to Depth. Equal projected
+literal capture lists give equal actual repaired ordinary levels. Both cached
+depth and ordinary free-name bounds are derived. The pure free-name transport
+lemma is reused; the actual source calls use the repaired executor.
+See `lean/notes-fresh-ordinary-depth.md` for the exact scope and next target.
+
 ## Remaining priorities
 
 1. Read `lean/notes-recursive-intersection-constructor-coverage.md` first.
@@ -722,8 +739,17 @@ record stays cached. A source path does not transfer result liveness.
    proved. Rooted source paths and actual shorter producers are now derived.
    Use `RootEncounter.complete_stopped_mismatch` and `PendingProducedAt`.
    Do not repeat extraction of the producer's pending ordinary callback or
-   whole binder outcome. Construct another actual observation of that same
-   shorter producer body. Retain its exact captured suffix, required normalized
+   whole binder outcome. First use the new source-depth and level results to
+   test route agreement: strengthen `ProbeChoiceSites.completed_route` to retain
+   each actual crossing's captured suffix. Preserve its old public wrapper.
+   Derive the same suffix relation from the actual current `ActiveOrigins.Path`.
+   Apply `LevelReplay.callback_level` from outer crossings to inner crossings.
+   Equal projected captured lists must be derived at each ordinary crossing;
+   Depth/fresh choices project to the same name. Derive earlier depth heaps
+   from `SourceDepth.closed_heap`, `DepthHeap.of_grows`, and actual source growth.
+   Do not claim that this route invariant or pending exclusion is already proved.
+   The shorter-producer descent remains another possible route. It needs
+   another actual observation of that same shorter producer body. Retain its exact captured suffix, required normalized
    callbacks, and actual chronological equations. The pending producer does
    not supply a completed binder or request. Derive a new mismatching producer
    pair or computed level before using the strict captured-prefix bound. One shorter producer
@@ -751,13 +777,12 @@ record stays cached. A source path does not transfer result liveness.
    language or row contracts. Derive new-body preparation, or a larger cold
    exposure invariant, before composing the completed cold table and Sized
    adapters. Read the optional-binder, kernel, and cold shared-row notes.
-2. Complete repaired cached-depth/deep heap induction. `InternedDepthFreeProjection*`
-   now proves full-syntax free-name membership and ordinary-root callback deep
-   observations with nested children. `callback_observed` derives observations
-   from syntax, validated context, and actual completion. General cached-depth
-   and binder-heap induction remain open. Use literal environments
-   `names.map Value.reference`; lists require membership agreement, not order
-   equality. Do not equate predicted depth with general no-pending completion.
+2. The repaired cached-depth/deep source driver is proved for arbitrary nested
+   syntax with literal inputs, `names.map Value.reference`. Do not repeat it.
+   Extend it to arbitrary captured records only where the native optional-binder
+   bridge requires that extension. Retain the incoming semantic context and
+   decoded heap. Do not equate depth correspondence with no-pending completion.
+   See `lean/notes-fresh-ordinary-depth.md`.
 3. Connect bounded import to native `fromFTA`/SCC and split readback, then
    preserve supplied custom order through final observation decoders.
    `SourceBoundedImport`, `SourceFromTerms*`, and `SourceImportGroups*` already
@@ -799,10 +824,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,327 jobs and 42,228 theorem dependency checks**.
+The current build passes **1,330 jobs and 42,279 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-stopped-producer-20261014-audit.log`.
+Log: `/tmp/mcfta-level-replay-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -847,6 +872,8 @@ Leave that unrelated baseline unchanged. No new test was added locally.
 
 | Commit | Result |
 | --- | --- |
+| `d0083f37` | Actual repaired ordinary-level agreement from equal projected literal capture lists. |
+| `42ce3d8a` | Full nested source cached-depth/deep heap induction for literal inputs, actual callback comparison, and closed-source observations. |
 | `0f665004` | Exact enclosing pending callback equations, stopped shorter ordinary producers and whole binder outcomes, and actual optional-binder composition. |
 | `98f633fa` | Current upstream two-form name encoder, safe unchanged serialization, injectivity, and exact public liquid Sized composition. |
 | `e3a33ed5` | Preserving 461-step rebase onto PR #117, with all 1,676 saved Lean-tree files unchanged. |
