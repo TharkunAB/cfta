@@ -43,6 +43,7 @@ def Mismatch [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin Symbol Guard 
       start = .done previous finish ∧
     Context start (earlier.map (fun crossing => Value.reference crossing.name) ++ .reference .depth :: origin.environment) ∧
     Grows finish origin.cut ∧
+    InternedFreshOrdinaryProbeChoiceSites.Captures (.reference .depth :: origin.environment) earlier ∧
     (∀ crossing ∈ earlier, Grows origin.before crossing.before ∧ Grows crossing.afterDepth origin.cut) ∧
     ∃ oldDepth afterDepth oldOrdinary afterOrdinary record,
       callback site.body
@@ -70,9 +71,9 @@ def Mismatch [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin Symbol Guard 
 theorem Site.mismatch [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin Symbol Guard key}
     {final : State Symbol Guard} (site : Site origin final) : Mismatch site := by
   classical
-  obtain ⟨earlier, start, previous, finish, descriptors, previousDone, previousContext, _, suffix, traces,
+  obtain ⟨earlier, start, previous, finish, descriptors, previousDone, previousContext, _, suffix, captures, traces,
     oldDepth, afterDepth, oldOrdinary, afterOrdinary, record, oldDepthDone, oldOrdinaryDone, oldRequestDone, oldStored, oldDifferent⟩ :=
-    InternedFreshOrdinaryEarlierPair.Site.earlier_pair site
+    InternedFreshOrdinaryEarlierPair.Site.scoped_earlier_pair site
   have lengths : earlier.length = site.crossings.length := by
     simpa only [List.length_map] using congrArg List.length descriptors
   have values := route_values origin earlier site.crossings lengths
@@ -127,7 +128,7 @@ theorem Site.mismatch [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin Symb
           origin.depth origin.depthAvailable.issued identity present
         omega
       · have present := supported (.uninterned level) (by intro impossible; cases impossible) (by rw [atomSame])
-        exact ⟨earlier, start, previous, finish, descriptors, previousDone, previousContext, suffix, traces,
+        exact ⟨earlier, start, previous, finish, descriptors, previousDone, previousContext, suffix, captures, traces,
           oldDepth, afterDepth, oldOrdinary, afterOrdinary, record, oldDepthDone, oldOrdinaryDone, oldRequestDone, oldStored, oldDifferent,
           index, first, second, level, firstAt, secondAt, bodies, flag, named, unequal,
           atomSame ▸ live, present, ordinary_free_bound origin.depth level present,

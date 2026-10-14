@@ -71,6 +71,36 @@ theorem earlier_pair [DecidableEq (EdgeKey Symbol Guard)] (origin : Origin Symbo
   · exact Or.inl depthSame
 
 /-- An actual pending site derives an earlier completed source route and both different earlier request probes. -/
+theorem Site.scoped_earlier_pair [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin Symbol Guard key}
+    {final : State Symbol Guard} (site : Site origin final) :
+    ∃ earlier : List (InternedFreshOrdinaryProbeChoiceSites.Crossing Symbol Guard), ∃ start previous finish,
+      earlier.map (fun crossing => (crossing.body, crossing.ordinary)) =
+        site.crossings.map (fun crossing => (crossing.body, Crossing.probeChoice crossing)) ∧
+      build (.binder site.smart site.body)
+        (earlier.map (fun crossing => Value.reference crossing.name) ++ .reference .depth :: origin.environment)
+        start = .done previous finish ∧
+      Context start (earlier.map (fun crossing => Value.reference crossing.name) ++ .reference .depth :: origin.environment) ∧
+      Grows origin.before start ∧ Grows finish origin.cut ∧
+      InternedFreshOrdinaryProbeChoiceSites.Captures (.reference .depth :: origin.environment) earlier ∧
+      (∀ crossing ∈ earlier, Grows origin.before crossing.before ∧ Grows crossing.afterDepth origin.cut) ∧
+      ∃ depth afterDepth ordinary afterOrdinary record,
+        callback site.body
+          (earlier.map (fun crossing => Value.reference crossing.name) ++ .reference .depth :: origin.environment)
+          .depth start = .done depth afterDepth ∧
+        callback site.body
+          (earlier.map (fun crossing => Value.reference crossing.name) ++ .reference .depth :: origin.environment)
+          (.uninterned (ordinaryLevel depth)) afterDepth = .done ordinary afterOrdinary ∧
+        request site.smart depth ordinary
+          (callback site.body (earlier.map (fun crossing => Value.reference crossing.name) ++ .reference .depth :: origin.environment))
+          afterOrdinary = .done previous finish ∧
+        origin.cut.nodeRecords (muKey depth ordinary) = some record ∧
+        (depth.referenceOf ≠ origin.depth.referenceOf ∨ ordinary.referenceOf ≠ origin.ordinary.referenceOf) := by
+  obtain ⟨earlier, start, previous, finish, descriptors, previousDone, previousContext, initial, suffix, captures, traces⟩ :=
+    Origin.completed_scoped_representative origin site.path
+  exact ⟨earlier, start, previous, finish, descriptors, previousDone, previousContext, initial, suffix, captures, traces,
+    InternedFreshOrdinaryEarlierPair.earlier_pair origin site.smart site.body _ start previous finish previousDone suffix⟩
+
+/-- An actual pending site derives an earlier completed source route and both different earlier request probes. -/
 theorem Site.earlier_pair [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin Symbol Guard key}
     {final : State Symbol Guard} (site : Site origin final) :
     ∃ earlier : List (InternedFreshOrdinaryProbeChoiceSites.Crossing Symbol Guard), ∃ start previous finish,
@@ -94,9 +124,8 @@ theorem Site.earlier_pair [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin 
           afterOrdinary = .done previous finish ∧
         origin.cut.nodeRecords (muKey depth ordinary) = some record ∧
         (depth.referenceOf ≠ origin.depth.referenceOf ∨ ordinary.referenceOf ≠ origin.ordinary.referenceOf) := by
-  obtain ⟨earlier, start, previous, finish, descriptors, previousDone, previousContext, initial, suffix, traces⟩ :=
-    Origin.completed_representative origin site.path
-  exact ⟨earlier, start, previous, finish, descriptors, previousDone, previousContext, initial, suffix, traces,
-    InternedFreshOrdinaryEarlierPair.earlier_pair origin site.smart site.body _ start previous finish previousDone suffix⟩
+  obtain ⟨earlier, start, previous, finish, descriptors, completed, context, initial, suffix, _, traces, pair⟩ :=
+    Site.scoped_earlier_pair site
+  exact ⟨earlier, start, previous, finish, descriptors, completed, context, initial, suffix, traces, pair⟩
 
 end MicroCFTA.InternedFreshOrdinaryEarlierPair

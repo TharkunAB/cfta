@@ -65,6 +65,26 @@ theorem Origin.rawDepth_before_cut [DecidableEq (EdgeKey Symbol Guard)] (origin 
   exact grows_trans filterGrowth ordinaryGrowth
 
 /-- Each actual active descendant has an earlier completed source representative with matching probe choices. -/
+theorem Origin.completed_scoped_representative [DecidableEq (EdgeKey Symbol Guard)] (origin : Origin Symbol Guard key)
+    {target : Syntax Symbol Guard} {environment : List (Value Symbol Guard)} {crossings : List (Crossing Symbol Guard)}
+    (path : Path origin.body origin.localInputs target environment crossings) :
+    ∃ earlier : List (InternedFreshOrdinaryProbeChoiceSites.Crossing Symbol Guard), ∃ start value finish,
+      earlier.map (fun crossing => (crossing.body, crossing.ordinary)) =
+        crossings.map (fun crossing => (crossing.body, Crossing.probeChoice crossing)) ∧
+      build target (earlier.map (fun crossing => Value.reference crossing.name) ++ .reference .depth :: origin.environment)
+        start = .done value finish ∧
+      Context start (earlier.map (fun crossing => Value.reference crossing.name) ++ .reference .depth :: origin.environment) ∧
+      Grows origin.before start ∧ Grows finish origin.cut ∧
+      InternedFreshOrdinaryProbeChoiceSites.Captures (.reference .depth :: origin.environment) earlier ∧
+      ∀ crossing ∈ earlier, Grows origin.before crossing.before ∧ Grows crossing.afterDepth origin.cut := by
+  obtain ⟨earlier, start, value, finish, choices, completed, context, initial, suffix, captures, traces⟩ :=
+    InternedFreshOrdinaryProbeChoiceSites.completed_scoped_route (Path.probe_route path) (.reference .depth :: origin.environment) origin.before origin.afterRawDepth origin.rawDepth
+      (origin.context.local .depth (depth_available origin.before))
+      (by simpa only [List.map_cons] using origin.rawDepthDone)
+  exact ⟨earlier, start, value, finish, choices, completed, context, initial, grows_trans suffix (Origin.rawDepth_before_cut origin), captures,
+    fun crossing member => ⟨(traces crossing member).1, grows_trans (traces crossing member).2 (Origin.rawDepth_before_cut origin)⟩⟩
+
+/-- Each actual active descendant has an earlier completed source representative with matching probe choices. -/
 theorem Origin.completed_representative [DecidableEq (EdgeKey Symbol Guard)] (origin : Origin Symbol Guard key)
     {target : Syntax Symbol Guard} {environment : List (Value Symbol Guard)} {crossings : List (Crossing Symbol Guard)}
     (path : Path origin.body origin.localInputs target environment crossings) :
@@ -76,12 +96,9 @@ theorem Origin.completed_representative [DecidableEq (EdgeKey Symbol Guard)] (or
       Context start (earlier.map (fun crossing => Value.reference crossing.name) ++ .reference .depth :: origin.environment) ∧
       Grows origin.before start ∧ Grows finish origin.cut ∧
       ∀ crossing ∈ earlier, Grows origin.before crossing.before ∧ Grows crossing.afterDepth origin.cut := by
-  obtain ⟨earlier, start, value, finish, choices, completed, context, initial, suffix, traces⟩ :=
-    InternedFreshOrdinaryProbeChoiceSites.completed_route (Path.probe_route path) (.reference .depth :: origin.environment) origin.before origin.afterRawDepth origin.rawDepth
-      (origin.context.local .depth (depth_available origin.before))
-      (by simpa only [List.map_cons] using origin.rawDepthDone)
-  exact ⟨earlier, start, value, finish, choices, completed, context, initial, grows_trans suffix (Origin.rawDepth_before_cut origin),
-    fun crossing member => ⟨(traces crossing member).1, grows_trans (traces crossing member).2 (Origin.rawDepth_before_cut origin)⟩⟩
+  obtain ⟨earlier, start, value, finish, choices, completed, context, initial, suffix, _, traces⟩ :=
+    Origin.completed_scoped_representative origin path
+  exact ⟨earlier, start, value, finish, choices, completed, context, initial, suffix, traces⟩
 
 /-- Each fresh local on an active descendant path is at least as new as the active ancestor. -/
 theorem Crossing.interned_after [DecidableEq (EdgeKey Symbol Guard)] (origin : Origin Symbol Guard key)
