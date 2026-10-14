@@ -6,8 +6,8 @@ escape fix and its regression are retained. It is separate from the proved
 SMT-name adapter. Sized/core refinement source did not change. See the root
 handoff for backup, manifest, validation, and historical hash mapping.
 
-Current checkpoint: **2026-10-14 13:05 CEST**, upstream `c66d10ea`.
-The latest proof commit is `75c50b4d`. No background proof worker is active.
+Current checkpoint: **2026-10-14 13:30 CEST**, upstream `c66d10ea`.
+The latest proof commit is `7f1daf23`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -264,6 +264,19 @@ substitution for an open raw binder body from actual closed construction.
 The smart stored rebuild removes one unused raw Mu and changes identity.
 Free names remain equal. Kernel and live Haskell observations agree.
 Runtime behavior was not changed. General closure must include this cleanup.
+`InternedFreshOrdinaryDependencies` derives exact repaired plan congruence
+from used slots and original free bindings. `InternedFreshOrdinaryBindingKeys`
+recovers full available replacements from physical key equality, derives
+exact computation and replay, and supplies finite keys for closed current-
+cache replacements. Future new closed values are not bounded by this result.
+See [repaired binding keys](notes-fresh-binding-keys.md).
+`InternedStoredPlanBinderDepth.encode_depth` derives exact binder nesting
+of the actual stored plan while treating closed captures as constants.
+Actual callback crossings respect that static budget. Zero depth is exactly
+binder-free execution and cannot add Mu records. General positive-depth
+unfolding progress remains unproved. A finite exploratory search found no
+counterexample, which is validation only. See
+[stored-plan binder depth](notes-stored-plan-binder-depth.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
 ancestor edits and bounded iteration for the fixed unary/two-atom fragment.
 General equality propagation remains open.
@@ -274,7 +287,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,368 targets and 42,779 theorem dependency checks**
+The current audit passes **1,371 targets and 42,877 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **642 Haskell examples** passed after the PR #119 refresh: 289 core,
 208 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.

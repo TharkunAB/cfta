@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 13:05 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 13:30 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -64,7 +64,7 @@ in complete semantic caches under explicit WordRanges. Native output scope,
 closedness, original syntax, and general bounded cold-reader effects are now
 proved. Finite repeated traversal and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`75c50b4d`**. A later documentation commit
+The latest proof checkpoint is **`7f1daf23`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -89,7 +89,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **30% at 13:05 CEST**. This is a historical value.
+The last observed value was **30% at 13:34 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -899,6 +899,47 @@ the cached pattern-synonym matcher fast paths. A general physical closure
 proof must account for smart cleanup. No language change is claimed.
 See [repaired cold shared rows](lean/notes-fresh-cold-shared-rows.md).
 
+## Repaired source dependencies and exact physical binding keys
+
+`8598886f` derives full repaired plan equivalence from agreement on the
+original used lexical slots. Repaired stored execution now has exact
+free-binding congruence, restriction, and replay after growth. Pending
+outcomes and cache effects are included by the congruence theorem.
+
+`InternedFreshOrdinaryBindingKeys.key_agree` recovers full available values
+from ordered optional physical identities in one coherent cache.
+`execute_key` and `execute_key_replay` derive the exact computation and
+allocation-free replay. A finite current-cache inventory covers every key
+of closed available replacements. Each binding has at most
+`nodes.next + 2` choices. This does not bound replacements created by future
+reads and does not prove general cold-reader termination. See
+[repaired binding keys](lean/notes-fresh-binding-keys.md).
+
+## Actual stored-plan binder depth and its zero case
+
+`7f1daf23` defines `InternedStoredPlanBinderDepth.valueDepth`, which ignores
+closed captures, and `bodyDepth`, which measures the actual Mu body plan.
+`encode_depth` proves exact maximum binder nesting in the emitted plan.
+`Path.plan_depth_bound` bounds actual source callback crossings.
+`syntax_zero` characterizes binder-free plans. `execute_zero_noNewMu` and
+`unfold_zero_noNewMu` prove the zero case. Ordinary allocation remains
+possible. These theorems require no preparation or semantic-cache premise.
+
+An exploratory run checked 1,336 generated closed expressions and every
+closed Mu in each constructed cache. It found no newly allocated closed
+Mu whose body measure failed to decrease on unfolding. This is finite
+validation, not a proof. File `/tmp/mcfta-open-rank-probe.lean`; log
+`/tmp/mcfta-open-rank-probe-20261014.log`.
+The next target is the positive-depth decrease for new closed Mu records in
+actual source-derived heaps, including canonical hits and fresh body names.
+No dynamic rank budget or general cold-reader termination is proved yet.
+See [stored-plan binder depth](lean/notes-stored-plan-binder-depth.md).
+
+The current preservation check compared all 1,723 files saved at 13:06.
+No file is missing. Only the two coverage documents and audit imports changed
+intentionally among those files. Report:
+`/tmp/mcfta-binding-plan-depth-20261014-preservation.json`.
+
 ## Remaining priorities
 
 1. Read `lean/notes-native-successful.md`. Arbitrary-record source completion,
@@ -911,7 +952,12 @@ See [repaired cold shared rows](lean/notes-fresh-cold-shared-rows.md).
    those completed results or replace their actual effects with contracts.
    The alternative shorter-producer descent is unclosed and unused by these
    results. Preserve its histories and counterexamples.
-2. Read `lean/notes-native-output-cold-effects.md`. Recursive result scope,
+2. Read `lean/notes-stored-plan-binder-depth.md` and
+   `lean/notes-fresh-binding-keys.md`. Prove or refute the proposed positive
+   body-depth decrease for newly allocated closed Mu records. The static
+   compiler equality, callback-path bound, and zero case are proved.
+   General finite physical closure remains the target. Read
+   `lean/notes-native-output-cold-effects.md`. Recursive result scope,
    native output closedness, original payload syntax, and general bounded
    cold-reader effects are proved. Do not repeat these results. Prove finite
    repeated repaired cold-reader traversal and finite final cold tables.
@@ -969,10 +1015,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,368 jobs and 42,779 theorem dependency checks**.
+The current build passes **1,371 jobs and 42,877 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-raw-identity-20261014-audit.log`.
+Log: `/tmp/mcfta-stored-plan-depth-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.

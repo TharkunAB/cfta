@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 13:05 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 13:30 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -586,6 +586,42 @@ the cached pattern-synonym matcher fast paths. A general physical closure
 proof must account for smart cleanup. No language change is claimed.
 See [repaired cold shared rows](lean/notes-fresh-cold-shared-rows.md).
 
+## Repaired source dependencies and exact physical binding keys
+
+`8598886f` derives full repaired plan equivalence from agreement on the
+original used lexical slots. Repaired stored execution now has exact
+free-binding congruence, restriction, and replay after growth. Pending
+outcomes and cache effects are included by the congruence theorem.
+
+`InternedFreshOrdinaryBindingKeys.key_agree` recovers full available values
+from ordered optional physical identities in one coherent cache.
+`execute_key` and `execute_key_replay` derive the exact computation and
+allocation-free replay. A finite current-cache inventory covers every key
+of closed available replacements. Each binding has at most
+`nodes.next + 2` choices. This does not bound replacements created by future
+reads and does not prove general cold-reader termination. See
+[repaired binding keys](lean/notes-fresh-binding-keys.md).
+
+## Actual stored-plan binder depth and its zero case
+
+`7f1daf23` defines `InternedStoredPlanBinderDepth.valueDepth`, which ignores
+closed captures, and `bodyDepth`, which measures the actual Mu body plan.
+`encode_depth` proves exact maximum binder nesting in the emitted plan.
+`Path.plan_depth_bound` bounds actual source callback crossings.
+`syntax_zero` characterizes binder-free plans. `execute_zero_noNewMu` and
+`unfold_zero_noNewMu` prove the zero case. Ordinary allocation remains
+possible. These theorems require no preparation or semantic-cache premise.
+
+An exploratory run checked 1,336 generated closed expressions and every
+closed Mu in each constructed cache. It found no newly allocated closed
+Mu whose body measure failed to decrease on unfolding. This is finite
+validation, not a proof. File `/tmp/mcfta-open-rank-probe.lean`; log
+`/tmp/mcfta-open-rank-probe-20261014.log`.
+The next target is the positive-depth decrease for new closed Mu records in
+actual source-derived heaps, including canonical hits and fresh body names.
+No dynamic rank budget or general cold-reader termination is proved yet.
+See [stored-plan binder depth](lean/notes-stored-plan-binder-depth.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
@@ -648,18 +684,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`75c50b4d`**; later commits record this handoff.
+The latest proof checkpoint is **`7f1daf23`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,368 build targets and 42,779 theorem
+The current Lean 4.34.1 audit passes **1,371 build targets and 42,877 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-raw-identity-20261014-audit.log`.
+Log: `/tmp/mcfta-stored-plan-depth-20261014-audit.log`.
 After the current refresh, all **642** examples passed in Nix: 289 core, 208
 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **30% at 13:05 CEST**.
+No background proof worker is active. Weekly allowance was **30% at 13:34 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
