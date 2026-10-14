@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 16:42 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 17:18 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -66,13 +66,41 @@ proved. General finite repaired traversal and structural tables are now
 proved. Final-cache guarded row language is proved. Its independent-language
 transport and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`0258ae86`**. A later documentation commit
+The latest proof checkpoint is **`19467e4a`**, after `e8f06e62`. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
+## Exact Mu-unfolding budgets
+
+`e8f06e62` defines budgeted least languages and complete stored meanings.
+A raw Mu consumes one step. Actual free-name support and ordinary node/union
+normalization preserve each fixed-budget language. Smart cleanup retains
+terms without increasing the budget. Root-self filtering preserves the
+budgeted least Mu language.
+
+`19467e4a` proves soundness and completeness against actual finite input
+derivations at each identical bound. Closed available Original records need
+no ambient-environment assumption. Erasing the bound gives independent
+stored meaning. This bound is separate from public term rank.
+
+Actual stored reconstruction and canonical-hit budget transport remain open.
+The finite Haskell unfolding and ordinary-probe checks found no counterexample.
+They do not prove transport. The stopped Lean generated-source probes supply
+no quantitative result. All workers are terminal. Read
+`lean/notes-unfolding-budget-language.md` for statements and evidence.
+
+Current audit: **1,428 jobs and 43,534 theorem dependency checks**. Only
+`propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
+`/tmp/mcfta-budget-input-20261014-audit.log`.
+Current snapshot: `/tmp/mcfta-budget-input-checkpoint-20261014-1718/`.
+It saves all **1,787 Lean-tree files** and compares all 1,777 previous files.
+None is missing. Only audit imports, two coverage ledgers, and the independent
+language note changed among those files. Earlier proof and marked-draft
+bytes remain unchanged. No production Haskell source changed.
+
 ## Independent guarded meaning and actual stored compiler
 
-The current local preservation snapshot is
+The earlier local preservation snapshot is
 `/tmp/mcfta-guarded-native-soundness-checkpoint-20261014-1642/`.
 It contains all **1,777 Lean-tree files**, root restart documents, the fixture,
 and focused/aggregate logs. All 1,771 files from the previous snapshot remain.
@@ -194,7 +222,7 @@ for arbitrary raw binders is refuted. Then derive physical
 The earlier prepared graph uses the old executor; its preparation premise
 remains valid in its stated fragment.
 
-Current audit: 1,417 jobs and 43,451 theorem dependency checks. Only
+Earlier audit: 1,417 jobs and 43,451 theorem dependency checks. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
 `/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
 
@@ -1359,10 +1387,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,417 jobs and 43,451 theorem dependency checks**.
+The current build passes **1,428 jobs and 43,534 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
+Log: `/tmp/mcfta-budget-input-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.

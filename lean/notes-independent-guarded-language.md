@@ -1,6 +1,6 @@
 # Independent guarded language and actual stored plans
 
-Updated: 2026-10-14 16:42 CEST. Latest proof: `0258ae86`. Earlier support/execution checkpoints remain.
+Updated: 2026-10-14 17:18 CEST. Latest proof: `19467e4a`. Earlier support/execution checkpoints remain.
 
 ## Independent meaning
 
@@ -153,6 +153,14 @@ stored interpretation therefore agree without a copy-language contract.
 
 ## Next proof
 
+`e8f06e62` defines complete stored languages at each Mu-unfolding budget.
+Actual ordinary normalization preserves each budget. Cleanup retains accepted
+terms without increasing the bound. Actual root-self filtering preserves the
+budgeted least Mu language. `19467e4a` proves exact actual finite input
+derivations at each bound for closed available Original records. Erasing the
+bound recovers independent stored meaning. This is separate from public term
+rank. See [unfolding budgets](notes-unfolding-budget-language.md).
+
 Prove completeness of the final repaired graph and finite table for independent
 meaning. Then derive physical `ProductReadback.members`, `.rejected`, and
 `product_exact`. Soundness and native/cold/shared semantic heap propagation
@@ -162,20 +170,21 @@ are proved. Do not repeat them.
 Keep availability, replay, and cache growth explicit. Graph acceptance is
 least finite-run acceptance. Equal unfolding equations alone do not prove
 completeness through unguarded epsilon cycles. The new `input_exact` gives
-finite input derivations for Original records. Any rank transport through
+finite input derivations for Original records. Exact budget correspondence
+now strengthens this law. Any rank transport through
 actual reconstruction and canonical hits must be derived before it is used.
 The raw unused-binder identity counterexample still applies.
 
 ## Validation
 
-Lean 4.34.1 passes 1,417 aggregate jobs and 43,451 theorem dependency checks.
+Lean 4.34.1 passes 1,428 aggregate jobs and 43,534 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-guarded-input-native-soundness-20261014-audit.log`.
+`/tmp/mcfta-budget-input-20261014-audit.log`.
 No production Haskell source changed. Existing Nix and formatter checks remain
 applicable. The earlier proofs, counterexamples, and marked drafts remain.
 
-All 1,771 files from the previous local snapshot remain. The current Lean
-tree has 1,777 files. Only audit imports, coverage ledgers, and three component
-notes changed among earlier files. All earlier proof bytes and marked drafts
+All 1,777 files from the previous local snapshot remain. The current Lean
+tree has 1,787 files. Only audit imports, coverage ledgers, and this component
+note changed among earlier files. All earlier proof bytes and marked drafts
 are unchanged. Snapshot:
-`/tmp/mcfta-guarded-native-soundness-checkpoint-20261014-1642/`.
+`/tmp/mcfta-budget-input-checkpoint-20261014-1718/`.

@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 16:42 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 17:18 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -34,9 +34,36 @@ Unknown and unchanged exceptions remain separate. Replies need not be stable.
 External Sat/Unsat correctness and completion remain explicit contracts.
 See [finite map Sized](lean/notes-sized-finite-keys.md).
 
+## Exact Mu-unfolding budgets
+
+`e8f06e62` defines complete stored meaning at each unfolding bound. A raw Mu
+consumes one step. Coherent free-name support and ordinary constructor
+normalization are proved. Actual cleanup retains acceptance without requiring
+more budget. Actual root-self filtering preserves the budgeted least language.
+
+`19467e4a` proves exact actual finite input derivations at each identical
+bound for closed available Original records under every ambient environment.
+Erasing the bound recovers independent stored meaning. This budget is
+separate from public distinct-term rank.
+
+Actual reconstruction and canonical-hit budget transport remain unproved.
+Finite Haskell probes found no counterexample to strict outer-unfolding rank
+decrease or stored/ordinary-probe budget equality. They are validation only.
+The stopped Lean generated-source probes supply no quantitative result.
+Read [unfolding budgets](lean/notes-unfolding-budget-language.md).
+
+The aggregate audit passes **1,428 jobs and 43,534 theorem dependency checks**,
+with only `propext`, `Classical.choice`, and `Quot.sound`. Log:
+`/tmp/mcfta-budget-input-20261014-audit.log`.
+Snapshot: `/tmp/mcfta-budget-input-checkpoint-20261014-1718/`.
+All 1,787 Lean-tree files are saved. All 1,777 previous files remain.
+Only audit imports, two coverage ledgers, and the independent-language note
+changed among those previous files. All earlier proofs and drafts retain
+their bytes. No production Haskell code changed. No worker remains active.
+
 ## Independent guarded meaning and actual stored compiler
 
-The current local preservation snapshot is
+The earlier local preservation snapshot is
 `/tmp/mcfta-guarded-native-soundness-checkpoint-20261014-1642/`.
 It contains all **1,777 Lean-tree files**, root restart documents, the fixture,
 and focused/aggregate logs. All 1,771 files from the previous snapshot remain.

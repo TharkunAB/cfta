@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 16:42 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `0258ae86`. No background proof worker is active.
+Current checkpoint: **2026-10-14 17:18 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `19467e4a`, after `e8f06e62`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -322,8 +322,15 @@ into independent meaning. Native optional binders have their least-language
 law. Native evaluation retains the new semantic heap, and its finite table
 is sound for the returned value. `SourceRecursiveIntersectionGuardedInput`
 identifies original stored meaning with copied lexical meaning and finite
-input derivations. Graph/table completeness and physical product language
-remain open. See
+input derivations. `InternedGuardedBudget` interprets complete stored records
+at each Mu-unfolding bound. Actual ordinary normalization preserves each
+budget. Cleanup retains terms without increasing it, and root-self filtering
+preserves the budgeted least language. `SourceRecursiveIntersectionBudgetExact`
+proves exact actual input derivations at each bound for closed available
+Original records. Erasing the bound recovers independent meaning. Actual
+reconstruction and canonical-hit budget transport, graph/table completeness,
+and physical product language remain open. See
+[unfolding budgets](notes-unfolding-budget-language.md) and
 [guarded compiler semantics](notes-independent-guarded-language.md).
 A finite exploratory search found no
 counterexample, which is validation only. See
