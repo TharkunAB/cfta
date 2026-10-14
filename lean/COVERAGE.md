@@ -1,14 +1,15 @@
 # Full formalization coverage
 
-The current preserving PR #121 rebase is `d8c500d4` on `8e393e62`.
-All 1,728 saved Lean-tree files matched exactly. Upstream qualifies the
-`substFree` identity comment for raw unused binders. Runtime and Sized code
-did not change. The qualified smart-binder identity law is not proved by
-this comment or the retained raw counterexample. Earlier hashes remain in
-the preserving backup branches. See root HANDOFF.md for exact evidence.
+The current preserving PR #122 rebase is `fc81eacf` on `3ea4a9d8`.
+All 1,732 saved Lean-tree files matched exactly. Upstream memoizes synthesis
+terms by flag, size, and ordered argument names. No Sized or interned
+runtime code changed. The synthesis application has no complete formal
+source model. Earlier proof hashes remain in the preserving backups.
+PR #121 qualified the raw-binder identity comment. The smart-only identity
+law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 14:05 CEST**, upstream `8e393e62`.
-The latest proof commit is `1e28a69c`. No background proof worker is active.
+Current checkpoint: **2026-10-14 14:34 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `de322a41`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -279,7 +280,13 @@ preserves open-depth bounds. `InternedStoredPlanBinderDepthOne` proves that
 closed depth-one unfolding gives every newly allocated Mu a zero-depth
 body. The entire returned cache is covered, including probe allocations.
 Earlier records and closed captures can have arbitrary cached depth.
-General progress at depths two and above remains unproved. A finite exploratory search found no
+`InternedOpenDepthExecution` now derives exact actual source depth and
+body/Depth-probe equality for complete Mu records.
+`InternedStoredPlanBinderDepthProgress` proves strict body-depth decrease
+for every new Mu after general closed unfolding, including all probes.
+Actual empty-cache construction derives its heap premises. Subsequent
+stored execution and unfolding preserve the new heap. A finite dynamic
+cold-reader budget and general final tables remain open. A finite exploratory search found no
 counterexample, which is validation only. See
 [stored-plan binder depth](notes-stored-plan-binder-depth.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
@@ -292,10 +299,10 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,375 targets and 42,935 theorem dependency checks**
+The current audit passes **1,381 targets and 43,054 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
-All **642 Haskell examples** passed after the PR #119 refresh: 289 core,
-208 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.
+After PR #122, all 208 generator and 145 refinement examples pass. The
+unchanged core retains its earlier 289 passing examples. Fourmolu and active-package cabal-gild passed.
 The broad gild check reports existing formatting failures in the unchanged
 legacy microecta package files. No new production test was added locally.
 See root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) for exact

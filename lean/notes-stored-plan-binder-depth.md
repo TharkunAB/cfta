@@ -1,7 +1,7 @@
 # Actual stored-plan binder depth
 
-Updated: 2026-10-14 14:05 CEST. Latest proof checkpoint: `1e28a69c`.
-The compiler and zero-case proof is now `d0680cbe` after rebase. Its earlier
+Updated: 2026-10-14 14:34 CEST. Latest proof checkpoint: `de322a41`.
+The compiler and zero-case proof is now `c269539f` after the PR #122 rebase. Its earlier
 hash `7f1daf23` remains in the preserving backup.
 
 ## Proved compiler correspondence
@@ -56,24 +56,58 @@ when that original body depth is one. It examines the complete returned
 cache, including probe allocations. No preparation, source semantic heap,
 or supplied successful outcome is required. Cached capture depth is unbounded.
 
-The aggregate audit passes 1,375 jobs and 42,935 theorem dependency checks.
-Log: `/tmp/mcfta-open-depth-one-20261014-audit.log`.
-The next positive-depth target is depth two and above. General finite cold
-traversal and physical product language remain open.
+The depth-one checkpoint audit passed 1,375 jobs and 42,935 theorem
+dependency checks. Log: `/tmp/mcfta-open-depth-one-20261014-audit.log`.
+This earlier depth-one scope is superseded by the general theorem below.
+Finite repeated cold traversal and physical product language remain open.
 
-## Proposed positive-depth target
+## General actual open-depth correspondence and unfolding progress
+
+`482cc0e2` proves exact open depth through actual union reconstruction,
+ordinary merging, canonical readback, and root self filtering.
+`InternedOpenDepthSemantics` uses the existing free-name and empty-shape
+observations plus separate lexical depth inputs. A closed binder result
+has depth zero. External renaming and both actual probe arguments preserve
+the interpreted depth. The static source plan plus its input depth bound
+bounds this interpretation.
+
+`InternedOpenDepthExecution.build_depth` follows every actual repaired
+source branch. `closed_heap` and `closed_probe_equal` derive equal open
+depth for every complete Mu body and its Depth probe from actual empty-
+cache construction. This covers raw and smart binders, arbitrary closed
+captures, canonical hits, and all probe records. The old cached-depth heap
+and free-name observations determine the exact cleanup branch.
+`build_bound` and `callback_bound` derive actual returned-value bounds.
+
+`de322a41` proves `InternedStoredPlanBinderDepthProgress.build_new_lower`.
+With zero-depth lexical inputs, every complete Mu in the returned cache
+is an exact initial record or has body depth strictly below the original
+plan depth. `execute_new_lower` follows the actual stored compiler.
+`unfold_new_lower` and `unfold_decreases` prove general strict progress for
+closed unfolding. Every newly allocated Mu is covered, including open
+probe records. `constructed_unfold_decreases` derives all heap premises
+from actual empty-cache construction. No preparation, supplied successful
+outcome, or assumed progress law is used. `execute_heap` and `unfold_heap`
+preserve the new body/probe invariant for subsequent actual source work.
+
+The aggregate audit passes 1,381 jobs and 43,054 theorem dependency checks.
+Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
+The three permitted axioms remain `propext`, `Classical.choice`, and `Quot.sound`.
+The primary Sized source results remain intact. General finite repeated
+cold traversal, final tables, and physical product language remain open.
+
+## Proved positive-depth target
 
 For actual source-derived caches, consider one completed unfolding of a
-closed available Mu. The proposed next property is that every newly
-allocated closed Mu has strictly smaller `bodyDepth` than the unfolded Mu.
-The property is proved when the original body depth is one.
-Depth two and above remain unproved. Do not use it as a theorem or a supplied contract.
-Canonical hits and actual fresh interned body names must be handled.
+closed available Mu. Every newly allocated Mu has strictly smaller
+`bodyDepth` than the unfolded Mu, by `unfold_decreases`. This includes open probe records.
+`constructed_unfold_decreases` derives the cache premises from actual
+source construction. Canonical hits and fresh body names are covered.
 The cached-depth and raw identity-substitution counterexamples remain.
 
-If the property holds, count unfinished closed Mu unfoldings by decreasing
-body depth in the finite current cache. A completed unfolding settles its
-own replay. Cache growth preserves settled calls. Any new unfinished closed
+The progress theorem permits counts of unfinished closed Mu unfoldings
+by decreasing body depth in the finite current cache. A completed
+unfolding settles its own replay. Cache growth preserves settled calls. Any new unfinished closed
 Mu would have a lower degree. A fixed maximum degree and lexicographic
 degree counts could replace the old fixed-inventory budget. No such dynamic
 budget has been implemented. Closed-reader invariants already exclude open
@@ -92,9 +126,10 @@ non-decreasing new closed Mu measures would be reported.
 
 The completed output is `1336` followed by `[]`. Log:
 `/tmp/mcfta-open-rank-probe-20261014.log`.
-This finite search is validation only. It does not prove the proposed
-positive-depth property or general termination. Do not repeat the search
-without a changed measure, broader grammar, or another concrete reason.
+This earlier finite search is validation only. The later general theorem
+proves the positive-depth property. General termination remains open.
+Do not repeat the search without a changed measure, broader grammar, or
+another concrete reason.
 
 The temporary live Haskell search `/tmp/mcfta-open-rank-native-search.hs`
 checks 1,336 closed and 2,040 sentinel-capturing expressions. It examines Mu
@@ -106,15 +141,47 @@ Log: `/tmp/mcfta-open-rank-native-search-20261014.log`.
 The two repaired live Haskell alias/stutter cases report `(1,1,1)` and
 `((1,1,1),(3,3,3),(2,2,2))` for their body and probe depths. Log:
 `/tmp/mcfta-open-rank-probes-native-staged-20261014.log`.
-This supports a candidate probe-bound invariant but does not prove it.
+This earlier evidence did not prove the invariant. The later actual source
+induction now proves equality of body and Depth-probe open depth.
+A stronger temporary Haskell check compares each stored body's open depth
+with its Depth probe. It uses the same 1,336 closed and 2,040 capturing
+expressions and reports no mismatch. File:
+`/tmp/mcfta-open-depth-equality-search.hs`; log:
+`/tmp/mcfta-open-depth-equality-search-20261014.log`.
+The formal source induction now supplies the general equality proof.
+
 The corresponding larger staged Lean evaluation exceeded its ten-minute cap and was stopped with exit 130 and no result. It is inconclusive. File:
 `/tmp/mcfta-open-rank-probes-bound.lean`. Do not repeat it without a changed
 strategy. No proof or runtime failure follows from this interrupted probe.
 
+## Next dynamic budget
+
+First prove finite execution of the actual repaired cold collector. Use a
+fixed maximum body depth from the finite initial `nodeInventory`. Count
+unseen Mu identities at each degree in decreasing order. Include open
+probe records in this inventory. Append the existing structural pending-
+work measure after those counts. Each unseen queried Mu is closed by the
+proved reader invariant. Its actual unfolding consumes that degree and can
+add Mu only at lower degrees. Union visits do not increase the counts.
+
+Derive the vector change from actual coherent inventory membership and
+issued identities. Do not assume a finite future cache. A nested product of
+natural orders can prove well-foundedness for the fixed vector length.
+Connect that measure to the actual transition before claiming termination.
+Existing source completion and bounded closed-reader effects supply the
+non-rank premises. The new open-depth heap is retained by actual unfolding.
+
+Then derive finite shared traversal and its exact final tables. Row reads
+reset the local seen list. Use the existing allocation-free replay of
+completed unfolds to avoid charging the same Mu repeatedly. Also transfer
+the new heap through actual native execution before claiming that scope.
+The native successful result and semantic heap proofs remain intact, but
+their older semantic-heap predicate does not include the new open-depth heap.
+
 ## Validation
 
-Lean 4.34.1 passes 1,375 aggregate jobs and 42,935 theorem dependency checks.
+Lean 4.34.1 passes 1,381 aggregate jobs and 43,054 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-open-depth-one-20261014-audit.log`.
+`/tmp/mcfta-open-depth-progress-20261014-audit.log`.
 No Haskell source changed. Existing Nix and active-package formatter checks
 remain valid.

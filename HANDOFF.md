@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 14:05 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 14:34 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -11,7 +11,7 @@ older next-target statements. `lean/FINDINGS.md` retains historical findings.
 
 The current continuation refreshed upstream and completed the finite optimized
 Sized inverse proof, recursive knot construction, and first-order shared rows.
-It also proves cold traversal termination, exact returned tables, native/solver Sized composition,
+It also proves cold traversal termination for prepared closed inputs, exact returned tables, native/solver Sized composition,
 physical recursive intersection control and domain effects, and actual
 optional-binder substitution and constructor effects. The full uncached
 recursive caller now has derived invariants, stable bounds, literal row
@@ -64,7 +64,7 @@ in complete semantic caches under explicit WordRanges. Native output scope,
 closedness, original syntax, and general bounded cold-reader effects are now
 proved. Finite repeated traversal and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`1e28a69c`**. A later documentation commit
+The latest proof checkpoint is **`de322a41`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -932,8 +932,8 @@ closed Mu in each constructed cache. It found no newly allocated closed
 Mu whose body measure failed to decrease on unfolding. This is finite
 validation, not a proof. File `/tmp/mcfta-open-rank-probe.lean`; log
 `/tmp/mcfta-open-rank-probe-20261014.log`.
-The positive depth-one case is now proved below. The next target is depth
-two and above, including canonical hits and fresh body names.
+The depth-one checkpoint below is historical. General strict progress is
+now proved by the later open-depth correspondence and allocation bound.
 No dynamic rank budget or general cold-reader termination is proved yet.
 See [stored-plan binder depth](lean/notes-stored-plan-binder-depth.md).
 
@@ -965,8 +965,8 @@ when that original body depth is one. It examines the complete returned
 cache, including probe allocations. No preparation, source semantic heap,
 or supplied successful outcome is required. Cached capture depth is unbounded.
 
-The aggregate audit passes 1,375 jobs and 42,935 theorem dependency checks.
-Log: `/tmp/mcfta-open-depth-one-20261014-audit.log`.
+The depth-one checkpoint audit passed 1,375 jobs and 42,935 theorem
+dependency checks. Log: `/tmp/mcfta-open-depth-one-20261014-audit.log`.
 The 14:07 restart snapshot contains 1,732 Lean-tree files, the root restart
 documents, the retained fixture, and the exploratory probes and results.
 Directory: `/tmp/mcfta-formalization-depth-one-20261014-1407/`.
@@ -974,12 +974,80 @@ Directory: `/tmp/mcfta-formalization-depth-one-20261014-1407/`.
 Only audit imports, the two coverage ledgers, and the two updated component
 notes differ intentionally. All earlier proof and draft bytes remain.
 
-The next positive-depth target is depth two and above. General finite cold
-traversal and physical product language remain open.
+The later general progress theorem supersedes this depth-one-only scope.
+Finite repeated cold traversal and physical product language remain open.
 
-## PR #121 preserving refresh
+## PR #122 preserving refresh
 
-The current upstream base is `8e393e62`. Its only change is the `substFree`
+The current upstream base is `3ea4a9d8`. PR #122 changes only
+`microcfta-generator/src/Data/CFTA/Gen/Synthesis.hs`. It memoizes synthesis
+terms by argument flag and size, and relevant terms by flag, size, and
+ordered argument names. No Sized or interned runtime code changed. The
+synthesis application still has no complete formal source model.
+
+The 497-step preserving rebase completed at `fc81eacf` without conflicts.
+Backup `backup/formalization-before-synthesis-memo-refresh-20261014-1409`
+retains `e41c7f5a`. All 1,732 saved Lean-tree files matched exactly.
+Evidence: `/tmp/mcfta-synthesis-memo-refresh-20261014-1409/`.
+The post-rebase audit passed 1,375 jobs and 42,935 theorem checks. Log:
+`/tmp/mcfta-synthesis-memo-refresh-20261014-audit.log`.
+The new depth-one hash is `0d433092`; the cached bound is `d623c648` and
+stored-plan compiler depth is `c269539f`. Earlier hashes remain in backups.
+
+Both changed-library suites pass in Nix: 208 generator and 145 refinement
+examples. The unchanged core's earlier 289 passing examples remain applicable.
+Fourmolu passes for the changed module. Logs:
+`/tmp/mcfta-synthesis-memo-refresh-20261014-tests.log` and
+`/tmp/mcfta-synthesis-memo-refresh-20261014-format.log`.
+No local Haskell source or test was added. Existing active-package gild
+checks remain applicable because no Cabal file changed.
+
+## General actual open-depth correspondence and unfolding progress
+
+`482cc0e2` proves exact open depth through actual union reconstruction,
+ordinary merging, canonical readback, and root self filtering.
+`InternedOpenDepthSemantics` uses the existing free-name and empty-shape
+observations plus separate lexical depth inputs. A closed binder result
+has depth zero. External renaming and both actual probe arguments preserve
+the interpreted depth. The static source plan plus its input depth bound
+bounds this interpretation.
+
+`InternedOpenDepthExecution.build_depth` follows every actual repaired
+source branch. `closed_heap` and `closed_probe_equal` derive equal open
+depth for every complete Mu body and its Depth probe from actual empty-
+cache construction. This covers raw and smart binders, arbitrary closed
+captures, canonical hits, and all probe records. The old cached-depth heap
+and free-name observations determine the exact cleanup branch.
+`build_bound` and `callback_bound` derive actual returned-value bounds.
+
+`de322a41` proves `InternedStoredPlanBinderDepthProgress.build_new_lower`.
+With zero-depth lexical inputs, every complete Mu in the returned cache
+is an exact initial record or has body depth strictly below the original
+plan depth. `execute_new_lower` follows the actual stored compiler.
+`unfold_new_lower` and `unfold_decreases` prove general strict progress for
+closed unfolding. Every newly allocated Mu is covered, including open
+probe records. `constructed_unfold_decreases` derives all heap premises
+from actual empty-cache construction. No preparation, supplied successful
+outcome, or assumed progress law is used. `execute_heap` and `unfold_heap`
+preserve the new body/probe invariant for subsequent actual source work.
+
+The aggregate audit passes 1,381 jobs and 43,054 theorem dependency checks.
+Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
+The three permitted axioms remain `propext`, `Classical.choice`, and `Quot.sound`.
+The 14:38 restart snapshot contains 1,738 Lean-tree files, the root restart
+documents, the retained fixture, and the new source/progress audit and live
+probe evidence. Directory:
+`/tmp/mcfta-open-depth-progress-checkpoint-20261014-1438/`.
+Its preservation report compares all 1,732 saved pre-rebase files. None is
+missing. Only audit imports, two coverage ledgers, and the depth note changed
+intentionally. All earlier proof and marked-draft bytes remain unchanged.
+
+The primary Sized source results remain intact. General finite repeated
+cold traversal, final tables, and physical product language remain open.
+
+## Historical PR #121 preserving refresh
+
+The earlier upstream base was `8e393e62`. Its only change is the `substFree`
 comment qualification for smart binders and raw unused binders. Runtime code
 and Sized code did not change. The 496-step preserving rebase completed at
 `d8c500d4` without conflicts. Backup
@@ -994,7 +1062,8 @@ Fourmolu passes for the changed `Type.hs` documentation in Nix. Logs:
 `/tmp/mcfta-substfree-doc-refresh-20261014-format.log`.
 The previous 642-example Nix suite and active-package gild checks remain
 valid for the unchanged runtime source. They were not repeated for comments.
-Current depth proof: `d0680cbe`; repaired binding keys: `41171842`.
+At the PR #121 checkpoint, depth proof was `d0680cbe` and repaired
+binding keys were `41171842`.
 Earlier proof hashes in component notes remain in the preserving backups.
 The retained raw counterexample does not prove the qualified identity law.
 
@@ -1011,9 +1080,10 @@ The retained raw counterexample does not prove the qualified identity law.
    The alternative shorter-producer descent is unclosed and unused by these
    results. Preserve its histories and counterexamples.
 2. Read `lean/notes-stored-plan-binder-depth.md` and
-   `lean/notes-fresh-binding-keys.md`. Prove or refute the proposed positive
-   body-depth decrease for newly allocated closed Mu records. The static
-   compiler equality, callback-path bound, and zero case are proved.
+   `lean/notes-fresh-binding-keys.md`. General strict body-depth decrease
+   for every new Mu after closed unfolding is proved by `de322a41`. Do not
+   repeat that proof or assume the reader terminates from the rank alone.
+   Implement the dynamic inventory budget described in the component note.
    General finite physical closure remains the target. Read
    `lean/notes-native-output-cold-effects.md`. Recursive result scope,
    native output closedness, original payload syntax, and general bounded
@@ -1073,10 +1143,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,375 jobs and 42,935 theorem dependency checks**.
+The current build passes **1,381 jobs and 43,054 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-open-depth-one-20261014-audit.log`.
+Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -1108,7 +1178,7 @@ Nix store/network access requires escalation. Use one coherent Nix toolchain.
 The earlier 633-example run and temporary Sized regressions remain historical
 in older logs; do not substitute their counts for current validation.
 
-After the current PR #117 refresh, all **642** Haskell examples passed in Nix:
+After the earlier PR #119 refresh, all **642** Haskell examples passed in Nix:
 289 core, 208 generator, and 145 refinement. The new upstream collision test
 passes. Fourmolu passes for both active package trees. Cabal-gild passes for
 the active `microcfta` and `microcfta-generator` package files.
