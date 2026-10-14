@@ -1,6 +1,6 @@
 # Independent guarded language and actual stored plans
 
-Updated: 2026-10-14 17:28 CEST. Latest proof: `9288ec6d`. Earlier support/execution checkpoints remain.
+Updated: 2026-10-14 17:58 CEST. Latest proof: `a76a22f1`. Earlier support/execution checkpoints remain.
 
 ## Independent meaning
 
@@ -164,9 +164,17 @@ rank. See [unfolding budgets](notes-unfolding-budget-language.md).
 `9288ec6d` proves exact raw budgets for arbitrary nested stored compilation
 and simultaneous-substitution plans. Each accepted Mu has its actual compiled
 outer-unfolding plan at a strictly smaller bound. This law is before source
-execution. Exact smart costs need the existing deep-local cleanup decision.
-Reuse `InternedDepthSemantics.Shape` and `InternedRecordDepth*`; actual source
-and canonical-hit budget transport remain unproved.
+execution. `50d79bef` and `35e07971` derive the actual smart finish choice and
+the complete smart-budget interpretation from existing depth shapes.
+`a76a22f1` proves full actual source execution and both canonical budget
+readbacks. Stored substitution and unfolding have exact smart-plan meanings
+and retain both heaps. See [smart budget execution](notes-smart-budget-execution.md).
+
+Next prove raw-plan inclusion into smart budgets for consistent actual inputs.
+The unused smart branch needs semantic separation of root alternatives from
+deep dependencies in the existing shape. Then derive strict smaller budgets
+for actual returned outer unfoldings. New budget-heap propagation through
+cold/native execution remains open. Existing unbounded heap propagation is proved.
 
 Prove completeness of the final repaired graph and finite table for independent
 meaning. Then derive physical `ProductReadback.members`, `.rejected`, and
@@ -178,20 +186,20 @@ Keep availability, replay, and cache growth explicit. Graph acceptance is
 least finite-run acceptance. Equal unfolding equations alone do not prove
 completeness through unguarded epsilon cycles. The new `input_exact` gives
 finite input derivations for Original records. Exact budget correspondence
-now strengthens this law. Any rank transport through
-actual reconstruction and canonical hits must be derived before it is used.
+now strengthens this law. Exact canonical smart budgets are now proved, but
+raw-to-smart inclusion and strict returned-unfolding bounds remain open.
 The raw unused-binder identity counterexample still applies.
 
 ## Validation
 
-Lean 4.34.1 passes 1,430 aggregate jobs and 43,598 theorem dependency checks.
+Lean 4.34.1 passes 1,443 aggregate jobs and 43,730 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-budget-stored-plan-20261014-audit.log`.
+`/tmp/mcfta-smart-budget-execution-20261014-audit.log`.
 No production Haskell source changed. Existing Nix and formatter checks remain
 applicable. The earlier proofs, counterexamples, and marked drafts remain.
 
-All 1,787 files from the previous local snapshot remain. The current Lean
-tree has 1,789 files. Only audit imports, coverage ledgers, and the two current
-component notes changed among earlier files. All earlier proof bytes and marked drafts
+All 1,789 files from the previous local snapshot remain. The current Lean
+tree has 1,803 files. Only audit imports, coverage ledgers, and the two previous
+current component notes changed among earlier files. All earlier proof bytes and marked drafts
 are unchanged. Snapshot:
-`/tmp/mcfta-budget-stored-plan-checkpoint-20261014-1728/`.
+`/tmp/mcfta-smart-budget-execution-checkpoint-20261014-1758/`.

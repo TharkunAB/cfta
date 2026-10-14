@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 17:28 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `9288ec6d`, after `e8f06e62` and `19467e4a`. No background proof worker is active.
+Current checkpoint: **2026-10-14 17:58 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `a76a22f1`, after `50d79bef` and `35e07971`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -330,10 +330,15 @@ proves exact actual input derivations at each bound for closed available
 Original records. Erasing the bound recovers independent meaning.
 `InternedGuardedBudgetStoredPlan` proves exact raw compiler and substitution
 budgets. Each accepted Mu has its exact compiled unfolding plan at a strictly
-smaller bound before execution. Actual source and canonical-hit budget
-transport, graph/table completeness,
-and physical product language remain open. See
-[unfolding budgets](notes-unfolding-budget-language.md) and
+smaller bound before execution. `InternedGuardedBudgetExecution` now proves
+exact actual smart budgets through both probes, fresh completion, canonical
+hits, and pending heaps. The new invariant retains raw-Mu and empty-local
+ordinary-probe languages. Actual stored substitution/unfolding retain both
+heaps and have their exact smart-plan meanings. Raw-to-smart plan inclusion,
+strict actual unfolding bounds, cold/native budget-heap propagation,
+graph/table completeness, and physical product language remain open. See
+[smart budget execution](notes-smart-budget-execution.md),
+[unfolding budgets](notes-unfolding-budget-language.md), and
 [guarded compiler semantics](notes-independent-guarded-language.md).
 A finite exploratory search found no
 counterexample, which is validation only. See

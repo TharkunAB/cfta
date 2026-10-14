@@ -1,6 +1,6 @@
 # Actual stored languages at each Mu-unfolding budget
 
-Updated: 2026-10-14 17:28 CEST. Proofs: `e8f06e62`, `19467e4a`, `9288ec6d`.
+Updated: 2026-10-14 17:58 CEST. Latest execution proof: `a76a22f1`. Earlier budget checkpoints remain.
 
 ## Purpose
 
@@ -112,27 +112,25 @@ evaluation. They were stopped after source-construction evaluation was
 identified as the slow stage. They give no rank result or counterexample.
 No worker remains active.
 
-Next derive budget transport through actual source execution and canonical
-hits. Stored compilation is now proved. Raw unused-binder reconstruction
-identity remains refuted. Ordinary language equality alone supplies no budget
-bound. One-way callback bounds alone also do not prove canonical readback:
-the ordinary callback may already have removed smart binder steps.
+`50d79bef` derives the exact actual filtered and normalized binder budget
+choice. `35e07971` defines the lexical smart-budget interpretation from the
+existing depth shapes and proves renaming, upward budgets, and complete
+semantic support. `a76a22f1` proves full actual source execution, both canonical
+budget readbacks, and heap preservation. Actual stored substitution and
+outer unfolding have their exact smart-plan languages. Read
+[smart budget execution](notes-smart-budget-execution.md).
 
-The existing `InternedDepthSemantics.Shape` separates root and deep names.
-Its `binder` decision already uses `hasLocal body.deep` for smart cleanup.
-`InternedRecordDepthShape`, `InternedRecordDepthCallback`, and
-`InternedRecordDepthExecution` connect those observations to actual arbitrary
-captured records and complete source execution. `InternedDeepFreeDepth.filter_free`
-and `finish_filter_depth` derive the actual post-filter cleanup decision.
-Use these proved facts for any exact smart-budget interpretation. Do not
-introduce another free-name or cleanup analysis. A source interpretation that
-counts every smart binder as one raw step cannot be exact after cleanup.
-Then prove final repaired graph/table completeness and physical product
-readback. Do not repeat the proved soundness or finite traversal results.
+Next prove raw-plan inclusion into smart-plan budgets for actual consistent
+captured inputs. The raw compiler and smart executor theorems are exact, but
+they do not yet supply this comparison. Root alternatives and deep dependencies
+need separate semantic bounds for the existing shape fields. Then derive a
+strict smaller budget for actual returned outer unfoldings. Cold/native
+budget-heap propagation, final graph/table completeness, and physical product
+readback remain open. Raw unused-binder reconstruction identity remains refuted.
 
 ## Validation
 
-Lean 4.34.1 passes 1,430 aggregate jobs and 43,598 theorem dependency checks.
+Lean 4.34.1 passes 1,443 aggregate jobs and 43,730 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-budget-stored-plan-20261014-audit.log`. No production Haskell code changed.
+`/tmp/mcfta-smart-budget-execution-20261014-audit.log`. No production Haskell code changed.
 The prior Nix and formatter results remain applicable.

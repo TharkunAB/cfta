@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 17:28 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 17:58 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -66,7 +66,7 @@ proved. General finite repaired traversal and structural tables are now
 proved. Final-cache guarded row language is proved. Its independent-language
 transport and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`9288ec6d`**, after `e8f06e62` and `19467e4a`. A later documentation commit
+The latest proof checkpoint is **`a76a22f1`**, after `50d79bef` and `35e07971`. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -87,22 +87,32 @@ stored meaning. This bound is separate from public term rank.
 compiler and simultaneous-substitution plan. `unfold_plan_lower` derives an
 accepted exact compiled outer-unfolding plan at a strictly smaller bound.
 The lexical interpretation counts both binder flags as one raw step before
-cleanup. Actual source execution and canonical-hit budget transport remain
-open. Existing `InternedDepthSemantics.Shape` and `InternedRecordDepth*`
-already derive the deep-local decision used by smart cleanup. Reuse them.
-One-way callback bounds alone do not establish exact canonical readback.
+cleanup. `50d79bef` now derives the exact actual filtered and normalized
+budget finish choices. `35e07971` defines smart budgets from the existing
+depth shapes and proves renaming, upward budgets, and complete semantic
+support. `a76a22f1` proves exact actual source execution and both canonical
+budget readbacks. The invariant retains raw-Mu and empty-local ordinary-probe
+languages. The existing depth heap decides the smart branch. Actual stored
+substitution and unfolding retain both heaps and have exact smart-plan meaning.
+
+Raw compiler budgets and smart execution budgets still need an inclusion law
+for actual consistent captures. Use the existing root/deep shape fields for
+semantic separation. Then derive strict smaller bounds for actual returned
+outer unfoldings. New budget-heap propagation through cold/native paths,
+graph/table completeness, and physical product readback remain open.
+Read `lean/notes-smart-budget-execution.md` for exact statements and next steps.
 The finite Haskell unfolding and ordinary-probe checks found no counterexample.
 They do not prove transport. The stopped Lean generated-source probes supply
 no quantitative result. All workers are terminal. Read
 `lean/notes-unfolding-budget-language.md` for statements and evidence.
 
-Current audit: **1,430 jobs and 43,598 theorem dependency checks**. Only
+Current audit: **1,443 jobs and 43,730 theorem dependency checks**. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-budget-stored-plan-20261014-audit.log`.
-Current snapshot: `/tmp/mcfta-budget-stored-plan-checkpoint-20261014-1728/`.
-It saves all **1,789 Lean-tree files** and compares all 1,787 previous files.
-None is missing. Only audit imports, two coverage ledgers, and the two current
-component notes changed among those files. Earlier proof and marked-draft
+`/tmp/mcfta-smart-budget-execution-20261014-audit.log`.
+Current snapshot: `/tmp/mcfta-smart-budget-execution-checkpoint-20261014-1758/`.
+It saves all **1,803 Lean-tree files** and compares all 1,789 previous files.
+None is missing. Only audit imports, two coverage ledgers, and the two previous
+current component notes changed among those files. Earlier proof and marked-draft
 bytes remain unchanged. No production Haskell source changed.
 
 ## Independent guarded meaning and actual stored compiler
@@ -1394,10 +1404,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,430 jobs and 43,598 theorem dependency checks**.
+The current build passes **1,443 jobs and 43,730 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-budget-stored-plan-20261014-audit.log`.
+Log: `/tmp/mcfta-smart-budget-execution-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.

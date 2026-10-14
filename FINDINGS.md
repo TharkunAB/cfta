@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 17:28 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 17:58 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -51,21 +51,28 @@ compilation and simultaneous-substitution plans. Every accepted Mu term has
 its exact compiled outer-unfolding plan at a strictly smaller bound.
 This result is before execution. Both lexical binder flags consume one raw
 step, so the interpretation does not assert exact smart runtime costs.
-Actual source execution and canonical-hit budget transport remain unproved.
-Existing depth shapes already determine the exact smart cleanup decision.
-Use `InternedDepthSemantics.Shape` and `InternedRecordDepth*` for that work.
+`50d79bef` proves the actual exact binder finish choice. `35e07971` defines
+smart budgets with the existing depth shapes and proves complete semantic
+support. `a76a22f1` derives full actual source execution, raw-Mu and empty-local
+ordinary-probe readback, and both heap invariants. Actual stored substitution
+and unfolding have exact smart-plan meanings. Read
+[smart budget execution](lean/notes-smart-budget-execution.md).
+Raw compiler budgets still need inclusion into smart plan budgets. Derive
+semantic root/deep separation for the existing shapes, then strict smaller
+budgets for actual returned unfoldings. New cold/native budget-heap propagation,
+final graph/table completeness, and physical product readback remain open.
 Finite Haskell probes found no counterexample to strict outer-unfolding rank
 decrease or stored/ordinary-probe budget equality. They are validation only.
 The stopped Lean generated-source probes supply no quantitative result.
 Read [unfolding budgets](lean/notes-unfolding-budget-language.md).
 
-The aggregate audit passes **1,430 jobs and 43,598 theorem dependency checks**,
+The aggregate audit passes **1,443 jobs and 43,730 theorem dependency checks**,
 with only `propext`, `Classical.choice`, and `Quot.sound`. Log:
-`/tmp/mcfta-budget-stored-plan-20261014-audit.log`.
-Snapshot: `/tmp/mcfta-budget-stored-plan-checkpoint-20261014-1728/`.
-All 1,789 Lean-tree files are saved. All 1,787 previous files remain.
-Only audit imports, two coverage ledgers, and the two current component notes
-changed among those previous files. All earlier proofs and drafts retain
+`/tmp/mcfta-smart-budget-execution-20261014-audit.log`.
+Snapshot: `/tmp/mcfta-smart-budget-execution-checkpoint-20261014-1758/`.
+All 1,803 Lean-tree files are saved. All 1,789 previous files remain.
+Only audit imports, two coverage ledgers, and the two previous current component
+notes changed among those previous files. All earlier proofs and drafts retain
 their bytes. No production Haskell code changed. No worker remains active.
 
 ## Independent guarded meaning and actual stored compiler
