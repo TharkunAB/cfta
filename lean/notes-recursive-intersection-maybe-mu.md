@@ -59,6 +59,22 @@ facts, available result, physical growth, and issued history. The coverage and
 prepared-body premises remain explicit. These proofs do not establish general
 open nested completion or preparation of every newly stored Mu body.
 
+## Later full nested coverage and pending encounters
+
+The later [constructor coverage](notes-recursive-intersection-constructor-coverage.md)
+proofs cover arbitrary repaired nested syntax. Completed actual callbacks
+and optional binders retain payload coverage without preparation. Every
+actual native yielded prefix retains incoming coverage. Bounded constructor
+blocks derive their original source site and complete pre-call coverage after
+actual completed source construction.
+
+Exact pending-phase extraction excludes an incomplete final hit after two
+successful probes. Full repaired pending encounters recover the earlier
+ancestor reservation and both original available probe records. The repaired
+ordinary callback uses `ordinaryLevel depth`. `pending_encounter` connects
+actual stored-body source execution to that witness. Earlier completed-request
+replay or key separation for the joint old-probe alias remains open.
+
 ## Remaining recursive caller obligations
 
 These source binder effects and the physical branch/domain proofs now compose

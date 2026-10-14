@@ -15,7 +15,7 @@ open InternedProbeProvenance InternedFreshProbeKeys InternedNestedFacts Interned
 open InternedNestedMissReadback InternedPendingScopes InternedPendingOrigins InternedNestedCoverage
 open InternedBinderProtocol (Reference NodeKey)
 
-/-- Both normalized probes of the encountered source InternedFreshOrdinaryFacts.callback have actually completed before the missing readback. -/
+/-- Both normalized probes of the encountered source callback have actually completed before the missing readback. -/
 def Encounter [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (final : State Symbol Guard) : Prop :=
   ∃ body environment before depth afterDepth ordinary,
     Facts before ∧ Values before environment ∧ Origin key before ∧
@@ -25,7 +25,7 @@ def Encounter [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (final : Stat
     Available final depth ∧ Available final ordinary ∧
     key = muKey depth ordinary ∧ IsPending key final
 
-/-- Normalized InternedFreshOrdinaryFacts.callback execution derives its record facts on both successful and pending outcomes. -/
+/-- Normalized callback execution derives its record facts on both successful and pending outcomes. -/
 theorem callback_verified [DecidableEq (EdgeKey Symbol Guard)] (body : Syntax Symbol Guard)
     (environment : List (Value Symbol Guard)) (name : Reference) (state : State Symbol Guard)
     (facts : Facts state) (inputs : Values state environment) (localAvailable : Available state (.reference name)) :
@@ -45,7 +45,7 @@ theorem values_after (verified : Verified before outcome property) (inputs : Val
   simpa only [completed, Outcome.state] using verified.available original (inputs original member)
 
 mutual
-/-- Every arbitrary pending source expression has an actual completed pair of encountered InternedFreshOrdinaryFacts.callback probes. -/
+/-- Every arbitrary pending source expression has an actual completed pair of encountered callback probes. -/
 theorem build_encounter [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
     (environment : List (Value Symbol Guard)) (state : State Symbol Guard)
     (facts : Facts state) (inputs : Values state environment) (waiting : List NodeKey)
@@ -229,7 +229,7 @@ theorem buildEdges_encounter [DecidableEq (EdgeKey Symbol Guard)] (expressions :
 termination_by sizeOf expressions
 end
 
-/-- Unrestricted closed source execution has a concrete encountered InternedFreshOrdinaryFacts.callback and exact completed probe records if it stops pending. -/
+/-- Unrestricted closed source execution has a concrete encountered callback and exact completed probe records if it stops pending. -/
 theorem closed_encounter [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
     (key : NodeKey) (state : State Symbol Guard) (pending : InternedFreshOrdinaryConstruction.build expression [] empty = .pending key state) :
     Encounter key state := by

@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 08:01 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 08:32 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -321,6 +321,31 @@ condition for open nested binders. General output preparation and physical
 product-row correspondence remain open. See
 [finite native observations](lean/notes-recursive-intersection-native-finite.md).
 
+Payload coverage now holds on completed repaired builds with arbitrary nested
+syntax and on completed actual optional binders. Actual native yielded prefixes
+retain their incoming coverage. A bounded constructor block derives its exact
+optional-binder source site and pre-call heap. Earlier actual completed source
+construction in empty caches supplies complete coverage there. Arbitrary
+supplied heaps still require incoming coverage.
+
+A complete-cache optional binder cannot report an incomplete final hit after
+both probes return. Its pending result must occur in the Depth callback,
+ordinary callback, or fresh body callback after a genuine miss.
+`InternedFreshOrdinaryEncounter` derives the full repaired nested encounter.
+`InternedFreshOrdinaryOldCall.encounter_old` recovers the earlier ancestor
+reservation and both exact original available probe records. The current
+callback captures the newly reserved reference. Both old probe boundary lists
+exclude it. The ordinary callback uses `ordinaryLevel depth`.
+`SourceRecursiveIntersectionMaybeMu.pending_encounter` connects the actual
+source call to this witness without an assumed callback execution or probe
+relation. Signature checks confirm the repaired executor.
+
+Pending exclusion still needs earlier completed-request replay or key
+separation for the exact joint old-probe alias. Normalized output absence does
+not establish independence of the original memo key. Preparation for all
+reached open nested bodies also remains open. See
+[constructor coverage](lean/notes-recursive-intersection-constructor-coverage.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
@@ -343,16 +368,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`2129c3ed`**; later commits record this handoff.
+The latest proof checkpoint is **`f79d0417`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,291 build targets and 41,663 theorem
+The current Lean 4.34.1 audit passes **1,301 build targets and 41,703 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-native-returns-or-pending-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-pending-encounter-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **32% at 08:01 CEST**.
+No background proof worker is active. Weekly allowance was **32% at 08:32 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

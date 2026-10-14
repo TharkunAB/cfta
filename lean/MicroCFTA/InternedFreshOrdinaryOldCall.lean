@@ -7,7 +7,7 @@ import MicroCFTA.InternedBoundaryAge
 A pending call captures its active ancestor's actual fresh reference.
 Both of its completed probe results already exist before that reference
 was allocated. The source reservation and complete cache readback derive
-these facts without an assumed relation between InternedFreshOrdinaryFacts.callback executions.
+these facts without an assumed relation between callback executions.
 -/
 namespace MicroCFTA.InternedFreshOrdinaryOldCall
 open Cache InternedConstructorTemplates InternedNestedConstruction InternedRecordCoherence
@@ -55,7 +55,7 @@ theorem encounter_old [DecidableEq (EdgeKey Symbol Guard)] (key : NodeKey) (fina
     cutCoherent, beforeFacts, depthFacts, finalFacts, inputs, cutGrowth, depthGrowth, ordinaryGrowth, missing, installed,
     capturedName, depthDone, ordinaryDone, depthSame.symm ▸ oldDepthAvailable, ordinarySame.symm ▸ oldOrdinaryAvailable, actualKey, pending⟩
 
-/-- Unrestricted closed source execution exposes the same exact old-probe InternedFreshOrdinaryFacts.callback obligation. -/
+/-- Unrestricted closed source execution exposes the same exact old-probe callback obligation. -/
 theorem closed_old_call [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
     (key : NodeKey) (final : State Symbol Guard) (stopped : InternedFreshOrdinaryConstruction.build expression [] empty = .pending key final) :
     ∃ body environment cut before depth afterDepth ordinary,

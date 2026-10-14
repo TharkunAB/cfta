@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 08:01 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 08:32 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -37,10 +37,14 @@ running cells. The body-limit invariant now covers every compiled branch and
 actual continuation. Strong bound induction and structural code induction
 derive a finite native return or exact pending constructor from closed original
 roots under checked word ranges. Source failures, absent handles, and busy
-cells are excluded. General successful first-run completion still needs the
-constructor pending exclusion and output preparation.
+cells are excluded. Payload coverage now holds through arbitrary repaired
+nested returns and all actual native yielded prefixes. Actual constructor
+blocks derive their source site and pending callback phase. Full repaired
+pending encounters recover the ancestor reservation and both original probes.
+General successful first-run completion still needs pending exclusion and
+output preparation.
 **No background proof worker is active.**
-The latest proof checkpoint is **`2129c3ed`**. A later documentation commit
+The latest proof checkpoint is **`f79d0417`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -65,7 +69,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **32% at 08:01 CEST**. This is a historical value.
+The last observed value was **32% at 08:32 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -100,7 +104,7 @@ files retain their bytes. New proofs are separate files.
 Before new work, inspect allowance, status, log, worktrees, and stashes.
 Preserve a backup and refresh `origin/microcfta`. If upstream moved, rebase the
 local continuation as requested. Preserve local source repairs through any
-overlap. The latest `git pull --ff-only origin microcfta` at 07:23 CEST
+overlap. The latest `git pull --ff-only origin microcfta` at 08:03 CEST
 reported `Already up to date.` Git metadata writes require escalation in this sandbox.
 
 Preserve the earlier backups and manifests, including
@@ -536,18 +540,64 @@ requires coverage and `PreparedWithoutMu`. Closed roots do not by themselves
 supply preparation for open nested binders. Do not assume a no-pending callback
 contract. Product-row correspondence and output preparation remain open.
 
+## Actual constructor coverage and repaired pending encounters
+
+`InternedFreshOrdinaryCoverage` proves incoming payload coverage on every
+actual returned repaired build, including arbitrary raw and smart nested
+binders. `SourceRecursiveIntersectionMaybeMuCoverage` proves the same for
+actual stored callbacks, probes, and optional binders. Cache validity and
+physical growth hold on both outcomes. No preparation or completion is assumed.
+
+`Steps.covered` derives coverage at every actual native yielded prefix without
+word bounds, body preparation, or memo provenance. `constructor_trace` starts
+with an actual bounded constructor block and derives its earlier optional
+binder, body, continuation, pre-call native state, and exact source pending
+equation. `constructor_trace_covered` derives coverage at that pre-call heap.
+Completed repaired source construction in empty caches supplies initial
+coverage for arbitrary nested source syntax. Arbitrary supplied heaps still
+need incoming coverage.
+
+`construct_pending_phase` excludes an incomplete final hit after successful
+probes. A pending result must stop in the Depth callback, the ordinary callback,
+or the fresh body callback after a genuine miss. `constructor_trace_phase`
+connects these cases to the actual blocked native run.
+
+`InternedFreshOrdinaryEncounter` derives the actual nested callback whose
+two repaired probes completed before a missing read. `encounter_old` in
+`InternedFreshOrdinaryOldCall` identifies both with the ancestor's original
+available probe records. The actual environment captures the ancestor's newly
+reserved reference, which is absent from the old probe boundary lists.
+The ordinary callback uses `ordinaryLevel depth`. `SourceRecursiveIntersectionMaybeMu.pending_encounter`
+derives this full repaired encounter from actual stored-body source execution,
+source facts, body availability, and complete incoming coverage. It assumes
+no callback termination or probe-equivalence contract.
+
+Read [constructor coverage](lean/notes-recursive-intersection-constructor-coverage.md)
+first. The remaining alias case needs earlier completed-request replay or
+key separation for both exact old probes despite the captured fresh ancestor.
+Do not infer original memo-key independence from normalized output absence.
+Old ordinary-choice mismatch results need repaired counterparts before use.
+Native successful completion, result preparation, and product rows remain open.
+
 ## Remaining priorities
 
-1. Read `lean/notes-recursive-intersection-native-finite.md` first. The original
-   physical input view, exact copied language, finite semantic schedule,
-   all compiled strict request limits, active-bound maintenance, and finite
-   native return-or-pending observations are proved. Do not repeat them.
-   Derive pending exclusion for actual optional binders reached by the driver.
-   Start with `SourceRecursiveIntersectionMaybeMu.complete` and its coverage
-   and `PreparedWithoutMu` conditions. Derive the conditions for the intended
-   scope, or prove the larger open nested constructor invariant. Closed root
-   syntax alone does not give preparation. A supplied no-pending callback or
-   completed native trace does not close this obligation.
+1. Read `lean/notes-recursive-intersection-constructor-coverage.md` first.
+   The original input view and exact copied language, finite semantic schedule,
+   all compiled strict limits, active-bound maintenance, finite native
+   return-or-pending induction, actual prefix coverage, source-site and callback
+   phase extraction, and full repaired nested encounters are proved.
+   Do not repeat them. Use `InternedFreshOrdinaryOldCall.encounter_old` with
+   `SourceRecursiveIntersectionMaybeMu.pending_encounter`. Exclude the exact
+   joint old-probe alias despite the captured fresh ancestor reference.
+   Derive an earlier completed request or sufficient key separation. Keep both
+   actual probe records and `ordinaryLevel depth`. Normalized dependency erasure
+   and profile equality are not original memo-key independence. Do not reuse
+   old ordinary-choice mismatch arguments without repaired counterparts.
+   Coverage at reached sites follows from earlier actual completed repaired
+   source construction. It remains explicit for arbitrary supplied heaps.
+   `PreparedWithoutMu` is still not derived for all reached open nested bodies.
+   Prove the larger constructor invariant where needed. A supplied no-pending
+   callback or completed native trace does not close the source obligation.
    Derive sufficient successful first-run native bounds and actual output
    preparation. Preserve exact source/domain effects, both memo families,
    publication before demand, ordered tagged operands, shifted domain keys,
@@ -608,10 +658,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,291 jobs and 41,663 theorem dependency checks**.
+The current build passes **1,301 jobs and 41,703 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-native-returns-or-pending-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-pending-encounter-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -645,6 +695,8 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `f79d0417` | Exact pending callback phases, full repaired nested encounters and old probe records, and actual optional-binder source bridge. |
+| `83d79a1d` | Full repaired nested payload coverage, actual native prefix coverage, and exact constructor-site extraction. |
 | `2129c3ed` | Exclude source failures; derive finite native return or exact pending constructor from closed original roots. |
 | `88abb29e` | Strong bound induction and structural code induction derive finite native observations without supplied completion. |
 | `08340409` | Word checks on actual finite prefixes, derived completed range certificates, and exact terminal sequencing. |

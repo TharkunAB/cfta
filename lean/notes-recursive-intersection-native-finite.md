@@ -93,8 +93,14 @@ exclude pending optional binders at the actual source states and bodies
 reached by this driver. `SourceRecursiveIntersectionMaybeMu.complete` already
 does so under complete payload coverage and `PreparedWithoutMu`. Derive the
 needed conditions for the intended input scope, or prove the larger nested
-constructor invariant. Do not add a supplied no-pending callback contract as
-a replacement for this source proof.
+constructor invariant. The later
+[constructor coverage](notes-recursive-intersection-constructor-coverage.md)
+proofs now derive coverage at actual reached sites after completed repaired
+source construction. They derive exact pending phases and the full repaired
+nested encounter with both old ancestor probe records. Pending exclusion
+still needs earlier completed-request replay or key separation for that exact
+alias. Read the later note first. Do not add a supplied no-pending callback
+contract as a replacement for this source proof.
 
 `PreparedWithoutMu` allows opaque closed nested Mu records. It excludes
 dynamic open nested Mu requests. Closed original roots can contain such

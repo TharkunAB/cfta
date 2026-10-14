@@ -99,9 +99,12 @@ now proved at `2129c3ed`. Read
 actual closed original roots under checked words. No source failure, absent
 handle, busy cell, or yielded outcome satisfies that result.
 
-Next exclude pending optional binders at their actual source caches and
-bodies. Derive coverage and `PreparedWithoutMu`, or the larger nested
-constructor invariant. Closed roots alone do not give preparation.
+Later [constructor coverage](notes-recursive-intersection-constructor-coverage.md)
+proofs derive coverage, exact source sites and callback phases, and full
+repaired pending encounters with both old ancestor probe records. Next exclude
+that joint old-probe alias through earlier completion or key separation.
+Preparation for all reached open nested bodies remains open. Closed roots
+alone do not give preparation.
 Derive successful first-run completion, output preparation, and actual
 product-row membership/rejection. Do not supply a completed trace or a
 no-pending callback contract as a replacement source proof.
