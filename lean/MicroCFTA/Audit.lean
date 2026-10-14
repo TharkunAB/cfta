@@ -1405,6 +1405,12 @@ import MicroCFTA.InternedFreshOrdinaryCostComposition
 import MicroCFTA.InternedFreshOrdinaryCostRequest
 import MicroCFTA.InternedFreshOrdinaryCosts
 import MicroCFTA.InternedFreshOrdinaryStoredCosts
+import MicroCFTA.InternedOccurrenceCostSupport
+import MicroCFTA.InternedStoredCostInputs
+import MicroCFTA.InternedStoredCostRetention
+import MicroCFTA.InternedPreparedCostRetention
+import MicroCFTA.InternedFreshOrdinaryUnfoldRank
+import MicroCFTA.InternedFreshOrdinaryGateRank
 /-!
 # Proof dependency audit
 
