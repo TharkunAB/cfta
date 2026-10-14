@@ -275,7 +275,7 @@ minimizePoolOn entailment similarityKey entries = Compile.reportTimeLimit $ do
         width = length (show (length entries - 1))
         poolSymbol index =
             let digits = show index
-             in fromString $ "__microcfta_pool_" <> replicate (width - length digits) '0' <> digits
+             in fromString $ "__cfta_pool_" <> replicate (width - length digits) '0' <> digits
     classes =
         Map.fromList
             [ (symbol, similarityKey value)

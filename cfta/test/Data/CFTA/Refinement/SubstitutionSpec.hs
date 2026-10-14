@@ -53,8 +53,8 @@ spec =
             -- A fresh value name that an ambient assumption names would read
             -- that assumption, so the query is Unknown; another fresh name is
             -- unaffected.
-            let fresh = "__microcfta_actual_0"
-                other = "__microcfta_actual_1"
+            let fresh = "__cfta_actual_0"
+                other = "__cfta_actual_1"
                 isZero name = Formula.Atom Formula.Eq (Formula.Var name) (Formula.Lit 0)
             results <- withZ3Assuming [] [isZero fresh] $ \solver ->
                 (,,)
@@ -67,8 +67,8 @@ spec =
                 let original = Formula.Forall [("x", IntSort)] $ Formula.Atom Formula.Eq (Formula.App "x" []) (Formula.Lit 0)
                     rewritten = Formula.substitute [("unused", Formula.Var "x")] original
                     expected =
-                        Formula.Forall [("__microcfta_bound_1", IntSort)] $
-                            Formula.Atom Formula.Eq (Formula.Var "__microcfta_bound_1") (Formula.Lit 0)
+                        Formula.Forall [("__cfta_bound_1", IntSort)] $
+                            Formula.Atom Formula.Eq (Formula.Var "__cfta_bound_1") (Formula.Lit 0)
                 rewritten `shouldBe` expected
                 Formula.freeNames rewritten `shouldBe` []
                 withZ3Assuming [("x", IntSort)] [Formula.Atom Formula.Eq (Formula.Var "x") (Formula.Lit 0)] $ \solver -> do
@@ -108,15 +108,15 @@ spec =
                         Formula.Forall [("f", FunctionSort [IntSort] IntSort)] $
                             Formula.Atom Formula.Eq (Formula.App "f" [Formula.Lit 0]) (Formula.App "g" [Formula.Lit 0])
                     expected =
-                        Formula.Forall [("__microcfta_bound_1", FunctionSort [IntSort] IntSort)] $
-                            Formula.Atom Formula.Eq (Formula.App "__microcfta_bound_1" [Formula.Lit 0]) (Formula.App "f" [Formula.Lit 0])
+                        Formula.Forall [("__cfta_bound_1", FunctionSort [IntSort] IntSort)] $
+                            Formula.Atom Formula.Eq (Formula.App "__cfta_bound_1" [Formula.Lit 0]) (Formula.App "f" [Formula.Lit 0])
                 Formula.substitute [("g", Formula.Var "f")] original `shouldBe` expected
 
             it "keeps the last of repeated binders effective after renaming" $ do
                 let original = Formula.Forall [("x", IntSort), ("x", IntSort)] $ Formula.Atom Formula.Eq (Formula.Var "x") (Formula.Lit 0)
                     expected =
-                        Formula.Forall [("__microcfta_bound_1", IntSort), ("__microcfta_bound_1", IntSort)] $
-                            Formula.Atom Formula.Eq (Formula.Var "__microcfta_bound_1") (Formula.Lit 0)
+                        Formula.Forall [("__cfta_bound_1", IntSort), ("__cfta_bound_1", IntSort)] $
+                            Formula.Atom Formula.Eq (Formula.Var "__cfta_bound_1") (Formula.Lit 0)
                 Formula.substitute [("unused", Formula.Var "x")] original `shouldBe` expected
 
             it "keeps the first nonidentity replacement for a duplicate name" $ do

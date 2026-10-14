@@ -681,7 +681,7 @@ take integer literals and arithmetic, the comparisons `.==`, `./=`, `.<`,
 `.<=`, `.>`, and `.>=`, and the connectives `.&&`, `.||`, and `lnot`. The
 `Transition` and `RefinedSymbol` patterns hold the formula of a refinement,
 stated about the value variable `valueName` from `Data.CFTA.Symbol`;
-`refinementFormula` gives it. The name has the reserved prefix `__microcfta_`,
+`refinementFormula` gives it. The name has the reserved prefix `__cfta_`,
 so a name that the caller makes with `variable` does not collide with it.
 
 An LTA uses the same `Constraint` type as every other automaton, so `union`, `intersect`, `boundDepth`, and the enumerator work on an LTA
@@ -902,11 +902,11 @@ This program prints:
 ```text
 node @root
 |
-`- sqrt [refinement(0) entails __microcfta_value >= 0]
+`- sqrt [refinement(0) entails __cfta_value >= 0]
    |
    `- node @0:0
       |
-      `- zero {__microcfta_value >= 0}
+      `- zero {__cfta_value >= 0}
 ```
 
 `renderNode` and `renderTransition` are caller code. Change them to use domain

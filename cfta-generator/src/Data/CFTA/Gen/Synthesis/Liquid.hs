@@ -767,7 +767,7 @@ valued components query typ = case typ of
 component.
 -}
 functionConstant :: Text -> Name
-functionConstant name = Name ("__microcfta_function_" <> name)
+functionConstant name = Name ("__cfta_function_" <> name)
 
 {- | The application of a function value to an argument, as the logic sees
 it: the measure @ap@, which the solver must declare with two arguments.
@@ -783,7 +783,7 @@ lifted :: Formula.Term -> RType -> Formula
 lifted function typ = case typ of
     RBase _ refinement -> Formula.substitute [(value, function)] refinement
     RArrow name parameter result ->
-        let bound = Name ("__microcfta_bound_" <> name)
+        let bound = Name ("__cfta_bound_" <> name)
             argument = Formula.Var bound
             assumption = case parameter of
                 RBase _ refinement -> Formula.substitute [(value, argument)] refinement
@@ -1044,7 +1044,7 @@ inferred function formals pathConditions arguments result =
                  in (actual, Just (Formula.substitute [(value, actual)] refinement))
             RArrow{} -> (Formula.Var name, Nothing)
         | argument <- arguments
-        , let name = Name ("__microcfta_argument_" <> Text.pack (show (length (takeWhile (/= stateNode argument) nodes))))
+        , let name = Name ("__cfta_argument_" <> Text.pack (show (length (takeWhile (/= stateNode argument) nodes))))
         ]
 
 -- | The term that a refinement says the value equals, when it says so in a top-level conjunct.
@@ -1446,7 +1446,7 @@ goalAutomaton entailment conditionals goal states = case goal of
         | stateRequirement state == Top = pure True
         | otherwise = holds Top (stateRequirement state)
     branch realize base refinement terms condition = do
-        let name = Name "__microcfta_condition"
+        let name = Name "__cfta_condition"
             chosen = Atom Formula.Eq (Formula.Var name) (Formula.Lit 1)
             known = case stateType condition of
                 RBase _ facts -> Formula.substitute [(value, Formula.Var name)] facts

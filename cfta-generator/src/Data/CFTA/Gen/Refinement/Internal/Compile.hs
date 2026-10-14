@@ -607,11 +607,11 @@ closedKey key = OpenKey key 0 true (Just 1)
 
 -- | The name of one open integer variable.
 integerName :: VarIndex -> String
-integerName index = "__microcfta_integer_" <> show index
+integerName index = "__cfta_integer_" <> show index
 
 -- | Whether a name is the name of an open integer variable.
 isIntegerName :: String -> Bool
-isIntegerName = isPrefixOf "__microcfta_integer_"
+isIntegerName = isPrefixOf "__cfta_integer_"
 
 {- | Compile one generator whose members can leave integer variables open.
 

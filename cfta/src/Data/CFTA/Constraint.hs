@@ -348,13 +348,13 @@ containsSame (Or guards) = any containsSame guards
 
 {- | The reserved solver name of the term at one path of a 'Holds' guard.
 
-The name starts with the reserved prefix @__microcfta_@, which the library
+The name starts with the reserved prefix @__cfta_@, which the library
 also uses for its integer and pool names. 'Data.CFTA.Refinement.Expression.variable'
 documents the reservation. A user name with that prefix can collide with these
 names, and nothing checks for such a name.
 -}
 contractTermName :: ArgumentIndex -> String
-contractTermName index = "__microcfta_contract_" <> show index
+contractTermName index = "__cfta_contract_" <> show index
 
 -- | Build a conjunction without redundant Boolean structure.
 conjoin :: [Guard] -> Guard

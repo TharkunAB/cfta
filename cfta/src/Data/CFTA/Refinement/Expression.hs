@@ -149,7 +149,7 @@ deriving via Enumerated () instance Literal ()
 
 {- | Refer to a named value. This does not declare its solver sort.
 
-Names that start with @__microcfta_@ are reserved for the solver names that
+Names that start with @__cfta_@ are reserved for the solver names that
 the library makes. A user name with that prefix can collide with them.
 -}
 variable :: String -> Expr

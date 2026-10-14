@@ -378,7 +378,7 @@ substitutionValues observedAt sameAt guard =
 
         available =
             filter (`Set.notMember` used) $
-                [fromString $ "__microcfta_actual_" <> show index | index <- [0 :: Integer ..]]
+                [fromString $ "__cfta_actual_" <> show index | index <- [0 :: Integer ..]]
 
         used =
             Set.fromList $

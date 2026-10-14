@@ -1206,7 +1206,7 @@ leaf, a node, an import, a choice of these, or a mapped or paid generator. On
 an import with a recursive root, it applies to the root only, not to the
 recursive occurrences. A condition names only `v` and ambient names, and on
 `every` only `v` and constants; a relation between children belongs in a
-contract. Names that start with `__microcfta_` are reserved for the compiler.
+contract. Names that start with `__cfta_` are reserved for the compiler.
 
 `node` and `guarded` use the universal result refinement. `refinedNode`
 supplies a fixed result refinement, and `refinedNodeByRoots` computes one from

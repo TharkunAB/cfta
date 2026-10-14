@@ -326,12 +326,12 @@ substituteWith unsupported replacements = inFormula (filter (\(name, term) -> te
     freshNames avoid =
         [ candidate
         | index <- [1 :: Integer ..]
-        , let candidate = Name $ Text.pack $ "__microcfta_bound_" <> show index
+        , let candidate = Name $ Text.pack $ "__cfta_bound_" <> show index
         , not $ HashSet.member candidate avoid
         ]
 
 {- | A formula as text, in the notation of the operators of
-"Data.CFTA.Refinement.Expression", as in @__microcfta_value >= 0 && x /= y@. A
+"Data.CFTA.Refinement.Expression", as in @__cfta_value >= 0 && x /= y@. A
 conjunction or a disjunction inside another formula gets parentheses, and so
 does an atom inside a negation.
 -}
