@@ -1,4 +1,7 @@
 import Lean
+import MicroCFTA.SourceRecursiveIntersectionBudgetEffects
+import MicroCFTA.SourceRecursiveIntersectionNativeBudgetHeap
+import MicroCFTA.SourceRecursiveIntersectionNativeColdExact
 import MicroCFTA.MergedFreshOrdinaryBudgetEffects
 import MicroCFTA.SourceFreshOrdinaryColdBudgetHeap
 import MicroCFTA.MergedFreshOrdinaryExposureInputs
