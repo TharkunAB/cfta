@@ -1,4 +1,8 @@
 import Lean
+import MicroCFTA.InternedGuardedAbstractSupport
+import MicroCFTA.InternedGuardedSyntaxSupport
+import MicroCFTA.InternedGuardedProfileSupport
+import MicroCFTA.InternedGuardedProbeHeap
 import MicroCFTA.SourceSizedFiniteKeysDispatchGate
 import MicroCFTA.SourceSizedFiniteKeysDispatchScans
 import MicroCFTA.SourceSizedFiniteKeysDispatchApi
