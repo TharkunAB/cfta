@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 04:07 CEST**, upstream `f59c198d`.
-The latest proof commit is `bf98ccfe`. No background proof worker is active.
+Current checkpoint: **2026-10-14 04:35 CEST**, upstream `f59c198d`.
+The latest proof commit is `6b8ceed8`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -93,11 +93,17 @@ after physical and domain growth without changing either later cache.
 native machine triples and actual current records. Concrete completed
 executions supply first-writer memo provenance and stable hit replay.
 The nonnegative first-key bound and distinct swapped keys are checked.
-Edge entries, pending native publication, recursive memo threading, and
-product correspondence remain open. See
-[recursive memo](notes-recursive-intersection-memo.md).
+`SourceRecursiveIntersectionEdgeMemo` extends concrete provenance and stable
+replay to checked raw row keys. `FlatMemoThunk` and
+`SourceRecursiveIntersectionThunks*` derive typed pending publication,
+original request identity, recursive pending observations, demand, completion,
+and retention through source growth. Completed native observations recover
+concrete kernel replay. Body execution still uses uncached recursion. Full
+recursive memo scheduling and product correspondence remain open. See
+[recursive memo](notes-recursive-intersection-memo.md) and
+[native memo thunks](notes-recursive-intersection-thunks.md).
 
-Nested binder construction, native cyclic product rows, pending memo values,
+Nested binder construction, native cyclic product rows, thunk scheduling,
 and complete recursive memo-effect traces remain open. Free-name projection and ordinary-root deep
 observations are derived; general cached-depth and binder-heap induction
 remain open. See [physical construction](notes-physical-intersection-rows.md).
@@ -111,7 +117,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,223 targets and 40,615 theorem dependency checks**
+The current audit passes **1,228 targets and 40,726 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

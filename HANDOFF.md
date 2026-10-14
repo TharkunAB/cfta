@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 04:07 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 04:35 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -15,9 +15,10 @@ It also proves cold traversal termination, exact returned tables, native/solver 
 physical recursive intersection control and domain effects, and actual
 optional-binder substitution and constructor effects. The full uncached
 recursive caller now has derived invariants, stable bounds, literal row
-readback, complete replay, and checked completed node-memo provenance.
+readback, complete replay, checked completed node/edge memo provenance,
+and typed pending publication, demand, completion, and exact native observations.
 **No background proof worker is active.**
-The latest proof checkpoint is **`bf98ccfe`**. A later documentation commit
+The latest proof checkpoint is **`6b8ceed8`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -42,7 +43,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **34% at 04:05 CEST**. This is a historical value.
+The last observed value was **34% at 04:35 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -317,19 +318,34 @@ first-key range, and distinct reversed keys for unequal operands.
 later growth. Initialization, growth, first-writer insertion, and
 `memo_hit` are derived. A hit has current availability and finite stable
 kernel replay without allocation. Open results can be placeholders.
-Pending publication, edge provenance, and recursive memo threading remain
-open. Read [recursive memo](lean/notes-recursive-intersection-memo.md).
+`SourceRecursiveIntersectionEdgeMemo` extends this provenance to actual
+guarded edge executions and checked ordered raw row keys. It derives current
+row residency and exact stable replay.
+
+`FlatMemoThunk` and `SourceRecursiveIntersectionThunks*` now derive typed
+pending publication, captured request identity, recursive pending observations,
+demand, completion, and retention through source growth in separate node and
+edge families. Completed native lookup and demand recover exact concrete
+kernel replay without effects. The source placeholders retain memo bypass.
+The completion body premises still use uncached execution. Full recursive
+memo scheduling and first-run termination remain open. Read
+[recursive memo](lean/notes-recursive-intersection-memo.md) and
+[native memo thunks](lean/notes-recursive-intersection-thunks.md).
 
 ## Remaining priorities
 
-1. Extend completed provenance to native edge memo entries. Use the checked
-   guarded edge replay and existing shifted-domain `edgeKey_exact` theorem.
-   Then thread native node and edge memo state through recursive requests.
+1. Thread native node and edge memo state through recursive body execution.
+   Typed pending publication, demand, completion, source growth, captured
+   request identity, and completed native observations are proved. The current
+   completion bodies still use the uncached kernel. Use
+   `lean/notes-recursive-intersection-thunks.md` for the exact next target.
    Preserve publication before thunk forcing, shifted domain keys, ordered
-   tagged operands, reversed swap requests, and RecIntersect bypass. Do not
-   replace the pending source protocol with completed-only insertion. Full
-   guarded kernel replay and completed node-entry provenance are proved;
-   do not repeat them or assume purity. Derive the physical input view
+   tagged operands, reversed swap requests, and RecIntersect bypass. Retain
+   the current continuation and source effects when a bounded execution yields.
+   Do not treat busy as a successful result or replace the pending source
+   protocol with completed-only insertion. Full guarded kernel replay and
+   completed node/edge provenance are proved. Do not repeat them or assume purity.
+   Derive the physical input view
    and a finite reachable payload inventory. Connect actual requests to the
    semantic schedule and derive a sufficient bound. Stable larger bounds
    and replay alone do not prove successful first-run completion. Use actual
@@ -390,10 +406,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,223 jobs and 40,615 theorem dependency checks**.
+The current build passes **1,228 jobs and 40,726 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-recursive-memo-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-thunks-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -427,6 +443,9 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `6b8ceed8` | Source node/edge pending request identity, demand, completion, growth, and exact completed native observations. |
+| `bb2da67b` | Typed memo publication before evaluation, recursive pending observations, and first-writer thunk retention. |
+| `be6da8b3` | Concrete guarded edge memo provenance, checked raw row keys, and stable replay. |
 | `bf98ccfe` | Complete guarded kernel replay and checked native-key completed node-memo provenance. |
 | `95792559` | Full uncached recursive caller invariants, stable larger bounds, and actual guarded row readback. |
 | `0bf65249` | Full nested rebinding, exact optional-binder effects, finite prepared probes, and exact pending-key classification. |

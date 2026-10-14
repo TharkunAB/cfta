@@ -1,6 +1,6 @@
 # Completed recursive caller replay and memo provenance
 
-Proof checkpoint: `bf98ccfe`. Upstream: `f59c198d`, 2026-10-14.
+Original node-layer checkpoint: `bf98ccfe`. Upstream: `f59c198d`, 2026-10-14.
 Source: `Interned/Operations.hs:intersectOpen`, `intersectOpenEdge`, and the
 canonical domain and constructor caches.
 
@@ -72,11 +72,14 @@ operational correspondence.
 
 ## Next obligations
 
-Extend completed provenance to the native edge memo key and actual guarded
-edge executions. The edge replay theorem and existing shifted-domain
-`edgeKey_exact` theorem provide the checked components.
+Completed edge provenance and typed pending thunk observations are now proved
+in `SourceRecursiveIntersectionEdgeMemo`, `FlatMemoThunk`, and
+`SourceRecursiveIntersectionThunks*`. Checked keys identify the original
+physical request in every thunk phase. Publication precedes forcing. Demand,
+completion, source growth, and completed native observations preserve concrete
+provenance. Read [native memo thunks](notes-recursive-intersection-thunks.md).
 
-Thread native node and edge memo state through recursive requests. Retain
+Thread native node and edge memo state through recursive body requests. Retain
 publication before value forcing, placeholder bypass, ordered operands,
 reversed swap requests, and actual constructor/domain effects. Derive
 correspondence with the uncached kernel from completed provenance and exact
@@ -89,7 +92,7 @@ preparation or a larger cold-exposure invariant. General open nested first-run
 completion, native thunk forcing, runtime primitives, and verified Haskell
 extraction remain open. The existing Sized and cold-table proofs remain.
 
-## Validation
+## Original node-layer validation
 
 All five modules are imported by `MicroCFTA.Audit`. The pinned Lean 4.34.1
 aggregate build passes 1,223 jobs and 40,615 theorem dependency checks.
