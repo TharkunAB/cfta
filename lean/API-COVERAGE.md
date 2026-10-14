@@ -1,13 +1,14 @@
 # Public API and source correspondence
 
-The current preserving PR #119 rebase is `018ae4db` on `c66d10ea`.
-All 1,707 saved Lean-tree files matched exactly. The synthesis state-label
-escape fix and its regression are retained. It is separate from the proved
-SMT-name adapter. Sized/core refinement source did not change. See the root
-handoff for backup, manifest, validation, and historical hash mapping.
+The current preserving PR #121 rebase is `d8c500d4` on `8e393e62`.
+All 1,728 saved Lean-tree files matched exactly. Upstream qualifies the
+`substFree` identity comment for raw unused binders. Runtime and Sized code
+did not change. The qualified smart-binder identity law is not proved by
+this comment or the retained raw counterexample. Earlier hashes remain in
+the preserving backup branches. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 13:30 CEST**, upstream `c66d10ea`.
-The latest proof commit is `7f1daf23`. No background proof worker is active.
+Current checkpoint: **2026-10-14 14:05 CEST**, upstream `8e393e62`.
+The latest proof commit is `1e28a69c`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -273,8 +274,12 @@ See [repaired binding keys](notes-fresh-binding-keys.md).
 `InternedStoredPlanBinderDepth.encode_depth` derives exact binder nesting
 of the actual stored plan while treating closed captures as constants.
 Actual callback crossings respect that static budget. Zero depth is exactly
-binder-free execution and cannot add Mu records. General positive-depth
-unfolding progress remains unproved. A finite exploratory search found no
+binder-free execution and cannot add Mu records. Actual normalization
+preserves open-depth bounds. `InternedStoredPlanBinderDepthOne` proves that
+closed depth-one unfolding gives every newly allocated Mu a zero-depth
+body. The entire returned cache is covered, including probe allocations.
+Earlier records and closed captures can have arbitrary cached depth.
+General progress at depths two and above remains unproved. A finite exploratory search found no
 counterexample, which is validation only. See
 [stored-plan binder depth](notes-stored-plan-binder-depth.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
@@ -287,7 +292,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,371 targets and 42,877 theorem dependency checks**
+The current audit passes **1,375 targets and 42,935 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **642 Haskell examples** passed after the PR #119 refresh: 289 core,
 208 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.

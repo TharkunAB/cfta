@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 13:30 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 14:05 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -64,7 +64,7 @@ in complete semantic caches under explicit WordRanges. Native output scope,
 closedness, original syntax, and general bounded cold-reader effects are now
 proved. Finite repeated traversal and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`7f1daf23`**. A later documentation commit
+The latest proof checkpoint is **`1e28a69c`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -100,7 +100,7 @@ Missing or stale data is not permission to use credits.
 
 Repository: `/home/tritlo/Code/mcfta`, Ubuntu/WSL2, Bash.
 Branch: `formalization/microcfta-sized-20261014`.
-Upstream: `origin/microcfta` at **`c66d10ea`** (PR #119).
+Upstream: `origin/microcfta` at **`8e393e62`** (PR #121).
 
 The 10:12 pull fetched upstream and could not fast-forward. The authorized
 preserving rebase completed at 10:16 after 461 steps. Its result was `e3a33ed5`.
@@ -791,7 +791,7 @@ remains open. Do not infer `NoNewMu` from single unfolding completion.
 
 ## PR #119 preserving refresh
 
-The current base is `origin/microcfta` at `c66d10ea`. The 479-step rebase
+The PR #119 refresh used `origin/microcfta` at `c66d10ea`. Its 479-step rebase
 completed at `018ae4db`. Backup
 `backup/formalization-before-state-label-refresh-20261014-1220` retains
 `8eeb1eea`. All 1,707 saved Lean-tree files matched exactly after rebase.
@@ -892,8 +892,10 @@ Kernel evaluation proves the exact observation. Live Haskell also reports
 `(False,1,0)`. Log:
 `/tmp/mcfta-identity-substitution-native-20261014.log`.
 
-The unqualified physical identity postcondition in `Type.hs` is false for
-this raw-binder case. Runtime behavior was not changed. `substitutionPlan`
+The earlier unqualified physical identity postcondition in `Type.hs` was
+false for this raw-binder case. PR #121 now qualifies the source comment.
+Runtime behavior did not change. The qualified smart-binder identity law
+remains a separate unproved source-correspondence target. `substitutionPlan`
 rebuilds open Mu records with smart `createMu`. It intentionally does not use
 the cached pattern-synonym matcher fast paths. A general physical closure
 proof must account for smart cleanup. No language change is claimed.
@@ -930,15 +932,71 @@ closed Mu in each constructed cache. It found no newly allocated closed
 Mu whose body measure failed to decrease on unfolding. This is finite
 validation, not a proof. File `/tmp/mcfta-open-rank-probe.lean`; log
 `/tmp/mcfta-open-rank-probe-20261014.log`.
-The next target is the positive-depth decrease for new closed Mu records in
-actual source-derived heaps, including canonical hits and fresh body names.
+The positive depth-one case is now proved below. The next target is depth
+two and above, including canonical hits and fresh body names.
 No dynamic rank budget or general cold-reader termination is proved yet.
 See [stored-plan binder depth](lean/notes-stored-plan-binder-depth.md).
 
-The current preservation check compared all 1,723 files saved at 13:06.
+The earlier preservation check compared all 1,723 files saved at 13:06.
 No file is missing. Only the two coverage documents and audit imports changed
 intentionally among those files. Report:
 `/tmp/mcfta-binding-plan-depth-20261014-preservation.json`.
+
+## Actual normalization bounds and the positive depth-one case
+
+`262242f9` proves that coherent available records satisfy
+`valueDepth value ≤ value.depth`. The actual repaired ordinary placeholder
+also bounds this measure. Closed captures can make the cached bound loose.
+This does not make cached depth a decreasing unfolding measure.
+
+`1e28a69c` proves open-depth bounds through actual node construction, union
+flattening and merging, canonical cache readback, and root self filtering.
+`InternedStoredPlanBinderDepthFlat.callback_bound` follows binder-free
+callbacks with arbitrary closed captures and bounded open lexical inputs.
+
+`InternedStoredPlanBinderDepthOne.build_new_zero` follows every actual
+source branch whose maximum binder depth is at most one. Each final Mu is
+an exact earlier record or has an open body plan of depth zero. The initial
+cache can contain deeper Mu records. `execute_new_zero` derives the same
+property for actual stored substitution with zero-depth replacements.
+`unfold_new_zero` applies it to closed available input with body depth at
+most one. `unfold_one_decreases` proves strict decrease for every new Mu
+when that original body depth is one. It examines the complete returned
+cache, including probe allocations. No preparation, source semantic heap,
+or supplied successful outcome is required. Cached capture depth is unbounded.
+
+The aggregate audit passes 1,375 jobs and 42,935 theorem dependency checks.
+Log: `/tmp/mcfta-open-depth-one-20261014-audit.log`.
+The 14:07 restart snapshot contains 1,732 Lean-tree files, the root restart
+documents, the retained fixture, and the exploratory probes and results.
+Directory: `/tmp/mcfta-formalization-depth-one-20261014-1407/`.
+`preservation.json` compares the 1,728 pre-rebase files: none is missing.
+Only audit imports, the two coverage ledgers, and the two updated component
+notes differ intentionally. All earlier proof and draft bytes remain.
+
+The next positive-depth target is depth two and above. General finite cold
+traversal and physical product language remain open.
+
+## PR #121 preserving refresh
+
+The current upstream base is `8e393e62`. Its only change is the `substFree`
+comment qualification for smart binders and raw unused binders. Runtime code
+and Sized code did not change. The 496-step preserving rebase completed at
+`d8c500d4` without conflicts. Backup
+`backup/formalization-before-substfree-doc-refresh-20261014-1337` retains
+`d0750228`. All 1,728 saved Lean-tree files matched exactly after rebase.
+The manifest and restart copies are under
+`/tmp/mcfta-substfree-doc-refresh-20261014-1337/`.
+
+The unchanged Lean audit passes 1,371 jobs and 42,877 theorem checks.
+Fourmolu passes for the changed `Type.hs` documentation in Nix. Logs:
+`/tmp/mcfta-substfree-doc-refresh-20261014-audit.log` and
+`/tmp/mcfta-substfree-doc-refresh-20261014-format.log`.
+The previous 642-example Nix suite and active-package gild checks remain
+valid for the unchanged runtime source. They were not repeated for comments.
+Current depth proof: `d0680cbe`; repaired binding keys: `41171842`.
+Earlier proof hashes in component notes remain in the preserving backups.
+The retained raw counterexample does not prove the qualified identity law.
 
 ## Remaining priorities
 
@@ -1015,10 +1073,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,371 jobs and 42,877 theorem dependency checks**.
+The current build passes **1,375 jobs and 42,935 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-stored-plan-depth-20261014-audit.log`.
+Log: `/tmp/mcfta-open-depth-one-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.

@@ -79,8 +79,10 @@ an unused raw Mu. Substitution replaces the outer reference with itself.
 The exact resulting body has a different identity and cached depth 0 instead
 of 1. Free-name lists remain equal. Kernel evaluation proves this observation.
 
-The source's `substFree` comment states an unqualified physical identity
-postcondition. That claim fails for this raw-binder case. `substitutionPlan`
+The earlier `substFree` comment stated an unqualified physical identity
+postcondition. That claim fails for this raw-binder case. Upstream PR #121
+now limits the comment to binders made by `createMu`. The qualified law
+remains unproved in the source model. `substitutionPlan`
 rebuilds an open Mu body with smart `createMu`, which removes the unused
 binder. It intentionally avoids pattern-synonym matcher fast paths.
 A general reconstruction proof must model that cleanup. No language change

@@ -1,6 +1,8 @@
 # Actual stored-plan binder depth
 
-Updated: 2026-10-14 13:30 CEST. Proof checkpoint: `7f1daf23`.
+Updated: 2026-10-14 14:05 CEST. Latest proof checkpoint: `1e28a69c`.
+The compiler and zero-case proof is now `d0680cbe` after rebase. Its earlier
+hash `7f1daf23` remains in the preserving backup.
 
 ## Proved compiler correspondence
 
@@ -31,12 +33,41 @@ body-plan depth is zero. Ordinary node and edge allocations remain possible.
 No preparation, validity, or semantic-heap premise is required for this
 absence of new Mu records.
 
+## Actual normalization bounds and the positive depth-one case
+
+`262242f9` proves that coherent available records satisfy
+`valueDepth value ≤ value.depth`. The actual repaired ordinary placeholder
+also bounds this measure. Closed captures can make the cached bound loose.
+This does not make cached depth a decreasing unfolding measure.
+
+`1e28a69c` proves open-depth bounds through actual node construction, union
+flattening and merging, canonical cache readback, and root self filtering.
+`InternedStoredPlanBinderDepthFlat.callback_bound` follows binder-free
+callbacks with arbitrary closed captures and bounded open lexical inputs.
+
+`InternedStoredPlanBinderDepthOne.build_new_zero` follows every actual
+source branch whose maximum binder depth is at most one. Each final Mu is
+an exact earlier record or has an open body plan of depth zero. The initial
+cache can contain deeper Mu records. `execute_new_zero` derives the same
+property for actual stored substitution with zero-depth replacements.
+`unfold_new_zero` applies it to closed available input with body depth at
+most one. `unfold_one_decreases` proves strict decrease for every new Mu
+when that original body depth is one. It examines the complete returned
+cache, including probe allocations. No preparation, source semantic heap,
+or supplied successful outcome is required. Cached capture depth is unbounded.
+
+The aggregate audit passes 1,375 jobs and 42,935 theorem dependency checks.
+Log: `/tmp/mcfta-open-depth-one-20261014-audit.log`.
+The next positive-depth target is depth two and above. General finite cold
+traversal and physical product language remain open.
+
 ## Proposed positive-depth target
 
 For actual source-derived caches, consider one completed unfolding of a
 closed available Mu. The proposed next property is that every newly
 allocated closed Mu has strictly smaller `bodyDepth` than the unfolded Mu.
-This property is unproved. Do not use it as a theorem or a supplied contract.
+The property is proved when the original body depth is one.
+Depth two and above remain unproved. Do not use it as a theorem or a supplied contract.
 Canonical hits and actual fresh interned body names must be handled.
 The cached-depth and raw identity-substitution counterexamples remain.
 
@@ -65,10 +96,25 @@ This finite search is validation only. It does not prove the proposed
 positive-depth property or general termination. Do not repeat the search
 without a changed measure, broader grammar, or another concrete reason.
 
+The temporary live Haskell search `/tmp/mcfta-open-rank-native-search.hs`
+checks 1,336 closed and 2,040 sentinel-capturing expressions. It examines Mu
+records reachable from the final root through children, bodies, and probes.
+It does not inspect unreachable discarded records in the global cache.
+No examined stored body has open depth above the maximum of its two probes.
+Log: `/tmp/mcfta-open-rank-native-search-20261014.log`.
+
+The two repaired live Haskell alias/stutter cases report `(1,1,1)` and
+`((1,1,1),(3,3,3),(2,2,2))` for their body and probe depths. Log:
+`/tmp/mcfta-open-rank-probes-native-staged-20261014.log`.
+This supports a candidate probe-bound invariant but does not prove it.
+The corresponding larger staged Lean evaluation exceeded its ten-minute cap and was stopped with exit 130 and no result. It is inconclusive. File:
+`/tmp/mcfta-open-rank-probes-bound.lean`. Do not repeat it without a changed
+strategy. No proof or runtime failure follows from this interrupted probe.
+
 ## Validation
 
-Lean 4.34.1 passes 1,371 aggregate jobs and 42,877 theorem dependency checks.
+Lean 4.34.1 passes 1,375 aggregate jobs and 42,935 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-stored-plan-depth-20261014-audit.log`.
+`/tmp/mcfta-open-depth-one-20261014-audit.log`.
 No Haskell source changed. Existing Nix and active-package formatter checks
 remain valid.
