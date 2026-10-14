@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 17:18 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `19467e4a`, after `e8f06e62`. No background proof worker is active.
+Current checkpoint: **2026-10-14 17:28 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `9288ec6d`, after `e8f06e62` and `19467e4a`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -327,8 +327,11 @@ at each Mu-unfolding bound. Actual ordinary normalization preserves each
 budget. Cleanup retains terms without increasing it, and root-self filtering
 preserves the budgeted least language. `SourceRecursiveIntersectionBudgetExact`
 proves exact actual input derivations at each bound for closed available
-Original records. Erasing the bound recovers independent meaning. Actual
-reconstruction and canonical-hit budget transport, graph/table completeness,
+Original records. Erasing the bound recovers independent meaning.
+`InternedGuardedBudgetStoredPlan` proves exact raw compiler and substitution
+budgets. Each accepted Mu has its exact compiled unfolding plan at a strictly
+smaller bound before execution. Actual source and canonical-hit budget
+transport, graph/table completeness,
 and physical product language remain open. See
 [unfolding budgets](notes-unfolding-budget-language.md) and
 [guarded compiler semantics](notes-independent-guarded-language.md).

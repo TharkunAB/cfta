@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 17:18 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 17:28 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -46,18 +46,25 @@ bound for closed available Original records under every ambient environment.
 Erasing the bound recovers independent stored meaning. This budget is
 separate from public distinct-term rank.
 
-Actual reconstruction and canonical-hit budget transport remain unproved.
+`9288ec6d` proves exact raw budgets of actual arbitrary nested stored
+compilation and simultaneous-substitution plans. Every accepted Mu term has
+its exact compiled outer-unfolding plan at a strictly smaller bound.
+This result is before execution. Both lexical binder flags consume one raw
+step, so the interpretation does not assert exact smart runtime costs.
+Actual source execution and canonical-hit budget transport remain unproved.
+Existing depth shapes already determine the exact smart cleanup decision.
+Use `InternedDepthSemantics.Shape` and `InternedRecordDepth*` for that work.
 Finite Haskell probes found no counterexample to strict outer-unfolding rank
 decrease or stored/ordinary-probe budget equality. They are validation only.
 The stopped Lean generated-source probes supply no quantitative result.
 Read [unfolding budgets](lean/notes-unfolding-budget-language.md).
 
-The aggregate audit passes **1,428 jobs and 43,534 theorem dependency checks**,
+The aggregate audit passes **1,430 jobs and 43,598 theorem dependency checks**,
 with only `propext`, `Classical.choice`, and `Quot.sound`. Log:
-`/tmp/mcfta-budget-input-20261014-audit.log`.
-Snapshot: `/tmp/mcfta-budget-input-checkpoint-20261014-1718/`.
-All 1,787 Lean-tree files are saved. All 1,777 previous files remain.
-Only audit imports, two coverage ledgers, and the independent-language note
+`/tmp/mcfta-budget-stored-plan-20261014-audit.log`.
+Snapshot: `/tmp/mcfta-budget-stored-plan-checkpoint-20261014-1728/`.
+All 1,789 Lean-tree files are saved. All 1,787 previous files remain.
+Only audit imports, two coverage ledgers, and the two current component notes
 changed among those previous files. All earlier proofs and drafts retain
 their bytes. No production Haskell code changed. No worker remains active.
 

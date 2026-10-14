@@ -1,6 +1,6 @@
 # Independent guarded language and actual stored plans
 
-Updated: 2026-10-14 17:18 CEST. Latest proof: `19467e4a`. Earlier support/execution checkpoints remain.
+Updated: 2026-10-14 17:28 CEST. Latest proof: `9288ec6d`. Earlier support/execution checkpoints remain.
 
 ## Independent meaning
 
@@ -161,6 +161,13 @@ derivations at each bound for closed available Original records. Erasing the
 bound recovers independent stored meaning. This is separate from public term
 rank. See [unfolding budgets](notes-unfolding-budget-language.md).
 
+`9288ec6d` proves exact raw budgets for arbitrary nested stored compilation
+and simultaneous-substitution plans. Each accepted Mu has its actual compiled
+outer-unfolding plan at a strictly smaller bound. This law is before source
+execution. Exact smart costs need the existing deep-local cleanup decision.
+Reuse `InternedDepthSemantics.Shape` and `InternedRecordDepth*`; actual source
+and canonical-hit budget transport remain unproved.
+
 Prove completeness of the final repaired graph and finite table for independent
 meaning. Then derive physical `ProductReadback.members`, `.rejected`, and
 `product_exact`. Soundness and native/cold/shared semantic heap propagation
@@ -177,14 +184,14 @@ The raw unused-binder identity counterexample still applies.
 
 ## Validation
 
-Lean 4.34.1 passes 1,428 aggregate jobs and 43,534 theorem dependency checks.
+Lean 4.34.1 passes 1,430 aggregate jobs and 43,598 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-budget-input-20261014-audit.log`.
+`/tmp/mcfta-budget-stored-plan-20261014-audit.log`.
 No production Haskell source changed. Existing Nix and formatter checks remain
 applicable. The earlier proofs, counterexamples, and marked drafts remain.
 
-All 1,777 files from the previous local snapshot remain. The current Lean
-tree has 1,787 files. Only audit imports, coverage ledgers, and this component
-note changed among earlier files. All earlier proof bytes and marked drafts
+All 1,787 files from the previous local snapshot remain. The current Lean
+tree has 1,789 files. Only audit imports, coverage ledgers, and the two current
+component notes changed among earlier files. All earlier proof bytes and marked drafts
 are unchanged. Snapshot:
-`/tmp/mcfta-budget-input-checkpoint-20261014-1718/`.
+`/tmp/mcfta-budget-stored-plan-checkpoint-20261014-1728/`.

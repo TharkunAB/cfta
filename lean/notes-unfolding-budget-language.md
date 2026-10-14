@@ -1,6 +1,6 @@
 # Actual stored languages at each Mu-unfolding budget
 
-Updated: 2026-10-14 17:18 CEST. Proofs: `e8f06e62`, `19467e4a`.
+Updated: 2026-10-14 17:28 CEST. Proofs: `e8f06e62`, `19467e4a`, `9288ec6d`.
 
 ## Purpose
 
@@ -71,6 +71,25 @@ between its budget language and actual `InputDerivation` at each bound.
 `erase_exact` proves that existentially erasing the bound gives the independent
 stored least language. No assumed copy-language or rank-transport law is used.
 
+## Actual stored compilation
+
+`9288ec6d` adds `InternedGuardedBudgetSyntax`. Every lexical branch retains
+guards and ordered children. Both binder flags consume one raw step. This
+interpretation describes a plan before smart cleanup. It does not claim exact
+runtime binder costs. Positivity and the smaller-bound binder equation hold.
+
+`InternedGuardedBudgetStoredPlan.encode_language` proves exact raw-budget
+meaning of the actual arbitrary nested stored compiler. The theorem retains
+coherent canonical slot lookup, closed captured records, nearest local
+shadowing, full guards, and ordered children. `execute_plan_language` derives
+the simultaneous replacement interpretation at each identical bound.
+
+`unfold_plan_shift` proves that adding one raw Mu step to the exact compiled
+outer-unfolding plan gives the original stored Mu budget language.
+`unfold_plan_lower` gives an accepted plan at a strictly smaller bound for
+every accepted Mu term. This is the actual pre-execution compiler law.
+It does not yet give a bound for the actual returned unfolding value.
+
 ## Exploratory checks and remaining obligations
 
 The local Haskell unfolding probe checked 600 generated programs, seven
@@ -93,15 +112,27 @@ evaluation. They were stopped after source-construction evaluation was
 identified as the slow stage. They give no rank result or counterexample.
 No worker remains active.
 
-Next derive budget transport through actual stored compilation, source
-execution, and canonical hits. Raw unused-binder reconstruction identity
-remains refuted. Ordinary language equality alone supplies no budget bound.
+Next derive budget transport through actual source execution and canonical
+hits. Stored compilation is now proved. Raw unused-binder reconstruction
+identity remains refuted. Ordinary language equality alone supplies no budget
+bound. One-way callback bounds alone also do not prove canonical readback:
+the ordinary callback may already have removed smart binder steps.
+
+The existing `InternedDepthSemantics.Shape` separates root and deep names.
+Its `binder` decision already uses `hasLocal body.deep` for smart cleanup.
+`InternedRecordDepthShape`, `InternedRecordDepthCallback`, and
+`InternedRecordDepthExecution` connect those observations to actual arbitrary
+captured records and complete source execution. `InternedDeepFreeDepth.filter_free`
+and `finish_filter_depth` derive the actual post-filter cleanup decision.
+Use these proved facts for any exact smart-budget interpretation. Do not
+introduce another free-name or cleanup analysis. A source interpretation that
+counts every smart binder as one raw step cannot be exact after cleanup.
 Then prove final repaired graph/table completeness and physical product
 readback. Do not repeat the proved soundness or finite traversal results.
 
 ## Validation
 
-Lean 4.34.1 passes 1,428 aggregate jobs and 43,534 theorem dependency checks.
+Lean 4.34.1 passes 1,430 aggregate jobs and 43,598 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-budget-input-20261014-audit.log`. No production Haskell code changed.
+`/tmp/mcfta-budget-stored-plan-20261014-audit.log`. No production Haskell code changed.
 The prior Nix and formatter results remain applicable.
