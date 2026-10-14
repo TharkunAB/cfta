@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 09:15 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 09:25 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -358,8 +358,20 @@ proof invariant, not an implementation defect. The finite Boolean preparation
 test is proved equivalent to `PreparedWithoutMu`. All concrete observations
 use kernel reduction.
 
-Pending exclusion still needs earlier completed-request replay or key
-separation for the exact joint old-probe alias. Normalized output absence does
+`InternedFreshOrdinaryActiveReplay.Origin.completed_representative` now
+derives an earlier completed source route inside the actual raw Depth build.
+It retains ordinary choices and uses Depth for fresh choices. Arbitrary
+original captured values remain unchanged. Each crossing retains its actual
+source body and repaired ordinary level. `InternedFreshOrdinaryEarlierPair.Site.earlier_pair`
+derives both earlier probes and a completed request whose payload survives
+to the ancestor cut. Its pair differs from the later original ancestor pair.
+No earlier completed callback or route witness is supplied.
+
+Pending exclusion still needs live-input comparison or key separation for
+the exact joint old-probe alias. The older live-input comparison handles only
+literal-reference environments and the older ordinary policy. The repaired
+comparison must retain arbitrary captured values and actual computed levels.
+Normalized output absence does
 not establish independence of the original memo key. Prove a broader open
 nested constructor invariant instead of universal preparation preservation. See
 [constructor coverage](lean/notes-recursive-intersection-constructor-coverage.md).
@@ -386,16 +398,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`0b123bab`**; later commits record this handoff.
+The latest proof checkpoint is **`3da93bb3`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,307 build targets and 42,042 theorem
+The current Lean 4.34.1 audit passes **1,311 build targets and 42,066 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-repaired-active-path-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-earlier-pair-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **32% at 09:14 CEST**.
+No background proof worker is active. Weekly allowance was **32% at 09:24 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

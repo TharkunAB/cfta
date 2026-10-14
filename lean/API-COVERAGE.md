@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 09:15 CEST**, upstream `f59c198d`.
-The latest proof commit is `0b123bab`. No background proof worker is active.
+Current checkpoint: **2026-10-14 09:25 CEST**, upstream `f59c198d`.
+The latest proof commit is `3da93bb3`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -149,8 +149,13 @@ probe records. The two probes derive equal captured free-name memberships.
 Every live interned capture predates the ancestor reservation. Its fresh name
 is absent. The actual optional-binder bridge requires an incoming full repaired
 semantic context; native prefix preservation of that context remains open.
-Earlier completed-request replay or key separation for the joint old-probe
-alias remains open. Capture absence does not establish request equality.
+Actual earlier completed routes now retain both repaired probes and a
+completed request payload before the ancestor reservation. That earlier pair
+differs from the later original pair. Captured values can be arbitrary records.
+Live-input comparison or key separation for the joint old-probe alias remains
+open. The older live-input theorem covers only literal-reference environments
+and the older ordinary policy. Capture absence does not establish request
+equality.
 An actual 22-step native prefix on repaired closed original source-built inputs
 refutes preservation of `PreparedWithoutMu` at every optional-binder body.
 Bounded execution of that example returns. This is a proof-invariant boundary,
@@ -181,7 +186,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,307 targets and 42,042 theorem dependency checks**
+The current audit passes **1,311 targets and 42,066 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

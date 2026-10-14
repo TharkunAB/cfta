@@ -1,6 +1,6 @@
 # Actual native constructor coverage and repaired pending encounters
 
-Proof checkpoints: `83d79a1d`, `f79d0417`, `4ca51381`, and `0b123bab`.
+Proof checkpoints: `83d79a1d`, `f79d0417`, `4ca51381`, `0b123bab`, and `3da93bb3`.
 Upstream: `f59c198d`, 2026-10-14.
 Read [finite native observations](notes-recursive-intersection-native-finite.md)
 and [actual optional binders](notes-recursive-intersection-maybe-mu.md).
@@ -164,13 +164,46 @@ pending optional binder to this full witness. It uses the body's available
 leaves, complete incoming coverage, and an incoming repaired semantic context.
 General preservation of that semantic context on native prefixes remains open.
 
+## Earlier completed routes and actual different request pairs
+
+`InternedFreshOrdinaryCompletedSites` extracts actual completed child calls
+from ordered members and edges. Each call retains its original full semantic
+context and the cache histories before and after that call.
+
+`InternedFreshOrdinaryProbeChoiceSites.completed_route` follows both actual
+probes at every binder in a completed enclosing run. Its crossing records
+retain the actual Depth callback that selects `ordinaryLevel`. Captured
+environments can contain arbitrary available records. It reuses only the pure
+`Route` syntax from the older proof, not the older executor or ordinary choice.
+
+`InternedFreshOrdinaryActiveReplay.Origin.completed_representative` starts
+from the active origin's actual completed raw Depth build. It derives a
+completed representative of the current pending site's syntax before the
+origin reservation. It retains ordinary choices and replaces fresh choices
+with Depth. Each crossing keeps its actual body and computed ordinary level.
+The original captured values remain unchanged after the lexical prefix.
+`Site.crossed_fresh_not_captured` also excludes every actual crossed fresh
+interned name from the current capture set.
+
+`InternedFreshOrdinaryEarlierPair.request_record` proves that any completed
+canonical request leaves a payload at its actual pair key. It needs no callback
+termination or coherence premise. `Site.earlier_pair` derives the earlier
+completed route, both actual repaired probes, its completed request, and the
+payload retained at the origin cut. At least one earlier probe reference
+differs from the original ancestor probe reference. Otherwise that payload
+would occupy the ancestor's missing key before its reservation.
+
 ## Next proof target and retained boundaries
 
 Exclude the full repaired encounter for the intended constructor scope.
 The difficult case has two exact old probe records even though the current
-callback captures the ancestor's newly reserved reference. Derive an earlier
-completed request at that source site, or another sufficient key-separation
-argument. Keep both actual probe identities and the repaired ordinary choice.
+callback captures the ancestor's newly reserved reference. An earlier completed
+route and a different earlier pair are now derived. Use `Site.earlier_pair`.
+Relate its pair difference to a changed live lexical input. The older live-input
+comparison handles only literal-reference environments and the older ordinary
+policy. Prove the repaired comparison for arbitrary captured values. Fixed
+captured records must remain equal, while crossed references can differ.
+Retain each actual `ordinaryLevel`. Do not equate computed levels across runs.
 
 Do not infer independence of the original substitution memo key from absence
 in normalized output. Smart construction can erase a dependency. The retained
@@ -192,9 +225,10 @@ constructor/equality proofs and all marked drafts.
 
 ## Validation and diagnostics
 
-Pinned Lean 4.34.1 passes 1,307 jobs and 42,042 theorem dependency checks.
+Pinned Lean 4.34.1 passes 1,311 jobs and 42,066 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are used.
-Log: `/tmp/mcfta-repaired-active-path-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-earlier-pair-20261014-audit.log`.
+The active-path audit passed 1,307 jobs and 42,042 checks.
 The preparation boundary audit passed 1,303 jobs and 41,982 checks.
 The pending encounter audit passed 1,301 jobs and 41,703 checks.
 The intermediate coverage audit passed 1,296 jobs and 41,685 checks.
