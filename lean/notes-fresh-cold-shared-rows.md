@@ -1,6 +1,6 @@
 # Repaired cold shared traversal and exact Sized classes
 
-Updated: 2026-10-14 15:23 CEST. Latest table checkpoint: `e70160d6`.
+Updated: 2026-10-14 15:49 CEST. Latest table checkpoint: `b3008aba`.
 General shared termination: `68e790f0`.
 Earlier checkpoints: `c410bc0a` and `75c50b4d`.
 
@@ -96,9 +96,9 @@ with the actual finite trace, stable outer/read bounds, semantic heaps,
 coverage, the body/probe heap, growth/history, and resident closed edges.
 No preparation, fixed future cache, or supplied trace is assumed.
 
-The aggregate audit passes 1,395 jobs and 43,222 theorem dependency checks.
+The aggregate audit passes 1,401 jobs and 43,344 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-native-final-language-20261014-audit.log`.
+`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
 This earlier result proves finite table structure and exact row readback.
 The later native and repaired-language checkpoints below also prove native
 heap propagation and final-cache guarded row language. Initial-source
@@ -139,17 +139,22 @@ for arbitrary raw binders is refuted. Then derive physical
 The earlier prepared graph uses the old executor; its preparation premise
 remains valid in its stated fragment.
 
-Current audit: 1,395 jobs and 43,222 theorem dependency checks. Only
+Current audit: 1,401 jobs and 43,344 theorem dependency checks. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-native-final-language-20261014-audit.log`.
+`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
 
 ## Remaining language obligation
 
-Prove transport from actual repaired source construction to independent
-intended guarded Mu semantics across allocation and canonical hits. Then
-connect physical product rows and rejected edges. The final-cache guarded
-law is complete in its stated scope. Native body/probe heap propagation,
-finite native output tables, and final-cache row language must not be repeated.
+`b3008aba` defines independent guarded stored-record and lexical meanings.
+It proves actual metadata support, normalization, cleanup, root-self filtering,
+and full nested stored-plan compilation. Its substitution and unfolding laws
+concern actual compiled plans. Actual repaired source execution and canonical
+Mu-hit language preservation remain open. Read
+[the guarded compiler note](notes-independent-guarded-language.md).
+Prove actual execution and semantic probe-heap preservation together. Then
+connect repaired final graph language to independent meaning and physical
+product row/rejection laws. Do not repeat finite native tables or their exact
+final-cache guarded readback.
 
 ## Raw-binder reconstruction boundary
 

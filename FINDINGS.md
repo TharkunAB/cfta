@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 15:23 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 15:49 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -34,6 +34,32 @@ Unknown and unchanged exceptions remain separate. Replies need not be stable.
 External Sat/Unsat correctness and completion remain explicit contracts.
 See [finite map Sized](lean/notes-sized-finite-keys.md).
 
+## Independent guarded meaning and actual stored compiler
+
+`b3008aba` adds `InternedGuardedLanguage` and `InternedGuardedSyntax`.
+Actual stored bodies and full lexical source syntax have independent positive
+least-language interpretations. Probe metadata and the cold reader do not
+define these meanings. The interpretations retain full guards and child order.
+`meaning_free` proves support from actual coherent cached free names.
+Closed captures are independent of ambient reference languages.
+
+`InternedGuardedConstructors` proves actual node/union normalization,
+unused/bare-self cleanup, and both raw/smart finish laws for this meaning.
+`InternedGuardedSelfFilter` proves actual callback root filtering through its
+real union reconstruction. It retains closed candidates and least languages.
+`InternedGuardedStoredPlan.encode_language` proves the exact nested compiler
+law with coherent slot lookup and nearest local shadowing.
+`execute_plan_language` and `unfold_plan_language` derive simultaneous
+substitution and outer-Mu plan semantics without an assumed execution law.
+
+These are actual compiler and normalization laws. The actual Mu constructor
+and canonical-hit execution language law is still open. Prove repaired source
+execution and its semantic probe-heap invariant together. Then connect final
+repaired graph language to independent meaning and physical product readback.
+Do not infer execution correspondence from the compiler law alone.
+Read `lean/notes-independent-guarded-language.md` for the exact next target,
+the proposed probe invariant, and all scope distinctions.
+
 ## Native heap propagation and exact final-cache guarded language
 
 `9a0df4cb` proves `SourceRecursiveIntersectionOpenDepthEffects` and
@@ -60,17 +86,17 @@ The native cold-table theorems also return this exact guarded-language law.
 
 The final-cache qualification is essential. These theorems do not equate
 the final repaired graph with an initial graph that discards allocated caches,
-or with independent intended Mu semantics. Next prove that source-language
-transport through actual repaired substitution, fresh identities, and
-canonical hits. Follow `substitutionPlan`; literal identity reconstruction
+or with independent intended Mu semantics. The later `b3008aba` compiler checkpoint defines independent meaning and
+proves exact stored-plan semantics. Actual source construction and canonical
+hit language preservation remain open. Follow `substitutionPlan`; literal identity reconstruction
 for arbitrary raw binders is refuted. Then derive physical
 `ProductReadback.members` and `.rejected` and apply `product_exact`.
 The earlier prepared graph uses the old executor; its preparation premise
 remains valid in its stated fragment.
 
-Current audit: 1,395 jobs and 43,222 theorem dependency checks. Only
+Current audit: 1,401 jobs and 43,344 theorem dependency checks. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-native-final-language-20261014-audit.log`.
+`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
 
 ## Finite general final tables
 
@@ -84,9 +110,9 @@ with the actual finite trace, stable outer/read bounds, semantic heaps,
 coverage, the body/probe heap, growth/history, and resident closed edges.
 No preparation, fixed future cache, or supplied trace is assumed.
 
-The aggregate audit passes 1,395 jobs and 43,222 theorem dependency checks.
+The aggregate audit passes 1,401 jobs and 43,344 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-native-final-language-20261014-audit.log`.
+`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
 This earlier result proves finite table structure and exact row readback.
 The later native and repaired-language checkpoints below also prove native
 heap propagation and final-cache guarded row language. Initial-source
@@ -94,9 +120,9 @@ language transport and physical product language remain open. The earlier prepar
 executor. Do not remove its preparation premise from termination alone.
 
 The latest restart snapshot is
-`/tmp/mcfta-native-final-language-checkpoint-20261014-1523/`.
-It contains 1,754 Lean-tree files, root restart documents, the retained fixture,
-and the new audits. Its manifest compares all 1,744 previous checkpoint files.
+`/tmp/mcfta-independent-guarded-checkpoint-20261014-1549/`.
+It contains 1,761 Lean-tree files, root restart documents, the retained fixture,
+and the new audits. Its manifest compares all 1,754 previous checkpoint files.
 No file is missing. Only audit imports, coverage ledgers, and three component notes changed
 among those files. All other
 proofs and all marked drafts remain byte-identical.
@@ -135,8 +161,8 @@ semantic/coverage and body/probe heap preservation, resident closed edges,
 and stability at all larger bounds. `constructed_read_closed` derives all
 cache premises from actual repaired empty-cache source construction.
 
-Audit: 1,395 jobs and 43,222 theorem dependency checks. Log:
-`/tmp/mcfta-native-final-language-20261014-audit.log`.
+Audit: 1,401 jobs and 43,344 theorem dependency checks. Log:
+`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
 General shared traversal is proved below the current source heap boundary by
 `68e790f0`. Its unfinished-unfolding budget uses actual allocation-free replay. Native propagation of the body/probe heap is now proved by `9a0df4cb`.
 Initial-source language transport and physical product language remain open. See
@@ -921,9 +947,9 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`e70160d6`**; later commits record this handoff.
+The latest proof checkpoint is **`b3008aba`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,395 build targets and 43,222 theorem
+The current Lean 4.34.1 audit passes **1,401 build targets and 43,344 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
 Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
 After PR #119, all **642** examples passed in Nix: 289 core, 208

@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 15:23 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `e70160d6`. No background proof worker is active.
+Current checkpoint: **2026-10-14 15:49 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `b3008aba`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -305,8 +305,15 @@ native-output tables from checked words and closed Original inputs.
 origins and full guarded row language. `SourceFreshOrdinaryColdTableLanguage`
 identifies the complete table with the repaired graph in its final cache.
 Both native cold-table entry points return that language equation.
-Initial-source language transport through allocation/canonical hits and
-physical product language remain open.
+`InternedGuardedLanguage` and `InternedGuardedSyntax` define independent
+positive least-language meanings. Actual coherent free-name support, ordinary
+normalization, smart cleanup, raw/smart finish, and callback root filtering
+retain these meanings. `InternedGuardedStoredPlan` proves exact arbitrary
+nested compilation, simultaneous-substitution plans, and outer-Mu plans.
+Actual source execution and semantic probe-heap preservation through canonical
+hits remain open. Independent-language transport to the repaired final graph
+and physical product language also remain open. See
+[guarded compiler semantics](notes-independent-guarded-language.md).
 A finite exploratory search found no
 counterexample, which is validation only. See
 [stored-plan binder depth](notes-stored-plan-binder-depth.md).
@@ -320,7 +327,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,395 targets and 43,222 theorem dependency checks**
+The current audit passes **1,401 targets and 43,344 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 After PR #122, all 208 generator and 145 refinement examples pass. The
 unchanged core retains its earlier 289 passing examples. Fourmolu and active-package cabal-gild passed.

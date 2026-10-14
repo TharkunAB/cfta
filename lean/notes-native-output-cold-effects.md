@@ -1,6 +1,6 @@
 # Native output scope and general repaired cold-reader effects
 
-Updated: 2026-10-14 15:23 CEST. Latest proof checkpoint: `e70160d6`.
+Updated: 2026-10-14 15:49 CEST. Latest proof checkpoint: `b3008aba`.
 Native heap checkpoint: `9a0df4cb`. Earlier replay and counterexample checkpoints remain.
 
 ## Derived recursive scope
@@ -120,21 +120,27 @@ for arbitrary raw binders is refuted. Then derive physical
 The earlier prepared graph uses the old executor; its preparation premise
 remains valid in its stated fragment.
 
-Current audit: 1,395 jobs and 43,222 theorem dependency checks. Only
+Current audit: 1,401 jobs and 43,344 theorem dependency checks. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-native-final-language-20261014-audit.log`.
+`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
 
 ## Remaining language obligation
 
-Relate actual repaired stored substitution and construction to independent
-intended guarded Mu language through fresh names and canonical hits. Then
-prove physical product row membership and rejected-edge laws. Final-cache
-readback and replay do not supply initial-source language transport.
+`b3008aba` defines independent guarded stored-record and lexical meanings.
+It proves actual metadata support, normalization, cleanup, root-self filtering,
+and full nested stored-plan compilation. Its substitution and unfolding laws
+concern actual compiled plans. Actual repaired source execution and canonical
+Mu-hit language preservation remain open. Read
+[the guarded compiler note](notes-independent-guarded-language.md).
+Prove actual execution and semantic probe-heap preservation together. Then
+connect repaired final graph language to independent meaning and physical
+product row/rejection laws. Do not repeat finite native tables or their exact
+final-cache guarded readback.
 
 ## Validation
 
-Lean 4.34.1 passes 1,395 aggregate jobs and 43,222 theorem dependency checks.
+Lean 4.34.1 passes 1,401 aggregate jobs and 43,344 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-native-final-language-20261014-audit.log`.
+`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
 No Haskell source changed. The current PR #119 Nix and active-package
 formatter checks remain valid.
