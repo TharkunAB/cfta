@@ -1,6 +1,6 @@
 # Actual native union and Mu branch witnesses
 
-Updated: 2026-10-14 19:37 CEST.
+Updated: 2026-10-14 20:06 CEST.
 Proofs: `9b6d9014` and `513d2824`.
 
 ## Actual union normalization
@@ -67,23 +67,28 @@ These results prove how actual branch outputs relate to their actual child
 outputs. They do not prove that each output represents its original input
 intersection. That complete two-input law remains open.
 
-Next derive a consistent relation from original input pairs to physical
-representatives through stored reconstruction and repaired unfolding. Use
-the exact extended-domain and body witnesses above. Preserve related children
-through the actual optional-binder substitution. Follow epsilon origins for
-Mu and union before comparing complete exposed rows. Do not use the literal
-ordinary `nodeEdges` projection as the exposed Mu or union row table.
+The next checkpoint now proves exact actual native union row origins through
+completed repaired extraction. It also proves a new boundary: exact
+`RelatedRows.Readback` is too strong for arbitrary ambiguous union/self
+results, even with multiple representatives. The old sufficiency theorem
+remains valid for its stated premises.
 
-Then derive related roots and local row closure. Apply the completed
-`RelatedRows`, `DiagonalProduct`, native minimum callback, and compiler Sized
-results. Do not assume product language as a premise. The general functional
-child map remains refuted by the retained ranked Mu witness. Preserve that
-witness, the exact unbounded transcript proof, and all older functional
-proofs for their stated scope. The optimized interned core stays unchanged.
+Use separate directional simulations for the general proof. Their local
+coverage retains full guard implications and ordered children. Structural
+projection covers redundant cross rows. Reverse copies establish the other
+direction. Both simulations compose with the native minimum callback and
+compiler Sized laws. Read [directional union rows](notes-directional-union-rows.md).
+
+Next derive the separate directions through actual stored reconstruction,
+optional-binder substitution, and repaired Mu unfolding. Use the exact
+extended-domain and body witnesses above. Follow epsilon origins for exposed
+rows. Do not assume product language or derive the refuted general exact
+interface. Preserve all older proofs, scopes, and witnesses. The optimized
+interned core stays unchanged.
 
 ## Validation and preservation
 
-Pinned Lean 4.34.1 passes all three focused modules and the aggregate audit:
+The preceding branch checkpoint passed all three focused modules and its audit:
 1,473 jobs and 43,911 theorem dependency checks. Only `propext`,
 `Classical.choice`, and `Quot.sound` are permitted. All new completed modules
 are imported by `MicroCFTA/Audit.lean`.

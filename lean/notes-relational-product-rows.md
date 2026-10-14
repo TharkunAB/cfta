@@ -1,6 +1,6 @@
 # Related physical product rows and native Sized composition
 
-Updated: 2026-10-14 19:37 CEST.
+Updated: 2026-10-14 20:06 CEST.
 Proofs: `f04b8261`, `4d80735a`, and `ddef16e6`.
 
 ## Exact language from local rows
@@ -90,12 +90,17 @@ Mu retains exact extended domains, original identities, actual body results,
 optional-binder replay, independent least language, and full unfolding. Read
 [native branch witnesses](notes-union-mu-branch-readback.md).
 
-Next derive related-child preservation through actual stored reconstruction,
-optional-binder substitution, and repaired unfolding. Then derive related
-roots and local row closure from actual epsilon origins. The branch witnesses
-do not yet establish those original-input relations. Use the completed generic
-product, callback, and compiler results. Do not supply product language as a
-premise or derive the refuted general functional child map.
+The latest union/self witness now refutes general physical derivation of
+this exact related-row interface too, even with multiple representatives.
+Its sufficiency theorem remains valid. Separate directional simulations allow
+child inclusion and redundant-row coverage. They prove the complete witness
+and compose with the native minimum callback and compiler Sized laws.
+Read [directional union rows](notes-directional-union-rows.md).
+
+Next derive those separate directions through actual stored reconstruction,
+optional-binder substitution, and repaired Mu unfolding. Use actual epsilon
+origins and exact domain/body witnesses. Do not supply whole product language
+as a premise or derive either refuted general exact-row adapter.
 
 The complete native two-input language theorem and verified runtime
 correspondence remain open. The primary finite-map reference, solver-decided,

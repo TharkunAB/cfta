@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 19:37 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `513d2824`, after `9b6d9014`. No background proof worker is active.
+Current checkpoint: **2026-10-14 20:06 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `1f2aa0c6`, after `2083dadf` and `5a8034f8`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -352,9 +352,16 @@ a formal obstruction to the functional adapter. Haskell extraction remains
 unverified. Actual union and Mu branch witnesses are now derived from
 checked native completion. They retain ordered child results, exact domains,
 independent normalization and least languages, and full Mu unfolding.
-Derive related-child preservation through actual stored reconstruction and
-repaired unfolding, then local row closure. Full native two-input language
-remains open. See [native union and Mu witnesses](notes-union-mu-branch-readback.md),
+Exact native union row origins are now proved through actual extraction.
+A live union/self witness and a checked explicit graph refute general exact
+related-row readback, even with multiple representatives. The source is
+ambiguous; this is not a runtime language defect or an observed full scan.
+Separate directional row simulations handle that witness structurally and
+retain the minimum callback, compiler equality, and Sized rank laws.
+Derive the directional relations through actual Mu reconstruction/unfolding.
+Full native two-input language remains open. See
+[directional union rows](notes-directional-union-rows.md),
+[native union and Mu witnesses](notes-union-mu-branch-readback.md),
 [related physical product rows](notes-relational-product-rows.md),
 [ordinary product rows and the identity boundary](notes-ordinary-product-rows.md),
 [cold budget completeness](notes-cold-budget-completeness.md),
@@ -374,7 +381,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,473 targets and 43,911 theorem dependency checks**
+The current audit passes **1,484 targets and 43,973 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 After PR #122, all 208 generator and 145 refinement examples pass. The
 unchanged core retains its earlier 289 passing examples. Fourmolu and active-package cabal-gild passed.

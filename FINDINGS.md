@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 19:37 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 20:06 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -113,14 +113,13 @@ The live dump and focused comparison validate the exact finite transcript.
 They do not verify Haskell extraction. The earlier depth-24 checks remain
 finite validation; the stopped generated Lean probes supply no measurement.
 
-Preserve untracked `lean/repro/NativeProductRowCycle.hs` and
-`lean/repro/NestedUnaryTwoAtom.hs`. Next derive consistent related roots and
-row closure from actual Mu, union, stored substitution, domains, and final
-row exposure. Use the completed generic product, callback, and compiler
-proofs. Do not assume product language or derive the refuted general literal
-`ProductReadback.members`. Preserve the older functional theorem for its
-stated scope. Read `lean/notes-relational-product-rows.md`. All workers are
-terminal. Full native two-input language correspondence remains open.
+The preceding exact relation is a sufficient interface. The later union/self
+witness below refutes its general physical derivation. Preserve all three
+untracked fixtures. Use separate directional relations for the general
+target. Do not assume product language or derive either refuted general
+exact-row adapter. Preserve all older theorems for their stated scopes.
+Read `lean/notes-directional-union-rows.md`. All workers are terminal.
+Full native two-input language correspondence remains open.
 
 `9b6d9014` now derives actual union and Mu branch witnesses. Union retains
 ordered physical child results and exact normalized independent language.
@@ -136,21 +135,48 @@ independent language laws. Incoming semantic and independent-language probe
 heaps suffice for native Mu; actual evaluation derives their preservation.
 No kernel-execution or two-input product-language premise is supplied.
 
-The original-input relation is still open through actual stored reconstruction
-and repaired unfolding. Preserve related children through optional-binder
-substitution, then derive related roots and local row closure using actual
-epsilon origins. Literal ordinary `nodeEdges` is not exposed Mu/union rows.
-Read `lean/notes-union-mu-branch-readback.md`. Do not repeat the completed
-branch witness, product-language-from-rows, minimum callback, or compiler
-Sized proofs. The full native two-input intersection law remains open.
+`2083dadf` now proves complete repaired epsilon-origin equations and actual
+union constructor origin preservation. Checked native union row extraction
+retains exact final-cache member calls, complete guards, and physical child
+order in both operand orientations. Incoming semantic/coverage facts and
+actual closed row extraction supply the final valid caller machine.
 
-The aggregate audit passes **1,473 jobs and 43,911 theorem dependency checks**,
+`5a8034f8` establishes a stronger adapter boundary. For `X = {a,b}`,
+`Y = {b,c}`, `A = f(X) | f(Y)`, and `U = A | mu x. h(x)`, actual `intersect U A`
+returns the identical original `A`. The live raw product cross row needs a
+child with exact language `{b}`. Neither returned child has that language.
+`UnionDiagonalRowBoundary.no_related_readback` proves that even a
+nonfunctional exact `RelatedRows.Readback` cannot describe this root.
+The explicit graph has a full correct root-language theorem. The source is
+ambiguous; no complete short-circuit scan trace or runtime defect is claimed.
+This does not refute a contract restricted to unambiguous graphs.
+
+Separate directional row simulations handle the witness structurally.
+`DirectionalRows` proves finite-term inclusion and exact language from both
+directions, with full guard implications and ordered children. Exact related
+rows remain a proved special case. `DirectionalProduct` derives right
+projection and reverse diagonal copies from literal row inclusion.
+`UnionDiagonalRowCoverage` proves the complete witness language from these
+local simulations. `1f2aa0c6` connects the directional interface to the actual
+minimum callback, complete ambiguity scan, compiler equality, finite guarded
+classes, and both rank inverse laws. Both physical simulations and completed
+extraction remain explicit premises.
+
+Next derive separate directional relations through actual optional-binder
+stored reconstruction and repaired Mu unfolding. Use the completed native
+union origins and exact domain/body witnesses. Permit redundant product rows
+to be covered by operand rows through child inclusion. Do not assume product
+language or derive the refuted general exact `RelatedRows.Readback`.
+Read `lean/notes-directional-union-rows.md`. The full native two-input law
+remains open. The primary explicit-product Sized route is unaffected.
+
+The aggregate audit passes **1,484 jobs and 43,973 theorem dependency checks**,
 with only `propext`, `Classical.choice`, and `Quot.sound`. Log:
-`/tmp/mcfta-union-mu-branch-readback-20261014-audit.log`.
-Snapshot: `/tmp/mcfta-union-mu-branch-readback-checkpoint-20261014-1937/`.
-All 1,840 Lean-tree files are saved. All 1,836 previous files remain.
-Only audit imports, two coverage ledgers, and the preceding relational-product
-note changed among those previous files. All earlier proofs and drafts retain
+`/tmp/mcfta-directional-union-rows-20261014-audit.log`.
+Snapshot: `/tmp/mcfta-directional-union-rows-checkpoint-20261014-2006/`.
+All 1,853 Lean-tree files are saved. All 1,840 previous files remain.
+Only audit imports, two coverage ledgers, and the two preceding component
+notes changed among those previous files. All earlier proofs and drafts retain
 their bytes. No production Haskell code changed. No worker remains active.
 
 ## Independent guarded meaning and actual stored compiler
