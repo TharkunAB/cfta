@@ -11,7 +11,7 @@ namespace MicroCFTA.SourceRecursiveIntersectionKernel
 open Cache InternedConstructorTemplates InternedProbeProvenance InternedEdgeResidency
 open InternedBinderProtocol IntersectionFlatMemoKeyDomain SourceRecursiveIntersectionDomain
 
-/-- Each recursive request preserves source facts and returns an available complete record. -/
+/-- Each recursive request preserves source facts and returns an available source value. -/
 def Calls
     (call : Interned DomainKey → Value Symbol Guard → Value Symbol Guard → Machine Symbol Guard → Result Symbol Guard (Value Symbol Guard)) : Prop :=
   ∀ domain left right state, Valid state → Domain state domain → Available state.heap left → Available state.heap right →

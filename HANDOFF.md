@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 03:07 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 03:37 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -13,9 +13,10 @@ The current continuation refreshed upstream and completed the finite optimized
 Sized inverse proof, recursive knot construction, and first-order shared rows.
 It also proves cold traversal termination, exact returned tables, native/solver Sized composition,
 physical recursive intersection control and domain effects, and actual
-optional-binder substitution and constructor effects.
+optional-binder substitution and constructor effects. The full uncached
+recursive caller now has derived invariants, stable bounds, and literal row readback.
 **No background proof worker is active.**
-The latest proof checkpoint is **`0bf65249`**. A later documentation commit
+The latest proof checkpoint is **`95792559`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -40,7 +41,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **34% at 03:06 CEST**. This is a historical value.
+The last observed value was **34% at 03:36 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -282,31 +283,44 @@ with complete payload coverage and a prepared body. General open nested
 completion and result preparation remain open. Read
 [optional binder effects](lean/notes-recursive-intersection-maybe-mu.md).
 
+## Stateful recursive caller
+
+`SourceRecursiveIntersectionKernel*` composes the actual physical branch
+selector, canonical Mu-domain allocation, original bound Mu readback,
+ordered union requests, guarded edge and row calls, and optional-binder
+effects. `execute_checked` derives source facts, physical and domain
+growth, issued history, and available successful values. Open calls can
+return RecIntersect placeholders.
+`execute_stable` retains every non-exhausted result and its exact caches
+at all larger bounds. `walk_done_iff` derives actual ordered request traces.
+`edge_readback`, `edge_mismatch_readback`, and `node_readback` derive
+literal symbols, conjoined guards, child results, and canonical surviving
+physical rows. No product-language or equivalent row contract is supplied.
+`execute` still uses uncached recursion. Native memo effects, a sufficient
+bound for every valid input, and product language remain open. Read
+[recursive caller](lean/notes-recursive-intersection-kernel.md).
+
 ## Remaining priorities
 
-1. Compose the checked physical `maybeMu` and domain effects in the actual
-   recursive caller. Derive the result product language and native product
-   rows, then connect them to the cold shared adapter. Keep the full input
-   scope. Physical control, domain lookup, and exact source callback and
-   constructor conversion are proved. Do not repeat them. General open
-   nested completion still needs key separation or a larger execution
-   invariant. Derive preparation of new Mu bodies where it applies. Preserve
-   actual constructor effects and recursive memo traces. The plain completed
-   dispatcher does not prove pending cyclic
-   publication. General open nested source binders still need a prepared heap
-   or a larger finite-execution invariant. Cold traversal termination and final
-   table language are now proved under `Prepared`. First-order empty-cache
-   construction derives that premise. Do not repeat those proofs or use the
-   older warmup snapshot as the cold source path. Read
-   `lean/notes-recursive-intersection-maybe-mu.md`,
-   `lean/notes-recursive-intersection-control.md`, and
-   `lean/notes-cold-shared-rows.md`. The raw-map Sized algorithms are complete.
-   The concrete remaining interface is
+1. Connect native recursive node and edge memo behavior to the checked
+   caller kernel. Derive completed-result replay under later constructor
+   and domain growth. Retain pending publication, the shifted domain key,
+   ordered tagged operands, reversed swap request, and RecIntersect bypass.
+   Derive the physical input view and a finite reachable payload inventory.
+   Connect the actual requests to the semantic schedule and derive a
+   sufficient bound. Stable larger bounds alone do not prove existence.
+   Use the literal child/row traces and canonical readback to derive
    `SourceCyclicRowsNativeGate.ProductReadback.members` and `.rejected`.
-   Derive them from `Interned/Operations.hs:intersectOpen`, including `maybeMu`,
-   the open-domain environment, recursive memo publication, and child effects.
-   Do not supply another product-row or language-equivalence premise to
-   `product_exact`. Existing ordinary dispatch proves the finite plain fragment.
+   `product_exact` then gives product language. Do not supply another
+   product-row or language-equivalence premise. General open nested
+   construction still needs key separation or a larger execution invariant.
+   Derive preparation of new Mu bodies where it applies, or a larger cold
+   exposure invariant. Compose the already proved cold table and Sized
+   adapters. Do not repeat the completed kernel or primary Sized proofs.
+   Read `lean/notes-recursive-intersection-kernel.md`, the optional-binder
+   and control notes, and `lean/notes-cold-shared-rows.md`. Preserve the
+   full input scope and exact caches. The plain completed dispatcher does
+   not prove pending cyclic publication.
 2. Complete repaired cached-depth/deep heap induction. `InternedDepthFreeProjection*`
    now proves full-syntax free-name membership and ordinary-root callback deep
    observations with nested children. `callback_observed` derives observations
@@ -355,10 +369,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,212 jobs and 40,366 theorem dependency checks**.
+The current build passes **1,218 jobs and 40,573 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-recursive-maybe-mu-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-kernel-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -392,6 +406,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `95792559` | Full uncached recursive caller invariants, stable larger bounds, and actual guarded row readback. |
 | `0bf65249` | Full nested rebinding, exact optional-binder effects, finite prepared probes, and exact pending-key classification. |
 | `2a533cc5` | Complete physical recursive guard order, semantic next-step conversion, and exact Mu-domain effects. |
 | `f425e2b6` | Finite cold traversal, first-order source Sized, and native/solver public composition. |

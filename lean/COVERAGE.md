@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 03:07 CEST**, upstream `f59c198d`.
-The latest proof commit is `0bf65249`. No background proof worker is active.
+Current checkpoint: **2026-10-14 03:37 CEST**, upstream `f59c198d`.
+The latest proof commit is `95792559`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -78,6 +78,15 @@ General open nested completion, result preparation, product language,
 pending cyclic memo publication, and product-row readback remain open. See
 [optional binder effects](notes-recursive-intersection-maybe-mu.md).
 
+`SourceRecursiveIntersectionKernel*` composes the full uncached recursive
+caller with actual domain, optional-binder, union, and guarded row effects.
+`execute_checked` derives complete cache invariants and available successful
+results. `execute_stable` preserves non-exhausted outcomes and exact caches
+at larger bounds. Actual request traces derive conjoined guard fields, child
+records, and canonical surviving rows. Native memo effects, sufficient-bound
+existence, and product-row correspondence remain open. See
+[recursive caller](notes-recursive-intersection-kernel.md).
+
 Nested binder construction, native cyclic product rows, pending memo values,
 and complete recursive memo-effect traces remain open. Free-name projection and ordinary-root deep
 observations are derived; general cached-depth and binder-heap induction
@@ -92,7 +101,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,212 targets and 40,366 theorem dependency checks**
+The current audit passes **1,218 targets and 40,573 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

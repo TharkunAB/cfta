@@ -61,8 +61,11 @@ open nested completion or preparation of every newly stored Mu body.
 
 ## Remaining recursive caller obligations
 
-Compose these source binder effects with the physical branch and domain
-proofs in [recursive control](notes-recursive-intersection-control.md).
+These source binder effects and the physical branch/domain proofs now compose
+in the uncached recursive caller at `95792559`. Its complete cache invariants,
+stable bounds, and literal guarded row readback are checked. Read
+[recursive caller](notes-recursive-intersection-kernel.md) and
+[recursive control](notes-recursive-intersection-control.md).
 Retain recursive node and edge memo requests, child effects, canonical domain
 identities, ordered operands, union requests, and conjoined guards. Derive the
 result's product language and the actual product-row membership and rejection

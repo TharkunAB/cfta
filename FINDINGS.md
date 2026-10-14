@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 03:07 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 03:37 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -159,6 +159,20 @@ completion, result preparation, product language, recursive pending memo
 publication, and product-row readback remain open. See
 [optional binder effects](lean/notes-recursive-intersection-maybe-mu.md).
 
+## Stateful recursive caller
+
+`SourceRecursiveIntersectionKernel*` now composes all physical branches,
+canonical domain effects, original Mu lookup, ordered union/child/row
+calls, guarded edge construction, and actual optional-binder effects.
+`execute_checked` derives complete cache facts, both histories, and
+available successful results. `execute_stable` retains every non-exhausted
+outcome and its exact returned caches at all larger bounds. Actual ordered
+traces derive literal symbols, conjoined guards, complete child values, and
+canonical surviving parent rows. The bounded recursive kernel remains
+uncached. Native node/edge memo effects, existence of a sufficient bound,
+physical product-row correspondence, and product language remain open. See
+[recursive caller](lean/notes-recursive-intersection-kernel.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
@@ -181,16 +195,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`0bf65249`**; later commits record this handoff.
+The latest proof checkpoint is **`95792559`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,212 build targets and 40,366 theorem
+The current Lean 4.34.1 audit passes **1,218 build targets and 40,573 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-recursive-maybe-mu-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-kernel-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **34% at 03:06 CEST**.
+No background proof worker is active. Weekly allowance was **34% at 03:36 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

@@ -5,7 +5,8 @@ import MicroCFTA.SourceRecursiveIntersectionKernelCalls
 
 Every source branch composes the actual domain and constructor effects.
 All bounded calls retain complete cache facts and both histories. Every
-successful result has a complete available physical record. This theorem
+successful result is an available source value. Open calls can return
+recursive placeholders. This theorem
 does not assert that all bounds succeed or establish product language.
 -/
 namespace MicroCFTA.SourceRecursiveIntersectionKernel
