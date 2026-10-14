@@ -1411,6 +1411,12 @@ import MicroCFTA.InternedStoredCostRetention
 import MicroCFTA.InternedPreparedCostRetention
 import MicroCFTA.InternedFreshOrdinaryUnfoldRank
 import MicroCFTA.InternedFreshOrdinaryGateRank
+import MicroCFTA.InternedFreshOrdinaryStatefulGate
+import MicroCFTA.InternedFreshOrdinaryStatefulGateCompletion
+import MicroCFTA.InternedFreshOrdinaryStatefulGateTrace
+import MicroCFTA.InternedFreshOrdinaryStatefulGateGraph
+import MicroCFTA.InternedFreshOrdinaryStatefulGateClasses
+import MicroCFTA.InternedFreshOrdinaryUnfoldMemo
 /-!
 # Proof dependency audit
 
