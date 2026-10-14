@@ -1,4 +1,5 @@
 import MicroCFTA.InternedFreshOrdinaryGrowth
+import MicroCFTA.InternedFreshOrdinaryFacts
 import MicroCFTA.InternedNestedCoverage
 
 /-!
@@ -134,5 +135,17 @@ theorem closed_covered [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax
     (value : Value Symbol Guard) (state : State Symbol Guard)
     (completed : build expression [] empty = .done value state) : Covered [] state :=
   build_covered expression [] empty empty_valid empty_correct.2 value state completed
+
+/-- A completed repaired normalized callback preserves coverage through arbitrary nested body syntax. -/
+theorem callback_covered [DecidableEq (EdgeKey Symbol Guard)] (body : Syntax Symbol Guard)
+    (environment : List (Value Symbol Guard)) (name : Reference) (state : State Symbol Guard)
+    (valid : InternedConstructorTemplates.Valid state) (covered : Covered pending state) :
+    OnDone pending (InternedFreshOrdinaryFacts.callback body environment name state) := by
+  unfold InternedFreshOrdinaryFacts.callback
+  apply bind_covered pending pending _ _ (build_covered body (.reference name :: environment) state valid covered)
+  intro value after done afterCovered
+  have afterValid : InternedConstructorTemplates.Valid after := by
+    simpa only [done, Outcome.state] using (build_correct body (.reference name :: environment) state valid).1
+  exact work_covered (withoutSelfReference name value) after afterValid afterCovered
 
 end MicroCFTA.InternedFreshOrdinaryCoverage
