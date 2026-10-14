@@ -32,14 +32,38 @@ structure Ready [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
   guarded : InternedGuardedProbeHeap.Heap state.machine.heap
   budget : InternedGuardedBudgetProbeHeap.Heap state.machine.heap
 
+/-- Successful exposure bounds return the identical ordered edges and cache. -/
+theorem read_unique [DecidableEq (EdgeKey Symbol Guard)]
+    (firstFuel secondFuel : Nat) (value : Value Symbol Guard) (state : InternedConstructorTemplates.State Symbol Guard)
+    (firstEdges secondEdges : List (EdgeValue Symbol Guard)) (firstAfter secondAfter : InternedConstructorTemplates.State Symbol Guard)
+    (first : MergedFreshOrdinaryExposure.nodeEdges firstFuel value state = .done firstEdges firstAfter)
+    (second : MergedFreshOrdinaryExposure.nodeEdges secondFuel value state = .done secondEdges secondAfter) :
+    firstEdges = secondEdges ∧ firstAfter = secondAfter := by
+  have firstStable := MergedFreshOrdinaryColdReplay.nodeEdges_stable firstFuel secondFuel value state
+    (by simp only [first, MergedSourceExposure.Finished])
+  have secondStable := MergedFreshOrdinaryColdReplay.nodeEdges_stable secondFuel firstFuel value state
+    (by simp only [second, MergedSourceExposure.Finished])
+  rw [Nat.add_comm secondFuel firstFuel] at secondStable
+  apply MergedSourceExposure.Result.done.inj
+  rw [← first, ← second]
+  exact firstStable.symm.trans secondStable
+
 /-- A complete source callback records finite execution of each actual worker and its final native cache. -/
 inductive Execution [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (left right : Value Symbol Guard) :
-    SourceRecursiveIntersectionThunks.State width Symbol Guard → Bool → SourceRecursiveIntersectionThunks.State width Symbol Guard → Prop where
+      SourceRecursiveIntersectionThunks.State width Symbol Guard → Bool → SourceRecursiveIntersectionThunks.State width Symbol Guard → Prop where
+  | empty (fuel readFuel : Nat)
+      (state middle : SourceRecursiveIntersectionThunks.State width Symbol Guard) (value : Value Symbol Guard)
+      (exposed : InternedConstructorTemplates.State Symbol Guard)
+      (native : SourceRecursiveIntersectionNative.execute emptyGuard conjoin fuel
+        (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure) state = .done value middle)
+      (read : MergedFreshOrdinaryExposure.nodeEdges readFuel value middle.machine.heap = .done [] exposed) :
+      Execution emptyGuard conjoin left right state false (advance middle ⟨exposed, middle.machine.domains⟩)
   | done (fuel readFuel outer inner minimumFuel : Nat)
       (state middle : SourceRecursiveIntersectionThunks.State width Symbol Guard) (value : Value Symbol Guard)
       (edges : List (EdgeValue Symbol Guard)) (exposed final : InternedConstructorTemplates.State Symbol Guard)
       (rows : SourceColdSharedRows.Rows Symbol Guard)
+      (nonempty : edges.isEmpty = false)
       (native : SourceRecursiveIntersectionNative.execute emptyGuard conjoin fuel
         (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure) state = .done value middle)
       (read : MergedFreshOrdinaryExposure.nodeEdges readFuel value middle.machine.heap = .done edges exposed)
@@ -86,20 +110,45 @@ theorem complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       ⟨nextValid, _, _, nextSemantic, nextCovered, nextOpen, nextGuarded, nextBudget, extension⟩, callback⟩ :=
     SourceFreshOrdinaryColdMemoState.prechecked_advance emptyGuard conjoin middle correct.valid middleSemantic middleCovered
       middleOpen middleGuarded middleBudget value correct.result closed
-  obtain ⟨minimumFuel, minimumRun, _⟩ := SourceRowsMinimumAdapter.finite (SourceColdSharedRows.table rows (keys final rows) value)
   let result := if edges.isEmpty then false else
     (SourceRowsMinimumAdapter.minimumSizes (SourceColdSharedRows.table rows (keys final rows) value) (encode value)).isSome
-  let after := advance middle (⟨final, middle.machine.domains⟩ : Machine Symbol Guard)
-  refine ⟨result, after, .done fuel readFuel outer inner minimumFuel state middle value edges exposed final rows
-    native read (collected outer inner (Nat.le_refl _) (Nat.le_refl _)) minimumRun,
-    ⟨nextValid, middleIdle.advance middle _, nextSemantic, nextCovered, nextOpen, nextGuarded, nextBudget⟩,
-    correct.growth.trans extension, ?_⟩
-  intro ambient
-  rw [callback ambient]
-  apply exists_congr
-  intro term
-  exact SourceRecursiveIntersectionNative.native_product emptyGuard conjoin fuel left right state middle value ready.valid
-    leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed ready.semantic ready.guarded native ranges
-    (fun _ _ => true) (by intros; rfl) ambient term
+  have language (ambient : InternedGuardedLanguage.Env Symbol) : result = true ↔ ∃ term,
+      InternedGuardedLanguage.meaning (fun _ _ => true) ambient left term ∧
+      InternedGuardedLanguage.meaning (fun _ _ => true) ambient right term := by
+    rw [callback ambient]
+    apply exists_congr
+    intro term
+    exact SourceRecursiveIntersectionNative.native_product emptyGuard conjoin fuel left right state middle value ready.valid
+      leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed ready.semantic ready.guarded native ranges
+      (fun _ _ => true) (by intros; rfl) ambient term
+  by_cases empty : edges.isEmpty = true
+  · have edgesEmpty := List.isEmpty_iff.mp empty
+    subst edges
+    obtain ⟨otherFuel, otherEdges, otherAfter, otherRead, exposedSemantic, exposedCovered, exposedOpen, exposedGrowth, exposedHistory, _, _, _⟩ :=
+      MergedFreshOrdinaryColdTermination.read_closed value middle.machine.heap middleSemantic middleCovered middleOpen correct.result closed
+    obtain ⟨rfl, rfl⟩ := read_unique readFuel otherFuel value middle.machine.heap [] otherEdges exposed otherAfter read otherRead
+    have exposedGuarded : InternedGuardedProbeHeap.Heap exposed := by
+      simpa only [read, MergedSourceExposure.Result.state] using
+        MergedFreshOrdinaryGuardedEffects.nodeEdges_heap readFuel value middle.machine.heap middleSemantic middleCovered middleGuarded correct.result closed
+    have exposedBudget : InternedGuardedBudgetProbeHeap.Heap exposed := by
+      simpa only [read, MergedSourceExposure.Result.state] using
+        MergedFreshOrdinaryBudgetEffects.nodeEdges_heap readFuel value middle.machine.heap middleSemantic middleCovered middleBudget correct.result closed
+    let after := advance middle (⟨exposed, middle.machine.domains⟩ : Machine Symbol Guard)
+    have readExtension : Extension middle.machine after.machine := ⟨exposedGrowth, exposedHistory, extends_refl _⟩
+    have checked : SourceRecursiveIntersectionKernel.Valid after.machine := ⟨exposedSemantic.1.normal.facts, correct.valid.machine.2⟩
+    refine ⟨false, after, .empty fuel readFuel state middle value exposed native read,
+      ⟨advance_valid width emptyGuard conjoin middle correct.valid _ checked readExtension, middleIdle.advance middle _,
+        exposedSemantic, exposedCovered, exposedOpen, exposedGuarded, exposedBudget⟩, correct.growth.trans readExtension, ?_⟩
+    exact language
+  · have nonempty : edges.isEmpty = false := by
+      cases found : edges.isEmpty with
+      | false => rfl
+      | true => exact False.elim (empty found)
+    obtain ⟨minimumFuel, minimumRun, _⟩ := SourceRowsMinimumAdapter.finite (SourceColdSharedRows.table rows (keys final rows) value)
+    let after := advance middle (⟨final, middle.machine.domains⟩ : Machine Symbol Guard)
+    exact ⟨result, after, .done fuel readFuel outer inner minimumFuel state middle value edges exposed final rows nonempty
+      native read (collected outer inner (Nat.le_refl _) (Nat.le_refl _)) minimumRun,
+      ⟨nextValid, middleIdle.advance middle _, nextSemantic, nextCovered, nextOpen, nextGuarded, nextBudget⟩,
+      correct.growth.trans extension, language⟩
 
 end MicroCFTA.SourceFreshOrdinaryNativeCallback

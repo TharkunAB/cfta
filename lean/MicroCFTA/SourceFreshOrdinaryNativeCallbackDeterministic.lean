@@ -13,7 +13,22 @@ open Cache Language InternedConstructorTemplates InternedProbeProvenance
 open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks
 open SourceRecursiveIntersectionInputView (Original)
 
-/-- Every complete callback returns the identical Boolean and native cache, regardless of successful bounds. -/
+/-- Successful native bounds retain the identical returned record and memo state. -/
+theorem native_unique [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {emptyGuard : Guard} {conjoin : Guard → Guard → Guard} {left right : Value Symbol Guard}
+    (firstFuel secondFuel : Nat) {state firstAfter secondAfter : SourceRecursiveIntersectionThunks.State width Symbol Guard}
+    {firstValue secondValue : Value Symbol Guard}
+    (first : SourceRecursiveIntersectionNative.execute emptyGuard conjoin firstFuel
+      (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure) state = .done firstValue firstAfter)
+    (second : SourceRecursiveIntersectionNative.execute emptyGuard conjoin secondFuel
+      (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure) state = .done secondValue secondAfter) :
+    firstValue = secondValue ∧ firstAfter = secondAfter := by
+  have firstStable := SourceRecursiveIntersectionNative.done_stable emptyGuard conjoin firstFuel secondFuel _ state firstAfter firstValue first
+  have secondStable := SourceRecursiveIntersectionNative.done_stable emptyGuard conjoin secondFuel firstFuel _ state secondAfter secondValue second
+  rw [Nat.add_comm secondFuel firstFuel] at secondStable
+  exact SourceRecursiveIntersectionNative.Outcome.done.inj (firstStable.symm.trans secondStable)
+
+/-- Every complete callback returns the identical Boolean and native cache, including the empty-exposure early return. -/
 theorem Execution.unique [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     {emptyGuard : Guard} {conjoin : Guard → Guard → Guard} {left right : Value Symbol Guard}
     {state firstAfter secondAfter : SourceRecursiveIntersectionThunks.State width Symbol Guard} {firstResult secondResult : Bool}
@@ -21,23 +36,25 @@ theorem Execution.unique [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard
     (second : Execution emptyGuard conjoin left right state secondResult secondAfter) :
     firstResult = secondResult ∧ firstAfter = secondAfter := by
   cases first with
-  | done fuel readFuel outer inner minimumFuel state middle value edges exposed final rows native read collected minimum =>
+  | empty fuel readFuel state middle value exposed native read =>
     cases second with
-    | done nextFuel nextReadFuel nextOuter nextInner nextMinimumFuel _ nextMiddle nextValue nextEdges nextExposed nextFinal nextRows nextNative nextRead nextCollected nextMinimum =>
-      have firstNative := SourceRecursiveIntersectionNative.done_stable emptyGuard conjoin fuel nextFuel _ state middle value native
-      have secondNative := SourceRecursiveIntersectionNative.done_stable emptyGuard conjoin nextFuel fuel _ state nextMiddle nextValue nextNative
-      rw [Nat.add_comm nextFuel fuel] at secondNative
-      have nativeSame := firstNative.symm.trans secondNative
-      obtain ⟨rfl, rfl⟩ := SourceRecursiveIntersectionNative.Outcome.done.inj nativeSame
-      have firstRead := MergedFreshOrdinaryColdReplay.nodeEdges_stable readFuel nextReadFuel value middle.machine.heap
-        (by simp only [read, MergedSourceExposure.Finished])
-      have secondRead := MergedFreshOrdinaryColdReplay.nodeEdges_stable nextReadFuel readFuel value middle.machine.heap
-        (by simp only [nextRead, MergedSourceExposure.Finished])
-      rw [Nat.add_comm nextReadFuel readFuel] at secondRead
-      have readSame : MergedSourceExposure.Result.done edges exposed = .done nextEdges nextExposed := by
-        rw [← read, ← nextRead]
-        exact firstRead.symm.trans secondRead
-      obtain ⟨rfl, rfl⟩ := MergedSourceExposure.Result.done.inj readSame
+    | empty nextFuel nextReadFuel _ nextMiddle nextValue nextExposed nextNative nextRead =>
+      obtain ⟨rfl, rfl⟩ := native_unique fuel nextFuel native nextNative
+      obtain ⟨_, rfl⟩ := read_unique readFuel nextReadFuel value middle.machine.heap [] [] exposed nextExposed read nextRead
+      exact ⟨rfl, rfl⟩
+    | done nextFuel nextReadFuel nextOuter nextInner nextMinimumFuel _ nextMiddle nextValue nextEdges nextExposed nextFinal nextRows nonempty nextNative nextRead nextCollected nextMinimum =>
+      obtain ⟨rfl, rfl⟩ := native_unique fuel nextFuel native nextNative
+      obtain ⟨rfl, _⟩ := read_unique readFuel nextReadFuel value middle.machine.heap [] nextEdges exposed nextExposed read nextRead
+      cases nonempty
+  | done fuel readFuel outer inner minimumFuel state middle value edges exposed final rows nonempty native read collected minimum =>
+    cases second with
+    | empty nextFuel nextReadFuel _ nextMiddle nextValue nextExposed nextNative nextRead =>
+      obtain ⟨rfl, rfl⟩ := native_unique fuel nextFuel native nextNative
+      obtain ⟨rfl, _⟩ := read_unique readFuel nextReadFuel value middle.machine.heap edges [] exposed nextExposed read nextRead
+      cases nonempty
+    | done nextFuel nextReadFuel nextOuter nextInner nextMinimumFuel _ nextMiddle nextValue nextEdges nextExposed nextFinal nextRows nextNonempty nextNative nextRead nextCollected nextMinimum =>
+      obtain ⟨rfl, rfl⟩ := native_unique fuel nextFuel native nextNative
+      obtain ⟨rfl, rfl⟩ := read_unique readFuel nextReadFuel value middle.machine.heap edges nextEdges exposed nextExposed read nextRead
       obtain ⟨firstOuter, firstInner, firstStable⟩ :=
         (SourceFreshOrdinaryColdSharedRows.collect_trace outer inner exposed (fun _ => none) rows [value] final collected).finite
       obtain ⟨secondOuter, secondInner, secondStable⟩ :=
