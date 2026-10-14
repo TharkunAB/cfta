@@ -59,6 +59,7 @@ module Data.CFTA.GHC.Fits (
     -- * Options
     Options (..),
     defaultOptions,
+    hectareAvoid,
 
     -- * Fits
     Fit (..),
@@ -182,6 +183,38 @@ defaultOptions =
         , optionReport = Nothing
         , optionTrace = Nothing
         }
+
+{- | Hectare's pruning rule of the Hoogle+ library, with GHC's names, for
+'optionAvoid': a list function is not applied to @[]@.
+-}
+hectareAvoid :: [([Text], Maybe [Text])]
+hectareAvoid =
+    [
+        (
+            [ "listToMaybe"
+            , "lefts"
+            , "rights"
+            , "partitionEithers"
+            , "catMaybes"
+            , "head"
+            , "last"
+            , "tail"
+            , "init"
+            , "null"
+            , "length"
+            , "reverse"
+            , "concat"
+            , "concatMap"
+            , "sum"
+            , "product"
+            , "maximum"
+            , "minimum"
+            , "(!!)"
+            , "(++)"
+            ]
+        , Just ["[]"]
+        )
+    ]
 
 -- | A program that fits, with its size in leaves.
 data Fit = Fit

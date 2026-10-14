@@ -16,7 +16,8 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
 - `Fit` tells whether a fit ignores part of itself (`fitIgnoresPart`): it
   still fits when one of its argument subterms has a fresh rigid type, so by
   parametricity it cannot use that subterm. `synthesizeFits` puts such fits
-  last.
+  last. `hectareAvoid` is Hectare's rule that a list function is not applied
+  to `[]`.
 - `Data.CFTA.GHC.Erase`: GHC types as Hectare's first-order types, with the
   class contexts erased, and `anyResult` for the components that would fit
   every hole once erased.

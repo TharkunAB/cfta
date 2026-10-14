@@ -153,38 +153,6 @@ signatureOf query = context <> renderType (foldr (TFun . snd) (ghcGoal query) (g
         [] -> ""
         constraints -> "(" <> intercalate ", " [className <> " " <> Text.unpack variable | (className, variable) <- constraints] <> ") => "
 
-{- | Hectare's pruning rule of the Hoogle+ library, with GHC's names: a list
-function is not applied to @[]@.
--}
-hooglePlusAvoid :: [([Text], Maybe [Text])]
-hooglePlusAvoid =
-    [
-        (
-            [ "listToMaybe"
-            , "lefts"
-            , "rights"
-            , "partitionEithers"
-            , "catMaybes"
-            , "head"
-            , "last"
-            , "tail"
-            , "init"
-            , "null"
-            , "length"
-            , "reverse"
-            , "concat"
-            , "concatMap"
-            , "sum"
-            , "product"
-            , "maximum"
-            , "minimum"
-            , "(!!)"
-            , "(++)"
-            ]
-        , Just ["[]"]
-        )
-    ]
-
 -- Libraries
 
 -- | A rung of the library ladder: its name and its modules.
@@ -238,7 +206,7 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
                         defaultOptions
                             { optionMaximumSize = ghcSize query
                             , optionSeconds = Just (fromIntegral seconds - (ready - start))
-                            , optionAvoid = hooglePlusAvoid
+                            , optionAvoid = hectareAvoid
                             , optionReport = Just report
                             , optionTrace = if tracing then Just trace else Nothing
                             }
