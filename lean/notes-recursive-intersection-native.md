@@ -70,21 +70,20 @@ verification derives memo invariant retention for these physical effects.
 
 ## Next obligations
 
-Derive whole completed native execution correspondence and completed memo
-provenance from the actual native traces. The driver now threads both memo
-families through recursive body execution. Its completion frames do not yet
-derive `Produced`, and there is no global validity theorem for every completed
-driver run. The earlier `finishNode_execution` and `finishEdge_execution`
-helpers still use an uncached kernel body premise. Do not treat them as a
-whole native execution proof.
+Actual completed runs now derive finite nested evaluations, and those
+evaluations construct the converse exact native runs. Trace splitting retains
+the original body, shared state, continuation, and total step count. Source
+body compilation excludes native completion frames. Completed source bodies
+retain both memo structures and every enclosing running cell. Their original
+completion frame stores the actual returned value in the original cell.
+Read [native completion](notes-recursive-intersection-completion.md).
 
-Use trace and continuation composition to identify well-formed nested body
-segments and their original captured requests. Derive completion-frame
-provenance from those segments. Do not supply `Produced` at every finish,
-assume callback purity, or replace the native body with uncached evaluation.
-Derive intermediate operand availability, checked key ranges, complete source
-machine invariants, and retained memo winners. Existing completed replay and
-larger-bound stability can combine finite child bounds after correspondence.
+Derive full guarded kernel correspondence and semantic `Produced` from these
+actual evaluation trees. Structural `Shape` and frame retention do not supply
+that provenance. Carry explicit word bounds and derive physical/domain facts,
+availability, exact growth, and finite child bounds. Do not supply provenance
+at completion frames, assume purity, or replace native body execution with an
+uncached callback. The old completion helpers still use uncached body premises.
 
 Then derive the physical input view, finite reachable payload inventory,
 sufficient first-run bounds, and `ProductReadback.members` and `.rejected`.
@@ -93,7 +92,7 @@ nested first-run constructor completion, new-body preparation, concrete GHC
 primitives and scheduling, and verified Haskell extraction remain open.
 The exact Sized source paths and cold-table results remain unchanged.
 
-## Validation
+## Validation at this checkpoint
 
 All seven new modules are imported by `MicroCFTA.Audit`. The pinned Lean 4.34.1
 aggregate build passes 1,235 jobs and 40,978 theorem dependency checks.

@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 05:03 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 05:36 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -19,8 +19,10 @@ readback, complete replay, checked completed node/edge memo provenance,
 and typed pending publication, demand, completion, and exact native observations.
 The complete source branch compiler and recursive native memo driver now have
 checked request steps, retained continuations, finite traces, and physical effects.
+Completed native runs now derive exact finite nested evaluations. Completed
+source bodies retain their memo structures and all enclosing running cells.
 **No background proof worker is active.**
-The latest proof checkpoint is **`2b6b1e2a`**. A later documentation commit
+The latest proof checkpoint is **`a674a61b`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -45,7 +47,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **33% at 05:03 CEST**. This is a historical value.
+The last observed value was **33% at 05:36 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -350,20 +352,41 @@ composition, actual finite traces, and retention through constructor work,
 domain entry, and optional-binder effects are checked. Pending construction
 keeps its actual installed key, returned heap, and original continuation.
 The driver does not yet derive `Produced` at completion frames or establish
-whole completed-run validity and correspondence. Read
-[native recursive execution](lean/notes-recursive-intersection-native.md).
+whole completed-run strong source validity and guarded kernel correspondence.
+Read [native recursive execution](lean/notes-recursive-intersection-native.md).
+
+## Actual native completion and frame ownership
+
+`SourceRecursiveIntersectionNativeTraceSplit` derives exact inner body and
+continuation traces, their shared state, and original total step count.
+`SourceRecursiveIntersectionNativeEvaluation` and its completion/trace proofs
+establish `completed_iff_evaluation`: actual finite completed native runs and
+finite nested evaluation trees agree in both directions. The judgment assumes
+no kernel execution, purity, language, or `Produced` premise.
+
+`SourceRecursiveIntersectionBodyCode` proves that every compiled node and edge
+body excludes explicit native completion instructions. `FlatMemoThunkRunning`
+and `SourceRecursiveIntersectionNativeShape` derive structural memo validity
+and running-cell retention through actual lookup, demand, and completion.
+`SourceRecursiveIntersectionNativeRunning.done_retains` derives final `Shape`
+and retention of all enclosing running requests from actual completed source
+body execution. `node_body_cell` and `edge_body_cell` retain the original
+running cell until its original frame stores the actual returned value.
+This establishes structural frame ownership, not semantic provenance.
+Read [native completion](lean/notes-recursive-intersection-completion.md).
 
 ## Remaining priorities
 
-1. Derive whole completed native execution correspondence and memo provenance
-   from actual native traces. The complete compiler and recursive memo driver
-   now thread both families. Request steps, continuation composition, finite
-   traces, and physical-effect retention are checked. The driver does not yet
-   derive `Produced` at completion frames. Use
-   `lean/notes-recursive-intersection-native.md` for the exact next target.
-   Derive well-formed nested body segments, original captured requests,
-   intermediate availability, checked machine ranges, and retained winners.
-   Do not supply completion provenance or use uncached replacement callbacks.
+1. Derive guarded kernel correspondence and concrete memo `Produced` from
+   actual native evaluation trees. Completed native runs and finite nested
+   evaluations now agree in both directions. Trace splitting, original frame
+   ownership, structural `Shape`, and enclosing running-cell retention are
+   proved. Do not repeat them. Use
+   `lean/notes-recursive-intersection-completion.md` for the exact next target.
+   Carry explicit word bounds. Derive physical/domain facts, availability,
+   exact growth, finite child bounds, and retained semantic memo provenance.
+   Structural `Shape` alone is not strong source validity. Do not supply
+   `Produced` at completion frames or use uncached replacement callbacks.
    Preserve publication before thunk forcing, shifted domain keys, ordered
    tagged operands, reversed swap requests, and RecIntersect bypass. Retain
    the current continuation and source effects when a bounded execution yields.
@@ -431,10 +454,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,235 jobs and 40,978 theorem dependency checks**.
+The current build passes **1,243 jobs and 41,062 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-native-driver-20261014-audit.log`.
+Log: `/tmp/mcfta-native-completion-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -468,6 +491,10 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `a674a61b` | Completed native bodies preserve memo structure, enclosing running cells, and original completion-frame ownership. |
+| `e929fbcf` | Complete source body restriction and generic running-cell lifecycle laws. |
+| `012ad439` | Exact equivalence between completed native runs and finite nested evaluations. |
+| `0af8aedd` | Exact split of actual completed body and continuation traces with original total step count. |
 | `2b6b1e2a` | Native continuation composition, exact finite traces, and retained physical effects. |
 | `6e80e732` | Resumable recursive node/edge memo driver and exact request steps. |
 | `1dbe0867` | Complete physical source branch compiler and exact guarded kernel agreement. |

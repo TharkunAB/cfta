@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 05:03 CEST**, upstream `f59c198d`.
-The latest proof commit is `2b6b1e2a`. No background proof worker is active.
+Current checkpoint: **2026-10-14 05:36 CEST**, upstream `f59c198d`.
+The latest proof commit is `a674a61b`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -103,14 +103,18 @@ concrete kernel replay. `SourceRecursiveIntersectionCode` and
 and derive exact kernel agreement. `SourceRecursiveIntersectionNative*`
 threads both memo families through recursive bodies. Request steps,
 continuation composition, finite actual traces, and physical-effect retention
-are checked. Whole completed-run correspondence, derived completion-frame
-provenance, and product correspondence remain open. See
+are checked. Actual finite completed runs and nested evaluations now agree
+in both directions. Completed source bodies preserve structural memo `Shape`
+and all enclosing running requests. Their original frame stores the actual
+returned value in the original cell. Guarded kernel correspondence, semantic
+completion-frame provenance, and product correspondence remain open. See
 [recursive memo](notes-recursive-intersection-memo.md),
-[native memo thunks](notes-recursive-intersection-thunks.md), and
-[native recursive execution](notes-recursive-intersection-native.md).
+[native memo thunks](notes-recursive-intersection-thunks.md),
+[native recursive execution](notes-recursive-intersection-native.md), and
+[native completion](notes-recursive-intersection-completion.md).
 
 Nested binder construction, native cyclic product rows, thunk scheduling,
-and complete recursive memo-effect traces remain open. Free-name projection and ordinary-root deep
+and whole native semantic correspondence remain open. Free-name projection and ordinary-root deep
 observations are derived; general cached-depth and binder-heap induction
 remain open. See [physical construction](notes-physical-intersection-rows.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
@@ -123,7 +127,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,235 targets and 40,978 theorem dependency checks**
+The current audit passes **1,243 targets and 41,062 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

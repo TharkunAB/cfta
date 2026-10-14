@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 05:03 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 05:36 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -207,17 +207,34 @@ families through recursive body execution. Misses publish before bodies run;
 busy hits retain their code and caches. Request steps, continuation composition,
 finite traces, and physical-effect retention are checked. Pending construction
 retains its actual installed key, new heap, and original continuation. Whole
-completed-run correspondence and memo provenance at completion frames remain
+guarded kernel correspondence and memo provenance at completion frames remain
 open, as do sufficient first-run bounds and product language. See
 [native recursive execution](lean/notes-recursive-intersection-native.md).
+
+## Actual native completion and frame ownership
+
+`SourceRecursiveIntersectionNativeTraceSplit` derives exact body and
+continuation segments from actual traces. `completed_iff_evaluation` proves
+that actual finite completed native runs and finite nested evaluation trees
+agree in both directions, including all returned caches. No kernel execution,
+purity, language, or completion-provenance premise is supplied.
+
+Every compiled source body excludes explicit native completion instructions.
+`SourceRecursiveIntersectionNativeRunning.done_retains` proves that actual
+completed source bodies preserve structural memo `Shape` and all enclosing
+running requests. The original node or edge cell remains running until its
+original frame stores the actual returned value. This establishes structural
+frame ownership. It does not prove strong source validity, guarded kernel
+correspondence, `Produced`, or a sufficient first-run bound for every input.
+See [native completion](lean/notes-recursive-intersection-completion.md).
 
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
 has exposed and repaired real defects. It is not yet an end-to-end proof of
 the Haskell library. The largest remaining obligations concern general
-recursive construction/exposure, thunk scheduling and full recursive
-memo traces, native SCC/split import readback and custom decoder order,
+recursive construction/exposure, semantic native memo correspondence and
+sufficient first-run bounds, native SCC/split import readback and custom decoder order,
 general equality propagation, and concrete runtime/dependency contracts.
 No verified Haskell-to-Lean extraction exists. There is no honest single
 completion percentage for these different layers.
@@ -233,16 +250,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`2b6b1e2a`**; later commits record this handoff.
+The latest proof checkpoint is **`a674a61b`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,235 build targets and 40,978 theorem
+The current Lean 4.34.1 audit passes **1,243 build targets and 41,062 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-native-driver-20261014-audit.log`.
+Log: `/tmp/mcfta-native-completion-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **33% at 05:03 CEST**.
+No background proof worker is active. Weekly allowance was **33% at 05:36 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
