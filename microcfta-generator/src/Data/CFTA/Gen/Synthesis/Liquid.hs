@@ -46,6 +46,11 @@ higher-order component states its result with @ap@, as
 With 'optionConditionals', a term whose guard holds only under a condition
 gets the condition as a requirement, and a conditional @if c t e@ at the goal
 can be a solution, as in the paper's starred queries.
+
+'checker' and 'preciseChecker' check single programs of
+"Data.CFTA.Gen.Synthesis" against a query, with the same inference and
+entailment. "Data.CFTA.Gen.Synthesis.Hybrid" lists Hectare's programs and
+checks them this way.
 -}
 module Data.CFTA.Gen.Synthesis.Liquid (
     -- * Refinement types
@@ -72,13 +77,19 @@ module Data.CFTA.Gen.Synthesis.Liquid (
     Outcome (..),
     synthesize,
     renderTerm,
+
+    -- * Checks of single programs
+    Checker (..),
+    checker,
+    preciseChecker,
+    componentRoles,
 ) where
 
 import Control.Applicative ((<|>))
 import Control.Exception (try)
 import Control.Monad (filterM, foldM, unless, when)
 import Data.Char (isAlphaNum, isDigit, isLower, isSpace)
-import Data.IORef (modifyIORef', newIORef, readIORef)
+import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
 import Data.List (inits, intercalate, nub, tails)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
@@ -473,32 +484,8 @@ the first size at which some term has the goal type.
 -}
 synthesize :: Entailment -> Options -> [Component] -> LiquidQuery -> IO (Either String Outcome)
 synthesize entailment options components query = do
-    counter <- newIORef (0 :: Int)
-    undecided <- newIORef (0 :: Int)
-    known <- newIORef Map.empty
+    (counted, counter, undecided) <- countedEntailment entailment (environmentOf query)
     let
-        -- The query arguments' refinements hold in every query. An entailment
-        -- that the solver cannot decide, or decide within its time limit,
-        -- counts as failed: a guard that needs
-        -- it does not apply, so no wrong term is kept. The verdicts are kept,
-        -- because many applications ask the same questions.
-        counted = entailmentWithBindings $ \bindings antecedent consequent -> do
-            let key = (bindings, antecedent, consequent)
-            remembered <- Map.lookup key <$> readIORef known
-            case remembered of
-                Just verdict -> pure verdict
-                Nothing | antecedent == consequent -> pure Yes
-                Nothing -> do
-                    modifyIORef' counter (+ 1)
-                    answer <-
-                        either (\TimeLimitReached{} -> Unknown) id
-                            <$> try (entailsWithBindings entailment bindings (Formula.conjunction [environment, antecedent]) consequent)
-                    verdict <-
-                        if answer == Unknown
-                            then No <$ modifyIORef' undecided (+ 1)
-                            else pure answer
-                    modifyIORef' known (Map.insert key verdict)
-                    pure verdict
         realizeWith' candidates =
             realizeWith
                 counted
@@ -566,16 +553,139 @@ synthesize entailment options components query = do
                 )
     go 1 (Map.singleton 0 leaves)
   where
-    heads =
-        [(name, typ, Formula.Var (functionConstant name)) | (name, typ@RArrow{}) <- components]
-            <> [(name, typ, Formula.Var (Name name)) | (name, typ@RArrow{}) <- liquidArguments query]
+    heads = headsOf components query
     functions = Map.fromList [(name, typ) | (name, typ@RArrow{}) <- components <> liquidArguments query]
-    -- What the query arguments' refinements state about them.
-    environment =
-        Formula.conjunction
-            ( [Formula.substitute [(value, Formula.Var (Name name))] refinement | (name, RBase _ refinement) <- liquidArguments query]
-                <> [lifted (Formula.Var (Name name)) typ | (name, typ@RArrow{}) <- liquidArguments query]
-            )
+
+{- | The heads of a query: the components and the query arguments of function
+type, each with its function value in the logic.
+-}
+headsOf :: [Component] -> LiquidQuery -> [(Text, RType, Formula.Term)]
+headsOf components query =
+    [(name, typ, Formula.Var (functionConstant name)) | (name, typ@RArrow{}) <- components]
+        <> [(name, typ, Formula.Var (Name name)) | (name, typ@RArrow{}) <- liquidArguments query]
+
+-- | What the query arguments' refinements state about them.
+environmentOf :: LiquidQuery -> Formula
+environmentOf query =
+    Formula.conjunction
+        ( [Formula.substitute [(value, Formula.Var (Name name))] refinement | (name, RBase _ refinement) <- liquidArguments query]
+            <> [lifted (Formula.Var (Name name)) typ | (name, typ@RArrow{}) <- liquidArguments query]
+        )
+
+{- | The entailment of a run, with the counts of its solver queries and of
+the queries that the solver did not decide. The environment holds in every
+query. An entailment that the solver cannot decide, or decide within its
+time limit, counts as failed: a guard that needs it does not apply, so no
+wrong term is kept. The verdicts are kept, because many applications ask
+the same questions.
+-}
+countedEntailment :: Entailment -> Formula -> IO (Entailment, IORef Int, IORef Int)
+countedEntailment entailment environment = do
+    counter <- newIORef (0 :: Int)
+    undecided <- newIORef (0 :: Int)
+    known <- newIORef Map.empty
+    let counted = entailmentWithBindings $ \bindings antecedent consequent -> do
+            let key = (bindings, antecedent, consequent)
+            remembered <- Map.lookup key <$> readIORef known
+            case remembered of
+                Just verdict -> pure verdict
+                Nothing | antecedent == consequent -> pure Yes
+                Nothing -> do
+                    modifyIORef' counter (+ 1)
+                    answer <-
+                        either (\TimeLimitReached{} -> Unknown) id
+                            <$> try (entailsWithBindings entailment bindings (Formula.conjunction [environment, antecedent]) consequent)
+                    verdict <-
+                        if answer == Unknown
+                            then No <$ modifyIORef' undecided (+ 1)
+                            else pure answer
+                    modifyIORef' known (Map.insert key verdict)
+                    pure verdict
+    pure (counted, counter, undecided)
+
+{- | A check of single programs against a query, with the inference and the
+entailment of 'synthesize'.
+-}
+data Checker = Checker
+    { checkProgram :: Synthesis.Program -> IO Bool
+    {- ^ Whether a program is defined and has the goal type. A program is a
+    query argument, a constant, a function value, or a head applied to all
+    its parameters, as in the terms of 'synthesize'. Another program fails.
+    -}
+    , checkerQueries :: IO (Int, Int)
+    -- ^ The solver queries so far, and the queries that the solver did not decide.
+    }
+
+{- | The checker of a query. It builds the state of a program bottom up, as
+'synthesize' builds the state of a term: the base types unify, each guard
+must hold, and the refinement of a subprogram is abstracted to the
+qualifiers. The states of the subprograms are kept, so a subprogram that
+many programs share gets one state. The goal check of a program uses its
+precise refinement, which implies the abstracted one. The checker does not
+make conditionals.
+-}
+checker :: Entailment -> [Component] -> LiquidQuery -> IO Checker
+checker = checkerWith True
+
+{- | The checker of a query that does not abstract: each subprogram keeps its
+precise refinement. It asks no qualifier queries, and its refinements grow
+with the program.
+-}
+preciseChecker :: Entailment -> [Component] -> LiquidQuery -> IO Checker
+preciseChecker = checkerWith False
+
+{- | The roles of the components in the terms of 'synthesize': the number of
+parameters of each component, zero for a constant, and whether it can be an
+argument without arguments of its own ('valued').
+-}
+componentRoles :: [Component] -> LiquidQuery -> [(Text, Int, Bool)]
+componentRoles components query = [(name, length (parametersOf typ), valued components query typ) | (name, typ) <- components]
+
+-- | The checker of a query, with or without the abstraction of subprograms to the qualifiers.
+checkerWith :: Bool -> Entailment -> [Component] -> LiquidQuery -> IO Checker
+checkerWith abstracts entailment components query = do
+    (counted, counter, undecided) <- countedEntailment entailment (environmentOf query)
+    candidates <-
+        if abstracts then simplifyQualifiers counted (qualifiers components query) else pure []
+    states <- newIORef Map.empty
+    let
+        -- Without conditions, each guard is decided when the state is made.
+        realize = realizeWith counted (Just [])
+        precise = realize (\_ refinement -> pure refinement)
+        abstracted = if abstracts then realize (abstractWith counted candidates) else precise
+        -- The state of a subprogram, kept for the next programs.
+        stateOf program = do
+            remembered <- Map.lookup program <$> readIORef states
+            case remembered of
+                Just state -> pure state
+                Nothing -> do
+                    state <- pendingOf program >>= maybe (pure Nothing) abstracted
+                    modifyIORef' states (Map.insert program state)
+                    pure state
+        -- The term of a program before its refinement is abstracted.
+        pendingOf program = case spine program [] of
+            (name, [])
+                | Just typ <- lookup name (liquidArguments query) -> pure $ Just (argumentLeaf (name, typ))
+                | Just typ <- lookup name components, valued components query typ -> pure $ Just (componentLeaf (name, typ))
+            (name, arguments)
+                | Just (typ, function) <- lookup name heads
+                , length (parametersOf typ) == length arguments -> do
+                    children <- traverse stateOf arguments
+                    pure $ sequence children >>= application (Just function) name typ
+            _ -> pure Nothing
+        check program = case liquidGoal query of
+            RArrow{} -> pure False
+            RBase base goal -> do
+                found <- pendingOf program >>= maybe (pure Nothing) precise
+                case found of
+                    Just State{stateType = RBase actual refinement}
+                        | actual == base -> (== Yes) <$> entailsWithBindings counted [] refinement goal
+                    _ -> pure False
+    pure $ Checker check ((,) <$> readIORef counter <*> readIORef undecided)
+  where
+    heads = [(name, (typ, function)) | (name, typ, function) <- headsOf components query]
+    spine (Synthesis.App function argument) arguments = spine function (argument : arguments)
+    spine (Synthesis.Var name) arguments = (name, arguments)
 
 -- | The number of states at all sizes.
 stateCount :: Map Int [State] -> Int

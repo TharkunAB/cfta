@@ -16,6 +16,7 @@ import qualified Data.CFTA.Gen.Refinement.SimilarityMinimizationSpec
 import qualified Data.CFTA.Gen.Refinement.SizedVectorSpec
 import qualified Data.CFTA.Gen.Refinement.StateMachineTraceSpec
 import qualified Data.CFTA.Gen.Refinement.SubsumptionTypedExpressionSpec
+import qualified Data.CFTA.Gen.Synthesis.HybridSpec
 import qualified Data.CFTA.Gen.Synthesis.LiquidSpec
 
 main :: IO ()
@@ -38,3 +39,4 @@ main = do
         Data.CFTA.Gen.Refinement.DependentApplicationSpec.spec
         Data.CFTA.Gen.Refinement.OracleSpec.spec
         Data.CFTA.Gen.Synthesis.LiquidSpec.spec
+        Data.CFTA.Gen.Synthesis.HybridSpec.spec
