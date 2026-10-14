@@ -1,6 +1,8 @@
 # Repaired cold shared traversal and exact Sized classes
 
-Updated: 2026-10-14 13:05 CEST. Proof checkpoints: `c410bc0a` and `75c50b4d`.
+Updated: 2026-10-14 15:07 CEST. Latest table checkpoint: `3dc8f856`.
+General shared termination: `68e790f0`.
+Earlier checkpoints: `c410bc0a` and `75c50b4d`.
 
 ## Direct repaired executor
 
@@ -62,14 +64,53 @@ The primary finite-key public native and solver-decided Sized contracts
 remain unchanged. This result makes the repaired shared executor explicit
 in the first-order construction path.
 
-## Remaining obligation
+## General finite shared traversal
 
-Derive a finite repaired trace for arbitrary nested closed source outputs.
-General single unfolding, bounded reader safety, and exact completed-read
-replay are already proved. The initial Mu inventory and descending cached
-depth are refuted as general measures by an actual closed source example.
-See [native output and cold effects](notes-native-output-cold-effects.md).
-General finite final tables and physical product language remain open.
+`68e790f0` adds `InternedFreshMuUnfoldBudget`. Counts use actual unfinished
+canonical Mu records by body degree. Completed unfoldings are settled, and
+actual allocation-free replay preserves settled calls after cache growth.
+`unfold_progress` gives strict finite-vector decrease or exact cache equality.
+`MergedFreshOrdinaryColdBudget` retains that result, the body/probe heap,
+and the maximum degree through every completed actual closed read.
+
+`SourceFreshOrdinaryColdSharedTermination.complete` follows the actual shared
+worklist. A changing cache reduces the unfinished-degree vector. An unchanged
+cache lets the new row consume an unvisited issued identity. Empty and known
+values reduce pending length. `cold_finite` derives an actual finite trace
+and uniform stable outer/read bounds. `constructed_cold_finite` derives all
+heap premises from actual repaired empty-cache source construction.
+No preparation, `NoNewMu`, finite future inventory, or supplied trace is
+assumed. General finite final-map readback and row-language preservation are
+next. Native body/probe heap propagation and physical product language remain
+separate obligations.
+
+## Finite general final tables
+
+`3dc8f856` adds `SourceFreshOrdinaryColdTable`. Every first-written row is
+retained. `Trace.closed` declares every nonempty child in the final map.
+`Trace.replayed` gives an available closed root and an identical allocation-
+free final-cache read for every stored row. `keys_exact` uses the actual final
+issued counter and proves a finite distinct exact map domain. `keys_ascending`
+proves the native ascending identity order. `cold_table` combines these facts
+with the actual finite trace, stable outer/read bounds, semantic heaps,
+coverage, the body/probe heap, growth/history, and resident closed edges.
+No preparation, fixed future cache, or supplied trace is assumed.
+
+The aggregate audit passes 1,385 jobs and 43,138 theorem dependency checks.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
+`/tmp/mcfta-fresh-cold-table-20261014-audit.log`.
+This proves finite table structure and exact row readback. General guarded
+row-language preservation, native body/probe heap propagation, and physical
+product language remain open. The earlier prepared graph uses the old stored
+executor. Do not remove its preparation premise from termination alone.
+
+## Remaining obligations
+
+The exact final finite map is proved. Derive general guarded row language. The
+prepared language bridge remains valid in its stated scope. Its preparation
+premise cannot be removed only from termination. Native construction must
+also retain the new body/probe heap before general native-output termination
+is claimed. Physical product language remains open.
 
 ## Raw-binder reconstruction boundary
 

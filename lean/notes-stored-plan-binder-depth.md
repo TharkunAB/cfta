@@ -1,6 +1,6 @@
 # Actual stored-plan binder depth
 
-Updated: 2026-10-14 14:54 CEST. Latest proof checkpoint: `6132e4f2`.
+Updated: 2026-10-14 15:07 CEST. Latest proof checkpoint: `3dc8f856`.
 The compiler and zero-case proof is now `c269539f` after the PR #122 rebase. Its earlier
 hash `7f1daf23` remains in the preserving backup.
 
@@ -93,8 +93,9 @@ preserve the new body/probe invariant for subsequent actual source work.
 The aggregate audit passes 1,381 jobs and 43,054 theorem dependency checks.
 Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
 The three permitted axioms remain `propext`, `Classical.choice`, and `Quot.sound`.
-The primary Sized source results remain intact. General finite repeated
-cold traversal, final tables, and physical product language remain open.
+The primary Sized source results remain intact. Later checkpoints prove
+general finite cold traversal and structural final tables. General guarded
+row-language preservation and physical product language remain open.
 
 ## Proved positive-depth target
 
@@ -177,19 +178,59 @@ edges, and identical edges and cache at every larger read bound.
 `constructed_read_closed` derives all cache premises from actual repaired
 empty-cache source construction.
 
-## Next shared traversal budget
+## General finite shared traversal
 
-Derive finite shared traversal and its exact final tables. Row reads
-reset the local seen list. Use the existing allocation-free replay of
-completed unfolds to avoid charging the same Mu repeatedly. Also transfer
-the new heap through actual native execution before claiming that scope.
-The native successful result and semantic heap proofs remain intact, but
-their older semantic-heap predicate does not include the new open-depth heap.
+`68e790f0` adds `InternedFreshMuUnfoldBudget`. Counts use actual unfinished
+canonical Mu records by body degree. Completed unfoldings are settled, and
+actual allocation-free replay preserves settled calls after cache growth.
+`unfold_progress` gives strict finite-vector decrease or exact cache equality.
+`MergedFreshOrdinaryColdBudget` retains that result, the body/probe heap,
+and the maximum degree through every completed actual closed read.
+
+`SourceFreshOrdinaryColdSharedTermination.complete` follows the actual shared
+worklist. A changing cache reduces the unfinished-degree vector. An unchanged
+cache lets the new row consume an unvisited issued identity. Empty and known
+values reduce pending length. `cold_finite` derives an actual finite trace
+and uniform stable outer/read bounds. `constructed_cold_finite` derives all
+heap premises from actual repaired empty-cache source construction.
+No preparation, `NoNewMu`, finite future inventory, or supplied trace is
+assumed. General finite final-map readback and row-language preservation are
+next. Native body/probe heap propagation and physical product language remain
+separate obligations.
+
+## Finite general final tables
+
+`3dc8f856` adds `SourceFreshOrdinaryColdTable`. Every first-written row is
+retained. `Trace.closed` declares every nonempty child in the final map.
+`Trace.replayed` gives an available closed root and an identical allocation-
+free final-cache read for every stored row. `keys_exact` uses the actual final
+issued counter and proves a finite distinct exact map domain. `keys_ascending`
+proves the native ascending identity order. `cold_table` combines these facts
+with the actual finite trace, stable outer/read bounds, semantic heaps,
+coverage, the body/probe heap, growth/history, and resident closed edges.
+No preparation, fixed future cache, or supplied trace is assumed.
+
+The aggregate audit passes 1,385 jobs and 43,138 theorem dependency checks.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
+`/tmp/mcfta-fresh-cold-table-20261014-audit.log`.
+This proves finite table structure and exact row readback. General guarded
+row-language preservation, native body/probe heap propagation, and physical
+product language remain open. The earlier prepared graph uses the old stored
+executor. Do not remove its preparation premise from termination alone.
+
+## Next language and native targets
+
+Exact finite map domains, declared children, and actual final-cache row
+replay are proved. Next prove general guarded row-language preservation
+and physical product readback.
+Transfer the new body/probe heap through actual native execution before
+claiming general native-output termination. The existing native successful
+result retains the older semantic heap, which omits this new invariant.
 
 ## Validation
 
-Lean 4.34.1 passes 1,381 aggregate jobs and 43,103 theorem dependency checks.
+Lean 4.34.1 passes 1,385 aggregate jobs and 43,138 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-fresh-cold-termination-20261014-audit.log`.
+`/tmp/mcfta-fresh-cold-table-20261014-audit.log`.
 No Haskell source changed. Existing Nix and active-package formatter checks
 remain valid.

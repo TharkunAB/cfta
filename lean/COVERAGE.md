@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 14:54 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `6132e4f2`. No background proof worker is active.
+Current checkpoint: **2026-10-14 15:07 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `3dc8f856`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -292,7 +292,14 @@ closed worklist execution with new lower-depth Mu allocations.
 `read_closed` proves successful public reads with exact returned edges/cache,
 retained semantic and body/probe heaps, coverage, and larger-bound stability.
 `constructed_read_closed` derives all premises from actual source construction.
-General finite shared rows and physical product language remain open.
+`InternedFreshMuUnfoldBudget` and `MergedFreshOrdinaryColdBudget` derive
+strict unfinished-degree progress or identical caches for actual closed reads.
+`SourceFreshOrdinaryColdSharedTermination` proves general finite shared
+traversal and stable uniform bounds from actual closed source construction.
+`SourceFreshOrdinaryColdTable` derives exact finite ascending map domains,
+declared nonempty children, and exact allocation-free final-cache row replay.
+General guarded row-language preservation, native body/probe heap propagation,
+and physical product language remain open.
 A finite exploratory search found no
 counterexample, which is validation only. See
 [stored-plan binder depth](notes-stored-plan-binder-depth.md).
@@ -306,7 +313,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,381 targets and 43,103 theorem dependency checks**
+The current audit passes **1,385 targets and 43,138 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 After PR #122, all 208 generator and 145 refinement examples pass. The
 unchanged core retains its earlier 289 passing examples. Fourmolu and active-package cabal-gild passed.

@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 14:54 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 15:07 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -34,6 +34,54 @@ Unknown and unchanged exceptions remain separate. Replies need not be stable.
 External Sat/Unsat correctness and completion remain explicit contracts.
 See [finite map Sized](lean/notes-sized-finite-keys.md).
 
+## Finite general final tables
+
+`3dc8f856` adds `SourceFreshOrdinaryColdTable`. Every first-written row is
+retained. `Trace.closed` declares every nonempty child in the final map.
+`Trace.replayed` gives an available closed root and an identical allocation-
+free final-cache read for every stored row. `keys_exact` uses the actual final
+issued counter and proves a finite distinct exact map domain. `keys_ascending`
+proves the native ascending identity order. `cold_table` combines these facts
+with the actual finite trace, stable outer/read bounds, semantic heaps,
+coverage, the body/probe heap, growth/history, and resident closed edges.
+No preparation, fixed future cache, or supplied trace is assumed.
+
+The aggregate audit passes 1,385 jobs and 43,138 theorem dependency checks.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
+`/tmp/mcfta-fresh-cold-table-20261014-audit.log`.
+This proves finite table structure and exact row readback. General guarded
+row-language preservation, native body/probe heap propagation, and physical
+product language remain open. The earlier prepared graph uses the old stored
+executor. Do not remove its preparation premise from termination alone.
+
+The latest restart snapshot is
+`/tmp/mcfta-fresh-shared-table-checkpoint-20261014-1507/`.
+It contains 1,744 Lean-tree files, root restart documents, the retained fixture,
+and the new audits. Its manifest compares all 1,740 previous checkpoint files.
+No file is missing. Only the additive height-order lemma, audit imports,
+coverage ledgers, and component notes changed among those files. All other
+proofs and all marked drafts remain byte-identical.
+
+## General finite shared traversal
+
+`68e790f0` adds `InternedFreshMuUnfoldBudget`. Counts use actual unfinished
+canonical Mu records by body degree. Completed unfoldings are settled, and
+actual allocation-free replay preserves settled calls after cache growth.
+`unfold_progress` gives strict finite-vector decrease or exact cache equality.
+`MergedFreshOrdinaryColdBudget` retains that result, the body/probe heap,
+and the maximum degree through every completed actual closed read.
+
+`SourceFreshOrdinaryColdSharedTermination.complete` follows the actual shared
+worklist. A changing cache reduces the unfinished-degree vector. An unchanged
+cache lets the new row consume an unvisited issued identity. Empty and known
+values reduce pending length. `cold_finite` derives an actual finite trace
+and uniform stable outer/read bounds. `constructed_cold_finite` derives all
+heap premises from actual repaired empty-cache source construction.
+No preparation, `NoNewMu`, finite future inventory, or supplied trace is
+assumed. The later `3dc8f856` checkpoint derives exact finite map readback.
+General row-language preservation is next. Native body/probe heap propagation and physical product language remain
+separate obligations.
+
 ## Finite general repaired cold reads
 
 `6132e4f2` proves a dynamic budget over actual canonical Mu identities.
@@ -47,11 +95,10 @@ semantic/coverage and body/probe heap preservation, resident closed edges,
 and stability at all larger bounds. `constructed_read_closed` derives all
 cache premises from actual repaired empty-cache source construction.
 
-Audit: 1,381 jobs and 43,103 theorem dependency checks. Log:
-`/tmp/mcfta-fresh-cold-termination-20261014-audit.log`.
-General shared traversal remains open because row reads reset local visited
-identities. Next count unsettled unfoldings by degree and use actual repaired
-allocation-free replay. Native propagation of the body/probe heap and physical
+Audit: 1,385 jobs and 43,138 theorem dependency checks. Log:
+`/tmp/mcfta-fresh-cold-table-20261014-audit.log`.
+General shared traversal is proved below the current source heap boundary by
+`68e790f0`. Its unfinished-unfolding budget uses actual allocation-free replay. Native propagation of the body/probe heap and physical
 product language remain separate obligations. See
 `lean/notes-stored-plan-binder-depth.md`.
 
@@ -642,7 +689,8 @@ validation, not a proof. File `/tmp/mcfta-open-rank-probe.lean`; log
 `/tmp/mcfta-open-rank-probe-20261014.log`.
 The depth-one checkpoint below is historical. General strict progress is
 now proved by the later open-depth correspondence and allocation bound.
-No dynamic rank budget or general cold-reader termination is proved yet.
+At this earlier checkpoint the dynamic rank budget was unproved.
+`6132e4f2` and `68e790f0` later prove the reader and shared traversal budgets.
 See [stored-plan binder depth](lean/notes-stored-plan-binder-depth.md).
 
 ## Actual normalization bounds and the positive depth-one case
@@ -745,8 +793,9 @@ Its preservation report compares all 1,732 saved pre-rebase files. None is
 missing. Only audit imports, two coverage ledgers, and the depth note changed
 intentionally. All earlier proof and marked-draft bytes remain unchanged.
 
-The primary Sized source results remain intact. General finite repeated
-cold traversal, final tables, and physical product language remain open.
+The primary Sized source results remain intact. Later checkpoints prove
+general finite cold traversal and structural final tables. General guarded
+row-language preservation and physical product language remain open.
 
 ## Historical PR #121 preserving refresh
 
@@ -832,9 +881,9 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`6132e4f2`**; later commits record this handoff.
+The latest proof checkpoint is **`3dc8f856`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,381 build targets and 43,103 theorem
+The current Lean 4.34.1 audit passes **1,385 build targets and 43,138 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
 Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
 After PR #119, all **642** examples passed in Nix: 289 core, 208
