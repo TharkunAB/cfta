@@ -50,7 +50,8 @@ import qualified Control.Monad.State.Strict as State
 import qualified Data.Foldable as Foldable
 import Data.Hashable (Hashable (..))
 import qualified Data.IntSet as IntSet
-import Data.List (compareLength, genericTake)
+import Data.List (compareLength, genericTake, sortOn)
+import Data.Maybe (fromMaybe)
 import Data.Monoid (All (..))
 import Data.Sequence (Seq ((:<|), (:|>)))
 import qualified Data.Sequence as Sequence
@@ -217,6 +218,10 @@ data EnumerationState symbol = EnumerationState
     -}
     , _expansionAncestry :: RecursionAncestry
     -- ^ The ancestry that the current expansion gives the UVars it reaches.
+    , _canonicalEdges :: IntMap.IntMap [Edge symbol]
+    {- ^ The edges of each node that the root reaches, in 'canonicalOrder'.
+    It does not change during enumeration.
+    -}
     }
     deriving (Eq, Show)
 
@@ -247,7 +252,7 @@ recursionKey n scs =
         }
 
 -- | Initial state whose root UVar contains the node being enumerated.
-initEnumerationState :: Node symbol -> EnumerationState symbol
+initEnumerationState :: (Hashable symbol, Ord symbol, Typeable symbol) => Node symbol -> EnumerationState symbol
 initEnumerationState n =
     let (uvg, uv) = UnionFind.nextUVar UnionFind.initUVarGen
         value = UVarUnenumerated (Just n) Sequence.Empty
@@ -260,6 +265,7 @@ initEnumerationState n =
             []
             IntMap.empty
             HashSet.empty
+            (canonicalOrder n)
 
 ---------------------------------------------------------------------------
 ---------------------------- Enumeration monad ----------------------------
@@ -488,10 +494,42 @@ unconstrained = memoTypeableWith @symbol unconstrainedCache $ getAll . crush fre
     free (Node es) = All (all (\e -> equalities (edgeConstraint e) == EmptyConstraints && not (residual (edgeConstraint e))) es)
     free _ = All True
 
+{- | The edges of each node that a root reaches, in the order of enumeration:
+by arity, then by symbol, then by the canonical classes of their children
+('canonicalClasses'), then by their equalities and guard. The classes depend
+on the content of the graph only, so the order does not depend on the
+automata that the process built before. Two edges that are equal in all of
+these have children in the same classes, so they give the same terms in the
+same order.
+-}
+canonicalOrder :: (Hashable symbol, Ord symbol, Typeable symbol) => Node symbol -> IntMap.IntMap [Edge symbol]
+canonicalOrder root = IntMap.map (sortOn key) graph
+  where
+    graph = reachable root
+    classes = canonicalClasses $ IntMap.map (map $ \edge -> (shape edge, map nodeIdentity $ edgeChildren edge)) graph
+    shape edge = (length $ edgeChildren edge, edgeSymbol edge, constraintEqualities constraint, constraintGuard constraint)
+      where
+        constraint = edgeConstraint edge
+    key edge = (arity, symbol, [classes IntMap.! child | NodeId child <- map nodeIdentity $ edgeChildren edge], equalities', guard')
+      where
+        (arity, symbol, equalities', guard') = shape edge
+
+-- | Table for 'canonicalEdges'.
+canonicalEdgesCache :: TypeableMemoCache
+canonicalEdgesCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE canonicalEdgesCache #-}
+
+{- | The edges of a node in 'canonicalOrder', for a node that the enumeration
+builds, such as an intersection or an unfolding.
+-}
+canonicalEdges :: forall symbol. (Hashable symbol, Ord symbol, Typeable symbol) => Node symbol -> [Edge symbol]
+canonicalEdges = memoTypeableWith @symbol canonicalEdgesCache $ \n ->
+    let NodeId ident = nodeIdentity n in canonicalOrder n IntMap.! ident
+
 -- | Enumerate one node under the suspended constraints currently in scope.
 enumerateNode ::
     forall symbol.
-    (Hashable symbol, Typeable symbol) =>
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
     Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)
 enumerateNode _ EmptyNode = mzero
 enumerateNode scs n =
@@ -500,7 +538,10 @@ enumerateNode scs n =
             Sequence.Empty -> case n of
                 Mu _ -> TermFragmentUVar <$> addUVarValue (Just n)
                 InternedUnion _ -> TermFragmentUVar <$> addUVarValue (Just n)
-                Node es -> enumerateEdge scs =<< branches es
+                Node _ -> do
+                    ordered <- gets _canonicalEdges
+                    let NodeId ident = nodeIdentity n
+                    enumerateEdge scs =<< branches (fromMaybe (canonicalEdges n) (IntMap.lookup ident ordered))
                 Rec recId ->
                     error $
                         "enumerateNode: unexpected unresolved recursive reference "
@@ -520,7 +561,7 @@ enumerateNode scs n =
 
 -- | Enumerate one edge, introducing UVars for its equality classes.
 enumerateEdge ::
-    (Hashable symbol, Typeable symbol) =>
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
     Seq SuspendedConstraint -> Edge symbol -> EnumerateM symbol (TermFragment symbol)
 enumerateEdge scs e = do
     let inherited = descendScs IntMap.empty scs
@@ -622,7 +663,7 @@ instead of raising. The branch is unreachable through @enumerateFully'@, which t
 UVar from 'nextExpandableUVar' and so only offers expandable UVars.
 -}
 enumerateOutUVar ::
-    (Hashable symbol, Typeable symbol) => UVar -> EnumerateM symbol (TermFragment symbol)
+    (Hashable symbol, Ord symbol, Typeable symbol) => UVar -> EnumerateM symbol (TermFragment symbol)
 enumerateOutUVar uv =
     do
         UVarUnenumerated (Just n) scs <- getUVarValue uv
@@ -643,7 +684,7 @@ enumerateOutUVar uv =
         return t
 
 -- | Expand the root UVar until it represents a complete term.
-enumerateFully :: (Hashable symbol, Typeable symbol) => EnumerateM symbol ()
+enumerateFully :: (Hashable symbol, Ord symbol, Typeable symbol) => EnumerateM symbol ()
 enumerateFully =
     enumerateFully' () noExpansionPreference (\state _ _ -> return (False, state))
 
@@ -668,7 +709,7 @@ produces neither callback. Enumeration ends when no other UVar can be expanded.
 -}
 enumerateFully' ::
     forall symbol a.
-    (Hashable symbol, Typeable symbol) =>
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
     a ->
     ExpansionOrder a ->
     (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
@@ -783,7 +824,7 @@ uses 'TruncatedRecursion'. Any genuinely unresolved non-recursive variable remai
 a 'UVarHole', as it does in 'expandPartialTermFrag'.
 -}
 truncatedTerms ::
-    (Hashable symbol, Typeable symbol) =>
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
     Node symbol -> [Term (PartialSymbol symbol)]
 truncatedTerms n = map fst $
     flip allBranches (initEnumerationState n) $ do
@@ -825,7 +866,7 @@ Truncated recursion is reported as the @Mu@ marker in the caller's alphabet;
 -}
 termsPrune ::
     forall symbol a.
-    (Hashable symbol, Typeable symbol, IsString symbol) =>
+    (Hashable symbol, Ord symbol, Typeable symbol, IsString symbol) =>
     a ->
     (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
     Node symbol ->
@@ -852,7 +893,7 @@ sees UVars sees the difference.
 -}
 termsPruneWith ::
     forall symbol a.
-    (Hashable symbol, Typeable symbol) =>
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
     symbol ->
     a ->
     ExpansionOrder a ->
@@ -905,7 +946,7 @@ still listed one by one, so an ambiguous one repeats a term. The symbol
 stands for truncated recursion.
 -}
 runs ::
-    (Hashable symbol, Typeable symbol) =>
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
     symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
 runs recursionSymbol n =
     map fst $ flip allBranches (initEnumerationState n) $ do
@@ -949,6 +990,6 @@ plainTermLevels EmptyNode = []
 plainTermLevels root =
     termLevelsBy
         [ (NodeId ident, [(edgeSymbol edge, map nodeIdentity (edgeChildren edge)) | edge <- edges])
-        | (ident, edges) <- IntMap.toList (reachable root)
+        | (ident, edges) <- IntMap.toList (canonicalOrder root)
         ]
         (nodeIdentity root)

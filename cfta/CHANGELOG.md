@@ -83,7 +83,13 @@ remains a separate ECTA-only package.
   path equalities by unification and stops at recursion, `plainTerms` lists an
   automaton without constraints lazily by depth, and `runs` returns each
   accepting run with the residual constraints it must satisfy. The pruning
-  oracles are `termsPrune` and `termsPruneWith`.
+  oracles are `termsPrune` and `termsPruneWith`. The enumerators list the
+  edges of a node in a canonical order: by arity, then by symbol, then by the
+  canonical classes of their children (`canonicalClasses` of
+  `Data.CFTA.Interned`), then by their constraint. So the order of the terms
+  does not depend on the order in which the process interned the edges.
+  `runs`, `truncatedTerms`, `termsPrune`, and `termsPruneWith` need
+  `Ord symbol` for this.
 - `Data.CFTA.Simple`: the automata defined as simply as possible, on the
   explicit-state automata of `Data.CFTA`. Membership recurses on the term,
   the terms up to a depth are every accepted tree of the underlying graph,

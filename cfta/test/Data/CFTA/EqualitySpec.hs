@@ -492,6 +492,23 @@ spec = do
                 mapSize (min 3) $
                     \(n :: Node Symbol) -> HashSet.fromList (terms n) `shouldBe` HashSet.fromList (terms $ reducePartially n)
 
+        -- Each test builds its edges in the opposite order to the canonical
+        -- one, so the identities of the edges sort against it. The symbols
+        -- are used nowhere else.
+        it "lists the edges of a node by symbol, not in the order they were built" $ do
+            late <- evaluate (Edge "order-b" [] :: Edge Symbol)
+            early <- evaluate (Edge "order-a" [])
+            terms (Node [late, early]) `shouldBe` [Term.Node "order-a" [], Term.Node "order-b" []]
+
+        it "lists edges with one symbol by the classes of their children" $ do
+            late <- evaluate (Edge "order-f" [Node [Edge "order-d" []]] :: Edge Symbol)
+            early <- evaluate (Edge "order-f" [Node [Edge "order-c" []]])
+            let same = equalityConstraint (mkEqConstraints [[path [0], path [1]]])
+                pair = Node [late, early]
+                leaf symbol = Term.Node "order-f" [Term.Node symbol []]
+            terms (Node [mkEdge "order-p" [pair, pair] same])
+                `shouldBe` [Term.Node "order-p" [leaf "order-c", leaf "order-c"], Term.Node "order-p" [leaf "order-d", leaf "order-d"]]
+
     describe "degenerate inputs" $ do
         it "a non-positive unfold bound terminates" $ do
             terms (unfoldBounded 0 intTest7) `shouldBe` []
