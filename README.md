@@ -14,7 +14,8 @@ flowchart BT
 
 [`microcfta-ghc`](microcfta-ghc/README.md), for GHC 9.14 only, fills typed
 holes with programs that Hectare's automaton proposes and GHC's typechecker
-checks; it is the only package that depends on the `ghc` library.
+checks, also as a typed-hole plugin (`-fplugin=Data.CFTA.GHC.HoleFits`); it
+is the only package that depends on the `ghc` library.
 
 The original ECTA line stays in this repository as
 [`microecta`](microecta/README.md) and
