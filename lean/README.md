@@ -6,7 +6,7 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,577 jobs and 44,674 theorem dependency checks.
+The audit passes 1,585 jobs and 44,758 theorem dependency checks.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open
@@ -20,19 +20,19 @@ repaired construction. It retains the real arity failure before solver work.
 The [closed source theorem](notes-source-closed-sized.md) now derives construction
 and all three exact query paths at the original expression's guarded least
 language. Reference and optimized paths return identical records and errors.
-Next audit opaque-probe gate progress under the repaired constructor.
-The [repaired gate proofs](notes-gate-unfolding-rank.md) now derive pure-probe
-progress and replay the old rank example with strict decrease in the repaired
-executor. [The Lava paper note](notes-lava.md) records relevant prior art and
-its source, solver, and termination limits.
-Repaired unfolding now completes with head rank zero for guarded bodies
-with arbitrary nested children. Its actual returned cache retains all
-representation invariants and stored body filters. Leading Mu bodies and
-root unions with Mu members remain in the general progress obligation.
-The [general occurrence-cost proof](notes-occurrence-costs.md) now derives
-weighted correspondence through arbitrary repaired source construction and
-stored execution. Actual unfolding still needs the prepared-plan retention
-bound before the candidate measure supplies a general gate rank.
+The [general unfolding-rank proof](notes-general-unfold-rank.md) now derives
+strict minimum free-occurrence rank decrease for every actual repaired open
+Mu unfolding. It includes arbitrary nested Mu and root unions. Prepared-plan
+retention derives nonempty reconstruction for live siblings. Actual execution
+retains every cache invariant needed by later unfoldings. The concrete
+certified read adapter gives a total gate decision and finite instrumented
+evaluation at every finite path. Original source construction derives its
+initial representation premises. The remaining source gate target threads
+shared memo effects through ordered sibling queries. The current view starts
+each child route in its parent's cache.
+[The Lava paper note](notes-lava.md) records relevant prior art and its source,
+solver, and termination limits. The [occurrence-cost note](notes-occurrence-costs.md)
+records the full weighted source callback/probe correspondence used here.
 All old proofs, fixtures, and marked drafts remain.
 
 [The system specification and current findings](SYSTEM.md) describe the

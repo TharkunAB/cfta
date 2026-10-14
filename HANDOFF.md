@@ -1,6 +1,50 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 00:34 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 00:47 CEST (Europe/Stockholm)**.
+
+## General repaired unfolding rank and gate completion
+
+Proofs: `0871fb7a` and `40027d5f`. Source: `TharkunAB/cfta`, `origin/main`
+at `f201deda`. Continue on `formalize` and push completed checkpoints.
+Read `lean/notes-general-unfold-rank.md`. This section supersedes the earlier
+prepared-plan retention and opaque-probe rank targets.
+
+The prepared-plan retention bound is complete. It includes arbitrary open
+nested Mu, root unions with Mu members, lexical shadowing, and nonempty
+reconstruction of every original live edge sibling. Replacing the outer
+reference with its open Mu retains each external body occurrence at no
+greater cost. The exact source cost theorem transfers that bound to the
+actual returned record. Every actual open Mu unfolding strictly decreases
+minimum free-occurrence rank. Finite completion retains the complete
+semantic contexts, depth heaps, payload coverage, weighted heaps,
+availability, growth, and issued-name history. Original source construction
+derives these premises. No shallow-body or successful-unfold premise remains.
+
+The general certified read adapter carries each actual unfolding result and
+its returned cache. Its concrete rank instantiates `ConstrainedRecursionGate`.
+Every finite path has a finite instrumented evaluation equal to the total
+decision. Every larger fuel amount gives that same decision. Original source
+construction derives the adapter's initial node and finite gate evaluation.
+The constraint predicate remains an explicit read parameter.
+
+The audit passes 1,585 jobs and 44,758 theorem dependency checks. Only
+`propext`, `Classical.choice`, and `Quot.sound` occur. Only the old unused
+`inputs` warning remains. No production Haskell code changed. Audit log:
+`/tmp/mcfta-general-open-unfold-rank-20261015-audit.log`. Snapshot:
+`/tmp/mcfta-general-unfold-rank-checkpoint-20261015-0047/` (1,967 Lean-tree files).
+All older proofs, counterexamples, repros, marked drafts, repairs, backups,
+stashes, and other worktrees remain.
+
+Next connect the ranked route adapter to the full ordered source gate with
+shared memo effects across sibling edge and path queries. The current view
+starts each child route in its parent's cache. Model ordered short circuit
+and thread actual returned caches. Reuse the rank bound in every retained
+cache. Derive a full source gate trace/readback law, or state the required
+memo observation law precisely. Do not repeat the completed retention or
+rank proof. Keep the completed Sized contracts, unary ancestor theorem,
+optimized interned core, and runtime/extraction limits. Do not use the
+closed-node dynamic Mu budget for an open Mu. Stop work and workers at 1%
+weekly allowance or less.
 
 ## General occurrence costs in repaired source execution
 
@@ -964,10 +1008,11 @@ Initial-source language transport and physical product language remain open. See
 
 ## Authorization and allowance
 
-Keep all work local. **No push, deployment, messages, or board posts.**
-The earlier requested publication ended at `1f982c5b` on
-`origin/formalization/microcfta-resume-20261012`. It does not authorize another
-push. Do not force-update any historical remote branch.
+Current authorization permits checkpoint pushes to `origin/formalize` in
+`TharkunAB/cfta`. Use `origin/main` as the source base. The later explicit
+publication request supersedes the earlier local-only checkpoint rule.
+Do not deploy, send messages, post to the board, or force-update a branch.
+The historical publication at `1f982c5b` remains unchanged.
 Keep the optimized interned core and every proof, repair, counterexample,
 backup, stash, marked draft, and other worktree.
 Do not formalize benchmark programs, datasets, or workload specifications.

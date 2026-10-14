@@ -1,5 +1,15 @@
 # Same-path unfolding in the current equality gate
 
+## General repaired rank and certified gate (2026-10-15 00:47 CEST)
+
+Proofs `0871fb7a` and `40027d5f` complete the prepared-plan retention bound
+and strict rank decrease for actual repaired open Mu unfolding. This includes
+opaque bodies, arbitrary nested Mu, and root unions with Mu members.
+The general certified read adapter supplies finite exact instrumented gate
+evaluation at every path. Read [the current proof note](notes-general-unfold-rank.md).
+It states the remaining shared-memo sibling correspondence limit.
+This section supersedes all earlier rank next targets below.
+
 ## General repaired occurrence costs (2026-10-15 00:33 CEST)
 
 Proofs `efa2e558` and `d17e644b` now establish the weighted callback/probe

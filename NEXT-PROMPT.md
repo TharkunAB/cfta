@@ -2,6 +2,50 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## General repaired unfolding rank and gate completion
+
+Proofs: `0871fb7a` and `40027d5f`. Source: `TharkunAB/cfta`, `origin/main`
+at `f201deda`. Continue on `formalize` and push completed checkpoints.
+Read `lean/notes-general-unfold-rank.md`. This section supersedes the earlier
+prepared-plan retention and opaque-probe rank targets.
+
+The prepared-plan retention bound is complete. It includes arbitrary open
+nested Mu, root unions with Mu members, lexical shadowing, and nonempty
+reconstruction of every original live edge sibling. Replacing the outer
+reference with its open Mu retains each external body occurrence at no
+greater cost. The exact source cost theorem transfers that bound to the
+actual returned record. Every actual open Mu unfolding strictly decreases
+minimum free-occurrence rank. Finite completion retains the complete
+semantic contexts, depth heaps, payload coverage, weighted heaps,
+availability, growth, and issued-name history. Original source construction
+derives these premises. No shallow-body or successful-unfold premise remains.
+
+The general certified read adapter carries each actual unfolding result and
+its returned cache. Its concrete rank instantiates `ConstrainedRecursionGate`.
+Every finite path has a finite instrumented evaluation equal to the total
+decision. Every larger fuel amount gives that same decision. Original source
+construction derives the adapter's initial node and finite gate evaluation.
+The constraint predicate remains an explicit read parameter.
+
+The audit passes 1,585 jobs and 44,758 theorem dependency checks. Only
+`propext`, `Classical.choice`, and `Quot.sound` occur. Only the old unused
+`inputs` warning remains. No production Haskell code changed. Audit log:
+`/tmp/mcfta-general-open-unfold-rank-20261015-audit.log`. Snapshot:
+`/tmp/mcfta-general-unfold-rank-checkpoint-20261015-0047/` (1,967 Lean-tree files).
+All older proofs, counterexamples, repros, marked drafts, repairs, backups,
+stashes, and other worktrees remain.
+
+Next connect the ranked route adapter to the full ordered source gate with
+shared memo effects across sibling edge and path queries. The current view
+starts each child route in its parent's cache. Model ordered short circuit
+and thread actual returned caches. Reuse the rank bound in every retained
+cache. Derive a full source gate trace/readback law, or state the required
+memo observation law precisely. Do not repeat the completed retention or
+rank proof. Keep the completed Sized contracts, unary ancestor theorem,
+optimized interned core, and runtime/extraction limits. Do not use the
+closed-node dynamic Mu budget for an open Mu. Stop work and workers at 1%
+weekly allowance or less.
+
 ## General occurrence costs in repaired source execution
 
 The latest proofs are `efa2e558` and `d17e644b`. Continue on `formalize` in

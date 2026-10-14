@@ -1,5 +1,10 @@
 # General occurrence costs in repaired source execution
 
+Current update: the prepared-plan retention and actual unfolding rank targets
+below are complete in `0871fb7a` and `40027d5f`.
+Read [the general unfolding-rank note](notes-general-unfold-rank.md).
+The sections below retain the earlier cost-correspondence checkpoint.
+
 Updated: 2026-10-15 00:33 CEST.
 Proofs: `efa2e558` and `d17e644b`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
@@ -62,7 +67,7 @@ Original source construction derives the new weighted heap through
 `closed_heap`. The prepared cost equality is not yet a comparison with the
 original body's costs.
 
-## Remaining general gate rank
+## Historical next target: general gate rank
 
 The next target is a pure prepared-plan retention bound. Let `outer` be an
 available open Mu with bound reference `own` and actual stored `body`. For each
