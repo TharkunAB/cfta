@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 19:20 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 19:37 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -122,12 +122,34 @@ proofs. Do not assume product language or derive the refuted general literal
 stated scope. Read `lean/notes-relational-product-rows.md`. All workers are
 terminal. Full native two-input language correspondence remains open.
 
-The aggregate audit passes **1,470 jobs and 43,899 theorem dependency checks**,
+`9b6d9014` now derives actual union and Mu branch witnesses. Union retains
+ordered physical child results and exact normalized independent language.
+Mu retains the exact extended-domain key, original operand identities,
+actual body result, and optional-binder completion in later caches. Its
+independent least language and full unfolding equation are proved. These
+laws can also be stated through actual successful child-call relations.
+
+`513d2824` derives allocation-free source branch replay from actual checked
+native completion at all larger bounds and later caches. Both union operand
+orientations and all three Mu branches have their actual child witnesses and
+independent language laws. Incoming semantic and independent-language probe
+heaps suffice for native Mu; actual evaluation derives their preservation.
+No kernel-execution or two-input product-language premise is supplied.
+
+The original-input relation is still open through actual stored reconstruction
+and repaired unfolding. Preserve related children through optional-binder
+substitution, then derive related roots and local row closure using actual
+epsilon origins. Literal ordinary `nodeEdges` is not exposed Mu/union rows.
+Read `lean/notes-union-mu-branch-readback.md`. Do not repeat the completed
+branch witness, product-language-from-rows, minimum callback, or compiler
+Sized proofs. The full native two-input intersection law remains open.
+
+The aggregate audit passes **1,473 jobs and 43,911 theorem dependency checks**,
 with only `propext`, `Classical.choice`, and `Quot.sound`. Log:
-`/tmp/mcfta-relational-product-rows-20261014-audit.log`.
-Snapshot: `/tmp/mcfta-relational-product-rows-checkpoint-20261014-1920/`.
-All 1,836 Lean-tree files are saved. All 1,828 previous files remain.
-Only audit imports, two coverage ledgers, and the preceding ordinary-product
+`/tmp/mcfta-union-mu-branch-readback-20261014-audit.log`.
+Snapshot: `/tmp/mcfta-union-mu-branch-readback-checkpoint-20261014-1937/`.
+All 1,840 Lean-tree files are saved. All 1,836 previous files remain.
+Only audit imports, two coverage ledgers, and the preceding relational-product
 note changed among those previous files. All earlier proofs and drafts retain
 their bytes. No production Haskell code changed. No worker remains active.
 

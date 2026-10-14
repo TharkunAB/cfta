@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 19:20 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 19:37 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -66,7 +66,7 @@ proved. General finite repaired traversal and structural tables are now
 proved. Final-cache guarded row language is proved. Its independent-language
 transport is now exact. Physical product language remains open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`ddef16e6`**, after `f04b8261` and `4d80735a`. A later documentation commit
+The latest proof checkpoint is **`513d2824`**, after `9b6d9014`. A later documentation commit
 records this handoff. Use `git log` for its hash. The intentionally untracked fixtures are
 `lean/repro/NestedUnaryTwoAtom.hs` and `lean/repro/NativeProductRowCycle.hs`; preserve both.
 
@@ -160,13 +160,35 @@ proofs. Do not assume product language or derive the refuted general literal
 stated scope. Read `lean/notes-relational-product-rows.md`. All workers are
 terminal. Full native two-input language correspondence remains open.
 
-Current audit: **1,470 jobs and 43,899 theorem dependency checks**. Only
+`9b6d9014` now derives actual union and Mu branch witnesses. Union retains
+ordered physical child results and exact normalized independent language.
+Mu retains the exact extended-domain key, original operand identities,
+actual body result, and optional-binder completion in later caches. Its
+independent least language and full unfolding equation are proved. These
+laws can also be stated through actual successful child-call relations.
+
+`513d2824` derives allocation-free source branch replay from actual checked
+native completion at all larger bounds and later caches. Both union operand
+orientations and all three Mu branches have their actual child witnesses and
+independent language laws. Incoming semantic and independent-language probe
+heaps suffice for native Mu; actual evaluation derives their preservation.
+No kernel-execution or two-input product-language premise is supplied.
+
+The original-input relation is still open through actual stored reconstruction
+and repaired unfolding. Preserve related children through optional-binder
+substitution, then derive related roots and local row closure using actual
+epsilon origins. Literal ordinary `nodeEdges` is not exposed Mu/union rows.
+Read `lean/notes-union-mu-branch-readback.md`. Do not repeat the completed
+branch witness, product-language-from-rows, minimum callback, or compiler
+Sized proofs. The full native two-input intersection law remains open.
+
+Current audit: **1,473 jobs and 43,911 theorem dependency checks**. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-relational-product-rows-20261014-audit.log`.
-Current snapshot: `/tmp/mcfta-relational-product-rows-checkpoint-20261014-1920/`.
-It saves all **1,836 Lean-tree files** and compares all 1,828 previous files.
+`/tmp/mcfta-union-mu-branch-readback-20261014-audit.log`.
+Current snapshot: `/tmp/mcfta-union-mu-branch-readback-checkpoint-20261014-1937/`.
+It saves all **1,840 Lean-tree files** and compares all 1,836 previous files.
 None is missing. Only audit imports, two coverage ledgers, and the preceding
-ordinary-product note changed among those files. Earlier proof and
+relational-product note changed among those files. Earlier proof and
 marked-draft bytes remain unchanged. No production Haskell source changed.
 
 ## Independent guarded meaning and actual stored compiler
@@ -1404,9 +1426,13 @@ The retained raw counterexample does not prove the qualified identity law.
    those completed results. Read `lean/notes-relational-product-rows.md`.
    Generic related physical rows, exact product language with diagonal reuse,
    actual ordinary native row relations, the minimum callback, and compiler
-   Sized composition are now proved. Derive consistent related roots and
-   local row closure through actual Mu, union, stored substitution, and final
-   repaired exposure. The general functional child-map adapter is refuted.
+   Sized composition are now proved. `9b6d9014` and `513d2824` now derive
+   actual union and Mu branch witnesses, exact domain/body replay, independent
+   normalization/least language, and the full Mu unfolding equation. Read
+   `lean/notes-union-mu-branch-readback.md`. Derive related-child preservation
+   through actual stored reconstruction and repaired unfolding. Then derive
+   related roots and local row closure using epsilon origins. The general
+   functional child-map adapter is refuted.
    Do not assume equivalent product language. Keep all checked-word, source,
    domain, memo, and continuation effects. Universal preparation preservation
    remains refuted. Retain its source-built counterexample and successful
@@ -1454,10 +1480,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,470 jobs and 43,899 theorem dependency checks**.
+The current build passes **1,473 jobs and 43,911 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-relational-product-rows-20261014-audit.log`.
+Log: `/tmp/mcfta-union-mu-branch-readback-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.

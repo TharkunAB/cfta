@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 19:20 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `ddef16e6`, after `f04b8261` and `4d80735a`. No background proof worker is active.
+Current checkpoint: **2026-10-14 19:37 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `513d2824`, after `9b6d9014`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -349,8 +349,12 @@ Actual native ordinary calls derive local row relations. The relational
 minimum callback and compiler retain finite classes and both rank inverses.
 The observed finite Mu transcript has a full unbounded language proof and
 a formal obstruction to the functional adapter. Haskell extraction remains
-unverified. Derive related roots and row closure through actual Mu and union
-calls. Full native two-input language remains open. See
+unverified. Actual union and Mu branch witnesses are now derived from
+checked native completion. They retain ordered child results, exact domains,
+independent normalization and least languages, and full Mu unfolding.
+Derive related-child preservation through actual stored reconstruction and
+repaired unfolding, then local row closure. Full native two-input language
+remains open. See [native union and Mu witnesses](notes-union-mu-branch-readback.md),
 [related physical product rows](notes-relational-product-rows.md),
 [ordinary product rows and the identity boundary](notes-ordinary-product-rows.md),
 [cold budget completeness](notes-cold-budget-completeness.md),
@@ -370,7 +374,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,470 targets and 43,899 theorem dependency checks**
+The current audit passes **1,473 targets and 43,911 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 After PR #122, all 208 generator and 145 refinement examples pass. The
 unchanged core retains its earlier 289 passing examples. Fourmolu and active-package cabal-gild passed.

@@ -1,6 +1,6 @@
 # Related physical product rows and native Sized composition
 
-Updated: 2026-10-14 19:20 CEST.
+Updated: 2026-10-14 19:37 CEST.
 Proofs: `f04b8261`, `4d80735a`, and `ddef16e6`.
 
 ## Exact language from local rows
@@ -84,12 +84,18 @@ interned core unchanged.
 
 ## Next proof target
 
-Derive a relation between actual native physical records and original input
-pairs through Mu construction, stored substitution, union normalization,
-exact domains, and repaired final row exposure. Prove its local row closure
-and related roots. Use the completed generic product, callback, and compiler
-results above. Do not repeat those proofs or supply language equivalence as
-a premise. Do not try to derive the refuted general functional child map.
+The next checkpoint now derives actual native union and Mu branch witnesses.
+Union retains ordered child results and exact independent normalization.
+Mu retains exact extended domains, original identities, actual body results,
+optional-binder replay, independent least language, and full unfolding. Read
+[native branch witnesses](notes-union-mu-branch-readback.md).
+
+Next derive related-child preservation through actual stored reconstruction,
+optional-binder substitution, and repaired unfolding. Then derive related
+roots and local row closure from actual epsilon origins. The branch witnesses
+do not yet establish those original-input relations. Use the completed generic
+product, callback, and compiler results. Do not supply product language as a
+premise or derive the refuted general functional child map.
 
 The complete native two-input language theorem and verified runtime
 correspondence remain open. The primary finite-map reference, solver-decided,
@@ -99,7 +105,7 @@ results.
 
 ## Validation and preservation
 
-Pinned Lean 4.34.1 passes all seven focused modules and the aggregate audit:
+The preceding relational checkpoint passed all seven modules and its audit:
 1,470 jobs and 43,899 theorem dependency checks. Only `propext`,
 `Classical.choice`, and `Quot.sound` are permitted. All new modules are imported
 by `MicroCFTA/Audit.lean`.
