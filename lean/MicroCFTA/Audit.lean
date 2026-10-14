@@ -17,6 +17,9 @@ import MicroCFTA.InternedRecordDepthShape
 import MicroCFTA.InternedRecordDepthSource
 import MicroCFTA.InternedRecordDepthCallback
 import MicroCFTA.InternedRecordDepthExecution
+import MicroCFTA.InternedRecordDepthLevels
+import MicroCFTA.InternedRecordDepthRoutes
+import MicroCFTA.InternedRecordDepthCompletion
 import MicroCFTA.SourcePhysicalRecursiveRows
 import MicroCFTA.SourcePhysicalRecursiveRowsReadback
 import MicroCFTA.SourcePhysicalRecursiveRowsLanguage
