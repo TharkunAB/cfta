@@ -42,9 +42,11 @@ tree automata of `microcfta`, with QuickCheck integration.
   first one that passes `checker` or `preciseChecker` of
   `Data.CFTA.Gen.Synthesis.Liquid`. These check one program with Hegel's
   inference: the precise checker keeps each subprogram's refinement, and
-  `checker` abstracts it to the qualifiers. The `hybrid` benchmark runs Hegel
-  and the hybrid on Hegel's queries and on a large library of the Hoogle+
-  components and refined list components.
+  `checker` abstracts it to the qualifiers. With `hybridFallback`, on by
+  default, Hegel's `synthesize` runs when the hybrid has no program within a
+  time budget of 5 seconds. The `hybrid` benchmark runs Hegel and the hybrid
+  on Hegel's queries and on a large library of the Hoogle+ components and
+  refined list components.
 - Sizes count pays, as in FEAT: `pure` has size zero, an atom one, `<*>` adds
   the sizes of its sides, and `pay`, which `Data.CFTA.Gen` and
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree

@@ -1746,7 +1746,8 @@ subprograms of goal-typed programs, and the search stops within a size.
 ```haskell
 import Data.CFTA.Gen.Synthesis.Hybrid
 
--- The precise checker, and programs of at most 20 components and arguments.
+-- The precise checker, programs of at most 20 components and arguments, and
+-- Hegel after 5 seconds without a program.
 solve :: Entailment -> [Component] -> LiquidQuery -> IO (Maybe Program)
 solve solver components query =
     hybridSolution <$> synthesizeHybrid solver defaultHybridOptions components query
@@ -1757,6 +1758,16 @@ subprogram and asks the solver only about guards and the goal. `checker`
 abstracts each subprogram to the qualifiers, as Hegel does. Both are in
 `Data.CFTA.Gen.Synthesis.Liquid`. The hybrid does not make conditionals,
 and it does not find a program that leaves out an argument of the query.
+
+The hybrid has a fallback, `hybridFallback`, on by default: a time budget
+of 5 seconds. When the hybrid has no program at the end of the budget, or
+after its largest size, Hegel's `synthesize` runs on the query, and
+`hybridFallbackOutcome` gives Hegel's result. On the 36 queries below, the
+hybrid with the fallback solves the 35 that Hegel solves in one run (27 by
+the hybrid, 8 by Hegel after the budget), in 0.17 times Hegel's time
+(geometric mean). Each query that falls back costs the budget more than
+Hegel alone. The numbers below are for the hybrid alone (`hybrid-only` in
+the benchmark).
 
 On the 36 queries of the `hegel` benchmark without conditionals (one run of
 each on the development machine, 180 seconds, 100 milliseconds for each
