@@ -125,6 +125,13 @@ The options apply to each hole:
    restores the unification variables to the longest prefix that the two
    share, and checks only the rest. A failing prefix goes into a trie of
    dead prefixes, and every later program under it is skipped.
+   The walk also keeps the verdict of each step by the walker's state and
+   the leaf (`StateKey`: the goals, the wanteds, the relevant constraints,
+   and the unification variables of the context, zonked, with the
+   unification variables numbered in order). A step that failed before
+   from an equal state is skipped without a check; a step that passed
+   before does not call the solver. Two subprograms of the same type lead
+   to equal states, so the steps after them repeat.
 4. `accept` gets each fit and returns whether to go on. `synthesizeFits`
    keeps the first `optionFits`.
 

@@ -22,6 +22,11 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   restore of the frozen unification variables, and checks only the rest. A
   prefix that fails goes into a trie of dead prefixes, so every later
   program under it is skipped without a step.
+* The verdict of a step depends only on the walker's state, up to the names
+  of its unification variables, and on the leaf ('StateKey'). The walk keeps
+  the verdicts in a table: a step that failed before from the same state is
+  skipped without a check, and a step that passed before does not call the
+  solver.
 * The walk stops after the first fits, after a size, after a number of
   programs, or at a deadline.
 * The figures of a search give the time of each part: Hectare's
@@ -76,7 +81,7 @@ import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.List (nub)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isJust)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Word (Word64)
@@ -277,12 +282,9 @@ streamFits options hole candidates goal accept = do
     case query of
         Just hectareQuery -> do
             ignoredLeaf <- rigidLeaf environment ignored
-            walk
-                environment
-                (startWalker environment (map candidateType candidates) goal)
-                (Map.insert ignored ignoredLeaf leaves)
-                hectareQuery
-                deadline
+            let start = startWalker environment (map candidateType candidates) goal
+            startKey <- stateKey environment (walkerVariables start) start
+            walk environment start startKey (Map.insert ignored ignoredLeaf leaves) hectareQuery deadline
         Nothing -> statisticsOf emptySearch <$> readCounters environment
   where
     -- Hectare's automaton has symbols of its own, as app and filter, so each
@@ -334,7 +336,7 @@ streamFits options hole candidates goal accept = do
             [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates]
     -- The name of the rigid leaf: a hole, so no candidate has it.
     ignored = "_"
-    walk environment start leaves' hectareQuery deadline = sizes 1 emptySearch
+    walk environment start startKey leaves' hectareQuery deadline = sizes 1 emptySearch
       where
         -- Build and reduce the automaton of each size, then check its
         -- programs: 'Data.CFTA.Gen.Synthesis.solutionsOfSize' in parts, so
@@ -369,7 +371,15 @@ streamFits options hole candidates goal accept = do
                             then stop search'{searchOutOfTime = True}
                             else do
                                 checked <-
-                                    check environment start leaves' search'{searchPrograms = searchPrograms search' + 1} size program tokens
+                                    check
+                                        environment
+                                        start
+                                        startKey
+                                        leaves'
+                                        search'{searchPrograms = searchPrograms search' + 1}
+                                        size
+                                        program
+                                        tokens
                                 after <- liftIO getMonotonicTimeNSec
                                 let search'' = checked{searchCheck = searchCheck checked + (after - before), searchLastFit = Nothing}
                                 more <- maybe (pure True) accept (searchLastFit checked)
@@ -407,7 +417,7 @@ streamFits options hole candidates goal accept = do
             (searchReduce search)
             (searchList search)
             (searchCheck search)
-    check environment start leaves' search size program tokens
+    check environment start startKey leaves' search size program tokens
         | isDead tokens (searchDead search) = pure search{searchSkipped = searchSkipped search + 1, searchSize = size}
         | otherwise = do
             let kept = commonPrefix (map frameToken (reverse (searchStack search))) tokens
@@ -417,11 +427,24 @@ streamFits options hole candidates goal accept = do
             case drop kept (reverse (searchStack search)) of
                 frame : _ -> restore environment (frameFrozen frame)
                 [] -> pure ()
-            forward environment leaves' search{searchStack = stack, searchSize = size} (drop kept tokens) kept start size program
-    forward environment leaves' search remaining depth start size program = case remaining of
+            forward
+                environment
+                startKey
+                leaves'
+                search{searchStack = stack, searchSize = size}
+                (drop kept tokens)
+                kept
+                start
+                size
+                program
+    forward environment startKey leaves' search remaining depth start size program = case remaining of
         [] -> do
             let walker = maybe start frameWalker (headMaybe (searchStack search))
-            fits <- complete environment walker
+                key = maybe startKey frameKey (headMaybe (searchStack search))
+            fits <- case Map.lookup (key, endToken) (searchVerdicts search) of
+                Just known -> known <$ countKnown environment known
+                Nothing -> complete environment walker
+            let search' = search{searchVerdicts = Map.insert (key, endToken) fits (searchVerdicts search)}
             if fits
                 then do
                     -- Undo the program's steps, and check the program with
@@ -430,38 +453,53 @@ streamFits options hole candidates goal accept = do
                     mapM_ (restore environment . frameFrozen) (lastMaybe (searchStack search))
                     ignoresPart <- anyM (fitsFrom environment leaves' start . preorder) (replacements ignored program)
                     pure
-                        search
+                        search'
                             { searchStack = []
                             , searchFits = searchFits search + 1
                             , searchLastFit = Just (Fit program size ignoresPart)
                             }
-                else pure search
+                else pure search'
         token@(name, children) : rest -> do
             let walker = maybe start frameWalker (headMaybe (searchStack search))
-            frozen <- freeze environment walker
-            stepped <- case Map.lookup name leaves' of
-                Just leaf -> step environment walker leaf children
-                Nothing -> pure Nothing
-            case stepped of
-                Just walker' ->
-                    forward
-                        environment
-                        leaves'
-                        search{searchStack = Frame token frozen walker' : searchStack search}
-                        rest
-                        (depth + 1)
-                        start
-                        size
-                        program
-                Nothing -> do
-                    restore environment frozen
-                    let dead = take (depth + 1) (map frameToken (reverse (searchStack search)) <> [token])
+                key = maybe startKey frameKey (headMaybe (searchStack search))
+                known = Map.lookup (key, token) (searchVerdicts search)
+                dead = take (depth + 1) (map frameToken (reverse (searchStack search)) <> [token])
+            case known of
+                Just False -> do
+                    countKnown environment False
                     pure search{searchDead = markDead dead (searchDead search)}
+                _ -> do
+                    frozen <- freeze environment walker
+                    stepped <- case Map.lookup name leaves' of
+                        Just leaf -> step environment walker leaf children (known == Just True)
+                        Nothing -> pure Nothing
+                    let verdicts = Map.insert (key, token) (isJust stepped) (searchVerdicts search)
+                    case stepped of
+                        Just walker' -> do
+                            key' <- stateKey environment (walkerVariables start) walker'
+                            forward
+                                environment
+                                startKey
+                                leaves'
+                                search{searchStack = Frame token frozen walker' key' : searchStack search, searchVerdicts = verdicts}
+                                rest
+                                (depth + 1)
+                                start
+                                size
+                                program
+                        Nothing -> do
+                            restore environment frozen
+                            pure search{searchDead = markDead dead (searchDead search), searchVerdicts = verdicts}
     headMaybe xs = case xs of
         x : _ -> Just x
         [] -> Nothing
     lastMaybe xs = headMaybe (reverse xs)
     anyM predicate = foldr (\x rest -> predicate x >>= \yes -> if yes then pure True else rest) (pure False)
+    -- The verdict of 'complete' and the steps that the table killed are
+    -- counted here; 'step' counts its own known verdicts.
+    countKnown environment known
+        | known = pure ()
+        | otherwise = liftIO $ modifyIORef' (environmentCounters environment) $ \c -> c{countKnownDead = countKnownDead c + 1}
     commonPrefix (x : xs) (y : ys) | x == y = 1 + commonPrefix xs ys
     commonPrefix _ _ = 0
     readCounters environment = liftIO (readIORef (environmentCounters environment))
@@ -479,7 +517,7 @@ fitsFrom environment leaves start tokens = do
     go walker remaining = case remaining of
         [] -> complete environment walker
         (name, children) : rest -> case Map.lookup name leaves of
-            Just leaf -> step environment walker leaf children >>= maybe (pure False) (`go` rest)
+            Just leaf -> step environment walker leaf children False >>= maybe (pure False) (`go` rest)
             Nothing -> pure False
 
 -- | The program with each of its argument subterms in turn replaced by a leaf.
@@ -503,20 +541,27 @@ preorder program = (name, length arguments) : concatMap preorder arguments
     spine (App function argument) = let (leaf, rest) = spine function in (leaf, rest <> [argument])
 
 {- | A checked step of the current program: its token, the frozen variables
-before the step, and the walker after it.
+before the step, and the walker after it, with the key of its state.
 -}
 data Frame = Frame
     { frameToken :: Token
     , frameFrozen :: Frozen
     , frameWalker :: Walker
+    , frameKey :: StateKey
     }
 
+-- | The token of the end of a program, for the verdict of 'complete'.
+endToken :: Token
+endToken = ("", -1)
+
 {- | The state of a search: the frames of the current program, innermost
-first, the dead prefixes, and the counts.
+first, the dead prefixes, the verdicts of the steps by state and token, and
+the counts.
 -}
 data Search = Search
     { searchStack :: [Frame]
     , searchDead :: Dead
+    , searchVerdicts :: Map (StateKey, Token) Bool
     , searchPrograms :: !Int
     , searchSkipped :: !Int
     , searchFits :: !Int
@@ -532,7 +577,7 @@ data Search = Search
 
 -- | A search before its first program.
 emptySearch :: Search
-emptySearch = Search [] emptyDead 0 0 0 0 Nothing False 0 0 0 0
+emptySearch = Search [] emptyDead Map.empty 0 0 0 0 Nothing False 0 0 0 0
 
 {- | Evaluate a value to weak head normal form, and give the nanoseconds that
 it took; the value is 'Nothing' when the deadline comes first. Only a pure
