@@ -1,0 +1,23 @@
+# Changelog
+
+## 0.1.0.0 - Unreleased
+
+Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
+
+- `Data.CFTA.GHC.Fits`: `streamFits` and `synthesizeFits` fill a GHC
+  `TypedHole` in `TcM`. Hectare's automaton proposes programs over the
+  `Candidate`s, size by size, and a walk inside GHC's typechecker checks each
+  one prefix by prefix with the parts of GHC's `tcCheckHoleFit`, with a trie
+  of dead prefixes. `holeFor` makes a hole from skolems and givens.
+  `Options` bound the size, the fits, and the programs, carry Hectare's
+  pruning rules, and take a report after each size and a trace of each
+  program.
+- `Data.CFTA.GHC.Erase`: GHC types as Hectare's first-order types, with the
+  class contexts erased, and `anyResult` for the components that would fit
+  every hole once erased.
+- `Data.CFTA.GHC.Internal.Check`: one step of a program walk as a refinement
+  hole fit (`tcSubTypeSigma`, GHC's fast path for insoluble equalities, and
+  `simplifyTopWanteds` under `runTcSEarlyAbort` inside the hole's
+  implications), and freeze and restore of unification variables.
+- The `hectare-ghc` benchmark: the 45 Hoogle+ queries on a library ladder
+  read from GHC's exports, one child process per query.
