@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 16:18 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `e46d3f9e`. No background proof worker is active.
+Current checkpoint: **2026-10-14 16:24 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `e1baab1e`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -315,7 +315,9 @@ surviving source captures. `InternedGuardedExecution.build_language` derives
 actual execution language and semantic probe-heap preservation together,
 including fresh completion, canonical hits, and pending outcomes. Actual
 stored substitution and outer-Mu unfolding preserve independent language in
-`InternedGuardedStoredExecution`. Independent-language transport to the final
+`InternedGuardedStoredExecution`. The new semantic probe heap also propagates
+through actual bounded cold reads and finite shared tables.
+Independent-language transport to the final
 repaired graph/table and physical product language remain open. See
 [guarded compiler semantics](notes-independent-guarded-language.md).
 A finite exploratory search found no
@@ -331,7 +333,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,409 targets and 43,422 theorem dependency checks**
+The current audit passes **1,411 targets and 43,431 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 After PR #122, all 208 generator and 145 refinement examples pass. The
 unchanged core retains its earlier 289 passing examples. Fourmolu and active-package cabal-gild passed.

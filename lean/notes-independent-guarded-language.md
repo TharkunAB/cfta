@@ -1,6 +1,6 @@
 # Independent guarded language and actual stored plans
 
-Updated: 2026-10-14 16:18 CEST. Proof checkpoints: `4457307a`, `e46d3f9e`.
+Updated: 2026-10-14 16:24 CEST. Proof checkpoints: `4457307a`, `e46d3f9e`, `e1baab1e`.
 
 ## Independent meaning
 
@@ -102,12 +102,23 @@ replacement language and preserves the heap. `unfold_checked` proves that
 actual repaired outer-Mu unfolding retains independent language for arbitrary
 available records. It uses no preparation or literal reconstruction premise.
 
+## Actual cold traversal
+
+`MergedFreshOrdinaryGuardedEffects.collect_heap` and `nodeEdges_heap` retain
+the independent probe-language heap through every bounded actual cold read.
+Exhausted bounds retain the heap. `SourceFreshOrdinaryColdSharedRows.Trace.guarded_heap`
+follows each actual read and carries the invariant to the exact final cache.
+`cold_finite_guarded` composes this law with existing finite traversal.
+`constructed_cold_finite_guarded` derives every initial premise from actual
+completed closed construction. Both depth and independent-language probe heaps
+hold in the resulting finite shared table.
+
 ## Next proof
 
 Connect the actual final repaired graph and finite cold table to independent
 meaning. Then derive physical `ProductReadback.members`, `.rejected`, and
-`product_exact`. Propagate the new semantic heap through cold/native effects
-where those paths construct binders. Their older depth/free/profile heaps
+`product_exact`. Propagate the new semantic heap through native intersection effects
+where those paths construct binders. Cold/shared propagation is proved. Their older depth/free/profile heaps
 remain separate proved invariants.
 
 `MergedFreshOrdinaryGraph` uses actual repaired unfolding but fixes one cache.
@@ -120,14 +131,14 @@ The raw unused-binder identity counterexample still applies.
 
 ## Validation
 
-Lean 4.34.1 passes 1,409 aggregate jobs and 43,422 theorem dependency checks.
+Lean 4.34.1 passes 1,411 aggregate jobs and 43,431 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-guarded-source-execution-20261014-audit.log`.
+`/tmp/mcfta-guarded-cold-heap-20261014-audit.log`.
 No production Haskell source changed. Existing Nix and formatter checks remain
 applicable. The earlier proofs, counterexamples, and marked drafts remain.
 
-All 1,761 files from the previous local snapshot remain. The current Lean
-tree has 1,769 files. Only audit imports, coverage ledgers, and this note
+All 1,769 files from the previous local snapshot remain. The current Lean
+tree has 1,771 files. Only audit imports, coverage ledgers, and this note
 changed among earlier files. All earlier proof bytes and marked drafts
 are unchanged. Snapshot:
-`/tmp/mcfta-guarded-source-execution-checkpoint-20261014-1620/`.
+`/tmp/mcfta-guarded-cold-heap-checkpoint-20261014-1624/`.
