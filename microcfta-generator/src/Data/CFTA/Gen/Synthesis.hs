@@ -73,7 +73,8 @@ import Data.Bifunctor (first)
 import Data.Char (isAlphaNum, isLower, isSpace, isUpper)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Hashable (Hashable)
-import Data.List (intercalate, permutations)
+import Data.List (intercalate, permutations, subsequences)
+import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Text (Text)
@@ -438,11 +439,16 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNode $ queryGo
     restricted = concatMap fst (libraryAvoid lib)
 
     -- The terms of a size that use no argument in particular; the flag
-    -- admits the components that only appear as an argument.
+    -- admits the components that only appear as an argument. The table
+    -- builds the terms of each flag and size once.
     termsOfSize :: Bool -> Int -> [Node Symbol]
-    termsOfSize _ 0 = []
-    termsOfSize asArgument 1 = [anyArgument, anyFunction] <> [argumentOnly | asArgument]
-    termsOfSize _ 2 =
+    termsOfSize asArgument size' = termsTable Map.! (asArgument, size')
+    termsTable =
+        LazyMap.fromList
+            [((asArgument, size'), buildTerms asArgument size') | asArgument <- [False, True], size' <- [0 .. size]]
+    buildTerms _ 0 = []
+    buildTerms asArgument 1 = [anyArgument, anyFunction] <> [argumentOnly | asArgument]
+    buildTerms _ 2 =
         [ application
             types
             (Node [edge | (name, edge) <- components, name `elem` functions])
@@ -450,16 +456,26 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNode $ queryGo
         | (functions, Just arguments) <- libraryAvoid lib
         ]
             <> [application types (union [without restricted, anyArgument]) (union $ termsOfSize True 1)]
-    termsOfSize _ size' =
+    buildTerms _ size' =
         [ application types (union $ termsOfSize False left) (union $ termsOfSize True (size' - left))
         | left <- [1 .. size' - 1]
         ]
 
-    -- The terms of a size that use each of the arguments once.
+    -- The terms of a size that use each of the arguments once. The
+    -- arguments are an ordered selection of the query's arguments, and the
+    -- table builds the terms of each flag, size, and selection once.
     relevant :: Bool -> Int -> [(Text, Edge Symbol)] -> [Node Symbol]
-    relevant asArgument size' [] = termsOfSize asArgument size'
-    relevant _ 1 [(_, edge)] = [Node [edge]]
-    relevant _ size' arguments
+    relevant asArgument size' arguments = relevantTable Map.! (asArgument, size', map fst arguments)
+    relevantTable =
+        LazyMap.fromList
+            [ ((asArgument, size', map fst arguments), buildRelevant asArgument size' arguments)
+            | asArgument <- [False, True]
+            , size' <- [0 .. size]
+            , arguments <- concatMap permutations (subsequences argumentEdges)
+            ]
+    buildRelevant asArgument size' [] = termsOfSize asArgument size'
+    buildRelevant _ 1 [(_, edge)] = [Node [edge]]
+    buildRelevant _ size' arguments
         | size' < length arguments = []
         | otherwise =
             [ application types (union $ relevant False left used) (union $ relevant True (size' - left) rest)
