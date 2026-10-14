@@ -3,7 +3,7 @@
 Checkpoints: `49498845`, `4601cf85`, and `f425e2b6`, upstream `f59c198d`, 2026-10-14.
 
 `SourceColdSharedRows.collect` models the actual `reachable` worklist in
-`microcfta/src/Data/CFTA/Interned.hs`. Each first read calls the actual modeled
+`cfta/src/Data/CFTA/Interned.hs`. Each first read calls the actual modeled
 `nodeEdges`, stores its ordered physical edges at the canonical identity, and
 queues those edges' child values before the remaining work. The next step
 uses the read's returned cache. Known identities retain their first row.
@@ -115,7 +115,7 @@ depth/head-rank shortcuts and saturated merge monotonicity.
 The concrete product interface is
 `SourceCyclicRowsNativeGate.ProductReadback.members` and `.rejected`.
 Derive these from the actual `intersectOpen` branches in
-`microcfta/src/Data/CFTA/Interned/Operations.hs`. Retain `maybeMu`, open-domain
+`cfta/src/Data/CFTA/Interned/Operations.hs`. Retain `maybeMu`, open-domain
 environments, recursive memo publication, and child effects. Do not assume
 another row or language contract to use the existing `product_exact` theorem.
 

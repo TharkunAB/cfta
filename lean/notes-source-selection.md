@@ -2,7 +2,7 @@
 
 `MergedSourceSelection` models the `recursive`, `kept`, and `accepts`
 expressions in `mergedUnion` in
-`microcfta/src/Data/CFTA/Interned/Operations.hs`. It tries the original
+`cfta/src/Data/CFTA/Interned/Operations.hs`. It tries the original
 closed Mu operands in order. It preserves every closed Mu. It removes
 another child only after a successful `subsumes` call. Open children pass
 the free-variable gate without comparison. Canonical identity removal

@@ -102,8 +102,8 @@ union case, the constrained parent caller, and nullary guard widening. It does
 not add a test to the production test suite.
 
 ```sh
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta lean/repro/MergedNarrowing.hs'
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta lean/repro/MergedNarrowing.hs union'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta lean/repro/MergedNarrowing.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta lean/repro/MergedNarrowing.hs union'
 ```
 
 The earlier two-operand probes timed out before the repair. They are historical

@@ -1,6 +1,57 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 20:56 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 21:13 CEST (Europe/Stockholm)**.
+
+## Package rename and current source boundary
+
+The current upstream base is `origin/microcfta` at `7bfb69d1` (PR #129).
+The packages are `cfta`, `cfta-generator`, and `cfta-ghc`.
+Their directories and Cabal targets use those names. `Data.CFTA.*` modules
+retain their names. The workspace path, Git branch, and Lean namespace
+`MicroCFTA` retain their names. The Lake package is now `cfta`.
+
+The preceding PR #120 refresh at `71a15220` added the GHC package and expanded
+synthesis. These applications still have no complete formal source model.
+This scope does not include their benchmarks or workload specifications.
+
+The preserving rebase replayed 555 commits. Its result is `ede5f85a`.
+Backup `backup/formalization-before-package-rename-20261014-2112` retains
+`2e165b8e`. One changelog conflict retained both the upstream rename note
+and the four-line constructor repair note. Immediately after the rebase,
+all 1,880 saved Lean-tree files matched byte for byte. No file was missing.
+Evidence: `/tmp/mcfta-rename-refresh-20261014-2111/`.
+The two stashes, other worktrees, three untracked fixtures, and marked drafts
+remain. The active Haskell package trees differ from upstream only in that
+retained changelog note.
+
+PR #129 also changes the reserved solver prefix from `__microcfta_` to
+`__cfta_`. The source definitions, injectivity and freshness proofs, and
+executable counterexamples now use the current prefix. This includes value,
+bound, actual, contract, and integer names. The injective external encoding,
+ambient freshness repair, and collision counterexamples remain.
+Current source links and Cabal commands use the renamed directories and
+packages. Historical commit hashes, snapshots, and log transcripts remain.
+A path in an older source note now identifies the relocated file.
+
+The latest saved proof checkpoint is `ede5f85a`, after `70289150` and
+`dab197d2`. `done_node_table_exact` covers arbitrary completed native calls,
+including warm memo states. It derives finite stable tables and exact
+independent language. `SourceFreshOrdinaryColdProductivity.prechecked_table`
+follows actual root exposure before row extraction. It proves that the
+source precheck and minimum lookup detect exactly the finite structural
+language. Neither theorem assumes an exact product-row adapter.
+
+The pre-rename audit passed 1,509 jobs and 44,088 theorem dependency checks.
+Its log is `/tmp/mcfta-warm-precheck-20261014-audit.log`.
+The renamed audit passed 1,509 jobs and 44,088 theorem dependency checks.
+Only the three standard foundations remain. The old unused `inputs` warning
+remains. The Nix suites passed: 289 core, 209 generator, and 147 refinement
+examples. All five updated native probes passed. Fourmolu and cabal-gild
+checks passed. The logs are `renamed-audit.log`, `renamed-source-tests.log`,
+and `renamed-repros.log` in the evidence directory.
+The next composition joins the derived native product language to this
+actual prechecked callback, then derives source-key languages and the full
+ordered ambiguity scan. Whole Haskell extraction remains outside the proof.
 
 ## Read first
 
@@ -24,7 +75,7 @@ source bodies retain their memo structures and all enclosing running cells.
 Completed native runs now derive guarded kernel agreement, exact physical
 growth, available results, and concrete new memo provenance under checked
 word bounds. Successful first-run execution is now proved under explicit checked word
-ranges and complete source semantic heaps. Product language remains open.
+ranges and complete source semantic heaps. Full native product language is now proved.
 The original physical input view now has derived cached free-name equations,
 closedness, branch selection, and copied closedness. Actual payload sizes
 supply structural ranks. Closed-root reference traversal stays in a finite
@@ -67,7 +118,7 @@ proved. Final-cache guarded row language is proved. Its independent-language
 transport is now exact. Native product language is now proved through the
 semantic schedule. Complete native callback/compiler composition remains open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`0f32ad39`**, after `3d9fd615`. A later documentation commit
+The latest saved proof checkpoint is **`ede5f85a`**, after `70289150` and `dab197d2`. A later documentation commit
 records this handoff. Use `git log` for its hash. The intentionally untracked fixtures are
 `lean/repro/NestedUnaryTwoAtom.hs`, `lean/repro/NativeProductRowCycle.hs`, and
 `lean/repro/UnionDiagonalRows.hs`; preserve all three.
@@ -469,7 +520,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **30% at 13:34 CEST**. This is a historical value.
+The last observed value was **26% at 21:09 CEST**. Check it again before work.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -480,7 +531,8 @@ Missing or stale data is not permission to use credits.
 
 Repository: `/home/tritlo/Code/mcfta`, Ubuntu/WSL2, Bash.
 Branch: `formalization/microcfta-sized-20261014`.
-Upstream: `origin/microcfta` at **`8e393e62`** (PR #121).
+Upstream: `origin/microcfta` at **`7bfb69d1`** (PR #129).
+The following refresh records retain their historical hashes.
 
 The 10:12 pull fetched upstream and could not fast-forward. The authorized
 preserving rebase completed at 10:16 after 461 steps. Its result was `e3a33ed5`.
@@ -1361,7 +1413,7 @@ Finite repeated cold traversal and physical product language remain open.
 ## PR #122 preserving refresh
 
 The current upstream base is `3ea4a9d8`. PR #122 changes only
-`microcfta-generator/src/Data/CFTA/Gen/Synthesis.hs`. It memoizes synthesis
+`cfta-generator/src/Data/CFTA/Gen/Synthesis.hs`. It memoizes synthesis
 terms by argument flag and size, and relevant terms by flag, size, and
 ordered argument names. No Sized or interned runtime code changed. The
 synthesis application still has no complete formal source model.
@@ -1572,8 +1624,8 @@ No new production test was added locally. The linker emitted one dynamic-symbol
 type/size warning. It did not prevent the successful test run.
 
 ```sh
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests microcfta-generator:gen-tests microcfta-generator:refinement-tests -j1 --test-show-details=direct'
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta-generator:gen-tests -j1 --test-show-details=direct'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test cfta:unit-tests cfta-generator:gen-tests cfta-generator:refinement-tests -j1 --test-show-details=direct'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test cfta-generator:gen-tests -j1 --test-show-details=direct'
 ```
 
 Nix store/network access requires escalation. Use one coherent Nix toolchain.

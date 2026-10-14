@@ -1,7 +1,7 @@
 # Exact native product language, Sized classes, and minima
 
 Updated: 2026-10-14 20:52 CEST.
-Proofs: `3d9fd615` and `0f32ad39`.
+Rebased proofs: `dab197d2`, `70289150`, and `ede5f85a`.
 
 ## Complete recursive correspondence
 
@@ -77,7 +77,7 @@ the actual arity-mismatch row has an empty child.
 
 This theorem covers the raw-table root-row precheck. The live compiler uses
 `null (nodeEdges node)` before minimum lookup in
-`microcfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs`. Its complete
+`cfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs`. Its complete
 callback and scan still need composition with actual repaired exposure.
 The standalone `Data.CFTA.Sized.unambiguousRows` uses the explicit synchronous
 product. Its existing proof does not depend on this separate native path.
@@ -88,18 +88,16 @@ Connect actual native overlap callbacks to the complete finite source-key
 ambiguity scan and its compiler result. Use language and Boolean equations.
 Do not derive the refuted general functional or exact related-row adapter.
 
-First retain finite cold extraction and exact product language after an
-arbitrary completed checked native call, including warm memo states.
-`native_product` already covers such completed native calls.
-The current existential cold-table wrappers start from `initial` memo state.
-Use actual successful native bounds, retained coverage, both probe heaps,
-and the existing general repaired cold traversal for the warm wrapper.
+`done_node_table_exact` now retains finite cold extraction after any
+completed checked native call, including warm memo states. It derives all
+final heaps, coverage, resident and replayed rows, exact finite keys,
+stable collection bounds, and complete independent table language.
 
-Then connect the actual `nodeEdges` precheck to the minimum result. A literal
-root-row equality is sufficient but is not necessary. A present minimum
-gives an accepted term. Exact repaired exposure must then have a root edge.
-When the minimum is absent, the callback is false for either precheck result.
-Keep actual exposure completion and its final-cache language in the proof.
+`SourceFreshOrdinaryColdProductivity.prechecked_table` now follows the actual
+`nodeEdges` precheck before row collection. It derives both finite operations
+and proves the Boolean equivalent to a finite structural term. A present
+minimum supplies a root edge through exact exposure. No literal root-row
+equality is required. The complete native callback composition is next.
 
 Derive the finite source-key operand language from the actual input cold
 trace and resident original closed records. Apply the native product and

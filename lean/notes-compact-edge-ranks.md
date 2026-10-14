@@ -1,7 +1,7 @@
 # Compact equality edge ranks
 
 `MicroCFTA/CompactEdgeRanks.lean` models `buildEdge`, `addGroup`, and `rankEdge`
-in `microcfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs`.
+in `cfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs`.
 It uses the actual parser and merge-fold layout from `CompactGroups` and the
 actual association builder and inverse group reader from `CompactChildSlots`.
 

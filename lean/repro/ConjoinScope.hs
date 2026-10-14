@@ -19,7 +19,7 @@ leaf name = Node [Transition name Formula.Top [] noConstraint]
 
 -- | Two applications share a constructor name and have different values.
 actual :: Integer -> Automaton
-actual value = Node [Transition "a" (equals "__microcfta_value" value) [leaf "z"] noConstraint]
+actual value = Node [Transition "a" (equals "__cfta_value" value) [leaf "z"] noConstraint]
 
 -- | The first independent scope proves that its actual value is zero.
 first :: Guard
@@ -47,7 +47,7 @@ graph guard =
 candidate :: Term.Term Symbol
 candidate =
     let termLeaf name = Term.Node (RefinedSymbol name Formula.Top) []
-        termActual value = Term.Node (RefinedSymbol "a" (equals "__microcfta_value" value)) [termLeaf "z"]
+        termActual value = Term.Node (RefinedSymbol "a" (equals "__cfta_value" value)) [termLeaf "z"]
      in Term.Node
             (RefinedSymbol "root" Formula.Top)
             [termActual 0, termActual 1, termLeaf "b", termLeaf "x", termLeaf "y", termLeaf "target"]

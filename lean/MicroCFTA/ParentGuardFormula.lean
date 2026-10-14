@@ -108,7 +108,7 @@ theorem substitution_values (env : Name → Int) (names : List Name) (terms : Li
 theorem contractName_injective : Function.Injective contractName := by
   intro left right same
   apply Nat.repr_injective
-  exact String.append_right_inj "__microcfta_contract_" |>.mp same
+  exact String.append_right_inj "__cfta_contract_" |>.mp same
 
 /-- Every target gets a different positional formal, even when target paths repeat. -/
 theorem contractNames_distinct (count : Nat) : ((List.range count).map contractName).Nodup := by

@@ -4,7 +4,7 @@
 `EnumerationState.lean`. It reads those definitions directly. It does not use a
 separate transition relation with assumed preservation laws.
 
-The source is `microcfta/src/Data/CFTA/Enumeration.hs`. `UVarValue`, suspended
+The source is `cfta/src/Data/CFTA/Enumeration.hs`. `UVarValue`, suspended
 path tries, union-find representatives, allocation, intersection, assimilation,
 node merging, residual obligations, and fragment rendering retain their source
 roles. The graph interface supplies node views and graph intersection.

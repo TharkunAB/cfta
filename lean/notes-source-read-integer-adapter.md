@@ -1,5 +1,8 @@
 # Integer adapter evidence for current guard transport
 
+Name examples use the current `__cfta_` prefix from PR #129.
+Earlier saved log transcripts use the historical `__microcfta_` prefix.
+
 `SourceReadLogicalIntegerAdapter` uses the actual pure `SolverAdapter.execute`
 path. `prepared_integer` proves that an all-Int ambient declaration list
 produces only Int ambient, fresh, and default declarations. It preserves
@@ -11,7 +14,7 @@ from correctness of the external Sat or Unsat response. Ambient assumptions
 are empty. Every value in the interpretation's integer carrier meets the
 prepared declaration domains. A failed preflight returns Unknown and needs
 no external response. `collision_unknown` proves this for an unused ambient
-`__microcfta_actual_0` declaration and any supplied check function.
+`__cfta_actual_0` declaration and any supplied check function.
 
 `Returned` connects a pure guard callback to the adapter's returned results.
 It is an explicit premise. It does not turn an exception into Unknown or prove

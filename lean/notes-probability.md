@@ -20,7 +20,7 @@ policy. [SYSTEM.md](SYSTEM.md) contains current findings;
 
 | Haskell code | Lean results | Scope |
 | --- | --- | --- |
-| `microcfta/src/Data/CFTA/Index.hs`, `pairRank`, `splitRank`, offsets | `split_pair`, `pair_split`, `pairRank_lt`, `split_lt`, `pairRank_injective`, `offset_interval` | Mixed-radix encoding is a bijection on valid product ranks. Offsets preserve branch bounds. |
+| `cfta/src/Data/CFTA/Index.hs`, `pairRank`, `splitRank`, offsets | `split_pair`, `pair_split`, `pairRank_lt`, `split_lt`, `pairRank_injective`, `offset_interval` | Mixed-radix encoding is a bijection on valid product ranks. Offsets preserve branch bounds. |
 | `Ranked/Internal.hs`, `fromWeighted`, `frequency`; `Ranked/QuickCheck.hs`, ticket intervals | `tickets_length`, `tickets_event_count`, `selectTicket_eq_getElem?`, `selectTicket_exists`, `uniform_tickets_probability` | Ordered intervals have exactly their declared ticket counts. The proof covers a linear decoder, not the Haskell binary search. |
 | `Ranked/Internal/Sampler.hs`, `Exact`, `uniformSampler`, `productSampler` | `uniform_event_probability`, `eventMass_map`, `eventMass_product`, `uniform_probability`, `product_probability` | Uniform occurrence sampling, duplicate outputs, independent products, nonnegative mass, and normalization. |
 | `Ranked/Internal/Sampler.hs`, `Exact.frequencyGen` | `eventMass_frequency`, `frequency_probability` | Each branch contributes its external weight times its conditional event probability. Positive total weight and probability distributions for the branches suffice. |
@@ -33,7 +33,7 @@ policy. [SYSTEM.md](SYSTEM.md) contains current findings;
 
 The `Index.hs` path is relative to the repository root. The other source
 paths are relative to
-`microcfta-generator/src/Data/CFTA/`.
+`cfta-generator/src/Data/CFTA/`.
 
 ## Checked distinctions
 

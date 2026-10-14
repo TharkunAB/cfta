@@ -1,5 +1,8 @@
 # Composite static candidate callbacks
 
+Name examples use the current `__cfta_` prefix from PR #129.
+Earlier saved log transcripts use the historical `__microcfta_` prefix.
+
 `StaticCompositeCandidateRanks` extends the source callback model to
 `Join.joinNBucketStatic`, `Chain.chainRanks`, and arbitrary-length
 `Static.frequencyStatic` choices. Its component terms and ranks come from
@@ -41,9 +44,9 @@ term. This is a counterexample to an unrestricted internal callback law,
 not a reproduced defect in a valid public generator. The source open
 compiler uses structural callbacks for open integer regions. It obtains
 enumerated and imported components through its closed-region path.
-An imported formula that uses `__microcfta_integer_*` can collide with
+An imported formula that uses `__cfta_integer_*` can collide with
 filling, but `Refinement.Expression.variable` explicitly reserves the
-`__microcfta_` prefix for library names.
+`__cfta_` prefix for library names.
 
 The module proves a join or frequency adapter over the earlier finite
 source fragment. It does not introduce one recursive syntax that nests

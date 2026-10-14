@@ -113,5 +113,5 @@ The exact retained and formatted file also passed. Its log is
 Run the retained source fixture with:
 
 ```sh
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- ghc -O0 -package=microcfta lean/repro/NestedUnaryTwoAtom.hs -outputdir /tmp/mcfta-nested-unary-build -o /tmp/mcfta-nested-unary && /tmp/mcfta-nested-unary'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- ghc -O0 -package=cfta lean/repro/NestedUnaryTwoAtom.hs -outputdir /tmp/mcfta-nested-unary-build -o /tmp/mcfta-nested-unary && /tmp/mcfta-nested-unary'
 ```

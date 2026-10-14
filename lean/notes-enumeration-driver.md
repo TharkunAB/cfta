@@ -2,7 +2,7 @@
 
 `EnumerationSchedule.lean` and `EnumerationDriver.lean` prove state invariants
 for the actual actions in `EnumerationState.lean`. These actions follow
-`microcfta/src/Data/CFTA/Enumeration.hs`. The proofs do not use a separate
+`cfta/src/Data/CFTA/Enumeration.hs`. The proofs do not use a separate
 transition relation with assumed preservation laws.
 
 ## Checked scheduler and caller laws

@@ -12,7 +12,7 @@ open FullSyntax FormulaSubstitution SourceFormula SourceScopeStack FreshEnvironm
 
 /-- The source contract and actual streams cannot contain the same name. -/
 theorem contract_ne_actual (contractIndex actualIndex : Nat) :
-    SourceGuards.contractName contractIndex ≠ "__microcfta_actual_" ++ toString actualIndex := by
+    SourceGuards.contractName contractIndex ≠ "__cfta_actual_" ++ toString actualIndex := by
   intro same
   have different := congrArg (fun name : String => name.toList[12]?) same
   simp [SourceGuards.contractName, String.toList_append] at different

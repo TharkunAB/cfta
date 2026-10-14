@@ -1,7 +1,7 @@
 # Suspended-path enumeration driver
 
 `MicroCFTA/EnumerationState.lean` is an executable port of the stateful driver
-in `microcfta/src/Data/CFTA/Enumeration.hs`. It uses the checked `EqualityTrie`,
+in `cfta/src/Data/CFTA/Enumeration.hs`. It uses the checked `EqualityTrie`,
 `UnionFind`, and `Fragments` models. The state contains the fresh-name supply,
 representative forest, value slots, residual obligations, recursion ancestry,
 and current expansion ancestry.

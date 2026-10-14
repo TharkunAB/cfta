@@ -2,8 +2,8 @@
 
 The source baseline is `origin/microcfta` at `de910ea`.
 The source operations are `recursiveChainTerms` in
-`microcfta-generator/src/Data/CFTA/Gen/Internal/Chain.hs` and `recursiveJoin`
-in `microcfta-generator/src/Data/CFTA/Gen/Internal/Join.hs`.
+`cfta-generator/src/Data/CFTA/Gen/Internal/Chain.hs` and `recursiveJoin`
+in `cfta-generator/src/Data/CFTA/Gen/Internal/Join.hs`.
 
 ## Model and source correspondence
 

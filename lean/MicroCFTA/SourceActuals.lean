@@ -11,13 +11,13 @@ namespace MicroCFTA.SourceActuals
 open SourceGuards SourceObservations
 
 /-- Distinct source indices produce distinct reserved actual-value names. -/
-theorem fresh_injective : Function.Injective (fun index : Nat => "__microcfta_actual_" ++ toString index) := by
+theorem fresh_injective : Function.Injective (fun index : Nat => "__cfta_actual_" ++ toString index) := by
   intro left right equal
-  exact Nat.repr_injective ((String.append_right_inj "__microcfta_actual_").mp equal)
+  exact Nat.repr_injective ((String.append_right_inj "__cfta_actual_").mp equal)
 
 /-- The finite prefix contains no duplicate fresh-name candidates. -/
 theorem candidates_nodup (count : Nat) :
-    ((List.range count).map (fun index => "__microcfta_actual_" ++ toString index)).Nodup := by
+    ((List.range count).map (fun index => "__cfta_actual_" ++ toString index)).Nodup := by
   rw [List.Nodup, List.pairwise_map]
   exact List.Pairwise.imp (fun apart same => apart (fresh_injective same)) List.nodup_range
 
@@ -30,7 +30,7 @@ theorem filter_length (items : List Name) (keep : Name → Bool) :
 
 /-- The source stream always supplies as many fresh identities as conflicts require. -/
 theorem fresh_length (avoid : List Name) (count : Nat) : (freshNames avoid count).length = count := by
-  let candidates := (List.range (avoid.length + count)).map (fun index => "__microcfta_actual_" ++ toString index)
+  let candidates := (List.range (avoid.length + count)).map (fun index => "__cfta_actual_" ++ toString index)
   have unique := candidates_nodup (avoid.length + count)
   have rejectedUnique := List.Pairwise.filter (fun name => avoid.contains name) unique
   have rejectedBound : (candidates.filter fun name => avoid.contains name).length ≤ avoid.length := by
@@ -132,7 +132,7 @@ def fixtureObservations : Observations Nat := fun path =>
   | [0] | [1] => some ⟨"same", 0, .inner⟩
   | [2] => some ⟨"left", 0, .leaf⟩
   | [3] => some ⟨"right", 0, .leaf⟩
-  | [4] => some ⟨"__microcfta_actual_0", 0, .leaf⟩
+  | [4] => some ⟨"__cfta_actual_0", 0, .leaf⟩
   | _ => none
 
 /-- The fixture substitutes two distinct actual paths into one semantic condition. -/
@@ -143,7 +143,7 @@ def fixtureGuard : SourceGuards.Guard Nat :=
 theorem conflicting_inner_names :
     (substitutionValues fixtureFormulas fixtureObservations
       (sameShape fixtureFormulas fixtureObservations []) fixtureGuard).1 =
-        [([0], "__microcfta_actual_1", "same"), ([1], "__microcfta_actual_2", "same")] ∧
+        [([0], "__cfta_actual_1", "same"), ([1], "__cfta_actual_2", "same")] ∧
     (substitutionValues fixtureFormulas fixtureObservations
       (sameShape fixtureFormulas fixtureObservations []) fixtureGuard).2 = [[0], [1]] := by
   have actualOrder : orderedPaths [[0], [1]] = [[0], [1]] := by
@@ -162,7 +162,7 @@ theorem ambiguous_refutation_remains_unknown :
   unfold evaluateGuardWithShape evaluateGuardWithSame
   rw [show (substitutionValues fixtureFormulas fixtureObservations
     (sameShape fixtureFormulas fixtureObservations []) fixtureGuard) =
-      ([([0], "__microcfta_actual_1", "same"), ([1], "__microcfta_actual_2", "same")], [[0], [1]]) from
+      ([([0], "__cfta_actual_1", "same"), ([1], "__cfta_actual_2", "same")], [[0], [1]]) from
         Prod.ext conflicting_inner_names.1 conflicting_inner_names.2]
   simp [fixtureGuard, evaluateWith, resolveMany, resolve, fixtureObservations, fixtureFormulas,
     decideWith]

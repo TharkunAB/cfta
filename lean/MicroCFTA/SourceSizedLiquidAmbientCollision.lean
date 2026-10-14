@@ -16,10 +16,10 @@ open FullSyntax SolverAdapter SourceSizedLiquidProgram
 open SourceSizedLiquidAmbient SourceReadLogicalIntegerCore
 
 /-- The first generated name occurs only in the ambient assumption. -/
-def ambientName : Name := "__microcfta_actual_0"
+def ambientName : Name := "__cfta_actual_0"
 
 /-- A separate generated name does not alias that assumption. -/
-def separateName : Name := "__microcfta_actual_1"
+def separateName : Name := "__cfta_actual_1"
 
 /-- The implicit ambient value equals zero. -/
 def assumptions : List Formula := [.atom .eq (.var ambientName) (.lit 0)]
@@ -44,7 +44,7 @@ theorem separate_not_entailed : ¬Meaning integerTarget [] assumptions (query se
   have domain : Domain integerTarget [] assumptions (query separateName) env := by
     refine ⟨?_, ?_, ?_⟩
     · intro binding member
-      have equal : binding = ("__microcfta_value", FormulaLowering.TargetSort.int) := by simpa [declarations, valueName] using member
+      have equal : binding = ("__cfta_value", FormulaLowering.TargetSort.int) := by simpa [declarations, valueName] using member
       subst binding
       trivial
     · intro binding member

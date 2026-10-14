@@ -13,7 +13,7 @@ import qualified Data.CFTA.Term as Term
 
 -- | Both inner actuals have this refinement and the same complete subtree.
 zero :: Formula.Formula
-zero = Formula.Atom Formula.Eq (Formula.Var "__microcfta_value") (Formula.Lit 0)
+zero = Formula.Atom Formula.Eq (Formula.Var "__cfta_value") (Formula.Lit 0)
 
 -- | The outer scope replaces the ambient name used by the complete inner actual.
 guard :: Guard

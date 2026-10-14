@@ -112,7 +112,7 @@ theorem mentioned_exact (assumptions : List FullSyntax.Formula)
   simp [mentioned, formula_symbols_lower, parts_symbols_lower]
 
 /-- The source distinguished refinement value name. -/
-def valueName : Name := "__microcfta_value"
+def valueName : Name := "__cfta_value"
 
 /-- The source default query limit is ten thousand milliseconds. -/
 def defaultTimeLimit : Int := 10000
@@ -440,24 +440,24 @@ example : freshDeclarations (declarations []) [("fresh", "x"), ("fresh", "x")] =
     some [("fresh", .int), ("fresh", .int)] := by decide +kernel
 
 /-- An unused ambient declaration is enough to reject the first generated spelling. -/
-example : run [("__microcfta_actual_0", .int)]
-    [("__microcfta_actual_0", "a"), ("__microcfta_actual_1", "a")]
+example : run [("__cfta_actual_0", .int)]
+    [("__cfta_actual_0", "a"), ("__cfta_actual_1", "a")]
     10000 (.answered .unsat false) = ⟨false, .returned .unknown⟩ := by decide +kernel
 
 /-- A spelling that avoids the same ambient declaration reaches the Unsat result. -/
-example : run [("__microcfta_actual_0", .int)]
-    [("__microcfta_actual_1", "a"), ("__microcfta_actual_2", "a")]
+example : run [("__cfta_actual_0", .int)]
+    [("__cfta_actual_1", "a"), ("__cfta_actual_2", "a")]
     10000 (.answered .unsat false) = ⟨false, .returned .yes⟩ := by decide +kernel
 
 /-- The full query preparation has the same collision, even for an empty Top query. -/
-example : execute [("__microcfta_actual_0", .int)]
-    [("__microcfta_actual_0", "a"), ("__microcfta_actual_1", "a")]
+example : execute [("__cfta_actual_0", .int)]
+    [("__cfta_actual_0", "a"), ("__cfta_actual_1", "a")]
     [] .top .top 10000 (fun _ => .answered .unsat false) =
       ⟨false, .returned .unknown⟩ := by decide +kernel
 
 /-- Changing only the fresh spelling permits the same valid Top query. -/
-example : execute [("__microcfta_actual_0", .int)]
-    [("__microcfta_actual_1", "a"), ("__microcfta_actual_2", "a")]
+example : execute [("__cfta_actual_0", .int)]
+    [("__cfta_actual_1", "a"), ("__cfta_actual_2", "a")]
     [] .top .top 10000 (fun _ => .answered .unsat false) =
       ⟨false, .returned .yes⟩ := by decide +kernel
 

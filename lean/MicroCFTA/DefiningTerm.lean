@@ -298,7 +298,7 @@ theorem integerName_ne_value (index : Nat) : IntegerLabelCodec.integerName index
   intro same
   have length := congrArg String.length same
   simp [IntegerLabelCodec.integerName, SourceGuards.valueName] at length
-  have longer : "__microcfta_value".length < "__microcfta_integer_".length := by decide +kernel
+  have longer : "__cfta_value".length < "__cfta_integer_".length := by decide +kernel
   omega
 
 /-- Actual point filling leaves the refined value name unchanged. -/

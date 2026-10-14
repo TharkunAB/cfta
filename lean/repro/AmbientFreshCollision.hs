@@ -12,14 +12,14 @@ import Data.CFTA.Refinement.Verdict (Verdict (..), entails, entailsWithBindings)
 main :: IO ()
 main = do
     collisionResults <-
-        withZ3Assuming [] [Atom Eq (Var "__microcfta_actual_0") (Lit 0)] $ \solver -> do
+        withZ3Assuming [] [Atom Eq (Var "__cfta_actual_0") (Lit 0)] $ \solver -> do
             collision <-
-                entailsWithBindings solver [("__microcfta_actual_0", "actual")] Top $
-                    Atom Eq (Var "__microcfta_actual_0") (Lit 0)
+                entailsWithBindings solver [("__cfta_actual_0", "actual")] Top $
+                    Atom Eq (Var "__cfta_actual_0") (Lit 0)
             independent <-
-                entailsWithBindings solver [("__microcfta_actual_1", "actual")] Top $
-                    Atom Eq (Var "__microcfta_actual_1") (Lit 0)
-            ambient <- entails solver Top $ Atom Eq (Var "__microcfta_actual_0") (Lit 0)
+                entailsWithBindings solver [("__cfta_actual_1", "actual")] Top $
+                    Atom Eq (Var "__cfta_actual_1") (Lit 0)
+            ambient <- entails solver Top $ Atom Eq (Var "__cfta_actual_0") (Lit 0)
             pure (collision, independent, ambient)
     boundName <-
         withZ3Assuming [] [Forall [("fresh", IntSort)] (Atom Eq (Var "fresh") (Var "fresh"))] $ \solver ->

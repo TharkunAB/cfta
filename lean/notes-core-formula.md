@@ -1,6 +1,10 @@
 # Core formula correspondence
 
-`MicroCFTA/CoreFormula.lean` models the integer fragment of `microcfta/src/Data/CFTA/Formula.hs` from `55fe503`. `MicroCFTA/FullSyntax.lean` models the complete syntax after `9ad319d`, now included in `microcfta` at `d7f7c11`. The core fragment remains the syntax that the automata construct. It evaluates unbounded integers and conditional terms. It implements the source constructor order and the lexicographic comparison of fields.
+Current executable definitions use `__cfta_bound_` after PR #129.
+The quoted historical result below retains its old `__microcfta_bound_` name.
+Source paths below use the current `cfta` directory.
+
+`MicroCFTA/CoreFormula.lean` models the integer fragment of `cfta/src/Data/CFTA/Formula.hs` from `55fe503`. `MicroCFTA/FullSyntax.lean` models the complete syntax after `9ad319d`, now included in `microcfta` at `d7f7c11`. The core fragment remains the syntax that the automata construct. It evaluates unbounded integers and conditional terms. It implements the source constructor order and the lexicographic comparison of fields.
 
 The checked substitution theorem covers arbitrary formulas and terms. Replacements apply simultaneously. The implementation removes identity entries before it selects the first matching entry. For example, `[(x, Var x), (x, Lit 1)]` replaces `x` with `1`. Replacement terms do not receive the same substitution again.
 

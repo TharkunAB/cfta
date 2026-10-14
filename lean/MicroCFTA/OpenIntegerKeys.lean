@@ -17,7 +17,7 @@ abbrev integerName := IntegerLabelCodec.integerName
 theorem integerName_injective : Function.Injective integerName := by
   intro left right same
   apply Nat.repr_injective
-  have suffix := String.append_right_inj "__microcfta_integer_" |>.mp same
+  have suffix := String.append_right_inj "__cfta_integer_" |>.mp same
   exact suffix
 
 /-- The actual `renameFrom` replacement table. -/

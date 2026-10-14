@@ -1,6 +1,57 @@
 # Current formalization findings
 
-Updated: **2026-10-14 20:56 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 21:13 CEST (Europe/Stockholm)**.
+
+## Package rename and current source boundary
+
+The current upstream base is `origin/microcfta` at `7bfb69d1` (PR #129).
+The packages are `cfta`, `cfta-generator`, and `cfta-ghc`.
+Their directories and Cabal targets use those names. `Data.CFTA.*` modules
+retain their names. The workspace path, Git branch, and Lean namespace
+`MicroCFTA` retain their names. The Lake package is now `cfta`.
+
+The preceding PR #120 refresh at `71a15220` added the GHC package and expanded
+synthesis. These applications still have no complete formal source model.
+This scope does not include their benchmarks or workload specifications.
+
+The preserving rebase replayed 555 commits. Its result is `ede5f85a`.
+Backup `backup/formalization-before-package-rename-20261014-2112` retains
+`2e165b8e`. One changelog conflict retained both the upstream rename note
+and the four-line constructor repair note. Immediately after the rebase,
+all 1,880 saved Lean-tree files matched byte for byte. No file was missing.
+Evidence: `/tmp/mcfta-rename-refresh-20261014-2111/`.
+The two stashes, other worktrees, three untracked fixtures, and marked drafts
+remain. The active Haskell package trees differ from upstream only in that
+retained changelog note.
+
+PR #129 also changes the reserved solver prefix from `__microcfta_` to
+`__cfta_`. The source definitions, injectivity and freshness proofs, and
+executable counterexamples now use the current prefix. This includes value,
+bound, actual, contract, and integer names. The injective external encoding,
+ambient freshness repair, and collision counterexamples remain.
+Current source links and Cabal commands use the renamed directories and
+packages. Historical commit hashes, snapshots, and log transcripts remain.
+A path in an older source note now identifies the relocated file.
+
+The latest saved proof checkpoint is `ede5f85a`, after `70289150` and
+`dab197d2`. `done_node_table_exact` covers arbitrary completed native calls,
+including warm memo states. It derives finite stable tables and exact
+independent language. `SourceFreshOrdinaryColdProductivity.prechecked_table`
+follows actual root exposure before row extraction. It proves that the
+source precheck and minimum lookup detect exactly the finite structural
+language. Neither theorem assumes an exact product-row adapter.
+
+The pre-rename audit passed 1,509 jobs and 44,088 theorem dependency checks.
+Its log is `/tmp/mcfta-warm-precheck-20261014-audit.log`.
+The renamed audit passed 1,509 jobs and 44,088 theorem dependency checks.
+Only the three standard foundations remain. The old unused `inputs` warning
+remains. The Nix suites passed: 289 core, 209 generator, and 147 refinement
+examples. All five updated native probes passed. Fourmolu and cabal-gild
+checks passed. The logs are `renamed-audit.log`, `renamed-source-tests.log`,
+and `renamed-repros.log` in the evidence directory.
+The next composition joins the derived native product language to this
+actual prechecked callback, then derives source-key languages and the full
+ordered ambiguity scan. Whole Haskell extraction remains outside the proof.
 
 ## Current result
 
@@ -1039,7 +1090,7 @@ Finite repeated cold traversal and physical product language remain open.
 ## PR #122 preserving refresh
 
 The current upstream base is `3ea4a9d8`. PR #122 changes only
-`microcfta-generator/src/Data/CFTA/Gen/Synthesis.hs`. It memoizes synthesis
+`cfta-generator/src/Data/CFTA/Gen/Synthesis.hs`. It memoizes synthesis
 terms by argument flag and size, and relevant terms by flag, size, and
 ordered argument names. No Sized or interned runtime code changed. The
 synthesis application still has no complete formal source model.
@@ -1289,7 +1340,7 @@ authorize or require a replacement of that core.
 | Ranking and unranking | Reference queries use the same distinct list. `sized` dispatches to the count-table decoder and bottom-up inverse where the plain unambiguous import succeeds. | Reuse `SourceCyclicAutomaton.exact_index_api`, `SourceFiniteAutomaton.exact_index_api`, and `SourceSymbolicStableIndex.stable_source_index`. Prove exact order agreement and current representation adapters for the new dispatch. |
 | Full guards at a size bound | `sizedUpTo` checks each complete candidate with `evaluateConstraint`. `Unknown` gives `GuardUnknown`; it does not reject a term silently. Returned classes above the bound are empty. | Prove successful exactness under terminating and adequate evaluator contracts. Logical solver soundness alone does not prove complete decisions. |
 
-Read [Sized.hs](microcfta-generator/src/Data/CFTA/Sized.hs) and
+Read [Sized.hs](cfta-generator/src/Data/CFTA/Sized.hs) and
 [ADR 0004](docs/adr/0004-explicit-graph-boundary.md). `sizedReference` and
 `sizedUpTo` operate directly on an explicit `FTA` without pruning or binder
 construction. The optimized `sized` branch still calls `fromFTA`, then

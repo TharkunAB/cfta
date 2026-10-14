@@ -19,11 +19,11 @@ private instance resolvedDecidableEq : DecidableEq (Resolved Formula) := by
 def zero (name : String) : Formula := .atom .eq (.var name) (.lit 0)
 
 /-- The exact sparse query can prove the first of its two ambient actual assumptions. -/
-def sparseAntecedent : Formula := .and [zero "__microcfta_actual_0", zero "__microcfta_actual_1"]
+def sparseAntecedent : Formula := .and [zero "__cfta_actual_0", zero "__cfta_actual_1"]
 
 /-- This pure callback decides just the two witness queries. -/
 def solver : SourceGuards.Entailment Formula := fun _ antecedent consequent =>
-  if antecedent = sparseAntecedent && consequent = zero "__microcfta_actual_0" then .yes
+  if antecedent = sparseAntecedent && consequent = zero "__cfta_actual_0" then .yes
   else if antecedent = zero "a" && consequent = zero "b" then .no else .unknown
 
 /-- The callback's positive result is valid; its negative result has the concrete a=0,b=1 countermodel. -/
@@ -34,7 +34,7 @@ theorem solver_sound : SourceEntailment.Sound integerModel (fun _ _ => True) sol
   · rename_i positive
     have same := Bool.and_eq_true_iff.mp positive
     have left : antecedent = sparseAntecedent := by simpa using same.1
-    have right : consequent = zero "__microcfta_actual_0" := by simpa using same.2
+    have right : consequent = zero "__cfta_actual_0" := by simpa using same.2
     subst antecedent; subst consequent
     intro env _ assumed
     simp only [sparseAntecedent, Holds, holdsAll] at assumed
@@ -79,18 +79,18 @@ private theorem complete_same : sameTerm SourceFormula.operations term [] =
   simp only [sameTerm, ActualQuotient.renameTree_empty]
 
 private theorem canonical_sparse :
-    FormulaExecutable.canonical [zero "__microcfta_actual_0", zero "__microcfta_actual_1"] =
-      [zero "__microcfta_actual_0", zero "__microcfta_actual_1"] := by
+    FormulaExecutable.canonical [zero "__cfta_actual_0", zero "__cfta_actual_1"] =
+      [zero "__cfta_actual_0", zero "__cfta_actual_1"] := by
   unfold FormulaExecutable.canonical
-  have erased : [zero "__microcfta_actual_0", zero "__microcfta_actual_1"].eraseDups =
-      [zero "__microcfta_actual_0", zero "__microcfta_actual_1"] := by decide +kernel
+  have erased : [zero "__cfta_actual_0", zero "__cfta_actual_1"].eraseDups =
+      [zero "__cfta_actual_0", zero "__cfta_actual_1"] := by decide +kernel
   rw [erased]
   exact List.mergeSort_of_pairwise (by decide +kernel)
 
 /-- The sparse pass creates two ambiguous names; the complete pass merges them into ambient a. -/
 theorem tables :
     substitutionValues SourceFormula.operations (observe term) (sameShape SourceFormula.operations (observe term) []) guard =
-      ([([0], "__microcfta_actual_0", "a"), ([1], "__microcfta_actual_1", "a")], [[0], [1]]) ∧
+      ([([0], "__cfta_actual_0", "a"), ([1], "__cfta_actual_1", "a")], [[0], [1]]) ∧
     substitutionValues SourceFormula.operations (observe term) (sameTerm SourceFormula.operations term []) guard = ([], []) := by
   rw [complete_same]
   constructor
@@ -103,21 +103,21 @@ theorem tables :
 
 private def outer : Resolved Formula := ⟨("a", "b"), ("a", "b"), .top, none, true⟩
 private def first : Resolved Formula :=
-  ⟨("x", "__microcfta_actual_0"), ("x", "a"), zero "__microcfta_actual_0", some ("__microcfta_actual_0", "a"), false⟩
+  ⟨("x", "__cfta_actual_0"), ("x", "a"), zero "__cfta_actual_0", some ("__cfta_actual_0", "a"), false⟩
 private def second : Resolved Formula :=
-  ⟨("y", "__microcfta_actual_1"), ("y", "a"), zero "__microcfta_actual_1", some ("__microcfta_actual_1", "a"), false⟩
+  ⟨("y", "__cfta_actual_1"), ("y", "a"), zero "__cfta_actual_1", some ("__cfta_actual_1", "a"), false⟩
 
 private theorem sparse_assumptions :
     withActualAssumptions SourceFormula.operations [[first, second], [outer]] .top = sparseAntecedent := by
-  change FormulaExecutable.simplify (.and [zero "__microcfta_actual_0", zero "__microcfta_actual_1", .top, .top]) = _
+  change FormulaExecutable.simplify (.and [zero "__cfta_actual_0", zero "__cfta_actual_1", .top, .top]) = _
   rw [FormulaExecutable.simplify]
-  have contradiction : [zero "__microcfta_actual_0", zero "__microcfta_actual_1", .top, .top].any FormulaExecutable.contradiction = false := by
+  have contradiction : [zero "__cfta_actual_0", zero "__cfta_actual_1", .top, .top].any FormulaExecutable.contradiction = false := by
     decide +kernel
   rw [contradiction]
   simp only [Bool.false_eq_true, ↓reduceIte]
   have flattened : FormulaSimplify.flatten ((FormulaExecutable.simplifyParts
-      [zero "__microcfta_actual_0", zero "__microcfta_actual_1", .top, .top]).filter
-        (fun part => !FormulaExecutable.tautology part)) = [zero "__microcfta_actual_0", zero "__microcfta_actual_1"] := by
+      [zero "__cfta_actual_0", zero "__cfta_actual_1", .top, .top]).filter
+        (fun part => !FormulaExecutable.tautology part)) = [zero "__cfta_actual_0", zero "__cfta_actual_1"] := by
     decide +kernel
   rw [flattened, canonical_sparse]
   rfl
@@ -131,9 +131,9 @@ theorem verdicts :
     rw [tables.1]
     simp only [guard, evaluateWith]
     have out : resolveMany SourceFormula.operations (observe term)
-        [([0], "__microcfta_actual_0", "a"), ([1], "__microcfta_actual_1", "a")] [[0], [1]] [⟨[2], [0]⟩] = some [outer] := by decide +kernel
+        [([0], "__cfta_actual_0", "a"), ([1], "__cfta_actual_1", "a")] [[0], [1]] [⟨[2], [0]⟩] = some [outer] := by decide +kernel
     have inn : resolveMany SourceFormula.operations (observe term)
-        [([0], "__microcfta_actual_0", "a"), ([1], "__microcfta_actual_1", "a")] [[0], [1]] [⟨[0], [3]⟩, ⟨[1], [4]⟩] = some [first, second] := by decide +kernel
+        [([0], "__cfta_actual_0", "a"), ([1], "__cfta_actual_1", "a")] [[0], [1]] [⟨[0], [3]⟩, ⟨[1], [4]⟩] = some [first, second] := by decide +kernel
     rw [out, inn]
     have observed : observe term [5] = some ⟨"target", .top, .leaf⟩ := by decide +kernel
     rw [observed]

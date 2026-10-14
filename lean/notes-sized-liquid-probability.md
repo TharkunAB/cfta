@@ -1,5 +1,8 @@
 # Main Sized theorem, liquid decisions, and probabilities
 
+Name examples use the current `__cfta_` prefix from PR #129.
+Earlier saved log transcripts use the historical `__microcfta_` prefix.
+
 Updated: 2026-10-13 22:30 CEST.
 
 ## Main language contract
@@ -52,9 +55,9 @@ External solver correctness and completion remain explicit premises.
 
 The former adapter checked fresh names against explicit declarations only.
 An implicit free name in an ambient assumption could capture a generated
-fresh value. Under the assumption `__microcfta_actual_0 == 0`, querying an
+fresh value. Under the assumption `__cfta_actual_0 == 0`, querying an
 independent fresh value with that same name returned Yes. Renaming that
-fresh value to `__microcfta_actual_1` returned No.
+fresh value to `__cfta_actual_1` returned No.
 
 Repair `48024a69` reserves the free symbols of ambient assumptions as well
 as declared symbols. The colliding query now returns Unknown before an SMT

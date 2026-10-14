@@ -1,6 +1,6 @@
 # Shared and direct acceptance
 
-These files model `microcfta/src/Data/CFTA/Internal/Tree.hs:acceptsBy`.
+These files model `cfta/src/Data/CFTA/Internal/Tree.hs:acceptsBy`.
 
 - `AcceptanceReference.lean` implements matching by symbol and exact arity,
   ordered alternatives, and ordered child conjunction. `accept_exact` connects

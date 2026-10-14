@@ -1,4 +1,11 @@
-# microcfta formal model
+# cfta formal model
+
+Current source: `origin/microcfta` at `7bfb69d1` (PR #129).
+The Haskell packages and source directories are `cfta`, `cfta-generator`,
+and `cfta-ghc`. `Data.CFTA.*` and the Lean namespace `MicroCFTA` retain their
+names. The Lake package is `cfta`. See [package rename](notes-package-rename.md)
+for name correspondence and preservation. Root [HANDOFF.md](../HANDOFF.md)
+supersedes the historical checkpoint descriptions below.
 
 [The system specification and current findings](SYSTEM.md) describe the
 language, distinct-term index, distribution, and optimization contracts.
@@ -319,11 +326,11 @@ The following older commands and results remain historical records.
 The Haskell commands run from the repository root:
 
 ```sh
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal build lib:microcfta lib:microcfta-generator -j1'
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta -package=microcfta-generator lean/repro/Counterexamples.hs'
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta -package=microcfta-generator lean/repro/RemainingFindings.hs'
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta -package=microcfta-generator lean/repro/CurrentFindings.hs'
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test microcfta:unit-tests microcfta-generator:gen-tests microcfta-generator:refinement-tests -j1 --test-show-details=direct'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal build lib:cfta lib:cfta-generator -j1'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta -package=cfta-generator lean/repro/Counterexamples.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta -package=cfta-generator lean/repro/RemainingFindings.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta -package=cfta-generator lean/repro/CurrentFindings.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test cfta:unit-tests cfta-generator:gen-tests cfta-generator:refinement-tests -j1 --test-show-details=direct'
 ```
 
 The host compiler path resolves the existing Nix/GHC `-lgmp` linker failure on

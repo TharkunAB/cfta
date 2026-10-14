@@ -13,7 +13,7 @@ import qualified Data.CFTA.Term as Term
 solver :: Entailment
 solver = entailmentWithBindings $ \bindings _ consequent ->
     pure $
-        if consequent == Formula.Top && any ((== "__microcfta_actual_0") . fst) bindings
+        if consequent == Formula.Top && any ((== "__cfta_actual_0") . fst) bindings
             then Yes
             else Unknown
 
@@ -40,13 +40,13 @@ candidate lastSymbol =
 main :: IO ()
 main = do
     let ordinary = candidate $ RefinedSymbol "ordinary" Formula.Top
-        reserved = candidate $ RefinedSymbol "__microcfta_actual_0" Formula.Top
+        reserved = candidate $ RefinedSymbol "__cfta_actual_0" Formula.Top
     first <- evaluateGuard solver guard ordinary
     second <- evaluateGuard solver guard reserved
     print (first, second)
     unless (first == Yes && second == Unknown) $
         fail "Expected the source evaluator to preserve the callback's spelling-sensitive uncertainty."
-    withZ3 [("__microcfta_actual_0", Formula.IntSort)] $ \z3 -> do
+    withZ3 [("__cfta_actual_0", Formula.IntSort)] $ \z3 -> do
         ordinaryVerdict <- evaluateGuard z3 guard ordinary
         reservedVerdict <- evaluateGuard z3 guard reserved
         print (ordinaryVerdict, reservedVerdict)

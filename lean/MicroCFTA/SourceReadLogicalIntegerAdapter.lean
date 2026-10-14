@@ -160,7 +160,7 @@ theorem guard_supports (model : FormulaLowering.Model Value) (allInteger : ∀ v
 
 /-- An unused ambient integer declaration still forces Unknown at an actual generated-name collision. -/
 theorem collision_unknown (check : Prepared → Attempt) :
-    execute [("__microcfta_actual_0", .int)] [("__microcfta_actual_0", "a")] [] .top .top 10000 check =
+    execute [("__cfta_actual_0", .int)] [("__cfta_actual_0", "a")] [] .top .top 10000 check =
       ⟨false, .returned .unknown⟩ := by
   apply rejected_without_check
   decide +kernel

@@ -1,7 +1,7 @@
 # Canonical ordered partition refinement
 
 `MicroCFTA/CanonicalClasses.lean` models `canonicalClasses` in
-`microcfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs`.
+`cfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs`.
 This is the graph class routine used by ordinary automaton row ordering and
 compact import ordering. It is separate from `SymbolicCanonicalOrder`, which
 orders operands of an intersection.

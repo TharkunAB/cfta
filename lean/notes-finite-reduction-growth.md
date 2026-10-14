@@ -205,7 +205,7 @@ The witness passed in the repository Nix environment on 2026-10-12. It was
 formatted with `fourmolu`. Run it against the local build with:
 
 ```sh
-nix-shell --run 'cabal exec -- runghc -package=microcfta lean/repro/FiniteReductionGrowth.hs'
+nix-shell --run 'cabal exec -- runghc -package=cfta lean/repro/FiniteReductionGrowth.hs'
 ```
 
 The diagnostic limits its copied schedule to twelve rounds and gives the

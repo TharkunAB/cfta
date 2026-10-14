@@ -1,7 +1,7 @@
 # Cached enumeration indexes
 
 Upstream PR #103 changes `findExpandableUVars` in
-`microcfta/src/Data/CFTA/Enumeration.hs`. The state now stores expandable
+`cfta/src/Data/CFTA/Enumeration.hs`. The state now stores expandable
 slot indices and raw waiting-reference counts. The scheduler resolves each
 present waiting-map key through union-find before it removes blocked
 representatives from the candidate set. Duplicate suspended references

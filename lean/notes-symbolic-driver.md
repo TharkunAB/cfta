@@ -1,7 +1,7 @@
 # Symbolic counter and rank driver
 
 `MicroCFTA/SymbolicDriver.lean` ports the operational core of
-`microcfta-generator/src/Data/CFTA/Gen/Internal/Symbolic.hs`. It complements
+`cfta-generator/src/Data/CFTA/Gen/Internal/Symbolic.hs`. It complements
 the general semantic proofs in `Symbolic.lean`.
 
 ## Executable scope

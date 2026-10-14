@@ -19,7 +19,7 @@ nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc lean/repro/Cou
 
 ## 1. Similarity reduction can remove every accepted term
 
-Source: [Refinement/Minimize.hs](../microcfta/src/Data/CFTA/Refinement/Minimize.hs),
+Source: [Refinement/Minimize.hs](../cfta/src/Data/CFTA/Refinement/Minimize.hs),
 `applyStep`, `finiteTransition`, `losesFinal`, and `productiveStates`
 (lines 242–271 and 313–321).
 
@@ -61,7 +61,7 @@ congruence for syntactic disequality.
 
 ## 2. Repeated Holds paths are treated as independent values
 
-Source: [Refinement/Evaluate.hs](../microcfta/src/Data/CFTA/Refinement/Evaluate.hs),
+Source: [Refinement/Evaluate.hs](../cfta/src/Data/CFTA/Refinement/Evaluate.hs),
 `evaluateWith (Holds targets formula)` (lines 194–207).
 
 The evaluator creates a new solver formal for every argument occurrence.
@@ -97,7 +97,7 @@ directly; the complete evaluator must agree with that path identity.
 ## 3. Observing a built atomic child changes its size semantics
 
 Source:
-[Refinement/Internal/Compile.hs](../microcfta-generator/src/Data/CFTA/Gen/Refinement/Internal/Compile.hs),
+[Refinement/Internal/Compile.hs](../cfta-generator/src/Data/CFTA/Gen/Refinement/Internal/Compile.hs),
 `groupBuilt` (lines 366–394).
 
 Use an atomic equal choice between leaf `a` with value `0` and tree `wrap(b)`

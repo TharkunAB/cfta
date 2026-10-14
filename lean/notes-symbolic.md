@@ -1,6 +1,6 @@
 # Symbolic finite equality counting
 
-Source: `microcfta-generator/src/Data/CFTA/Gen/Internal/Symbolic.hs` on
+Source: `cfta-generator/src/Data/CFTA/Gen/Internal/Symbolic.hs` on
 `tidy/core-formula`. The module counts distinct terms. It does not count
 accepting runs. Its rank order uses constructor arity, the supplied key, and
 then the symbol. This last comparison preserves distinct constructors when

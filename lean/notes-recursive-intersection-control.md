@@ -1,8 +1,8 @@
 # Physical recursive intersection control
 
 Proof checkpoint: `2a533cc5`. Upstream: `f59c198d`, 2026-10-14. Source:
-`microcfta/src/Data/CFTA/Interned/Operations.hs:451` and
-`microcfta/src/Data/CFTA/Interned/Type.hs:304`.
+`cfta/src/Data/CFTA/Interned/Operations.hs:451` and
+`cfta/src/Data/CFTA/Interned/Type.hs:304`.
 
 ## Checked control and domain effects
 

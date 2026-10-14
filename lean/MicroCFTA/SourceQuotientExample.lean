@@ -20,10 +20,10 @@ def guard : Guard Formula := .substitute recipe (.satisfies [5] (NestedScopeCapt
 
 /-- The sparse source resolves two fresh identities. -/
 def sparse : Scope :=
-  [⟨("x", "__microcfta_actual_0"), ("x", "a"), NestedScopeCapture.zero "__microcfta_actual_0",
-      some ("__microcfta_actual_0", "a"), false⟩,
-   ⟨("y", "__microcfta_actual_1"), ("y", "a"), NestedScopeCapture.zero "__microcfta_actual_1",
-      some ("__microcfta_actual_1", "a"), false⟩]
+  [⟨("x", "__cfta_actual_0"), ("x", "a"), NestedScopeCapture.zero "__cfta_actual_0",
+      some ("__cfta_actual_0", "a"), false⟩,
+   ⟨("y", "__cfta_actual_1"), ("y", "a"), NestedScopeCapture.zero "__cfta_actual_1",
+      some ("__cfta_actual_1", "a"), false⟩]
 
 /-- Complete source resolution drops both fresh declarations. -/
 def complete : Scope :=
@@ -39,7 +39,7 @@ private instance resolvedDecidableEq : DecidableEq (Resolved Formula) := by
 theorem tables :
     SourceGuards.substitutionValues operations (observe NestedScopeCapture.term)
       (sameShape operations (observe NestedScopeCapture.term) []) guard =
-      ([([0], "__microcfta_actual_0", "a"), ([1], "__microcfta_actual_1", "a")], [[0], [1]]) ∧
+      ([([0], "__cfta_actual_0", "a"), ([1], "__cfta_actual_1", "a")], [[0], [1]]) ∧
     SourceGuards.substitutionValues operations (observe NestedScopeCapture.term)
       (sameTerm operations NestedScopeCapture.term []) guard = ([], []) := by
   have actualOrder : SourceGuards.orderedPaths [[0], [1]] = [[0], [1]] := by
@@ -95,24 +95,24 @@ theorem stacks :
 
 private theorem sparse_assumptions :
     SourceGuards.withActualAssumptions operations [sparse] .top = NestedScopeCapture.sparseAntecedent := by
-  change FormulaExecutable.simplify (.and [NestedScopeCapture.zero "__microcfta_actual_0",
-    NestedScopeCapture.zero "__microcfta_actual_1", .top]) = _
+  change FormulaExecutable.simplify (.and [NestedScopeCapture.zero "__cfta_actual_0",
+    NestedScopeCapture.zero "__cfta_actual_1", .top]) = _
   rw [FormulaExecutable.simplify]
-  have contradiction : [NestedScopeCapture.zero "__microcfta_actual_0",
-      NestedScopeCapture.zero "__microcfta_actual_1", .top].any FormulaExecutable.contradiction = false := by decide +kernel
+  have contradiction : [NestedScopeCapture.zero "__cfta_actual_0",
+      NestedScopeCapture.zero "__cfta_actual_1", .top].any FormulaExecutable.contradiction = false := by decide +kernel
   rw [contradiction]
   simp only [Bool.false_eq_true, ↓reduceIte]
   have flattened : FormulaSimplify.flatten ((FormulaExecutable.simplifyParts
-      [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1", .top]).filter
+      [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1", .top]).filter
         (fun part => !FormulaExecutable.tautology part)) =
-      [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"] := by decide +kernel
+      [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"] := by decide +kernel
   rw [flattened]
   have canonical : FormulaExecutable.canonical
-      [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"] =
-      [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"] := by
+      [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"] =
+      [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"] := by
     unfold FormulaExecutable.canonical
-    have erased : [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"].eraseDups =
-        [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"] := by decide +kernel
+    have erased : [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"].eraseDups =
+        [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"] := by decide +kernel
     rw [erased]
     exact List.mergeSort_of_pairwise (by decide +kernel)
   rw [canonical]

@@ -1,7 +1,7 @@
 # Ordered cold source edge reader
 
 The physical Lean reader now models the ordered `nodeEdges` branches in
-`microcfta/src/Data/CFTA/Interned/Operations.hs`. It executes actual
+`cfta/src/Data/CFTA/Interned/Operations.hs`. It executes actual
 stored-body unfolding against the cache returned by each earlier call.
 It needs no eager warmup.
 

@@ -128,9 +128,9 @@ def conflicts [DecidableEq Formula] (observed : Observations Formula) (sameAt : 
   let entries := values observed sameAt guard
   entries.filter (fun entry => 1 < entries.countP (fun other => decide (other.2 = entry.2)))
 
-/-- Allocate from the source stream beginning at `__microcfta_actual_0`. -/
+/-- Allocate from the source stream beginning at `__cfta_actual_0`. -/
 def freshNames (avoid : List Name) (count : Nat) : List Name :=
-  (((List.range (avoid.length + count)).map (fun index => "__microcfta_actual_" ++ toString index)).filter
+  (((List.range (avoid.length + count)).map (fun index => "__cfta_actual_" ++ toString index)).filter
     (fun candidate => !avoid.contains candidate)).take count
 
 /-- Every observed symbol name and refinement free name is unavailable for fresh identities. -/
@@ -177,7 +177,7 @@ structure Resolved (Formula : Type) where
   deriving Repr
 
 /-- The source's reserved refinement value name. -/
-def valueName : Name := "__microcfta_value"
+def valueName : Name := "__cfta_value"
 
 /-- Resolve a simultaneous substitution only when both actual and formal positions exist. -/
 def resolve (formulas : Formulas Formula) (observed : Observations Formula)
@@ -241,7 +241,7 @@ def resolveMany (formulas : Formulas Formula) (observed : Observations Formula)
   | first :: rest => do return (← resolve formulas observed fresh unknown first) :: (← resolveMany formulas observed fresh unknown rest)
 
 /-- The reserved name for one positional term in a relational contract. -/
-def contractName (index : Nat) : Name := "__microcfta_contract_" ++ toString index
+def contractName (index : Nat) : Name := "__cfta_contract_" ++ toString index
 
 /-- A relational contract has one formal per target and aliases repeated target paths. -/
 def contract (formulas : Formulas Formula) (targets : List Path) (observations : List (Observed Formula)) :

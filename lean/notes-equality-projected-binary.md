@@ -46,7 +46,7 @@ occurrence position and checks every replayed pass against
 ```
 
 Every original occurrence retains its rows after pass one. The command
-`nix-shell --run 'cabal exec -- runghc -package=microcfta /tmp/mcfta-projected-binary-progress.hs'`
+`nix-shell --run 'cabal exec -- runghc -package=cfta /tmp/mcfta-projected-binary-progress.hs'`
 passed. Its log is `/tmp/mcfta-projected-binary-progress.log`.
 
 The theorem describes fixed occurrence groups. It is not yet a complete

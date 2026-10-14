@@ -1,7 +1,7 @@
 # Arbitrary-arity recursive term choices
 
 `RecursiveNaryChoice` models `choiceTerms` in
-`microcfta-generator/src/Data/CFTA/Gen/Internal/Recursive.hs`.
+`cfta-generator/src/Data/CFTA/Gen/Internal/Recursive.hs`.
 Each child supplies its value count, term selector, and checked callback in
 one record. The adapter uses that same ordered list for every field.
 It permits an empty list, zero-count branches, and every natural branch

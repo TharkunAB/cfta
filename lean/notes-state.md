@@ -8,7 +8,7 @@ in [COVERAGE.md](COVERAGE.md).
 ## Union-find
 
 [UnionFind.lean](MicroCFTA/UnionFind.lean) follows
-`microcfta/src/Data/CFTA/Internal/UnionFind.hs`.
+`cfta/src/Data/CFTA/Internal/UnionFind.hs`.
 
 - `Forest` models the effective `IntMap` lookup. `put` models a single insert.
   Missing entries mean singleton roots of size one, as in `findRoot`.

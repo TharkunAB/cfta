@@ -1,5 +1,8 @@
 # Pruning admitted an invalid nested-substitution term
 
+Name examples use the current `__cfta_` prefix from PR #129.
+Earlier saved log transcripts use the historical `__microcfta_` prefix.
+
 `lean/repro/NestedScopeCapture.hs` uses the supplied Z3 backend. The grammar
 has one underlying term. Two children are the same inner term named `a`, with
 refinement `value = 0`. An outer scope substitutes `b` for formal `a`. An
@@ -7,8 +10,8 @@ inner scope substitutes the two actuals for formals `x` and `y`. The guard
 then requires `x = 0`.
 
 Sparse evaluation cannot prove that the two inner terms are identical. It
-allocates `__microcfta_actual_0` and `__microcfta_actual_1`. The requirement
-becomes `__microcfta_actual_0 = 0`, which follows from its actual assumption.
+allocates `__cfta_actual_0` and `__cfta_actual_1`. The requirement
+becomes `__cfta_actual_0 = 0`, which follows from its actual assumption.
 Complete evaluation merges the two actuals into the ambient name `a`. Its
 requirement becomes `b = 0` after both scopes. The source deliberately keeps
 actual assumptions ambient, so the available assumption is `a = 0`. The

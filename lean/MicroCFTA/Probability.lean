@@ -4,7 +4,7 @@ import Std
 # Finite sampling and replay ranks
 
 This file models the arithmetic and exact finite sampler in
-`microcfta-generator/src/Data/CFTA/Ranked/Internal/Sampler.hs`.
+`cfta-generator/src/Data/CFTA/Ranked/Internal/Sampler.hs`.
 It uses natural ranks after the Haskell range checks.
 Rational mass denotes the exact interpretation, not a statement about the
 pseudorandom number generator in QuickCheck.

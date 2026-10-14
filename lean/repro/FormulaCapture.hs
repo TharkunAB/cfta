@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- Run with: cabal exec -- runghc -package=microcfta lean/repro/FormulaCapture.hs
+-- Run with: cabal exec -- runghc -package=cfta lean/repro/FormulaCapture.hs
 module Main (main) where
 
 import Control.Monad (unless)
@@ -13,7 +13,7 @@ main :: IO ()
 main = do
     let original = Forall [("x", IntSort)] (Atom Eq (App "x" []) (Lit 0))
         rewritten = substitute [("unused", Var "x")] original
-        expected = Forall [("__microcfta_bound_1", IntSort)] (Atom Eq (Var "__microcfta_bound_1") (Lit 0))
+        expected = Forall [("__cfta_bound_1", IntSort)] (Atom Eq (Var "__cfta_bound_1") (Lit 0))
     unless (rewritten == expected) $ fail "The source substitution result changed."
     unless (null (freeNames original) && null (freeNames rewritten)) $
         fail "Substitution introduced a free name."

@@ -20,7 +20,7 @@ def guard : Guard Formula :=
 theorem tables :
     substitutionValues SourceFormula.operations (observe NestedScopeCapture.term)
       (sameShape SourceFormula.operations (observe NestedScopeCapture.term) []) guard =
-      ([([0], "__microcfta_actual_0", "a"), ([1], "__microcfta_actual_1", "a")], [[0], [1]]) ∧
+      ([([0], "__cfta_actual_0", "a"), ([1], "__cfta_actual_1", "a")], [[0], [1]]) ∧
     substitutionValues SourceFormula.operations (observe NestedScopeCapture.term)
       (sameTerm SourceFormula.operations NestedScopeCapture.term []) guard = ([], []) := by
   have actualOrder : orderedPaths [[0], [1], [2]] = [[0], [1], [2]] := by
@@ -51,34 +51,34 @@ private instance resolvedDecidableEq : DecidableEq (Resolved Formula) := by
   exact decidable_of_iff _ (Iff.of_eq (Resolved.mk.injEq _ _ _ _ _ _ _ _ _ _).symm)
 
 private def scope : List (Resolved Formula) :=
-  [⟨("a", "__microcfta_actual_0"), ("a", "a"), NestedScopeCapture.zero "__microcfta_actual_0",
-      some ("__microcfta_actual_0", "a"), false⟩,
-   ⟨("y", "__microcfta_actual_1"), ("y", "a"), NestedScopeCapture.zero "__microcfta_actual_1",
-      some ("__microcfta_actual_1", "a"), false⟩,
+  [⟨("a", "__cfta_actual_0"), ("a", "a"), NestedScopeCapture.zero "__cfta_actual_0",
+      some ("__cfta_actual_0", "a"), false⟩,
+   ⟨("y", "__cfta_actual_1"), ("y", "a"), NestedScopeCapture.zero "__cfta_actual_1",
+      some ("__cfta_actual_1", "a"), false⟩,
    ⟨("a", "b"), ("a", "b"), .top, none, true⟩]
 
 private theorem assumptions :
     withActualAssumptions SourceFormula.operations [scope] .top = NestedScopeCapture.sparseAntecedent := by
-  change FormulaExecutable.simplify (.and [NestedScopeCapture.zero "__microcfta_actual_0",
-    NestedScopeCapture.zero "__microcfta_actual_1", .top, .top]) = _
+  change FormulaExecutable.simplify (.and [NestedScopeCapture.zero "__cfta_actual_0",
+    NestedScopeCapture.zero "__cfta_actual_1", .top, .top]) = _
   rw [FormulaExecutable.simplify]
-  have contradiction : [NestedScopeCapture.zero "__microcfta_actual_0",
-      NestedScopeCapture.zero "__microcfta_actual_1", .top, .top].any FormulaExecutable.contradiction = false := by
+  have contradiction : [NestedScopeCapture.zero "__cfta_actual_0",
+      NestedScopeCapture.zero "__cfta_actual_1", .top, .top].any FormulaExecutable.contradiction = false := by
     decide +kernel
   rw [contradiction]
   simp only [Bool.false_eq_true, ↓reduceIte]
   have flattened : FormulaSimplify.flatten ((FormulaExecutable.simplifyParts
-      [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1", .top, .top]).filter
+      [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1", .top, .top]).filter
         (fun part => !FormulaExecutable.tautology part)) =
-      [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"] := by
+      [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"] := by
     decide +kernel
   rw [flattened]
   have canonical : FormulaExecutable.canonical
-      [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"] =
-      [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"] := by
+      [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"] =
+      [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"] := by
     unfold FormulaExecutable.canonical
-    have erased : [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"].eraseDups =
-        [NestedScopeCapture.zero "__microcfta_actual_0", NestedScopeCapture.zero "__microcfta_actual_1"] := by decide +kernel
+    have erased : [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"].eraseDups =
+        [NestedScopeCapture.zero "__cfta_actual_0", NestedScopeCapture.zero "__cfta_actual_1"] := by decide +kernel
     rw [erased]
     exact List.mergeSort_of_pairwise (by decide +kernel)
   rw [canonical]
@@ -99,7 +99,7 @@ theorem sparse_yes :
   rw [tables.1]
   simp only [guard, SourceEnclosingRenames.evaluateWith]
   have resolved : resolveMany SourceFormula.operations (observe NestedScopeCapture.term)
-      [([0], "__microcfta_actual_0", "a"), ([1], "__microcfta_actual_1", "a")] [[0], [1]]
+      [([0], "__cfta_actual_0", "a"), ([1], "__cfta_actual_1", "a")] [[0], [1]]
       [⟨[0], [0]⟩, ⟨[1], [4]⟩, ⟨[2], [0]⟩] = some scope := by decide +kernel
   rw [resolved]
   have pass : scope.any (SourceEnclosingRenames.renamedByEnclosing []) = false := by decide +kernel

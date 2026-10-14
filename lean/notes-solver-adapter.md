@@ -1,12 +1,15 @@
 # Liquid Fixpoint query adapter
 
+Name examples use the current `__cfta_` prefix from PR #129.
+Earlier saved log transcripts use the historical `__microcfta_` prefix.
+
 `SolverAdapter.lean` models the pure decisions in
-`microcfta/src/Data/CFTA/Refinement/LiquidFixpoint.hs`.
+`cfta/src/Data/CFTA/Refinement/LiquidFixpoint.hs`.
 It reuses `FormulaLowering` for formula, term, and sort translation.
 It does not change the source collision policy.
 
 The model preserves the ambient declaration list. It adds
-`__microcfta_value : Int` only when that name has no supplied declaration.
+`__cfta_value : Int` only when that name has no supplied declaration.
 Declaration lookup uses the first matching name. A fresh binding receives
 the original name's declared sort, or `Int` when the original is undeclared.
 `fresh_rejected`, `fresh_sort`, and `fresh_all_accepted` give the exact
@@ -54,7 +57,7 @@ replace the context. A thrown exception during the check does request a
 replacement. `finish` models these distinct control paths.
 
 Kernel-evaluated examples reproduce the ambient-name boundary. Declare the
-unused name `__microcfta_actual_0 : Int`. Bindings using generated names 0 and
+unused name `__cfta_actual_0 : Int`. Bindings using generated names 0 and
 1 fail preflight and return `Unknown`, even for a valid `Top` query. Bindings
 using names 1 and 2 reach the same query and map its `Unsat` response to `Yes`.
 `top_entails` proves that the query is valid under every declared domain.

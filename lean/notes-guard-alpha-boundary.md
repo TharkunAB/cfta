@@ -1,9 +1,12 @@
 # Solver uncertainty and fresh-name spelling
 
+Name examples use the current `__cfta_` prefix from PR #129.
+Earlier saved log transcripts use the historical `__microcfta_` prefix.
+
 `GuardAlphaBoundary.lean` gives a checked counterexample to exact operational
 guard homogeneity under a merely sound incomplete solver. The callback
 returns Yes only when the consequent is Top and a declaration uses
-`__microcfta_actual_0`. It returns Unknown otherwise. `solver_sound` proves
+`__cfta_actual_0`. It returns Unknown otherwise. `solver_sound` proves
 this callback sound for every formula interpretation and every declared
 environment domain. The callback is a pure function, so repeated identical
 queries are stable.
@@ -12,7 +15,7 @@ The guard substitutes two leaf actuals with the same constructor name into
 different formals, then asks one refinement-only position to satisfy Top.
 The actuals have different annotations, so their structural identities are
 known. Both actual-ambiguity sets are empty. One term's last leaf is named
-`ordinary`; the other is named `__microcfta_actual_0`. Their source grouping
+`ordinary`; the other is named `__cfta_actual_0`. Their source grouping
 signatures are identical because that position needs only its refinement.
 
 The complete avoid lists nevertheless contain those literal constructor
@@ -30,7 +33,7 @@ preservation of the public evaluator's confirmed Yes/Unknown behavior.
 Soundness alone cannot establish the latter across fresh-name changes.
 
 The same repro also uses the supplied `withZ3` backend with the unused ambient
-declaration `__microcfta_actual_0 : Int`. It prints `(Unknown,Yes)`. The first
+declaration `__cfta_actual_0 : Int`. It prints `(Unknown,Yes)`. The first
 query allocates that name. `freshDeclaration` rejects a generated name which
 already exists in the backend's ambient declaration set, so the query returns
 Unknown. The second term makes the guard allocator skip that name, and Z3
@@ -62,6 +65,6 @@ verdict agreement for the backend behavior shown here.
 
 Validation: `lake build MicroCFTA.SourceAliasTransport` succeeds with the
 pinned toolchain. All counterexamples use kernel reduction. The source repro
-runs under `nix-shell` with `cabal exec -- runghc -package=microcfta`; it printed
+runs under `nix-shell` with `cabal exec -- runghc -package=cfta`; it printed
 `(Yes,Unknown)` and `(Unknown,Yes)`. Fourmolu formatted the repro. No production
 code changed.

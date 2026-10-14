@@ -1,7 +1,7 @@
 # Intersection domain and flat memo keys
 
 Upstream PR #102 changes `intersectOpen` and `intersectOpenEdge` in
-`microcfta/src/Data/CFTA/Interned/Operations.hs`. `mkIntersectionDom` interns
+`cfta/src/Data/CFTA/Interned/Operations.hs`. `mkIntersectionDom` interns
 the pair `(IntMap.toList free, Set.toList recInt)`. Domain equality then
 compares the returned identity. Node memoization uses the triple of domain
 identity and two `nodeMemoKey` integers. Edge memoization uses domain

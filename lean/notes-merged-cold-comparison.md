@@ -7,7 +7,7 @@ execution orders.
 
 ## Source boundary
 
-`subsumes` in `microcfta/src/Data/CFTA/Interned/Operations.hs` checks the
+`subsumes` in `cfta/src/Data/CFTA/Interned/Operations.hs` checks the
 ancestor pair before it reads `nodeEdges`. The edge reader follows union
 members and completed recursive unfoldings. Its closure traversal checks
 the identities of recursive and union records before it processes them

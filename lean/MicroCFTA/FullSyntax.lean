@@ -187,18 +187,18 @@ def lookup (name : Name) : List (Name × Term) → Option Term
 /-- A finite prefix of the source's fresh-name stream. -/
 def freshNames (avoid : List Name) (count : Nat) : List Name :=
   (((List.range (avoid.length + count)).map
-    (fun index => "__microcfta_bound_" ++ toString (index + 1))).filter
+    (fun index => "__cfta_bound_" ++ toString (index + 1))).filter
       (fun candidate => !avoid.contains candidate)).take count
 
 private theorem freshCandidate_injective : Function.Injective
-    (fun index : Nat => "__microcfta_bound_" ++ toString (index + 1)) := by
+    (fun index : Nat => "__cfta_bound_" ++ toString (index + 1)) := by
   intro left right equal
-  have digits := (String.append_right_inj "__microcfta_bound_").mp equal
+  have digits := (String.append_right_inj "__cfta_bound_").mp equal
   have same : left + 1 = right + 1 := Nat.repr_injective digits
   omega
 
 private theorem freshCandidates_nodup (count : Nat) :
-    ((List.range count).map (fun index => "__microcfta_bound_" ++ toString (index + 1))).Nodup := by
+    ((List.range count).map (fun index => "__cfta_bound_" ++ toString (index + 1))).Nodup := by
   rw [List.Nodup, List.pairwise_map]
   exact List.Pairwise.imp (fun apart same => apart (freshCandidate_injective same)) List.nodup_range
 
@@ -212,7 +212,7 @@ private theorem filter_partition_length (items : List Name) (keep : Name → Boo
 theorem freshNames_length (avoid : List Name) (count : Nat) :
     (freshNames avoid count).length = count := by
   let candidates := (List.range (avoid.length + count)).map
-    (fun index => "__microcfta_bound_" ++ toString (index + 1))
+    (fun index => "__cfta_bound_" ++ toString (index + 1))
   have unique := freshCandidates_nodup (avoid.length + count)
   have rejectedUnique := List.Pairwise.filter (fun name => avoid.contains name) unique
   have rejectedBound : (candidates.filter fun name => avoid.contains name).length ≤ avoid.length := by
@@ -333,12 +333,12 @@ def captureOriginal : Formula := .forall [("x", .int)] (.atom .eq (.app "x" []) 
 
 /-- The result produced by the source for a substitution on an absent name. -/
 def captureRewritten : Formula :=
-  .forall [("__microcfta_bound_1", .int)] (.atom .eq (.app "x" []) (.lit 0))
+  .forall [("__cfta_bound_1", .int)] (.atom .eq (.app "x" []) (.lit 0))
 
 /-- The executable source transcription reproduces the faulty alpha-renaming. -/
 theorem capture_substitution :
     substitute [("unused", .var "x")] captureOriginal = captureRewritten := by
-  have fresh : freshNames ["x", "x", "x"] 1 = ["__microcfta_bound_1"] := by decide +kernel
+  have fresh : freshNames ["x", "x", "x"] 1 = ["__cfta_bound_1"] := by decide +kernel
   simp [substitute, captureOriginal, captureRewritten, substituteActive, substituteTerm,
     substituteArguments, prepareBinders, identityReplacement, formulaNames,
     termNames, argumentsNames, fresh]

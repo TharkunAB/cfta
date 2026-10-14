@@ -125,12 +125,12 @@ theorem argument_error_first (active : List (Name × Term)) (name : Name)
 
 /-- The repaired result of the original integer-binder counterexample. -/
 def captureFixed : Formula :=
-  .forall [("__microcfta_bound_1", .int)] (.atom .eq (.var "__microcfta_bound_1") (.lit 0))
+  .forall [("__cfta_bound_1", .int)] (.atom .eq (.var "__cfta_bound_1") (.lit 0))
 
 /-- The repaired source renames the nullary application to the bound value. -/
 theorem capture_fixed :
     checked [("unused", .var "x")] captureOriginal = .ok captureFixed := by
-  have fresh : freshNames ["x", "x", "x", "unused"] 1 = ["__microcfta_bound_1"] := by decide +kernel
+  have fresh : freshNames ["x", "x", "x", "unused"] 1 = ["__cfta_bound_1"] := by decide +kernel
   simp [checked, formula, term, captureOriginal, captureFixed, prepare, uniqueNames, uniqueNamesFrom,
     identityReplacement, formulaNames, termNames, argumentsNames, fresh, renameName, lookup] <;> rfl
 

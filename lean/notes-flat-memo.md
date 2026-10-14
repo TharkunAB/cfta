@@ -1,7 +1,7 @@
 # PR 102 flat memo table audit and model
 
 Source baseline: `origin/microcfta` at `9508eb3`. The source implementation
-is `microcfta/src/Data/CFTA/Interned/FlatMemo.hs`. All changes here remain
+is `cfta/src/Data/CFTA/Interned/FlatMemo.hs`. All changes here remain
 local. No Haskell source repair was needed within the documented key and
 machine-size preconditions.
 

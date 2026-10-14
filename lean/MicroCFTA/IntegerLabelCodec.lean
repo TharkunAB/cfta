@@ -19,10 +19,10 @@ open FullSyntax
 abbrev Symbol := String × Formula
 
 /-- One internal open coordinate name, in the source's zero-based order. -/
-def integerName (index : Nat) : String := "__microcfta_integer_" ++ toString index
+def integerName (index : Nat) : String := "__cfta_integer_" ++ toString index
 
 /-- The source prefix test includes all names beginning with the reserved prefix. -/
-def isIntegerName (name : String) : Bool := "__microcfta_integer_".toList.isPrefixOf name.toList
+def isIntegerName (name : String) : Bool := "__cfta_integer_".toList.isPrefixOf name.toList
 
 /-- A label is open when its refinement names any internal coordinate. -/
 def symbolic (label : Symbol) : Bool := (freeNames label.2).any isIntegerName

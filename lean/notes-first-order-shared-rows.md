@@ -23,7 +23,7 @@ coherent facts, payload availability, and `MergedPhysicalWarmup.Prepared`.
 No prepared-heap or stored-knot premise remains for this construction fragment.
 
 The source correspondence is the repaired binder probe protocol in
-`microcfta/src/Data/CFTA/Interned/Type.hs`. Stored reconstruction uses no new
+`cfta/src/Data/CFTA/Interned/Type.hs`. Stored reconstruction uses no new
 binder requests in this fragment. Its repaired and earlier executors therefore
 have identical values, failures, and cache effects.
 

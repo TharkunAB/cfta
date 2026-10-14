@@ -102,7 +102,7 @@ private theorem freshNames_ext_le (first second : List Name) (count : Nat)
   have prefixLength := SourceActuals.fresh_length first count
   unfold freshNames at prefixLength ⊢
   rw [List.length_take] at prefixLength
-  have enough : count ≤ (((List.range (first.length + count)).map (fun index => "__microcfta_actual_" ++ toString index)).filter
+  have enough : count ≤ (((List.range (first.length + count)).map (fun index => "__cfta_actual_" ++ toString index)).filter
       (fun candidate => !first.contains candidate)).length := by omega
   have longer : second.length + count = (first.length + count) + (second.length - first.length) := by omega
   rw [longer]

@@ -2,7 +2,7 @@
 
 `SimilarityWithin.lean` models the `similarityWithin` optimization added on
 `microcfta` in PR #90. The model follows
-`microcfta/src/Data/CFTA/Refinement/Minimize.hs`.
+`cfta/src/Data/CFTA/Refinement/Minimize.hs`.
 
 The implementation first removes transitions whose classification is
 `Nothing`. It groups each remaining transition by class. The map combine

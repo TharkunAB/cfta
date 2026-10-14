@@ -12,7 +12,7 @@ open SourceGuards SourceObservations FullSyntax
 
 /-- This solver proves only Top conclusions with one selected fresh-name spelling. -/
 def solver : SourceGuards.Entailment Formula := fun bindings _ consequent =>
-  if consequent = .top && bindings.any (fun binding => binding.1 == "__microcfta_actual_0") then
+  if consequent = .top && bindings.any (fun binding => binding.1 == "__cfta_actual_0") then
     .yes else .unknown
 
 /-- The solver is sound for every interpretation and every declared environment domain. -/
@@ -35,7 +35,7 @@ def observations (blocked : Bool) : Observations Formula := fun path =>
   | [1] => some ⟨"same", .not .bottom, .leaf⟩
   | [2] => some ⟨"left", .top, .leaf⟩
   | [3] => some ⟨"right", .top, .leaf⟩
-  | [4] => some ⟨if blocked then "__microcfta_actual_0" else "ordinary", .top, .leaf⟩
+  | [4] => some ⟨if blocked then "__cfta_actual_0" else "ordinary", .top, .leaf⟩
   | _ => none
 
 /-- The last constructor name is not a structural read of this guard. -/
@@ -47,7 +47,7 @@ def term (blocked : Bool) : Language.Term (Label Formula) :=
   .node ("root", .top)
     [.node ("same", .top) [], .node ("same", .not .bottom) [],
      .node ("left", .top) [], .node ("right", .top) [],
-     .node ((if blocked then "__microcfta_actual_0" else "ordinary"), .top) []]
+     .node ((if blocked then "__cfta_actual_0" else "ordinary"), .top) []]
 
 private theorem actual_order : orderedPaths [[0], [1]] = [[0], [1]] := by
   change ([[0], [1]] : List Path).mergeSort _ = _
@@ -72,8 +72,8 @@ theorem same_signature : SourceReadAgreement.signature guard (observations false
 theorem allocated_tables (blocked : Bool) :
     substitutionValues SourceFormula.operations (observations blocked)
       (sameShape SourceFormula.operations (observations blocked) []) guard =
-      ((if blocked then [([0], "__microcfta_actual_1", "same"), ([1], "__microcfta_actual_2", "same")]
-        else [([0], "__microcfta_actual_0", "same"), ([1], "__microcfta_actual_1", "same")]), []) := by
+      ((if blocked then [([0], "__cfta_actual_1", "same"), ([1], "__cfta_actual_2", "same")]
+        else [([0], "__cfta_actual_0", "same"), ([1], "__cfta_actual_1", "same")]), []) := by
   cases blocked <;>
     simp [guard, substitutionValues, actuals, actualPaths, allocated, conflicts, values,
       usedNames, paths, requirements, ambiguous, actual_order, used_order] <;> decide +kernel
@@ -90,8 +90,8 @@ theorem observations_requested (blocked : Bool) (path : Path) (requested : path 
 theorem complete_tables (blocked : Bool) :
     substitutionValues SourceFormula.operations (observe (term blocked))
       (sameTerm SourceFormula.operations (term blocked) []) guard =
-      ((if blocked then [([0], "__microcfta_actual_1", "same"), ([1], "__microcfta_actual_2", "same")]
-        else [([0], "__microcfta_actual_0", "same"), ([1], "__microcfta_actual_1", "same")]), []) := by
+      ((if blocked then [([0], "__cfta_actual_1", "same"), ([1], "__cfta_actual_2", "same")]
+        else [([0], "__cfta_actual_0", "same"), ([1], "__cfta_actual_1", "same")]), []) := by
   have reads : SourceReadAgreement.Reads guard (observations blocked) (observe (term blocked)) :=
     ⟨fun path member => congrArg (Option.map SourceGuards.Observed.refinement) (observations_requested blocked path member),
      fun path member => observations_requested blocked path (SourceReadAgreement.sensitive_requested guard path member)⟩

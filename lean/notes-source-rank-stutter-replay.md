@@ -14,7 +14,7 @@ Finally, it unfolds the original record three times.
 Run from the repository root:
 
 ```sh
-nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=microcfta lean/repro/SourceRankStutter.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta lean/repro/SourceRankStutter.hs'
 ```
 
 The checked observations agree with Lean:
@@ -36,7 +36,7 @@ functions match the Lean definitions.
 The program also checks the original stored body's substitutions to its
 actual depth and ordinary probes. Both equations hold. However, the
 unrestricted callback renaming equation in
-`microcfta/src/Data/CFTA/Interned/Type.hs` does not hold for this fixture.
+`cfta/src/Data/CFTA/Interned/Type.hs` does not hold for this fixture.
 For `f = originalBody`, the following values differ:
 
 ```haskell

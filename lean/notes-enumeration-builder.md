@@ -83,9 +83,9 @@ and nodes. It does not require an empty global cache.
 ## Remaining source correspondence
 
 The source constructor branch is in
-`microcfta/src/Data/CFTA/Interned/Operations.hs`, in `boundDepth`.
+`cfta/src/Data/CFTA/Interned/Operations.hs`, in `boundDepth`.
 The constructor cache operations are in
-`microcfta/src/Data/CFTA/Interned/Type.hs`, in `setChildren` and `mkNode`.
+`cfta/src/Data/CFTA/Interned/Type.hs`, in `setChildren` and `mkNode`.
 The Lean builder starts from exposed constructor rows. It does not execute
 `Mu` unfolding or resolve an unexpected `Rec`. Binder exposure remains a
 separate obligation.
