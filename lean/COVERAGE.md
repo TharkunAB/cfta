@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 18:25 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `081ce3d1`, after `a7b5d94e` and `9ca74b4d`. No background proof worker is active.
+Current checkpoint: **2026-10-14 18:53 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `dac5f26b`, after `2e6fb87a` and `6afdfe00`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -338,8 +338,14 @@ heaps and have their exact smart-plan meanings. `a7b5d94e` proves raw-to-smart
 plan inclusion and strict budgets for actual returned unfolding. `9ca74b4d`
 proves cold/shared budget heaps, complete final graph/table language, and
 general closed-source reference Sized laws. `081ce3d1` proves native budget
-heaps and exact independent returned-value table language. Physical product
-row readback and the two-input intersection law remain open. See
+heaps and exact independent returned-value table language. `2e6fb87a`,
+`6afdfe00`, and `dac5f26b` prove literal ordinary product-row membership,
+complete guards/child order, dead-row rejection, and native closed diagonal
+reuse. Native ordinary rows hold at all larger bounds and later valid caches.
+A live ranked Mu witness refutes the general functional child-map adapter.
+Derive a relation from actual output records to input pairs for the remaining
+Mu/union product proof. Full native two-input language remains open. See
+[ordinary product rows and the identity boundary](notes-ordinary-product-rows.md),
 [cold budget completeness](notes-cold-budget-completeness.md),
 [smart budget execution](notes-smart-budget-execution.md),
 [unfolding budgets](notes-unfolding-budget-language.md), and

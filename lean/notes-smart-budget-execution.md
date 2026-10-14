@@ -84,9 +84,11 @@ propagation, general final graph/table completeness, and general closed-source
 reference Sized laws. `081ce3d1` proves native propagation and exact independent
 returned-value table language. Read [cold budget completeness](notes-cold-budget-completeness.md).
 
-Next derive physical `ProductReadback.members` and `.rejected`, then apply
-`product_exact`. Native returned-value meaning is now exact; the intersection
-of the two operand languages remains a separate physical row obligation.
+The ordinary native product-row case is now proved. A live ranked Mu witness
+refutes the general functional child-map adapter. Derive related physical
+rows from actual execution for the remaining native two-input law. Read
+[ordinary product rows](notes-ordinary-product-rows.md). Do not assume
+product-language equivalence or force the refuted general literal field.
 
 ## Validation and preservation
 

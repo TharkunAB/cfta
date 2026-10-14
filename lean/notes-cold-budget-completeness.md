@@ -1,6 +1,6 @@
 # Exact general repaired cold tables and Sized classes
 
-Updated: 2026-10-14 18:24 CEST.
+Updated: 2026-10-14 18:53 CEST.
 Proofs: `a7b5d94e`, `9ca74b4d`, and `081ce3d1`.
 
 ## Raw plans refine to actual smart execution
@@ -71,13 +71,15 @@ actual effects, and checked `WordRanges` retain their existing scope.
 
 ## Next obligation and boundaries
 
-Derive physical `SourceCyclicRowsNativeGate.ProductReadback.members` and
-`.rejected` from actual ordered child and row traces, canonical returned rows,
-and the proved final-table language. Then apply `product_exact`. The exact
-native returned-value language does not yet prove the intersection of the two
-operand languages. Do not replace physical row obligations with an assumed
-product-language equivalence. Keep diagonal reuse, child order, complete guards,
-dead-row cleanup, domain identities, and cache growth explicit.
+The ordinary physical membership and rejection cases are now proved by
+`2e6fb87a`, `6afdfe00`, and `dac5f26b`. A live ranked Mu witness refutes a
+single public closed child map for general returned rows. Preserve the
+existing functional theorem in its stated scope. Derive related physical
+rows from actual domains, Mu reconstruction, union normalization, and child
+traces. Then prove complete native two-input language and the minimum callback.
+Read [ordinary product rows](notes-ordinary-product-rows.md) for the witness,
+completed local laws, and current next target. Do not assume a product-language
+contract or infer a runtime defect from different physical identities alone.
 
 The primary reference, solver-decided, and optimized Sized source contracts
 remain proved at their recorded boundaries. External solver correctness and

@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 18:25 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 18:53 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -74,18 +74,43 @@ size order, and both inverse laws, without preparation or a supplied trace.
 `081ce3d1` retains the budget heap through complete native evaluation.
 `cold_node_table_exact` and `constructed_node_table_exact` give exact independent
 returned-value table language under the existing checked native scope.
-The two-input intersection law remains open. Next derive physical
-`ProductReadback.members` and `.rejected`, then apply `product_exact`.
-Read `lean/notes-cold-budget-completeness.md` before new product-row work.
+The full native two-input intersection law remains open.
+Read `lean/notes-cold-budget-completeness.md` for the completed table boundary.
+
+`2e6fb87a`, `6afdfe00`, and `dac5f26b` now derive literal normalized
+ordinary product-row membership and empty-child rejection from actual native
+execution. Exact pointwise replay retains guards, child order, domains, and
+later cache growth. The law holds at all larger bounds and later valid caches.
+Closed native self-intersection also returns the identical record and unchanged
+physical/domain machine.
+
+A live ranked witness refutes the proposed general functional Mu row adapter.
+For `L = mu x. a | f(a | f(x | a))` and `R = a | f(L | a)`, an actual product
+row's child differs from the separate closed intersection of its source children.
+`R` occurs in the original graph of `L`. An enclosing `g(L) | g(R)` node gives
+two overlapping alternatives. Both smart and raw Mu reproduce the mismatch.
+Unary terms through depth 24 still equal the common input acceptance. Those
+finite checks do not prove complete language correctness or expose a semantic
+runtime defect.
+
+Preserve untracked `lean/repro/NativeProductRowCycle.hs` and
+`lean/repro/NestedUnaryTwoAtom.hs`. Next derive a relation between actual output
+records and original input pairs through Mu, union, stored substitution, and
+final row exposure. Allow multiple physical records for one input pair. Prove
+finite-term product correctness from local related rows, including diagonal
+reuse and dead-row reasons. Do not assume a product-language contract or try
+to derive the refuted literal `ProductReadback.members` for general Mu output.
+The existing abstract functional theorem retains its stated scope. Read
+`lean/notes-ordinary-product-rows.md` before further product work.
 The finite Haskell probes remain validation only. The stopped Lean generated
 probes supply no quantitative result. All workers are terminal.
 
-The aggregate audit passes **1,456 jobs and 43,803 theorem dependency checks**,
+The aggregate audit passes **1,463 jobs and 43,854 theorem dependency checks**,
 with only `propext`, `Classical.choice`, and `Quot.sound`. Log:
-`/tmp/mcfta-cold-budget-exact-20261014-audit.log`.
-Snapshot: `/tmp/mcfta-cold-budget-exact-checkpoint-20261014-1825/`.
-All 1,819 Lean-tree files are saved. All 1,803 previous files remain.
-Only audit imports, two coverage ledgers, and three current component notes
+`/tmp/mcfta-ordinary-product-rows-20261014-audit.log`.
+Snapshot: `/tmp/mcfta-ordinary-product-rows-checkpoint-20261014-1853/`.
+All 1,828 Lean-tree files are saved. All 1,819 previous files remain.
+Only audit imports, two coverage ledgers, and two current component notes
 changed among those previous files. All earlier proofs and drafts retain
 their bytes. No production Haskell code changed. No worker remains active.
 
