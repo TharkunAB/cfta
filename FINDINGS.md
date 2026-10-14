@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 01:49 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 02:11 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -94,20 +94,33 @@ traversal and exact guarded language through ordinary, Mu, and union identities.
 `SourceFirstOrderSharedRows.source_sized` connects actual construction and
 explicit warmup to exact distinct node-count classes, finite evaluation,
 size-order prefixes, bounded coverage, and both inverses. Warmup is a proof
-construction. Equality with native cold traversal allocation order remains
+construction. Equality between warmup and native cold allocation orders remains
 open, as do nested binder construction and native cyclic product rows.
 See [first-order shared rows](lean/notes-first-order-shared-rows.md) and
 [physical intersection](lean/notes-physical-intersection-rows.md).
 
+`SourceColdSharedRows*` now derives the actual stateful cold output table and
+its exact original guarded language. `SourceColdUnfoldBudget` tracks unfinished
+Mu unfoldings in the finite initial record inventory. A read either reduces
+that budget or retains the identical cache. Unvisited identities and pending
+work supply the other two termination measures. `cold_finite` derives a finite
+actual trace and stable executable bounds for every closed available root in
+a prepared cache. No warmup, fixed input heap, or supplied trace is assumed.
 
-`SourceColdSharedRows*` now models the actual stateful cold worklist without
-a fixed input heap. Each source row read retains its exact cache effects.
-Finite traces and successful executable runs correspond in both directions,
-with stable finite outer/read fuel bounds. The proofs retain coherent cache
-histories, first rows, resident closed children, distinct discovered keys, and
-closure of all new nonempty children. A finite completed trace remains a
-premise. General cold-walk termination and final-table language correspondence
-remain open. See [cold shared rows](lean/notes-cold-shared-rows.md).
+`SourceFirstOrderColdSized` derives the prepared cache from actual repaired
+first-order empty-cache construction. Its cold table has exact distinct
+node-count classes, finite evaluation, size-order prefixes, bounded coverage,
+and both inverse laws. `Trace.native_correct` connects the actual returned
+rows to the canonical public reference API and both signed inverse laws.
+`Trace.liquid_correct` connects encoded solver-decided folds to original
+physical ambient logical meaning, finite classes, canonical order, bounded
+coverage, and both signed inverses. Finite external attempts give finite
+outcomes, including Unknown and failures. Validation and external solver
+contracts remain explicit.
+
+General open nested binder construction, native cyclic intersection product
+rows, pending memo execution, and concrete runtime correspondence remain open.
+See [cold shared rows](lean/notes-cold-shared-rows.md).
 
 `InternedDepthFreeProjection*` proves full-syntax free-name membership
 agreement and actual ordinary-root callback deep observations with nested
@@ -145,16 +158,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`49498845`**; later commits record this handoff.
+The latest proof checkpoint is **`f425e2b6`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,195 build targets and 39,965 theorem
+The current Lean 4.34.1 audit passes **1,204 build targets and 40,032 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-cold-shared-20261014-audit.log`.
+Log: `/tmp/mcfta-cold-complete-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **34% at 01:49 CEST**.
+No background proof worker is active. Weekly allowance was **34% at 02:11 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

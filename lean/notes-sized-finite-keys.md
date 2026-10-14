@@ -72,10 +72,10 @@ explicit premises. This proof does not replace the source worker with an eager
 Haskell implementation. Concrete lazy heap scheduling remains a runtime boundary.
 
 Earlier checkpoints: `5f79d22e` and `bc7599d4`. The finite inverse proof is
-`51242646`. The current audit passes 1,195 targets and 39,965 theorem dependency
+`51242646`. The current audit passes 1,204 targets and 40,032 theorem dependency
 checks using only the three permitted Lean
 foundations.
-Log: `/tmp/mcfta-cold-shared-20261014-audit.log`.
+Log: `/tmp/mcfta-cold-complete-20261014-audit.log`.
 Concrete Haskell containers, lazy heap execution, primitive machine resources,
 and external solver behavior retain their stated contracts.
 
@@ -84,3 +84,12 @@ classes from actual repaired first-order recursive construction and explicit
 finite warmup. The shared table has the original guarded physical language.
 Native cold shared traversal allocation order remains separate. See
 [first-order shared rows](notes-first-order-shared-rows.md).
+
+`SourceFirstOrderColdSized` now derives the actual cold table without warmup
+or a supplied trace. `SourceColdSharedRowsTermination.cold_finite` proves
+finite stateful traversal in every prepared closed source cache. The cold
+output language is exact. `Trace.native_correct` and `Trace.liquid_correct`
+compose the actual returned table with canonical native and encoded
+solver-decided queries, finite classes, and both signed inverses. Validation
+and external solver contracts remain explicit. See
+[cold shared rows](notes-cold-shared-rows.md).

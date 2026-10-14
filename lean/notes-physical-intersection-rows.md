@@ -61,14 +61,17 @@ The shared snapshot retains the exposed physical rows and the original Mu
 child identity. Concrete lazy heaps and verified extraction remain boundaries.
 The first-order extension derives actual construction and finite cold exposure
 for arbitrary binder-free trees and unions inside one outer binder. It derives
-a prepared heap, fixed-cache shared traversal, exact guarded language, and the
-full reference Sized laws after explicit warmup. Native cold shared traversal,
-nested binder construction, cyclic product rows, and pending-thunk execution
-remain open. See [first-order shared rows](notes-first-order-shared-rows.md).
+a prepared heap and exact shared rows. The new cold adapter now proves finite
+stateful traversal, exact output language, and every reference Sized law from
+actual first-order construction without warmup. Canonical native and encoded
+solver-decided queries compose with its actual returned table.
+Open nested binder construction, cyclic product rows, and pending-thunk execution
+remain open. See [first-order shared rows](notes-first-order-shared-rows.md) and
+[cold shared rows](notes-cold-shared-rows.md).
 `InternedDepthFreeProjection*` separately derives full-syntax free-name
 membership and ordinary-root deep callback observations, including nested
 children. General cached-depth and binder-heap induction remain open.
 
-Checkpoints: `70795677`, `0bc6806e`, `aca84882`, `7e942dde`, `9207c2cf`, `93f3cbaa`, `e9214aa6`, and `49498845`.
-The closing audit passes 1,195 targets and 39,965 theorem dependency checks.
-Log: `/tmp/mcfta-cold-shared-20261014-audit.log`.
+Checkpoints: `70795677`, `0bc6806e`, `aca84882`, `7e942dde`, `9207c2cf`, `93f3cbaa`, `e9214aa6`, `49498845`, `4601cf85`, and `f425e2b6`.
+The closing audit passes 1,204 targets and 40,032 theorem dependency checks.
+Log: `/tmp/mcfta-cold-complete-20261014-audit.log`.
