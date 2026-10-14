@@ -1,5 +1,11 @@
 # Sized execution from a validated finite row map
 
+The common full query specification now covers original-map reference,
+optimized, and actual bounded encoded solver paths in `221bb23a`.
+Read [the common API note](notes-sized-api-laws.md). The current aggregate
+audit passes 1,554 jobs and 44,359 theorem dependency checks. Later counts
+in this note describe historical component checkpoints.
+
 A finite FTA can use an infinite state type such as `Nat`. The earlier public
 input contains a complete finite state carrier. This work constructs that
 carrier from the actual validated map keys. It does not require every value

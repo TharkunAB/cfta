@@ -1,8 +1,46 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 23:08 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 23:16 CEST (Europe/Stockholm)**.
 
-## Current upstream, public entry, and complete Sized API laws
+## Complete common query laws for all explicit-map Sized paths
+
+The latest proof checkpoint is `221bb23a`. Continue on `formalize` against
+`origin/main` at `f201deda` in `TharkunAB/cfta`. Push completed checkpoints
+regularly to `origin/formalize`. The upstream and permission notes below
+remain in force. This section supersedes their next proof targets.
+Read `lean/notes-sized-api-laws.md`.
+
+`SourceSizedFiniteKeysApiLaws` derives the common `Exact` query specification
+for the original-map reference and optimized paths at the original guarded
+language. `SourceSizedBoundedReference.classes_eq` proves that a complete-term
+size guard preserves the exact canonical classes through a signed bound and
+makes every later class empty. It includes negative bounds and size zero.
+The certificate graph does not replace the actual source solver worker.
+`SourceSizedBoundedApiLaws` identifies the complete fromClasses record with
+that reference sequence. `SourceSizedFiniteKeysDecidedApiLaws` and
+`SourceSizedFiniteKeysLiquidApiLaws` derive all common laws for actual bounded
+and encoded raw solver traces. They retain occurrence work, varying replies,
+Unknown, and exact error channels. Finite external outcomes derive finite
+actual execution. External correctness and termination remain explicit.
+
+The current audit passes 1,554 jobs and 44,359 theorem dependency checks.
+Log: `/tmp/mcfta-unified-sized-api-laws-20261014-audit.log`. Only the three
+permitted Lean foundations occur. Only the old unused `inputs` warning remains.
+No production Haskell code changed. All older proof bytes, fixtures, and
+marked drafts remain. Snapshot:
+`/tmp/mcfta-unified-sized-api-checkpoint-20261014-2316/` (1,933 Lean-tree files).
+
+Next connect the general repaired cold path to the encoded solver query
+result. Derive successful validation from actual root membership and child
+closure. Use `SourceFreshOrdinaryColdGuardedExact.trace_table_exact` for the
+independent original root language, `sizedTable`/`sized_graph` for raw conversion,
+and the new encoded exact query theorem. The old prepared/first-order liquid
+adapter remains a narrower result. Preserve the optimized interned core,
+all older constructor/equality work, and the explicit runtime/extraction
+boundaries. Do not repeat the completed explicit-map query proofs.
+Stop all work and workers at 1% weekly allowance or less.
+
+## Upstream move and physical public entry
 
 The repository is now `TharkunAB/cfta`. `origin` is
 `git@github.com:TharkunAB/cfta.git`. Continue on `formalize` against

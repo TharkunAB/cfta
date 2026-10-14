@@ -4,6 +4,10 @@ Updated: 2026-10-14 23:08 CEST.
 Proof: `8a0eb5f9`. Source base: `origin/main` at `f201deda`.
 Repository: `git@github.com:TharkunAB/cfta.git`. Branch: `formalize`.
 
+The common explicit-map query target below is complete in `221bb23a`.
+Read [the common API note](notes-sized-api-laws.md) for the new solver-decided
+result, current validation, and next cold-adapter target.
+
 ## Actual entry control
 
 `SourceFreshOrdinaryNativeEntry.Execution` follows the physical root checks

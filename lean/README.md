@@ -6,14 +6,16 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,549 jobs and 44,339 theorem dependency checks.
+The audit passes 1,554 jobs and 44,359 theorem dependency checks.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open
 returns, exact distinct node-count classes, size order, and both term inverses.
 Normalized original annotations and reached cache capacity remain explicit.
-Next apply the common query specification to original-map dispatch and bounded
-solver-decided classes. All old proofs, fixtures, and marked drafts remain.
+The [common API proof](notes-sized-api-laws.md) now applies the complete
+specification to original-map reference, optimized dispatch, and actual bounded
+solver-decided traces. Next connect general repaired cold rows to the encoded
+solver result and derive validation. All old proofs, fixtures, and drafts remain.
 
 [The system specification and current findings](SYSTEM.md) describe the
 language, distinct-term index, distribution, and optimization contracts.
