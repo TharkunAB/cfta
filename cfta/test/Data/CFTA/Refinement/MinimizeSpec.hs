@@ -1,0 +1,510 @@
+{-# LANGUAGE OverloadedStrings #-}
+
+module Data.CFTA.Refinement.MinimizeSpec (spec) where
+
+import Control.Monad ((>=>))
+import Data.CFTA.Formula (Sort (IntSort))
+import Data.CFTA.Refinement (
+    Automaton,
+    Entailment,
+    Guard (Entails, Not, Same, Satisfies, Substitute),
+    MinimizeError (StaleSimilarity),
+    Node (Mu, Node),
+    SimilarityPair (SimilarityPair),
+    Substitution (Substitution),
+    Subtyping (..),
+    Symbol (RefinedSymbol),
+    Transition,
+    TransitionId (TransitionId),
+    Verdict (No, Yes),
+    accepts,
+    automatonAlphabet,
+    denotationAtMost,
+    edgeChildren,
+    minimize,
+    mkEdge,
+    noConstraint,
+    nodeEdges,
+    nodeMapChildren,
+    path,
+    reduce,
+    refinementSubtypingOn,
+    semanticConstraint,
+    similarity,
+    similarityPairs,
+    transitionSymbol,
+    pattern Transition,
+ )
+import Data.CFTA.Refinement.Expression (false, refinementFormula, true, (./=), (.==), (.>=))
+import Data.CFTA.Refinement.Guard (requires)
+import qualified Data.CFTA.Refinement.Guard as Guard
+import Data.CFTA.Refinement.Lattice (latticeEntailment)
+import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
+import Data.CFTA.Refinement.TestSupport (declarations)
+import qualified Data.CFTA.Term as Term
+import qualified Data.Set as Set
+import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList, shouldSatisfy)
+
+spec :: Spec
+spec =
+    describe "similarity and minimization" $ do
+        it "infers transition similarity and removes the supertype" $
+            withZ3 declarations $ \solver -> do
+                inferred <- similarity (atomSubtyping solver) similarAtoms
+                case inferred of
+                    Left err -> expectationFailure $ show err
+                    Right related -> do
+                        similarityPairs related
+                            `shouldBe` [SimilarityPair (TransitionId similarAtoms naturalAtom) (TransitionId similarAtoms unknownAtom)]
+                        minimize similarAtoms related `shouldBe` Right (Node [naturalAtom])
+
+        it "rejects a similarity snapshot when transition contents change at the same addresses" $
+            withZ3 declarations $ \solver -> do
+                inferred <- similarity (atomSubtyping solver) similarAtoms
+                case inferred of
+                    Left err -> expectationFailure $ show err
+                    Right related -> do
+                        let changed =
+                                nodeMapChildren
+                                    (\edge -> mkEdge (transitionLabel edge) [] (semanticConstraint $ Satisfies (path []) true))
+                                    similarAtoms
+                        minimize changed related `shouldBe` Left StaleSimilarity
+
+        it "rejects a similarity snapshot when only the root changes" $
+            withZ3 declarations $ \solver -> do
+                inferred <- similarity (atomSubtyping solver) separatedSimilarAtoms
+                case inferred of
+                    Left err -> expectationFailure $ show err
+                    Right related -> minimize naturalNode related `shouldBe` Left StaleSimilarity
+
+        it "checks snapshots even when the similarity set is empty" $ do
+            inferred <- similarity (Subtyping $ \_ _ _ -> pure No) similarAtoms
+            case inferred of
+                Left err -> expectationFailure $ show err
+                Right related -> do
+                    similarityPairs related `shouldBe` []
+                    minimize naturalNode related `shouldBe` Left StaleSimilarity
+
+        it "redirects incoming edges to the retained subtype target" $
+            withZ3 declarations $ \solver -> do
+                reducedResult <- reduce solver (atomSubtyping solver) separatedSimilarAtoms
+                case reducedResult of
+                    Left err -> expectationFailure $ show err
+                    Right reduced -> do
+                        map edgeChildren (nodeEdges reduced) `shouldMatchList` [[naturalNode], [naturalNode]]
+                        automatonAlphabet reduced `shouldSatisfy` Set.notMember (RefinedSymbol "unknown" true)
+
+        it "keeps unrelated alternatives at a removed transition's target" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (atomSubtyping solver) sharedSupertypeState $ \reduced -> do
+                    map edgeChildren (nodeEdges reduced)
+                        `shouldMatchList` [[naturalNode], [Node [otherAtom]], [naturalNode]]
+                    denotationAtMost solver 1 reduced >>= (\terms -> fmap length terms `shouldBe` Right 3)
+
+        it "does not give a parent the other alternatives of the representative's node" $ do
+            let ints =
+                    Node
+                        [ Transition "Int" (refinementFormula (.== 0)) [] noConstraint
+                        , Transition "Int" (refinementFormula (.== 1)) [] noConstraint
+                        ]
+                root = case Guard.transition "div" (const true) [ints, ints] (\_ d -> d `requires` (./= 0)) of
+                    Right edge -> Node [edge]
+                    Left err -> error (show err)
+                subtyping = refinementSubtypingOn latticeEntailment (Just . length . edgeChildren)
+                int k = Term.Node (RefinedSymbol "Int" (refinementFormula (.== k))) []
+                divide left right = Term.Node (RefinedSymbol "div" true) [int left, int right]
+            accepts latticeEntailment root (divide 0 0) >>= (`shouldBe` No)
+            reduced <- reduce latticeEntailment subtyping root
+            case reduced of
+                Left err -> expectationFailure $ show err
+                Right result -> do
+                    accepts latticeEntailment result (divide 0 0) >>= (`shouldBe` No)
+                    accepts latticeEntailment result (divide 0 1) >>= (`shouldBe` Yes)
+
+        it "installs the chosen representative when removing the only root transition" $
+            withZ3 declarations $ \solver -> do
+                inferred <- similarity (atomSubtyping solver) finalStateSupertype
+                case inferred of
+                    Left err -> expectationFailure $ show err
+                    Right related -> minimize finalStateSupertype related `shouldBe` Right naturalNode
+
+        it "can remove a root transition when another root derivation remains" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (atomSubtyping solver) finalStateWithAlternative $ \reduced -> do
+                    reduced `shouldBe` Node [naturalAtom, otherAtom]
+                    denotationAtMost solver 0 reduced
+                        >>= (`shouldBe` Right [Term.Node (transitionLabel naturalAtom) [], Term.Node (transitionLabel otherAtom) []])
+
+        it "keeps an accepted root representative when the other root alternative rejects every term" $
+            withZ3 declarations $ \solver -> do
+                denotationAtMost solver 1 rootWithRejectedAlternative
+                    >>= (`shouldBe` Right [Term.Node (transitionLabel unknownAtom) []])
+                checkMinimization (atomSubtyping solver) rootWithRejectedAlternative $
+                    denotationAtMost solver 1
+                        >=> (`shouldBe` Right [Term.Node (transitionLabel naturalAtom) []])
+
+        it "keeps each root representative after multiple scheduled removals" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (twoClassSubtyping solver) multipleRootRepresentatives $ \reduced -> do
+                    map transitionSymbol (nodeEdges reduced) `shouldMatchList` ["pair", "specific-a", "specific-b"]
+                    denotationAtMost solver 1 reduced >>= (\terms -> fmap length terms `shouldBe` Right 3)
+
+        it "allows multiple representatives for one target and substitutes repeated nodes together" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (twoClassSubtyping solver) multipleRepresentatives $ \reduced -> do
+                    [edgeChildren edge | edge <- nodeEdges reduced, transitionSymbol edge == "pair"]
+                        `shouldMatchList` [[Node [otherAtom], Node [otherAtom]], [specificANode, specificANode], [specificBNode, specificBNode]]
+                    denotationAtMost solver 1 reduced >>= (\terms -> fmap length terms `shouldBe` Right 5)
+
+        it "composes substitutions for distinct source nodes on earlier copies" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (twoClassSubtyping solver) composedRepresentatives $ \reduced -> do
+                    [edgeChildren edge | edge <- nodeEdges reduced, transitionSymbol edge == "pair"]
+                        `shouldMatchList` [ [otherANode, otherBNode]
+                                          , [specificANode, otherBNode]
+                                          , [otherANode, specificBNode]
+                                          , [specificANode, specificBNode]
+                                          ]
+                    denotationAtMost solver 1 reduced >>= (\terms -> fmap length terms `shouldBe` Right 6)
+
+        it "keeps a redirected copy when its original supertype transition is removed" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (twoClassSubtyping solver) copiedSupertype $ \reduced -> do
+                    [edgeChildren edge | edge <- nodeEdges reduced, transitionSymbol edge == "goal"]
+                        `shouldMatchList` [[Node [Transition "unknown-b" true [specificANode] noConstraint]], [specificBNode]]
+                    denotationAtMost solver 2 reduced >>= (\terms -> fmap length terms `shouldBe` Right 4)
+
+        it "applies M-Trans transitively over one similarity snapshot" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (threeAtomSubtyping solver) transitiveSimilarAtoms $ \reduced ->
+                    map edgeChildren (nodeEdges reduced) `shouldBe` replicate 3 [Node [specificAtom]]
+
+        it "uses one inferred representative for overlapping subtypes" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (overlappingAtomSubtyping solver) overlappingSimilarAtoms $ \reduced -> do
+                    length (nodeEdges reduced) `shouldBe` 3
+                    map edgeChildren (nodeEdges reduced) `shouldSatisfy` notElem [Node [unknownAtom]]
+                    denotationAtMost solver 1 reduced >>= (\terms -> fmap length terms `shouldBe` Right 3)
+
+        it "retains a base required by a stricter representative" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (threeAtomSubtyping solver) dependentRepresentative 1
+
+        it "retains a base required by a recursive alternative in the same node" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (threeAtomSubtyping solver) recursiveRepresentative 4
+
+        it "retains a productive base when its subtype has no finite derivation" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (threeAtomSubtyping solver) unproductiveRepresentative 1
+
+        it "retains batches whose combined redirects create a dependency cycle" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (twoClassSubtyping solver) mutuallyDependentRepresentatives 1
+
+        it "retains a batch whose copied guard would inspect a recursive node" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (atomSubtyping solver) cyclicGuardRepresentative 2
+
+        it "retains a batch whose redirect would make children equal under a disequality" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (atomSubtyping solver) disequalChildren 1
+
+        it "retains a batch whose redirect would strengthen the consequent of an entailment" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (atomSubtyping solver) entailedChild 2
+
+        it "retains a batch whose representative has a guard that rejects its terms" $
+            withZ3 declarations $ \solver ->
+                checkRetainedBatch solver (atomSubtyping solver) rejectedRepresentative 1
+
+        it "keeps the supertype when pruning leaves the representative's guard undecided" $
+            -- Two compound actuals with the same root observation make the
+            -- substitution ambiguous, so pruning keeps the guard as it is.
+            withZ3 (declarations <> [("app", IntSort)]) $ \solver -> do
+                denotationAtMost solver 4 undecidedRepresentative >>= (\terms -> fmap length terms `shouldBe` Right 1)
+                reduced <- reduce solver (atomSubtyping solver) undecidedRepresentative
+                case reduced of
+                    Left err -> expectationFailure $ show err
+                    Right result -> denotationAtMost solver 4 result >>= (\terms -> fmap length terms `shouldBe` Right 1)
+
+        it "applies a redirect that a guard reads only through a refinement it assumes" $
+            withZ3 declarations $ \solver ->
+                checkMinimization (atomSubtyping solver) assumedChild $ \reduced -> do
+                    map edgeChildren (nodeEdges reduced) `shouldMatchList` [[naturalNode], [naturalNode]]
+                    denotationAtMost solver 1 reduced >>= (\terms -> fmap length terms `shouldBe` Right 2)
+
+-- | Inspect a successful schedule while reporting inference failures.
+checkMinimization :: Subtyping -> Automaton -> (Automaton -> IO ()) -> IO ()
+checkMinimization subtyping original check = do
+    inferred <- similarity subtyping original
+    case inferred of
+        Left err -> expectationFailure $ show err
+        Right related -> case minimize original related of
+            Left err -> expectationFailure $ show err
+            Right reduced -> check reduced
+
+-- | Check that minimization retains the finite derivations required by a batch.
+checkRetainedBatch :: Entailment -> Subtyping -> Automaton -> Int -> IO ()
+checkRetainedBatch solver subtyping original expected = do
+    before <- denotationAtMost solver 3 original
+    fmap length before `shouldBe` Right expected
+    inferred <- similarity subtyping original
+    case inferred of
+        Left err -> expectationFailure $ show err
+        Right related -> minimize original related `shouldBe` Right original
+
+-- | The complete label of a transition.
+transitionLabel :: Transition -> Symbol
+transitionLabel (Transition symbol refinement _ _) = RefinedSymbol symbol refinement
+
+-- | Similarity for integer atom transitions; structural nodes are excluded.
+atomSubtyping :: Entailment -> Subtyping
+atomSubtyping solver = refinementSubtypingOn solver classify
+  where
+    classify transition
+        | transitionSymbol transition `elem` ["unknown", "natural"] = Just ("integer" :: String)
+        | otherwise = Nothing
+
+-- | Three comparable integer refinements for the transitive M-Trans fixture.
+threeAtomSubtyping :: Entailment -> Subtyping
+threeAtomSubtyping solver = refinementSubtypingOn solver classify
+  where
+    classify transition
+        | transitionSymbol transition `elem` ["specific", "natural", "unknown"] =
+            Just ("integer" :: String)
+        | otherwise = Nothing
+
+-- | Two incomparable exact values that both refine one unknown value.
+overlappingAtomSubtyping :: Entailment -> Subtyping
+overlappingAtomSubtyping solver = refinementSubtypingOn solver classify
+  where
+    classify transition
+        | transitionSymbol transition `elem` ["exact-zero", "exact-one", "unknown"] =
+            Just ("integer" :: String)
+        | otherwise = Nothing
+
+-- | Two independent source type classes for node-substitution schedules.
+twoClassSubtyping :: Entailment -> Subtyping
+twoClassSubtyping solver = refinementSubtypingOn solver classify
+  where
+    classify transition
+        | transitionSymbol transition `elem` ["specific-a", "unknown-a"] = Just False
+        | transitionSymbol transition `elem` ["specific-b", "unknown-b"] = Just True
+        | otherwise = Nothing
+
+-- | An unrefined, unconstrained leaf transition.
+plain :: Symbol -> Transition
+plain symbol = Transition symbol true [] noConstraint
+
+-- | An unrefined constructor with no constraint.
+wrap :: Symbol -> [Automaton] -> Transition
+wrap symbol children = Transition symbol true children noConstraint
+
+unknownAtom, naturalAtom, otherAtom, specificAtom :: Transition
+unknownAtom = plain "unknown"
+naturalAtom = Transition "natural" (refinementFormula (\v -> v .>= 0)) [] noConstraint
+otherAtom = plain "other"
+specificAtom = Transition "specific" (refinementFormula (\v -> v .== 0)) [] noConstraint
+
+naturalNode, specificANode, specificBNode, otherANode, otherBNode :: Automaton
+naturalNode = Node [naturalAtom]
+specificANode = Node [Transition "specific-a" (refinementFormula (\v -> v .== 0)) [] noConstraint]
+specificBNode = Node [Transition "specific-b" (refinementFormula (\v -> v .== 1)) [] noConstraint]
+otherANode = Node [plain "other-a"]
+otherBNode = Node [plain "other-b"]
+
+-- | Two refinements sharing one node, as in an alternative row.
+similarAtoms :: Automaton
+similarAtoms = Node [unknownAtom, naturalAtom]
+
+-- | Paper-style representatives with one node per program transition.
+separatedSimilarAtoms :: Automaton
+separatedSimilarAtoms =
+    Node
+        [ wrap "specific-box" [naturalNode]
+        , wrap "general-box" [Node [unknownAtom]]
+        ]
+
+-- | A supertype transition shares its node with an unrelated alternative.
+sharedSupertypeState :: Automaton
+sharedSupertypeState =
+    Node
+        [ wrap "specific-box" [naturalNode]
+        , wrap "general-box" [Node [unknownAtom, otherAtom]]
+        ]
+
+-- | Removing the only root transition would leave no accepted derivation.
+finalStateSupertype :: Automaton
+finalStateSupertype = Node [wrap "unknown" [naturalNode]]
+
+-- | A root supertype can be removed while another root alternative remains.
+finalStateWithAlternative :: Automaton
+finalStateWithAlternative = Node [wrap "unknown" [naturalNode], otherAtom]
+
+-- | A structurally productive alternative rejects all terms after root removal.
+rootWithRejectedAlternative :: Automaton
+rootWithRejectedAlternative =
+    Node
+        [ unknownAtom
+        , Transition "f" true [naturalNode] $ semanticConstraint $ Satisfies (path []) false
+        ]
+
+-- | Two root alternatives use different representatives in the same schedule.
+multipleRootRepresentatives :: Automaton
+multipleRootRepresentatives =
+    Node [plain "unknown-a", plain "unknown-b", wrap "pair" [specificANode, specificBNode]]
+
+-- | Two removed transitions share a node but use different representatives.
+multipleRepresentatives :: Automaton
+multipleRepresentatives =
+    Node
+        [ wrap "pair" [shared, shared]
+        , wrap "use-a" [specificANode]
+        , wrap "use-b" [specificBNode]
+        ]
+  where
+    shared = Node [plain "unknown-a", plain "unknown-b", otherAtom]
+
+-- | Independent substitutions can affect each argument of a copied transition.
+composedRepresentatives :: Automaton
+composedRepresentatives =
+    Node
+        [ wrap "pair" [Node [plain "unknown-a", plain "other-a"], Node [plain "unknown-b", plain "other-b"]]
+        , wrap "use-a" [specificANode]
+        , wrap "use-b" [specificBNode]
+        ]
+
+-- | The first step copies a supertype whose original is removed by the second.
+copiedSupertype :: Automaton
+copiedSupertype =
+    Node
+        [ wrap "goal" [Node [wrap "unknown-b" [Node [plain "unknown-a"]]]]
+        , wrap "use-a" [specificANode]
+        , wrap "use-b" [specificBNode]
+        ]
+
+-- | The representative is the only alternative of its node, and the node is recursive.
+cyclicGuardRepresentative :: Automaton
+cyclicGuardRepresentative =
+    Node
+        [ Transition "goal" true [Node [unknownAtom]] $ semanticConstraint $ Satisfies (path [0]) true
+        , wrap "use" [recursiveNatural]
+        ]
+  where
+    recursiveNatural = Mu $ \self -> Node [Transition "natural" natural [zeroOrLoop self] noConstraint]
+    zeroOrLoop self = Node [plain "zero", wrap "loop" [self]]
+    natural = refinementFormula (\v -> v .>= 0)
+
+-- | The redirect of the unknown child would make both children natural.
+disequalChildren :: Automaton
+disequalChildren =
+    Node
+        [ Transition "pair" true [naturalNode, Node [unknownAtom]]
+            $ semanticConstraint
+            $ Not
+            $ Same (path [0]) (path [1])
+        ]
+
+-- | The redirect of the unknown child would make the entailment from the other child fail.
+entailedChild :: Automaton
+entailedChild =
+    Node
+        [ Transition "implied" true [Node [otherAtom], Node [unknownAtom]]
+            $ semanticConstraint
+            $ Entails (path [0]) (path [1])
+        , wrap "use-natural" [naturalNode]
+        ]
+
+-- | The guard assumes the refinement of the child, so the natural child also satisfies it.
+assumedChild :: Automaton
+assumedChild =
+    Node
+        [ Transition "checked" true [Node [unknownAtom]] $ semanticConstraint $ Satisfies (path [0]) true
+        , wrap "use-natural" [naturalNode]
+        ]
+
+-- | The natural representative rejects every term, so only the unknown child gives a term.
+rejectedRepresentative :: Automaton
+rejectedRepresentative =
+    Node
+        [ wrap
+            "f"
+            [ Node
+                [Transition "natural" (refinementFormula (\v -> v .>= 0)) [] $ semanticConstraint $ Satisfies (path []) false]
+            ]
+        , wrap "f" [Node [unknownAtom]]
+        ]
+
+-- | The natural representative rejects every term through a substitution that pruning cannot decide.
+undecidedRepresentative :: Automaton
+undecidedRepresentative =
+    Node
+        [ wrap
+            "f"
+            [ Node
+                [Transition "natural" (refinementFormula (\v -> v .>= 0)) [compound "u", compound "v", leaf "x", leaf "y"] rejecting]
+            ]
+        , wrap "f" [Node [unknownAtom]]
+        ]
+  where
+    compound symbol = Node [wrap "app" [leaf symbol]]
+    leaf symbol = Node [plain symbol]
+    rejecting =
+        semanticConstraint $
+            Substitute
+                [Substitution (path [0]) (path [2]), Substitution (path [1]) (path [3])]
+                (Satisfies (path []) false)
+
+-- | Three program nodes ordered exact-zero <: natural <: unknown.
+transitiveSimilarAtoms :: Automaton
+transitiveSimilarAtoms =
+    Node
+        [ wrap "use-specific" [Node [specificAtom]]
+        , wrap "use-natural" [naturalNode]
+        , wrap "use-unknown" [Node [unknownAtom]]
+        ]
+
+-- | Two incomparable subtypes both related to one supertype.
+overlappingSimilarAtoms :: Automaton
+overlappingSimilarAtoms =
+    Node
+        [ wrap "use-zero" [Node [Transition "exact-zero" (refinementFormula (\v -> v .== 0)) [] noConstraint]]
+        , wrap "use-one" [Node [Transition "exact-one" (refinementFormula (\v -> v .== 1)) [] noConstraint]]
+        , wrap "use-any" [Node [unknownAtom]]
+        ]
+
+-- | The stricter transition uses the only base term as its argument.
+dependentRepresentative :: Automaton
+dependentRepresentative =
+    Node
+        [ wrap
+            "goal"
+            [Node [Transition "specific" (refinementFormula (\v -> v .== 0)) [Node [unknownAtom]] noConstraint]]
+        ]
+
+-- | A recursive alternative and its only base share one node.
+recursiveRepresentative :: Automaton
+recursiveRepresentative =
+    Mu $ \self -> Node [unknownAtom, Transition "specific" (refinementFormula (\v -> v .== 0)) [self] noConstraint]
+
+-- | The subtype contains an unproductive cycle before minimization.
+unproductiveRepresentative :: Automaton
+unproductiveRepresentative =
+    Node
+        [ wrap "goal" [Node [unknownAtom]]
+        , wrap "other-goal" [Node [Transition "specific" (refinementFormula (\v -> v .== 0)) [loop] noConstraint]]
+        ]
+  where
+    loop = Mu $ \self -> Node [wrap "loop" [self]]
+
+-- | Two safe individual redirects form a cycle when applied together.
+mutuallyDependentRepresentatives :: Automaton
+mutuallyDependentRepresentatives =
+    Node
+        [ wrap
+            "goal"
+            [ Node [Transition "specific-a" (refinementFormula (\v -> v .== 0)) [Node [plain "unknown-b"]] noConstraint]
+            , Node [Transition "specific-b" (refinementFormula (\v -> v .== 0)) [Node [plain "unknown-a"]] noConstraint]
+            ]
+        ]

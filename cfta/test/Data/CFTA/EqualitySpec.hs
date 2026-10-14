@@ -1,0 +1,940 @@
+{-# LANGUAGE OverloadedStrings #-}
+
+module Data.CFTA.EqualitySpec (spec) where
+
+import Control.Exception (evaluate)
+import Control.Monad (forM_, replicateM)
+import qualified Data.HashSet as HashSet
+import Data.Hashable (Hashable)
+import Data.IORef (modifyIORef, newIORef, readIORef)
+import qualified Data.IntMap.Strict as IntMap
+import Data.Maybe (fromMaybe)
+import Data.Set (Set)
+import qualified Data.Set as Set
+import qualified Data.Text as Text
+import GHC.Generics (Generic)
+
+import System.IO.Unsafe (unsafePerformIO)
+import System.Timeout (timeout)
+
+import Test.Hspec
+import Test.QuickCheck
+
+import Data.CFTA.Equality
+import Data.CFTA.Index (Depth)
+import Data.CFTA.Internal.UnionFind (intToUVar)
+import Data.CFTA.Interned.Operations (mergeAlternatives)
+import Data.CFTA.Symbol
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
+
+import Test.Generators.Equality ()
+
+-----------------------------------------------------------------
+
+data ArithmeticSymbol = Zero | Succ | Recursion
+    deriving (Eq, Generic, Ord, Read, Show)
+
+instance Hashable ArithmeticSymbol
+
+constTerms :: [Symbol] -> Node Symbol
+constTerms ss = Node (map (`Edge` []) ss)
+
+ex1 :: Node Symbol
+ex1 =
+    Node
+        [ mkEdge
+            "f"
+            [constTerms ["1", "2"], Node [Edge "g" [constTerms ["1", "2"]]]]
+            (equalityConstraint $ mkEqConstraints [[path [0], path [1, 0]]])
+        ]
+
+ex2 :: Node Symbol
+ex2 =
+    Node
+        [ mkEdge
+            "f"
+            [constTerms ["1", "2", "3"], Node [Edge "g" [constTerms ["1", "2", "4"]]]]
+            (equalityConstraint $ mkEqConstraints [[path [0], path [1, 0]]])
+        ]
+
+ex3 :: Node Symbol
+ex3 = Node [Edge "f" [Node [Edge "g" [constTerms ["1", "2"]]]], Edge "h" [Node [Edge "i" [constTerms ["3", "4"]]]]]
+
+ex3_root_doubled :: Node Symbol
+ex3_root_doubled = Node [Edge "ff" [Node [Edge "g" [constTerms ["1", "2"]]]], Edge "hh" [Node [Edge "i" [constTerms ["3", "4"]]]]]
+
+ex3_doubled :: Node Symbol
+ex3_doubled = Node [Edge "f" [Node [Edge "g" [constTerms ["11", "22"]]]], Edge "h" [Node [Edge "i" [constTerms ["33", "44"]]]]]
+
+doubleNodeSymbols :: Node Symbol -> Node Symbol
+doubleNodeSymbols (Node es) = Node $ map doubleEdgeSymbol es
+  where
+    doubleEdgeSymbol :: Edge Symbol -> Edge Symbol
+    doubleEdgeSymbol (Edge (Symbol s) ns) = Edge (Symbol (Text.append s s)) ns
+doubleNodeSymbols n = error $ "doubleNodeSymbols: unexpected " <> show n
+
+-- | The terms of a node up to a depth.
+shallowTerms :: Depth -> Node Symbol -> HashSet.HashSet (Term Symbol)
+shallowTerms depth n = HashSet.fromList (terms (boundDepth depth n))
+
+{- | A node whose children are recursive nodes, with and without
+constraints, and one class over paths into them.
+-}
+recursiveNode :: Gen (Node Symbol)
+recursiveNode = do
+    children <- replicateM 3 $ oneof [resize 1 arbitrary, recursive]
+    classes <- chooseInt (1, 2) >>= \count -> replicateM count (chooseInt (2, 3) >>= \size -> replicateM size randomPath)
+    pure $ Node [mkEdge "w" children (equalityConstraint $ mkEqConstraints classes)]
+  where
+    recursive = do
+        other <- elements [Nothing, Just (Node [Edge "b" []]), Just (Node [Edge "a" [], Edge "b" []])]
+        classes <- elements [[], [[path [0], path [1]]], [[path [0, 0], path [1]]], [[path [0, 1], path [1, 0]]]]
+        pure $ Mu $ \r -> Node [Edge "a" [], mkEdge "g" [r, fromMaybe r other] (equalityConstraint $ mkEqConstraints classes)]
+    randomPath = do
+        first <- chooseInt (0, 2)
+        rest <- chooseInt (0, 2) >>= \size -> replicateM size (chooseInt (0, 1))
+        pure $ path $ map ChildIndex (first : rest)
+
+testBigNode :: Node Symbol
+testBigNode = ex3
+
+{- FOURMOLU_DISABLE -}
+-- One regression value on one line: formatted, it is 1,500 lines.
+bug062721NonIdempotentEqConstraintReduction :: (EqConstraints, [Node Symbol])
+bug062721NonIdempotentEqConstraintReduction =
+    ( (EqConstraints [PathEClass (Set.fromList [Path [0], Path [2, 0, 2]]), PathEClass (Set.fromList [Path [1], Path [2, 0, 0]]), PathEClass (Set.fromList [Path [2, 0, 1], Path [3, 0]])])
+    , [(Node [(Edge "baseType" [])]), (Node [(Edge "(->)" [])]), (Node [(mkEdge "app" [(Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))]), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])]), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "(->)" [])]), (Node [(Edge "g" [(Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "baseType" [])]), (Node [(Edge "baseType" [])])])])]), (Edge "x" [(Node [(Edge "baseType" [])])]), (Edge "n" [(Node [(Edge "Int" [])])]), (Edge "$" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 1]]), PathEClass (Set.fromList [Path [1, 2], Path [2, 2]])]))])]), (Edge "replicate" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "Int" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [2, 1], Path [2, 2, 0]])]))])]), (Edge "foldr" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 2, 1, 0]]), PathEClass (Set.fromList [Path [1, 2, 1], Path [1, 2, 2], Path [2, 1], Path [2, 2, 2]])]))])])]), (Node [(Edge "g" [(Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "baseType" [])]), (Node [(Edge "baseType" [])])])])]), (Edge "x" [(Node [(Edge "baseType" [])])]), (Edge "n" [(Node [(Edge "Int" [])])]), (Edge "$" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 1]]), PathEClass (Set.fromList [Path [1, 2], Path [2, 2]])]))])]), (Edge "replicate" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "Int" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [2, 1], Path [2, 2, 0]])]))])]), (Edge "foldr" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 2, 1, 0]]), PathEClass (Set.fromList [Path [1, 2, 1], Path [1, 2, 2], Path [2, 1], Path [2, 2, 2]])]))])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [0], Path [2, 0, 2]]), PathEClass (Set.fromList [Path [1], Path [2, 0, 0]]), PathEClass (Set.fromList [Path [2, 0, 1], Path [3, 0]])]))]), (Node [(mkEdge "app" [(Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))]), (Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))]), (Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))]), (Edge "Maybe" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (Node [(Edge "(->)" [])]), (Node [(mkEdge "app" [(Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))]), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])]), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "(->)" [])]), (Node [(Edge "g" [(Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "baseType" [])]), (Node [(Edge "baseType" [])])])])]), (Edge "x" [(Node [(Edge "baseType" [])])]), (Edge "n" [(Node [(Edge "Int" [])])]), (Edge "$" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 1]]), PathEClass (Set.fromList [Path [1, 2], Path [2, 2]])]))])]), (Edge "replicate" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "Int" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [2, 1], Path [2, 2, 0]])]))])]), (Edge "foldr" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 2, 1, 0]]), PathEClass (Set.fromList [Path [1, 2, 1], Path [1, 2, 2], Path [2, 1], Path [2, 2, 2]])]))])])]), (Node [(Edge "g" [(Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "baseType" [])]), (Node [(Edge "baseType" [])])])])]), (Edge "x" [(Node [(Edge "baseType" [])])]), (Edge "n" [(Node [(Edge "Int" [])])]), (Edge "$" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 1]]), PathEClass (Set.fromList [Path [1, 2], Path [2, 2]])]))])]), (Edge "replicate" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "Int" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [2, 1], Path [2, 2, 0]])]))])]), (Edge "foldr" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 2, 1, 0]]), PathEClass (Set.fromList [Path [1, 2, 1], Path [1, 2, 2], Path [2, 1], Path [2, 2, 2]])]))])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [0], Path [2, 0, 2]]), PathEClass (Set.fromList [Path [1], Path [2, 0, 0]]), PathEClass (Set.fromList [Path [2, 0, 1], Path [3, 0]])]))]), (Node [(Edge "g" [(Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "baseType" [])]), (Node [(Edge "baseType" [])])])])]), (Edge "x" [(Node [(Edge "baseType" [])])]), (Edge "n" [(Node [(Edge "Int" [])])]), (Edge "$" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 1]]), PathEClass (Set.fromList [Path [1, 2], Path [2, 2]])]))])]), (Edge "replicate" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "Int" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [2, 1], Path [2, 2, 0]])]))])]), (Edge "foldr" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 2, 1, 0]]), PathEClass (Set.fromList [Path [1, 2, 1], Path [1, 2, 2], Path [2, 1], Path [2, 2, 2]])]))])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [0], Path [2, 0, 2]]), PathEClass (Set.fromList [Path [1], Path [2, 0, 0]]), PathEClass (Set.fromList [Path [2, 0, 1], Path [3, 0]])])), (mkEdge "app" [(Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))]), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])]), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "(->)" [])]), (Node [(Edge "g" [(Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "baseType" [])]), (Node [(Edge "baseType" [])])])])]), (Edge "x" [(Node [(Edge "baseType" [])])]), (Edge "n" [(Node [(Edge "Int" [])])]), (Edge "$" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 1]]), PathEClass (Set.fromList [Path [1, 2], Path [2, 2]])]))])]), (Edge "replicate" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "Int" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [2, 1], Path [2, 2, 0]])]))])]), (Edge "foldr" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 2, 1, 0]]), PathEClass (Set.fromList [Path [1, 2, 1], Path [1, 2, 2], Path [2, 1], Path [2, 2, 2]])]))])])]), (Node [(mkEdge "app" [(Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))]), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])]), (Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "(->)" [])]), (Node [(Edge "g" [(Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "baseType" [])]), (Node [(Edge "baseType" [])])])])]), (Edge "x" [(Node [(Edge "baseType" [])])]), (Edge "n" [(Node [(Edge "Int" [])])]), (Edge "$" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 1]]), PathEClass (Set.fromList [Path [1, 2], Path [2, 2]])]))])]), (Edge "replicate" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "Int" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [2, 1], Path [2, 2, 0]])]))])]), (Edge "foldr" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 2, 1, 0]]), PathEClass (Set.fromList [Path [1, 2, 1], Path [1, 2, 2], Path [2, 1], Path [2, 2, 2]])]))])])]), (Node [(Edge "g" [(Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "baseType" [])]), (Node [(Edge "baseType" [])])])])]), (Edge "x" [(Node [(Edge "baseType" [])])]), (Edge "n" [(Node [(Edge "Int" [])])]), (Edge "$" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 1]]), PathEClass (Set.fromList [Path [1, 2], Path [2, 2]])]))])]), (Edge "replicate" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "Int" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [2, 1], Path [2, 2, 0]])]))])]), (Edge "foldr" [(Node [(mkEdge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])]), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])])), (Node [(Edge "->" [(Node [(Edge "(->)" [])]), (Node [(Edge "List" [(createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])]), (createMu $ \x -> (Node [(Edge "baseType" []), (Edge "->" [(Node [(Edge "(->)" [])]), x, x]), (Edge "Maybe" [x]), (Edge "List" [x])]))])])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [1, 1], Path [2, 2, 1, 0]]), PathEClass (Set.fromList [Path [1, 2, 1], Path [1, 2, 2], Path [2, 1], Path [2, 2, 2]])]))])])])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [0], Path [2, 0, 2]]), PathEClass (Set.fromList [Path [1], Path [2, 0, 0]]), PathEClass (Set.fromList [Path [2, 0, 1], Path [3, 0]])]))])] (equalityConstraint $ EqConstraints [PathEClass (Set.fromList [Path [0], Path [2, 0, 2]]), PathEClass (Set.fromList [Path [1], Path [2, 0, 0]]), PathEClass (Set.fromList [Path [2, 0, 1], Path [3, 0]])]))])]
+    )
+{- FOURMOLU_ENABLE -}
+
+infiniteFNode :: Node Symbol
+infiniteFNode = createMu (\x -> (Node [Edge "f" [x]]))
+
+--------------------------------------------------------------
+----------------------------- Main ---------------------------
+--------------------------------------------------------------
+
+spec :: Spec
+spec = do
+    describe "Pathable" $ do
+        it "Node.getPath root" $
+            getPath (path []) testBigNode `shouldBe` testBigNode
+
+        it "Node.getPath one-level" $
+            getPath (path [0]) ex1 `shouldBe` (constTerms ["1", "2"])
+
+        it "Node.getPath merges multiple branches" $
+            getPath (path [0, 0]) ex3 `shouldBe` (constTerms ["1", "2", "3", "4"])
+
+        it "Node.modifyAtPath modifies at root" $
+            modifyAtPath doubleNodeSymbols (path []) ex3 `shouldBe` ex3_root_doubled
+
+        it "Node.modifyAtPath modifies at path" $
+            modifyAtPath doubleNodeSymbols (path [0, 0]) ex3 `shouldBe` ex3_doubled
+
+    describe "hash-consing" $ do
+        it "similar mu-nodes created independently are equal / have equal ids" $
+            (createMu (\x -> Node [Edge "f" [x]]) :: Node Symbol) `shouldBe` createMu (\x -> Node [Edge "f" [x]])
+
+        it "keeps identities from different symbol alphabets distinct" $ do
+            let typed = Node [Edge Zero []] :: Node ArithmeticSymbol
+                textual = Node [Edge "Zero" []] :: Node Symbol
+            nodeIdentity typed `shouldNotBe` nodeIdentity textual
+
+    describe "ECTA-nodes" $ do
+        it "equality constraints constrain" $
+            terms ex1 `shouldSatisfy` ((== 2) . length)
+
+        it "reduces paths constrained by equality constraints" $
+            reducePartially ex2 `shouldBe` reducePartially ex1
+
+        it "accepts requires exact term arity" $ do
+            let n = Node [Edge "f" [constTerms ["a"], constTerms ["b"]]]
+            accepts n (Term.Node "f" [Term.Node "a" [], Term.Node "b" []]) `shouldBe` True
+            accepts n (Term.Node "f" [Term.Node "a" []]) `shouldBe` False
+            accepts n (Term.Node "f" [Term.Node "a" [], Term.Node "b" [], Term.Node "c" []]) `shouldBe` False
+
+        it "accepts only terms that have every path of a class, as enumeration does" $ do
+            let child = Node [Edge "a" [], Edge "f" [constTerms ["a"]]]
+                pairs = Node [mkEdge "p" [child, child] (equalityConstraint $ mkEqConstraints [[path [0, 0], path [1, 0]]])]
+                candidates = terms (dropConstraints pairs)
+            length candidates `shouldBe` 4
+            filter (accepts pairs) candidates `shouldBe` terms pairs
+
+        it "empties an edge whose class names a child that does not exist" $ do
+            let alts = Node [Edge "a" [], Edge "b" []] :: Node Symbol
+                pairsAt second = Node [mkEdge "p" [alts, alts] (equalityConstraint $ mkEqConstraints [[path [0], second]])]
+            forM_ [path [5], path [-1], path [1, -1]] $ \missing -> do
+                pairsAt missing `shouldBe` EmptyNode
+                terms (pairsAt missing) `shouldBe` []
+            length (terms (pairsAt (path [1]))) `shouldBe` 2
+
+    describe "templates" $ do
+        it "restricts a constrained language and lets equality narrow a hole" $ do
+            let values = Node [Edge "a" [], Edge "b" []] :: Node Symbol
+                pairs =
+                    Node
+                        [ mkEdge
+                            "pair"
+                            [values, values]
+                            (equalityConstraint $ mkEqConstraints [[path [0], path [1]]])
+                        ]
+                rightIsA = TemplateNode "pair" [Hole, TemplateNode "a" []]
+            terms (termsMatching rightIsA pairs)
+                `shouldBe` [Term.Node "pair" [Term.Node "a" [], Term.Node "a" []]]
+
+        it "distinguishes exact arity from an explicit prefix" $ do
+            let call = Term.Node "call" [Term.Node "f" [], Term.Node "x" []] :: Term Symbol
+            matchesTemplate (TemplateNode "call" [Hole]) call `shouldBe` False
+            matchesTemplate (TemplatePrefix "call" [TemplateNode "f" []]) call `shouldBe` True
+
+        it "treats <v> as an ordinary symbol" $ do
+            matchesTemplate (TemplateNode "<v>" []) (Term.Node "<v>" [] :: Term Symbol) `shouldBe` True
+            matchesTemplate (TemplateNode "<v>" []) (Term.Node "other" [] :: Term Symbol) `shouldBe` False
+
+        it "uses a typed alphabet without an IsString instance" $ do
+            let zero = Node [Edge Zero []] :: Node ArithmeticSymbol
+                naturals = Node [Edge Zero [], Edge Succ [zero]]
+                successors = termsMatching (TemplateNode Succ [Hole]) naturals
+                materialize = \case
+                    ConcreteSymbol symbol -> symbol
+                    UVarHole _ -> Recursion
+                    TruncatedRecursion -> Recursion
+            termsWith Recursion successors
+                `shouldBe` [Term.Node Succ [Term.Node Zero []]]
+            truncatedTerms successors
+                `shouldBe` [Term.Node (ConcreteSymbol Succ) [Term.Node (ConcreteSymbol Zero) []]]
+            map (fmap materialize) (truncatedTerms successors)
+                `shouldBe` [Term.Node Succ [Term.Node Zero []]]
+
+        it "restricting a finite ECTA agrees with filtering its terms" $
+            property $
+                mapSize (min 3) $ \(template :: Template Symbol) (node :: Node Symbol) ->
+                    HashSet.fromList (terms $ termsMatching template node)
+                        `shouldBe` HashSet.fromList (filter (matchesTemplate template) $ terms node)
+
+    describe "recursive union" $ do
+        it "retains an enclosing reference through a nested binder" $ do
+            let grammar :: Node Symbol
+                grammar = Mu $ \outer ->
+                    Node [Edge "a" [], Edge "wrap" [Mu $ \_ -> union [outer, Node [Edge "b" []]]]]
+                wrap term = Term.Node "wrap" [term]
+                a = Term.Node "a" []
+                b = Term.Node "b" []
+                expected = a : concat [map (!! depth) [iterate wrap a, iterate wrap b] | depth <- [1 .. 4]]
+            Set.fromList (plainTermsAtMost 4 grammar) `shouldBe` Set.fromList expected
+            accepts grammar (wrap a) `shouldBe` True
+            accepts grammar b `shouldBe` False
+            freeVars grammar `shouldBe` Set.empty
+            case toFTA grammar of
+                Left err -> expectationFailure $ show err
+                Right graph -> Set.fromList (plainTermsAtMost 4 $ fromFTA graph) `shouldBe` Set.fromList expected
+
+        it "drops a binder's own reference at the root of its body" $ do
+            let leaf = Node [Edge "a" []] :: Node Symbol
+                step child = Node [Edge "f" [child]]
+            Mu (\r -> union [leaf, step r, r]) `shouldBe` Mu (\r -> union [leaf, step r])
+
+        it "takes the least fixed point through epsilon cycles" $ do
+            let a = Node [Edge "a" []] :: Node Symbol
+                self = Mu $ \r -> union [r, a]
+                nested = Mu $ \outer -> Mu $ \inner -> union [outer, inner, a]
+                empty = Mu (\outer -> Mu $ \inner -> union [outer, inner]) :: Node Symbol
+            completed <-
+                timeout 5000000
+                    $ evaluate
+                    $ plainTermsAtMost 3 self == [Term.Node "a" []]
+                        && plainTermsAtMost 3 nested == [Term.Node "a" []]
+                        && null (plainTermsAtMost 3 empty)
+            completed `shouldBe` Just True
+
+        it "intersects and restricts terms without adding a union constructor" $ do
+            let grammar :: Node Symbol
+                grammar = Mu $ \outer -> Node [Edge "a" [], Edge "wrap" [union [outer, Node [Edge "b" []]]]]
+                onlyA = Mu $ \self -> Node [Edge "a" [], Edge "wrap" [self]]
+                expected = take 5 $ iterate (\term -> Term.Node "wrap" [term]) (Term.Node "a" [])
+            Set.fromList (plainTermsAtMost 4 $ intersect grammar onlyA) `shouldBe` Set.fromList expected
+            Set.fromList (plainTermsAtMost 4 $ restrict (TemplateNode "wrap" [Hole]) grammar)
+                `shouldBe` Set.fromList (filter (matchesTemplate $ TemplateNode "wrap" [Hole]) $ plainTermsAtMost 4 grammar)
+
+    describe "intersection" $ do
+        it "intersection commutes with terms" $
+            property $
+                mapSize (min 3) $ \(n1 :: Node Symbol) (n2 :: Node Symbol) ->
+                    HashSet.fromList (terms $ intersect n1 n2)
+                        `shouldBe` HashSet.intersection
+                            (HashSet.fromList $ terms n1)
+                            (HashSet.fromList $ terms n2)
+
+        it "intersect is associative" $
+            property $
+                \(n1 :: Node Symbol) n2 n3 -> ((n1 `intersect` n2) `intersect` n3) == (n1 `intersect` (n2 `intersect` n3))
+
+        it "intersect is commutative" $
+            property $
+                \(n1 :: Node Symbol) n2 -> intersect n1 n2 == intersect n2 n1
+
+        it "intersect distributes over union" $
+            property $
+                \(n1 :: Node Symbol) n2 n3 -> intersect n1 (union [n2, n3]) == union [n1 `intersect` n2, n1 `intersect` n3]
+
+        it "intersect is idempotent" $
+            property $
+                \(n1 :: Node Symbol) -> intersect n1 n1 == n1
+
+    describe "intersection examples" $ do
+        -- Intersection examples without Mu nodes
+        --
+        -- Note: Intersection between 1 and 3 is not well-defined: must be same-sorted.
+
+        it "remove leaf choice" $
+            intersect intTest1 intTest2 `shouldBe` intTest1
+
+        it "remove non-leaf choice" $
+            intersect intTest3 intTest4 `shouldBe` intTest3
+
+        -- This test is a bit indirect: the intersection results in a term with what I /think/ is an inaccessible branch.
+        -- Not sure if there is a clean-up pass we can do.
+        it "add constraints" $
+            terms (intTest5 `intersect` intTest6) `shouldBe` [Term.Node "g" [Term.Node "a" [], Term.Node "b" []]]
+
+        -- Intersection examples with Mu nodes
+
+        it "intersect (one-step loop) with (its own unfolding: step, one-step)" $
+            intersect intTest7 intTest8 `shouldBe` intTest8
+
+        it "intersect (one-step loop) with (two-step loop)" $
+            intersect intTest7 intTest9 `shouldBe` intTest9
+
+        it "intersect (one-step loop) with (one step, two-step loop)" $
+            intersect intTest7 intTest10 `shouldBe` intTest10
+
+        it "intersect (one step, one-step loop) with (two-step loop)" $
+            intersect intTest8 intTest9 `shouldBe` intTest10
+
+        it "intersect (one step, one-step loop) with (one step, two-step loop)" $
+            intersect intTest8 intTest10 `shouldBe` intTest10
+
+        it "intersect (two-step loop) with (one step, two-step loop)" $
+            intersect intTest9 intTest10 `shouldBe` intTest8
+
+        it "intersect with nested Mus" $ do
+            intersect intTest11 intTest12 `shouldBe` Node [Edge "f" [createMu $ \r -> Node [Edge "f" [r]]]]
+
+    describe "reduction" $ do
+        it "keeps the merge of recursive languages fixed under repeated narrowing" $ do
+            -- Formalization row 22: the merge unfolded its retained recursive
+            -- child union again on each pass, and equality reduction grew.
+            let loop name = Mu (\self -> Node [Edge name [], Edge "f" [self]]) :: Node Symbol
+                source = union (map loop ["a", "b", "c", "d", "e"])
+                merged = mergeAlternatives source
+                classes = mkEqConstraints [[path [0], path [1]]]
+                fixed = fixUnbounded (reduceEqConstraints classes EmptyConstraints) [source, source]
+            result <-
+                timeout 10000000
+                    $ evaluate
+                    $ mergeAlternatives merged == merged
+                        && reduceEqConstraints classes EmptyConstraints fixed == fixed
+            result `shouldBe` Just True
+        it "stops a fixed point after a number of passes" $ do
+            fixWithin 3 (+ (1 :: Int)) 0 `shouldBe` 3
+            fixWithin 10 (min (5 :: Int) . (+ 1)) 0 `shouldBe` 5
+            fixWithin 0 (+ (1 :: Int)) 7 `shouldBe` 7
+        it "stops on the example that needs inherited constraints" $ do
+            -- The example in the comment of 'reducePartially'': without the
+            -- constraints that the parent passes down, 'tau' could expand
+            -- forever between rounds of reduction.
+            let tau = createMu $ \x -> Node [Edge "Pair" [x, x], Edge "a" []]
+                classes = mkEqConstraints [[path [0, 0], path [0, 1], path [1]]]
+                n1 = Node [mkEdge "Pair" [tau, tau] (equalityConstraint classes)]
+                n2 = Node [Edge "Pair" [tau, tau]]
+                n = Node [mkEdge "Pair" [n1, n2] (equalityConstraint classes)] :: Node Symbol
+            terms (reducePartially n) `shouldBe` []
+
+        it "stops on a class over three recursive children" $ do
+            let a = Mu $ \r -> Node [Edge "f" [r], Edge "a" []]
+                b = Mu $ \r -> Node [Edge "f" [r], Edge "b" [], Edge "a" []]
+                c = Mu $ \r -> Node [Edge "f" [Node [Edge "f" [r]]], Edge "a" []]
+                n = Node [mkEdge "w" [a, b, c] (equalityConstraint $ mkEqConstraints [[path [0], path [1], path [2]]])]
+            forM_ [0 .. 4] $ \depth ->
+                shallowTerms depth (fixUnbounded reducePartially n) `shouldBe` shallowTerms depth n
+
+        it "stops on classes over recursive children" $
+            -- 'reducePartially'' never enters a 'Mu', so only the fixpoint in
+            -- 'reduceEqConstraints' and repeated rounds can run forever. Each
+            -- case must end within two seconds.
+            property $
+                forAll recursiveNode $ \m -> within 2000000 $ ioProperty $ do
+                    onePass <- evaluate (reducePartially m)
+                    rounds <- evaluate (fixUnbounded reducePartially m)
+                    _ <- evaluate (nodeCount onePass + nodeCount rounds)
+                    pure $ shallowTerms 3 onePass == shallowTerms 3 m && shallowTerms 3 rounds == shallowTerms 3 m
+
+        it "reducing child domains preserves constrained terms" $
+            property $
+                mapSize (min 3) $ \(e :: Edge Symbol) ->
+                    let ns = edgeChildren e
+                        ecs = edgeConstraint e
+                        ns' = reduceEqConstraints (equalities ecs) EmptyConstraints ns
+                        reduced = mkEdge (edgeSymbol e) ns' ecs
+                     in HashSet.fromList (terms $ Node [reduced])
+                            `shouldBe` HashSet.fromList (terms $ Node [e])
+
+        it "reducing intersected child domains preserves constrained terms" $
+            let intersectingEdge :: Gen (Edge Symbol)
+                intersectingEdge =
+                    resize 3 arbitrary `suchThatMap` uncurry intersectEdge
+             in forAll intersectingEdge $ \e' ->
+                    let ns = edgeChildren e'
+                        ecs = edgeConstraint e'
+                        ns' = reduceEqConstraints (equalities ecs) EmptyConstraints ns
+                        reduced = mkEdge (edgeSymbol e') ns' ecs
+                     in HashSet.fromList (terms $ Node [reduced])
+                            `shouldBe` HashSet.fromList (terms $ Node [e'])
+
+        it "reduction ends and keeps the terms when constraints reach into a recursive node" $ do
+            let equalChildren = mkEqConstraints [[path [0, 0], path [1, 0]]]
+                -- x = g(y, y) with 0.0 = 1.0, where y = b | h(x, y)
+                outer :: Node Symbol
+                outer = Mu $ \x ->
+                    let inner = Mu $ \y -> Node [Edge "b" [], Edge "h" [x, y]]
+                     in Node [mkEdge "g" [inner, inner] (equalityConstraint equalChildren)]
+                -- The same, with a constrained alternative inside y too.
+                nested :: Node Symbol
+                nested = Mu $ \x ->
+                    let inner = Mu $ \y -> Node [Edge "b" [], mkEdge "h" [x, y] (equalityConstraint equalChildren), Edge "h" [x, y]]
+                     in Node [mkEdge "g" [inner, inner] (equalityConstraint equalChildren)]
+                reduceFully = fixUnbounded (withoutRedundantEdges . reducePartially)
+                termsTo depth n = HashSet.fromList (terms (boundDepth depth n))
+            forM_ [outer, nested, unfoldOuterRec outer, unfoldOuterRec nested] $ \n ->
+                forM_ [0 .. 4] $ \depth -> do
+                    termsTo depth (fixUnbounded reducePartially n) `shouldBe` termsTo depth n
+                    termsTo depth (reduceFully n) `shouldBe` termsTo depth n
+
+        it "iterated reduction of a constraint reaches a fixpoint: buggy input 6/27/21" $ do
+            -- One pass is not idempotent on this input.
+            let (ecs, ns) = bug062721NonIdempotentEqConstraintReduction
+                ns' = fixUnbounded (reduceEqConstraints ecs EmptyConstraints) ns
+            ns' `shouldBe` reduceEqConstraints ecs EmptyConstraints ns'
+
+        -- One pass does not establish this. The fixpoint of the passes does.
+        it "saturated reduction means, for everything at a path, there is something matching at the other paths" $
+            let liveConstrainedEdge :: Gen (Edge Symbol)
+                liveConstrainedEdge =
+                    arbitrary `suchThatMap` \edge ->
+                        let reduced = fixUnbounded (reduceEdgeIntersection EmptyConstraints) edge
+                         in if reduced /= emptyEdge (edgeSymbol reduced) && edgeConstraint reduced /= noConstraint
+                                then Just reduced
+                                else Nothing
+             in forAll liveConstrainedEdge $ \edge ->
+                    let ns = edgeChildren edge
+                     in and
+                            [ intersect n1 n2 /= EmptyNode
+                            | ec <- unsafeGetEclasses (equalities $ edgeConstraint edge)
+                            , p1 <- Set.toList $ unPathEClass ec
+                            , p2 <- Set.toList $ unPathEClass ec
+                            , let n2 = getPath p2 ns
+                            , n1 <- getAllAtPath p1 ns
+                            ]
+
+    describe "(un)folding" $ do
+        it "unfolding a mu node once unfolds it once" $
+            unfoldOuterRec infiniteFNode `shouldBe` (Node [Edge "f" [infiniteFNode]])
+
+        it "recursive terms are unrolled to the depth of the constraints and no more" $
+            let ecs = (mkEqConstraints [[path [0, 0, 0, 0], path [1, 0, 0]]])
+                ns = [infiniteFNode, infiniteFNode]
+                ns' = reduceEqConstraints ecs EmptyConstraints ns
+                ns'' = reduceEqConstraints ecs EmptyConstraints ns'
+                f n = Node [Edge "f" [n]]
+             in (ns' == ns'') && ns' == [f $ f $ f $ f infiniteFNode, f $ f $ f infiniteFNode] `shouldBe` True
+
+        it "reduction stops on a domain with an epsilon reference to its binder" $ do
+            let leaf = Node [Edge "a" []] :: Node Symbol
+                step child = Node [Edge "f" [child]]
+                withEpsilon = Mu $ \r -> union [leaf, step r, r]
+                withoutEpsilon = Mu $ \r -> union [leaf, step r]
+                children = [withEpsilon, withoutEpsilon, withEpsilon]
+                direct = [path [0], path [1], path [2]]
+                below = [path [0, 0], path [1, 0], path [2, 0]]
+            forM_ [(children, direct), (map step children, direct), (children, below), (map step children, below)] $ \(domains, paths) -> do
+                let original = Node [mkEdge "triple" domains (equalityConstraint $ mkEqConstraints [paths])]
+                result <- timeout 2000000 $ do
+                    let reduced = fixUnbounded reducePartially original
+                    _ <- evaluate (nodeCount reduced)
+                    pure reduced
+                case result of
+                    Nothing -> expectationFailure "recursive equality narrowing did not finish"
+                    Just reduced ->
+                        forM_ [0 .. 4] $ \depth ->
+                            shallowTerms depth reduced `shouldBe` shallowTerms depth original
+
+        it "refold folds the simplest unrolled input" $
+            refold (Node [Edge "f" [infiniteFNode]]) `shouldBe` infiniteFNode
+
+    describe "traversals" $ do
+        it "mapNodes calls its function once for each node, by count" $
+            -- Note: If the Arbitrary Node instance is changed to return empty or mu nodes, this will need to change
+            property $ \(n :: Node Symbol) -> unsafePerformIO $ do
+                v <- newIORef 0
+                let n' = mapNodes (\m -> unsafePerformIO (modifyIORef v (+ 1) >> pure m)) n
+                let k = nodeCount n'
+                numInvocations <- k `seq` readIORef v
+                return $ k == numInvocations
+
+        it "nodeCount works on a trivial recursive node" $
+            nodeCount infiniteFNode `shouldBe` 1
+
+    describe "enumeration" $ do
+        it "reduction preserves enumeration on nodes without mu" $
+            property $
+                mapSize (min 3) $
+                    \(n :: Node Symbol) -> HashSet.fromList (terms n) `shouldBe` HashSet.fromList (terms $ reducePartially n)
+
+    describe "degenerate inputs" $ do
+        it "a non-positive unfold bound terminates" $ do
+            terms (unfoldBounded 0 intTest7) `shouldBe` []
+            terms (unfoldBounded (-1) intTest7) `shouldBe` []
+            terms (unfoldBounded (-100) intTest7) `shouldBe` []
+
+    describe "enumerating recursive automata" $ do
+        -- A root Mu is never expanded. Check that terms does not report the
+        -- empty language and that truncatedTerms does not raise.
+        it "a bare Mu truncates instead of reporting an empty language" $ do
+            terms intTest7 `shouldBe` [Term.Node "Mu" []]
+            truncatedTerms intTest7
+                `shouldBe` [Term.Node TruncatedRecursion []]
+
+        it "stops where a constrained Mu gives its own constraints again" $ do
+            let classes = mkEqConstraints [[path [0], path [1]], [path [0, 0], path [1, 0]]]
+                repeating = Mu (\self -> Node [Edge "a" [], mkEdge "p" [self, self] (equalityConstraint classes)]) :: Node Symbol
+                automaton = Node [mkEdge "p" [repeating, repeating] (equalityConstraint classes)]
+                truncated = Term.Node "p" [Term.Node "Mu" [], Term.Node "Mu" []]
+            listed <- timeout 10000000 $ evaluate $ terms automaton
+            fmap (take 2) listed `shouldBe` Just [Term.Node "p" [truncated, truncated]]
+
+        it "a Mu under an edge truncates the same way" $
+            terms (Node [Edge "wrap" [intTest7]])
+                `shouldBe` [Term.Node "wrap" [Term.Node "Mu" []]]
+
+        it "unfolding first enumerates past the recursion" $
+            terms (unfoldBounded 2 intTest7)
+                `shouldMatchList` [Term.Node "a" [], Term.Node "f" [Term.Node "a" []]]
+
+        it "a recursion with no base case unfolds to nothing" $
+            terms (unfoldBounded 2 infiniteFNode) `shouldBe` []
+
+    describe "dropping constraints" $ do
+        it "an edge keeps its symbol and children" $ do
+            let dropped = dropEdgeConstraints constrainedPair
+            edgeSymbol dropped `shouldBe` edgeSymbol constrainedPair
+            edgeChildren dropped `shouldBe` edgeChildren constrainedPair
+            edgeConstraint dropped `shouldBe` noConstraint
+
+        it "the language grows to every combination of children" $ do
+            let constrained = Node [constrainedPair]
+            length (terms constrained) `shouldBe` 2
+            length (terms $ dropConstraints constrained) `shouldBe` 4
+
+        it "the original language is retained" $ do
+            let constrained = Node [constrainedPair]
+                relaxed = HashSet.fromList $ terms $ dropConstraints constrained
+            terms constrained `shouldSatisfy` all (`HashSet.member` relaxed)
+
+    describe "pruning" $ do
+        it "an oracle that never prunes enumerates the whole language" $
+            HashSet.fromList (termsPrune () keepEverything searchNode)
+                `shouldBe` HashSet.fromList (terms searchNode)
+
+        it "rejecting the node before expansion drops the whole branch" $
+            termsPrune () rejectEveryNode searchNode `shouldBe` []
+
+        it "rejecting a produced fragment drops only that branch" $ do
+            let oracle state _ (Left frag) = do
+                    partial <- expandPartialTermFrag frag
+                    return (partial == partialTerm (applied "f" "x"), state)
+                oracle state _ (Right _) = return (False, state)
+            HashSet.fromList (termsPrune () oracle searchNode)
+                `shouldBe` HashSet.fromList
+                    [applied "f" "y", applied "g" "x", applied "g" "y"]
+
+        -- The pattern the pruning docs prescribe. The library holds no
+        -- pending-check state, so the oracle parks a check under the hole's
+        -- representative and settles it when that hole is expanded.
+        it "an oracle can suspend a check on a hole and settle it later" $ do
+            let forbidden = partialTerm $ Term.Node "f" [Term.Node "T" []]
+
+                oracle parkedChecks uv (Left frag) = do
+                    rep <- uvarToInt <$> getUVarRepresentative uv
+                    partial <- expandPartialTermFrag frag
+                    case IntMap.lookup rep parkedChecks of
+                        -- Settling a parked check: this hole is now concrete.
+                        Just parked ->
+                            return
+                                ( partial `elem` parked
+                                , IntMap.delete rep parkedChecks
+                                )
+                        Nothing -> do
+                            holes <- mapM (fmap uvarToInt . getUVarRepresentative) (holesOf frag)
+                            return
+                                ( False
+                                , foldr (\hole -> IntMap.insertWith (<>) hole [forbidden]) parkedChecks holes
+                                )
+                oracle parkedChecks _ (Right _) = return (False, parkedChecks)
+
+                shared symbol = Term.Node "filter" [wrapped symbol, wrapped symbol]
+                wrapped symbol = Term.Node symbol [Term.Node "T" []]
+            termsPrune IntMap.empty oracle sharedFilterNode `shouldBe` [shared "g"]
+
+        it "an expansion order steers which hole is expanded first" $ do
+            -- Rejects a branch whose first hole to become concrete is "x"-rooted.
+            let oracle seen _ (Left frag) = do
+                    partial <- expandPartialTermFrag frag
+                    case (seen, partial) of
+                        (Nothing, Term.Node (ConcreteSymbol symbol) _)
+                            | symbol `elem` holeSymbols ->
+                                return (symbol == "x", Just symbol)
+                        _ -> return (False, seen)
+                oracle seen _ (Right _) = return (False, seen)
+                holeSymbols = ["f", "g", "x", "y"] :: [Symbol]
+                preferLast _ candidates = case reverse candidates of
+                    uv : _ -> Just uv
+                    [] -> Nothing
+            -- The enumerator reaches the left hole first, which is never "x".
+            length (termsPruneWith "Mu" Nothing noExpansionPreference oracle twoHoleNode)
+                `shouldBe` 4
+            -- Steering to the last candidate reaches the right hole first.
+            length (termsPruneWith "Mu" Nothing preferLast oracle twoHoleNode)
+                `shouldBe` 2
+
+        it "an oracle with monotone rejections gives the same terms in the default order and in the reversed order" $ do
+            -- Rejects every fragment that holds an "x". A fragment only grows,
+            -- so no extension of a rejected fragment is accepted.
+            let oracle _ _ (Left frag) = do
+                    partial <- expandPartialTermFrag frag
+                    return (holdsX partial, ())
+                oracle _ _ (Right _) = return (False, ())
+                holdsX (Term.Node (ConcreteSymbol symbol) children) = symbol == "x" || any holdsX children
+                holdsX (Term.Node _ children) = any holdsX children
+                preferLast _ candidates = case reverse candidates of
+                    uv : _ -> Just uv
+                    [] -> Nothing
+                expected = filter (notElem "x" . Term.flatten) (terms twoHoleNode)
+            termsPruneWith "Mu" () noExpansionPreference oracle twoHoleNode `shouldMatchList` expected
+            termsPruneWith "Mu" () preferLast oracle twoHoleNode `shouldMatchList` expected
+
+        it "a preference outside the candidates is ignored" $ do
+            let preferAbsent _ _ = Just (intToUVar 9999)
+            termsPruneWith "Mu" () preferAbsent keepEverything twoHoleNode
+                `shouldBe` terms twoHoleNode
+
+    describe "counted nested Mu" $ do
+        it "no Mu" $
+            numNestedMu (Node [Edge "a" []] :: Node Symbol) `shouldBe` 0
+        it "single Mu" $
+            numNestedMu (Mu (\x -> Node [Edge "f" [x]]) :: Node Symbol) `shouldBe` 1
+        it "two parallel Mus" $
+            numNestedMu
+                (Node [Edge "h" [Mu $ \x -> Node [Edge "g" [x]], Mu $ \x -> Node [Edge "h" [x]]]] :: Node Symbol)
+                `shouldBe` 1
+        it "nested" $
+            numNestedMu (Mu (\x -> Node [Edge "f" [x], Edge "g" [Mu $ \y -> Node [Edge "g" [y]]]]) :: Node Symbol)
+                `shouldBe` 2
+
+    describe "redundant Mu" $ do
+        it "redundant inner Mu is skipped even when its shape is already interned" $ do
+            _ <- evaluate infiniteFNode
+            let actual = Mu (\r1 -> Mu $ \_r2 -> Node [Edge "f" [r1]]) :: Node Symbol
+                expected = Mu (\r1 -> Node [Edge "f" [r1]]) :: Node Symbol
+            actual `shouldBe` expected
+
+        it "redundant outer Mu is skipped" $
+            (Mu (\_r1 -> Mu $ \r2 -> Node [Edge "f" [r2]]) :: Node Symbol)
+                `shouldBe` Mu (\r1 -> Node [Edge "f" [r1]])
+
+        it "two redundant Mus are both skipped" $
+            (Mu (\_r1 -> Mu $ \_r2 -> Node [Edge "f" []]) :: Node Symbol)
+                `shouldBe` Node [Edge "f" []]
+
+        it "a used outer Mu is kept" $
+            numNestedMu (Mu (\r1 -> Mu $ \_r2 -> Node [Edge "f" [r1]]) :: Node Symbol) `shouldBe` 1
+
+        it "a used inner Mu is kept, and is not the same as reusing the outer one" $ do
+            let nested = Mu (\r1 -> Mu $ \r2 -> Node [Edge "f" [r1], Edge "g" [r2]]) :: Node Symbol
+                shared = Mu (\r1 -> Node [Edge "f" [r1], Edge "g" [r1]]) :: Node Symbol
+            numNestedMu nested `shouldBe` 2
+            nested `shouldNotBe` shared
+
+        it "a Mu whose body is only a variable is empty, at any nesting depth" $ do
+            -- The language of a Mu is the least fixpoint of its body, so
+            -- Mu (\r -> r) has no terms. Nested binders are built from the
+            -- inside out, and an unused binder gives its body, so a chain of
+            -- binders that ends in a variable reduces to that case.
+            let empty =
+                    [ Mu id -- Mu (\r -> r)
+                    , Mu (Mu . const) -- Mu (\r -> Mu (\_ -> r))
+                    , Mu (const (Mu id)) -- Mu (\_ -> Mu (\s -> s))
+                    , Mu (Mu . const . Mu . const) -- Mu (\r -> Mu (\_ -> Mu (\_ -> r)))
+                    , Mu (const (Mu (Mu . const))) -- Mu (\_ -> Mu (\s -> Mu (\_ -> s)))
+                    , Mu (const (Node [Edge "f" [Mu id]])) -- f of an empty child
+                    ] ::
+                        [Node Symbol]
+            empty `shouldBe` map (const EmptyNode) empty
+            restrict (TemplateNode "f" []) (Mu id :: Node Symbol) `shouldBe` EmptyNode
+            -- A variable under a constructor is guarded, so these keep their binders.
+            (Mu (\r -> Node [Edge "a" [], Edge "f" [Mu (const r)]]) :: Node Symbol)
+                `shouldBe` Mu (\r -> Node [Edge "a" [], Edge "f" [r]])
+            numNestedMu (Mu (\r -> Mu (\s -> Node [Edge "f" [r, s], Edge "a" []])) :: Node Symbol)
+                `shouldBe` 2
+
+        it "keeping a redundant Mu is what createMuDontCleanup is for" $
+            numNestedMu (createMuDontCleanup (\_r -> Node [Edge "f" []]) :: Node Symbol) `shouldBe` 1
+
+        it "bounds retained epsilon binder cycles through their constructor closure" $ do
+            let empty =
+                    [ createMuDontCleanup id
+                    , createMuDontCleanup $ \outer -> createMuDontCleanup $ const outer
+                    ] ::
+                        [Node Symbol]
+                leaf = Node [Edge "a" []] :: Node Symbol
+                productive = Mu $ \outer -> Mu $ \inner -> union [outer, inner, leaf, Node [Edge "f" [outer], Edge "g" [inner]]]
+                expected depth
+                    | depth < 0 = []
+                    | otherwise = Term.Node "a" [] : [Term.Node symbol [child] | symbol <- ["f", "g"], child <- expected (depth - 1)]
+            forM_ [-1 .. 2] $ \depth -> do
+                forM_ empty $ \node -> do
+                    freeVars node `shouldBe` Set.empty
+                    nodeEdges node `shouldBe` []
+                    timeout 2000000 (evaluate $ boundDepth depth node) `shouldReturn` Just EmptyNode
+                terms (boundDepth depth productive) `shouldMatchList` expected depth
+
+    describe "nested Mu" $ do
+        it "completes a closed binder whose body captures the placeholder of an enclosing binder" $ do
+            -- Formalization row 23: the probe of a nested binder aliased a
+            -- reference that the body captured, and construction did not return.
+            let row symbol children = mkNode [mkEdge symbol children noConstraint] :: Node Symbol
+                inner p q r a =
+                    createUnion
+                        [ row
+                            "2"
+                            [ createMu (\_ -> mkNode [mkEdge "0" [r] noConstraint, mkEdge "0" [q] noConstraint, mkEdge "42" [q, p] noConstraint])
+                            , EmptyNode
+                            ]
+                        , row
+                            "1"
+                            [ createMu
+                                ( \e ->
+                                    mkNode
+                                        [ mkEdge "0" [e] noConstraint
+                                        , mkEdge "0" [a] noConstraint
+                                        , mkEdge "0" [r] noConstraint
+                                        , mkEdge "0" [q] noConstraint
+                                        , mkEdge "42" [q, p] noConstraint
+                                        ]
+                                )
+                            ]
+                        ]
+                crossed p q r a c = createUnion [inner p q r a, row "9" [createMuDontCleanup (\_ -> row "11" [c, q, p]), EmptyNode]]
+                ancestor p q r a = createUnion [row "10" [createMuDontCleanup (crossed p q r a), EmptyNode], row "11" [p, q, p]]
+                closed =
+                    createMu $ \p ->
+                        createUnion
+                            [ createMuDontCleanup $ \q -> createMu $ \r -> row "3" [createMuDontCleanup (ancestor p q r), EmptyNode]
+                            , createMuDontCleanup id
+                            ]
+            result <- timeout 10000000 $ evaluate closed
+            fmap (Set.null . freeVars) result `shouldBe` Just True
+        it "references to different Mu nodes are not confused" $ do
+            -- Two nodes with very similar structure
+            -- We are precise about evaluation order here: what we are testing is that after the first term have been
+            -- interned, we do /NOT/ reuse that term when interning the second. (If we /did/ confuse different references
+            -- to 'Mu' nodes, @m@ looks precisely like the inner @Mu@ node of @n@.)
+            n <- evaluate (Mu (\r1 -> Mu $ \r2 -> Node [Edge "f" [r1], Edge "g" [r2], Edge "a" []]) :: Node Symbol)
+            m <- evaluate (Mu (\r -> Node [Edge "f" [r], Edge "g" [r], Edge "a" []]) :: Node Symbol)
+
+            -- This is a low-level test; crush doesn't work, because we don't see what 'InternedMu' caches.
+            let collectAllIds :: Node Symbol -> Set NodeId
+                collectAllIds EmptyNode = Set.empty
+                collectAllIds (InternedNode node) =
+                    Set.unions
+                        [ Set.singleton (internedNodeId node)
+                        , Set.unions $ concatMap (map collectAllIds . edgeChildren) (internedNodeEdges node)
+                        ]
+                collectAllIds (InternedMu mu) =
+                    Set.unions
+                        [ Set.singleton (internedMuId mu)
+                        , Set.union (collectAllIds (internedMuBody mu)) (collectAllIds (internedMuShape mu))
+                        ]
+                collectAllIds (Rec _) = Set.empty
+                collectAllIds (InternedUnion group) =
+                    Set.insert (internedUnionId group) $ Set.unions $ map collectAllIds $ internedUnionMembers group
+
+            Set.intersection (collectAllIds n) (collectAllIds m) `shouldBe` Set.empty
+
+-------------------------------------
+--- Example inputs for the intersection tests
+-------------------------------------
+
+-- | Single zero-argument term
+intTest1 :: Node Symbol
+intTest1 = Node [Edge "f" []]
+
+-- | Two zero-argument terms
+intTest2 :: Node Symbol
+intTest2 = Node [Edge "f" [], Edge "g" []]
+
+-- | Single one-argument term, two possible arguments
+intTest3 :: Node Symbol
+intTest3 = Node [Edge "f" [Node [Edge "a" [], Edge "b" []]]]
+
+-- | Two one-argument terms, each two possible arguments (chosen from the same set)
+intTest4 :: Node Symbol
+intTest4 = Node [Edge "f" args, Edge "g" args]
+  where
+    args :: [Node Symbol]
+    args = [arg]
+
+    arg :: Node Symbol
+    arg = Node [Edge "a" [], Edge "b" []]
+
+-- | Two two-argument terms, no choice for arguments
+intTest5 :: Node Symbol
+intTest5 = Node [Edge "f" args, Edge "g" args]
+  where
+    args :: [Node Symbol]
+    args = [argA, argB]
+
+    argA, argB :: Node Symbol
+    argA = Node [Edge "a" []]
+    argB = Node [Edge "b" []]
+
+-- | Two two-argument terms, same choice for arguments, but constrain the two arguments to be the same if choosing f
+intTest6 :: Node Symbol
+intTest6 = Node [mkEdge "f" args (equalityConstraint cs), Edge "g" args]
+  where
+    args :: [Node Symbol]
+    args = [arg, arg]
+
+    arg :: Node Symbol
+    arg = Node [Edge "a" [], Edge "b" []]
+
+    cs :: EqConstraints
+    cs = mkEqConstraints [[path [0], path [1]]]
+
+-- | f (f (f (... a)))
+intTest7 :: Node Symbol
+intTest7 = createMu $ \r -> Node [Edge "f" [r], Edge "a" []]
+
+{- | A pair whose two children are forced equal.
+
+Dropping that constraint admits every combination of them instead.
+-}
+constrainedPair :: Edge Symbol
+constrainedPair =
+    mkEdge
+        "pair"
+        [constTerms ["1", "2"], constTerms ["1", "2"]]
+        (equalityConstraint $ mkEqConstraints [[path [0], path [1]]])
+
+{- | A node in the term-search encoding the pruning matcher reads.
+
+An @app@ edge carries two leading type children followed by the function and
+argument positions, and each term symbol carries its type.
+-}
+searchNode :: Node Symbol
+searchNode = Node [Edge "app" [anyType, anyType, functions, arguments]]
+  where
+    functions = Node [Edge "f" [anyType], Edge "g" [anyType]]
+    arguments = Node [Edge "x" [anyType], Edge "y" [anyType]]
+
+anyType :: Node Symbol
+anyType = Node [Edge "T" []]
+
+-- | One accepted term of 'searchNode'.
+applied :: Symbol -> Symbol -> Term Symbol
+applied functionSymbol argumentSymbol =
+    Term.Node
+        "app"
+        [ Term.Node "T" []
+        , Term.Node "T" []
+        , Term.Node functionSymbol [Term.Node "T" []]
+        , Term.Node argumentSymbol [Term.Node "T" []]
+        ]
+
+-- | Lift a concrete term into the alphabet used by partial enumeration.
+partialTerm :: Term symbol -> Term (PartialSymbol symbol)
+partialTerm = fmap ConcreteSymbol
+
+{- | A node with two independent holes, one per equality class.
+
+Both are expandable at once after the root, so the order they are taken in is
+observable.
+-}
+twoHoleNode :: Node Symbol
+twoHoleNode =
+    Node
+        [ mkEdge
+            "pair"
+            [leftTerms, leftTerms, rightTerms, rightTerms]
+            (equalityConstraint $ mkEqConstraints [[path [0], path [1]], [path [2], path [3]]])
+        ]
+  where
+    leftTerms = Node [Edge "f" [anyType], Edge "g" [anyType]]
+    rightTerms = Node [Edge "x" [anyType], Edge "y" [anyType]]
+
+{- | A @filter@ node whose two children are one shared hole.
+
+Enumerating it produces a fragment holding an unexpanded UVar, which is the
+shape an oracle has to suspend on.
+-}
+sharedFilterNode :: Node Symbol
+sharedFilterNode =
+    Node
+        [ mkEdge
+            "filter"
+            [alternatives, alternatives]
+            (equalityConstraint $ mkEqConstraints [[path [0], path [1]]])
+        ]
+  where
+    alternatives = Node [Edge "f" [anyType], Edge "g" [anyType]]
+
+-- | The holes of a fragment.
+holesOf :: TermFragment Symbol -> [UVar]
+holesOf (TermFragmentNode _ children) = concatMap holesOf children
+holesOf (TermFragmentUVar uv) = [uv]
+
+-- | An oracle that keeps every branch.
+keepEverything ::
+    () -> UVar -> Either (TermFragment Symbol) (Node Symbol) -> EnumerateM Symbol (Bool, ())
+keepEverything state _ _ = return (False, state)
+
+-- | An oracle that rejects every node before it is expanded.
+rejectEveryNode ::
+    () -> UVar -> Either (TermFragment Symbol) (Node Symbol) -> EnumerateM Symbol (Bool, ())
+rejectEveryNode state _ (Right _) = return (True, state)
+rejectEveryNode state _ (Left _) = return (False, state)
+
+-- | intTest7, once unrolled
+intTest8 :: Node Symbol
+intTest8 = unfoldOuterRec intTest7
+
+-- | Like intTest7, but with an 'inner' unrolling: two f edges before recursing
+intTest9 :: Node Symbol
+intTest9 = createMu $ \r -> Node [Edge "f" [Node [Edge "f" [r], Edge "a" []]], Edge "a" []]
+
+-- | Like intTest9, but with a single additional node on top (not an unrolling: this would result in /two/ additional nodes)
+intTest10 :: Node Symbol
+intTest10 = Node [Edge "f" [intTest9], Edge "a" []]
+
+-- | Example with nested Mu: refer to outer Mu
+intTest11 :: Node Symbol
+intTest11 = createMuDontCleanup $ \r -> createMuDontCleanup $ \_r' -> Node [Edge "f" [r]]
+
+{- | Example with nested Mu: refer to inner Mu
+
+Both examples hold one redundant binder, which 'createMu' would drop, so they are built with
+'createMuDontCleanup' to keep the nesting these cases are about.
+-}
+intTest12 :: Node Symbol
+intTest12 = createMuDontCleanup $ \_r -> createMuDontCleanup $ \r' -> Node [Edge "f" [r']]

@@ -1,0 +1,915 @@
+{-# LANGUAGE DerivingStrategies #-}
+
+-- | Interned nodes and edges with a constraint parameter.
+module Data.CFTA.Interned.Type (
+    NodeId (..),
+    EdgeId (..),
+    MuDepth (..),
+    RecNodeId (..),
+    Edge (.., Edge),
+    UninternedEdge (..),
+    mkEdge,
+    mkNode,
+    emptyEdge,
+    edgeChildren,
+    edgeConstraint,
+    edgeSymbol,
+    setChildren,
+    Node (.., Node, Mu),
+    InternedNode (..),
+    InternedMu (..),
+    InternedUnion (..),
+    UninternedNode (..),
+    IntersectId,
+    pattern IntersectId,
+    nodeIdentity,
+    nodeMemoKey,
+    numNestedMu,
+    substFree,
+    freeVars,
+    modifyNode,
+    createMu,
+    createMuDontCleanup,
+    createUnion,
+    recursiveBoundary,
+) where
+
+import Data.Foldable (toList)
+import Data.Function (on)
+import Data.Hashable (Hashable (..))
+import Data.List (nub)
+import Data.Map.Strict (Map)
+import qualified Data.Map.Strict as Map
+import Data.Maybe (fromMaybe)
+import Data.Sequence (Seq (..))
+import Data.Set (Set)
+import qualified Data.Set as Set
+import Type.Reflection (Typeable)
+
+import System.IO.Unsafe (unsafePerformIO)
+
+import Data.CFTA.Interned.Cache
+
+import Data.CFTA.Constraint (
+    Constraint (..),
+    contradictory,
+    equalities,
+    noConstraint,
+ )
+import Data.CFTA.Equality.Constraint (fitsArity)
+import Data.CFTA.Index (Arity (..))
+import Data.CFTA.Interned.Memo
+
+{- | The identity of an interned node.
+
+The interning cache gives each new node a fresh identity. Identities are
+unique, but they are not dense. A recursive node and an ordinary node draw
+identities from one counter.
+-}
+newtype NodeId = NodeId Int
+    deriving newtype (Eq, Ord, Show, Hashable)
+
+{- | The number of nested 'Mu' nodes in a term.
+
+A term without 'Mu' has 'MuDepth' 0. This is not the 'Data.CFTA.Index.Depth'
+of a term.
+-}
+newtype MuDepth = MuDepth Int
+    deriving newtype (Eq, Ord, Show, Hashable, Num)
+
+-- | Internal identifier for references to recursive Interned automaton nodes.
+data RecNodeId
+    = -- | Reference to the 'NodeId' of an interned 'Mu' node
+      RecInt !NodeId
+    | {- | Reference to an as-yet uninterned 'Mu' node, for which the 'NodeId' is not yet known
+
+      The 'MuDepth' argument is used to distinguish between multiple nested 'Mu' nodes.
+
+      NOTE: This is intentionally not a 'NodeId': it does not refer to the 'NodeId' of any interned node.
+      -}
+      RecUnint MuDepth
+    | {- | Placeholder variable for depth calculations
+
+      'createMu' first applies the body to 'RecDepth'. Its depth and free
+      ordinary references select a fresh 'RecUnint' placeholder. The 'Mu'
+      node also keeps the body at 'RecDepth' as 'internedMuDepthShape', which
+      is part of its interning key: it tells a
+      binder that uses its variable from a redundant nested binder.
+      -}
+      RecDepth
+    | {- | Refer to a 'Mu' node that @intersect@ is about to construct
+
+      Only intersection uses this constructor. Parameterizing @Node@ over the
+      type of reference it carries would move it into a type that intersection
+      owns. A prototype of that change cost 10% to 14% more instructions where
+      sampling unfolds 'Mu' nodes on each draw, and 4% to 5% on the core
+      micro-benchmarks. It also broke the @Node (..)@ import form, because a
+      type synonym cannot bundle pattern synonyms. So the change was not made.
+      'RecUnint' and 'RecDepth' would stay in any case: every interned 'Mu'
+      stores terms that contain them ('internedMuShape' and
+      'internedMuDepthShape').
+      -}
+      RecIntersect IntersectId
+    | {- | Refer to a state that @fromFTA@ is about to bind, by the position of
+      the state in the automaton.
+
+      Only @fromFTA@ uses this constructor. It builds the body of a binder once
+      with this reference, and then substitutes the binder for it. So
+      'createMu' applies a substitution to the body, and does not build the
+      body again for each argument.
+      -}
+      RecState !Int
+    deriving (Eq, Ord, Show)
+
+{- | Pair of node identities naming the recursive node introduced by @intersect@.
+
+This is a context-free way to name a 'Mu' node before its 'NodeId' exists. It
+generalizes "refer to the immediately enclosing binder": all we need is /some/
+concrete way to name that node without a 'NodeId'. Intersection introduces a 'Mu'
+whenever it meets a 'Mu' on either side, and does not introduce a second one
+for the same intersection problem in the same scope, so the 'NodeId's of the two
+operands identify the node to be constructed uniquely. Seeing a call to
+intersect again with those same two operands, whatever kind of nodes they are,
+can therefore refer back to it.
+
+Intersection introduces a 'Mu' in three cases ('Mu' on both sides, on the left
+only, or on the right only), but the distinction does not matter here: the two
+operand 'NodeId's are the whole name.
+
+Because free variables are cached in a term, checking whether the 'Mu' node is
+needed at all is cheap. So if the input graphs never refer past a 'Mu', the
+output does not either: no redundant 'Mu' nodes are introduced.
+-}
+data IntersectId
+    = -- Invariant: the two 'NodeId's should be ordered (guaranteed by the pattern synonym constructor)
+      UnsafeIntersectId !NodeId !NodeId
+    deriving (Eq, Ord, Show)
+
+-- | Smart pattern that stores the two ids in canonical order.
+pattern IntersectId :: NodeId -> NodeId -> IntersectId
+pattern IntersectId i j <- (UnsafeIntersectId i j)
+  where
+    IntersectId i j
+        | i <= j = UnsafeIntersectId i j
+        | otherwise = UnsafeIntersectId j i
+
+instance Hashable RecNodeId where
+    hashWithSalt salt (RecInt nodeId) =
+        salt `hashWithSalt` (0 :: Int) `hashWithSalt` nodeId
+    hashWithSalt salt (RecUnint nodeId) =
+        salt `hashWithSalt` (1 :: Int) `hashWithSalt` nodeId
+    hashWithSalt salt RecDepth =
+        salt `hashWithSalt` (2 :: Int)
+    hashWithSalt salt (RecIntersect intersectionId) =
+        salt `hashWithSalt` (3 :: Int) `hashWithSalt` intersectionId
+    hashWithSalt salt (RecState position) =
+        salt `hashWithSalt` (4 :: Int) `hashWithSalt` position
+
+instance Hashable IntersectId where
+    hashWithSalt salt (UnsafeIntersectId left right) =
+        salt `hashWithSalt` left `hashWithSalt` right
+
+-- Edges
+
+{- | The identity of an interned edge.
+
+The interning cache gives each new edge a fresh identity. Identities are
+unique, but they are not dense. A node orders its edges by identity.
+-}
+newtype EdgeId = EdgeId Int
+    deriving newtype (Eq, Ord, Hashable)
+
+-- | One outgoing transition of an interned automaton node.
+data Edge symbol = InternedEdge
+    { edgeId :: !EdgeId
+    , uninternedEdge :: !(UninternedEdge symbol)
+    }
+
+instance (Show symbol) => Show (Edge symbol) where
+    show e
+        | edgeConstraint e == noConstraint = "(Edge " ++ show (edgeSymbol e) ++ " " ++ show (edgeChildren e) ++ ")"
+        | otherwise = "(mkEdge " ++ show (edgeSymbol e) ++ " " ++ show (edgeChildren e) ++ " " ++ show (edgeConstraint e) ++ ")"
+
+-- | Symbol at the root of terms accepted through this edge.
+{-# INLINEABLE edgeSymbol #-}
+edgeSymbol :: Edge symbol -> symbol
+edgeSymbol = uEdgeSymbol . uninternedEdge
+
+-- | Child automata for this edge.
+{-# INLINEABLE edgeChildren #-}
+edgeChildren :: Edge symbol -> [Node symbol]
+edgeChildren = uEdgeChildren . uninternedEdge
+
+-- | The constraint attached to this transition.
+{-# INLINEABLE edgeConstraint #-}
+edgeConstraint :: Edge symbol -> Constraint
+edgeConstraint = uEdgeConstraint . uninternedEdge
+
+instance Eq (Edge symbol) where
+    (InternedEdge{edgeId = n1}) == (InternedEdge{edgeId = n2}) = n1 == n2
+
+instance Ord (Edge symbol) where
+    compare = compare `on` edgeId
+
+instance Hashable (Edge symbol) where
+    hashWithSalt s e = s `hashWithSalt` (edgeId e)
+
+-- Nodes
+
+-- The function given to 'Mu' must be parametric in its variable. Nothing checks
+-- this, and nothing can check it for every function: the argument is a 'Node',
+-- which the function can compare or match. A function that is not parametric
+-- gives a shape that differs from its body, and then 'createMu' can return
+-- another 'Mu' with the same interning key. The operations of this package are
+-- parametric. A function given to 'mapNodes' is parametric only if it returns a
+-- 'Rec' node unchanged.
+
+-- | Interned recursive node payload.
+data InternedMu symbol = MkInternedMu
+    { internedMuId :: {-# UNPACK #-} !NodeId
+    -- ^ 'NodeId' of the node itself
+    , internedMuBody :: !(Node symbol)
+    {- ^ The body of the 'Mu'
+
+    Recursive occurrences of this node are
+
+    > Rec (RecInt internedMuId)
+    -}
+    , internedMuShape :: !(Node symbol)
+    {- ^ The body of the 'Mu', before it was assigned a 'NodeId'
+
+    Invariant, when the function given to 'Mu' is parametric in its variable:
+
+    >    substFree (RecInt internedMuId) (Rec (muPlaceholder internedMuDepthShape)) internedMuBody
+    > == internedMuShape
+    -}
+    , internedMuDepthShape :: !(Node symbol)
+    {- ^ The body applied to 'RecDepth'.
+
+    This distinguishes a binder that uses its argument from a nested,
+    redundant binder whose captured outer reference happens to equal the
+    ordinary shape placeholder.
+    -}
+    }
+
+-- | Interned non-recursive node payload.
+data InternedNode symbol = MkInternedNode
+    { internedNodeId :: {-# UNPACK #-} !NodeId
+    -- ^ The 'NodeId' of the node itself
+    , internedNodeEdges :: ![Edge symbol]
+    -- ^ All outgoing edges
+    , internedNodeNumNestedMu :: !MuDepth
+    -- ^ Maximum Mu nesting depth in the term
+    , internedNodeFree :: !(Set RecNodeId)
+    -- ^ Free variables in the term
+    }
+
+-- | A disjunction that retains unresolved recursive operands.
+data InternedUnion symbol = MkInternedUnion
+    { internedUnionId :: !NodeId
+    , internedUnionMembers :: ![Node symbol]
+    , internedUnionNumNestedMu :: !MuDepth
+    , internedUnionFree :: !(Set RecNodeId)
+    }
+
+-- | Interned automaton node.
+data Node symbol
+    = -- | Interned node with one or more outgoing alternatives.
+      InternedNode {-# UNPACK #-} !(InternedNode symbol)
+    | -- | Empty language.
+      EmptyNode
+    | -- | Interned recursive node.
+      InternedMu {-# UNPACK #-} !(InternedMu symbol)
+    | -- | Alternatives joined without consuming a term constructor.
+      InternedUnion {-# UNPACK #-} !(InternedUnion symbol)
+    | -- | Recursive reference used inside a 'Mu'.
+      Rec !RecNodeId
+
+instance Eq (Node symbol) where
+    InternedNode l == InternedNode r = internedNodeId l == internedNodeId r
+    InternedMu l == InternedMu r = internedMuId l == internedMuId r
+    InternedUnion l == InternedUnion r = internedUnionId l == internedUnionId r
+    Rec l == Rec r = l == r
+    EmptyNode == EmptyNode = True
+    _ == _ = False
+    {-# INLINE (==) #-}
+
+instance (Show symbol) => Show (Node symbol) where
+    show (InternedNode node) = "(Node " <> show (internedNodeEdges node) <> ")"
+    show EmptyNode = "EmptyNode"
+    show (InternedMu mu) = "(Mu " <> show (internedMuId mu) <> " " <> show (internedMuBody mu) <> ")"
+    show (Rec n) = "(Rec " <> show n <> ")"
+    show (InternedUnion alternatives) = "(Union " <> show (internedUnionMembers alternatives) <> ")"
+
+instance Ord (Node symbol) where
+    compare n1 n2 = compare (tag n1) (tag n2) <> sameKind n1 n2
+      where
+        tag :: Node symbol -> Int
+        tag EmptyNode = 0
+        tag (InternedNode _) = 1
+        tag (InternedMu _) = 2
+        tag (InternedUnion _) = 3
+        tag (Rec _) = 4
+
+        sameKind (InternedNode left) (InternedNode right) = compare (internedNodeId left) (internedNodeId right)
+        sameKind (InternedMu left) (InternedMu right) = compare (internedMuId left) (internedMuId right)
+        sameKind (InternedUnion left) (InternedUnion right) = compare (internedUnionId left) (internedUnionId right)
+        sameKind (Rec left) (Rec right) = compare left right
+        sameKind _ _ = EQ
+
+instance Hashable (Node symbol) where
+    hashWithSalt s EmptyNode = s `hashWithSalt` (-1 :: Int)
+    hashWithSalt s (InternedMu mu) = s `hashWithSalt` (-2 :: Int) `hashWithSalt` i
+      where
+        i = internedMuId mu
+    hashWithSalt s (Rec i) = s `hashWithSalt` (-3 :: Int) `hashWithSalt` i
+    hashWithSalt s (InternedUnion alternatives) = s `hashWithSalt` (-4 :: Int) `hashWithSalt` internedUnionId alternatives
+    hashWithSalt s (InternedNode node) = s `hashWithSalt` i
+      where
+        i = internedNodeId node
+
+{- | Maximum number of nested Mus in the term
+
+@O(1)@ provided that there are no unbounded Mu chains in the term.
+-}
+{-# INLINEABLE numNestedMu #-}
+numNestedMu :: Node symbol -> MuDepth
+numNestedMu EmptyNode = 0
+numNestedMu (InternedNode node) = internedNodeNumNestedMu node
+numNestedMu (InternedMu mu) = 1 + numNestedMu (internedMuBody mu)
+numNestedMu (InternedUnion alternatives) = internedUnionNumNestedMu alternatives
+numNestedMu (Rec _) = 0
+
+{- | Free variables in the term
+
+@O(1)@ in the size of the graph, provided that there are no unbounded Mu chains in the term.
+@O(log n)@ in the number of free variables in the graph, which we expect to be orders of magnitude smaller than the
+size of the graph (indeed, we don't expect more than a handful).
+-}
+{-# INLINEABLE freeVars #-}
+freeVars :: Node symbol -> Set RecNodeId
+freeVars EmptyNode = Set.empty
+freeVars (InternedNode node) = internedNodeFree node
+freeVars (InternedMu mu) = Set.delete (RecInt (internedMuId mu)) (freeVars (internedMuBody mu))
+freeVars (InternedUnion alternatives) = internedUnionFree alternatives
+freeVars (Rec i) = Set.singleton i
+
+-- Getters and setters
+
+-- | Stable interned identity for non-empty, interned nodes.
+{-# INLINEABLE nodeIdentity #-}
+nodeIdentity :: Node symbol -> NodeId
+nodeIdentity (InternedMu mu) = internedMuId mu
+nodeIdentity (InternedNode node) = internedNodeId node
+nodeIdentity (InternedUnion alternatives) = internedUnionId alternatives
+nodeIdentity (Rec (RecInt i)) = i
+nodeIdentity _ = error "nodeIdentity: unexpected empty or unresolved node"
+
+{- | The integer that names a node in a memo key, if the node has one.
+
+Different nodes give different integers. A reference that is not a 'RecInt'
+gives no integer. Such a reference is a placeholder while a node is built.
+-}
+{-# INLINE nodeMemoKey #-}
+nodeMemoKey :: Node symbol -> Maybe Int
+nodeMemoKey EmptyNode = Just (-1)
+nodeMemoKey (InternedNode MkInternedNode{internedNodeId = NodeId i}) = Just (4 * i)
+nodeMemoKey (InternedMu MkInternedMu{internedMuId = NodeId i}) = Just (4 * i + 1)
+nodeMemoKey (InternedUnion MkInternedUnion{internedUnionId = NodeId i}) = Just (4 * i + 2)
+nodeMemoKey (Rec (RecInt (NodeId i))) = Just (4 * i + 3)
+nodeMemoKey (Rec _) = Nothing
+
+{- | Replace an edge's children while preserving its symbol and constraints.
+
+Every interned edge meets the checks of 'mkEdge' for its number of children.
+So with the same number of children, the edge skips those checks.
+-}
+{-# INLINEABLE setChildren #-}
+setChildren ::
+    (Hashable symbol, Typeable symbol) =>
+    Edge symbol -> [Node symbol] -> Edge symbol
+setChildren e ns
+    | length ns == length (edgeChildren e) = internEdge $ UninternedEdge (edgeSymbol e) ns (edgeConstraint e)
+    | otherwise = mkEdge (edgeSymbol e) ns (edgeConstraint e)
+
+-- Interning Nodes
+
+-- | Non-canonical node description used before hash-consing.
+data UninternedNode symbol
+    = UninternedNode ![Edge symbol]
+    | UninternedEmptyNode
+    | UninternedUnion ![Node symbol]
+    | {- | Recursive node, carrying its shape alongside the function.
+
+      The function should be parametric in the 'RecNodeId':
+
+      > substFree i (Rec j) (f i) == f j
+
+      The shape is the body applied to its placeholder, as
+      'createMuDontCleanup' computes it, stored rather than recomputed.
+      Computing it builds nodes, which interns them, so leaving it to 'Eq' or
+      'Hashable' would make hashing an uninterned node re-enter the interning
+      cache. The strict field forces it while the value is still being
+      constructed, which is before 'intern' looks at anything.
+
+      The first node is the body applied to 'RecDepth'; the second is its
+      ordinary shape. Keeping both distinguishes a real recursive binder
+      from a redundant nested one whose captured outer reference happens to
+      equal the ordinary shape placeholder. Without that distinction, the
+      unused binder can reuse the recursive node before 'createMu' removes it.
+      -}
+      UninternedMu
+        !(Node symbol)
+        !(Node symbol)
+        !(RecNodeId -> Node symbol)
+
+instance Eq (UninternedNode symbol) where
+    UninternedNode es == UninternedNode es' = es == es'
+    UninternedEmptyNode == UninternedEmptyNode = True
+    UninternedUnion members == UninternedUnion members' = members == members'
+    UninternedMu depthShape s _ == UninternedMu depthShape' s' _ = depthShape == depthShape' && s == s'
+    _ == _ = False
+
+instance Hashable (UninternedNode symbol) where
+    hashWithSalt salt = go
+      where
+        go :: UninternedNode symbol -> Int
+        go UninternedEmptyNode = salt `hashWithSalt` (0 :: Int)
+        go (UninternedNode es) = salt `hashWithSalt` (1 :: Int) `hashWithSalt` es
+        go (UninternedUnion members) = salt `hashWithSalt` (3 :: Int) `hashWithSalt` members
+        go (UninternedMu depthShape s _) =
+            salt
+                `hashWithSalt` (2 :: Int)
+                `hashWithSalt` depthShape
+                `hashWithSalt` s
+
+-- | Typed node caches share one identity sequence across all automaton types.
+nodeCaches :: CacheFamily
+nodeCaches = unsafePerformIO newCacheFamily
+{-# NOINLINE nodeCaches #-}
+
+-- | Next identity for a node in any typed cache.
+nodeIds :: IdSupply
+nodeIds = unsafePerformIO newIdSupply
+{-# NOINLINE nodeIds #-}
+
+-- | Return the canonical node in its typed cache.
+{-# INLINEABLE internNode #-}
+internNode ::
+    forall symbol.
+    (Typeable symbol) => UninternedNode symbol -> Node symbol
+internNode = intern (selectCache @symbol nodeCaches (freshCacheWith nodeIds)) (identifyNode . NodeId)
+
+{-# INLINEABLE identifyNode #-}
+identifyNode :: NodeId -> UninternedNode symbol -> Node symbol
+identifyNode i (UninternedNode es) =
+    InternedNode $
+        MkInternedNode
+            { internedNodeId = i
+            , internedNodeEdges = es
+            , internedNodeNumNestedMu = maximum (0 : [numNestedMu child | edge <- es, child <- edgeChildren edge])
+            , internedNodeFree = Set.unions [freeVars child | edge <- es, child <- edgeChildren edge]
+            }
+identifyNode _ UninternedEmptyNode = EmptyNode
+identifyNode i (UninternedUnion members) =
+    InternedUnion $
+        MkInternedUnion i members (maximum $ 0 : map numNestedMu members) (Set.unions $ map freeVars members)
+identifyNode i (UninternedMu depthShape s n) =
+    InternedMu $
+        MkInternedMu
+            { internedMuId = i
+            , internedMuBody = n (RecInt i)
+            , -- Keep the exact ordinary observation used in the interning key.
+              -- Smart cleanup can change depth between callback executions.
+              -- Readback must use the placeholder selected from depthShape.
+              internedMuShape = s
+            , internedMuDepthShape = depthShape
+            }
+
+-- Interning Edges
+
+-- | Edge payload before interning.
+data UninternedEdge symbol = UninternedEdge
+    { uEdgeSymbol :: !symbol
+    , uEdgeChildren :: ![Node symbol]
+    , uEdgeConstraint :: !Constraint
+    }
+    deriving (Eq)
+
+instance (Hashable symbol) => Hashable (UninternedEdge symbol) where
+    hashWithSalt salt (UninternedEdge symbol children ecs) =
+        salt `hashWithSalt` symbol `hashWithSalt` children `hashWithSalt` ecs
+
+-- | Typed edge caches share one identity sequence across all automaton types.
+edgeCaches :: CacheFamily
+edgeCaches = unsafePerformIO newCacheFamily
+{-# NOINLINE edgeCaches #-}
+
+-- | Next identity for an edge in any typed cache.
+edgeIds :: IdSupply
+edgeIds = unsafePerformIO newIdSupply
+{-# NOINLINE edgeIds #-}
+
+-- | Return the canonical edge in its typed cache.
+{-# INLINEABLE internEdge #-}
+internEdge ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) => UninternedEdge symbol -> Edge symbol
+internEdge = intern (selectCache @symbol edgeCaches (freshCacheWith edgeIds)) (InternedEdge . EdgeId)
+
+-- Smart constructors
+
+-- Edge constructors
+
+-- | Build or match an unconstrained edge.
+pattern Edge ::
+    (Hashable symbol, Typeable symbol) =>
+    symbol -> [Node symbol] -> Edge symbol
+pattern Edge s ns <- (InternedEdge _ (UninternedEdge s ns _))
+  where
+    Edge s ns = internEdge $ UninternedEdge s ns noConstraint
+
+{-# COMPLETE Edge #-}
+
+-- | Edge that is guaranteed to be removed when a node is built.
+{-# INLINEABLE emptyEdge #-}
+emptyEdge :: (Hashable symbol, Typeable symbol) => symbol -> Edge symbol
+emptyEdge symbol = Edge symbol [EmptyNode]
+
+{-# INLINEABLE isEmptyEdge #-}
+isEmptyEdge :: Edge symbol -> Bool
+isEmptyEdge = elem EmptyNode . edgeChildren
+
+{-# INLINEABLE removeEmptyEdges #-}
+removeEmptyEdges :: [Edge symbol] -> [Edge symbol]
+removeEmptyEdges = filter (not . isEmptyEdge)
+
+{- | Build an edge with transition constraints.
+
+The edge is empty when no term can meet its constraints: when 'contradictory'
+says so, when its path equalities are contradictory, or when a path equality
+names a child that the edge does not have (see 'fitsArity'). Enumeration and
+'Data.CFTA.Equality.accepts' rely on this: they read the equality classes of an
+edge without checking them.
+-}
+{-# INLINEABLE mkEdge #-}
+mkEdge ::
+    (Hashable symbol, Typeable symbol) =>
+    symbol -> [Node symbol] -> Constraint -> Edge symbol
+mkEdge s ns ecs
+    | contradictory ecs || not (fitsArity (Arity (length ns)) (equalities ecs)) = emptyEdge s
+    | otherwise = internEdge $ UninternedEdge s ns ecs
+
+-- Node constructors
+
+{-# COMPLETE Node, EmptyNode, Mu, Rec, InternedUnion #-}
+
+-- | Build or match a non-empty node from outgoing alternatives.
+pattern Node :: (Typeable symbol) => [Edge symbol] -> Node symbol
+pattern Node es <- (InternedNode (internedNodeEdges -> es))
+  where
+    Node = mkNode
+
+-- | Intern a set of alternatives and discard edges with empty children.
+{-# INLINEABLE mkNode #-}
+mkNode :: (Typeable symbol) => [Edge symbol] -> Node symbol
+mkNode es = case removeEmptyEdges es of
+    [] -> EmptyNode
+    es' -> internNode $ UninternedNode $ Set.toList $ Set.fromList es'
+
+{- | Retain every operand of an open union until its references are bound.
+
+Flatten nested unions and remove empty or repeated operands. A union of
+ordinary nodes uses the ordinary edge representation.
+-}
+createUnion :: (Typeable symbol) => [Node symbol] -> Node symbol
+createUnion nodes = case nub (concatMap members nodes) of
+    [] -> EmptyNode
+    [node] -> node
+    alternatives
+        | Just edges <- traverse ordinary alternatives -> mkNode $ concat edges
+        | otherwise -> internNode $ UninternedUnion alternatives
+  where
+    members EmptyNode = []
+    members (InternedUnion alternatives) = internedUnionMembers alternatives
+    members node = [node]
+
+    ordinary (InternedNode node) = Just $ internedNodeEdges node
+    ordinary _ = Nothing
+
+-- | A node where finite diagnostic enumeration can stop before unfolding recursion.
+recursiveBoundary :: Node symbol -> Bool
+recursiveBoundary (InternedMu _) = True
+recursiveBoundary (InternedUnion _) = True
+recursiveBoundary _ = False
+
+{- | An optimized Node constructor that avoids the interning/preprocessing of the Node constructor
+  when nothing changes
+-}
+{-# INLINEABLE modifyNode #-}
+modifyNode ::
+    (Typeable symbol) =>
+    Node symbol -> ([Edge symbol] -> [Edge symbol]) -> Node symbol
+modifyNode n@(Node es) f =
+    let es' = f es
+     in if es' == es
+            then
+                n
+            else
+                Node es'
+modifyNode _ _ = error "modifyNode: unexpected empty, recursive, or unresolved node"
+
+-- Mu
+
+{- | Build or match a recursive node.
+
+When we go underneath a Mu constructor, we need to bind the corresponding Rec node to something: that's why pattern
+matching on 'Mu' yields a function. Code that wants to traverse the term as-is should match on the interned
+constructors instead (and then deal with the dangling references).
+
+An identity function
+
+> foo (Mu f) = Mu f
+
+reuses the cached body observations:
+
+> foo (Mu f) = Mu f
+>   -- { expand view pattern }
+> foo node | Just f <- matchMu node = createMu f
+>   -- { case for @InternedMu mu@ }
+> foo (InternedMu mu) | Just f <- matchMu (InternedMu mu) = createMu f
+>   -- { definition of matchMu }
+> foo (InternedMu mu) = let f = \n' ->
+>                          if | n' == Rec (muPlaceholder (internedMuDepthShape mu)) ->
+>                                internedMuShape mu
+>                            | n' == Rec RecDepth ->
+>                                internedMuDepthShape mu
+>                            | otherwise ->
+>                                substFree (RecInt (internedMuId mu)) n' (internedMuBody mu)
+>                       in createMu f
+>   -- { definition of createMu }
+> foo (InternedMu mu) =
+>   let g = f . Rec
+>       bodyAtDepth = g RecDepth
+>   in internNode $ UninternedMu bodyAtDepth (g (muPlaceholder bodyAtDepth)) g
+
+Before calling 'intern', 'createMu' computes and stores both the body at
+'RecDepth' and its ordinary shape in the 'UninternedMu'. The stored depth probe
+is reused to choose the shape placeholder, so the body function is evaluated
+twice in total. 'matchMu' reuses both forms, so rebuilding an unchanged 'Mu'
+does not evaluate the original body function again. Placeholder selection
+scans the free references of the cached depth observation. Equality, hashing,
+and identification do not invoke the function inside the interning cache.
+-}
+pattern Mu ::
+    (Hashable symbol, Typeable symbol) =>
+    (Node symbol -> Node symbol) -> Node symbol
+pattern Mu f <- (matchMu -> Just f)
+  where
+    Mu = createMu
+
+{- | Construct recursive node
+
+A 'Mu' whose variable does not occur in its body binds nothing, so the body is returned on its own. Intersection
+already avoids introducing such nodes (see @maybeMu@); doing it here covers every recursive node, however it was
+built. A 'Mu' whose body is its own variable accepts no term, so it is 'EmptyNode'. Its unfolding is the node itself,
+so an operation that unfolds it would not stop.
+
+Implementation note: 'createMu' and 'matchMu' interact in non-trivial ways; see docs of the 'Mu' pattern synonym
+for performance considerations.
+-}
+{-# INLINEABLE createMu #-}
+createMu ::
+    (Typeable symbol) => (Node symbol -> Node symbol) -> Node symbol
+createMu = dropRedundantMu . createMuDontCleanup
+  where
+    dropRedundantMu :: Node symbol -> Node symbol
+    dropRedundantMu node@(InternedMu mu)
+        | RecInt (internedMuId mu) `Set.notMember` freeVars (internedMuBody mu) = internedMuBody mu
+        | Rec (RecInt identity) <- internedMuBody mu, identity == internedMuId mu = EmptyNode
+        | otherwise = node
+    dropRedundantMu node = node
+
+{- | Construct a recursive node, keeping it even when its variable is unused.
+
+Interning a 'Mu' is what assigns the identity its body refers to, so the redundancy check in 'createMu' can only run
+afterwards. This is that first half, exported for tests that need to observe a redundant node before it is dropped.
+
+Interning needs the shape of the body before the node has a 'NodeId'. The shape is the body applied to the placeholder
+selected by 'muPlaceholder'. Its level is at least the depth of the probe
+and exceeds every free ordinary level in that probe. The choice avoids
+aliases with those captured references.
+For example, the placeholders of @r@ and @r'@ differ in
+
+> -- f (f (f ... (g (g (g ... a)))))
+> Mu $ \r -> Node [
+>     Edge "f" [r]
+>   , Edge "g" [ Mu $ \r' -> Node [
+>                    Edge "g" [r']
+>                  , Edge "a" []
+>                  ]
+>              ]
+>   ]
+
+Precondition: the function must be parametric in the choice of variable names:
+
+> substFree i (Rec j) (f i) == f j
+
+The function is applied to 'RecDepth' and to the selected ordinary placeholder.
+Smart cleanup can give these observations different nested depths. The stored
+depth observation determines the ordinary placeholder for construction and readback.
+
+A union at the root of the body loses an operand that is the binder's own reference, so the shape does not depend on
+that operand.
+-}
+{-# INLINEABLE createMuDontCleanup #-}
+createMuDontCleanup ::
+    (Typeable symbol) => (Node symbol -> Node symbol) -> Node symbol
+createMuDontCleanup f =
+    internNode $
+        UninternedMu
+            bodyAtDepth
+            (g (muPlaceholder bodyAtDepth))
+            g
+  where
+    g variable = withoutSelfReference (Rec variable) (f (Rec variable))
+    bodyAtDepth = g RecDepth
+
+    -- A union at the root of the body that names the binder adds no term,
+    -- because the binder accepts the least fixed point. Dropping the operand
+    -- gives the same body, and so the same node, as the union without it.
+    withoutSelfReference self body@(InternedUnion payload)
+        | self `elem` members = createUnion (filter (/= self) members)
+        | otherwise = body
+      where
+        members = internedUnionMembers payload
+    withoutSelfReference _ body = body
+
+-- | Choose a probe outside the depth observation's free ordinary references.
+muPlaceholder :: Node symbol -> RecNodeId
+muPlaceholder bodyAtDepth = RecUnint $ Set.foldr above (numNestedMu bodyAtDepth) (freeVars bodyAtDepth)
+  where
+    above (RecUnint level) candidate = max (level + 1) candidate
+    above _ candidate = candidate
+
+{- | Match on a 'Mu' node
+
+Implementation note: 'createMu' and 'matchMu' interact in non-trivial ways; see docs of the 'Mu' pattern synonym
+for performance considerations.
+-}
+{-# INLINEABLE matchMu #-}
+matchMu ::
+    (Hashable symbol, Typeable symbol) =>
+    Node symbol -> Maybe (Node symbol -> Node symbol)
+matchMu (InternedMu mu) = Just $ \n' ->
+    if
+        | n' == Rec (muPlaceholder (internedMuDepthShape mu)) ->
+            -- Special case justified by the invariant on 'internedMuShape'
+            internedMuShape mu
+        | n' == Rec RecDepth ->
+            -- Reuse the exact depth probe stored in the interning key. It is
+            -- not interchangeable with 'internedMuShape': the distinction is
+            -- what keeps an unused nested binder from colliding with a used
+            -- binder that has the same ordinary shape.
+            internedMuDepthShape mu
+        | otherwise ->
+            substFree (RecInt (internedMuId mu)) n' (internedMuBody mu)
+matchMu _otherwise = Nothing
+
+{- | Substitution
+
+@substFree i n@ will replace all occurrences of @Rec i@ by @n@. We appeal to the uniqueness of node IDs
+and assume that all occurrences of @i@ must be free (in other words, that any occurrences of 'Mu' will have a
+/different/ identifier).
+
+Postcondition, when 'createMu' made each 'Mu' of the node:
+
+> substFree i (Rec i) == id
+
+A test checks this on the body of each 'Mu' in recursive nodes with nested
+binders.
+
+The rebuild makes each open 'Mu' again with 'createMu', which removes a
+binder that its body does not use. So a 'Mu' that 'createMuDontCleanup'
+made with an unused binder does not survive the substitution, also when
+@n@ is @Rec i@: the result has the same free names and the same language,
+but it is another node, with fewer nested 'Mu's.
+-}
+{-# INLINEABLE substFree #-}
+substFree ::
+    (Hashable symbol, Typeable symbol) =>
+    RecNodeId -> Node symbol -> Node symbol -> Node symbol
+substFree old new = substFree' (Map.singleton old new)
+
+-- | Generalization of 'substFree' to multiple binders.
+{-# INLINEABLE substFree' #-}
+substFree' ::
+    (Hashable symbol, Typeable symbol) =>
+    Map RecNodeId (Node symbol) -> Node symbol -> Node symbol
+substFree' env node = case substitutionPlan node of
+    SubstitutionPlan f -> f env
+
+-- Substitution internals
+
+{- | A graph rebuild prepared for an environment of recursive substitutions.
+
+This datatype should satisfy two properties for 'substitutionPlan' to work
+correctly:
+
+1. Forcing the @SubstitutionPlan@ to WHNF should not result in any recursive calls
+   (so that the recursion isn't totally unrolled before memoization can happen).
+2. But forcing the /function inside/ the @SubstitutionPlan@ to WHNF /should/
+   perform all recursive calls before the function is executed; applying the
+   function should not call 'substitutionPlan' again.
+
+Preparing the plan therefore does the expensive traversal once, independently
+of the substitution environment. Applying it still rebuilds the graph for each
+environment, except a subgraph without free variables, which it returns
+unchanged. See @intersect@ for an operation that can avoid an environment
+altogether; substitution cannot, because the environment is part of its input.
+-}
+data SubstitutionPlan symbol a = SubstitutionPlan (Map RecNodeId (Node symbol) -> a)
+
+{- | Commute @[]@ and @SubstitutionPlan@.
+
+Forces all elements in the list
+-}
+{-# INLINEABLE sequenceSubstitutionPlans #-}
+sequenceSubstitutionPlans :: [SubstitutionPlan symbol a] -> SubstitutionPlan symbol [a]
+sequenceSubstitutionPlans = SubstitutionPlan . go Empty
+  where
+    go ::
+        Seq (Map RecNodeId (Node symbol) -> a) ->
+        [SubstitutionPlan symbol a] ->
+        Map RecNodeId (Node symbol) ->
+        [a]
+    -- The functions are listed once here rather than for every environment
+    -- the resulting function is applied to.
+    go acc [] = let fs = toList acc in \env -> map ($ env) fs
+    go acc (SubstitutionPlan !f : fs) = go (acc :|> f) fs
+
+-- | The memo cache of 'substitutionPlan'.
+genericSubstitutionPlanCache :: TypeableMemoCache
+genericSubstitutionPlanCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE genericSubstitutionPlanCache #-}
+
+{- | Extract the shape from a term
+
+Any free variables in the original node become holes that the resulting
+plan fills from its environment.
+
+We do not use the pattern synonyms here, because 'substitutionPlan' is used
+through 'substFree' to /define/ those pattern synonyms.
+-}
+substitutionPlan ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    Node symbol -> SubstitutionPlan symbol (Node symbol)
+{-# INLINEABLE substitutionPlan #-}
+substitutionPlan inputNode = memoTypeableWith @symbol genericSubstitutionPlanCache onNode inputNode
+  where
+    onNode :: Node symbol -> SubstitutionPlan symbol (Node symbol)
+    onNode n = SubstitutionPlan $
+        case n of
+            -- A node without free variables has nothing to substitute.
+            _ | Set.null (freeVars n) -> const n
+            EmptyNode -> const EmptyNode
+            InternedNode node -> case sequenceSubstitutionPlans $ map edgeSubstitutionPlan (internedNodeEdges node) of
+                SubstitutionPlan !f -> \env -> mkNode (f env)
+            InternedUnion alternatives -> case sequenceSubstitutionPlans $ map substitutionPlan (internedUnionMembers alternatives) of
+                SubstitutionPlan !f -> createUnion . f
+            -- 'createMu' applies its function more than once, and each
+            -- application substitutes into the nested binders again. So the
+            -- result for each binder and the bindings of its free variables is
+            -- kept: without it, a chain of nested binders costs time
+            -- exponential in its depth.
+            InternedMu mu -> case onNode (internedMuBody mu) of
+                SubstitutionPlan !f ->
+                    \env ->
+                        memoTypeableWith @symbol
+                            genericMuSubstitutionCache
+                            (\(_, bindings) -> createMu $ \r -> f (Map.insert (RecInt (internedMuId mu)) r (Map.fromDistinctAscList bindings)))
+                            (n, Map.toAscList $ Map.restrictKeys env $ freeVars n)
+            Rec i -> \env -> fromMaybe n (Map.lookup i env)
+
+-- | The memo cache of the substitution into one binder, by its free bindings.
+genericMuSubstitutionCache :: TypeableMemoCache
+genericMuSubstitutionCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE genericMuSubstitutionCache #-}
+
+-- | Prepare substitution for an edge's children.
+genericEdgeSubstitutionPlanCache :: TypeableMemoCache
+genericEdgeSubstitutionPlanCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE genericEdgeSubstitutionPlanCache #-}
+
+edgeSubstitutionPlan ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    Edge symbol -> SubstitutionPlan symbol (Edge symbol)
+{-# INLINEABLE edgeSubstitutionPlan #-}
+edgeSubstitutionPlan inputEdge = memoTypeableWith @symbol genericEdgeSubstitutionPlanCache onEdge inputEdge
+  where
+    onEdge :: Edge symbol -> SubstitutionPlan symbol (Edge symbol)
+    onEdge e =
+        SubstitutionPlan $ case sequenceSubstitutionPlans (map substitutionPlan (edgeChildren e)) of
+            SubstitutionPlan !f -> setChildren e . f
