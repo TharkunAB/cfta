@@ -1,5 +1,59 @@
 # Public API and source correspondence
 
+## Actual native callbacks and finite physical source keys
+
+The latest proof checkpoint is `d635b84c`, after `23632065` and `1e95555f`.
+The package rename update is `df9fcff6` on `origin/microcfta` at `7bfb69d1`.
+This section supersedes older callback next-target statements.
+
+`SourceRecursiveIntersectionNative.done_node_productivity` follows an actual
+completed checked native intersection. It derives finite actual root exposure,
+then finite cold row extraction, then finite stable minimum sweeps. The actual
+precheck Boolean holds exactly when the original operands share a finite
+structural term. Warm memo tables are permitted. Native completion and checked
+`WordRanges` remain explicit at this entry.
+
+`SourceFreshOrdinaryColdKeys.physical_record` reads each canonical operand
+from the actual issued map. Resident rows derive availability, closedness,
+Original syntax, exact state encoding, and row support. `table_declared`
+derives the operand domain from actual finite table keys. `finite_language`
+derives the complete guarded operand language after finite restriction.
+It includes the empty-root case. Input child-key closure remains explicit.
+`physical_grows` retains the identical operand through later cache growth.
+
+`SourceFreshOrdinaryNativeKeyCallback.completed` composes these results.
+For each finite input-key pair, actual completed native execution supplies
+finite exposure, collection, and minimum execution. Its Boolean equals the
+reference finite synchronous-product test. No product-language equation,
+functional product-row map, or exact related-row simulation is supplied.
+
+`SourceFreshOrdinaryColdMemoState.prechecked_advance` retains the actual
+post-read constructor cache in the native machine. Both native memo tables
+remain identical. Their pending and completed provenance stays valid.
+Semantic heaps, coverage, open-depth heap, both guarded probe heaps, and
+machine growth remain. Existing `advance_valid` proves this preservation.
+
+Next compose the full ordered ambiguity scan and literal compiler result.
+Keep the actual empty, open, and constrained precheck order. Use the derived
+physical key language and native callback equality. Carry the cache after
+each executed callback. General completed warm-call correctness is proved;
+successful warm-call execution still needs the reachable completed memo-state
+condition. The existing first-run success theorem starts from `initial` memos.
+Do not replace that remaining execution obligation with a supplied product
+language or either refuted exact-row adapter. Do not repeat primary Sized,
+individual cold termination, complete product language, or the pointwise
+callback proofs. Read `lean/notes-native-key-callback.md`.
+
+The current aggregate audit passed 1,513 jobs and 44,104 theorem dependency
+checks. Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
+Log: `/tmp/mcfta-cold-memo-state-20261014-audit.log`.
+The old unused `inputs` warning remains. No new warning was introduced.
+The renamed Nix suites passed 289 core, 209 generator, and 147 refinement
+examples. All five updated probes and both formatting checks passed.
+No production Haskell code changed. No proof worker is active.
+Current snapshot: `/tmp/mcfta-native-key-checkpoint-20261014-2124/`.
+All work remains local. Check weekly allowance before work; stop at 1%.
+
 ## Package rename and current source boundary
 
 The current upstream base is `origin/microcfta` at `7bfb69d1` (PR #129).
@@ -440,12 +494,12 @@ contracts, checkpoints, validation logs, and remaining priorities.
 Everything remains local. No further push, deployment, or board post is
 authorized. Stop all work at 1% weekly allowance remaining or less.
 
-This inventory covers all 71 Haskell source modules under `cfta/src` and
-`cfta-generator/src`. It includes exposed and private internal modules.
-It uses `origin/microcfta` at `1a083040` (PR #117), which includes
-the `tidy/core-formula` work, optimization changes, and the findings repairs
-through PR #116. The three new synthesis modules have no formal source model.
-Their presence in this inventory does not claim verified synthesis behavior.
+This inventory covers all 77 Haskell source modules under `cfta/src`,
+`cfta-generator/src`, and `cfta-ghc/src` at `7bfb69d1` (PR #129).
+It includes exposed and private internal modules. The five synthesis modules
+and four GHC source modules have no complete formal source model.
+Their presence in this inventory does not claim verified application behavior.
+The GHC shared session helper is also outside formal source coverage.
 The following history describes the preserved models before
 the new bridges above. PR #102 adds flat intersection memo tables and interned
 intersection domains. PR #103 maintains expandable and waiting UVar indexes.
@@ -601,6 +655,8 @@ rows describe reusable component proofs and retain their explicit premises.
 | `Data.CFTA.Gen.Synthesis` — component types and ordinary synthesis API | Added by PR #91. PR #119 repairs state-label escaping for at signs and backslashes; its native regression passes. No formal source model. Library synthesis correctness remains unverified. Benchmark programs and datasets are excluded from formalization. |
 | `Data.CFTA.Gen.Synthesis.Liquid` — refinement specifications and synthesis API | Added by PR #91. PR #119 repairs state-label escaping for at signs and backslashes; its native regression passes. No formal source model. The verified core liquid entailment adapter does not prove this module's application or conditional construction rules. |
 | `Data.CFTA.Gen.Synthesis.Internal.Syntax` — encoded synthesis syntax | Added by PR #91. PR #119 repairs state-label escaping for at signs and backslashes; its native regression passes. No formal source model. This syntax adapter is distinct from the core term and generator rank contracts. |
+| `Data.CFTA.Gen.Synthesis.Hybrid` — synthesis application | Added by PR #120. No formal source model. Core automaton and ranking proofs do not verify this application. |
+| `Data.CFTA.Gen.Synthesis.Walk` — synthesis application | Added by PR #120. No formal source model. Benchmark programs and workload specifications remain excluded. |
 | `Data.CFTA.Gen.Sig` — operation signatures, result keys, binary key projections | Signatures identify input/output families. The contract is positional agreement between `Sig`, `Args`, key maps, and decoded operations. These GADT/typeclass adapters have no independent Lean extraction. They do not choose term semantics themselves. |
 | `Data.CFTA.Ranked` — finite ranked facade | Re-exports the internal ranked constructors, samplers, rank queries, pay, and shrinking. Its ranks are members; arbitrary equal values do not collapse ranks. The same indexed callback contracts apply. |
 | `Data.CFTA.Ranked.Internal` — indexed/weighted sources, sharing, pay, weighted alternatives, count/decode/lower/shrink | `Decoder`, `Sampler`, `Probability`, and `Shrink` prove the pure operations. `SourceWeightedIndexed.exact_api` derives normalization, replay, and rank support from metadata plus the documented callback obligations. Checked/native counterexamples show why metadata alone is insufficient. A `WeightedIndexed` callback must give every rank positive ticket mass and map every valid ticket to a valid rank. The source deliberately does not enumerate callbacks to verify that contract. `share` caches a plan/index/decoder triple whose semantics must agree. |
@@ -743,3 +799,19 @@ user codecs/index callbacks, lawful random draws, and sound solver answers.
 Diagnostic rendering and user effects do not prove semantic correctness.
 No source algorithm is marked correct solely because tests pass. No generic
 contract substitutes for an unproved internal algorithm invariant.
+
+## GHC application source coverage
+
+PR #120 added these modules. PR #129 moved them to `cfta-ghc/src`.
+None has a formal source model or verified extraction.
+
+| Module | Current boundary |
+| --- | --- |
+| `Data.CFTA.GHC.Erase` | GHC application erasure remains unverified. |
+| `Data.CFTA.GHC.Fits` | GHC fit application remains unverified. |
+| `Data.CFTA.GHC.HoleFits` | Typed-hole plugin behavior remains unverified. |
+| `Data.CFTA.GHC.Internal.Check` | GHC typechecker integration remains unverified. |
+
+`cfta-ghc/common/Data/CFTA/GHC/Session.hs` supplies the shared GHC session.
+It also remains outside formal source coverage. GHC package tests and
+benchmarks were not run in this formalization checkpoint.

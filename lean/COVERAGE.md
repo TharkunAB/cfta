@@ -1,5 +1,59 @@
 # Full formalization coverage
 
+## Actual native callbacks and finite physical source keys
+
+The latest proof checkpoint is `d635b84c`, after `23632065` and `1e95555f`.
+The package rename update is `df9fcff6` on `origin/microcfta` at `7bfb69d1`.
+This section supersedes older callback next-target statements.
+
+`SourceRecursiveIntersectionNative.done_node_productivity` follows an actual
+completed checked native intersection. It derives finite actual root exposure,
+then finite cold row extraction, then finite stable minimum sweeps. The actual
+precheck Boolean holds exactly when the original operands share a finite
+structural term. Warm memo tables are permitted. Native completion and checked
+`WordRanges` remain explicit at this entry.
+
+`SourceFreshOrdinaryColdKeys.physical_record` reads each canonical operand
+from the actual issued map. Resident rows derive availability, closedness,
+Original syntax, exact state encoding, and row support. `table_declared`
+derives the operand domain from actual finite table keys. `finite_language`
+derives the complete guarded operand language after finite restriction.
+It includes the empty-root case. Input child-key closure remains explicit.
+`physical_grows` retains the identical operand through later cache growth.
+
+`SourceFreshOrdinaryNativeKeyCallback.completed` composes these results.
+For each finite input-key pair, actual completed native execution supplies
+finite exposure, collection, and minimum execution. Its Boolean equals the
+reference finite synchronous-product test. No product-language equation,
+functional product-row map, or exact related-row simulation is supplied.
+
+`SourceFreshOrdinaryColdMemoState.prechecked_advance` retains the actual
+post-read constructor cache in the native machine. Both native memo tables
+remain identical. Their pending and completed provenance stays valid.
+Semantic heaps, coverage, open-depth heap, both guarded probe heaps, and
+machine growth remain. Existing `advance_valid` proves this preservation.
+
+Next compose the full ordered ambiguity scan and literal compiler result.
+Keep the actual empty, open, and constrained precheck order. Use the derived
+physical key language and native callback equality. Carry the cache after
+each executed callback. General completed warm-call correctness is proved;
+successful warm-call execution still needs the reachable completed memo-state
+condition. The existing first-run success theorem starts from `initial` memos.
+Do not replace that remaining execution obligation with a supplied product
+language or either refuted exact-row adapter. Do not repeat primary Sized,
+individual cold termination, complete product language, or the pointwise
+callback proofs. Read `lean/notes-native-key-callback.md`.
+
+The current aggregate audit passed 1,513 jobs and 44,104 theorem dependency
+checks. Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
+Log: `/tmp/mcfta-cold-memo-state-20261014-audit.log`.
+The old unused `inputs` warning remains. No new warning was introduced.
+The renamed Nix suites passed 289 core, 209 generator, and 147 refinement
+examples. All five updated probes and both formatting checks passed.
+No production Haskell code changed. No proof worker is active.
+Current snapshot: `/tmp/mcfta-native-key-checkpoint-20261014-2124/`.
+All work remains local. Check weekly allowance before work; stop at 1%.
+
 ## Package rename and current source boundary
 
 The current upstream base is `origin/microcfta` at `7bfb69d1` (PR #129).

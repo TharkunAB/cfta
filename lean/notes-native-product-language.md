@@ -1,6 +1,6 @@
 # Exact native product language, Sized classes, and minima
 
-Updated: 2026-10-14 20:52 CEST.
+Updated: 2026-10-14 21:24 CEST.
 Rebased proofs: `dab197d2`, `70289150`, and `ede5f85a`.
 
 ## Complete recursive correspondence
@@ -78,7 +78,9 @@ the actual arity-mismatch row has an empty child.
 This theorem covers the raw-table root-row precheck. The live compiler uses
 `null (nodeEdges node)` before minimum lookup in
 `cfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs`. Its complete
-callback and scan still need composition with actual repaired exposure.
+ordered scan still needs composition with actual repaired exposure.
+The actual prechecked callback now has exact finite execution and Boolean
+readback. See [native source-key callbacks](notes-native-key-callback.md).
 The standalone `Data.CFTA.Sized.unambiguousRows` uses the explicit synchronous
 product. Its existing proof does not depend on this separate native path.
 
@@ -93,18 +95,24 @@ completed checked native call, including warm memo states. It derives all
 final heaps, coverage, resident and replayed rows, exact finite keys,
 stable collection bounds, and complete independent table language.
 
-`SourceFreshOrdinaryColdProductivity.prechecked_table` now follows the actual
-`nodeEdges` precheck before row collection. It derives both finite operations
-and proves the Boolean equivalent to a finite structural term. A present
-minimum supplies a root edge through exact exposure. No literal root-row
-equality is required. The complete native callback composition is next.
+`SourceFreshOrdinaryColdProductivity.prechecked_table` follows actual
+root exposure before row collection. `done_node_productivity` now composes
+native completion, finite actual exposure, collection, and minimum sweeps.
+Its Boolean holds exactly when the original operands share a structural term.
 
-Derive the finite source-key operand language from the actual input cold
-trace and resident original closed records. Apply the native product and
-minimum equations for each callback. Preserve the real ordered scan and its
-constraint precheck. Reuse existing compiler and Sized sequence theorems after
-the actual callback equality is derived. Do not replace those obligations
-with an assumed whole product-language equation.
+`SourceFreshOrdinaryColdKeys` derives closed original physical operands and
+their complete language from actual input-table metadata. The finite carrier
+retains those exact languages. `SourceFreshOrdinaryNativeKeyCallback.completed`
+proves that each actual native callback equals the finite reference product
+test. No literal product rows or supplied product-language law are used.
+`physical_grows` retains identical operands after cache growth.
+
+`SourceFreshOrdinaryColdMemoState.prechecked_advance` retains valid unchanged
+native memo tables through the actual exposure and collection effects.
+Every heap needed by the next callback remains. Next compose the full ordered
+scan and literal compiler result. Successful warm-call execution still needs
+its reachable completed memo-state condition. General completed warm-call
+correctness is already proved. Read [native source-key callbacks](notes-native-key-callback.md).
 
 Concrete Haskell containers, lazy scheduling, source extraction, and external
 solver contracts retain their documented scope. No theorem count or green
@@ -112,9 +120,9 @@ build verifies those boundaries. The whole Haskell library is not verified.
 
 ## Validation and preservation
 
-The aggregate audit passes 1,507 jobs and 44,085 theorem dependency checks.
+The aggregate audit passes 1,513 jobs and 44,104 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-native-product-20261014-audit.log`.
+Log: `/tmp/mcfta-cold-memo-state-20261014-audit.log`.
 No new warning was introduced. The old unused `inputs` warning remains.
 No production Haskell code changed. All fixtures and marked drafts remain.
 Everything remains local. No worker is active.
