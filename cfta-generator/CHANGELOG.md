@@ -56,7 +56,14 @@ tree automata of `cfta`, with QuickCheck integration.
   trie of dead prefixes, limits, and the time of each part. Because it keeps
   a set of the programs, not of the typed terms, the peak memory of the
   Hoogle+ ladder of `cfta-ghc` falls by 30% to 31% (45% to 46% on the
-  queries that time out), with the same results and time.
+  queries that time out), with the same results and time. Its `Progress`
+  tells how it ended (`progressOutcome`: `Solved`, `Exhausted`, or
+  `OutOfTime`), and its caller says which fits are new (`hookNew`).
+- `Data.CFTA.Gen.Synthesis.Portfolio`: proposers (`hectare` for the walk)
+  that run in order under one deadline, each for its budget, with one host
+  checker and the fits new once across the runs; the outcome of a run
+  decides whether the next one runs. `flaggedLast` ranks the fits with a
+  host's flag last, in a stable order.
 - `Data.CFTA.Gen.Synthesis.Hybrid`: Hectare's program spaces with Hegel's
   checks. `synthesizeHybrid` lists the programs of the base types of a
   refinement-typed query size by size, in Hectare's order, in the saturated

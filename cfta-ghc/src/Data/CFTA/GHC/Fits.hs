@@ -85,7 +85,7 @@ import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
 import Data.List (nub)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, isJust, mapMaybe)
+import Data.Maybe (catMaybes, isJust, listToMaybe, mapMaybe)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Word (Word64)
@@ -94,18 +94,17 @@ import GHC.Clock (getMonotonicTimeNSec)
 import Data.CFTA.GHC.Erase (anyResult, erase, higherKinded, typeHeads)
 import Data.CFTA.GHC.Internal.Check
 import Data.CFTA.Gen.Synthesis (Program (..))
+import Data.CFTA.Gen.Synthesis.Portfolio (Run (..), flaggedLast, hectare, portfolio)
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
     Erased (..),
     Extension (..),
-    Hooks (..),
     Limits (..),
     Progress (..),
     Role (..),
     Token,
     emptyProgress,
     preorder,
-    walk,
  )
 import qualified Data.CFTA.Gen.Synthesis.Walk as Walk
 import GHC.Builtin.Types (listTyCon)
@@ -286,7 +285,7 @@ synthesizeFits options hole candidates goal = do
             fits <- liftIO (modifyIORef' found (fit :) >> readIORef found)
             pure (length (filter (not . fitIgnoresPart) fits) < optionFits options)
     fits <- reverse <$> liftIO (readIORef found)
-    pure (take (optionFits options) (filter (not . fitIgnoresPart) fits <> filter fitIgnoresPart fits))
+    pure (take (optionFits options) (flaggedLast fitIgnoresPart fits))
 
 {- | Check Hectare's programs for a hole in its enumeration order, and call
 the function on each fit; stop when it returns 'False'. The result has the
@@ -309,13 +308,20 @@ streamFits options hole candidates goal accept = do
             startKey <- stateKey environment (walkerVariables start) start
             checker <- newChecker environment leaves' start startKey
             let limits = Limits (optionMaximumSize options) (optionMaximumPrograms options) deadline
-                hooks =
-                    Hooks
-                        { hookSize = \size progress -> case optionReport options of
-                            Just callback -> statistics progress >>= liftIO . callback size
-                            Nothing -> pure ()
-                        , hookProgram = \size program -> mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
-                        }
+                onSize size progress = case optionReport options of
+                    Just callback -> statistics progress >>= liftIO . callback size
+                    Nothing -> pure ()
+                onProgram size program = mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
+                proposer =
+                    hectare
+                        "hectare"
+                        Nothing
+                        checker
+                        onSize
+                        onProgram
+                        [Erased name typ (role candidate) | (candidate, name, typ) <- erased]
+                        (avoid erased)
+                        erasedGoal
                 -- The walk gives a new fit with the hole as at the start:
                 -- check the program with each argument subterm in turn of a
                 -- fresh rigid type.
@@ -325,15 +331,8 @@ streamFits options hole candidates goal accept = do
                     after <- liftIO getMonotonicTimeNSec
                     liftIO (modifyIORef' ignoring (+ (after - before)))
                     accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart)
-            statistics
-                =<< walk
-                    limits
-                    checker
-                    hooks
-                    [Erased name typ (role candidate) | (candidate, name, typ) <- erased]
-                    (avoid erased)
-                    erasedGoal
-                    accept'
+            runs <- portfolio limits [proposer] accept'
+            statistics (maybe emptyProgress runProgress (listToMaybe runs))
         Nothing -> statistics emptyProgress
   where
     -- The free type variables of the scope, named in order of occurrence.

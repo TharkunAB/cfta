@@ -18,8 +18,9 @@ module does the rest:
   prefix that it shares with the host's frames. A prefix that fails goes into
   a trie of dead prefixes, and every later program under it is skipped
   without a call to the host.
-* The fits, each program once: a program that fits again (as from two erased
-  types of one leaf) is not a new fit.
+* The fits: the caller says which fits are new ('hookNew'), so that a
+  program that fits again (as from two erased types of one leaf, or from two
+  runs of a portfolio) is a fit once.
 
 The host gives a 'Checker'. It keeps a stack of frames, one for each checked
 token of the current prefix: frame @i@ holds the host's snapshot from before
@@ -51,6 +52,7 @@ module Data.CFTA.Gen.Synthesis.Walk (
     Limits (..),
     Hooks (..),
     Fit (..),
+    Outcome (..),
     Progress (..),
     emptyProgress,
     walk,
@@ -61,8 +63,6 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
-import Data.Set (Set)
-import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Word (Word64)
@@ -161,6 +161,11 @@ data Hooks m = Hooks
     -- ^ After the programs of each size, and when the walk stops.
     , hookProgram :: Int -> Program -> m ()
     -- ^ Before each program is checked, with its size.
+    , hookNew :: [Token] -> m Bool
+    {- ^ Whether a program that fits is new: the walk gives the function only
+    a new fit. The caller keeps the fits so far, so that a program of two
+    runs (as of a portfolio) is a fit once.
+    -}
     }
 
 -- | A program that fits, with its size in leaves.
@@ -168,6 +173,16 @@ data Fit = Fit
     { fitProgram :: Program
     , fitSize :: Int
     }
+    deriving (Eq, Show)
+
+-- | How a walk ended.
+data Outcome
+    = -- | The caller's function stopped it.
+      Solved
+    | -- | It looked at every program up to its limits of size and programs.
+      Exhausted
+    | -- | It reached its deadline.
+      OutOfTime
     deriving (Eq, Show)
 
 -- | The figures of a walk.
@@ -189,26 +204,26 @@ data Progress = Progress
     -- ^ The time to list Hectare's programs.
     , progressCheckNanos :: !Word64
     -- ^ The time of the host's checks.
+    , progressOutcome :: !Outcome
+    -- ^ How the walk ended.
     }
     deriving (Eq, Show)
 
 -- | The figures before the first program.
 emptyProgress :: Progress
-emptyProgress = Progress 0 0 0 0 False 0 0 0 0
+emptyProgress = Progress 0 0 0 0 False 0 0 0 0 Exhausted
 
-{- | The state of a walk: the tokens of the host's frames, the dead prefixes,
-the fits so far, and the figures.
--}
+-- | The state of a walk: the tokens of the host's frames, the dead prefixes, and the figures.
 data State = State
     { stateHeld :: [Token]
     , stateDead :: Dead
-    , stateReported :: Set [Token]
     , stateProgress :: !Progress
     }
 
 {- | Check Hectare's programs over the erased leaves for an erased goal type,
-size by size, with the host's checker, and call the function on each new fit;
-stop when it returns 'False', at a limit, or after the last size. The rules
+size by size, with the host's checker, and call the function on each new fit
+('hookNew'); stop when it returns 'False', at a limit, or after the last
+size. The figures tell how the walk ended ('progressOutcome'). The rules
 of the second argument are Hectare's pruning rules for programs of size two,
 with the leaves' names in Hectare: a leaf of the first list is not applied to
 one of the second list (with 'Nothing': to any).
@@ -227,7 +242,7 @@ walk ::
     Type ->
     (Fit -> m Bool) ->
     m Progress
-walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead Set.empty emptyProgress)
+walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead emptyProgress)
   where
     -- Hectare's automaton has symbols of its own, as app and filter, so each
     -- name gets a prefix there.
@@ -248,24 +263,24 @@ walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead
     -- Build and reduce the automaton of each size, then check its programs,
     -- so that each part has its own time.
     sizes size state
-        | size > limitSize limits = finish state
+        | size > limitSize limits = finish Exhausted state
         | otherwise = do
             (built, buildTime) <- liftIO (timed deadline (rawSearchSpace hectareLibrary hectareQuery size))
             let state' = withProgress state $ \p -> p{progressSize = size, progressBuildNanos = progressBuildNanos p + buildTime}
             case built of
-                Nothing -> stop (withProgress state' $ \p -> p{progressOutOfTime = True})
+                Nothing -> stop OutOfTime (withProgress state' $ \p -> p{progressOutOfTime = True})
                 Just raw -> do
                     (reduced, reduceTime) <- liftIO (timed deadline (refold (reduceFully raw)))
                     let state'' = withProgress state' $ \p -> p{progressReduceNanos = progressReduceNanos p + reduceTime}
                     case reduced of
-                        Nothing -> stop (withProgress state'' $ \p -> p{progressOutOfTime = True})
+                        Nothing -> stop OutOfTime (withProgress state'' $ \p -> p{progressOutOfTime = True})
                         Just space ->
                             programs
                                 size
                                 [program | representative <- distinctProgramsIn space, program <- expand hectareLibrary representative]
                                 state''
     programs size remaining state
-        | maybe False (progressPrograms (progressOf state) >=) (limitPrograms limits) = stop state
+        | maybe False (progressPrograms (progressOf state) >=) (limitPrograms limits) = stop Exhausted state
         | otherwise = do
             (next, listTime) <- liftIO (timed Nothing (nextProgram remaining))
             let state' = withProgress state $ \p -> p{progressListNanos = progressListNanos p + listTime}
@@ -274,14 +289,14 @@ walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead
                     hookProgram hooks size program
                     before <- liftIO getMonotonicTimeNSec
                     if maybe False (before >=) deadline
-                        then stop (withProgress state' $ \p -> p{progressOutOfTime = True})
+                        then stop OutOfTime (withProgress state' $ \p -> p{progressOutOfTime = True})
                         else do
                             (checked, fit) <-
                                 check (withProgress state' $ \p -> p{progressPrograms = progressPrograms p + 1}) size program tokens
                             after <- liftIO getMonotonicTimeNSec
                             let state'' = withProgress checked $ \p -> p{progressCheckNanos = progressCheckNanos p + (after - before)}
                             more <- maybe (pure True) accept fit
-                            if more then programs size rest state'' else stop state''
+                            if more then programs size rest state'' else stop Solved state''
                 _ -> hookSize hooks size (progressOf state') >> sizes (size + 1) state'
     -- The next program, with its tokens evaluated, so that the listing has
     -- its own time.
@@ -292,9 +307,9 @@ walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead
                 tokens = preorder program
              in forceTokens tokens `seq` Just (program, tokens, rest)
     forceTokens = foldr (\(name, children) rest -> name `seq` children `seq` rest) ()
-    stop state = hookSize hooks (progressSize (progressOf state)) (progressOf state) >> finish state
+    stop outcome state = hookSize hooks (progressSize (progressOf state)) (progressOf state) >> finish outcome state
     -- Leave the host as it was before the walk.
-    finish state = progressOf state <$ checkerTruncate checker 0
+    finish outcome state = (progressOf state){progressOutcome = outcome} <$ checkerTruncate checker 0
     check state size program tokens
         | isDead tokens (stateDead state) =
             pure (withProgress state (\p -> p{progressSkipped = progressSkipped p + 1, progressSize = size}), Nothing)
@@ -306,18 +321,19 @@ walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead
             case extension of
                 Died index ->
                     pure (sized{stateHeld = take index tokens, stateDead = markDead (take (index + 1) tokens) (stateDead state)}, Nothing)
-                Done True
-                    | Set.notMember tokens (stateReported state) -> do
-                        -- A new fit: the function gets the host from the start,
-                        -- and the next program starts from the root.
-                        checkerTruncate checker 0
-                        pure
-                            ( withProgress
-                                sized{stateHeld = [], stateReported = Set.insert tokens (stateReported state)}
-                                (\p -> p{progressFits = progressFits p + 1})
-                            , Just (Fit program size)
-                            )
-                _ -> pure (sized{stateHeld = tokens}, Nothing)
+                Done True -> do
+                    new <- hookNew hooks tokens
+                    if new
+                        then do
+                            -- A new fit: the function gets the host from the
+                            -- start, and the next program starts from the root.
+                            checkerTruncate checker 0
+                            pure
+                                ( withProgress sized{stateHeld = []} (\p -> p{progressFits = progressFits p + 1})
+                                , Just (Fit program size)
+                                )
+                        else pure (sized{stateHeld = tokens}, Nothing)
+                Done False -> pure (sized{stateHeld = tokens}, Nothing)
     commonPrefix (x : xs) (y : ys) | x == y = 1 + commonPrefix xs ys
     commonPrefix _ _ = 0 :: Int
 
