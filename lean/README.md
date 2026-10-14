@@ -6,7 +6,7 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,603 jobs and 44,981 theorem dependency checks.
+The audit passes 1,609 jobs and 45,030 theorem dependency checks.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open
@@ -41,8 +41,12 @@ The [exact fold and both memo proof](notes-source-crush-both-memos.md) now
 characterizes every physically reached ordinary edge, including shared
 canonical records and root unions. A false fold has a reached failing edge.
 Complete gate graphs now carry both actual memos and retain exact finite
-source execution. Next carry them through the complete ordered local-class
-filter, then derive its connection to source equality-class selection.
+source execution. The [complete class filter](notes-ordered-class-selection.md)
+now retains both memo tables and one ordered receipt per class occurrence.
+Derived gate replay gives exact pure selected-class readback in the retained
+final cache and connects the existing one-pass theorem. Next derive the
+physical class-order adapter and the empty/contradiction guards before this
+filter. Primitive-operation and native container contracts remain explicit.
 [The Lava paper note](notes-lava.md) records relevant prior art and its source,
 solver, and termination limits. The [occurrence-cost note](notes-occurrence-costs.md)
 records the full weighted source callback/probe correspondence used here.

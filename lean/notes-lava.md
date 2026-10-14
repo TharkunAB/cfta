@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Complete selection application (2026-10-15 01:52 CEST)
+
+The ordered class filter now has separate finite execution and receipt graphs
+with both actual memo tables. An independent source induction derives exact
+gate replay in caches that retain all completed work. This supplies pure
+selected-class readback in the final cache without a whole-gate observation
+premise. Read [the selection note](notes-ordered-class-selection.md).
+Physical class sorting, caller prechecks, native primitives, and extraction
+remain separate obligations.
+
 ## Current application (2026-10-15 01:40 CEST)
 
 The actual visited fold now has an exact physical reachability theorem.

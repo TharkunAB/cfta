@@ -1,5 +1,12 @@
 # Ordered source gate execution and coherent unfolding memo
 
+Current update (2026-10-15 01:52 CEST): `f3d27627`, `a93d1b35`, and `d0d8ac1f`
+complete the ordered class filter with both memo tables. Each class occurrence
+retains its exact intermediate caches. Derived gate replay connects all
+decisions to the pure selected-class operation in the retained final cache.
+Read [the current note](notes-ordered-class-selection.md). Earlier next
+targets below retain their historical context.
+
 Current update (2026-10-15 01:40 CEST): `0f5f465f`, `348e5adc`, and `9abb1aff`
 complete exact physical descendant checks for the actual visited source fold
 and carry both actual memo tables through complete ordered gate graphs.

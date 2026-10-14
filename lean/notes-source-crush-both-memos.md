@@ -1,5 +1,12 @@
 # Exact visited source checks and both gate memos
 
+Current update (2026-10-15 01:52 CEST): `f3d27627`, `a93d1b35`, and `d0d8ac1f`
+complete the ordered class filter with both memo tables. Each class occurrence
+retains its exact intermediate caches. Derived gate replay connects all
+decisions to the pure selected-class operation in the retained final cache.
+Read [the current note](notes-ordered-class-selection.md). Earlier next
+targets below retain their historical context.
+
 Updated: 2026-10-15 01:40 CEST.
 Proofs: `0f5f465f`, `348e5adc`, and `9abb1aff`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.

@@ -1,5 +1,55 @@
 # Public API and source correspondence
 
+## Complete ordered class selection and retained-cache readback
+
+Proofs: `f3d27627`, `a93d1b35`, and `d0d8ac1f`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-ordered-class-selection.md`. This section supersedes the
+earlier complete local-class filter target.
+
+The actual ordered class filter now has finite complete execution. Every
+class reads the original child list. A blocked class is discarded, then later
+classes run. Each original occurrence has one ordered receipt with its actual
+before cache, Boolean, and after cache. Repeated classes remain visible.
+Every retained class has complete false path checks. Missing fuel and pending
+construction remain separate from a Boolean decision. Graph and execution
+correspond in both directions. More fuel retains the selected list and cache.
+
+Both actual memo tables pass through the complete filter. Original source
+construction derives initial cache premises and both empty memos. Memo
+choices retain every class receipt, selected order, and final constructor
+cache. The full gate now has a derived replay law: above a completed query's
+final cache, the same query returns the same Boolean without constructor
+effects. Every class receipt therefore replays in the full filter's final
+cache. Derived total decisions in that cache give exactly
+`EqualityReduction.selectedClasses`. The selected list also connects to the
+existing one-pass forest theorem under its explicit primitive-operation laws.
+No whole-cache observation law is supplied. This is retained-final-cache
+readback, not arbitrary initial-cache equivalence or a native container proof.
+
+The audit passes 1,609 jobs and 45,030 theorem dependency checks. Only the
+three permitted foundations occur. Only the old unused `inputs` warning
+remains. No production Haskell code changed. Audit log:
+`/tmp/mcfta-ordered-class-selection-20261015-audit.log`. Snapshot:
+`/tmp/mcfta-ordered-class-selection-checkpoint-20261015-0152/`
+(1,997 Lean-tree files and four root documents). All older proofs except new
+audit imports, counterexamples, fixtures, marked drafts, repairs, backups,
+stashes, and other worktrees remain. Weekly allowance was 19% at 01:51 CEST;
+refresh it before work.
+
+Next connect physical source constraint values to the ordered class input.
+Model `unsafeSubsumptionOrderedEclasses`, `completedSubsumptionOrdering`,
+its reverse structural fallback, and the actual source `sortBy` order. Keep
+raw constructor payloads distinct from normalized consistent constraints.
+Reuse the existing subsumption transitivity and irreflexivity proofs. Do not
+assume a lawful comparator for arbitrary raw classes. Derive the empty and
+combined-contradiction guards before selection, including why the unsafe
+accessor cannot see `EqContradiction`. Then connect the actual required-path
+and narrowing primitives to the one-pass laws. Do not infer fixed-point
+termination from finite gate completion. Preserve exact Sized contracts,
+the unary ancestor theorem, the optimized interned core, and native runtime
+and extraction limits. Stop all work and workers at 1% allowance or less.
+
 ## Exact source crush semantics and both gate memos
 
 Proofs: `0f5f465f`, `348e5adc`, and `9abb1aff`. Source: `TharkunAB/cfta`,
