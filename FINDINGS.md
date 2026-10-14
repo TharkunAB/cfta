@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 07:00 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 07:23 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -282,6 +282,22 @@ physical returned product rows. New binder construction and preparation
 remain separate obligations. See
 [exact original inputs](lean/notes-recursive-intersection-input-exact.md).
 
+Least successful semantic fuel now gives a request-specific progress measure.
+Every immediate branch and ordered edge child strictly decreases it.
+Actual canonical domain allocation retains the same exact execution and
+least bound as semantic overwrite lists. Initial certificates come from
+actual closed original physical inputs. No child execution is supplied.
+
+Actual completed native source bodies now leave no new running cells.
+Their original completion frames restore the caller's running cells.
+`ActiveAbove` has initialization, publication, physical-effect, start, and
+completion-frame lemmas. Published handles cannot be absent. Busy is excluded
+under checked keys, strong source validity, active bounds, and the request's
+strict decrease. The body-limit invariant is not yet maintained across all
+compiled continuations. These conditional progress results do not assert
+general native first-run completion. See
+[request progress](lean/notes-recursive-intersection-request-progress.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
@@ -304,16 +320,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`7387845d`**; later commits record this handoff.
+The latest proof checkpoint is **`2a9cea9c`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,263 build targets and 41,364 theorem
+The current Lean 4.34.1 audit passes **1,272 build targets and 41,502 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-input-exact-20261014-audit.log`.
+Log: `/tmp/mcfta-native-active-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **33% at 07:00 CEST**.
+No background proof worker is active. Weekly allowance was **33% at 07:23 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

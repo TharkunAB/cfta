@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 07:00 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 07:23 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -31,8 +31,13 @@ carrier bounded by the actual issued counter. Canonical representatives and
 both copied-language directions now derive the complete finite input interface.
 The semantic schedule has a sufficient finite bound and exact product language
 for actual closed original inputs. Sufficient native first-run bounds remain open.
+Least successful semantic request bounds now decrease at every immediate call.
+Canonical source allocation retains them. Native completed frames leave no new
+running cells. Active-bound lifecycle lemmas and conditional absent/busy
+exclusion are proved. Maintaining the body limit through compiled continuations
+and deriving complete native first-run execution remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`7387845d`**. A later documentation commit
+The latest proof checkpoint is **`2a9cea9c`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -57,7 +62,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **33% at 07:00 CEST**. This is a historical value.
+The last observed value was **33% at 07:23 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -463,19 +468,53 @@ body, row, member, free-name, and copied-syntax retention through actual
 record and reservation growth. New allocations can change unused defaults.
 Read [exact original inputs](lean/notes-recursive-intersection-input-exact.md).
 
+## Recursive request decrease and native demand progress
+
+`IntersectDomainEquivalence` proves exact execution from lookup equality and
+cutoff membership. Free-map emptiness follows from lookup equality.
+`SourceRecursiveIntersectionDomainEquivalence` derives the same observations
+for actual canonical domain allocation and semantic overwrite lists.
+
+`IntersectRequiredFuel.requiredFuel` selects the least successful semantic
+bound for the request itself. `IntersectImmediateCalls.immediate_requiredFuel`
+derives strict decrease for all immediate branches and ordered edge children.
+`SourceRecursiveIntersectionRequestProgress` derives physical branch-child
+decrease, initial closed-root completion certificates, and unchanged required
+fuel under actual canonical Mu allocation. Successful child execution is not
+supplied as a premise. Full compiled continuation coverage remains open.
+
+`SourceRecursiveIntersectionNativeRunningBefore.Evaluation.running_before`
+and `done_running_before` show that actual completed source bodies leave no
+new running requests. Together with forward retention, running-cell origin is
+exact. Completed node/edge bodies and their original frames restore the
+running cells present before demand.
+
+`SourceRecursiveIntersectionNativeActiveBounds.ActiveAbove` retains least
+semantic bounds of all enclosing running cells. Empty initialization,
+publication, source effects, demand starts, and completed frames have checked
+lifecycle lemmas. `SourceRecursiveIntersectionNativeDemandProgress` excludes
+absent published handles and excludes busy under strong source validity,
+checked keys, active bounds, and a strict request decrease. Active bounds and
+the decrease are explicit premises. Full first-run completion is not claimed.
+Read [request progress](lean/notes-recursive-intersection-request-progress.md).
+
 ## Remaining priorities
 
 1. Use the proved physical input view, cached free-variable/closedness equations,
    finite reachable input carrier, physical structural ranks, actual canonical
    representatives, and proved independent copied-language equivalence. The
    complete finite input interface and sufficient semantic schedule bounds
-   are now derived. Connect actual native request execution to that schedule
-   and derive sufficient first-run native bounds for the intended input scope.
+   are now derived. Least request bounds and active native bounds now provide
+   the progress measure. Derive its body-limit invariant for all compiled
+   source branches and continuations, then construct finite actual native
+   evaluation. Restore caller bounds through original completion frames.
+   Carry explicit checked word ranges. Derive sufficient successful first-run
+   native bounds for the intended input scope.
    Preserve actual constructor/domain effects and source growth. Completed native node/edge
    correspondence, strong memo validity, exact physical/domain growth,
    available results, stable kernel bounds, and new `Produced` are proved
    under explicit checked word ranges. Do not repeat those proofs. Use
-   `lean/notes-recursive-intersection-input-exact.md` for the exact
+   `lean/notes-recursive-intersection-request-progress.md` for the exact
    next target. Actual completion remains a premise of the new theorems.
    Do not replace termination with a supplied completed trace. General open
    nested constructor completion and new-body preparation remain open.
@@ -545,10 +584,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,263 jobs and 41,364 theorem dependency checks**.
+The current build passes **1,272 jobs and 41,502 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-input-exact-20261014-audit.log`.
+Log: `/tmp/mcfta-native-active-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -582,6 +621,8 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `2a9cea9c` | Running-cell origin, original completed-frame restoration, active-bound lifecycle, and conditional node/edge demand progress. |
+| `e1ae3098` | Extensional domain execution, least successful fuel, all immediate request decreases, and actual canonical allocation correspondence. |
 | `7387845d` | Canonical input identities, both independent copied-language directions, full finite input interface, semantic schedule totality, and original view retention through growth. |
 | `6d64cb4a` | Actual tagged input view, derived free/closed equations, copied closedness, physical ranks, and finite closed-root input pairs. |
 | `e9ade493` | Full completed native node/edge kernel correspondence, strong returned memo invariants, and derived concrete provenance. |

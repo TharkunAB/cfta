@@ -76,6 +76,14 @@ assert closedness or a complete interned physical root.
 
 ## Next obligations
 
+The least-request-bound measure, actual canonical-domain equivalence,
+running-cell origin, active-bound lifecycle, and conditional native demand
+progress are now proved in
+[request progress](notes-recursive-intersection-request-progress.md).
+Derive the body-limit invariant through every compiled continuation and use
+it to construct finite native execution. Conditional busy exclusion does not
+prove that invariant for the whole driver.
+
 Derive sufficient first-run native bounds for the intended valid input scope.
 Completed-run correspondence does not prove that every input completes.
 Pending constructors and busy thunk observations remain distinct. General

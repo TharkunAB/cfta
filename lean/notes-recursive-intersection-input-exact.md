@@ -73,6 +73,13 @@ old and new total view is asserted.
 
 ## Next obligations
 
+Least successful request bounds, canonical domain equivalence, completed-frame
+running-cell origin, active-bound lifecycle, and conditional native demand
+progress are now proved in
+[request progress](notes-recursive-intersection-request-progress.md).
+Use those results and derive the body-limit invariant for compiled
+continuations. Full successful native first-run completion remains open.
+
 Use these derived original input facts and finite semantic execution to
 connect the native request tree to the schedule. Preserve actual constructor
 and domain effects, both memo families, publication before demand, and the
