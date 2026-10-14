@@ -13,7 +13,11 @@ The check follows 'GHC.Tc.Errors.Hole.tcCheckHoleFit':
   method) and unifies on the fly.
 * The fast path: an obviously insoluble equality, as @Int ~ Bool@, kills the
   step without the solver ('checkInsoluble', copied from GHC, which does not
-  export it).
+  export it). So does an equality of the walker that GHC's pure unifier
+  ('tcUnifyTysFG') finds surely apart, with the unification variables
+  bindable and the other variables rigid: GHC's unifier defers a mismatch
+  to the solver (@Bool ~ t a@), and the solver call costs tens of
+  microseconds.
 * The solver: the wanteds of the whole program so far, cloned, and the
   hole's relevant constraints, cloned, wrapped in the hole's implications so
   that the solver has the givens, and solved with 'simplifyTopWanteds' under
@@ -89,6 +93,7 @@ import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
 import GHC.Core.TyCo.Rep (TyLit (CharTyLit, NumTyLit, StrTyLit), Type (..), ft_af)
 import GHC.Core.TyCon (TyCon, isGenerativeTyCon)
 import GHC.Core.Type (PredType, anyFreeVarsOfType, coreView, mkTyVarTy, mkVisFunTysMany)
+import GHC.Core.Unify (BindFlag (BindMe, DontBindMe), UnifyResultM (SurelyApart), alwaysBindFam, tcUnifyTysFG)
 import GHC.Data.Bag (bagToList, listToBag, mapBag, unitBag)
 import GHC.Data.FastString (unpackFS)
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
@@ -175,7 +180,7 @@ data Counters = Counters
     { countSteps :: !Int
     -- ^ The steps tried.
     , countFastRejects :: !Int
-    -- ^ The steps that the fast path killed: the leaf does not fit, or an obviously insoluble equality.
+    -- ^ The steps that the fast path killed: the leaf does not fit, an obviously insoluble equality, or one surely apart.
     , countSolverSkips :: !Int
     -- ^ The checks that did not need the solver.
     , countSolverCalls :: !Int
@@ -387,35 +392,45 @@ entails environment predicates = setTcLevel (environmentLevel environment) . dis
 'True', every wanted must be solved, as for a complete program. Otherwise
 the solver runs only when the step brought an equality (the third
 argument), or when some wanted has no unification variable left; only those
-can make a prefix fail.
+can make a prefix fail. An equality that is surely apart fails without the
+solver.
 -}
 satisfiable :: Environment -> Walker -> Bool -> Bool -> TcM Bool
 satisfiable environment walker equality finished = do
     current <- liftZonkM (zonkTcTypes (filter (not . isCallStackPredTy) (wantedPredicates (walkerWanteds walker))))
-    if not finished && not equality && all open current
-        then True <$ count (\c -> c{countSolverSkips = countSolverSkips c + 1})
-        else do
-            start <- liftIO getMonotonicTimeNSec
-            -- The solver's own unifications and defaulting do not stay.
-            frozen <- freeze environment walker
-            residual <- solve
-            unsolved <- liftZonkM (zonkTcTypes (maybe [] (filter (not . isCallStackPredTy) . wantedPredicates) residual))
-            restore environment frozen
-            end <- liftIO getMonotonicTimeNSec
-            let answer = case residual of
-                    Nothing -> False
-                    Just remaining
-                        | insolubleWC remaining -> False
-                        | finished -> isSolvedWC remaining
-                        | otherwise -> all open unsolved
-            count $ \c ->
-                c
-                    { countSolverCalls = countSolverCalls c + 1
-                    , countSolverPrunes = countSolverPrunes c + (if answer then 0 else 1)
-                    , countSolverNanos = countSolverNanos c + (end - start)
-                    }
-            pure answer
+    if any apart current
+        then False <$ count (\c -> c{countFastRejects = countFastRejects c + 1})
+        else
+            if not finished && not equality && all open current
+                then True <$ count (\c -> c{countSolverSkips = countSolverSkips c + 1})
+                else do
+                    start <- liftIO getMonotonicTimeNSec
+                    -- The solver's own unifications and defaulting do not stay.
+                    frozen <- freeze environment walker
+                    residual <- solve
+                    unsolved <- liftZonkM (zonkTcTypes (maybe [] (filter (not . isCallStackPredTy) . wantedPredicates) residual))
+                    restore environment frozen
+                    end <- liftIO getMonotonicTimeNSec
+                    let answer = case residual of
+                            Nothing -> False
+                            Just remaining
+                                | insolubleWC remaining -> False
+                                | finished -> isSolvedWC remaining
+                                | otherwise -> all open unsolved
+                    count $ \c ->
+                        c
+                            { countSolverCalls = countSolverCalls c + 1
+                            , countSolverPrunes = countSolverPrunes c + (if answer then 0 else 1)
+                            , countSolverNanos = countSolverNanos c + (end - start)
+                            }
+                    pure answer
   where
+    apart predicate = case classifyPredType predicate of
+        EqPred _ left right -> case tcUnifyTysFG alwaysBindFam bindable [left] [right] of
+            SurelyApart -> True
+            _ -> False
+        _ -> False
+    bindable variable _ = if isTcTyVar variable && isMetaTyVar variable then BindMe else DontBindMe
     open = anyFreeVarsOfType (\variable -> isTcTyVar variable && isMetaTyVar variable)
     count = liftIO . modifyIORef' (environmentCounters environment)
     hole = environmentHole environment
