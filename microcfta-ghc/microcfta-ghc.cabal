@@ -24,6 +24,10 @@ extra-doc-files:
   CHANGELOG.md
   README.md
 
+extra-source-files:
+  test/holes/Holes.golden
+  test/holes/Holes.hs
+
 source-repository head
   type: git
   location: https://github.com/Tritlo/microecta.git
@@ -46,10 +50,12 @@ library
   exposed-modules:
     Data.CFTA.GHC.Erase
     Data.CFTA.GHC.Fits
+    Data.CFTA.GHC.HoleFits
     Data.CFTA.GHC.Internal.Check
 
   build-depends:
     base >=4.22 && <4.23,
+    bytestring >=0.12 && <0.13,
     containers >=0.8 && <0.9,
     deepseq >=1.5 && <1.6,
     ghc >=9.14 && <9.15,
@@ -79,6 +85,20 @@ test-suite ghc-fits-tests
     microcfta-ghc,
     process >=1.6 && <1.7,
     text >=2.1 && <2.2,
+
+test-suite hole-fits-golden
+  import: warnings
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: HoleFitsGolden.hs
+  hs-source-dirs: test
+  ghc-options: -rtsopts
+  build-depends:
+    base >=4.22 && <4.23,
+    directory >=1.3 && <1.4,
+    ghc >=9.14 && <9.15,
+    microcfta-ghc,
+    process >=1.6 && <1.7,
 
 benchmark hectare-ghc
   import: warnings

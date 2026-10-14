@@ -2,11 +2,13 @@
 
 {- | The streamed walk of "Data.CFTA.GHC.Fits" end to end, on five easy
 Hoogle+ queries with the Prelude: each query gives its expected program,
-and GHC accepts every fit as a program of the query's signature.
+and GHC accepts every fit as a program of the query's signature. Also: the
+fits that ignore an argument are marked, and the walk leaves the goal's
+unification variables as it found them.
 -}
 module Main (main) where
 
-import Control.Monad (forM_)
+import Control.Monad (forM, forM_)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.Text (Text)
@@ -57,6 +59,20 @@ main = withSession ["import Prelude"] $ \session -> do
                     forM_ (take 10 fits) $ \fit ->
                         accepts session ("(\\" <> unwords (map Text.unpack arguments) <> " -> " <> renderProgram fit <> ") :: " <> signature)
                             `shouldReturn` True
+        describe "fitIgnoresPart" $
+            it "marks the fits that ignore an argument" $ do
+                marks <- forM ignoring $ \(signature, arguments, programs) -> do
+                    Just typ <- typeOfExpression session ("undefined :: " <> signature)
+                    found <- newIORef []
+                    let wanted = map parse programs
+                        record fit = liftIO $ do
+                            modifyIORef' found (fit :)
+                            fits <- readIORef found
+                            pure (not (all (`elem` map fitProgram fits) wanted))
+                    _ <- fitsForSignature session defaultOptions{optionMaximumSize = 4} candidates typ arguments record
+                    fits <- readIORef found
+                    pure [lookup program [(fitProgram fit, fitIgnoresPart fit) | fit <- fits] | program <- wanted]
+                marks `shouldBe` [[Just True, Just False], [Just True, Just False]]
         describe "synthesizeFits" $
             it "leaves the unification variables of the goal as it found them" $ do
                 result <- inTypechecker session $ do
@@ -72,6 +88,12 @@ main = withSession ["import Prelude"] $ \session -> do
                     pure (length fits, isFlexi details)
                 result `shouldBe` Just (3, True)
   where
+    -- Two signatures, each with a fit that ignores an argument and one that does not.
+    ignoring =
+        [ ("[a] -> Int -> [a]", ["xs", "n"], ["const xs n", "take n xs"])
+        , ("(a -> Bool) -> [a] -> Int", ["p", "xs"], ["const (length xs) p", "length (filter p xs)"])
+        ]
+    parse = either error id . parseProgram
     size program = case program of
         Var _ -> 1
         App function argument -> size function + size argument

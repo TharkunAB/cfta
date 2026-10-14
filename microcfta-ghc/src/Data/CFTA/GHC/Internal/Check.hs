@@ -43,6 +43,7 @@ back.
 module Data.CFTA.GHC.Internal.Check (
     -- * Leaves
     Leaf (..),
+    rigidLeaf,
 
     -- * Walks
     Environment,
@@ -52,6 +53,10 @@ module Data.CFTA.GHC.Internal.Check (
     startWalker,
     step,
     complete,
+
+    -- * States
+    StateKey,
+    stateKey,
 
     -- * Freeze and restore
     Frozen,
@@ -65,20 +70,26 @@ module Data.CFTA.GHC.Internal.Check (
 
 import Control.Monad (replicateM)
 import Control.Monad.IO.Class (liftIO)
+import Data.Bits (shiftR, (.&.), (.|.))
+import Data.ByteString.Short (ShortByteString)
+import qualified Data.ByteString.Short as ShortByteString
 import Data.Containers.ListUtils (nubOrd)
 import Data.IORef (IORef, modifyIORef', newIORef, writeIORef)
+import qualified Data.Map.Strict as Map
 import Data.Maybe (isNothing)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
+import GHC.Builtin.Types (liftedTypeKind)
 import GHC.Core.Predicate (EqRel, Pred (EqPred), classifyPredType, eqRelRole, isCallStackPredTy)
 import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
-import GHC.Core.TyCo.Rep (Type (ForAllTy, FunTy, TyConApp), ft_af)
+import GHC.Core.TyCo.Rep (TyLit (CharTyLit, NumTyLit, StrTyLit), Type (..), ft_af)
 import GHC.Core.TyCon (TyCon, isGenerativeTyCon)
-import GHC.Core.Type (PredType, anyFreeVarsOfType, coreView, mkVisFunTysMany)
+import GHC.Core.Type (PredType, anyFreeVarsOfType, coreView, mkTyVarTy, mkVisFunTysMany)
 import GHC.Data.Bag (bagToList, listToBag, mapBag, unitBag)
+import GHC.Data.FastString (unpackFS)
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
 import GHC.Tc.Solver (simplifyTopWanteds)
 import GHC.Tc.Solver.Monad (runTcSEarlyAbort)
@@ -95,13 +106,39 @@ import GHC.Tc.Types.Constraint (
     mkImplicWC,
     mkNonCanonical,
  )
-import GHC.Tc.Types.Origin (CtOrigin (ExprHoleOrigin), ReportRedundantConstraints (NoRRC), UserTypeCtxt (ExprSigCtxt))
-import GHC.Tc.Utils.Monad (TcM, discardErrs, getTcLevel, liftZonkM, setTcLevel, tryCaptureConstraints, tryTc)
-import GHC.Tc.Utils.TcMType (cloneWC, cloneWantedCtEv, newOpenFlexiTyVarTy, newTcEvBinds, readMetaTyVar)
-import GHC.Tc.Utils.TcType (MetaDetails (Flexi, Indirect), TcLevel, TcTyVar, isMetaTyVar, metaTyVarRef)
+import GHC.Tc.Types.Origin (
+    CtOrigin (ExprHoleOrigin),
+    ReportRedundantConstraints (NoRRC),
+    SkolemInfoAnon (RuntimeUnkSkol),
+    UserTypeCtxt (ExprSigCtxt),
+    mkSkolemInfo,
+ )
+import GHC.Tc.Utils.Monad (
+    TcM,
+    discardErrs,
+    getTcLevel,
+    liftZonkM,
+    newSysName,
+    setTcLevel,
+    tryCaptureConstraints,
+    tryTc,
+ )
+import GHC.Tc.Utils.TcMType (cloneWC, cloneWantedCtEv, newOpenFlexiTyVarTy, newSkolemTyVar, newTcEvBinds, readMetaTyVar)
+import GHC.Tc.Utils.TcType (
+    MetaDetails (Flexi, Indirect),
+    MetaInfo (..),
+    TcLevel (..),
+    TcTyVar,
+    isMetaTyVar,
+    metaTyVarInfo,
+    metaTyVarRef,
+    metaTyVarTcLevel,
+ )
 import GHC.Tc.Utils.Unify (tcSubTypeSigma)
 import GHC.Tc.Zonk.TcType (zonkTcTypes)
-import GHC.Types.Var (isTcTyVar)
+import GHC.Types.Name.Occurrence (mkTyVarOcc)
+import GHC.Types.Unique (Uniquable, getKey, getUnique)
+import GHC.Types.Var (FunTyFlag (..), VarBndr (Bndr), isTcTyVar, tyVarKind)
 
 {- | A leaf of a program: its name in the program, its type, and whether it
 can head an application.
@@ -111,6 +148,17 @@ data Leaf = Leaf
     , leafType :: Type
     , leafHeads :: Bool
     }
+
+{- | A leaf of a fresh rigid type, with the given name: a new skolem of kind
+@Type@ at the level of the hole. By parametricity, a program fits with this
+leaf only when it does not use the leaf's value, except with 'seq'.
+-}
+rigidLeaf :: Environment -> Text -> TcM Leaf
+rigidLeaf environment name = setTcLevel (environmentLevel environment) $ do
+    information <- mkSkolemInfo RuntimeUnkSkol
+    variableName <- newSysName (mkTyVarOcc "ignored")
+    variable <- newSkolemTyVar information variableName liftedTypeKind
+    pure (Leaf name (mkTyVarTy variable) False)
 
 -- | The counters of a walk.
 data Counters = Counters
@@ -127,12 +175,18 @@ data Counters = Counters
     , countFreezes :: !Int
     , countFreezeNanos :: !Word64
     -- ^ The time of the freezes and the restores.
+    , countKnownGood :: !Int
+    -- ^ The steps whose solver verdict was known from an earlier step of the same state.
+    , countKnownDead :: !Int
+    -- ^ The steps that failed before from the same state, skipped without a check.
+    , countKeyNanos :: !Word64
+    -- ^ The time of the state keys.
     }
     deriving (Eq, Show)
 
 -- | No steps yet.
 emptyCounters :: Counters
-emptyCounters = Counters 0 0 0 0 0 0 0 0
+emptyCounters = Counters 0 0 0 0 0 0 0 0 0 0 0
 
 -- | The hole of a walk, the level of its innermost implication, and the walk's counters.
 data Environment = Environment
@@ -176,16 +230,99 @@ startWalker environment types goal =
         , walkerGoals = [goal]
         }
 
+{- | The state of a walker up to the names of its unification variables:
+its goals, its wanteds, the hole's relevant constraints, and the given
+unification variables (of the goal and of the candidates' types, which a
+step can fill without a trace in the goals), all zonked. Each unification
+variable becomes a number in the order of its first occurrence, with its
+level, its kind of variable, and its kind. A step of two walkers with the
+same key and the same leaf gives the same verdict.
+-}
+newtype StateKey = StateKey ShortByteString
+    deriving (Eq, Ord)
+
+-- | The key of a walker's state, with the given unification variables.
+stateKey :: Environment -> [TcTyVar] -> Walker -> TcM StateKey
+stateKey environment given walker = do
+    start <- liftIO getMonotonicTimeNSec
+    types <-
+        liftZonkM . zonkTcTypes $
+            walkerGoals walker
+                <> wantedPredicates (walkerWanteds walker)
+                <> map ctEvPred (bagToList (th_relevant_cts (environmentHole environment)))
+                <> map mkTyVarTy given
+    let key = StateKey (encode (typesKey types))
+    end <- key `seq` liftIO getMonotonicTimeNSec
+    liftIO $ modifyIORef' (environmentCounters environment) $ \c -> c{countKeyNanos = countKeyNanos c + (end - start)}
+    pure key
+  where
+    -- Seven bits to a byte; the last byte of a number is under 128.
+    encode = ShortByteString.pack . concatMap bytes
+    bytes number
+        | number < 128 = [fromIntegral number]
+        | otherwise = fromIntegral (number .&. 127 .|. 128) : bytes (number `shiftR` 7)
+
+{- | Types as numbers: a tag for each form of type, then its parts. A
+unification variable is its number in the order of first occurrence; the
+first occurrence also gives its level, its kind of variable, and its kind.
+Another variable, a type constructor, or a binder is its unique.
+-}
+typesKey :: [Type] -> [Word64]
+typesKey = reverse . snd . foldl' typeKey (Map.empty, [])
+  where
+    typeKey (seen, out) typ = case typ of
+        TyVarTy variable
+            | isTcTyVar variable && isMetaTyVar variable -> case Map.lookup (unique variable) seen of
+                Just index -> (seen, index : 1 : out)
+                Nothing ->
+                    let index = fromIntegral (Map.size seen)
+                     in typeKey
+                            (Map.insert (unique variable) index seen, info variable : level variable : index : 1 : out)
+                            (tyVarKind variable)
+            | otherwise -> (seen, unique variable : 2 : out)
+        TyConApp constructor arguments ->
+            foldl' typeKey (seen, fromIntegral (length arguments) : unique constructor : 3 : out) arguments
+        FunTy flag multiplicity argument result -> foldl' typeKey (seen, flagKey flag : 4 : out) [multiplicity, argument, result]
+        AppTy function argument -> foldl' typeKey (seen, 5 : out) [function, argument]
+        ForAllTy (Bndr variable _) body -> foldl' typeKey (seen, unique variable : 6 : out) [tyVarKind variable, body]
+        LitTy literal ->
+            let text = case literal of
+                    NumTyLit number -> 'n' : show number
+                    StrTyLit string -> 's' : unpackFS string
+                    CharTyLit character -> ['c', character]
+             in (seen, reverse (map (fromIntegral . fromEnum) text) <> (fromIntegral (length text) : 7 : out))
+        CastTy inner _ -> typeKey (seen, 8 : out) inner
+        CoercionTy _ -> (seen, 9 : out)
+    unique :: (Uniquable a) => a -> Word64
+    unique = getKey . getUnique
+    level variable = case metaTyVarTcLevel variable of
+        TcLevel depth -> fromIntegral depth + 1
+        QLInstVar -> 0
+    info variable = case metaTyVarInfo variable of
+        TauTv -> 0
+        TyVarTv -> 1
+        RuntimeUnkTv -> 2
+        CycleBreakerTv -> 3
+        ConcreteTv _ -> 4
+    flagKey flag = case flag of
+        FTF_T_T -> 0
+        FTF_T_C -> 1
+        FTF_C_T -> 2
+        FTF_C_C -> 3
+
 -- | The unification variables of types.
 metasOf :: [Type] -> [TcTyVar]
 metasOf = filter (\variable -> isTcTyVar variable && isMetaTyVar variable) . tyCoVarsOfTypesList
 
 {- | Give the leftmost open goal a leaf with so many children. 'Nothing' when
-the leaf does not fit, or when a wanted cannot be solved any more. The step
-writes unification variables; freeze before it to undo it.
+the leaf does not fit, or when a wanted cannot be solved any more. With
+'True' for the last argument, the wanteds are known to be good (an earlier
+step of a walker with the same 'StateKey' and the same leaf passed), so the
+solver does not run. The step writes unification variables; freeze before
+it to undo it.
 -}
-step :: Environment -> Walker -> Leaf -> Int -> TcM (Maybe Walker)
-step environment walker leaf children = case walkerGoals walker of
+step :: Environment -> Walker -> Leaf -> Int -> Bool -> TcM (Maybe Walker)
+step environment walker leaf children known = case walkerGoals walker of
     [] -> pure Nothing
     goal : rest
         | children > 0 && not (leafHeads leaf) -> pure Nothing
@@ -208,7 +345,10 @@ step environment walker leaf children = case walkerGoals walker of
                                 , walkerWanteds = wanted `andWC` walkerWanteds walker
                                 , walkerGoals = arguments <> rest
                                 }
-                    ok <- satisfiable environment walker' (hasEquality wanted) False
+                    ok <-
+                        if known
+                            then True <$ count (\c -> c{countKnownGood = countKnownGood c + 1})
+                            else satisfiable environment walker' (hasEquality wanted) False
                     pure (if ok then Just walker' else Nothing)
   where
     count = liftIO . modifyIORef' (environmentCounters environment)

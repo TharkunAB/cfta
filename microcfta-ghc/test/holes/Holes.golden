@@ -1,0 +1,152 @@
+test/holes/Holes.hs:5:9: error: [GHC-88464]
+    * Found hole: _ :: [a] -> Int
+      Where: `a' is a rigid type variable bound by
+               the type signature for:
+                 count :: forall a. [a] -> Int
+               at test/holes/Holes.hs:4:1-19
+    * In an equation for `count': count = _
+    * Relevant bindings include
+        count :: [a] -> Int (bound at test/holes/Holes.hs:5:1)
+      Valid hole fits include
+        count :: [a] -> Int (bound at test/holes/Holes.hs:5:1)
+        length :: forall (t :: * -> *) a. Foldable t => t a -> Int
+          with length @[] @a
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Data.Foldable'))
+        \x1 -> pred (length x1)
+        \x1 -> succ (length x1)
+        \x1 -> abs (length x1)
+        \x1 -> negate (length x1)
+        \x1 -> signum (length x1)
+  |
+5 | count = _
+  |         ^
+
+test/holes/Holes.hs:9:11: error: [GHC-88464]
+    * Found hole: _ :: [[a]] -> [a]
+      Where: `a' is a rigid type variable bound by
+               the type signature for:
+                 flatten :: forall a. Ord a => [[a]] -> [a]
+               at test/holes/Holes.hs:8:1-34
+    * In an equation for `flatten': flatten = _
+    * Relevant bindings include
+        flatten :: [[a]] -> [a] (bound at test/holes/Holes.hs:9:1)
+      Constraints include Ord a (from test/holes/Holes.hs:8:1-34)
+      Valid hole fits include
+        flatten :: [[a]] -> [a] (bound at test/holes/Holes.hs:9:1)
+        mconcat :: forall a. Monoid a => [a] -> a
+          with mconcat @[a]
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Base'))
+        concat :: forall (t :: * -> *) a. Foldable t => t [a] -> [a]
+          with concat @[] @a
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Data.Foldable'))
+        head :: forall a. GHC.Internal.Stack.Types.HasCallStack => [a] -> a
+          with head @[a]
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.List'))
+        last :: forall a. GHC.Internal.Stack.Types.HasCallStack => [a] -> a
+          with last @[a]
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.List'))
+        maximum :: forall (t :: * -> *) a. (Foldable t, Ord a) => t a -> a
+          with maximum @[] @[a]
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Data.Foldable'))
+        \x1 -> cycle (mconcat x1)
+        \x1 -> cycle (head x1)
+        \x1 -> cycle (last x1)
+        \x1 -> init (mconcat x1)
+        \x1 -> init (head x1)
+        (Some hole fits suppressed; use -fmax-valid-hole-fits=N or -fno-max-valid-hole-fits)
+  |
+9 | flatten = _
+  |           ^
+
+test/holes/Holes.hs:12:11: error: [GHC-88464]
+    * Found hole: _ :: (a -> b) -> [a] -> [b]
+      Where: `a', `b' are rigid type variables bound by
+               the type signature for:
+                 mapList :: forall a b. (a -> b) -> [a] -> [b]
+               at test/holes/Holes.hs:11:1-33
+    * In an equation for `mapList': mapList = _
+    * Relevant bindings include
+        mapList :: (a -> b) -> [a] -> [b]
+          (bound at test/holes/Holes.hs:12:1)
+      Valid hole fits include
+        mapList :: (a -> b) -> [a] -> [b]
+          (bound at test/holes/Holes.hs:12:1)
+        map :: forall a b. (a -> b) -> [a] -> [b]
+          with map @a @b
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Base'))
+        fmap :: forall (f :: * -> *) a b.
+                Functor f =>
+                (a -> b) -> f a -> f b
+          with fmap @[] @a @b
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Base'))
+        (<$>) :: forall (f :: * -> *) a b.
+                 Functor f =>
+                 (a -> b) -> f a -> f b
+          with (<$>) @[] @a @b
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Data.Functor'))
+        mempty :: forall a. Monoid a => a
+          with mempty @((a -> b) -> [a] -> [b])
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Base'))
+        \x1 x2 -> map x1 (cycle x2)
+        \x1 x2 -> map x1 (init x2)
+        \x1 x2 -> map x1 (reverse x2)
+        \x1 x2 -> map x1 (tail x2)
+        \x1 x2 -> flip map x2 x1
+   |
+12 | mapList = _
+   |           ^
+
+test/holes/Holes.hs:16:16: error: [GHC-88464]
+    * Found hole: _ :: (a -> Bool) -> [a] -> Int
+      Where: `a' is a rigid type variable bound by
+               the type signature for:
+                 countMatches :: forall a. (a -> Bool) -> [a] -> Int
+               at test/holes/Holes.hs:15:1-41
+    * In an equation for `countMatches': countMatches = _
+    * Relevant bindings include
+        countMatches :: (a -> Bool) -> [a] -> Int
+          (bound at test/holes/Holes.hs:16:1)
+      Valid hole fits include
+        countMatches :: (a -> Bool) -> [a] -> Int
+          (bound at test/holes/Holes.hs:16:1)
+        \x1 x2 -> length (map x1 x2)
+        \x1 x2 -> length (mapList x1 x2)
+        \x1 x2 -> length (dropWhile x1 x2)
+        \x1 x2 -> length (filter x1 x2)
+        \x1 x2 -> length (takeWhile x1 x2)
+   |
+16 | countMatches = _
+   |                ^
+
+test/holes/Holes.hs:20:23: error: [GHC-88464]
+    * Found hole: _ :: a
+      Where: `a' is a rigid type variable bound by
+               the type signature for:
+                 firstOr :: forall a. a -> [a] -> a
+               at test/holes/Holes.hs:19:1-24
+    * In an equation for `firstOr': firstOr fallback xs = _
+    * Relevant bindings include
+        xs :: [a] (bound at test/holes/Holes.hs:20:18)
+        fallback :: a (bound at test/holes/Holes.hs:20:9)
+        firstOr :: a -> [a] -> a (bound at test/holes/Holes.hs:20:1)
+      Valid hole fits include
+        fallback :: a (bound at test/holes/Holes.hs:20:9)
+        head xs
+        last xs
+        foldl1 asTypeOf []
+        foldr1 asTypeOf []
+        foldl1 asTypeOf xs
+   |
+20 | firstOr fallback xs = _
+   |                       ^
+

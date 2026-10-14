@@ -15,7 +15,9 @@ The parent runs each query in a child process with a heap limit and a time
 limit, as Hectare's evaluation does. Each row gives the query, the rung, the
 outcome (@solved@, @other@ when other programs fit but not the expected one,
 @unsolved@, @timeout@, @oom@, or @crash@), the bound, the size of the first
-fit and of the expected one, the programs that Hectare proposed, the solver
+fit and of the expected one, the rank of the expected one among the fits
+and among the fits that use every part of themselves ('fitIgnoresPart'),
+the programs that Hectare proposed, the solver
 calls, the seconds, the seconds of Hectare's construction, reduction, and
 listing and of the checks in the typechecker, the peak memory in megabytes,
 whether GHC accepts the first fit as a program of the signature, and the
@@ -40,7 +42,7 @@ import Control.Exception (AsyncException (HeapOverflow), try)
 import Control.Monad (forM_, replicateM_, when)
 import Control.Monad.IO.Class (liftIO)
 import Data.Char (isAlphaNum, isUpper)
-import Data.IORef (newIORef, readIORef, writeIORef)
+import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
 import Data.List (intercalate, isPrefixOf, partition)
 import Data.Maybe (isJust, isNothing)
 import Data.Text (Text)
@@ -153,38 +155,6 @@ signatureOf query = context <> renderType (foldr (TFun . snd) (ghcGoal query) (g
         [] -> ""
         constraints -> "(" <> intercalate ", " [className <> " " <> Text.unpack variable | (className, variable) <- constraints] <> ") => "
 
-{- | Hectare's pruning rule of the Hoogle+ library, with GHC's names: a list
-function is not applied to @[]@.
--}
-hooglePlusAvoid :: [([Text], Maybe [Text])]
-hooglePlusAvoid =
-    [
-        (
-            [ "listToMaybe"
-            , "lefts"
-            , "rights"
-            , "partitionEithers"
-            , "catMaybes"
-            , "head"
-            , "last"
-            , "tail"
-            , "init"
-            , "null"
-            , "length"
-            , "reverse"
-            , "concat"
-            , "concatMap"
-            , "sum"
-            , "product"
-            , "maximum"
-            , "minimum"
-            , "(!!)"
-            , "(++)"
-            ]
-        , Just ["[]"]
-        )
-    ]
-
 -- Libraries
 
 -- | A rung of the library ladder: its name and its modules.
@@ -226,6 +196,8 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
             start <- getMonotonicTime
             firstFit <- newIORef Nothing
             solved <- newIORef Nothing
+            -- The fits so far, and those that use every part of themselves.
+            counts <- newIORef (0 :: Int, 0 :: Int)
             tracing <- isJust <$> lookupEnv "HECTARE_GHC_TRACE"
             -- The walk stops at the time limit; this limit is for the rest.
             outcome <- try . timeout ((seconds + 30) * 1000000) $ withSession (importLines rung) $ \session -> do
@@ -238,7 +210,7 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
                         defaultOptions
                             { optionMaximumSize = ghcSize query
                             , optionSeconds = Just (fromIntegral seconds - (ready - start))
-                            , optionAvoid = hooglePlusAvoid
+                            , optionAvoid = hectareAvoid
                             , optionReport = Just report
                             , optionTrace = if tracing then Just trace else Nothing
                             }
@@ -252,6 +224,7 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
                     accept fit = liftIO $ do
                         known <- readIORef firstFit
                         when (isNothing known) $ writeIORef firstFit (Just fit)
+                        modifyIORef' counts (\(all', using) -> (all' + 1, if fitIgnoresPart fit then using else using + 1))
                         if Just (fitProgram fit) == ghcSolution query
                             then False <$ writeIORef solved (Just (fitSize fit))
                             else pure True
@@ -277,6 +250,7 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
             memory <- peakMemory
             found <- readIORef firstFit
             size <- readIORef solved
+            (rank, rankUsing) <- readIORef counts
             let outcomeText :: String
                 outcomeText = case outcome of
                     Left HeapOverflow -> "oom"
@@ -301,13 +275,15 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
                         )
                     _ -> ("-", "-", "-,-,-,-", "-")
             printf
-                "result,%s,%s,%s,%d,%s,%s,%s,%s,%.3f,%s,%d,%s,%s\n"
+                "result,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%.3f,%s,%d,%s,%s\n"
                 name
                 rungName'
                 outcomeText
                 (ghcSize query)
                 (maybe "-" (show . fitSize) found)
                 (maybe "-" show size)
+                (if isJust size then show rank else "-")
+                (if isJust size then show rankUsing else "-")
                 programs
                 calls
                 (end - start)
@@ -337,7 +313,7 @@ runSuite rung seconds heap jobs names = do
     output <- newMVar ()
     done <- newEmptyMVar
     putStrLn
-        "result,query,rung,outcome,bound,first,solved,programs,calls,seconds,build,reduce,list,check,memory,checked,program"
+        "result,query,rung,outcome,bound,first,solved,rank,using,programs,calls,seconds,build,reduce,list,check,memory,checked,program"
     hFlush stdout
     forM_ [0 .. jobs - 1] $ \worker -> forkIO $ do
         let loop = do
@@ -358,9 +334,9 @@ runSuite rung seconds heap jobs names = do
                             writeFile (directory <> "/" <> rung <> "/" <> query <> ".log") (out <> err <> "exit " <> show code <> "\n")
                         let row = case (code, [line | line <- lines out, "result," `isPrefixOf` line]) of
                                 (_, line : _) -> line
-                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,"
-                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,"
-                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,"
+                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,"
+                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,"
+                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,"
                         withMVar output $ \() -> putStrLn row >> hFlush stdout
                         loop
         loop
