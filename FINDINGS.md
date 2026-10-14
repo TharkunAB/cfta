@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 15:49 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 16:18 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -36,6 +36,14 @@ See [finite map Sized](lean/notes-sized-finite-keys.md).
 
 ## Independent guarded meaning and actual stored compiler
 
+The current local preservation snapshot is
+`/tmp/mcfta-guarded-source-execution-checkpoint-20261014-1620/`.
+It contains all **1,769 Lean-tree files**, root restart documents, the fixture,
+and focused/aggregate logs. All 1,761 files from the previous snapshot remain.
+Only audit imports, the two coverage ledgers, and the guarded-language note
+changed among those older files. All earlier proof bytes and marked drafts
+are unchanged. No Haskell source changed in this proof checkpoint.
+
 `b3008aba` adds `InternedGuardedLanguage` and `InternedGuardedSyntax`.
 Actual stored bodies and full lexical source syntax have independent positive
 least-language interpretations. Probe metadata and the cold reader do not
@@ -52,11 +60,35 @@ law with coherent slot lookup and nearest local shadowing.
 `execute_plan_language` and `unfold_plan_language` derive simultaneous
 substitution and outer-Mu plan semantics without an assumed execution law.
 
-These are actual compiler and normalization laws. The actual Mu constructor
-and canonical-hit execution language law is still open. Prove repaired source
-execution and its semantic probe-heap invariant together. Then connect final
-repaired graph language to independent meaning and physical product readback.
-Do not infer execution correspondence from the compiler law alone.
+`4457307a` proves semantic support for the existing root-profile and free-name
+analyses over complete lexical syntax. Pure root profiles bound accepted
+languages. Empty-child filtering removes no accepted term. Only surviving
+symbolic captures can affect a body language. The ordinary chooser is fresh
+for those captures; it need not be fresh for every supplied unused input.
+The next reserved interned identity is also fresh for surviving captures.
+
+`e46d3f9e` proves `InternedGuardedExecution.build_language` and `closed_heap`.
+The joint source induction derives the semantic probe heap and exact returned
+language through both probes, fresh completion, cleanup, and canonical hits.
+Every stored Mu has the least language of its exact ordinary probe under
+binding of `.uninterned (ordinaryLevel depth)`. A hit uses its complete stored
+payload and requested probes. It does not use a discarded candidate body.
+Pending outcomes retain the same heap invariant. No execution contract is
+assumed. `closed_language` gives the independent language of a completed
+closed source expression under arbitrary guards and ambient languages.
+
+`InternedGuardedStoredExecution.execute_checked` composes actual execution
+with the exact stored compiler. It proves capture-free simultaneous
+substitution language and semantic heap preservation. `unfold_checked`
+proves that actual outer-Mu unfolding preserves independent language for
+arbitrary available records. No preparation or literal reconstruction
+identity premise is used.
+
+Next connect the actual final repaired graph and finite cold table to this
+independent meaning. Then derive physical `ProductReadback.members`,
+`.rejected`, and `product_exact`. The exact final-cache graph/table law is
+already proved, but execution correspondence alone does not supply this
+transport. Keep cache growth, availability, and leastness explicit.
 Read `lean/notes-independent-guarded-language.md` for the exact next target,
 the proposed probe invariant, and all scope distinctions.
 
@@ -94,9 +126,9 @@ for arbitrary raw binders is refuted. Then derive physical
 The earlier prepared graph uses the old executor; its preparation premise
 remains valid in its stated fragment.
 
-Current audit: 1,401 jobs and 43,344 theorem dependency checks. Only
+Current audit: 1,409 jobs and 43,422 theorem dependency checks. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
+`/tmp/mcfta-guarded-source-execution-20261014-audit.log`.
 
 ## Finite general final tables
 
@@ -110,9 +142,9 @@ with the actual finite trace, stable outer/read bounds, semantic heaps,
 coverage, the body/probe heap, growth/history, and resident closed edges.
 No preparation, fixed future cache, or supplied trace is assumed.
 
-The aggregate audit passes 1,401 jobs and 43,344 theorem dependency checks.
+The aggregate audit passes 1,409 jobs and 43,422 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
+`/tmp/mcfta-guarded-source-execution-20261014-audit.log`.
 This earlier result proves finite table structure and exact row readback.
 The later native and repaired-language checkpoints below also prove native
 heap propagation and final-cache guarded row language. Initial-source
@@ -161,8 +193,8 @@ semantic/coverage and body/probe heap preservation, resident closed edges,
 and stability at all larger bounds. `constructed_read_closed` derives all
 cache premises from actual repaired empty-cache source construction.
 
-Audit: 1,401 jobs and 43,344 theorem dependency checks. Log:
-`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
+Audit: 1,409 jobs and 43,422 theorem dependency checks. Log:
+`/tmp/mcfta-guarded-source-execution-20261014-audit.log`.
 General shared traversal is proved below the current source heap boundary by
 `68e790f0`. Its unfinished-unfolding budget uses actual allocation-free replay. Native propagation of the body/probe heap is now proved by `9a0df4cb`.
 Initial-source language transport and physical product language remain open. See
@@ -849,7 +881,7 @@ outcome, or assumed progress law is used. `execute_heap` and `unfold_heap`
 preserve the new body/probe invariant for subsequent actual source work.
 
 The aggregate audit passes 1,381 jobs and 43,054 theorem dependency checks.
-Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
+Log: `/tmp/mcfta-guarded-source-execution-20261014-audit.log`.
 The three permitted axioms remain `propext`, `Classical.choice`, and `Quot.sound`.
 The 14:38 restart snapshot contains 1,738 Lean-tree files, the root restart
 documents, the retained fixture, and the new source/progress audit and live
@@ -947,11 +979,11 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`b3008aba`**; later commits record this handoff.
+The latest proof checkpoint is **`e46d3f9e`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,401 build targets and 43,344 theorem
+The current Lean 4.34.1 audit passes **1,409 build targets and 43,422 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
+Log: `/tmp/mcfta-guarded-source-execution-20261014-audit.log`.
 After PR #119, all **642** examples passed in Nix: 289 core, 208
 generator, and 145 refinement. PR #121 changes comments only; the runtime
 checks remain applicable. Fourmolu and active-package cabal-gild passed.
@@ -959,7 +991,7 @@ The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **29% at 14:32 CEST**.
+No background proof worker is active. Weekly allowance was **28% at 16:18 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

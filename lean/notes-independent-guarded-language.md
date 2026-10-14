@@ -1,6 +1,6 @@
 # Independent guarded language and actual stored plans
 
-Updated: 2026-10-14 15:48 CEST. Proof checkpoint: `b3008aba`.
+Updated: 2026-10-14 16:18 CEST. Proof checkpoints: `4457307a`, `e46d3f9e`.
 
 ## Independent meaning
 
@@ -54,37 +54,80 @@ actual optional replacement. Closed captured records remain constants.
 `unfold_plan_language` proves that the exact outer-Mu unfolding plan has
 the independent least language of that Mu.
 
-These are compiler laws. They do not yet identify the actual returned record
-of `InternedFreshOrdinaryConstruction.build` or repaired `execute` with the
-independent source-plan language. They do not use an assumed execution law.
+## Complete source analysis support
+
+`InternedGuardedAbstractSupport.Related` combines root-language bounds with
+free-name support. A pure root profile bounds its language by its literal
+root alternatives. A smart binder lowers that bound by a closed candidate
+argument. Both binder forms retain external-name support.
+
+`InternedGuardedSyntaxSupport.evaluate_related` proves both properties for
+complete lexical syntax. A filtered edge has an empty child profile. The
+child's root bound proves that no finite accepted term can use that edge.
+All retained guards and ordered forests remain in the interpretation.
+
+`InternedGuardedProfileSupport.profile_upper` derives root bounds directly
+from actual stored profiles. `values_inputs` combines these bounds with
+coherent cached free-name support. `body_captures` and `body_bind_fresh`
+show that only surviving symbolic captures need fresh local names.
+Unused supplied inputs can contain the chosen ordinary sentinel. Do not
+replace the proved capture-freshness condition by all-input freshness.
+`InternedGuardedProbeHeap.ordinary_fresh_captures` follows the actual chooser.
+`next_fresh_captures` follows actual issued-name bounds.
+
+## Actual source execution
+
+`InternedGuardedProbeHeap.Correct` equates each actual stored Mu's independent
+language with the least language of its exact ordinary probe. The probe name
+is `.uninterned (ordinaryLevel depth)`. Guards and ambient environments are
+universally quantified. `Heap` requires this law for all complete Mu records.
+
+`InternedGuardedRequest.request_heap` derives the candidate invariant from
+recursive callback least languages. A completed canonical hit retains its
+existing invariant. `request_language` uses exact coherent requested probes,
+actual cleanup, and the completed stored record. No discarded candidate
+replaces a canonical hit.
+
+`InternedGuardedExecution.build_language` proves execution correspondence and
+heap preservation in one source induction. It follows ordered children and
+edges, both probes, root-self normalization, fresh completion, and canonical
+readback. Pending results retain the heap. `closed_heap` derives the invariant
+from empty caches. `closed_language` identifies every completed closed source
+result with independent lexical meaning. No callback or execution contract
+is assumed.
+
+`InternedGuardedStoredExecution.execute_checked` composes that source theorem
+with exact stored compilation. It proves the actual capture-free simultaneous
+replacement language and preserves the heap. `unfold_checked` proves that
+actual repaired outer-Mu unfolding retains independent language for arbitrary
+available records. It uses no preparation or literal reconstruction premise.
 
 ## Next proof
 
-Prove actual repaired source execution and a semantic probe-heap invariant
-together. Cover canonical hits as well as fresh request completion.
-Use exact coherent probe readback. Use actual fresh-name bounds and
-`meaning_free` to keep captured languages unchanged under local binding.
-Use actual normalization, cleanup, and root-self filtering from this checkpoint.
-Do not replace a canonical hit with the candidate record that it discarded.
+Connect the actual final repaired graph and finite cold table to independent
+meaning. Then derive physical `ProductReadback.members`, `.rejected`, and
+`product_exact`. Propagate the new semantic heap through cold/native effects
+where those paths construct binders. Their older depth/free/profile heaps
+remain separate proved invariants.
 
-One candidate invariant equates the stored Mu's independent least language
-with the least language obtained from its ordinary probe. Bind the probe's
-actual name `.uninterned (ordinaryLevel depth)` to the candidate language.
-Quantify over ambient environments and guards. This invariant is a proposed
-proof target, not a theorem. Check its exact freshness requirements before
-using it. Full body-transform equality can be stronger than necessary because
-the root-self filter preserves closed candidates and least languages.
-
-After execution correspondence, connect the actual final repaired graph and
-finite table to the independent language. Then derive physical
-`ProductReadback.members` and `.rejected`. Exact final-cache graph language,
-native heap propagation, and finite native output tables are already proved.
+`MergedFreshOrdinaryGraph` uses actual repaired unfolding but fixes one cache.
+Keep availability, replay, and cache growth explicit when following its
+successors. Graph acceptance is least finite-run acceptance. Equal unfolding
+equations alone do not prove completeness through unguarded epsilon cycles.
+The existing final-cache graph/table theorem and new execution theorem are
+component results. Their full independent-language transport remains open.
 The raw unused-binder identity counterexample still applies.
 
 ## Validation
 
-Lean 4.34.1 passes 1,401 aggregate jobs and 43,344 theorem dependency checks.
+Lean 4.34.1 passes 1,409 aggregate jobs and 43,422 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-independent-guarded-compiler-20261014-audit.log`.
+`/tmp/mcfta-guarded-source-execution-20261014-audit.log`.
 No production Haskell source changed. Existing Nix and formatter checks remain
 applicable. The earlier proofs, counterexamples, and marked drafts remain.
+
+All 1,761 files from the previous local snapshot remain. The current Lean
+tree has 1,769 files. Only audit imports, coverage ledgers, and this note
+changed among earlier files. All earlier proof bytes and marked drafts
+are unchanged. Snapshot:
+`/tmp/mcfta-guarded-source-execution-checkpoint-20261014-1620/`.
