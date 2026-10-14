@@ -1,5 +1,6 @@
 import Lean
 import MicroCFTA.InternedGuardedBudgetSelfFilter
+import MicroCFTA.InternedGuardedBudgetStoredPlan
 import MicroCFTA.SourceRecursiveIntersectionBudgetExact
 import MicroCFTA.InternedGuardedAbstractSupport
 import MicroCFTA.InternedGuardedSyntaxSupport
