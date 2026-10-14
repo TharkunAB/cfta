@@ -23,13 +23,15 @@ module Data.CFTA.GHC.Session (
     -- * Types
     typeOfExpression,
     accepts,
+    declare,
 
     -- * Fits
     fitsForSignature,
+    inSignatureHole,
     inTypechecker,
 ) where
 
-import Control.Monad (forM)
+import Control.Monad (forM, void)
 import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (isJust)
 import qualified Data.Set as Set
@@ -38,7 +40,7 @@ import qualified Data.Text as Text
 import System.Environment (lookupEnv)
 import System.Process (readProcess)
 
-import Data.CFTA.GHC.Fits (Candidate (..), Fit, Options, Statistics, candidateFromId, holeFor, streamFits)
+import Data.CFTA.GHC.Fits (Candidate (..), Fit, Options, Statistics, TypedHole, candidateFromId, holeFor, streamFits)
 import GHC (
     Ghc,
     InteractiveImport (IIDecl),
@@ -54,6 +56,7 @@ import GHC (
     modInfoExports,
     parseDynamicFlags,
     parseImportDecl,
+    runDecls,
     runGhc,
     setContext,
     setSessionDynFlags,
@@ -98,7 +101,9 @@ withSessionPackages packages imports action = do
             parseDynamicFlags
                 logger
                 flags
-                (map noLoc ("-w" : concatMap (\package -> ["-package", package]) ("containers" : packages)))
+                -- QuantifiedConstraints, so that a signature can have a
+                -- quantified context.
+                (map noLoc ("-w" : "-XQuantifiedConstraints" : concatMap (\package -> ["-package", package]) ("containers" : packages)))
         _ <- setSessionDynFlags parsed
         declarations <- traverse parseImportDecl imports
         setContext (map IIDecl declarations)
@@ -170,15 +175,24 @@ inTypechecker session action = inSession session $ do
     environment <- getSession
     snd <$> liftIO (runTcInteractive environment action)
 
-{- | Stream the fits of a signature: run the typechecker in the context,
-skolemise the signature (its type variables become skolems and its class
-context the givens), make the hole of the skolems and givens ('holeFor'),
-and call 'streamFits' on its result, with the signature's arguments as
-required candidates of the given names. 'Nothing'
-when the typechecker action fails.
+{- | Stream the fits of a signature: 'streamFits' on the hole of
+'inSignatureHole', with the signature's arguments as required candidates
+of the given names.
 -}
 fitsForSignature :: Session -> Options -> [Candidate] -> Type -> [Text] -> (Fit -> TcM Bool) -> IO (Maybe Statistics)
 fitsForSignature session options candidates signature arguments accept =
+    inSignatureHole session candidates signature arguments $ \hole candidates' goal ->
+        streamFits options hole candidates' goal accept
+
+{- | Run a search on the hole of a signature: skolemise the signature (its
+type variables become skolems and its class context the givens), make the
+hole of the skolems and givens ('holeFor'), and give the search the hole,
+the candidates with the signature's arguments as required candidates of
+the given names, and the goal. 'Nothing' when the typechecker action fails.
+-}
+inSignatureHole ::
+    Session -> [Candidate] -> Type -> [Text] -> (TypedHole -> [Candidate] -> Type -> TcM a) -> IO (Maybe a)
+inSignatureHole session candidates signature arguments search =
     inTypechecker session $ do
         information <- mkSkolemInfo RuntimeUnkSkol
         (_, skolems, givens, rho) <- topSkolemise information signature
@@ -189,4 +203,8 @@ fitsForSignature session options candidates signature arguments accept =
             arity = length arguments
             required = [Candidate name (scaledThing parameter) True True | (name, parameter) <- zip arguments parameters]
             goal = mkScaledFunTys (drop arity parameters) result
-        streamFits options hole (candidates <> required) goal accept
+        search hole (candidates <> required) goal
+
+-- | Add declarations to the interactive context, as GHCi does for a declaration at its prompt.
+declare :: Session -> String -> IO ()
+declare session declarations = inSession session (void (runDecls declarations))

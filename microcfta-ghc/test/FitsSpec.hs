@@ -4,21 +4,26 @@
 Hoogle+ queries and five queries of higher-kinded types with the Prelude:
 each query gives its expected program, and GHC accepts every fit as a
 program of the query's signature. Also: the
-fits that ignore an argument are marked, and the walk leaves the goal's
-unification variables as it found them.
+fits that ignore an argument are marked, the walk leaves the goal's
+unification variables as it found them, and the fast rejects keep three
+fits that only the solver can decide (a coercion through a newtype, a given
+equality, and a quantified given).
 -}
 module Main (main) where
 
 import Control.Monad (forM, forM_)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef)
+import qualified Data.Map.Strict as Map
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
 
 import Data.CFTA.GHC.Fits
+import Data.CFTA.GHC.Internal.Check (Leaf (..), complete, newEnvironment, startWalker, step)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), parseProgram, renderProgram)
+import Data.CFTA.Gen.Synthesis.Walk (preorder)
 import GHC.Builtin.Types (mkListTy)
 import GHC.Core.Type (liftedTypeKind, mkTyVarTy)
 import GHC.Data.Bag (emptyBag)
@@ -56,8 +61,24 @@ higherKinded =
     query name signature arguments expected = Query name signature arguments (either error id (parseProgram expected))
 
 main :: IO ()
-main = withSession ["import Prelude"] $ \session -> do
+main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Data.Monoid (Sum (..))"] $ \session -> do
     candidates <- candidatesOf session [Import "Prelude" Nothing]
+    coercions <- candidatesOf session [Import "Data.Coerce" Nothing]
+    declare session "class Sized a where { sized :: a -> Int }; instance Sized Int where { sized = id }"
+    Just sizedType <- typeOfExpression session "sized"
+    let
+        -- Whether one program fits a signature, by the steps of the walk.
+        checks signature arguments program = do
+            Just typ <- typeOfExpression session ("undefined :: " <> signature)
+            let extra = coercions <> [Candidate "sized" sizedType True False]
+            inSignatureHole session (candidates <> extra) typ arguments $ \hole candidates' goal -> do
+                environment <- newEnvironment hole
+                let leaves = Map.fromList [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates']
+                    go walker [] = complete environment walker
+                    go walker ((name, children) : rest) = case Map.lookup name leaves of
+                        Just leaf -> step environment walker leaf children False >>= maybe (pure False) (`go` rest)
+                        Nothing -> pure False
+                go (startWalker environment (map candidateType candidates') goal) (preorder program)
     hspec $ do
         describe "streamFits" $
             forM_ (queries <> higherKinded) $ \(Query name signature arguments expected) ->
@@ -89,6 +110,10 @@ main = withSession ["import Prelude"] $ \session -> do
                     fits <- readIORef found
                     pure [lookup program [(fitProgram fit, fitIgnoresPart fit) | fit <- fits] | program <- wanted]
                 marks `shouldBe` [[Just True, Just False], [Just True, Just False]]
+        describe "the fast rejects" $
+            forM_ soundness $ \(name, signature, arguments, program) ->
+                it ("keep the fit of " <> name) $
+                    checks signature arguments (parse program) `shouldReturn` Just True
         describe "synthesizeFits" $
             it "leaves the unification variables of the goal as it found them" $ do
                 result <- inTypechecker session $ do
@@ -108,6 +133,12 @@ main = withSession ["import Prelude"] $ \session -> do
     ignoring =
         [ ("[a] -> Int -> [a]", ["xs", "n"], ["const xs n", "take n xs"])
         , ("(a -> Bool) -> [a] -> Int", ["p", "xs"], ["const (length xs) p", "length (filter p xs)"])
+        ]
+    -- Fits that the solver accepts and a careless fast reject would not.
+    soundness =
+        [ ("a coercion through a newtype", "[Sum Int] -> [Int]", ["xs"], "coerce xs")
+        , ("a given equality", "(a ~ Int) => a -> Int", ["x"], "x")
+        , ("a quantified given", "(forall x. Sized (f x)) => f Bool -> Int", ["y"], "sized y")
         ]
     parse = either error id . parseProgram
     size program = case program of
