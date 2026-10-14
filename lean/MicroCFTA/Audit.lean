@@ -373,6 +373,7 @@ import MicroCFTA.SourceSizedFiniteKeysNormalized
 import MicroCFTA.SourceSizedNormalizedConstraints
 import MicroCFTA.SourceFreshOrdinarySizedEntry
 import MicroCFTA.SourceFreshOrdinarySizedEntryCorrect
+import MicroCFTA.SourceClosedSized
 import MicroCFTA.SourceFreshOrdinaryColdValidated
 import MicroCFTA.SourceFreshOrdinaryColdLiquid
 import MicroCFTA.SourceFreshOrdinaryLiquidEntry
