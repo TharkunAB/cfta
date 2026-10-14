@@ -782,12 +782,18 @@ matchMu _otherwise = Nothing
 and assume that all occurrences of @i@ must be free (in other words, that any occurrences of 'Mu' will have a
 /different/ identifier).
 
-Postcondition:
+Postcondition, when 'createMu' made each 'Mu' of the node:
 
 > substFree i (Rec i) == id
 
 A test checks this on the body of each 'Mu' in recursive nodes with nested
 binders.
+
+The rebuild makes each open 'Mu' again with 'createMu', which removes a
+binder that its body does not use. So a 'Mu' that 'createMuDontCleanup'
+made with an unused binder does not survive the substitution, also when
+@n@ is @Rec i@: the result has the same free names and the same language,
+but it is another node, with fewer nested 'Mu's.
 -}
 {-# INLINEABLE substFree #-}
 substFree ::
