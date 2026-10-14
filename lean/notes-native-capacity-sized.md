@@ -4,6 +4,10 @@ Updated: 2026-10-14 22:43 CEST.
 Proofs: `a9cae6f5`, `8dab9b3c`, and `d094c368`.
 Source base: `7bfb69d1` (PR #129). All work remains local.
 
+The public entry target below is complete. Read
+[physical public entry](notes-native-public-entry.md) for the current result,
+new upstream, pushed branch, and next proof target.
+
 ## Derived request bounds
 
 `SourceRecursiveIntersectionNativeCapacity.Capacity bits machine` checks

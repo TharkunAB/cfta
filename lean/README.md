@@ -1,18 +1,19 @@
 # cfta formal model
 
-Current source: `origin/microcfta` at `7bfb69d1` (PR #129).
-The Haskell packages and source directories are `cfta`, `cfta-generator`,
-and `cfta-ghc`. `Data.CFTA.*` and the Lean namespace `MicroCFTA` retain their
-names. The Lake package is `cfta`. See [package rename](notes-package-rename.md)
-for name correspondence and preservation. Root [HANDOFF.md](../HANDOFF.md)
-supersedes the historical checkpoint descriptions below.
-The current audit passes 1,542 jobs and 44,313 theorem dependency checks.
-The [native capacity proof](notes-native-capacity-sized.md) derives request-word
-safety from actual source cache counters and connects it to complete Sized
-query-record equality, finite preparation, exact classes, and both term inverses.
-It also proves physical root-precheck order and the closed cold-adapter boundary.
-Reached capacity and normalized original annotations remain explicit.
-The next entry proof must retain empty/open returns before any row traversal.
+Current source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
+Continue on `formalize`; publish completed checkpoints to `origin/formalize`.
+The former remote remains as `microecta-legacy`. The Haskell packages are
+`cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
+Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
+Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
+The audit passes 1,549 jobs and 44,339 theorem dependency checks.
+The [public entry proof](notes-native-public-entry.md) derives finite actual
+entry execution, exact independent root-language readback, and complete
+optimized/reference query-record equality. It includes direct empty/open
+returns, exact distinct node-count classes, size order, and both term inverses.
+Normalized original annotations and reached cache capacity remain explicit.
+Next apply the common query specification to original-map dispatch and bounded
+solver-decided classes. All old proofs, fixtures, and marked drafts remain.
 
 [The system specification and current findings](SYSTEM.md) describe the
 language, distinct-term index, distribution, and optimization contracts.

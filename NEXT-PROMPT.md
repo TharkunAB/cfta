@@ -2,15 +2,69 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
-Resume formalization/microcfta-sized-20261014. The latest proof checkpoint is d094c368, after 8dab9b3c and a9cae6f5. Use git log for the following documentation commit. The source base remains origin/microcfta at 7bfb69d1 (PR #129); the fresh pull found no change. The current audit passes 1,542 jobs and 44,313 theorem dependency checks, with only propext, Classical.choice, and Quot.sound. Log: /tmp/mcfta-capacity-entry-precheck-20261014-audit.log. No background proof worker is active. Preserve all three excluded marked drafts and all three untracked fixtures: lean/repro/NestedUnaryTwoAtom.hs, lean/repro/NativeProductRowCycle.hs, and lean/repro/UnionDiagonalRows.hs. Latest snapshot: /tmp/mcfta-capacity-native-sized-checkpoint-20261014-2243/. It preserves all 1,919 Lean-tree files, root restart documents, and validation evidence. All 1,908 previous files remain. All earlier proof modules except audit imports retain their exact bytes. All fixtures and marked drafts retain their bytes.
+## Current upstream, public entry, and complete Sized API laws
 
-Refresh origin/microcfta before new work. The current upstream base is 7bfb69d1 (PR #129). The packages and directories are now cfta, cfta-generator, and cfta-ghc. Public Data.CFTA.* modules and the internal Lean namespace MicroCFTA retain their names. The Lake package is cfta. All executable solver-name definitions, proofs, and repros now use __cfta_. Source paths and Cabal commands use the new packages. The preserving 555-step rebase completed at ede5f85a. One changelog conflict retained both notes. Backup backup/formalization-before-package-rename-20261014-2112 retains 2e165b8e. All 1,880 saved Lean-tree files matched exactly before the explicit name updates. Evidence: /tmp/mcfta-rename-refresh-20261014-2111/. The preceding base 71a15220 added GHC and synthesis applications. Those applications remain outside complete formal source coverage. All earlier bases, backups, repairs, counterexamples, marked drafts, stashes, and worktrees remain. Only the retained four-line constructor changelog note differs from upstream in the active Haskell package trees. Historical hashes and logs retain their original names. The originally requested f8a3d48 checkpoint and 2200117 base are historical.
+The repository is now `TharkunAB/cfta`. `origin` is
+`git@github.com:TharkunAB/cfta.git`. Continue on `formalize` against
+`origin/main` at `f201deda`. The old remote remains as `microecta-legacy`.
+The user now authorizes regular pushes to `origin/formalize`. This overrides
+older local-only and no-push instructions below. Do not deploy, post to the
+board, or send messages.
+
+The latest proof is `8a0eb5f9`. It adds actual physical-root entry control,
+finite complete native execution, unique public reference results, independent
+guarded root-language readback, and the complete public query specification.
+Read `lean/notes-native-public-entry.md`. Empty and open roots return before
+cold traversal or native callbacks. Only a nonempty closed root enters the
+finite row phase. The key carrier remains internal to that branch.
+`execution_correct` proves complete optimized/reference result equality,
+including errors. `complete_exact` derives finite actual execution and exact
+query laws. `constructed_complete` derives its initial invariants from actual
+closed construction. Normalized original annotations and reached cache
+capacity remain explicit. Final metadata, callback completion, and language
+correspondence are derived.
+
+`SourceSizedApiLaws.Exact` includes finite source class evaluations, exact
+distinct accepted terms per node-count size, counts, signed rejection,
+accepted-term rank coverage, size-major prefixes, and both rank/unrank inverse
+directions. The physical reference and native paths satisfy the same record
+specification at the original independent guarded root language.
+
+The conflict-free rebase replayed 575 commits onto the new main. The upstream
+changes remove the old ECTA packages and update URLs. They change no active
+CFTA implementation. All 1,926 saved Lean-tree files and four root documents
+retained identical bytes through the rebase. Proof `452b20b5` tracks the three
+retained repro fixtures so the remote checkpoint includes them. All marked
+drafts, earlier proofs, repairs, counterexamples, backups, stashes, and other
+worktrees remain. Pre-rebase evidence is in
+`/tmp/mcfta-cfta-origin-refresh-20261014-2306/`. The complete pre-rebase branch
+is `backup/formalization-complete-before-cfta-main-20261014-2309`.
+The former proof hashes and `origin/microcfta` references below are historical.
+
+The post-rebase audit passes 1,549 jobs and 44,339 theorem dependency checks.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
+Log: `/tmp/mcfta-cfta-main-20261014-audit.log`. Only the old unused `inputs`
+warning remains. The active Haskell trees differ from main only in a retained
+four-line constructor changelog note. The previous 645 examples, five probes,
+and formatter checks retain the same implementation and were not repeated.
+Current snapshot:
+`/tmp/mcfta-public-entry-cfta-main-checkpoint-20261014-2308/`.
+
+Next apply the common query specification to the original-map reference and
+optimized dispatch paths, then to bounded solver-decided classes. Reuse
+`SourceSizedFiniteKeysPublic*`, `SourceSizedFiniteKeysDispatchApi`, and
+`SourceSizedFiniteKeysNativeLiquid`. Preserve actual work, varying replies,
+Unknown, exact errors, and empty classes above the bound. Keep all external
+solver, concrete container, lazy scheduling, and extraction boundaries explicit.
+Preserve the optimized interned core and older constructor/equality targets.
+Check weekly allowance and stop all work at 1% remaining or less.
+
 
 The earlier independent compiler snapshot is /tmp/mcfta-independent-guarded-checkpoint-20261014-1549/: 1,761 Lean-tree files, root restart documents, retained fixture, and audit evidence. Its preservation report compares all 1,754 previous checkpoint files. None is missing. Only audit imports, two coverage ledgers, and three component notes changed among those files. The six new semantic/compiler proof modules and their new component note are added. All earlier proof and marked-draft bytes remain. All preserving backups remain.
 
-Inspect allowance, status, branches, worktrees, and stashes first. Preserve every local proof, source repair, counterexample, marked draft, backup, stash, and worktree. Preserve untracked lean/repro/NestedUnaryTwoAtom.hs, lean/repro/NativeProductRowCycle.hs, and lean/repro/UnionDiagonalRows.hs. Do not alter /tmp/mcfta-update-20261013 or its uncommitted review merge and evidence. If upstream moved, back up and rebase again. Verify preservation against a new manifest.
+Inspect allowance, status, branches, worktrees, and stashes first. Preserve every local proof, source repair, counterexample, marked draft, backup, stash, and worktree. Preserve tracked lean/repro/NestedUnaryTwoAtom.hs, lean/repro/NativeProductRowCycle.hs, and lean/repro/UnionDiagonalRows.hs. Do not alter /tmp/mcfta-update-20261013 or its uncommitted review merge and evidence. If upstream moved, back up and rebase again. Verify preservation against a new manifest.
 
-Read lean/notes-native-capacity-sized.md for the current target. Actual source cache counters now derive every native request-word check through exact yielded prefixes, recursive bodies, and memo completion. CacheRanges assumes no supplied completion or request provenance. The complete callback, ordered scan, compiler, and normalized source Sized entry all use reached cache capacities. SourceFreshOrdinaryCapacityNativeSized.complete derives literal complete optimized/reference query-record equality, finite minimum preparation, exact finite distinct size classes, size order, and both global inverses. Raw closure, final cache/row metadata, rowwise normalization, scan equality, product laws, word safety, and native completion are derived. Concrete actual-prefix cache capacity and checked original annotations remain explicit. Arbitrary natural caches cannot fit fixed native words; public raw EqConstraints patterns do not normalize arbitrary values. Do not repeat these proofs. SourceFreshOrdinaryNativeEntryPrecheck proves physical EmptyNode/freeVars precedence. Open references return the open error before traversal. closed_empty_exact proves the cold adapter's empty flag only on closed roots; reference_boundary proves why the domain matters. Next lift these decisions into a staged public execution relation: empty and open roots return without cold rows or native callbacks; only nonempty closed roots enter the derived cold/native compiler. Return a common query API or exact source error so finite-key carriers remain internal. Derive the prechecks from the actual physical value. Do not supply arbitrary freeVariables or equate all reference-none values with EmptyNode. General Ready caches with the constraint invariant can cover open inputs; closed construction derives those premises for its root. Concrete Haskell extraction, lazy scheduling, and external solver correctness retain their boundaries. Older next-target statements below may be stale.
+Read lean/notes-native-public-entry.md for the current target. The physical public entry and complete query specification are now proved. Do not repeat the precheck, cold trace uniqueness, complete native entry, or independent language readback proofs. Next connect SourceSizedApiLaws.Exact to original-map reference and optimized dispatch, then bounded solver-decided classes. Keep actual bounded work and errors. Reuse the existing component theorems. Historical next-target statements below are superseded.
 
 The primary Sized source contract is proved: exact distinct accepted terms per node-count size, finite reference classes, size-major prefixes, and both rank/unrank inverse laws. SourceSizedFiniteKeys* derives the carrier from actual validated map keys even when the state type is infinite. nativeSized_eq proves exact raw-map optimized/reference query-record equality and errors. The finite synchronous product minimum gate is derived. This exact path retains the optimized interned core and does not depend on recursive interned intersection construction.
 
@@ -106,6 +160,6 @@ Retain checked WordRanges, Original syntax, full guards, exact source/domain eff
 
 After PR #122, all 208 generator and 145 refinement examples passed in Nix. The unchanged core retains its earlier 289 passing examples. Fourmolu passes for the changed synthesis module. Logs: /tmp/mcfta-synthesis-memo-refresh-20261014-tests.log and /tmp/mcfta-synthesis-memo-refresh-20261014-format.log. The active Cabal files did not change, so their prior gild checks remain applicable. Fourmolu and cabal-gild pass for the active microcfta packages. Logs: /tmp/mcfta-state-label-refresh-20261014-tests.log and /tmp/mcfta-state-label-refresh-20261014-format.log. The broader cabal-gild check reports existing formatting failures in the unchanged legacy microecta and microecta-generator Cabal files; leave those unrelated files unchanged. No new production test was added locally. Use the pinned Lean 4.34.1 binary, focused checks for changes, and the aggregate audit for completed modules. Do not repeat passing checks without a new reason. No sorry, native evaluation axioms, or project axioms. Handwritten models and test results do not establish verified Haskell extraction or whole-library completion.
 
-Keep everything local: no push, deployment, messages, or board posts. Keep the optimized interned core. Do not formalize benchmark programs, datasets, or workload specifications. Do not update memory or create an ADR without a request. Address Matti in English, timestamp every response, give brief material updates, and work without asking whether to continue.
+Push completed checkpoints regularly to origin/formalize. Do not deploy, send messages, or post to the board. Keep the optimized interned core. Do not formalize benchmark programs, datasets, or workload specifications. Do not update memory or create an ADR without a request. Address Matti in English, timestamp every response, give brief material updates, and work without asking whether to continue.
 
 Monitor weekly allowance before work and regularly afterward with python3 /tmp/mcfta-weekly-usage.py. Check observed_at. The script includes the next UTC date directory because logs can use the local date after midnight. The 32% reading at 08:32 CEST on 2026-10-14 is historical. Stop all work and workers immediately at 1% remaining or less. This latest explicit user threshold supersedes older 20% notes. Missing or stale usage is not permission to use credits.

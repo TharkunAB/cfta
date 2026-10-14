@@ -1,6 +1,63 @@
 # Current formalization findings
 
-Updated: **2026-10-14 22:43 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 23:08 CEST (Europe/Stockholm)**.
+
+## Current upstream, public entry, and complete Sized API laws
+
+The repository is now `TharkunAB/cfta`. `origin` is
+`git@github.com:TharkunAB/cfta.git`. Continue on `formalize` against
+`origin/main` at `f201deda`. The old remote remains as `microecta-legacy`.
+The user now authorizes regular pushes to `origin/formalize`. This overrides
+older local-only and no-push instructions below. Do not deploy, post to the
+board, or send messages.
+
+The latest proof is `8a0eb5f9`. It adds actual physical-root entry control,
+finite complete native execution, unique public reference results, independent
+guarded root-language readback, and the complete public query specification.
+Read `lean/notes-native-public-entry.md`. Empty and open roots return before
+cold traversal or native callbacks. Only a nonempty closed root enters the
+finite row phase. The key carrier remains internal to that branch.
+`execution_correct` proves complete optimized/reference result equality,
+including errors. `complete_exact` derives finite actual execution and exact
+query laws. `constructed_complete` derives its initial invariants from actual
+closed construction. Normalized original annotations and reached cache
+capacity remain explicit. Final metadata, callback completion, and language
+correspondence are derived.
+
+`SourceSizedApiLaws.Exact` includes finite source class evaluations, exact
+distinct accepted terms per node-count size, counts, signed rejection,
+accepted-term rank coverage, size-major prefixes, and both rank/unrank inverse
+directions. The physical reference and native paths satisfy the same record
+specification at the original independent guarded root language.
+
+The conflict-free rebase replayed 575 commits onto the new main. The upstream
+changes remove the old ECTA packages and update URLs. They change no active
+CFTA implementation. All 1,926 saved Lean-tree files and four root documents
+retained identical bytes through the rebase. Proof `452b20b5` tracks the three
+retained repro fixtures so the remote checkpoint includes them. All marked
+drafts, earlier proofs, repairs, counterexamples, backups, stashes, and other
+worktrees remain. Pre-rebase evidence is in
+`/tmp/mcfta-cfta-origin-refresh-20261014-2306/`. The complete pre-rebase branch
+is `backup/formalization-complete-before-cfta-main-20261014-2309`.
+The former proof hashes and `origin/microcfta` references below are historical.
+
+The post-rebase audit passes 1,549 jobs and 44,339 theorem dependency checks.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
+Log: `/tmp/mcfta-cfta-main-20261014-audit.log`. Only the old unused `inputs`
+warning remains. The active Haskell trees differ from main only in a retained
+four-line constructor changelog note. The previous 645 examples, five probes,
+and formatter checks retain the same implementation and were not repeated.
+Current snapshot:
+`/tmp/mcfta-public-entry-cfta-main-checkpoint-20261014-2308/`.
+
+Next apply the common query specification to the original-map reference and
+optimized dispatch paths, then to bounded solver-decided classes. Reuse
+`SourceSizedFiniteKeysPublic*`, `SourceSizedFiniteKeysDispatchApi`, and
+`SourceSizedFiniteKeysNativeLiquid`. Preserve actual work, varying replies,
+Unknown, exact errors, and empty classes above the bound. Keep all external
+solver, concrete container, lazy scheduling, and extraction boundaries explicit.
+Preserve the optimized interned core and older constructor/equality targets.
+Check weekly allowance and stop all work at 1% remaining or less.
 
 ## Actual cache capacity, complete Sized queries, and physical prechecks
 
