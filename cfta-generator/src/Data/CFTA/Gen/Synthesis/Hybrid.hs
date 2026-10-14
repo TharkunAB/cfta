@@ -45,6 +45,7 @@ import qualified Data.Text as Text
 import System.Timeout (timeout)
 
 import Data.CFTA.Gen.Synthesis (
+    Encoding (FirstOrder),
     Library (..),
     Program,
     Query (..),
@@ -162,6 +163,7 @@ synthesizeHybrid entailment options components query = do
             { libraryGroups = [(representativeName index, typ, members) | (index, ((typ, _), members)) <- zip [0 ..] groups]
             , libraryArgumentOnly = []
             , libraryAvoid = []
+            , libraryEncoding = FirstOrder
             }
     saturation =
         Saturation

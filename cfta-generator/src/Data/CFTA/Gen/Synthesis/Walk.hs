@@ -70,6 +70,8 @@ import GHC.Clock (getMonotonicTimeNSec)
 import System.Timeout (timeout)
 
 import Data.CFTA.Gen.Synthesis (
+    Encoding (..),
+    Library (..),
     Program (..),
     Query (..),
     Type,
@@ -220,9 +222,12 @@ one of the second list (with 'Nothing': to any).
 Before the function gets a fit, the host holds no frame, so that the function
 can use the host from the start. At the end the host holds no frame, so it is
 as it was before the walk.
+
+The encoding is that of Hectare's types ('Encoding').
 -}
 walk ::
     (MonadIO m) =>
+    Encoding ->
     Limits ->
     Checker m ->
     Hooks m ->
@@ -231,7 +236,7 @@ walk ::
     Type ->
     (Fit -> m Bool) ->
     m Progress
-walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead Set.empty emptyProgress)
+walk encoding limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead Set.empty emptyProgress)
   where
     -- Hectare's automaton has symbols of its own, as app and filter, so each
     -- name gets a prefix there.
@@ -241,10 +246,13 @@ walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead
         App function argument -> App (unprefix function) (unprefix argument)
     named role = [(prefix (erasedName leaf), erasedType leaf) | leaf <- leaves, erasedRole leaf == role]
     hectareLibrary =
-        library
+        ( library
             (named Component)
             (named ArgumentOnly)
             [(map prefix heads, map prefix <$> arguments) | (heads, arguments) <- avoid]
+        )
+            { libraryEncoding = encoding
+            }
     hectareQuery = Query (named Required) goal
     deadline = limitDeadline limits
     progressOf = stateProgress

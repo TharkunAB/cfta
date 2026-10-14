@@ -35,7 +35,11 @@ tree automata of `cfta`, with QuickCheck integration.
   the build and the reduction created them. So, unlike the enumerator's
   canonical order, Hectare's order depends on what the process built before.
   Its results depend on this order, and no stable key that we tried gives
-  them back. `parseType` and `parseProgram` read types
+  them back. `libraryEncoding` chooses how a space encodes the types
+  (`Encoding`): `FirstOrder`, or `Curried`, in which a type constructor is
+  a leaf applied by `@` edges, so that a type variable of kind `* -> *`
+  (`?Foldable t0`) ranges over a domain of type constructors.
+  `parseType` and `parseProgram` read types
   and programs in Haskell syntax, and `renderType` and `renderProgram` print
   them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
   suites. Their components and queries are in the public sublibrary

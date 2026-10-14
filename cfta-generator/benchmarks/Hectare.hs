@@ -12,6 +12,9 @@ solution, and the number of programs listed before it.
 With no arguments, it runs three small Hoogle+ queries with 30 seconds and a
 heap of 2 GB each, so that @cabal bench@ stays short.
 
+With the variable @HECTARE_CURRIED@ set, the children encode the types
+curried ('Curried'), with no variable of kind @* -> *@.
+
 > hectare [hplus | stackoverflow | all | smoke] [seconds] [heap]
 > hectare --query NAME [seconds]
 > hectare --profile NAME SIZE
@@ -21,9 +24,10 @@ module Main (main) where
 
 import Control.Exception (evaluate)
 import Data.List (elemIndex, find, nub, sort)
+import Data.Maybe (isJust)
 import qualified Data.Text as Text
 import GHC.Clock (getMonotonicTime)
-import System.Environment (getArgs, getExecutablePath)
+import System.Environment (getArgs, getExecutablePath, lookupEnv)
 import System.Exit (ExitCode (..))
 import System.IO (hFlush, stdout)
 import System.Process (readProcessWithExitCode)
@@ -86,7 +90,10 @@ runSuite suite seconds heap = do
 runQuery :: String -> Int -> IO ()
 runQuery name seconds = case find ((== Text.pack name) . benchmarkName . fst) (suiteQueries "all") of
     Nothing -> fail $ "no query " <> name
-    Just (benchmark, lib) -> do
+    Just (benchmark, firstOrder) -> do
+        -- HECTARE_CURRIED encodes the types curried (with no variable of kind * -> *).
+        curried <- isJust <$> lookupEnv "HECTARE_CURRIED"
+        let lib = if curried then firstOrder{libraryEncoding = Curried mempty} else firstOrder
         start <- getMonotonicTime
         found <- timeout (seconds * 1000000) $ search benchmark lib
         end <- getMonotonicTime
@@ -122,7 +129,9 @@ counts after each phase.
 profileQuery :: String -> Int -> IO ()
 profileQuery name size = case find ((== Text.pack name) . benchmarkName . fst) (suiteQueries "all") of
     Nothing -> fail $ "no query " <> name
-    Just (benchmark, lib) -> do
+    Just (benchmark, firstOrder) -> do
+        curried <- isJust <$> lookupEnv "HECTARE_CURRIED"
+        let lib = if curried then firstOrder{libraryEncoding = Curried mempty} else firstOrder
         t0 <- getMonotonicTime
         let raw = rawSearchSpace lib (benchmarkQuery benchmark) size
         rawNodes <- evaluate (nodeCount raw)

@@ -93,7 +93,7 @@ import GHC.Clock (getMonotonicTimeNSec)
 
 import Data.CFTA.GHC.Erase (anyResult, erase, higherKinded, typeHeads)
 import Data.CFTA.GHC.Internal.Check
-import Data.CFTA.Gen.Synthesis (Program (..))
+import Data.CFTA.Gen.Synthesis (Encoding (..), Program (..))
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
     Erased (..),
@@ -329,6 +329,7 @@ streamFits options hole candidates goal accept = do
                     accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart)
             statistics
                 =<< walk
+                    FirstOrder
                     limits
                     checker
                     hooks
