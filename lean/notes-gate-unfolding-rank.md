@@ -1,5 +1,11 @@
 # Same-path unfolding in the current equality gate
 
+Current update: ordered constructor-cache threading is complete in
+`ec56843a` and `512a386d`. Coherent unfolding memo calls are proved in
+`8b5ec04e`. Read [the stateful gate note](notes-stateful-gate.md).
+It states the remaining complete memo composition and source predicate work.
+The sections below retain their earlier checkpoints.
+
 ## General repaired rank and certified gate (2026-10-15 00:47 CEST)
 
 Proofs `0871fb7a` and `40027d5f` complete the prepared-plan retention bound

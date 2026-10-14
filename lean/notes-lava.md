@@ -70,3 +70,12 @@ Keep external solver contracts and runtime/extraction limits explicit.
 Continue the repaired constructor gate proof. Use this paper when designing
 any later source certificate path. Do not add Lava or a Rocq dependency to
 the current project without a separate decision.
+
+## Current use of the function and graph method
+
+The ordered gate checkpoint `512a386d` has a separate logical execution graph.
+It proves graph/execution correspondence in both directions. It also proves
+uniqueness of the Boolean result and complete final cache. The source gate
+can share constructor effects across sibling edge and path queries.
+These are Lean proofs of the modeled source worker. They do not add a Lava
+translation, a Rocq dependency, or a verified GHC extraction claim.

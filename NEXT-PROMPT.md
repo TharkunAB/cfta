@@ -2,6 +2,53 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Ordered gate execution and coherent unfolding memo
+
+Proofs: `ec56843a`, `512a386d`, and `8b5ec04e`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-stateful-gate.md`. This section supersedes the earlier
+ordered sibling-cache target.
+
+The new worker threads actual constructor caches through original edge and
+path order. A true result stops the scan. Every completed false query passes
+its returned cache to the next sibling. Missing gate fuel and a pending
+constructor request remain separate. Every node query and complete equality
+class has a finite Boolean execution. Cache growth keeps later siblings'
+original inputs available. Every returned cache retains semantic contexts,
+depth heaps, payload coverage, weighted heaps, and both growth histories.
+More fuel preserves the exact Boolean and final constructor cache.
+
+Separate logical node, child, edge, path, and class graphs have no gate fuel.
+Both graph/execution directions are proved. Node and class graphs are
+functional in the Boolean and complete final cache. Original source
+construction derives finite node traces and class traces for every original
+outgoing edge. No completed construction or gate call is supplied.
+
+The unfolding memo now has a derived coherence invariant. It uses actual
+canonical references and immutable input records. Every hit or miss returns
+exactly the actual repaired unfolding value and constructor cache. A miss
+installs a coherent entry. Later growth preserves every saved entry. This
+reuses the existing stored unfolding replay theorem in
+`MergedFreshOrdinaryColdReplay`; no duplicate replay helper was retained.
+
+The audit passes 1,591 jobs and 44,835 theorem dependency checks. Only the
+three permitted foundations occur. Only the old unused `inputs` warning
+remains. No production Haskell code changed. Audit log:
+`/tmp/mcfta-stateful-gate-memo-20261015-audit.log`. Snapshot:
+`/tmp/mcfta-stateful-gate-checkpoint-20261015-0106/` (1,974 Lean-tree files).
+All prior proofs, counterexamples, marked drafts, repairs, backups, stashes,
+and other worktrees remain. Weekly allowance was 19% at 01:06 CEST; refresh it.
+
+Next carry the coherent memo runner through complete ordered gate graphs.
+Use `run_complete` for each actual hit or miss. Then derive the source
+`unconstrained` read from `crush` over complete records and the actual edge
+constraint test. Its Mu traversal reads only the body, not the probes.
+The constraint predicate is still a supplied pure read in the current gate.
+Do not repeat completed rank, stateful completion, or graph adequacy proofs.
+Keep exact Sized contracts, the unary ancestor theorem, the optimized
+interned core, and native runtime/extraction limits. Stop work and workers
+at 1% weekly allowance or less.
+
 ## General repaired unfolding rank and gate completion
 
 Proofs: `0871fb7a` and `40027d5f`. Source: `TharkunAB/cfta`, `origin/main`
