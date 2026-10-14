@@ -34,6 +34,42 @@ theorem decision_source [DecidableEq Symbol] (source : InternedConstructorTempla
     ← closed_readback source facts holds request.left scope.left scope.leftAvailable,
     ← closed_readback source facts holds request.right scope.right scope.rightAvailable]
 
+/-- A successful original request selects a successful semantic branch action. -/
+theorem successful_action [DecidableEq Symbol] (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Language.Term Symbol → Bool) (request : NodeRequest Symbol Guard) (scope : NodeScope source request)
+    (complete : Completes (view source holds) (nodeSemantic request)) :
+    ∃ fuel result, SourceRecursiveIntersectionStep.action (view source holds) fuel
+      (SourceRecursiveIntersectionSchedule.domain request.domain.key) (inputOf request.left) (inputOf request.right)
+      (SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right) = some (.ok result) := by
+  obtain ⟨result, done⟩ := requiredFuel_success (view source holds) (nodeSemantic request) complete
+  have positive := requiredFuel_positive (view source holds) (nodeSemantic request) complete
+  have predecessor : requiredFuel (view source holds) (nodeSemantic request) complete - 1 + 1 =
+      requiredFuel (view source holds) (nodeSemantic request) complete := by omega
+  rw [← predecessor] at done
+  have selected := SourceRecursiveIntersectionStep.run_selected (view source holds)
+    (requiredFuel (view source holds) (nodeSemantic request) complete - 1)
+    (SourceRecursiveIntersectionSchedule.domain request.domain.key) (inputOf request.left) (inputOf request.right)
+  rw [← decision_source source facts holds request scope] at selected
+  exact ⟨_, result, selected.trans (congrArg some done)⟩
+
+/-- A selected Mu branch has both actual source operand identities. -/
+theorem mu_identities [DecidableEq Symbol] (request : NodeRequest Symbol Guard)
+    (recursive : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .bothMu ∨
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .leftMu ∨
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .rightMu) :
+    ∃ first second, SourceRecursiveIntersectionControl.identity request.left = some first ∧
+      SourceRecursiveIntersectionControl.identity request.right = some second := by
+  unfold SourceRecursiveIntersectionControl.decision at recursive
+  split at recursive <;> try rcases recursive with impossible | impossible | impossible <;> cases impossible
+  split at recursive <;> try rcases recursive with impossible | impossible | impossible <;> cases impossible
+  split at recursive <;> try rcases recursive with impossible | impossible | impossible <;> cases impossible
+  split at recursive <;> try rcases recursive with impossible | impossible | impossible <;> cases impossible
+  cases first : SourceRecursiveIntersectionControl.identity request.left <;>
+    cases second : SourceRecursiveIntersectionControl.identity request.right <;>
+    simp only [first, second] at recursive
+  all_goals try rcases recursive with impossible | impossible | impossible <;> cases impossible
+  exact ⟨_, _, rfl, rfl⟩
+
 /-- Actual canonical Mu entry derives an original child strictly below the parent request bound. -/
 theorem mu_request_below [DecidableEq Symbol] (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
     (holds : Guard → Language.Term Symbol → Bool) (request : NodeRequest Symbol Guard) (scope : NodeScope source request)
@@ -71,9 +107,8 @@ theorem compileMu_below [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)
     (state : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid state) :
     Below source holds (requiredFuel (view source holds) (nodeSemantic request) complete)
       (compileMu request.domain request.left request.right) state := by
-  cases first : SourceRecursiveIntersectionControl.identity request.left <;>
-    cases second : SourceRecursiveIntersectionControl.identity request.right <;>
-    simp only [compileMu, first, second, unsupported, Below] <;> try trivial
+  obtain ⟨firstIdentity, secondIdentity, first, second⟩ := mu_identities request recursive
+  simp only [compileMu, first, second, Below]
   refine ⟨mu_request_below source facts holds request scope complete recursive state.domains valid.2 _ _ first second, ?_⟩
   intro value after _ _ _ result final done
   trivial

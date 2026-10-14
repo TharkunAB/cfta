@@ -1,4 +1,4 @@
-import MicroCFTA.SourceRecursiveIntersectionNativeTerminal
+import MicroCFTA.SourceRecursiveIntersectionNativeConstructorObservation
 
 /-!
 # Smaller compiled body observations
@@ -25,7 +25,7 @@ structure BodiesBelow [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     Grows source state.machine.heap → Extends source.nodes.issued state.machine.heap.nodes.issued →
     ActiveAbove (view source holds) holds (requiredFuel (view source holds) (nodeSemantic request) complete) state →
     WordRanges emptyGuard conjoin (compileNode request) state →
-    ∃ fuel, Terminal (execute emptyGuard conjoin fuel (compileNode request) state)
+    ∃ fuel, ReturnsOrPending (execute emptyGuard conjoin fuel (compileNode request) state)
   edges : ∀ (request : EdgeRequest Symbol Guard), EdgeScope source request →
     ∀ complete : Completes (view source holds) (edgeSemantic holds request),
     requiredFuel (view source holds) (edgeSemantic holds request) complete < bound →
@@ -34,6 +34,6 @@ structure BodiesBelow [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     Grows source state.machine.heap → Extends source.nodes.issued state.machine.heap.nodes.issued →
     ActiveAbove (view source holds) holds (requiredFuel (view source holds) (edgeSemantic holds request) complete) state →
     WordRanges emptyGuard conjoin (compileEdge emptyGuard conjoin request) state →
-    ∃ fuel, Terminal (execute emptyGuard conjoin fuel (compileEdge emptyGuard conjoin request) state)
+    ∃ fuel, ReturnsOrPending (execute emptyGuard conjoin fuel (compileEdge emptyGuard conjoin request) state)
 
 end MicroCFTA.SourceRecursiveIntersectionNative

@@ -26,8 +26,8 @@ theorem node_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (ranges : WordRanges emptyGuard conjoin (.node request next) state)
     (later : ∀ value after, SourceRecursiveIntersectionThunks.Valid width emptyGuard conjoin after → Extension state.machine after.machine →
       Available after.machine.heap value → ActiveAbove (view source holds) holds bound after → WordRanges emptyGuard conjoin (next value) after →
-      ∃ fuel, Terminal (execute emptyGuard conjoin fuel (next value) after)) :
-    ∃ fuel, Terminal (execute emptyGuard conjoin fuel (.node request next) state) := by
+      ∃ fuel, ReturnsOrPending (execute emptyGuard conjoin fuel (next value) after)) :
+    ∃ fuel, ReturnsOrPending (execute emptyGuard conjoin fuel (.node request next) state) := by
   obtain ⟨scope, complete, smaller⟩ := below
   let limit := requiredFuel (view source holds) (nodeSemantic request) complete
   cases lookup : lookupNode width request state with
@@ -43,8 +43,8 @@ theorem node_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       have bodyRanges := entered.before_bind emptyGuard conjoin _ _ _
       have observed := bodies.nodes request scope complete smaller state valid ready growth history
         (active.weaken _ holds bound limit (Nat.le_of_lt smaller) state) bodyRanges
-      apply terminal_after_step emptyGuard conjoin _ _ _ _ one
-      apply terminal_bind emptyGuard conjoin (compileNode request) next state observed
+      apply returns_after_step emptyGuard conjoin _ _ _ _ one
+      apply returns_bind emptyGuard conjoin (compileNode request) next state observed
       intro fuel value after done
       have evaluated := evaluation_of_done emptyGuard conjoin fuel (compileNode request) state after value done
       have built := (evaluated.bounds_of_ranges bodyRanges).correct (fun after value => Available after.heap value)
@@ -71,7 +71,7 @@ theorem node_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
           have returnedActive : ActiveAbove (view source holds) holds bound current := by
             rw [(demandNode_ready handle chosen current value demand).choose_spec.2]
             exact chosenActive
-          exact terminal_after_step emptyGuard conjoin _ _ _ _ one
+          exact returns_after_step emptyGuard conjoin _ _ _ _ one
             (later value current called.1 physical called.2.2.1 returnedActive (ranges.after_step emptyGuard conjoin _ _ _ _ one))
         | evaluate original =>
           have started := node_started_source emptyGuard conjoin state chosen current valid request original ready safeWord handle lookup demand
@@ -88,8 +88,8 @@ theorem node_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
           have entered := ranges.after_step emptyGuard conjoin _ _ _ _ one
           have bodyRanges := entered.before_bind emptyGuard conjoin _ _ _
           have observed := bodies.nodes request scope complete smaller current started.1 currentReady currentGrowth currentHistory currentActive bodyRanges
-          apply terminal_after_step emptyGuard conjoin _ _ _ _ one
-          apply terminal_bind emptyGuard conjoin (compileNode request) (fun value => .finishNode handle value (next value)) current observed
+          apply returns_after_step emptyGuard conjoin _ _ _ _ one
+          apply returns_bind emptyGuard conjoin (compileNode request) (fun value => .finishNode handle value (next value)) current observed
           intro fuel value middle done
           have evaluated := evaluation_of_done emptyGuard conjoin fuel (compileNode request) current middle value done
           have built := (evaluated.bounds_of_ranges bodyRanges).correct (fun after value => Available after.heap value)
@@ -108,7 +108,7 @@ theorem node_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
           have atFrame := entered.after_body emptyGuard conjoin _ _ _ _ value evaluated
           have finishStep : step emptyGuard conjoin (.finishNode handle value (next value)) middle =
               .yielded (next value) (SourceRecursiveIntersectionThunks.finishNode handle value middle) := rfl
-          exact terminal_after_step emptyGuard conjoin _ _ _ _ finishStep
+          exact returns_after_step emptyGuard conjoin _ _ _ _ finishStep
             (later value _ completed physical built.result restored (atFrame.after_step emptyGuard conjoin _ _ _ _ finishStep))
 
 end MicroCFTA.SourceRecursiveIntersectionNative

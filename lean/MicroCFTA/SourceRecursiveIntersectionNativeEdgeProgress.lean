@@ -26,8 +26,8 @@ theorem edge_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (ranges : WordRanges emptyGuard conjoin (.edge request next) state)
     (later : ∀ value after, SourceRecursiveIntersectionThunks.Valid width emptyGuard conjoin after → Extension state.machine after.machine →
       EdgeResident after.machine.heap value → ActiveAbove (view source holds) holds bound after → WordRanges emptyGuard conjoin (next value) after →
-      ∃ fuel, Terminal (execute emptyGuard conjoin fuel (next value) after)) :
-    ∃ fuel, Terminal (execute emptyGuard conjoin fuel (.edge request next) state) := by
+      ∃ fuel, ReturnsOrPending (execute emptyGuard conjoin fuel (next value) after)) :
+    ∃ fuel, ReturnsOrPending (execute emptyGuard conjoin fuel (.edge request next) state) := by
   obtain ⟨scope, complete, smaller⟩ := below
   let limit := requiredFuel (view source holds) (edgeSemantic holds request) complete
   have safeWord := ranges.current emptyGuard conjoin _ _
@@ -48,7 +48,7 @@ theorem edge_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
         have returnedActive : ActiveAbove (view source holds) holds bound current := by
           rw [(demandEdge_ready handle chosen current value demand).choose_spec.2]
           exact chosenActive
-        exact terminal_after_step emptyGuard conjoin _ _ _ _ one
+        exact returns_after_step emptyGuard conjoin _ _ _ _ one
           (later value current called.1 physical called.2.2.1 returnedActive (ranges.after_step emptyGuard conjoin _ _ _ _ one))
       | evaluate original =>
         have started := edge_started_source emptyGuard conjoin state chosen current valid request original ready safeWord handle lookup demand
@@ -65,8 +65,8 @@ theorem edge_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
         have entered := ranges.after_step emptyGuard conjoin _ _ _ _ one
         have bodyRanges := entered.before_bind emptyGuard conjoin _ _ _
         have observed := bodies.edges request scope complete smaller current started.1 currentReady currentGrowth currentHistory currentActive bodyRanges
-        apply terminal_after_step emptyGuard conjoin _ _ _ _ one
-        apply terminal_bind emptyGuard conjoin (compileEdge emptyGuard conjoin request) (fun value => .finishEdge handle value (next value)) current observed
+        apply returns_after_step emptyGuard conjoin _ _ _ _ one
+        apply returns_bind emptyGuard conjoin (compileEdge emptyGuard conjoin request) (fun value => .finishEdge handle value (next value)) current observed
         intro fuel value middle done
         have evaluated := evaluation_of_done emptyGuard conjoin fuel (compileEdge emptyGuard conjoin request) current middle value done
         have built := (evaluated.bounds_of_ranges bodyRanges).correct (fun after value => EdgeResident after.heap value)
@@ -86,7 +86,7 @@ theorem edge_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
         have atFrame := entered.after_body emptyGuard conjoin _ _ _ _ value evaluated
         have finishStep : step emptyGuard conjoin (.finishEdge handle value (next value)) middle =
             .yielded (next value) (SourceRecursiveIntersectionThunks.finishEdge handle value middle) := rfl
-        exact terminal_after_step emptyGuard conjoin _ _ _ _ finishStep
+        exact returns_after_step emptyGuard conjoin _ _ _ _ finishStep
           (later value _ completed physical built.result restored (atFrame.after_step emptyGuard conjoin _ _ _ _ finishStep))
 
 end MicroCFTA.SourceRecursiveIntersectionNative

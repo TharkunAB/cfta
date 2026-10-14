@@ -23,10 +23,10 @@ theorem code_terminal_of_bodies [DecidableEq Symbol] [DecidableEq (EdgeKey Symbo
     Safe code state.machine post → Below source holds bound code state.machine →
     SourceRecursiveIntersectionThunks.Valid width emptyGuard conjoin state → Grows source state.machine.heap →
     Extends source.nodes.issued state.machine.heap.nodes.issued → ActiveAbove (view source holds) holds bound state →
-    WordRanges emptyGuard conjoin code state → ∃ fuel, Terminal (execute emptyGuard conjoin fuel code state) := by
+    WordRanges emptyGuard conjoin code state → ∃ fuel, ReturnsOrPending (execute emptyGuard conjoin fuel code state) := by
   induction code with
   | pure value => intro state _ _ _ _ _ _ _ _; exact ⟨1, .done value state⟩
-  | fail failure => intro state _ _ _ _ _ _ _ _; exact ⟨1, .failed failure state⟩
+  | fail failure => intro _ _ _ impossible; cases impossible
   | work job next ih =>
       intro state post safe below valid growth history active ranges
       let actual := InternedConstructorTemplates.run job state.machine.heap
@@ -36,7 +36,7 @@ theorem code_terminal_of_bodies [DecidableEq Symbol] [DecidableEq (EdgeKey Symbo
         (advance_valid width emptyGuard conjoin state valid current safe.1 physical)
         (grows_trans growth physical.heap) (extends_trans history physical.history)
         (active.advance _ holds bound state current) (ranges.after_step emptyGuard conjoin _ _ _ _ rfl)
-      exact terminal_after_step emptyGuard conjoin _ _ _ _ rfl continued
+      exact returns_after_step emptyGuard conjoin _ _ _ _ rfl continued
   | enter domain left right first second next ih =>
       intro state post safe below valid growth history active ranges
       let actual := SourceRecursiveIntersectionEnvironment.enter state.machine.domains domain.key left right first second
@@ -46,10 +46,10 @@ theorem code_terminal_of_bodies [DecidableEq Symbol] [DecidableEq (EdgeKey Symbo
         (advance_valid width emptyGuard conjoin state valid current safe.1 physical)
         (grows_trans growth physical.heap) (extends_trans history physical.history)
         (active.advance _ holds bound state current) (ranges.after_step emptyGuard conjoin _ _ _ _ rfl)
-      exact terminal_after_step emptyGuard conjoin _ _ _ _ rfl continued
+      exact returns_after_step emptyGuard conjoin _ _ _ _ rfl continued
   | read name next ih =>
       intro state post safe below valid growth history active ranges
-      exact terminal_after_step emptyGuard conjoin _ _ _ _ rfl
+      exact returns_after_step emptyGuard conjoin _ _ _ _ rfl
         (ih _ state post safe below valid growth history active (ranges.after_step emptyGuard conjoin _ _ _ _ rfl))
   | optionalBinder key body next ih =>
       intro state post safe below valid growth history active ranges
@@ -64,7 +64,7 @@ theorem code_terminal_of_bodies [DecidableEq Symbol] [DecidableEq (EdgeKey Symbo
             simp only [constructed, construction]; rfl
           have one : step emptyGuard conjoin (.optionalBinder key body next) state = .yielded (next value) (advance state current) := by
             simp only [step, constructed]; rfl
-          exact terminal_after_step emptyGuard conjoin _ _ _ _ one
+          exact returns_after_step emptyGuard conjoin _ _ _ _ one
             (ih value (advance state current) post (safe.2.2 value current actual) (below value current actual)
               (advance_valid width emptyGuard conjoin state valid current currentValid physical)
               (grows_trans growth physical.heap) (extends_trans history physical.history)

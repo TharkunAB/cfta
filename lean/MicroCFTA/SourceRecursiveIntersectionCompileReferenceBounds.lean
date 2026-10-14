@@ -34,7 +34,10 @@ theorem leftReference_below [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Gu
       exact congrArg (fun input => Call.node (SourceRecursiveIntersectionSchedule.domain domain.key) input (inputOf right)) encoded
     simp only [compileReference, bound, ite_true, Below, found]
     exact below_requestNode source holds _ _ state childBound
-  · simp only [compileReference, bound, ite_false, Below]
+  · obtain ⟨fuel, result, action⟩ := successful_action source facts holds ⟨domain, .reference (.interned name), right⟩ scope complete
+    simp only [selected, inputOf, Value.referenceOf, IntersectionFlatMemoKey.input, Option.getD_some,
+      SourceRecursiveIntersectionStep.action, lookup_domain, bound, ite_false] at action
+    cases action
 
 /-- Actual right-reference code derives original binder scope and the strict request limit after growth. -/
 theorem rightReference_below [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard)
@@ -57,6 +60,9 @@ theorem rightReference_below [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol G
       exact congrArg (fun input => Call.node (SourceRecursiveIntersectionSchedule.domain domain.key) (inputOf left) input) encoded
     simp only [compileReference, bound, ite_true, Below, found]
     exact below_requestNode source holds _ _ state childBound
-  · simp only [compileReference, bound, ite_false, Below]
+  · obtain ⟨fuel, result, action⟩ := successful_action source facts holds ⟨domain, left, .reference (.interned name)⟩ scope complete
+    simp only [selected, inputOf, Value.referenceOf, IntersectionFlatMemoKey.input, Option.getD_some,
+      SourceRecursiveIntersectionStep.action, lookup_domain, bound, ite_false] at action
+    cases action
 
 end MicroCFTA.SourceRecursiveIntersectionCode

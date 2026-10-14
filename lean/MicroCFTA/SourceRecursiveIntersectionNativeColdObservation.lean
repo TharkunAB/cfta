@@ -4,8 +4,8 @@ import MicroCFTA.SourceRecursiveIntersectionNativeFiniteObservation
 # Finite first observations for closed original source roots
 
 Actual closed available roots derive the semantic bound and empty active
-state. The native driver then reaches a finite return, source failure, or
-actual pending constructor. No native completion witness is supplied.
+state. The native driver then reaches a finite return or actual pending
+constructor. Source failures are excluded. No native completion witness is supplied.
 Successful returns derive complete memo facts and guarded kernel meaning.
 -/
 namespace MicroCFTA.SourceRecursiveIntersectionNative
@@ -24,7 +24,7 @@ theorem cold_node_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Gua
     (leftClosed : left.free = []) (rightClosed : right.free = [])
     (ranges : WordRanges emptyGuard conjoin (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure)
       (initial width ⟨source, domains⟩)) :
-    ∃ fuel, Terminal (execute emptyGuard conjoin fuel (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure)
+    ∃ fuel, ReturnsOrPending (execute emptyGuard conjoin fuel (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure)
       (initial width ⟨source, domains⟩)) := by
   let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
   have complete : Completes (view source holds) (nodeSemantic request) :=

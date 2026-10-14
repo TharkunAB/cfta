@@ -25,8 +25,10 @@ theorem compileNode_below [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guar
   | mk domain left right =>
       obtain ⟨known, leftAvailable, rightAvailable⟩ := ready
       let bound := requiredFuel (view source holds) (nodeSemantic ⟨domain, left, right⟩) complete
+      obtain ⟨fuel, result, action⟩ := successful_action source facts holds ⟨domain, left, right⟩ scope complete
       cases selected : decision domain.key left right with
-      | empty | self | repeated key | unsupported => simp only [compileNode, selected, unsupported, Below]
+      | empty | self | repeated key => simp only [compileNode, selected, Below]
+      | unsupported => simp only [selected, SourceRecursiveIntersectionStep.action] at action; cases action
       | reset =>
           simp only [compileNode, selected]
           apply below_requestNode source holds bound ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ state
@@ -52,7 +54,9 @@ theorem compileNode_below [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guar
               exact union_below source holds bound domain members right true state valid known rightAvailable
                 (fun value member => leftAvailable.children value member)
                 (fun child member => leftUnion_member_below source facts holds domain entry members depth free right scope complete selected child member)
-          | empty | reference | node | mu => trivial
+          | empty | reference | node | mu =>
+              cases scope.left <;> simp only [selected, SourceRecursiveIntersectionStep.action, inputOf,
+                Value.referenceOf, IntersectionFlatMemoKey.input, Option.getD_some] at action <;> cases action
       | rightUnion =>
           simp only [compileNode, selected]
           cases right with
@@ -60,29 +64,43 @@ theorem compileNode_below [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guar
               exact union_below source holds bound domain members left false state valid known leftAvailable
                 (fun value member => rightAvailable.children value member)
                 (fun child member => rightUnion_member_below source facts holds domain left entry members depth free scope complete selected child member)
-          | empty | reference | node | mu => trivial
+          | empty | reference | node | mu =>
+              cases scope.right <;> simp only [selected, SourceRecursiveIntersectionStep.action, inputOf,
+                Value.referenceOf, IntersectionFlatMemoKey.input, Option.getD_some] at action <;> cases action
       | leftReference =>
           simp only [compileNode, selected]
-          cases left <;> try trivial
-          rename_i name
-          cases name <;> try trivial
-          rename_i identity
-          exact leftReference_below source facts holds domain identity right scope complete selected state valid growth history
+          cases scope.left with
+          | reference identity => exact leftReference_below source facts holds domain identity right scope complete selected state valid growth history
+          | empty | node | union | mu =>
+              simp only [selected, SourceRecursiveIntersectionStep.action, inputOf,
+                Value.referenceOf, IntersectionFlatMemoKey.input, Option.getD_some] at action
+              cases action
       | rightReference =>
           simp only [compileNode, selected]
-          cases right <;> try trivial
-          rename_i name
-          cases name <;> try trivial
-          rename_i identity
-          exact rightReference_below source facts holds domain left identity scope complete selected state valid growth history
+          cases scope.right with
+          | reference identity => exact rightReference_below source facts holds domain left identity scope complete selected state valid growth history
+          | empty | node | union | mu =>
+              simp only [selected, SourceRecursiveIntersectionStep.action, inputOf,
+                Value.referenceOf, IntersectionFlatMemoKey.input, Option.getD_some] at action
+              cases action
       | ordinary =>
           simp only [compileNode, selected]
-          cases left <;> cases right <;> try trivial
-          rename_i first leftEdges leftDepth leftFree second rightEdges rightDepth rightFree
-          exact compileRows_below source holds bound domain leftEdges rightEdges state valid known
-            (fun edge member => valid.1.linked first.key _ (leftAvailable.resident first rfl) edge member)
-            (fun edge member => valid.1.linked second.key _ (rightAvailable.resident second rfl) edge member)
-            (fun rows member => rows_member_below source facts holds domain first leftEdges leftDepth leftFree second rightEdges rightDepth rightFree
-              scope complete selected rows member)
+          cases scope.left with
+          | node first leftEdges leftDepth leftFree _ =>
+              cases scope.right with
+              | node second rightEdges rightDepth rightFree _ =>
+                  exact compileRows_below source holds bound domain leftEdges rightEdges state valid known
+                    (fun edge member => valid.1.linked first.key _ (leftAvailable.resident first rfl) edge member)
+                    (fun edge member => valid.1.linked second.key _ (rightAvailable.resident second rfl) edge member)
+                    (fun rows member => rows_member_below source facts holds domain first leftEdges leftDepth leftFree second rightEdges rightDepth rightFree
+                      scope complete selected rows member)
+              | empty | reference | union | mu =>
+                  simp only [selected, SourceRecursiveIntersectionStep.action, inputOf,
+                    Value.referenceOf, IntersectionFlatMemoKey.input, Option.getD_some] at action
+                  cases action
+          | empty | reference | union | mu =>
+              simp only [selected, SourceRecursiveIntersectionStep.action, inputOf,
+                Value.referenceOf, IntersectionFlatMemoKey.input, Option.getD_some] at action
+              cases action
 
 end MicroCFTA.SourceRecursiveIntersectionCode

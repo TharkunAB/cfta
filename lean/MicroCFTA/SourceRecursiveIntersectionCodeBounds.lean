@@ -4,8 +4,9 @@ import MicroCFTA.SourceRecursiveIntersectionRequestScope
 # Request bounds through source code and continuations
 
 Every recursive request retains original input scope and a least successful
-semantic bound below the current body limit. Actual effects use their exact
-returned machines. Recursive continuations accept available returned values
+semantic bound below the current body limit. Explicit source failures are
+excluded. Actual effects use their exact returned machines. Recursive
+continuations accept available returned values
 after valid source growth. No completed execution is supplied.
 -/
 namespace MicroCFTA.SourceRecursiveIntersectionCode
@@ -25,11 +26,12 @@ def EdgeBelow [DecidableEq Symbol] (source : InternedConstructorTemplates.State 
   EdgeScope source request ∧ ∃ complete : Completes (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request),
     requiredFuel (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete < bound
 
-/-- Source code retains original request scope and its strict body limit through actual continuations. -/
+/-- Source code excludes failures and retains original request scope and its strict body limit through actual continuations. -/
 def Below [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard)
     (holds : Guard → Language.Term Symbol → Bool) (bound : Nat) (code : Code Symbol Guard A) (state : Machine Symbol Guard) : Prop :=
   match code with
-  | .pure _ | .fail _ => True
+  | .pure _ => True
+  | .fail _ => False
   | .work job next =>
       let actual := SourceRecursiveIntersectionKernel.work job state
       ∀ value after, actual = .done value after → Below source holds bound (next value) after
@@ -57,7 +59,7 @@ theorem below_bind [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (so
       intermediate after value → Below source holds bound (next value) after) : Below source holds bound (code.bind next) state := by
   induction code generalizing state with
   | pure value => exact continuation value state valid (.refl state) safe
-  | fail failure => trivial
+  | fail failure => exact bounded
   | work job resume ih | optionalBinder key body resume ih =>
       intro value after done
       have afterValid : SourceRecursiveIntersectionKernel.Valid after := by simpa only [done, Result.state] using safe.1

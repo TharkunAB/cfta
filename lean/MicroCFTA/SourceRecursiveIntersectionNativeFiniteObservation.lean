@@ -5,8 +5,9 @@ import MicroCFTA.SourceRecursiveIntersectionNativeCodeProgress
 
 Strong induction on the least semantic request bound supplies every smaller
 compiled body. Structural code induction follows actual continuations.
-No completed native trace or body termination contract is assumed. Source
-failure and pending construction remain distinct from successful results.
+No completed native trace or body termination contract is assumed. Derived
+source branch success excludes explicit failures. Pending construction
+remains distinct from a successful result.
 -/
 namespace MicroCFTA.SourceRecursiveIntersectionNative
 open Cache InternedConstructorTemplates InternedProbeProvenance InternedEdgeResidency InternedNestedFacts
@@ -22,7 +23,7 @@ theorem code_terminal [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (post : Machine Symbol Guard → A → Prop), Safe code state.machine post → Below source holds bound code state.machine →
     SourceRecursiveIntersectionThunks.Valid width emptyGuard conjoin state → Grows source state.machine.heap →
     Extends source.nodes.issued state.machine.heap.nodes.issued → ActiveAbove (view source holds) holds bound state →
-    WordRanges emptyGuard conjoin code state → ∃ fuel, Terminal (execute emptyGuard conjoin fuel code state) := by
+    WordRanges emptyGuard conjoin code state → ∃ fuel, ReturnsOrPending (execute emptyGuard conjoin fuel code state) := by
   induction bound using Nat.strongRecOn with
   | ind bound ih =>
       have bodies : BodiesBelow source holds bound width emptyGuard conjoin := by
