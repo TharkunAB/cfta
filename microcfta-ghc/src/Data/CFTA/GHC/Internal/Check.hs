@@ -17,7 +17,9 @@ The check follows 'GHC.Tc.Errors.Hole.tcCheckHoleFit':
   ('tcUnifyTysFG') finds surely apart, with the unification variables
   bindable and the other variables rigid: GHC's unifier defers a mismatch
   to the solver (@Bool ~ t a@), and the solver call costs tens of
-  microseconds.
+  microseconds. And so does a class constraint that no instance in scope
+  can match, of a class that has instances and that no given provides
+  (@Num [a]@, @Integral (a -> b)@): a lookup in the instance environment.
 * The solver: the wanteds of the whole program so far, cloned, and the
   hole's relevant constraints, cloned, wrapped in the hole's implications so
   that the solver has the givens, and solved with 'simplifyTopWanteds' under
@@ -88,7 +90,9 @@ import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
 import GHC.Builtin.Types (liftedTypeKind)
-import GHC.Core.Predicate (EqRel, Pred (EqPred), classifyPredType, eqRelRole, isCallStackPredTy)
+import GHC.Core.Class (className)
+import GHC.Core.InstEnv (classInstances, lookupInstEnv, nullUnifiers)
+import GHC.Core.Predicate (EqRel, Pred (ClassPred, EqPred), classifyPredType, eqRelRole, isCallStackPredTy)
 import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
 import GHC.Core.TyCo.Rep (TyLit (CharTyLit, NumTyLit, StrTyLit), Type (..), ft_af)
 import GHC.Core.TyCon (TyCon, isGenerativeTyCon)
@@ -120,6 +124,7 @@ import GHC.Tc.Types.Origin (
     UserTypeCtxt (ExprSigCtxt),
     mkSkolemInfo,
  )
+import GHC.Tc.Utils.Env (tcGetInstEnvs)
 import GHC.Tc.Utils.Monad (
     TcM,
     discardErrs,
@@ -144,13 +149,16 @@ import GHC.Tc.Utils.TcType (
     MetaInfo (..),
     TcLevel (..),
     TcTyVar,
+    evVarPred,
     isMetaTyVar,
     metaTyVarInfo,
     metaTyVarRef,
     metaTyVarTcLevel,
+    transSuperClasses,
  )
 import GHC.Tc.Utils.Unify (tcSubTypeSigma)
 import GHC.Tc.Zonk.TcType (zonkTcTypes)
+import GHC.Types.Name (Name)
 import GHC.Types.Name.Occurrence (mkTyVarOcc)
 import GHC.Types.Unique (Uniquable, getKey, getUnique)
 import GHC.Types.Var (FunTyFlag (..), VarBndr (Bndr), isTcTyVar, tyVarKind)
@@ -180,7 +188,10 @@ data Counters = Counters
     { countSteps :: !Int
     -- ^ The steps tried.
     , countFastRejects :: !Int
-    -- ^ The steps that the fast path killed: the leaf does not fit, an obviously insoluble equality, or one surely apart.
+    {- ^ The steps that the fast path killed: the leaf does not fit, an
+    obviously insoluble equality, one surely apart, or a class constraint
+    that no instance can match.
+    -}
     , countSolverSkips :: !Int
     -- ^ The checks that did not need the solver.
     , countSolverCalls :: !Int
@@ -203,10 +214,13 @@ data Counters = Counters
 emptyCounters :: Counters
 emptyCounters = Counters 0 0 0 0 0 0 0 0 0 0 0
 
--- | The hole of a walk, the level of its innermost implication, and the walk's counters.
+{- | The hole of a walk, the level of its innermost implication, the classes
+that its givens provide (with their superclasses), and the walk's counters.
+-}
 data Environment = Environment
     { environmentHole :: TypedHole
     , environmentLevel :: TcLevel
+    , environmentProvided :: [Name]
     , environmentCounters :: IORef Counters
     -- ^ The counters of the walks in this environment.
     }
@@ -220,7 +234,13 @@ newEnvironment hole = do
     level <- case th_implics hole of
         innermost : _ -> pure (ic_tclvl innermost)
         [] -> getTcLevel
-    Environment hole level <$> liftIO (newIORef emptyCounters)
+    let givens = map evVarPred (concatMap ic_given (th_implics hole))
+        provided =
+            [ className cls
+            | predicate <- givens <> concatMap transSuperClasses givens
+            , ClassPred cls _ <- [classifyPredType predicate]
+            ]
+    Environment hole level provided <$> liftIO (newIORef emptyCounters)
 
 {- | The state of a walk: the unification variables that a later step can
 write, the wanteds of the program so far, and the goals still open, leftmost
@@ -392,13 +412,21 @@ entails environment predicates = setTcLevel (environmentLevel environment) . dis
 'True', every wanted must be solved, as for a complete program. Otherwise
 the solver runs only when the step brought an equality (the third
 argument), or when some wanted has no unification variable left; only those
-can make a prefix fail. An equality that is surely apart fails without the
-solver.
+can make a prefix fail. An equality that is surely apart, or a class
+constraint that no instance can match, fails without the solver.
 -}
 satisfiable :: Environment -> Walker -> Bool -> Bool -> TcM Bool
 satisfiable environment walker equality finished = do
     current <- liftZonkM (zonkTcTypes (filter (not . isCallStackPredTy) (wantedPredicates (walkerWanteds walker))))
-    if any apart current
+    instances <- tcGetInstEnvs
+    let impossible predicate = case classifyPredType predicate of
+            ClassPred cls arguments
+                | not (null (classInstances instances cls))
+                , className cls `notElem` environmentProvided environment
+                , (matches, unifiers, _) <- lookupInstEnv False instances cls arguments ->
+                    null matches && nullUnifiers unifiers
+            _ -> False
+    if any apart current || any impossible current
         then False <$ count (\c -> c{countFastRejects = countFastRejects c + 1})
         else
             if not finished && not equality && all open current
