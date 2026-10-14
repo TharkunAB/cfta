@@ -62,6 +62,7 @@ module Data.CFTA.Gen.Synthesis (
     reductionRounds,
     searchSpace,
     programsIn,
+    distinctProgramsIn,
     solutionsOfSize,
     distinctSolutionsOfSize,
     distinctSaturatedSolutionsOfSize,
@@ -572,11 +573,15 @@ query, each once, in Hectare's order ('interningOrder'), as
 -}
 distinctSaturatedSolutionsOfSize :: Saturation -> Library -> Query -> Int -> [Program]
 distinctSaturatedSolutionsOfSize saturation lib query =
-    distinctPrograms . refold . reduceFully . rawSaturatedSearchSpace saturation lib query
+    distinctProgramsIn . refold . reduceFully . rawSaturatedSearchSpace saturation lib query
 
--- | The programs of a search space, each once, in Hectare's order.
-distinctPrograms :: Node Symbol -> [Program]
-distinctPrograms = nubOrd . map (toProgram . fst) . runsBy interningOrder "Mu"
+{- | The programs of a search space, each once, in Hectare's order: the order
+in which 'programsIn' first lists them. 'programsIn' keeps a set of the
+typed terms, and a program can have many; this keeps a set of the programs
+only.
+-}
+distinctProgramsIn :: Node Symbol -> [Program]
+distinctProgramsIn = nubOrd . map (toProgram . fst) . runsBy interningOrder "Mu"
 
 {- | Hectare's order of the edges of a search space, as weights for 'runsBy':
 the order of the edges' identities. That is the order in which the build and
@@ -613,7 +618,7 @@ of the search space and keeps a set of the programs only, which needs much
 less memory.
 -}
 distinctSolutionsOfSize :: Library -> Query -> Int -> [Program]
-distinctSolutionsOfSize lib query = distinctPrograms . searchSpace lib query
+distinctSolutionsOfSize lib query = distinctProgramsIn . searchSpace lib query
 
 -- | The programs up to a size that solve the query, smallest first.
 synthesize :: Library -> Query -> Int -> [Program]
