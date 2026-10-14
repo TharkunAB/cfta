@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 10:08 CEST**, upstream `f59c198d`.
-The latest proof commit is `878cc5d7`. No background proof worker is active.
+Current checkpoint: **2026-10-14 10:29 CEST**, upstream `1a083040`.
+The latest proof commit is `98f633fa`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -24,7 +24,8 @@ The original state type need not be finite.
 fold to independent mixed-sort ambient logical acceptance and the canonical
 bounded sequence. `encoded_finite` derives finite outcomes from finite
 external attempts, including Unknown and unchanged exceptions. Replies may
-vary. `SourceSolverName*` proves the concrete encoding, serializer control,
+vary. `SourceSolverNameFastEncoding` proves upstream's current two-form codec.
+The historical decimal codec remains. `SourceSolverName*` proves serializer control,
 quantified meaning, preparation, and public composition for repair `73223201`.
 That repair prevents distinct raw names from capturing a quantified variable
 in the solver. The prior ambient freshness repair also remains.
@@ -202,11 +203,12 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,326 targets and 42,195 theorem dependency checks**
+The current audit passes **1,327 targets and 42,214 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
-All **640 Haskell examples** passed after the upstream refresh: 288 core,
-208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new
-production test was added locally.
+All **641 Haskell examples** passed after the PR #117 refresh: 289 core,
+208 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
+The broad gild check reports existing formatting failures in the unchanged
+legacy microecta package files. No new production test was added locally.
 See root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) for exact
 contracts, checkpoints, validation logs, and remaining priorities.
 Everything remains local. No further push, deployment, or board post is

@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 10:08 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 10:29 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -427,7 +427,19 @@ completion percentage for these different layers.
 ## Checkpoint and validation
 
 Branch: `formalization/microcfta-sized-20261014`.
-Upstream base: `origin/microcfta` at **`f59c198d`** (PR #116).
+Upstream base: `origin/microcfta` at **`1a083040`** (PR #117).
+The current 461-step preserving rebase completed at `e3a33ed5`.
+Backup `backup/formalization-before-producer-refresh-20261014-1014` retains
+`0ca89cba`. All 1,676 saved Lean-tree files matched immediately afterward.
+The manifest and extra copies are under `/tmp/mcfta-producer-resume-20261014-1014/`.
+Upstream's faster two-form encoder and new regression remain. `98f633fa`
+proves both tagged branches, safety, serializer identity, and injectivity.
+The public preparation, encoded calls, and solver-decided Sized path use that
+current codec. The older decimal-only proofs remain as historical evidence.
+Executable Haskell source matches upstream; the constructor changelog note
+remains local. Earlier proof hashes remain in preserved backup history.
+
+The previous refresh record is historical:
 The 398-step rebase completed at `97d79d63`. Two overlap resolutions retain
 upstream's equivalent `void` call and merged recursive-union changelog text.
 Backup `backup/formalization-before-sized-refresh-20261014-0036` retains `f4b5fac1`.
@@ -436,16 +448,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`878cc5d7`**; later commits record this handoff.
+The latest proof checkpoint is **`98f633fa`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,326 build targets and 42,195 theorem
+The current Lean 4.34.1 audit passes **1,327 build targets and 42,214 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-repaired-root-history-20261014-audit.log`.
-After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
-generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
-test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
+Log: `/tmp/mcfta-fast-name-refresh-20261014-audit.log`.
+After the current refresh, all **641** examples passed in Nix: 289 core, 208
+generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
+The broader gild check found formatting failures in two unchanged legacy
+`microecta` package files. Those unrelated files remain unchanged. No new
+production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **31% at 10:07 CEST**.
+No background proof worker is active. Weekly allowance was **31% at 10:29 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

@@ -2,7 +2,8 @@
 
 Proof checkpoints: `83d79a1d`, `f79d0417`, `4ca51381`, `0b123bab`,
 `3da93bb3`, `8a922c58`, `74fe5ef0`, `939a3499`, and `878cc5d7`.
-Upstream: `f59c198d`, 2026-10-14.
+Upstream: `1a083040`, 2026-10-14. The rooted-history checkpoint is now
+`2669b334` after the preserving rebase. Earlier hashes remain in backup history.
 Read [finite native observations](notes-recursive-intersection-native-finite.md)
 and [actual optional binders](notes-recursive-intersection-maybe-mu.md).
 
@@ -344,9 +345,10 @@ constructor/equality proofs and all marked drafts.
 
 ## Validation and diagnostics
 
-Pinned Lean 4.34.1 passes 1,326 jobs and 42,195 theorem dependency checks.
+Pinned Lean 4.34.1 passes 1,327 jobs and 42,214 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are used.
-Log: `/tmp/mcfta-repaired-root-history-20261014-audit.log`.
+Log: `/tmp/mcfta-fast-name-refresh-20261014-audit.log`.
+The root-history audit passed 1,326 jobs and 42,195 checks.
 The live-mismatch audit passed 1,320 jobs and 42,130 checks.
 The earlier-pair audit passed 1,311 jobs and 42,066 checks.
 The active-path audit passed 1,307 jobs and 42,042 checks.

@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 10:08 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 10:29 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -55,7 +55,7 @@ and a contradictory recursive descent remain open.
 General successful first-run completion still needs pending exclusion and
 output preparation.
 **No background proof worker is active.**
-The latest proof checkpoint is **`878cc5d7`**. A later documentation commit
+The latest proof checkpoint is **`98f633fa`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -80,7 +80,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **31% at 10:07 CEST**. This is a historical value.
+The last observed value was **31% at 10:29 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -91,7 +91,29 @@ Missing or stale data is not permission to use credits.
 
 Repository: `/home/tritlo/Code/mcfta`, Ubuntu/WSL2, Bash.
 Branch: `formalization/microcfta-sized-20261014`.
-Upstream: `origin/microcfta` at **`f59c198d`** (PR #116, merged source repairs).
+Upstream: `origin/microcfta` at **`1a083040`** (PR #117).
+
+The 10:12 pull fetched upstream and could not fast-forward. The authorized
+preserving rebase completed at 10:16 after 461 steps. Its result was `e3a33ed5`.
+Backup `backup/formalization-before-producer-refresh-20261014-1014` retains
+`0ca89cba`. All 1,676 saved Lean-tree files matched immediately afterward.
+The manifest, fixture copy, and restart copies are under
+`/tmp/mcfta-producer-resume-20261014-1014/`.
+
+The three overlaps retain upstream's equivalent Sized `void` call, merged
+recursive-union explanation, and faster two-form name encoder. The local
+solver collision reproduction remains. Upstream's new regression remains.
+Executable Haskell source matches upstream. Only the retained constructor
+changelog note differs in the active package trees.
+
+`SourceSolverNameFastEncoding` now proves the current encoder. Preparation,
+public calls, and the solver-decided Sized path use it. The original decimal
+codec and its proofs remain as historical evidence. The latest proof is
+`98f633fa`; rooted capture histories are now `2669b334`, with selected-origin
+readback at `246dc98d`. Older component notes and table rows can use pre-refresh
+hashes. The backups retain those commits.
+
+The preceding refresh to `f59c198d` is historical:
 The attempted fast-forward pull reported
 `Not possible to fast-forward, aborting.`
 The latest user instruction explicitly authorized a rebase. It supersedes
@@ -115,8 +137,9 @@ and audit imports. Earlier proof files retain their bytes. New proofs are separa
 Before new work, inspect allowance, status, log, worktrees, and stashes.
 Preserve a backup and refresh `origin/microcfta`. If upstream moved, rebase the
 local continuation as requested. Preserve local source repairs through any
-overlap. The latest `git pull --ff-only origin microcfta` at 09:48 CEST
-reported `Already up to date.` Git metadata writes require escalation in this sandbox.
+overlap. The latest `git pull --ff-only origin microcfta` at 10:12 CEST
+fetched `1a083040` and reported that fast-forward was impossible. The preserving
+rebase above completed the refresh. Git metadata writes require escalation.
 
 Preserve the earlier backups and manifests, including
 `backup/formalization-before-rebase-20261013-2315` (`298a225b`),
@@ -763,10 +786,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,326 jobs and 42,195 theorem dependency checks**.
+The current build passes **1,327 jobs and 42,214 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-repaired-root-history-20261014-audit.log`.
+Log: `/tmp/mcfta-fast-name-refresh-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -782,7 +805,7 @@ for that isolated change. Log:
 `/tmp/mcfta-weighted-midpoint-20261014-tests.log`.
 No production test or benchmark formalization was added in this continuation.
 
-After the current upstream refresh, all **640** Haskell examples passed in
+After the previous upstream refresh, all **640** Haskell examples passed in
 Nix: 288 core, 208 generator, and 144 refinement. Fourmolu and cabal-gild pass.
 Logs: `/tmp/mcfta-sized-20261014-tests.log` and
 `/tmp/mcfta-sized-20261014-format.log`. The added upstream regressions remain.
@@ -798,8 +821,21 @@ Nix store/network access requires escalation. Use one coherent Nix toolchain.
 The earlier 633-example run and temporary Sized regressions remain historical
 in older logs; do not substitute their counts for current validation.
 
+After the current PR #117 refresh, all **641** Haskell examples passed in Nix:
+289 core, 208 generator, and 144 refinement. The new upstream collision test
+passes. Fourmolu passes for both active package trees. Cabal-gild passes for
+the active `microcfta` and `microcfta-generator` package files.
+Logs: `/tmp/mcfta-producer-refresh-20261014-tests.log`,
+`/tmp/mcfta-producer-refresh-20261014-format.log`, and
+`/tmp/mcfta-producer-refresh-20261014-active-gild.log`.
+The broad cabal-gild command also checked the unchanged legacy `microecta`
+and `microecta-generator` package files. Those two files fail formatting.
+Leave that unrelated baseline unchanged. No new test was added locally.
+
 | Commit | Result |
 | --- | --- |
+| `98f633fa` | Current upstream two-form name encoder, safe unchanged serialization, injectivity, and exact public liquid Sized composition. |
+| `e3a33ed5` | Preserving 461-step rebase onto PR #117, with all 1,676 saved Lean-tree files unchanged. |
 | `878cc5d7` | Rooted actual capture histories, shorter producers with descendant paths, stored-leaf ordinary names, actual optional-binder bridge, and repaired dead-branch boundary. |
 | `939a3499` | Keep a specified active origin through exact canonical pending-site readback. |
 | `74fe5ef0` | Actual live ordinary mismatch with retained earlier pair, capture age, original captured value, and optional-binder bridge. |
