@@ -84,4 +84,11 @@ theorem source [DecidableEq (EdgeKey Symbol Guard)] (expression : InternedNested
   exact ⟨⟨after.normal, (by intro value member; cases member), after.profiles, after.freeNames⟩,
     (InternedRecordDepthExecution.build_depth expression environment state initial semantic.2).heap⟩
 
+/-- An actual repaired closed construction derives the full semantic heap of its exact returned cache. -/
+theorem constructed [DecidableEq (EdgeKey Symbol Guard)] (expression : InternedNestedConstruction.Syntax Symbol Guard)
+    (value : Value Symbol Guard) (state : State Symbol Guard)
+    (done : InternedFreshOrdinaryConstruction.build expression [] empty = .done value state) : SemanticHeap state := by
+  have retained := source expression [] empty empty_heap (by intro value member; cases member)
+  simpa only [done, InternedNestedConstruction.Outcome.state] using retained
+
 end MicroCFTA.SourceRecursiveIntersectionSemanticHeap
