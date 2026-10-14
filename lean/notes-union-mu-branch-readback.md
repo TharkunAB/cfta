@@ -61,6 +61,17 @@ preservation. It does not assume those heaps at each reached binder.
 Source availability, selected branch, native validity, checked word scope,
 and exact returned value remain explicit.
 
+## Semantic schedule continuation
+
+`b436e0fa` derives canonical pair-environment binding and actual native Mu
+body/binder correspondence. Actual recursive execution supplies the body
+scope. `98281e39` retains the exact reference schedule through actual heap
+growth. `cd342e4b` derives original domain binding closure, physical reference
+lookup, ordered union/row transport, and actual/reference edge-worker steps.
+These are local induction steps. The complete recursive kernel and native
+product law remains open. Read
+[semantic schedule correspondence](notes-semantic-schedule-correspondence.md).
+
 ## Remaining product obligation
 
 These results prove how actual branch outputs relate to their actual child

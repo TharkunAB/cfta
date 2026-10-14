@@ -103,12 +103,18 @@ related roots, and completed extraction remain explicit premises.
 
 ## Next proof target
 
-Derive the separate directional relations through actual optional-binder
-stored reconstruction and repaired Mu unfolding. Use the exact domain/body
-witnesses from the preceding checkpoint and the complete union origins above.
-Allow a redundant product row to be covered by an operand row through child
-inclusion. Preserve both directions, full guard implications, child order,
-and explicit deletion reasons. Do not assume the whole product language.
+The current continuation uses independent guarded meaning and the proved
+semantic schedule. It proves exact local actual constructor steps, native Mu
+body/binder transport, reference execution through heap growth, ordered
+union/row transport, and actual/reference edge-worker correspondence.
+Read [semantic schedule correspondence](notes-semantic-schedule-correspondence.md).
+The complete recursive kernel and native product theorem remains open.
+
+The directional route remains an alternative. A later derivation must pass
+through actual optional-binder reconstruction and repaired Mu unfolding.
+It must permit child inclusion to cover redundant product rows. Preserve
+both directions, complete guards, child order, and explicit deletion reasons.
+Do not assume the whole product language.
 
 Do not try to derive general exact `RelatedRows.Readback`, even with multiple
 representatives. Its sufficiency theorem remains useful in narrower scopes.

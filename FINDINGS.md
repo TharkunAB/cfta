@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 20:06 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 20:33 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -162,22 +162,44 @@ minimum callback, complete ambiguity scan, compiler equality, finite guarded
 classes, and both rank inverse laws. Both physical simulations and completed
 extraction remain explicit premises.
 
-Next derive separate directional relations through actual optional-binder
-stored reconstruction and repaired Mu unfolding. Use the completed native
-union origins and exact domain/body witnesses. Permit redundant product rows
-to be covered by operand rows through child inclusion. Do not assume product
-language or derive the refuted general exact `RelatedRows.Readback`.
-Read `lean/notes-directional-union-rows.md`. The full native two-input law
-remains open. The primary explicit-product Sized route is unaffected.
+The current semantic route avoids an exact physical row correspondence.
+`b436e0fa` proves pair-environment binding on scoped canonical pairs, actual
+constructor correspondence, and actual native Mu body/binder transport.
+`98281e39` proves exact bounded reference outcomes through actual heap and
+issued-key growth. One finite exact original-input schedule result remains
+valid in every later valid heap. `cd342e4b` proves original domain binding
+closure, physical reference readback, ordered union and row correspondence,
+and exact actual/reference edge-worker steps. Full guards, duplicate request
+occurrences, and both arity branches remain in these equations.
 
-The aggregate audit passes **1,484 jobs and 43,973 theorem dependency checks**,
+These are local recursive induction steps. The complete kernel and native
+two-input language theorem remains open. Body and child correspondence are
+explicit local induction premises. No complete product-language law is
+assumed. The directional row route remains an alternative. The general exact
+row adapters remain refuted for their recorded examples.
+
+Next prove the complete kernel correspondence by induction on its bound.
+Replay completed calls in one valid final cache. Keep original operands,
+available records, original domain bindings, both semantic probe heaps, and
+canonical seen pairs in the induction statement. Use `physical_step` for
+branch order and the new constructor steps for output language. Connect the
+ordered mapped hash join and check the extra semantic edge-worker fuel.
+Then derive native product language from actual completion, stable reference
+execution, and `source_schedule_total_grows`. Compose it with exact cold
+tables and the existing minimum callback and Sized laws. Do not assume the
+whole product law or require a refuted exact row adapter. Read
+`lean/notes-semantic-schedule-correspondence.md` before the next proof.
+The primary explicit-product Sized route remains proved and unaffected.
+
+The aggregate audit passes **1,495 jobs and 44,052 theorem dependency checks**,
 with only `propext`, `Classical.choice`, and `Quot.sound`. Log:
-`/tmp/mcfta-directional-union-rows-20261014-audit.log`.
-Snapshot: `/tmp/mcfta-directional-union-rows-checkpoint-20261014-2006/`.
-All 1,853 Lean-tree files are saved. All 1,840 previous files remain.
+`/tmp/mcfta-semantic-schedule-20261014-audit.log`.
+Snapshot: `/tmp/mcfta-semantic-schedule-checkpoint-20261014-2033/`.
+All 1,865 Lean-tree files are saved. All 1,853 previous files remain.
 Only audit imports, two coverage ledgers, and the two preceding component
 notes changed among those previous files. All earlier proofs and drafts retain
-their bytes. No production Haskell code changed. No worker remains active.
+their bytes. The eleven new proof modules and their component note are saved.
+No production Haskell code changed. No worker remains active.
 
 ## Independent guarded meaning and actual stored compiler
 
