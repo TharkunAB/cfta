@@ -1,6 +1,47 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 00:02 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 00:14 CEST (Europe/Stockholm)**.
+
+## Guarded repaired unfolding and the cost replay
+
+The latest proof is `6adcb38f`. Continue on `formalize` in `TharkunAB/cfta`,
+based on `origin/main` at `f201deda`. Push checkpoints regularly.
+Read the first section of `lean/notes-gate-unfolding-rank.md`.
+This section supersedes the earlier opaque-body next-target statement.
+
+`InternedFreshOrdinaryGuardedUnfold` proves actual repaired guard preservation,
+completed unfolding, head rank zero, and strict head-rank decrease for a
+source-filtered `HeadSafe` body. Constructor children can contain arbitrary
+open nested binders. No shallow-body, marker, first-order, or successful-unfold
+premise is supplied. Original empty-cache construction derives the cache
+premises. Exact returned contexts, depth heaps, payload coverage, available
+results, growth, issued-name history, and body filters are retained.
+General repaired substitution also preserves body filters without `HeadSafe`.
+
+`InternedFreshOrdinaryCostReplay` checks the exact earlier cost-boundary
+expression with the repaired scheduler. Both probes now retain its external
+body costs, and exact probe coverage holds for this replay. The old checked
+failure remains unchanged. This does not establish a general cost invariant.
+
+The audit passes 1,570 jobs and 44,569 theorem dependency checks. Only the
+three permitted foundations occur. Only the old unused `inputs` warning
+remains. Log: `/tmp/mcfta-repaired-guarded-cost-20261015-audit.log`.
+No production Haskell code changed. Snapshot:
+`/tmp/mcfta-repaired-guarded-cost-checkpoint-20261015-0013/` (1,952 Lean-tree files).
+All older proof bytes, counterexamples, repros, marked drafts, repairs,
+backups, stashes, and worktrees remain. No owned proof worker remains.
+
+Next prove progress for opaque leading Mu bodies and root unions with Mu
+members. Such unions can expose a Mu through singleton reconstruction.
+Use actual repaired semantic origins, returned caches, and body filters.
+The retention and separation lemmas may help the union case. For a cost-based
+rank, first prove weighted source callback/probe correspondence through
+actual cache hits. Reuse `InternedFreeOccurrenceExact` and normalization laws.
+Do not infer the invariant from the finite replay. The closed-node dynamic
+budget does not apply directly to open Mu. Preserve the completed Sized and
+unary ancestor proofs, the optimized interned core, and runtime boundaries.
+The Lava note remains relevant prior art. Stop work and workers at 1% weekly
+allowance or less.
 
 ## Repaired gate progress and Lava
 

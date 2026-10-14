@@ -1,5 +1,52 @@
 # Same-path unfolding in the current equality gate
 
+## Repaired guarded unfolding (2026-10-15 00:13 CEST)
+
+Proof: `6adcb38f`. Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
+This section supersedes the next-target statement below. The existing
+repaired replay and pure-probe proofs remain unchanged.
+
+`InternedFreshOrdinaryGuardedUnfold` proves root guard preservation in the
+full repaired source executor. An ordinary constructor guards arbitrary
+nested child work. Root union normalization preserves guarded members.
+The proof reuses the static stored-plan guard theorem and proves execution
+against `InternedFreshOrdinaryConstruction`, not the older scheduler.
+
+`unfold_guarded_zero` derives head rank zero for every completed repaired
+unfold of a source-filtered body with `HeadSafe`. `unfold_complete_decreases`
+derives the completed call itself from the general decoded completion theorem.
+It retains the exact returned context, depth heap, payload coverage, available
+result, cache growth, and issued-name history. It also retains `Clean`.
+No shallow-body, marker, first-order, or successful-unfold premise is supplied.
+`closed_unfold_decreases` derives all representation premises from the
+original empty-cache source construction and a stored record in that cache.
+
+`execute_clean` and `unfold_clean` preserve stored body filters through
+arbitrary repaired stored substitution. They do not require a guarded body.
+This property is available for the remaining opaque reconstruction cases.
+
+`InternedFreshOrdinaryCostReplay` uses the exact body and captured sentinels
+from `InternedNestedProbeCostBoundary`. Kernel reduction now gives identity
+10, actual external body costs `(RecDepth, 1)` and `(RecUnint 0, 1)`, and the
+same two costs in both probes. The ordinary probe also has its supplied
+`RecUnint 1` at cost 1. `exact_probe_coverage` proves the old proposed coverage
+property for this repaired replay. The older checked failure remains unchanged.
+This finite example does not prove coverage for all nested repaired callbacks.
+
+The aggregate audit passes 1,570 jobs and checks 44,569 theorem dependencies.
+Only the three permitted foundations occur. Only the old unused `inputs`
+warning remains. Log: `/tmp/mcfta-repaired-guarded-cost-20261015-audit.log`.
+No production Haskell code changed.
+
+Next prove progress for the remaining opaque repaired bodies. `HeadSafe`
+excludes a leading Mu and a root union with Mu members. A root union can
+expose a Mu when reconstruction returns a singleton. The existing retention
+and separation lemmas may help this case. For a cost-based argument, first
+establish weighted source callback/probe correspondence through actual cache
+hits. Reuse `InternedFreeOccurrenceExact`, `InternedFreeOccurrenceNormalization`,
+and repaired semantic origins. Do not infer a general cost invariant from
+the repaired replay. Do not use the closed-node dynamic budget for an open Mu.
+
 ## Repaired source checkpoint (2026-10-15 00:02 CEST)
 
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
