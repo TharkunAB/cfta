@@ -1,5 +1,6 @@
 import MicroCFTA.SourceRecursiveIntersectionMaybeMuCoverage
 import MicroCFTA.InternedFreshOrdinaryActiveSite
+import MicroCFTA.InternedFreshOrdinaryJointMismatch
 
 /-!
 # Full repaired active source paths for actual optional binders
@@ -36,5 +37,16 @@ theorem active_pending_site [DecidableEq (EdgeKey Symbol Guard)] (pair : Nat × 
       Nonempty (InternedFreshOrdinaryActiveSite.Site origin final) :=
   InternedFreshOrdinaryActiveSite.encounter_site key final
     (active_pending_encounter pair body state final key context available covered stopped)
+
+/-- An actual pending optional binder derives an earlier completed route and its live ordinary mismatch. -/
+theorem active_pending_mismatch [DecidableEq (EdgeKey Symbol Guard)] (pair : Nat × Nat) (body : Value Symbol Guard)
+    (state final : State Symbol Guard) (key : NodeKey)
+    (context : InternedFreshOrdinaryContext.Context state environment) (available : Available state body)
+    (covered : Covered [] state) (stopped : maybeMu pair body state = .pending key final) :
+    ∃ origin : InternedFreshOrdinaryActiveOrigins.Origin Symbol Guard key,
+      ∃ site : InternedFreshOrdinaryActiveSite.Site origin final,
+        InternedFreshOrdinaryJointMismatch.Mismatch site := by
+  obtain ⟨origin, ⟨site⟩⟩ := active_pending_site pair body state final key context available covered stopped
+  exact ⟨origin, site, InternedFreshOrdinaryJointMismatch.Site.mismatch site⟩
 
 end MicroCFTA.SourceRecursiveIntersectionMaybeMu
