@@ -56,6 +56,12 @@ module Data.CFTA.Gen.Synthesis.Walk (
     Progress (..),
     emptyProgress,
     walk,
+
+    -- * Dead prefixes
+    Dead,
+    emptyDead,
+    isDead,
+    markDead,
 ) where
 
 import Control.Exception (evaluate)
