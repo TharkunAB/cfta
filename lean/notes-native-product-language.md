@@ -1,5 +1,9 @@
 # Exact native product language, Sized classes, and minima
 
+See [complete native scans](notes-native-full-scan.md) for the later warm
+completion, exact early return, and full ordered ambiguity scan. Literal
+compiler composition is next. Older next-target statements below are historical.
+
 Updated: 2026-10-14 21:24 CEST.
 Rebased proofs: `dab197d2`, `70289150`, and `ede5f85a`.
 

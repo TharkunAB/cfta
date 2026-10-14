@@ -1,58 +1,81 @@
 # Full formalization coverage
 
-## Actual native callbacks and finite physical source keys
+## Complete warm callbacks and actual ordered ambiguity scans
 
-The latest proof checkpoint is `d635b84c`, after `23632065` and `1e95555f`.
-The package rename update is `df9fcff6` on `origin/microcfta` at `7bfb69d1`.
-This section supersedes older callback next-target statements.
+The latest proof checkpoint is `53ba5057`, after `5de26f4b` and `3dd34cb7`.
+The current source base remains `origin/microcfta` at `7bfb69d1` (PR #129).
+The fresh pull found no upstream change. This section supersedes earlier
+warm-completion and ordered-scan next-target statements.
 
-`SourceRecursiveIntersectionNative.done_node_productivity` follows an actual
-completed checked native intersection. It derives finite actual root exposure,
-then finite cold row extraction, then finite stable minimum sweeps. The actual
-precheck Boolean holds exactly when the original operands share a finite
-structural term. Warm memo tables are permitted. Native completion and checked
-`WordRanges` remain explicit at this entry.
+`SourceRecursiveIntersectionNative.Idle` excludes evaluating node and edge
+memo cells. It permits suspended and returned cells. Initial tables are idle.
+Actual completed body code and constructor/domain cache growth retain Idle.
+`warm_node_terminal` derives a finite observation from the actual input view
+and Idle. `warm_node_complete` excludes pending construction with complete
+semantic heaps. It derives successful stable native execution, exact checked
+correspondence, coverage, and Idle in the returned warm state. Empty initial
+memo tables and supplied native completion are no longer required.
+Checked per-request `WordRanges` remain explicit.
 
-`SourceFreshOrdinaryColdKeys.physical_record` reads each canonical operand
-from the actual issued map. Resident rows derive availability, closedness,
-Original syntax, exact state encoding, and row support. `table_declared`
-derives the operand domain from actual finite table keys. `finite_language`
-derives the complete guarded operand language after finite restriction.
-It includes the empty-root case. Input child-key closure remains explicit.
-`physical_grows` retains the identical operand through later cache growth.
+`SourceFreshOrdinaryNativeCallback.Execution` follows actual callback control.
+Its empty-exposure branch returns false immediately and retains the exposure
+cache. It does not execute row collection or minimum lookup. Its nonempty
+branch records finite native, exposure, collection, and minimum execution.
+`complete` derives a complete callback with exact common-term Boolean,
+actual machine growth, and all seven next-call invariants in `Ready`.
+`Execution.unique` proves identical Boolean and cache at every successful
+choice of bounds. `Execution.correct` covers every actual completed callback.
+The earlier unconditional cold-table wrappers remain auxiliary finite
+readback certificates. They do not define the callback's early-return control.
+The early-return repair changes only the formal execution relation.
+The live Haskell already has this branch. No runtime bug was found here.
 
-`SourceFreshOrdinaryNativeKeyCallback.completed` composes these results.
-For each finite input-key pair, actual completed native execution supplies
-finite exposure, collection, and minimum execution. Its Boolean equals the
-reference finite synchronous-product test. No product-language equation,
-functional product-row map, or exact related-row simulation is supplied.
+`SourceFreshOrdinaryNativeKeyCallback.complete_keys` derives closed original
+physical operands and their exact languages from actual finite input-table
+metadata. Later ready caches retain those same operands. Every checked key
+pair has finite actual callback execution, the literal finite reference
+product Boolean, and its exact subsequent cache. No native completion,
+product-language equation, or exact product-row adapter is supplied.
 
-`SourceFreshOrdinaryColdMemoState.prechecked_advance` retains the actual
-post-read constructor cache in the native machine. Both native memo tables
-remain identical. Their pending and completed provenance stays valid.
-Semantic heaps, coverage, open-depth heap, both guarded probe heaps, and
-machine growth remain. Existing `advance_valid` proves this preservation.
+`SourceShortCircuitScan` models actual left-to-right all/any scans.
+`SourceFreshOrdinaryNativeKeyScan.children_complete` and `children_correct`
+connect the actual zipped child scan to the reference child-overlap Boolean.
+`EdgeExecution` rejects different symbols or arities before callbacks.
+`edgePairs` retains the ordered source tails comprehension. `edgeQueries`
+retains finite map-key order and every row's edge-pair order.
+`scan_complete` derives finite actual all-row execution. `scan_correct`
+proves the literal reference ambiguity Boolean for every completed run.
+Actual caches pass from each executed callback to the next.
 
-Next compose the full ordered ambiguity scan and literal compiler result.
-Keep the actual empty, open, and constrained precheck order. Use the derived
-physical key language and native callback equality. Carry the cache after
-each executed callback. General completed warm-call correctness is proved;
-successful warm-call execution still needs the reachable completed memo-state
-condition. The existing first-run success theorem starts from `initial` memos.
-Do not replace that remaining execution obligation with a supplied product
-language or either refuted exact-row adapter. Do not repeat primary Sized,
-individual cold termination, complete product language, or the pointwise
-callback proofs. Read `lean/notes-native-key-callback.md`.
+The nested `Ranges` predicate checks only reached queries and suffixes after
+continuing actual executions. A decisive result does not demand later checks
+or calls. It does not assume callback completion or a product-language law.
+Do not replace this contract with word bounds on arbitrary future heaps.
+Input child-key closure and normalized source constraints retain their stated
+boundaries. Whole Haskell extraction and concrete lazy scheduling remain open.
 
-The current aggregate audit passed 1,513 jobs and 44,104 theorem dependency
-checks. Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-cold-memo-state-20261014-audit.log`.
+Next connect the actual scan to literal compiler results. Preserve empty,
+open, constrained, ambiguous, and canonical branches in source order. Derive
+the cyclic input record from actual finite raw rows and root membership.
+Use the real constraint precheck to identify guarded rows with structural
+rows before applying the new scan equality. Derive the compiler output and
+reuse the existing exact class, order, finite execution, and both inverse laws.
+Do not leave a whole scan equality, product equation, exact-row adapter, or
+native completion as a supplied premise at the actual source entry.
+Read `lean/notes-native-full-scan.md`. Do not repeat completed warm success,
+callback determinism, or the full ordered scan.
+
+The current audit passes 1,520 jobs and 44,155 theorem dependency checks.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
+Log: `/tmp/mcfta-native-early-scan-20261014-audit.log`.
 The old unused `inputs` warning remains. No new warning was introduced.
-The renamed Nix suites passed 289 core, 209 generator, and 147 refinement
-examples. All five updated probes and both formatting checks passed.
+The unchanged source base already passed 289 core, 209 generator, and 147
+refinement examples, all five updated probes, and both formatter checks.
+Those Haskell checks were not repeated for these Lean-only changes.
 No production Haskell code changed. No proof worker is active.
-Current snapshot: `/tmp/mcfta-native-key-checkpoint-20261014-2124/`.
-All work remains local. Check weekly allowance before work; stop at 1%.
+Current snapshot: `/tmp/mcfta-native-full-scan-checkpoint-20261014-2148/`.
+Keep every fixture, marked draft, backup, stash, and other worktree.
+All work remains local. Check allowance before work and stop at 1%.
 
 ## Package rename and current source boundary
 

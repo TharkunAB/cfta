@@ -1,5 +1,11 @@
 # Actual native callbacks on finite source keys
 
+The later [full native scan proof](notes-native-full-scan.md) supersedes
+warm-completion and ordered-scan next-target statements in this checkpoint.
+Warm calls now derive completion from Idle. The actual callback execution
+relation includes the empty-exposure early return. The earlier unconditional
+cold-table wrappers are auxiliary finite readback certificates.
+
 Updated: 2026-10-14 21:24 CEST.
 Proofs: `1e95555f`, `23632065`, and `d635b84c`.
 Source base: `7bfb69d1`, after the `cfta` package rename.

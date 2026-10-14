@@ -6,10 +6,10 @@ and `cfta-ghc`. `Data.CFTA.*` and the Lean namespace `MicroCFTA` retain their
 names. The Lake package is `cfta`. See [package rename](notes-package-rename.md)
 for name correspondence and preservation. Root [HANDOFF.md](../HANDOFF.md)
 supersedes the historical checkpoint descriptions below.
-The current audit passes 1,513 jobs and 44,104 theorem dependency checks.
-The [native key callback proof](notes-native-key-callback.md) derives actual
-finite callbacks and their reference product Boolean. Full scan composition
-remains open.
+The current audit passes 1,520 jobs and 44,155 theorem dependency checks.
+The [full native scan proof](notes-native-full-scan.md) derives complete warm
+callbacks and finite ordered ambiguity scans with exact reference Booleans.
+Literal compiler composition remains open.
 
 [The system specification and current findings](SYSTEM.md) describe the
 language, distinct-term index, distribution, and optimization contracts.
