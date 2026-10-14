@@ -1396,6 +1396,8 @@ import MicroCFTA.InternedFreshOrdinaryRankReplay
 import MicroCFTA.InternedFreshOrdinaryBodyFilter
 import MicroCFTA.InternedFreshOrdinaryPureProbeGate
 import MicroCFTA.InternedFreshOrdinaryProbeOpacity
+import MicroCFTA.InternedFreshOrdinaryGuardedUnfold
+import MicroCFTA.InternedFreshOrdinaryCostReplay
 /-!
 # Proof dependency audit
 
