@@ -22,17 +22,17 @@ open InternedBinderProtocol (Reference NodeKey)
 /-- The exact pending encounter retains its active origin's path from the initial source call. -/
 def Encounter [DecidableEq (EdgeKey Symbol Guard)] (root : Syntax Symbol Guard)
     (initial : List (Value Symbol Guard)) (key : NodeKey) (final : State Symbol Guard) : Prop :=
-  ∃ origin : Origin Symbol Guard key, Rooted root initial origin ∧
+  ∃ origin : Origin Symbol Guard key, StoppedRooted root initial key final origin ∧
     InternedFreshOrdinaryActiveEncounter.AtOrigin origin final
 
 mutual
 /-- Every stopped source expression derives the exact source origin of its active reservation. -/
 theorem build_encounter [DecidableEq (EdgeKey Symbol Guard)]
-    (root : Syntax Symbol Guard) (initial : List (Value Symbol Guard)) (expression : Syntax Symbol Guard)
+    (root : Syntax Symbol Guard) (initial : List (Value Symbol Guard)) (key : NodeKey) (final : State Symbol Guard)
+    (expression : Syntax Symbol Guard)
     (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (context : Context state environment) (waiting : List NodeKey)
-    (covered : Covered waiting state) (scope : Scoped root initial waiting expression environment state)
-    (reached : Reached root initial expression environment state)
-    (key : NodeKey) (final : State Symbol Guard)
+    (covered : Covered waiting state) (scope : Scoped root initial key final waiting expression environment state)
+    (reached : StoppedReached root initial key final expression environment state)
     (pending : InternedFreshOrdinaryConstruction.build expression environment state = .pending key final) : Encounter root initial key final := by
   cases expression with
   | empty | var index => simp [InternedFreshOrdinaryConstruction.build] at pending
@@ -41,30 +41,29 @@ theorem build_encounter [DecidableEq (EdgeKey Symbol Guard)]
       | pending selected after =>
           simp only [InternedFreshOrdinaryConstruction.build, childrenDone, Outcome.bind, Outcome.pending.injEq] at pending
           obtain ⟨rfl, rfl⟩ := pending
-          exact buildEdges_encounter root initial edges environment state context waiting covered
+          exact buildEdges_encounter root initial _ _ edges environment state context waiting covered
             (fun _ _ _ edge child member => scope.node edge member)
-            (fun _ _ _ edge child member => reached.node edge member) _ _ childrenDone
+            (fun _ _ _ edge child member => reached.node edge member) childrenDone
       | done values after => simp [InternedFreshOrdinaryConstruction.build, childrenDone, Outcome.bind, work] at pending
   | union members =>
       cases childrenDone : InternedFreshOrdinaryConstruction.buildMany members environment state with
       | pending selected after =>
           simp only [InternedFreshOrdinaryConstruction.build, childrenDone, Outcome.bind, Outcome.pending.injEq] at pending
           obtain ⟨rfl, rfl⟩ := pending
-          exact buildMany_encounter root initial members environment state context waiting covered
-            (fun child member => scope.union member) (fun child member => reached.union member) _ _ childrenDone
+          exact buildMany_encounter root initial _ _ members environment state context waiting covered
+            (fun child member => scope.union member) (fun child member => reached.union member) childrenDone
       | done values after => simp [InternedFreshOrdinaryConstruction.build, childrenDone, Outcome.bind, work] at pending
   | binder smart body =>
       have invoke : ∀ active name current, Context current (.reference name :: environment) →
-          Covered active current → Scoped root initial active body (.reference name :: environment) current →
-          Reached root initial body (.reference name :: environment) current → ∀ selected after,
-          InternedFreshOrdinaryFacts.callback body environment name current = .pending selected after → Encounter root initial selected after := by
-        intro active name current localContext currentCovered currentScope currentReached selected after stopped
+          Covered active current → Scoped root initial key final active body (.reference name :: environment) current →
+          StoppedReached root initial key final body (.reference name :: environment) current →
+          InternedFreshOrdinaryFacts.callback body environment name current = .pending key final → Encounter root initial key final := by
+        intro active name current localContext currentCovered currentScope currentReached stopped
         cases returned : InternedFreshOrdinaryConstruction.build body (.reference name :: environment) current with
         | pending inner finish =>
             simp only [InternedFreshOrdinaryFacts.callback, returned, Outcome.bind, Outcome.pending.injEq] at stopped
             obtain ⟨rfl, rfl⟩ := stopped
-            exact build_encounter root initial body (.reference name :: environment) current localContext active currentCovered currentScope currentReached _ _
-              returned
+            exact build_encounter root initial _ _ body (.reference name :: environment) current localContext active currentCovered currentScope currentReached returned
         | done value finish => simp [InternedFreshOrdinaryFacts.callback, returned, Outcome.bind, work] at stopped
       rw [InternedFreshOrdinaryConstruction.build] at pending
       change ((InternedFreshOrdinaryFacts.callback body environment .depth state).bind fun depth afterDepth =>
@@ -76,7 +75,7 @@ theorem build_encounter [DecidableEq (EdgeKey Symbol Guard)]
           simp only [depthDone, Outcome.bind, Outcome.pending.injEq] at pending
           obtain ⟨rfl, rfl⟩ := pending
           let crossing : Crossing Symbol Guard := ⟨smart, body, environment, state, .depth, state, context, .depth⟩
-          exact invoke waiting .depth state crossing.facts.1 covered (scope.enter crossing) (Reached.enter crossing reached) _ _ depthDone
+          exact invoke waiting .depth state crossing.facts.1 covered (scope.enter crossing) (StoppedReached.enter crossing reached depthDone) depthDone
       | done depth afterDepth =>
           have depthContext : Context afterDepth environment := by
             simpa only [depthDone, Outcome.state] using context.callback body .depth (depth_available state)
@@ -90,7 +89,7 @@ theorem build_encounter [DecidableEq (EdgeKey Symbol Guard)]
               obtain ⟨rfl, rfl⟩ := pending
               let crossing : Crossing Symbol Guard :=
                 ⟨smart, body, environment, state, .uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth), afterDepth, context, .ordinary depth afterDepth depthDone⟩
-              exact invoke waiting _ afterDepth crossing.facts.1 depthCovered (scope.enter crossing) (Reached.enter crossing reached) _ _ ordinaryDone
+              exact invoke waiting _ afterDepth crossing.facts.1 depthCovered (scope.enter crossing) (StoppedReached.enter crossing reached ordinaryDone) ordinaryDone
           | done ordinary afterOrdinary =>
               have ordinaryContext : Context afterOrdinary environment := by
                 simpa only [ordinaryDone, Outcome.state] using
@@ -126,7 +125,7 @@ theorem build_encounter [DecidableEq (EdgeKey Symbol Guard)]
                   let origin : Origin Symbol Guard (muKey depth ordinary) :=
                     ⟨smart, body, environment, state, rawDepth, afterRawDepth, depth, afterDepth, ordinary, afterOrdinary,
                       context, rawDepthDone, depthDone, ordinaryDone, rfl, found, ordinaryContext, depthAvailable, ordinaryAvailable⟩
-                  have allocatedScope : Scoped root initial (muKey depth ordinary :: waiting) body
+                  have allocatedScope : Scoped root initial key final (muKey depth ordinary :: waiting) body
                       (.reference (.interned entry.1.identity) :: environment) allocated :=
                     Scoped.reserve origin reached (scope.enter crossing)
                   have allocatedCovered := reserve_covered (muKey depth ordinary) afterOrdinary ordinaryCovered
@@ -137,16 +136,16 @@ theorem build_encounter [DecidableEq (EdgeKey Symbol Guard)]
                   | pending selected after =>
                       simp only [bodyDone, Outcome.bind, Outcome.pending.injEq] at pending
                       obtain ⟨rfl, rfl⟩ := pending
-                      exact invoke (muKey depth ordinary :: waiting) _ allocated crossing.facts.1 allocatedCovered allocatedScope (Reached.enter crossing reached) _ _ bodyDone
+                      exact invoke (muKey depth ordinary :: waiting) _ allocated crossing.facts.1 allocatedCovered allocatedScope (StoppedReached.enter crossing reached bodyDone) bodyDone
 termination_by sizeOf expression
 
 /-- The stopped member of an ordered child list retains the source paths of all active ancestors. -/
 theorem buildMany_encounter [DecidableEq (EdgeKey Symbol Guard)]
-    (root : Syntax Symbol Guard) (initial : List (Value Symbol Guard)) (expressions : List (Syntax Symbol Guard))
+    (root : Syntax Symbol Guard) (initial : List (Value Symbol Guard)) (key : NodeKey) (final : State Symbol Guard)
+    (expressions : List (Syntax Symbol Guard))
     (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (context : Context state environment) (waiting : List NodeKey)
-    (covered : Covered waiting state) (scope : ∀ expression ∈ expressions, Scoped root initial waiting expression environment state)
-    (reached : ∀ expression ∈ expressions, Reached root initial expression environment state)
-    (key : NodeKey) (final : State Symbol Guard)
+    (covered : Covered waiting state) (scope : ∀ expression ∈ expressions, Scoped root initial key final waiting expression environment state)
+    (reached : ∀ expression ∈ expressions, StoppedReached root initial key final expression environment state)
     (pending : InternedFreshOrdinaryConstruction.buildMany expressions environment state = .pending key final) : Encounter root initial key final := by
   cases expressions with
   | nil => simp [InternedFreshOrdinaryConstruction.buildMany] at pending
@@ -156,7 +155,7 @@ theorem buildMany_encounter [DecidableEq (EdgeKey Symbol Guard)]
       | pending selected after =>
           simp only [InternedFreshOrdinaryConstruction.buildMany, firstDone, Outcome.bind, Outcome.pending.injEq] at pending
           obtain ⟨rfl, rfl⟩ := pending
-          exact build_encounter root initial first environment state context waiting covered (scope first List.mem_cons_self) (reached first List.mem_cons_self) _ _ firstDone
+          exact build_encounter root initial _ _ first environment state context waiting covered (scope first List.mem_cons_self) (reached first List.mem_cons_self) firstDone
       | done value after =>
           have afterContext : Context after environment := by simpa only [firstDone, Outcome.state] using context.build first
           have afterCovered := InternedFreshOrdinaryCoverage.build_covered first _ state context.normal.facts.coherent.valid covered value after firstDone
@@ -166,21 +165,21 @@ theorem buildMany_encounter [DecidableEq (EdgeKey Symbol Guard)]
           | pending selected last =>
               simp only [InternedFreshOrdinaryConstruction.buildMany, firstDone, Outcome.bind, restDone, Outcome.pending.injEq] at pending
               obtain ⟨rfl, rfl⟩ := pending
-              exact buildMany_encounter root initial rest environment after afterContext waiting afterCovered
+              exact buildMany_encounter root initial _ _ rest environment after afterContext waiting afterCovered
                 (fun expression member => (scope expression (List.mem_cons_of_mem first member)).grows afterGrowth)
-                (fun expression member => (reached expression (List.mem_cons_of_mem first member)).grows afterGrowth) _ _ restDone
+                (fun expression member => (reached expression (List.mem_cons_of_mem first member)).grows afterGrowth) restDone
 termination_by sizeOf expressions
 
 /-- The stopped edge child retains actual source origins across all preceding child and edge effects. -/
 theorem buildEdges_encounter [DecidableEq (EdgeKey Symbol Guard)]
-    (root : Syntax Symbol Guard) (initial : List (Value Symbol Guard)) (expressions : List (EdgeSyntax Symbol Guard))
+    (root : Syntax Symbol Guard) (initial : List (Value Symbol Guard)) (key : NodeKey) (final : State Symbol Guard)
+    (expressions : List (EdgeSyntax Symbol Guard))
     (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (context : Context state environment) (waiting : List NodeKey)
     (covered : Covered waiting state)
     (scope : ∀ symbol guard children, .mk symbol guard children ∈ expressions →
-      ∀ expression ∈ children, Scoped root initial waiting expression environment state)
+      ∀ expression ∈ children, Scoped root initial key final waiting expression environment state)
     (reached : ∀ symbol guard children, .mk symbol guard children ∈ expressions →
-      ∀ expression ∈ children, Reached root initial expression environment state)
-    (key : NodeKey) (final : State Symbol Guard)
+      ∀ expression ∈ children, StoppedReached root initial key final expression environment state)
     (pending : InternedFreshOrdinaryConstruction.buildEdges expressions environment state = .pending key final) : Encounter root initial key final := by
   cases expressions with
   | nil => simp [InternedFreshOrdinaryConstruction.buildEdges] at pending
@@ -192,9 +191,9 @@ theorem buildEdges_encounter [DecidableEq (EdgeKey Symbol Guard)]
           | pending selected after =>
               simp only [InternedFreshOrdinaryConstruction.buildEdges, childrenDone, Outcome.bind, Outcome.pending.injEq] at pending
               obtain ⟨rfl, rfl⟩ := pending
-              exact buildMany_encounter root initial children environment state context waiting covered
+              exact buildMany_encounter root initial _ _ children environment state context waiting covered
                 (scope symbol constraint children List.mem_cons_self)
-                (reached symbol constraint children List.mem_cons_self) _ _ childrenDone
+                (reached symbol constraint children List.mem_cons_self) childrenDone
           | done values after =>
               have afterContext : Context after environment := by simpa only [childrenDone, Outcome.state] using context.many children
               have afterCovered := InternedFreshOrdinaryCoverage.buildMany_covered children _ state context.normal.facts.coherent.valid covered values after childrenDone
@@ -213,11 +212,11 @@ theorem buildEdges_encounter [DecidableEq (EdgeKey Symbol Guard)]
                   change (InternedFreshOrdinaryConstruction.buildEdges rest environment edge.2).bind _ = .pending key final at pending
                   simp only [restDone, Outcome.bind, Outcome.pending.injEq] at pending
                   obtain ⟨rfl, rfl⟩ := pending
-                  exact buildEdges_encounter root initial rest environment edge.2 edgeContext waiting edgeCovered
+                  exact buildEdges_encounter root initial _ _ rest environment edge.2 edgeContext waiting edgeCovered
                     (fun s g c member expression included =>
                       (scope s g c (List.mem_cons_of_mem _ member) expression included).grows (grows_trans afterGrowth edgeVerified.growth))
                     (fun s g c member expression included =>
-                      (reached s g c (List.mem_cons_of_mem _ member) expression included).grows (grows_trans afterGrowth edgeVerified.growth)) _ _ restDone
+                      (reached s g c (List.mem_cons_of_mem _ member) expression included).grows (grows_trans afterGrowth edgeVerified.growth)) restDone
 termination_by sizeOf expressions
 end
 
@@ -228,8 +227,8 @@ theorem complete_encounter [DecidableEq (EdgeKey Symbol Guard)] (expression : Sy
     (covered : Covered [] state) (key : NodeKey) (final : State Symbol Guard)
     (pending : InternedFreshOrdinaryConstruction.build expression environment state = .pending key final) :
     Encounter expression environment key final :=
-  build_encounter expression environment expression environment state context [] covered
-    (by intro key member; cases member) (reached_initial expression environment state) key final pending
+  build_encounter expression environment key final expression environment state context [] covered
+    (by intro key member; cases member) (stopped_initial expression environment key final state) pending
 
 /-- Canonical readback retains the same origin and its original source path. -/
 theorem complete_site [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
@@ -239,7 +238,18 @@ theorem complete_site [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax 
     ∃ origin : Origin Symbol Guard key, Rooted expression environment origin ∧
       Nonempty (InternedFreshOrdinaryActiveSite.Site origin final) := by
   obtain ⟨origin, rooted, atOrigin⟩ := complete_encounter expression environment state context covered key final pending
-  exact ⟨origin, rooted, InternedFreshOrdinaryActiveSite.encounter_site_at origin final atOrigin⟩
+  exact ⟨origin, StoppedReached.reached rooted, InternedFreshOrdinaryActiveSite.encounter_site_at origin final atOrigin⟩
+
+/-- The live mismatch retains every enclosing pending callback at the same exact origin. -/
+theorem complete_stopped_mismatch [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
+    (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (context : Context state environment)
+    (covered : Covered [] state) (key : NodeKey) (final : State Symbol Guard)
+    (pending : InternedFreshOrdinaryConstruction.build expression environment state = .pending key final) :
+    ∃ origin : Origin Symbol Guard key, StoppedRooted expression environment key final origin ∧
+      ∃ site : InternedFreshOrdinaryActiveSite.Site origin final, InternedFreshOrdinaryJointMismatch.Mismatch site := by
+  obtain ⟨origin, rooted, atOrigin⟩ := complete_encounter expression environment state context covered key final pending
+  obtain ⟨site⟩ := InternedFreshOrdinaryActiveSite.encounter_site_at origin final atOrigin
+  exact ⟨origin, rooted, site, InternedFreshOrdinaryJointMismatch.Site.mismatch site⟩
 
 /-- Actual pending execution retains the original source path and the live mismatch at the same exact origin. -/
 theorem complete_mismatch [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
@@ -248,8 +258,24 @@ theorem complete_mismatch [DecidableEq (EdgeKey Symbol Guard)] (expression : Syn
     (pending : InternedFreshOrdinaryConstruction.build expression environment state = .pending key final) :
     ∃ origin : Origin Symbol Guard key, Rooted expression environment origin ∧
       ∃ site : InternedFreshOrdinaryActiveSite.Site origin final, InternedFreshOrdinaryJointMismatch.Mismatch site := by
-  obtain ⟨origin, rooted, ⟨site⟩⟩ := complete_site expression environment state context covered key final pending
-  exact ⟨origin, rooted, site, InternedFreshOrdinaryJointMismatch.Site.mismatch site⟩
+  obtain ⟨origin, rooted, site, mismatch⟩ := complete_stopped_mismatch expression environment state context covered key final pending
+  exact ⟨origin, StoppedReached.reached rooted, site, mismatch⟩
+
+/-- Closed pending execution derives actual stopped shorter ordinary producers for the exact active origin. -/
+theorem closed_mismatch_pending_producers [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
+    (key : NodeKey) (final : State Symbol Guard)
+    (pending : InternedFreshOrdinaryConstruction.build expression [] empty = .pending key final) :
+    ∃ origin : Origin Symbol Guard key, ∃ site : InternedFreshOrdinaryActiveSite.Site origin final,
+      InternedFreshOrdinaryJointMismatch.Mismatch site ∧
+      ∀ level, .uninterned level ∈ origin.depth.free →
+        PendingProducedAt key final (.binder origin.smart origin.body) origin.environment origin.before level := by
+  obtain ⟨origin, rooted, site, mismatch⟩ :=
+    complete_stopped_mismatch expression [] empty InternedFreshOrdinaryContext.empty_context empty_correct.2 key final pending
+  refine ⟨origin, site, mismatch, ?_⟩
+  intro level member
+  rcases StoppedRooted.ordinary_capture rooted level member with ⟨original, impossible, _⟩ | produced
+  · cases impossible
+  · exact produced
 
 /-- Closed repaired pending execution derives actual shorter producers for every ordinary capture in its ancestor Depth probe. -/
 theorem closed_mismatch_producers [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
@@ -258,12 +284,7 @@ theorem closed_mismatch_producers [DecidableEq (EdgeKey Symbol Guard)] (expressi
     ∃ origin : Origin Symbol Guard key, ∃ site : InternedFreshOrdinaryActiveSite.Site origin final,
       InternedFreshOrdinaryJointMismatch.Mismatch site ∧
       ∀ level, .uninterned level ∈ origin.depth.free → ProducedAt (.binder origin.smart origin.body) origin.environment origin.before level := by
-  obtain ⟨origin, rooted, site, mismatch⟩ :=
-    complete_mismatch expression [] empty InternedFreshOrdinaryContext.empty_context empty_correct.2 key final pending
-  refine ⟨origin, site, mismatch, ?_⟩
-  intro level member
-  rcases Rooted.ordinary_capture rooted level member with ⟨original, impossible, _⟩ | produced
-  · cases impossible
-  · exact produced
+  obtain ⟨origin, site, mismatch, producers⟩ := closed_mismatch_pending_producers expression key final pending
+  exact ⟨origin, site, mismatch, fun level member => PendingProducedAt.produced (producers level member)⟩
 
 end MicroCFTA.InternedFreshOrdinaryRootEncounter
