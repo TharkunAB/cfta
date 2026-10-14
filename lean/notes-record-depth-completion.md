@@ -68,14 +68,15 @@ derives the successful value and exact cache, retained context and decoded
 heap, complete coverage, result availability, growth, and issued history.
 The stored body can contain arbitrary available captured Mu records.
 
-## Remaining native obligations
+## Native extension
 
-Derive the full semantic context and decoded depth heap through actual native
-prefixes. Follow actual emitted work and its available inputs. Arbitrary
-`Work` instructions can install invalid records. Complete coverage alone
-does not establish these semantic invariants. Apply `MaybeMu.not_pending`
-at the exact reached constructor site, then strengthen finite native
-return-or-pending to successful first-run bounds.
+The later [successful native execution](notes-native-successful.md) proof,
+checkpoint `f7b842e4`, completes primitive and compiled semantic conditions,
+completed native semantic preservation, actual unfinished trace splits,
+pending-constructor exclusion, and successful stable first-run bounds for
+closed Original available inputs under checked words. It derives the needed
+context at each reached blocked site. It requires no generic semantic
+invariant for arbitrary native prefixes.
 
 Output preparation, or a broader cold-reader invariant, and physical product
 row membership and rejection remain open. Universal preparation preservation

@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 11:49 CEST**, upstream `1a083040`.
-The latest proof commit is `e4a011e8`. No background proof worker is active.
+Current checkpoint: **2026-10-14 12:05 CEST**, upstream `1a083040`.
+The latest proof commit is `f7b842e4`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -85,8 +85,8 @@ caller with actual domain, optional-binder, union, and guarded row effects.
 results. `execute_stable` preserves non-exhausted outcomes and exact caches
 at larger bounds. Actual request traces derive conjoined guard fields, child
 records, and canonical surviving rows. Completed native memo effects are
-connected below. Sufficient first-run bounds and product-row correspondence
-remain open. See
+connected below. Successful first-run bounds under checked words are now
+derived. Physical product-row correspondence remains open. See
 [recursive caller](notes-recursive-intersection-kernel.md).
 
 `SourceRecursiveIntersectionReplay*` proves completed guarded kernel replay
@@ -149,7 +149,8 @@ Full active paths now retain arbitrary captured values and both exact old
 probe records. The two probes derive equal captured free-name memberships.
 Every live interned capture predates the ancestor reservation. Its fresh name
 is absent. The actual optional-binder bridge requires an incoming full repaired
-semantic context; native prefix preservation of that context remains open.
+semantic context. The later native no-constructor proof derives the needed
+context at each actual blocked source site from completed-body preservation.
 Actual earlier completed routes now retain both repaired probes and a
 completed request payload before the ancestor reservation. That earlier pair
 differs from the later original pair. Captured values can be arbitrary records.
@@ -202,10 +203,20 @@ derive equal actual ordinary choices along both scoped routes.
 `SourceRecursiveIntersectionMaybeMuCompletion.complete_decoded` composes actual
 stored substitution and arbitrary available leaves without preparation. It
 retains the semantic context, decoded depth heap, coverage, availability,
-growth, and issued history. Native semantic-prefix preservation, successful
-first-run bounds, output preparation or a broader cold-reader invariant, and
-physical product rows remain open. See
-[record completion](notes-record-depth-completion.md).
+growth, and issued history. `SourceRecursiveIntersectionCompileSemantic*` derives the semantic conditions
+of every actual compiled branch. `NativeSemantic.Bounds.semantic_heap`
+preserves complete semantic heaps through actual completed nested evaluation.
+`NativeNoConstructor.no_constructor` follows unfinished body/continuation
+splits and excludes pending constructors. `NativeSuccessful.cold_node_complete`
+derives successful stable first native execution for closed Original available
+inputs from complete semantic caches under explicit `WordRanges`. Exact
+returned caches, guarded kernel meaning, strong memo provenance, semantic
+heaps, and coverage are retained. `constructed_node_complete` derives initial
+semantic heaps and coverage from actual repaired closed source construction.
+Output preparation or a broader cold-reader invariant, a finite final cold
+table, and physical product rows remain open. See
+[record completion](notes-record-depth-completion.md) and
+[successful native execution](notes-native-successful.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
 ancestor edits and bounded iteration for the fixed unary/two-atom fragment.
 General equality propagation remains open.
@@ -216,7 +227,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,340 targets and 42,373 theorem dependency checks**
+The current audit passes **1,348 targets and 42,439 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **641 Haskell examples** passed after the PR #117 refresh: 289 core,
 208 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.

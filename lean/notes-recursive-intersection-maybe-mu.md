@@ -5,8 +5,9 @@ The actual optional-binder substitution now derives successful execution
 without a prepared-body premise. See
 [record completion](notes-record-depth-completion.md), checkpoint `e4a011e8`.
 Earlier literal-only limits and next targets below are historical. The next
-obligation is semantic-context/depth-heap preservation on actual native
-prefixes, then successful native bounds and physical product rows.
+obligation is output preparation or a broader cold-reader invariant and
+physical product rows. Native first-run success under checked words is
+proved in [successful native execution](notes-native-successful.md).
 
 
 Proof checkpoint: `0bf65249`. Upstream: `f59c198d`, 2026-10-14.

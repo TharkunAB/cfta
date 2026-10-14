@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 11:49 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:05 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -23,14 +23,16 @@ Completed native runs now derive exact finite nested evaluations. Completed
 source bodies retain their memo structures and all enclosing running cells.
 Completed native runs now derive guarded kernel agreement, exact physical
 growth, available results, and concrete new memo provenance under checked
-word bounds. General first-run termination and product language remain open.
+word bounds. Successful first-run execution is now proved under explicit checked word
+ranges and complete source semantic heaps. Product language remains open.
 The original physical input view now has derived cached free-name equations,
 closedness, branch selection, and copied closedness. Actual payload sizes
 supply structural ranks. Closed-root reference traversal stays in a finite
 carrier bounded by the actual issued counter. Canonical representatives and
 both copied-language directions now derive the complete finite input interface.
 The semantic schedule has a sufficient finite bound and exact product language
-for actual closed original inputs. Sufficient native first-run bounds remain open.
+for actual closed original inputs. Successful native first-run bounds are now
+derived under explicit checked words, as recorded below.
 Least successful semantic request bounds now decrease at every immediate call.
 Canonical source allocation retains them. Native completed frames leave no new
 running cells. The body-limit invariant now covers every compiled branch and
@@ -57,10 +59,11 @@ key and final cache. The producer-descent alternative remains unclosed.
 General closed-source completion is now proved by paired-route level agreement.
 Arbitrary captured records in a complete valid decoded cache also complete.
 The actual optional-binder substitution now derives successful execution.
-General native first-run completion still needs native semantic-prefix
-invariants, successful bounds, and output preparation.
+Native first-run completion is now proved for closed Original available inputs
+in complete semantic caches under explicit WordRanges. Output preparation
+and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`e4a011e8`**. A later documentation commit
+The latest proof checkpoint is **`f7b842e4`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -85,7 +88,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **31% at 11:48 CEST**. This is a historical value.
+The last observed value was **31% at 12:03 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -734,8 +737,8 @@ termination contract is used.
 `f095aa16` extends the result to literal captures in any complete initial cache
 with full source context and decoded depth heap. `literal_not_pending` and
 `literal_complete` retain the actual returned cache. Arbitrary fixed captured
-records and native prefix invariants remain open. Do not repeat the completed
-literal route proof or pursue a producer descent for that scope.
+records are handled by the later general source proof below. Native first-run
+success uses actual unfinished trace splits. Do not repeat the literal proof.
 
 ## Arbitrary-record source and optional-binder completion
 
@@ -753,31 +756,49 @@ coverage, available result, growth, and issued history. See
 [record depth and completion](lean/notes-record-depth-completion.md).
 The earlier literal-only next target is superseded by this section.
 
+## Successful native first-run execution
+
+`ec611802` proves semantic heap preservation for actual emitted primitives,
+compiled source continuations, and completed nested native evaluations.
+`f7b842e4` derives exact unfinished body/continuation splits. Strong induction
+on the actual finite native bound excludes pending constructors. Completed
+body provenance restores the original completion frames. Complete semantic
+heaps and payload coverage supply each actual optional-binder premise.
+`NativeSuccessful.cold_node_complete` now derives successful finite native
+execution for closed Original available roots, complete semantic caches, and
+explicit `WordRanges`. It retains strong memo provenance, guarded kernel
+meaning, semantic heaps, coverage, and identical returned values and caches
+at every larger bound. `constructed_node_complete` derives the semantic and
+coverage premises from actual repaired closed source construction. See
+[successful native execution](lean/notes-native-successful.md).
+Earlier statements that this native first-run scope remains open are historical.
+Output preparation, final cold traversal, and product language remain open.
+
 ## Remaining priorities
 
-1. Read `lean/notes-record-depth-completion.md`. Arbitrary-record source
-   depth, projected-level agreement, paired routes, and completion are proved.
-   Actual `maybeMu` now completes for arbitrary available bodies in a complete
-   decoded semantic context. Derive full semantic-context and decoded-heap
-   preservation through actual native prefixes. Complete coverage alone does
-   not supply those invariants. Follow actual emitted work and its available
-   inputs; arbitrary `Work` instructions can install invalid payloads.
-   Use `MaybeMu.semantic_context` for optional-binder heap preservation and
-   `MaybeMu.not_pending` at the exact native constructor site. The retained
-   alternative producer-descent proof lacks a second paired observation.
-   These completed source results do not depend on it. Preserve its evidence.
-2. Apply the completed finite native return-or-pending theorem after excluding
-   the actual arbitrary-record constructor pending case. Keep checked word
-   ranges, exact source/domain effects, both memo families, publication before
-   demand, ordered tagged operands, shifted domain keys, reversed swaps,
-   RecIntersect bypass, original finish frames, and yielded continuations.
-   Derive successful first-run bounds and actual output preparation, or a
-   broader cold-reader invariant. Universal `PreparedWithoutMu` preservation
-   at reached native bodies is refuted by `SourceRecursiveIntersectionOpenBodyBoundary`.
-   Keep that source-built counterexample and its successful native return.
-   Derive physical `ProductReadback.members` and `.rejected` from actual row
-   traces, then use `product_exact`. Do not assume equivalent product language.
-   Retain the exact reference, solver-decided, and optimized Sized results.
+1. Read `lean/notes-native-successful.md`. Arbitrary-record source completion,
+   actual optional-binder completion, emitted semantic heap preservation,
+   completed native semantic preservation, pending-constructor exclusion, and
+   successful stable native first-run execution are proved for the stated
+   complete-cache, closed Original input, and checked-word scope. The actual
+   unfinished trace split supplies semantic context at reached constructor
+   sites. A generic all-prefix semantic invariant is not needed. Do not repeat
+   those completed results or replace their actual effects with contracts.
+   The alternative shorter-producer descent is unclosed and unused by these
+   results. Preserve its histories and counterexamples.
+2. Derive output closedness and preparation, or a broader cold-reader
+   invariant. `cold_node_complete` supplies availability, exact guarded kernel
+   meaning, memo provenance, semantic heaps, coverage, and stable exact caches.
+   It does not yet supply product language or a finite final cold table.
+   Universal `PreparedWithoutMu` preservation at reached native bodies remains
+   refuted by `SourceRecursiveIntersectionOpenBodyBoundary`. Keep that actual
+   source-built counterexample and its successful native return. Derive
+   physical `ProductReadback.members` and `.rejected` from actual row traces,
+   then use `product_exact`. Do not assume equivalent product language.
+   Keep explicit word checks, source/domain effects, both memo families,
+   publication before demand, ordered tagged operands, shifted domain keys,
+   reversed swaps, RecIntersect bypass, original finish frames, and yielded
+   continuations. Retain all reference, solver-decided, and optimized Sized laws.
 3. Connect bounded import to native `fromFTA`/SCC and split readback, then
    preserve supplied custom order through final observation decoders.
    `SourceBoundedImport`, `SourceFromTerms*`, and `SourceImportGroups*` already
@@ -801,7 +822,8 @@ The earlier literal-only next target is superseded by this section.
 
 The old constructor's general first-run completion claim is refuted. Repaired
 source completion is proved with arbitrary captured records and complete
-decoded contexts. Native first-run completion remains open. The cold-source comparison bridge is checked.
+decoded contexts. Native first-run completion is proved for the stated closed Original input
+and checked-word scope. Output preparation and product language remain open. The cold-source comparison bridge is checked.
 The marked `MergedFreshOrdinarySelection.lean.incomplete` still has an `any_eq`
 kernel timeout (`/tmp/mcfta-fresh-selection.log`). Try the opaque `readRows_eq`
 step that resolved the analogous comparator problem. Preserve exact run
@@ -820,10 +842,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,340 jobs and 42,373 theorem dependency checks**.
+The current build passes **1,348 jobs and 42,439 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-maybe-mu-completion-20261014-audit.log`.
+Log: `/tmp/mcfta-native-successful-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -868,6 +890,8 @@ Leave that unrelated baseline unchanged. No new test was added locally.
 
 | Commit | Result |
 | --- | --- |
+| `f7b842e4` | Exact unfinished native trace splits, no pending constructor, successful stable first native execution for closed Original inputs under checked words. |
+| `ec611802` | Actual primitive/compiled semantic heap conditions and completed native semantic heap preservation. |
 | `e4a011e8` | Actual arbitrary-body optional-binder completion, complete semantic context, decoded depth heap, coverage, and exact effects. |
 | `cdcbb881` | Arbitrary-record projected levels, paired routes, and general repaired source completion. |
 | `e543e630` | Full repaired source depth/deep execution with arbitrary captured records; literal driver specialization. |

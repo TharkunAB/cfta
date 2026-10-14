@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 11:49 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:05 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -143,10 +143,10 @@ value and its exact final cache. No supplied termination or preparation
 premise is used. `f095aa16` extends this to literal captures in any complete
 cache with a full source context and decoded depth heap.
 
-Arbitrary fixed captured records and actual native context/decoded-heap
-preservation remain open. The next step extends the new source and route
-results to those mixed inputs. Output preparation and physical product rows
-also remain open. See [source depth](lean/notes-fresh-ordinary-depth.md).
+The later arbitrary-record and native-success checkpoints below extend these
+results to mixed captures and derive successful native first execution under
+explicit checked words. Output preparation and physical product rows remain
+open. See [successful native execution](lean/notes-native-successful.md).
 
 `EqualityNestedUnaryAncestorRoot*` composes actual projections, target merges,
 both ancestor edits, and the root identity stop. The fixed unary/two-atom,
@@ -176,9 +176,9 @@ now derives the actual substitution callback and repaired constructor
 equation, source facts, physical histories, and replay. Prepared callbacks
 and probes complete at arbitrary current caches. `pending_exact` identifies
 the exact installed post-probe key with an absent payload. Complete cache
-coverage gives successful prepared first-run execution. General open nested
-completion, result preparation, product language, recursive pending memo
-publication, and product-row readback remain open. See
+coverage gives successful prepared first-run execution. The later arbitrary-record
+completion theorem removes that preparation condition in complete semantic
+caches. Result preparation, product language, and product-row readback remain open. See
 [optional binder effects](lean/notes-recursive-intersection-maybe-mu.md).
 
 ## Stateful recursive caller
@@ -191,9 +191,9 @@ available successful results. `execute_stable` retains every non-exhausted
 outcome and its exact returned caches at all larger bounds. Actual ordered
 traces derive literal symbols, conjoined guards, actual child values, and
 canonical surviving parent rows. The bounded recursive kernel remains
-uncached. Completed native node/edge effects are connected below. Existence
-of a sufficient first-run bound, physical product-row correspondence, and
-product language remain open. See
+uncached. Completed native node/edge effects and successful stable first-run
+bounds under checked words are derived below. Physical product-row
+correspondence and product language remain open. See
 [recursive caller](lean/notes-recursive-intersection-kernel.md).
 
 ## Completed replay and memo provenance
@@ -472,12 +472,34 @@ still needs semantic-context/depth-heap preservation at its reached source
 sites before constructor pending can be excluded. See
 [record completion](lean/notes-record-depth-completion.md).
 
+## Successful native first-run execution
+
+`ec611802` proves the actual emitted operations and all compiled source
+branches preserve semantic heap conditions. `Bounds.semantic_heap` follows
+completed nested native evaluation, checked memo keys, and original frames.
+`f7b842e4` splits an actual unfinished appended run into a blocked body or an
+actual completed body followed by a blocked continuation. Strong induction
+on the finite native bound excludes pending constructors. Each reached
+optional binder has its derived available body and complete semantic heaps.
+The proof does not assume successful native execution or a no-pending callback.
+
+`NativeSuccessful.cold_node_complete` combines this with the existing finite
+terminal theorem. Closed Original available inputs now derive successful
+finite native execution in complete semantic caches under explicit
+`WordRanges`. The result retains exact caches, strong memo provenance,
+guarded kernel meaning, semantic heaps, complete coverage, and identical
+value/cache at every larger bound. `constructed_node_complete` derives the
+semantic and coverage premises from actual repaired closed source construction.
+Output preparation, a finite final cold table, physical product-language
+correspondence, and concrete runtime/word-range justification remain open.
+See [successful native execution](lean/notes-native-successful.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
 has exposed and repaired real defects. It is not yet an end-to-end proof of
 the Haskell library. The largest remaining obligations concern general
-recursive construction/exposure, sufficient first-run native bounds and
+recursive construction/exposure, final cold exposure and
 physical product-row correspondence, native SCC/split import readback and custom decoder order,
 general equality propagation, and concrete runtime/dependency contracts.
 No verified Haskell-to-Lean extraction exists. There is no honest single
@@ -507,18 +529,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`e4a011e8`**; later commits record this handoff.
+The latest proof checkpoint is **`f7b842e4`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,340 build targets and 42,373 theorem
+The current Lean 4.34.1 audit passes **1,348 build targets and 42,439 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-maybe-mu-completion-20261014-audit.log`.
+Log: `/tmp/mcfta-native-successful-20261014-audit.log`.
 After the current refresh, all **641** examples passed in Nix: 289 core, 208
 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **31% at 11:48 CEST**.
+No background proof worker is active. Weekly allowance was **31% at 12:03 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
@@ -649,7 +671,7 @@ new scaling proof. No new production test was added in this refresh.
 | --- | --- | --- |
 | Mathematical language, enumeration, ranks, probabilities | Finite-term acceptance, enumeration laws, distinct-term bijections/inverses, and exact rational distributions. | Full connection of every runtime API path to these laws. Generator members remain distinct from FTA terms. |
 | Executable library components | Enumeration and symbolic count/select/rank drivers, supported lattice operations, typed recursive/mutual/n-ary families, nested joins, guard and pruning components. | Arbitrary runtime schemas, support/codec wiring, recursive productivity, and remaining primitive adapters. |
-| Constructor repair | Facts, normalization, actual semantic origins, root profiles, free-name heaps, closed-output free-name absence, capture bounds, exact completed replay, and bounded source chooser correspondence. | General repaired first-run completion; full depth/deep heap induction; complete accepted-language and arbitrary substitution correspondence. |
+| Constructor repair | Facts, normalization, actual semantic origins, root profiles, free-name heaps, closed-output free-name absence, capture bounds, exact completed replay, arbitrary-record depth/deep heap induction, source completion, and successful stable native first execution under checked words. | Complete accepted-language correspondence, output preparation or a broader cold-reader invariant, and concrete runtime correspondence. |
 | Cold comparison and merging | Prepared cold completion, original-language coverage, exact fuel stability and successful replay. Exact repaired reader and complete comparator bridges. | The repaired selection bridge has a kernel-timeout draft; whole repaired merge composition follows it. Open nested Mu reconstruction remains outside the prepared fragment. |
 | Equality convergence | Repeated target merge reaches an exact fixed point within ordinary-tree height. A concrete nested unary two-atom endpoint loop has a derived bound. Actual-cache original ancestor replay and edit effects are proved. | Compose both ancestor/forest edits and root stopping. Generalize beyond fixed unary/two-atom/single-class fragments. |
 | Upstream optimizations through PR #103 | Flat memo probing/copy/growth/winner retention and bounded keys; maintained enumeration indexes and exact scheduler selection. | The newer representation bridges above, native publication, concrete containers, identity lifetimes, and runtime range obligations. |
