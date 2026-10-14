@@ -31,6 +31,14 @@ heap of 2 GB each, so that @cabal bench@ stays short. The variable
 @HECTARE_GHC_TRACE@ makes a child print each program that it checks to its
 standard error, with the seconds and the size.
 
+The variable @HECTARE_GHC_MODES@ gives the modes of the portfolio
+('optionModes'), separated by commas, each with an optional budget in
+seconds after a colon: @hectare@ (mode (a), the default), @states@ (mode (b),
+"Data.CFTA.GHC.States"), or @hectare:2,states@. Then a child also prints a
+row @run@ for each run (the query, the mode, the outcome, the seconds, the
+programs, and the fits) and a row @figures@ with the figures of the states
+of mode (b), and the parent prints them after the result row.
+
 > hectare-ghc [RUNG [SECONDS [HEAP [JOBS [NAME...]]]]]
 > hectare-ghc --query NAME RUNG SECONDS
 -}
@@ -47,6 +55,7 @@ import Data.List (intercalate, isPrefixOf, partition)
 import Data.Maybe (isJust, isNothing)
 import Data.Text (Text)
 import qualified Data.Text as Text
+import Data.Word (Word64)
 import GHC.Clock (getMonotonicTime)
 import GHC.Stats (getRTSStats, getRTSStatsEnabled, max_mem_in_use_bytes)
 import System.Directory (createDirectoryIfMissing)
@@ -56,12 +65,15 @@ import System.IO (hFlush, hPutStrLn, stderr, stdout)
 import System.Process (readProcessWithExitCode)
 import System.Timeout (timeout)
 import Text.Printf (printf)
+import Text.Read (readMaybe)
 
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Counters (..))
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), renderProgram, renderType)
 import Data.CFTA.Gen.Synthesis.HooglePlus (Benchmark (..), hooglePlusBenchmarks)
+import Data.CFTA.Gen.Synthesis.Portfolio (Run (..))
+import Data.CFTA.Gen.Synthesis.Walk (Progress (..))
 
 main :: IO ()
 main = do
@@ -199,6 +211,7 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
             -- The fits so far, and those that use every part of themselves.
             counts <- newIORef (0 :: Int, 0 :: Int)
             tracing <- isJust <$> lookupEnv "HECTARE_GHC_TRACE"
+            modes <- maybe (pure (optionModes defaultOptions)) (either fail pure . readModes) =<< lookupEnv "HECTARE_GHC_MODES"
             -- The walk stops at the time limit; this limit is for the rest.
             outcome <- try . timeout ((seconds + 30) * 1000000) $ withSession (importLines rung) $ \session -> do
                 candidates <- candidatesOf session (rungModules rung)
@@ -211,6 +224,7 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
                             { optionMaximumSize = ghcSize query
                             , optionSeconds = Just (fromIntegral seconds - (ready - start))
                             , optionAvoid = hectareAvoid
+                            , optionModes = modes
                             , optionReport = Just report
                             , optionTrace = if tracing then Just trace else Nothing
                             }
@@ -231,6 +245,18 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
                 statistics <- case signature of
                     Just typ -> fitsForSignature session options candidates typ (map fst (ghcArguments query)) accept
                     Nothing -> pure Nothing
+                forM_ statistics $ \searched -> do
+                    forM_ (statisticsRuns searched) $ \run ->
+                        printf
+                            "run,%s,%s,%s,%.3f,%d,%d\n"
+                            name
+                            (Text.unpack (runName run))
+                            (show (progressOutcome (runProgress run)))
+                            (nanosToSeconds (runNanos run))
+                            (progressPrograms (runProgress run))
+                            (progressFits (runProgress run))
+                    forM_ (statisticsStates searched) $ \figures -> printf "figures,%s,%s\n" name (show figures)
+                    hFlush stdout
                 -- Check the first fit itself, as a program of the signature.
                 found <- readIORef firstFit
                 checked <- case found of
@@ -292,6 +318,25 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark hoogl
                 checkedText
                 (maybe "-" (renderProgram . fitProgram) found)
 
+-- | Nanoseconds as seconds.
+nanosToSeconds :: Word64 -> Double
+nanosToSeconds nanos = fromIntegral nanos / 1e9
+
+{- | Read the modes of a portfolio: names separated by commas, each with an
+optional budget in seconds after a colon, as @hectare:2,states@.
+-}
+readModes :: String -> Either String [(Mode, Maybe Double)]
+readModes = mapM mode . words . map (\c -> if c == ',' then ' ' else c)
+  where
+    mode text = case break (== ':') text of
+        ("hectare", budget) -> (,) Hectare <$> seconds budget
+        ("states", budget) -> (,) States <$> seconds budget
+        _ -> Left ("no mode " <> text)
+    seconds budget = case budget of
+        "" -> Right Nothing
+        ':' : number -> maybe (Left ("not seconds: " <> number)) (Right . Just) (readMaybe number)
+        _ -> Left ("not a budget: " <> budget)
+
 -- | The peak memory in use in megabytes, when the RTS keeps statistics.
 peakMemory :: IO Int
 peakMemory = do
@@ -337,7 +382,8 @@ runSuite rung seconds heap jobs names = do
                                 (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,"
                                 (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,"
                                 _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,"
-                        withMVar output $ \() -> putStrLn row >> hFlush stdout
+                        let extra = [line | line <- lines out, any (`isPrefixOf` line) ["run,", "figures,"]]
+                        withMVar output $ \() -> mapM_ putStrLn (row : extra) >> hFlush stdout
                         loop
         loop
     replicateM_ jobs (takeMVar done)

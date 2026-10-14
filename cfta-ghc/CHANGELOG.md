@@ -46,10 +46,19 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `StateKey`, the state of a walker up to the names of its unification
   variables. The walk keeps the verdict of each step by state and leaf, and
   skips the steps and the solver calls whose verdict it knows.
+- `Data.CFTA.GHC.States`: mode (b), the goals of a hole for the search over
+  states of `Data.CFTA.Gen.Synthesis.States` (`holeGoals`), without Hectare
+  and without erasure. The key of a goal is its `StateKey`, and a
+  refinement is the walk's step of a leaf on the goal, from an index of the
+  leaves by the head of their result. `optionModes` runs the modes (`Mode`:
+  `Hectare` for mode (a), the default, and `States`) as a portfolio with one
+  checker, each for its budget; `Statistics` have the runs
+  (`statisticsRuns`) and the figures of the states (`statisticsStates`).
 - The `ghc-fits` executable: the programs of a type signature over the
   exports of some modules, checked in GHC's typechecker.
 - The `hole-fits-golden` test: GHC's messages for a module with holes,
   compiled with the plugin.
 - The `hectare-ghc` benchmark: the 45 Hoogle+ queries on a library ladder
-  read from GHC's exports, one child process per query. The queries come
-  from the sublibrary `cfta-generator:hoogleplus`.
+  read from GHC's exports, one child process per query, with the modes of
+  `HECTARE_GHC_MODES`. The queries come from the sublibrary
+  `cfta-generator:hoogleplus`.

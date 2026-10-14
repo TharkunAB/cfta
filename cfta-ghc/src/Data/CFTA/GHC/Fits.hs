@@ -34,6 +34,11 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   solver.
 * The walk stops after the first fits, after a size, after a number of
   programs, or at a deadline.
+* The modes ('optionModes') run in order as a portfolio
+  ("Data.CFTA.Gen.Synthesis.Portfolio"), each for its budget, with one
+  checker: Hectare's programs (mode (a), the default), or the programs of
+  states built from GHC's own goals, without erasure (mode (b),
+  "Data.CFTA.GHC.States"). The fits of each mode get the check below.
 * The figures of a search give the time of each part: Hectare's
   construction, reduction, and listing, and the checks in the
   typechecker.
@@ -68,6 +73,7 @@ module Data.CFTA.GHC.Fits (
 
     -- * Options
     Options (..),
+    Mode (..),
     defaultOptions,
     hectareAvoid,
 
@@ -85,7 +91,7 @@ import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
 import Data.List (nub)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, isJust, listToMaybe, mapMaybe)
+import Data.Maybe (catMaybes, isJust, mapMaybe)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Word (Word64)
@@ -93,8 +99,10 @@ import GHC.Clock (getMonotonicTimeNSec)
 
 import Data.CFTA.GHC.Erase (anyResult, erase, higherKinded, typeHeads)
 import Data.CFTA.GHC.Internal.Check
+import Data.CFTA.GHC.States (holeGoals)
 import Data.CFTA.Gen.Synthesis (Program (..))
-import Data.CFTA.Gen.Synthesis.Portfolio (Run (..), flaggedLast, hectare, portfolio)
+import Data.CFTA.Gen.Synthesis.Portfolio (Run (..), combined, flaggedLast, hectare, portfolio, states)
+import Data.CFTA.Gen.Synthesis.States (Figures)
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
     Erased (..),
@@ -103,7 +111,6 @@ import Data.CFTA.Gen.Synthesis.Walk (
     Progress (..),
     Role (..),
     Token,
-    emptyProgress,
     preorder,
  )
 import qualified Data.CFTA.Gen.Synthesis.Walk as Walk
@@ -187,13 +194,26 @@ data Options = Options
     first list is not applied to one of the second list (with 'Nothing': to
     any), as Hectare does for @head []@.
     -}
+    , optionModes :: [(Mode, Maybe Double)]
+    {- ^ The modes, in the order of the portfolio, each with its budget in
+    seconds ('Nothing': the rest of the time). A mode runs when the one
+    before it did not end the search.
+    -}
     , optionReport :: Maybe (Int -> Statistics -> IO ())
     -- ^ A function to call after each size.
     , optionTrace :: Maybe (Int -> Program -> IO ())
     -- ^ A function to call before each program is checked, with its size.
     }
 
--- | Programs of up to five leaves, the first ten fits, no other limit.
+-- | A way to propose the programs of a hole.
+data Mode
+    = -- | Hectare's programs over the erased candidates (mode (a)).
+      Hectare
+    | -- | The programs of states of GHC's own goals (mode (b), "Data.CFTA.GHC.States").
+      States
+    deriving (Eq, Show, Read)
+
+-- | Programs of up to five leaves, the first ten fits, mode (a) alone, no other limit.
 defaultOptions :: Options
 defaultOptions =
     Options
@@ -202,6 +222,7 @@ defaultOptions =
         , optionMaximumPrograms = Nothing
         , optionSeconds = Nothing
         , optionAvoid = []
+        , optionModes = [(Hectare, Nothing)]
         , optionReport = Nothing
         , optionTrace = Nothing
         }
@@ -270,6 +291,10 @@ data Statistics = Statistics
     , statisticsCheckNanos :: !Word64
     -- ^ The time of the checks in the typechecker.
     , statisticsCounters :: !Counters
+    , statisticsRuns :: [Run]
+    -- ^ The runs of the modes, in order; the figures above are their sums.
+    , statisticsStates :: Maybe Figures
+    -- ^ The figures of the states of mode (b), when it ran.
     }
     deriving (Eq, Show)
 
@@ -287,53 +312,69 @@ synthesizeFits options hole candidates goal = do
     fits <- reverse <$> liftIO (readIORef found)
     pure (take (optionFits options) (flaggedLast fitIgnoresPart fits))
 
-{- | Check Hectare's programs for a hole in its enumeration order, and call
-the function on each fit; stop when it returns 'False'. The result has the
-figures of the search.
+{- | Check the programs of the modes ('optionModes') for a hole, in their
+orders (Hectare's enumeration order for mode (a)), and call the function on
+each fit; stop when it returns 'False'. The result has the figures of the
+search.
 -}
 streamFits :: Options -> TypedHole -> [Candidate] -> Type -> (Fit -> TcM Bool) -> TcM Statistics
 streamFits options hole candidates goal accept = do
     environment <- newEnvironment hole
     begin <- liftIO getMonotonicTimeNSec
     let deadline = (\seconds -> begin + round (seconds * 1e9)) <$> optionSeconds options
-    erased <- concat <$> mapM (erasures environment) candidates
+    erased <-
+        if Hectare `elem` map fst (optionModes options)
+            then concat <$> mapM (erasures environment) candidates
+            else pure []
     -- The time of the checks of the fits' parts, which are checks too.
     ignoring <- liftIO (newIORef 0)
-    let statistics progress = statisticsOf progress <$> liftIO (readIORef ignoring) <*> readCounters environment
-    case query erased of
-        Just erasedGoal -> do
-            ignoredLeaf <- rigidLeaf environment ignored
-            let start = startWalker environment (map candidateType candidates) goal
-                leaves' = Map.insert ignored ignoredLeaf leaves
-            startKey <- stateKey environment (walkerVariables start) start
-            checker <- newChecker environment leaves' start startKey
-            let limits = Limits (optionMaximumSize options) (optionMaximumPrograms options) deadline
-                onSize size progress = case optionReport options of
-                    Just callback -> statistics progress >>= liftIO . callback size
-                    Nothing -> pure ()
-                onProgram size program = mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
-                proposer =
+    figures <- liftIO (newIORef Nothing)
+    let statistics runs progress =
+            statisticsOf runs progress <$> liftIO (readIORef ignoring) <*> liftIO (readIORef figures) <*> readCounters environment
+    ignoredLeaf <- rigidLeaf environment ignored
+    let start = startWalker environment (map candidateType candidates) goal
+        leaves' = Map.insert ignored ignoredLeaf leaves
+    startKey <- stateKey environment (walkerVariables start) start
+    checker <- newChecker environment leaves' start startKey
+    let limits = Limits (optionMaximumSize options) (optionMaximumPrograms options) deadline
+        onSize size progress = case optionReport options of
+            Just callback -> statistics [] progress >>= liftIO . callback size
+            Nothing -> pure ()
+        onProgram size program = mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
+        -- Mode (a) needs an erased goal; mode (b) does not.
+        proposer (mode, budget) = case mode of
+            Hectare ->
+                pure $
                     hectare
                         "hectare"
-                        Nothing
+                        budget
                         checker
                         onSize
                         onProgram
                         [Erased name typ (role candidate) | (candidate, name, typ) <- erased]
                         (avoid erased)
-                        erasedGoal
-                -- The walk gives a new fit with the hole as at the start:
-                -- check the program with each argument subterm in turn of a
-                -- fresh rigid type.
-                accept' fit = do
-                    before <- liftIO getMonotonicTimeNSec
-                    ignoresPart <- anyM (fitsFrom environment leaves' start . preorder) (replacements ignored (Walk.fitProgram fit))
-                    after <- liftIO getMonotonicTimeNSec
-                    liftIO (modifyIORef' ignoring (+ (after - before)))
-                    accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart)
-            runs <- portfolio limits [proposer] accept'
-            statistics (maybe emptyProgress runProgress (listToMaybe runs))
-        Nothing -> statistics emptyProgress
+                        <$> query erased
+            States -> do
+                goals <-
+                    holeGoals
+                        environment
+                        [(leafOf candidate, candidateRequired candidate) | candidate <- candidates]
+                        (optionMaximumSize options - 1)
+                        goal
+                pure
+                    (Just (states "states" budget checker onSize onProgram (liftIO . writeIORef figures . Just) goals (optionAvoid options)))
+        -- The walk gives a new fit with the hole as at the start:
+        -- check the program with each argument subterm in turn of a
+        -- fresh rigid type.
+        accept' fit = do
+            before <- liftIO getMonotonicTimeNSec
+            ignoresPart <- anyM (fitsFrom environment leaves' start . preorder) (replacements ignored (Walk.fitProgram fit))
+            after <- liftIO getMonotonicTimeNSec
+            liftIO (modifyIORef' ignoring (+ (after - before)))
+            accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart)
+    proposers <- catMaybes <$> mapM proposer (optionModes options)
+    runs <- portfolio limits proposers accept'
+    statistics runs (combined runs)
   where
     -- The free type variables of the scope, named in order of occurrence.
     relevant = map ctEvPred (bagToList (th_relevant_cts hole))
@@ -380,13 +421,11 @@ streamFits options hole candidates goal accept = do
             erase rigid goal
         | otherwise = Nothing
     leaves :: Map Text Leaf
-    leaves =
-        Map.fromListWith
-            (\_ old -> old)
-            [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates]
+    leaves = Map.fromListWith (\_ old -> old) [(candidateName c, leafOf c) | c <- candidates]
+    leafOf c = Leaf (candidateName c) (candidateType c) (candidateHeads c)
     -- The name of the rigid leaf: a hole, so no candidate has it.
     ignored = "_"
-    statisticsOf progress ignoring =
+    statisticsOf runs progress ignoring figures counters =
         Statistics
             (progressPrograms progress)
             (progressSkipped progress)
@@ -397,6 +436,9 @@ streamFits options hole candidates goal accept = do
             (progressReduceNanos progress)
             (progressListNanos progress)
             (progressCheckNanos progress + ignoring)
+            counters
+            runs
+            figures
     anyM predicate = foldr (\x rest -> predicate x >>= \yes -> if yes then pure True else rest) (pure False)
     readCounters environment = liftIO (readIORef (environmentCounters environment))
 
