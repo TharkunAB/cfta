@@ -18,6 +18,11 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   parametricity it cannot use that subterm. `synthesizeFits` puts such fits
   last. `hectareAvoid` is Hectare's rule that a list function is not applied
   to `[]`.
+- `Data.CFTA.GHC.HoleFits`: a typed-hole plugin
+  (`-fplugin=Data.CFTA.GHC.HoleFits`). After GHC's own valid hole fits, it
+  gives fits of several components, which `streamFits` finds in GHC's `TcM`
+  on the hole's `TypedHole`. Options: `size`, `fits`, `seconds`, and
+  `programs`.
 - `Data.CFTA.GHC.Erase`: GHC types as Hectare's first-order types, with the
   class contexts erased, and `anyResult` for the components that would fit
   every hole once erased.
