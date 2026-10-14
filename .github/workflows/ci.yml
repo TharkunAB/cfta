@@ -22,6 +22,7 @@ jobs:
           pattern: |
             microcfta/**/*.hs
             microcfta-generator/**/*.hs
+            microcfta-ghc/**/*.hs
 
       - name: Set up hlint
         uses: haskell-actions/hlint-setup@v2
@@ -31,7 +32,7 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["microcfta", "microcfta-generator"]'
+          path: '["microcfta", "microcfta-generator", "microcfta-ghc"]'
           fail-on: warning
 
   build-test-bench:

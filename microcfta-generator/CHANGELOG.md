@@ -38,6 +38,12 @@ tree automata of `microcfta`, with QuickCheck integration.
   types and queries in the syntax of LiquidHaskell, and `renderRType` prints
   them. The `hegel` benchmark runs recreated versions of the paper's RQ1
   queries and its ablations.
+- `Data.CFTA.Gen.Synthesis.Walk`: Hectare proposes, a host typechecker
+  checks. `walk` builds, reduces, and lists Hectare's automaton of each size
+  over erased leaves, and checks each program in preorder through a host's
+  `Checker` (`checkerTruncate`, `checkerExtend`), from the prefix that it
+  shares with the last one, with a trie of dead prefixes, limits, and the
+  time of each part.
 - `Data.CFTA.Gen.Synthesis.Hybrid`: Hectare's program spaces with Hegel's
   checks. `synthesizeHybrid` lists the programs of the base types of a
   refinement-typed query size by size, in Hectare's order, in the saturated
