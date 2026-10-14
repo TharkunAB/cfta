@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 08:32 CEST**, upstream `f59c198d`.
-The latest proof commit is `f79d0417`. No background proof worker is active.
+Current checkpoint: **2026-10-14 09:15 CEST**, upstream `f59c198d`.
+The latest proof commit is `0b123bab`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -144,8 +144,17 @@ successful probes is excluded. Full repaired nested encounters recover both
 original ancestor probe records and its newly captured reference.
 `SourceRecursiveIntersectionMaybeMu.pending_encounter` connects the source
 call to that witness. The repaired ordinary callback uses `ordinaryLevel depth`.
+Full active paths now retain arbitrary captured values and both exact old
+probe records. The two probes derive equal captured free-name memberships.
+Every live interned capture predates the ancestor reservation. Its fresh name
+is absent. The actual optional-binder bridge requires an incoming full repaired
+semantic context; native prefix preservation of that context remains open.
 Earlier completed-request replay or key separation for the joint old-probe
-alias remains open. `PreparedWithoutMu` for all reached open nested bodies,
+alias remains open. Capture absence does not establish request equality.
+An actual 22-step native prefix on repaired closed original source-built inputs
+refutes preservation of `PreparedWithoutMu` at every optional-binder body.
+Bounded execution of that example returns. This is a proof-invariant boundary,
+not an implementation defect. A broader open nested constructor invariant,
 output preparation, and physical product rows remain open.
 See [constructor coverage](notes-recursive-intersection-constructor-coverage.md),
 [finite native observations](notes-recursive-intersection-native-finite.md),
@@ -172,7 +181,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,301 targets and 41,703 theorem dependency checks**
+The current audit passes **1,307 targets and 42,042 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

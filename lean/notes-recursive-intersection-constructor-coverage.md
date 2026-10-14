@@ -1,6 +1,6 @@
 # Actual native constructor coverage and repaired pending encounters
 
-Proof checkpoints: `83d79a1d` and `f79d0417`.
+Proof checkpoints: `83d79a1d`, `f79d0417`, `4ca51381`, and `0b123bab`.
 Upstream: `f59c198d`, 2026-10-14.
 Read [finite native observations](notes-recursive-intersection-native-finite.md)
 and [actual optional binders](notes-recursive-intersection-maybe-mu.md).
@@ -115,6 +115,55 @@ the proved stored-body lexical equation, source facts, available original body,
 and complete incoming coverage. Its captures come from the actual stored
 body's leaves. It assumes no callback execution or termination contract.
 
+## Preparation is not preserved at all native sites
+
+`InternedStoredPreparationCheck.check_eq_true` proves a finite Boolean test
+equivalent to `PreparedWithoutMu`. A closed value passes without inspecting
+its payload. An open Mu fails. Open nodes and unions check their actual children.
+
+`SourceRecursiveIntersectionOpenBodyBoundary` builds both inputs through the
+actual repaired source executor from empty caches. Each input has the form
+`mu x. node 0 c [mu y. node 1 c [x, y]]`, for `c = 1` and `c = 2`.
+Both roots are closed, available, and original. The shared source heap has
+complete payload coverage and the full repaired semantic context.
+
+An actual 22-step native prefix reaches an optional binder with pair `(10, 26)`.
+Its body has free names `[intersection 10 26]` and fails the finite test.
+`not_all_closed_original_prepared` refutes preparation preservation even with
+the full initial semantic context and a checked root key. It does not assert
+word ranges on every later prefix. `native_returned` separately verifies
+that bounded native execution returns the original right root. The example
+refutes a proposed proof invariant. It does not show an implementation defect.
+All observations use kernel reduction, not native evaluation axioms.
+
+General native completion therefore needs a broader open nested constructor
+invariant. Do not make preparation preservation the next proof target.
+
+## Full active paths with arbitrary captured values
+
+`InternedFreshOrdinaryActiveOrigins` retains an actual active reservation,
+its raw Depth build, both repaired normalized probes, and the complete semantic
+contexts. Its `Path` records every actual descendant callback crossing.
+The captured environment can contain available records, not only references.
+
+`InternedFreshOrdinaryActiveEncounter.complete_encounter` derives this witness
+from actual pending execution, a semantic context, and complete coverage.
+The mutual proof follows members, edges, and children in source order.
+`InternedFreshOrdinaryActiveSite.encounter_site` uses canonical readback to
+identify both complete current probe records with the original records.
+It requires no supplied path, callback replay, or probe equality.
+
+`Site.inputs` recovers the exact crossed-reference prefix before the original
+captured values. `Site.capture_equivalent` derives equal captured free-name
+memberships from the actual two probes. `Site.capture_below` puts every live
+interned capture below the ancestor's reservation counter.
+`Site.fresh_not_captured` excludes the ancestor's fresh name from this set.
+
+`SourceRecursiveIntersectionMaybeMu.active_pending_site` connects an actual
+pending optional binder to this full witness. It uses the body's available
+leaves, complete incoming coverage, and an incoming repaired semantic context.
+General preservation of that semantic context on native prefixes remains open.
+
 ## Next proof target and retained boundaries
 
 Exclude the full repaired encounter for the intended constructor scope.
@@ -131,11 +180,10 @@ Do not reuse ordinary-choice-specific mismatch theorems for the old executor
 without proving the repaired counterpart.
 
 `PreparedWithoutMu` and complete coverage already give successful source
-completion. Coverage is now derived at native sites after actual completed
-source construction. Preparation for all reached open nested bodies is still
-unproved. Closed original roots do not alone establish it. A larger nested
-constructor invariant may be needed. A supplied no-pending callback contract
-does not close the source obligation.
+completion. Coverage is derived at native sites after actual completed source
+construction. Preparation preservation is refuted above. Prove a broader
+nested constructor invariant. A supplied no-pending callback contract does
+not close the source obligation.
 
 General successful native first-run completion, output preparation, and
 physical `ProductReadback.members`/`.rejected` remain open. Preserve the exact
@@ -144,21 +192,24 @@ constructor/equality proofs and all marked drafts.
 
 ## Validation and diagnostics
 
-Pinned Lean 4.34.1 passes 1,301 jobs and 41,703 theorem dependency checks.
+Pinned Lean 4.34.1 passes 1,307 jobs and 42,042 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are used.
-Log: `/tmp/mcfta-repaired-pending-encounter-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-active-path-20261014-audit.log`.
+The preparation boundary audit passed 1,303 jobs and 41,982 checks.
+The pending encounter audit passed 1,301 jobs and 41,703 checks.
 The intermediate coverage audit passed 1,296 jobs and 41,685 checks.
 The phase audit passed 1,298 jobs and 41,689 checks.
 Explicit signature checks confirm the repaired executor and `ordinaryLevel`:
 `/tmp/mcfta-repaired-encounter-signature.log`.
 
-A temporary diagnostic completed one two-binder source example. Paired
+A temporary diagnostic completed one two-binder source example. Earlier paired
 source setup variants did not finish within 15- and 20-second limits.
-They produced no native preparation result and no pending counterexample.
+These old runs produced no native preparation result or pending counterexample.
 Logs: `/tmp/mcfta-native-nested-one.log`,
 `/tmp/mcfta-native-nested-bind.log`, and
 `/tmp/mcfta-native-nested-pair.log`. All diagnostic workers have stopped.
-No performance or termination claim follows from these limits.
+No performance or termination claim follows from these limits. The later
+kernel-reduced preparation example above supersedes their lack of results.
 
 No Haskell source changed. Prior Nix and formatter checks remain the source
 validation checkpoint. All proof, draft, fixture, stash, and worktree

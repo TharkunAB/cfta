@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 08:32 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 09:15 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -340,10 +340,28 @@ exclude it. The ordinary callback uses `ordinaryLevel depth`.
 source call to this witness without an assumed callback execution or probe
 relation. Signature checks confirm the repaired executor.
 
+`InternedFreshOrdinaryActiveOrigins`, `ActiveEncounter`, and `ActiveSite`
+now retain the exact actual descendant path for arbitrary captured values.
+Canonical readback derives both original probe records. Their free-name
+observations imply equal capture memberships and exclude the ancestor's fresh
+name from live captures. `SourceRecursiveIntersectionMaybeMu.active_pending_site`
+derives the full witness from actual execution under complete coverage, body
+availability, and an incoming repaired semantic context. General native prefix
+preservation of that semantic context remains open.
+
+`SourceRecursiveIntersectionOpenBodyBoundary` refutes preparation preservation
+at all reached native bodies. Two actual repaired closed original inputs built
+from empty caches reach an unprepared optional-binder body after 22 steps.
+The initial heap has complete coverage and the full repaired semantic context.
+Bounded native execution nevertheless returns. This is a counterexample to a
+proof invariant, not an implementation defect. The finite Boolean preparation
+test is proved equivalent to `PreparedWithoutMu`. All concrete observations
+use kernel reduction.
+
 Pending exclusion still needs earlier completed-request replay or key
 separation for the exact joint old-probe alias. Normalized output absence does
-not establish independence of the original memo key. Preparation for all
-reached open nested bodies also remains open. See
+not establish independence of the original memo key. Prove a broader open
+nested constructor invariant instead of universal preparation preservation. See
 [constructor coverage](lean/notes-recursive-intersection-constructor-coverage.md).
 
 ## Remaining work and assessment
@@ -368,16 +386,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`f79d0417`**; later commits record this handoff.
+The latest proof checkpoint is **`0b123bab`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,301 build targets and 41,703 theorem
+The current Lean 4.34.1 audit passes **1,307 build targets and 42,042 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-repaired-pending-encounter-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-active-path-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **32% at 08:32 CEST**.
+No background proof worker is active. Weekly allowance was **32% at 09:14 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
