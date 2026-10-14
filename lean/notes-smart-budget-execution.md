@@ -1,6 +1,7 @@
 # Exact smart budgets through actual source execution
 
-Updated: 2026-10-14 17:58 CEST. Proofs: `50d79bef`, `35e07971`, `a76a22f1`.
+Updated: 2026-10-14 18:24 CEST. Proofs: `50d79bef`, `35e07971`, `a76a22f1`,
+and `a7b5d94e`. Cold/native composition: `9ca74b4d` and `081ce3d1`.
 
 ## Exact smart decision
 
@@ -68,47 +69,30 @@ heaps after arbitrary stored outer unfolding. These are actual execution laws.
 No callback-language or canonical-budget contract remains as a premise of the
 closed source theorem.
 
-## Remaining comparison and next proof
+## Completed comparison and next proof
 
-The raw compiler theorem and smart executor theorem now have different exact
-reference languages. Prove inclusion from raw plan budgets into smart plan
-budgets for the actual captured shapes and upward budget inputs. Do not assume
-the law for arbitrary inconsistent shape/language inputs.
+`a7b5d94e` completes all four comparison steps. Literal root alternatives are
+included at the same budget. Changes outside deep names contribute only root
+alternatives. The unused smart body at the empty local supplies an upward
+closed candidate. Retained Mu steps compare upward candidates. These laws use
+the existing shape fields and complete actual captured records.
 
-The unused smart branch needs a semantic law that separates root alternatives
-from deep dependencies. For example, `mu x. union [x, leaf]` can lose its smart
-binder step. Its self alternative occurs only at the root. Ordinary complete
-free-name support still lists `x`; the existing shape also records that `x`
-has no deep occurrence. Add semantic bounds for those existing fields. Do not
-introduce another root/deep interpreter.
+`InternedGuardedBudgetStoredRefinement.unfold_strict` combines raw plan decrease
+with exact actual execution. Every accepted Mu term reaches its actual returned
+unfolding at a strictly smaller budget. `9ca74b4d` proves cold/shared budget-heap
+propagation, general final graph/table completeness, and general closed-source
+reference Sized laws. `081ce3d1` proves native propagation and exact independent
+returned-value table language. Read [cold budget completeness](notes-cold-budget-completeness.md).
 
-One possible proof requires these unproved steps:
-
-1. Prove that the shape's literal root alternatives are included in the smart
-   language at the same budget. Establish this for actual captured records.
-2. Prove that changes outside the deep names can contribute only their literal
-   root alternatives. Keep the already proved complete free-name support.
-3. Use the smart body at an empty local as an upward closed candidate for the
-   raw Mu when the local has no deep occurrence. A local root alternative is
-   already in that candidate; unchanged external roots enter through step 1.
-4. Use raw/smart body inclusion for retained Mu steps. The budgeted least
-   definition quantifies only upward candidates, which can be used explicitly.
-
-Then combine raw `unfold_plan_lower` with actual smart execution to obtain a
-strictly smaller bound for the returned unfolding value. Propagate the new
-budget probe heap through actual cold and native paths. Its source and stored
-propagation are proved; cold/native propagation is not. Prove final repaired
-graph/table completeness, then physical product readback and `product_exact`.
-
-The primary node-count Sized sequence and both public term-rank inverses remain
-proved at their recorded source-model boundaries. Mu-unfolding budgets are a
-separate measure. General graph completeness is still open.
+Next derive physical `ProductReadback.members` and `.rejected`, then apply
+`product_exact`. Native returned-value meaning is now exact; the intersection
+of the two operand languages remains a separate physical row obligation.
 
 ## Validation and preservation
 
-Lean 4.34.1 passes 1,443 aggregate jobs and 43,730 theorem dependency checks.
+Lean 4.34.1 passes 1,456 aggregate jobs and 43,803 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-smart-budget-execution-20261014-audit.log`.
+`/tmp/mcfta-cold-budget-exact-20261014-audit.log`.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 No production Haskell source changed. Earlier Nix and formatter evidence
 remains applicable. No worker is active.

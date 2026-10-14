@@ -2,6 +2,13 @@
 
 Updated: 2026-10-14 17:58 CEST. Latest proof: `a76a22f1`. Earlier support/execution checkpoints remain.
 
+Current result: `a7b5d94e`, `9ca74b4d`, and `081ce3d1` prove strict actual
+unfolding budgets, general cold graph/table completeness, general reference
+Sized laws, and exact native returned-value table language. Read
+[cold budget completeness](notes-cold-budget-completeness.md) for the current
+proof map and next physical product-row target. Older remaining-target text
+below records the earlier checkpoint.
+
 ## Independent meaning
 
 `InternedGuardedLanguage.meaning` interprets complete actual stored records.

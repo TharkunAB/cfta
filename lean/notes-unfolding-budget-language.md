@@ -2,13 +2,20 @@
 
 Updated: 2026-10-14 17:58 CEST. Latest execution proof: `a76a22f1`. Earlier budget checkpoints remain.
 
+Current result: `a7b5d94e`, `9ca74b4d`, and `081ce3d1` prove strict actual
+unfolding budgets, general cold graph/table completeness, general reference
+Sized laws, and exact native returned-value table language. Read
+[cold budget completeness](notes-cold-budget-completeness.md) for the current
+proof map and next physical product-row target. Older remaining-target text
+below records the earlier checkpoint.
+
 ## Purpose
 
-The final repaired graph and cold table have proved independent-language
-soundness. Completeness remains open. Equal unfolding equations do not prove
-least finite-run completeness through unguarded epsilon cycles. A possible
-measure is the minimum finite input unfolding bound. Transport of that bound
-through actual stored reconstruction and canonical hits must be proved.
+The final repaired graph and cold table now have exact independent-language
+soundness and completeness. Equal unfolding equations alone do not prove
+least finite-run completeness through unguarded epsilon cycles. Strict actual
+unfolding decrease supplies the required finite measure. The raw-to-smart
+comparison includes actual stored reconstruction and canonical hits.
 
 This bound is separate from node-count size and public distinct-term rank.
 The primary reference, solver-decided, and optimized Sized laws remain proved

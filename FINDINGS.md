@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 17:58 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 18:25 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -57,22 +57,36 @@ support. `a76a22f1` derives full actual source execution, raw-Mu and empty-local
 ordinary-probe readback, and both heap invariants. Actual stored substitution
 and unfolding have exact smart-plan meanings. Read
 [smart budget execution](lean/notes-smart-budget-execution.md).
-Raw compiler budgets still need inclusion into smart plan budgets. Derive
-semantic root/deep separation for the existing shapes, then strict smaller
-budgets for actual returned unfoldings. New cold/native budget-heap propagation,
-final graph/table completeness, and physical product readback remain open.
-Finite Haskell probes found no counterexample to strict outer-unfolding rank
-decrease or stored/ordinary-probe budget equality. They are validation only.
-The stopped Lean generated-source probes supply no quantitative result.
-Read [unfolding budgets](lean/notes-unfolding-budget-language.md).
+`a7b5d94e` proves raw-to-smart plan inclusion for actual captured records.
+The existing root/deep shapes supply literal-root lower bounds and deep-change
+separation. `InternedGuardedBudgetStoredRefinement.unfold_strict` derives a
+strictly smaller budget for every actual returned Mu unfolding.
 
-The aggregate audit passes **1,443 jobs and 43,730 theorem dependency checks**,
+`9ca74b4d` carries the budget heap through cold/shared execution. Completed
+read certificates derive available closed values at every final epsilon path.
+The ordered measure `(term size, unfolding budget, stored value size)` proves
+finite graph completeness. `trace_table_exact` gives exact independent root
+meaning; `trace_table_input_exact` gives the actual initial tagged input
+language. `SourceFreshOrdinaryColdSized.source_sized` supplies general closed
+construction with exact distinct node-count classes, finite class execution,
+size order, and both inverse laws, without preparation or a supplied trace.
+
+`081ce3d1` retains the budget heap through complete native evaluation.
+`cold_node_table_exact` and `constructed_node_table_exact` give exact independent
+returned-value table language under the existing checked native scope.
+The two-input intersection law remains open. Next derive physical
+`ProductReadback.members` and `.rejected`, then apply `product_exact`.
+Read `lean/notes-cold-budget-completeness.md` before new product-row work.
+The finite Haskell probes remain validation only. The stopped Lean generated
+probes supply no quantitative result. All workers are terminal.
+
+The aggregate audit passes **1,456 jobs and 43,803 theorem dependency checks**,
 with only `propext`, `Classical.choice`, and `Quot.sound`. Log:
-`/tmp/mcfta-smart-budget-execution-20261014-audit.log`.
-Snapshot: `/tmp/mcfta-smart-budget-execution-checkpoint-20261014-1758/`.
-All 1,803 Lean-tree files are saved. All 1,789 previous files remain.
-Only audit imports, two coverage ledgers, and the two previous current component
-notes changed among those previous files. All earlier proofs and drafts retain
+`/tmp/mcfta-cold-budget-exact-20261014-audit.log`.
+Snapshot: `/tmp/mcfta-cold-budget-exact-checkpoint-20261014-1825/`.
+All 1,819 Lean-tree files are saved. All 1,803 previous files remain.
+Only audit imports, two coverage ledgers, and three current component notes
+changed among those previous files. All earlier proofs and drafts retain
 their bytes. No production Haskell code changed. No worker remains active.
 
 ## Independent guarded meaning and actual stored compiler

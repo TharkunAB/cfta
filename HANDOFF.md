@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 17:58 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 18:25 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -64,9 +64,9 @@ in complete semantic caches under explicit WordRanges. Native output scope,
 closedness, original syntax, and general bounded cold-reader effects are now
 proved. General finite repaired traversal and structural tables are now
 proved. Final-cache guarded row language is proved. Its independent-language
-transport and physical product language remain open.
+transport is now exact. Physical product language remains open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`a76a22f1`**, after `50d79bef` and `35e07971`. A later documentation commit
+The latest proof checkpoint is **`081ce3d1`**, after `a7b5d94e` and `9ca74b4d`. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -95,24 +95,36 @@ budget readbacks. The invariant retains raw-Mu and empty-local ordinary-probe
 languages. The existing depth heap decides the smart branch. Actual stored
 substitution and unfolding retain both heaps and have exact smart-plan meaning.
 
-Raw compiler budgets and smart execution budgets still need an inclusion law
-for actual consistent captures. Use the existing root/deep shape fields for
-semantic separation. Then derive strict smaller bounds for actual returned
-outer unfoldings. New budget-heap propagation through cold/native paths,
-graph/table completeness, and physical product readback remain open.
-Read `lean/notes-smart-budget-execution.md` for exact statements and next steps.
-The finite Haskell unfolding and ordinary-probe checks found no counterexample.
-They do not prove transport. The stopped Lean generated-source probes supply
-no quantitative result. All workers are terminal. Read
-`lean/notes-unfolding-budget-language.md` for statements and evidence.
+`a7b5d94e` proves raw-to-smart plan inclusion for actual captured records.
+The existing root/deep shapes supply literal-root lower bounds and deep-change
+separation. `InternedGuardedBudgetStoredRefinement.unfold_strict` derives a
+strictly smaller budget for every actual returned Mu unfolding.
 
-Current audit: **1,443 jobs and 43,730 theorem dependency checks**. Only
+`9ca74b4d` carries the budget heap through cold/shared execution. Completed
+read certificates derive available closed values at every final epsilon path.
+The ordered measure `(term size, unfolding budget, stored value size)` proves
+finite graph completeness. `trace_table_exact` gives exact independent root
+meaning; `trace_table_input_exact` gives the actual initial tagged input
+language. `SourceFreshOrdinaryColdSized.source_sized` supplies general closed
+construction with exact distinct node-count classes, finite class execution,
+size order, and both inverse laws, without preparation or a supplied trace.
+
+`081ce3d1` retains the budget heap through complete native evaluation.
+`cold_node_table_exact` and `constructed_node_table_exact` give exact independent
+returned-value table language under the existing checked native scope.
+The two-input intersection law remains open. Next derive physical
+`ProductReadback.members` and `.rejected`, then apply `product_exact`.
+Read `lean/notes-cold-budget-completeness.md` before new product-row work.
+The finite Haskell probes remain validation only. The stopped Lean generated
+probes supply no quantitative result. All workers are terminal.
+
+Current audit: **1,456 jobs and 43,803 theorem dependency checks**. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-smart-budget-execution-20261014-audit.log`.
-Current snapshot: `/tmp/mcfta-smart-budget-execution-checkpoint-20261014-1758/`.
-It saves all **1,803 Lean-tree files** and compares all 1,789 previous files.
-None is missing. Only audit imports, two coverage ledgers, and the two previous
-current component notes changed among those files. Earlier proof and marked-draft
+`/tmp/mcfta-cold-budget-exact-20261014-audit.log`.
+Current snapshot: `/tmp/mcfta-cold-budget-exact-checkpoint-20261014-1825/`.
+It saves all **1,819 Lean-tree files** and compares all 1,803 previous files.
+None is missing. Only audit imports, two coverage ledgers, and three current
+component notes changed among those files. Earlier proof and marked-draft
 bytes remain unchanged. No production Haskell source changed.
 
 ## Independent guarded meaning and actual stored compiler
@@ -197,13 +209,10 @@ Original payloads have equal guarded stored and copied lexical meanings.
 finite tagged input derivations. This derives the connection to the existing
 input specification. No copy-language contract is supplied.
 
-Next prove completeness of the actual final repaired graph and cold table
-for independent meaning. Then derive physical `ProductReadback.members`,
-`.rejected`, and `product_exact`. The exact final-cache graph/table law is
-already proved, but execution correspondence alone does not supply this
-transport. Keep cache growth, availability, and leastness explicit.
-Read `lean/notes-independent-guarded-language.md` for the exact next target,
-the proved probe invariant, and all remaining scope distinctions.
+General independent graph/table completeness is now proved by `9ca74b4d`.
+Next derive physical `ProductReadback.members`, `.rejected`, and `product_exact`.
+Keep cache growth, availability, and actual ordered row traces explicit.
+Read `lean/notes-cold-budget-completeness.md` for the current next target.
 
 ## Native heap propagation and exact final-cache guarded language
 
