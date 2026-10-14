@@ -78,7 +78,7 @@ import Control.Applicative ((<|>))
 import Control.Exception (try)
 import Control.Monad (filterM, foldM, unless, when)
 import Data.Char (isAlphaNum, isDigit, isLower, isSpace)
-import Data.IORef (modifyIORef', newIORef, readIORef)
+import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
 import Data.List (inits, intercalate, nub, tails)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
@@ -473,32 +473,8 @@ the first size at which some term has the goal type.
 -}
 synthesize :: Entailment -> Options -> [Component] -> LiquidQuery -> IO (Either String Outcome)
 synthesize entailment options components query = do
-    counter <- newIORef (0 :: Int)
-    undecided <- newIORef (0 :: Int)
-    known <- newIORef Map.empty
+    (counted, counter, undecided) <- countedEntailment entailment (environmentOf query)
     let
-        -- The query arguments' refinements hold in every query. An entailment
-        -- that the solver cannot decide, or decide within its time limit,
-        -- counts as failed: a guard that needs
-        -- it does not apply, so no wrong term is kept. The verdicts are kept,
-        -- because many applications ask the same questions.
-        counted = entailmentWithBindings $ \bindings antecedent consequent -> do
-            let key = (bindings, antecedent, consequent)
-            remembered <- Map.lookup key <$> readIORef known
-            case remembered of
-                Just verdict -> pure verdict
-                Nothing | antecedent == consequent -> pure Yes
-                Nothing -> do
-                    modifyIORef' counter (+ 1)
-                    answer <-
-                        either (\TimeLimitReached{} -> Unknown) id
-                            <$> try (entailsWithBindings entailment bindings (Formula.conjunction [environment, antecedent]) consequent)
-                    verdict <-
-                        if answer == Unknown
-                            then No <$ modifyIORef' undecided (+ 1)
-                            else pure answer
-                    modifyIORef' known (Map.insert key verdict)
-                    pure verdict
         realizeWith' candidates =
             realizeWith
                 counted
@@ -566,16 +542,55 @@ synthesize entailment options components query = do
                 )
     go 1 (Map.singleton 0 leaves)
   where
-    heads =
-        [(name, typ, Formula.Var (functionConstant name)) | (name, typ@RArrow{}) <- components]
-            <> [(name, typ, Formula.Var (Name name)) | (name, typ@RArrow{}) <- liquidArguments query]
+    heads = headsOf components query
     functions = Map.fromList [(name, typ) | (name, typ@RArrow{}) <- components <> liquidArguments query]
-    -- What the query arguments' refinements state about them.
-    environment =
-        Formula.conjunction
-            ( [Formula.substitute [(value, Formula.Var (Name name))] refinement | (name, RBase _ refinement) <- liquidArguments query]
-                <> [lifted (Formula.Var (Name name)) typ | (name, typ@RArrow{}) <- liquidArguments query]
-            )
+
+{- | The heads of a query: the components and the query arguments of function
+type, each with its function value in the logic.
+-}
+headsOf :: [Component] -> LiquidQuery -> [(Text, RType, Formula.Term)]
+headsOf components query =
+    [(name, typ, Formula.Var (functionConstant name)) | (name, typ@RArrow{}) <- components]
+        <> [(name, typ, Formula.Var (Name name)) | (name, typ@RArrow{}) <- liquidArguments query]
+
+-- | What the query arguments' refinements state about them.
+environmentOf :: LiquidQuery -> Formula
+environmentOf query =
+    Formula.conjunction
+        ( [Formula.substitute [(value, Formula.Var (Name name))] refinement | (name, RBase _ refinement) <- liquidArguments query]
+            <> [lifted (Formula.Var (Name name)) typ | (name, typ@RArrow{}) <- liquidArguments query]
+        )
+
+{- | The entailment of a run, with the counts of its solver queries and of
+the queries that the solver did not decide. The environment holds in every
+query. An entailment that the solver cannot decide, or decide within its
+time limit, counts as failed: a guard that needs it does not apply, so no
+wrong term is kept. The verdicts are kept, because many applications ask
+the same questions.
+-}
+countedEntailment :: Entailment -> Formula -> IO (Entailment, IORef Int, IORef Int)
+countedEntailment entailment environment = do
+    counter <- newIORef (0 :: Int)
+    undecided <- newIORef (0 :: Int)
+    known <- newIORef Map.empty
+    let counted = entailmentWithBindings $ \bindings antecedent consequent -> do
+            let key = (bindings, antecedent, consequent)
+            remembered <- Map.lookup key <$> readIORef known
+            case remembered of
+                Just verdict -> pure verdict
+                Nothing | antecedent == consequent -> pure Yes
+                Nothing -> do
+                    modifyIORef' counter (+ 1)
+                    answer <-
+                        either (\TimeLimitReached{} -> Unknown) id
+                            <$> try (entailsWithBindings entailment bindings (Formula.conjunction [environment, antecedent]) consequent)
+                    verdict <-
+                        if answer == Unknown
+                            then No <$ modifyIORef' undecided (+ 1)
+                            else pure answer
+                    modifyIORef' known (Map.insert key verdict)
+                    pure verdict
+    pure (counted, counter, undecided)
 
 -- | The number of states at all sizes.
 stateCount :: Map Int [State] -> Int
