@@ -197,6 +197,7 @@ import MicroCFTA.SourceInternedIntersectionRowsPhysical
 import MicroCFTA.SourceInternedIntersectionRowsCompletion
 import MicroCFTA.SourceSolverNameEncoding
 import MicroCFTA.SourceSolverNameEncodingFixpoint
+import MicroCFTA.SourceSolverNameFastEncoding
 import MicroCFTA.SourceSolverNameSemantics
 import MicroCFTA.SourceSolverNameCollision
 import MicroCFTA.SourceSolverNamePreparationSymbols

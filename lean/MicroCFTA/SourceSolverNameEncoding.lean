@@ -3,11 +3,12 @@ import Init.Data.List.SplitOn.Lemmas
 import Init.Data.String.Lemmas.Intercalate
 
 /-!
-# Decimal Unicode names for the Liquid Fixpoint adapter
+# Historical decimal Unicode names for the Liquid Fixpoint adapter
 
 Each Unicode scalar becomes its decimal code point and an underscore.
 A fixed ASCII prefix supplies a safe alphabetic first character.
 The proof splits the suffix at actual underscores and recovers every scalar.
+The current two-form adapter is in SourceSolverNameFastEncoding.
 -/
 namespace MicroCFTA.SourceSolverNameEncoding
 
@@ -22,7 +23,7 @@ def body : List Char → List Char
   | [] => []
   | character :: rest => digits character ++ '_' :: body rest
 
-/-- The source nameSymbol payload before Fixpoint.symbol processes it. -/
+/-- The former nameSymbol payload before Fixpoint.symbol processes it. -/
 def encode (name : String) : String := namePrefix ++ String.ofList (body name.toList)
 
 /-- The list worker is the source concatMap of decimal tokens and separators. -/
@@ -32,7 +33,7 @@ theorem body_concatMap (characters : List Char) :
   | nil => rfl
   | cons character rest ih => simp [body, digits, ih]
 
-/-- The public encoder has the exact decimal-token concatenation used by nameSymbol. -/
+/-- The historical encoder has the exact decimal-token concatenation used by the former nameSymbol. -/
 theorem encode_source (name : String) :
     encode name = namePrefix ++ String.join (name.toList.map (fun character => Nat.repr character.toNat ++ "_")) := by
   unfold encode

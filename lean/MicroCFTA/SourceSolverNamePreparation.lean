@@ -1,5 +1,5 @@
 import MicroCFTA.SourceSolverNamePreparationSymbols
-import MicroCFTA.SourceSolverNameEncodingFixpoint
+import MicroCFTA.SourceSolverNameFastEncoding
 import MicroCFTA.SourceSizedLiquidAmbientRepair
 
 /-!
@@ -154,16 +154,16 @@ theorem sourcePrepare_rename (rename : Name → Name) (injective : Function.Inje
       assertion_rename, renamePrepared, List.map_append]
     rfl
 
-/-- The repaired native decimal codec is applied before every preflight operation. -/
+/-- The current two-form native codec is applied before every preflight operation. -/
 def encodedPrepare (given : List Declaration) (assumptions : List FullSyntax.Formula) (query : Query) :
-    Option Prepared := prepareRenamed SourceSolverNameEncoding.encode given assumptions query
+    Option Prepared := prepareRenamed SourceSolverNameFastEncoding.encode given assumptions query
 
 /-- The actual codec gives exactly the encoded successful request or the original rejection. -/
 theorem sourcePrepare_encode (given : List Declaration) (assumptions : List FullSyntax.Formula) (query : Query) :
     encodedPrepare given assumptions query =
       (SourceSizedLiquidAmbientRepair.prepareQuery given assumptions query).map
-        (renamePrepared SourceSolverNameEncoding.encode) := by
-  rw [encodedPrepare, sourcePrepare_rename _ (fun _ _ same => SourceSolverNameEncoding.encode_injective same),
+        (renamePrepared SourceSolverNameFastEncoding.encode) := by
+  rw [encodedPrepare, sourcePrepare_rename _ (fun _ _ same => SourceSolverNameFastEncoding.encode_injective same),
     SourceSizedLiquidAmbientRepair.sourcePrepare_exact]
 
 /-- Encoding does not change which queries return Unknown during preflight. -/

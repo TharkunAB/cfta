@@ -12,7 +12,7 @@ the repaired source without assuming unencoded external answers.
 -/
 namespace MicroCFTA.SourceSolverNamePublic
 open FullSyntax SolverAdapter SourceSizedLiquidProgram
-open SourceSolverNameSemantics SourceSolverNameEncoding SourceSolverNamePreparation
+open SourceSolverNameSemantics SourceSolverNameFastEncoding SourceSolverNamePreparation
 
 /-- Interpret one actual external check at the encoded source request. -/
 def translated (check : Prepared → Nat → Attempt → Prop) (request : Prepared) : Nat → Attempt → Prop :=
