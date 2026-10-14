@@ -13,6 +13,8 @@ import MicroCFTA.InternedFreshOrdinarySourceDepth
 import MicroCFTA.InternedFreshOrdinaryLevelReplay
 import MicroCFTA.InternedFreshOrdinaryRouteLevels
 import MicroCFTA.InternedFreshOrdinaryClosedCompletion
+import MicroCFTA.InternedRecordDepthShape
+import MicroCFTA.InternedRecordDepthSource
 import MicroCFTA.SourcePhysicalRecursiveRows
 import MicroCFTA.SourcePhysicalRecursiveRowsReadback
 import MicroCFTA.SourcePhysicalRecursiveRowsLanguage
