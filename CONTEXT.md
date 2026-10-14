@@ -93,6 +93,9 @@ Wilf, and Feat (ranking).
   **size class** holds the members of one size.
 - **Class rank**: the rank of a member inside its size class. A **sized
   rank** is a size with a class rank.
+- **Unfolding rank**: a well-founded measure for repeated Mu unfolding.
+  `headRank` and the minimum free-occurrence `rank` are candidate measures.
+  An unfolding rank is separate from a term's enumeration rank.
 - **Rank offset**: the first rank of a group of members in a larger
   language.
 - **Weight**: a relative frequency weight of an alternative or a value

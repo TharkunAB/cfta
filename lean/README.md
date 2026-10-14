@@ -6,7 +6,7 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,570 jobs and 44,569 theorem dependency checks.
+The audit passes 1,577 jobs and 44,674 theorem dependency checks.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open
@@ -29,6 +29,10 @@ Repaired unfolding now completes with head rank zero for guarded bodies
 with arbitrary nested children. Its actual returned cache retains all
 representation invariants and stored body filters. Leading Mu bodies and
 root unions with Mu members remain in the general progress obligation.
+The [general occurrence-cost proof](notes-occurrence-costs.md) now derives
+weighted correspondence through arbitrary repaired source construction and
+stored execution. Actual unfolding still needs the prepared-plan retention
+bound before the candidate measure supplies a general gate rank.
 All old proofs, fixtures, and marked drafts remain.
 
 [The system specification and current findings](SYSTEM.md) describe the

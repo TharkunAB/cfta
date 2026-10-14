@@ -1,5 +1,19 @@
 # Same-path unfolding in the current equality gate
 
+## General repaired occurrence costs (2026-10-15 00:33 CEST)
+
+Proofs `efa2e558` and `d17e644b` now establish the weighted callback/probe
+correspondence requested below. Read [the occurrence-cost note](notes-occurrence-costs.md).
+The full actual source induction covers arbitrary nested syntax and canonical
+cache hits. External body costs equal the ordinary probe's captured costs.
+Every free Mu occurrence has its exact predecessor in that probe.
+Actual stored execution has the exact interpreted prepared-plan costs and
+retains the weighted heap through finite unfolding.
+
+The remaining target is the prepared-plan retention bound in the new note.
+The strict probe rank is proved. Strict decrease for actual unfolding is
+still separate. This section supersedes the earlier next-target statements.
+
 ## Repaired guarded unfolding (2026-10-15 00:13 CEST)
 
 Proof: `6adcb38f`. Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.

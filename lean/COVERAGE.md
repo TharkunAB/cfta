@@ -1,5 +1,47 @@
 # Full formalization coverage
 
+## General occurrence costs in repaired source execution
+
+The latest proofs are `efa2e558` and `d17e644b`. Continue on `formalize` in
+`TharkunAB/cfta`, based on `origin/main` at `f201deda`. Push checkpoints
+regularly. Read `lean/notes-occurrence-costs.md`. This section supersedes the
+earlier weighted callback/probe next target.
+
+The full actual source induction now derives every returned free-reference
+cost and preserves the weighted recursive heap. It covers arbitrary nested
+syntax, both probes, actual fresh bodies, canonical hits, discarded child
+effects, and pending outer outcomes. Original empty-cache construction derives
+the invariant. No whole-callback cost law or final weighted heap is supplied.
+The comparison is exact pair membership, not list order or multiplicity.
+
+Every stored Mu now has exact external body/ordinary-probe cost agreement.
+Every free Mu occurrence has its exact predecessor in the actual ordinary
+probe. The probe has a strict minimum-cost rank bound for an open Mu.
+Actual repaired stored execution has the exact pure prepared-plan costs.
+Finite stored execution and unfolding preserve the weighted heap and all
+existing semantic contexts, depth heaps, coverage, availability, and growth.
+An unfolding rank is separate from a Sized term rank; the glossary records it.
+
+The audit passes 1,577 jobs and 44,674 theorem dependency checks. Only the
+three permitted foundations occur. Only the old unused `inputs` warning
+remains. Log: `/tmp/mcfta-general-fresh-occurrence-costs-20261015-audit.log`.
+No production Haskell code changed. Snapshot:
+`/tmp/mcfta-general-fresh-costs-checkpoint-20261015-0034/` (1,960 Lean-tree files).
+All earlier proofs, counterexamples, repros, marked drafts, repairs, backups,
+stashes, and worktrees remain. No owned proof worker remains.
+
+Next prove the prepared-plan retention bound stated in the occurrence-cost
+note. Each external original body occurrence must survive at no greater cost
+when the outer reference is replaced by its actual open Mu. Include nested
+Mu and root unions with Mu members. Derive nonempty reconstruction for live
+edge siblings if needed. Reuse exact stored slot lookup and lexical shadowing.
+Then use `execute_complete_costs`, `mu_cost_iff`, and the original minimum
+witness to derive strict rank decrease for actual unfolding. The weighted
+source correspondence is complete; do not repeat it. The probe's strict rank
+is not yet a rank theorem for actual unfolding. Keep the completed Sized and
+unary ancestor proofs and the optimized interned core. Preserve runtime and
+extraction limits. Stop all work and workers at 1% weekly allowance or less.
+
 ## Guarded repaired unfolding and the cost replay
 
 The latest proof is `6adcb38f`. Continue on `formalize` in `TharkunAB/cfta`,
