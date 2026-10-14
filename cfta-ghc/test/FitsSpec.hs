@@ -1,9 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 {- | The streamed walk of "Data.CFTA.GHC.Fits" end to end, on five easy
-Hoogle+ queries and five queries of higher-kinded types with the Prelude:
-each query gives its expected program, and GHC accepts every fit as a
-program of the query's signature. Also: the
+Hoogle+ queries, five queries of higher-kinded types, and two queries of the
+second stage with the Prelude: each query gives its expected program in the
+stage of its kind, and GHC accepts every fit as a program of the query's
+signature. Also: the
 fits that ignore an argument are marked, the walk leaves the goal's
 unification variables as it found them, and the fast rejects keep three
 fits that only the solver can decide (a coercion through a newtype, a given
@@ -60,6 +61,18 @@ higherKinded =
   where
     query name signature arguments expected = Query name signature arguments (either error id (parseProgram expected))
 
+{- | Queries that only the second stage solves: the erasure makes the
+@Foldable@ variable of @sum@ a list, and the second stage proposes @sum@ at
+@Maybe@ and at the signature's @t@ too.
+-}
+secondStage :: [Query]
+secondStage =
+    [ query "sumMaybe" "Maybe Int -> Int" ["m"] "sum m"
+    , query "foldableSum" "Foldable t => t Int -> Int" ["xs"] "sum xs"
+    ]
+  where
+    query name signature arguments expected = Query name signature arguments (either error id (parseProgram expected))
+
 main :: IO ()
 main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Data.Monoid (Sum (..))"] $ \session -> do
     candidates <- candidatesOf session [Import "Prelude" Nothing]
@@ -81,7 +94,7 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 go (startWalker environment (map candidateType candidates') goal) (preorder program)
     hspec $ do
         describe "streamFits" $
-            forM_ (queries <> higherKinded) $ \(Query name signature arguments expected) ->
+            forM_ ([(False, q) | q <- queries <> higherKinded] <> [(True, q) | q <- secondStage]) $ \(second, Query name signature arguments expected) ->
                 it ("finds the expected program of " <> name <> ", and GHC accepts its fits") $ do
                     Just typ <- typeOfExpression session ("undefined :: " <> signature)
                     found <- newIORef []
@@ -92,6 +105,7 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                     statistics <- fitsForSignature session options candidates typ arguments record
                     fits <- reverse <$> readIORef found
                     fmap statisticsFits statistics `shouldBe` Just (length fits)
+                    fmap statisticsSecondStage statistics `shouldBe` Just second
                     fits `shouldSatisfy` elem expected
                     forM_ (take 10 fits) $ \fit ->
                         accepts session ("(\\" <> unwords (map Text.unpack arguments) <> " -> " <> renderProgram fit <> ") :: " <> signature)

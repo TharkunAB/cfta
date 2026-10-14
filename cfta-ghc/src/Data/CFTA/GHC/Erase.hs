@@ -12,7 +12,9 @@ becomes such a type after these rules:
   variable, which Hectare instantiates at each use.
 * A bound type variable of class @Foldable@ or @Traversable@ becomes the
   list type, as in the Hoogle+ library: @length :: Foldable t => t a -> Int@
-  becomes @[a] -> Int@.
+  becomes @[a] -> Int@. In its second stage, "Data.CFTA.GHC.Fits" also
+  replaces such a variable by the other type heads of the query
+  ('listKinded').
 * A free type variable (a skolem of the context, or a unification variable)
   becomes a constant type, named by the caller, so that Hectare treats it as
   rigid. Applied to arguments (@f a@, with @f@ of the context), it becomes a
@@ -34,6 +36,7 @@ module Data.CFTA.GHC.Erase (
     erase,
     anyResult,
     higherKinded,
+    listKinded,
     typeHeads,
 ) where
 
@@ -61,7 +64,9 @@ erase :: (TyVar -> Maybe Text) -> GHC.Type -> Maybe Type
 erase rigid typ = go (Map.fromList (zip bound [0 :: Int ..])) body
   where
     (bound, theta, body) = tcSplitNestedSigmaTys (GHC.expandTypeSynonyms typ)
-    containers = listVariables theta
+    -- Only a bound variable becomes a list: a rigid one of the context
+    -- (a Foldable t of the signature) stays a type constructor.
+    containers = filter (`elem` bound) (listVariables theta)
     go :: Map TyVar Int -> GHC.Type -> Maybe Type
     go names t
         | Just variable <- GHC.getTyVar_maybe t =
@@ -106,6 +111,15 @@ does not make lists: @f@ in the type of @fmap@ and @m@ in the type of
 -}
 higherKinded :: GHC.Type -> [TyVar]
 higherKinded typ = [variable | variable <- bound, tyVarKind variable `eqType` headKind, variable `notElem` listVariables theta]
+  where
+    (bound, theta, _) = tcSplitNestedSigmaTys typ
+
+{- | The bound type variables of kind @Type -> Type@ of a type that 'erase'
+makes lists: those of class @Foldable@ or @Traversable@, as @t@ in the type
+of @length@.
+-}
+listKinded :: GHC.Type -> [TyVar]
+listKinded typ = [variable | variable <- bound, tyVarKind variable `eqType` headKind, variable `elem` listVariables theta]
   where
     (bound, theta, _) = tcSplitNestedSigmaTys typ
 

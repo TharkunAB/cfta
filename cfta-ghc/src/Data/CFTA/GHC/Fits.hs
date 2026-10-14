@@ -14,6 +14,12 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   candidate with a higher-kinded type variable, as @fmap@ or @(>>=)@, has
   an erased type at each type head of the query whose class constraints GHC
   solves under the hole's givens ('specializations').
+* The search has two stages. When the first stage ends, or uses half of the
+  time, with too few fits, the second stage runs for the rest of the time.
+  It also proposes a candidate with a @Foldable@ or @Traversable@ type
+  variable, which the erasure makes a list, at the other type heads of the
+  query: so @sum@ at @Maybe@ for @Maybe Int -> Int@. The first stage stays
+  as fast as before where the erasure keeps what the query needs.
 * Each program is checked in preorder, one leaf at a time
   ("Data.CFTA.GHC.Internal.Check"), as a refinement hole fit, with the
   parts of 'GHC.Tc.Errors.Hole.tcCheckHoleFit': 'tcSubTypeSigma' at the
@@ -79,19 +85,20 @@ module Data.CFTA.GHC.Fits (
 ) where
 
 import Control.Applicative ((<|>))
-import Control.Monad (forM)
+import Control.Monad (forM, unless)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
 import Data.List (nub)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, isJust, mapMaybe)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
-import Data.CFTA.GHC.Erase (anyResult, erase, higherKinded, typeHeads)
+import Data.CFTA.GHC.Erase (anyResult, erase, higherKinded, listKinded, typeHeads)
 import Data.CFTA.GHC.Internal.Check
 import Data.CFTA.Gen.Synthesis (Program (..))
 import Data.CFTA.Gen.Synthesis.Walk (
@@ -262,6 +269,8 @@ data Statistics = Statistics
     -- ^ The size of the last program looked at.
     , statisticsOutOfTime :: !Bool
     -- ^ Whether the search stopped at the deadline.
+    , statisticsSecondStage :: !Bool
+    -- ^ Whether the second stage ran.
     , statisticsBuildNanos :: !Word64
     -- ^ The time of Hectare's construction of the automata.
     , statisticsReduceNanos :: !Word64
@@ -291,50 +300,98 @@ synthesizeFits options hole candidates goal = do
 {- | Check Hectare's programs for a hole in its enumeration order, and call
 the function on each fit; stop when it returns 'False'. The result has the
 figures of the search.
+
+The search has two stages, with one checker and one table of verdicts. The
+first stage proposes each candidate at its erased type, or else at its
+'specializations' at the type heads of the query. The second stage runs when
+the first one ends, or reaches half of 'optionSeconds', with fewer fits that
+use every part than 'optionFits', and the function did not stop it. It has
+the rest of the time and of the programs, and also specializes the variables
+that the erasure makes lists ('listKinded'). It gives only the fits that the
+first stage did not give.
 -}
 streamFits :: Options -> TypedHole -> [Candidate] -> Type -> (Fit -> TcM Bool) -> TcM Statistics
 streamFits options hole candidates goal accept = do
     environment <- newEnvironment hole
     begin <- liftIO getMonotonicTimeNSec
-    let deadline = (\seconds -> begin + round (seconds * 1e9)) <$> optionSeconds options
-    erased <- concat <$> mapM (erasures environment) candidates
+    let deadline fraction = (\seconds -> begin + round (seconds * fraction * 1e9)) <$> optionSeconds options
     -- The time of the checks of the fits' parts, which are checks too.
     ignoring <- liftIO (newIORef 0)
-    let statistics progress = statisticsOf progress <$> liftIO (readIORef ignoring) <*> readCounters environment
-    case query erased of
-        Just erasedGoal -> do
-            ignoredLeaf <- rigidLeaf environment ignored
-            let start = startWalker environment (map candidateType candidates) goal
-                leaves' = Map.insert ignored ignoredLeaf leaves
-            startKey <- stateKey environment (walkerVariables start) start
-            checker <- newChecker environment leaves' start startKey
-            let limits = Limits (optionMaximumSize options) (optionMaximumPrograms options) deadline
-                hooks =
-                    Hooks
-                        { hookSize = \size progress -> case optionReport options of
-                            Just callback -> statistics progress >>= liftIO . callback size
-                            Nothing -> pure ()
-                        , hookProgram = \size program -> mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
-                        }
-                -- The walk gives a new fit with the hole as at the start:
-                -- check the program with each argument subterm in turn of a
-                -- fresh rigid type.
-                accept' fit = do
+    -- The fits so far, by their tokens; the number of them that use every
+    -- part; and whether the function stopped the search.
+    delivered <- liftIO (newIORef Set.empty)
+    using <- liftIO (newIORef (0 :: Int))
+    stopped <- liftIO (newIORef False)
+    ignoredLeaf <- rigidLeaf environment ignored
+    let start = startWalker environment (map candidateType candidates) goal
+        leaves' = Map.insert ignored ignoredLeaf leaves
+    startKey <- stateKey environment (walkerVariables start) start
+    checker <- newChecker environment leaves' start startKey
+    let statistics second earlier progress = do
+            ignoringNanos <- liftIO (readIORef ignoring)
+            fits <- Set.size <$> liftIO (readIORef delivered)
+            counters <- liftIO (readIORef (environmentCounters environment))
+            let total part = sum (map part (progress : earlier))
+            pure
+                Statistics
+                    { statisticsPrograms = total progressPrograms
+                    , statisticsSkipped = total progressSkipped
+                    , statisticsFits = fits
+                    , statisticsSize = progressSize progress
+                    , statisticsOutOfTime = progressOutOfTime progress
+                    , statisticsSecondStage = second
+                    , statisticsBuildNanos = total progressBuildNanos
+                    , statisticsReduceNanos = total progressReduceNanos
+                    , statisticsListNanos = total progressListNanos
+                    , statisticsCheckNanos = total progressCheckNanos + ignoringNanos
+                    , statisticsCounters = counters
+                    }
+        -- The walk gives a new fit with the hole as at the start: check the
+        -- program with each argument subterm in turn of a fresh rigid type.
+        deliver fit = do
+            let tokens = preorder (Walk.fitProgram fit)
+            known <- Set.member tokens <$> liftIO (readIORef delivered)
+            if known
+                then pure True
+                else do
                     before <- liftIO getMonotonicTimeNSec
                     ignoresPart <- anyM (fitsFrom environment leaves' start . preorder) (replacements ignored (Walk.fitProgram fit))
                     after <- liftIO getMonotonicTimeNSec
-                    liftIO (modifyIORef' ignoring (+ (after - before)))
-                    accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart)
-            statistics
-                =<< walk
-                    limits
-                    checker
-                    hooks
-                    [Erased name typ (role candidate) | (candidate, name, typ) <- erased]
-                    (avoid erased)
-                    erasedGoal
-                    accept'
-        Nothing -> statistics emptyProgress
+                    liftIO $ do
+                        modifyIORef' ignoring (+ (after - before))
+                        modifyIORef' delivered (Set.insert tokens)
+                        unless ignoresPart (modifyIORef' using (+ 1))
+                    more <- accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart)
+                    unless more (liftIO (writeIORef stopped True))
+                    pure more
+        -- One stage, after the stages before it.
+        stage second deadline' programs earlier = do
+            erased <- concat <$> mapM (erasures environment second) candidates
+            let hooks =
+                    Hooks
+                        { hookSize = \size progress -> case optionReport options of
+                            Just callback -> statistics second earlier progress >>= liftIO . callback size
+                            Nothing -> pure ()
+                        , hookProgram = \size program -> mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
+                        }
+            case query erased of
+                Just erasedGoal ->
+                    walk
+                        (Limits (optionMaximumSize options) programs deadline')
+                        checker
+                        hooks
+                        [Erased name typ (role candidate) | (candidate, name, typ) <- erased]
+                        (avoid erased)
+                        erasedGoal
+                        deliver
+                Nothing -> pure emptyProgress
+    first <- stage False (deadline 0.5) (optionMaximumPrograms options) []
+    done <- liftIO (readIORef stopped)
+    enough <- (>= optionFits options) <$> liftIO (readIORef using)
+    let programs = subtract (progressPrograms first) <$> optionMaximumPrograms options
+    if done || enough || maybe False (<= 0) programs
+        then statistics False [] first
+        else stage True (deadline 1) programs [first] >>= statistics True [first]
   where
     -- The free type variables of the scope, named in order of occurrence.
     relevant = map ctEvPred (bagToList (th_relevant_cts hole))
@@ -347,17 +404,21 @@ streamFits options hole candidates goal accept = do
     rigid variable = Map.lookup variable names
     -- The Hectare types of a candidate, each with its name in Hectare: its
     -- erased type, or else its specializations at the type heads of the
-    -- query. The k-th specialization of a candidate has the number after a
-    -- space, which no Haskell name has.
-    erasures environment candidate = case erase rigid (candidateType candidate) of
-        Just typ -> pure [(candidate, candidateName candidate, typ) | keep candidate typ]
-        Nothing -> do
-            specialized <- specializations environment queryHeads (candidateType candidate)
+    -- query. In the second stage, a candidate with a variable that the
+    -- erasure makes a list has its specializations too. The k-th
+    -- specialization of a candidate has the number after a space, which no
+    -- Haskell name has.
+    erasures environment second candidate = case erase rigid typ of
+        Just erased | not second || null (listKinded typ) -> pure [(candidate, candidateName candidate, erased) | keep candidate erased]
+        _ -> do
+            specialized <- specializations environment queryHeads second typ
             pure
-                [ (candidate, candidateName candidate <> " " <> Text.pack (show index), typ)
-                | (index, typ) <- zip [1 :: Int ..] (mapMaybe (erase rigid) specialized)
-                , keep candidate typ
+                [ (candidate, candidateName candidate <> " " <> Text.pack (show index), erased)
+                | (index, erased) <- zip [1 :: Int ..] (mapMaybe (erase rigid) specialized)
+                , keep candidate erased
                 ]
+      where
+        typ = candidateType candidate
     keep candidate typ = candidateRequired candidate || not (anyResult typ)
     role candidate
         | candidateRequired candidate = Required
@@ -387,19 +448,7 @@ streamFits options hole candidates goal accept = do
             [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates]
     -- The name of the rigid leaf: a hole, so no candidate has it.
     ignored = "_"
-    statisticsOf progress ignoring =
-        Statistics
-            (progressPrograms progress)
-            (progressSkipped progress)
-            (progressFits progress)
-            (progressSize progress)
-            (progressOutOfTime progress)
-            (progressBuildNanos progress)
-            (progressReduceNanos progress)
-            (progressListNanos progress)
-            (progressCheckNanos progress + ignoring)
     anyM predicate = foldr (\x rest -> predicate x >>= \yes -> if yes then pure True else rest) (pure False)
-    readCounters environment = liftIO (readIORef (environmentCounters environment))
 
 {- | A checked step of the current program: the frozen variables before the
 step, and the walker after it, with the key of its state.
@@ -476,21 +525,29 @@ newChecker environment leaves start startKey = do
 higher-kinded type variable ('higherKinded') replaced by a head, when GHC
 solves the class constraints on the heads under the hole's givens. So
 @fmap@ gets a type at @Maybe@ when the instances give @Functor Maybe@, and
-at @m@ when the signature gives @Monad m@. GHC still checks each use of the
-candidate with its own type.
+at @m@ when the signature gives @Monad m@. With 'True', each variable that
+the erasure makes a list ('listKinded', as @t@ in @length@) is also kept or
+replaced by a head, so @sum@ gets a type at @Maybe@ as well as at lists; the
+first type keeps every list variable, as the erasure does. GHC still checks
+each use of the candidate with its own type.
 -}
-specializations :: Environment -> [Type] -> Type -> TcM [Type]
-specializations environment heads typ
-    | null higher = pure []
-    | otherwise = fmap catMaybes . forM (mapM (const heads) higher) $ \choice -> do
-        let instantiate = substTyWith higher choice
-            remaining = filter (`notElem` higher) variables
+specializations :: Environment -> [Type] -> Bool -> Type -> TcM [Type]
+specializations environment heads withLists typ
+    | null (higher <> lists) = pure []
+    | otherwise = fmap catMaybes . forM (mapM choices (higher <> lists)) $ \choice -> do
+        let replaced = [(variable, head') | (variable, Just head') <- zip (higher <> lists) choice]
+            instantiate = substTyWith (map fst replaced) (map snd replaced)
+            remaining = filter (`notElem` map fst replaced) variables
             theta' = map instantiate theta
             closed = [predicate | predicate <- theta', not (any (`elemVarSet` tyCoVarsOfType predicate) remaining)]
         solved <- entails environment closed
         pure (if solved then Just (mkSpecSigmaTy remaining theta' (instantiate rho)) else Nothing)
   where
     higher = higherKinded typ
+    lists = if withLists then listKinded typ else []
+    choices variable
+        | variable `elem` higher = map Just heads
+        | otherwise = Nothing : map Just heads
     (variables, theta, rho) = tcSplitNestedSigmaTys typ
 
 {- | Whether a program fits, from a walker: every step, then the end. The

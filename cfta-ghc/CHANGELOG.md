@@ -22,6 +22,13 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   parametricity it cannot use that subterm. `synthesizeFits` puts such fits
   last. `hectareAvoid` is Hectare's rule that a list function is not applied
   to `[]`.
+- The search of `streamFits` has two stages. When the first stage ends, or
+  uses half of `optionSeconds`, with fewer fits that use every part than
+  `optionFits`, the second stage runs for the rest of the time. It also
+  proposes the `Foldable` and `Traversable` components (`sum`, `length`,
+  `sequenceA`) at the type heads of the query other than the list, and it
+  gives only the fits that the first stage did not give.
+  `statisticsSecondStage` tells whether it ran.
 - `Data.CFTA.GHC.HoleFits`: a typed-hole plugin
   (`-fplugin=Data.CFTA.GHC.HoleFits`). After GHC's own valid hole fits, it
   gives fits of several components, which `streamFits` finds in GHC's `TcM`
@@ -33,7 +40,9 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   a type constructor. `higherKinded` and `typeHeads` give the variables and
   the heads for the specializations of `streamFits`: a component with a
   higher-kinded type variable is proposed at each type head of the query
-  whose class constraints GHC solves under the hole's givens.
+  whose class constraints GHC solves under the hole's givens. `listKinded`
+  gives the `Foldable` and `Traversable` variables, which the erasure makes
+  lists, for the second stage of `streamFits`.
 - `Data.CFTA.GHC.Internal.Check`: one step of a program walk as a refinement
   hole fit (`tcSubTypeSigma`, GHC's fast path for insoluble equalities, and
   `simplifyTopWanteds` under `runTcSEarlyAbort` inside the hole's
