@@ -83,38 +83,18 @@ node normalization. `edge_schedule` connects the actual edge call to the
 exact bounded reference edge worker, including its input codec and both
 arity branches. No row-shape or product-language premise is supplied.
 
-## Next proof
+## Completed recursive continuation
 
-Prove the complete recursive kernel correspondence by induction on its
-explicit execution bound. Use completed allocation-free calls in one
-valid final cache. The existing replay theorems put actual recursive child
-calls in that cache. This keeps the semantic view and both probe heaps
-fixed during the induction. Do not add an assumed heap invariant at every
-intermediate source call.
+`3d9fd615` completes the full bounded kernel correspondence and native
+product-language theorem. It uses final-cache replay, exact branch selection,
+original binding scope, the ordered hash join, and twice kernel fuel.
+`0f32ad39` derives finite stable native product tables, exact Sized classes,
+both inverse laws, and exact minimum/productive calculations. The local
+induction premises described above are discharged by the full kernel theorem.
+The original validation record below remains the record of this component.
 
-Keep original operands, available records, original domain bindings,
-semantic heaps, and canonical seen pairs in the induction statement.
-`ScheduleOriginals` supplies body and reference obligations. Actual domain
-entry and `entered_domain_equivalent` supply Mu extension. The new Mu,
-union, and row laws supply the constructor cases. The already proved
-`physical_step` supplies branch order. It does not supply output semantics.
-
-Use a semantic bound of twice the actual kernel bound, or an equivalent
-proved bound. The semantic edge worker consumes one additional level.
-`run_stable` retains successful semantic child results at larger bounds.
-Check the ordinary and nonordinary branch arithmetic explicitly.
-
-For ordinary rows, connect the actual equal-symbol hash join to the mapped
-semantic row list. `SymbolicHashJoin.hashJoin_exact` retains the right
-bucket reversal and every duplicate. Do not replace this ordered equation
-with a membership-only argument.
-
-Then use actual native completion and final-cache replay to instantiate
-the complete kernel theorem. `source_schedule_total_grows` connects its
-final view to the original input schedule. Compose the derived product
-language with exact native cold tables and the existing minimum callback,
-ambiguity scan, compiler, and Sized laws. The complete kernel theorem and
-this final composition are not yet proved.
+The next target is complete native callback and source-key scan composition.
+Read [native product language](notes-native-product-language.md).
 
 ## Validation and preservation
 

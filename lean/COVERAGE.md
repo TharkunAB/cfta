@@ -8,8 +8,8 @@ source model. Earlier proof hashes remain in the preserving backups.
 PR #121 qualified the raw-binder identity comment. The smart-only identity
 law is still unproved. See root HANDOFF.md for exact evidence.
 
-Current checkpoint: **2026-10-14 20:33 CEST**, upstream `3ea4a9d8`.
-The latest proof commit is `cd342e4b`, after `b436e0fa` and `98281e39`. No background proof worker is active.
+Current checkpoint: **2026-10-14 20:56 CEST**, upstream `3ea4a9d8`.
+The latest proof commit is `0f32ad39`, after `3d9fd615`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -94,7 +94,8 @@ results. `execute_stable` preserves non-exhausted outcomes and exact caches
 at larger bounds. Actual request traces derive conjoined guard fields, child
 records, and canonical surviving rows. Completed native memo effects are
 connected below. Successful first-run bounds under checked words are now
-derived. Physical product-row correspondence remains open. See
+derived. Native product language is now proved through the semantic
+schedule. Exact physical row adapters remain invalid in general. See
 [recursive caller](notes-recursive-intersection-kernel.md).
 
 `SourceRecursiveIntersectionReplay*` proves completed guarded kernel replay
@@ -358,13 +359,16 @@ related-row readback, even with multiple representatives. The source is
 ambiguous; this is not a runtime language defect or an observed full scan.
 Separate directional row simulations handle that witness structurally and
 retain the minimum callback, compiler equality, and Sized rank laws.
-The current semantic route proves exact actual constructor steps, native Mu
-body/binder transport, original domain bindings and physical lookup, exact
-reference execution through heap growth, ordered union/row transport, and
-actual/reference edge-worker correspondence. Complete kernel induction and
-native two-input language remain open. Use final-cache replay and retain
-the extra semantic edge-worker fuel. The directional route remains valid.
-See [semantic schedule correspondence](notes-semantic-schedule-correspondence.md),
+The full actual kernel/native product language is now derived through the
+semantic schedule. It retains exact hash-join order and uses twice kernel
+fuel. Actual constructed native products have finite stable cold tables,
+exact distinct node-count classes, finite evaluation, size order, rank
+coverage, both inverse laws, exact common structural minima, and the raw-table
+productive Boolean. Complete native callback/scan compiler composition remains
+open. Warm native cold extraction, the actual nodeEdges precheck, and source-key
+operand language are the next obligations. The refuted exact-row adapters
+remain unnecessary. See [native product language](notes-native-product-language.md),
+[semantic schedule correspondence](notes-semantic-schedule-correspondence.md),
 [directional union rows](notes-directional-union-rows.md),
 [native union and Mu witnesses](notes-union-mu-branch-readback.md),
 [related physical product rows](notes-relational-product-rows.md),
@@ -386,7 +390,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,495 targets and 44,052 theorem dependency checks**
+The current audit passes **1,507 targets and 44,085 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 After PR #122, all 208 generator and 145 refinement examples pass. The
 unchanged core retains its earlier 289 passing examples. Fourmolu and active-package cabal-gild passed.

@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 20:33 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 20:56 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -64,9 +64,10 @@ in complete semantic caches under explicit WordRanges. Native output scope,
 closedness, original syntax, and general bounded cold-reader effects are now
 proved. General finite repaired traversal and structural tables are now
 proved. Final-cache guarded row language is proved. Its independent-language
-transport is now exact. Physical product language remains open.
+transport is now exact. Native product language is now proved through the
+semantic schedule. Complete native callback/compiler composition remains open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`cd342e4b`**, after `b436e0fa` and `98281e39`. A later documentation commit
+The latest proof checkpoint is **`0f32ad39`**, after `3d9fd615`. A later documentation commit
 records this handoff. Use `git log` for its hash. The intentionally untracked fixtures are
 `lean/repro/NestedUnaryTwoAtom.hs`, `lean/repro/NativeProductRowCycle.hs`, and
 `lean/repro/UnionDiagonalRows.hs`; preserve all three.
@@ -113,7 +114,8 @@ size order, and both inverse laws, without preparation or a supplied trace.
 `081ce3d1` retains the budget heap through complete native evaluation.
 `cold_node_table_exact` and `constructed_node_table_exact` give exact independent
 returned-value table language under the existing checked native scope.
-The full native two-input intersection law remains open.
+The full native two-input language law is now proved for closed original inputs.
+The complete native callback/scan compiler composition remains open.
 Read `lean/notes-cold-budget-completeness.md` for the completed table boundary.
 
 `2e6fb87a`, `6afdfe00`, and `dac5f26b` now derive literal normalized
@@ -158,7 +160,8 @@ untracked fixtures. Use separate directional relations for the general
 target. Do not assume product language or derive either refuted general
 exact-row adapter. Preserve all older theorems for their stated scopes.
 Read `lean/notes-directional-union-rows.md`. All workers are terminal.
-Full native two-input language correspondence remains open.
+The later semantic schedule proof now derives full native two-input language
+for closed original inputs. It does not require the refuted exact-row interface.
 
 `9b6d9014` now derives actual union and Mu branch witnesses. Union retains
 ordered physical child results and exact normalized independent language.
@@ -201,43 +204,52 @@ minimum callback, complete ambiguity scan, compiler equality, finite guarded
 classes, and both rank inverse laws. Both physical simulations and completed
 extraction remain explicit premises.
 
-The current semantic route avoids an exact physical row correspondence.
-`b436e0fa` proves pair-environment binding on scoped canonical pairs, actual
-constructor correspondence, and actual native Mu body/binder transport.
-`98281e39` proves exact bounded reference outcomes through actual heap and
-issued-key growth. One finite exact original-input schedule result remains
-valid in every later valid heap. `cd342e4b` proves original domain binding
-closure, physical reference readback, ordered union and row correspondence,
-and exact actual/reference edge-worker steps. Full guards, duplicate request
-occurrences, and both arity branches remain in these equations.
+`3d9fd615` proves the complete bounded kernel and native product language.
+`execute_schedule_replay` uses actual completed calls in one final cache.
+Induction derives every recursive correspondence. The semantic bound is
+twice the kernel bound. `execute_schedule` recovers the original input view
+through actual cache growth. `execute_product` identifies the result with
+the finite exact reference schedule. `native_product` derives exact common
+finite-term language from actual checked native completion and initial
+semantic heaps. No kernel run, recursive correspondence, row relation, or
+whole product-language premise is supplied at the native entry.
 
-These are local recursive induction steps. The complete kernel and native
-two-input language theorem remains open. Body and child correspondence are
-explicit local induction premises. No complete product-language law is
-assumed. The directional row route remains an alternative. The general exact
-row adapters remain refuted for their recorded examples.
+`0f32ad39` supplies finite actual native product cold tables and stable bounds.
+The constructed-source entry derives all heap invariants. Its Sized theorem
+proves distinct terms at every node-count size, finite class evaluation,
+size-major distinct prefixes, complete rank coverage, and both inverse laws
+for the actual product table. Its minimum theorem proves finite convergence,
+the exact least common structural size, and the raw-table productivity
+Boolean. Guard conjunction, closed original available inputs, domain-cache
+validity, and checked `WordRanges` retain their stated scope.
 
-Next prove the complete kernel correspondence by induction on its bound.
-Replay completed calls in one valid final cache. Keep original operands,
-available records, original domain bindings, both semantic probe heaps, and
-canonical seen pairs in the induction statement. Use `physical_step` for
-branch order and the new constructor steps for output language. Connect the
-ordered mapped hash join and check the extra semantic edge-worker fuel.
-Then derive native product language from actual completion, stable reference
-execution, and `source_schedule_total_grows`. Compose it with exact cold
-tables and the existing minimum callback and Sized laws. Do not assume the
-whole product law or require a refuted exact row adapter. Read
-`lean/notes-semantic-schedule-correspondence.md` before the next proof.
-The primary explicit-product Sized route remains proved and unaffected.
+Next compose the complete native overlap callback and finite ambiguity scan
+with the derived language and minimum equations. Retain finite extraction
+after arbitrary completed warm native calls. The product theorem already
+covers those calls; the existential cold-table wrapper currently starts
+from `initial` memo state. Connect the actual `nodeEdges` precheck to the
+minimum lookup. A positive minimum gives an accepted term and therefore
+requires an exposed root edge. An absent minimum gives false for either
+precheck result. A literal root-row equality is not required for this logic.
 
-Current audit: **1,495 jobs and 44,052 theorem dependency checks**. Only
+Derive each source-key operand language from actual input cold traces and
+resident original closed values. Then prove actual callback equality,
+preserve the real constraint precheck and ordered scan, and reuse existing
+compiler and Sized sequence theorems. Do not derive either refuted general
+exact row adapter or assume the whole product language. Read
+`lean/notes-native-product-language.md` before the next proof.
+The primary finite-map reference, solver-decided, and optimized Sized proofs
+remain. The optimized interned core is unchanged. Whole Haskell source
+extraction and runtime representation boundaries remain unverified.
+
+Current audit: **1,507 jobs and 44,085 theorem dependency checks**. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-semantic-schedule-20261014-audit.log`.
-Current snapshot: `/tmp/mcfta-semantic-schedule-checkpoint-20261014-2033/`.
-It saves all **1,865 Lean-tree files** and compares all 1,853 previous files.
-None is missing. Only audit imports, two coverage ledgers, and the two
+`/tmp/mcfta-native-product-20261014-audit.log`.
+Current snapshot: `/tmp/mcfta-native-product-checkpoint-20261014-2056/`.
+It saves all **1,878 Lean-tree files** and compares all 1,865 previous files.
+None is missing. Only audit imports, two coverage ledgers, and three
 preceding component notes changed among those files. All older proof and
-marked-draft bytes remain unchanged. The eleven new proof modules and their
+marked-draft bytes remain unchanged. The twelve new proof modules and their
 component note are saved. No production Haskell source changed.
 
 ## Independent guarded meaning and actual stored compiler

@@ -108,7 +108,9 @@ semantic schedule. It proves exact local actual constructor steps, native Mu
 body/binder transport, reference execution through heap growth, ordered
 union/row transport, and actual/reference edge-worker correspondence.
 Read [semantic schedule correspondence](notes-semantic-schedule-correspondence.md).
-The complete recursive kernel and native product theorem remains open.
+The full kernel and native product language is now proved through that route.
+Read [native product language](notes-native-product-language.md). The complete
+native callback/scan compiler composition remains open.
 
 The directional route remains an alternative. A later derivation must pass
 through actual optional-binder reconstruction and repaired Mu unfolding.
@@ -118,7 +120,8 @@ Do not assume the whole product language.
 
 Do not try to derive general exact `RelatedRows.Readback`, even with multiple
 representatives. Its sufficiency theorem remains useful in narrower scopes.
-The full native two-input law remains open. The primary finite-map reference,
+The full native two-input language is now derived through the semantic
+schedule. The primary finite-map reference,
 solver-decided, and optimized Sized laws remain proved with their explicit
 synchronous product route. The optimized interned core stays unchanged.
 

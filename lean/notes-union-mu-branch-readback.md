@@ -68,15 +68,18 @@ body/binder correspondence. Actual recursive execution supplies the body
 scope. `98281e39` retains the exact reference schedule through actual heap
 growth. `cd342e4b` derives original domain binding closure, physical reference
 lookup, ordered union/row transport, and actual/reference edge-worker steps.
-These are local induction steps. The complete recursive kernel and native
-product law remains open. Read
-[semantic schedule correspondence](notes-semantic-schedule-correspondence.md).
+The full recursive kernel and native product language is now proved by
+`3d9fd615`. `0f32ad39` supplies finite actual product tables, Sized classes,
+both inverses, and common structural minima. Complete native callback/scan
+composition remains open. Read
+[native product language](notes-native-product-language.md).
 
 ## Remaining product obligation
 
 These results prove how actual branch outputs relate to their actual child
 outputs. They do not prove that each output represents its original input
-intersection. That complete two-input law remains open.
+intersection by themselves. The later semantic schedule proof now derives
+that complete language law for closed original native inputs.
 
 The next checkpoint now proves exact actual native union row origins through
 completed repaired extraction. It also proves a new boundary: exact

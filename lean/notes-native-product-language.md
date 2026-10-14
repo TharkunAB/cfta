@@ -1,0 +1,122 @@
+# Exact native product language, Sized classes, and minima
+
+Updated: 2026-10-14 20:52 CEST.
+Proofs: `3d9fd615` and `0f32ad39`.
+
+## Complete recursive correspondence
+
+`SourceRecursiveIntersectionKernel.execute_schedule_replay` proves the full
+bounded kernel correspondence. It uses actual completed allocation-free
+calls in one valid final cache. Induction on kernel fuel retains that cache.
+The reference schedule uses twice the kernel fuel. This includes the extra
+edge-worker level. Successful reference results remain exact at larger bounds.
+
+The induction retains `NodeScope`, actual domain residency, and canonical
+seen pairs. `onNode_schedule` covers every source branch. The ordinary case
+retains the exact hash-join order, right-bucket reversal, and duplicate rows.
+Mu entry retains the exact canonical domain and both original bindings.
+Original body and reference readback supply every recursive operand.
+Actual node, union, and binder normalization supply output language.
+
+`execute_schedule` uses actual completed replay and heap/history growth to
+recover the original input view. It does not assume the correspondence of
+recursive child calls. The whole bounded induction derives that property.
+
+## Exact product language
+
+`SourceRecursiveIntersectionKernel.execute_product` identifies the derived
+reference result with the finite exact original-input schedule. Closed
+input and result support remove dependence on the reference environment.
+The result accepts exactly the common finite terms of its original inputs.
+The generic kernel entry requires its final independent-language probe heap.
+
+`SourceRecursiveIntersectionNative.native_product` starts from actual checked
+native completion. Native evaluation derives that final heap from its
+initial heap. The theorem retains actual source validity, closed original
+available inputs, checked `WordRanges`, semantic heaps, and exact Boolean
+guard conjunction. No completed kernel run, body correspondence, row relation,
+or product-language equation is supplied at this native entry.
+
+Both raw and smart stored binders retain their existing independent language.
+Different physical child identities and redundant rows are permitted.
+The preserved functional and exact-row counterexamples remain valid.
+They do not refute the derived language theorem.
+
+## Finite tables and Sized
+
+`cold_node_table_product` composes actual first native completion and finite
+repaired cold extraction with the product theorem. The output table accepts
+exactly the common original-input language. This holds for every guard
+interpretation that respects the actual conjunction operation. Both native
+and row collection bounds are stable. No output preparation is assumed.
+
+`constructed_node_table_product` derives every source heap invariant from a
+completed repaired empty-cache construction. Actual source operands remain
+closed, original, and available. Domain-cache validity and `WordRanges` remain
+explicit. The theorem supplies native completion and the finite cold trace.
+
+`constructed_product_sized` uses that actual table in the reference Sized
+worker. It proves distinct accepted terms at every node-count size, finite
+class evaluation, size-major distinct prefixes, complete rank coverage, and
+both distinct-term rank/unrank inverse laws. Accepted support is exactly the
+common language of the two original inputs. The table retains its source row
+order. The rank counts distinct terms, including on ambiguous product graphs.
+
+The primary finite-map reference, solver-decided, and optimized dispatcher
+proofs remain. The optimized interned core remains unchanged.
+
+## Exact structural minimum
+
+`constructed_product_minimum` runs the actual finite minimum recurrence on
+the native cold table. It derives finite convergence and a stable sweep.
+Every root minimum is precisely the least common structural term size.
+`SourceRowsMinimumAdapter.productiveRows` is true exactly when the original
+inputs have a common structural finite term. Constraints are erased only
+for this structural test. No predicate on `emptyGuard` is needed because
+the actual arity-mismatch row has an empty child.
+
+This theorem covers the raw-table root-row precheck. The live compiler uses
+`null (nodeEdges node)` before minimum lookup in
+`microcfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs`. Its complete
+callback and scan still need composition with actual repaired exposure.
+The standalone `Data.CFTA.Sized.unambiguousRows` uses the explicit synchronous
+product. Its existing proof does not depend on this separate native path.
+
+## Next target
+
+Connect actual native overlap callbacks to the complete finite source-key
+ambiguity scan and its compiler result. Use language and Boolean equations.
+Do not derive the refuted general functional or exact related-row adapter.
+
+First retain finite cold extraction and exact product language after an
+arbitrary completed checked native call, including warm memo states.
+`native_product` already covers such completed native calls.
+The current existential cold-table wrappers start from `initial` memo state.
+Use actual successful native bounds, retained coverage, both probe heaps,
+and the existing general repaired cold traversal for the warm wrapper.
+
+Then connect the actual `nodeEdges` precheck to the minimum result. A literal
+root-row equality is sufficient but is not necessary. A present minimum
+gives an accepted term. Exact repaired exposure must then have a root edge.
+When the minimum is absent, the callback is false for either precheck result.
+Keep actual exposure completion and its final-cache language in the proof.
+
+Derive the finite source-key operand language from the actual input cold
+trace and resident original closed records. Apply the native product and
+minimum equations for each callback. Preserve the real ordered scan and its
+constraint precheck. Reuse existing compiler and Sized sequence theorems after
+the actual callback equality is derived. Do not replace those obligations
+with an assumed whole product-language equation.
+
+Concrete Haskell containers, lazy scheduling, source extraction, and external
+solver contracts retain their documented scope. No theorem count or green
+build verifies those boundaries. The whole Haskell library is not verified.
+
+## Validation and preservation
+
+The aggregate audit passes 1,507 jobs and 44,085 theorem dependency checks.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
+Log: `/tmp/mcfta-native-product-20261014-audit.log`.
+No new warning was introduced. The old unused `inputs` warning remains.
+No production Haskell code changed. All fixtures and marked drafts remain.
+Everything remains local. No worker is active.
