@@ -37,7 +37,10 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `simplifyTopWanteds` under `runTcSEarlyAbort` inside the hole's
   implications, with GHC's pure unifier for equalities that are surely
   apart and the instance environment for class constraints that no
-  instance can match), freeze and restore of unification variables, and
+  instance can match; neither runs under a given equality, only nominal
+  equalities can be apart, a quantified given provides the class of its
+  head, and the classes that GHC solves without instances go to the
+  solver), freeze and restore of unification variables, and
   `StateKey`, the state of a walker up to the names of its unification
   variables. The walk keeps the verdict of each step by state and leaf, and
   skips the steps and the solver calls whose verdict it knows.

@@ -20,6 +20,15 @@ The check follows 'GHC.Tc.Errors.Hole.tcCheckHoleFit':
   microseconds. And so does a class constraint that no instance in scope
   can match, of a class that has instances and that no given provides
   (@Num [a]@, @Integral (a -> b)@): a lookup in the instance environment.
+  These two checks keep four rules, so that they reject only what the
+  solver rejects: only a nominal equality can be apart (@Age@ and @Int@ are
+  coercible); under a given equality (a context @a ~ Int@, or a GADT match
+  around the hole) the skolems are not rigid, so neither check runs; a
+  quantified given (@forall x. Show x => Show (f x)@) provides the class of
+  its head; and the classes that GHC solves without instances (@HasField@,
+  @KnownNat@, @KnownSymbol@, @KnownChar@, @Typeable@, implicit parameters,
+  @WithDict@, @DataToTag@, @Unsatisfiable@) are left to the solver, also
+  when the program declares an instance of one of them.
 * The solver: the wanteds of the whole program so far, cloned, and the
   hole's relevant constraints, cloned, wrapped in the hole's implications so
   that the solver has the givens, and solved with 'simplifyTopWanteds' under
@@ -89,10 +98,28 @@ import Data.Text (Text)
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
+import GHC.Builtin.Names (
+    dataToTagClassKey,
+    hasFieldClassNameKey,
+    ipClassKey,
+    knownCharClassNameKey,
+    knownNatClassNameKey,
+    knownSymbolClassNameKey,
+    typeableClassKey,
+    unsatisfiableClassNameKey,
+    withDictClassKey,
+ )
 import GHC.Builtin.Types (liftedTypeKind)
-import GHC.Core.Class (className)
+import GHC.Core.Class (classKey, className)
 import GHC.Core.InstEnv (classInstances, lookupInstEnv, nullUnifiers)
-import GHC.Core.Predicate (EqRel, Pred (ClassPred, EqPred), classifyPredType, eqRelRole, isCallStackPredTy)
+import GHC.Core.Predicate (
+    EqRel (NomEq),
+    Pred (ClassPred, EqPred, ForAllPred),
+    classifyPredType,
+    eqRelRole,
+    isCallStackPredTy,
+    isEqualityClass,
+ )
 import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
 import GHC.Core.TyCo.Rep (TyLit (CharTyLit, NumTyLit, StrTyLit), Type (..), ft_af)
 import GHC.Core.TyCon (TyCon, isGenerativeTyCon)
@@ -215,12 +242,15 @@ emptyCounters :: Counters
 emptyCounters = Counters 0 0 0 0 0 0 0 0 0 0 0
 
 {- | The hole of a walk, the level of its innermost implication, the classes
-that its givens provide (with their superclasses), and the walk's counters.
+that its givens provide (with their superclasses, and the heads of the
+quantified ones), whether its givens have no equality (so that its skolems
+are rigid), and the walk's counters.
 -}
 data Environment = Environment
     { environmentHole :: TypedHole
     , environmentLevel :: TcLevel
     , environmentProvided :: [Name]
+    , environmentRigid :: Bool
     , environmentCounters :: IORef Counters
     -- ^ The counters of the walks in this environment.
     }
@@ -235,12 +265,19 @@ newEnvironment hole = do
         innermost : _ -> pure (ic_tclvl innermost)
         [] -> getTcLevel
     let givens = map evVarPred (concatMap ic_given (th_implics hole))
+        closure = givens <> concatMap transSuperClasses givens
+        -- The head of a quantified given, with its superclasses.
+        heads = [head' | predicate <- closure, ForAllPred _ _ head' <- [classifyPredType predicate]]
         provided =
             [ className cls
-            | predicate <- givens <> concatMap transSuperClasses givens
+            | predicate <- closure <> heads <> concatMap transSuperClasses heads
             , ClassPred cls _ <- [classifyPredType predicate]
             ]
-    Environment hole level provided <$> liftIO (newIORef emptyCounters)
+        equality predicate = case classifyPredType predicate of
+            EqPred{} -> True
+            ClassPred cls _ -> isEqualityClass cls
+            _ -> False
+    Environment hole level provided (not (any equality (closure <> heads))) <$> liftIO (newIORef emptyCounters)
 
 {- | The state of a walk: the unification variables that a later step can
 write, the wanteds of the program so far, and the goals still open, leftmost
@@ -421,12 +458,13 @@ satisfiable environment walker equality finished = do
     instances <- tcGetInstEnvs
     let impossible predicate = case classifyPredType predicate of
             ClassPred cls arguments
-                | not (null (classInstances instances cls))
+                | classKey cls `notElem` builtIn
+                , not (null (classInstances instances cls))
                 , className cls `notElem` environmentProvided environment
                 , (matches, unifiers, _) <- lookupInstEnv False instances cls arguments ->
                     null matches && nullUnifiers unifiers
             _ -> False
-    if any apart current || any impossible current
+    if environmentRigid environment && (any apart current || any impossible current)
         then False <$ count (\c -> c{countFastRejects = countFastRejects c + 1})
         else
             if not finished && not equality && all open current
@@ -454,11 +492,23 @@ satisfiable environment walker equality finished = do
                     pure answer
   where
     apart predicate = case classifyPredType predicate of
-        EqPred _ left right -> case tcUnifyTysFG alwaysBindFam bindable [left] [right] of
+        EqPred NomEq left right -> case tcUnifyTysFG alwaysBindFam bindable [left] [right] of
             SurelyApart -> True
             _ -> False
         _ -> False
     bindable variable _ = if isTcTyVar variable && isMetaTyVar variable then BindMe else DontBindMe
+    -- The classes that GHC solves without instances.
+    builtIn =
+        [ hasFieldClassNameKey
+        , knownNatClassNameKey
+        , knownSymbolClassNameKey
+        , knownCharClassNameKey
+        , typeableClassKey
+        , ipClassKey
+        , withDictClassKey
+        , dataToTagClassKey
+        , unsatisfiableClassNameKey
+        ]
     open = anyFreeVarsOfType (\variable -> isTcTyVar variable && isMetaTyVar variable)
     count = liftIO . modifyIORef' (environmentCounters environment)
     hole = environmentHole environment
