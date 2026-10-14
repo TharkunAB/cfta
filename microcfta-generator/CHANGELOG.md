@@ -36,6 +36,12 @@ tree automata of `microcfta`, with QuickCheck integration.
   types and queries in the syntax of LiquidHaskell, and `renderRType` prints
   them. The `hegel` benchmark runs recreated versions of the paper's RQ1
   queries and its ablations.
+- `Data.CFTA.Gen.Synthesis.Walk`: Hectare proposes, a host typechecker
+  checks. `walk` builds, reduces, and lists Hectare's automaton of each size
+  over erased leaves, and checks each program in preorder through a host's
+  `Checker` (`checkerTruncate`, `checkerExtend`), from the prefix that it
+  shares with the last one, with a trie of dead prefixes, limits, and the
+  time of each part.
 - Sizes count pays, as in FEAT: `pure` has size zero, an atom one, `<*>` adds
   the sizes of its sides, and `pay`, which `Data.CFTA.Gen` and
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree

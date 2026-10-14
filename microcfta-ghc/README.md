@@ -18,6 +18,28 @@ depends on `ghc`.
 | `Data.CFTA.GHC.Erase` | GHC types as Hectare's first-order types, with the class contexts erased. |
 | `Data.CFTA.GHC.Internal.Check` | One step of a program walk in `TcM` on the machinery of GHC's hole fits, and freeze and restore of unification variables; exposed for integration, not covered by the PVP contract. |
 
+## The synthesizer
+
+`ghc-fits` lists the programs of a type signature over the exports of some
+modules, each checked in GHC's typechecker, best first:
+
+```sh
+$ cabal run ghc-fits -- -m Prelude -m Data.Maybe '[Maybe a] -> a -> a'
+\x1 x2 -> foldl fromMaybe x2 x1
+\x1 x2 -> foldl' fromMaybe x2 x1
+\x1 x2 -> foldl const x2 x1
+\x1 x2 -> foldl' const x2 x1
+\x1 x2 -> foldr seq x2 x1
+```
+
+The signature can have a class context (`Eq a => a -> [(a, b)] -> Maybe b`),
+which gives the givens of the search. Each argument of the signature is a
+variable that a program uses once. `-m MODULE=Q` imports a module qualified,
+and `-p PACKAGE` exposes a package. `--size`, `--fits`, and `--seconds`
+bound the search (by default five leaves, ten fits, ten seconds). The
+figures of the search go to the standard error. The Hoogle+ ladder of
+`hectare-ghc` is its benchmark.
+
 ## The hole-fit plugin
 
 `Data.CFTA.GHC.HoleFits` is a GHC plugin. For each typed hole, it adds fits
@@ -178,9 +200,13 @@ or the variable `GHC_LIBDIR`.
 
 ## Limits
 
-- The erased types are first-order: a component with an applied type
-  variable other than a `Foldable` or `Traversable` one (`fmap`, `pure`,
-  `(>>=)`, `traverse`) has no erased type, so Hectare never proposes it.
+- The erased types are first-order. A component with a higher-kinded type
+  variable (`fmap`, `pure`, `(>>=)`, the `Applicative` of `traverse`) gets
+  an erased type only at the type heads of the query (`Maybe` in `Maybe a`,
+  or `m` in `Monad m => m (m a) -> m a`) whose class constraints GHC's
+  solver discharges under the hole's givens; not at the list head, which
+  the list functions cover. A `Foldable` or `Traversable` variable becomes a
+  list.
 - A unification variable of the goal becomes a rigid constant in the erased
   goal, so Hectare proposes only programs that keep it abstract.
 - There is no defaulting: a program that needs `Num` defaulting is rejected.

@@ -8,7 +8,9 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `TypedHole` in `TcM`. Hectare's automaton proposes programs over the
   `Candidate`s, size by size, and a walk inside GHC's typechecker checks each
   one prefix by prefix with the parts of GHC's `tcCheckHoleFit`, with a trie
-  of dead prefixes. `holeFor` makes a hole from skolems and givens.
+  of dead prefixes. The walk is the one of `Data.CFTA.Gen.Synthesis.Walk`
+  (in `microcfta-generator`), with GHC's frames and the table of verdicts as
+  its checker. `holeFor` makes a hole from skolems and givens.
   `Options` bound the size, the fits, the programs, and the seconds, carry
   Hectare's pruning rules, and take a report after each size and a trace of
   each program. `Statistics` give the time of Hectare's construction,
@@ -25,7 +27,11 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `programs`.
 - `Data.CFTA.GHC.Erase`: GHC types as Hectare's first-order types, with the
   class contexts erased, and `anyResult` for the components that would fit
-  every hole once erased.
+  every hole once erased. An applied rigid type variable (`f a`) erases to
+  a type constructor. `higherKinded` and `typeHeads` give the variables and
+  the heads for the specializations of `streamFits`: a component with a
+  higher-kinded type variable is proposed at each type head of the query
+  whose class constraints GHC solves under the hole's givens.
 - `Data.CFTA.GHC.Internal.Check`: one step of a program walk as a refinement
   hole fit (`tcSubTypeSigma`, GHC's fast path for insoluble equalities, and
   `simplifyTopWanteds` under `runTcSEarlyAbort` inside the hole's
@@ -33,6 +39,8 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `StateKey`, the state of a walker up to the names of its unification
   variables. The walk keeps the verdict of each step by state and leaf, and
   skips the steps and the solver calls whose verdict it knows.
+- The `ghc-fits` executable: the programs of a type signature over the
+  exports of some modules, checked in GHC's typechecker.
 - The `hole-fits-golden` test: GHC's messages for a module with holes,
   compiled with the plugin.
 - The `hectare-ghc` benchmark: the 45 Hoogle+ queries on a library ladder
