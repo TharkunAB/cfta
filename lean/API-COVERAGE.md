@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 05:36 CEST**, upstream `f59c198d`.
-The latest proof commit is `a674a61b`. No background proof worker is active.
+Current checkpoint: **2026-10-14 06:16 CEST**, upstream `f59c198d`.
+The latest proof commit is `e9ade493`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -83,8 +83,9 @@ caller with actual domain, optional-binder, union, and guarded row effects.
 `execute_checked` derives complete cache invariants and available successful
 results. `execute_stable` preserves non-exhausted outcomes and exact caches
 at larger bounds. Actual request traces derive conjoined guard fields, child
-records, and canonical surviving rows. Native memo effects, sufficient-bound
-existence, and product-row correspondence remain open. See
+records, and canonical surviving rows. Completed native memo effects are
+connected below. Sufficient first-run bounds and product-row correspondence
+remain open. See
 [recursive caller](notes-recursive-intersection-kernel.md).
 
 `SourceRecursiveIntersectionReplay*` proves completed guarded kernel replay
@@ -106,15 +107,21 @@ continuation composition, finite actual traces, and physical-effect retention
 are checked. Actual finite completed runs and nested evaluations now agree
 in both directions. Completed source bodies preserve structural memo `Shape`
 and all enclosing running requests. Their original frame stores the actual
-returned value in the original cell. Guarded kernel correspondence, semantic
-completion-frame provenance, and product correspondence remain open. See
+returned value in the original cell. Full completed native kernel correspondence
+and semantic memo provenance are now derived under explicit checked word
+bounds. `Bounds.correct` derives strong validity, exact physical/domain growth,
+available results, stable kernel meaning, and new `Produced` from actual native
+bodies. Public node/edge and empty-memo theorems start from actual native
+completion. General first-run termination and product correspondence remain
+open. See
 [recursive memo](notes-recursive-intersection-memo.md),
 [native memo thunks](notes-recursive-intersection-thunks.md),
-[native recursive execution](notes-recursive-intersection-native.md), and
-[native completion](notes-recursive-intersection-completion.md).
+[native recursive execution](notes-recursive-intersection-native.md),
+[native completion](notes-recursive-intersection-completion.md), and
+[native correctness](notes-recursive-intersection-native-correctness.md).
 
 Nested binder construction, native cyclic product rows, thunk scheduling,
-and whole native semantic correspondence remain open. Free-name projection and ordinary-root deep
+and general first-run native completion remain open. Free-name projection and ordinary-root deep
 observations are derived; general cached-depth and binder-heap induction
 remain open. See [physical construction](notes-physical-intersection-rows.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
@@ -127,7 +134,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,243 targets and 41,062 theorem dependency checks**
+The current audit passes **1,252 targets and 41,133 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

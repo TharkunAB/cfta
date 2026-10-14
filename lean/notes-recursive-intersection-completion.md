@@ -66,30 +66,22 @@ structural frame ownership. It does not establish `Produced` for that value.
 
 ## Next obligations
 
-Derive completed native execution correspondence with the full guarded kernel
-and concrete completed memo provenance. Use the extracted evaluation trees
-and retained enclosing cells. Do not repeat trace splitting, evaluation
-extraction, or running-cell retention.
+Completed native source execution now has full guarded kernel correspondence
+and derived semantic memo provenance under the explicit checked word bounds.
+`compileNode_safe` and `compileEdge_safe` derive physical continuation safety.
+`Bounds.correct` derives final strong validity, exact physical/domain growth,
+available results, stable kernel meaning, and `Produced` at new completion
+frames. The node and edge API theorems start from actual native completion.
+Read [native correctness](notes-recursive-intersection-native-correctness.md).
 
-Carry the explicit checked machine-word bounds. Derive intermediate physical
-and domain validity, original input availability, returned record availability,
-and exact physical/domain growth from actual source effects. Combine finite
-child bounds with existing kernel stability and replay. Use the full compiler
-equations to derive the original body execution. Then derive `Produced` at
-the original completion frame and preserve the stronger memo invariant.
-Do not supply `Produced` at every finish, assume callback purity, or replace
-the native body with an uncached callback. `Shape` alone is not that proof.
-The old `finishNode_execution` and `finishEdge_execution` helper premises
-still use uncached body execution.
-
-After completed-run correspondence, derive physical input views, finite
+Derive physical input views, finite
 reachable payload inventories, sufficient first-run bounds, and
 `ProductReadback.members` and `.rejected`. `product_exact` gives product
 language after those obligations. General open nested constructor completion,
 new-body preparation, concrete GHC primitives and scheduling, and verified
 Haskell extraction remain open. The exact Sized and cold-table results remain.
 
-## Validation
+## Validation at this checkpoint
 
 All eight new modules are imported by `MicroCFTA.Audit`. The pinned Lean 4.34.1
 aggregate build passes 1,243 jobs and 41,062 theorem dependency checks.

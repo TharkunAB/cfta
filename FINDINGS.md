@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 05:36 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 06:16 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -119,7 +119,7 @@ outcomes, including Unknown and failures. Validation and external solver
 contracts remain explicit.
 
 General open nested binder construction, native cyclic intersection product
-rows, pending memo execution, and concrete runtime correspondence remain open.
+rows, general pending thunk completion, and concrete runtime correspondence remain open.
 See [cold shared rows](lean/notes-cold-shared-rows.md).
 
 `InternedDepthFreeProjection*` proves full-syntax free-name membership
@@ -169,8 +169,9 @@ available successful results. `execute_stable` retains every non-exhausted
 outcome and its exact returned caches at all larger bounds. Actual ordered
 traces derive literal symbols, conjoined guards, actual child values, and
 canonical surviving parent rows. The bounded recursive kernel remains
-uncached. Native node/edge memo effects, existence of a sufficient bound,
-physical product-row correspondence, and product language remain open. See
+uncached. Completed native node/edge effects are connected below. Existence
+of a sufficient first-run bound, physical product-row correspondence, and
+product language remain open. See
 [recursive caller](lean/notes-recursive-intersection-kernel.md).
 
 ## Completed replay and memo provenance
@@ -207,8 +208,8 @@ families through recursive body execution. Misses publish before bodies run;
 busy hits retain their code and caches. Request steps, continuation composition,
 finite traces, and physical-effect retention are checked. Pending construction
 retains its actual installed key, new heap, and original continuation. Whole
-guarded kernel correspondence and memo provenance at completion frames remain
-open, as do sufficient first-run bounds and product language. See
+guarded kernel correspondence and memo provenance at completion frames are
+now derived below. Sufficient first-run bounds and product language remain open. See
 [native recursive execution](lean/notes-recursive-intersection-native.md).
 
 ## Actual native completion and frame ownership
@@ -224,17 +225,38 @@ Every compiled source body excludes explicit native completion instructions.
 completed source bodies preserve structural memo `Shape` and all enclosing
 running requests. The original node or edge cell remains running until its
 original frame stores the actual returned value. This establishes structural
-frame ownership. It does not prove strong source validity, guarded kernel
-correspondence, `Produced`, or a sufficient first-run bound for every input.
+frame ownership. That structural theorem alone does not prove semantic
+provenance or a sufficient first-run bound for every input.
 See [native completion](lean/notes-recursive-intersection-completion.md).
+
+## Completed native semantic correspondence
+
+Physical continuation safety is now derived for every compiled source branch.
+`SourceRecursiveIntersectionNativeCorrectness.Bounds.correct` derives final
+strong source/memo validity, exact physical/domain growth, returned record
+properties, and stable guarded kernel meaning from actual native evaluations.
+The explicit word-bound certificate adds only checked ranges at memoized
+requests. New `Produced` facts come from actual compiled body execution and
+its original completion frame. No kernel execution, purity, or completion
+provenance is supplied at new finishes.
+
+The public native node and edge theorems start from actual bounded native
+completion. They derive the same value and exact physical/domain caches as
+the guarded kernel, current availability/residency, strong memo invariants,
+and concrete provenance. `cold_node_correct` starts with empty memo tables
+and an actual valid physical input cache. Actual completion and checked word
+bounds remain premises. Available open results can be recursion placeholders.
+General first-run termination, physical input-view equations, new-body
+preparation, and product-row language remain open. See
+[native correctness](lean/notes-recursive-intersection-native-correctness.md).
 
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
 has exposed and repaired real defects. It is not yet an end-to-end proof of
 the Haskell library. The largest remaining obligations concern general
-recursive construction/exposure, semantic native memo correspondence and
-sufficient first-run bounds, native SCC/split import readback and custom decoder order,
+recursive construction/exposure, physical input-view correspondence and
+sufficient first-run native bounds, native SCC/split import readback and custom decoder order,
 general equality propagation, and concrete runtime/dependency contracts.
 No verified Haskell-to-Lean extraction exists. There is no honest single
 completion percentage for these different layers.
@@ -250,16 +272,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`a674a61b`**; later commits record this handoff.
+The latest proof checkpoint is **`e9ade493`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,243 build targets and 41,062 theorem
+The current Lean 4.34.1 audit passes **1,252 build targets and 41,133 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-native-completion-20261014-audit.log`.
+Log: `/tmp/mcfta-native-correctness-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **33% at 05:36 CEST**.
+No background proof worker is active. Weekly allowance was **33% at 06:16 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
