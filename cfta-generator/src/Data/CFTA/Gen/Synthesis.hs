@@ -567,12 +567,29 @@ rawSaturatedSearchSpace saturation lib query size =
         ]
 
 {- | The programs of a size in the saturated search space that solve the
-query, each once, in enumeration order, as 'distinctSolutionsOfSize' gives
-them for 'rawSearchSpace'.
+query, each once, in Hectare's order ('interningOrder'), as
+'distinctSolutionsOfSize' gives them for 'rawSearchSpace'.
 -}
 distinctSaturatedSolutionsOfSize :: Saturation -> Library -> Query -> Int -> [Program]
 distinctSaturatedSolutionsOfSize saturation lib query =
-    nubOrd . map (toProgram . fst) . runs "Mu" . refold . reduceFully . rawSaturatedSearchSpace saturation lib query
+    distinctPrograms . refold . reduceFully . rawSaturatedSearchSpace saturation lib query
+
+-- | The programs of a search space, each once, in Hectare's order.
+distinctPrograms :: Node Symbol -> [Program]
+distinctPrograms = nubOrd . map (toProgram . fst) . runsBy interningOrder "Mu"
+
+{- | Hectare's order of the edges of a search space, as weights for 'runsBy':
+the order of the edges' identities. That is the order in which the build and
+the reduction of the space created the edges, so Hectare's order depends on
+what the process built before, unlike the canonical order of the enumerator.
+Hectare's results depend on this order, and no stable key that we tried gives
+them back: on the Hoogle+ and Stack Overflow suites, with 60 seconds for each
+query, the canonical order solves 51 queries against 53, and lists the
+expected solutions at 1.32 times their rank (the geometric mean of the rank
+plus one).
+-}
+interningOrder :: Edge Symbol -> Double
+interningOrder edge = let EdgeId identity = edgeIdentity edge in negate (fromIntegral identity)
 
 -- | The programs of a term of the search space: the types go.
 toProgram :: Term Symbol -> Program
@@ -581,9 +598,9 @@ toProgram term = case (Term.rootLabel term, Term.subForest term) of
     ("filter", children@(_ : _)) -> toProgram $ last children
     (symbol, _) -> Var (symbolText symbol)
 
--- | The programs of an automaton of the search space, in enumeration order.
+-- | The programs of an automaton of the search space, one for each typed term, in Hectare's order.
 programsIn :: Node Symbol -> [Program]
-programsIn = map toProgram . terms
+programsIn = map toProgram . nubOrd . map fst . runsBy interningOrder "Mu"
 
 -- | The programs of a size that solve the query, with representatives.
 solutionsOfSize :: Library -> Query -> Int -> [Program]
@@ -596,7 +613,7 @@ of the search space and keeps a set of the programs only, which needs much
 less memory.
 -}
 distinctSolutionsOfSize :: Library -> Query -> Int -> [Program]
-distinctSolutionsOfSize lib query = nubOrd . map (toProgram . fst) . runs "Mu" . searchSpace lib query
+distinctSolutionsOfSize lib query = distinctPrograms . searchSpace lib query
 
 -- | The programs up to a size that solve the query, smallest first.
 synthesize :: Library -> Query -> Int -> [Program]

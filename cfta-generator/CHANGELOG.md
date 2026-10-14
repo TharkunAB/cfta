@@ -29,7 +29,12 @@ tree automata of `cfta`, with QuickCheck integration.
   by size; `programsOfSize` and `programsOfSizeUpToDepth` read the program
   space of a size as a generator. `rawSaturatedSearchSpace` builds the space of
   the saturated programs of a size, in which each head is applied to all its
-  parameters, as in Hegel's terms. `parseType` and `parseProgram` read types
+  parameters, as in Hegel's terms. Hectare lists the programs of a space in
+  the order of the edges' identities, through `runsBy`: the order in which
+  the build and the reduction created them. So, unlike the enumerator's
+  canonical order, Hectare's order depends on what the process built before.
+  Its results depend on this order, and no stable key that we tried gives
+  them back. `parseType` and `parseProgram` read types
   and programs in Haskell syntax, and `renderType` and `renderProgram` print
   them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
   suites.

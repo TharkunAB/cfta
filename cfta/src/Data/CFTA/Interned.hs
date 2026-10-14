@@ -32,6 +32,7 @@ module Data.CFTA.Interned (
     edgeConstraint,
     edgeSymbol,
     nodeIdentity,
+    edgeIdentity,
     numNestedMu,
     freeVars,
     module Data.CFTA.Constraint,

@@ -33,6 +33,12 @@ spec = describe "Data.CFTA.Gen.Synthesis" $ do
                 map snd (concat libraries)
                     <> concat [liquidGoal query : map snd (liquidArguments query) | query <- map liquidQuery liquidBenchmarks]
         [typ | typ <- types, parseRType (Text.pack (renderRType typ)) /= Right typ] `shouldBe` []
+    it "lists the programs of a size in the order that the library makes them, not the canonical one" $ do
+        -- The names are new to the process, so the identities of their edges
+        -- follow the order of the library.
+        int <- either fail pure (parseType (Text.pack "Int"))
+        let lib = Library [(Text.pack n, int, [Text.pack n]) | n <- ["order-zeta", "order-alpha"]] [] []
+        solutionsOfSize lib (Query [] int) 1 `shouldBe` [Var (Text.pack "order-zeta"), Var (Text.pack "order-alpha")]
 
 -- | The saturated search space against Hectare's own space.
 saturatedSpec :: Spec

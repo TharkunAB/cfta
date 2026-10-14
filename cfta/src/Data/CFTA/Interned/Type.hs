@@ -23,6 +23,7 @@ module Data.CFTA.Interned.Type (
     IntersectId,
     pattern IntersectId,
     nodeIdentity,
+    edgeIdentity,
     nodeMemoKey,
     numNestedMu,
     substFree,
@@ -364,6 +365,12 @@ nodeIdentity (InternedNode node) = internedNodeId node
 nodeIdentity (InternedUnion alternatives) = internedUnionId alternatives
 nodeIdentity (Rec (RecInt i)) = i
 nodeIdentity _ = error "nodeIdentity: unexpected empty or unresolved node"
+
+{- | The interned identity of an edge. Identities follow the order in which
+the process interns edges, so they depend on what it built before.
+-}
+edgeIdentity :: Edge symbol -> EdgeId
+edgeIdentity = edgeId
 
 {- | The integer that names a node in a memo key, if the node has one.
 
