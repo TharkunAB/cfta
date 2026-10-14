@@ -6,12 +6,13 @@ and `cfta-ghc`. `Data.CFTA.*` and the Lean namespace `MicroCFTA` retain their
 names. The Lake package is `cfta`. See [package rename](notes-package-rename.md)
 for name correspondence and preservation. Root [HANDOFF.md](../HANDOFF.md)
 supersedes the historical checkpoint descriptions below.
-The current audit passes 1,526 jobs and 44,192 theorem dependency checks.
-The [cold native Sized proof](notes-cold-native-sized.md) derives finite actual
-cold traversal, compiler-result equality, exact distinct classes, size order,
-and both term-rank inverses. Normalized constraints and reached-query native
-word checks remain explicit. The [full native scan proof](notes-native-full-scan.md)
-provides complete warm callbacks and exact ordered ambiguity scans.
+The current audit passes 1,532 jobs and 44,248 theorem dependency checks.
+The [normalized native Sized proof](notes-normalized-native-sized.md) derives
+normalized cold rows from original annotations and proves complete optimized
+query-record equality, finite preparation, exact distinct classes, size order,
+and both term-rank inverses. Reached native word checks and the raw input
+normalization boundary remain explicit. The [cold compiler proof](notes-cold-native-sized.md)
+derives actual compiler-result equality and all final row/cache metadata.
 
 [The system specification and current findings](SYSTEM.md) describe the
 language, distinct-term index, distribution, and optimization contracts.

@@ -1,5 +1,11 @@
 # Actual cold native compilation and exact Sized queries
 
+The later [normalized source proof](notes-normalized-native-sized.md) derives
+row normalization from checked original annotations through actual construction
+and cold traversal. It also proves complete query-record equality and one
+finite minimum prepass for every size. It supersedes the normalization target
+below. Raw pattern-built equality values retain an explicit input boundary.
+
 Updated: 2026-10-14 22:09 CEST.
 Proofs: `634a3c40` and `0215ed02`.
 Source base: `7bfb69d1` (PR #129). All changes remain local.

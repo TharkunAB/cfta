@@ -1,55 +1,62 @@
 # Full formalization coverage
 
-## Actual cold native compiler and exact Sized sequence
+## Normalized cold native Sized queries and complete API equality
 
-The latest proof checkpoints are `634a3c40` and `0215ed02`.
+The latest proof checkpoint is `064cd013`, after `634a3c40` and `0215ed02`.
 The source base remains `origin/microcfta` at `7bfb69d1` (PR #129).
-Read `lean/notes-cold-native-sized.md`. This section supersedes earlier
-statements that literal native compiler composition is the next target.
+Read `lean/notes-normalized-native-sized.md` and `lean/notes-cold-native-sized.md`.
+This section supersedes earlier normalization and compiler next-target statements.
 
-`SourceFreshOrdinaryColdCyclic.input` derives the cyclic input from actual
-finite cold rows. The actual constraint check derives structural row equality
-and the literal reference ambiguity Boolean. `SourceFreshOrdinaryNativeCompiler`
-proves finite execution and literal compiler-result equality for empty, open,
-constrained, ambiguous, and accepted branches in source order. Actual native
-calls pass their exact cache through the scan. Accepted results have finite
-exact classes, counts, decoder order, reference-class equality, bounded query
-inverses, size-major prefixes, rank coverage, and both global term inverses.
+`InternedFreshOrdinaryConstraintHeap` proves that actual repaired construction
+retains checked original constraint annotations. The proof covers all probe
+calls, pending outcomes, cache hits, and reserved bodies. Stored encoding,
+actual substitution, unfolding, cold exposure, and shared traversal retain
+the same edge-cache invariant. Resident records derive it at every raw row.
+`SourceFreshOrdinaryNormalizedNativeSized.complete` starts from actual closed
+construction and checked original annotations. It derives Ready, root scope,
+finite table metadata, raw child-key closure, and normalized final rows.
+No final rowwise normalization certificate is supplied. The actual compiler
+then has finite execution and literal reference-result equality, subject to
+reached-query word checks. Every successful output has exact finite distinct
+node-count classes, counts, decoder order, optimized/reference class equality,
+size-major prefixes, rank coverage, and both global term-rank inverse laws.
+Bounded query and position/replay inverses also hold for the same execution.
+No whole scan equality, product law, or native completion is supplied.
 
-`MergedFreshOrdinaryExposureLive` derives empty-child exclusion through actual
-ordinary, union, and Mu exposure. `SourceFreshOrdinaryColdClosed.table_closed`
-derives raw child-key closure from row replay, resident closed payloads, and
-completed child declarations. No `NoEmptyBelow` premise is supplied.
-`SourceFreshOrdinaryColdNativeTable` derives ready native caches and all final
-row metadata from actual finite cold traversal. Closed construction supplies
-the initial Ready state, available root, and closedness.
-`SourceFreshOrdinaryColdNativeSized.complete` composes these results. It derives
-the complete exact finite Sized sequence without supplied final-cache metadata,
-raw closure, whole scan equality, product language, or native completion.
+`SourceFreshOrdinaryNativeCompiler.api_record` proves literal equality of
+all four optimized and reference query fields, including signed inputs.
+`finite_prepass` derives one finite stable minimum-size table and finite
+count/decoder evaluation for every size. The earlier actual cold composition
+and derived empty-child exclusion remain complete. Do not repeat them.
 
-Next derive normalized equality-class invariants from the actual public
-constraint constructors and preserve them through cold exposure. The current
-entry retains rowwise `ActiveOption`; arbitrary raw model constraints do not
-establish it. Local `normalize_active` and `combine_active` are already proved.
-Retain the reached-query `Ranges` word contract. Derive it from actual source
-cache/key bounds where possible. Do not use arbitrary future heaps or supplied
-callback completion. Concrete containers, lazy scheduling, external solver
-correctness, and verified Haskell extraction retain their stated boundaries.
-The model keeps interpreted guards after the check; Haskell erases them to unit.
-Checked structural equality proves semantic correspondence at this boundary.
+Input annotations use `ActiveOption constraint.equalities`. Actual array
+normalization and combination establish this invariant. The public raw
+`EqConstraints` pattern does not normalize its input. Arbitrary pattern-built
+values therefore do not establish the invariant. No runtime defect is claimed.
+The current source entry explicitly checks original annotations.
 
-The current audit passes 1,526 jobs and 44,192 theorem dependency checks.
+Next derive reached native word checks from actual source cache/key bounds
+where possible. Read `SourceRecursiveIntersectionNativeWordRanges`,
+`SourceRecursiveIntersectionMemo.KeySafe`, `SourceRecursiveIntersectionEdgeMemo.KeySafe`,
+and `IntersectionFlatMemoKey.Safe`. Keep a finite-capacity premise when needed.
+Arbitrary natural caches cannot fit a fixed native width. Do not replace actual
+prefix checks with completion assumptions or bounds on arbitrary future heaps.
+Concrete containers, lazy scheduling, verified Haskell extraction, and external
+solver correctness retain their stated boundaries. Checked structural equality
+justifies source guard erasure to unit; it is not literal Haskell extraction.
+
+The current audit passes 1,532 jobs and 44,248 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-cold-native-sized-20261014-audit.log`.
-The old unused `inputs` warning remains. No new warning was introduced.
+Log: `/tmp/mcfta-normalized-native-sized-20261014-audit.log`.
+No new warning was introduced. The old unused `inputs` warning remains.
 No production Haskell code changed. The same base already passed 645 source
-examples, five updated probes, and formatter checks. These Lean-only changes
-did not require another Haskell run. The current preservation snapshot is
-`/tmp/mcfta-cold-native-sized-checkpoint-20261014-2210/`. It saves all 1,901
-Lean-tree files. None of the 1,894 previous files is missing. The only change
-to an older proof module adds `root_physical`; all its prior proof text remains.
-All other older proof modules, fixtures, and marked drafts retain their bytes. All work remains local. Check weekly
-allowance before work and stop all work at 1% remaining or less.
+examples, five updated probes, and formatter checks. They were not repeated.
+Current snapshot: `/tmp/mcfta-normalized-native-sized-checkpoint-20261014-2222/`.
+It saves all 1,908 Lean-tree files. None of the 1,901 prior files is missing.
+All prior proof modules except audit imports retain their exact bytes.
+All fixtures and marked drafts retain their bytes. Preserve every backup,
+stash, worktree, and source repair. No background worker is active.
+All work remains local. Check allowance and stop all work at 1% or less.
 
 ## Complete warm callbacks and actual ordered ambiguity scans
 
