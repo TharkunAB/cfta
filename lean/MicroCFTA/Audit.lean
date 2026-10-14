@@ -1398,6 +1398,13 @@ import MicroCFTA.InternedFreshOrdinaryPureProbeGate
 import MicroCFTA.InternedFreshOrdinaryProbeOpacity
 import MicroCFTA.InternedFreshOrdinaryGuardedUnfold
 import MicroCFTA.InternedFreshOrdinaryCostReplay
+import MicroCFTA.InternedOccurrenceCostSemantics
+import MicroCFTA.InternedFreshOrdinaryCostHeap
+import MicroCFTA.InternedFreshOrdinaryCostExecutionFacts
+import MicroCFTA.InternedFreshOrdinaryCostComposition
+import MicroCFTA.InternedFreshOrdinaryCostRequest
+import MicroCFTA.InternedFreshOrdinaryCosts
+import MicroCFTA.InternedFreshOrdinaryStoredCosts
 /-!
 # Proof dependency audit
 
