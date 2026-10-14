@@ -82,10 +82,10 @@ data HybridOptions = HybridOptions
     deriving (Show)
 
 {- | The precise checker, programs of at most 20 components and arguments,
-and Hegel with 'defaultOptions' after 5 seconds.
+and Hegel with 'defaultOptions' after 30 seconds.
 -}
 defaultHybridOptions :: HybridOptions
-defaultHybridOptions = HybridOptions True 20 (Just (5, defaultOptions))
+defaultHybridOptions = HybridOptions True 20 (Just (30, defaultOptions))
 
 -- | What a hybrid search did.
 data HybridStatistics = HybridStatistics

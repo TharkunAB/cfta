@@ -1751,7 +1751,7 @@ stops within a size.
 import Data.CFTA.Gen.Synthesis.Hybrid
 
 -- The precise checker, programs of at most 20 components and arguments, and
--- Hegel after 5 seconds without a program.
+-- Hegel after 30 seconds without a program.
 solve :: Entailment -> [Component] -> LiquidQuery -> IO (Maybe Program)
 solve solver components query =
     hybridSolution <$> synthesizeHybrid solver defaultHybridOptions components query
@@ -1764,12 +1764,14 @@ abstracts each subprogram to the qualifiers, as Hegel does. Both are in
 and it does not find a program that leaves out an argument of the query.
 
 The hybrid has a fallback, `hybridFallback`, on by default: a time budget
-of 5 seconds. When the hybrid has no program at the end of the budget, or
+of 30 seconds. When the hybrid has no program at the end of the budget, or
 after its largest size, Hegel's `synthesize` runs on the query, and
-`hybridFallbackOutcome` gives Hegel's result. On the 36 queries below, the
-hybrid with the fallback solves all 36 (32 by the hybrid, 4 by Hegel after
-the budget), in 0.058 times Hegel's time (geometric mean). Each query that
-falls back costs the budget more than Hegel alone. The numbers below are for
+`hybridFallbackOutcome` gives Hegel's result. On the 36 queries below, with
+a limit of 240 seconds, the hybrid with the fallback solves all 36 (35 by
+the hybrid, and SplitAt3 by Hegel after the budget), in 0.056 times Hegel's
+time (geometric mean). Each query that falls back costs the budget more
+than Hegel alone: SplitAt3 takes 193 seconds, and Hegel alone 160, so it
+needs more than the limit of 180 seconds below. The numbers below are for
 the hybrid alone (`hybrid-only` in the benchmark).
 
 On the 36 queries of the `hegel` benchmark without conditionals (one run of

@@ -46,7 +46,7 @@ tree automata of `microcfta`, with QuickCheck integration.
   check one program with Hegel's inference: the precise checker keeps each
   subprogram's refinement, and `checker` abstracts it to the qualifiers. With `hybridFallback`, on by
   default, Hegel's `synthesize` runs when the hybrid has no program within a
-  time budget of 5 seconds. The `hybrid` benchmark runs Hegel and the hybrid
+  time budget of 30 seconds. The `hybrid` benchmark runs Hegel and the hybrid
   on Hegel's queries and on a large library of the Hoogle+ components and
   refined list components.
 - Sizes count pays, as in FEAT: `pure` has size zero, an atom one, `<*>` adds

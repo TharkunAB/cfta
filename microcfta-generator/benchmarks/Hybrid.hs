@@ -11,10 +11,10 @@ Hegel's queries. Its queries are three Hoogle+ queries with a refined goal,
 and Nth_Incr1 and RevApp1.
 
 The parent runs each query in a child process with a heap limit and a time
-limit, first with Hegel and then with the hybrid. The hybrid has 5 seconds,
+limit, first with Hegel and then with the hybrid. The hybrid has 30 seconds,
 and then Hegel runs on the query; @hybrid-only@ has no fallback. Each row of
 the CSV gives the library, the query, the tool, the outcome (@solved@,
-@fallback@ when Hegel solved it after the hybrid's 5 seconds, @unsolved@,
+@fallback@ when Hegel solved it after the hybrid's 30 seconds, @unsolved@,
 @timeout@, or @crash@), the applications of the solution, the seconds, the
 entailment queries, the undecided queries, and the solution.
 
@@ -150,7 +150,7 @@ type Row = (String, String, Int, Int, String)
 @abstracting@ tools.
 -}
 fallbackSeconds :: Int
-fallbackSeconds = 5
+fallbackSeconds = 30
 
 -- | Hegel on a query, with the reduction steps of the paper and a bound on the size.
 hegelRow :: Entailment -> Options -> [Component] -> LiquidQuery -> IO Row
