@@ -1,5 +1,9 @@
 # Complete native callbacks and actual ordered ambiguity scans
 
+The later [cold native Sized proof](notes-cold-native-sized.md) completes
+literal compiler composition and derives raw child-key closure and final cache
+metadata. It supersedes compiler next-target statements in this checkpoint.
+
 Updated: 2026-10-14 21:48 CEST.
 Proofs: `3dd34cb7`, `5de26f4b`, and `53ba5057`.
 Source base: `7bfb69d1` (PR #129). All work remains local.

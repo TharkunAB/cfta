@@ -1,5 +1,9 @@
 # Exact native product language, Sized classes, and minima
 
+The later [cold native Sized proof](notes-cold-native-sized.md) completes
+literal compiler composition and derives raw child-key closure and final cache
+metadata. It supersedes compiler next-target statements in this checkpoint.
+
 See [complete native scans](notes-native-full-scan.md) for the later warm
 completion, exact early return, and full ordered ambiguity scan. Literal
 compiler composition is next. Older next-target statements below are historical.

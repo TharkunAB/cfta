@@ -1,5 +1,9 @@
 # Actual native callbacks on finite source keys
 
+The later [cold native Sized proof](notes-cold-native-sized.md) completes
+literal compiler composition and derives raw child-key closure and final cache
+metadata. It supersedes compiler next-target statements in this checkpoint.
+
 The later [full native scan proof](notes-native-full-scan.md) supersedes
 warm-completion and ordered-scan next-target statements in this checkpoint.
 Warm calls now derive completion from Idle. The actual callback execution
