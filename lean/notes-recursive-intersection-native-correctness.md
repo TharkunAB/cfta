@@ -85,8 +85,10 @@ machine-word bounds; do not turn resource premises into an overflow claim.
 The physical input view, cached free-variable/closedness equations, finite
 reachable input carrier, and actual structural ranks are now proved in
 [physical input view](notes-recursive-intersection-input-view.md). Use those
-results. Derive canonical representative readback and independent copied
-language equivalence. `copy_closed` does not prove `FiniteInput.copy_exact`.
+results. Canonical representative readback, both independent copied-language
+directions, the complete finite input interface, and sufficient semantic
+schedule bounds are now proved in
+[exact original inputs](notes-recursive-intersection-input-exact.md).
 Connect the
 actual source requests to the semantic schedule and obtain sufficient bounds.
 Preserve exact constructor/domain effects and native memo publication.

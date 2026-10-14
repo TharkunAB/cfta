@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 06:51 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 07:00 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -256,7 +256,7 @@ agreement with the semantic schedule. Original syntax has an explicit
 complete-reference premise. General source construction has not yet been
 proved to supply it for every result. Copied syntax has exact free-name
 membership, and closed inputs have closed copies. Independent copied-language
-equivalence remains open.
+equivalence is now proved in both directions below.
 
 Actual payload sizes derive strict body/row/member ranks and local schedule
 decreases. A finite tagged carrier comes from the actual issued counter.
@@ -267,13 +267,28 @@ supplied. The carrier does not declare incompatible tags valid at one
 identity. These proofs do not yet derive a sufficient first-run native bound.
 See [physical input view](lean/notes-recursive-intersection-input-view.md).
 
+Canonical representative readback and both independent copied-language
+directions now derive the entire `FiniteInput` interface. Completeness uses
+finite derivation-rank induction at least binders. No copy-language contract
+is supplied. The semantic schedule has one sufficient finite bound and an
+exact product language for actual closed original physical inputs.
+`source_schedule_total` states this product using the actual original copied
+least-language meanings. Original complete-reference syntax and availability
+remain explicit input premises. Actual source-cache growth retains all old
+input-view fields on that valid domain.
+
+These results do not yet give sufficient native memo-driver bounds or exact
+physical returned product rows. New binder construction and preparation
+remain separate obligations. See
+[exact original inputs](lean/notes-recursive-intersection-input-exact.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
 has exposed and repaired real defects. It is not yet an end-to-end proof of
 the Haskell library. The largest remaining obligations concern general
-recursive construction/exposure, copied-language correspondence and
-sufficient first-run native bounds, native SCC/split import readback and custom decoder order,
+recursive construction/exposure, sufficient first-run native bounds and
+physical product-row correspondence, native SCC/split import readback and custom decoder order,
 general equality propagation, and concrete runtime/dependency contracts.
 No verified Haskell-to-Lean extraction exists. There is no honest single
 completion percentage for these different layers.
@@ -289,16 +304,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`6d64cb4a`**; later commits record this handoff.
+The latest proof checkpoint is **`7387845d`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,257 build targets and 41,315 theorem
+The current Lean 4.34.1 audit passes **1,263 build targets and 41,364 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-input-view-20261014-audit.log`.
+Log: `/tmp/mcfta-input-exact-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **33% at 06:51 CEST**.
+No background proof worker is active. Weekly allowance was **33% at 07:00 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

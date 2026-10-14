@@ -74,16 +74,16 @@ not assume an intersection result, a completed native trace, or memo provenance.
 
 ## Next obligations
 
-Connect the actual canonical representative at each reachable identity to the
-physical map. Establish the independent copied-language equation with
-`InputDerivation`. `copy_closed` alone does not prove that equation.
-The existing `FiniteInput` record includes this semantic premise even when
-the termination argument uses only its structural fields. Do not discharge
-that premise with an empty copy or a supplied equivalent language contract.
+Canonical representative readback, both independent copied-language
+directions, the complete `FiniteInput` interface, and sufficient semantic
+schedule bounds are now proved in
+[exact original inputs](notes-recursive-intersection-input-exact.md).
+That proof uses least binders and finite derivation ranks. It does not fill
+`FiniteInput.copy_exact` with an empty copy or a supplied language contract.
 
 Use the concrete view, actual finite carrier, derived free equations, and
-physical ranks to connect actual source requests to the semantic schedule.
-Derive sufficient first-run native bounds. Retain original constructor and
+physical ranks to connect actual native source requests to the proved finite
+semantic schedule. Derive sufficient first-run native bounds. Retain original constructor and
 domain effects, pending publication, busy observations, and explicit checked
 word ranges. Completed native correspondence remains conditional on actual
 completion. General open nested constructor completion and preparation of

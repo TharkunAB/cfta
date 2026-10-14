@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 06:51 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 07:00 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -27,10 +27,12 @@ word bounds. General first-run termination and product language remain open.
 The original physical input view now has derived cached free-name equations,
 closedness, branch selection, and copied closedness. Actual payload sizes
 supply structural ranks. Closed-root reference traversal stays in a finite
-carrier bounded by the actual issued counter. Independent copied-language
-equivalence and sufficient first-run bounds remain open.
+carrier bounded by the actual issued counter. Canonical representatives and
+both copied-language directions now derive the complete finite input interface.
+The semantic schedule has a sufficient finite bound and exact product language
+for actual closed original inputs. Sufficient native first-run bounds remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`6d64cb4a`**. A later documentation commit
+The latest proof checkpoint is **`7387845d`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -55,7 +57,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **33% at 06:51 CEST**. This is a historical value.
+The last observed value was **33% at 07:00 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -421,7 +423,7 @@ been proved to supply `Original` for every result.
 
 `SourceRecursiveIntersectionInputCopy.copy_free_all` proves exact copied free
 membership over the total view. `copy_closed` derives closed copies.
-This does not prove `FiniteInput.copy_exact` language equivalence.
+Independent `FiniteInput.copy_exact` language equivalence is now proved below.
 
 `SourceRecursiveIntersectionInputRanks` derives actual physical payload ranks,
 strict body/row/member decreases, and every local schedule decrease. No
@@ -434,18 +436,46 @@ and `closed_pair_inventory` give finite input pairs and physical rank bounds.
 No intersection result or completed native trace is supplied.
 Read [physical input view](lean/notes-recursive-intersection-input-view.md).
 
+## Exact original input languages and semantic termination
+
+`SourceRecursiveIntersectionInputIdentity` derives actual canonical payload
+representatives throughout the reachable domain of two closed original roots.
+Recursive references select their actual Mu record. Unused tagged carrier
+entries remain outside the valid domain.
+
+`Original.copy_sound` and `Original.copy_complete` prove both independent
+copied-language directions. Completeness uses syntax induction and finite
+derivation-rank induction at least recursive binders. `copy_exact_original`
+derives the closed language equation for every environment. No copy-language
+contract is supplied. `Original` and actual availability remain explicit
+input premises.
+
+`SourceRecursiveIntersectionInputExact.finiteInput` derives all structural and
+semantic fields of `FiniteInput`. `inputBounds` derives actual finite input
+pairs, physical payload ranks, and closed-root bounds. `schedule_total` gives
+finite stable semantic execution and exact common input language.
+`source_schedule_total` starts with actual closed original physical records
+and states exact product language of their copied least-language meanings.
+These theorems do not give a native driver bound or physical product rows.
+
+`SourceRecursiveIntersectionInputGrowth` derives exact original payload,
+body, row, member, free-name, and copied-syntax retention through actual
+record and reservation growth. New allocations can change unused defaults.
+Read [exact original inputs](lean/notes-recursive-intersection-input-exact.md).
+
 ## Remaining priorities
 
 1. Use the proved physical input view, cached free-variable/closedness equations,
-   finite reachable input carrier, and physical structural ranks. Derive actual
-   canonical representatives, independent copied-language equivalence, and
-   sufficient first-run native bounds for the intended valid input scope.
-   `copy_closed` does not prove `FiniteInput.copy_exact`. Do not fill that field
-   with an empty copy or a supplied equivalent language contract. Completed native node/edge
+   finite reachable input carrier, physical structural ranks, actual canonical
+   representatives, and proved independent copied-language equivalence. The
+   complete finite input interface and sufficient semantic schedule bounds
+   are now derived. Connect actual native request execution to that schedule
+   and derive sufficient first-run native bounds for the intended input scope.
+   Preserve actual constructor/domain effects and source growth. Completed native node/edge
    correspondence, strong memo validity, exact physical/domain growth,
    available results, stable kernel bounds, and new `Produced` are proved
    under explicit checked word ranges. Do not repeat those proofs. Use
-   `lean/notes-recursive-intersection-input-view.md` for the exact
+   `lean/notes-recursive-intersection-input-exact.md` for the exact
    next target. Actual completion remains a premise of the new theorems.
    Do not replace termination with a supplied completed trace. General open
    nested constructor completion and new-body preparation remain open.
@@ -515,10 +545,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,257 jobs and 41,315 theorem dependency checks**.
+The current build passes **1,263 jobs and 41,364 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-input-view-20261014-audit.log`.
+Log: `/tmp/mcfta-input-exact-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -552,6 +582,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `7387845d` | Canonical input identities, both independent copied-language directions, full finite input interface, semantic schedule totality, and original view retention through growth. |
 | `6d64cb4a` | Actual tagged input view, derived free/closed equations, copied closedness, physical ranks, and finite closed-root input pairs. |
 | `e9ade493` | Full completed native node/edge kernel correspondence, strong returned memo invariants, and derived concrete provenance. |
 | `4eea8784` | Finite stable kernel meaning composition and explicit word bounds on actual native evaluations. |

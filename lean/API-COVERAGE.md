@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 06:51 CEST**, upstream `f59c198d`.
-The latest proof commit is `6d64cb4a`. No background proof worker is active.
+Current checkpoint: **2026-10-14 07:00 CEST**, upstream `f59c198d`.
+The latest proof commit is `7387845d`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -118,8 +118,13 @@ branch agreement, and copied closedness. Actual payload ranks supply strict
 structural decreases. Closed-root reference traversal retains original
 available records inside a finite carrier bounded by the issued counter.
 The carrier gives finite input pairs. `Original` remains an explicit input
-premise. Independent copied-language equivalence, sufficient first-run native
-bounds, and product correspondence remain open. See
+premise. Actual canonical representatives and both independent copied-language
+directions now derive the complete finite input interface. The semantic
+schedule terminates with exact product language for actual closed original
+records. Original input-view fields remain exact through source growth.
+Sufficient native first-run bounds and physical product correspondence remain
+open. See
+[exact original inputs](notes-recursive-intersection-input-exact.md),
 [physical input view](notes-recursive-intersection-input-view.md),
 [recursive memo](notes-recursive-intersection-memo.md),
 [native memo thunks](notes-recursive-intersection-thunks.md),
@@ -141,7 +146,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,257 targets and 41,315 theorem dependency checks**
+The current audit passes **1,263 targets and 41,364 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new
