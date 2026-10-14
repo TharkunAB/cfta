@@ -50,6 +50,21 @@ theorem physical_record (state : State Symbol Guard) (semantic : SemanticHeap st
         have equal := Option.some.inj (same.symm.trans otherRef)
         simpa only [← equal] using Exists.intro edges present
 
+/-- Later constructor effects retain the identical canonical physical operand at every declared key. -/
+theorem physical_grows (before after : State Symbol Guard) (semantic : SemanticHeap before)
+    (afterSemantic : SemanticHeap after) (rows : Rows Symbol Guard) (resident : ResidentRows before rows)
+    (growth : Grows before after) (history : Extends before.nodes.issued after.nodes.issued)
+    (key : SourceInternedRows.State) (declared : Declared rows key) : physical after key = physical before key := by
+  cases key with
+  | empty => rfl
+  | interned identity =>
+      obtain ⟨edges, present⟩ := declared
+      obtain ⟨value, available, same, _, _, _⟩ := resident identity edges present
+      have first := SourcePreparedSharedRows.read_identity before semantic.1.normal.facts value available identity same
+      have second := SourcePreparedSharedRows.read_identity after afterSemantic.1.normal.facts value
+        (available.grows before after growth history) identity same
+      simp only [physical, first, second]
+
 /-- The actual raw-table key inventory contains only declared physical operands. -/
 theorem table_declared (rows : Rows Symbol Guard) (keys : List Nat)
     (domain : ∀ identity, (∃ edges, rows identity = some edges) ↔ identity ∈ keys)
