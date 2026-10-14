@@ -82,6 +82,7 @@ module Data.CFTA.Gen.Synthesis.Liquid (
     Checker (..),
     checker,
     preciseChecker,
+    componentRoles,
 ) where
 
 import Control.Applicative ((<|>))
@@ -632,6 +633,13 @@ with the program.
 -}
 preciseChecker :: Entailment -> [Component] -> LiquidQuery -> IO Checker
 preciseChecker = checkerWith False
+
+{- | The roles of the components in the terms of 'synthesize': the number of
+parameters of each component, zero for a constant, and whether it can be an
+argument without arguments of its own ('valued').
+-}
+componentRoles :: [Component] -> LiquidQuery -> [(Text, Int, Bool)]
+componentRoles components query = [(name, length (parametersOf typ), valued components query typ) | (name, typ) <- components]
 
 -- | The checker of a query, with or without the abstraction of subprograms to the qualifiers.
 checkerWith :: Bool -> Entailment -> [Component] -> LiquidQuery -> IO Checker

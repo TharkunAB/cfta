@@ -40,11 +40,11 @@ tree automata of `microcfta`, with QuickCheck integration.
   queries and its ablations.
 - `Data.CFTA.Gen.Synthesis.Hybrid`: Hectare's program spaces with Hegel's
   checks. `synthesizeHybrid` lists the programs of the base types of a
-  refinement-typed query size by size, in Hectare's order, and stops at the
-  first one that passes `checker` or `preciseChecker` of
-  `Data.CFTA.Gen.Synthesis.Liquid`. These check one program with Hegel's
-  inference: the precise checker keeps each subprogram's refinement, and
-  `checker` abstracts it to the qualifiers. With `hybridFallback`, on by
+  refinement-typed query size by size, in Hectare's order, in the saturated
+  space, which has only Hegel's terms. It stops at the first one that passes
+  `checker` or `preciseChecker` of `Data.CFTA.Gen.Synthesis.Liquid`. These
+  check one program with Hegel's inference: the precise checker keeps each
+  subprogram's refinement, and `checker` abstracts it to the qualifiers. With `hybridFallback`, on by
   default, Hegel's `synthesize` runs when the hybrid has no program within a
   time budget of 5 seconds. The `hybrid` benchmark runs Hegel and the hybrid
   on Hegel's queries and on a large library of the Hoogle+ components and
