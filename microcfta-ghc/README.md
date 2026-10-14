@@ -18,6 +18,28 @@ depends on `ghc`.
 | `Data.CFTA.GHC.Erase` | GHC types as Hectare's first-order types, with the class contexts erased. |
 | `Data.CFTA.GHC.Internal.Check` | One step of a program walk in `TcM` on the machinery of GHC's hole fits, and freeze and restore of unification variables; exposed for integration, not covered by the PVP contract. |
 
+## The synthesizer
+
+`ghc-fits` lists the programs of a type signature over the exports of some
+modules, each checked in GHC's typechecker, best first:
+
+```sh
+$ cabal run ghc-fits -- -m Prelude -m Data.Maybe '[Maybe a] -> a -> a'
+\x1 x2 -> foldl fromMaybe x2 x1
+\x1 x2 -> foldl' fromMaybe x2 x1
+\x1 x2 -> foldl const x2 x1
+\x1 x2 -> foldl' const x2 x1
+\x1 x2 -> foldr seq x2 x1
+```
+
+The signature can have a class context (`Eq a => a -> [(a, b)] -> Maybe b`),
+which gives the givens of the search. Each argument of the signature is a
+variable that a program uses once. `-m MODULE=Q` imports a module qualified,
+and `-p PACKAGE` exposes a package. `--size`, `--fits`, and `--seconds`
+bound the search (by default five leaves, ten fits, ten seconds). The
+figures of the search go to the standard error. The Hoogle+ ladder of
+`hectare-ghc` is its benchmark.
+
 ## The hole-fit plugin
 
 `Data.CFTA.GHC.HoleFits` is a GHC plugin. For each typed hole, it adds fits

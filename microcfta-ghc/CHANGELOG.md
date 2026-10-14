@@ -33,6 +33,8 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `StateKey`, the state of a walker up to the names of its unification
   variables. The walk keeps the verdict of each step by state and leaf, and
   skips the steps and the solver calls whose verdict it knows.
+- The `ghc-fits` executable: the programs of a type signature over the
+  exports of some modules, checked in GHC's typechecker.
 - The `hole-fits-golden` test: GHC's messages for a module with holes,
   compiled with the plugin.
 - The `hectare-ghc` benchmark: the 45 Hoogle+ queries on a library ladder

@@ -14,6 +14,7 @@ module Data.CFTA.GHC.Session (
     -- * Sessions
     Session,
     withSession,
+    withSessionPackages,
 
     -- * Candidates
     Import (..),
@@ -84,12 +85,20 @@ action with it. The library directory comes from the variable @GHC_LIBDIR@,
 or else from @ghc --print-libdir@.
 -}
 withSession :: [String] -> (Session -> IO a) -> IO a
-withSession imports action = do
+withSession = withSessionPackages []
+
+-- | 'withSession' with the given packages exposed too, besides @containers@.
+withSessionPackages :: [String] -> [String] -> (Session -> IO a) -> IO a
+withSessionPackages packages imports action = do
     libdir <- maybe (takeWhile (/= '\n') <$> readProcess "ghc" ["--print-libdir"] "") pure =<< lookupEnv "GHC_LIBDIR"
     runGhc (Just libdir) $ do
         flags <- getSessionDynFlags
         logger <- hsc_logger <$> getSession
-        (parsed, _, _) <- parseDynamicFlags logger flags (map noLoc ["-w", "-package", "containers"])
+        (parsed, _, _) <-
+            parseDynamicFlags
+                logger
+                flags
+                (map noLoc ("-w" : concatMap (\package -> ["-package", package]) ("containers" : packages)))
         _ <- setSessionDynFlags parsed
         declarations <- traverse parseImportDecl imports
         setContext (map IIDecl declarations)
