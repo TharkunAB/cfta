@@ -36,6 +36,15 @@ tree automata of `microcfta`, with QuickCheck integration.
   types and queries in the syntax of LiquidHaskell, and `renderRType` prints
   them. The `hegel` benchmark runs recreated versions of the paper's RQ1
   queries and its ablations.
+- `Data.CFTA.Gen.Synthesis.Hybrid`: Hectare's program spaces with Hegel's
+  checks. `synthesizeHybrid` lists the programs of the base types of a
+  refinement-typed query size by size, in Hectare's order, and stops at the
+  first one that passes `checker` or `preciseChecker` of
+  `Data.CFTA.Gen.Synthesis.Liquid`. These check one program with Hegel's
+  inference: the precise checker keeps each subprogram's refinement, and
+  `checker` abstracts it to the qualifiers. The `hybrid` benchmark runs Hegel
+  and the hybrid on Hegel's queries and on a large library of the Hoogle+
+  components and refined list components.
 - Sizes count pays, as in FEAT: `pure` has size zero, an atom one, `<*>` adds
   the sizes of its sides, and `pay`, which `Data.CFTA.Gen` and
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree

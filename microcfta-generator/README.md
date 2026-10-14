@@ -1586,7 +1586,7 @@ cabal run cfta-automaton-interop
 ## Component synthesis
 
 Two modules use the automata and the generators to synthesize programs from
-a library of components, after two papers.
+a library of components, after two papers. A third module combines them.
 
 ### Hectare: type-directed synthesis on equality automata
 
@@ -1732,6 +1732,67 @@ comparison.
 
 ```
 cabal bench hegel --benchmark-options='Hegel 180 8G'
+```
+
+### Hectare and Hegel together
+
+`Data.CFTA.Gen.Synthesis.Hybrid` gives Hectare the base types of a Hegel
+query and its components. It lists the programs of the goal's base type size
+by size, in Hectare's order, expands each group representative to the
+members of its group, and checks each program with Hegel's inference. The
+first program that passes is the solution. The solver sees only the
+subprograms of goal-typed programs, and the search stops within a size.
+
+```haskell
+import Data.CFTA.Gen.Synthesis.Hybrid
+
+-- The precise checker, and programs of at most 20 components and arguments.
+solve :: Entailment -> [Component] -> LiquidQuery -> IO (Maybe Program)
+solve solver components query =
+    hybridSolution <$> synthesizeHybrid solver defaultHybridOptions components query
+```
+
+`preciseChecker`, the default, keeps the precise refinement of each
+subprogram and asks the solver only about guards and the goal. `checker`
+abstracts each subprogram to the qualifiers, as Hegel does. Both are in
+`Data.CFTA.Gen.Synthesis.Liquid`. The hybrid does not make conditionals,
+and it does not find a program that leaves out an argument of the query.
+
+On the 36 queries of the `hegel` benchmark without conditionals (one run of
+each on the development machine, 180 seconds, 100 milliseconds for each
+solver query), Hegel solves 36 and the hybrid 31. On the 31 that both solve,
+the hybrid takes 0.13 times Hegel's time (geometric mean) and is faster on
+21, and it asks 7,569 solver queries where Hegel asks 525,402. Its solution
+is Hegel's in 27 of them. In the other 4 it is a different program with as
+many applications that also passes the goal, such as
+`rev (map incr (map f l))` for Map3. Most of Hegel's solver time goes to
+the abstraction of every application that it builds; the hybrid checks
+only the subprograms of programs of the goal type. The hybrid is slower
+where Hectare's own search is slow. Queries that need many components and
+arguments take long: Nth1 and SplitStr3 take 20 and 25 seconds, and Nth2,
+Nth3, and ApplyNInv3 reach the limit. SplitAt1 and SplitAt3 reach the limit
+too: their goal type has millions of programs of size 8 in the library of
+20 polymorphic list components.
+
+The `large` suite has a large polymorphic library: the Hoogle+ components
+of the `hectare` benchmark (without `($)`) and the 20 refined list and pair
+components of Hegel's queries, 303 components. Three Hoogle+ queries get a
+refined goal, and Nth_Incr1 and RevApp1 come from Hegel's queries. Hegel
+builds about 30,000 states at size 1 alone and asks over 20,000 solver
+queries; it solves one of the five within 180 seconds. The hybrid solves all
+five:
+
+| Query | Refined goal | Hegel | Hybrid | Solution |
+|---|---|---:|---:|---|
+| singletonList | `{v:[a] \| len v = 1 && hd v = x}` | 168.6 s | 0.04 s | `cons x nil` |
+| appendN | `{v:[a] \| len v = n + len xs && lst v = lst xs}` | timeout | 0.68 s | `append (take n xs) xs` |
+| takeNdropM | `{v:([a], [a]) \| len (proj1 v) = n && len (proj2 v) = len xs - m}` | timeout | 18.7 s | `pair (take n xs) (drop m xs)` |
+| Nth_Incr1 | Hegel's query | timeout | 0.06 s | `nth l (incr n)` |
+| RevApp1 | Hegel's query | timeout | 0.49 s | `append (rev l) l` |
+
+```
+cabal bench hybrid --benchmark-options='hegel 180 8G'
+cabal bench hybrid --benchmark-options='large 180 8G'
 ```
 
 
