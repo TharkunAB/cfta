@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 10:29 CEST**, upstream `1a083040`.
-The latest proof commit is `98f633fa`. No background proof worker is active.
+Current checkpoint: **2026-10-14 10:43 CEST**, upstream `1a083040`.
+The latest proof commit is `0f665004`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -163,13 +163,16 @@ same earlier route. Fresh interned changes are excluded. The current level is
 free in the ancestor's old Depth probe, lies strictly below its ordinaryLevel,
 and comes from an actual captured value. Rooted source paths now derive actual
 shorter producers with full contexts, completed Depth callbacks, chosen levels,
-cache histories, descendant paths, and exact captured suffixes. Closed empty-input
-pending execution has no initial-capture alternative. Actual optional binders
+cache histories, descendant paths, and exact captured suffixes. `StoppedReached`
+retains the actual pending equation of every enclosing callback. `PendingProducedAt`
+adds the shorter producer's pending ordinary callback and pending binder outcome
+at the same exact key and cache. Closed empty-input pending execution has no
+initial-capture alternative. Actual optional binders
 retain an initial-body free-name alternative. It is excluded only under the
 explicit absence of ordinary free names in that body, which is not yet derived
 at all native sites. A second actual observation of the shorter producer's same
-body remains open. A completed Depth callback is not a completed binder/request
-or a pending equation for the whole ordinary callback. The shorter prefix alone
+body remains open. The newly derived pending producer outcomes do not supply
+a completed producer binder/request or a new mismatching pair. The shorter prefix alone
 does not establish contradictory recursive descent. A repaired dead-branch
 example also excludes transfer of descendant liveness to the producer result.
 Native prefix preservation of the full semantic context remains open.
@@ -203,7 +206,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,327 targets and 42,214 theorem dependency checks**
+The current audit passes **1,327 targets and 42,228 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **641 Haskell examples** passed after the PR #117 refresh: 289 core,
 208 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.

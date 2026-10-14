@@ -12,11 +12,23 @@ histories from actual closed pending execution. The actual optional-binder
 bridge keeps an initial-body capture alternative. It excludes that alternative
 only under the explicit absence of ordinary free names in the original body.
 
-The second paired producer observation remains open. `ProducedAt` does not
-assert completion of the producer binder or its request. It does not retain
-an equation for the whole producer ordinary callback's pending outcome.
-Those observations must be derived from actual source execution. A shorter
-prefix alone does not produce a smaller contradictory joint-key witness.
+Checkpoint `0f665004` strengthens the rooted induction. `StoppedReached`
+retains the exact pending key and final cache of every enclosing callback.
+`RootScope` stores that stopped root path at the same original reservation.
+`RootEncounter.complete_stopped_mismatch` preserves that origin through
+canonical readback. `PendingProducedAt` retains the actual whole ordinary
+callback's pending outcome. Its completed Depth probe then derives the whole
+producer binder's pending outcome, for either smart flag. The exact captured
+suffix, strict length bound, original context, and chronological growth remain.
+`closed_mismatch_pending_producers` derives this witness for empty inputs.
+The actual optional-binder bridge gives `pending_callback_history` and
+`pending_mismatch_callbacks`. The latter keeps the explicit condition that the
+original body has no ordinary free name. All previous history results remain.
+
+The second paired producer observation remains open. The pending producer
+outcomes do not supply a completed producer binder or request, a different
+producer pair, or a contradictory descent. A shorter prefix alone does not
+produce a smaller contradictory joint-key witness.
 `InternedFreshOrdinaryProducerPathBoundary` verifies that descendant liveness
 does not transfer to the producer result under the repaired policy either.
 See [current constructor coverage](notes-recursive-intersection-constructor-coverage.md).
@@ -73,8 +85,10 @@ this order but do not supply a completed request at the earlier cut.
 
 ## Next exact obligation
 
-A valid descent must first construct another actual observation of the
-shorter producer's same body. It must retain the capture relation, both
+For the repaired executor, start from `PendingProducedAt` and the exact
+`complete_stopped_mismatch` witness. Do not repeat extraction of the pending
+ordinary callback or whole binder outcome. A valid descent must construct
+another actual observation of the shorter producer's same body. It must retain the capture relation, both
 normalized callbacks, and chronological growth into the original cut.
 Only then can it establish a changed producer pair or computed level and
 use the strict capture-length decrease. This construction must use both

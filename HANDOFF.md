@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 10:29 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 10:43 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -50,12 +50,15 @@ Mixed-input comparison now retains arbitrary fixed captured values and derives
 an actual live ordinary mismatch from pending execution. The current level
 is an old capture below the ancestor's selected ordinary level.
 Rooted source paths now derive actual shorter producers with an exact captured
-suffix and a descendant path to the active binder. Paired producer observations
-and a contradictory recursive descent remain open.
+suffix and a descendant path to the active binder. The strengthened rooted
+induction retains every enclosing pending callback. It derives the shorter
+producer's whole ordinary callback and binder pending outcomes at the same
+key and final cache. A second producer observation and a contradictory
+recursive descent remain open.
 General successful first-run completion still needs pending exclusion and
 output preparation.
 **No background proof worker is active.**
-The latest proof checkpoint is **`98f633fa`**. A later documentation commit
+The latest proof checkpoint is **`0f665004`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -80,7 +83,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **31% at 10:29 CEST**. This is a historical value.
+The last observed value was **31% at 10:42 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -108,8 +111,9 @@ changelog note differs in the active package trees.
 
 `SourceSolverNameFastEncoding` now proves the current encoder. Preparation,
 public calls, and the solver-decided Sized path use it. The original decimal
-codec and its proofs remain as historical evidence. The latest proof is
-`98f633fa`; rooted capture histories are now `2669b334`, with selected-origin
+codec and its proofs remain as historical evidence. The encoder proof is
+`98f633fa`. Stopped producer histories are `0f665004`. Rooted capture histories
+are now `2669b334`, with selected-origin
 readback at `246dc98d`. Older component notes and table rows can use pre-refresh
 hashes. The backups retain those commits.
 
@@ -680,6 +684,18 @@ is excluded when the original body has no ordinary free names. This condition
 is explicit and is not yet derived at all native sites. Full incoming semantic
 context, body availability, and complete coverage also remain explicit.
 
+`0f665004` strengthens that rooted induction. `StoppedReached` and
+`StoppedRooted` retain the actual pending equation of each enclosing callback.
+`RootScope` keeps the same origin through source effects and callbacks.
+`complete_stopped_mismatch` retains it through canonical probe readback.
+`PendingProducedAt` adds the actual pending ordinary callback and the whole
+producer binder's pending outcome for either smart flag. It retains all earlier
+contexts, probe records, captured suffixes, length bounds, and cache histories.
+`closed_mismatch_pending_producers` derives it from actual closed execution.
+The actual optional-binder bridge gives `pending_callback_history` and
+`pending_mismatch_callbacks`. The original-body absence condition remains
+explicit. Earlier history results follow by dropping the new equations.
+
 The repaired producer-path boundary verifies that a live descendant capture
 can disappear from the enclosing producer result while its complete nested
 record stays cached. A source path does not transfer result liveness.
@@ -704,16 +720,13 @@ record stays cached. A source path does not transfer result liveness.
    source construction. It remains explicit for arbitrary supplied heaps.
    The repaired mixed-input comparison and actual live ordinary mismatch are
    proved. Rooted source paths and actual shorter producers are now derived.
-   Use `RootEncounter.complete_mismatch` and `ProducedAt`. Do not repeat them.
-   Construct another actual observation of the shorter producer's same body.
-   Retain its exact captured suffix, required normalized callbacks, and actual
-   chronological equations. One completed Depth callback is not a completed
-   binder or request. `ProducedAt` does not supply a pending equation for the
-   producer's whole ordinary callback. Derive those observations from actual
-   source execution. First retain the actual pending equation for the enclosing
-   producer ordinary callback along the original encounter. Then derive a new
-   mismatching producer pair or computed
-   level before using the strict captured-prefix bound. One shorter producer
+   Use `RootEncounter.complete_stopped_mismatch` and `PendingProducedAt`.
+   Do not repeat extraction of the producer's pending ordinary callback or
+   whole binder outcome. Construct another actual observation of that same
+   shorter producer body. Retain its exact captured suffix, required normalized
+   callbacks, and actual chronological equations. The pending producer does
+   not supply a completed binder or request. Derive a new mismatching producer
+   pair or computed level before using the strict captured-prefix bound. One shorter producer
    is not a contradictory recursive descent. Read
    `lean/notes-pending-producer-descent.md`. The repaired dead-branch boundary
    excludes transfer of descendant liveness to the enclosing producer result.
@@ -786,10 +799,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,327 jobs and 42,214 theorem dependency checks**.
+The current build passes **1,327 jobs and 42,228 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-fast-name-refresh-20261014-audit.log`.
+Log: `/tmp/mcfta-stopped-producer-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -834,6 +847,7 @@ Leave that unrelated baseline unchanged. No new test was added locally.
 
 | Commit | Result |
 | --- | --- |
+| `0f665004` | Exact enclosing pending callback equations, stopped shorter ordinary producers and whole binder outcomes, and actual optional-binder composition. |
 | `98f633fa` | Current upstream two-form name encoder, safe unchanged serialization, injectivity, and exact public liquid Sized composition. |
 | `e3a33ed5` | Preserving 461-step rebase onto PR #117, with all 1,676 saved Lean-tree files unchanged. |
 | `878cc5d7` | Rooted actual capture histories, shorter producers with descendant paths, stored-leaf ordinary names, actual optional-binder bridge, and repaired dead-branch boundary. |

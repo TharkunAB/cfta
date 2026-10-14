@@ -290,6 +290,22 @@ The body condition remains explicit. It is not yet derived at all native sites.
 Incoming full semantic context, body availability, and complete coverage also
 remain explicit.
 
+Checkpoint `0f665004` strengthens the rooted induction. `StoppedReached` retains
+the actual pending outcome of every enclosing callback, including its exact
+key and final cache. `StoppedRooted` retains those equations at each active
+origin. `RootScope` preserves that same origin. `complete_stopped_mismatch`
+keeps it through canonical pending-site readback.
+
+`PendingProducedAt` retains both the completed Depth probe and the pending
+ordinary callback of the shorter producer. It derives the whole producer
+binder's pending outcome for either smart flag. It keeps the original context,
+strict captured-prefix bound, exact descendant path, and chronological growth.
+`closed_mismatch_pending_producers` derives these witnesses from actual closed
+pending execution. `pending_callback_history` connects them to the actual
+optional binder. `pending_mismatch_callbacks` excludes the initial-body
+alternative under the same explicit absence condition. Previous history
+results follow by dropping only the new pending equations.
+
 ## The producer path does not transfer result liveness
 
 `InternedFreshOrdinaryProducerPathBoundary` checks the repaired policy.
@@ -310,15 +326,15 @@ Use `InternedFreshOrdinaryJointMismatch.Mismatch`. Do not repeat the
 mixed-input comparison or replace fixed captured values with literal lists.
 
 The original path, capture alternative, and actual shorter producer are proved.
-Use `RootEncounter.complete_mismatch`, `ProducedAt`, and the actual optional
-binder history theorems. Do not repeat this extraction.
+Use `RootEncounter.complete_stopped_mismatch`, `PendingProducedAt`, and the
+actual optional-binder callback history theorems. Do not repeat extraction of
+the actual pending ordinary callback or whole producer binder outcome.
 
 Construct another actual observation of the shorter producer's same body.
 Retain the exact captured suffix, both normalized callbacks where required,
-and chronological growth into the original cut. A completed producer Depth
-callback is not a completed producer binder or request. `ProducedAt` also does
-not assert that its whole ordinary callback has a particular pending outcome.
-Derive those source observations from actual execution before using them.
+and chronological growth into the original cut. The actual pending producer
+outcomes do not supply a completed producer binder or request. Derive the
+second required observation from actual execution before using it.
 Then derive a new mismatching producer pair or computed level and apply the
 strict captured-prefix decrease. One shorter producer does not itself prove
 recursive descent. See [the paired producer obligation](notes-pending-producer-descent.md).
@@ -345,9 +361,9 @@ constructor/equality proofs and all marked drafts.
 
 ## Validation and diagnostics
 
-Pinned Lean 4.34.1 passes 1,327 jobs and 42,214 theorem dependency checks.
+Pinned Lean 4.34.1 passes 1,327 jobs and 42,228 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are used.
-Log: `/tmp/mcfta-fast-name-refresh-20261014-audit.log`.
+Log: `/tmp/mcfta-stopped-producer-20261014-audit.log`.
 The root-history audit passed 1,326 jobs and 42,195 checks.
 The live-mismatch audit passed 1,320 jobs and 42,130 checks.
 The earlier-pair audit passed 1,311 jobs and 42,066 checks.

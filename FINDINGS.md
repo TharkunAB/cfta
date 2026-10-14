@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 10:29 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 10:43 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -400,10 +400,19 @@ excludes that alternative under explicit absence of ordinary free names in the
 body. This condition is not yet derived at every native site. The incoming full
 semantic context also remains explicit.
 
-Pending exclusion still needs a second actual observation of the shorter
-producer's same body. A completed Depth callback supplies neither a completed
-producer binder/request nor a pending equation for its whole ordinary callback.
-The strict prefix bound does not yet form a contradictory recursive descent.
+`0f665004` strengthens the rooted induction with `StoppedReached` and
+`StoppedRooted`. Every enclosing callback retains the same exact pending key
+and final cache. `complete_stopped_mismatch` preserves the selected origin.
+`PendingProducedAt` derives the shorter producer's actual pending ordinary
+callback and whole binder outcome from its completed Depth probe. It retains
+the exact captured suffix, strict length bound, original context, and cache
+history. The actual optional-binder bridge keeps the same initial-body
+alternative and explicit absence condition. All previous history results remain.
+
+Pending exclusion still needs a second actual observation of that same shorter
+producer body. The newly derived pending outcomes do not supply a completed
+producer binder/request or a different producer pair. The strict prefix bound
+does not yet form a contradictory recursive descent.
 `InternedFreshOrdinaryProducerPathBoundary` verifies that the repaired executor
 can retain a live nested capture while the enclosing producer returns empty.
 Result liveness does not follow from a descendant path. Both actual pending-site
@@ -448,18 +457,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`98f633fa`**; later commits record this handoff.
+The latest proof checkpoint is **`0f665004`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,327 build targets and 42,214 theorem
+The current Lean 4.34.1 audit passes **1,327 build targets and 42,228 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-fast-name-refresh-20261014-audit.log`.
+Log: `/tmp/mcfta-stopped-producer-20261014-audit.log`.
 After the current refresh, all **641** examples passed in Nix: 289 core, 208
 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **31% at 10:29 CEST**.
+No background proof worker is active. Weekly allowance was **31% at 10:42 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
