@@ -4,6 +4,11 @@ Updated: 2026-10-14 23:16 CEST.
 Proof: `221bb23a`. Source base: `origin/main` at `f201deda`.
 Repository: `TharkunAB/cfta`. Publish checkpoints on `formalize`.
 
+The general repaired cold solver target below is complete in `e7ab540a` and
+`4d1240dc`. Read [the general cold entry note](notes-general-cold-liquid-entry.md).
+Validation retains the actual arity scan. Root membership and child closure
+alone do not imply successful conversion.
+
 ## Source contract
 
 `cfta-generator/src/Data/CFTA/Sized.hs` defines `sizedReference`, `sized`,
@@ -86,7 +91,7 @@ It saves all 1,933 Lean-tree files and four root documents. The previous
 The explicit-map reference, optimized, and solver-decided paths now satisfy
 the same complete query specification. Do not repeat these component proofs.
 Next connect the general repaired cold path to the solver-decided result.
-Derive successful validation from actual root membership and child closure.
+Derive root membership and child closure, then retain the actual arity scan.
 Use `SourceFreshOrdinaryColdGuardedExact.trace_table_exact` for the original
 independent guarded meaning. Reuse `SourceColdSharedRows.sizedTable` and
 `sized_graph`, then the new encoded query theorem. The older prepared/first-order

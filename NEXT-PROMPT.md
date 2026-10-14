@@ -2,6 +2,48 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## General repaired cold conversion and complete encoded Sized entry
+
+The latest proofs are `e7ab540a` and `4d1240dc`. Continue on `formalize` in
+`TharkunAB/cfta`, based on `origin/main` at `f201deda`. Push checkpoints
+regularly to `origin/formalize`. Read `lean/notes-general-cold-liquid-entry.md`.
+This section supersedes the earlier cold-validation next target.
+
+Root membership and child closure do not imply a ranked alphabet. The new
+checked `FTAValidation.arity_boundary` counterexample records that boundary.
+`SourceFreshOrdinaryColdValidated` derives both state invariants from actual
+repaired traversal and reduces public conversion to the literal normalized
+arity scan. Complete raw constraints and alternative order survive actual
+map normalization. Only the real arity failure can reject a closed cold table.
+No unconditional successful-validation claim is made.
+
+`SourceFreshOrdinaryColdLiquid` derives the independent original physical
+root language after normalized validation. `SourceFreshOrdinaryLiquidEntry`
+follows physical free-variable checks, actual cold traversal, FTA validation,
+and the encoded bounded solver fold. Open and invalid inputs return before
+solver work. Conversion errors, raised failures, Unknown, and successful
+query APIs retain distinct channels. `constructed_complete` derives finite
+actual staged execution and all exact bounded query laws from actual general
+repaired construction. It assumes no supplied validation success, final
+metadata, prepared-cache restriction, native completion, or language equation.
+External attempt termination and response correctness remain explicit.
+
+The audit passes 1,560 jobs and 44,392 theorem dependency checks. Only the
+three permitted Lean foundations occur. Only the old unused `inputs` warning
+remains. Log: `/tmp/mcfta-general-cold-liquid-entry-20261014-audit.log`.
+No production Haskell code changed. Snapshot:
+`/tmp/mcfta-general-cold-liquid-checkpoint-20261014-2331/` (1,940 Lean-tree files).
+All earlier proof bytes, repros, drafts, repairs, backups, stashes, and worktrees
+remain. No background proof worker is active after this checkpoint.
+
+Next connect original-map `sizedReference` and optimized `sized` to this same
+actual validated normalized cold table. Derive raw active equalities from
+original checked annotations through construction and traversal. Retain FTA
+arity errors, Sized residual-guard errors, and complete query-record equality.
+Reuse the cold constraint heap, normalized raw graph, and existing explicit-map
+API laws. Keep the older cyclic-import entry and all constructor/equality work.
+Stop all work and workers at 1% weekly allowance or less.
+
 ## Complete common query laws for all explicit-map Sized paths
 
 The latest proof checkpoint is `221bb23a`. Continue on `formalize` against
@@ -31,8 +73,8 @@ marked drafts remain. Snapshot:
 `/tmp/mcfta-unified-sized-api-checkpoint-20261014-2316/` (1,933 Lean-tree files).
 
 Next connect the general repaired cold path to the encoded solver query
-result. Derive successful validation from actual root membership and child
-closure. Use `SourceFreshOrdinaryColdGuardedExact.trace_table_exact` for the
+result. Derive root membership and child closure. Retain the actual arity scan;
+successful validation also requires a ranked alphabet. Use `SourceFreshOrdinaryColdGuardedExact.trace_table_exact` for the
 independent original root language, `sizedTable`/`sized_graph` for raw conversion,
 and the new encoded exact query theorem. The old prepared/first-order liquid
 adapter remains a narrower result. Preserve the optimized interned core,
