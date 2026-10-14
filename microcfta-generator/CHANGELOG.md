@@ -25,7 +25,9 @@ tree automata of `microcfta`, with QuickCheck integration.
 - `Data.CFTA.Gen.Synthesis`: Hectare, the type-directed component
   synthesizer of the ECTA paper. `synthesize` lists the programs of a query
   by size; `programsOfSize` and `programsOfSizeUpToDepth` read the program
-  space of a size as a generator. `parseType` and `parseProgram` read types
+  space of a size as a generator. `rawSaturatedSearchSpace` builds the space of
+  the saturated programs of a size, in which each head is applied to all its
+  parameters, as in Hegel's terms. `parseType` and `parseProgram` read types
   and programs in Haskell syntax, and `renderType` and `renderProgram` print
   them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
   suites.
@@ -42,6 +44,17 @@ tree automata of `microcfta`, with QuickCheck integration.
   `Checker` (`checkerTruncate`, `checkerExtend`), from the prefix that it
   shares with the last one, with a trie of dead prefixes, limits, and the
   time of each part.
+- `Data.CFTA.Gen.Synthesis.Hybrid`: Hectare's program spaces with Hegel's
+  checks. `synthesizeHybrid` lists the programs of the base types of a
+  refinement-typed query size by size, in Hectare's order, in the saturated
+  space, which has only Hegel's terms. It stops at the first one that passes
+  `checker` or `preciseChecker` of `Data.CFTA.Gen.Synthesis.Liquid`. These
+  check one program with Hegel's inference: the precise checker keeps each
+  subprogram's refinement, and `checker` abstracts it to the qualifiers. With `hybridFallback`, on by
+  default, Hegel's `synthesize` runs when the hybrid has no program within a
+  time budget of 30 seconds. The `hybrid` benchmark runs Hegel and the hybrid
+  on Hegel's queries and on a large library of the Hoogle+ components and
+  refined list components.
 - Sizes count pays, as in FEAT: `pure` has size zero, an atom one, `<*>` adds
   the sizes of its sides, and `pay`, which `Data.CFTA.Gen` and
   `Data.CFTA.Ranked` export, adds one. A constructor pays one, so a built tree
