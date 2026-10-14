@@ -153,8 +153,9 @@ ghcProgram dictionaries = go
 {- | Queries where the erasure loses information: components that are
 polymorphic over a type constructor (Functor, Applicative, Monad, Foldable,
 Traversable) at Maybe, Either e, pairs, lists, or a rigid variable of the
-signature. Each has its signature, its argument names, and its expected
-program; the arguments' Hectare types are not used.
+signature, or at an intermediate type that no head of the signature has, as
+the Maybe in @length (lookup k xs)@. Each has its signature, its argument
+names, and its expected program; the arguments' Hectare types are not used.
 -}
 differential :: [GhcQuery]
 differential =
@@ -180,6 +181,23 @@ differential =
     , query "concatMaybe" "Maybe [a] -> [a]" ["m"] "concat m"
     , query "sumMaybe" "Maybe Int -> Int" ["m"] "sum m"
     , query "lengthPair" "(a, b) -> Int" ["p"] "length p"
+    , -- The gap test: a Foldable or Traversable at an intermediate Maybe, of
+      -- lookup and find (rungs 1 and 2), listToMaybe (rung 2), or Map.lookup
+      -- (rung 3).
+      query "gapLengthLookup" "Eq k => k -> [(k, v)] -> Int" ["k", "xs"] "length (lookup k xs)"
+    , query "gapNullLookup" "Eq k => k -> [(k, v)] -> Bool" ["k", "xs"] "null (lookup k xs)"
+    , query "gapSumLookup" "Eq k => k -> [(k, Int)] -> Int" ["k", "xs"] "sum (lookup k xs)"
+    , query "gapConcatLookup" "Eq k => k -> [(k, [a])] -> [a]" ["k", "xs"] "concat (lookup k xs)"
+    , query "gapAndLookup" "Eq k => k -> [(k, Bool)] -> Bool" ["k", "xs"] "and (lookup k xs)"
+    , query "gapMaximumLookup" "(Eq k, Ord v) => k -> [(k, v)] -> v" ["k", "xs"] "maximum (lookup k xs)"
+    , query "gapElemLookup" "(Eq k, Eq v) => v -> k -> [(k, v)] -> Bool" ["v", "k", "xs"] "elem v (lookup k xs)"
+    , query "gapSequenceLookup" "Eq k => k -> [(k, [a])] -> [Maybe a]" ["k", "xs"] "sequenceA (lookup k xs)"
+    , query "gapTraverseLookup" "Eq k => (v -> [b]) -> k -> [(k, v)] -> [Maybe b]" ["f", "k", "xs"] "traverse f (lookup k xs)"
+    , query "gapToListLookup" "Eq k => k -> [(k, v)] -> [v]" ["k", "xs"] "foldr (:) [] (lookup k xs)"
+    , query "gapLengthFind" "(a -> Bool) -> [a] -> Int" ["p", "xs"] "length (find p xs)"
+    , query "gapNullFind" "(a -> Bool) -> [a] -> Bool" ["p", "xs"] "null (find p xs)"
+    , query "gapSumListToMaybe" "[Int] -> Int" ["xs"] "sum (listToMaybe xs)"
+    , query "gapLengthMapLookup" "Ord k => k -> Map.Map k [a] -> Int" ["k", "m"] "length (Map.lookup k m)"
     ]
   where
     query name signature arguments expected =
