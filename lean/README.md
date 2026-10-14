@@ -6,7 +6,7 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,560 jobs and 44,392 theorem dependency checks.
+The audit passes 1,564 jobs and 44,406 theorem dependency checks.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open
@@ -17,7 +17,10 @@ specification to original-map reference, optimized dispatch, and actual bounded
 solver-decided traces. The [general cold entry proof](notes-general-cold-liquid-entry.md)
 now derives actual normalized validation and complete encoded queries from
 repaired construction. It retains the real arity failure before solver work.
-Next connect reference and optimized queries to that same validated cold table.
+The [closed source theorem](notes-source-closed-sized.md) now derives construction
+and all three exact query paths at the original expression's guarded least
+language. Reference and optimized paths return identical records and errors.
+Next audit opaque-probe gate progress under the repaired constructor.
 All old proofs, fixtures, and marked drafts remain.
 
 [The system specification and current findings](SYSTEM.md) describe the

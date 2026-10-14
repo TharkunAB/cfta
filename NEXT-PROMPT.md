@@ -2,6 +2,49 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Exact Sized paths from original closed source expressions
+
+The latest proofs are `0e8b2265` and `dd240eb6`. Continue on `formalize` in
+`TharkunAB/cfta`, based on `origin/main` at `f201deda`. Push completed
+checkpoints regularly to `origin/formalize`. Read `lean/notes-source-closed-sized.md`.
+This section supersedes the earlier cold reference/dispatch next target.
+
+`SourceSizedNormalizedConstraints` derives complete normalized row annotation
+invariants from original checked syntax through actual construction and cold
+traversal. `SourceFreshOrdinarySizedEntry` follows actual physical open checks,
+cold rows, public validation, and either original-map query path.
+`Execution.change_dispatch` retains the exact complete result and final cache.
+The correct entry derives both complete executions, all exact query laws at
+the independent physical language, and the original FTA/residual error channels.
+No validation success, final metadata, or rowwise annotation law is supplied.
+
+`SourceClosedSized.reference_and_dispatch` derives construction itself, then
+both actual query paths. Its successful complete API denotes the original
+expression's independent guarded least language. `solver_decided` derives
+construction and actual encoded bounded execution at the expression language
+under ambient solver meaning and the signed node-count bound. No supplied
+finished-construction equation remains. External attempt termination and
+response correctness keep their explicit contracts. All three paths retain
+finite exact distinct classes, size order, counts, and both term inverses.
+
+The audit passes 1,564 jobs and 44,406 theorem dependency checks. Only the
+three permitted foundations occur. Only the old unused `inputs` warning
+remains. Log: `/tmp/mcfta-source-closed-sized-20261014-audit.log`.
+No production Haskell code changed. Snapshot:
+`/tmp/mcfta-source-closed-sized-checkpoint-20261014-2343/` (1,945 Lean-tree files).
+All previous proof bytes, repros, drafts, repairs, backups, stashes, and worktrees
+remain. No background proof worker is active after this checkpoint.
+
+Next resume the general opaque-probe constrained-recursion gate. Read the
+last section of `lean/notes-gate-unfolding-rank.md`, `InternedReachableGateRank`,
+and `InternedSourceRankStutter`. Replay the old example with the repaired
+FreshOrdinary constructor and stored executor before applying its observations
+to current source. Shallow reachable Mu and pure-probe ranks are already proved;
+the general opaque case remains separate. Do not repeat the completed unary
+ancestor edit or root loop. Preserve all marked drafts. Keep the optimized
+interned core and the explicit runtime/extraction boundaries. Stop all work
+and workers at 1% weekly allowance or less.
+
 ## General repaired cold conversion and complete encoded Sized entry
 
 The latest proofs are `e7ab540a` and `4d1240dc`. Continue on `formalize` in

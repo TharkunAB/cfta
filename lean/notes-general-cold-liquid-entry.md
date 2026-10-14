@@ -4,6 +4,10 @@ Updated: 2026-10-14 23:31 CEST.
 Proofs: `4d1240dc` and `e7ab540a`. Source base: `origin/main` at `f201deda`.
 Repository: `TharkunAB/cfta`. Publish checkpoints on `formalize`.
 
+The cold reference/dispatch target below is complete in `dd240eb6`.
+`0e8b2265` also derives construction and query laws from the original source
+expression. Read [the closed source note](notes-source-closed-sized.md).
+
 ## Source composition
 
 This proof composes `Data.CFTA.Interned.toFTA` with
