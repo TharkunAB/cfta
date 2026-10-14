@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 02:48 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 03:07 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -12,9 +12,10 @@ older next-target statements. `lean/FINDINGS.md` retains historical findings.
 The current continuation refreshed upstream and completed the finite optimized
 Sized inverse proof, recursive knot construction, and first-order shared rows.
 It also proves cold traversal termination, exact returned tables, native/solver Sized composition,
-and physical recursive intersection control and domain effects.
+physical recursive intersection control and domain effects, and actual
+optional-binder substitution and constructor effects.
 **No background proof worker is active.**
-The latest proof checkpoint is **`2a533cc5`**. A later documentation commit
+The latest proof checkpoint is **`0bf65249`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -39,7 +40,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **34% at 02:47 CEST**. This is a historical value.
+The last observed value was **34% at 03:06 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -265,24 +266,40 @@ computation selected by physical control. Its physical-to-view closedness
 equations remain explicit. It does not derive a complete semantic view.
 `SourceRecursiveIntersectionEnvironment` derives the actual Mu binding
 list, canonical domain allocation, complete physical binding invariant,
-and source/schedule overwrite lookup. Physical `maybeMu` construction and
-recursive memo publication remain open. Read
+and source/schedule overwrite lookup. Read
 [recursive control](lean/notes-recursive-intersection-control.md).
+
+`InternedFreshOrdinaryPlanEquivalence` and
+`InternedStoredSubstitutionRebind` now derive full nested lexical rebinding
+with exact outcomes and caches. `SourceRecursiveIntersectionMaybeMu`
+proves the actual source substitution callback and repaired constructor
+equation, including probes, fresh ordinary names, pending reads, reservation,
+cleanup, source facts, physical histories, and replay. Prepared callbacks
+and probes complete at arbitrary current caches. `pending_exact` identifies
+the exact installed post-probe key without a payload. Whole-cache coverage
+is not assumed for that theorem. Successful first-run completion follows
+with complete payload coverage and a prepared body. General open nested
+completion and result preparation remain open. Read
+[optional binder effects](lean/notes-recursive-intersection-maybe-mu.md).
 
 ## Remaining priorities
 
-1. Prove actual `maybeMu` callback substitution and repaired constructor
-   effects. Preserve probes, fresh ordinary names, cleanup, hits, and
-   reservations. Then connect native cyclic intersection product rows to
-   the cold shared adapter. Physical control and domain lookup are proved;
-   do not repeat them. Preserve actual constructor effects and recursive
-   memo traces. The plain completed dispatcher does not prove pending cyclic
+1. Compose the checked physical `maybeMu` and domain effects in the actual
+   recursive caller. Derive the result product language and native product
+   rows, then connect them to the cold shared adapter. Keep the full input
+   scope. Physical control, domain lookup, and exact source callback and
+   constructor conversion are proved. Do not repeat them. General open
+   nested completion still needs key separation or a larger execution
+   invariant. Derive preparation of new Mu bodies where it applies. Preserve
+   actual constructor effects and recursive memo traces. The plain completed
+   dispatcher does not prove pending cyclic
    publication. General open nested source binders still need a prepared heap
    or a larger finite-execution invariant. Cold traversal termination and final
    table language are now proved under `Prepared`. First-order empty-cache
    construction derives that premise. Do not repeat those proofs or use the
    older warmup snapshot as the cold source path. Read
-   `lean/notes-recursive-intersection-control.md` and
+   `lean/notes-recursive-intersection-maybe-mu.md`,
+   `lean/notes-recursive-intersection-control.md`, and
    `lean/notes-cold-shared-rows.md`. The raw-map Sized algorithms are complete.
    The concrete remaining interface is
    `SourceCyclicRowsNativeGate.ProductReadback.members` and `.rejected`.
@@ -338,10 +355,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,209 jobs and 40,275 theorem dependency checks**.
+The current build passes **1,212 jobs and 40,366 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-recursive-control-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-maybe-mu-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -375,6 +392,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `0bf65249` | Full nested rebinding, exact optional-binder effects, finite prepared probes, and exact pending-key classification. |
 | `2a533cc5` | Complete physical recursive guard order, semantic next-step conversion, and exact Mu-domain effects. |
 | `f425e2b6` | Finite cold traversal, first-order source Sized, and native/solver public composition. |
 | `4601cf85` | Exact guarded final cold tables and reference Sized laws. |

@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 02:48 CEST**, upstream `f59c198d`.
-The latest proof commit is `2a533cc5`. No background proof worker is active.
+Current checkpoint: **2026-10-14 03:07 CEST**, upstream `f59c198d`.
+The latest proof commit is `0bf65249`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -65,9 +65,18 @@ tagged operand comparison, independently sorted cutoff pairs, typed
 canonical domain overwrite, original Mu record lookup, and domain-cache
 allocation. The complete branch selector and next semantic computation
 are connected. Physical-to-view closedness equations remain explicit.
-Physical `maybeMu` construction, pending cyclic memo publication, and
-product-row readback remain open. See
-[recursive control](notes-recursive-intersection-control.md).
+See [recursive control](notes-recursive-intersection-control.md).
+
+`InternedFreshOrdinaryPlanEquivalence`, `InternedStoredSubstitutionRebind`,
+and `SourceRecursiveIntersectionMaybeMu` derive full nested stored-plan
+rebinding and the exact actual optional-binder executor. They retain
+probes, fresh ordinary names, pending keys, source facts, histories, and
+replay. Prepared callbacks and probes complete without whole-cache
+coverage. The exact pending result is an installed post-probe key without
+a payload. Complete cache coverage gives successful prepared construction.
+General open nested completion, result preparation, product language,
+pending cyclic memo publication, and product-row readback remain open. See
+[optional binder effects](notes-recursive-intersection-maybe-mu.md).
 
 Nested binder construction, native cyclic product rows, pending memo values,
 and complete recursive memo-effect traces remain open. Free-name projection and ordinary-root deep
@@ -83,7 +92,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,209 targets and 40,275 theorem dependency checks**
+The current audit passes **1,212 targets and 40,366 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

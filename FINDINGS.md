@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 02:48 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 03:07 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -144,10 +144,20 @@ domain overwrite, and exact original Mu record lookup. The actual Mu
 binding list derives canonical domain-cache allocation and complete
 physical bindings. `decision_encoded` and `physical_step` connect the
 complete selector to the existing semantic executor. Physical-to-view
-closedness equations remain explicit. This does not prove physical
-`maybeMu` construction, recursive pending memo publication, or product
-row readback. Those remain the next target. See
+closedness equations remain explicit. See
 [recursive control](lean/notes-recursive-intersection-control.md).
+
+`InternedFreshOrdinaryPlanEquivalence` and
+`InternedStoredSubstitutionRebind` derive full nested stored-plan rebinding
+with identical outcomes and caches. `SourceRecursiveIntersectionMaybeMu`
+now derives the actual substitution callback and repaired constructor
+equation, source facts, physical histories, and replay. Prepared callbacks
+and probes complete at arbitrary current caches. `pending_exact` identifies
+the exact installed post-probe key with an absent payload. Complete cache
+coverage gives successful prepared first-run execution. General open nested
+completion, result preparation, product language, recursive pending memo
+publication, and product-row readback remain open. See
+[optional binder effects](lean/notes-recursive-intersection-maybe-mu.md).
 
 ## Remaining work and assessment
 
@@ -171,16 +181,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`2a533cc5`**; later commits record this handoff.
+The latest proof checkpoint is **`0bf65249`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,209 build targets and 40,275 theorem
+The current Lean 4.34.1 audit passes **1,212 build targets and 40,366 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-recursive-control-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-maybe-mu-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **34% at 02:47 CEST**.
+No background proof worker is active. Weekly allowance was **34% at 03:06 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

@@ -49,11 +49,13 @@ edge requests. The physical-to-view closedness equations remain explicit in
 
 ## Next construction obligation
 
-The next target is the physical source `maybeMu` call. Its callback performs
-`substFree` on the actual recursive body at each selected reference. Connect
-that callback to the repaired constructor while retaining the complete body,
-both probes, the selected fresh ordinary reference, cleanup, cache hits,
-reservations, and actual returned caches. Do not assume a completed binder.
+The physical source `maybeMu` callback and exact repaired constructor effects
+are now checked in `0bf65249`. Full nested stored-plan rebinding retains
+identical outcomes and caches. Prepared callbacks and probes complete. The
+only possible prepared pending result is the exact installed post-probe key
+with an absent payload. Successful completion follows with complete payload
+coverage. General open nested completion and new-body preparation remain
+open. Read [optional binder effects](notes-recursive-intersection-maybe-mu.md).
 
 Then retain outer recursive memo requests before these control branches.
 Their keys keep the shifted domain identity and ordered operands. A swap
