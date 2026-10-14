@@ -34,11 +34,10 @@ module Data.CFTA.Gen.Synthesis.Hybrid (
 ) where
 
 import Control.Monad (join)
-import Data.Containers.ListUtils (nubOrd)
 import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
 import System.Timeout (timeout)
 
-import Data.CFTA.Gen.Synthesis (Program, Query (..), expand, library, solutionsOfSize)
+import Data.CFTA.Gen.Synthesis (Program, Query (..), distinctSolutionsOfSize, expand, library)
 import Data.CFTA.Gen.Synthesis.Liquid (
     Checker (..),
     Component,
@@ -110,7 +109,7 @@ synthesizeHybrid entailment options components query = do
             | size > hybridMaximumSize options = pure Nothing
             | otherwise = do
                 writeIORef reached size
-                found <- firstPassing (concatMap (expand lib) (nubOrd (solutionsOfSize lib goal size)))
+                found <- firstPassing (concatMap (expand lib) (distinctSolutionsOfSize lib goal size))
                 maybe (search (size + 1)) (pure . Just . (size,)) found
         firstPassing [] = pure Nothing
         firstPassing (program : rest) = do

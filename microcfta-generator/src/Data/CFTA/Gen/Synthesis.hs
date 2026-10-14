@@ -61,6 +61,7 @@ module Data.CFTA.Gen.Synthesis (
     searchSpace,
     programsIn,
     solutionsOfSize,
+    distinctSolutionsOfSize,
     synthesize,
 
     -- * Generators
@@ -499,6 +500,15 @@ programsIn = map toProgram . terms
 -- | The programs of a size that solve the query, with representatives.
 solutionsOfSize :: Library -> Query -> Int -> [Program]
 solutionsOfSize lib query = programsIn . searchSpace lib query
+
+{- | The programs of a size that solve the query, each once, in the order in
+which 'solutionsOfSize' first lists them. 'solutionsOfSize' keeps a set of
+the typed terms, and a large size has millions of them; this lists the runs
+of the search space and keeps a set of the programs only, which needs much
+less memory.
+-}
+distinctSolutionsOfSize :: Library -> Query -> Int -> [Program]
+distinctSolutionsOfSize lib query = nubOrd . map (toProgram . fst) . runs "Mu" . searchSpace lib query
 
 -- | The programs up to a size that solve the query, smallest first.
 synthesize :: Library -> Query -> Int -> [Program]
