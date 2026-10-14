@@ -1,5 +1,12 @@
 # Source completion with arbitrary captured records
 
+Later extension: general stored support and individual unfolding now have
+checked completion and closedness without preparation. See
+[stored support and unfolding](notes-stored-free-unfold.md), `2ac3ca41`.
+Native output closedness, repeated cold-reader termination, and physical
+product rows remain open.
+
+
 Updated: 2026-10-14 11:49 CEST. Proof checkpoint: `e4a011e8`.
 
 ## Exact input observations

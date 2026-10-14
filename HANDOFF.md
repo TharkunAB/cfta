@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 12:05 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:18 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -63,7 +63,7 @@ Native first-run completion is now proved for closed Original available inputs
 in complete semantic caches under explicit WordRanges. Output preparation
 and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`f7b842e4`**. A later documentation commit
+The latest proof checkpoint is **`2ac3ca41`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -88,7 +88,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **31% at 12:03 CEST**. This is a historical value.
+The last observed value was **30% at 12:17 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -774,6 +774,20 @@ coverage premises from actual repaired closed source construction. See
 Earlier statements that this native first-run scope remains open are historical.
 Output preparation, final cold traversal, and product language remain open.
 
+## General stored free support and single unfolding
+
+`018f1712` derives exact used lexical origins and original stored-plan support
+outside every enclosing local binder. Actual `MaybeMu.free_support` retains
+only original body names and removes the selected intersection name.
+`2ac3ca41` derives actual repaired substitution support from replacements of
+original free references. General repaired stored substitution and individual
+Mu unfoldings now complete without preparation. They retain exact caches,
+semantic contexts and depth heaps, complete coverage, availability, growth,
+and issued history. An unfolding of a closed available record is closed.
+See [stored support and unfolding](lean/notes-stored-free-unfold.md).
+Repeated cold-reader termination and native result closedness are separate
+obligations. Do not infer `NoNewMu` from single unfolding completion.
+
 ## Remaining priorities
 
 1. Read `lean/notes-native-successful.md`. Arbitrary-record source completion,
@@ -786,19 +800,22 @@ Output preparation, final cold traversal, and product language remain open.
    those completed results or replace their actual effects with contracts.
    The alternative shorter-producer descent is unclosed and unused by these
    results. Preserve its histories and counterexamples.
-2. Derive output closedness and preparation, or a broader cold-reader
-   invariant. `cold_node_complete` supplies availability, exact guarded kernel
-   meaning, memo provenance, semantic heaps, coverage, and stable exact caches.
-   It does not yet supply product language or a finite final cold table.
-   Universal `PreparedWithoutMu` preservation at reached native bodies remains
-   refuted by `SourceRecursiveIntersectionOpenBodyBoundary`. Keep that actual
+2. Read `lean/notes-stored-free-unfold.md`. Derive the recursive result scope
+   from actual source execution: every returned free name is an intersection
+   reference from the incoming domain's `seen` pairs. The Mu body call adds
+   its current pair; actual `MaybeMu.free_support` removes that pair. Use the
+   empty initial domain and proved native guarded kernel meaning to derive
+   output closedness. Then prove output preparation or a broader cold-reader
+   invariant and finite final cold tables. General single unfolding now
+   completes and preserves closedness, but can add Mu records. Use actual
+   `MergedFreshOrdinaryExposure` for the repaired reader. The old
+   `MergedSourceExposure` bridge agrees only in the prepared fragment.
+   Universal preparation preservation remains refuted. Keep that actual
    source-built counterexample and its successful native return. Derive
    physical `ProductReadback.members` and `.rejected` from actual row traces,
    then use `product_exact`. Do not assume equivalent product language.
-   Keep explicit word checks, source/domain effects, both memo families,
-   publication before demand, ordered tagged operands, shifted domain keys,
-   reversed swaps, RecIntersect bypass, original finish frames, and yielded
-   continuations. Retain all reference, solver-decided, and optimized Sized laws.
+   Keep the stated word/input scope and all source, domain, memo, and
+   continuation effects. Retain the complete public Sized results.
 3. Connect bounded import to native `fromFTA`/SCC and split readback, then
    preserve supplied custom order through final observation decoders.
    `SourceBoundedImport`, `SourceFromTerms*`, and `SourceImportGroups*` already
@@ -842,10 +859,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,348 jobs and 42,439 theorem dependency checks**.
+The current build passes **1,354 jobs and 42,506 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-native-successful-20261014-audit.log`.
+Log: `/tmp/mcfta-unfold-completion-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -890,6 +907,8 @@ Leave that unrelated baseline unchanged. No new test was added locally.
 
 | Commit | Result |
 | --- | --- |
+| `2ac3ca41` | Actual replacement free support, general repaired stored substitution/single unfolding completion, and closed unfolding. |
+| `018f1712` | Exact used lexical free-name origins, stored-plan external support, and actual optional-binder pair elimination. |
 | `f7b842e4` | Exact unfinished native trace splits, no pending constructor, successful stable first native execution for closed Original inputs under checked words. |
 | `ec611802` | Actual primitive/compiled semantic heap conditions and completed native semantic heap preservation. |
 | `e4a011e8` | Actual arbitrary-body optional-binder completion, complete semantic context, decoded depth heap, coverage, and exact effects. |

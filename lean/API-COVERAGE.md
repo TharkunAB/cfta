@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 12:05 CEST**, upstream `1a083040`.
-The latest proof commit is `f7b842e4`. No background proof worker is active.
+Current checkpoint: **2026-10-14 12:18 CEST**, upstream `1a083040`.
+The latest proof commit is `2ac3ca41`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -217,6 +217,16 @@ Output preparation or a broader cold-reader invariant, a finite final cold
 table, and physical product rows remain open. See
 [record completion](notes-record-depth-completion.md) and
 [successful native execution](notes-native-successful.md).
+`InternedFreeNameIndexedOrigins` and `InternedStoredPlanFreeSupport` derive
+exact used lexical free-name origins and original support outside local
+binders. `MaybeMuFreeSupport.free_support` and `pair_absent` derive actual
+intersection-name elimination. `InternedFreshOrdinaryStoredFreeSupport`
+derives free names from actual replacements of original free references.
+`InternedFreshOrdinaryUnfoldCompletion` derives general stored substitution
+and single unfolding without preparation, retains complete semantic caches,
+and proves closed unfolding. Repeated cold-reader termination and native
+output closedness remain open. See
+[stored support and unfolding](notes-stored-free-unfold.md).
 The [equality root proof](notes-equality-nested-unary-root.md) now composes both
 ancestor edits and bounded iteration for the fixed unary/two-atom fragment.
 General equality propagation remains open.
@@ -227,7 +237,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,348 targets and 42,439 theorem dependency checks**
+The current audit passes **1,354 targets and 42,506 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **641 Haskell examples** passed after the PR #117 refresh: 289 core,
 208 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.

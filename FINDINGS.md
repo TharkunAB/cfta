@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 12:05 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:18 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -494,6 +494,24 @@ Output preparation, a finite final cold table, physical product-language
 correspondence, and concrete runtime/word-range justification remain open.
 See [successful native execution](lean/notes-native-successful.md).
 
+## Actual stored support and general single unfolding
+
+`018f1712` derives exact used lexical positions for actual returned free names.
+Stored-plan support connects those slots to original free names outside every
+local binder. Actual `MaybeMu.free_support` retains only original body free
+names and removes the selected intersection name. Normalization can remove
+additional names.
+
+`2ac3ca41` proves that every captured leaf is closed or a reference. Actual
+repaired substitution can return a free name only from the replacement of an
+original free reference. Arbitrary stored substitution and single Mu unfolding
+now complete without preparation in complete semantic caches. They retain
+exact cache effects, semantic contexts/depth heaps, complete coverage,
+availability, and histories. A closed available record has a closed unfolding.
+Repeated repaired cold-reader termination, native output closedness, final
+cold tables, and physical product rows remain open. See
+[stored support and unfolding](lean/notes-stored-free-unfold.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
@@ -529,18 +547,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`f7b842e4`**; later commits record this handoff.
+The latest proof checkpoint is **`2ac3ca41`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,348 build targets and 42,439 theorem
+The current Lean 4.34.1 audit passes **1,354 build targets and 42,506 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-native-successful-20261014-audit.log`.
+Log: `/tmp/mcfta-unfold-completion-20261014-audit.log`.
 After the current refresh, all **641** examples passed in Nix: 289 core, 208
 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **31% at 12:03 CEST**.
+No background proof worker is active. Weekly allowance was **30% at 12:17 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
