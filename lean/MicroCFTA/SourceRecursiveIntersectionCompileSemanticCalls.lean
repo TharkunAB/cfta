@@ -1,0 +1,138 @@
+import MicroCFTA.SourceRecursiveIntersectionCodeSemantic
+
+/-!
+# Semantic heap conditions in compiled recursive source calls
+
+Actual domain entry, original binder reads, guarded child requests, matched
+rows, and ordered unions derive semantic heap conditions. Actual available operands supply the primitive semantic heap conditions. No memo completion or
+product-language law is assumed.
+-/
+namespace MicroCFTA.SourceRecursiveIntersectionCode
+open Cache InternedConstructorTemplates InternedProbeProvenance InternedEdgeResidency
+open InternedBinderProtocol IntersectionFlatMemoKeyDomain SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks
+
+/-- Actual Mu compilation derives safe body requests and optional-binder effects. -/
+theorem compileMu_semantic [DecidableEq (EdgeKey Symbol Guard)] (domain : Interned DomainKey) (left right : Value Symbol Guard)
+    (state : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid state) (known : Domain state domain)
+    (leftAvailable : Available state.heap left) (rightAvailable : Available state.heap right) :
+    Semantic (compileMu domain left right) state := by
+  cases first : SourceRecursiveIntersectionControl.identity left <;>
+    cases second : SourceRecursiveIntersectionControl.identity right <;> simp only [compileMu, first, second]
+  all_goals try trivial
+  rename_i firstId secondId
+  obtain ⟨afterValid, growth, afterDomain⟩ := entered state valid domain known left right leftAvailable rightAvailable firstId secondId
+  refine ⟨⟨afterDomain, body_available _ left leftAvailable, body_available _ right rightAvailable⟩, ?_⟩
+  intro value final finalValid later available
+  exact semantic_optionalBinder _ value final available
+
+/-- Original free-binding readback supplies the complete next physical node request. -/
+theorem compileReference_semantic [DecidableEq (EdgeKey Symbol Guard)] (domain : Interned DomainKey) (name : Nat)
+    (other : Value Symbol Guard) (left : Bool) (state : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid state)
+    (known : Domain state domain) (available : Available state.heap other) :
+    Semantic (compileReference domain name other left) state := by
+  by_cases bound : name ∈ SourceRecursiveIntersectionDomain.names domain.key
+  · obtain ⟨entry, body, depth, ordinary, rfl, stored⟩ := known.bindings name bound
+    have read := SourcePreparedSharedRows.read_identity state.heap valid.1 _ stored entry.identity rfl
+    simp only [compileReference, bound, ite_true, Semantic, read]
+    cases left
+    · exact semantic_requestNode domain other (.mu entry body depth ordinary) state ⟨known, available, stored⟩
+    · exact semantic_requestNode domain (.mu entry body depth ordinary) other state ⟨known, stored, available⟩
+  · simp only [compileReference, bound, ite_false, Semantic]
+
+/-- Every guarded compiled edge derives available ordered child requests and a complete output row. -/
+theorem compileEdge_semantic [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (request : EdgeRequest Symbol Guard) (state : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid state)
+    (ready : EdgeReady state request) : Semantic (compileEdge emptyGuard conjoin request) state := by
+  unfold compileEdge
+  split
+  · let input := fun (current : Machine Symbol Guard) (pair : Value Symbol Guard × Value Symbol Guard) =>
+      Domain current request.domain ∧ Available current.heap pair.1 ∧ Available current.heap pair.2
+    have stable : Stable input := by
+      intro before after growth pair known
+      exact ⟨known.1.grows _ growth, growth.available _ known.2.1, growth.available _ known.2.2⟩
+    have children := safe_walk (fun pair => requestNode request.domain pair.1 pair.2)
+      (request.left.children.zip request.right.children) input _ stable available_stable
+      (fun pair _ current currentValid known => safe_requestNode request.domain pair.1 pair.2 current known)
+      state valid (by
+        intro pair member
+        have contained := List.of_mem_zip member
+        exact ⟨ready.1, valid.1.cached.edges request.left.entry.key request.left ready.2.1 pair.1 contained.1,
+          valid.1.cached.edges request.right.entry.key request.right ready.2.2 pair.2 contained.2⟩)
+    have childrenSemantic := semantic_walk (fun pair => requestNode request.domain pair.1 pair.2)
+      (request.left.children.zip request.right.children) input _ stable available_stable
+      (fun pair _ current currentValid known => safe_requestNode request.domain pair.1 pair.2 current known)
+      (fun pair _ current currentValid known => semantic_requestNode request.domain pair.1 pair.2 current known)
+      state valid (by
+        intro pair member
+        have contained := List.of_mem_zip member
+        exact ⟨ready.1, valid.1.cached.edges request.left.entry.key request.left ready.2.1 pair.1 contained.1,
+          valid.1.cached.edges request.right.entry.key request.right ready.2.2 pair.2 contained.2⟩)
+    apply semantic_bind _ _ state valid _ children childrenSemantic
+    intro values after afterValid growth available
+    exact semantic_edge _ _ values after available
+  · exact semantic_edge _ _ [.empty] state
+      (by intro value member; simp only [List.mem_singleton] at member; subst value; exact empty_available state.heap)
+
+/-- Actual hash-join occurrences derive resident row requests before canonical node construction. -/
+theorem compileRows_semantic [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (domain : Interned DomainKey)
+    (left right : List (EdgeValue Symbol Guard)) (state : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid state)
+    (known : Domain state domain) (leftResident : ∀ edge ∈ left, EdgeResident state.heap edge)
+    (rightResident : ∀ edge ∈ right, EdgeResident state.heap edge) :
+    Semantic (compileRows domain left right) state := by
+  let input := fun (current : Machine Symbol Guard) (pair : EdgeValue Symbol Guard × EdgeValue Symbol Guard) =>
+    Domain current domain ∧ EdgeResident current.heap pair.1 ∧ EdgeResident current.heap pair.2
+  have stable : Stable input := by
+    intro before after growth pair known
+    exact ⟨known.1.grows _ growth, edge_grows _ _ growth.heap _ known.2.1, edge_grows _ _ growth.heap _ known.2.2⟩
+  have rows := safe_walk (fun pair => requestEdge domain pair.1 pair.2) (pairs left right) input _ stable edge_stable
+    (fun pair _ current currentValid known => safe_requestEdge domain pair.1 pair.2 current known)
+    state valid (by
+      intro pair member
+      obtain ⟨first, second, _⟩ := (pairs_member left right pair).mp member
+      exact ⟨known, leftResident pair.1 first, rightResident pair.2 second⟩)
+  have rowsSemantic := semantic_walk (fun pair => requestEdge domain pair.1 pair.2) (pairs left right) input _ stable edge_stable
+    (fun pair _ current currentValid known => safe_requestEdge domain pair.1 pair.2 current known)
+    (fun pair _ current currentValid known => semantic_requestEdge domain pair.1 pair.2 current known)
+    state valid (by
+      intro pair member
+      obtain ⟨first, second, _⟩ := (pairs_member left right pair).mp member
+      exact ⟨known, leftResident pair.1 first, rightResident pair.2 second⟩)
+  apply semantic_bind _ _ state valid _ rows rowsSemantic
+  intro values after afterValid growth resident
+  exact semantic_node values after resident
+
+/-- Ordered compiled union requests retain available members before source union construction. -/
+theorem union_semantic [DecidableEq (EdgeKey Symbol Guard)] (domain : Interned DomainKey) (members : List (Value Symbol Guard))
+    (other : Value Symbol Guard) (left : Bool) (state : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid state)
+    (known : Domain state domain) (available : Available state.heap other) (membersAvailable : ∀ value ∈ members, Available state.heap value) :
+    Semantic ((walk (fun member => if left then requestNode domain member other else requestNode domain other member) members).bind
+      fun values => .work (makeUnion values) .pure) state := by
+  let input := fun (current : Machine Symbol Guard) (value : Value Symbol Guard) =>
+    Domain current domain ∧ Available current.heap other ∧ Available current.heap value
+  have stable : Stable input := by
+    intro before after growth value known
+    exact ⟨known.1.grows _ growth, growth.available _ known.2.1, growth.available _ known.2.2⟩
+  have requests := safe_walk (fun member => if left then requestNode domain member other else requestNode domain other member)
+    members input _ stable available_stable (by
+      intro member present current currentValid known
+      cases left
+      · exact safe_requestNode domain other member current ⟨known.1, known.2.1, known.2.2⟩
+      · exact safe_requestNode domain member other current ⟨known.1, known.2.2, known.2.1⟩)
+    state valid (fun member present => ⟨known, available, membersAvailable member present⟩)
+  have requestsSemantic := semantic_walk (fun member => if left then requestNode domain member other else requestNode domain other member)
+    members input _ stable available_stable (by
+      intro member present current currentValid known
+      cases left
+      · exact safe_requestNode domain other member current ⟨known.1, known.2.1, known.2.2⟩
+      · exact safe_requestNode domain member other current ⟨known.1, known.2.2, known.2.1⟩)
+    (by
+      intro member present current currentValid known
+      cases left
+      · exact semantic_requestNode domain other member current ⟨known.1, known.2.1, known.2.2⟩
+      · exact semantic_requestNode domain member other current ⟨known.1, known.2.2, known.2.1⟩)
+    state valid (fun member present => ⟨known, available, membersAvailable member present⟩)
+  apply semantic_bind _ _ state valid _ requests requestsSemantic
+  intro values after afterValid growth present
+  exact semantic_union values after present
+
+end MicroCFTA.SourceRecursiveIntersectionCode
