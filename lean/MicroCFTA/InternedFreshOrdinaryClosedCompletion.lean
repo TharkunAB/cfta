@@ -60,24 +60,40 @@ theorem site_impossible [DecidableEq (EdgeKey Symbol Guard)] {origin : Origin Sy
       Reference.uninterned.injEq] using atIndex
   exact unequal equal
 
+/-- Literal source construction in a complete valid decoded cache cannot stop at an unfinished recursive record. -/
+theorem literal_not_pending [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
+    (names : List Reference) (state : State Symbol Guard) (context : Context state (names.map Value.reference))
+    (heap : InternedFreshOrdinaryDepthHeap.Heap state) (covered : Covered [] state)
+    (key : NodeKey) (final : State Symbol Guard) : build expression (names.map Value.reference) state ≠ .pending key final := by
+  intro pending
+  obtain ⟨origin, rooted, ⟨site⟩⟩ := InternedFreshOrdinaryRootEncounter.complete_site expression (names.map Value.reference) state
+    context covered key final pending
+  obtain ⟨crossings, path, histories⟩ := rooted
+  have inputs : origin.environment = (crossings.map (fun crossing => crossing.name) ++ names).map Value.reference := by
+    simpa only [List.map_append, List.map_map, Function.comp_def] using path.inputs
+  have finalHeap : InternedFreshOrdinaryDepthHeap.Heap final := by
+    simpa only [pending, Outcome.state] using (InternedFreshOrdinarySourceDepth.build_depth expression names state context heap).heap
+  exact site_impossible site _ inputs finalHeap
+
+/-- Every repaired literal-input construction in a complete valid decoded cache returns a complete value and its actual cache. -/
+theorem literal_complete [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
+    (names : List Reference) (state : State Symbol Guard) (context : Context state (names.map Value.reference))
+    (heap : InternedFreshOrdinaryDepthHeap.Heap state) (covered : Covered [] state) :
+    ∃ value final, build expression (names.map Value.reference) state = .done value final := by
+  cases result : build expression (names.map Value.reference) state with
+  | done value final => exact ⟨value, final, rfl⟩
+  | pending key final => exact False.elim (literal_not_pending expression names state context heap covered key final result)
+
 /-- No repaired source expression built from empty captures and caches stops at an unfinished recursive record. -/
 theorem closed_not_pending [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
-    (key : NodeKey) (final : State Symbol Guard) : build expression [] empty ≠ .pending key final := by
-  intro pending
-  obtain ⟨origin, rooted, site, mismatch⟩ := InternedFreshOrdinaryRootEncounter.complete_stopped_mismatch expression [] empty
-    InternedFreshOrdinaryContext.empty_context empty_correct.2 key final pending
-  obtain ⟨crossings, path, histories⟩ := rooted
-  have inputs : origin.environment = (crossings.map (fun crossing => crossing.name)).map Value.reference := by
-    simpa only [List.append_nil, List.map_map, Function.comp_def] using path.inputs
-  have heap : InternedFreshOrdinaryDepthHeap.Heap final := by
-    simpa only [pending, Outcome.state] using InternedFreshOrdinarySourceDepth.closed_heap expression
-  exact site_impossible site _ inputs heap
+    (key : NodeKey) (final : State Symbol Guard) : build expression [] empty ≠ .pending key final :=
+  literal_not_pending expression [] empty InternedFreshOrdinaryContext.empty_context
+    InternedFreshOrdinaryDepthHeap.empty_heap empty_correct.2 key final
 
 /-- Every repaired closed source expression returns a complete value and its actual final cache. -/
 theorem closed_complete [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard) :
-    ∃ value final, build expression [] empty = .done value final := by
-  cases result : build expression [] empty with
-  | done value final => exact ⟨value, final, rfl⟩
-  | pending key final => exact False.elim (closed_not_pending expression key final result)
+    ∃ value final, build expression [] empty = .done value final :=
+  literal_complete expression [] empty InternedFreshOrdinaryContext.empty_context
+    InternedFreshOrdinaryDepthHeap.empty_heap empty_correct.2
 
 end MicroCFTA.InternedFreshOrdinaryClosedCompletion
