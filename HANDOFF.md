@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 13:00 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 13:05 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -64,7 +64,7 @@ in complete semantic caches under explicit WordRanges. Native output scope,
 closedness, original syntax, and general bounded cold-reader effects are now
 proved. Finite repeated traversal and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`c410bc0a`**. A later documentation commit
+The latest proof checkpoint is **`75c50b4d`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -89,7 +89,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **30% at 13:01 CEST**. This is a historical value.
+The last observed value was **30% at 13:05 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -882,6 +882,23 @@ stored-unfold note changed intentionally. No saved proof, counterexample,
 fixture, or marked draft changed. Report:
 `/tmp/mcfta-native-cold-effects-20261014-preservation.json`.
 
+## Raw-binder identity substitution boundary
+
+`75c50b4d` retains `InternedStoredRawIdentityBoundary`. Actual closed source
+construction builds an outer binder whose open stored body contains an
+unused raw inner Mu. Replacing the outer name with itself changes physical
+identity and cached depth from 1 to 0. Free-name lists remain equal.
+Kernel evaluation proves the exact observation. Live Haskell also reports
+`(False,1,0)`. Log:
+`/tmp/mcfta-identity-substitution-native-20261014.log`.
+
+The unqualified physical identity postcondition in `Type.hs` is false for
+this raw-binder case. Runtime behavior was not changed. `substitutionPlan`
+rebuilds open Mu records with smart `createMu`. It intentionally does not use
+the cached pattern-synonym matcher fast paths. A general physical closure
+proof must account for smart cleanup. No language change is claimed.
+See [repaired cold shared rows](lean/notes-fresh-cold-shared-rows.md).
+
 ## Remaining priorities
 
 1. Read `lean/notes-native-successful.md`. Arbitrary-record source completion,
@@ -952,10 +969,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,367 jobs and 42,729 theorem dependency checks**.
+The current build passes **1,368 jobs and 42,779 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-fresh-shared-sized-20261014-audit.log`.
+Log: `/tmp/mcfta-raw-identity-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.

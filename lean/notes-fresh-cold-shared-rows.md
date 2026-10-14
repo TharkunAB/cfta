@@ -1,6 +1,6 @@
 # Repaired cold shared traversal and exact Sized classes
 
-Updated: 2026-10-14 13:00 CEST. Proof checkpoint: `c410bc0a`.
+Updated: 2026-10-14 13:05 CEST. Proof checkpoints: `c410bc0a` and `75c50b4d`.
 
 ## Direct repaired executor
 
@@ -71,10 +71,31 @@ depth are refuted as general measures by an actual closed source example.
 See [native output and cold effects](notes-native-output-cold-effects.md).
 General finite final tables and physical product language remain open.
 
+## Raw-binder reconstruction boundary
+
+`75c50b4d` adds `InternedStoredRawIdentityBoundary`. Actual repaired closed
+construction builds `mu x. rawMu unused. f(x)`. Its open stored body contains
+an unused raw Mu. Substitution replaces the outer reference with itself.
+The exact resulting body has a different identity and cached depth 0 instead
+of 1. Free-name lists remain equal. Kernel evaluation proves this observation.
+
+The source's `substFree` comment states an unqualified physical identity
+postcondition. That claim fails for this raw-binder case. `substitutionPlan`
+rebuilds an open Mu body with smart `createMu`, which removes the unused
+binder. It intentionally avoids pattern-synonym matcher fast paths.
+A general reconstruction proof must model that cleanup. No language change
+is claimed. Runtime behavior was not changed.
+
+The live Haskell reproduction uses `createMu` outside and
+`createMuDontCleanup` inside. It substitutes the outer `RecInt` with itself
+in the stored body. The observation is `(False,1,0)` for equality and the two
+nested-Mu counts. File: `/tmp/mcfta-identity-substitution-native.hs`. Log:
+`/tmp/mcfta-identity-substitution-native-20261014.log`.
+
 ## Validation
 
-Lean 4.34.1 passes 1,367 aggregate jobs and 42,729 theorem dependency checks.
+Lean 4.34.1 passes 1,368 aggregate jobs and 42,779 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-fresh-shared-sized-20261014-audit.log`.
+`/tmp/mcfta-raw-identity-20261014-audit.log`.
 No Haskell source changed. The current upstream Nix suite and active-package
 formatter checks remain valid.

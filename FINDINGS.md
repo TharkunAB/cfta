@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 13:00 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 13:05 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -569,6 +569,23 @@ The same prepared trace bridge retains existing native and solver-decided
 table compositions. General nested finite trace existence remains open.
 See [repaired cold shared rows](lean/notes-fresh-cold-shared-rows.md).
 
+## Raw-binder identity substitution boundary
+
+`75c50b4d` retains `InternedStoredRawIdentityBoundary`. Actual closed source
+construction builds an outer binder whose open stored body contains an
+unused raw inner Mu. Replacing the outer name with itself changes physical
+identity and cached depth from 1 to 0. Free-name lists remain equal.
+Kernel evaluation proves the exact observation. Live Haskell also reports
+`(False,1,0)`. Log:
+`/tmp/mcfta-identity-substitution-native-20261014.log`.
+
+The unqualified physical identity postcondition in `Type.hs` is false for
+this raw-binder case. Runtime behavior was not changed. `substitutionPlan`
+rebuilds open Mu records with smart `createMu`. It intentionally does not use
+the cached pattern-synonym matcher fast paths. A general physical closure
+proof must account for smart cleanup. No language change is claimed.
+See [repaired cold shared rows](lean/notes-fresh-cold-shared-rows.md).
+
 ## Remaining work and assessment
 
 The central mathematical and source-algorithm contracts are strong. The work
@@ -631,18 +648,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`c410bc0a`**; later commits record this handoff.
+The latest proof checkpoint is **`75c50b4d`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,367 build targets and 42,729 theorem
+The current Lean 4.34.1 audit passes **1,368 build targets and 42,779 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-fresh-shared-sized-20261014-audit.log`.
+Log: `/tmp/mcfta-raw-identity-20261014-audit.log`.
 After the current refresh, all **642** examples passed in Nix: 289 core, 208
 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **30% at 13:01 CEST**.
+No background proof worker is active. Weekly allowance was **30% at 13:05 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
