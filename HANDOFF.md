@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 18:53 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 19:20 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -66,7 +66,7 @@ proved. General finite repaired traversal and structural tables are now
 proved. Final-cache guarded row language is proved. Its independent-language
 transport is now exact. Physical product language remains open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`dac5f26b`**, after `2e6fb87a` and `6afdfe00`. A later documentation commit
+The latest proof checkpoint is **`ddef16e6`**, after `f04b8261` and `4d80735a`. A later documentation commit
 records this handoff. Use `git log` for its hash. The intentionally untracked fixtures are
 `lean/repro/NestedUnaryTwoAtom.hs` and `lean/repro/NativeProductRowCycle.hs`; preserve both.
 
@@ -131,26 +131,43 @@ Unary terms through depth 24 still equal the common input acceptance. Those
 finite checks do not prove complete language correctness or expose a semantic
 runtime defect.
 
-Preserve untracked `lean/repro/NativeProductRowCycle.hs` and
-`lean/repro/NestedUnaryTwoAtom.hs`. Next derive a relation between actual output
-records and original input pairs through Mu, union, stored substitution, and
-final row exposure. Allow multiple physical records for one input pair. Prove
-finite-term product correctness from local related rows, including diagonal
-reuse and dead-row reasons. Do not assume a product-language contract or try
-to derive the refuted literal `ProductReadback.members` for general Mu output.
-The existing abstract functional theorem retains its stated scope. Read
-`lean/notes-ordinary-product-rows.md` before further product work.
-The finite Haskell probes remain validation only. The stopped Lean generated
-probes supply no quantitative result. All workers are terminal.
+`f04b8261` proves exact graph languages from local related physical rows.
+It permits multiple representatives, complete guards, ordered children, and
+explicit false-guard or empty-child deletion. Diagonal reuse has exact product
+language even for ambiguous source rows. Existing functional rows are a
+proved special case. `4d80735a` derives local related rows from actual checked
+native ordinary calls at every larger bound and later valid cache.
 
-Current audit: **1,463 jobs and 43,854 theorem dependency checks**. Only
+`ddef16e6` connects related product rows and related roots to the actual
+minimum callback, complete ambiguity scan, and literal reference compiler
+result. Finite classes, exact distinct guarded node counts, decoder order,
+and both rank inverses follow. Physical relation closure and completed row
+extraction remain explicit premises.
+
+`NativeProductRowCycleReadout` now proves full unbounded language equality
+for the observed finite Mu transcript, distinct literal rows, and a formal
+obstruction to the functional adapter with the observed parent/child results.
+The live dump and focused comparison validate the exact finite transcript.
+They do not verify Haskell extraction. The earlier depth-24 checks remain
+finite validation; the stopped generated Lean probes supply no measurement.
+
+Preserve untracked `lean/repro/NativeProductRowCycle.hs` and
+`lean/repro/NestedUnaryTwoAtom.hs`. Next derive consistent related roots and
+row closure from actual Mu, union, stored substitution, domains, and final
+row exposure. Use the completed generic product, callback, and compiler
+proofs. Do not assume product language or derive the refuted general literal
+`ProductReadback.members`. Preserve the older functional theorem for its
+stated scope. Read `lean/notes-relational-product-rows.md`. All workers are
+terminal. Full native two-input language correspondence remains open.
+
+Current audit: **1,470 jobs and 43,899 theorem dependency checks**. Only
 `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-ordinary-product-rows-20261014-audit.log`.
-Current snapshot: `/tmp/mcfta-ordinary-product-rows-checkpoint-20261014-1853/`.
-It saves all **1,828 Lean-tree files** and compares all 1,819 previous files.
-None is missing. Only audit imports, two coverage ledgers, and two current
-component notes changed among those files. Earlier proof and marked-draft
-bytes remain unchanged. No production Haskell source changed.
+`/tmp/mcfta-relational-product-rows-20261014-audit.log`.
+Current snapshot: `/tmp/mcfta-relational-product-rows-checkpoint-20261014-1920/`.
+It saves all **1,836 Lean-tree files** and compares all 1,828 previous files.
+None is missing. Only audit imports, two coverage ledgers, and the preceding
+ordinary-product note changed among those files. Earlier proof and
+marked-draft bytes remain unchanged. No production Haskell source changed.
 
 ## Independent guarded meaning and actual stored compiler
 
@@ -1381,21 +1398,19 @@ The retained raw counterexample does not prove the qualified identity law.
    least language, native semantic heap propagation, and sound finite native
    tables. `0258ae86` identifies Original stored meaning with copied syntax
    and finite tagged input derivations. Read
-   `lean/notes-independent-guarded-language.md`. Next prove final graph/table
-   completeness and physical product readback. Derive leastness and any rank
-   transport through actual canonical reconstruction; do not assume them.
-   Read `lean/notes-native-output-cold-effects.md` and
-   `lean/notes-fresh-cold-shared-rows.md`. The earlier abstract lexical inventory
-   and the actual finite physical table are both proved; independent guarded
-   Mu semantics and physical product readback still need a source bridge.
-   Use actual `MergedFreshOrdinaryExposure`. The old `MergedSourceExposure`
-   bridge agrees only in the prepared fragment. Universal preparation
-   preservation remains refuted. Keep that actual source-built counterexample
-   and its successful native return. Derive physical `ProductReadback.members`
-   and `.rejected` from actual row traces, then use `product_exact`. Do not
-   assume equivalent product language. Keep the stated word/input scope and
-   all source, domain, memo, and continuation effects. Retain the complete
-   public Sized results.
+   `lean/notes-independent-guarded-language.md`. `9ca74b4d` now proves exact
+   final graph/table completeness and initial input language. `081ce3d1`
+   retains exact independent native returned-value language. Do not repeat
+   those completed results. Read `lean/notes-relational-product-rows.md`.
+   Generic related physical rows, exact product language with diagonal reuse,
+   actual ordinary native row relations, the minimum callback, and compiler
+   Sized composition are now proved. Derive consistent related roots and
+   local row closure through actual Mu, union, stored substitution, and final
+   repaired exposure. The general functional child-map adapter is refuted.
+   Do not assume equivalent product language. Keep all checked-word, source,
+   domain, memo, and continuation effects. Universal preparation preservation
+   remains refuted. Retain its source-built counterexample and successful
+   native return. Keep the complete public Sized results.
 3. Connect bounded import to native `fromFTA`/SCC and split readback, then
    preserve supplied custom order through final observation decoders.
    `SourceBoundedImport`, `SourceFromTerms*`, and `SourceImportGroups*` already
@@ -1439,10 +1454,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,443 jobs and 43,730 theorem dependency checks**.
+The current build passes **1,470 jobs and 43,899 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-smart-budget-execution-20261014-audit.log`.
+Log: `/tmp/mcfta-relational-product-rows-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.

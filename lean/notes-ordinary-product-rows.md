@@ -1,6 +1,6 @@
 # Actual ordinary product rows and the general child-identity boundary
 
-Updated: 2026-10-14 18:52 CEST.
+Updated: 2026-10-14 19:20 CEST.
 Proofs: `2e6fb87a`, `6afdfe00`, and `dac5f26b`.
 
 ## Completed physical row proofs
@@ -102,13 +102,18 @@ pairs. More than one physical record can represent one input pair. Derive
 this relation from actual domains, ordered child calls, Mu construction and
 stored substitution, union normalization, and final repaired row exposure.
 
-Prove finite-term product correctness from local related physical rows. Keep
-the diagonal shortcut and dead-row reasons explicit. The relation must be
-derived from execution. Do not supply language equivalence as its premise.
-Then connect actual native returned tables and the minimum callback through
-the relational result. The native ordinary theorem above supplies one local
-row case with an exact domain-specific child map. The Mu and union cases and
-their consistent relational child witnesses remain open.
+The next checkpoint now proves generic finite-term product correctness from
+local related rows, diagonal reuse, and explicit deletion reasons. It also
+derives actual native ordinary row relations and connects the minimum
+callback, complete ambiguity scan, and compiler Sized laws. The observed
+finite Mu transcript now has an unbounded language proof and a formal
+functional-row obstruction. Read [related product rows](notes-relational-product-rows.md).
+
+The relation must still be derived consistently through actual Mu and union
+execution, stored substitution, and repaired row exposure. Do not supply
+language equivalence as its premise. Consistent related roots and local row
+closure for those cases remain open. Preserve the functional theorem for
+its stated scope.
 
 The primary reference, solver-decided, and optimized finite-map Sized laws
 remain proved at their recorded source-model boundaries. Their explicit
@@ -118,7 +123,7 @@ concrete Haskell runtime verification remain open.
 
 ## Validation and preservation
 
-Pinned Lean 4.34.1 passes all focused checks and the aggregate audit:
+The preceding ordinary-row checkpoint passed all focused checks and its audit:
 1,463 jobs and 43,854 theorem dependency checks. Only `propext`,
 `Classical.choice`, and `Quot.sound` are permitted.
 Log: `/tmp/mcfta-ordinary-product-rows-20261014-audit.log`.

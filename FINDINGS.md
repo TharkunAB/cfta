@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 18:53 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 19:20 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -93,25 +93,42 @@ Unary terms through depth 24 still equal the common input acceptance. Those
 finite checks do not prove complete language correctness or expose a semantic
 runtime defect.
 
-Preserve untracked `lean/repro/NativeProductRowCycle.hs` and
-`lean/repro/NestedUnaryTwoAtom.hs`. Next derive a relation between actual output
-records and original input pairs through Mu, union, stored substitution, and
-final row exposure. Allow multiple physical records for one input pair. Prove
-finite-term product correctness from local related rows, including diagonal
-reuse and dead-row reasons. Do not assume a product-language contract or try
-to derive the refuted literal `ProductReadback.members` for general Mu output.
-The existing abstract functional theorem retains its stated scope. Read
-`lean/notes-ordinary-product-rows.md` before further product work.
-The finite Haskell probes remain validation only. The stopped Lean generated
-probes supply no quantitative result. All workers are terminal.
+`f04b8261` proves exact graph languages from local related physical rows.
+It permits multiple representatives, complete guards, ordered children, and
+explicit false-guard or empty-child deletion. Diagonal reuse has exact product
+language even for ambiguous source rows. Existing functional rows are a
+proved special case. `4d80735a` derives local related rows from actual checked
+native ordinary calls at every larger bound and later valid cache.
 
-The aggregate audit passes **1,463 jobs and 43,854 theorem dependency checks**,
+`ddef16e6` connects related product rows and related roots to the actual
+minimum callback, complete ambiguity scan, and literal reference compiler
+result. Finite classes, exact distinct guarded node counts, decoder order,
+and both rank inverses follow. Physical relation closure and completed row
+extraction remain explicit premises.
+
+`NativeProductRowCycleReadout` now proves full unbounded language equality
+for the observed finite Mu transcript, distinct literal rows, and a formal
+obstruction to the functional adapter with the observed parent/child results.
+The live dump and focused comparison validate the exact finite transcript.
+They do not verify Haskell extraction. The earlier depth-24 checks remain
+finite validation; the stopped generated Lean probes supply no measurement.
+
+Preserve untracked `lean/repro/NativeProductRowCycle.hs` and
+`lean/repro/NestedUnaryTwoAtom.hs`. Next derive consistent related roots and
+row closure from actual Mu, union, stored substitution, domains, and final
+row exposure. Use the completed generic product, callback, and compiler
+proofs. Do not assume product language or derive the refuted general literal
+`ProductReadback.members`. Preserve the older functional theorem for its
+stated scope. Read `lean/notes-relational-product-rows.md`. All workers are
+terminal. Full native two-input language correspondence remains open.
+
+The aggregate audit passes **1,470 jobs and 43,899 theorem dependency checks**,
 with only `propext`, `Classical.choice`, and `Quot.sound`. Log:
-`/tmp/mcfta-ordinary-product-rows-20261014-audit.log`.
-Snapshot: `/tmp/mcfta-ordinary-product-rows-checkpoint-20261014-1853/`.
-All 1,828 Lean-tree files are saved. All 1,819 previous files remain.
-Only audit imports, two coverage ledgers, and two current component notes
-changed among those previous files. All earlier proofs and drafts retain
+`/tmp/mcfta-relational-product-rows-20261014-audit.log`.
+Snapshot: `/tmp/mcfta-relational-product-rows-checkpoint-20261014-1920/`.
+All 1,836 Lean-tree files are saved. All 1,828 previous files remain.
+Only audit imports, two coverage ledgers, and the preceding ordinary-product
+note changed among those previous files. All earlier proofs and drafts retain
 their bytes. No production Haskell code changed. No worker remains active.
 
 ## Independent guarded meaning and actual stored compiler
