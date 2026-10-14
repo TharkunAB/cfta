@@ -54,6 +54,11 @@ theorem preserve (before after : State Symbol Guard) (heap : Heap before)
   intro key entry body depth ordinary present
   exact heap key entry body depth ordinary (old key entry body depth ordinary present)
 
+/-- A later decoded heap proves the same invariant for every retained earlier complete record. -/
+theorem of_grows (before after : State Symbol Guard) (growth : Grows before after) (heap : Heap after) : Heap before := by
+  intro key entry body depth ordinary present
+  exact heap key entry body depth ordinary (growth.nodeRecords key _ present)
+
 /-- Completing a request installs its proved observation or retains an earlier record. -/
 theorem complete_heap (smart : Bool) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
     (state : State Symbol Guard) (heap : Heap state) (correct : Correct entry body depth ordinary) :

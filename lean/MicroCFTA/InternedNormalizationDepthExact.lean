@@ -13,6 +13,38 @@ open InternedUnionSeparation InternedUnionDescendants InternedNormalizationDepth
 open InternedLiveEdges InternedEdgeResidency
 open InternedBinderProtocol (NodeKey Reference)
 
+/-- Concatenating child lists takes the maximum of their two cached-depth bounds. -/
+theorem maximumDepth_append (first second : List (Value Symbol Guard)) :
+    maximumDepth (first ++ second) = max (maximumDepth first) (maximumDepth second) := by
+  apply Nat.le_antisymm
+  · apply (maximumDepth_exact _ _).mpr
+    intro value member
+    rcases List.mem_append.mp member with left | right
+    · exact Nat.le_trans ((maximumDepth_exact first _).mp (Nat.le_refl _) value left) (Nat.le_max_left _ _)
+    · exact Nat.le_trans ((maximumDepth_exact second _).mp (Nat.le_refl _) value right) (Nat.le_max_right _ _)
+  · apply Nat.max_le.mpr
+    constructor
+    · exact (maximumDepth_exact _ _).mpr (fun value member =>
+        (maximumDepth_exact _ _).mp (Nat.le_refl _) value (List.mem_append_left second member))
+    · exact (maximumDepth_exact _ _).mpr (fun value member =>
+        (maximumDepth_exact _ _).mp (Nat.le_refl _) value (List.mem_append_right first member))
+
+/-- Canonical edge order and identity deduplication preserve the maximum child depth. -/
+theorem canonicalEdges_depth (edges : List (EdgeValue Symbol Guard)) (state : State Symbol Guard)
+    (coherent : Coherent state) (resident : ∀ edge ∈ edges, EdgeResident state edge) :
+    maximumDepth ((canonicalEdges edges).flatMap EdgeValue.children) = maximumDepth (edges.flatMap EdgeValue.children) := by
+  apply Nat.le_antisymm
+  · apply (maximumDepth_exact _ _).mpr
+    intro child member
+    obtain ⟨edge, included, childMember⟩ := List.mem_flatMap.mp member
+    exact (maximumDepth_exact _ _).mp (Nat.le_refl _) child
+      (List.mem_flatMap.mpr ⟨edge, canonicalEdges_member _ edge included, childMember⟩)
+  · apply (maximumDepth_exact _ _).mpr
+    intro child member
+    obtain ⟨edge, included, childMember⟩ := List.mem_flatMap.mp member
+    exact (maximumDepth_exact _ _).mp (Nat.le_refl _) child
+      (List.mem_flatMap.mpr ⟨edge, canonicalEdges_retains state coherent edges edge resident included, childMember⟩)
+
 /-- A positive maximum is attained by one actual input record. -/
 theorem maximumDepth_attained (values : List (Value Symbol Guard))
     (positive : 0 < maximumDepth values) :
@@ -48,6 +80,15 @@ theorem makeNode_depth [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeV
     obtain ⟨entry, exactResult⟩ := identifyNode_readback
       (first :: rest) state coherent linked (by simpa [same] using selected)
     simp only [run, exactResult, identifyNode, Value.depth, same]
+
+/-- Actual ordinary construction has the maximum child depth of the original surviving source edges. -/
+theorem makeNode_surviving_depth [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : State Symbol Guard) (coherent : Coherent state) (linked : Linked state)
+    (resident : ∀ edge ∈ edges, EdgeResident state edge) :
+    (run (makeNode edges) state).1.depth = maximumDepth ((surviving edges).flatMap EdgeValue.children) := by
+  rw [makeNode_depth edges state coherent linked resident]
+  exact canonicalEdges_depth (surviving edges) state coherent
+    (fun edge member => resident edge (List.mem_filter.mp member).1)
 
 /-- Every positive source depth is the depth of a retained Mu record. -/
 theorem depth_witness (state : State Symbol Guard) (coherent : Coherent state)
