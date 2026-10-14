@@ -1,13 +1,14 @@
 import MicroCFTA.SourceRecursiveIntersectionNativeColdEffects
 import MicroCFTA.SourceRecursiveIntersectionNativeOpenDepth
-import MicroCFTA.SourceFreshOrdinaryColdTable
+import MicroCFTA.SourceFreshOrdinaryColdTableLanguage
 
 /-!
 # Finite repaired cold tables after actual native intersection
 
 The actual first native run retains the body/probe heap. Its closed result
 therefore has a finite repaired shared traversal, an exact finite map domain,
-declared children, and allocation-free final-cache row replay. Checked word
+declared children, allocation-free row replay, and exact final-cache guarded
+language. Checked word
 ranges and original input syntax retain their stated native scope.
 -/
 namespace MicroCFTA.SourceRecursiveIntersectionNative
@@ -40,8 +41,11 @@ theorem cold_node_table [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)
       (∀ identity, (∃ edges, rows identity = some edges) ↔ identity ∈ keys final rows) ∧
       (∀ extra, execute emptyGuard conjoin (fuel + extra) (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure)
         (initial width ⟨source, domains⟩) = .done value after) ∧
-      ∀ largerOuter largerInner, outer ≤ largerOuter → inner ≤ largerInner →
-        SourceFreshOrdinaryColdSharedRows.collect largerOuter largerInner after.machine.heap (fun _ => none) [value] = .done rows final := by
+      (∀ largerOuter largerInner, outer ≤ largerOuter → inner ≤ largerInner →
+        SourceFreshOrdinaryColdSharedRows.collect largerOuter largerInner after.machine.heap (fun _ => none) [value] = .done rows final) ∧
+      ∀ meaning term, Language.Accepts (FTAValidation.rowFor (SourceInternedRows.interpretedRows meaning
+        (SourceColdSharedRows.table rows (keys final rows) value))) (SourcePreparedSharedRows.encode value) term ↔
+        EpsilonUnion.Accepts (MergedFreshOrdinaryGraph.graph final meaning) value term := by
   obtain ⟨fuel, value, after, done, correct, afterSemantic, afterCovered, stable⟩ :=
     cold_node_complete source semantic covered domains domainsValid holds emptyGuard conjoin left right
       leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed ranges
@@ -59,7 +63,9 @@ theorem cold_node_table [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)
   obtain ⟨rows, final, outer, inner, trace, finalSemantic, finalCovered, finalHeap, _, _, _, replayed, allChildren, distinct, domain, rowStable⟩ :=
     SourceFreshOrdinaryColdSharedRows.cold_table after.machine.heap afterSemantic afterCovered retained.2 value correct.result closed
   exact ⟨fuel, value, after, rows, final, outer, inner, done, correct, closed, correct.closed_original closed, trace,
-    finalSemantic, finalCovered, finalHeap, replayed, allChildren, distinct, domain, stable, rowStable⟩
+    finalSemantic, finalCovered, finalHeap, replayed, allChildren, distinct, domain, stable, rowStable,
+    SourceFreshOrdinaryColdTableLanguage.trace_table_language_final after.machine.heap final value rows trace
+      afterSemantic afterCovered correct.result closed (keys final rows) domain⟩
 
 /-- Actual repaired source construction derives every heap premise for native intersection and its finite cold table. -/
 theorem constructed_node_table [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
@@ -84,8 +90,11 @@ theorem constructed_node_table [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol
       (∀ identity, (∃ edges, rows identity = some edges) ↔ identity ∈ keys final rows) ∧
       (∀ extra, execute emptyGuard conjoin (fuel + extra) (.node ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure)
         (initial width ⟨source, domains⟩) = .done value after) ∧
-      ∀ largerOuter largerInner, outer ≤ largerOuter → inner ≤ largerInner →
-        SourceFreshOrdinaryColdSharedRows.collect largerOuter largerInner after.machine.heap (fun _ => none) [value] = .done rows final := by
+      (∀ largerOuter largerInner, outer ≤ largerOuter → inner ≤ largerInner →
+        SourceFreshOrdinaryColdSharedRows.collect largerOuter largerInner after.machine.heap (fun _ => none) [value] = .done rows final) ∧
+      ∀ meaning term, Language.Accepts (FTAValidation.rowFor (SourceInternedRows.interpretedRows meaning
+        (SourceColdSharedRows.table rows (keys final rows) value))) (SourcePreparedSharedRows.encode value) term ↔
+        EpsilonUnion.Accepts (MergedFreshOrdinaryGraph.graph final meaning) value term := by
   have heap : InternedOpenDepthReadback.Heap source := by
     simpa only [built, InternedNestedConstruction.Outcome.state] using InternedOpenDepthExecution.closed_heap expression
   exact cold_node_table source (SourceRecursiveIntersectionSemanticHeap.constructed expression builtValue source built)
