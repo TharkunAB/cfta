@@ -84,8 +84,6 @@ jobs:
         run: |
           (cd cfta && cabal check)
           (cd cfta-generator && cabal check)
-          (cd microecta && cabal check)
-          (cd microecta-generator && cabal check)
 
       - name: Build with strict warnings
         run: cabal v2-build all --enable-tests --enable-benchmarks --ghc-options=-Werror
@@ -99,9 +97,6 @@ jobs:
           cabal v2-build lib:cfta \
             --enable-optimization=2 \
             --ghc-options='-Werror +RTS -K512M -M512M -RTS'
-          cabal v2-build lib:microecta \
-            --enable-optimization=2 \
-            --ghc-options='-Werror +RTS -K512M -M512M -RTS'
 
       - name: Test
         run: cabal v2-test all --enable-optimization=2 --ghc-options=-Werror --test-show-details=direct
@@ -113,8 +108,6 @@ jobs:
             --install-method=copy --installdir="$HOME/.local/bin"
           cabal repl --with-repl="$HOME/.local/bin/doctest" lib:cfta
           cabal repl --with-repl="$HOME/.local/bin/doctest" lib:cfta-generator
-          cabal repl --with-repl="$HOME/.local/bin/doctest" lib:microecta
-          cabal repl --with-repl="$HOME/.local/bin/doctest" lib:microecta-generator
 
       - name: Test the generator examples
         run: |
@@ -136,8 +129,6 @@ jobs:
         run: |
           scripts/release.sh cfta --check-only
           scripts/release.sh cfta-generator --check-only
-          scripts/release.sh microecta --check-only
-          scripts/release.sh microecta-generator --check-only
 
       - name: Benchmark
         run: cabal v2-bench all --enable-optimization=2
