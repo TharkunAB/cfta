@@ -46,6 +46,11 @@ higher-order component states its result with @ap@, as
 With 'optionConditionals', a term whose guard holds only under a condition
 gets the condition as a requirement, and a conditional @if c t e@ at the goal
 can be a solution, as in the paper's starred queries.
+
+'checker' and 'preciseChecker' check single programs of
+"Data.CFTA.Gen.Synthesis" against a query, with the same inference and
+entailment. "Data.CFTA.Gen.Synthesis.Hybrid" lists Hectare's programs and
+checks them this way.
 -}
 module Data.CFTA.Gen.Synthesis.Liquid (
     -- * Refinement types
@@ -72,6 +77,11 @@ module Data.CFTA.Gen.Synthesis.Liquid (
     Outcome (..),
     synthesize,
     renderTerm,
+
+    -- * Checks of single programs
+    Checker (..),
+    checker,
+    preciseChecker,
 ) where
 
 import Control.Applicative ((<|>))
@@ -591,6 +601,83 @@ countedEntailment entailment environment = do
                     modifyIORef' known (Map.insert key verdict)
                     pure verdict
     pure (counted, counter, undecided)
+
+{- | A check of single programs against a query, with the inference and the
+entailment of 'synthesize'.
+-}
+data Checker = Checker
+    { checkProgram :: Synthesis.Program -> IO Bool
+    {- ^ Whether a program is defined and has the goal type. A program is a
+    query argument, a constant, a function value, or a head applied to all
+    its parameters, as in the terms of 'synthesize'. Another program fails.
+    -}
+    , checkerQueries :: IO (Int, Int)
+    -- ^ The solver queries so far, and the queries that the solver did not decide.
+    }
+
+{- | The checker of a query. It builds the state of a program bottom up, as
+'synthesize' builds the state of a term: the base types unify, each guard
+must hold, and the refinement of a subprogram is abstracted to the
+qualifiers. The states of the subprograms are kept, so a subprogram that
+many programs share gets one state. The goal check of a program uses its
+precise refinement, which implies the abstracted one. The checker does not
+make conditionals.
+-}
+checker :: Entailment -> [Component] -> LiquidQuery -> IO Checker
+checker = checkerWith True
+
+{- | The checker of a query that does not abstract: each subprogram keeps its
+precise refinement. It asks no qualifier queries, and its refinements grow
+with the program.
+-}
+preciseChecker :: Entailment -> [Component] -> LiquidQuery -> IO Checker
+preciseChecker = checkerWith False
+
+-- | The checker of a query, with or without the abstraction of subprograms to the qualifiers.
+checkerWith :: Bool -> Entailment -> [Component] -> LiquidQuery -> IO Checker
+checkerWith abstracts entailment components query = do
+    (counted, counter, undecided) <- countedEntailment entailment (environmentOf query)
+    candidates <-
+        if abstracts then simplifyQualifiers counted (qualifiers components query) else pure []
+    states <- newIORef Map.empty
+    let
+        -- Without conditions, each guard is decided when the state is made.
+        realize = realizeWith counted (Just [])
+        precise = realize (\_ refinement -> pure refinement)
+        abstracted = if abstracts then realize (abstractWith counted candidates) else precise
+        -- The state of a subprogram, kept for the next programs.
+        stateOf program = do
+            remembered <- Map.lookup program <$> readIORef states
+            case remembered of
+                Just state -> pure state
+                Nothing -> do
+                    state <- pendingOf program >>= maybe (pure Nothing) abstracted
+                    modifyIORef' states (Map.insert program state)
+                    pure state
+        -- The term of a program before its refinement is abstracted.
+        pendingOf program = case spine program [] of
+            (name, [])
+                | Just typ <- lookup name (liquidArguments query) -> pure $ Just (argumentLeaf (name, typ))
+                | Just typ <- lookup name components, valued components query typ -> pure $ Just (componentLeaf (name, typ))
+            (name, arguments)
+                | Just (typ, function) <- lookup name heads
+                , length (parametersOf typ) == length arguments -> do
+                    children <- traverse stateOf arguments
+                    pure $ sequence children >>= application (Just function) name typ
+            _ -> pure Nothing
+        check program = case liquidGoal query of
+            RArrow{} -> pure False
+            RBase base goal -> do
+                found <- pendingOf program >>= maybe (pure Nothing) precise
+                case found of
+                    Just State{stateType = RBase actual refinement}
+                        | actual == base -> (== Yes) <$> entailsWithBindings counted [] refinement goal
+                    _ -> pure False
+    pure $ Checker check ((,) <$> readIORef counter <*> readIORef undecided)
+  where
+    heads = [(name, (typ, function)) | (name, typ, function) <- headsOf components query]
+    spine (Synthesis.App function argument) arguments = spine function (argument : arguments)
+    spine (Synthesis.Var name) arguments = (name, arguments)
 
 -- | The number of states at all sizes.
 stateCount :: Map Int [State] -> Int
