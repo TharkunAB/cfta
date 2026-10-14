@@ -1,7 +1,7 @@
 # Public API and source correspondence
 
-Current checkpoint: **2026-10-14 09:25 CEST**, upstream `f59c198d`.
-The latest proof commit is `3da93bb3`. No background proof worker is active.
+Current checkpoint: **2026-10-14 09:46 CEST**, upstream `f59c198d`.
+The latest proof commit is `74fe5ef0`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -152,10 +152,18 @@ semantic context; native prefix preservation of that context remains open.
 Actual earlier completed routes now retain both repaired probes and a
 completed request payload before the ancestor reservation. That earlier pair
 differs from the later original pair. Captured values can be arbitrary records.
-Live-input comparison or key separation for the joint old-probe alias remains
-open. The older live-input theorem covers only literal-reference environments
-and the older ordinary policy. Capture absence does not establish request
-equality.
+Exact repaired live-input comparison now covers arbitrary fixed captured
+values. Common symbolic profiles derive actual child liveness. Equal surviving
+varying references give equal complete returned records in a coherent common
+cache. An earlier completed binder and actual later probes derive request
+readiness. Actual callback free-name observations expose every live varying
+capture. Pending execution now derives an actual ordinary mismatch on the
+same earlier route. Fresh interned changes are excluded. The current level is
+free in the ancestor's old Depth probe, lies strictly below its ordinaryLevel,
+and comes from an actual captured value. General pending exclusion still needs
+that capture's source history and a derived strict decrease. Retain the initial
+capture alternative until the actual source scope excludes it. Native prefix
+preservation of the full semantic context also remains open.
 An actual 22-step native prefix on repaired closed original source-built inputs
 refutes preservation of `PreparedWithoutMu` at every optional-binder body.
 Bounded execution of that example returns. This is a proof-invariant boundary,
@@ -186,7 +194,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,311 targets and 42,066 theorem dependency checks**
+The current audit passes **1,320 targets and 42,130 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

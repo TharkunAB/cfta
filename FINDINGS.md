@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 09:25 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 09:46 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -367,12 +367,30 @@ derives both earlier probes and a completed request whose payload survives
 to the ancestor cut. Its pair differs from the later original ancestor pair.
 No earlier completed callback or route witness is supplied.
 
-Pending exclusion still needs live-input comparison or key separation for
-the exact joint old-probe alias. The older live-input comparison handles only
-literal-reference environments and the older ordinary policy. The repaired
-comparison must retain arbitrary captured values and actual computed levels.
-Normalized output absence does
-not establish independence of the original memo key. Prove a broader open
+`InternedFreshOrdinaryLiveInputReplay.build_same` now proves exact completed
+record comparison for arbitrary fixed captured values and varying references.
+The symbolic profiles derive actual child liveness. Equal surviving varying
+inputs suffice in an actual coherent common cache. Discarded computations can
+have different cache effects. `LiveInputReadiness.not_pending_after_probes`
+derives the later completed request from an earlier completed binder and the
+later actual probes. Full semantic contexts and source cache growth remain
+explicit. No later binder completion is supplied.
+
+`InternedFreshOrdinaryJointMismatch.Site.mismatch` derives a changed live
+ordinary crossing on the same actual earlier route. Fresh interned changes
+contradict the original Depth probe's issued-name bound. The ordinary witness
+retains both earlier probes, their different pair, a completed request, and its
+payload before the ancestor reservation. The current level is free in the old
+ancestor Depth probe, is strictly below its selected `ordinaryLevel`, and comes
+from an actual earlier captured value. `active_pending_mismatch` connects this
+result to the actual optional-binder call without supplied mismatch witnesses.
+
+Pending exclusion still needs the ordinary capture's actual source history
+and a derived strict decrease. A root-to-origin path must distinguish initial
+captured names from actual earlier ordinary callbacks. Initial captures can
+be excluded only after proving the required source scope. The level bound alone
+does not exclude ordinary aliases. Normalized output absence does not establish
+independence of the original memo key. Prove a broader open
 nested constructor invariant instead of universal preparation preservation. See
 [constructor coverage](lean/notes-recursive-intersection-constructor-coverage.md).
 
@@ -398,16 +416,16 @@ All 1,515 saved Lean-tree files matched immediately after rebase. Later only
 intended coverage documents, the finite-key note, and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`3da93bb3`**; later commits record this handoff.
+The latest proof checkpoint is **`74fe5ef0`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,311 build targets and 42,066 theorem
+The current Lean 4.34.1 audit passes **1,320 build targets and 42,130 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-repaired-earlier-pair-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-live-mismatch-20261014-audit.log`.
 After the upstream refresh, all **640** examples passed in Nix: 288 core, 208
 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new production
 test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **32% at 09:24 CEST**.
+No background proof worker is active. Weekly allowance was **32% at 09:45 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.

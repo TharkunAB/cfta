@@ -1,6 +1,7 @@
 # Actual native constructor coverage and repaired pending encounters
 
-Proof checkpoints: `83d79a1d`, `f79d0417`, `4ca51381`, `0b123bab`, and `3da93bb3`.
+Proof checkpoints: `83d79a1d`, `f79d0417`, `4ca51381`, `0b123bab`,
+`3da93bb3`, `8a922c58`, and `74fe5ef0`.
 Upstream: `f59c198d`, 2026-10-14.
 Read [finite native observations](notes-recursive-intersection-native-finite.md)
 and [actual optional binders](notes-recursive-intersection-maybe-mu.md).
@@ -193,17 +194,80 @@ payload retained at the origin cut. At least one earlier probe reference
 differs from the original ancestor probe reference. Otherwise that payload
 would occupy the ancestor's missing key before its reservation.
 
+## Exact live-input comparison with arbitrary fixed captured values
+
+`InternedFreshOrdinaryLiveInputs` represents each lexical slot as a fixed
+value or a varying reference. Both executions retain the same fixed records.
+The symbolic profiles retain all fixed reference names. Free labels track
+only varying slots. `callback_agreement` proves the exact local extension
+through a binder. It does not assume equal computed ordinary levels.
+
+`InternedFreshOrdinaryLexicalLiveness.buildMany_empty` derives the actual
+empty-child test from those common symbolic profiles. The mutual proof in
+`InternedFreshOrdinaryLiveInputReplay` compares actual completed expressions,
+members, and edges. `build_same` proves equal complete returned records when
+all surviving varying inputs agree. Both full semantic contexts and an actual
+coherent common cache are required. Discarded source edges need no input
+agreement. Their earlier computations can have different cache effects.
+
+`InternedFreshOrdinaryLiveInputReadiness.not_pending_after_probes` needs an
+earlier completed binder and the later actual completed probes. It derives
+the later canonical request and excludes its pending readback. The later
+binder is not assumed complete. Equal Depth records determine equal repaired
+ordinary choices before the second callback comparison.
+
+`InternedFreeNameInputSubset` proves free-name inclusion with fixed symbolic
+profiles. `InternedFreshOrdinaryLiveInputSupport.callback_live` uses it to
+expose each live varying capture in an actual callback's free-name list away
+from its supplied argument. Names inside fixed captured records need not be
+empty. Adding those names cannot remove the varying capture observation.
+
+## Actual live ordinary mismatch
+
+`InternedFreshOrdinaryRouteInputs` pairs the actual crossed references and
+keeps the ancestor's complete captured values in a fixed tail. Both actual
+environments are derived exactly. Every changed varying input is ordinary or
+an interned name at or above the ancestor reservation counter.
+
+`InternedFreshOrdinaryJointMismatch.Site.mismatch` starts from the actual
+pending site and its derived earlier completed route. Agreement on all live
+varying inputs would make that request complete. A changed live interned name
+contradicts the original Depth probe's issued-name bound. The remaining
+witness retains:
+
+- The earlier completed source route, both probes, and completed request.
+- Its different pair and retained payload before the ancestor reservation.
+- One matched pair of actual source crossings with the same body.
+- A live ordinary input with different earlier and current selected levels.
+- The current level in the original ancestor Depth probe's free-name list.
+- Its strict bound below the ancestor's selected `ordinaryLevel`.
+- An actual earlier captured value that contains that ordinary name.
+
+`closed_mismatch` derives this witness from actual repaired pending execution
+in empty caches. `SourceRecursiveIntersectionMaybeMu.active_pending_mismatch`
+derives it from the actual optional-binder call with incoming full semantic
+context, body availability, and complete coverage. No route, callback replay,
+probe equality, or ordinary mismatch is supplied.
+
 ## Next proof target and retained boundaries
 
 Exclude the full repaired encounter for the intended constructor scope.
 The difficult case has two exact old probe records even though the current
 callback captures the ancestor's newly reserved reference. An earlier completed
-route and a different earlier pair are now derived. Use `Site.earlier_pair`.
-Relate its pair difference to a changed live lexical input. The older live-input
-comparison handles only literal-reference environments and the older ordinary
-policy. Prove the repaired comparison for arbitrary captured values. Fixed
-captured records must remain equal, while crossed references can differ.
-Retain each actual `ordinaryLevel`. Do not equate computed levels across runs.
+route, different earlier pair, and live ordinary mismatch are now derived.
+Use `InternedFreshOrdinaryJointMismatch.Mismatch`. Do not repeat the
+mixed-input comparison or replace fixed captured values with literal lists.
+
+Derive the actual source history of the ordinary name in the ancestor's
+captured value. A root-to-origin source path should distinguish an ordinary
+name from the initial captured values from a name supplied by an actual
+earlier ordinary callback. Retain that callback's original context, completed
+Depth equation, selected `ordinaryLevel`, cache history, and shorter lexical
+prefix. Eliminate the initial-capture alternative only when the actual source
+scope proves it absent. Then derive the strict decrease needed for pending
+exclusion. The current strict level bound alone is not that proof.
+Do not assume equal computed levels across executions. Do not treat a live
+ordinary alias as impossible without checking both actual probes.
 
 Do not infer independence of the original substitution memo key from absence
 in normalized output. Smart construction can erase a dependency. The retained
@@ -225,9 +289,10 @@ constructor/equality proofs and all marked drafts.
 
 ## Validation and diagnostics
 
-Pinned Lean 4.34.1 passes 1,311 jobs and 42,066 theorem dependency checks.
+Pinned Lean 4.34.1 passes 1,320 jobs and 42,130 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are used.
-Log: `/tmp/mcfta-repaired-earlier-pair-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-live-mismatch-20261014-audit.log`.
+The earlier-pair audit passed 1,311 jobs and 42,066 checks.
 The active-path audit passed 1,307 jobs and 42,042 checks.
 The preparation boundary audit passed 1,303 jobs and 41,982 checks.
 The pending encounter audit passed 1,301 jobs and 41,703 checks.

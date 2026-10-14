@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 09:25 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 09:46 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -46,10 +46,13 @@ probe records. Capture membership and age separation are derived. An actual
 native example refutes preparation preservation at all reached bodies.
 Actual earlier completed routes now expose different request pairs with
 payloads retained before the ancestor reservation.
+Mixed-input comparison now retains arbitrary fixed captured values and derives
+an actual live ordinary mismatch from pending execution. The current level
+is an old capture below the ancestor's selected ordinary level.
 General successful first-run completion still needs pending exclusion and
 output preparation.
 **No background proof worker is active.**
-The latest proof checkpoint is **`3da93bb3`**. A later documentation commit
+The latest proof checkpoint is **`74fe5ef0`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -74,7 +77,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **32% at 09:24 CEST**. This is a historical value.
+The last observed value was **32% at 09:45 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -109,7 +112,7 @@ files retain their bytes. New proofs are separate files.
 Before new work, inspect allowance, status, log, worktrees, and stashes.
 Preserve a backup and refresh `origin/microcfta`. If upstream moved, rebase the
 local continuation as requested. Preserve local source repairs through any
-overlap. The latest `git pull --ff-only origin microcfta` at 09:25 CEST
+overlap. The latest `git pull --ff-only origin microcfta` at 09:27 CEST
 reported `Already up to date.` Git metadata writes require escalation in this sandbox.
 
 Preserve the earlier backups and manifests, including
@@ -578,8 +581,8 @@ source facts, body availability, and complete incoming coverage. It assumes
 no callback termination or probe-equivalence contract.
 
 Read [constructor coverage](lean/notes-recursive-intersection-constructor-coverage.md)
-first. The remaining alias case needs live-input comparison or key separation
-for both exact old probes despite the captured fresh ancestor.
+first. The remaining alias case needs the ordinary capture history and a
+strict source decrease for both exact old probes.
 Do not infer original memo-key independence from normalized output absence.
 Old ordinary-choice mismatch results need repaired counterparts before use.
 Native successful completion, result preparation, and product rows remain open.
@@ -611,6 +614,25 @@ survives to the ancestor cut. That pair differs from the later original pair.
 All captured values can be arbitrary available records. The original values
 remain unchanged after the crossed-reference prefix.
 
+`8a922c58` proves exact repaired source comparison with arbitrary fixed captured
+values. Mixed lexical slots distinguish a fixed record from a varying reference.
+The existing symbolic profiles derive actual edge-selection tests. Completed
+source calls with equal surviving varying inputs return the same complete
+record in an actual common coherent cache. Discarded computations can have
+different effects. `not_pending_after_probes` derives readiness from an earlier
+completed binder and the later actual probes. The later binder need not return.
+Actual callback free-name observations derive every live varying capture.
+
+`74fe5ef0` derives a live ordinary mismatch on the exact earlier completed route.
+Fresh interned changes contradict the original Depth probe's issued-name bound.
+The witness retains both actual earlier probes, its different pair, completed
+request, retained payload, exact matched source crossing, and unequal ordinary
+levels. The current level is free in the original ancestor Depth probe and is
+strictly below its selected `ordinaryLevel`. An actual ancestor captured value
+contains the name. `closed_mismatch` starts from actual repaired pending execution
+in empty caches. `active_pending_mismatch` connects the actual optional-binder
+call under full incoming context, body availability, and complete coverage.
+
 ## Remaining priorities
 
 1. Read `lean/notes-recursive-intersection-constructor-coverage.md` first.
@@ -622,17 +644,22 @@ remain unchanged after the crossed-reference prefix.
    `SourceRecursiveIntersectionMaybeMu.active_pending_site`. Exclude the exact
    joint old-probe alias despite the captured fresh ancestor reference.
    An earlier completed route and different earlier request pair are derived.
-   Use `InternedFreshOrdinaryEarlierPair.Site.earlier_pair`. Keep both
+   Use `InternedFreshOrdinaryJointMismatch.Mismatch` and
+   `SourceRecursiveIntersectionMaybeMu.active_pending_mismatch`. Keep both
    actual probe records and `ordinaryLevel depth`. Normalized dependency erasure
    and profile equality are not original memo-key independence. Do not reuse
    old ordinary-choice mismatch arguments without repaired counterparts.
    Coverage at reached sites follows from earlier actual completed repaired
    source construction. It remains explicit for arbitrary supplied heaps.
-   Derive a changed live lexical input from that actual earlier pair difference.
-   The older live-input comparison only covers literal-reference environments
-   and the older ordinary policy. Prove the repaired comparison for arbitrary
-   captured values. Fixed captured records remain equal; crossed references
-   can differ. Retain each actual selected ordinary level.
+   The repaired mixed-input comparison and actual live ordinary mismatch are
+   proved. Do not repeat them. Derive the root-to-origin source path. Trace the
+   ordinary name in the ancestor's captured value to either initial captures
+   or an actual prior ordinary callback with a shorter lexical prefix.
+   Retain that callback's original context, completed Depth equation, selected
+   ordinary level, and cache history. Eliminate the initial-capture alternative
+   only when the actual source scope proves it absent. Derive a strict source
+   decrease for pending exclusion. The current level bound alone does not
+   exclude the alias. Retain arbitrary fixed captured values and both probes.
    Capture absence is not exact callback-request equality. General semantic
    context preservation on native prefixes remains open.
    Preservation of `PreparedWithoutMu` at all reached bodies is refuted by
@@ -699,10 +726,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,311 jobs and 42,066 theorem dependency checks**.
+The current build passes **1,320 jobs and 42,130 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-repaired-earlier-pair-20261014-audit.log`.
+Log: `/tmp/mcfta-repaired-live-mismatch-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -736,6 +763,8 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `74fe5ef0` | Actual live ordinary mismatch with retained earlier pair, capture age, original captured value, and optional-binder bridge. |
+| `8a922c58` | Exact repaired source comparison for arbitrary fixed captured values, actual child liveness, callback support, and request readiness. |
 | `3da93bb3` | Actual completed repaired source routes, earlier representatives, and different earlier request pairs with retained payloads. |
 | `0b123bab` | Full repaired active paths for arbitrary captured values, exact old probes, capture equality and age separation, and actual optional-binder bridge. |
 | `4ca51381` | Finite preparation test and actual closed original native inputs that reach an unprepared optional-binder body. |
