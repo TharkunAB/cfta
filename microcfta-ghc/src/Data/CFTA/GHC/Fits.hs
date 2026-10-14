@@ -27,6 +27,11 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
 * The figures of a search give the time of each part: Hectare's
   construction, reduction, and listing, and the checks in the
   typechecker.
+* Each fit tells whether it ignores part of itself, by an exact check in
+  GHC's terms: by parametricity, a program cannot use a subterm when it
+  still fits with a value of a fresh rigid type in the place of that
+  subterm. Such a fit, as @const xs n@ or @const (length xs) p@, has a
+  smaller program that does the same.
 
 Why these types:
 
@@ -182,6 +187,11 @@ defaultOptions =
 data Fit = Fit
     { fitProgram :: Program
     , fitSize :: Int
+    , fitIgnoresPart :: Bool
+    {- ^ Whether the program still fits when one of its argument subterms
+    has a fresh rigid type: then it cannot use that subterm, except with
+    'seq'.
+    -}
     }
     deriving (Eq, Show)
 
@@ -208,15 +218,19 @@ data Statistics = Statistics
     }
     deriving (Eq, Show)
 
--- | The first fits of a hole, as many as 'optionFits'.
+{- | The first fits of a hole, as many as 'optionFits'. The search stops
+after so many fits that use every part of themselves; a fit that ignores a
+part ('fitIgnoresPart') comes after them.
+-}
 synthesizeFits :: Options -> TypedHole -> [Candidate] -> Type -> TcM [Fit]
 synthesizeFits options hole candidates goal = do
     found <- liftIO (newIORef [])
     _ <-
         streamFits options hole candidates goal $ \fit -> do
             fits <- liftIO (modifyIORef' found (fit :) >> readIORef found)
-            pure (length fits < optionFits options)
-    reverse <$> liftIO (readIORef found)
+            pure (length (filter (not . fitIgnoresPart) fits) < optionFits options)
+    fits <- reverse <$> liftIO (readIORef found)
+    pure (take (optionFits options) (filter (not . fitIgnoresPart) fits <> filter fitIgnoresPart fits))
 
 {- | Check Hectare's programs for a hole in its enumeration order, and call
 the function on each fit; stop when it returns 'False'. The result has the
@@ -228,8 +242,14 @@ streamFits options hole candidates goal accept = do
     begin <- liftIO getMonotonicTimeNSec
     let deadline = (\seconds -> begin + round (seconds * 1e9)) <$> optionSeconds options
     case query of
-        Just hectareQuery ->
-            walk environment (startWalker environment (map candidateType candidates) goal) hectareQuery deadline
+        Just hectareQuery -> do
+            ignoredLeaf <- rigidLeaf environment ignored
+            walk
+                environment
+                (startWalker environment (map candidateType candidates) goal)
+                (Map.insert ignored ignoredLeaf leaves)
+                hectareQuery
+                deadline
         Nothing -> statisticsOf emptySearch <$> readCounters environment
   where
     -- Hectare's automaton has symbols of its own, as app and filter, so each
@@ -279,7 +299,9 @@ streamFits options hole candidates goal accept = do
         Map.fromListWith
             (\_ old -> old)
             [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates]
-    walk environment start hectareQuery deadline = sizes 1 emptySearch
+    -- The name of the rigid leaf: a hole, so no candidate has it.
+    ignored = "_"
+    walk environment start leaves' hectareQuery deadline = sizes 1 emptySearch
       where
         -- Build and reduce the automaton of each size, then check its
         -- programs: 'Data.CFTA.Gen.Synthesis.solutionsOfSize' in parts, so
@@ -314,7 +336,7 @@ streamFits options hole candidates goal accept = do
                             then stop search'{searchOutOfTime = True}
                             else do
                                 checked <-
-                                    check environment start search'{searchPrograms = searchPrograms search' + 1} size program tokens
+                                    check environment start leaves' search'{searchPrograms = searchPrograms search' + 1} size program tokens
                                 after <- liftIO getMonotonicTimeNSec
                                 let search'' = checked{searchCheck = searchCheck checked + (after - before), searchLastFit = Nothing}
                                 more <- maybe (pure True) accept (searchLastFit checked)
@@ -352,7 +374,7 @@ streamFits options hole candidates goal accept = do
             (searchReduce search)
             (searchList search)
             (searchCheck search)
-    check environment start search size program tokens
+    check environment start leaves' search size program tokens
         | isDead tokens (searchDead search) = pure search{searchSkipped = searchSkipped search + 1, searchSize = size}
         | otherwise = do
             let kept = commonPrefix (map frameToken (reverse (searchStack search))) tokens
@@ -362,25 +384,36 @@ streamFits options hole candidates goal accept = do
             case drop kept (reverse (searchStack search)) of
                 frame : _ -> restore environment (frameFrozen frame)
                 [] -> pure ()
-            forward environment search{searchStack = stack, searchSize = size} (drop kept tokens) kept start size program
-    forward environment search remaining depth start size program = case remaining of
+            forward environment leaves' search{searchStack = stack, searchSize = size} (drop kept tokens) kept start size program
+    forward environment leaves' search remaining depth start size program = case remaining of
         [] -> do
             let walker = maybe start frameWalker (headMaybe (searchStack search))
             fits <- complete environment walker
-            pure $
-                if fits
-                    then search{searchFits = searchFits search + 1, searchLastFit = Just (Fit program size)}
-                    else search
+            if fits
+                then do
+                    -- Undo the program's steps, and check the program with
+                    -- each argument subterm in turn of a fresh rigid type.
+                    -- The next program starts from the hole.
+                    mapM_ (restore environment . frameFrozen) (lastMaybe (searchStack search))
+                    ignoresPart <- anyM (fitsFrom environment leaves' start . preorder) (replacements ignored program)
+                    pure
+                        search
+                            { searchStack = []
+                            , searchFits = searchFits search + 1
+                            , searchLastFit = Just (Fit program size ignoresPart)
+                            }
+                else pure search
         token@(name, children) : rest -> do
             let walker = maybe start frameWalker (headMaybe (searchStack search))
             frozen <- freeze environment walker
-            stepped <- case Map.lookup name leaves of
+            stepped <- case Map.lookup name leaves' of
                 Just leaf -> step environment walker leaf children
                 Nothing -> pure Nothing
             case stepped of
                 Just walker' ->
                     forward
                         environment
+                        leaves'
                         search{searchStack = Frame token frozen walker' : searchStack search}
                         rest
                         (depth + 1)
@@ -394,9 +427,36 @@ streamFits options hole candidates goal accept = do
     headMaybe xs = case xs of
         x : _ -> Just x
         [] -> Nothing
+    lastMaybe xs = headMaybe (reverse xs)
+    anyM predicate = foldr (\x rest -> predicate x >>= \yes -> if yes then pure True else rest) (pure False)
     commonPrefix (x : xs) (y : ys) | x == y = 1 + commonPrefix xs ys
     commonPrefix _ _ = 0
     readCounters environment = liftIO (readIORef (environmentCounters environment))
+
+{- | Whether a program fits, from a walker: every step, then the end. The
+walker's unification variables are as before afterwards.
+-}
+fitsFrom :: Environment -> Map Text Leaf -> Walker -> [Token] -> TcM Bool
+fitsFrom environment leaves start tokens = do
+    frozen <- freeze environment start
+    result <- go start tokens
+    restore environment frozen
+    pure result
+  where
+    go walker remaining = case remaining of
+        [] -> complete environment walker
+        (name, children) : rest -> case Map.lookup name leaves of
+            Just leaf -> step environment walker leaf children >>= maybe (pure False) (`go` rest)
+            Nothing -> pure False
+
+-- | The program with each of its argument subterms in turn replaced by a leaf.
+replacements :: Text -> Program -> [Program]
+replacements leaf program = case program of
+    Var _ -> []
+    App function argument ->
+        App function (Var leaf)
+            : [App function' argument | function' <- replacements leaf function]
+                <> [App function argument' | argument' <- replacements leaf argument]
 
 -- | A leaf of a program in preorder: its name and its number of children.
 type Token = (Text, Int)

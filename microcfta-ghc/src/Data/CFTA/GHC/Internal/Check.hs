@@ -43,6 +43,7 @@ back.
 module Data.CFTA.GHC.Internal.Check (
     -- * Leaves
     Leaf (..),
+    rigidLeaf,
 
     -- * Walks
     Environment,
@@ -73,11 +74,12 @@ import Data.Text (Text)
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
+import GHC.Builtin.Types (liftedTypeKind)
 import GHC.Core.Predicate (EqRel, Pred (EqPred), classifyPredType, eqRelRole, isCallStackPredTy)
 import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
 import GHC.Core.TyCo.Rep (Type (ForAllTy, FunTy, TyConApp), ft_af)
 import GHC.Core.TyCon (TyCon, isGenerativeTyCon)
-import GHC.Core.Type (PredType, anyFreeVarsOfType, coreView, mkVisFunTysMany)
+import GHC.Core.Type (PredType, anyFreeVarsOfType, coreView, mkTyVarTy, mkVisFunTysMany)
 import GHC.Data.Bag (bagToList, listToBag, mapBag, unitBag)
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
 import GHC.Tc.Solver (simplifyTopWanteds)
@@ -95,12 +97,28 @@ import GHC.Tc.Types.Constraint (
     mkImplicWC,
     mkNonCanonical,
  )
-import GHC.Tc.Types.Origin (CtOrigin (ExprHoleOrigin), ReportRedundantConstraints (NoRRC), UserTypeCtxt (ExprSigCtxt))
-import GHC.Tc.Utils.Monad (TcM, discardErrs, getTcLevel, liftZonkM, setTcLevel, tryCaptureConstraints, tryTc)
-import GHC.Tc.Utils.TcMType (cloneWC, cloneWantedCtEv, newOpenFlexiTyVarTy, newTcEvBinds, readMetaTyVar)
+import GHC.Tc.Types.Origin (
+    CtOrigin (ExprHoleOrigin),
+    ReportRedundantConstraints (NoRRC),
+    SkolemInfoAnon (RuntimeUnkSkol),
+    UserTypeCtxt (ExprSigCtxt),
+    mkSkolemInfo,
+ )
+import GHC.Tc.Utils.Monad (
+    TcM,
+    discardErrs,
+    getTcLevel,
+    liftZonkM,
+    newSysName,
+    setTcLevel,
+    tryCaptureConstraints,
+    tryTc,
+ )
+import GHC.Tc.Utils.TcMType (cloneWC, cloneWantedCtEv, newOpenFlexiTyVarTy, newSkolemTyVar, newTcEvBinds, readMetaTyVar)
 import GHC.Tc.Utils.TcType (MetaDetails (Flexi, Indirect), TcLevel, TcTyVar, isMetaTyVar, metaTyVarRef)
 import GHC.Tc.Utils.Unify (tcSubTypeSigma)
 import GHC.Tc.Zonk.TcType (zonkTcTypes)
+import GHC.Types.Name.Occurrence (mkTyVarOcc)
 import GHC.Types.Var (isTcTyVar)
 
 {- | A leaf of a program: its name in the program, its type, and whether it
@@ -111,6 +129,17 @@ data Leaf = Leaf
     , leafType :: Type
     , leafHeads :: Bool
     }
+
+{- | A leaf of a fresh rigid type, with the given name: a new skolem of kind
+@Type@ at the level of the hole. By parametricity, a program fits with this
+leaf only when it does not use the leaf's value, except with 'seq'.
+-}
+rigidLeaf :: Environment -> Text -> TcM Leaf
+rigidLeaf environment name = setTcLevel (environmentLevel environment) $ do
+    information <- mkSkolemInfo RuntimeUnkSkol
+    variableName <- newSysName (mkTyVarOcc "ignored")
+    variable <- newSkolemTyVar information variableName liftedTypeKind
+    pure (Leaf name (mkTyVarTy variable) False)
 
 -- | The counters of a walk.
 data Counters = Counters

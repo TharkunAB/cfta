@@ -13,6 +13,10 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   Hectare's pruning rules, and take a report after each size and a trace of
   each program. `Statistics` give the time of Hectare's construction,
   reduction, and listing, and of the checks.
+- `Fit` tells whether a fit ignores part of itself (`fitIgnoresPart`): it
+  still fits when one of its argument subterms has a fresh rigid type, so by
+  parametricity it cannot use that subterm. `synthesizeFits` puts such fits
+  last.
 - `Data.CFTA.GHC.Erase`: GHC types as Hectare's first-order types, with the
   class contexts erased, and `anyResult` for the components that would fit
   every hole once erased.
