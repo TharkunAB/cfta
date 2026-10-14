@@ -500,6 +500,11 @@ spec = do
             early <- evaluate (Edge "order-a" [])
             terms (Node [late, early]) `shouldBe` [Term.Node "order-a" [], Term.Node "order-b" []]
 
+        it "lists the edges with larger weights first, and equal weights in the canonical order" $ do
+            let node = Node [Edge "weight-a" [], Edge "weight-b" [], Edge "weight-c" []] :: Node Symbol
+                weight edge = if edgeSymbol edge == "weight-c" then 1 else 0
+            map fst (runsBy weight "Mu" node) `shouldBe` [Term.Node "weight-c" [], Term.Node "weight-a" [], Term.Node "weight-b" []]
+
         it "lists edges with one symbol by the classes of their children" $ do
             late <- evaluate (Edge "order-f" [Node [Edge "order-d" []]] :: Edge Symbol)
             early <- evaluate (Edge "order-f" [Node [Edge "order-c" []]])

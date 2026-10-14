@@ -24,6 +24,7 @@ module Data.CFTA.Enumeration (
     terms,
     termsWith,
     runs,
+    runsBy,
     truncatedTerms,
     plainTerms,
     plainTermsAtMost,
@@ -51,8 +52,8 @@ import qualified Data.Foldable as Foldable
 import Data.Hashable (Hashable (..))
 import qualified Data.IntSet as IntSet
 import Data.List (compareLength, genericTake, sortOn)
-import Data.Maybe (fromMaybe)
 import Data.Monoid (All (..))
+import Data.Ord (Down (..))
 import Data.Sequence (Seq ((:<|), (:|>)))
 import qualified Data.Sequence as Sequence
 import Data.String (IsString (..))
@@ -219,11 +220,15 @@ data EnumerationState symbol = EnumerationState
     , _expansionAncestry :: RecursionAncestry
     -- ^ The ancestry that the current expansion gives the UVars it reaches.
     , _canonicalEdges :: IntMap.IntMap [Edge symbol]
-    {- ^ The edges of each node that the root reaches, in 'canonicalOrder'.
-    It does not change during enumeration.
+    {- ^ The edges of each node that the root reaches, in 'canonicalOrder',
+    then by the weights of '_edgeWeights'. It does not change during
+    enumeration.
+    -}
+    , _edgeWeights :: Maybe (Edge symbol -> Double)
+    {- ^ The weights of 'runsBy'. The enumeration tries the edges of a node
+    with larger weights first.
     -}
     }
-    deriving (Eq, Show)
 
 {- | The expansions of constrained recursive nodes that a UVar descends from,
 each as its 'recursionKey'.
@@ -251,9 +256,13 @@ recursionKey n scs =
         , suspendedTries = HashSet.fromList $ map scGetPathTrie $ Foldable.toList scs
         }
 
--- | Initial state whose root UVar contains the node being enumerated.
-initEnumerationState :: (Hashable symbol, Ord symbol, Typeable symbol) => Node symbol -> EnumerationState symbol
-initEnumerationState n =
+{- | Initial state whose root UVar contains the node being enumerated, with
+the weights of the edges, if any.
+-}
+initEnumerationState ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    Maybe (Edge symbol -> Double) -> Node symbol -> EnumerationState symbol
+initEnumerationState weights n =
     let (uvg, uv) = UnionFind.nextUVar UnionFind.initUVarGen
         value = UVarUnenumerated (Just n) Sequence.Empty
      in EnumerationState
@@ -265,7 +274,8 @@ initEnumerationState n =
             []
             IntMap.empty
             HashSet.empty
-            (canonicalOrder n)
+            (maybe id (IntMap.map . byWeight) weights (canonicalOrder n))
+            weights
 
 ---------------------------------------------------------------------------
 ---------------------------- Enumeration monad ----------------------------
@@ -514,6 +524,12 @@ canonicalOrder root = IntMap.map (sortOn key) graph
       where
         (arity, symbol, equalities', guard') = shape edge
 
+{- | Order edges by descending weight. The sort is stable, so edges with
+equal weights keep their order.
+-}
+byWeight :: (Edge symbol -> Double) -> [Edge symbol] -> [Edge symbol]
+byWeight weight = sortOn (Down . weight)
+
 -- | Table for 'canonicalEdges'.
 canonicalEdgesCache :: TypeableMemoCache
 canonicalEdgesCache = unsafePerformIO newTypeableMemoCache
@@ -541,7 +557,13 @@ enumerateNode scs n =
                 Node _ -> do
                     ordered <- gets _canonicalEdges
                     let NodeId ident = nodeIdentity n
-                    enumerateEdge scs =<< branches (fromMaybe (canonicalEdges n) (IntMap.lookup ident ordered))
+                    edges <- case IntMap.lookup ident ordered of
+                        Just found -> pure found
+                        -- A node that the enumeration built.
+                        Nothing -> do
+                            weights <- gets _edgeWeights
+                            pure $ maybe id byWeight weights (canonicalEdges n)
+                    enumerateEdge scs =<< branches edges
                 Rec recId ->
                     error $
                         "enumerateNode: unexpected unresolved recursive reference "
@@ -827,7 +849,7 @@ truncatedTerms ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
     Node symbol -> [Term (PartialSymbol symbol)]
 truncatedTerms n = map fst $
-    flip allBranches (initEnumerationState n) $ do
+    flip allBranches (initEnumerationState Nothing n) $ do
         enumerateFully
         rootTermFrag >>= expandPartialTermFrag
 
@@ -901,7 +923,7 @@ termsPruneWith ::
     Node symbol ->
     [Term symbol]
 termsPruneWith recursionSymbol ost order oracle n =
-    map fst $ flip allBranches (initEnumerationState n) $ do
+    map fst $ flip allBranches (initEnumerationState Nothing n) $ do
         enumerateFully' ost order oracle
         expandUVarWith recursionSymbol (intToUVar 0)
 
@@ -948,8 +970,24 @@ stands for truncated recursion.
 runs ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
     symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
-runs recursionSymbol n =
-    map fst $ flip allBranches (initEnumerationState n) $ do
+runs = runsFrom Nothing
+
+{- | 'runs' with a weight for each edge. The enumeration tries the edges of a
+node with larger weights first, and edges with equal weights in the order of
+'runs'. The weights only change the order of the edges of each node, so the
+result has the runs of 'runs', in another order. A weight must not be NaN.
+-}
+runsBy ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    (Edge symbol -> Double) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsBy weight = runsFrom (Just weight)
+
+-- | 'runs' with the weights of the edges, if any.
+runsFrom ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    Maybe (Edge symbol -> Double) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsFrom weights recursionSymbol n =
+    map fst $ flip allBranches (initEnumerationState weights n) $ do
         enumerateFully
         term <- expandUVarWith recursionSymbol (intToUVar 0)
         obligations <- gets _obligations
