@@ -82,8 +82,12 @@ Pending constructors and busy thunk observations remain distinct. General
 open nested constructor completion is still an obligation. Carry explicit
 machine-word bounds; do not turn resource premises into an overflow claim.
 
-Derive the physical input view and its cached free-variable/closedness
-equations. Derive a finite reachable input payload inventory. Connect the
+The physical input view, cached free-variable/closedness equations, finite
+reachable input carrier, and actual structural ranks are now proved in
+[physical input view](notes-recursive-intersection-input-view.md). Use those
+results. Derive canonical representative readback and independent copied
+language equivalence. `copy_closed` does not prove `FiniteInput.copy_exact`.
+Connect the
 actual source requests to the semantic schedule and obtain sufficient bounds.
 Preserve exact constructor/domain effects and native memo publication.
 Do not repeat completed-run correspondence or supply an execution trace as

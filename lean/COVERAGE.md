@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 06:16 CEST**, upstream `f59c198d`.
-The latest proof commit is `e9ade493`. No background proof worker is active.
+Current checkpoint: **2026-10-14 06:51 CEST**, upstream `f59c198d`.
+The latest proof commit is `6d64cb4a`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -112,8 +112,15 @@ and semantic memo provenance are now derived under explicit checked word
 bounds. `Bounds.correct` derives strong validity, exact physical/domain growth,
 available results, stable kernel meaning, and new `Produced` from actual native
 bodies. Public node/edge and empty-memo theorems start from actual native
-completion. General first-run termination and product correspondence remain
-open. See
+completion. The original physical input view now derives exact payload
+readback, cached free-name equations, original-input closedness, physical
+branch agreement, and copied closedness. Actual payload ranks supply strict
+structural decreases. Closed-root reference traversal retains original
+available records inside a finite carrier bounded by the issued counter.
+The carrier gives finite input pairs. `Original` remains an explicit input
+premise. Independent copied-language equivalence, sufficient first-run native
+bounds, and product correspondence remain open. See
+[physical input view](notes-recursive-intersection-input-view.md),
 [recursive memo](notes-recursive-intersection-memo.md),
 [native memo thunks](notes-recursive-intersection-thunks.md),
 [native recursive execution](notes-recursive-intersection-native.md),
@@ -134,7 +141,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,252 targets and 41,133 theorem dependency checks**
+The current audit passes **1,257 targets and 41,315 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

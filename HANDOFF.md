@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 06:16 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 06:51 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -24,8 +24,13 @@ source bodies retain their memo structures and all enclosing running cells.
 Completed native runs now derive guarded kernel agreement, exact physical
 growth, available results, and concrete new memo provenance under checked
 word bounds. General first-run termination and product language remain open.
+The original physical input view now has derived cached free-name equations,
+closedness, branch selection, and copied closedness. Actual payload sizes
+supply structural ranks. Closed-root reference traversal stays in a finite
+carrier bounded by the actual issued counter. Independent copied-language
+equivalence and sufficient first-run bounds remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`e9ade493`**. A later documentation commit
+The latest proof checkpoint is **`6d64cb4a`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -50,7 +55,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **33% at 06:16 CEST**. This is a historical value.
+The last observed value was **33% at 06:51 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -404,15 +409,43 @@ successful first-run termination for every input. Available open results can
 be recursion placeholders. Read
 [native correctness](lean/notes-recursive-intersection-native-correctness.md).
 
+## Original physical input view and finite bounds
+
+`SourceRecursiveIntersectionInputView.payload_readback` derives exact original
+tagged payloads through actual issued and record maps. `free_correct` derives
+all cached free-name equations. `Original` checks complete interned references
+in actual payload syntax and excludes probe metadata. Under this explicit
+input premise, `closed_readback` and `physical_step` derive actual cached
+closedness and semantic branch agreement. General construction has not yet
+been proved to supply `Original` for every result.
+
+`SourceRecursiveIntersectionInputCopy.copy_free_all` proves exact copied free
+membership over the total view. `copy_closed` derives closed copies.
+This does not prove `FiniteInput.copy_exact` language equivalence.
+
+`SourceRecursiveIntersectionInputRanks` derives actual physical payload ranks,
+strict body/row/member decreases, and every local schedule decrease. No
+allocation-order assumption is used. `SourceRecursiveIntersectionInputInventory`
+derives a finite tagged carrier from the actual issued counter. It is a
+superset, not a declaration that all tags at one identity are valid.
+`closed_reach_original` derives available original payloads through reference
+unfolding from closed roots. `closed_reach_inventory`, `closed_reach_below`,
+and `closed_pair_inventory` give finite input pairs and physical rank bounds.
+No intersection result or completed native trace is supplied.
+Read [physical input view](lean/notes-recursive-intersection-input-view.md).
+
 ## Remaining priorities
 
-1. Derive the physical input view, cached free-variable/closedness equations,
-   finite reachable input payload inventory, and sufficient first-run native
-   bounds for the intended valid input scope. Completed native node/edge
+1. Use the proved physical input view, cached free-variable/closedness equations,
+   finite reachable input carrier, and physical structural ranks. Derive actual
+   canonical representatives, independent copied-language equivalence, and
+   sufficient first-run native bounds for the intended valid input scope.
+   `copy_closed` does not prove `FiniteInput.copy_exact`. Do not fill that field
+   with an empty copy or a supplied equivalent language contract. Completed native node/edge
    correspondence, strong memo validity, exact physical/domain growth,
    available results, stable kernel bounds, and new `Produced` are proved
    under explicit checked word ranges. Do not repeat those proofs. Use
-   `lean/notes-recursive-intersection-native-correctness.md` for the exact
+   `lean/notes-recursive-intersection-input-view.md` for the exact
    next target. Actual completion remains a premise of the new theorems.
    Do not replace termination with a supplied completed trace. General open
    nested constructor completion and new-body preparation remain open.
@@ -482,10 +515,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,252 jobs and 41,133 theorem dependency checks**.
+The current build passes **1,257 jobs and 41,315 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-native-correctness-20261014-audit.log`.
+Log: `/tmp/mcfta-input-view-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -519,6 +552,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `6d64cb4a` | Actual tagged input view, derived free/closed equations, copied closedness, physical ranks, and finite closed-root input pairs. |
 | `e9ade493` | Full completed native node/edge kernel correspondence, strong returned memo invariants, and derived concrete provenance. |
 | `4eea8784` | Finite stable kernel meaning composition and explicit word bounds on actual native evaluations. |
 | `eb4c43b5` | Actual native start/hit source identity, invariants, and concrete completed replay. |
