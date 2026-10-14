@@ -782,7 +782,7 @@ realizeWith entailment conditions abstract (Pending name typ children obligation
                     (RBase base refinement)
                     requirement
                     (Node [Transition (labelled name base requirement) refinement (map stateNode children) guard])
-        RArrow{} -> pure $ State typ requirement (Node [Transition (Symbol name) Top (map stateNode children) guard])
+        RArrow{} -> pure $ State typ requirement (Node [Transition (Symbol (escapeName name)) Top (map stateNode children) guard])
 
 -- | The first element for which an action gives 'True'.
 findM :: (Monad m) => (a -> m Bool) -> [a] -> m (Maybe a)
@@ -795,10 +795,30 @@ contractName = Name . Text.pack . contractTermName . ArgumentIndex
 
 {- | The symbol of a term of a base type: the name, and the label of its base
 type and requirement after an at sign, so that similarity compares only
-terms of one base type and one requirement.
+terms of one base type and one requirement. The name is escaped
+('escapeName'), so the first at sign ends it, also when the name or the
+label has an at sign.
 -}
 labelled :: Text -> Type -> Formula -> Symbol
-labelled name base requirement = Symbol (name <> "@" <> labelOf base requirement)
+labelled name base requirement = Symbol (escapeName name <> "@" <> labelOf base requirement)
+
+{- | A name with no at sign: each backslash becomes two, and each at sign
+becomes a backslash and @a@. A name without them does not change.
+-}
+escapeName :: Text -> Text
+escapeName = Text.concatMap $ \c -> case c of
+    '\\' -> "\\\\"
+    '@' -> "\\a"
+    _ -> Text.singleton c
+
+-- | The name that 'escapeName' escaped.
+unescapeName :: Text -> Text
+unescapeName = Text.pack . go . Text.unpack
+  where
+    go ('\\' : 'a' : rest) = '@' : go rest
+    go ('\\' : c : rest) = c : go rest
+    go (c : rest) = c : go rest
+    go [] = []
 
 -- | The base type, and the requirement after a question mark unless it is 'Top'.
 labelOf :: Type -> Formula -> Text
@@ -816,8 +836,8 @@ renderType typ = case typ of
 -- | The name and the label of a symbol, as 'labelled' writes them.
 unlabelled :: Symbol -> (Text, Maybe Text)
 unlabelled symbol = case Text.breakOn "@" (symbolText symbol) of
-    (name, rest) | not (Text.null rest) -> (name, Just (Text.drop 1 rest))
-    (name, _) -> (name, Nothing)
+    (name, rest) | not (Text.null rest) -> (unescapeName name, Just (Text.drop 1 rest))
+    (name, _) -> (unescapeName name, Nothing)
 
 -- | The name of the value of a refinement.
 value :: Name
