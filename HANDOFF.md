@@ -1,6 +1,53 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 01:06 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 01:23 CEST (Europe/Stockholm)**.
+
+## Complete memo gate graphs and concrete source predicate
+
+Proofs: `c087a4ed`, `13b10b57`, and `3602e821`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-memo-gate-predicate.md`. This section supersedes the earlier
+memo composition and supplied node-predicate targets.
+
+Complete node, child, edge, path, and class graphs now carry the actual
+unfolding memo and constructor cache together. Every source graph lifts to
+actual coherent memo calls. Each Mu readback is derived from `run_complete`.
+Erasure recovers the exact source graph. False siblings pass both returned
+caches onward. True siblings stop. Complete class graphs are equivalent to
+the source graphs under derived ready-cache and memo invariants. Certified
+class decisions and final constructor caches do not depend on the starting
+unfolding memo. Original construction derives all initial premises.
+
+The source Boolean `crush` is now modeled directly. It skips empty records
+and bare references. It marks canonical identities before source child visits.
+Mu traversal visits only the body, not either probe. The structurally recursive
+worker retains a distinct visited set bounded by the actual issued counter.
+`SourceMemoGate` installs this concrete node read with the existing normalized
+equality/residual edge test. Its source-derived node and class theorems take
+no supplied whole-node predicate. `SourceUnconstrainedMemo` proves exact
+predicate memo hits, misses, insertion, and preservation after cache growth.
+The scalar normalization wrapper retains the existing noncomputable logical
+source model. No executable extraction claim is added.
+
+The audit passes 1,598 jobs and 44,916 theorem dependency checks. Only the
+three permitted foundations occur. Only the old unused `inputs` warning
+remains. No production Haskell code changed. Audit log:
+`/tmp/mcfta-memo-composition-source-predicate-20261015-audit.log`. Snapshot:
+`/tmp/mcfta-memo-gate-predicate-checkpoint-20261015-0123/` (1,982 Lean-tree files).
+All prior proofs, counterexamples, marked drafts, repairs, backups, stashes,
+and other worktrees remain. Weekly allowance was 19% at 01:23 CEST; refresh it.
+
+Next prove the full semantic characterization of the visited `crush` result
+on actual coherent available records. It is true exactly when every ordinary
+edge reached through stored bodies, ordinary children, and union members
+passes `plain`. Include repeated canonical identities and root unions.
+Bare references stop; do not follow them by unfolding. Use actual canonical
+record coherence, not an assumed whole-fold law. Then carry the separately
+proved predicate memo through the complete gate graphs beside the unfolding
+memo. Do not repeat completed unfolding-memo composition or predicate call
+laws. Preserve exact Sized contracts, the unary ancestor theorem, the
+optimized interned core, and native runtime/extraction limits. Stop work and
+workers at 1% weekly allowance or less.
 
 ## Ordered gate execution and coherent unfolding memo
 

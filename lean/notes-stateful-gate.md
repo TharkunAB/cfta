@@ -1,5 +1,11 @@
 # Ordered source gate execution and coherent unfolding memo
 
+Current update: `c087a4ed`, `13b10b57`, and `3602e821` complete unfolding-memo
+composition through the gate graphs and install the concrete visited-node
+source predicate. Read [the current note](notes-memo-gate-predicate.md).
+It states the remaining visited-fold semantics and predicate memo composition.
+The sections below retain the earlier checkpoint.
+
 Updated: 2026-10-15 01:06 CEST.
 Proofs: `ec56843a`, `512a386d`, and `8b5ec04e`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.

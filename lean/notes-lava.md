@@ -79,3 +79,8 @@ uniqueness of the Boolean result and complete final cache. The source gate
 can share constructor effects across sibling edge and path queries.
 These are Lean proofs of the modeled source worker. They do not add a Lava
 translation, a Rocq dependency, or a verified GHC extraction claim.
+
+Checkpoint `c087a4ed` extends the logical graph method to actual unfolding
+memo calls through complete node and class scans. Each readback follows
+from canonical cache coherence and the checked memo runner. No whole-callback
+or whole-gate observation law is supplied.
