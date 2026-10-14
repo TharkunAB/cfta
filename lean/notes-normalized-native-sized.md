@@ -1,5 +1,11 @@
 # Normalized source constraints and complete native Sized queries
 
+The later [actual capacity proof](notes-native-capacity-sized.md) derives every
+native word check from reached source cache counters. It connects those checks
+to the complete Sized query record and proves physical root-precheck order.
+It supersedes the word-bound next target below. Actual cache capacity and
+normalized original annotations retain explicit boundaries.
+
 Updated: 2026-10-14 22:22 CEST.
 Proof: `064cd013`, after `634a3c40` and `0215ed02`.
 Source base: `7bfb69d1` (PR #129). All work remains local.
