@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 12:18 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:24 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -63,7 +63,7 @@ Native first-run completion is now proved for closed Original available inputs
 in complete semantic caches under explicit WordRanges. Output preparation
 and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`2ac3ca41`**. A later documentation commit
+The latest proof checkpoint is **`b1994b3f`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -88,7 +88,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **30% at 12:17 CEST**. This is a historical value.
+The last observed value was **30% at 12:23 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -99,7 +99,7 @@ Missing or stale data is not permission to use credits.
 
 Repository: `/home/tritlo/Code/mcfta`, Ubuntu/WSL2, Bash.
 Branch: `formalization/microcfta-sized-20261014`.
-Upstream: `origin/microcfta` at **`1a083040`** (PR #117).
+Upstream: `origin/microcfta` at **`c66d10ea`** (PR #119).
 
 The 10:12 pull fetched upstream and could not fast-forward. The authorized
 preserving rebase completed at 10:16 after 461 steps. Its result was `e3a33ed5`.
@@ -788,6 +788,33 @@ See [stored support and unfolding](lean/notes-stored-free-unfold.md).
 Repeated cold-reader termination and native result closedness are separate
 obligations. Do not infer `NoNewMu` from single unfolding completion.
 
+## PR #119 preserving refresh
+
+The current base is `origin/microcfta` at `c66d10ea`. The 479-step rebase
+completed at `018ae4db`. Backup
+`backup/formalization-before-state-label-refresh-20261014-1220` retains
+`8eeb1eea`. All 1,707 saved Lean-tree files matched exactly after rebase.
+Manifest and restart copies: `/tmp/mcfta-state-label-refresh-20261014-1220/`.
+Manual overlaps kept the merged constructor changelog and upstream's
+identical `void` behavior in Sized. All earlier proofs, repairs, drafts,
+fixtures, stashes, backups, and other worktrees remain.
+
+PR #119 escapes at signs and backslashes in synthesis state labels. Its
+native regression is retained. This application-level label codec is separate
+from the proved SMT-name adapter. Sized and core refinement source did not
+change. Executable package source and tests match upstream. Only the retained
+four-line constructor changelog note differs. The synthesis API still has no
+complete formal source model. No benchmark specification was formalized.
+
+The unchanged Lean audit passes 1,354 jobs and 42,506 theorem checks. All 642
+Haskell examples pass in Nix: 289 core, 208 generator, and 145 refinement.
+Fourmolu and both active-package cabal-gild checks pass. Logs:
+`/tmp/mcfta-state-label-refresh-20261014-audit.log`,
+`/tmp/mcfta-state-label-refresh-20261014-tests.log`, and
+`/tmp/mcfta-state-label-refresh-20261014-format.log`.
+Earlier refresh records and old proof hashes below are historical and remain
+in the preserved backup branches. Current single-unfold proof: `b1994b3f`.
+
 ## Remaining priorities
 
 1. Read `lean/notes-native-successful.md`. Arbitrary-record source completion,
@@ -862,7 +889,7 @@ Pinned Lean: **4.34.1**. From the repository root:
 The current build passes **1,354 jobs and 42,506 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-unfold-completion-20261014-audit.log`.
+Log: `/tmp/mcfta-state-label-refresh-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -894,13 +921,13 @@ Nix store/network access requires escalation. Use one coherent Nix toolchain.
 The earlier 633-example run and temporary Sized regressions remain historical
 in older logs; do not substitute their counts for current validation.
 
-After the current PR #117 refresh, all **641** Haskell examples passed in Nix:
-289 core, 208 generator, and 144 refinement. The new upstream collision test
+After the current PR #117 refresh, all **642** Haskell examples passed in Nix:
+289 core, 208 generator, and 145 refinement. The new upstream collision test
 passes. Fourmolu passes for both active package trees. Cabal-gild passes for
 the active `microcfta` and `microcfta-generator` package files.
-Logs: `/tmp/mcfta-producer-refresh-20261014-tests.log`,
-`/tmp/mcfta-producer-refresh-20261014-format.log`, and
-`/tmp/mcfta-producer-refresh-20261014-active-gild.log`.
+Logs: `/tmp/mcfta-state-label-refresh-20261014-tests.log`,
+`/tmp/mcfta-state-label-refresh-20261014-format.log`, and
+`/tmp/mcfta-state-label-refresh-20261014-format.log`.
 The broad cabal-gild command also checked the unchanged legacy `microecta`
 and `microecta-generator` package files. Those two files fail formatting.
 Leave that unrelated baseline unchanged. No new test was added locally.

@@ -1,7 +1,13 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 12:18 CEST**, upstream `1a083040`.
-The latest proof commit is `2ac3ca41`. No background proof worker is active.
+The current preserving PR #119 rebase is `018ae4db` on `c66d10ea`.
+All 1,707 saved Lean-tree files matched exactly. The synthesis state-label
+escape fix and its regression are retained. It is separate from the proved
+SMT-name adapter. Sized/core refinement source did not change. See the root
+handoff for backup, manifest, validation, and historical hash mapping.
+
+Current checkpoint: **2026-10-14 12:24 CEST**, upstream `c66d10ea`.
+The latest proof commit is `b1994b3f`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -239,8 +245,8 @@ Benchmark programs, datasets, and workload specifications are excluded.
 
 The current audit passes **1,354 targets and 42,506 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
-All **641 Haskell examples** passed after the PR #117 refresh: 289 core,
-208 generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
+All **642 Haskell examples** passed after the PR #119 refresh: 289 core,
+208 generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.
 The broad gild check reports existing formatting failures in the unchanged
 legacy microecta package files. No new production test was added locally.
 See root [HANDOFF.md](../HANDOFF.md) and [FINDINGS.md](../FINDINGS.md) for exact

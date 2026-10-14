@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 12:18 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 12:24 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -523,10 +523,37 @@ general equality propagation, and concrete runtime/dependency contracts.
 No verified Haskell-to-Lean extraction exists. There is no honest single
 completion percentage for these different layers.
 
+## PR #119 preserving refresh
+
+The current base is `origin/microcfta` at `c66d10ea`. The 479-step rebase
+completed at `018ae4db`. Backup
+`backup/formalization-before-state-label-refresh-20261014-1220` retains
+`8eeb1eea`. All 1,707 saved Lean-tree files matched exactly after rebase.
+Manifest and restart copies: `/tmp/mcfta-state-label-refresh-20261014-1220/`.
+Manual overlaps kept the merged constructor changelog and upstream's
+identical `void` behavior in Sized. All earlier proofs, repairs, drafts,
+fixtures, stashes, backups, and other worktrees remain.
+
+PR #119 escapes at signs and backslashes in synthesis state labels. Its
+native regression is retained. This application-level label codec is separate
+from the proved SMT-name adapter. Sized and core refinement source did not
+change. Executable package source and tests match upstream. Only the retained
+four-line constructor changelog note differs. The synthesis API still has no
+complete formal source model. No benchmark specification was formalized.
+
+The unchanged Lean audit passes 1,354 jobs and 42,506 theorem checks. All 642
+Haskell examples pass in Nix: 289 core, 208 generator, and 145 refinement.
+Fourmolu and both active-package cabal-gild checks pass. Logs:
+`/tmp/mcfta-state-label-refresh-20261014-audit.log`,
+`/tmp/mcfta-state-label-refresh-20261014-tests.log`, and
+`/tmp/mcfta-state-label-refresh-20261014-format.log`.
+Earlier refresh records and old proof hashes below are historical and remain
+in the preserved backup branches. Current single-unfold proof: `b1994b3f`.
+
 ## Checkpoint and validation
 
 Branch: `formalization/microcfta-sized-20261014`.
-Upstream base: `origin/microcfta` at **`1a083040`** (PR #117).
+Upstream base: `origin/microcfta` at **`c66d10ea`** (PR #119).
 The current 461-step preserving rebase completed at `e3a33ed5`.
 Backup `backup/formalization-before-producer-refresh-20261014-1014` retains
 `0ca89cba`. All 1,676 saved Lean-tree files matched immediately afterward.
@@ -547,18 +574,18 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`2ac3ca41`**; later commits record this handoff.
+The latest proof checkpoint is **`b1994b3f`**; later commits record this handoff.
 
 The current Lean 4.34.1 audit passes **1,354 build targets and 42,506 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
-Log: `/tmp/mcfta-unfold-completion-20261014-audit.log`.
-After the current refresh, all **641** examples passed in Nix: 289 core, 208
-generator, and 144 refinement. Fourmolu and active-package cabal-gild passed.
+Log: `/tmp/mcfta-state-label-refresh-20261014-audit.log`.
+After the current refresh, all **642** examples passed in Nix: 289 core, 208
+generator, and 145 refinement. Fourmolu and active-package cabal-gild passed.
 The broader gild check found formatting failures in two unchanged legacy
 `microecta` package files. Those unrelated files remain unchanged. No new
 production test was added locally. Exact commands and logs are in [HANDOFF.md](HANDOFF.md).
 
-No background proof worker is active. Weekly allowance was **30% at 12:17 CEST**.
+No background proof worker is active. Weekly allowance was **30% at 12:23 CEST**.
 Refresh it before new work and stop all work at **1% or less**, as the latest
 explicit user instruction requires. Everything remains local: no push, deployment, or
 board post. Benchmark formalization remains excluded.
