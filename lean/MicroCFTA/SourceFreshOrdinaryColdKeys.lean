@@ -25,6 +25,21 @@ def Declared (rows : Rows Symbol Guard) : SourceInternedRows.State → Prop
   | .empty => True
   | .interned identity => ∃ edges, rows identity = some edges
 
+/-- A closed available root reads back as the identical physical record under its encoded key. -/
+theorem root_physical (state : State Symbol Guard) (semantic : SemanticHeap state)
+    (value : Value Symbol Guard) (available : Available state value) (closed : value.free = []) :
+    physical state (encode value) = value := by
+  cases same : reference value with
+  | none =>
+      have empty : value = .empty := by
+        cases value <;> simp only [reference] at same <;> try contradiction
+        · rfl
+      subst value
+      rfl
+  | some identity =>
+      have read := SourcePreparedSharedRows.read_identity state semantic.1.normal.facts value available identity same
+      simp only [encode, same, SourceInternedRows.stateOf, physical, read, Option.getD_some]
+
 /-- Resident rows supply closed original operands and exact state readback. -/
 theorem physical_record (state : State Symbol Guard) (semantic : SemanticHeap state)
     (rows : Rows Symbol Guard) (resident : ResidentRows state rows)
