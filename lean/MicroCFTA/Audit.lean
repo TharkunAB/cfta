@@ -1392,6 +1392,7 @@ import MicroCFTA.MergedProjectionOrder
 import MicroCFTA.MergedRawLeafLanguage
 import MicroCFTA.MergedSubsumptionTermination
 import MicroCFTA.InternedSourceRankStutter
+import MicroCFTA.InternedFreshOrdinaryRankReplay
 /-!
 # Proof dependency audit
 
