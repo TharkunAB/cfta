@@ -1,4 +1,7 @@
 import Lean
+import MicroCFTA.SourceRecursiveIntersectionUnionReadback
+import MicroCFTA.SourceRecursiveIntersectionMuReadback
+import MicroCFTA.SourceRecursiveIntersectionNativeBranchReadback
 import MicroCFTA.RelatedRows
 import MicroCFTA.DiagonalProduct
 import MicroCFTA.SourceCyclicRowsNativeGateRelational
