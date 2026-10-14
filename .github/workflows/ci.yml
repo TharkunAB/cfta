@@ -20,9 +20,9 @@ jobs:
         with:
           version: "0.20.1.0"
           pattern: |
-            microcfta/**/*.hs
-            microcfta-generator/**/*.hs
-            microcfta-ghc/**/*.hs
+            cfta/**/*.hs
+            cfta-generator/**/*.hs
+            cfta-ghc/**/*.hs
 
       - name: Set up hlint
         uses: haskell-actions/hlint-setup@v2
@@ -32,7 +32,7 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["microcfta", "microcfta-generator", "microcfta-ghc"]'
+          path: '["cfta", "cfta-generator", "cfta-ghc"]'
           fail-on: warning
 
   build-test-bench:
@@ -82,8 +82,8 @@ jobs:
 
       - name: Check package metadata
         run: |
-          (cd microcfta && cabal check)
-          (cd microcfta-generator && cabal check)
+          (cd cfta && cabal check)
+          (cd cfta-generator && cabal check)
           (cd microecta && cabal check)
           (cd microecta-generator && cabal check)
 
@@ -96,7 +96,7 @@ jobs:
       # cap is not baked into the library's ghc-options.
       - name: Guard compile-time memory of the optimized core
         run: |
-          cabal v2-build lib:microcfta \
+          cabal v2-build lib:cfta \
             --enable-optimization=2 \
             --ghc-options='-Werror +RTS -K512M -M512M -RTS'
           cabal v2-build lib:microecta \
@@ -111,8 +111,8 @@ jobs:
         run: |
           cabal install doctest --ignore-project --overwrite-policy=always \
             --install-method=copy --installdir="$HOME/.local/bin"
-          cabal repl --with-repl="$HOME/.local/bin/doctest" lib:microcfta
-          cabal repl --with-repl="$HOME/.local/bin/doctest" lib:microcfta-generator
+          cabal repl --with-repl="$HOME/.local/bin/doctest" lib:cfta
+          cabal repl --with-repl="$HOME/.local/bin/doctest" lib:cfta-generator
           cabal repl --with-repl="$HOME/.local/bin/doctest" lib:microecta
           cabal repl --with-repl="$HOME/.local/bin/doctest" lib:microecta-generator
 
@@ -134,8 +134,8 @@ jobs:
       - name: Validate release artifacts
         if: github.base_ref == 'main'
         run: |
-          scripts/release.sh microcfta --check-only
-          scripts/release.sh microcfta-generator --check-only
+          scripts/release.sh cfta --check-only
+          scripts/release.sh cfta-generator --check-only
           scripts/release.sh microecta --check-only
           scripts/release.sh microecta-generator --check-only
 
