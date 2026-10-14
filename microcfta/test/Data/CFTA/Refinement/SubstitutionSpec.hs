@@ -39,6 +39,16 @@ dependentGuard =
 spec :: Spec
 spec =
     describe "dependent LTA guards" $ do
+        it "keeps distinct names distinct in the solver" $ do
+            -- Liquid Fixpoint wrote the names 1 and fix$1 as one SMT name, so
+            -- the binder captured the free name and a false statement held.
+            let equal left right = Formula.Atom Formula.Eq (Formula.Var left) (Formula.Var right)
+                isZero name = Formula.Atom Formula.Eq (Formula.Var name) (Formula.Lit 0)
+            collision <- withZ3 [("1", IntSort)] $ \solver -> entails solver true $ Forall [("fix$1", IntSort)] (equal "1" "fix$1")
+            independent <- withZ3 [("1", IntSort)] $ \solver -> entails solver true $ Forall [("other", IntSort)] (equal "1" "other")
+            shared <- withZ3 [("1", IntSort), ("fix$1", IntSort)] $ \solver -> entails solver (isZero "1") (isZero "fix$1")
+            identity <- withZ3 [] $ \solver -> entails solver true $ Forall [("1", IntSort)] (equal "1" "1")
+            (collision, independent, shared, identity) `shouldBe` (No, No, No, Yes)
         it "reserves the free names of ambient assumptions for fresh values" $ do
             -- A fresh value name that an ambient assumption names would read
             -- that assumption, so the query is Unknown; another fresh name is

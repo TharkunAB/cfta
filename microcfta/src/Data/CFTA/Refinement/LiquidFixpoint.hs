@@ -15,6 +15,7 @@ import Control.Concurrent.MVar (modifyMVar, newMVar, withMVar)
 import Control.Exception (Exception (..), SomeException, bracket, throwIO, try, uninterruptibleMask_)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.State.Lazy (runStateT)
+import Data.Char (isAlphaNum, isAscii, ord)
 import qualified Data.HashSet as HashSet
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as Text
@@ -80,7 +81,7 @@ withZ3Timeout milliseconds sorted assumptions action =
     bracket acquire release $ \contextVar ->
         action (entailmentWithBindings $ query contextVar)
   where
-    valueSymbol = Fixpoint.symbol valueName
+    valueSymbol = nameSymbol (Name $ Text.pack valueName)
     given = [(nameSymbol name, sortToFixpoint sort) | (name, sort) <- sorted]
     declarations
         | valueSymbol `elem` map fst given = given
@@ -201,9 +202,22 @@ sortToFixpoint sort = case sort of
     BoolSort -> Fixpoint.boolSort
     FunctionSort arguments result -> Fixpoint.mkFFunc 0 $ map sortToFixpoint arguments <> [sortToFixpoint result]
 
--- | The Liquid Fixpoint symbol of a name.
+{- | The Liquid Fixpoint symbol of a name.
+
+Liquid Fixpoint can write two distinct raw names as one SMT name, so each name
+gets an injective encoding into characters that it writes unchanged. A name of
+ASCII letters, digits, and underscores keeps its text behind the prefix @m_@.
+Any other name becomes the decimal codes of its characters, each ended by an
+underscore, behind the prefix @mx@. The second character of the two forms
+differs, so no name of one form equals a name of the other.
+-}
 nameSymbol :: Name -> Fixpoint.Symbol
-nameSymbol (Name text) = Fixpoint.symbol text
+nameSymbol (Name text)
+    | Text.all plain text = Fixpoint.symbol $ Text.append (Text.pack "m_") text
+    | otherwise = Fixpoint.symbol $ Text.append (Text.pack "mx") $ Text.concatMap encodeChar text
+  where
+    plain character = isAscii character && isAlphaNum character || character == '_'
+    encodeChar character = Text.pack (show $ ord character) <> Text.singleton '_'
 
 {- | Z3 stopped a query at the time limit, in milliseconds, before it decided
 the query.

@@ -45,7 +45,7 @@ instance Ranked.GenBackend QuickCheckBackend where
                 | selected < fst (table ! middle) = pick selected low middle
                 | otherwise = pick selected (middle + 1) high
               where
-                middle = (low + high) `quot` 2
+                middle = low + (high - low) `quot` 2
          in QuickCheckBackend $ do
                 selected <-
                     if total <= toInteger (maxBound :: Int)

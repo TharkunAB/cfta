@@ -95,7 +95,8 @@ import Data.CFTA.Symbol (Symbol)
 
 Within one size, ranks order the edges of a node by arity, then by the given
 key of their symbol, as symbolic counts do, then by the canonical classes of
-their children ('canonicalClasses').
+their children ('canonicalClasses'). Equal keys retain the order of the
+source rows, which can depend on interning order.
 
 Fails on an automaton with free recursive variables, which is not a closed
 language, on one whose edges carry equality constraints, and on an ambiguous
@@ -152,8 +153,8 @@ automatonRows order root
             ( (length $ FTA.transitionChildren transition, order $ FTA.transitionSymbol transition)
             , map (NodeId . number) $ FTA.transitionChildren transition
             )
-    -- Transitions with one arity and key are ordered by the classes of their
-    -- children, so the order does not depend on interning order.
+    -- Child classes order transitions with one arity and symbol key.
+    -- Equal complete keys retain the source row order.
     transitionKey transition =
         ( length $ FTA.transitionChildren transition
         , order $ FTA.transitionSymbol transition
@@ -274,9 +275,8 @@ compileFiniteAutomaton order root
                 Right ranked -> Just (Ranked.share ranked, rankAlternatives alternatives)
       where
         sharedSymbols = Set.size (Set.fromList $ map edgeSymbol $ nodeEdges node) /= length (nodeEdges node)
-        -- Alternatives that share an arity and a key are ordered by the
-        -- canonical classes of their children, so the order does not depend
-        -- on the order in which the edges were interned.
+        -- Child classes order alternatives with one arity and symbol key.
+        -- Equal complete keys retain the source row order.
         edges
             | sharedSymbols = map snd keyed
             | otherwise = sortOn (\edge -> (length $ edgeChildren edge, order $ edgeSymbol edge)) $ nodeEdges node
