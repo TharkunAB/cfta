@@ -56,12 +56,15 @@ module Data.CFTA.Gen.Synthesis (
     -- * Search
     typeNode,
     rawSearchSpace,
+    Saturation (..),
+    rawSaturatedSearchSpace,
     reduceFully,
     reductionRounds,
     searchSpace,
     programsIn,
     solutionsOfSize,
     distinctSolutionsOfSize,
+    distinctSaturatedSolutionsOfSize,
     synthesize,
 
     -- * Generators
@@ -423,13 +426,7 @@ searchSpace lib query = refold . reduceFully . rawSearchSpace lib query
 rawSearchSpace :: Library -> Query -> Int -> Node Symbol
 rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNode $ queryGoal query)
   where
-    types =
-        allTypes
-            $ nubOrd
-            $ concatMap (\(_, typ, _) -> constructorsOf typ) (libraryGroups lib)
-                <> concatMap (constructorsOf . snd) (libraryArgumentOnly lib)
-                <> concatMap (constructorsOf . snd) (queryArguments query)
-                <> constructorsOf (queryGoal query)
+    types = typesOf lib query
     component name typ = Edge (Symbol name) [generalize types (typeNode typ)]
     components = [(name, component name typ) | (name, typ, _) <- libraryGroups lib]
     anyFunction = Node (map snd components)
@@ -485,6 +482,97 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNode $ queryGo
             ]
 
     relevantOfSize size' = union $ concatMap (relevant True size') (permutations argumentEdges)
+
+-- | The node of all types of a library and a query.
+typesOf :: Library -> Query -> Node Symbol
+typesOf lib query =
+    allTypes
+        $ nubOrd
+        $ concatMap (\(_, typ, _) -> constructorsOf typ) (libraryGroups lib)
+            <> concatMap (constructorsOf . snd) (libraryArgumentOnly lib)
+            <> concatMap (constructorsOf . snd) (queryArguments query)
+            <> constructorsOf (queryGoal query)
+
+{- | How the components of a library form terms in which each head is applied
+to all its parameters, by the names of the group representatives.
+-}
+data Saturation = Saturation
+    { saturationArities :: Map.Map Text Int
+    -- ^ The heads, with the number of their parameters.
+    , saturationValues :: [Text]
+    -- ^ The components that can be an argument without arguments of their own.
+    }
+    deriving (Eq, Show)
+
+{- | The automaton of the saturated programs of a size that use every argument
+of the query and have the goal type. A head is applied to all its
+parameters, and an argument is a query argument, a value, or such an
+application, so no partial application is an argument. A size counts the
+components and arguments of a program, as in 'rawSearchSpace'. The library's
+argument-only components and pruning rules play no part.
+-}
+rawSaturatedSearchSpace :: Saturation -> Library -> Query -> Int -> Node Symbol
+rawSaturatedSearchSpace saturation lib query size =
+    ofType
+        (union [node | arguments <- permutations argumentEdges, node <- complete size arguments])
+        (typeNode $ queryGoal query)
+  where
+    types = typesOf lib query
+    component name typ = Edge (Symbol name) [generalize types (typeNode typ)]
+    headsWith parameters =
+        Node
+            [ component name typ
+            | (name, typ, _) <- libraryGroups lib
+            , Map.lookup name (saturationArities saturation) == Just parameters
+            ]
+    values = Node [component name typ | (name, typ, _) <- libraryGroups lib, name `elem` saturationValues saturation]
+    argumentEdges = [(name, Edge (Symbol name) [typeNode typ]) | (name, typ) <- queryArguments query]
+    anyArgument = Node (map snd argumentEdges)
+    largestArity = maximum (1 : Map.elems (saturationArities saturation))
+    selections = concatMap permutations (subsequences argumentEdges)
+
+    -- The complete terms of a size that use each argument of a selection
+    -- once, and the heads of a size with some parameters left, applied to
+    -- the arguments before them. The tables build each once.
+    complete :: Int -> [(Text, Edge Symbol)] -> [Node Symbol]
+    complete size' arguments = completeTable Map.! (size', map fst arguments)
+    partial :: Int -> Int -> [(Text, Edge Symbol)] -> [Node Symbol]
+    partial size' left arguments = partialTable Map.! (size', left, map fst arguments)
+    completeTable =
+        LazyMap.fromList
+            [((size', map fst arguments), buildComplete size' arguments) | size' <- [0 .. size], arguments <- selections]
+    partialTable =
+        LazyMap.fromList
+            [ ((size', left, map fst arguments), buildPartial size' left arguments)
+            | size' <- [0 .. size]
+            , left <- [1 .. largestArity]
+            , arguments <- selections
+            ]
+    buildComplete 0 _ = []
+    buildComplete 1 [] = [anyArgument, values]
+    buildComplete 1 [(_, edge)] = [Node [edge]]
+    buildComplete size' arguments
+        | size' < length arguments = []
+        | otherwise = applied size' 1 arguments
+    buildPartial 0 _ _ = []
+    buildPartial 1 left [] = [headsWith left]
+    buildPartial 1 _ _ = []
+    buildPartial size' left arguments = applied size' (left + 1) arguments
+    -- A head with so many parameters left, applied to one more argument.
+    applied size' left arguments =
+        [ application types (union $ partial functionSize left used) (union $ complete (size' - functionSize) rest)
+        | left <= largestArity
+        , functionSize <- [1 .. size' - 1]
+        , (used, rest) <- map (`splitAt` arguments) [0 .. length arguments]
+        ]
+
+{- | The programs of a size in the saturated search space that solve the
+query, each once, in enumeration order, as 'distinctSolutionsOfSize' gives
+them for 'rawSearchSpace'.
+-}
+distinctSaturatedSolutionsOfSize :: Saturation -> Library -> Query -> Int -> [Program]
+distinctSaturatedSolutionsOfSize saturation lib query =
+    nubOrd . map (toProgram . fst) . runs "Mu" . refold . reduceFully . rawSaturatedSearchSpace saturation lib query
 
 -- | The programs of a term of the search space: the types go.
 toProgram :: Term Symbol -> Program

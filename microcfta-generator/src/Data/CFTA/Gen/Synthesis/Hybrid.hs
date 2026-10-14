@@ -4,10 +4,14 @@ Hegel's checks.
 "Data.CFTA.Gen.Synthesis" (Hectare) lists the programs of a goal type size
 by size, and the programs of its spaces use every argument of the query.
 "Data.CFTA.Gen.Synthesis.Liquid" (Hegel) checks refinement types. The hybrid
-gives Hectare the base types of the components and the query, lists the
-programs of each size in Hectare's order, replaces each group
-representative by each member of its group ('Data.CFTA.Gen.Synthesis.expand'),
-and checks each program with 'Data.CFTA.Gen.Synthesis.Liquid.checker' or
+gives Hectare the base types of the components and the query, and Hectare's
+saturated space ('Data.CFTA.Gen.Synthesis.rawSaturatedSearchSpace') has only
+Hegel's terms: each head is applied to all its parameters, and each leaf is
+an argument of the query or a component that Hegel uses as a value. The
+hybrid lists the programs of each size of this space in Hectare's order,
+replaces each group representative by each member of its group
+('Data.CFTA.Gen.Synthesis.expand'), and checks each program with
+'Data.CFTA.Gen.Synthesis.Liquid.checker' or
 'Data.CFTA.Gen.Synthesis.Liquid.preciseChecker'. It stops at the first
 program that passes.
 
@@ -16,8 +20,9 @@ programs of the goal type, and the search stops within a size. A size counts
 the components and arguments of a program, as in Hectare. The hybrid does
 not make conditionals, and it does not find a program that leaves out an
 argument of the query. Up to the largest size, each other term of Hegel is a
-program of Hectare's spaces. A program of Hectare's spaces that Hegel cannot
-type, such as a partial application as an argument, fails the check.
+program of the saturated space. The other programs of Hectare's spaces, such
+as a partial application as an argument, fail the check, so the saturated
+space loses no solution.
 
 Hectare's construction grows fast with the size and the number of
 arguments, and some goal types have millions of programs, so the hybrid can
@@ -35,9 +40,18 @@ module Data.CFTA.Gen.Synthesis.Hybrid (
 
 import Control.Monad (join)
 import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
+import qualified Data.Map.Strict as Map
+import qualified Data.Text as Text
 import System.Timeout (timeout)
 
-import Data.CFTA.Gen.Synthesis (Program, Query (..), distinctSolutionsOfSize, expand, library)
+import Data.CFTA.Gen.Synthesis (
+    Library (..),
+    Program,
+    Query (..),
+    Saturation (..),
+    distinctSaturatedSolutionsOfSize,
+    expand,
+ )
 import Data.CFTA.Gen.Synthesis.Liquid (
     Checker (..),
     Component,
@@ -46,6 +60,7 @@ import Data.CFTA.Gen.Synthesis.Liquid (
     Outcome,
     baseOf,
     checker,
+    componentRoles,
     defaultOptions,
     preciseChecker,
     synthesize,
@@ -67,10 +82,10 @@ data HybridOptions = HybridOptions
     deriving (Show)
 
 {- | The precise checker, programs of at most 20 components and arguments,
-and Hegel with 'defaultOptions' after 5 seconds.
+and Hegel with 'defaultOptions' after 30 seconds.
 -}
 defaultHybridOptions :: HybridOptions
-defaultHybridOptions = HybridOptions True 20 (Just (5, defaultOptions))
+defaultHybridOptions = HybridOptions True 20 (Just (30, defaultOptions))
 
 -- | What a hybrid search did.
 data HybridStatistics = HybridStatistics
@@ -95,8 +110,8 @@ data HybridOutcome = HybridOutcome
     }
     deriving (Show)
 
-{- | List the programs of the goal's base type size by size, and stop at the
-first one that passes the check. Each program is checked once: two
+{- | List the saturated programs of the goal's base type size by size, and
+stop at the first one that passes the check. Each program is checked once: two
 programs of representatives expand to different programs. Without a
 program, run the fallback of the options.
 -}
@@ -109,7 +124,7 @@ synthesizeHybrid entailment options components query = do
             | size > hybridMaximumSize options = pure Nothing
             | otherwise = do
                 writeIORef reached size
-                found <- firstPassing (concatMap (expand lib) (distinctSolutionsOfSize lib goal size))
+                found <- firstPassing (concatMap (expand lib) (distinctSaturatedSolutionsOfSize saturation lib goal size))
                 maybe (search (size + 1)) (pure . Just . (size,)) found
         firstPassing [] = pure Nothing
         firstPassing (program : rest) = do
@@ -133,5 +148,28 @@ synthesizeHybrid entailment options components query = do
             (HybridStatistics (maybe size fst found) count queries undecided)
             fallback
   where
-    lib = library [(name, baseOf typ) | (name, typ) <- components] [] []
     goal = Query [(name, baseOf typ) | (name, typ) <- liquidArguments query] (baseOf (liquidGoal query))
+    -- The components of a group share their base type, their number of
+    -- parameters, and whether they are values.
+    roles = Map.fromList [(name, (parameters, value)) | (name, parameters, value) <- componentRoles components query]
+    groups = foldl addMember [] [(name, (baseOf typ, Map.findWithDefault (0, False) name roles)) | (name, typ) <- components]
+    addMember found (name, key) = case break ((== key) . fst) found of
+        (before, (_, members) : after) -> before <> ((key, members <> [name]) : after)
+        (before, []) -> before <> [(key, [name])]
+    representativeName index = Text.pack ("f" <> show (index :: Int))
+    lib =
+        Library
+            { libraryGroups = [(representativeName index, typ, members) | (index, ((typ, _), members)) <- zip [0 ..] groups]
+            , libraryArgumentOnly = []
+            , libraryAvoid = []
+            }
+    saturation =
+        Saturation
+            { saturationArities =
+                Map.fromList
+                    [ (representativeName index, parameters)
+                    | (index, ((_, (parameters, _)), _)) <- zip [0 ..] groups
+                    , parameters > 0
+                    ]
+            , saturationValues = [representativeName index | (index, ((_, (_, True)), _)) <- zip [0 ..] groups]
+            }

@@ -8,15 +8,13 @@ conditionals, each with its own small library. The @large@ suite has a
 large polymorphic library: the Hoogle+ components of the @hectare@
 benchmark (without @($)@) and the 20 refined list and pair components of
 Hegel's queries. Its queries are three Hoogle+ queries with a refined goal,
-and Nth_Incr1 and RevApp1. Each Hoogle+ component gets the name @hp@ and
-its index, because Hegel's labels of states use the at sign, which the names
-of Hoogle+'s dictionaries contain.
+and Nth_Incr1 and RevApp1.
 
 The parent runs each query in a child process with a heap limit and a time
-limit, first with Hegel and then with the hybrid. The hybrid has 5 seconds,
+limit, first with Hegel and then with the hybrid. The hybrid has 30 seconds,
 and then Hegel runs on the query; @hybrid-only@ has no fallback. Each row of
 the CSV gives the library, the query, the tool, the outcome (@solved@,
-@fallback@ when Hegel solved it after the hybrid's 5 seconds, @unsolved@,
+@fallback@ when Hegel solved it after the hybrid's 30 seconds, @unsolved@,
 @timeout@, or @crash@), the applications of the solution, the seconds, the
 entailment queries, the undecided queries, and the solution.
 
@@ -29,7 +27,6 @@ With no arguments, it runs three small queries with 60 seconds and a heap of
 module Main (main) where
 
 import Data.List (find)
-import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Clock (getMonotonicTime)
@@ -153,7 +150,7 @@ type Row = (String, String, Int, Int, String)
 @abstracting@ tools.
 -}
 fallbackSeconds :: Int
-fallbackSeconds = 5
+fallbackSeconds = 30
 
 -- | Hegel on a query, with the reduction steps of the paper and a bound on the size.
 hegelRow :: Entailment -> Options -> [Component] -> LiquidQuery -> IO Row
@@ -177,7 +174,7 @@ hybridRow solver options components query = do
     outcome <- synthesizeHybrid solver options components query
     let HybridStatistics _ _ queries undecided = hybridStatistics outcome
     pure $ case (hybridSolution outcome, hybridFallbackOutcome outcome) of
-        (Just program, _) -> ("solved", show (applications program), queries, undecided, renderProgram (originalNames program))
+        (Just program, _) -> ("solved", show (applications program), queries, undecided, renderProgram program)
         (Nothing, Just result) -> case hegelResult result of
             ("solved", size, hegelQueries, hegelUndecided, solution) ->
                 ("fallback", size, queries + hegelQueries, undecided + hegelUndecided, solution)
@@ -196,21 +193,6 @@ applications program = case spine program [] of
 
 -- The large library
 
-{- | The Hoogle+ components without @($)@, each with the name @hp@ and its
-index, and with its original name.
--}
-hooglePlusNamed :: [(Text, Text, Type)]
-hooglePlusNamed =
-    [ ("hp" <> Text.pack (show index), name, typ)
-    | (index, (name, typ)) <- zip [0 :: Int ..] hooglePlusComponents
-    , name /= "(Data.Function.$)"
-    ]
-
--- | A program with the original names of the Hoogle+ components.
-originalNames :: Program -> Program
-originalNames (Var name) = Var (fromMaybe name (lookup name [(safe, original) | (safe, original, _) <- hooglePlusNamed]))
-originalNames (App function argument) = App (originalNames function) (originalNames argument)
-
 {- | A refinement type without refinements: a parameter @p@ and its index for
 each argument of a function type. A function parameter keeps its function
 type as a base type.
@@ -221,9 +203,12 @@ plainRType = go (0 :: Int)
     go index (TFun parameter result) = RArrow ("p" <> Text.pack (show index)) (plain parameter) (go (index + 1) result)
     go _ typ = plain typ
 
--- | The Hoogle+ components without refinements, and the refined list and pair components.
+-- | The Hoogle+ components without @($)@ and without refinements, and the refined list and pair components.
 largeComponents :: [Component]
-largeComponents = [(safe, plainRType typ) | (safe, _, typ) <- hooglePlusNamed] <> listLibrary <> pairLibrary
+largeComponents =
+    [(name, plainRType typ) | (name, typ) <- hooglePlusComponents, name /= "(Data.Function.$)"]
+        <> listLibrary
+        <> pairLibrary
 
 {- | Three Hoogle+ queries with one refinement in the goal and the
 preconditions that it needs, and two of Hegel's queries.
