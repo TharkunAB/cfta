@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 15:07 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 15:23 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -34,6 +34,44 @@ Unknown and unchanged exceptions remain separate. Replies need not be stable.
 External Sat/Unsat correctness and completion remain explicit contracts.
 See [finite map Sized](lean/notes-sized-finite-keys.md).
 
+## Native heap propagation and exact final-cache guarded language
+
+`9a0df4cb` proves `SourceRecursiveIntersectionOpenDepthEffects` and
+`SourceRecursiveIntersectionOrdinaryWork`. Actual optional binders retain
+the body/probe heap through their exact repaired compilation. All ordinary
+compiler jobs add no Mu. `Bounds.open_depth_heaps` follows actual nested
+native evaluation, checked memo lookups, source bodies, completion frames,
+and continuations. It retains both semantic and body/probe heaps.
+`NativeColdTable.cold_node_table` and `constructed_node_table` derive a finite
+repaired cold table after successful first native execution. Complete caches,
+closed Original inputs, and checked WordRanges retain their stated scope.
+No preparation, output trace, or finite future cache is supplied.
+
+`e70160d6` adds `MergedFreshOrdinaryGraph`. Its Mu epsilon step uses the actual
+repaired stored executor. `MergedFreshOrdinaryExposureCertificate` derives a
+finite complete constructor certificate for allocation-free completed reads.
+`ExposureOrigins` proves that every returned edge has a repaired epsilon
+origin in each later cache. `ExposureCoverage` proves the reverse inclusion.
+`ExposureLanguage.actual_exact` retains complete guards and ordered children.
+`SourceFreshOrdinaryColdTableLanguage.trace_table_language_final` identifies
+the complete finite table with this repaired graph in its actual final cache.
+`cold_table_language` supplies the finite trace and stable bounds.
+The native cold-table theorems also return this exact guarded-language law.
+
+The final-cache qualification is essential. These theorems do not equate
+the final repaired graph with an initial graph that discards allocated caches,
+or with independent intended Mu semantics. Next prove that source-language
+transport through actual repaired substitution, fresh identities, and
+canonical hits. Follow `substitutionPlan`; literal identity reconstruction
+for arbitrary raw binders is refuted. Then derive physical
+`ProductReadback.members` and `.rejected` and apply `product_exact`.
+The earlier prepared graph uses the old executor; its preparation premise
+remains valid in its stated fragment.
+
+Current audit: 1,395 jobs and 43,222 theorem dependency checks. Only
+`propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
+`/tmp/mcfta-native-final-language-20261014-audit.log`.
+
 ## Finite general final tables
 
 `3dc8f856` adds `SourceFreshOrdinaryColdTable`. Every first-written row is
@@ -46,20 +84,21 @@ with the actual finite trace, stable outer/read bounds, semantic heaps,
 coverage, the body/probe heap, growth/history, and resident closed edges.
 No preparation, fixed future cache, or supplied trace is assumed.
 
-The aggregate audit passes 1,385 jobs and 43,138 theorem dependency checks.
+The aggregate audit passes 1,395 jobs and 43,222 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-fresh-cold-table-20261014-audit.log`.
-This proves finite table structure and exact row readback. General guarded
-row-language preservation, native body/probe heap propagation, and physical
-product language remain open. The earlier prepared graph uses the old stored
+`/tmp/mcfta-native-final-language-20261014-audit.log`.
+This earlier result proves finite table structure and exact row readback.
+The later native and repaired-language checkpoints below also prove native
+heap propagation and final-cache guarded row language. Initial-source
+language transport and physical product language remain open. The earlier prepared graph uses the old stored
 executor. Do not remove its preparation premise from termination alone.
 
 The latest restart snapshot is
-`/tmp/mcfta-fresh-shared-table-checkpoint-20261014-1507/`.
-It contains 1,744 Lean-tree files, root restart documents, the retained fixture,
-and the new audits. Its manifest compares all 1,740 previous checkpoint files.
-No file is missing. Only the additive height-order lemma, audit imports,
-coverage ledgers, and component notes changed among those files. All other
+`/tmp/mcfta-native-final-language-checkpoint-20261014-1523/`.
+It contains 1,754 Lean-tree files, root restart documents, the retained fixture,
+and the new audits. Its manifest compares all 1,744 previous checkpoint files.
+No file is missing. Only audit imports, coverage ledgers, and three component notes changed
+among those files. All other
 proofs and all marked drafts remain byte-identical.
 
 ## General finite shared traversal
@@ -79,8 +118,9 @@ and uniform stable outer/read bounds. `constructed_cold_finite` derives all
 heap premises from actual repaired empty-cache source construction.
 No preparation, `NoNewMu`, finite future inventory, or supplied trace is
 assumed. The later `3dc8f856` checkpoint derives exact finite map readback.
-General row-language preservation is next. Native body/probe heap propagation and physical product language remain
-separate obligations.
+The later checkpoints prove native body/probe heap propagation and exact
+final-cache guarded row language. Initial-source language transport and
+physical product language remain separate obligations.
 
 ## Finite general repaired cold reads
 
@@ -95,11 +135,11 @@ semantic/coverage and body/probe heap preservation, resident closed edges,
 and stability at all larger bounds. `constructed_read_closed` derives all
 cache premises from actual repaired empty-cache source construction.
 
-Audit: 1,385 jobs and 43,138 theorem dependency checks. Log:
-`/tmp/mcfta-fresh-cold-table-20261014-audit.log`.
+Audit: 1,395 jobs and 43,222 theorem dependency checks. Log:
+`/tmp/mcfta-native-final-language-20261014-audit.log`.
 General shared traversal is proved below the current source heap boundary by
-`68e790f0`. Its unfinished-unfolding budget uses actual allocation-free replay. Native propagation of the body/probe heap and physical
-product language remain separate obligations. See
+`68e790f0`. Its unfinished-unfolding budget uses actual allocation-free replay. Native propagation of the body/probe heap is now proved by `9a0df4cb`.
+Initial-source language transport and physical product language remain open. See
 `lean/notes-stored-plan-binder-depth.md`.
 
 ## Repairs and retained counterexamples
@@ -881,9 +921,9 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`3dc8f856`**; later commits record this handoff.
+The latest proof checkpoint is **`e70160d6`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,385 build targets and 43,138 theorem
+The current Lean 4.34.1 audit passes **1,395 build targets and 43,222 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
 Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
 After PR #119, all **642** examples passed in Nix: 289 core, 208

@@ -4,8 +4,8 @@ import MicroCFTA.MergedFreshOrdinaryExposureCoverage
 # Exact guarded language of general repaired cold reads
 
 Each successful read returns exactly the constructor edges reached through
-actual repaired unfolding in its final cache. Replay retains that language
-in later complete caches. All source guards and child order remain present.
+actual repaired unfolding in its final cache. Replay gives the same edge
+decomposition in later complete caches. Source guards and child order remain present.
 This does not identify the initial discarded-cache graph with the final one.
 -/
 namespace MicroCFTA.MergedFreshOrdinaryExposureLanguage

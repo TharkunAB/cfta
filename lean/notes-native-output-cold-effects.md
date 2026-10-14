@@ -1,6 +1,7 @@
 # Native output scope and general repaired cold-reader effects
 
-Updated: 2026-10-14 12:54 CEST. Proof checkpoints: `6e9804df` and `0534aad8`.
+Updated: 2026-10-14 15:23 CEST. Latest proof checkpoint: `e70160d6`.
+Native heap checkpoint: `9a0df4cb`. Earlier replay and counterexample checkpoints remain.
 
 ## Derived recursive scope
 
@@ -85,23 +86,55 @@ returned edge. File: `/tmp/mcfta-cold-measure-native.hs`. Log:
 `/tmp/mcfta-cold-measure-native-20261014.log`. These are counterexamples to the
 proposed measures. They are not termination counterexamples or source defects.
 
-## Remaining obligations
+## Native heap propagation and exact final-cache guarded language
 
-Exhaustion is still possible in the proved bounded result. Finite repeated
-traversal needs a source-derived finite physical inventory or another
-well-founded measure. `LexicalBinderClosure` derives a finite abstract
-syntax inventory. Physical allocation and canonical replay have not yet
-been connected to it. The old initial-cache inventory requires `NoNewMu`
-and does not prove this general case.
+`9a0df4cb` proves `SourceRecursiveIntersectionOpenDepthEffects` and
+`SourceRecursiveIntersectionOrdinaryWork`. Actual optional binders retain
+the body/probe heap through their exact repaired compilation. All ordinary
+compiler jobs add no Mu. `Bounds.open_depth_heaps` follows actual nested
+native evaluation, checked memo lookups, source bodies, completion frames,
+and continuations. It retains both semantic and body/probe heaps.
+`NativeColdTable.cold_node_table` and `constructed_node_table` derive a finite
+repaired cold table after successful first native execution. Complete caches,
+closed Original inputs, and checked WordRanges retain their stated scope.
+No preparation, output trace, or finite future cache is supplied.
 
-Finite final cold tables, physical `ProductReadback.members` and `.rejected`,
-and exact product language remain open. Do not infer those results from
-closed output, original syntax, or bounded reader safety.
+`e70160d6` adds `MergedFreshOrdinaryGraph`. Its Mu epsilon step uses the actual
+repaired stored executor. `MergedFreshOrdinaryExposureCertificate` derives a
+finite complete constructor certificate for allocation-free completed reads.
+`ExposureOrigins` proves that every returned edge has a repaired epsilon
+origin in each later cache. `ExposureCoverage` proves the reverse inclusion.
+`ExposureLanguage.actual_exact` retains complete guards and ordered children.
+`SourceFreshOrdinaryColdTableLanguage.trace_table_language_final` identifies
+the complete finite table with this repaired graph in its actual final cache.
+`cold_table_language` supplies the finite trace and stable bounds.
+The native cold-table theorems also return this exact guarded-language law.
+
+The final-cache qualification is essential. These theorems do not equate
+the final repaired graph with an initial graph that discards allocated caches,
+or with independent intended Mu semantics. Next prove that source-language
+transport through actual repaired substitution, fresh identities, and
+canonical hits. Follow `substitutionPlan`; literal identity reconstruction
+for arbitrary raw binders is refuted. Then derive physical
+`ProductReadback.members` and `.rejected` and apply `product_exact`.
+The earlier prepared graph uses the old executor; its preparation premise
+remains valid in its stated fragment.
+
+Current audit: 1,395 jobs and 43,222 theorem dependency checks. Only
+`propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
+`/tmp/mcfta-native-final-language-20261014-audit.log`.
+
+## Remaining language obligation
+
+Relate actual repaired stored substitution and construction to independent
+intended guarded Mu language through fresh names and canonical hits. Then
+prove physical product row membership and rejected-edge laws. Final-cache
+readback and replay do not supply initial-source language transport.
 
 ## Validation
 
-Lean 4.34.1 passes 1,365 aggregate jobs and 42,696 theorem dependency checks.
+Lean 4.34.1 passes 1,395 aggregate jobs and 43,222 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-cold-measure-boundary-20261014-audit.log`.
+`/tmp/mcfta-native-final-language-20261014-audit.log`.
 No Haskell source changed. The current PR #119 Nix and active-package
 formatter checks remain valid.

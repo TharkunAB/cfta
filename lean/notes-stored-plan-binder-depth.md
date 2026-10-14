@@ -1,6 +1,6 @@
 # Actual stored-plan binder depth
 
-Updated: 2026-10-14 15:07 CEST. Latest proof checkpoint: `3dc8f856`.
+Updated: 2026-10-14 15:23 CEST. Latest proof checkpoint: `e70160d6`.
 The compiler and zero-case proof is now `c269539f` after the PR #122 rebase. Its earlier
 hash `7f1daf23` remains in the preserving backup.
 
@@ -210,27 +210,65 @@ with the actual finite trace, stable outer/read bounds, semantic heaps,
 coverage, the body/probe heap, growth/history, and resident closed edges.
 No preparation, fixed future cache, or supplied trace is assumed.
 
-The aggregate audit passes 1,385 jobs and 43,138 theorem dependency checks.
+The aggregate audit passes 1,395 jobs and 43,222 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-fresh-cold-table-20261014-audit.log`.
-This proves finite table structure and exact row readback. General guarded
-row-language preservation, native body/probe heap propagation, and physical
-product language remain open. The earlier prepared graph uses the old stored
+`/tmp/mcfta-native-final-language-20261014-audit.log`.
+This earlier result proves finite table structure and exact row readback.
+The later native and repaired-language checkpoints below also prove native
+heap propagation and final-cache guarded row language. Initial-source
+language transport and physical product language remain open. The earlier prepared graph uses the old stored
 executor. Do not remove its preparation premise from termination alone.
 
-## Next language and native targets
+## Native heap propagation and exact final-cache guarded language
 
-Exact finite map domains, declared children, and actual final-cache row
-replay are proved. Next prove general guarded row-language preservation
-and physical product readback.
-Transfer the new body/probe heap through actual native execution before
-claiming general native-output termination. The existing native successful
-result retains the older semantic heap, which omits this new invariant.
+`9a0df4cb` proves `SourceRecursiveIntersectionOpenDepthEffects` and
+`SourceRecursiveIntersectionOrdinaryWork`. Actual optional binders retain
+the body/probe heap through their exact repaired compilation. All ordinary
+compiler jobs add no Mu. `Bounds.open_depth_heaps` follows actual nested
+native evaluation, checked memo lookups, source bodies, completion frames,
+and continuations. It retains both semantic and body/probe heaps.
+`NativeColdTable.cold_node_table` and `constructed_node_table` derive a finite
+repaired cold table after successful first native execution. Complete caches,
+closed Original inputs, and checked WordRanges retain their stated scope.
+No preparation, output trace, or finite future cache is supplied.
+
+`e70160d6` adds `MergedFreshOrdinaryGraph`. Its Mu epsilon step uses the actual
+repaired stored executor. `MergedFreshOrdinaryExposureCertificate` derives a
+finite complete constructor certificate for allocation-free completed reads.
+`ExposureOrigins` proves that every returned edge has a repaired epsilon
+origin in each later cache. `ExposureCoverage` proves the reverse inclusion.
+`ExposureLanguage.actual_exact` retains complete guards and ordered children.
+`SourceFreshOrdinaryColdTableLanguage.trace_table_language_final` identifies
+the complete finite table with this repaired graph in its actual final cache.
+`cold_table_language` supplies the finite trace and stable bounds.
+The native cold-table theorems also return this exact guarded-language law.
+
+The final-cache qualification is essential. These theorems do not equate
+the final repaired graph with an initial graph that discards allocated caches,
+or with independent intended Mu semantics. Next prove that source-language
+transport through actual repaired substitution, fresh identities, and
+canonical hits. Follow `substitutionPlan`; literal identity reconstruction
+for arbitrary raw binders is refuted. Then derive physical
+`ProductReadback.members` and `.rejected` and apply `product_exact`.
+The earlier prepared graph uses the old executor; its preparation premise
+remains valid in its stated fragment.
+
+Current audit: 1,395 jobs and 43,222 theorem dependency checks. Only
+`propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
+`/tmp/mcfta-native-final-language-20261014-audit.log`.
+
+## Remaining language obligation
+
+Prove transport from actual repaired source construction to independent
+intended guarded Mu semantics across allocation and canonical hits. Then
+connect physical product rows and rejected edges. The final-cache guarded
+law is complete in its stated scope. Native body/probe heap propagation,
+finite native output tables, and final-cache row language must not be repeated.
 
 ## Validation
 
-Lean 4.34.1 passes 1,385 aggregate jobs and 43,138 theorem dependency checks.
+Lean 4.34.1 passes 1,395 aggregate jobs and 43,222 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-fresh-cold-table-20261014-audit.log`.
+`/tmp/mcfta-native-final-language-20261014-audit.log`.
 No Haskell source changed. Existing Nix and active-package formatter checks
 remain valid.
