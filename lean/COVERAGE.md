@@ -1,7 +1,7 @@
 # Full formalization coverage
 
-Current checkpoint: **2026-10-14 02:11 CEST**, upstream `f59c198d`.
-The latest proof commit is `f425e2b6`. No background proof worker is active.
+Current checkpoint: **2026-10-14 02:48 CEST**, upstream `f59c198d`.
+The latest proof commit is `2a533cc5`. No background proof worker is active.
 The requested rebase preserved all saved proofs, drafts, and fixtures.
 
 `SizedLanguageTheorem` proves exact distinct accepted node-count classes,
@@ -59,6 +59,16 @@ The actual returned table connects to canonical native dispatch and encoded
 solver-decided execution, including finite classes and both signed inverses.
 Validation and external solver contracts remain explicit. See
 [cold shared rows](notes-cold-shared-rows.md).
+
+`SourceRecursiveIntersection*` now derives full physical guard order,
+tagged operand comparison, independently sorted cutoff pairs, typed
+canonical domain overwrite, original Mu record lookup, and domain-cache
+allocation. The complete branch selector and next semantic computation
+are connected. Physical-to-view closedness equations remain explicit.
+Physical `maybeMu` construction, pending cyclic memo publication, and
+product-row readback remain open. See
+[recursive control](notes-recursive-intersection-control.md).
+
 Nested binder construction, native cyclic product rows, pending memo values,
 and complete recursive memo-effect traces remain open. Free-name projection and ordinary-root deep
 observations are derived; general cached-depth and binder-heap induction
@@ -73,7 +83,7 @@ external solver/PRNG contracts, codecs, and verified extraction remain
 boundaries. The handwritten source models do not verify the whole library.
 Benchmark programs, datasets, and workload specifications are excluded.
 
-The current audit passes **1,204 targets and 40,032 theorem dependency checks**
+The current audit passes **1,209 targets and 40,275 theorem dependency checks**
 with only `propext`, `Classical.choice`, and `Quot.sound`.
 All **640 Haskell examples** passed after the upstream refresh: 288 core,
 208 generator, and 144 refinement. Fourmolu and cabal-gild passed. No new

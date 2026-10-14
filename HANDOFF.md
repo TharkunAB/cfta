@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 02:11 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 02:48 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -11,9 +11,10 @@ older next-target statements. `lean/FINDINGS.md` retains historical findings.
 
 The current continuation refreshed upstream and completed the finite optimized
 Sized inverse proof, recursive knot construction, and first-order shared rows.
-It also proves cold traversal termination, exact returned tables, and native/solver Sized composition.
+It also proves cold traversal termination, exact returned tables, native/solver Sized composition,
+and physical recursive intersection control and domain effects.
 **No background proof worker is active.**
-The latest proof checkpoint is **`f425e2b6`**. A later documentation commit
+The latest proof checkpoint is **`2a533cc5`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
 
@@ -38,7 +39,7 @@ python3 /tmp/mcfta-weekly-usage.py
 
 Stop all work and workers immediately at **1% remaining or less**.
 The latest explicit user instruction supersedes the earlier 20% threshold.
-The last observed value was **34% at 02:11 CEST**. This is a historical value.
+The last observed value was **34% at 02:47 CEST**. This is a historical value.
 Check `observed_at`. The script reads the newest 40 local logs across the
 current UTC date, the preceding two dates, and the next date directory. The
 next directory includes logs named with the local date after midnight. It selects the 10,080-minute
@@ -251,16 +252,37 @@ General open nested binder construction, native cyclic intersection product
 rows, pending memo execution, and concrete runtime correspondence remain open.
 See [cold shared rows](lean/notes-cold-shared-rows.md).
 
+## Physical recursive intersection control
+
+`SourceRecursiveIntersectionDomain` proves canonical source map/set keys,
+typed last-new-binding overwrite, exact complete Mu lookup, and retained
+bindings after physical growth. `SourceRecursiveIntersectionControl` reads
+all physical source guards in order. `SourceRecursiveIntersectionSchedule`
+connects complete tagged comparison, independently sorted actual pairs,
+canonical domain lookup, and full branch selection to `IntersectSchedule`.
+`SourceRecursiveIntersectionStep.physical_step` proves the next semantic
+computation selected by physical control. Its physical-to-view closedness
+equations remain explicit. It does not derive a complete semantic view.
+`SourceRecursiveIntersectionEnvironment` derives the actual Mu binding
+list, canonical domain allocation, complete physical binding invariant,
+and source/schedule overwrite lookup. Physical `maybeMu` construction and
+recursive memo publication remain open. Read
+[recursive control](lean/notes-recursive-intersection-control.md).
+
 ## Remaining priorities
 
-1. Connect native cyclic intersection construction and its product rows to
-   the cold shared adapter. Preserve actual constructor effects and recursive
+1. Prove actual `maybeMu` callback substitution and repaired constructor
+   effects. Preserve probes, fresh ordinary names, cleanup, hits, and
+   reservations. Then connect native cyclic intersection product rows to
+   the cold shared adapter. Physical control and domain lookup are proved;
+   do not repeat them. Preserve actual constructor effects and recursive
    memo traces. The plain completed dispatcher does not prove pending cyclic
    publication. General open nested source binders still need a prepared heap
    or a larger finite-execution invariant. Cold traversal termination and final
    table language are now proved under `Prepared`. First-order empty-cache
    construction derives that premise. Do not repeat those proofs or use the
    older warmup snapshot as the cold source path. Read
+   `lean/notes-recursive-intersection-control.md` and
    `lean/notes-cold-shared-rows.md`. The raw-map Sized algorithms are complete.
    The concrete remaining interface is
    `SourceCyclicRowsNativeGate.ProductReadback.members` and `.rejected`.
@@ -316,10 +338,10 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,204 jobs and 40,032 theorem dependency checks**.
+The current build passes **1,209 jobs and 40,275 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
-Log: `/tmp/mcfta-cold-complete-20261014-audit.log`.
+Log: `/tmp/mcfta-recursive-control-20261014-audit.log`.
 Use focused targets for changes, then the aggregate audit. Do not add `sorry`,
 native evaluation axioms, or project axioms. Do not repeat passing checks
 without a source change or a new concern.
@@ -353,6 +375,7 @@ in older logs; do not substitute their counts for current validation.
 
 | Commit | Result |
 | --- | --- |
+| `2a533cc5` | Complete physical recursive guard order, semantic next-step conversion, and exact Mu-domain effects. |
 | `f425e2b6` | Finite cold traversal, first-order source Sized, and native/solver public composition. |
 | `4601cf85` | Exact guarded final cold tables and reference Sized laws. |
 | `49498845` | Exact stateful cold traces, finite executable correspondence, and discovered key closure. |
