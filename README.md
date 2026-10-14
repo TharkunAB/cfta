@@ -17,9 +17,8 @@ holes with programs that Hectare's automaton proposes and GHC's typechecker
 checks, also as a typed-hole plugin (`-fplugin=Data.CFTA.GHC.HoleFits`); it
 is the only package that depends on the `ghc` library.
 
-The original ECTA line stays in this repository as
-[`microecta`](microecta/README.md) and
-[`microecta-generator`](microecta-generator/README.md). `microecta` remains on
+The original ECTA line, `microecta` and `microecta-generator`, lives in
+[Tritlo/microecta](https://github.com/Tritlo/microecta). `microecta` remains on
 Hackage as a separate, ECTA-only package.
 
 Concrete terms are `Term symbol` from `Data.CFTA.Term`. The interned engine in
