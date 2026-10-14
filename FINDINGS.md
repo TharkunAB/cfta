@@ -1,6 +1,6 @@
 # Current formalization findings
 
-Updated: **2026-10-14 14:34 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 14:54 CEST (Europe/Stockholm)**.
 
 ## Current result
 
@@ -33,6 +33,27 @@ fold. `encoded_finite` derives finite outcomes from finite external attempts.
 Unknown and unchanged exceptions remain separate. Replies need not be stable.
 External Sat/Unsat correctness and completion remain explicit contracts.
 See [finite map Sized](lean/notes-sized-finite-keys.md).
+
+## Finite general repaired cold reads
+
+`6132e4f2` proves a dynamic budget over actual canonical Mu identities.
+`InternedMuDepthInventory` handles duplicate issued reservations and growing
+inventories. `MergedFreshOrdinaryColdTermination.collect_complete` proves
+finite actual closed worklist execution in complete semantic caches with the
+body/probe heap. New Mu and open probe allocations are permitted at lower
+degrees. No preparation, fixed future cache, trace, or progress contract is
+supplied. `read_closed` proves public completion with exact edges and cache,
+semantic/coverage and body/probe heap preservation, resident closed edges,
+and stability at all larger bounds. `constructed_read_closed` derives all
+cache premises from actual repaired empty-cache source construction.
+
+Audit: 1,381 jobs and 43,103 theorem dependency checks. Log:
+`/tmp/mcfta-fresh-cold-termination-20261014-audit.log`.
+General shared traversal remains open because row reads reset local visited
+identities. Next count unsettled unfoldings by degree and use actual repaired
+allocation-free replay. Native propagation of the body/probe heap and physical
+product language remain separate obligations. See
+`lean/notes-stored-plan-binder-depth.md`.
 
 ## Repairs and retained counterexamples
 
@@ -811,9 +832,9 @@ intended coverage documents, the finite-key and pending-producer descent notes,
 and audit imports changed among those files.
 All earlier proofs, marked drafts, repairs, stashes, and worktrees remain.
 `lean/repro/NestedUnaryTwoAtom.hs` remains intentionally untracked.
-The latest proof checkpoint is **`de322a41`**; later commits record this handoff.
+The latest proof checkpoint is **`6132e4f2`**; later commits record this handoff.
 
-The current Lean 4.34.1 audit passes **1,381 build targets and 43,054 theorem
+The current Lean 4.34.1 audit passes **1,381 build targets and 43,103 theorem
 dependency checks**, using only `propext`, `Classical.choice`, and `Quot.sound`.
 Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.
 After PR #119, all **642** examples passed in Nix: 289 core, 208

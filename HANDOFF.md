@@ -1,6 +1,6 @@
 # microcfta formalization restart handoff
 
-Updated: **2026-10-14 14:34 CEST (Europe/Stockholm)**.
+Updated: **2026-10-14 14:54 CEST (Europe/Stockholm)**.
 
 ## Read first
 
@@ -64,9 +64,30 @@ in complete semantic caches under explicit WordRanges. Native output scope,
 closedness, original syntax, and general bounded cold-reader effects are now
 proved. Finite repeated traversal and physical product language remain open.
 **No background proof worker is active.**
-The latest proof checkpoint is **`de322a41`**. A later documentation commit
+The latest proof checkpoint is **`6132e4f2`**. A later documentation commit
 records this handoff. Use `git log` for its hash. The only intentionally untracked file is
 `lean/repro/NestedUnaryTwoAtom.hs`; preserve it.
+
+## Finite general repaired cold reads
+
+`6132e4f2` proves a dynamic budget over actual canonical Mu identities.
+`InternedMuDepthInventory` handles duplicate issued reservations and growing
+inventories. `MergedFreshOrdinaryColdTermination.collect_complete` proves
+finite actual closed worklist execution in complete semantic caches with the
+body/probe heap. New Mu and open probe allocations are permitted at lower
+degrees. No preparation, fixed future cache, trace, or progress contract is
+supplied. `read_closed` proves public completion with exact edges and cache,
+semantic/coverage and body/probe heap preservation, resident closed edges,
+and stability at all larger bounds. `constructed_read_closed` derives all
+cache premises from actual repaired empty-cache source construction.
+
+Audit: 1,381 jobs and 43,103 theorem dependency checks. Log:
+`/tmp/mcfta-fresh-cold-termination-20261014-audit.log`.
+General shared traversal remains open because row reads reset local visited
+identities. Next count unsettled unfoldings by degree and use actual repaired
+allocation-free replay. Native propagation of the body/probe heap and physical
+product language remain separate obligations. See
+`lean/notes-stored-plan-binder-depth.md`.
 
 ## Authorization and allowance
 
@@ -1082,8 +1103,9 @@ The retained raw counterexample does not prove the qualified identity law.
 2. Read `lean/notes-stored-plan-binder-depth.md` and
    `lean/notes-fresh-binding-keys.md`. General strict body-depth decrease
    for every new Mu after closed unfolding is proved by `de322a41`. Do not
-   repeat that proof or assume the reader terminates from the rank alone.
-   Implement the dynamic inventory budget described in the component note.
+   repeat that proof. `6132e4f2` now proves finite individual actual closed
+   reads with a dynamic degree budget. Extend that budget across shared
+   row reads using allocation-free replay, as described in the component note.
    General finite physical closure remains the target. Read
    `lean/notes-native-output-cold-effects.md`. Recursive result scope,
    native output closedness, original payload syntax, and general bounded
@@ -1143,7 +1165,7 @@ Pinned Lean: **4.34.1**. From the repository root:
 /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake -d lean build
 ```
 
-The current build passes **1,381 jobs and 43,054 theorem dependency checks**.
+The current build passes **1,381 jobs and 43,103 theorem dependency checks**.
 All completed modules are imported by `MicroCFTA/Audit.lean`.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted.
 Log: `/tmp/mcfta-open-depth-progress-20261014-audit.log`.

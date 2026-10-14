@@ -1,6 +1,6 @@
 # Actual stored-plan binder depth
 
-Updated: 2026-10-14 14:34 CEST. Latest proof checkpoint: `de322a41`.
+Updated: 2026-10-14 14:54 CEST. Latest proof checkpoint: `6132e4f2`.
 The compiler and zero-case proof is now `c269539f` after the PR #122 rebase. Its earlier
 hash `7f1daf23` remains in the preserving backup.
 
@@ -109,9 +109,9 @@ The progress theorem permits counts of unfinished closed Mu unfoldings
 by decreasing body depth in the finite current cache. A completed
 unfolding settles its own replay. Cache growth preserves settled calls. Any new unfinished closed
 Mu would have a lower degree. A fixed maximum degree and lexicographic
-degree counts could replace the old fixed-inventory budget. No such dynamic
-budget has been implemented. Closed-reader invariants already exclude open
-pending inputs. Finite final cold tables and product language remain open.
+degree counts replace the old fixed-inventory budget in the reader proof
+below. Closed-reader invariants exclude open pending inputs. Finite final
+cold tables and product language remain open.
 
 ## Exploratory evidence
 
@@ -154,24 +154,32 @@ The corresponding larger staged Lean evaluation exceeded its ten-minute cap and 
 `/tmp/mcfta-open-rank-probes-bound.lean`. Do not repeat it without a changed
 strategy. No proof or runtime failure follows from this interrupted probe.
 
-## Next dynamic budget
+## Proved dynamic reader budget
 
-First prove finite execution of the actual repaired cold collector. Use a
-fixed maximum body depth from the finite initial `nodeInventory`. Count
-unseen Mu identities at each degree in decreasing order. Include open
-probe records in this inventory. Append the existing structural pending-
-work measure after those counts. Each unseen queried Mu is closed by the
-proved reader invariant. Its actual unfolding consumes that degree and can
-add Mu only at lower degrees. Union visits do not increase the counts.
+`6132e4f2` adds `InternedMuDepthInventory`. Its finite counts include each
+complete Mu only at its canonical issued identity. This avoids duplicate
+reservations for one key. Initial cached depth supplies a maximum body
+degree. Future cached depth need not decrease. The count comparison uses a
+common finite range and does not assume that `Grows` includes issued counters.
 
-Derive the vector change from actual coherent inventory membership and
-issued identities. Do not assume a finite future cache. A nested product of
-natural orders can prove well-foundedness for the fixed vector length.
-Connect that measure to the actual transition before claiming termination.
-Existing source completion and bounded closed-reader effects supply the
-non-rank premises. The new open-depth heap is retained by actual unfolding.
+`MergedFreshOrdinaryColdTermination.collect_complete` derives a successful
+bound for every available closed worklist in a complete semantic cache with
+the proved body/probe heap. The fixed finite vector counts unseen canonical
+Mu identities by decreasing body depth. Structural pending work has lowest
+priority. Actual unseen unfolding consumes its degree and adds Mu only at
+lower degrees. The proof permits all probe allocations and retains the heap
+for subsequent reads. It assumes no preparation, `NoNewMu`, successful trace,
+finite future cache, or external progress law.
 
-Then derive finite shared traversal and its exact final tables. Row reads
+`nodeEdges_complete` covers both public reader paths. `read_closed` also
+retains semantic heaps, coverage, exact growth/history, resident closed
+edges, and identical edges and cache at every larger read bound.
+`constructed_read_closed` derives all cache premises from actual repaired
+empty-cache source construction.
+
+## Next shared traversal budget
+
+Derive finite shared traversal and its exact final tables. Row reads
 reset the local seen list. Use the existing allocation-free replay of
 completed unfolds to avoid charging the same Mu repeatedly. Also transfer
 the new heap through actual native execution before claiming that scope.
@@ -180,8 +188,8 @@ their older semantic-heap predicate does not include the new open-depth heap.
 
 ## Validation
 
-Lean 4.34.1 passes 1,381 aggregate jobs and 43,054 theorem dependency checks.
+Lean 4.34.1 passes 1,381 aggregate jobs and 43,103 theorem dependency checks.
 Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Log:
-`/tmp/mcfta-open-depth-progress-20261014-audit.log`.
+`/tmp/mcfta-fresh-cold-termination-20261014-audit.log`.
 No Haskell source changed. Existing Nix and active-package formatter checks
 remain valid.
