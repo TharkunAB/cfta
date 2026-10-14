@@ -8,7 +8,9 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `TypedHole` in `TcM`. Hectare's automaton proposes programs over the
   `Candidate`s, size by size, and a walk inside GHC's typechecker checks each
   one prefix by prefix with the parts of GHC's `tcCheckHoleFit`, with a trie
-  of dead prefixes. `holeFor` makes a hole from skolems and givens.
+  of dead prefixes. The walk is the one of `Data.CFTA.Gen.Synthesis.Walk`
+  (in `microcfta-generator`), with GHC's frames and the table of verdicts as
+  its checker. `holeFor` makes a hole from skolems and givens.
   `Options` bound the size, the fits, the programs, and the seconds, carry
   Hectare's pruning rules, and take a report after each size and a trace of
   each program. `Statistics` give the time of Hectare's construction,
