@@ -1431,6 +1431,12 @@ import MicroCFTA.SourceMemoGateSemantics
 import MicroCFTA.SourcePredicateGateTrace
 import MicroCFTA.SourcePredicateGateLift
 import MicroCFTA.SourcePredicateGateClasses
+import MicroCFTA.InternedSourceClassSelection
+import MicroCFTA.InternedSourceClassSelectionComplete
+import MicroCFTA.InternedSourceGateReplay
+import MicroCFTA.InternedSourceClassSelectionReadback
+import MicroCFTA.SourceMemoClassSelection
+import MicroCFTA.SourceMemoClassSelectionReadback
 /-!
 # Proof dependency audit
 
