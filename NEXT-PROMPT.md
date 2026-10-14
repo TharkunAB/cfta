@@ -2,6 +2,50 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Repaired gate progress and Lava
+
+The latest proofs are `8e8cbc91` and `d513db2b`. Continue on `formalize` in
+`TharkunAB/cfta`, based on `origin/main` at `f201deda`. Push completed
+checkpoints regularly to `origin/formalize`. Read the first section of
+`lean/notes-gate-unfolding-rank.md` and `lean/notes-lava.md`.
+This section supersedes the earlier replay and pure-probe next targets.
+
+The exact repaired replay of the old rank example gives head and minimum
+free-reference ranks `[2, 1, 0, 0]`, cached depths `[2, 3, 3, 3]`, and no
+first-unfold hit on the later representative. Its first step strictly
+decreases both candidate ranks. The old executor's stutter remains checked
+and unchanged. Neither result proves a general repaired rank.
+
+Actual repaired execution now derives stored body filters, joint probe
+opacity, and completed strict head-rank progress from one pure Depth probe.
+The theorem uses the repaired stored executor and derives the representation
+premises from original empty-cache source execution. No body-depth or
+callback-completion premise is supplied. The repaired ordinary probe choice
+remains `ordinaryLevel`; a pure Depth probe need not select level zero.
+
+Matti supplied the local Lava paper. The paper note records its executable
+function/logical graph correspondence method. Its monomorphic, structural,
+call-by-value fragment does not close the opaque gate, lazy scheduling,
+external solver, native capacity, or source-extraction obligations. No new
+translator, dependency, or proof system was introduced.
+
+The audit passes 1,568 jobs and 44,486 theorem dependency checks. Only the
+three permitted foundations occur. Only the old unused `inputs` warning
+remains. Log: `/tmp/mcfta-repaired-gate-lava-20261015-audit.log`.
+No production Haskell code changed. Snapshot:
+`/tmp/mcfta-repaired-gate-lava-checkpoint-20261015-0003/` (1,950 Lean-tree files).
+All earlier proof bytes, counterexamples, repros, marked drafts, repairs,
+backups, stashes, and worktrees remain. No owned proof worker remains.
+
+Next prove progress for arbitrary opaque repaired probes. Use actual
+FreshOrdinary source origins, body filters, and returned caches. The existing
+dynamic Mu budget requires a closed node and cannot be applied directly to
+the open-Mu gate. Cached maximum depth is not a strict measure. Keep the
+completed Sized paths and unary ancestor root theorem. Do not resume the
+archived unary draft. Do not claim general rank decrease from this finite
+replay. Keep the optimized interned core and explicit runtime boundaries.
+Stop all work and workers at 1% weekly allowance or less.
+
 ## Exact Sized paths from original closed source expressions
 
 The latest proofs are `0e8b2265` and `dd240eb6`. Continue on `formalize` in

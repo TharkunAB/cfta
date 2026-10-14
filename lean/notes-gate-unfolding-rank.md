@@ -1,5 +1,63 @@
 # Same-path unfolding in the current equality gate
 
+## Repaired source checkpoint (2026-10-15 00:02 CEST)
+
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
+Proofs: `8e8cbc91` and `d513db2b`. This section supersedes the next-target
+statements in the historical sections below. The older executors and all
+their checked counterexamples remain unchanged.
+
+`InternedFreshOrdinaryRankReplay` uses the exact source expressions, captured
+Depth and ordinary names, and allocation order of `InternedSourceRankStutter`.
+Every build and stored unfold now uses the repaired FreshOrdinary executor.
+Kernel reduction gives head ranks and minimum free-reference ranks
+`[2, 1, 0, 0]`, with cached depths `[2, 3, 3, 3]`. The first unfold does not
+hit the later representative. Both candidate ranks strictly decrease on that
+step. The retained old executor instead gives ranks `[2, 2, 1, 0]` and depths
+`[2, 4, 5, 5]`. Its stutter does not transfer to this repaired replay.
+Cached maximum Mu depth still increases in the repaired example. It is not
+a general strict unfolding measure.
+
+`InternedFreshOrdinaryBodyFilter` proves that actual repaired execution
+preserves `Clean` for every source expression, child schedule, and edge
+schedule. Both probes and every fresh body pass the actual root filter.
+The proof includes complete hits and pending outer outcomes. Empty caches
+derive the initial invariant.
+
+`InternedFreshOrdinaryPureProbeGate.body_zero` derives actual body depth zero
+from two pure repaired probes in the complete semantic context.
+`unfold_shallow_eq` proves exact outcome and cache equality with the older
+stored executor for such a depth-zero body. `unfold_decreases` therefore
+derives actual repaired completion and a strict head-rank decrease.
+`closed_unfold_decreases` derives the representation premises from the
+original repaired source expression.
+
+`InternedFreshOrdinaryProbeOpacity` uses the retained semantic source origins
+and actual callback profiles to prove joint probe opacity. Its
+`closed_depth_pure_unfold` requires only one pure Depth probe. The repaired
+ordinary name uses `ordinaryLevel`; a pure Depth probe does not justify
+replacing that choice with level zero.
+
+The focused builds and aggregate audit pass. The audit completes 1,568 jobs
+and checks 44,486 theorem dependencies. It permits only `propext`,
+`Classical.choice`, and `Quot.sound`. Log:
+`/tmp/mcfta-repaired-gate-lava-20261015-audit.log`.
+No production Haskell code changed.
+
+Next prove progress for arbitrary opaque repaired probes. The replay is a
+finite example, not a general rank theorem. The closed-node dynamic Mu
+budget cannot be applied directly to the gate's open-Mu branch. Use the
+actual repaired semantic origins, body filters, and returned caches when
+proving a candidate measure. Keep the completed Sized proofs and unary
+ancestor root theorem. Do not resume the archived unary draft.
+
+Matti supplied *Lava: Foundations for Liquid Haskell via Translation to Rocq*.
+[The paper note](notes-lava.md) records its function/graph correspondence
+method and the limits relevant to the current gate. Its supported fragment
+does not close this non-structural recursion obligation.
+
+## Historical source and lexical results
+
 The source gate in `Equality/Operations.hs` unfolds an open unconstrained
 `InternedMu` without consuming a path index. Closed unconstrained binders
 return false. References and stored unions return true before metadata

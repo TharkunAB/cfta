@@ -73,6 +73,12 @@ It saves all 1,945 Lean-tree files and four root documents.
 
 ## Next constructor and equality target
 
+Update (2026-10-15): The repaired replay and pure-probe gate are now proved
+in `8e8cbc91` and `d513db2b`. Read the first section of
+[the gate note](notes-gate-unfolding-rank.md) and [the Lava note](notes-lava.md).
+The remaining target is the general opaque-probe rank in the repaired
+executor. The historical restart instructions below are superseded.
+
 The Sized reference, optimized, and solver-decided compositions now reach
 the original source-expression language at the stated source-model layer.
 Do not repeat construction completion, cold traversal, row validation,
