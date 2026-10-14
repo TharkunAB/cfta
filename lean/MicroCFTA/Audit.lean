@@ -1393,6 +1393,9 @@ import MicroCFTA.MergedRawLeafLanguage
 import MicroCFTA.MergedSubsumptionTermination
 import MicroCFTA.InternedSourceRankStutter
 import MicroCFTA.InternedFreshOrdinaryRankReplay
+import MicroCFTA.InternedFreshOrdinaryBodyFilter
+import MicroCFTA.InternedFreshOrdinaryPureProbeGate
+import MicroCFTA.InternedFreshOrdinaryProbeOpacity
 /-!
 # Proof dependency audit
 
