@@ -1769,6 +1769,8 @@ import MicroCFTA.SourceSecondaryGateHeap
 import MicroCFTA.SourceSecondaryGateEndpointClosed
 import MicroCFTA.SourceSecondaryGateHeadLanguage
 import MicroCFTA.SourceSecondaryGateHeadHeap
+import MicroCFTA.SourceSecondaryGateProjectionLanguage
+import MicroCFTA.SourceSecondaryGateProjectionHeap
 /-!
 # Proof dependency audit
 
