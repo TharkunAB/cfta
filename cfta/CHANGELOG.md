@@ -153,7 +153,9 @@ remains a separate ECTA-only package.
   24% of the time of two reduction rounds and 11% of the listing time.
   The enumerator keeps the count of the suspended constraints that wait for
   an equality class by the class's representative, so a step no longer
-  resolves every waiting variable through the union-find.
+  resolves every waiting variable through the union-find, and a write of a
+  slot changes only the counts that change. On Hectare's listing of
+  headLast at size 5 this cut 13% of instructions and 9% of allocation.
 - The refinement layer's `denotationAtMost` runs on the shared enumerator: a
   positive `Same` guard is a path equality solved by unification, so an
   equality-guarded pair costs milliseconds instead of a quadratic candidate
