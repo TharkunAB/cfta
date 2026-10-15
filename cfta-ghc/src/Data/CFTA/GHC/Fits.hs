@@ -114,7 +114,7 @@ import Control.Applicative ((<|>))
 import Control.Exception (evaluate)
 import Control.Monad (forM)
 import Control.Monad.IO.Class (liftIO)
-import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
+import Data.IORef (atomicModifyIORef', modifyIORef', newIORef, readIORef, writeIORef)
 import Data.List (nub, sort)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
@@ -428,6 +428,8 @@ streamFits options hole candidates goal accept = do
     seen <- liftIO (newIORef Set.empty)
     merged <- liftIO (newIORef 0)
     normalizing <- liftIO (newIORef 0)
+    -- The fits so far, so that a program that fits again is not a new fit.
+    reported <- liftIO (newIORef Set.empty)
     let statistics progress =
             statisticsOf progress
                 <$> liftIO (readIORef ignoring)
@@ -448,6 +450,8 @@ streamFits options hole candidates goal accept = do
                             Just callback -> statistics progress >>= liftIO . callback size
                             Nothing -> pure ()
                         , hookProgram = \size program -> mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
+                        , hookNew = \tokens -> liftIO $ atomicModifyIORef' reported $ \fits ->
+                            if tokens `Set.member` fits then (fits, False) else (Set.insert tokens fits, True)
                         }
                 -- A fit with the normal form of an earlier fit is skipped,
                 -- before the checks of its parts.

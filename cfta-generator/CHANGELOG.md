@@ -64,7 +64,9 @@ tree automata of `cfta`, with QuickCheck integration.
   typed terms that Hectare listed (`progressRuns`). Because it keeps
   a set of the programs, not of the typed terms, the peak memory of the
   Hoogle+ ladder of `cfta-ghc` falls by 30% to 31% (45% to 46% on the
-  queries that time out), with the same results and time.
+  queries that time out), with the same results and time. Its `Progress`
+  tells how it ended (`progressOutcome`: `Solved`, `Exhausted`, or
+  `OutOfTime`), and its caller says which fits are new (`hookNew`).
 - `Data.CFTA.Gen.Synthesis.Hybrid`: Hectare's program spaces with Hegel's
   checks. `synthesizeHybrid` lists the programs of the base types of a
   refinement-typed query size by size, in Hectare's order, in the saturated
