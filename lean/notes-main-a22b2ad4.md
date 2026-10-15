@@ -1,5 +1,9 @@
 # Conservative emptiness and refused equality classes
 
+The current table and source-row proof update is in
+[the explored-table note](notes-emptiness-table-source.md). Read it first.
+Earlier next targets and audit counts below retain their checkpoint scope.
+
 Current source main: `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.
 Preserving merge: `e612302b`. Pre-merge checkpoint: `aaeeac64`.
 Backup: `backup/formalize-before-main-a22b2ad4-20261015-1648`.

@@ -1,6 +1,54 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 17:04 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 17:26 CEST (Europe/Stockholm)**.
+
+## Explored emptiness tables and source row readback
+
+Current source main remains `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.
+Starting checkpoint: `7b270679`. New proofs: `76afeec1`, `e736beeb`, and
+`71b7fd08`. Read `lean/notes-emptiness-table-source.md` first. Continue on
+formalize and push verified checkpoints. Full library scope remains open.
+
+The actual completed table now derives the finite key carrier, exact raw
+rounds, least fixed point, and equality-stop completion. Empty-start exploration
+derives exact stored-supply receipts. Certified source values derive complete
+untagged identity readback under common-heap coherence and inventory coverage.
+The physical table endpoint excludes original guarded terms without a supplied
+Readback oracle. Actual nodeEdges reads derive accepted retained rows, active
+classes, and satisfaction of the full equality accessor, including residual
+guards. Original normalized closed construction derives those reads. Plain
+getPath operands and both distinct native fold schedules retain their actual
+scoped caches and smaller accepted-subterm witnesses. The seeded helper also
+retains its empty-list fallback.
+
+Next model the stateful worklist of delayed requirements. Original children
+precede captured class-intersection thunks. Force each queued item before the
+budget check; do not force all class intersections before child traversal.
+Derive inventory coverage and closed resident requirements in one final heap.
+Connect actual row and fold receipts to the certified table supply and primitive
+laws, then instantiate each oracle call. Transfer scoped fold leaves to the
+newer checked constraint-operation state. Word-range checks and general native
+completion remain open. Carry both gate modes and three memo families through
+the lazy refused-class scan, selected fallback, and recursive caller.
+
+The pinned Lean audit passes 2,006 jobs and 51,337 dependency checks with only
+permitted axioms. No new warning occurs. All Haskell package trees are unchanged;
+prior Nix build/tests/formatting/metadata and separate Sized probes were not
+repeated. All earlier proof definitions except additive Audit imports, repros,
+marked drafts, external drafts, stashes, and other worktrees remain.
+Start: `/tmp/mcfta-emptiness-table-start-20261015-1707/` (2,656 files).
+Closing snapshot: `/tmp/mcfta-emptiness-table-checkpoint-20261015-1726/` (2,664 files).
+
+Keep native InputsThrough, semantic finish receipts, internal ranges, sidecar
+coverage, and candidate-parametric Mu/repeated-pair contexts as separate targets.
+Keep the optimized interned core and older constructor/equality work. Full
+source/runtime correspondence, derived-refinement APIs, named measures,
+getAllAtPath, decision-model, parser/decoder bridges, and extraction remain open.
+Sized exact node-count classes, finite execution, canonical sequence, distinct
+size order, and both signed inverse implications remain separate contracts.
+Weekly allowance was 89% at 2026-10-15 17:23 CEST. Refresh before work; stop
+work and owned workers at 1% or less. No board posts or deployments. Earlier
+source heads, counts, runtime observations, and next targets are historical.
 
 ## Main a22b2ad4: conservative emptiness
 

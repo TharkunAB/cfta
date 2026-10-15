@@ -1,5 +1,9 @@
 # Sized execution from a validated finite row map
 
+The current table and source-row proof update is in
+[the explored-table note](notes-emptiness-table-source.md). Read it first.
+Earlier next targets and audit counts below retain their checkpoint scope.
+
 Current proof update: `9f6d66a6` adds current-policy stateful execution,
 finite source checks, ordered descendant memo correctness, sequential active
 ancestor separation, and receipts for all three gate memo tables. The complete

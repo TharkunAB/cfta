@@ -1,5 +1,21 @@
 # Constrained languages, indexing, and distributions
 
+## Current explored-table and source-row proofs
+
+Proofs `76afeec1`, `e736beeb`, and `71b7fd08`, on unchanged main `a22b2ad4`.
+Read [the table and source-read note](notes-emptiness-table-source.md).
+Completed table keys derive the finite carrier, literal rounds, least fixed
+point, and equality-stop completion. Empty-start exploration derives stored
+rows. Closed resident records derive untagged physical readback. Actual
+nodeEdges reads derive retained accepted rows and normalized satisfied classes
+from original source construction. Plain projections and both distinct scoped
+native fold schedules derive closed output and smaller accepted witnesses.
+Stateful delayed exploration, final inventory coverage, certified primitive
+laws, checked native allocation transfer, and the complete current class scan
+remain open. All Haskell source is unchanged. The pinned Lean audit passes
+2,006 jobs and 51,337 dependency checks with only permitted axioms. Full scope
+and the separate Sized contracts remain. Earlier checkpoints below are historical.
+
 ## Current conservative emptiness source
 
 Main `a22b2ad4` is merged at `e612302b`. Read
