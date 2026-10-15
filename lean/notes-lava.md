@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Exact edit-language application (2026-10-15 03:58 CEST)
+
+The actual edit graph now satisfies its independent leaf-condition language
+specification. Nonoverlapping compilation has exact original path occurrence
+readback. Concrete native intersection derives immediate cache effects and
+exact narrowing. Captured-target scope, native memo state, and checked word
+ranges stay explicit. Read [the current note](notes-edit-language.md).
+Scoped caller composition remains separate from the global conditional leaf
+law. No Lava or Rocq dependency or runtime conversion is added.
+
 ## Finite edit graph application (2026-10-15 03:42 CEST)
 
 The actual edit worker now has separate physical call graphs and two-way

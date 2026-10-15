@@ -5,6 +5,14 @@ Proofs: `5635846d`, `28bf4f0e`, and `96653514`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+## Current independent language checkpoint
+
+`c6f33d9d` derives exact physical edit-language filtering from leaf laws.
+`172ce399` derives original nonoverlapping path and physical class readback.
+`6359b4a4` derives actual native leaf effects in the immediate returned cache.
+Read [the current note](notes-edit-language.md). Scoped callback composition
+and actual projection/merged targets remain the next caller target.
+
 ## Signed compiler and independent conditions
 
 `SourceEqualityEdits.Edits Action` uses editAt for a leaf callback token and

@@ -1,5 +1,68 @@
 # Full formalization coverage
 
+## Exact edit languages, original paths, and native leaf effects
+
+Proofs: `c6f33d9d`, `172ce399`, and `6359b4a4`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`, with retained traversal repair `61f2c939`.
+Continue on `formalize` and push checkpoints. Read
+`lean/notes-edit-language.md`. This section supersedes the independent edit
+language and nonoverlapping compiled-path readback targets.
+
+Actual completed node, child, and row edit graphs now derive exact independent
+language filtering from stored leaf completion and narrowing laws. The node
+result accepts exactly its original terms that satisfy the retained leaf
+conditions. Intermediate cache premises follow from verified graph effects.
+Actual head normalization, complete edge guards, ordered children, and canonical
+constructor readback remain. Signed negative and missing positions are no-ops.
+The compiled list entry keeps its ignored root-leaf branch. Original closed
+source construction derives stable execution and exact node/forest language.
+
+Retained leaves have complete signed path readback. Nonoverlapping insertion
+adds exactly one callback occurrence. Actual right-fold compilation preserves
+every original occurrence for pairwise nonoverlapping edits. The independent
+condition is therefore exactly each original callback condition at its existing
+complete path. No arity or nonnegative-key premise is added. Coherent nontrivial
+physical equality classes derive disjoint nonroot edit paths. Natural-to-signed
+conversion retains both prefix and complete lookup readback. Raw prefix and
+duplicate inputs still retain their earlier source shadowing behavior.
+
+Actual checked native intersection requests now derive the immediate edit cache
+invariants and exact input-intersection-target language. Closed available inputs
+derive original syntax. The result retains semantic heaps, coverage, depth,
+both histories, availability, and closedness in its actual returned native
+state. The theorem covers successful warm requests. First requests also have
+derived finite stable execution. Captured-target availability follows through
+earlier actual cache growth. No runtime table conversion is added.
+
+The generic LeafLaw still quantifies all semantic-ready caches. The concrete
+native theorem has actual operand availability, native memo validity, and
+checked word ranges. These premises are not interchangeable. A captured target
+need not exist in an unrelated cache. Do not claim that the global LeafLaw
+has been instantiated for arbitrary captured native targets. The next caller
+proof must retain the target's cache scope and the actual native memo state.
+
+The aggregate audit passes 1,662 jobs and 45,923 dependency checks using only
+propext, Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. All seven new modules pass focused builds. No Haskell source changed;
+the earlier 645 examples and format checks apply to the unchanged tree.
+Log: `/tmp/mcfta-edit-language-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-edit-language-checkpoint-20261015-0358/`
+(2,056 Lean-tree files and four root documents). The only older proof change
+is added audit imports. Repros, counterexamples, marked drafts, stashes, other
+worktrees, and production source remain unchanged. Weekly allowance was 17%
+at 03:58 CEST; refresh before work.
+
+Next derive scoped callback composition through actual edit traversal. Retain
+captured-target availability through Keeps, native memo/domain state, and word
+ranges at every actual request. Reuse SourceEqualityNativeLeaf.done, complete,
+and captured_target. Derive the actual getPath and merged-target contracts,
+then intersection-list and original class edit callbacks. Keep merge inclusion
+distinct from equality and preserve exact accepted terms. Compose the ordered
+class right fold and empty propagation. Full one-pass correspondence, open
+contexts, repeated fixed-point reduction, native containers, lazy scheduling,
+and extraction remain open. Preserve exact Sized laws, older constructor and
+equality proofs, and the optimized interned core. Stop all work at 1% or less.
+
 ## Finite signed simultaneous edit execution
 
 Proofs: `5635846d`, `28bf4f0e`, and `96653514`. Source: `TharkunAB/cfta`,

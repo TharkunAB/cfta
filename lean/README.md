@@ -6,7 +6,7 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,655 jobs and 45,879 theorem dependency checks.
+The audit passes 1,662 jobs and 45,923 theorem dependency checks.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open
@@ -73,9 +73,14 @@ with required-path execution, including both actual memo receipts. The
 [simultaneous edit proof](notes-edit-execution.md) now retains signed trie
 compilation, callback branch priority, finite traversal from stored leaf
 contracts, exact graph agreement, and stable complete returned caches.
-Independent edit conditions agree with the signed child fold. Next connect
-them to actual output languages and derive the concrete narrowing callbacks.
-Native lazy scheduling, open contexts, containers, and extraction remain separate.
+Independent edit conditions agree with the signed child fold. The
+[edit-language proof](notes-edit-language.md) now derives actual output
+languages, exact original nonoverlapping path readback, and coherent physical
+class edit conditions. Actual native intersection supplies immediate leaf
+cache effects and exact narrowing with captured-target scope and checked
+word ranges explicit. Next compose scoped callbacks and actual projection
+and merged targets through the caller. Native lazy scheduling, open contexts,
+containers, and extraction remain separate.
 [The Lava paper note](notes-lava.md) records relevant prior art and its source,
 solver, and termination limits. The [occurrence-cost note](notes-occurrence-costs.md)
 records the full weighted source callback/probe correspondence used here.
