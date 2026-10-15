@@ -1,4 +1,7 @@
 import Lean
+import MicroCFTA.SourceEqualityPartialIntersectionAllocation
+import MicroCFTA.SourceEqualityPartialConjoinAllocation
+import MicroCFTA.SourceEqualityMkEdgeArity
 import MicroCFTA.SourceEqualityPartialPrecheckAllocation
 import MicroCFTA.SourceEqualityPartialPayloadAllocation
 import MicroCFTA.SourceEqualityPartialMemoRenaming
