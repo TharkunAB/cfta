@@ -61,7 +61,7 @@ import Control.Monad (forM_, replicateM_, unless, when)
 import Control.Monad.IO.Class (liftIO)
 import Data.Char (isAlphaNum, isUpper)
 import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
-import Data.List (elemIndex, intercalate, isPrefixOf, partition, sortOn)
+import Data.List (elemIndex, intercalate, isPrefixOf, nub, partition, sortOn)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust, isNothing)
 import Data.Text (Text)
@@ -555,7 +555,8 @@ rankPools file arguments = do
     hFlush stdout
     withOllama settings $ \model ->
         forM_ (pools :: [(String, String, Maybe Int, [(String, Int)])]) $ \(name, state, expected, fits) ->
-            forM_ sizes $ \count -> forM_ [False, True] $ \both -> case (expected, drop (fromMaybe 0 expected) fits) of
+            -- A pool with fewer fits than a number of options gets that question once.
+            forM_ (nub [min count (length fits) | count <- sizes]) $ \count -> forM_ [False, True] $ \both -> case (expected, drop (fromMaybe 0 expected) fits) of
                 (Just at, (wanted, _) : _) | at < count -> do
                     let options = take count fits
                         rankIn ordered = maybe "-" (show . (+ 1)) (elemIndex wanted ordered)
