@@ -122,8 +122,13 @@ data GenError
       form that compile cannot count.
       -}
       IntegerLeafRead !(Maybe Guard)
-    | -- | The measure of the constructor names a child that has no measure: a refinement that does not fix one integer.
-      InexactMeasure !Symbol
+    | {- | The measure of the constructor names a child that has no measure: a
+      refinement that does not fix one integer. The fields are the
+      constructor, the name of the measure ('Nothing' for the one measure of
+      'Data.CFTA.Gen.Refinement.measured'), and the positions of the children
+      that the measure reads without one integer.
+      -}
+      InexactMeasure !Symbol !(Maybe String) ![Int]
     | {- | A guard reads the children of a constructor, and one child gives a
       number of terms other than one, as a choice of products or a source
       without symbols does. Or an equality reads a node whose members are
@@ -458,13 +463,23 @@ explain (IntegerLeafRead reader) =
                , "children it relates, or build the child with measured to give it a"
                , "measure."
                ]
-explain (InexactMeasure (Symbol symbol)) =
+explain (InexactMeasure (Symbol symbol) Nothing children) =
     guidance
-        [ "The measure of the constructor " <> show symbol <> " names a child that has"
-        , "no measure: its refinement does not fix one integer, so the measure has"
-        , "no one value."
+        [ "The measure of the constructor " <> show symbol <> " reads a child that has no"
+        , "measure: " <> childList children <> ". A refinement that does not fix one integer"
+        , "gives the measure no one value."
         , "Fix: draw that child from elements, every, or a constructor built with"
         , "measured, or leave it out of the measure."
+        ]
+explain (InexactMeasure (Symbol symbol) (Just name) children) =
+    guidance
+        [ "The named measure " <> show name <> " of the constructor " <> show symbol <> " reads a child"
+        , "that has no one integer for it: " <> childList children <> ". A named measure reads"
+        , "the children whose refinements fix one integer: a leaf or a pool entry"
+        , "with the measure in its refinement, a value from elements, or a"
+        , "constructor built with measuredBy. A value from every stays a term."
+        , "Fix: draw that child from elements or a pool, not every, or leave it"
+        , "out of the measure."
         ]
 explain TermNotInLanguage =
     guidance
@@ -478,3 +493,10 @@ explain TermNotInLanguage =
 -- | One guidance message, one line per element.
 guidance :: [String] -> String
 guidance = intercalate "\n"
+
+-- | The children at the positions, as in "child 0" or "the children 0 and 2".
+childList :: [Int] -> String
+childList positions = case reverse positions of
+    [] -> "a child"
+    [position] -> "child " <> show position
+    final : others -> "the children " <> intercalate ", " (map show (reverse others)) <> " and " <> show final

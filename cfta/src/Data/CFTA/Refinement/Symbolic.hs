@@ -14,10 +14,21 @@ inRange x = 0 .<= x .&& x .<= 1000000
 formula @0 <= x && x <= 1000000@. The operators have the names and the
 fixities of "Data.CFTA.Refinement.Expression". Import them from one of the
 two modules.
+
+'ite' chooses one of two integers by a truth value: @if@ on values, and a
+conditional term on formulas. 'smaller' and 'larger' come from it, so a
+measure can take the larger height of two subtrees:
+
+@
+height :: Symbolic e => e -> e -> e
+height left right = 1 + larger left right
+@
 -}
 module Data.CFTA.Refinement.Symbolic (
     Boolean (..),
     Symbolic (..),
+    smaller,
+    larger,
 ) where
 
 import Data.CFTA.Formula (Formula)
@@ -83,6 +94,17 @@ class (Num e, Boolean (Truth e)) => Symbolic e where
     -- | The first integer is greater than or equal to the second.
     (.>=) :: e -> e -> Truth e
 
+    -- | The second integer when the truth value holds, and the third when it does not.
+    ite :: Truth e -> e -> e -> e
+
+-- | The smaller of two integers.
+smaller :: (Symbolic e) => e -> e -> e
+smaller left right = ite (left .<= right) left right
+
+-- | The larger of two integers.
+larger :: (Symbolic e) => e -> e -> e
+larger left right = ite (left .>= right) left right
+
 instance Symbolic Integer where
     type Truth Integer = Bool
     (.==) = (==)
@@ -91,6 +113,7 @@ instance Symbolic Integer where
     (.<=) = (<=)
     (.>) = (>)
     (.>=) = (>=)
+    ite condition yes no = if condition then yes else no
 
 instance Symbolic Expression.Expr where
     type Truth Expression.Expr = Formula
@@ -100,3 +123,4 @@ instance Symbolic Expression.Expr where
     (.<=) = (Expression..<=)
     (.>) = (Expression..>)
     (.>=) = (Expression..>=)
+    ite = Expression.conditional

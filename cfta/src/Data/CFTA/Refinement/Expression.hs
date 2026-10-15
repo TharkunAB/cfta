@@ -18,6 +18,7 @@ module Data.CFTA.Refinement.Expression (
     Enumerated (..),
     fromExpr,
     toExpr,
+    conditional,
 
     -- * Formulas
     Formula,
@@ -66,7 +67,7 @@ instance Num Expr where
     signum term = conditional (term .> 0) 1 (conditional (term .== 0) 0 (-1))
     fromInteger = Expr . Lit
 
--- | Choose between two terms by a formula.
+-- | The first term when the formula holds, and the second term when it does not.
 conditional :: Formula -> Expr -> Expr -> Expr
 conditional condition (Expr yes) (Expr no) = Expr $ Ite condition yes no
 

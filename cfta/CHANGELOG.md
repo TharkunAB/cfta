@@ -14,7 +14,10 @@ Before release, the package was called `microcfta`.
 - `Data.CFTA.Refinement.Symbolic`: the classes `Boolean` and `Symbolic`. They
   give the operators of the refinement logic on values (`Integer` and `Bool`)
   and on terms (`Expr` and `Formula`), so one polymorphic function is both a
-  predicate and a refinement.
+  predicate and a refinement. `ite` chooses one of two integers by a truth
+  value, and `smaller` and `larger` come from it.
+  `Data.CFTA.Refinement.Expression` exports `conditional`, the choice on
+  terms.
 - `Data.CFTA.Refinement.Symbolic.Internal`: `Measures`, the children of a
   constructor, a term on `Expr` and the integers of a node on `Integer`, with
   `childMeasure` for a named measure of a child: the backend of the derived
