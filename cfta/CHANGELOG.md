@@ -304,3 +304,7 @@ remains a separate ECTA-only package.
 - The term-search application layer is not part of the library.
 - The `Pretty` class and the path-trie `Ord` instance are gone; `show` the
   constraint, or compare equality classes by their path lists.
+- The Z3 entailment declares the names of a scope once, when it starts a Z3
+  process, and each query declares only its fresh names. A query sends about
+  a third less text, and the Hegel queries take about 8% less time with the
+  same answers.
