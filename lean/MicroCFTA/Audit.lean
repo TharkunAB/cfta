@@ -1481,6 +1481,13 @@ import MicroCFTA.SourceEqualityEditWorkerComplete
 import MicroCFTA.SourceEqualityEditExecution
 import MicroCFTA.SourceEqualityEditMeaning
 import MicroCFTA.SourceEqualityEditExamples
+import MicroCFTA.SourceEqualityEditLanguage
+import MicroCFTA.SourceEqualityEditAPI
+import MicroCFTA.SourceEqualityEditLeafPaths
+import MicroCFTA.SourceEqualityEditMapLeaves
+import MicroCFTA.SourceEqualityEditCompiledPaths
+import MicroCFTA.SourceEqualityClassEdits
+import MicroCFTA.SourceEqualityNativeLeaf
 /-!
 # Proof dependency audit
 
