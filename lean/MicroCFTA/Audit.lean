@@ -1782,8 +1782,12 @@ import MicroCFTA.SourceNativeGlobalMemos
 import MicroCFTA.SourceCurrentMuEndpointQuery
 import MicroCFTA.SourceCurrentSecondaryMemos
 import MicroCFTA.SourceCurrentEqualityClassEntry
+import MicroCFTA.SourceCurrentClassScanGlobalMemos
+import MicroCFTA.SourceCurrentClassEntryGlobalMemos
 import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
+import MicroCFTA.SourceCurrentEnumerationStorage
+import MicroCFTA.SourceCurrentEnumerationOrder
 /-!
 # Proof dependency audit
 
