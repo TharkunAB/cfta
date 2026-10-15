@@ -55,7 +55,8 @@ remains a separate ECTA-only package.
   restriction checked by `validate`, a bounded reference denotation on the
   shared enumerator, and the Z3 entailment in
   `Data.CFTA.Refinement.LiquidFixpoint`, which declares every free name as an
-  integer. A fresh value name of a binding must not be a declared name or a
+  integer, and a free name that a query applies to arguments as a function
+  from integers to an integer. A fresh value name of a binding must not be a declared name or a
   free name of an ambient assumption; otherwise the query is `Unknown`.
   Every name reaches Z3 through one injective encoding, so two distinct names
   never become one SMT name.
@@ -67,7 +68,8 @@ remains a separate ECTA-only package.
   Haskell function of the value, as in `\v -> v ./= 0`. Terms take integer
   literals and arithmetic through `Num`; the comparisons are `.==`, `./=`,
   `.<`, `.<=`, `.>`, and `.>=`, and the connectives are `.&&`, `.||`, and
-  `lnot`. `Formula` is the closed formula that the engine stores, and
+  `lnot`. `uninterpreted` applies an uninterpreted function, such as a
+  measure, to terms. `Formula` is the closed formula that the engine stores, and
   `refinementFormula` gives the formula of a refinement about the value
   variable, the reserved name `valueName` of `Data.CFTA.Symbol`. `Literal`
   gives the integer that stands for each value of a type, the value of each

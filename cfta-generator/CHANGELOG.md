@@ -134,7 +134,10 @@ tree automata of `cfta`, with QuickCheck integration.
   children from `every`. A refinement whose defining term mentions the value
   itself, such as `v .== v`, gives no exact measure, and `compile` reports
   `InexactMeasure` for it.
-  `measuredNode` takes a positional guard in place of the contract. `recurUpTo` unfolds a recursive description a bounded number
+  `measuredNode` takes a positional guard in place of the contract.
+  `measuredBy` gives a constructor several named measures: uninterpreted
+  functions of the value, each one integer, which a contract reads as
+  `uninterpreted name [child]`. `recurUpTo` unfolds a recursive description a bounded number
   of times. The module also has liquid automaton and datatype imports,
   `minimizePoolOn`, `compile` with Z3, `compileAssuming`, `compileWith`, and
   `validOutcomes`.

@@ -12,6 +12,7 @@ module Data.CFTA.Refinement.Expression (
     -- * Terms
     Expr,
     variable,
+    uninterpreted,
     Literal (..),
     literal,
     Enumerated (..),
@@ -154,6 +155,13 @@ the library makes. A user name with that prefix can collide with them.
 -}
 variable :: String -> Expr
 variable = Expr . Var . fromString
+
+{- | A measure, an uninterpreted function of the logic, applied to terms, as in
+@uninterpreted "bh" [v]@. The solver declares an applied name that the caller does not
+declare as a function from integers to an integer.
+-}
+uninterpreted :: String -> [Expr] -> Expr
+uninterpreted name arguments = Expr $ App (fromString name) [term | Expr term <- arguments]
 
 -- | The 'Term' of an expression.
 fromExpr :: Expr -> Term

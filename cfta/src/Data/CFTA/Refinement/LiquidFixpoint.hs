@@ -16,6 +16,7 @@ import Control.Exception (Exception (..), SomeException, bracket, throwIO, try, 
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.State.Lazy (runStateT)
 import Data.Char (isAlphaNum, isAscii, ord)
+import qualified Data.HashMap.Strict as HashMap
 import qualified Data.HashSet as HashSet
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as Text
@@ -102,8 +103,16 @@ withZ3Timeout milliseconds sorted assumptions action =
                 outcome <- modifyMVar contextVar $ \context -> do
                     let mentioned = foldMap Fixpoint.exprSymbolsSet (antecedent : consequent : solverAssumptions)
                         declared = HashSet.union known $ HashSet.fromList $ map fst freshDeclarations
+                        -- An undeclared name that the query applies to arguments
+                        -- is a function from integers to an integer.
+                        arities =
+                            HashMap.fromList
+                                [(nameSymbol name, arity) | (name, arity) <- foldMap applications (antecedentFormula : consequentFormula : assumptions)]
+                        sortOf name =
+                            maybe Fixpoint.FInt (\arity -> sortToFixpoint $ FunctionSort (replicate arity IntSort) IntSort) $
+                                HashMap.lookup name arities
                         undeclared =
-                            [(name, Fixpoint.FInt) | name <- HashSet.toList $ HashSet.difference mentioned declared]
+                            [(name, sortOf name) | name <- HashSet.toList $ HashSet.difference mentioned declared]
                     attempt <- try $ runStateT (check (freshDeclarations <> undeclared)) context
                     case attempt of
                         -- An exception during the query, such as a time limit
@@ -157,6 +166,31 @@ withZ3Timeout milliseconds sorted assumptions action =
             ioError . userError $ "Z3 rejected a cfta query: " <> Text.unpack message
         responseVerdict (response, _) =
             ioError . userError $ "Unexpected Z3 response: " <> show response
+
+-- | The names that a formula applies to arguments, each with the number of its arguments.
+applications :: Formula -> [(Name, Int)]
+applications formula = case formula of
+    Top -> []
+    Bottom -> []
+    And parts -> foldMap applications parts
+    Or parts -> foldMap applications parts
+    Not inner -> applications inner
+    Atom _ left right -> termApplications left <> termApplications right
+    Forall _ inner -> applications inner
+    Exists _ inner -> applications inner
+  where
+    termApplications term = case term of
+        Lit _ -> []
+        Var _ -> []
+        Neg inner -> termApplications inner
+        Add left right -> termApplications left <> termApplications right
+        Sub left right -> termApplications left <> termApplications right
+        Mul left right -> termApplications left <> termApplications right
+        Div left right -> termApplications left <> termApplications right
+        Mod left right -> termApplications left <> termApplications right
+        App function arguments -> (function, length arguments) : foldMap termApplications arguments
+        Ite condition yes no -> applications condition <> termApplications yes <> termApplications no
+        Cast inner _ -> termApplications inner
 
 -- | The Liquid Fixpoint expression of a formula.
 toFixpoint :: Formula -> Fixpoint.Expr
