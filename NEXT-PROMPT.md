@@ -2,6 +2,46 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Upstream main refresh at 239feb64
+
+Merge `b3d06a08` retains formalization parent `0c9afd41` and upstream main
+`239feb6477ecf352c696ed4d63a450fb4008e1ac`. Main is an ancestor of
+`formalize`. Continue on `formalize` and push checkpoints. Read
+`lean/notes-main-refresh-20261015.md`, then `lean/notes-origin-boundaries.md`.
+This section supersedes older source-head statements below.
+
+Core and generator source files and tests are unchanged. All 2,314 Lean-tree
+files were byte-identical before documentation updates. The starting snapshot
+`/tmp/mcfta-main-refresh-start-20261015-1153/` contains 2,514 files, both
+unverified intersection drafts, and their limit record. Backup branch:
+`backup/formalize-before-main-239feb64-20261015-1154`. Existing proofs,
+repros, marked drafts, stashes, and other worktrees remain intact.
+
+Upstream adds decision-model and moves Data.CFTA.GHC.Session into its
+library, with session options and expression compilation. These APIs remain
+outside formal source coverage. Core and Sized correspondence retain their
+source definitions. Preserve exact size classes, finite execution, size order,
+both distinct rank inverses, the optimized core, and older constructor and
+equality work.
+
+The strict Haskell build passes for all libraries, tests, and benchmarks.
+All six test suites pass: 687 examples plus the hole-fit golden suite.
+Fourmolu, all four Cabal-gild checks, and all four package metadata checks
+pass in Nix. The aggregate Lean audit passes 1,890 jobs and 48,594 dependency
+checks with only propext, Classical.choice, and Quot.sound. The older unused
+inputs warning remains. Logs: `/tmp/mcfta-main-refresh-*-20261015.log`.
+
+Next derive a rank or finite dependency argument for actual constrained
+outer child continuations, including native narrowing, inherited combination
+and descent, Mu cleanup, and stopping at Mu and union inputs. The retained
+height, inherited-closure, and physical-absorption counterexamples still
+apply. Do not assume a future finite node inventory, completed caller graph,
+or successful receipt to prove general existence. General caller termination,
+the outer memo table, open contexts, repeated fixed points, getAllAtPath,
+native containers, GHC scheduling, decision-model, and extraction remain open.
+Weekly allowance was 97% at 2026-10-15 11:53 CEST. Refresh it before work.
+Stop all work and owned workers at 1% or less. No board posts or deployments.
+
 ## Source boundaries for inherited payloads and physical node factors
 
 Proofs and reproductions: `b163ddd4`. Source: `TharkunAB/cfta`,

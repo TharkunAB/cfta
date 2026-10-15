@@ -1,5 +1,17 @@
 # Public API and source correspondence
 
+## Upstream main refresh at 239feb64
+
+Merge `b3d06a08` retains all earlier formalization work and main `239feb64`.
+Core and generator source files and tests are unchanged. Read
+[the source comparison](notes-main-refresh-20261015.md). Decision-model and
+the moved GHC session library remain outside formal source coverage.
+The strict Haskell build, all six suites (687 examples plus golden tests),
+formatting, package metadata, and the 1,890-job Lean audit pass. The audit
+checks 48,594 theorem dependencies. Next derive a rank for actual constrained
+outer child continuations. Existing counterexamples and open obligations
+remain in force. This section supersedes older source-head statements.
+
 ## Source boundaries for inherited payloads and physical node factors
 
 Proofs and reproductions: `b163ddd4`, on main `33148e6d`. Read
@@ -3158,6 +3170,21 @@ None has a formal source model or verified extraction.
 | `Data.CFTA.GHC.HoleFits` | Typed-hole plugin behavior remains unverified. |
 | `Data.CFTA.GHC.Internal.Check` | GHC typechecker integration remains unverified. |
 
-`cfta-ghc/common/Data/CFTA/GHC/Session.hs` supplies the shared GHC session.
-It also remains outside formal source coverage. GHC package tests and
-benchmarks were not run in this formalization checkpoint.
+`cfta-ghc/src/Data/CFTA/GHC/Session.hs` supplies the public GHC session
+library after main `239feb64`. Session options, expression compilation,
+and all other exports remain outside formal source coverage. The strict
+benchmark build and GHC package tests pass at this upstream refresh.
+
+## Decision-model source coverage
+
+Main `239feb64` adds the decision-model package. No module has a formal
+source model or verified extraction.
+
+| Module | Current boundary |
+| --- | --- |
+| `Decision` | Question, option-score, chunking, two-order scoring, and ranking contracts remain unmodeled. |
+| `Decision.Http` | HTTP execution and error handling remain unmodeled. |
+| `Decision.Ollama` | Request and response interpretation remain unmodeled. |
+| `Decision.OpenAI` | Request and response interpretation remain unmodeled. |
+
+The 22 package examples pass. They do not prove these contracts.

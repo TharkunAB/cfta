@@ -8,6 +8,8 @@ sequence. Read [the upstream comparison](notes-canonical-upstream.md).
 The current audit passes 1,890 jobs and 48,594 dependency checks.
 The later upstream refresh to 33148e6d leaves Sized and canonicalClasses
 unchanged. Its retained traversal repair is identical to the local repair.
+The refresh to main 239feb64 also leaves those source definitions unchanged.
+Read [the source comparison](notes-main-refresh-20261015.md).
 Later counts in this note are historical component evidence.
 
 The common full query specification now covers original-map reference,

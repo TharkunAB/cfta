@@ -1,11 +1,16 @@
 # cfta formal model
 
-Current source: `TharkunAB/cfta`, `origin/main` at `33148e6d`.
+Current source: `TharkunAB/cfta`, `origin/main` at `239feb64`.
 Continue on `formalize`; publish completed checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
-`cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
+`cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
+The [upstream refresh](notes-main-refresh-20261015.md) preserves every proof.
+Core and generator source files are unchanged. Decision-model and the moved
+GHC session library remain outside formal source coverage. All six Haskell
+suites pass, with 687 examples plus the golden suite. The strict build,
+formatting, and metadata checks pass for all four packages.
 The audit passes 1,890 jobs and 48,594 theorem dependency checks.
 The [source boundary checks](notes-origin-boundaries.md) refute inherited
 literal conjunction closure and a local maximum-path bound. Retained Haskell

@@ -1,5 +1,17 @@
 # Full formalization coverage
 
+## Upstream main refresh at 239feb64
+
+Merge `b3d06a08` retains all earlier formalization work and main `239feb64`.
+Core and generator source files and tests are unchanged. Read
+[the source comparison](notes-main-refresh-20261015.md). Decision-model and
+the moved GHC session library remain outside formal source coverage.
+The strict Haskell build, all six suites (687 examples plus golden tests),
+formatting, package metadata, and the 1,890-job Lean audit pass. The audit
+checks 48,594 theorem dependencies. Next derive a rank for actual constrained
+outer child continuations. Existing counterexamples and open obligations
+remain in force. This section supersedes older source-head statements.
+
 ## Source boundaries for inherited payloads and physical node factors
 
 Proofs and reproductions: `b163ddd4`, on main `33148e6d`. Read
