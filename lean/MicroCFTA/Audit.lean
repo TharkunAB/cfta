@@ -1488,6 +1488,17 @@ import MicroCFTA.SourceEqualityEditMapLeaves
 import MicroCFTA.SourceEqualityEditCompiledPaths
 import MicroCFTA.SourceEqualityClassEdits
 import MicroCFTA.SourceEqualityNativeLeaf
+import MicroCFTA.SourceEqualityProjectionAPI
+import MicroCFTA.SourceEqualityProjectionComplete
+import MicroCFTA.SourceEqualityProjectionEffects
+import MicroCFTA.SourceEqualityProjectionExamples
+import MicroCFTA.SourceEqualityProjectionGraph
+import MicroCFTA.SourceEqualityProjectionLanguage
+import MicroCFTA.SourceEqualityProjectionRead
+import MicroCFTA.SourceEqualityProjectionUnion
+import MicroCFTA.SourceEqualityProjectionWorker
+import MicroCFTA.SourceEqualityProjectionWorkerComplete
+import MicroCFTA.SourceEqualityProjectionWorkerSound
 /-!
 # Proof dependency audit
 
