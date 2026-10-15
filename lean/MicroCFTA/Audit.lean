@@ -1673,6 +1673,11 @@ import MicroCFTA.SourceEqualityPartialGraphRunRows
 import MicroCFTA.SourceEqualityPartialGraphRuns
 import MicroCFTA.SourceEqualityPartialScope
 import MicroCFTA.SourceEqualityPartialSource
+import MicroCFTA.SourceEqualityPartialChecks
+import MicroCFTA.SourceEqualityPartialLiftChildren
+import MicroCFTA.SourceEqualityPartialLiftRows
+import MicroCFTA.SourceEqualityPartialWorkerGraph
+import MicroCFTA.SourceEqualityPartialCheckedSource
 /-!
 # Proof dependency audit
 
