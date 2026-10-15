@@ -1437,6 +1437,13 @@ import MicroCFTA.InternedSourceGateReplay
 import MicroCFTA.InternedSourceClassSelectionReadback
 import MicroCFTA.SourceMemoClassSelection
 import MicroCFTA.SourceMemoClassSelectionReadback
+import MicroCFTA.SourceListSortMerge
+import MicroCFTA.SourceListSortRuns
+import MicroCFTA.SourceListSort
+import MicroCFTA.SourceEqualityClassOrder
+import MicroCFTA.SourceEqualityClassOrderExamples
+import MicroCFTA.SourceEqualityPrecheck
+import MicroCFTA.SourceEqualitySelectionEntry
 /-!
 # Proof dependency audit
 
