@@ -1779,6 +1779,9 @@ import MicroCFTA.SourceEqualityLazyClassSoundness
 import MicroCFTA.SourceEqualityLazyClassEntry
 import MicroCFTA.SourceEqualityQueryGlobalMemos
 import MicroCFTA.SourceNativeGlobalMemos
+import MicroCFTA.SourceCurrentMuEndpointQuery
+import MicroCFTA.SourceCurrentEmptinessMerge
+import MicroCFTA.SourceTemplateAnywhere
 /-!
 # Proof dependency audit
 
