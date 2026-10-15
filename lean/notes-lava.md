@@ -7,6 +7,20 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Actual outer-step application (2026-10-15 08:19 CEST)
+
+Actual stored source origins now derive fixed filters on both cached Mu probes.
+Literal source reconstruction then forces the resident key hit and smart
+cleanup. Ordered native rows and both modifyNode branches have physical scope
+and public language proofs. The bounded outer worker retains all source
+branches and exact incomplete observations. Its successful-step theorem keeps
+the smaller-call law and reached physical checks explicit. Read
+[the current note](notes-partial-node.md). Propagating filtered probes through
+native effects and deriving the recursive callback remain next. The function
+and graph method does not establish whole-caller termination, the outer Haskell
+memo table, GHC lazy scheduling, native containers, or extraction. No Lava or
+Rocq dependency is added.
+
 ## Inherited edge continuation application (2026-10-15 08:01 CEST)
 
 Actual physical payload combination and trie descent now derive their own

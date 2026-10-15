@@ -6,7 +6,15 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,812 jobs and 47,884 theorem dependency checks.
+The audit passes 1,819 jobs and 47,971 theorem dependency checks.
+The [outer-step proof](notes-partial-node.md) derives exact cached Mu probe
+reuse, actual smart cleanup, ordered native row traversal, and both modifyNode
+branches. The bounded outer worker retains every source branch and incomplete
+observation. Its successful-step theorem keeps smaller-call, reached-word,
+and filtered-probe checks explicit. Propagate the probe invariant through
+actual native effects, then derive the recursive callback and replay across
+larger traversal bounds. Whole-caller completion and the outer Haskell memo
+table remain open. This paragraph supersedes older node/row and Mu targets.
 The [inherited edge proof](notes-inherited-edge.md) derives actual physical
 constraint combination and trie descent, indexed child obligations, exact
 callback observations, and direct equal-arity edge rebuilding. Concrete native

@@ -1,5 +1,12 @@
 # Concrete inherited edge continuation and indexed children
 
+The actual outer worker, ordered rows, modifyNode fast path, and cached Mu
+reconstruction are now checked. Successful outer steps derive their local
+language and scope conclusion. The smaller recursive callback and reached
+physical checks remain explicit. The next target is probe-invariant propagation
+and traversal-bound induction. Read [the current note](notes-partial-node.md).
+This paragraph supersedes older outer traversal and Mu targets in this note.
+
 Updated: 2026-10-15 08:01 CEST.
 Proofs: `55fd6fed`, `0f8c72b5`, and `07410acf`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.

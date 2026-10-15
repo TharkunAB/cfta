@@ -1,5 +1,12 @@
 # Inherited equality reduction
 
+The actual outer worker, ordered rows, modifyNode fast path, and cached Mu
+reconstruction are now checked. Successful outer steps derive their local
+language and scope conclusion. The smaller recursive callback and reached
+physical checks remain explicit. The next target is probe-invariant propagation
+and traversal-bound induction. Read [the current note](notes-partial-node.md).
+This paragraph supersedes older outer traversal and Mu targets in this note.
+
 Actual inherited/local physical payload combination and trie descent are now
 proved. Indexed children derive their own obligations and preserve actual
 scopes and language under an explicit recursive-node induction hypothesis.

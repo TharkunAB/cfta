@@ -1,5 +1,58 @@
 # Full formalization coverage
 
+## Actual outer step, ordered rows, and cached Mu reconstruction
+
+Proofs: `6aa6c341`, `94860ace`, and `1ec8eb87`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. The upstream refresh is current. Continue on
+`formalize` and push checkpoints. Read `lean/notes-partial-node.md`.
+This section supersedes the outer node/row and Mu targets below.
+
+Actual original probe calls derive both filtered Mu probes. Filtering either
+cached probe again returns the identical value and heap. Coherent residency
+then forces a complete request hit at the stored key. Smart cleanup preserves
+availability, free names, and exact public guarded meaning. It is not node
+identity. Original closed construction supplies this exact bounded Mu branch
+from an actual stored record. No generic binder language law is supplied.
+
+The actual ordered row worker runs each native edge pass and inherited child
+continuation at its returned warm state. Complete graphs have uniform stable
+six-stage bounds for a fixed node callback. Reached word checks derive the
+reverse worker/graph direction. Pointwise proofs derive row scope, annotations,
+narrowing, and exact public union meaning under inherited satisfaction.
+Source modifyNode compares ordered interned identities. Coherence recovers
+complete row equality on its unchanged-node fast path. Changed rows use the
+literal source node constructor. Both branches have exact row-union meaning.
+
+The bounded outer worker now retains every source branch, source Rec errors,
+actual Mu reconstruction, row observations, and traversal exhaustion. One
+successful outer step has the full local callback conclusion under explicit
+smaller-call, reached-word, and filtered-probe premises. This is not yet a
+recursive Callback theorem. The outer Haskell memo table is not modeled here.
+
+Next prove the filtered-probe heap invariant through every actual native and
+source constructor effect. Original source origins derive it, but IdleReady
+does not contain it. Preserve it explicitly; do not infer it from IdleReady or
+assume a binder language law. Then discharge the smaller recursive callback
+by traversal-bound induction with actual reached word checks. Prove replay
+when traversal bounds increase and callbacks change. Existing row stability
+fixes the callback, so it does not supply that result. General caller finite
+execution remains unproved; native intersection can increase ordinary depth.
+
+The audit passes 1,819 jobs and 47,971 dependency checks with only propext,
+Classical.choice, and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-partial-node-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-partial-node-checkpoint-20261015-0819/` (2,230 Lean-tree files and four root documents).
+All older proofs except audit imports, counterexamples, marked drafts,
+production source, stashes, and other worktrees remain unchanged. No Haskell
+source changed, so the earlier 645 examples and formatter checks were not
+rerun. Weekly allowance was 100% at 2026-10-15 08:19 CEST, after a reported reset.
+Refresh it before work. Stop all work and owned workers at 1% or less.
+Preserve Sized exact classes, finite size execution, size order, both rank
+inverses, the optimized interned core, and all older artifacts. Open contexts,
+repeated fixed points, getAllAtPath, native containers, GHC lazy scheduling,
+and extraction remain separate obligations. No board posts or deployments.
+
 ## Concrete inherited edge continuation and indexed child descent
 
 Proofs: `55fd6fed`, `0f8c72b5`, and `07410acf`.
