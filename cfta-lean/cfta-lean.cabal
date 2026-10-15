@@ -43,9 +43,9 @@ library
   exposed-modules: Data.CFTA.Lean
   build-depends:
     base >=4.22 && <4.23,
+    cfta-generator >=0.1.0.0 && <0.2,
     containers >=0.8 && <0.9,
     directory >=1.3 && <1.4,
-    cfta-generator >=0.1.0.0 && <0.2,
     process >=1.6 && <1.7,
     text >=2.1 && <2.2,
 
@@ -74,8 +74,24 @@ benchmark hectare-lean
 
   build-depends:
     base >=4.22 && <4.23,
-    containers >=0.8 && <0.9,
     cfta-generator,
     cfta-lean,
+    containers >=0.8 && <0.9,
+    directory >=1.3 && <1.4,
     process >=1.6 && <1.7,
+    text >=2.1 && <2.2,
+
+test-suite lean-tests
+  import: warnings
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: LeanSpec.hs
+  hs-source-dirs: test
+  ghc-options: -rtsopts
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta-generator,
+    cfta-lean,
+    directory >=1.3 && <1.4,
+    hspec >=2.11 && <2.12,
     text >=2.1 && <2.2,

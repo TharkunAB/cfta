@@ -28,6 +28,7 @@ module Data.CFTA.Lean (
     withOracle,
     handleOracle,
     oracleImportMilliseconds,
+    missingOracle,
 
     -- * Libraries and goals
     Component (..),
@@ -70,7 +71,8 @@ import qualified Data.Text as Text
 import qualified Data.Text.IO as Text
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
-import System.Directory (makeAbsolute)
+import System.Directory (doesFileExist, findExecutable, makeAbsolute)
+import System.Environment (lookupEnv)
 import System.IO (BufferMode (LineBuffering), Handle, hClose, hFlush, hSetBuffering, hSetEncoding, utf8)
 import System.Process (
     CreateProcess (..),
@@ -133,6 +135,21 @@ withOracle relative modules use = bracket start stop $ \(input, output, _) -> do
         terminateProcess process
         _ <- waitForProcess process
         pure ()
+
+{- | Why the oracle of the Lake project in a directory cannot run, if it
+cannot: its executable is not built, or Lean is not on the @PATH@ (elan
+gives the toolchain of the project's @lean-toolchain@) and @LEAN_SYSROOT@ is
+not set.
+-}
+missingOracle :: FilePath -> IO (Maybe String)
+missingOracle directory = do
+    built <- doesFileExist (directory <> "/.lake/build/bin/lean-oracle")
+    lean <- findExecutable "lean"
+    sysroot <- lookupEnv "LEAN_SYSROOT"
+    pure $ case (built, lean, sysroot) of
+        (False, _, _) -> Just ("no " <> directory <> "/.lake/build/bin/lean-oracle: run `lake build` in " <> directory)
+        (_, Nothing, Nothing) -> Just "no lean on the PATH: install elan, which installs the toolchain of oracle/lean-toolchain"
+        _ -> Nothing
 
 {- | An oracle on two handles: the first for the requests, the second for the
 replies. A program that a Lean tactic runs as its proposer is the client of

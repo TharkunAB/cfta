@@ -59,7 +59,9 @@ the fits) and a row @figures@ with the figures of the states.
 @exact? using@) and without, and prints its time and term. @--ping@ measures
 a round trip without work and a pair of @saveState@ and @restore@. The
 variable @CFTA_LEAN_ORACLE@ names the oracle's Lake project, by default
-@cfta-lean/oracle@.
+@oracle@ when it is in the current directory (as under @cabal bench@) and
+@cfta-lean/oracle@ otherwise. Without a built oracle or without Lean, the
+run with no arguments prints why and does nothing.
 -}
 module Main (main) where
 
@@ -72,6 +74,7 @@ import Data.Maybe (fromMaybe, isNothing)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Clock (getMonotonicTime, getMonotonicTimeNSec)
+import System.Directory (doesDirectoryExist)
 import System.Environment (getArgs, getExecutablePath, lookupEnv)
 import System.Exit (ExitCode (..))
 import System.IO (hFlush, stdout)
@@ -98,7 +101,10 @@ main = do
         ["--portfolio-query", name, rung, seconds] -> runPortfolioQuery name rung (read seconds)
         "--features" : rung : names -> runFeatures rung names
         ["--ping", count] -> runPing (read count)
-        [] -> runSuite "--query" "core" 60 []
+        [] -> do
+            -- Without the oracle (as in a build without Lean), there is nothing to measure.
+            missing <- missingOracle =<< oracleDirectory
+            maybe (runSuite "--query" "core" 60 []) (\reason -> putStrLn ("hectare-lean: skipped: " <> reason)) missing
         [rung] -> runSuite "--query" rung 60 []
         rung : seconds : names -> runSuite "--query" rung (read seconds) names
 
@@ -200,7 +206,10 @@ avoid =
 
 -- | The oracle's Lake project.
 oracleDirectory :: IO FilePath
-oracleDirectory = fromMaybe "cfta-lean/oracle" <$> lookupEnv "CFTA_LEAN_ORACLE"
+oracleDirectory = do
+    -- cabal bench runs in the package's directory, cabal run where it is called.
+    here <- doesDirectoryExist "oracle"
+    fromMaybe (if here then "oracle" else "cfta-lean/oracle") <$> lookupEnv "CFTA_LEAN_ORACLE"
 
 -- Runs
 
