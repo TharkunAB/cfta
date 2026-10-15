@@ -1,4 +1,6 @@
 import Lean
+import MicroCFTA.SourceEqualityNativeDemandAcceptedReadback
+import MicroCFTA.SourceEqualityNativeDemandAcceptedSelfChild
 import MicroCFTA.SourceEqualityPartialNativeStopped
 import MicroCFTA.SourceEqualityPartialNativeHeap
 import MicroCFTA.SourceEqualityNativeDemandMismatchReceipt
