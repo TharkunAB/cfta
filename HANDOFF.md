@@ -1,6 +1,64 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 09:22 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 09:37 CEST (Europe/Stockholm)**.
+
+## Finite exact public execution for equality-free original syntax
+
+Proofs: `ee4cd6da` and `347a988f`. Source: `TharkunAB/cfta`,
+`origin/main` at `33148e6d`, integrated by `af4a2b87`. Continue on
+`formalize` and push checkpoints. Read `lean/notes-plain-completion.md`.
+This section supersedes the equality-free finite-existence target below.
+
+Upstream now contains the same retained-cycle repair in `c292354b`.
+The merge leaves all traversal source and regression bytes unchanged.
+The local fresh-probe changelog note is retained. Hoogle+ data now uses
+its public sublibrary. Sized and existing proof definitions are unchanged.
+The old canonical ordering comparison remains valid for those definitions.
+Backup: `backup/formalize-before-retained-main-20261015-0925`.
+
+Region follows actual ordinary children and stops at Mu and union branches.
+Each ordinary row has the actual empty physical equality payload. Literal
+empty native prefixes retain the original structural children and reach no
+native word request. Actual physical combination and descent stay empty.
+Mutual structural induction constructs the complete outer graph at each
+closed available scope. Actual smaller child and literal edge effects derive
+every returned warm scope and history. Mu uses its real cached probes and
+resident hit. No future scope or completed caller graph is supplied.
+
+Original source annotation checks derive Region from the actual constructed
+heap. Closed normalized source syntax with empty equality readback therefore
+derives finite public execution, both source gate memo receipts, exact
+independent guarded least language, all physical invariants, and stable
+identical value/full-state replay above a common seven-bound threshold.
+No successful worker receipt, complete outer graph, native word-range
+hypothesis, or sufficient bound is an input premise. Full residual guards
+remain intact. This does not prove general constrained outer termination.
+
+Next extend equality-free region completion to arbitrary inherited payloads.
+Retain actual contradiction and empty selected-class branches, concrete
+prechecks, physical combination and descent, and final empty propagation.
+Derive finite local execution and returned scope before structural recursion.
+Then study general selected narrowing with a valid measure or a focused
+counterexample. Native intersection can increase ordinary depth. General
+constrained outer success, the outer reduction memo table, open contexts,
+repeated fixed points, getAllAtPath, native containers, GHC lazy scheduling,
+and extraction remain open. Do not use cached input depth as the measure.
+
+The audit passes 1,863 jobs and 48,189 dependency checks with only propext,
+Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. Log: `/tmp/mcfta-plain-completion-20261015-audit.log`.
+All 650 Haskell examples pass after the new public Hoogle+ library is built
+first. The initial unstaged run failed on its missing installed unit.
+The affected GHC benchmark compiles; no benchmark was run. Fourmolu,
+all three active Cabal formatting checks, and all three metadata checks pass.
+Logs: `/tmp/mcfta-retained-main-20261015-{tests,staged-tests,format,metadata}.log`.
+Snapshot: `/tmp/mcfta-plain-completion-checkpoint-20261015-0937/`.
+All older proofs except audit imports, counterexamples, marked drafts,
+stashes, and other worktrees remain unchanged. Weekly allowance was 99%
+at 2026-10-15 09:35 CEST. Refresh it before work. Stop all work and owned
+workers at 1% or less. Preserve Sized exact classes, finite size execution,
+size order, both distinct rank inverses, and the optimized interned core.
+No board posts or deployments.
 
 ## Actual source gate memos through recursive public reduction
 

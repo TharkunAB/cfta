@@ -1,28 +1,27 @@
 # cfta formal model
 
-Current source: `TharkunAB/cfta`, `origin/main` at `c351674e`.
+Current source: `TharkunAB/cfta`, `origin/main` at `33148e6d`.
 Continue on `formalize`; publish completed checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,857 jobs and 48,168 theorem dependency checks.
-The [upstream comparison](notes-canonical-upstream.md) confirms that Sized's
-implementation changes only its canonicalClasses import. Exact classes,
-finite execution, sequence, and both rank inverse contracts retain the same
-source definitions. New UVar and synthesis sequences remain separate.
-The [recursive memo proof](notes-recursive-memos.md) derives both actual gate
-memo tables at every closed warm native prefix, recursive child, and returned
-row tail. Closed calls need physical facts, availability, and closure; they
-cannot unfold an open binder. No unfolding-cost heap is assumed or inferred.
-The older certificate with that extra field remains unchanged. Actual checked
-bounded public success derives its graph, memo receipts, exact language,
-physical invariants, and stable identical value/full-state replay. Original
-closed normalized construction supplies the initial scope. General outer
-success and the outer reduction memo table remain open. Next prove finite
-execution for equality-free ordinary regions above opaque Mu/union boundaries,
-then study general selected narrowing with a valid measure. This paragraph
-supersedes older worker-to-graph and warm gate-memo targets.
+The audit passes 1,863 jobs and 48,189 theorem dependency checks.
+The [finite caller proof](notes-plain-completion.md) constructs completed
+outer graphs for equality-free ordinary regions above actual Mu and union
+boundaries. Original literal source annotations derive those regions.
+Closed normalized equality-free source syntax therefore has finite exact
+public execution, both source gate memo receipts, physical scope, and stable
+identical full-state replay. No completed outer graph, successful worker
+receipt, native word-range hypothesis, or sufficient bound is supplied.
+Residual full guards remain intact. General selected-narrowing termination
+and the outer memo table remain open. Next extend these finite regions to
+arbitrary inherited payloads, then study a valid general measure.
+The [Sized comparison](notes-canonical-upstream.md) remains valid: the latest
+upstream refresh leaves Sized and canonicalClasses unchanged. Exact classes,
+finite size execution, sequence, and both rank inverse contracts retain the
+same source. New UVar and synthesis sequences remain separate.
+This paragraph supersedes older equality-free finite-existence targets.
 The [inherited edge proof](notes-inherited-edge.md) derives actual physical
 constraint combination and trie descent, indexed child obligations, exact
 callback observations, and direct equal-arity edge rebuilding. Concrete native

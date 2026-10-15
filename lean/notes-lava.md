@@ -7,6 +7,18 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Derived finite source caller application (2026-10-15 09:37 CEST)
+
+Structural induction now constructs the complete outer graph for actual
+equality-free ordinary regions. Original literal source annotations derive
+that region from closed normalized construction. Finite exact public
+execution, both source gate memo receipts, physical scope, and stable
+full-state replay follow without a supplied success, graph, or bound.
+Read [the current note](notes-plain-completion.md). The general constrained
+case remains open. Graph agreement alone still does not prove termination.
+The outer memo table, repeated passes, native containers, GHC scheduling,
+and extraction remain separate. No Lava or Rocq dependency is added.
+
 ## Recursive source memo application (2026-10-15 09:22 CEST)
 
 Actual closed source gate traces retain both concrete memo tables without
