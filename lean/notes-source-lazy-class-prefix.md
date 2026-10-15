@@ -4,6 +4,13 @@ Proof checkpoint `3ca8c0c4`, source main `525d722e`. The starting checkpoint
 is `a421f9cd`. Full library scope stays active. The optimized interned core,
 older constructor and equality proofs, and separate Sized contracts remain.
 
+The later [query memo proof](notes-source-query-memos.md), checkpoint
+`60a8d3eb`, now derives actual projection/exposure memo receipts and ordered
+entry laws from cached original record readback. Earlier next steps below
+retain this note's historical scope. Native global-event instrumentation,
+whole-query/Scan memo composition, concrete entry extraction, and fallback
+remain open.
+
 ## Exact reached schedule
 
 `SourceEqualityLazyClassPrefix.Scan` records the current caller schedule.

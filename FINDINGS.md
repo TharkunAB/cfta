@@ -1,6 +1,43 @@
 # Current formalization findings
 
-Updated: **2026-10-15 20:30 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 20:43 CEST (Europe/Stockholm)**.
+
+## Actual projection memo receipts and ordered entry
+
+Proof checkpoint `60a8d3eb`, source main `525d722e`. Read
+`lean/notes-source-query-memos.md`. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+Actual exposure and completed projection graphs now derive ordered global
+unfolding receipts, final memo coherence, and old-entry retention. Both query
+tables stay unchanged, with coherence derived through actual heap histories.
+The exact first Mu call and original-root fallback remain. All three tables
+now pass through plain scoped Operand. No final validity is assumed.
+These conditional projection effects do not cover every deferred open union.
+
+The exact successful Precheck result derives ordered Active classes and
+accessor satisfaction from coherent original records and cached equality
+readback. Scan refutation now discharges activity and refutes that accessor.
+Native record/trie extraction remains explicit.
+
+Source review confirms that stored-body intersection and fixed callbacks
+make no direct global unfoldOuterRec call on completed resident operands.
+No existing Code-to-global-event transfer proves native silence. Delayed
+Haskell operand/child producers can run those calls when forced by native
+keys or constructors. Instrument the actual instructions before composing
+native/query/Scan memo receipts. Keep this demand boundary and the distinct
+substitution-plan/per-binder memos. Concrete entry, selected fallback,
+checked state, machine bounds, general completion, waiting counts, template
+exclusion, broader APIs/runtime, and separate Sized contracts remain open.
+
+Full audit: 2,065 jobs, 52,088 dependency checks, permitted axioms only,
+no new warning. Five new modules and two additive Audit imports. Older proof
+definitions and all four Haskell package trees match `11fb07a1` unchanged.
+Start: `/tmp/mcfta-lazy-prefix-checkpoint-20261015-2030/` (2,730 files).
+Closing: `/tmp/mcfta-query-memo-checkpoint-20261015-2043/` (2,736 files).
+Script: `/tmp/mcfta-preserve-query-memo-20261015.py`.
+All prior artifacts remain. Weekly allowance is 85%. No unchanged Haskell
+checks were repeated.
 
 ## Sound early rejection through reached original classes
 

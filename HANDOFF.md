@@ -1,6 +1,48 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 20:30 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 20:43 CEST (Europe/Stockholm)**.
+
+## Actual projection memo receipts and ordered entry
+
+Proof checkpoint `60a8d3eb`, source main `525d722e`. Read
+`lean/notes-source-query-memos.md` first. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+Actual bounded exposure now derives ordered global unfolding call receipts,
+final coherence, and old-entry retention. nodeEdges keeps the first Mu call
+and exact original-Mu fallback. Actual projection Read/Head/Union/Rows/Forest
+and scoped Operand compose these receipts. Adapters for all three tables retain
+both query tables and derive their final coherence from actual histories.
+They do not assume final validity or claim all open union branches complete.
+
+Actual successful Precheck now derives the exact ordered Active entry and
+satisfaction equivalence from coherent original records, cached equalities,
+and accessor readback. stopped_refutes discharges Scan activity and refutes
+that accessor. Concrete native Record/trie extraction remains a premise.
+
+Next instrument actual native instructions and fixed constructors for global
+unfold events, then compose Fold/Seeded, task exploration/Decision, and Scan.
+The source review shows stored-body native intersection and fixed callbacks
+make no direct unfoldOuterRec call on completed resident operands. No
+Code-to-global-event transfer currently proves silence. Haskell key and
+constructor demand can force delayed producers that call the memo. Do not
+infer unchanged runtime memos from result equality or modeled heap Keeps.
+Review: `/tmp/mcfta-query-memo-native-source-review-20261015.md`.
+Concrete caller entry, selected fallback, lazy rows/original child forcing,
+checked state, machine bounds, general completion, recent features, broader
+APIs/runtime, and all distinct Sized contracts remain open.
+
+Full audit: 2,065 jobs, 52,088 dependency checks, permitted axioms only,
+no new warning. Log: `/tmp/mcfta-query-memo-audit-20261015.log`.
+Five new modules and two additive Audit imports contain the change. Older
+proof definitions and all four Haskell package trees match `11fb07a1`;
+unchanged Haskell checks were not repeated.
+Start: `/tmp/mcfta-lazy-prefix-checkpoint-20261015-2030/` (2,730 files).
+Closing: `/tmp/mcfta-query-memo-checkpoint-20261015-2043/` (2,736 files).
+Script: `/tmp/mcfta-preserve-query-memo-20261015.py`.
+All prior artifacts, stashes, and other worktrees remain. New logs, probes,
+frozen sources, and source review remain there. Weekly allowance is 85%.
+Stop owned work at 1% or less. No board posts or deployments.
 
 ## Sound early rejection through reached original classes
 

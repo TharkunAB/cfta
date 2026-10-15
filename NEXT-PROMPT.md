@@ -2,6 +2,51 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Actual projection memo receipts and ordered entry
+
+Proof checkpoint `60a8d3eb`, source main `525d722e`. Read
+`lean/notes-source-query-memos.md` first. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+Actual global unfolding calls now follow bounded collect/nodeEdges,
+Read/Head/ReadAll/Union/Project/Rows/Forest, and plain scoped Operand.
+The first Mu call and original-Mu fallback stay distinct. Returned memo
+coherence and old-entry retention are derived. Both query tables remain
+unchanged in these operations, and actual heap histories derive their final
+coherence. No future-validity premise is supplied. Effects of existing
+completed projection graphs do not derive all open deferred union branches.
+
+SourceEqualityLazyClassEntry derives the exact computed order, Active, and
+satisfaction correspondence from actual successful Precheck, original
+coherent Record values, Cached equalities, and accessor readback. The stopped
+Scan now refutes that accessor after deriving activity. Native physical
+record/trie extraction and initial caller construction remain explicit.
+
+Next instrument native source instructions and fixed constructors for global
+unfold events. Source review shows intersectOpen enters stored Mu bodies and
+its fixed callbacks make no direct global unfoldOuterRec calls on completed
+resident operands. No current Code-to-global-event transfer proves silence.
+Do not define an unchanged-memo predicate and call that transfer proved.
+Haskell native key/constructor demand can force delayed projection/child
+producers, which can call the memo. Preserve that separate runtime boundary.
+Review: `/tmp/mcfta-query-memo-native-source-review-20261015.md`.
+
+Then compose query receipts through Fold/Seeded, delayed task Force/Expose/
+Run/Decision, and Scan with all three global gate tables. Compose concrete
+caller entry and selected requireAll/class reduction/empty propagation.
+Exact GHC demand/sharing, checked state, machine bounds, general completion,
+waiting counts, template exclusion, broader APIs/runtime, and distinct exact
+Sized contracts remain open. Keep the optimized core and older proof work.
+
+Full audit: 2,065 jobs, 52,088 dependency checks, permitted axioms only,
+no new warning. Five new modules and two additive Audit imports. Older proof
+definitions and all four Haskell package trees remain byte-identical.
+Start: `/tmp/mcfta-lazy-prefix-checkpoint-20261015-2030/` (2,730 files).
+Closing: `/tmp/mcfta-query-memo-checkpoint-20261015-2043/` (2,736 files).
+Script: `/tmp/mcfta-preserve-query-memo-20261015.py`.
+All prior artifacts remain. Weekly allowance is 85%. Stop owned work at
+1% or less. No board posts or deployments. Push verified formalize checkpoints.
+
 ## Sound early rejection through reached original classes
 
 Proof checkpoint `3ca8c0c4`, source main `525d722e`. Read

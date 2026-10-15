@@ -7,6 +7,23 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current query memo receipts and ordered entry
+
+Proof checkpoint `60a8d3eb`, source main `525d722e`. Read
+[the query memo receipts and remaining composition](notes-source-query-memos.md).
+Actual exposure, completed projection, and scoped Operand now derive global
+unfolding calls, final three-table coherence, and retained earlier entries.
+The exact ordered Active class entry and accessor satisfaction follow from
+successful Precheck with coherent original records and cached readback.
+Native physical record extraction remains explicit. Native global-event
+instrumentation, query/Scan memo composition, selected fallback, GHC delayed
+demand, checked-state/runtime transfer, and general completion remain open.
+The full audit passes 2,065 jobs and 52,088 dependency checks with no new
+warning or axiom. Five new modules and two additive Audit imports contain
+the change. All older definitions and all four Haskell package trees remain
+unchanged. Full scope and distinct Sized contracts remain. Earlier sections
+are historical.
+
 ## Current reached-prefix rejection proof
 
 Proof checkpoint `3ca8c0c4`, source main `525d722e`. Read
