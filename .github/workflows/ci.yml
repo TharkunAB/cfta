@@ -138,12 +138,11 @@ jobs:
 
   # cfta-lean's tests and benchmark above run without Lean, and skip what needs
   # the oracle. This job builds the oracle with the toolchain of
-  # cfta-lean/oracle/lean-toolchain and runs those parts. It is optional: no
-  # job waits for it, and its failure does not fail the run.
+  # cfta-lean/oracle/lean-toolchain and runs those parts. No other job waits
+  # for it, and a failure here fails the run.
   lean-oracle:
-    name: Lean oracle (optional)
+    name: Lean oracle
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
       - name: Checkout
