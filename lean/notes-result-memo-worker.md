@@ -80,6 +80,15 @@ No completed result is installed in either cell. This observation does not
 prove GHC divergence or a particular exception. The retained Haskell source
 certificate and cold/warm timeouts remain separate execution evidence.
 
+## Completed-cell target status
+
+The [completed-cell proof](notes-result-memo-soundness.md), `51a5922c`, closes
+the bounded successful semantic preservation target below. It follows actual
+recursive effects and derives warm ready reuse. A concrete successful cold
+source fixture supplies its reached check plan. Constraint allocation up to
+identity renaming and source demand/runtime correspondence remain open.
+The next-target section below records the earlier worker checkpoint.
+
 ## Next proof target
 
 Prove a completed-cell invariant for this worker. Retain the original request,

@@ -1,5 +1,14 @@
 # Sized execution from a validated finite row map
 
+The [completed result-memo proof](notes-result-memo-soundness.md) adds actual
+recursive language and cell preservation. It leaves Sized and canonicalClasses
+unchanged. Exact accepted classes, finite execution, canonical sequence,
+distinct size order, and both signed rank inverses remain separate contracts.
+The aggregate audit passes 1,914 jobs and 49,869 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Log:
+`/tmp/mcfta-memo-invariant-audit-20261015.log`.
+Older audit counts below describe their historical checkpoints.
+
 Upstream `c351674e` moves canonicalClasses to Data.CFTA.Interned without
 changing its implementation. Sized changes only that import. Existing exact
 classes, finite execution, size order, and both rank inverses retain their

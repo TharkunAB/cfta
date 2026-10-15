@@ -14,17 +14,20 @@ Exact classes, finite execution, sequence, size order, and both rank inverses
 remain separate contracts. The named-measure frontend and actual parser/codec
 bridges remain open. The optimized interned core and equality code are preserved.
 
-The [recursive result-memo worker](notes-result-memo-worker.md), `b07b8612`,
-threads full native, constraint-interner, and result-thunk state. Its kernel
-fixture reaches the published running root cell after both actual local prefixes.
-No abstract request trace is supplied. Busy is a logical observation. Constraint
-identity reconstruction, warm completed-cell soundness, full source runtime
-correspondence, and GHC scheduling remain separate obligations. Next prove a
-completed-cell language/residency invariant through actual recursive effects.
-The aggregate audit passes 1,902 jobs and 49,621 theorem dependency checks.
-All six Haskell suites pass (687 examples plus golden
-tests). Strict Nix build, formatting, and metadata checks pass. The new example
-agrees at 205 ranks. Older counts and next targets below are historical.
+The [completed-cell proof](notes-result-memo-soundness.md), `51a5922c`, derives
+full memo Sound and exact contextual language through actual recursive effects.
+Original closed construction and successful reached checks give exact public
+language. The p(a,a) kernel fixture supplies a concrete successful plan and
+two returned shared cells. The original busy fixture retains two running cells
+and no completed answers. Ready hits return identical full state at any bound.
+Constraint allocation up to identity renaming and source runtime correspondence
+remain open. General successful caller completion is not proved.
+The aggregate audit passes 1,914 jobs and 49,869 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Log:
+`/tmp/mcfta-memo-invariant-audit-20261015.log`.
+No Haskell files changed. Earlier strict Nix, six-suite, format, metadata, and
+205-rank example checks retain their prior evidence and were not repeated.
+Older counts and next targets below are historical.
 
 The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`,
 returns to the original physical root with empty inherited constraints after

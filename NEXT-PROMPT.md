@@ -2,6 +2,80 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Completed result-memo invariant and actual public language
+
+Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Frame and key proofs: `45d7249a`. Recursive semantic proofs: `51a5922c`.
+Completed fixture and aggregate audit: `44d73de6`.
+HTTPS pull succeeds with no upstream change. Main remains an ancestor of
+`formalize`. Continue on this branch and push verified checkpoints. Read
+`lean/notes-result-memo-soundness.md`, then the worker and upstream notes.
+This section supersedes the older completed-cell next target below.
+
+SourceEqualityPartialMemoFrame.run_frame preserves valid physical key links,
+constraint and publication table growth, original running ancestor requests,
+and all completed cells through every bounded worker observation. It covers
+source errors and incomplete observations without a semantic callback premise.
+SourceEqualityPartialMemoSound.Sound checks every actual cell at the current
+native heap. Original requests remain resident, closed, and well formed.
+Returned values remain resident and closed. Their independent language narrows
+the original language and is exact under inherited constraint satisfaction.
+Physical trie identity transport retains ordered ascending keys and coherent
+resident node references. Native heap extension transports immutable meaning.
+
+SourceEqualityPartialResultMemoProofs.run_verified derives final Sound and
+the existing contextual NodeLaw by induction on the actual body bound.
+It follows native prefixes, indexed children, rows, allocations, and actual
+request completion. Reached check plans contain native word checks and
+smaller actual receipts. They contain no future Sound or semantic oracle.
+SourceEqualityPartialResultMemoSource.public_exact starts at actual closed
+normalized source construction with empty tables. Successful checked execution
+then gives final Sound, native Scope, heap preservation, resident closed output,
+and exact original public language. Successful execution remains a premise.
+The distinct ResultMemo module names preserve the older gate-memo proofs.
+
+SourceEqualityPartialMemoReuse.run_ready returns the full stored value and
+identical full state for a repeated completed original request at every body
+bound, including zero. It does not replay native effects. The successful
+SourceEqualityPartialMemoCompletedExample constructs p(a,a), shares the leaf,
+and executes the actual cold worker. Kernel reduction verifies two returned
+cells, their published keys, full receipts, and the reached check plan.
+The source public theorem derives exact language and Sound for this run.
+SourceEqualityOuterMemoCycleInvariant retains the actual original closed busy
+fixture with two evaluating cells, valid tables, no other allocated cells,
+and no completed answer at any key. It is a fixed finite observation, not a
+GHC divergence theorem or an all-bounds failure theorem.
+
+The aggregate audit passes 1,914 jobs and 49,869 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Log:
+`/tmp/mcfta-memo-invariant-audit-20261015.log`.
+The existing unused-input warning remains. No Haskell source changed in this
+checkpoint. The prior strict Nix build, all six suites (687 examples plus
+golden tests), Fourmolu, Cabal-gild, metadata checks, and the 205-rank example
+retain their earlier source evidence. They were not repeated.
+
+Next relate the physical constraint interner to production EqConstraints
+allocation up to identity renaming. Native prefixes do not yet expose every
+production allocation event. Retain ordered physical trie equality, cache
+validity and extension, and result-memo key links. Do not assume equality of
+numeric IDs from independently allocated tables. The sequential adapter also
+needs source demand/runtime correspondence. General successful completion,
+open contexts, repeated fixed points, getAllAtPath, native containers, GHC
+scheduling, unsafe IO, decision-model, named-measure/parser/decoder bridges,
+and extraction remain open. The current solver preparation and all distinct
+Sized contracts remain preserved. Whole-library formalization is not complete.
+
+Starting snapshot: `/tmp/mcfta-memo-invariant-start-20261015-1258/` (2,543 files).
+Closing snapshot: `/tmp/mcfta-memo-invariant-checkpoint-20261015-1324/` (2,556 files).
+Its `preservation.json` records exact hashes and retained external drafts.
+All older Lean proofs except Audit imports remain byte-identical. Reproductions,
+marked drafts, stashes, and other worktrees remain unchanged. The optimized
+interned core, equality code, Sized definitions, both unverified intersection
+drafts, and their limit report retain their exact hashes. Exploratory probes
+remain outside Audit; repository modules are authoritative.
+Weekly allowance was 96% at 2026-10-15 13:23 CEST. Refresh before work.
+Stop all work and owned workers at 1% or less. No board posts or deployments.
+
 ## Recursive result memo and current solver sort inference
 
 Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.

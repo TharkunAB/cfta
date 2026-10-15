@@ -1,5 +1,28 @@
 # Public API and source correspondence
 
+## Completed result cells and exact actual public execution
+
+Source main `1eb4ab05`; frame/key proof `45d7249a`, recursive soundness proof
+`51a5922c`. Read [the completed-cell note](notes-result-memo-soundness.md).
+Every bounded observation preserves original requests, valid physical keys,
+and existing completed cells. Successful checked recursive execution derives
+resident closed results, current full-memo Sound, and exact contextual language.
+Original closed source construction gives exact public language at empty
+inheritance. Reached check plans supply no future Sound or semantic oracle.
+Ready reuse returns the stored value and identical state at any body bound.
+The actual p(a,a) cold fixture supplies successful receipts and its concrete
+check plan. The preserved closed busy fixture has two running cells and no
+completed answers. Neither result proves general caller completion.
+The aggregate audit passes 1,914 jobs and 49,869 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Log:
+`/tmp/mcfta-memo-invariant-audit-20261015.log`.
+No Haskell files changed. Earlier Haskell/Nix/format checks were not repeated.
+Next connect physical constraint allocation up to identity renaming, then
+source demand/runtime correspondence. Open contexts, repeated fixed points,
+getAllAtPath, native containers, unsafe IO, decision-model, named measures,
+parser/decoder bridges, and extraction remain open. Distinct Sized contracts
+and older proofs remain preserved. Older next targets below are historical.
+
 ## Recursive result memo and current solver sort inference
 
 Source main `1eb4ab05`, merged at `271284df`. Solver proof `3e881cdb`;

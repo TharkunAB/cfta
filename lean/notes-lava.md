@@ -7,6 +7,17 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Completed result-memo soundness (2026-10-15 13:25 CEST)
+
+The [completed-cell proof](notes-result-memo-soundness.md), `51a5922c`, derives
+resident immutable result meaning through actual native and recursive effects.
+Body-bound induction supplies smaller callback soundness. Reached checks contain
+no future Sound premise. Original source construction and a concrete successful
+p(a,a) execution instantiate exact public language and full memo Sound.
+Warm hits reuse that proof at the current heap without native effect replay.
+The busy-cycle fixture remains valid. Constraint-ID allocation correspondence,
+source demand/runtime adequacy, and general completion remain separate.
+
 ## Recursive memo application (2026-10-15 12:52 CEST)
 
 The actual recursive result-memo worker now retains publication, body demand,
