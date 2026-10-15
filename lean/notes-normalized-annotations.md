@@ -5,6 +5,12 @@ Proofs: `8fe4544e`, `50bdc097`, and `307f83be`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+The native-output annotation target below is now proved for the actual scoped
+native intersection. Repaired unfolding, bounded exposure, complete required
+paths, and general projection also retain annotations. The complete equality
+pass still needs general merging, shared-target edits, gate queries, and fold
+preservation. Read [the current note](notes-native-annotations.md).
+
 ## The independent constraint meaning
 
 EqualityNormalize already defines PCS classes by equality of distinct paths.

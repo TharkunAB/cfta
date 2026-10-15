@@ -7,6 +7,19 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Native annotation application (2026-10-15 07:30 CEST)
+
+Actual compiled calls now derive physical annotation conditions at their
+returned cache scopes. The native Bounds proof retains them through memo hits,
+started bodies, completion frames, and continuations. Concrete scoped native
+intersection therefore has exact public input and output meanings. Required
+paths and general projection also preserve annotations, including the final
+union's actual operand reads. Read [the current note](notes-native-annotations.md).
+The complete equality pass still needs merge, shared-target, gate, and fold
+annotation effects. No supplied final invariant replaces these effects. The
+paper's function and graph method helps structure this proof. It does not
+supply GHC lazy scheduling or extraction. No Lava or Rocq dependency is added.
+
 ## Normalized annotation application (2026-10-15 07:17 CEST)
 
 Concrete source guard constructors now have global laws at independent PCS

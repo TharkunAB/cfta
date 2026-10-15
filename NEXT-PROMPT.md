@@ -2,6 +2,62 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Public native intersection and physical annotations through path traversal
+
+Proofs: `da6e72e7`, `ab156db1`, and `854bd6d3`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-native-annotations.md`. This section supersedes the native
+annotation target below and earlier audit counts.
+
+Actual compiled native calls now derive annotation continuation certificates.
+Literal edge work checks its emitted guard. Node and union work emit no guard.
+Optional binders use the existing actual stored-body construction theorem.
+The Bounds induction follows actual direct calls, started bodies, memo hits,
+completion frames, and later continuations. It derives the returned physical
+annotation heap without assuming that heap or a final language law.
+
+Concrete source native intersection preserves normalized annotations. Actual
+Top and conjunction supply every emitted constraint check. The scoped native
+product therefore has exact public input and public output meanings. Finite
+completion follows from existing actual reached word checks. This closes the
+public output readback boundary for this scoped native product only.
+
+Actual repaired stored unfolding retains annotations even in pending outcomes.
+Every bounded cold exposure retains them, including exhausted observations.
+Complete head reads retain them after literal row-node reconstruction.
+Required-node, child, and row graph inductions retain each original full guard.
+General path projection retains annotations through selected children and the
+actual final union: that union reads every operand before one node request.
+Forest root, missing, and selected branches are included.
+
+The complete equality pass still needs output annotation preservation. Do not
+report public/public guarded-edge exactness yet. Next prove it through the
+actual SourceMergedWorker comparison, retention, and merge requests. Lift that
+proof through SourceEqualityTargetOperand, DemandTarget, shared first-force
+and reuse, and SharedEditGraph. Retain original capture scopes, actual slots,
+and all warm native state. Then carry annotations through source gate queries,
+class folds, the one-pass worker, and literal guarded-edge reconstruction.
+Use the proved PCS laws and derive public readback from each returned heap.
+Do not assume a complete merge invariant, future heap, or whole-edge law.
+
+All ten new modules pass focused builds. The aggregate audit passes
+1,799 jobs and 47,752 dependency checks using only propext, Classical.choice,
+and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-native-annotations-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-native-annotations-checkpoint-20261015-0730/` (2,207 Lean-tree files and four root documents).
+Older proofs except audit imports, all counterexamples, marked drafts,
+production source, stashes, and other worktrees remain unchanged. The earlier
+645 Haskell examples and formatter checks apply to the unchanged source and
+were not rerun. Weekly allowance was 15% at 2026-10-15 07:30 CEST. Refresh it before work.
+Stop all work and owned workers immediately at 1% or less.
+
+Inherited descendant processing, reducePartially traversal, open contexts,
+repeated fixed points, getAllAtPath, native containers, GHC lazy scheduling,
+and extraction remain open. Preserve Sized exact classes, finite execution,
+size order, both distinct-term rank inverses, the optimized interned core,
+and all older proofs and boundary artifacts.
+
 ## Concrete PCS guard laws and normalized source annotation heaps
 
 Proofs: `8fe4544e`, `50bdc097`, and `307f83be`.
