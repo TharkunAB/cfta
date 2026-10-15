@@ -1745,6 +1745,8 @@ import MicroCFTA.SourceEqualityOuterCallerCycle
 import MicroCFTA.SourceEqualityOuterCallerMemoCycle
 import MicroCFTA.SourceEqualityPartialFirstDemand
 import MicroCFTA.SourceEqualityOuterCallerWorkerCycle
+import MicroCFTA.SourceEndpointGateCompletion
+import MicroCFTA.SourceEndpointCallerRegression
 /-!
 # Proof dependency audit
 
