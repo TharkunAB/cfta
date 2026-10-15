@@ -1,6 +1,85 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 14:47 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 15:08 CEST (Europe/Stockholm)**.
+
+## Checked native provenance and actual heap preservation
+
+Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Checked receipt proof: `af1c9d19`. Heap and outer-memo proof: `59c41d3a`.
+Actual rejection and stopped outer-call proof: `20982f98`.
+Pull returned Already up to date. Continue on `formalize` and push verified
+checkpoints. Read `lean/notes-native-checked-provenance.md`, then the native
+demand, checked-edge, payload, identity, and completed-cell notes. This
+supersedes the completed-provenance target below. Full library scope is open.
+
+NativeDemandProvenance defines actual checked node-body and edgeBody execution
+witnesses with original inputs, physical/domain growth, available results,
+and independent language. NodeGood/EdgeGood and the new Valid do not use the
+eager Produced relation. CellValidity derives publication, demand, growth,
+completion, and exact ready-hit receipt laws. Word bounds stay explicit in
+published key links. Ready reuse does not replay physical effects.
+The language law applies only to closed inputs in the exact empty domain.
+Other contexts can satisfy its implication vacuously. Existential body
+witnesses do not establish a complete causal history for the original thunk.
+Their initial native/operation validity and all internal ranges are not
+asserted. Key links do not establish full lifetime capacity. Generic completion
+requires a separately proved checked receipt. Arbitrary recursive step/execute
+preservation of semantic Valid is not proved.
+
+NativeDemandHeapPrimitives derives actual node/union/edge and optional-binder
+heap effects from current physical operands. Open operands need no closedness
+premise for these effects. NativeDemandHeap derives step and finite execute
+Keeps on every outcome from current reached InputsThrough checks. These check
+work operands or optional-binder bodies; they supply no future Ready/Keeps.
+PartialNativeHeap derives current outer result-memo Sound from these heap
+receipts and actual operation effects. Its normalized-field and current-input
+plans remain explicit. No future Sound or eager execution is assumed.
+
+MismatchReceipt and RejectedReceipt derive actual three-instruction standalone
+bodies and five-instruction publication-to-completion observations. Both
+retain the original selected handle, resident sentinel, actual heap Keeps,
+and checked Valid in both native families. Mismatch language uses actual
+forest arity for any guard evaluator without a cached-field premise.
+Equal-arity rejection retains actual conjunction/accessor effects before
+empty-field allocation. Original field loads, current Cached receipts, and
+operation validity derive exact independent PCS empty-intersection language.
+The rejection result retains valid growing operation caches. No child code
+exists. PartialNativeStopped derives current outer Sound and Frame for fresh
+mismatch and rejected calls without reached-path plans or future heap facts.
+NodeShortcut derives actual empty/self body receipts and independent language.
+Its generic pure-wrapper completion is not a fresh-miss totality theorem.
+
+Next prove checked provenance through accepted recursive edge and node bodies.
+Derive available child results/resident edges, InputsThrough from actual
+compiled operands, and FieldsThrough from original constructor receipts plus
+dynamic field closure. Retain matched-symbol facts from the actual row join;
+matching arity alone does not imply matching symbols. Then connect class
+folds, reconstruction, both gate memo families, full guarded passes, recursive
+reduction, and original construction. Do not assume eager effect replay.
+General caller completion, open contexts, repeated fixed points, getAllAtPath,
+global unrelated prehistory, pending equality-operation thunks, native
+cache/hash/IntMap adequacy, signed indexes, lifetime capacity, unsafe IO, GHC,
+decision-model, named measures, parser/decoder bridges, and extraction remain
+open. Preserve the optimized interned core and older constructor/equality work.
+Sized exact classes, finite execution, canonical sequence, distinct size order,
+and both signed inverse implications remain separate contracts.
+
+The pinned full audit passes 1,955 jobs and 50,413 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Focused endpoints pass
+1,093 jobs. Logs: `/tmp/mcfta-native-provenance-complete-audit-20261015.log`
+and `/tmp/mcfta-native-provenance-focused-20261015.log`. The old unused-input
+warning remains; the ten new modules have no warnings. No Haskell file changed.
+Prior strict Nix, six-suite, format, metadata, and 205-rank checks were not
+repeated. They retain their previous source evidence.
+Starting snapshot: `/tmp/mcfta-native-provenance-start-20261015-1449/` (2,591 files).
+Closing snapshot: `/tmp/mcfta-native-provenance-checkpoint-20261015-1507/` (2,602 files).
+All earlier Lean definitions except Audit imports, reproductions, marked
+drafts, stashes, and other worktrees retain their hashes. Both external
+unverified intersection drafts and the limit report remain unchanged.
+Repository modules are authoritative. Temporary validation notes and probes
+stay outside Audit. Weekly allowance was 94% at 2026-10-15 14:48 CEST.
+Refresh before work; stop work and owned workers at 1% or less. No board posts
+or deployments. Older counts and next targets below are historical.
 
 ## Resumable checked native edge demand
 

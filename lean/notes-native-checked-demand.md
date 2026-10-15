@@ -1,5 +1,12 @@
 # Native checked demand and retained memo state
 
+The [checked provenance checkpoint](notes-native-checked-provenance.md),
+`20982f98`, derives stopped native completion and outer memo Sound. Actual
+finite heap Keeps follows from reached current-input checks. Accepted
+recursive provenance and derivation of the input/field plans remain open.
+Its audit passes 1,955 jobs and 50,413 dependency checks. All Sized contracts
+and Haskell definitions remain unchanged. Older next targets are historical.
+
 Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
 Field/code proofs: `c8d5d219`. Resumable interpreter: `c82daff4`.
 Stopped-language, completion, outer-memo proofs, and audit: `f4687ad9`.

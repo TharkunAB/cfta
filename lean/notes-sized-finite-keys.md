@@ -1,5 +1,12 @@
 # Sized execution from a validated finite row map
 
+The [checked provenance checkpoint](notes-native-checked-provenance.md),
+`20982f98`, derives stopped native completion and outer memo Sound. Actual
+finite heap Keeps follows from reached current-input checks. Accepted
+recursive provenance and derivation of the input/field plans remain open.
+Its audit passes 1,955 jobs and 50,413 dependency checks. All Sized contracts
+and Haskell definitions remain unchanged. Older next targets are historical.
+
 The [native demand checkpoint](notes-native-checked-demand.md) passes 1,945
 audit jobs and 50,309 theorem dependency checks. It adds checked native
 execution with retained operation caches and surrounding memo cells. Completed

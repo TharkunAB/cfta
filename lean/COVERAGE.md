@@ -1,5 +1,26 @@
 # Full formalization coverage
 
+## Checked native provenance and derived heap effects
+
+Proofs `af1c9d19`, `59c41d3a`, and `20982f98`, on main `1eb4ab05`.
+Read [the checked provenance note](notes-native-checked-provenance.md).
+Completed cell receipts use actual checked bodies and independent language.
+Their language law covers closed inputs in the exact empty domain. Generic
+lifecycle proofs require derived completion receipts. Actual mismatch and
+constraint-rejection branches derive those receipts, both native invariants,
+original returned handles, and resident results. Rejection retains real
+conjunction/accessor allocations. Fresh stopped calls preserve outer Sound
+and Frame without reached-path plans or future semantic/heap premises.
+Every finite outcome derives actual heap Keeps from current constructor-input
+checks. General compiled calls must still derive these reached checks and
+normalized fields, matched-symbol facts, and accepted recursive provenance.
+Existential checked-body witnesses are not full global history correspondence.
+Published KeySafe links do not establish full lifetime capacity. The old
+eager Produced relation is not assumed. All whole-library, runtime, and
+separate Sized boundaries remain. The audit passes 1,955 jobs and 50,413
+dependency checks with only permitted axioms. No Haskell file changed.
+Older counts and next targets below are historical.
+
 ## Resumable checked native edge demand
 
 Proofs `c8d5d219`, `c82daff4`, and `f4687ad9`, on main `1eb4ab05`.

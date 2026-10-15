@@ -1,5 +1,12 @@
 # Lava and the cfta proof boundaries
 
+The [checked provenance checkpoint](notes-native-checked-provenance.md),
+`20982f98`, derives stopped native completion and outer memo Sound. Actual
+finite heap Keeps follows from reached current-input checks. Accepted
+recursive provenance and derivation of the input/field plans remain open.
+Its audit passes 1,955 jobs and 50,413 dependency checks. All Sized contracts
+and Haskell definitions remain unchanged. Older next targets are historical.
+
 Source: Colin Rothgang, Loïc Peyrot, Yannick Forster, Michael Greenberg,
 and Niki Vazou, *Lava: Foundations for Liquid Haskell via Translation to
 Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at

@@ -1,5 +1,12 @@
 # Checked edge allocation and recursive memo preservation
 
+The [checked provenance checkpoint](notes-native-checked-provenance.md),
+`20982f98`, derives stopped native completion and outer memo Sound. Actual
+finite heap Keeps follows from reached current-input checks. Accepted
+recursive provenance and derivation of the input/field plans remain open.
+Its audit passes 1,955 jobs and 50,413 dependency checks. All Sized contracts
+and Haskell definitions remain unchanged. Older next targets are historical.
+
 Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
 Constructor proofs: `1fa17554`. Recursive integration and audit: `261627c4`.
 This extends [equality payload allocation](notes-payload-allocation-receipts.md).
