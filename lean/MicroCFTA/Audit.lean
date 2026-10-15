@@ -1714,6 +1714,8 @@ import MicroCFTA.SourceEqualityConstraintGeometry
 import MicroCFTA.SourceEqualityConstraintGuardInventory
 import MicroCFTA.SourceEqualityConstraintPathInventory
 import MicroCFTA.SourceEqualityConstraintInventory
+import MicroCFTA.SourceEqualityNormalizationReceipt
+import MicroCFTA.SourceEqualityInheritedGrowthBoundary
 /-!
 # Proof dependency audit
 
