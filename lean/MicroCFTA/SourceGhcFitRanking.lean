@@ -8,7 +8,8 @@ This module follows Decision.ranked and GHC.Rank.rankedFits at main 4101746a.
 The installed source sorter preserves occurrences for every comparator.
 The fit pool is the signed splitAt prefix after the comesLast partition.
 A completed answer records success, failure, or timeout. A small pool asks
-no question. The external request and timeout IO remain separate adapters.
+no question. The recorded question is the intended pool, not an IO receipt.
+The external request and timeout IO remain separate adapters.
 
 Complete score vectors preserve all fits. Short vectors lose the unscored
 pool suffix through source zip. No comparator law is needed for these facts.
@@ -59,7 +60,7 @@ inductive Answer (Score Message : Type) where
   | failure (message : Message)
   | timeout
 
-/-- A finite answer retains the exact question pool and optional source diagnostic. -/
+/-- A finite answer retains the intended question pool and optional source diagnostic. -/
 structure Result (Fit Message : Type) where
   fits : List Fit
   problem : Option Message
@@ -149,7 +150,7 @@ theorem result_member (compare : Score → Score → Ordering) (comesLast : Fit 
         simp only [rankedFits, small, ↓reduceIte] at member
         exact (partition_perm comesLast fits).mem_iff.mp member
 
-/-- A returned question is exactly the eligible prefix, with at least two fits. -/
+/-- An intended question uses exactly the eligible prefix, with at least two fits. -/
 theorem question_pool (compare : Score → Score → Ordering) (comesLast : Fit → Bool)
     (pool : Int) (timeoutMessage : Message) (fits : List Fit) (answer : Answer Score Message) (asked : List Fit)
     (question : (rankedFits compare comesLast pool timeoutMessage fits answer).question = some asked) :
