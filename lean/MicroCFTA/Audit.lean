@@ -1647,6 +1647,22 @@ import MicroCFTA.SourceEqualityInheritedRowsProofs
 import MicroCFTA.SourceEqualityPartialNodeRebuild
 import MicroCFTA.SourceEqualityPartialWorker
 import MicroCFTA.SourceEqualityPartialStepProofs
+import MicroCFTA.InternedFreshOrdinaryProbeHeap
+import MicroCFTA.SourceEqualityNativeProbeScoped
+import MicroCFTA.SourceEqualityPartialProbeEntry
+import MicroCFTA.SourceEqualityProbeExposure
+import MicroCFTA.SourceEqualityProbeHead
+import MicroCFTA.SourceEqualityProbePass
+import MicroCFTA.SourceEqualityProbeProjection
+import MicroCFTA.SourceEqualityProbeRequired
+import MicroCFTA.SourceEqualityProbeSharedEdit
+import MicroCFTA.SourceEqualityProbeTarget
+import MicroCFTA.SourceEqualityProbeUnfold
+import MicroCFTA.SourceMergedProbeComparison
+import MicroCFTA.SourceMergedProbeSelection
+import MicroCFTA.SourceMergedProbeWorker
+import MicroCFTA.SourceRecursiveIntersectionNativeProbeHeap
+import MicroCFTA.SourceRecursiveIntersectionProbeEffects
 /-!
 # Proof dependency audit
 
