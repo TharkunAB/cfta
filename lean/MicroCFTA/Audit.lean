@@ -1,4 +1,6 @@
 import Lean
+import MicroCFTA.SourceEqualityPartialPrecheckAllocation
+import MicroCFTA.SourceEqualityPartialPayloadAllocation
 import MicroCFTA.SourceEqualityPartialMemoRenaming
 import MicroCFTA.SourceEqualityPartialConstraintWords
 import MicroCFTA.SourceEqualityPartialResultMemoSource
