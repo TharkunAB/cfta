@@ -210,9 +210,10 @@ data EnumerationState symbol = EnumerationState
     a slot updates this set.
     -}
     , _waitingUVars :: !(IntMap.IntMap Int)
-    {- ^ For each UVar, how many suspended constraints of 'UVarUnenumerated'
-    slots name it. A UVar with no such constraint has no entry. Every write of
-    a slot updates this map.
+    {- ^ For each representative UVar, how many suspended constraints of
+    'UVarUnenumerated' slots name a UVar of its class. A class with no such
+    constraint has no entry. Every write of a slot updates this map, and a
+    union moves the count of the old representatives to the new one.
     -}
     , _obligations :: [(Constraint, TermFragment symbol)]
     -- ^ Constraints with a 'residual', each with the fragment it guards.
@@ -414,12 +415,17 @@ setUVarValue uv val =
                     then IntSet.insert idx (_expandableUVars s)
                     else IntSet.delete idx (_expandableUVars s)
             , _waitingUVars =
-                count 1 val (count (-1) (Sequence.index (_uvarValues s) idx) (_waitingUVars s))
+                count
+                    (_uvarRepresentative s)
+                    1
+                    val
+                    (count (_uvarRepresentative s) (-1) (Sequence.index (_uvarValues s) idx) (_waitingUVars s))
             }
   where
     idx = uvarToInt uv
-    count change (UVarUnenumerated _ scs) waiting = Foldable.foldl' (\m sc -> IntMap.alter (add change) (uvarToInt (scGetUVar sc)) m) waiting scs
-    count _ _ waiting = waiting
+    count uf change (UVarUnenumerated _ scs) waiting =
+        Foldable.foldl' (\m sc -> IntMap.alter (add change) (uvarToInt (UnionFind.root (scGetUVar sc) uf)) m) waiting scs
+    count _ _ _ waiting = waiting
     add change old = case maybe change (+ change) old of
         0 -> Nothing
         new -> Just new
@@ -630,6 +636,12 @@ enumerateNode scs n =
                     modify' $ \s ->
                         s{_uvarRepresentative = UnionFind.union (scGetUVar x) (scGetUVar sc) (_uvarRepresentative s)}
                 uv <- getUVarRepresentative (scGetUVar x)
+                -- The waiting counts of the old representatives go to the new one.
+                let merged = IntSet.delete (uvarToInt uv) (IntSet.fromList (map uvarToInt (Foldable.toList reps)))
+                    move waiting old = case IntMap.lookup old waiting of
+                        Just waits -> IntMap.insertWith (+) (uvarToInt uv) waits (IntMap.delete old waiting)
+                        Nothing -> waiting
+                modify' $ \s -> s{_waitingUVars = IntSet.foldl' move (_waitingUVars s) merged}
                 mapM_ (assimilateUvarVal uv) reps
 
                 mergeNodeIntoUVarVal uv n descendantConstraints
@@ -670,11 +682,10 @@ data ExpandableUVarResult
 
 {- | Find every expandable UVar that no suspended constraint waits for.
 
-The state keeps the expandable slots and the UVars that suspended constraints
-name. Slots merged into another UVar are marked 'UVarEliminated', so every
-expandable slot is a representative. A suspended constraint may still name
-an eliminated UVar, so resolve each named UVar through the union-find and
-write the path compression back once.
+The state keeps the expandable slots and the representatives of the UVars
+that suspended constraints name. Slots merged into another UVar are marked
+'UVarEliminated', so every expandable slot is a representative, and the
+blocked ones are the keys of '_waitingUVars'.
 
 'Nothing' means no candidates remain. @Just empty@ means candidates exist, but
 all of them are blocked by suspended constraints.
@@ -683,17 +694,10 @@ findExpandableUVars :: EnumerateM symbol (Maybe IntSet.IntSet)
 findExpandableUVars = do
     candidates <- gets _expandableUVars
     waiting <- gets _waitingUVars
-    uf0 <- gets _uvarRepresentative
-    let (ruledOut, uf) = IntMap.foldlWithKey' resolve (IntSet.empty, uf0) waiting
-    modify' $ \s -> s{_uvarRepresentative = uf}
     return $
         if IntSet.null candidates
             then Nothing
-            else Just (candidates IntSet.\\ ruledOut)
-  where
-    resolve (ruledOut, uf) uv _ =
-        let (rep, uf') = UnionFind.find (intToUVar uv) uf
-         in (IntSet.insert (uvarToInt rep) ruledOut, uf')
+            else Just (candidates IntSet.\\ IntMap.keysSet waiting)
 
 {- | Which of the currently expandable UVars to expand next.
 
