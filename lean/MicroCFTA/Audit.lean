@@ -1708,6 +1708,8 @@ import MicroCFTA.SourceEqualityConstraintClosure
 import MicroCFTA.SourceEqualityConstraintEditClosure
 import MicroCFTA.SourceEqualityConstraintPassClosure
 import MicroCFTA.SourceEqualityConstraintOrigins
+import MicroCFTA.SourceEqualityPartialConstraintClosure
+import MicroCFTA.SourceEqualityPartialConstraintOrigins
 /-!
 # Proof dependency audit
 
