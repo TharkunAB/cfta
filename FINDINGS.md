@@ -1,6 +1,88 @@
 # Current formalization findings
 
-Updated: **2026-10-15 15:56 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 16:07 CEST (Europe/Stockholm)**.
+
+## Main refresh with derived refinement APIs
+
+Current source main: `6fe34ab815d41bd282e46903afc693e9671bd2d3`.
+Preserving merge: `9f8d3afc`. Pre-merge proof checkpoint: `7c5f4367`.
+Backup: `backup/formalize-before-main-6fe34ab8-20261015-1559`.
+Continue on `formalize` and push verified checkpoints. Read
+`lean/notes-main-6fe34ab8.md`, then `lean/notes-native-field-running-invariants.md`.
+After each pull, check origin/main ancestry before proof edits. Merge newer
+main commits with a backup and preservation check; retain the formalize history.
+The branch pull fetched a new main while formalize remained current with
+its own tracking branch. The closing ancestry check detected the pending
+main update. The merge retained both changelog entries in its only conflict.
+The optimized interned core, equality repair, Sized, and all earlier proofs
+remain. No proof history was rewritten. The new upstream APIs expand the
+uncovered source surface; full library scope remains open.
+
+The upstream delta adds Data.CFTA.Refinement.Symbolic and
+Data.CFTA.Gen.Refinement.Derive. Generic now exposes Description constructors.
+Existing implementation bodies are unchanged within this delta. Compared
+with new main, the package tree retains only the earlier Equality/Operations
+traversal repair and its changelog entry. New source bridges include value/
+formula class agreement, partial measure reads, metadata/codec coherence,
+placeholder totality, annotation validation/order, SCC/depth unfolding,
+atomic-conjunct movement, recipe/rank correspondence, and named measures.
+The existing Generic and combinator proofs do not prove these new APIs.
+
+`lean/repro/DerivedAnnotationBoundaries.hs` verifies two source limits with
+public APIs. Equal annotationFormulas projections omit named measures and
+produce filtered cardinalities two versus one. A documented Strict{}
+invariant on a constructor with !Integer throws the placeholder field-read
+error. These source behaviors remain unchanged. The initial package-name
+probe selected a hidden package; the corrected exact-unit invocation verifies
+both limits. Final log: `/tmp/mcfta-derived-boundaries-final-20261015.log`.
+
+Current proofs derive actual running-cell survival, exact started-request
+identity, native step validity, and dynamic normalized-field closure.
+FieldsThrough follows from initial normalized physical fields, compiled
+continuations, StateValid, and native-only InputsThrough. Native physical
+inputs, word bounds, and semantic finish receipts remain explicit. Structural
+running-cell survival does not supply the semantic receipt. Normalized fields
+do not prove sidecar storage coverage. Open finite-context branch laws and
+closed specialization are proved. The old NodeMeaning is vacuous on repeated
+branches. General Mu correctness needs a candidate-parametric context law;
+the finite seen-pair context fixes the very language that binder candidates
+must vary. The actual least-language equation and scoped transport are proved.
+
+Next derive native InputsThrough from original physical inputs and actual
+compiled continuations. Combine request identity and running-cell survival
+with semantic finish receipts and internal ranges. Establish candidate-
+parametric Mu/repeated-pair context extension and sidecar allocation coverage.
+Then derive general reached-child checks, class folds, reconstruction, both
+gate memo families, guarded passes, recursive reduction, and original graph
+construction. Global causal prehistory, pending equality thunks, cache/hash/
+IntMap and signed adequacy, lifetime capacity, unsafe IO, GHC, general
+completion, repeated fixed points, getAllAtPath, decision-model, new derived
+frontend and named-measure bridges, parser/decoder bridges, and extraction
+remain open. Keep older constructor/equality work. Sized exact classes,
+finite execution, canonical sequence, distinct size order, and both signed
+inverse implications remain separate contracts.
+
+Strict Nix build passes all libraries, executables, tests, and benchmarks.
+All six suites pass: 696 examples plus the golden suite. Fourmolu checks the
+five changed source/test files and formats the standalone repro. Cabal-gild
+and cabal check pass all four packages. Existing linker warnings and the
+cabal-gild --input deprecation remain observations. The Lean audit passes
+1,975 jobs and 50,686 dependency checks with only permitted axioms. The older
+unused-input warning remains. The ten new Lean modules have no warnings.
+Logs use `/tmp/mcfta-main-6fe34ab8-{build,tests,format-metadata,lean-audit}-20261015.log`.
+The prior separate 205-rank example was not repeated; the new derived tests
+check their source examples and ranks. These are component checks only.
+
+Turn start: `/tmp/mcfta-native-validity-start-20261015-1539/` (2,613 files).
+Pre-merge snapshot: `/tmp/mcfta-native-validity-checkpoint-20261015-1555/`
+(2,624 files). Final snapshot: `/tmp/mcfta-main-6fe34ab8-checkpoint-20261015-1605/`
+(2,629 files). All prior Lean definitions except additive Audit imports,
+old repros, marked drafts, stashes, and other worktrees retain their hashes.
+All three external intersection draft/limit files and the two superseded
+scoped-receipt drafts remain. New main is an ancestor of the final branch.
+Weekly allowance was 91% at 2026-10-15 16:03 CEST. Refresh before work; stop
+work and owned workers at 1% or less. No board posts or deployments.
+Older source heads, validation counts, and next targets below are historical.
 
 ## Running-cell preservation and derived normalized fields
 

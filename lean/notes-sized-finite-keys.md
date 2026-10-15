@@ -1,5 +1,11 @@
 # Sized execution from a validated finite row map
 
+The [main 6fe34ab8 refresh](notes-main-6fe34ab8.md), merged at `9f8d3afc`,
+retains these proofs and their existing source bodies. It adds uncovered
+derived-refinement frontends and two verified source counterexamples.
+The audit remains 1,975 jobs and 50,686 dependency checks. Older source heads
+and next targets below are historical.
+
 The [running and field checkpoint](notes-native-field-running-invariants.md),
 `b03d0d1f`, derives actual original running-cell survival and normalized-field
 closure. Native input checks, semantic finish receipts, sidecar coverage, and

@@ -1,5 +1,21 @@
 # Full formalization coverage
 
+## Main 6fe34ab8: additive derived refinement frontends
+
+Main `6fe34ab8` is merged at `9f8d3afc`. Read [the source comparison](notes-main-6fe34ab8.md).
+The optimized core, equality repair, Sized, and prior proofs are preserved.
+New public Symbolic and Gen.Refinement.Derive APIs remain uncovered: class
+interpretation, partial lookups, metadata/codec discovery, placeholders,
+annotation order/errors, SCC/depth unfolding, atomic predicate movement,
+recipe/rank equivalence, and named measures need source bridges. Existing
+Generic and generator proofs do not cover them. The standalone derived
+annotation repro verifies projection loss (cardinalities two versus one)
+and strict-field placeholder failure. All six Nix suites pass 696 examples
+plus golden checks. The strict build, format and package checks, and Lean
+1,975-job/50,686-dependency audit pass. Native input/finish receipts, sidecar
+coverage, general contextual Mu correctness, and full library scope remain open.
+Older source heads, counts, and next targets below are historical.
+
 ## Running-cell preservation and derived normalized fields
 
 Proofs `7ab3b4f7`, `ad4f21de`, `4fa1fcfa`, and `b03d0d1f`, on main `1eb4ab05`.

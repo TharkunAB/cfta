@@ -7,6 +7,14 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+The [current main refresh](notes-main-6fe34ab8.md), `9f8d3afc`, preserves
+all proofs, the optimized core, the equality repair, and Sized. New Symbolic
+and automatic derived-refinement APIs remain uncovered. A retained standalone
+repro verifies named-annotation projection loss and strict-field placeholders.
+All six Nix suites pass 696 examples plus golden checks. The strict build,
+format, metadata, and 1,975-job/50,686-dependency Lean audit pass.
+Whole-library correspondence and general checked-native correctness remain open.
+
 The [running and field checkpoint](notes-native-field-running-invariants.md),
 `b03d0d1f`, derives actual running-cell preservation, exact started requests,
 and normalized-field closure through checked execution. Native input checks

@@ -1,5 +1,11 @@
 # Actual running cells and derived normalized fields
 
+The [main 6fe34ab8 refresh](notes-main-6fe34ab8.md), merged at `9f8d3afc`,
+retains these proofs and their existing source bodies. It adds uncovered
+derived-refinement frontends and two verified source counterexamples.
+The audit remains 1,975 jobs and 50,686 dependency checks. Older source heads
+and next targets below are historical.
+
 Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
 Running cells and current validity: `7ab3b4f7`.
 Normalized-field closure: `ad4f21de`. Exact request identity: `4fa1fcfa`.
