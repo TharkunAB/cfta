@@ -347,8 +347,12 @@ instance (GConstructors left, GConstructors right) => GConstructors (left :+: ri
 instance (Generic.Constructor metadata, GFields fields) => GConstructors (M1 C metadata fields) where
     gConstructors typ _ = [(genericConstructor @metadata @fields typ, map snd $ gFields $ Proxy @fields)]
     gEncode typ (M1 fields) = Term.Node (genericConstructor @metadata @fields typ) (gEncodeFields fields)
+
+    -- The type and the name identify a constructor, and the fields check the
+    -- arity, so the decoder does not build the constructor to compare it.
     gDecode typ (Term.Node constructor children)
-        | constructor == genericConstructor @metadata @fields typ = do
+        | constructorType constructor == typ
+        , constructorName constructor == conName (undefined :: M1 C metadata fields ()) = do
             (fields, rest) <- gDecodeFields children
             if null rest then Just $ M1 fields else Nothing
         | otherwise = Nothing
