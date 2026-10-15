@@ -55,6 +55,10 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   solver.
 * The walk stops after the first fits, after a size, after a number of
   programs, or at a deadline.
+* The mode ('optionMode') says where the programs come from: Hectare's
+  programs (mode (a), the default), or the programs of states built from
+  GHC's own goals, without erasure (mode (b), "Data.CFTA.GHC.States"). The
+  fits of both get the check below.
 * The figures of a search give the time of each part: Hectare's
   construction, reduction, and listing, and the checks in the
   typechecker.
@@ -96,6 +100,7 @@ module Data.CFTA.GHC.Fits (
 
     -- * Options
     Options (..),
+    Mode (..),
     defaultOptions,
     hectareAvoid,
 
@@ -114,7 +119,7 @@ import Control.Applicative ((<|>))
 import Control.Exception (evaluate)
 import Control.Monad (forM)
 import Control.Monad.IO.Class (liftIO)
-import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
+import Data.IORef (atomicModifyIORef', modifyIORef', newIORef, readIORef, writeIORef)
 import Data.List (nub, sort)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
@@ -137,8 +142,10 @@ import Data.CFTA.GHC.Erase (
  )
 import Data.CFTA.GHC.Internal.Check
 import Data.CFTA.GHC.NormalForm (NormalForm, mentions, normalForm, termOfId)
+import Data.CFTA.GHC.States (holeGoals)
 import Data.CFTA.Gen.Synthesis (Defaulting (..), Encoding (..), Program (..))
 import qualified Data.CFTA.Gen.Synthesis as Hectare
+import Data.CFTA.Gen.Synthesis.States (Figures, Walking (..), searchStatesWith)
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
     Erased (..),
@@ -262,6 +269,8 @@ data Options = Options
     first list is not applied to one of the second list (with 'Nothing': to
     any), as Hectare does for @head []@.
     -}
+    , optionMode :: Mode
+    -- ^ Where the programs come from.
     , optionReport :: Maybe (Int -> Statistics -> IO ())
     -- ^ A function to call after each size.
     , optionTrace :: Maybe (Int -> Program -> IO ())
@@ -287,7 +296,17 @@ data Options = Options
     -}
     }
 
--- | Programs of up to five leaves, the first ten fits, no other limit, with Hectare's curried types and normal forms.
+-- | A way to propose the programs of a hole.
+data Mode
+    = -- | Hectare's programs over the erased candidates (mode (a)).
+      Hectare
+    | {- | The programs of states of GHC's own goals (mode (b),
+      "Data.CFTA.GHC.States"), walked as the 'Walking' says.
+      -}
+      States Walking
+    deriving (Eq, Show, Read)
+
+-- | Programs of up to five leaves, the first ten fits, mode (a), no other limit, with Hectare's curried types and normal forms.
 defaultOptions :: Options
 defaultOptions =
     Options
@@ -296,6 +315,7 @@ defaultOptions =
         , optionMaximumPrograms = Nothing
         , optionSeconds = Nothing
         , optionAvoid = []
+        , optionMode = Hectare
         , optionReport = Nothing
         , optionTrace = Nothing
         , optionCurried = True
@@ -387,6 +407,8 @@ data Statistics = Statistics
     , statisticsNormalNanos :: !Word64
     -- ^ The time of the normal forms of the fits.
     , statisticsCounters :: !Counters
+    , statisticsStates :: Maybe Figures
+    -- ^ The figures of the states of mode (b), when it ran.
     }
     deriving (Eq, Show)
 
@@ -404,9 +426,10 @@ synthesizeFits options hole candidates goal = do
     fits <- reverse <$> liftIO (readIORef found)
     pure (take (optionFits options) (filter (not . comesLast) fits <> filter comesLast fits))
 
-{- | Check Hectare's programs for a hole in its enumeration order, and call
-the function on each fit; stop when it returns 'False'. The result has the
-figures of the search.
+{- | Check the programs of the mode ('optionMode') for a hole, in its order
+(Hectare's enumeration order for mode (a)), and call the function on each
+fit; stop when it returns 'False'. The result has the figures of the
+search.
 -}
 streamFits :: Options -> TypedHole -> [Candidate] -> Type -> (Fit -> TcM Bool) -> TcM Statistics
 streamFits options hole candidates goal accept = do
@@ -416,7 +439,9 @@ streamFits options hole candidates goal accept = do
     let deadline = (\seconds -> begin + round (seconds * 1e9)) <$> optionSeconds options
         -- The classes that the domains of the variables of kind Type follow.
         decided cls = optionTypeDomains options && decides environment instances cls
-    erased <- concat <$> mapM (erasures environment decided) candidates
+    erased <- case optionMode options of
+        Hectare -> concat <$> mapM (erasures environment decided) candidates
+        States _ -> pure []
     let encoding
             | optionCurried options =
                 Curried defaulting (domains environment instances <> typeDomains environment instances decided)
@@ -428,63 +453,81 @@ streamFits options hole candidates goal accept = do
     seen <- liftIO (newIORef Set.empty)
     merged <- liftIO (newIORef 0)
     normalizing <- liftIO (newIORef 0)
+    -- The fits so far, so that a program that fits again is not a new fit.
+    reported <- liftIO (newIORef Set.empty)
+    figures <- liftIO (newIORef Nothing)
     let statistics progress =
             statisticsOf progress
                 <$> liftIO (readIORef ignoring)
                 <*> liftIO (readIORef merged)
                 <*> liftIO (readIORef normalizing)
                 <*> readCounters environment
-    case query decided erased of
-        Just erasedGoal -> do
-            ignoredLeaf <- rigidLeaf environment ignored
-            let start = startWalker environment (map candidateType candidates) goal
-                leaves' = Map.insert ignored ignoredLeaf leaves
-            startKey <- stateKey environment (walkerVariables start) start
-            checker <- newChecker environment leaves' start startKey
-            let limits = Limits (optionMaximumSize options) (optionMaximumPrograms options) deadline
-                hooks =
-                    Hooks
-                        { hookSize = \size progress -> case optionReport options of
-                            Just callback -> statistics progress >>= liftIO . callback size
-                            Nothing -> pure ()
-                        , hookProgram = \size program -> mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
-                        }
-                -- A fit with the normal form of an earlier fit is skipped,
-                -- before the checks of its parts.
-                accept' fit
-                    | optionNormalForms options = do
-                        before <- liftIO getMonotonicTimeNSec
-                        -- A fit without a normal form (too large, or out of fuel) is not merged.
-                        let normal = normalOf (Walk.fitProgram fit)
-                        present <- liftIO (readIORef seen)
-                        known <- liftIO (evaluate (maybe False (`Set.member` present) normal))
-                        liftIO (if known then pure () else mapM_ (modifyIORef' seen . Set.insert) normal)
-                        after <- liftIO getMonotonicTimeNSec
-                        liftIO (modifyIORef' normalizing (+ (after - before)))
-                        if known
-                            then True <$ liftIO (modifyIORef' merged (+ 1))
-                            else checkParts fit (maybe False (\form -> not (all (mentions form) required)) normal)
-                    | otherwise = checkParts fit False
-                -- The walk gives a new fit with the hole as at the start:
-                -- check the program with each argument subterm in turn of a
-                -- fresh rigid type.
-                checkParts fit dropsArgument = do
-                    before <- liftIO getMonotonicTimeNSec
-                    ignoresPart <- anyM (fitsFrom environment leaves' start . preorder) (replacements ignored (Walk.fitProgram fit))
-                    after <- liftIO getMonotonicTimeNSec
-                    liftIO (modifyIORef' ignoring (+ (after - before)))
-                    accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart dropsArgument)
-            statistics
-                =<< walk
-                    encoding
-                    limits
-                    checker
-                    hooks
-                    [Erased name typ (role candidate) | (candidate, name, typ) <- erased]
-                    (avoid erased)
-                    erasedGoal
-                    accept'
-        Nothing -> statistics emptyProgress
+                <*> liftIO (readIORef figures)
+    ignoredLeaf <- rigidLeaf environment ignored
+    let start = startWalker environment (map candidateType candidates) goal
+        leaves' = Map.insert ignored ignoredLeaf leaves
+    startKey <- stateKey environment (walkerVariables start) start
+    checker <- newChecker environment leaves' start startKey
+    let limits = Limits (optionMaximumSize options) (optionMaximumPrograms options) deadline
+        hooks =
+            Hooks
+                { hookSize = \size progress -> case optionReport options of
+                    Just callback -> statistics progress >>= liftIO . callback size
+                    Nothing -> pure ()
+                , hookProgram = \size program -> mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
+                , hookNew = \tokens -> liftIO $ atomicModifyIORef' reported $ \fits ->
+                    if tokens `Set.member` fits then (fits, False) else (Set.insert tokens fits, True)
+                }
+        -- A fit with the normal form of an earlier fit is skipped,
+        -- before the checks of its parts.
+        accept' fit
+            | optionNormalForms options = do
+                before <- liftIO getMonotonicTimeNSec
+                -- A fit without a normal form (too large, or out of fuel) is not merged.
+                let normal = normalOf (Walk.fitProgram fit)
+                present <- liftIO (readIORef seen)
+                known <- liftIO (evaluate (maybe False (`Set.member` present) normal))
+                liftIO (if known then pure () else mapM_ (modifyIORef' seen . Set.insert) normal)
+                after <- liftIO getMonotonicTimeNSec
+                liftIO (modifyIORef' normalizing (+ (after - before)))
+                if known
+                    then True <$ liftIO (modifyIORef' merged (+ 1))
+                    else checkParts fit (maybe False (\form -> not (all (mentions form) required)) normal)
+            | otherwise = checkParts fit False
+        -- The walk gives a new fit with the hole as at the start:
+        -- check the program with each argument subterm in turn of a
+        -- fresh rigid type.
+        checkParts fit dropsArgument = do
+            before <- liftIO getMonotonicTimeNSec
+            ignoresPart <- anyM (fitsFrom environment leaves' start . preorder) (replacements ignored (Walk.fitProgram fit))
+            after <- liftIO getMonotonicTimeNSec
+            liftIO (modifyIORef' ignoring (+ (after - before)))
+            accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart dropsArgument)
+    case optionMode options of
+        -- Mode (a) needs an erased goal; mode (b) does not.
+        Hectare -> case query decided erased of
+            Just erasedGoal ->
+                statistics
+                    =<< walk
+                        encoding
+                        limits
+                        checker
+                        hooks
+                        [Erased name typ (role candidate) | (candidate, name, typ) <- erased]
+                        (avoid erased)
+                        erasedGoal
+                        accept'
+            Nothing -> statistics emptyProgress
+        States walking -> do
+            goals <-
+                holeGoals
+                    environment
+                    [(leafOf candidate, candidateRequired candidate) | candidate <- candidates]
+                    (optionMaximumSize options - 1)
+                    goal
+            (progress, figures') <- searchStatesWith walking limits checker hooks goals (optionAvoid options) accept'
+            liftIO (writeIORef figures (Just figures'))
+            statistics progress
   where
     -- The free type variables of the scope, named in order of occurrence.
     relevant = map ctEvPred (bagToList (th_relevant_cts hole))
@@ -595,15 +638,13 @@ streamFits options hole candidates goal accept = do
             eraseFor decided rigid goal
         | otherwise = Nothing
     leaves :: Map Text Leaf
-    leaves =
-        Map.fromListWith
-            (\_ old -> old)
-            [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates]
+    leaves = Map.fromListWith (\_ old -> old) [(candidateName c, leafOf c) | c <- candidates]
+    leafOf c = Leaf (candidateName c) (candidateType c) (candidateHeads c)
     -- The name of the rigid leaf: a hole, so no candidate has it.
     ignored = "_"
     -- The names of the arguments of the query.
     required = [candidateName candidate | candidate <- candidates, candidateRequired candidate]
-    statisticsOf progress ignoring skipped normalNanos =
+    statisticsOf progress ignoring skipped normalNanos counters states =
         Statistics
             (progressPrograms progress)
             (progressRuns progress)
@@ -617,6 +658,8 @@ streamFits options hole candidates goal accept = do
             (progressListNanos progress)
             (progressCheckNanos progress + ignoring)
             normalNanos
+            counters
+            states
     anyM predicate = foldr (\x rest -> predicate x >>= \yes -> if yes then pure True else rest) (pure False)
     readCounters environment = liftIO (readIORef (environmentCounters environment))
 
