@@ -5,6 +5,14 @@ Proofs: `ae6a0141`, `ac7c1eaf`, `97f987a1`, and `a84343e3`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 Publish completed checkpoints on `formalize`.
 
+## Current required-path checkpoint
+
+`06353eab` proves exact Needed construction and complete-path term meaning.
+`61f2c939` repairs retained-cycle traversal through the existing constructor-row
+closure. Read [the current proof note](notes-needed-head-repair.md). The raw
+self-binder witness below remains as historical evidence. The full physical
+required-path worker still needs its finite execution and language theorem.
+
 ## Exact installed sorting schedule
 
 The project plan selects GHC 9.14.1, base 4.22.0.0, ghc-internal 9.1401.0,

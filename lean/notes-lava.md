@@ -7,6 +7,17 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Required-path application (2026-10-15 02:30 CEST)
+
+The actual Needed compiler now has independent complete-path term semantics.
+A separate kernel fixture checks actual constructor-row exposure of the closed
+raw self binder. Independent least-language semantics proves that replacement
+by empty preserves its language. Eight native traversals now use that exposure;
+the existing finite cold-reader proofs remain available for the general path
+worker. Read [the current note](notes-needed-head-repair.md). Compiler meaning,
+finite physical worker execution, and complete native pass correspondence stay
+separate claims. The latter two remain the next proof work.
+
 ## Physical caller application (2026-10-15 02:13 CEST)
 
 The physical class sort and early guards now connect to the complete memo
@@ -77,8 +88,9 @@ not directly cover the cfta interned core or the repeated open-Mu gate.
 The evaluation theorem uses a call-by-value calculus (§4, p. 20).
 Appendix C.1 assumes termination of that calculus because Liquid Haskell
 checks termination (p. 34). This does not prove Haskell lazy scheduling or
-the termination measure still needed for the general constrained-recursion
-gate. Do not use that assumption to close the gate obligation.
+finite execution of the remaining required-path and fixed-point workers.
+The open-Mu gate now has an independent rank proof. Do not use the paper's
+termination assumption to close any remaining worker obligation.
 
 The translation maps Haskell `Int` to unbounded Rocq integers and treats
 overflow as undefined (pp. 4–5). It does not replace the existing native
@@ -98,7 +110,7 @@ file or a translation success alone is not proof evidence.
 
 Keep Lean, the existing optimized interned core, and the exact Sized sequence.
 Keep external solver contracts and runtime/extraction limits explicit.
-Continue the repaired constructor gate proof. Use this paper when designing
+Continue the repaired physical required-path proof. Use this paper when designing
 any later source certificate path. Do not add Lava or a Rocq dependency to
 the current project without a separate decision.
 

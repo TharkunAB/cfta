@@ -6,7 +6,7 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,617 jobs and 45,336 theorem dependency checks.
+The audit passes 1,621 jobs and 45,462 theorem dependency checks.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open
@@ -49,10 +49,14 @@ final cache and connects the existing one-pass theorem. The
 installed source sort schedule, exact trie/set comparison, safe prechecks,
 and actual parent-array normalization before selection. A checked raw-class
 comparator cycle explains why the physical merge schedule is retained.
-The next requireAll target has a verified closed raw self-binder stutter.
-Its kernel fixture and Haskell reproduction remain. Address that case across
-the full exported input domain before claiming general required-path progress.
-Primitive-operation and native container contracts remain explicit.
+The [Needed compiler and cycle repair](notes-needed-head-repair.md) now
+prove exact signed trie construction and independent complete-path meaning.
+The kernel checks constructor-row exposure and empty least language for the
+raw self binder. Eight source traversals now use that exposure. All 645 Haskell
+examples pass. The original stutter witness and reproduction remain unchanged.
+Next derive the repaired physical requireAll worker, its actual constructor
+effects, and its exact output language. The self-cycle fixture is not a general
+worker proof. Primitive-operation and native container contracts remain explicit.
 [The Lava paper note](notes-lava.md) records relevant prior art and its source,
 solver, and termination limits. The [occurrence-cost note](notes-occurrence-costs.md)
 records the full weighted source callback/probe correspondence used here.
