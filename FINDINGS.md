@@ -1,6 +1,40 @@
 # Current formalization findings
 
-Updated: **2026-10-15 18:59 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 19:10 CEST (Europe/Stockholm)**.
+
+## Open ordinary Mu projection and selected-path completion
+
+Proof `00b4806e` is pushed. Source main remains `525d722e`. Read
+`lean/notes-source-open-ordinary-head.md`.
+
+The original closed-head premise is unnecessary for a single ordinary Mu
+exposure. Actual stored unfolding completes for available open records in a
+semantic-ready cache. Ordinary reconstruction retains exact independent
+language, all semantic heaps, availability, histories, and annotations.
+Finite selected-path completion then gives finite open Mu projection from
+the domain of its actual rebuilt head. No final projection-language premise
+or completed-projection premise is needed at this endpoint.
+
+The retained warm gate fixture checks the exact operations. Reconstruction
+returns the same unfolded ordinary value and heap. Its free list still
+contains reference 999, while its selected child path is closed. The domain
+comparison replaces one forest value only for the proof. The caller is
+unchanged. No whole-source ready cache or completed caller is asserted.
+
+The remaining bridge is from false gate traces to later projection support
+in the grown caller heap. Existing final-heap replay is derived, but its
+Ready has an extra cost heap. Repeated Mu/nodeEdges cases and current memo
+composition remain open. Forest root [] is not certified by a false gate.
+All broader native, lazy-demand, completion, recent-feature, API/runtime,
+and separate Sized obligations remain.
+
+Full audit: 2,031 jobs, 51,878 dependency checks, permitted axioms only, no
+new warning. Prior definitions remain byte-identical except two Audit imports.
+All four Haskell package trees match `fd279a46`; checks were not repeated.
+Start: `/tmp/mcfta-refused-query-checkpoint-20261015-1853/` (2,691 files).
+Closing: `/tmp/mcfta-open-head-checkpoint-20261015-1910/` (2,696 files).
+Script: `/tmp/mcfta-preserve-open-head-20261015.py`. All prior artifacts remain.
+Weekly allowance is 87%. Full scope remains active. Earlier entries are historical.
 
 ## Scoped refused-class queries and the open Mu boundary
 

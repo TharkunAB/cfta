@@ -2,6 +2,8 @@
 
 Source main remains `525d722e`. The query-demand proof is `e36ecf90`.
 The seeded query and domain-boundary proof is `38569b85`. Both are pushed.
+The [open ordinary-head note](notes-source-open-ordinary-head.md) records
+the later local exposure, selected-path completion, and concrete domain proof.
 The [completed task-table proof](notes-source-emptiness-task-soundness.md)
 supplies the finite emptiness result. This work connects that result to the
 caller's distinct seeded intersection and weakens its closedness premise.

@@ -2,6 +2,41 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Open ordinary Mu projection and selected-path completion
+
+Proof checkpoint: `00b4806e`, pushed to origin/formalize. Source main remains
+`525d722e`. Read `lean/notes-source-open-ordinary-head.md` first. Continue
+the full library scope. Earlier targets below retain their historical scope.
+
+Single actual stored unfolding and ordinary reconstruction now preserve
+independent open language, available records, semantic heaps, both histories,
+and physical annotations. No closed-input or closed-head premise is needed.
+The existing selected-path domain now derives finite projection. An open Mu
+with an actual ordinary first unfolding also has finite projection when its
+actual rebuilt head meets that domain. The retained warm gate fixture proves
+this head stays open while its selected child is closed.
+
+Next connect false secondary-gate traces to later selected projections.
+Separate same-start-cache reasoning from replay above the completed gate
+cache. Existing InternedSourceGateReplay derives exact effect-free replay
+above that final cache, but its Ready includes CostHeap. Either derive that
+heap or remove the incidental cost premise with the new actual unfolding
+effects. Cover repeated open Mu exposure, union/metadata branches, and actual
+current memo receipts. A forest false-gate statement must exclude root [];
+the source gate returns false there without inspecting the forest.
+Do not assert the original static domain or arbitrary cache independence.
+General caller composition, lazy demand, checked native transfer, ranges,
+completion, recent source features, and separate Sized contracts remain.
+
+The full pinned audit passes 2,031 jobs and 51,878 dependency checks, with
+permitted axioms only and no new warning. All prior definitions except two
+Audit imports and all four Haskell package trees remain byte-identical.
+Start: `/tmp/mcfta-refused-query-checkpoint-20261015-1853/` (2,691 files).
+Closing: `/tmp/mcfta-open-head-checkpoint-20261015-1910/` (2,696 files).
+Script: `/tmp/mcfta-preserve-open-head-20261015.py`.
+All earlier artifacts remain. Weekly allowance is 87%. Stop owned work at
+1% or less. No board posts or deployments. Keep the optimized core.
+
 ## Scoped refused-class queries and the open Mu boundary
 
 Proof checkpoints: `e36ecf90` and `38569b85`, pushed to origin/formalize.

@@ -7,6 +7,18 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current open ordinary Mu projection
+
+Proof `00b4806e` derives open ordinary-head language and cache preservation,
+finite selected-path completion, and finite projection through an actual
+ordinary Mu unfolding. A checked warm fixture keeps its head open while its
+selected path is closed. Read [the proof and its limits](notes-source-open-ordinary-head.md).
+Next transfer false secondary-gate traces to later caller projections.
+General repeated-head/caller completion and broader library gaps remain.
+The full audit passes 2,031 jobs and 51,878 dependency checks, with no new
+warning or axiom. Prior definitions remain unchanged except two Audit imports.
+All Haskell package trees are unchanged. Earlier scopes below are historical.
+
 ## Current refused-class queries and open Mu boundary
 
 Proofs `e36ecf90` and `38569b85` connect actual seeded class queries to

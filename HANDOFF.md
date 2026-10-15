@@ -1,6 +1,43 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 18:59 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 19:10 CEST (Europe/Stockholm)**.
+
+## Open ordinary Mu projection and selected-path completion
+
+Proof `00b4806e` is pushed to origin/formalize. Source main stays `525d722e`.
+Read `lean/notes-source-open-ordinary-head.md` first. Full scope stays active.
+
+Actual single unfolding and ordinary reconstruction retain open independent
+language, SemanticReady, availability, both histories, and edge annotations.
+The old selected-path domain now derives complete finite projection. Actual
+open Mu projection completes when its first unfolding is ordinary and the
+actual rebuilt head meets that selected domain. Every completed projection
+also retains accepted subtrees and physical annotations. The warm fixture
+keeps free reference 999 in that head and proves the selected path closed.
+This proves the intended local case without assuming the original Mu closed.
+
+Next derive projection support from false secondary-gate traces and transfer
+it to the later caller cache. InternedSourceGateReplay already proves exact
+replay above a completed final gate heap. It uses an extra CostHeap premise.
+The new single-unfolding effects can remove that incidental premise, or the
+caller can derive the heap. Keep same-start and later-heap statements distinct.
+Cover repeated Mu exposure and nodeEdges fallback, union/metadata branches,
+both gate modes, current memos, query, and fallback. Exclude [] from a false
+forest-path implication. Do not assume unrestricted cache independence.
+Lazy demand, checked native transfer, machine ranges/identities, general
+completion, waiting counts, template exclusion, broader APIs/runtime, and
+every distinct Sized contract remain separate targets.
+
+The full audit passes 2,031 jobs and 51,878 dependency checks, with permitted
+axioms only and no new warning. Log: `/tmp/mcfta-open-head-audit-20261015.log`.
+Prior definitions remain unchanged except two additive Audit imports. All
+four Haskell package trees match `fd279a46`; checks were not repeated.
+Starting snapshot: `/tmp/mcfta-refused-query-checkpoint-20261015-1853/`
+(2,691 files). Closing: `/tmp/mcfta-open-head-checkpoint-20261015-1910/`
+(2,696 files). Script: `/tmp/mcfta-preserve-open-head-20261015.py`.
+All earlier artifacts, stashes, and other worktrees remain. Weekly allowance
+is 87%. Stop owned work at 1% or less. No board posts or deployments.
+Earlier sections retain their historical checkpoint scope.
 
 ## Scoped refused-class queries and the open Mu boundary
 
