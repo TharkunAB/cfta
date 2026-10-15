@@ -23,7 +23,10 @@ Before release, the package was called `microcfta`.
   that match none of some templates at the root, as `matchesNone` says. It
   splits an edge by what its children match, so an unambiguous input gives
   an unambiguous result, and counts and ranks over it are exact. It reaches
-  only as deep as the templates.
+  only as deep as the templates. A split that keeps two different parts
+  without holes at one child has no terms, and it is left out, so the
+  preorder prefixes of a trie give a child one copy for each part that they
+  fix there and one for none, not one copy for each subset of the prefixes.
   `excludeFTA` does the same for an explicit-state automaton: each result
   state pairs a source state with an `Obligation`, the templates that its
   terms must match and those that they must not.

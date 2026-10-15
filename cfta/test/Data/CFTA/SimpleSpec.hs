@@ -135,12 +135,28 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
                                 check (exclude shapes node)
                                 check (Interned.fromFTA (excludeFTA shapes explicit))
 
+    it "exclude templates from the explicit view with one run for each run of the input that it keeps" $
+        property $
+            forAll ((,) <$> automaton <*> templates) $ \(explicit, shapes) -> within 10000000 $ do
+                let excluded = excludeFTA shapes explicit
+                forM_ [0 .. deepest explicit] $ \depth ->
+                    (depth, [explicitRuns excluded (FTA.initialState excluded) term | term <- underlying depth explicit])
+                        `shouldBe` (depth, [if matchesNone shapes term then explicitRuns explicit 0 term else 0 | term <- underlying depth explicit])
+
     it "exclude templates anywhere from the explicit view as filtering its trees does" $
         property $
             forAll ((,) <$> automaton <*> templates) $ \(explicit, shapes) -> within 10000000 $
                 forM_ [0 .. deepest explicit] $ \depth ->
                     (depth, sort (FTA.terms (FTA.boundDepth depth (excludeAnywhereFTA shapes explicit))))
                         `shouldBe` (depth, filter (matchesNowhere shapes) (underlying depth explicit))
+
+    it "exclude templates anywhere from the explicit view with one run for each run of the input that it keeps" $
+        property $
+            forAll ((,) <$> automaton <*> templates) $ \(explicit, shapes) -> within 10000000 $ do
+                let excluded = excludeAnywhereFTA shapes explicit
+                forM_ [0 .. deepest explicit] $ \depth ->
+                    (depth, [explicitRuns excluded (FTA.initialState excluded) term | term <- underlying depth explicit])
+                        `shouldBe` (depth, [if matchesNowhere shapes term then explicitRuns explicit 0 term else 0 | term <- underlying depth explicit])
 
     it "exclude templates anywhere from the explicit view and the interned view with no new ambiguity" $
         -- As for excludeFTA, a term with one run in the input has one run in
@@ -353,6 +369,17 @@ deepest :: FTA Int String Constraint -> Depth
 deepest explicit
     | length (underlying 2 explicit) <= 40 = 3
     | otherwise = 2
+
+-- | The number of runs of an explicit automaton from a state on a term, whose constraints hold on the term.
+explicitRuns :: (Ord state) => FTA state String Constraint -> state -> Term String -> Integer
+explicitRuns explicit state term@(Term.Node symbol children) =
+    sum
+        [ product (zipWith (explicitRuns explicit) (FTA.transitionChildren transition) children)
+        | transition <- FTA.transitionsFrom explicit state
+        , FTA.transitionSymbol transition == symbol
+        , length (FTA.transitionChildren transition) == length children
+        , equalitiesHold (FTA.transitionConstraint transition) term
+        ]
 
 -- | The number of runs of each term of a node up to a depth.
 runCounts :: Depth -> Interned.Node String -> Map (Term String) Int
