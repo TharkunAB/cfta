@@ -1774,6 +1774,8 @@ import MicroCFTA.SourceSecondaryGateProjectionHeap
 import MicroCFTA.SourceSecondaryGateRefusedClassQuery
 import MicroCFTA.EndpointMemoGateClasses
 import MicroCFTA.SourceSecondaryGateQueryCosts
+import MicroCFTA.EndpointGateClassModes
+import MicroCFTA.SourceEqualityLazyClassSoundness
 /-!
 # Proof dependency audit
 
