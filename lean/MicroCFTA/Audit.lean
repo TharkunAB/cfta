@@ -1751,6 +1751,9 @@ import MicroCFTA.SourceEndpointMemoPublicationCorrect
 import MicroCFTA.EndpointMemoGateSource
 import MicroCFTA.EndpointGateModes
 import MicroCFTA.ConservativeEmptiness
+import MicroCFTA.ConservativeEmptinessRows
+import MicroCFTA.ConservativeEmptinessExplore
+import MicroCFTA.RefusedEqualityEmptyPass
 /-!
 # Proof dependency audit
 
