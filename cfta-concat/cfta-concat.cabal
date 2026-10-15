@@ -1,0 +1,99 @@
+cabal-version: 3.0
+name: cfta-concat
+version: 0.1.0.0
+synopsis: Refinements and measures for cfta from monomorphic Haskell functions
+description:
+  The concat plugin (compiling to categories) compiles a monomorphic Haskell
+  predicate or measure with no recursion to the formulas and terms of the
+  refinement logic of cfta, for the refinement generators of cfta-generator.
+  The package depends on concat-plugin, which depends on the ghc library and
+  pins GHC 9.14. Build it with cabal.project.concat.
+
+homepage: https://github.com/TharkunAB/cfta/tree/main/cfta-concat#readme
+bug-reports: https://github.com/TharkunAB/cfta/issues
+category: Testing
+author: Matthias Pall Gissurarson
+maintainer: mpg@mpg.is
+copyright: 2026 Tharkun AB
+license: BSD-3-Clause
+license-file: LICENSE
+build-type: Simple
+tested-with: ghc ==9.14.1
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+
+source-repository head
+  type: git
+  location: https://github.com/TharkunAB/cfta.git
+  subdir: cfta-concat
+
+common warnings
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Widentities
+    -Wincomplete-record-updates
+    -Wincomplete-uni-patterns
+    -Wpartial-fields
+    -Wredundant-constraints
+
+-- The plugin needs optimization in each module that calls symbolic, so
+-- cabal.project.concat builds this package with optimization. A module that
+-- runs the plugin needs concat-classes, concat-plugin, and ghc-prim in its
+-- dependencies, because the plugin loads modules of these packages.
+common plugin
+  ghc-options:
+    -fplugin=ConCat.Plugin
+    -fplugin-opt=ConCat.Plugin:showResiduals
+    -fplugin-opt=ConCat.Plugin:failResiduals
+
+library
+  import: warnings
+  default-language: Haskell2010
+  hs-source-dirs: src
+  exposed-modules:
+    Data.CFTA.Concat
+    Data.CFTA.Concat.FormulaCat
+    Data.CFTA.Concat.Measure
+
+  -- concat's classes need more superclass expansion of givens than the
+  -- default of GHC 9.8 and later.
+  ghc-options: -fgivens-expansion-fuel=10
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
+    concat-classes >=0.3 && <0.4,
+    concat-plugin >=0.3 && <0.4,
+
+test-suite acceptance
+  import: warnings, plugin
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Acceptance.hs
+  hs-source-dirs: test
+  ghc-options: -rtsopts
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
+    cfta-concat,
+    cfta-generator >=0.1.0.0 && <0.2,
+    concat-classes >=0.3 && <0.4,
+    concat-plugin >=0.3 && <0.4,
+    containers >=0.8 && <0.9,
+    ghc-prim >=0.13 && <0.14,
+
+test-suite measure
+  import: warnings, plugin
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Measure.hs
+  hs-source-dirs: test
+  ghc-options: -rtsopts
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
+    cfta-concat,
+    concat-classes >=0.3 && <0.4,
+    concat-plugin >=0.3 && <0.4,
+    ghc-prim >=0.13 && <0.14,
