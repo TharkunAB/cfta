@@ -42,6 +42,13 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   still fits with a value of a fresh rigid type in the place of that
   subterm. Such a fit, as @const xs n@ or @const (length xs) p@, has a
   smaller program that does the same.
+* With 'optionNormalForms', each fit has a normal form
+  ("Data.CFTA.GHC.NormalForm"): the bodies of the components, as @flip@,
+  @fst@, and @maybe@, unfold from GHC's unfoldings. A fit with the normal form of an
+  earlier fit is the same program, as @flip filter xs p@ is @filter p xs@,
+  and the search skips it. A fit whose normal form drops an argument, as
+  @curry snd n (f x)@, which is @f x@, does the same as a smaller program,
+  and it comes last, as a fit that ignores a part does.
 
 Why these types:
 
@@ -73,12 +80,17 @@ module Data.CFTA.GHC.Fits (
 
     -- * Fits
     Fit (..),
+    comesLast,
     Statistics (..),
     synthesizeFits,
     streamFits,
+
+    -- * Normal forms
+    normalFormsOf,
 ) where
 
 import Control.Applicative ((<|>))
+import Control.Exception (evaluate)
 import Control.Monad (forM)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
@@ -86,6 +98,7 @@ import Data.List (nub)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, isJust, mapMaybe)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Data.Word (Word64)
@@ -93,6 +106,7 @@ import GHC.Clock (getMonotonicTimeNSec)
 
 import Data.CFTA.GHC.Erase (anyResult, erase, higherKinded, typeHeads)
 import Data.CFTA.GHC.Internal.Check
+import Data.CFTA.GHC.NormalForm (NormalForm, mentions, normalForm, termOfId)
 import Data.CFTA.Gen.Synthesis (Program (..))
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
@@ -109,20 +123,24 @@ import Data.CFTA.Gen.Synthesis.Walk (
  )
 import qualified Data.CFTA.Gen.Synthesis.Walk as Walk
 import GHC.Builtin.Types (listTyCon)
-import GHC.Core.DataCon (dataConNonlinearType)
+import GHC.Core.ConLike (ConLike (RealDataCon))
+import GHC.Core.DataCon (dataConName, dataConNonlinearType, dataConWrapId)
 import GHC.Core.TyCo.FVs (tyCoVarsOfType, tyCoVarsOfTypesList)
 import GHC.Core.Type (Type, substTyWith, tyConAppTyCon_maybe)
 import GHC.Data.Bag (bagToList, emptyBag)
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
 import GHC.Tc.Types.Constraint (Implication (..), ctEvPred)
 import GHC.Tc.Types.Origin (SkolemInfoAnon (RuntimeUnkSkol))
-import GHC.Tc.Utils.Monad (TcM)
+import GHC.Tc.Utils.Env (tcLookupGlobal)
+import GHC.Tc.Utils.Monad (TcM, tryM)
 import GHC.Tc.Utils.TcMType (newImplication, newTcEvBinds)
 import GHC.Tc.Utils.TcType (TcLevel, TcTyVar, mkSpecSigmaTy, tcSplitNestedSigmaTys)
 import GHC.Types.Id (Id, idType, isDataConWorkId_maybe, isDataConWrapId_maybe)
-import GHC.Types.Name (getOccString)
+import GHC.Types.Name (Name, getName, getOccString, isExternalName, nameModule_maybe)
+import GHC.Types.TyThing (TyThing (AConLike, AnId))
 import GHC.Types.Var (EvVar, isTyVar)
 import GHC.Types.Var.Set (elemVarSet)
+import GHC.Unit.Module (getModule)
 
 {- | A hole under one implication with the given skolems and givens, at the
 given level (the skolems' level): what a driver without a typechecked hole
@@ -149,27 +167,32 @@ holeFor level skolems givens = do
             }
 
 {- | A candidate for a fit: its text in a program, its type, whether it can
-head an application, and whether every fit must use it. A closed type is
-instantiated at each use; a type with free type variables keeps them.
+head an application, whether every fit must use it, and the name of its
+identifier, if it has one. A closed type is instantiated at each use; a type
+with free type variables keeps them. The name finds the identifier, whose
+unfolding is the body of the candidate in the normal forms
+('normalFormsOf').
 -}
 data Candidate = Candidate
     { candidateName :: Text
     , candidateType :: Type
     , candidateHeads :: Bool
     , candidateRequired :: Bool
+    , candidateOrigin :: Maybe Name
     }
 
 {- | An identifier as a candidate with the given text, which can head an
 application and is not required. A data constructor's arrows are linear in
 its identifier's type (@a %1 -> [a] %1 -> [a]@), so its candidate has the
 type with unrestricted arrows, 'dataConNonlinearType', as GHC's own hole
-fits use.
+fits use. The origin of a data constructor is the constructor's name.
 -}
 candidateFromId :: Text -> Id -> Candidate
-candidateFromId name identifier = Candidate name typ True False
+candidateFromId name identifier = Candidate name typ True False (Just origin)
   where
-    typ =
-        maybe (idType identifier) dataConNonlinearType (isDataConWrapId_maybe identifier <|> isDataConWorkId_maybe identifier)
+    constructor = isDataConWrapId_maybe identifier <|> isDataConWorkId_maybe identifier
+    typ = maybe (idType identifier) dataConNonlinearType constructor
+    origin = maybe (getName identifier) dataConName constructor
 
 -- | The options of a search.
 data Options = Options
@@ -192,9 +215,14 @@ data Options = Options
     -- ^ A function to call after each size.
     , optionTrace :: Maybe (Int -> Program -> IO ())
     -- ^ A function to call before each program is checked, with its size.
+    , optionNormalForms :: Bool
+    {- ^ Whether to use the normal forms of the fits: a fit with the normal
+    form of an earlier fit is skipped, and a fit whose normal form drops an
+    argument comes last ('fitDropsArgument').
+    -}
     }
 
--- | Programs of up to five leaves, the first ten fits, no other limit.
+-- | Programs of up to five leaves, the first ten fits, no other limit, with normal forms.
 defaultOptions :: Options
 defaultOptions =
     Options
@@ -205,6 +233,7 @@ defaultOptions =
         , optionAvoid = []
         , optionReport = Nothing
         , optionTrace = Nothing
+        , optionNormalForms = True
         }
 
 {- | Hectare's pruning rule of the Hoogle+ library, with GHC's names, for
@@ -248,8 +277,20 @@ data Fit = Fit
     has a fresh rigid type: then it cannot use that subterm, except with
     'seq'.
     -}
+    , fitDropsArgument :: Bool
+    {- ^ With 'optionNormalForms': whether the normal form of the program
+    does not use one of the required candidates (the arguments of the
+    query). Then a smaller program does the same.
+    -}
     }
     deriving (Eq, Show)
+
+{- | Whether a fit comes after the others: it ignores a part
+('fitIgnoresPart'), or its normal form drops an argument
+('fitDropsArgument'). Either way, a smaller program does the same.
+-}
+comesLast :: Fit -> Bool
+comesLast fit = fitIgnoresPart fit || fitDropsArgument fit
 
 -- | The figures of a search.
 data Statistics = Statistics
@@ -258,6 +299,9 @@ data Statistics = Statistics
     , statisticsSkipped :: !Int
     -- ^ The programs under a dead prefix, skipped without a step.
     , statisticsFits :: !Int
+    -- ^ The fits that the search gave to the caller.
+    , statisticsMerged :: !Int
+    -- ^ The fits that the search skipped: each had the normal form of an earlier fit.
     , statisticsSize :: !Int
     -- ^ The size of the last program looked at.
     , statisticsOutOfTime :: !Bool
@@ -270,13 +314,15 @@ data Statistics = Statistics
     -- ^ The time to list Hectare's programs.
     , statisticsCheckNanos :: !Word64
     -- ^ The time of the checks in the typechecker.
+    , statisticsNormalNanos :: !Word64
+    -- ^ The time of the normal forms of the fits.
     , statisticsCounters :: !Counters
     }
     deriving (Eq, Show)
 
 {- | The first fits of a hole, as many as 'optionFits'. The search stops
 after so many fits that use every part of themselves; a fit that ignores a
-part ('fitIgnoresPart') comes after them.
+part or drops an argument ('comesLast') comes after them.
 -}
 synthesizeFits :: Options -> TypedHole -> [Candidate] -> Type -> TcM [Fit]
 synthesizeFits options hole candidates goal = do
@@ -284,9 +330,9 @@ synthesizeFits options hole candidates goal = do
     _ <-
         streamFits options hole candidates goal $ \fit -> do
             fits <- liftIO (modifyIORef' found (fit :) >> readIORef found)
-            pure (length (filter (not . fitIgnoresPart) fits) < optionFits options)
+            pure (length (filter (not . comesLast) fits) < optionFits options)
     fits <- reverse <$> liftIO (readIORef found)
-    pure (take (optionFits options) (filter (not . fitIgnoresPart) fits <> filter fitIgnoresPart fits))
+    pure (take (optionFits options) (filter (not . comesLast) fits <> filter comesLast fits))
 
 {- | Check Hectare's programs for a hole in its enumeration order, and call
 the function on each fit; stop when it returns 'False'. The result has the
@@ -300,7 +346,17 @@ streamFits options hole candidates goal accept = do
     erased <- concat <$> mapM (erasures environment) candidates
     -- The time of the checks of the fits' parts, which are checks too.
     ignoring <- liftIO (newIORef 0)
-    let statistics progress = statisticsOf progress <$> liftIO (readIORef ignoring) <*> readCounters environment
+    -- The normal forms of the fits so far, the skipped fits, and the time of the normal forms.
+    normalOf <- if optionNormalForms options then normalFormsOf candidates else pure (const Nothing)
+    seen <- liftIO (newIORef Set.empty)
+    merged <- liftIO (newIORef 0)
+    normalizing <- liftIO (newIORef 0)
+    let statistics progress =
+            statisticsOf progress
+                <$> liftIO (readIORef ignoring)
+                <*> liftIO (readIORef merged)
+                <*> liftIO (readIORef normalizing)
+                <*> readCounters environment
     case query erased of
         Just erasedGoal -> do
             ignoredLeaf <- rigidLeaf environment ignored
@@ -316,15 +372,31 @@ streamFits options hole candidates goal accept = do
                             Nothing -> pure ()
                         , hookProgram = \size program -> mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
                         }
+                -- A fit with the normal form of an earlier fit is skipped,
+                -- before the checks of its parts.
+                accept' fit
+                    | optionNormalForms options = do
+                        before <- liftIO getMonotonicTimeNSec
+                        -- A fit without a normal form (too large) is not merged.
+                        let normal = normalOf (Walk.fitProgram fit)
+                        present <- liftIO (readIORef seen)
+                        known <- liftIO (evaluate (maybe False (`Set.member` present) normal))
+                        liftIO (if known then pure () else mapM_ (modifyIORef' seen . Set.insert) normal)
+                        after <- liftIO getMonotonicTimeNSec
+                        liftIO (modifyIORef' normalizing (+ (after - before)))
+                        if known
+                            then True <$ liftIO (modifyIORef' merged (+ 1))
+                            else checkParts fit (maybe False (\form -> not (all (mentions form) required)) normal)
+                    | otherwise = checkParts fit False
                 -- The walk gives a new fit with the hole as at the start:
                 -- check the program with each argument subterm in turn of a
                 -- fresh rigid type.
-                accept' fit = do
+                checkParts fit dropsArgument = do
                     before <- liftIO getMonotonicTimeNSec
                     ignoresPart <- anyM (fitsFrom environment leaves' start . preorder) (replacements ignored (Walk.fitProgram fit))
                     after <- liftIO getMonotonicTimeNSec
                     liftIO (modifyIORef' ignoring (+ (after - before)))
-                    accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart)
+                    accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart dropsArgument)
             statistics
                 =<< walk
                     limits
@@ -387,19 +459,47 @@ streamFits options hole candidates goal accept = do
             [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates]
     -- The name of the rigid leaf: a hole, so no candidate has it.
     ignored = "_"
-    statisticsOf progress ignoring =
+    -- The names of the arguments of the query.
+    required = [candidateName candidate | candidate <- candidates, candidateRequired candidate]
+    statisticsOf progress ignoring skipped normalNanos =
         Statistics
             (progressPrograms progress)
             (progressSkipped progress)
-            (progressFits progress)
+            (progressFits progress - skipped)
+            skipped
             (progressSize progress)
             (progressOutOfTime progress)
             (progressBuildNanos progress)
             (progressReduceNanos progress)
             (progressListNanos progress)
             (progressCheckNanos progress + ignoring)
+            normalNanos
     anyM predicate = foldr (\x rest -> predicate x >>= \yes -> if yes then pure True else rest) (pure False)
     readCounters environment = liftIO (readIORef (environmentCounters environment))
+
+{- | The normal forms of programs over the candidates, from the unfoldings
+of their identifiers ("Data.CFTA.GHC.NormalForm"). A candidate without a
+name, a local variable, or a name of the current module is a leaf.
+'Nothing' for a program whose normal form is too large.
+-}
+normalFormsOf :: [Candidate] -> TcM (Program -> Maybe NormalForm)
+normalFormsOf candidates = do
+    this <- getModule
+    terms <- forM
+        [ (candidateName candidate, name)
+        | candidate <- candidates
+        , Just name <- [candidateOrigin candidate]
+        , isExternalName name
+        , nameModule_maybe name /= Just this
+        ]
+        $ \(text, name) -> do
+            thing <- tryM (tcLookupGlobal name)
+            pure $ case thing of
+                Right (AnId identifier) -> Just (text, termOfId identifier)
+                Right (AConLike (RealDataCon constructor)) -> Just (text, termOfId (dataConWrapId constructor))
+                _ -> Nothing
+    let byName = Map.fromList (catMaybes terms)
+    pure (normalForm (`Map.lookup` byName))
 
 {- | A checked step of the current program: the frozen variables before the
 step, and the walker after it, with the key of its state.
