@@ -1,5 +1,72 @@
 # cfta formal model
 
+## Current finite shared class pass and actual merge memo effects
+
+Source main remains `45d6538c`, merged at `0694b6f9`. Proof commits are
+`22a33ecf`, `284e05ef`, `8b6f9a22`, `b3498f92`, and `3deb645f`.
+This checkpoint changes no Haskell or CI file. Full library scope stays active.
+Earlier sections retain their historical source and proof scopes.
+
+Shared targets now complete from selected ForestClosed path domains, while
+unrelated captured siblings can remain open. Actual projection derives closed
+merge operands. Actual target, fold, stored receipt, first force, and hit reuse
+retain the existing source graphs and full native state.
+
+The actual edit compiler derives populated child subtrees. Actual shared
+node/child/row edits preserve every arbitrary tracked signed path domain.
+Original class domains derive safe recursive-prefix reads and concrete native
+leaves. Range plans derive finite class execution and literal-worker StableRun.
+The actual right fold derives each head's captured domains from the actual
+tail output. Final empty propagation retains all tracked domains.
+
+live_scan_pass composes computed live physical entry, an actual successful
+Scan, finite exact requireAll, retained original records, and a finite class
+Pass under the existing reached-prefix word-range plan. Final native readiness,
+retained entries, available output, fourth emptiness-memo correctness, and
+EVERY selected path domain follow. This theorem assumes successful Scan and
+word-range checks. It does not prove the whole outer caller or fixpoint.
+Its exact language, cost/field facts, and global call receipts stop at required
+execution. The source graph still uses the existing scoped native state;
+transfer to the newer checked allocation state and GHC demand remains open.
+
+Actual comparison, child selection, and general merging now retain stored
+cost and physical annotation invariants on available open or closed inputs.
+The separate global memo proofs derive ordered exposure and constructor
+receipts through the complete merge body. All three final tables are valid;
+old unfolding entries remain and both query tables are unchanged. Literal
+constructor Work has a checked silent primitive trace. Native Merge receipts
+retain the exact returned state and unchanged native tables/domains.
+The separate genericMergeAlternativesCache hit/miss/publication model remains
+open. Completed merge-worker execution remains a premise of its effects.
+
+Next prove independent language bounds for the new open-sibling class pass.
+Use actual target inclusion and shared leaf semantics. Compose all actual
+global memos, cost/field effects and separate merge-result memo through target
+forcing, class edits and the full current caller. Continue actual allocation
+history and checked native/runtime transfer, machine bounds, general current
+Scan/outer completion, import trim/DFS/SCC and language/run bridges, whole
+enumeration, waiting counts, full template exclusion, typed refinements,
+broader generators and decision-model, curried/GHC adequacy, and all distinct
+Sized contracts. Keep the optimized interned core and older constructor work.
+
+The full audit passes 2,147 jobs and 53,338 dependency checks with only the
+permitted foundations and no new warning. Ten new modules and two additive
+Audit imports preserve every older non-Audit proof file. Current-source strict
+Nix build, six suites (736 examples plus golden), Fourmolu and Cabal-gild
+results remain valid. They were not repeated for this proof-only increment.
+
+Read `lean/notes-current-shared-paths.md`,
+`lean/notes-current-merge-effects.md`, and `lean/notes-current-merge-memos.md`.
+
+Start: `/tmp/mcfta-required-endpoints-checkpoint-20261015-2337/` (2,830 files).
+Closing: `/tmp/mcfta-shared-paths-checkpoint-20261015-2354/` (2,843 files).
+Script: `/tmp/mcfta-preserve-shared-paths-20261015.py`.
+Evidence: `/tmp/mcfta-shared-paths-*` and the target, class-edit, class-fold,
+merged-cost and merged-query-memos validation notes in /tmp. All prior proofs,
+repros, repairs, 13 external drafts, stashes, and other worktrees remain.
+Weekly allowance was 81% at the source refresh. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
 ## Current required endpoints, physical effects, and global memo composition
 
 Main `45d6538c` is merged at `0694b6f9`. Proof commits are `168ef9ed`,
