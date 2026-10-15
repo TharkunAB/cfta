@@ -1,5 +1,62 @@
 # Current formalization findings
 
+## Current memo-aware shared class pass
+
+Audited source main is `0696b48d`, merged at `f780009a`.
+Proof commits are `24d8eb31`, `aa3e90c0`, `311cb8ac`, `3c1237be`,
+`aa4cdd35`, `60ad3b5f`, and `9e59450c`. Full library scope stays active.
+Earlier sections retain their historical proof and source scopes.
+
+Shared target slots now retain actual memo-aware construction histories.
+A hit reuses its exact stored value and full state. A miss executes the new
+Target and stores its returned native state and completed merge table.
+Actual leaves, signed edits, rows, and classes thread that same table.
+The right fold captures each actual tail forest and table, then starts only
+its class-local target slots empty. Unselected siblings can remain open.
+
+`SourceCurrentMemoClassPassComplete.source_cold` composes one finite Pass
+with physical readiness, stored costs and merge records, available results,
+selected path domains, producer histories, independent language bounds,
+and its exact ordered three-global-table receipt. The physical heap and
+global tables can be warm. Only the completed merge table starts empty.
+Guard laws, original selected domains, and actual-prefix range plans remain
+explicit. Output terms belong to the input language. Input terms that
+satisfy all retained original classes survive. The exact caller must still
+check those original constraints.
+
+Main adds preorder-prefix exclusion in three files. Its new monitor proof
+establishes literal word-prefix rejection, strict active depth descent,
+and unique ordered child boundaries. Minimal DAG extraction, endsOf/copies/
+walk, and the source run-copy bijection remain open. The advertised template
+equivalence needs valid partial preorders: the preserved malformed a0,b0
+source example retains leaf a through the new route and removes it through
+the template route. No source behavior was changed for this domain caveat.
+
+The full pinned Lean build passes 2,195 jobs and 54,154 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Strict Nix validation passes all six suites: 745 examples plus golden.
+Fourmolu passes both changed Haskell files. Cabal-gild passes four packages.
+Seventeen new modules, two notes, and two additive Audit imports retain every
+earlier non-Audit proof file. This refresh changes only the three upstream files.
+
+Read `lean/notes-current-memo-shared-class-pass.md` and
+`lean/notes-main-0696b48d.md`. Next connect executable memo-aware workers,
+physical annotation fields, and the current Scan/required entry to this pass.
+Continue general constrained completion, allocation/native/machine bridges,
+whole-pass lazy publication and GHC demand, source group allocation order,
+import trim/DFS/SCC, enumeration and waiting counts, templates/refinements,
+heterogeneous generators, decision-model, curried/GHC, synthesis, normal
+forms, and every distinct Sized contract. Keep the optimized interned core.
+
+Start: `/tmp/mcfta-published-merge-checkpoint-20261016-0104/` (2,882 files).
+Closing: `/tmp/mcfta-memo-shared-checkpoint-20261016-0128/` (2,901 files).
+Script: `/tmp/mcfta-preserve-memo-shared-20261016.py`.
+Evidence: `/tmp/mcfta-memo-shared-*` and `/tmp/mcfta-prefix-exclusion-*`.
+All prior proofs, repros, repairs, 14 external drafts, stashes, and other
+worktrees remain. The last weekly allowance was 81%; it is stale. Stop
+owned work at 1% or less. No board posts or deployments. Push verified
+formalize checkpoints regularly. The full-library goal stays active.
+
 ## Current serial publication and memo-aware targets
 
 Source main remains `a4dd678f`, merged at `1a421c7d`. Proof commits are
