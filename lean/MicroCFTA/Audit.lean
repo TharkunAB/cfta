@@ -1663,6 +1663,16 @@ import MicroCFTA.SourceMergedProbeSelection
 import MicroCFTA.SourceMergedProbeWorker
 import MicroCFTA.SourceRecursiveIntersectionNativeProbeHeap
 import MicroCFTA.SourceRecursiveIntersectionProbeEffects
+import MicroCFTA.SourceEqualityPartialGraph
+import MicroCFTA.SourceEqualityPartialGraphArity
+import MicroCFTA.SourceEqualityPartialGraphCases
+import MicroCFTA.SourceEqualityPartialGraphExecution
+import MicroCFTA.SourceEqualityPartialGraphLaws
+import MicroCFTA.SourceEqualityPartialGraphProofs
+import MicroCFTA.SourceEqualityPartialGraphRunRows
+import MicroCFTA.SourceEqualityPartialGraphRuns
+import MicroCFTA.SourceEqualityPartialScope
+import MicroCFTA.SourceEqualityPartialSource
 /-!
 # Proof dependency audit
 
