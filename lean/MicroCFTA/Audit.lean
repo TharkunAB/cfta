@@ -1754,6 +1754,9 @@ import MicroCFTA.ConservativeEmptiness
 import MicroCFTA.ConservativeEmptinessRows
 import MicroCFTA.ConservativeEmptinessExplore
 import MicroCFTA.RefusedEqualityEmptyPass
+import MicroCFTA.SourceEmptinessTableSoundness
+import MicroCFTA.SourceEmptinessClassFold
+import MicroCFTA.SourceEmptinessExposure
 /-!
 # Proof dependency audit
 
