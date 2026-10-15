@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Scoped native edit application (2026-10-15 04:43 CEST)
+
+Simultaneous native edit workers now have physical graphs, two-way checked
+execution agreement, finite completion, and independent exact language laws.
+The proof retains actual full native states and captured cache scope through
+all operations. Read [the current note](notes-native-edits.md). Native word
+checks stay at actual request prefixes. Actual merger inclusion, class target
+construction, lazy target forcing, and extraction remain separate.
+No Lava or Rocq dependency is added.
+
 ## Scoped native target application (2026-10-15 04:24 CEST)
 
 Concrete target-list workers now have physical graphs, two-way execution

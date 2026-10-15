@@ -6,7 +6,12 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,677 jobs and 46,148 theorem dependency checks.
+The audit passes 1,688 jobs and 46,352 theorem dependency checks.
+The [scoped native edit proof](notes-native-edits.md) now derives full native
+state preservation, finite edit completion, exact retained target language,
+and stable three-bound worker agreement. Coherent physical classes have
+exact original-path readback. Actual target construction and independent
+merger inclusion remain open.
 The [scoped native target proof](notes-native-target-fold.md) now derives finite
 warm native target folds, exact intersection-list language, and target-then-leaf
 narrowing. General projection retains the actual domain and both memo tables.

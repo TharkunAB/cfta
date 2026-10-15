@@ -1,5 +1,75 @@
 # Full formalization coverage
 
+## Scoped simultaneous native edits and original class paths
+
+Proofs: `b2e5fd76`, `f110cc11`, `6dc38a2b`, and `8cc092ee`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-native-edits.md`. This section supersedes the scoped
+simultaneous edit traversal and captured-target class edit targets.
+
+Native node, child, row, and list graphs now retain the full native state.
+Leaves execute actual checked native intersections with captured physical
+targets. Every head, edge, and node effect advances the same state. Domain
+and both memo tables remain at their actual values. Scoped graph induction
+derives native validity, idle memos, all semantic heaps, cache histories,
+closed available values, and resident complete row payloads. Captured target
+availability follows from its actual earlier base cache through Keeps.
+
+Independent language is exact input language intersected with retained
+physical-target conditions. Actual native leaf language and complete
+constructor readback derive this law. No global callback LeafLaw or
+whole-worker language law is supplied. The older conditional theorem remains.
+Signed missing positions, root-list callback suppression, full guards,
+row order, and actual recursive head normalization remain in the graph.
+
+Actual-prefix NodeRanges, ChildrenRanges, and RowsRanges state native word
+checks only. Later checks use actual completed earlier graphs and their
+full returned states. They supply no callback or edit completion law.
+Local idle warm progress, complete heads, and finite control derive complete
+edit graphs from these checks. The machine-word premises remain explicit.
+The native worker separates recursion, head-read, and native-request bounds.
+Checked successful workers and complete graphs agree in both directions.
+Every complete graph supplies stable identical values and full native states
+at every larger bound triple. Completed node and list graphs are unique.
+An incomplete native leaf retains its exact observation; outer-worker resume
+and native lazy scheduling are not asserted.
+
+The actual signed right-fold compiler derives captured scope from original
+edit pairs. Nonoverlapping nonroot pairs have exact original complete-path
+readback. Coherent nontrivial physical classes derive those path premises.
+NativeClassEdits.class_complete derives finite stable class edits and exact
+conditions at the original natural paths for already captured physical
+targets. It does not yet construct those targets from getPath and merging.
+Shared lazy target forcing remains a separate implementation obligation.
+
+The aggregate audit passes 1,688 jobs and 46,352 dependency checks using only
+propext, Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. All eleven new modules pass focused builds. Kernel checks cover
+leaf/list priority, missing signed positions, raw self normalization, both
+exhausted traversal bounds, and one actual warm memo cell reused by two edit
+positions and a later repeated batch.
+Log: `/tmp/mcfta-native-edit-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-native-edit-checkpoint-20261015-0443/`
+(2,087 Lean-tree files and four root documents). Older proofs are unchanged
+except added audit imports. All repros, counterexamples, marked drafts,
+stashes, other worktrees, and production source remain unchanged.
+No Haskell source changed. The earlier 645 examples and formatter checks
+apply to the unchanged tree. Weekly allowance was 17% at
+04:43 CEST; refresh before work. Stop all work at 1% or less.
+
+Next derive actual mergeAlternatives independent-language inclusion and
+SemanticReady preservation. Reuse existing MergedColdMergeSoundness finite
+prepared common-cache graph proof, but derive the independent-language and
+closed source entry connection. Do not supply a whole-merger law. Then derive
+actual class target construction from getPath, merging, and the first-seeded
+native intersection list. Establish retained equality-satisfying subterms and
+captured target availability. Connect NativeClassEdits to the actual selected
+classes, ordered right fold, and empty propagation. Full one-pass source
+correspondence, open contexts, repeated fixed points, getAllAtPath, native
+containers, lazy scheduling, and extraction remain open. Preserve exact Sized
+contracts, the optimized interned core, and the completed unary ancestor proof.
+
 ## Scoped warm native state and exact target intersection lists
 
 Proofs: `69de4363`, `e03f2c4d`, and `e145fe27`. Source: `TharkunAB/cfta`,

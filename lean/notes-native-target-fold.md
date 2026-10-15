@@ -5,6 +5,15 @@ Proofs: `69de4363`, `e03f2c4d`, and `e145fe27`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+## Current simultaneous native edit checkpoint
+
+`b2e5fd76`, `f110cc11`, `6dc38a2b`, and `8cc092ee` derive scoped native
+edit effects, exact languages, completion from actual-prefix word checks,
+stable worker agreement, and original physical class path contracts. Read
+[the current note](notes-native-edits.md). Actual merger inclusion and class
+target construction remain open. Older simultaneous-edit next-target text
+below is historical.
+
 ## Actual warm request state
 
 SourceEqualityNativeScoped.IdleReady contains actual native validity, idle
