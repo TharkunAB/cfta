@@ -9,21 +9,25 @@ unification variables as it found them, and the fast rejects keep three
 fits that only the solver can decide (a coercion through a newtype, a given
 equality, and a quantified given). The normal forms merge the fits that
 respell one program, as @flip filter xs p@ and @filter p xs@, keep the fits
-that differ in meaning, and mark the fits that drop an argument.
+that differ in meaning, and mark the fits that drop an argument. A reduction
+that does not end gives no normal form.
 -}
 module Main (main) where
 
+import Control.Exception (evaluate)
 import Control.Monad (forM, forM_)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (isJust)
+import Data.Maybe (isJust, isNothing)
 import Data.Text (Text)
 import qualified Data.Text as Text
+import System.Timeout (timeout)
 import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
 
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Leaf (..), complete, newEnvironment, startWalker, step)
+import Data.CFTA.GHC.NormalForm (Term (TApp, TLam, TVar), normalForm)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), parseProgram, renderProgram)
 import Data.CFTA.Gen.Synthesis.Walk (preorder)
@@ -187,6 +191,12 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 fits <- readIORef found
                 [lookup program [(fitProgram fit, fitDropsArgument fit) | fit <- fits] | program <- wanted]
                     `shouldBe` [Just True, Just False]
+            it "stop a reduction that does not end" $ do
+                -- (\x -> x x) (\x -> x x): the term of a newtype fixpoint when the translation erases its casts.
+                let selfApply = TLam (TApp (TVar 0) (TVar 0))
+                    loop = TApp selfApply selfApply
+                timeout 10000000 (evaluate (isNothing (normalForm (const (Just loop)) (Var "loop"))))
+                    `shouldReturn` Just True
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->
                 it ("keep the fit of " <> name) $
