@@ -1,5 +1,26 @@
 # Constrained languages, indexing, and distributions
 
+## Original construction through current cold class scan
+
+Source main remains `2ca1644c`. Proofs `dae67292`, `a5b760f1`, and `abe70af7`
+derive physical own records, actual allocated precheck entry, original
+construction invariants, and four global memo invariants through current
+completed cold Scan. Public accepted original edges cannot reach scan
+rejection. Exact positional selection retains original physical fields.
+Read [the proof and remaining caller obligations](notes-current-physical-entry.md).
+
+Original equality-interner coverage, inherited storage, live precheck, and
+completed execution remain explicit. The operation result ends at the
+prefix. Full caller branches and path-local open-sibling fallback remain
+open. Keep merge/subsumes memo effects, GHC demand/publication, checked
+transfer, word bounds, general completion, broader APIs, and every separate
+exact Sized contract. Full library scope stays active.
+
+The full audit passes 2,110 jobs and 52,720 dependency checks with permitted
+axioms only and no new warning. Haskell remains byte-identical to the
+preceding required Nix/format validation: 720 examples plus golden.
+All older proofs/repros/drafts remain. Earlier sections are historical.
+
 ## Global memo composition at normalized current entry
 
 Source main `2ca1644c` is merged at `a7134ecb`. Proofs `36545747`,

@@ -1,6 +1,59 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 22:08 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 22:25 CEST (Europe/Stockholm)**.
+
+## Physical accessor, allocated prefix, and original cold construction
+
+Source main remains `2ca1644c`, merged at `a7134ecb`. Proof commits are
+`dae67292`, `a5b760f1`, and `abe70af7`. Read
+`lean/notes-current-physical-entry.md` first. Full library scope stays.
+Earlier sections retain historical source and proof scopes.
+
+Computed physical own payloads derive coherent ascending records and exact
+accessor readback. Actual read-only field lookup and allocated accessor/
+precheck derive the physical entry and prefix operation validity/history.
+Original closed construction derives cold native readiness, CostHeap,
+normalized fields, and available original children. cold_scan_memos derives
+four completed global memo invariants. cold_scan_sound translates public
+edge acceptance and excludes a rejecting scan outcome. It does not assume
+class satisfaction or an oracle answer.
+
+Actual successful interner lookup, operation validity, inherited storage,
+live precheck, and completed Scan remain explicit. Operation Valid/Grows
+concludes at the PREFIX state. It is not the operation state after all
+scan-native allocations. Cold global memos start empty at this declared
+scope; a warm caller is not reset. Source unchanged/combined-contradiction
+and later fallback branches are outside cold_scan_sound.
+
+Retained records now follow all actual Scan branches. Only selection keeps
+the literal original head. Stop keeps no later record. Actual Scan induction
+derives the receipt, original Sublist, returned path map, and physical fields.
+This positional receipt avoids ambiguous equal-path record substitution.
+
+Next derive synchronized original equality-field provenance and interner
+coverage. FieldHeap alone does not establish that storage. Then compose the
+complete caller. Current open-sibling fallback needs path-local required/
+edit/target support through rebuilt forests. Keep original children and
+selected records at the actual scan-final state. MergeAlternatives/subsumes
+row reads, separate merge memo, global unfolding receipts, costs, and fields
+remain to compose. Keep general completion, checked transfer, word bounds,
+GHC demand/publication, whole enumeration, waiting counts, templates, typed
+refinements, broader APIs/runtime, and all distinct exact Sized contracts.
+
+The full audit passes 2,110 jobs and 52,720 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. No new warning occurs. Five new
+modules and two additive Audit imports preserve all older non-Audit files.
+All four Haskell package trees remain byte-identical. The preceding required
+strict Nix build and six suites passed 720 examples plus golden checks.
+Fourmolu and active Cabal-gild passed there. They are not repeated here.
+
+Start: `/tmp/mcfta-query-global-checkpoint-20261015-2208/` (2,784 files).
+Closing: `/tmp/mcfta-physical-entry-checkpoint-20261015-2225/` (2,790 files).
+Script: `/tmp/mcfta-preserve-physical-entry-20261015.py`.
+Evidence: `/tmp/mcfta-physical-entry-*`. All prior artifacts and 13 marked
+external drafts remain. Stashes and other worktrees remain unchanged.
+Weekly allowance is 82%. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
 
 ## Global memo composition at normalized current entry
 

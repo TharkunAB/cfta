@@ -1,5 +1,23 @@
 # cfta formal model
 
+## Physical accessor and original cold scan entry
+
+Source main remains `2ca1644c`. Proofs `dae67292`, `a5b760f1`, and `abe70af7`
+derive actual allocated precheck entry and original source native/cost/field
+invariants. Public accepted original edges cannot reach rejection in the
+completed cold Scan. Exact positional receipts retain selected original
+records. Read [the construction and remaining caller scope](notes-current-physical-entry.md).
+
+Equality-interner coverage, inherited storage, actual live precheck, and
+completed execution remain explicit. The full caller and open-sibling
+required/edit fallback remain open. Merge/subsumes memo effects, runtime,
+general completion, broader APIs, and all distinct Sized contracts remain.
+The full audit passes 2,110 jobs and 52,720 dependencies, permitted axioms
+only, no new warning. Five new modules and two additive Audit imports
+preserve older definitions. Haskell is unchanged; its preceding required
+checks passed 720 examples plus golden. Full library scope stays active.
+Earlier sections retain historical source and proof scopes.
+
 ## Global memo composition at normalized current entry
 
 Source main `2ca1644c` is merged at `a7134ecb`. Proofs `36545747`,

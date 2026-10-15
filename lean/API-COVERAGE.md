@@ -1,5 +1,28 @@
 # Public API and source correspondence
 
+## Physical accessor and original cold class entry
+
+Source main remains `2ca1644c`. Read
+[the current entry scope](notes-current-physical-entry.md). Full scope stays.
+Earlier sections retain historical source and proof scopes.
+
+Computed physical records and actual allocated accessor/precheck now derive
+the current Scan entry. Original source construction derives its native,
+cost, field, and child-availability invariants. Public accepted original
+edges cannot reach scan rejection. Positional selected Record receipts
+preserve actual original fields for fallback.
+
+Original equality-interner coverage, inherited storage, actual live prefix,
+and completed execution remain explicit. No full caller or post-scan
+operation-state claim follows. Current open-sibling required/edit fallback,
+merge/subsumes global memo calls, costs/fields, general completion, runtime,
+broader public APIs, and all distinct Sized obligations remain open.
+
+The full audit passes 2,110 jobs and 52,720 dependency checks. Five new
+modules and two additive Audit imports preserve older proof definitions.
+All Haskell package trees are unchanged from required validation of
+720 examples plus golden checks. Formatting passed there.
+
 ## Global memo composition and current source adapters
 
 Main `2ca1644c` is merged at `a7134ecb`. Read

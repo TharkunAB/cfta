@@ -1,5 +1,38 @@
 # Current formalization findings
 
+## Physical accessor and original cold scan entry
+
+Source main remains `2ca1644c`. Proofs `dae67292`, `a5b760f1`, and `abe70af7`
+derive computed physical accessor records, actual allocated precheck entry,
+and original construction invariants. A public accepted original edge
+cannot reach rejection through the actual completed cold Scan. Input
+language translation and original class satisfaction are derived. Exact
+selected-position receipts retain original Record fields for fallback.
+Read `lean/notes-current-physical-entry.md`.
+
+Normalized original fields do not establish equality-interner coverage.
+Successful read-only lookup, operation validity, ready inherited storage,
+the live precheck, and completed Scan remain explicit. The operation-state
+result ends at the prefix. Earlier contradiction and later fallback are
+outside the cold scan theorem. Do not allocate missing fields at lookup.
+
+Next derive synchronized original equality-field allocation coverage and
+compose the complete caller. The current fallback permits unrelated open
+siblings, while existing required/edit/Pass proofs require closed forests.
+Derive path-local support through rebuilt forests. Merge/subsumes row reads
+also need actual unfolding/global memo receipts. Keep all broader runtime,
+completion, enumeration, template, typed refinement, and distinct Sized
+obligations. Full library scope stays active.
+
+The full audit passes 2,110 jobs and 52,720 dependency checks, permitted
+axioms only, no new warning. Five new modules and two additive Audit imports
+preserve older definitions. Haskell package trees are unchanged; preceding
+required Nix/format checks passed 720 examples plus golden and are not
+repeated. The closing snapshot has 2,790 files at
+`/tmp/mcfta-physical-entry-checkpoint-20261015-2225/`. All prior proofs,
+repros, repairs, drafts, stashes, and worktrees remain. Earlier sections
+retain historical source and proof scopes.
+
 ## Global memo composition at normalized current entry
 
 Main `2ca1644c` is merged at `a7134ecb`. Proofs `36545747`, `143985fb`,

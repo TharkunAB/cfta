@@ -2,6 +2,48 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Physical accessor, allocated prefix, and original cold construction
+
+Source main remains `2ca1644c`. Proofs are `dae67292`, `a5b760f1`, and
+`abe70af7`. Read `lean/notes-current-physical-entry.md` first. Full library
+scope stays active. Earlier sections retain historical source/proof scopes.
+
+Computed own payloads now derive physical records and literal accessor
+readback. Actual read-only field lookup and allocated accessor/precheck
+derive that entry and prefix operation validity/history. Original closed
+source construction derives native readiness, costs, normalized fields,
+and available original children. A cold current scan derives all four
+completed global memo invariants. Public accepted original edges cannot
+reach scan rejection through this chain. Actual interner lookup, inherited
+storage, live precheck, and completed scan remain explicit receipts.
+
+Selected Record receipts now follow actual Scan branches and retain literal
+original positions. Equal path lists do not select an arbitrary substitute.
+The derived sublist/map and physical field facts are ready for fallback.
+
+Next derive synchronized original equality-field allocation provenance and
+interner coverage before read-only lookup. Compose the complete caller's
+branches. For its fallback, derive path-local requireAll/edit/shared-target
+support that permits unrelated open siblings. Existing full-forest closed
+Pass proofs cannot substitute for that current domain. Retain actual
+scan-final state and original selected records. Fallback merge/subsumes can
+call global unfolding; derive these receipts and the separate merge memo.
+Keep costs/fields, checked native transfer, word bounds, GHC demand/sharing/
+publication, general completion, whole enumeration, waiting counts, template
+exclusion, typed refinements, broader APIs, and all distinct Sized contracts.
+
+The full audit passes 2,110 jobs and 52,720 dependency checks, permitted
+axioms only, no new warning. Five new modules and two additive Audit imports
+preserve every older non-Audit proof file. All four package trees are
+unchanged. The preceding required Nix checks passed 720 examples plus golden
+and formatting; they are not repeated for this proof-only checkpoint.
+Start: `/tmp/mcfta-query-global-checkpoint-20261015-2208/` (2,784 files).
+Closing: `/tmp/mcfta-physical-entry-checkpoint-20261015-2225/` (2,790 files).
+Script: `/tmp/mcfta-preserve-physical-entry-20261015.py`.
+All prior proofs, repros, repairs, drafts, stashes, and worktrees remain.
+Weekly allowance is 82%. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
 ## Global memo composition at normalized current entry
 
 Main `2ca1644c` is merged at `a7134ecb`. Proofs are `36545747`,

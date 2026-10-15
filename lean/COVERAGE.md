@@ -1,5 +1,41 @@
 # Full formalization coverage
 
+## Physical accessor, allocated prefix, and original construction
+
+Source main remains `2ca1644c`. Read
+[the source entry proof and limits](notes-current-physical-entry.md).
+Full library scope stays active. Earlier sections retain historical scopes.
+
+`SourceEqualityPhysicalClassEntry` derives physical records and literal
+accessor readback. `SourceCurrentClassInitial` derives native readiness,
+costs, normalized fields, and original child availability from actual source
+construction. `SourceCurrentClassAllocatedEntry` derives live entry from
+successful read-only field lookup and actual accessor/precheck allocation.
+It retains operation Valid/Grows at the prefix state.
+
+`SourceCurrentClassConstructionEntry` composes this chain with the completed
+cold Scan and its four global memo families. Public original edge acceptance
+derives PCS child acceptance and actual accessor satisfaction, excluding
+scan rejection. `SourceCurrentSelectedClassRecords.Retained` records exact
+original positions through actual Scan branches. Its receipt derives
+Sublist, path-map, and physical field facts without a closed-forest premise.
+
+Original equality-interner coverage, operation validity, inherited storage,
+live precheck, and completed Scan remain explicit. No full operation state
+after scan-native allocation is supplied. Earlier caller branches and
+selected fallback remain to compose. Current open-sibling required/edit/
+target support, merge/subsumes global unfolding and merge memo receipts,
+fallback costs/fields, checked transfer, word bounds, GHC demand/publication,
+and general completion remain open. Keep whole enumeration, waiting counts,
+template exclusion, typed refinement, broader APIs, and all exact Sized
+class/execution/order/enumeration/inverse obligations.
+
+The aggregate audit passes 2,110 jobs and 52,720 dependency checks. Only the
+permitted axioms occur. No new warning occurs. Five new modules and two
+additive Audit imports preserve all older non-Audit files. Haskell package
+trees are unchanged. Preceding required checks passed 720 examples plus
+golden and formatting. All prior artifacts remain in the 2,790-file snapshot.
+
 ## Global memo composition at normalized current entry
 
 Source main `2ca1644c` is merged at `a7134ecb`. Read
