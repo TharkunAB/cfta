@@ -1,6 +1,6 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 01:49 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 01:54 CEST (Europe/Stockholm)**.
 
 ## Current executable memo merge and physical class entry
 
@@ -70,6 +70,13 @@ Evidence and closing preservation use `/tmp/mcfta-memo-workers-*`,
 worktrees remain. The last weekly allowance was 81%; it is stale. Stop owned
 work at 1% or less. No board posts or deployments. Push verified formalize
 checkpoints regularly. The full-library goal stays active.
+
+GitHub port 22 timed out during publication. Port 443 authenticated.
+Use this per-command transport if port 22 remains unavailable:
+
+```sh
+git -c core.sshCommand='ssh -o HostName=ssh.github.com -p 443 -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1' <command>
+```
 
 ## Current memo-aware shared class pass
 

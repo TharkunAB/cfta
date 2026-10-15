@@ -71,6 +71,8 @@ worktrees remain. The last weekly allowance was 81%; it is stale. Stop owned
 work at 1% or less. No board posts or deployments. Push verified formalize
 checkpoints regularly. The full-library goal stays active.
 
+HANDOFF.md records the verified per-command SSH port 443 fallback.
+
 ## Current memo-aware shared class pass
 
 Audited source main is `0696b48d`, merged at `f780009a`.
