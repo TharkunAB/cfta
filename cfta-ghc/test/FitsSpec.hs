@@ -66,6 +66,11 @@ higherKinded =
 main :: IO ()
 main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Data.Monoid (Sum (..))"] $ \session -> do
     candidates <- candidatesOf session [Import "Prelude" Nothing]
+    -- The modules of base with the other components of the laws.
+    others <-
+        candidatesOf
+            session
+            [Import name Nothing | name <- ["Data.Tuple", "Data.Function", "Data.Bool", "Data.Maybe", "Data.Either", "Data.List"]]
     coercions <- candidatesOf session [Import "Data.Coerce" Nothing]
     declare session "class Sized a where { sized :: a -> Int }; instance Sized Int where { sized = id }"
     Just sizedType <- typeOfExpression session "sized"
@@ -142,6 +147,12 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                     pure [lookup program [(fitProgram fit, fitIgnoresPart fit) | fit <- fits] | program <- wanted]
                 marks `shouldBe` [[Just True, Just False], [Just True, Just False]]
         describe "normal forms" $ do
+            it "unfold each component of base with a body, one law each" $ do
+                Just normal <- inTypechecker session (normalFormsOf (candidates <> others))
+                let holds (left, right) = isJust (normal (parse left)) && normal (parse left) == normal (parse right)
+                filter (not . holds) laws `shouldBe` []
+                -- listToMaybe is foldr, which is recursive, so it does not reduce on a list.
+                holds ("listToMaybe ((:) x xs)", "Just x") `shouldBe` False
             it "merge the respellings of one program, and keep the programs that differ" $ do
                 Just normal <- inTypechecker session (normalFormsOf candidates)
                 let same left right = isJust (normal (parse left)) && normal (parse left) == normal (parse right)
@@ -205,6 +216,44 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
         [ ("a coercion through a newtype", "[Sum Int] -> [Int]", ["xs"], "coerce xs")
         , ("a given equality", "(a ~ Int) => a -> Int", ["x"], "x")
         , ("a quantified given", "(forall x. Sized (f x)) => f Bool -> Int", ["y"], "sized y")
+        ]
+    {- One law for each component of base that has a body from its unfolding
+    in GHC 9.14 (the constructors of pairs, lists, Bool, Maybe, and Either
+    occur in them). A GHC release that drops or changes an unfolding breaks
+    its law.
+    -}
+    laws =
+        [ ("fst ((,) x y)", "x")
+        , ("snd ((,) x y)", "y")
+        , ("curry f x y", "f ((,) x y)")
+        , ("uncurry f ((,) x y)", "f x y")
+        , ("swap ((,) x y)", "(,) y x")
+        , ("id x", "x")
+        , ("const x y", "x")
+        , ("flip f x y", "f y x")
+        , ("(.) f g x", "f (g x)")
+        , ("($) f x", "f x")
+        , ("(&) x f", "f x")
+        , ("on g f x y", "g (f x) (f y)")
+        , ("otherwise", "True")
+        , ("not True", "False")
+        , ("(&&) True b", "b")
+        , ("(||) False b", "b")
+        , ("bool f t True", "t")
+        , ("maybe n f (Just x)", "f x")
+        , ("fromMaybe d (Just x)", "x")
+        , ("isJust (Just x)", "True")
+        , ("isNothing Nothing", "True")
+        , ("fromJust (Just x)", "x")
+        , ("maybeToList (Just x)", "(:) x []")
+        , ("either f g (Left x)", "f x")
+        , ("fromLeft d (Left x)", "x")
+        , ("fromRight d (Right x)", "x")
+        , ("isLeft (Left x)", "True")
+        , ("isRight (Right x)", "True")
+        , ("head ((:) x xs)", "x")
+        , ("tail ((:) x xs)", "xs")
+        , ("uncons ((:) x xs)", "Just ((,) x xs)")
         ]
     -- Programs that respell one program, from the probe of the merges.
     respellings =

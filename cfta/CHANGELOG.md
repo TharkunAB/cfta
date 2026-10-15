@@ -36,6 +36,13 @@ Before release, the package was called `microcfta`.
   prefix of a term in preorder.
   `Data.CFTA.Interned.fromRows` interns the transitions of each state as
   `fromFTA` does, without a ranked alphabet.
+- `fromFTA` and `fromRows` nest the binders of a strongly connected
+  component in one order, the order in which a depth-first walk from the
+  initial state meets the states. A node is then built once for each set of
+  enclosing binders, at most 2^k for a component of k states, instead of
+  once for each order of them, about e * (k - 1)!. On the products of
+  `excludeAnywhereFTA` with a component of 9 states, `fromFTA` took 3.6 s at
+  -O0 and takes 16 ms. The terms and their runs do not change.
 - Fix `reducePartially` not returning when a node at the end of an equality
   path reaches a recursive node with constraints. The intersection at that
   path unfolded the recursive node, a narrowed child contained its own
