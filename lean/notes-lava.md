@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Complete filter specification (2026-10-15 03:28 CEST)
+
+The actual required-path worker now satisfies its independent node and forest
+filter specification. This theorem is separate from function/graph agreement
+and finite completion. Actual closed-source selection derives the next
+worker's cache premises and both required-operation laws. Read
+[the current note](notes-required-filter.md). The native edit/narrowing and
+full pass correspondence obligations remain. No Lava or Rocq dependency is
+added. The supplied local PDF still has the recorded SHA-256.
+
 ## Independent head-language application (2026-10-15 03:13 CEST)
 
 The completed head graph now has an independent guarded least-language theorem.

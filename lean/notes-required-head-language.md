@@ -5,6 +5,14 @@ Proofs: `9fd64a7b`, `74df3d3b`, and `1bc034a6`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained traversal
 repair `61f2c939`. Continue on `formalize` and push completed checkpoints.
 
+## Current complete filter checkpoint
+
+`68128dd5` proves exact required-node and forest language filtering.
+`cfc38752` composes actual closed-source class selection with the required
+worker and derives the retained semantic cache. Read
+[the current note](notes-required-filter.md). The next target is the signed
+simultaneous edit worker and its concrete narrowing callbacks.
+
 ## Semantic caches and the future witness
 
 `SourceEqualityRequiredSemanticCache.SemanticReady` retains the completed

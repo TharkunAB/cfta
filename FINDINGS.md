@@ -1,6 +1,67 @@
 # Current formalization findings
 
-Updated: **2026-10-15 03:13 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 03:28 CEST (Europe/Stockholm)**.
+
+## Exact required-path language and ordered selection composition
+
+Proofs: `68128dd5` and `cfc38752`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`, with retained traversal repair `61f2c939`.
+Continue on `formalize` and push checkpoints. Read
+`lean/notes-required-filter.md`. This section supersedes the complete
+required-node filter and closed-source selection-composition targets.
+
+Every completed physical required-node graph now satisfies:
+meaning result term iff meaning input term and Matches needed term.
+The trie is valid and recursively nonnegative. The input is closed and
+available in a semantic-ready cache. Mutual graph induction retains exact
+symbols, full guards, ordered children, and actual constructor readback.
+Actual head normalization supplies recursive cases. Matching term arity
+proves that rejected rows cannot discard a matching term. A semantic forest
+bridge identifies the original-position child scan with the signed source
+right fold. It uses the existing checked_row_exact theorem.
+
+The compiled worker derives finite stable execution, final semantic heaps,
+and exact forest filtering. Original closed construction derives all initial
+premises. The top-level list entry ignores missing root positions. The
+unconditional law therefore states requirements at present positions.
+A root arity bound gives existence of every complete input path. Preservation
+of an original term with all paths derives that bound from the term itself.
+Both narrowing and preservation laws needed by the pure pass are proved.
+A kernel fixture retains the missing-root boundary.
+
+Actual class selection on a closed available forest returns the original
+constructor cache. Closed Mu queries stop before unfolding; ordinary closed
+records supply closed children. Thus every semantic-ready field after actual
+selection follows without equating different Ready predicates. The following
+required-path worker uses the ascending union of selected path sets, with
+explicit natural-to-signed lookup readback. Both actual memo receipts and
+finite stage bounds remain. Original closed source edges compose the actual
+live precheck branch, physical ordered selection, and required-path execution.
+The open-forest gate case is not covered by this cache-identity theorem.
+
+The aggregate audit passes 1,646 jobs and 45,714 dependency checks using only
+propext, Classical.choice, and Quot.sound. Only the old unused inputs warning
+remains. All five new modules pass focused builds. No production Haskell
+source changed; the earlier 645 examples and format checks apply to the
+unchanged tree. Log: `/tmp/mcfta-required-filter-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-required-filter-checkpoint-20261015-0328/`
+(2,038 Lean-tree files and four root documents). The only older Lean proof change
+is added audit imports. All repros, counterexamples, marked drafts, stashes,
+and other worktrees remain unchanged. Weekly allowance was 18% at
+03:28 CEST; refresh before work.
+
+Next derive the actual signed Edits compiler and simultaneous edit worker.
+Retain the source right fold, empty-path replacement, prefix shadowing,
+negative and missing positions, constructor-row head normalization, full
+guards, and actual returned caches. Derive finite completion from finite edit
+depth and completed head exposure. Prove node-callback and forest narrowing
+and preservation, then derive concrete projection/intersection/merged-target
+callbacks. Reuse existing physical operations and the completed unary ancestor
+theorem. Do not replace merge over-approximation by equality. Full one-pass
+source correspondence, open contexts, repeated fixed-point reduction, native
+containers, lazy scheduling, and verified extraction remain open. Preserve
+the exact Sized contracts, optimized interned core, all repairs and older
+proofs. Stop all work and workers at 1% weekly allowance or less.
 
 ## Independent required-head language and semantic cache preservation
 
