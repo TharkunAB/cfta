@@ -6,21 +6,23 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,850 jobs and 48,149 theorem dependency checks.
+The audit passes 1,857 jobs and 48,168 theorem dependency checks.
 The [upstream comparison](notes-canonical-upstream.md) confirms that Sized's
-implementation changes only its canonicalClasses import. All exact class,
-finite execution, sequence, and rank inverse contracts retain the same source.
-The new UVar and synthesis sequences have separate correspondence boundaries.
-The [checked recursive proof](notes-checked-recursion.md) derives complete
-graphs from actual checked bounded worker success by traversal induction.
-It assumes no global Callback law, binder law, or supplied completed graph.
-Any two checked successes have identical physical values and full native states.
-Original closed normalized construction supplies the initial scope. Actual
-public success preserves exact public language and all physical invariants,
-with stable replay at all sufficient seven bounds. General outer termination
-and the outer Haskell memo table remain open. Next retain actual gate memo
-evidence at every warm recursive prefix. This paragraph supersedes older
-worker-to-graph and replay targets.
+implementation changes only its canonicalClasses import. Exact classes,
+finite execution, sequence, and both rank inverse contracts retain the same
+source definitions. New UVar and synthesis sequences remain separate.
+The [recursive memo proof](notes-recursive-memos.md) derives both actual gate
+memo tables at every closed warm native prefix, recursive child, and returned
+row tail. Closed calls need physical facts, availability, and closure; they
+cannot unfold an open binder. No unfolding-cost heap is assumed or inferred.
+The older certificate with that extra field remains unchanged. Actual checked
+bounded public success derives its graph, memo receipts, exact language,
+physical invariants, and stable identical value/full-state replay. Original
+closed normalized construction supplies the initial scope. General outer
+success and the outer reduction memo table remain open. Next prove finite
+execution for equality-free ordinary regions above opaque Mu/union boundaries,
+then study general selected narrowing with a valid measure. This paragraph
+supersedes older worker-to-graph and warm gate-memo targets.
 The [inherited edge proof](notes-inherited-edge.md) derives actual physical
 constraint combination and trie descent, indexed child obligations, exact
 callback observations, and direct equal-arity edge rebuilding. Concrete native

@@ -1,5 +1,55 @@
 # Full formalization coverage
 
+## Actual source gate memos through recursive public reduction
+
+Proofs: `29ce7e5c` and `51f5f888`. Source: `TharkunAB/cfta`,
+`origin/main` at `c351674e`, integrated by `79f2e38e`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-recursive-memos.md`. This section supersedes the warm
+recursive gate-memo target below. The Sized comparison remains current.
+
+Closed available source gate inputs cannot take the open-binder unfolding
+branch. Actual node, child, path, and class traces therefore retain the
+unchanged unfolding memo and every concrete predicate memo lookup or
+insertion. Both returned tables are coherent at the actual selected heap.
+Physical facts, availability, and closure suffice. No unfolding-cost heap
+or original gate history is assumed. The older StageMemos certificate has
+an extra cost-heap field. The new closed-call receipt proves actual calls
+and table coherence without asserting that extra invariant.
+
+Concrete guarded native prefixes derive these receipts at any closed warm
+scope. Mutual graph induction then carries both source memos through every
+actual native prefix, recursive child, and returned row tail. All later
+scopes come from actual proved effects. Actual checked bounded public
+success now derives its graph, both memo receipts, exact public language,
+all physical invariants, and stable identical value/full-state replay.
+Original normalized closed construction derives the initial scope. No
+Callback law, recursive memo law, completed outer graph, or future heap
+invariant is an input premise. Native word checks remain explicit.
+
+Next prove finite single-pass existence for equality-free ordinary regions
+above opaque Mu and union boundaries. Use actual empty prechecks, physical
+payload combination and descent, literal edge requests, and structural
+smaller child calls. Carry returned scopes and histories. Then study the
+general selected-narrowing case with a valid measure or a focused
+counterexample. Native intersection can increase ordinary depth. General
+outer success, the outer memo table, open contexts, repeated fixed points,
+getAllAtPath, native containers, GHC lazy scheduling, and extraction remain
+open. Do not use cached input depth as the termination measure.
+
+The aggregate audit passes 1,857 jobs and 48,168 dependency checks with only
+propext, Classical.choice, and Quot.sound. Only the older unused inputs
+warning remains. Log: `/tmp/mcfta-recursive-memos-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-recursive-memos-checkpoint-20261015-0922/`.
+All older proofs except audit imports, counterexamples, marked drafts,
+production source, stashes, and other worktrees remain unchanged. No
+Haskell source changed after the upstream checkpoint. Its 650 examples
+and formatter checks were not repeated. Weekly allowance was 99% at
+2026-10-15 09:19 CEST. Refresh it before work. Stop all work and owned
+workers at 1% or less. Preserve Sized exact classes, finite size execution,
+size order, both distinct rank inverses, the optimized interned core, and
+all older artifacts. No board posts or deployments.
+
 ## Upstream canonical enumeration and checked recursive success
 
 Source: `TharkunAB/cfta`, `origin/main` at `c351674e`, integrated by

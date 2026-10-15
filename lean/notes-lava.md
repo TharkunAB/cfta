@@ -7,6 +7,18 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Recursive source memo application (2026-10-15 09:22 CEST)
+
+Actual closed source gate traces retain both concrete memo tables without
+an open-unfolding cost heap. Mutual graph induction propagates these
+receipts through actual warm prefixes, children, and returned row states.
+Checked successful public execution therefore has both memo receipts,
+exact language, physical scope, and stable full-state replay. Read
+[the current note](notes-recursive-memos.md). This result does not establish
+outer success, the outer reduction memo table, or termination of repeated
+passes. Native containers, GHC lazy scheduling, and extraction remain
+separate. No Lava or Rocq dependency is added.
+
 ## Checked recursive execution application (2026-10-15 09:10 CEST)
 
 Traversal induction now derives the actual recursive graph from checked
