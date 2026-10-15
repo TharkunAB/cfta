@@ -2,6 +2,59 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Open required-path completion and ordered source import
+
+Main `5c53de80` is merged at `ea7d8b05`. Proofs are `676fd247`,
+`68eebcb8`, `fff6ef45`, `63598858`, and `e89aa110`. Full library scope
+stays active. Earlier sections retain historical source and proof scopes.
+
+One causal constructor/interleave history now derives original field
+origins, final interner validity, and valid cold operation tables. Actual
+GHC history, initial validity, and literal coverage remain explicit.
+
+Maximal tips of the actual Needed trie derive path-local required domains.
+Actual false primary ClassTrace derives that domain and finite StableRun
+of the existing requireAll worker. Unselected original siblings can remain
+open. No completed callback, whole-forest closedness, result Support, or
+future validity is supplied. Head language is exact. Whole-worker filter
+language, common scan-final support for all selected classes, rebuilt/output
+support, later class edits, global memo effects, costs, and fields remain.
+
+Source fromRows now uses ordered binder contexts and one post-body memo.
+New proofs cover exact dispatch, ordered rows/children, old-entry retention,
+a finite key inventory, and a real same-component rank. A combined component/
+context rank derives finite Build/root schedules from finite positional
+child closure and strict cross-component height descent. Actual trim/DFS/SCC
+readback and height derivation, constructor semantics, complete imported
+language/runs, physical sharing/counts, capacity, and GHC demand remain.
+Old induced-cycle BinderSchedule/BinderCycles correspondence is historical.
+
+Next prove the new required-worker language and combine selected primary
+receipts at the actual scan-final anchor. Then retain path-local support
+through shared targets and edits. Continue actual allocation provenance,
+full caller branches, fallback merge/subsumes memos, checked native/runtime
+transfer, word bounds, general completion, whole enumeration, waiting counts,
+templates, typed refinements, broader APIs, and every distinct Sized contract.
+Keep the optimized interned core and every older constructor/equality proof.
+
+The aggregate audit passes 2,120 jobs and 52,960 dependency checks with only
+the permitted Lean foundations and no new warning. Six new modules and
+three additive Audit imports preserve every older non-Audit proof file.
+Required strict Nix build and six suites pass 724 examples plus golden
+checks. Fourmolu passes all four changed Haskell files; all Cabal-gild checks
+pass. GHC production normal-key filtering and Sized bodies are unchanged.
+
+Read `lean/notes-original-allocation-history.md`,
+`lean/notes-current-required-support.md`, and `lean/notes-main-5c53de80.md`.
+
+Start: `/tmp/mcfta-normal-form-checkpoint-20261015-2242/` (2,798 files).
+Closing: `/tmp/mcfta-required-support-checkpoint-20261015-2257/` (2,807 files).
+Script: `/tmp/mcfta-preserve-required-support-20261015.py`.
+Evidence: `/tmp/mcfta-required-support-*`. All prior proofs, repros,
+repairs, 13 marked external drafts, stashes, and other worktrees remain.
+Weekly allowance is 82%. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
 ## Original allocation origins, primary support, and GHC fit filtering
 
 Source main `e16f3b50` is merged at `50f21a5f`. Proof commits are
