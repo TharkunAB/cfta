@@ -1,4 +1,7 @@
 import Lean
+import MicroCFTA.SourceEqualityPartialResultMemoSource
+import MicroCFTA.SourceEqualityPartialMemoCompletedExample
+import MicroCFTA.SourceEqualityOuterMemoCycleInvariant
 import MicroCFTA.SourceEqualityOuterMemoWorkerCycle
 import MicroCFTA.SourceSolverAppliedPublic
 import MicroCFTA.SourceSizedFiniteKeysAppliedLiquid
