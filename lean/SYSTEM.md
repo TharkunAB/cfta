@@ -1,5 +1,81 @@
 # Constrained languages, indexing, and distributions
 
+## Current class-pass language, physical heaps, and actual global memos
+
+Source main `a4dd678f` is merged at `1a421c7d`. Proof commits are
+`a6137293`, `d5059da3`, `58bdb112`, `785fabb0`, and `4fff37a2`.
+Full library scope stays active. Older sections retain their historical
+source and proof scopes.
+
+The actual shared class pass now derives independent language bounds with
+open unrelated siblings. Output terms belong to the input language.
+Accepted terms that satisfy all retained original classes survive.
+Nontrivial class satisfaction derives required term path existence.
+This is conditional exactness. Narrowing alone need not enforce each class.
+Original constraint checks remain part of the exact caller.
+
+Actual shared targets, first forces, stored hits, leaves, edits, right folds,
+and final propagation now retain stored costs and physical annotations.
+Ordered actual global receipts derive all three final tables' validity,
+retain earlier unfolding entries, and preserve the scan-final query tables
+through required and class execution. Each head captures the actual tail's
+forest and returned memo bundle. No future coherence or whole-forest
+closedness is supplied. CostHeap is a stored cost invariant, not wall time.
+
+`SourceCurrentPhysicalClassPassLanguage.live_scan_pass` composes computed
+physical entry, actual successful Scan, finite required execution, and a
+range-checked finite class Pass. The same returned Pass has literal StableRun,
+final IdleReady, CostHeap, FieldHeap, original/result availability, retained
+entries, fourth emptiness-memo correctness, all selected path domains,
+independent language bounds, and its exact final three-table receipt.
+Successful Scan and reached range checks remain premises. General current
+Scan and outer constrained caller completion remain open. The existing
+scoped native state still needs checked allocation/runtime transfer.
+
+The separate merge-result memo now has completed hit/miss provenance,
+resident results, retained entries, global effects, and language coverage.
+An independent publication graph follows lookup, first-writer thunk insert,
+and winner reread. Publication-to-completion/GHC forcing and recursive
+memo-aware merge bodies remain open. Target receipts still use the existing
+body graph; a cache hit is not a new body execution.
+
+Upstream adds state-based synthesis, automaton enumeration per size, caller
+fit deduplication, explicit outcomes, and shared normal-form work fuel.
+New source components prove exact positive size compositions, retained split
+size/length/accounting, strict child-size descent, shared quotation budget
+accounting and sequencing, beta-loop rejection, and the separate output-size
+check. Complete argument partitions, host refinement, cached state builds,
+automaton/search, Core/value exposure, and current Walk/Fits runtime remain.
+The equality/Sized/import/interned source bodies and local repair are unchanged.
+
+The aggregate audit passes 2,158 jobs and 53,642 dependency checks with
+only permitted foundations and no new warning. Eleven new modules and four
+additive Audit imports retain every earlier non-Audit proof file. Required
+strict Nix build and all six suites pass 743 examples plus the golden check.
+Fourmolu passes nine changed Haskell files; Cabal-gild passes four packages.
+The source delta is exactly the 13-file upstream merge.
+
+Read `lean/notes-current-class-pass-language.md`,
+`lean/notes-current-merge-result-memo.md`, and `lean/notes-main-a4dd678f.md`.
+
+Next derive actual memo-aware recursive merge requests and connect published
+thunks to completed producers. Continue general Scan/outer completion,
+allocation history and checked native transfer, machine bounds, import
+trim/DFS/SCC and language/run bridges, whole enumeration, waiting counts,
+template exclusion, typed refinements, heterogeneous generators and
+decision-model, curried/GHC adequacy, state search and all distinct Sized
+contracts. Keep the optimized interned core and older constructor/equality work.
+
+Start: `/tmp/mcfta-shared-paths-checkpoint-20261015-2354/` (2,843 files).
+Closing: `/tmp/mcfta-class-language-checkpoint-20261016-0019/` (2,860 files).
+Script: `/tmp/mcfta-preserve-class-language-20261016.py`.
+Evidence: `/tmp/mcfta-class-language-*` plus the physical class pass, heap,
+class memo, merge-result memo and normal-form budget validation notes.
+All previous proofs, repros, repairs, 13 external drafts, stashes and other
+worktrees remain. The last observed weekly allowance was 81%; it is not a
+fresh reading. Stop owned work at 1% or less. No board posts or deployments.
+Push verified formalize checkpoints. The full-library goal remains active.
+
 ## Current finite shared class pass and actual merge memo effects
 
 Source main remains `45d6538c`, merged at `0694b6f9`. Proof commits are
