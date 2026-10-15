@@ -25,6 +25,7 @@ module Data.CFTA.Enumeration (
     termsWith,
     runs,
     runsBy,
+    runsNarrowedBy,
     runsInterned,
     truncatedTerms,
     plainTerms,
@@ -1092,6 +1093,22 @@ runsBy ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
     (Edge symbol -> Double) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
 runsBy weight = runsFrom (canonicalEdgesOf (Just weight))
+
+{- | 'runsBy' with a function on the edges of each node, which the
+enumeration applies before it tries them. It sees the node of the current
+run: in a run, a node that an equality constraint reaches is the
+intersection of the nodes of all the paths of its class, because the
+enumeration expands it only after all of them. A function that keeps a
+subset of the edges keeps a subset of the runs.
+-}
+runsNarrowedBy ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    (Edge symbol -> Double) ->
+    ([Edge symbol] -> [Edge symbol]) ->
+    symbol ->
+    Node symbol ->
+    [(Term symbol, [(Constraint, Term symbol)])]
+runsNarrowedBy weight narrowing = runsFrom (\root -> narrowing . canonicalEdgesOf (Just weight) root)
 
 {- | 'runs' in the order of the edges in the automaton, without
 'canonicalOrder'. The result has the runs of 'runs', in another order, which

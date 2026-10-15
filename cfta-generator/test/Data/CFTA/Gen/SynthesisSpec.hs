@@ -37,7 +37,7 @@ spec = describe "Data.CFTA.Gen.Synthesis" $ do
         -- The names are new to the process, so the identities of their edges
         -- follow the order of the library.
         int <- either fail pure (parseType (Text.pack "Int"))
-        let lib = Library [(Text.pack n, int, [Text.pack n]) | n <- ["order-zeta", "order-alpha"]] [] []
+        let lib = Library [(Text.pack n, int, [Text.pack n]) | n <- ["order-zeta", "order-alpha"]] [] [] FirstOrder
         solutionsOfSize lib (Query [] int) 1 `shouldBe` [Var (Text.pack "order-zeta"), Var (Text.pack "order-alpha")]
 
 -- | The saturated search space against Hectare's own space.
@@ -54,7 +54,7 @@ saturatedSpec =
                     values = [n | (n, _, True) <- roles]
                     grouped = library [(n, baseOf t) | (n, t) <- components] [] []
                     -- Each component its own group, so that no expansion is needed.
-                    single = Library [(n, baseOf t, [n]) | (n, t) <- components] [] []
+                    single = Library [(n, baseOf t, [n]) | (n, t) <- components] [] [] FirstOrder
                     saturation = Saturation arities values
                     arguments = map fst (queryArguments goal)
                     saturated program = case spine program [] of

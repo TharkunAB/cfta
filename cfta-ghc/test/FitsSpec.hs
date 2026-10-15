@@ -89,24 +89,42 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 go (startWalker environment (map candidateType candidates') goal) (preorder program)
     hspec $ do
         describe "streamFits" $
-            forM_ (queries <> higherKinded) $ \(Query name signature arguments expected) ->
-                it ("finds the expected program of " <> name <> ", and GHC accepts its fits") $ do
-                    Just typ <- typeOfExpression session ("undefined :: " <> signature)
-                    Just normal <- inTypechecker session (normalFormsOf candidates)
-                    found <- newIORef []
-                    let options = defaultOptions{optionMaximumSize = size expected}
-                        -- The expected program, or an earlier fit with its normal form.
-                        isExpected program = program == expected || (isJust (normal expected) && normal program == normal expected)
-                        record fit = do
-                            liftIO (modifyIORef' found (fitProgram fit :))
-                            pure (not (isExpected (fitProgram fit)))
-                    statistics <- fitsForSignature session options candidates typ arguments record
-                    fits <- reverse <$> readIORef found
-                    fmap statisticsFits statistics `shouldBe` Just (length fits)
-                    fits `shouldSatisfy` any isExpected
-                    forM_ (take 10 fits) $ \fit ->
-                        accepts session ("(\\" <> unwords (map Text.unpack arguments) <> " -> " <> renderProgram fit <> ") :: " <> signature)
-                            `shouldReturn` True
+            forM_ [(False, ""), (True, ", with the domains of kind Type")] $ \(domains, label) ->
+                forM_ (queries <> higherKinded) $ \(Query name signature arguments expected) ->
+                    it ("finds the expected program of " <> name <> ", and GHC accepts its fits" <> label) $ do
+                        Just typ <- typeOfExpression session ("undefined :: " <> signature)
+                        Just normal <- inTypechecker session (normalFormsOf candidates)
+                        found <- newIORef []
+                        let options = defaultOptions{optionMaximumSize = size expected, optionTypeDomains = domains}
+                            -- The expected program, or an earlier fit with its normal form.
+                            isExpected program = program == expected || (isJust (normal expected) && normal program == normal expected)
+                            record fit = do
+                                liftIO (modifyIORef' found (fitProgram fit :))
+                                pure (not (isExpected (fitProgram fit)))
+                        statistics <- fitsForSignature session options candidates typ arguments record
+                        fits <- reverse <$> readIORef found
+                        fmap statisticsFits statistics `shouldBe` Just (length fits)
+                        fits `shouldSatisfy` any isExpected
+                        forM_ (take 10 fits) $ \fit ->
+                            accepts session ("(\\" <> unwords (map Text.unpack arguments) <> " -> " <> renderProgram fit <> ") :: " <> signature)
+                                `shouldReturn` True
+        describe "optionTypeDomains" $
+            it "proposes no maximum at a rigid goal without a given Ord, and keeps head" $ do
+                Just typ <- typeOfExpression session "undefined :: [a] -> a"
+                let proposed domains = do
+                        traced <- newIORef []
+                        let options =
+                                defaultOptions
+                                    { optionMaximumSize = 2
+                                    , optionTypeDomains = domains
+                                    , optionTrace = Just (\_ program -> modifyIORef' traced (program :))
+                                    }
+                        _ <- fitsForSignature session options candidates typ ["xs"] (\_ -> pure True)
+                        readIORef traced
+                without <- proposed False
+                with <- proposed True
+                (parse "maximum xs" `elem` without, parse "maximum xs" `elem` with, parse "head xs" `elem` with)
+                    `shouldBe` (True, False, True)
         describe "fitIgnoresPart" $
             it "marks the fits that ignore an argument" $ do
                 marks <- forM ignoring $ \(signature, arguments, programs) -> do

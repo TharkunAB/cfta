@@ -43,6 +43,8 @@ module Data.CFTA.Gen.Synthesis (
 
     -- * Libraries and queries
     Library (..),
+    Encoding (..),
+    Defaulting (..),
     library,
     Query (..),
 
@@ -63,6 +65,7 @@ module Data.CFTA.Gen.Synthesis (
     searchSpace,
     programsIn,
     distinctProgramsIn,
+    programRuns,
     solutionsOfSize,
     distinctSolutionsOfSize,
     distinctSaturatedSolutionsOfSize,
@@ -81,7 +84,8 @@ import Data.Hashable (Hashable)
 import Data.List (intercalate, permutations, subsequences)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (catMaybes, fromMaybe, isJust)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Generics (Generic)
@@ -224,7 +228,46 @@ data Library = Library
     not applied to a component of the second list, such as @head@ to @Nil@.
     With 'Nothing', the functions head no term of size two.
     -}
+    , libraryEncoding :: Encoding
+    -- ^ How the automaton encodes the types.
     }
+    deriving (Show)
+
+-- | How the automaton encodes the types of a library and a query.
+data Encoding
+    = -- | A type constructor is the symbol of an edge, with its arguments as its children.
+      FirstOrder
+    | {- | A type constructor is a leaf, applied to its arguments one at a
+      time by @\@@ edges, so that a type variable can stand for a type
+      constructor. A type constructor whose name starts with @?@, as
+      @?Foldable t0@, is a type variable of kind @* -> *@. The map gives, by
+      the text after the @?@ up to the first space (the names of the
+      variable's classes, as @Foldable@ or @Applicative,Foldable@), the
+      types of kind @* -> *@ over which the variable ranges, as @Maybe@ or
+      @Either e@ (each as a type constructor with one argument less than its
+      arity).
+      -}
+      Curried Defaulting (Map.Map Text [Type])
+    deriving (Show)
+
+{- | Which types of its domain a variable of kind @* -> *@ of the curried
+encoding takes when the program does not determine it, as @t@ in
+@length (pure x)@. The program determines a variable when a constraint of
+the run ties it to a type constructor, as @lookup@ ties the @t@ of
+@length (lookup k xs)@ to @Maybe@.
+-}
+data Defaulting
+    = -- | Every type of its domain, so a program has a typed term for each.
+      AnyHead
+    | {- | Only the list type, when the map gives 'True' for the key of its
+      domain (or of one of the domains that the run intersects with it);
+      else none, so the run is dropped. GHC's @ExtendedDefaultRules@ default
+      such a variable to the list type when one of its classes is
+      @Foldable@ or @Traversable@. The map has the keys of the variables of
+      kind @* -> *@; a domain whose key it does not have, as one of kind
+      @*@, keeps every type.
+      -}
+      OnlyDefault (Map.Map Text Bool)
     deriving (Show)
 
 {- | The library of the components, with the components that only appear as
@@ -238,6 +281,7 @@ library components argumentOnly avoid =
         { libraryGroups = [(representativeOf index, typ, members) | (index, (typ, members)) <- zip [0 :: Int ..] groups]
         , libraryArgumentOnly = argumentOnly
         , libraryAvoid = [(map toRepresentative functions, map toRepresentative <$> arguments) | (functions, arguments) <- avoid]
+        , libraryEncoding = FirstOrder
         }
   where
     groups = foldr addMember [] (reverse components)
@@ -340,6 +384,28 @@ typeNode (TCons name arguments) = Node [Edge (Symbol name) (map typeNode argumen
 variableSymbol :: Text -> Symbol
 variableSymbol name = Symbol $ fromMaybe ("var_" <> name) $ lookup name [("a", "var1"), ("b", "var2"), ("c", "var3"), ("d", "var4")]
 
+{- | The node of a type in an encoding: 'typeNode' for 'FirstOrder'. In the
+curried encoding, a type constructor is a leaf, and an application of a
+type to a type is an @\@@ edge; a function type is as in 'typeNode'.
+-}
+typeNodeWith :: Encoding -> Type -> Node Symbol
+typeNodeWith FirstOrder = typeNode
+typeNodeWith (Curried _ _) = curried
+  where
+    curried (TVar name) = Node [Edge (variableSymbol name) []]
+    curried (TFun argument result) = arrowType (curried argument) (curried result)
+    curried (TCons "Fun" [argument, result]) = arrowType (curried argument) (curried result)
+    curried (TCons name arguments) = foldl typeApplication (Node [Edge (Symbol name) []]) (map curried arguments)
+
+-- | In the curried encoding, the application of a type to a type.
+typeApplication :: Node Symbol -> Node Symbol -> Node Symbol
+typeApplication function argument = Node [Edge "@" [function, argument]]
+
+-- | The key of the domain of the leaf of a type variable of kind @* -> *@ in the curried encoding: the names of its classes.
+higherClass :: Node Symbol -> Maybe Text
+higherClass (Node [Edge (Symbol name) []]) = Text.takeWhile (/= ' ') <$> Text.stripPrefix "?" name
+higherClass _ = Nothing
+
 -- | Whether a node is the leaf of a type variable.
 isVariable :: Node Symbol -> Bool
 isVariable (Node [Edge (Symbol name) []]) = name `elem` ["var1", "var2", "var3", "var4"] || "var_" `Text.isPrefixOf` name
@@ -355,6 +421,27 @@ allTypes constructors =
             [arrowType types types]
                 <> map (\name -> Node [Edge name []]) ["var1", "var2", "var3", "var4"]
                 <> [Node [Edge (Symbol name) (replicate arity types)] | (name, arity) <- constructors]
+
+{- | The node of all types in the curried encoding: the function types, the
+four type variables, and each type constructor applied to as many types as
+its arity. The arity of a type constructor is the largest number of
+arguments that it has in the types.
+-}
+allCurriedTypes :: Defaulting -> [(Text, Int)] -> Node Symbol
+allCurriedTypes defaulting constructors =
+    createMu $ \types ->
+        let ofKind missing =
+                union $
+                    [Node [Edge (Symbol name) []] | (name, arity) <- arities, arity == missing]
+                        <> [typeApplication (ofKind (missing + 1)) types | missing < largest]
+                        <> [marker | missing == 1, marker <- anyMarkers defaulting]
+         in union $
+                [arrowType types types]
+                    <> map (\name -> Node [Edge name []]) ["var1", "var2", "var3", "var4"]
+                    <> [ofKind 0]
+  where
+    arities = Map.toList (Map.fromListWith max [(name, arity) | (name, arity) <- constructors, not ("?" `Text.isPrefixOf` name)])
+    largest = maximum (0 : map snd arities)
 
 -- | The type constructors of a type with their arities.
 constructorsOf :: Type -> [(Text, Int)]
@@ -373,6 +460,75 @@ generalize types typ@(Node [Edge symbol _]) = case mapNodes (\node -> if isVaria
     variables = nubOrd $ crush (\node -> [node | isVariable node]) typ
     pathsOf variable = pathsMatching (== variable) typ
 generalize _ typ = typ
+
+{- | 'generalize' in an encoding. In the curried encoding, a type variable of
+kind @* -> *@ is replaced by the types over which its class ranges, and the
+equality constraints also tie its occurrences.
+-}
+generalizeWith :: Encoding -> Node Symbol -> Node Symbol -> Node Symbol
+generalizeWith FirstOrder types typ = generalize types typ
+generalizeWith encoding@(Curried defaulting domains) types typ@(Node [Edge symbol _]) = case mapNodes replace typ of
+    Node [Edge _ children] -> Node [mkEdge symbol children (equalityConstraint $ mkEqConstraints $ map pathsOf variables)]
+    other -> other
+  where
+    replace node
+        | isVariable node = types
+        | Just className <- higherClass node = domain className
+        | otherwise = node
+    domain className =
+        union $
+            [ mapNodes (\node -> if isVariable node then types else node) (typeNodeWith encoding head')
+            | head' <- Map.findWithDefault [] className domains
+            ]
+                <> domainMarkers defaulting className
+    variables = nubOrd $ crush (\node -> [node | isVariable node || isJust (higherClass node)]) typ
+    pathsOf variable = pathsMatching (== variable) typ
+generalizeWith _ _ typ = typ
+
+{- | With 'OnlyDefault', the leaves that the domain of a curried variable has
+beside its types, so that the intersection of domains in a run tells
+whether the program determines the variable, and whether it has a default:
+
+* @?@ is in every domain of a key of the map, and in the types of kind
+  @* -> *@ of the node of all types ('anyMarkers'), but not in a type
+  constructor. So a run that
+  ties the variable to a type constructor, as @Maybe@, loses it.
+* @?nodefault@ is in a domain whose key has 'False', and in the types
+  of kind @* -> *@ of the node of all types. So a run keeps it when no
+  domain of the intersection has a default.
+
+'narrowHeads' reads them, and drops them, before the enumeration tries the
+edges of a node.
+-}
+domainMarkers :: Defaulting -> Text -> [Node Symbol]
+domainMarkers AnyHead _ = []
+domainMarkers (OnlyDefault keys) key = case Map.lookup key keys of
+    Just defaults -> [openMarker] <> [noDefaultMarker | not defaults]
+    Nothing -> []
+
+-- | The markers of the types of kind @* -> *@ of the node of all types: both, which an intersection keeps.
+anyMarkers :: Defaulting -> [Node Symbol]
+anyMarkers AnyHead = []
+anyMarkers (OnlyDefault _) = [openMarker, noDefaultMarker]
+
+-- | The leaves of 'domainMarkers'.
+openMarker, noDefaultMarker :: Node Symbol
+openMarker = Node [Edge (Symbol "?") []]
+noDefaultMarker = Node [Edge (Symbol "?nodefault") []]
+
+{- | The edges of a node of a run with 'OnlyDefault' ('domainMarkers'). A
+node without a marker keeps its edges. A node with a marker is the domain of
+a variable that the program does not determine: it keeps the list type when
+it has no @?nodefault@, and no edge when it has.
+-}
+narrowHeads :: [Edge Symbol] -> [Edge Symbol]
+narrowHeads edges
+    | not (any (leaf "?") edges) = edges
+    | any (leaf "?nodefault") edges = []
+    | otherwise = filter (leaf "List") edges
+  where
+    leaf name (Edge (Symbol symbol) []) = symbol == name
+    leaf _ _ = False
 
 -- | The application of a function term to an argument term.
 application :: Node Symbol -> Node Symbol -> Node Symbol -> Node Symbol
@@ -425,14 +581,15 @@ searchSpace lib query = refold . reduceFully . rawSearchSpace lib query
 
 -- | The automaton of 'searchSpace' before the reduction.
 rawSearchSpace :: Library -> Query -> Int -> Node Symbol
-rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNode $ queryGoal query)
+rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNodeWith encoding $ queryGoal query)
   where
+    encoding = libraryEncoding lib
     types = typesOf lib query
-    component name typ = Edge (Symbol name) [generalize types (typeNode typ)]
+    component name typ = Edge (Symbol name) [generalizeWith encoding types (typeNodeWith encoding typ)]
     components = [(name, component name typ) | (name, typ, _) <- libraryGroups lib]
     anyFunction = Node (map snd components)
     argumentOnly = Node [component name typ | (name, typ) <- libraryArgumentOnly lib]
-    argumentEdges = [(name, Edge (Symbol name) [typeNode typ]) | (name, typ) <- queryArguments query]
+    argumentEdges = [(name, Edge (Symbol name) [typeNodeWith encoding typ]) | (name, typ) <- queryArguments query]
     anyArgument = Node (map snd argumentEdges)
     without names = Node [edge | (name, edge) <- components, name `notElem` names]
     restricted = concatMap fst (libraryAvoid lib)
@@ -486,13 +643,16 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNode $ queryGo
 
 -- | The node of all types of a library and a query.
 typesOf :: Library -> Query -> Node Symbol
-typesOf lib query =
-    allTypes
-        $ nubOrd
-        $ concatMap (\(_, typ, _) -> constructorsOf typ) (libraryGroups lib)
-            <> concatMap (constructorsOf . snd) (libraryArgumentOnly lib)
-            <> concatMap (constructorsOf . snd) (queryArguments query)
-            <> constructorsOf (queryGoal query)
+typesOf lib query = case libraryEncoding lib of
+    FirstOrder -> allTypes constructors
+    Curried defaulting _ -> allCurriedTypes defaulting constructors
+  where
+    constructors =
+        nubOrd $
+            concatMap (\(_, typ, _) -> constructorsOf typ) (libraryGroups lib)
+                <> concatMap (constructorsOf . snd) (libraryArgumentOnly lib)
+                <> concatMap (constructorsOf . snd) (queryArguments query)
+                <> constructorsOf (queryGoal query)
 
 {- | How the components of a library form terms in which each head is applied
 to all its parameters, by the names of the group representatives.
@@ -581,7 +741,24 @@ typed terms, and a program can have many; this keeps a set of the programs
 only.
 -}
 distinctProgramsIn :: Node Symbol -> [Program]
-distinctProgramsIn = nubOrd . map (toProgram . fst) . runsBy interningOrder "Mu"
+distinctProgramsIn = catMaybes . programRuns FirstOrder
+
+{- | The runs of a search space in Hectare's order, one for each typed term,
+each with its program when no run before it has that program. So the
+programs are those of 'distinctProgramsIn', and the length is the number of
+typed terms that the enumeration lists. A typed term can repeat, as in
+'runs'. With 'OnlyDefault', the runs are narrowed by 'narrowHeads'.
+-}
+programRuns :: Encoding -> Node Symbol -> [Maybe Program]
+programRuns encoding = go Set.empty . map (toProgram . fst) . listRuns "Mu"
+  where
+    listRuns = case encoding of
+        Curried (OnlyDefault _) _ -> runsNarrowedBy interningOrder narrowHeads
+        _ -> runsBy interningOrder
+    go _ [] = []
+    go seen (program : rest)
+        | Set.member program seen = Nothing : go seen rest
+        | otherwise = Just program : go (Set.insert program seen) rest
 
 {- | Hectare's order of the edges of a search space, as weights for 'runsBy':
 the order of the edges' identities. That is the order in which the build and
