@@ -1,6 +1,86 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 15:32 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 15:56 CEST (Europe/Stockholm)**.
+
+## Running-cell preservation and derived normalized fields
+
+Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Running cells and validity: `7ab3b4f7`. Field closure: `ad4f21de`.
+Exact request identity: `4fa1fcfa`. Open laws and Audit: `b03d0d1f`.
+Pull returned Already up to date. Continue on `formalize` and push verified
+checkpoints. Read `lean/notes-native-field-running-invariants.md`, then the
+accepted-child, checked-provenance, native-demand, and allocation notes.
+This supersedes the running-cell and field targets below. Full scope is open.
+Fetched origin/main is now `6fe34ab8`. Preserve this proof checkpoint, then
+review and merge its additive refinement frontend changes. The source base
+for the proofs in this section remains `1eb4ab05` until that refresh.
+
+NodeReadback derives actual direct, ready, and started calls with exact full
+states and trace lengths. Running proves that actual completed clean source
+bodies retain every enclosing running cell and both memo structures. It
+includes actual checked edge-prefix effects. The original node/edge cell
+survives to its own finish frame. No old completed-run transfer, semantic
+receipt, or future validity is assumed. RequestExact derives literal actual
+request equality from current checked validity, Ready, and explicit key bounds.
+
+Validity derives checked native validity and physical/domain growth for all
+actual step outcomes. StateValid also retains the full ready physical heap
+and valid operation caches. Finite reached current checks compose all these
+invariants and histories. Native Inputs checks current physical operands,
+request Ready/KeySafe, and the actual evaluating cell plus semantic receipt
+at each finish. These semantic finish receipts remain explicit obligations.
+
+FieldHeap connects resident edge keys to normalized stored fields. Actual
+optional-binder reconstruction retains this invariant through nested stored
+substitution and both probes. CodeFields covers every compileNode branch,
+ordered walks, and appended continuations. FieldClosure derives actual ready
+prefix annotations from conjunction and preserves current field facts.
+FieldExecution derives the old FieldsThrough plan from the initial normalized
+heap, compiled annotation facts, StateValid, and native-only InputsThrough.
+The native physical-input, word-bound, and semantic finish checks still need
+derivation for general recursive code. Normalized fields do not establish
+sidecar storage coverage. Missing-field blocking remains a distinct outcome.
+
+OpenMeaning provides finite physical bound-name and seen-pair contexts,
+local empty/self/swap/reset/repeated laws, environment transport, compatible
+environments for closed physical bound readbacks, and exact closed/empty
+specialization. It does not replace completed-cell NodeMeaning. The old law
+is proved vacuous at every selected repeated branch. An exact checked
+one-step reference-pair example disproves unrestricted ambient intersection.
+The example does not prove every chosen state/domain is source-reachable.
+General Mu correctness needs a stronger candidate-parametric domain law:
+a finite seen-pair context fixes a pair language, while the least-language
+binder equation must hold for every candidate. The actual binder equation
+and scope transport are proved. That recursive extension law is open.
+
+Next derive native InputsThrough from original inputs and actual compiled
+continuations. Use exact request identity and proved running-cell survival
+to derive semantic finish receipts. Retain internal word ranges. Establish
+the candidate-parametric Mu/repeated-pair law and sidecar allocation coverage.
+Then derive general reached-child checks and connect class folds,
+reconstruction, both gate memo families, guarded passes, recursive reduction,
+and original construction. Global causal prehistory, pending equality thunks,
+cache/hash/IntMap and signed adequacy, lifetime capacity, unsafe IO, GHC,
+general completion, repeated fixed points, getAllAtPath, decision-model,
+named measures, parser/decoder bridges, and extraction remain open. Keep the
+optimized interned core and older constructor/equality work. Sized exact
+classes, finite execution, sequence, distinct size order, and both signed
+inverse implications remain separate contracts.
+
+The pinned audit passes 1,975 jobs and 50,686 theorem dependency checks using
+only propext, Classical.choice, and Quot.sound. Focused endpoints pass 1,074
+jobs. Logs: `/tmp/mcfta-native-field-running-audit-20261015.log` and
+`/tmp/mcfta-native-field-running-focused-20261015.log`. The old unused-input
+warning remains. The ten new modules have no warnings. No Haskell file changed.
+Prior Nix, six-suite, format, metadata, and 205-rank checks were not repeated.
+Starting snapshot: `/tmp/mcfta-native-validity-start-20261015-1539/` (2,613 files).
+Closing snapshot: `/tmp/mcfta-native-validity-checkpoint-20261015-1555/` (2,624 files).
+All earlier proofs except Audit imports, repros, marked drafts, stashes,
+other worktrees, and Haskell sources retain their hashes. External unverified
+intersection drafts, limit report, and superseded scoped-receipt drafts remain.
+Weekly allowance was 92% at 2026-10-15 15:54 CEST. Refresh before work; stop
+work and owned workers at 1% or less. No board posts or deployments.
+Older counts and next targets below are historical.
 
 ## Accepted native child execution and scoped receipts
 

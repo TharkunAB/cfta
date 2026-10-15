@@ -1,5 +1,12 @@
 # Checked edge allocation and recursive memo preservation
 
+The [running and field checkpoint](notes-native-field-running-invariants.md),
+`b03d0d1f`, derives actual original running-cell survival and normalized-field
+closure. Native input checks, semantic finish receipts, sidecar coverage, and
+general contextual Mu correctness remain open. Its audit passes 1,975 jobs
+and 50,686 dependency checks. Sized and Haskell sources remain unchanged.
+Older next targets below are historical.
+
 The [accepted child checkpoint](notes-native-accepted-child-demand.md),
 `970ef848`, derives actual child traces and accepted edge receipts. General
 node/Mu correctness and reached-child checks remain open. Its audit passes

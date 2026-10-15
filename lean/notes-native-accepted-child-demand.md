@@ -1,5 +1,12 @@
 # Accepted native edges and actual ordered child execution
 
+The [running and field checkpoint](notes-native-field-running-invariants.md),
+`b03d0d1f`, derives actual original running-cell survival and normalized-field
+closure. Native input checks, semantic finish receipts, sidecar coverage, and
+general contextual Mu correctness remain open. Its audit passes 1,975 jobs
+and 50,686 dependency checks. Sized and Haskell sources remain unchanged.
+Older next targets below are historical.
+
 Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
 Trace proof: `c3896b48`. Accepted receipt proof: `ff2d49be`.
 Fresh node and self-child proof: `970ef848`.

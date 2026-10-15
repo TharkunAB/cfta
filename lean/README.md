@@ -7,6 +7,14 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+The [running and field checkpoint](notes-native-field-running-invariants.md),
+`b03d0d1f`, derives actual running-cell preservation, exact started requests,
+and normalized-field closure through checked execution. Native input checks
+and semantic finish receipts remain explicit. Open-context branch laws expose
+the remaining candidate-parametric Mu obligation. The audit passes 1,975 jobs
+and 50,686 dependency checks. No Haskell file changed. Older counts and next
+targets below are historical.
+
 The [accepted child execution proof](notes-native-accepted-child-demand.md),
 `970ef848`, derives actual ordered child traces, accepted edge constructor
 receipts, and completion of a fresh self-child source class. Observed accepted

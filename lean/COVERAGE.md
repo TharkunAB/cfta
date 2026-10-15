@@ -1,5 +1,23 @@
 # Full formalization coverage
 
+## Running-cell preservation and derived normalized fields
+
+Proofs `7ab3b4f7`, `ad4f21de`, `4fa1fcfa`, and `b03d0d1f`, on main `1eb4ab05`.
+Read [the running and field note](notes-native-field-running-invariants.md).
+Actual clean checked completion preserves original running cells and exact
+finish frames. Current native checks derive checked validity and all cache
+histories. Literal started-request identity follows from current keys and
+original inputs. Dynamic normalized-field closure derives FieldsThrough from
+the initial physical heap and compiled annotations. Native InputsThrough,
+semantic finish receipts, internal word bounds, and sidecar storage coverage
+remain separate obligations. Finite open contexts derive local branch laws
+and the old closed law. The old law is vacuous on repeated branches. A checked
+reference-pair example rejects unrestricted ambient intersection. General Mu
+needs a candidate-parametric context law. Full correspondence, whole-library
+scope, and distinct Sized contracts remain open where recorded. The audit
+passes 1,975 jobs and 50,686 dependency checks with permitted axioms only.
+No Haskell file changed. Older counts and next targets below are historical.
+
 ## Accepted native child execution and scoped receipts
 
 Proofs `c3896b48`, `ff2d49be`, and `970ef848`, on main `1eb4ab05`.
