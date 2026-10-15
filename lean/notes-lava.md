@@ -10,7 +10,9 @@ Page references below use the printed page numbers in that PDF.
 ## Required-path application (2026-10-15 02:30 CEST)
 
 The actual Needed compiler now has independent complete-path term semantics.
-A separate kernel fixture checks actual constructor-row exposure of the closed
+The ordered child fold composes explicit per-node contracts into its exact
+forest meaning. Actual arity checks derive all normalized child positions.
+The physical recursive node must still prove its contract. A separate kernel fixture checks actual constructor-row exposure of the closed
 raw self binder. Independent least-language semantics proves that replacement
 by empty preserves its language. Eight native traversals now use that exposure;
 the existing finite cold-reader proofs remain available for the general path

@@ -6,7 +6,7 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,621 jobs and 45,462 theorem dependency checks.
+The audit passes 1,623 jobs and 45,488 theorem dependency checks.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open
@@ -54,8 +54,10 @@ prove exact signed trie construction and independent complete-path meaning.
 The kernel checks constructor-row exposure and empty least language for the
 raw self binder. Eight source traversals now use that exposure. All 645 Haskell
 examples pass. The original stutter witness and reproduction remain unchanged.
-Next derive the repaired physical requireAll worker, its actual constructor
-effects, and its exact output language. The self-cycle fixture is not a general
+The source child-adjustment fold now has exact lookup and conditional forest
+meaning. The actual arity check derives every normalized child position.
+Next derive the repaired physical node callback, its constructor effects, and
+its exact output language. The self-cycle fixture is not a general
 worker proof. Primitive-operation and native container contracts remain explicit.
 [The Lava paper note](notes-lava.md) records relevant prior art and its source,
 solver, and termination limits. The [occurrence-cost note](notes-occurrence-costs.md)

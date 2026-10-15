@@ -1,8 +1,8 @@
 # Full formalization coverage
 
-## Required-path trie meaning and retained-cycle repair
+## Required-path trie, ordered child fold, and retained-cycle repair
 
-Proofs: `06353eab`. Source repair: `61f2c939`. Upstream:
+Proofs: `06353eab` and `31868723`. Source repair: `61f2c939`. Upstream:
 `TharkunAB/cfta`, `origin/main` at `f201deda`. Continue on `formalize` and
 push checkpoints. Read `lean/notes-needed-head-repair.md`. This section
 supersedes the Needed-construction and raw self-binder repair targets.
@@ -16,6 +16,14 @@ rejects no matching term. Raw negative keys remain explicit: that test alone
 can pass a negative key, whereas signed lookup cannot. Normalized equality
 classes derive nonnegative paths through the existing constructor validation.
 
+The ordered child fold now has exact signed lookup and length proofs. It
+keeps the source right-fold structure. Missing and negative positions leave
+the list unchanged. Its forest theorem composes explicit exact node contracts.
+The source arity check, normalized nonnegative keys, and original forest length
+derive every selected child position. No whole-list law or term arity premise
+is supplied. The actual recursive node contract remains to be proved. These
+list results do not establish native lazy constructor scheduling.
+
 The kernel checks that constructor-row exposure resolves the raw self binder
 in two worklist steps. Rebuilding the empty row list leaves the cache unchanged.
 Independent least-language semantics proves this binder equivalent to empty.
@@ -25,28 +33,29 @@ template restriction. It reuses nodeEdges and retains its ordinary fast path.
 The old stutter proof and timeout reproduction remain unchanged. The old repro
 expects failure; on repaired source it reports unexpected completion.
 
-The aggregate audit passes 1,621 jobs and 45,462 theorem dependency checks.
+The aggregate audit passes 1,623 jobs and 45,488 theorem dependency checks.
 Only the three permitted foundations occur. Only the old unused inputs warning
 remains. All 645 Haskell examples pass in Nix: 289 core, 209 generator, and
 147 refinement examples. The extended retained-cycle regression and format
-checks pass. Audit: `/tmp/mcfta-needed-head-repair-20261015-audit.log`.
-Snapshot: `/tmp/mcfta-needed-head-repair-checkpoint-20261015-0230/`
-(2,012 Lean-tree files and four root documents). All older proofs except added
+checks pass. Audit: `/tmp/mcfta-needed-adjust-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-needed-adjust-checkpoint-20261015-0237/`
+(2,014 Lean-tree files and four root documents). All older proofs except added
 audit imports, counterexamples, repros, drafts, backups, stashes, and other
-worktrees remain. Weekly allowance was 18% at 02:30 CEST. Refresh before work.
+worktrees remain. Weekly allowance was 18% at 02:37 CEST. Refresh before work.
 
-Next model the repaired physical requireAll worker, including ordered
-IntMap.foldrWithKey adjustments, the maximum-key row test before recursion,
-empty-map identity, missing child positions, and actual constructor effects.
-Derive finite execution from finite Needed depth and complete closed exposure.
-Reuse MergedFreshOrdinaryColdTermination.read_closed and the exact physical
-head readback. Connect the returned source language to Needed Matches and the
-one-pass required-path law. Then derive actual edit/narrowing contracts.
-The new self-cycle fixture is not a general path-worker proof. Full pass
-correspondence, repeated fixed-point reduction, native containers, lazy
-scheduling, and extraction remain open. Preserve the exact Sized contracts,
-completed unary ancestor theorem, and optimized interned core. Stop all work
-and workers at 1% weekly allowance or less.
+Next derive the repaired physical requireNode callback: empty-map identity,
+maximum-key row rejection before child recursion, constructor-row exposure,
+actual row-node and edge reconstruction, canonical cache hits, and returned
+caches. The Needed compiler and ordered child-fold proofs are complete. Use
+SourceEqualityNeededAdjustMeaning.checked_row_exact after deriving the actual
+node callback contract. Derive finite execution from finite Needed depth and
+complete closed exposure. Reuse MergedFreshOrdinaryColdTermination.read_closed
+and exact physical head readback. Then derive actual edit/narrowing contracts.
+The self-cycle fixture and conditional fold theorem are not a general physical
+worker proof. Full pass correspondence, repeated fixed-point reduction,
+native containers, lazy scheduling, and extraction remain open. Preserve the
+exact Sized contracts, completed unary ancestor theorem, and optimized interned
+core. Stop all work and workers at 1% weekly allowance or less.
 
 ## Physical class order, safe entry guards, and raw self-binder boundary
 

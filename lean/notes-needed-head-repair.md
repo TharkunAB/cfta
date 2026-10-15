@@ -1,7 +1,7 @@
 # Required-path trie meaning and retained-cycle repair
 
-Updated: 2026-10-15 02:30 CEST.
-Proofs: `06353eab`. Source repair: `61f2c939`.
+Updated: 2026-10-15 02:37 CEST.
+Proofs: `06353eab` and `31868723`. Source repair: `61f2c939`.
 Upstream: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 
 ## Actual Needed construction
@@ -36,6 +36,29 @@ matching subtree at that key. Both facts are checked in Lean. The existing
 equality smart constructor rejects negative paths before positive normalized
 classes reach the worker. Retain that normalization premise in the caller
 proof. Do not replace signed keys by natural keys without an adapter theorem.
+
+## Ordered source child adjustments
+
+`SourceEqualityNeededAdjust` copies the source right fold over ascending child
+entries. The natural child adjustment has the exact split-and-rebuild source
+equation. Signed lookup shows that each selected position receives exactly its
+own callback. The original child count stays fixed. Missing and negative
+positions leave the list unchanged. Lookup uses the original input value;
+unique keys exclude repeated updates at one position.
+
+`SourceEqualityNeededAdjustMeaning` composes explicit per-node callback
+contracts. `apply_exact` says that the resulting forest contains exactly the
+original forest terms that satisfy each requirement at each existing selected
+position. `checked_row_exact` uses the actual greatest-key row test and
+normalized nonnegative keys. The original forest supplies term-list length.
+These facts derive all selected child positions. No additional term-arity
+premise or whole-list operation law is supplied.
+
+The node callback contract remains explicit. It must be derived from the
+actual recursive source worker before applying this theorem to the complete
+required-path pass. The returned-list proof retains the source fold structure.
+It does not establish the native lazy evaluation order of constructor effects.
+Do not infer that a right fold evaluates all callbacks from right to left.
 
 ## Source repair
 
@@ -73,10 +96,10 @@ the complete new native path worker.
 
 ## Validation and preservation
 
-The aggregate audit passes 1,621 jobs and checks 45,462 theorem dependencies.
+The aggregate audit passes 1,623 jobs and checks 45,488 theorem dependencies.
 Only `propext`, `Classical.choice`, and `Quot.sound` occur. Only the old unused
 `inputs` warning remains. Log:
-`/tmp/mcfta-needed-head-repair-20261015-audit.log`.
+`/tmp/mcfta-needed-adjust-20261015-audit.log`.
 
 All three Haskell suites pass in the project Nix shell: 289 core, 209 generator,
 and 147 refinement examples. The existing retained-cycle test now also checks
@@ -92,8 +115,8 @@ The Nix linker initially could not find `libgmp`. The documented
 An initial multiword Hspec filter was rejected. The single-word retained
 filter passed. Neither setup error is a failing semantic regression.
 
-Snapshot: `/tmp/mcfta-needed-head-repair-checkpoint-20261015-0230/`.
-It retains 2,012 Lean-tree files and the four root documents. The preservation
+Snapshot: `/tmp/mcfta-needed-adjust-checkpoint-20261015-0237/`.
+It retains 2,014 Lean-tree files and the four root documents. The preservation
 report checks all older proof bytes except the added audit imports. It checks
 all counterexamples, repros, and marked drafts. It also checks stashes and
 other worktrees. The repaired production files and validation logs are copied
@@ -101,9 +124,10 @@ beside that snapshot.
 
 ## Next proof
 
-Model the repaired physical `requireAll` worker and its actual ordered
-`IntMap.foldrWithKey` child adjustments. The trie compiler and its independent
-term meaning are complete. The ordinary-node maximum-key rejection must occur
+Derive the repaired physical `requireNode` callback. The trie compiler,
+independent term meaning, ordered child adjustments, and conditional forest
+composition are complete. Use `checked_row_exact` after deriving the actual
+callback contract. The ordinary-node maximum-key rejection must occur
 before child recursion. Empty maps must return the original source value.
 Missing list positions must keep the source list behavior.
 
