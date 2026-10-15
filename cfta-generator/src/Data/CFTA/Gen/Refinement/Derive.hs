@@ -78,6 +78,7 @@ module Data.CFTA.Gen.Refinement.Derive (
     measureNamed,
     fieldsContract,
     fieldsMeasure,
+    fieldsMeasureNamed,
     annotationFormulas,
 
     -- * Errors
@@ -218,6 +219,10 @@ fieldsContract count formulaOf = Annotation [Contract (Arity count) (formulaOf $
 -- | A measure of a constructor with the given number of fields, as 'fieldsContract' gives a contract.
 fieldsMeasure :: Int -> ([Expr] -> Expr) -> Annotation
 fieldsMeasure count termOf = Annotation [] [Measure (Arity count) (termOf $ fieldTerms count)] []
+
+-- | A named measure of a constructor with the given number of fields, as 'fieldsContract' gives a contract.
+fieldsMeasureNamed :: String -> Int -> ([Expr] -> Expr) -> Annotation
+fieldsMeasureNamed name count termOf = Annotation [] [] [(name, Measure (Arity count) (termOf $ fieldTerms count))]
 
 -- | The terms of the fields of a constructor, as a contract names them.
 fieldTerms :: Int -> [Expr]
