@@ -47,6 +47,14 @@ Before release, the package was called `microcfta`.
   once for each order of them, about e * (k - 1)!. On the products of
   `excludeAnywhereFTA` with a component of 9 states, `fromFTA` took 3.6 s at
   -O0 and takes 16 ms. The terms and their runs do not change.
+- `exclude`, `excludeFTA`, `excludeAnywhere`, and `excludeAnywhereFTA` keep a
+  template alive into a child only when the child can match its part, with
+  the other parts that it must match, at the root of one of its edges. A
+  part that no edge of the child fits is not passed to the child. On a cell
+  of Specftacular's lists-5-1 whose templates all have the root `app`, the
+  split at the function child made 3,521 copies and 190 states (1.4 s at
+  -O0); it now makes 10 copies and 10 states (5 ms). The terms and their
+  runs do not change.
 - Fix `reducePartially` not returning when a node at the end of an equality
   path reaches a recursive node with constraints. The intersection at that
   path unfolded the recursive node, a narrowed child contained its own
