@@ -2,4 +2,4 @@
 
 ## 0.1.0.0
 
-- The first version: `Decision`.
+- The first version: `Decision` and `Decision.Ollama`.
