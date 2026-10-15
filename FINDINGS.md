@@ -1,5 +1,39 @@
 # Current formalization findings
 
+## Global memo composition at normalized current entry
+
+Main `2ca1644c` is merged at `a7134ecb`. Proofs `36545747`, `143985fb`,
+`0845cfa6`, and `37efaa55` compose the SAME three global gate tables through
+actual folds, delayed tasks, current Decision, fourth-memo calls, and the
+reached current Scan. Initial invariants derive ordered call receipts and
+final memo/heap coherence. No accepted term or future-state invariant is
+supplied. Cached equality readback and the actual live precheck derive the
+proper-path domain. Physical accessor extraction and caller initialization
+remain explicit. Read `lean/notes-query-global-memos.md`.
+
+Current enumeration storage/order adapters derive allocated-prefix map/list
+correspondence and root-map/fallback closure laws. Out-of-range map insertion
+does not equal an old out-of-range list update. Actual canonicalClasses,
+sortOn/Double ordering, physical containers, capacity, whole scheduling, and
+representative waiting counts remain separate bridges. Grouped edgeCopies
+exclusion and typed derived refinements remain uncovered. The source removes
+deriveNode TODO prose; it adds no implementation. Read
+`lean/notes-main-2ca1644c.md`.
+
+Next connect physical equality records and initial caller construction, then
+the selected required-path/class-reduction/empty-propagation fallback.
+General recursive completion, GHC demand/publication, checked native state,
+word bounds, whole enumeration, broader APIs, and all distinct exact Sized
+contracts remain. Full library scope stays active.
+
+The full audit passes 2,105 jobs and 52,700 dependency checks with permitted
+axioms only and no new warning. Required Nix checks pass all six suites,
+720 examples plus golden. Formatting passes. Eight new modules and four
+additive Audit imports preserve all older proof definitions. The closing
+2,784-file snapshot is `/tmp/mcfta-query-global-checkpoint-20261015-2208/`.
+All prior proofs, counterexamples, repairs, drafts, stashes, and worktrees
+remain. Earlier sections retain their historical source and proof scopes.
+
 Updated: **2026-10-15 21:48 CEST (Europe/Stockholm)**.
 
 ## Current secondary, fourth-memo scan, and main 7fdebd07

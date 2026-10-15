@@ -1,5 +1,32 @@
 # Public API and source correspondence
 
+## Global memo composition and current source adapters
+
+Main `2ca1644c` is merged at `a7134ecb`. Read
+[the global memo proof](notes-query-global-memos.md) and
+[the source comparison](notes-main-2ca1644c.md). Full scope stays active.
+Earlier sections retain historical source and proof scopes.
+
+Current reached class scans retain actual global gate tables through folds,
+delayed tasks, Decision, and fourth-memo calls. Cached accessor readback and
+actual precheck derive their proper paths. Physical record extraction,
+initial caller construction, selected fallback, GHC demand/publication,
+general completion, checked native state, and word bounds remain explicit.
+
+`Enumeration` now has IntMap value slots, one edge-order closure, and raw
+`runsInterned`. New adapters prove allocated-prefix slot laws, root-map hit
+and fallback precedence, and finite ordinary/CPS branch order. Actual
+canonicalClasses, sortOn/Double ordering, NodeId coherence, machine capacity,
+containers, whole scheduler, representative waiting counts, and shared
+helper memo effects remain open. Grouped `Template.edgeCopies` needs its
+partition/construction/unambiguity proof. Derive changes only remove TODO
+prose. Typed NodeView/MeasureRecord, broader APIs, and all distinct Sized
+runtime contracts remain open.
+
+The full audit passes 2,105 jobs and 52,700 dependency checks. Required
+Nix checks pass 720 examples plus golden across all six suites. Eight new
+modules and four additive Audit imports preserve older proof definitions.
+
 ## Current complete secondary and memoized class scan
 
 Source main `7fdebd07` is merged at `a3e68610`. Proofs `0992b336`,

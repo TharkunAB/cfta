@@ -2,6 +2,45 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Global memo composition at normalized current entry
+
+Main `2ca1644c` is merged at `a7134ecb`. Proofs are `36545747`,
+`143985fb`, `0845cfa6`, and `37efaa55`. Read
+`lean/notes-query-global-memos.md` and `lean/notes-main-2ca1644c.md` first.
+Full library scope stays active. Earlier sections retain historical scope.
+
+The SAME three global gate tables now compose through actual Fold/Seeded,
+delayed Force/Expose/Run/Decision, the fourth memo, and every reached current
+Scan branch. Actual ordered calls derive final coherence and heap invariants
+from initial invariants. No accepted candidate or future-validity premise
+is supplied. Cached accessor readback and the actual live precheck derive
+proper paths. The entry theorem needs no separate proper-path premise.
+
+Next derive physical accessor records from the actual equality interner and
+connect initial caller construction. Then compose selected requireAll,
+class reduction, and empty propagation. Keep actual completed scoped and
+exploration receipts explicit until their completion is derived. Keep GHC
+demand/sharing/publication, checked native state, word bounds, general
+completion, and shared reaches-helper effects separate.
+
+The source adds IntMap value slots and one edge-order closure. Two new
+adapters derive allocated-prefix and root-map/fallback laws. Physical
+containers, canonicalClasses, Double/sort implementation, machine capacity,
+whole enumeration, and representative waiting counts remain open. Grouped
+template exclusion and typed NodeView/MeasureRecord frontends remain open.
+Keep all broader API and distinct exact Sized obligations.
+
+The aggregate audit passes 2,105 jobs and 52,700 dependency checks, permitted
+axioms only, no new warning. Eight new modules and four additive Audit
+imports contain the proof change. Required Nix checks pass all six suites,
+720 examples plus golden. Changed-file Fourmolu and active Cabal-gild pass.
+Start: `/tmp/mcfta-current-secondary-checkpoint-20261015-2148/` (2,774 files).
+Closing: `/tmp/mcfta-query-global-checkpoint-20261015-2208/` (2,784 files).
+Script: `/tmp/mcfta-preserve-query-global-20261015.py`.
+All prior proofs, repros, repairs, drafts, stashes, and worktrees remain.
+Weekly allowance is 83%. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
 ## Current secondary, fourth-memo scan, and main 7fdebd07
 
 Main `7fdebd07` is merged at `a3e68610`. Proofs are `0992b336`,

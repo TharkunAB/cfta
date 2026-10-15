@@ -1,6 +1,52 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 21:48 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 22:08 CEST (Europe/Stockholm)**.
+
+## Global memo composition at normalized current entry
+
+Main `2ca1644c` is merged at `a7134ecb`. Proof commits are `36545747`,
+`143985fb`, `0845cfa6`, and `37efaa55`. Read
+`lean/notes-query-global-memos.md` and `lean/notes-main-2ca1644c.md` first.
+Full library scope stays active. Earlier sections retain historical scope.
+
+The SAME three global gate tables now pass through actual Fold/Seeded,
+delayed Force/Expose/Run/Decision, the fourth memo, and the reached current
+Scan. Ordered call receipts derive final coherence, readiness, costs,
+normalized fields, original heap/value retention, and fourth-memo history.
+No accepted candidate, future readiness, or future table validity is supplied.
+The cached accessor and actual precheck derive proper paths at live entry.
+No separate proper-path or coherent Record premise is needed by live_memos.
+Exact accessor readback and initial caller invariants remain explicit.
+
+Next connect the physical equality interner to accessor records and initial
+caller construction. Existing payload/readback APIs can derive the record
+facts. Derive their actual constructor provenance and coverage. Then compose
+selected requireAll, class reduction, and final empty propagation. Actual
+completed scoped requests and exploration remain explicit. General native
+completion, checked state, word bounds, GHC demand/sharing/publication, and
+shared reaches-helper effects remain open.
+
+Two source adapters cover current IntMap slot lookup/insertion under an
+allocated-prefix domain and current root-map/fallback/weight order closures.
+Whole enumeration, representative waiting counts, canonicalClasses,
+sortOn/Double, physical storage, and machine capacity remain open. Grouped
+template exclusion, typed derived refinements, broader APIs, and all separate
+exact Sized contracts remain.
+
+The aggregate audit passes 2,105 jobs and 52,700 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. No new warning occurs.
+Eight new modules and four additive Audit imports contain the proof change.
+All older non-Audit proof files remain byte-identical. Required strict Nix
+build and all six suites pass 720 examples plus golden checks. Changed-file
+Fourmolu and all four active package Cabal-gild checks pass.
+
+Start: `/tmp/mcfta-current-secondary-checkpoint-20261015-2148/` (2,774 files).
+Closing: `/tmp/mcfta-query-global-checkpoint-20261015-2208/` (2,784 files).
+Script: `/tmp/mcfta-preserve-query-global-20261015.py`.
+Evidence: `/tmp/mcfta-query-global-*`. All prior artifacts and 13 marked
+external drafts remain. Stashes and other worktrees remain unchanged.
+Weekly allowance is 83%. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
 
 ## Current secondary, fourth-memo scan, and main 7fdebd07
 

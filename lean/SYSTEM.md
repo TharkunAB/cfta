@@ -1,5 +1,28 @@
 # Constrained languages, indexing, and distributions
 
+## Global memo composition at normalized current entry
+
+Source main `2ca1644c` is merged at `a7134ecb`. Proofs `36545747`,
+`143985fb`, `0845cfa6`, and `37efaa55` derive actual global table effects
+through folds, delayed tasks, Decision, the fourth memo, and current Scan.
+The cached accessor and actual precheck derive proper paths. No accepted
+candidate or future-state invariant supplies the memo-effect result. Read
+[the proof and remaining caller obligations](notes-query-global-memos.md).
+Physical entry, caller construction, selected fallback, general completion,
+and runtime correspondence remain open. Full library scope stays active.
+
+The current IntMap storage and edge-order closure adapters retain explicit
+allocated-domain, completed-row, and comparator contracts. Whole enumeration,
+canonicalClasses, representative waiting counts, grouped template exclusion,
+and typed derived refinements remain open. Read
+[the source comparison](notes-main-2ca1644c.md). Keep the independent language,
+distinct-term rank, member-rank, probability, and exact Sized contracts below.
+
+The full audit passes 2,105 jobs and 52,700 dependency checks, permitted
+axioms only, no new warning. Required Nix checks pass all six suites,
+720 examples plus golden. All earlier proofs/repros/drafts remain.
+Earlier sections retain historical source and proof scopes.
+
 ## Current complete secondary and memoized class scan
 
 Source main `7fdebd07` is merged at `a3e68610`. Proofs `0992b336`,

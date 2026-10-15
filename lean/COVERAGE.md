@@ -1,5 +1,40 @@
 # Full formalization coverage
 
+## Global memo composition at normalized current entry
+
+Source main `2ca1644c` is merged at `a7134ecb`. Read
+[the memo proof scope](notes-query-global-memos.md) and
+[the source comparison](notes-main-2ca1644c.md). Full library scope stays.
+Earlier sections retain their historical source and proof scopes.
+
+`SourceClassQueryGlobalMemos`, `SourceTaskQueryGlobalMemos`, and
+`SourceDecisionGlobalMemos` derive actual Fold/Seeded, Force/Expose/Run,
+current Decision, and fourth-memo hit/miss receipts. The current query and
+scan modules pass the SAME three gate tables through all reached branches.
+Initial invariants derive final coherence, readiness, costs, fields, heap
+retention, original values, and fourth-memo history. No accepted candidate
+or future-state invariant is supplied. `SourceCurrentClassEntryGlobalMemos`
+derives proper paths from cached accessor readback and the actual precheck.
+Physical record extraction and initial caller construction remain explicit.
+Selected requireAll/class reduction/empty propagation, general completion,
+checked native transfer, word bounds, and GHC demand/publication remain open.
+
+`SourceCurrentEnumerationStorage` derives allocated-prefix map/list laws.
+Writes require allocated keys. Actual bounded union-find receipts derive
+representative slot reads. `SourceCurrentEnumerationOrder` derives exact
+root-map/fallback closure equations and raw ordinary/CPS branch order.
+Actual canonicalClasses, sortOn/Double, NodeId coherence, physical storage,
+capacity, whole scheduler, representative waiting counts, and shared helper
+memo effects remain open. Complete grouped template exclusion, typed derived
+refinement APIs, broader runtime/API obligations, and distinct Sized class,
+execution, canonical sequence, size-major enumeration, and inverses remain.
+
+The full audit passes 2,105 jobs and 52,700 dependency checks with permitted
+axioms only and no new warning. Eight new modules and four additive Audit
+imports preserve every older non-Audit proof file. Required Nix validation
+passes all six suites, 720 examples plus golden. Formatting passes.
+The closing snapshot has 2,784 files. All prior artifacts remain.
+
 ## Current complete secondary and memoized class scan
 
 Source main `7fdebd07` is merged at `a3e68610`. Proofs `0992b336`,

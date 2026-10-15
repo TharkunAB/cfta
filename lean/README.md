@@ -1,5 +1,28 @@
 # cfta formal model
 
+## Global memo composition at normalized current entry
+
+Source main `2ca1644c` is merged at `a7134ecb`. Proofs `36545747`,
+`143985fb`, `0845cfa6`, and `37efaa55` pass the SAME global gate tables
+through actual folds, delayed tasks, Decision, fourth-memo calls, and the
+current reached Scan. Initial invariants derive final coherence. Cached
+accessor readback and live precheck derive proper paths. Read
+[the memo composition and remaining caller work](notes-query-global-memos.md).
+Physical entry, caller initialization, selected fallback, runtime, and
+general completion remain open. Full library scope stays active.
+
+Current source adapters cover allocated-prefix IntMap slot laws and exact
+root-map/fallback closure order. Whole enumeration, actual canonicalClasses,
+containers, machine capacity, representative waiting counts, grouped template
+exclusion, and typed derived refinements remain open. Read
+[the source comparison](notes-main-2ca1644c.md).
+
+The aggregate audit passes 2,105 jobs and 52,700 dependencies, permitted
+axioms only, no new warning. Eight new modules and four additive Audit
+imports preserve older definitions. Required Nix checks pass 720 examples
+plus golden across all six suites. Formatting passes. Keep every separate
+exact Sized contract. Earlier sections retain historical scopes.
+
 Current source: `TharkunAB/cfta`, `origin/main` at `88998669`, merged at `6d1462c7`.
 Continue on `formalize`; push verified checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
