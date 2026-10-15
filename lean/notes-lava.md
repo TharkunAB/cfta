@@ -7,6 +7,19 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Guarded-edge application (2026-10-15 07:04 CEST)
+
+Actual source guard readback now supplies valid own records and satisfaction.
+Literal edge reconstruction has two-way worker/graph agreement, stable finite
+bounds, exact original labels, and both source memo certificates. Independent
+language exactness retains inherited satisfaction and local guard-constructor
+contracts. Concrete constructor laws require normalized stored payloads; their
+restriction to actual reached guards remains next. Read
+[the guarded-edge note](notes-guarded-edge.md). The singleton-storage boundary
+prevents an unrestricted raw-constraint claim. The explicit graph method does
+not supply GHC lazy scheduling, native container correctness, or extraction.
+No Lava or Rocq dependency is added.
+
 ## Complete native one-pass application (2026-10-15 06:47 CEST)
 
 The guarded one-pass worker now has checked function/graph agreement,

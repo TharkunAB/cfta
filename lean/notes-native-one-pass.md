@@ -5,6 +5,11 @@ Proofs: `565ea4a4`, `b859a782`, and `ed3568fe`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+The actual guarded-edge reconstruction target below is now proved in
+[the guarded-edge note](notes-guarded-edge.md). Actual own readback derives
+physical validity and satisfaction. The generic guard-constructor contracts
+still require a proof restricted to normalized actual reached guards.
+
 ## Physical record selection
 
 SourceEqualityRecordSelectionWorker.queries runs the actual classMeets worker

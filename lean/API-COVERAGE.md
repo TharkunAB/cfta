@@ -1,5 +1,67 @@
 # Public API and source correspondence
 
+## Guarded-edge reconstruction and actual guard readback
+
+Proofs: `5ac49f0a`, `dbd22112`, and `70d3e67c`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-guarded-edge.md`. This section supersedes the guarded-edge
+reconstruction target and earlier audit counts.
+
+Actual sourceEqualities now derives valid physical records from cached
+normalized payloads. Complete guard acceptance implies their independent
+own-class satisfaction, including residual guards. No guard-to-payload law
+or completed pass is supplied. Source normalization, the empty shortcut,
+combination, and the accessor derive coherent nontrivial canonical classes.
+
+The guarded-edge worker runs the actual accessor and complete native pass,
+then literal makeEdge with the original symbol and complete constraint.
+Accessor errors, child errors, and incomplete child observations retain their
+actual scope. Complete graphs and successful bounded workers agree in both
+directions. Every complete graph supplies six stable stage bounds and an
+additional eventual array bound. Results and full native states are unique.
+Original closed construction derives finite execution, both source memo
+certificates, final idle validity, histories, residency, and closed children.
+
+The independent edge theorem narrows unconditionally. It gives exact language
+under inherited satisfaction and the existing native guard-constructor laws.
+Actual own validity and satisfaction come from the accessor. The new source
+entry combines this theorem with finite original construction. The local
+clear/top/conjunction contracts remain explicit; they are not yet discharged
+for all actual reached source guards.
+
+Concrete source Top, plain, and conjoinConstraints laws are now proved.
+The conjunction and plain truth laws require normalized stored operands.
+A checked singleton-storage boundary shows why the invariant matters:
+normalization discards a malformed singleton's existence test. Therefore do
+not instantiate the generic unrestricted guard laws with arbitrary raw
+Constraint values. The concrete normalized laws do not establish those
+unrestricted premises. This remains a source-correspondence obligation.
+
+Kernel checks retain reflexive Same as residual, unchanged mixed children,
+immediate inherited contradiction, original complete labels, actual final
+edge allocation, and unchanged native memo counters. All ten new modules pass
+focused builds. The aggregate audit passes 1,782 jobs and 47,576 dependency
+checks using only propext, Classical.choice, and Quot.sound. Only the older
+unused inputs warning remains. Log: `/tmp/mcfta-guarded-edge-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-guarded-edge-checkpoint-20261015-0704/` (2,186 Lean-tree files and four root documents).
+Older proof bytes except audit imports, all counterexamples, marked drafts,
+production source, stashes, and other worktrees remain unchanged. The earlier
+645 Haskell examples and formatter checks apply to the unchanged source.
+Weekly allowance was 16% at 2026-10-15 07:04 CEST. Refresh it before work.
+Stop all work and owned workers immediately at 1% or less.
+
+Next carry normalized stored-constraint invariants through original source
+annotations, constructor-cache growth, shared edits, and native intersection.
+Restrict generic language guard premises to actual reached guards. Use the
+concrete constructor laws to discharge those premises at each actual prefix.
+Do not assume unrestricted conjunction on malformed raw payloads. Then
+compose inherited descendant processing and the complete reducePartially
+traversal. Open contexts, repeated fixed points, getAllAtPath, native containers,
+GHC lazy scheduling, and extraction remain open. Preserve exact Sized classes,
+finite execution, size order, both distinct-term rank inverses, the optimized
+interned core, and all older proofs and boundary artifacts.
+
 ## Complete guarded native one-pass worker
 
 Proofs: `565ea4a4`, `b859a782`, and `ed3568fe`.
