@@ -1,6 +1,41 @@
 # Current formalization findings
 
-Updated: **2026-10-15 19:36 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 19:53 CEST (Europe/Stockholm)**.
+
+## Actual selected projection from secondary gate traces
+
+Proof `ea919bfa` is pushed. Source main remains `525d722e`. Read
+`lean/notes-source-gate-projection.md`.
+
+The gate-to-projection bridge now derives actual finite natural-path
+projection, closed resident output, retained accepted subtrees, and physical
+annotations. Support is closedness or an exact false node certificate at
+one fixed final gate heap. Actual epsilon origins and complete canonical
+row readback transfer it to selected children. Repeated open Mu heads use
+actual head completion and exact language. No whole-original-value or
+whole-head closedness premise is restored.
+
+Initial and anchor gate Ready retain CostHeap for endpoint closedness.
+Later callers need SemanticReady, current original availability, and growth
+from the completed gate heap. Actual effects retain histories. False proper
+forest gates derive all projection premises; [] remains excluded.
+
+Next adapt actual Operand.force and IdleReady.advance, then Fold/Seeded
+with one anchor and retained original Values. Preserve the seeded rotation.
+For refutes_decision, assume ClassSat first and derive proper paths before
+effects/fields. Nontrivial and false secondary gates alone do not exclude
+[]. Actual native word ranges, checked-state transfer, lazy demand, general
+completion, full caller, recent features, broader APIs/runtime, and Sized
+remain open.
+
+Full audit: 2,042 jobs, 51,971 dependency checks, permitted axioms only,
+no new warning. Prior definitions remain byte-identical except two Audit
+imports. All four Haskell package trees match `5234cbab`; checks were not
+repeated. Start: `/tmp/mcfta-secondary-gate-checkpoint-20261015-1936/`
+(2,703 files). Closing: `/tmp/mcfta-gate-projection-checkpoint-20261015-1953/`
+(2,709 files). Script: `/tmp/mcfta-preserve-gate-projection-20261015.py`.
+All prior artifacts remain. Weekly allowance is 86%. Full scope stays active.
+Earlier sections retain their historical checkpoint scope.
 
 ## Secondary gate replay and exact recursive head exposure
 

@@ -1,5 +1,11 @@
 # Secondary gate effects, endpoints, and actual head completion
 
+The [selected projection note](notes-source-gate-projection.md) records the
+later gate-to-projection proof. Finite projection, accepted-subtree inclusion,
+and physical annotations are now derived for proper false forest paths.
+The next target is the actual scoped Operand/Fold/Seeded transfer.
+Earlier results and limits below retain their checkpoint scope.
+
 Source main remains `525d722e`. The starting checkpoint is `516615d0`.
 The checked proof checkpoint is `e7c08d35`, pushed to origin/formalize.
 The [open ordinary-head note](notes-source-open-ordinary-head.md) records

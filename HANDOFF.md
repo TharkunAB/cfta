@@ -1,6 +1,47 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 19:36 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 19:53 CEST (Europe/Stockholm)**.
+
+## Actual selected projection from secondary gate traces
+
+Proof `ea919bfa` is pushed to origin/formalize. Source main stays `525d722e`.
+Read `lean/notes-source-gate-projection.md` first. Full scope stays active.
+
+Anchored Support is now proved through actual epsilon origins, canonical
+rows, makeNode, and selected child positions. Actual false traces derive the
+semantic/weighted final anchor, original availability, and exact effect-free
+certificates. Projection inducts on natural path length and uses actual head
+completion at recursive values. It derives finite Project/Forest receipts,
+Keeps, SemanticReady, and closed available output in later retained heaps.
+Actual completed receipts also retain independently accepted subtrees and
+physical annotations. Direct false-path wrappers exclude forest [].
+The cost heap stays explicit at the initial gate and anchor. Later caller
+heaps need only SemanticReady, current Available/Values, and Grows from G.
+No completed projection, closed output, or final semantic/field oracle is
+assumed. Natural-to-Int projection does not derive machine integer bounds.
+
+Next add an actual Operand adapter to these ForestSupport laws. Use its
+literal force receipt and IdleReady.advance, retaining native memo/domain
+state. Then compose Fold/Seeded with one fixed anchor, current original
+Values, and current growth. Each native Step receives derived closed
+operands. Preserve Fold head/tail/intersection and Seeded rest ++ [seed].
+For gate-based refutes_decision, begin with the ClassSat assumption. Derive
+proper paths from Nontrivial + ClassSat before effects or fields. A false
+forest gate and Nontrivial alone do not exclude []. Apply Decision.sound
+after the common accepted subtree is retained. Actual native WordRanges,
+newer checked-state transfer, lazy demand, general completion, whole caller,
+waiting counts, template exclusion, other APIs/runtime, and Sized remain.
+
+Full audit: 2,042 jobs and 51,971 dependency checks, permitted axioms only,
+no new warning. Log: `/tmp/mcfta-gate-projection-audit-20261015.log`.
+All prior definitions except two additive Audit imports remain unchanged.
+All four Haskell package trees match `5234cbab`; checks were not repeated.
+Start: `/tmp/mcfta-secondary-gate-checkpoint-20261015-1936/` (2,703 files).
+Closing: `/tmp/mcfta-gate-projection-checkpoint-20261015-1953/` (2,709 files).
+Script: `/tmp/mcfta-preserve-gate-projection-20261015.py`.
+All earlier proofs, repros, drafts, stashes, and other worktrees remain.
+Weekly allowance is 86%. Stop owned work at 1% or less. No board posts
+or deployments. Earlier sections retain historical checkpoint scope.
 
 ## Secondary gate replay and exact recursive head exposure
 
