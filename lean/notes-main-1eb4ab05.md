@@ -43,6 +43,18 @@ and both signed inverse laws. Correct external replies and finite attempts
 remain separate contracts. Historical preparation/public modules remain intact.
 They target their historical source unless application-free compatibility applies.
 
+`SourceSizedFiniteKeysAppliedLiquid` runs the current encoded callback on the
+actual original-state raw trim and state folds. `encoded_correct` and
+`encoded_finite` retain their separate contracts. `encoded_exact` and
+`encoded_complete_exact` connect successful outcomes to the common full API laws.
+The older `SourceSizedFiniteKeysPublic` and `SourceSizedFiniteKeysNativeLiquid`
+encoded endpoints remain historical. The current endpoint does not retarget
+`SourceColdSharedRows.Trace.liquid_correct`,
+`SourceFreshOrdinaryColdSharedRows.Trace.liquid_language` or `.liquid_exact`, or
+`SourceFreshOrdinaryLiquidEntry.Execution` or `.open_result`. Those wrappers
+still use historical preparation and meaning. Their current-source composition
+remains open beyond the proved application-free compatibility.
+
 The optimized interned core, equality operations, Sized definitions, and older
 constructor/equality proofs are preserved. The merge changes no Lean proof.
 The new source-comparison modules are additive.
