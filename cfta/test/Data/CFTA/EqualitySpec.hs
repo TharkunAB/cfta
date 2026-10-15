@@ -414,7 +414,9 @@ spec = do
             -- [w(root), w(root)], so the pass demanded its own result. Only
             -- "a" is in 'constrained', and no term is in the root: the
             -- intersection of the class needs the root again. With "a" in the
-            -- second child too, the root accepts p(w(a), w(a)).
+            -- second child too, the root accepts p(w(a), w(a)). The
+            -- enumeration merges the two children of the class into that
+            -- intersection, so it ends only if the merge finds it empty.
             let wrap child = Node [Edge "w" [child]]
                 same = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
                 plain = Mu $ \r -> Node [Edge "a" [], Edge "p" [wrap r, wrap r]]
@@ -430,12 +432,15 @@ spec = do
                         , termsMatching (TemplateNode "p" [Hole, Hole]) root
                         , fixUnbounded (withoutRedundantEdges . reducePartially) root
                         ]
+                    listed = (terms root, terms withLeaf)
                 _ <- evaluate (sum (map nodeCount (reducePartially withLeaf : reduced)))
-                pure reduced
+                _ <- evaluate (length (show listed))
+                pure (reduced, listed)
             case result of
-                Nothing -> expectationFailure "the reduction did not finish"
-                Just reduced -> do
+                Nothing -> expectationFailure "the reduction or the enumeration did not finish"
+                Just (reduced, listed) -> do
                     reduced `shouldBe` [EmptyNode, EmptyNode, EmptyNode]
+                    listed `shouldBe` ([], [pair])
                     forM_ [0 .. 4] $ \depth -> do
                         terms (boundDepth depth root) `shouldBe` []
                         terms (boundDepth depth constrained) `shouldBe` [leaf]

@@ -29,6 +29,7 @@ module Data.CFTA.Enumeration (
     plainTerms,
     plainTermsAtMost,
     unconstrained,
+    reachesConstrainedMu,
     provablyEmpty,
 
     -- * Pruning oracles
@@ -77,6 +78,7 @@ import qualified Data.CFTA.Internal.UnionFind as UnionFind
 import Data.CFTA.Interned
 import Data.CFTA.Interned.Memo (TypeableMemoCache, memoTypeableWith, newTypeableMemoCache)
 import Data.CFTA.Path (Pathable (getPath))
+import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 import qualified Data.HashSet as HashSet
@@ -176,19 +178,30 @@ data UVarValue symbol
       UVarEliminated
     deriving (Eq, Show)
 
+{- | Intersect two UVar values. With the first argument true, an intersection
+that provably accepts no term becomes 'EmptyNode' (see '_constrainedRecursion').
+-}
 intersectUVarValue ::
     (Hashable symbol, Typeable symbol) =>
-    UVarValue symbol -> UVarValue symbol -> UVarValue symbol
-intersectUVarValue (UVarUnenumerated mn1 scs1) (UVarUnenumerated mn2 scs2) =
+    Bool -> UVarValue symbol -> UVarValue symbol -> UVarValue symbol
+intersectUVarValue checkEmpty (UVarUnenumerated mn1 scs1) (UVarUnenumerated mn2 scs2) =
     let newContents = case (mn1, mn2) of
             (Nothing, x) -> x
             (x, Nothing) -> x
-            (Just n1, Just n2) -> Just (n1 `intersect` n2)
+            (Just n1, Just n2) -> Just (emptyIfProvably (n1 `intersect` n2))
         newConstraints = scs1 <> scs2
      in UVarUnenumerated newContents newConstraints
-intersectUVarValue UVarEliminated _ = error "intersectUVarValue: Unexpected UVarEliminated"
-intersectUVarValue _ UVarEliminated = error "intersectUVarValue: Unexpected UVarEliminated"
-intersectUVarValue _ _ = error "intersectUVarValue: Intersecting with enumerated value not implemented"
+  where
+    -- An intersection can unfold a recursive node with constraints into a
+    -- node that needs itself again with no base case. Enumeration of such a
+    -- node would not end, so the merge makes it 'EmptyNode', and the caller
+    -- ends the branch.
+    emptyIfProvably n
+        | checkEmpty, reachesConstrainedMu n, provablyEmpty n = EmptyNode
+        | otherwise = n
+intersectUVarValue _ UVarEliminated _ = error "intersectUVarValue: Unexpected UVarEliminated"
+intersectUVarValue _ _ UVarEliminated = error "intersectUVarValue: Unexpected UVarEliminated"
+intersectUVarValue _ _ _ = error "intersectUVarValue: Intersecting with enumerated value not implemented"
 
 -----------------------
 ------- Top-level state
@@ -232,6 +245,10 @@ data EnumerationState symbol = EnumerationState
     , _edgeWeights :: Maybe (Edge symbol -> Double)
     {- ^ The weights of 'runsBy'. The enumeration tries the edges of a node
     with larger weights first.
+    -}
+    , _constrainedRecursion :: !Bool
+    {- ^ Whether the root reaches a recursive node with constraints. Only then
+    can a merge unfold one, so only then does a merge run 'provablyEmpty'.
     -}
     }
 
@@ -281,6 +298,7 @@ initEnumerationState weights n =
             HashSet.empty
             (maybe id (IntMap.map . byWeight) weights (canonicalOrder n))
             weights
+            (reachesConstrainedMu n)
 
 ---------------------------------------------------------------------------
 ---------------------------- Enumeration monad ----------------------------
@@ -470,7 +488,8 @@ assimilateUvarVal uvTarg uvSrc
         case srcVal of
             UVarEliminated -> return () -- Happens from duplicate constraints
             _ -> do
-                let v = intersectUVarValue srcVal targVal
+                checkEmpty <- gets _constrainedRecursion
+                let v = intersectUVarValue checkEmpty srcVal targVal
                 guard $ not $ hasEmptyContents v
                 -- The suspended constraints of the source move to the
                 -- target, in the same class, so no count changes.
@@ -488,7 +507,8 @@ mergeNodeIntoUVarVal uv n scs = do
     uv' <- getUVarRepresentative uv
     let idx = uvarToInt uv'
     values <- gets _uvarValues
-    let new = intersectUVarValue (UVarUnenumerated (Just n) scs) (Sequence.index values idx)
+    checkEmpty <- gets _constrainedRecursion
+    let new = intersectUVarValue checkEmpty (UVarUnenumerated (Just n) scs) (Sequence.index values idx)
     -- The slot keeps its suspended constraints and gains these.
     writeUVarValue scs Sequence.Empty uv' new
     inheritAncestry idx
@@ -518,6 +538,31 @@ unconstrained = memoTypeableWith @symbol unconstrainedCache $ getAll . crush fre
     free (Node es) = All (all (\e -> equalities (edgeConstraint e) == EmptyConstraints && not (residual (edgeConstraint e))) es)
     free _ = All True
 
+{- | Whether a closed node reaches a recursive node with constraints. A
+recursive node without constraints reaches no constraint at all, so the walk
+does not enter it.
+-}
+reachesConstrainedMu :: forall symbol. (Typeable symbol) => Node symbol -> Bool
+reachesConstrainedMu = memoTypeableWith @symbol reachesConstrainedMuCache go
+  where
+    go n | numNestedMu n == 0 = False
+    go n@(InternedMu _) = not (unconstrained n)
+    go (InternedUnion alternatives) = any reachesConstrainedMu (internedUnionMembers alternatives)
+    go (Node es) = any (any reachesConstrainedMu . edgeChildren) es
+    go _ = False
+{-# INLINEABLE reachesConstrainedMu #-}
+{-# SPECIALIZE reachesConstrainedMu :: Node Symbol -> Bool #-}
+
+-- | Table for 'reachesConstrainedMu'.
+reachesConstrainedMuCache :: TypeableMemoCache
+reachesConstrainedMuCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE reachesConstrainedMuCache #-}
+
+-- | Table for 'provablyEmpty'.
+provablyEmptyCache :: TypeableMemoCache
+provablyEmptyCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE provablyEmptyCache #-}
+
 {- | Whether a closed node provably accepts no term. False proves nothing.
 
 A node can accept a term when one of its edges can. An edge can when each of
@@ -532,17 +577,18 @@ Emptiness is not decidable for every automaton with path equalities, so the
 check cannot find every empty node. It finds a class whose intersection needs
 the node again, with no other way to a term.
 -}
+{-# INLINEABLE provablyEmpty #-}
 provablyEmpty :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Bool
-provablyEmpty start = not (canAccept (grow IntSet.empty) start)
-  where
+provablyEmpty = memoTypeableWith @symbol provablyEmptyCache $ \start ->
     -- For each node that the check reads, the requirements of each edge.
-    rows :: IntMap.IntMap [[Node symbol]]
-    rows = explore emptinessBudget IntMap.empty [start]
-
+    let rows = explore emptinessBudget IntMap.empty [start]
+     in null (freeVars start) && not (canAccept rows (grow rows IntSet.empty) start)
+  where
+    explore :: Int -> IntMap.IntMap [[Node symbol]] -> [Node symbol] -> IntMap.IntMap [[Node symbol]]
     explore _ seen [] = seen
     explore budget seen (n : rest)
         | EmptyNode <- n = explore budget seen rest
-        | budget <= 0 || IntMap.member (key n) seen || not (null (freeVars n)) = explore budget seen rest
+        | budget <= 0 || not (null (freeVars n)) || IntMap.member (key n) seen = explore budget seen rest
         | otherwise = explore (budget - 1) (IntMap.insert (key n) edgeRows seen) (concat edgeRows <> rest)
       where
         edgeRows =
@@ -555,12 +601,12 @@ provablyEmpty start = not (canAccept (grow IntSet.empty) start)
         children
             <> [foldr1 intersect [getPath p children | p <- Set.toList (unPathEClass pec)] | pec <- unsafeGetEclasses classes]
 
-    grow known =
-        let next = IntMap.keysSet $ IntMap.filter (any (all (canAccept known))) rows
-         in if next == known then known else grow next
+    grow rows known =
+        let next = IntMap.keysSet $ IntMap.filter (any (all (canAccept rows known))) rows
+         in if next == known then known else grow rows next
 
-    canAccept _ EmptyNode = False
-    canAccept known n = IntMap.notMember (key n) rows || IntSet.member (key n) known
+    canAccept _ _ EmptyNode = False
+    canAccept rows known n = not (null (freeVars n)) || IntMap.notMember (key n) rows || IntSet.member (key n) known
 
     key n = let NodeId ident = nodeIdentity n in ident
 

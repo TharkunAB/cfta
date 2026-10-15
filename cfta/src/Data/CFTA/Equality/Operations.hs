@@ -23,14 +23,13 @@ import qualified Data.Set as Set
 import System.IO.Unsafe (unsafePerformIO)
 import Type.Reflection (Typeable)
 
-import Data.CFTA.Enumeration (provablyEmpty, unconstrained)
+import Data.CFTA.Enumeration (provablyEmpty, reachesConstrainedMu, unconstrained)
 import Data.CFTA.Equality.Constraint
 import Data.CFTA.Internal.Tree (adjustAt)
 import Data.CFTA.Interned
 import Data.CFTA.Interned.Memo (
     TypeableMemoCache,
     memo2TypeableWith,
-    memoTypeableWith,
     newTypeableMemoCache,
  )
 import Data.CFTA.Interned.Operations (mergeAlternatives)
@@ -63,7 +62,8 @@ constrained position must agree with every other.
 The pass does not unfold a recursive node that has constraints. A class that
 reaches into such a node, or ends above one, stays unreduced (see
 'reduceEqConstraints'). The language does not change, because enumeration and
-'accepts' still check that class.
+'accepts' still check that class. When the class ends above such a node and
+the nodes at its paths provably share no term, the edge becomes empty instead.
 -}
 reducePartially ::
     (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
@@ -263,23 +263,6 @@ reduceEqConstraints = go
     nodeMeetsConstrainedMu belowEnd EmptyPath n = not (null (freeVars n)) || (belowEnd && reachesConstrainedMu n)
     nodeMeetsConstrainedMu belowEnd p (Node es) = any (\e -> meetsConstrainedMu belowEnd (edgeChildren e) p) es
     nodeMeetsConstrainedMu _ _ _ = False
-
-genericReachesConstrainedMuCache :: TypeableMemoCache
-genericReachesConstrainedMuCache = unsafePerformIO newTypeableMemoCache
-{-# NOINLINE genericReachesConstrainedMuCache #-}
-
-{- | Whether a closed node reaches a recursive node with constraints. A
-recursive node without constraints reaches no constraint at all, so the walk
-does not enter it.
--}
-reachesConstrainedMu :: forall symbol. (Typeable symbol) => Node symbol -> Bool
-reachesConstrainedMu = memoTypeableWith @symbol genericReachesConstrainedMuCache go
-  where
-    go n | numNestedMu n == 0 = False
-    go n@(InternedMu _) = not (unconstrained n)
-    go (InternedUnion alternatives) = any reachesConstrainedMu (internedUnionMembers alternatives)
-    go (Node es) = any (any reachesConstrainedMu . edgeChildren) es
-    go _ = False
 
 -- | A trie of child positions that must exist. An empty map ends a required path.
 newtype Needed = Needed (IntMap.IntMap Needed)
