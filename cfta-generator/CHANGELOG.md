@@ -141,6 +141,14 @@ tree automata of `cfta`, with QuickCheck integration.
   of times. The module also has liquid automaton and datatype imports,
   `minimizePoolOn`, `compile` with Z3, `compileAssuming`, `compileWith`, and
   `validOutcomes`.
+- `Data.CFTA.Gen.Refinement.Derive`: refinement generators derived from a
+  `HasFTA` datatype. `HasLTA` holds an `Invariant`, a measure and a contract
+  written once as functions that are polymorphic over `Symbolic`, and
+  `deriveLTA` builds the generator that the combinators give, with their
+  ranks. `holds` and `measureOf` run the invariant on values.
+  `deriveLTAWith` takes the contracts and the measures by constructor name,
+  and `atom` gives the generator of each atomic field type. A contract
+  conjunct about one atomic field becomes a condition on that field.
 - `compile` folds the recipe of a generator once with the solver. It groups
   child languages by the observations a guard reads, decides each guard once
   for each tuple of groups, and prunes and splits imports by the same

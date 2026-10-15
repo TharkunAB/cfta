@@ -1595,6 +1595,50 @@ example, which bounds a recursive datatype grammar:
 cabal run cfta-automaton-interop
 ```
 
+### Derived refinement generators
+
+A datatype with a `HasFTA` instance has a grammar. With an invariant it also
+has a refinement generator. `Data.CFTA.Gen.Refinement.Derive` reads the
+constructors of the datatype from `HasFTA` and builds the generator that the
+combinators above give, so the ranks are the ranks of that hand-written
+generator. The invariant is a measure and a contract, written once as Haskell
+functions that are polymorphic over `Symbolic`:
+
+```haskell
+data SortedList = Nil | Cons Integer SortedList
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+
+instance HasLTA SortedList where
+    invariant = Measured headOf sorted
+      where
+        headOf Cons{} [x, _] = x
+        headOf _ _ = 1000001
+        sorted Cons{} [x, restHead] = 0 .<= x .&& x .<= 1000000 .&& x .<= restHead
+        sorted _ _ = true
+
+sortedLists :: Either DeriveLTAError (LTAGen.LTAGen SortedList)
+sortedLists = deriveLTA @SortedList 8 (atom @Integer LTAGen.every)
+```
+
+Each function takes a constructor, matched with a pattern that does not read
+its fields, and the integers of its fields: the value of an atomic field, and
+the measure of a field of the datatype. On `Expr`, the functions give the
+formulas of the generator. Here `sortedLists` is the generator of
+SortedLists.hs: the contract conjuncts that name only the element move to
+its `every` leaf, and the generator has C(1000009, 8) members. On `Integer`,
+`holds` and `measureOf` run the same functions on values, so the property
+of a test reads the invariant of the generator:
+`holds atoms invariant (Cons 3 (Cons 1 Nil))` is `False`.
+
+`deriving anyclass (HasLTA)` gives a datatype without an invariant. The bound
+and the atoms are arguments of `deriveLTA`, as the domains are arguments of
+`deriveFTAWith`, because they belong to one use of the datatype. The bound
+counts the unfoldings of each group of types that refer to each other, as
+`recurUpTo` does. `deriveLTAWith` is the level below: it takes the contracts
+and the measures of the constructors by name, as annotations in the
+expression language.
+
 ## Component synthesis
 
 Two modules use the automata and the generators to synthesize programs from
