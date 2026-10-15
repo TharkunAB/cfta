@@ -1780,6 +1780,8 @@ import MicroCFTA.SourceEqualityLazyClassEntry
 import MicroCFTA.SourceEqualityQueryGlobalMemos
 import MicroCFTA.SourceNativeGlobalMemos
 import MicroCFTA.SourceCurrentMuEndpointQuery
+import MicroCFTA.SourceCurrentSecondaryMemos
+import MicroCFTA.SourceCurrentEqualityClassEntry
 import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
 /-!
