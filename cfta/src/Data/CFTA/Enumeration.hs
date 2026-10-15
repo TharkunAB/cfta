@@ -55,7 +55,8 @@ import qualified Control.Monad.State.Strict as State
 import qualified Data.Foldable as Foldable
 import Data.Hashable (Hashable (..))
 import qualified Data.IntSet as IntSet
-import Data.List (compareLength, genericTake, sortOn)
+import Data.List (compareLength, genericTake, sortOn, transpose)
+import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Monoid (All (..))
 import Data.Ord (Down (..))
@@ -70,6 +71,7 @@ import Data.CFTA.Equality.Constraint (
     EqConstraints (EmptyConstraints, EqContradiction),
     PathEClass (getPathTrie),
     PathTrie (PathTrie),
+    combineEqConstraints,
     isTerminalPathTrie,
     unPathEClass,
     unsafeGetEclasses,
@@ -561,13 +563,22 @@ provablyEmptyCache = unsafePerformIO newTypeableMemoCache
 
 {- | Whether a closed node provably accepts no term. False proves nothing.
 
-A node can accept a term when one of its edges can. An edge can when each of
-its children can, and, for each equality class, the intersection of the
-nodes at the paths of the class can: the subterm that the class shares is in
-each of them. The check takes the least fixed point of this rule over the
-nodes that the node reaches through children and these intersections. A node
-beyond 'emptinessBudget' of them, and a node with free references, counts as
-a node that can accept a term. So true is never wrong.
+The check reads conjunctions: sets of nodes that one term must be in. A
+conjunction can accept a term when one of its edge tuples can. An edge tuple
+has one edge of each node, all with one symbol and one arity, and the classes
+of the equalities of all its edges. It can accept a term when, at each child
+position, the conjunction of the children of its edges can, and, for each
+class, the conjunction of the nodes at the paths of the class can: the
+subterm that the class shares is in each of them. The check takes the least
+fixed point of this rule over the conjunctions that the node reaches. A
+conjunction beyond 'emptinessBudget' of them, and a conjunction with free
+references, counts as one that can accept a term. So true is never wrong.
+
+The check builds no intersection. The intersection of an intersection is a
+new node, deeper in recursive nodes than its operands, and the cost of an
+intersection grows with that depth. Two conjunctions of the same nodes are
+one conjunction, so a class that needs a conjunction again closes the fixed
+point.
 
 Emptiness is not decidable for every automaton with path equalities, so the
 check cannot find every empty node. It finds a class whose intersection needs
@@ -576,37 +587,59 @@ the node again, with no other way to a term.
 {-# INLINEABLE provablyEmpty #-}
 provablyEmpty :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Bool
 provablyEmpty = memoTypeableWith @symbol provablyEmptyCache $ \start ->
-    -- For each node that the check reads, the requirements of each edge.
-    let rows = explore emptinessBudget IntMap.empty [start]
-     in null (freeVars start) && not (canAccept rows (grow rows IntSet.empty) start)
+    -- For each conjunction that the check reads, the requirements of each edge tuple.
+    let rows = explore emptinessBudget Map.empty [[start]]
+     in null (freeVars start) && not (canAccept rows (grow rows Set.empty) [start])
   where
-    explore :: Int -> IntMap.IntMap [[Node symbol]] -> [Node symbol] -> IntMap.IntMap [[Node symbol]]
+    explore :: Int -> Map.Map [Int] [[[Node symbol]]] -> [[Node symbol]] -> Map.Map [Int] [[[Node symbol]]]
     explore _ seen [] = seen
-    explore budget seen (n : rest)
-        | EmptyNode <- n = explore budget seen rest
-        | budget <= 0 || not (null (freeVars n)) || IntMap.member (key n) seen = explore budget seen rest
-        | otherwise = explore (budget - 1) (IntMap.insert (key n) edgeRows seen) (concat edgeRows <> rest)
+    explore budget seen (ns : rest)
+        | EmptyNode `elem` ns = explore budget seen rest
+        | budget <= 0 || not (all (null . freeVars) ns) || Map.member (keys ns) seen = explore budget seen rest
+        | otherwise = explore (budget - 1) (Map.insert (keys ns) tupleRows seen) (concat tupleRows <> rest)
       where
-        edgeRows =
-            [ requirements (equalities (edgeConstraint e)) (edgeChildren e)
-            | e <- nodeEdges n
-            , equalities (edgeConstraint e) /= EqContradiction
+        tupleRows =
+            [ requirements classes (map edgeChildren tuple)
+            | tuple <- edgeTuples ns
+            , let classes = foldr (combineEqConstraints . equalities . edgeConstraint) EmptyConstraints tuple
+            , classes /= EqContradiction
             ]
 
-    requirements classes children =
-        children
-            <> [foldr1 intersect [getPath p children | p <- Set.toList (unPathEClass pec)] | pec <- unsafeGetEclasses classes]
+    edgeTuples [] = []
+    edgeTuples (n : ns) = foldr extend [[e] | e <- nodeEdges n] ns
+      where
+        extend m tuples =
+            [ e : tuple
+            | tuple@(first : _) <- tuples
+            , e <- nodeEdges m
+            , edgeSymbol e == edgeSymbol first
+            , length (edgeChildren e) == length (edgeChildren first)
+            ]
+
+    requirements classes childLists =
+        map conjunction (transpose childLists)
+            <> [ conjunction [getPath p children | children <- childLists, p <- Set.toList (unPathEClass pec)]
+               | pec <- unsafeGetEclasses classes
+               ]
+
+    -- The nodes in the order of their identities, each once. A conjunction
+    -- with an empty node accepts nothing, so it is the empty node alone.
+    conjunction ns
+        | EmptyNode `elem` ns = [EmptyNode]
+        | otherwise = IntMap.elems $ IntMap.fromList [(key n, n) | n <- ns]
 
     grow rows known =
-        let next = IntMap.keysSet $ IntMap.filter (any (all (canAccept rows known))) rows
+        let next = Map.keysSet $ Map.filter (any (all (canAccept rows known))) rows
          in if next == known then known else grow rows next
 
-    canAccept _ _ EmptyNode = False
-    canAccept rows known n = not (null (freeVars n)) || IntMap.notMember (key n) rows || IntSet.member (key n) known
+    canAccept rows known ns
+        | EmptyNode `elem` ns = False
+        | otherwise = not (all (null . freeVars) ns) || Map.notMember (keys ns) rows || Set.member (keys ns) known
 
+    keys = map key
     key n = let NodeId ident = nodeIdentity n in ident
 
--- | The number of nodes that 'provablyEmpty' reads before it stops.
+-- | The number of conjunctions that 'provablyEmpty' reads before it stops.
 emptinessBudget :: Int
 emptinessBudget = 1000
 
