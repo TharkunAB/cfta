@@ -1765,6 +1765,10 @@ import MicroCFTA.SourceRefusedClassQuery
 import MicroCFTA.SourceRefusedClassDomainBoundary
 import MicroCFTA.SourceEqualityProjectionOpenOrdinary
 import MicroCFTA.SourceRefusedClassOpenHeadBoundary
+import MicroCFTA.SourceSecondaryGateHeap
+import MicroCFTA.SourceSecondaryGateEndpointClosed
+import MicroCFTA.SourceSecondaryGateHeadLanguage
+import MicroCFTA.SourceSecondaryGateHeadHeap
 /-!
 # Proof dependency audit
 
