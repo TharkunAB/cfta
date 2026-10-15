@@ -361,15 +361,44 @@ spec = do
                 shallowTerms depth (fixUnbounded reducePartially n) `shouldBe` shallowTerms depth n
 
         it "stops on classes over recursive children" $
-            -- 'reducePartially'' never enters a 'Mu', so only the fixpoint in
-            -- 'reduceEqConstraints' and repeated rounds can run forever. Each
-            -- case must end within two seconds.
+            -- 'reducePartially'' never enters a 'Mu'. No proof shows that one
+            -- pass, or repeated rounds, end on every input. Each case must end
+            -- within two seconds.
             property $
                 forAll recursiveNode $ \m -> within 2000000 $ ioProperty $ do
                     onePass <- evaluate (reducePartially m)
                     rounds <- evaluate (fixUnbounded reducePartially m)
                     _ <- evaluate (nodeCount onePass + nodeCount rounds)
                     pure $ shallowTerms 3 onePass == shallowTerms 3 m && shallowTerms 3 rounds == shallowTerms 3 m
+
+        it "stops when a narrowed child contains its ancestor" $ do
+            -- The formalization found this closed input. The class 0 = 1 of
+            -- the root ends above the constrained 'Mu' 'constrained', and its
+            -- intersection unfolded that 'Mu'. The narrowed children were
+            -- [w(root), w(root)], so the pass demanded its own result. Only
+            -- "a" is in 'constrained', and no term is in the root.
+            let wrap child = Node [Edge "w" [child]]
+                same = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
+                plain = Mu $ \r -> Node [Edge "a" [], Edge "p" [wrap r, wrap r]]
+                next = Node [Edge "p" [wrap plain, wrap plain]]
+                constrained = Mu $ \r -> Node [Edge "a" [], mkEdge "p" [wrap r, wrap next] same]
+                root = Node [mkEdge "p" [wrap constrained, wrap next] same] :: Node Symbol
+                leaf = Term.Node "a" []
+            result <- timeout 10000000 $ do
+                let reduced =
+                        [ reducePartially root
+                        , termsMatching (TemplateNode "p" [Hole, Hole]) root
+                        , fixUnbounded (withoutRedundantEdges . reducePartially) root
+                        ]
+                _ <- evaluate (sum (map nodeCount reduced))
+                pure reduced
+            case result of
+                Nothing -> expectationFailure "the reduction did not finish"
+                Just reduced ->
+                    forM_ [0 .. 4] $ \depth -> do
+                        forM_ (root : reduced) $ \n -> terms (boundDepth depth n) `shouldBe` []
+                        terms (boundDepth depth constrained) `shouldBe` [leaf]
+            accepts root (Term.Node "p" [Term.Node "w" [leaf], Term.Node "w" [leaf]]) `shouldBe` False
 
         it "reducing child domains preserves constrained terms" $
             property $

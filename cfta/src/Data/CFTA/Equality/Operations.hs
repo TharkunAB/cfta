@@ -30,6 +30,7 @@ import Data.CFTA.Interned
 import Data.CFTA.Interned.Memo (
     TypeableMemoCache,
     memo2TypeableWith,
+    memoTypeableWith,
     newTypeableMemoCache,
  )
 import Data.CFTA.Interned.Operations (mergeAlternatives)
@@ -60,9 +61,9 @@ Iterate to a fixpoint, as 'fixUnbounded' does, when every
 constrained position must agree with every other.
 
 The pass does not unfold a recursive node that has constraints. A class that
-reaches into such a node stays unreduced (see 'reduceEqConstraints'). The
-language does not change, because enumeration and 'accepts' still check that
-class.
+reaches into such a node, or ends above one, stays unreduced (see
+'reduceEqConstraints'). The language does not change, because enumeration and
+'accepts' still check that class.
 -}
 reducePartially ::
     (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
@@ -115,15 +116,29 @@ reducePartially' constraints node =
     -- At this node, we will have to combine the inherited constraints `0=1` and the local constraints `0.0=0.1=1`.
     -- Now, we can see that these two constraints contain a contradiction that requires `0=0.0=0.1`, so we can drop the edge.
     --
-    -- This does not stop every recursive cycle. A cycle through a recursive
-    -- node with constraints stops because 'reduceEqConstraints' does not
-    -- unfold that node. 'go' returns a recursive node unchanged, so one pass
-    -- visits a finite part of the input, and only the fixpoint in
-    -- 'reduceEqConstraints' can repeat. No proof shows that this fixpoint, or
-    -- a repetition of passes, ends on every input. The reduction tests "stops
-    -- on the example that needs inherited constraints", "stops on a class over
-    -- three recursive children", and "stops on classes over recursive
-    -- children" check this example and random recursive inputs.
+    -- The inherited constraints do not stop every recursive cycle. The pass
+    -- must also not unfold a recursive node that has constraints. 'go'
+    -- returns a recursive node unchanged. 'reduceEqConstraints' does not
+    -- reduce a class whose paths meet such a node, or end above one. Without
+    -- the last rule, an intersection at the end of a path can unfold the
+    -- node, and a narrowed child can then contain its own ancestor. The memo
+    -- then demands its own unfinished result. The test "stops when a narrowed
+    -- child contains its ancestor" has such an input.
+    --
+    -- One pass ends in two cases. If no reduced path meets a recursive node,
+    -- at its end or before it, the pass unfolds nothing. An intersection is
+    -- then not higher than the node that it replaces, so each narrowed child
+    -- is lower than its parent. If no node at the end of a reduced path has a
+    -- constraint, the narrowing adds no constraint. Then the pass changes no
+    -- node below the deepest constrained edge of the input, and below that
+    -- depth it stops at each recursive node. No proof covers the other
+    -- inputs. A class over paths of unequal length can move a constrained
+    -- node into the unfolding of a recursive node without constraints,
+    -- deeper than it was. No proof shows that a repetition of passes ends
+    -- either. The reduction tests "stops on the example that needs inherited
+    -- constraints", "stops on a class over three recursive children", and
+    -- "stops on classes over recursive children" check finite examples and
+    -- random recursive inputs.
     reduceWithInheritedEcs :: EqConstraints -> [Node symbol] -> [Node symbol]
     reduceWithInheritedEcs EqContradiction children = map (const EmptyNode) children
     reduceWithInheritedEcs inheritedEcs children = zipWith (\i -> reducePartially' (eqConstraintsDescend inheritedEcs i)) [0 ..] children
@@ -167,7 +182,9 @@ A class stays unreduced when one of its paths meets a recursive node with
 constraints, at the end of the path or before it. Unfolding such a node shows
 its constrained edges again, and their reduction unfolds the node again. A
 recursive node without constraints can unfold, because its unfolding has no
-constraints to reduce.
+constraints to reduce. A class also stays unreduced when a node at the end of
+one of its paths reaches a recursive node with constraints. The intersection
+at that path would unfold the recursive node too.
 -}
 reduceEqConstraints ::
     forall symbol.
@@ -214,7 +231,9 @@ reduceEqConstraints = go
     -- node: pruning a recursive body leaves references to the node that is
     -- being pruned, and its edges are not known there. So does a node with
     -- free references at the end of the path, and an unconstrained recursive
-    -- node with free references is followed through its unfolding.
+    -- node with free references is followed through its unfolding. A node at
+    -- the end of the path counts when it reaches a recursive node with
+    -- constraints ('reachesConstrainedMu').
     meetsConstrainedMu :: [Node symbol] -> Path -> Bool
     meetsConstrainedMu ns (ConsPath (ChildIndex index) rest) = maybe False (nodeMeetsConstrainedMu rest) (ns !? index)
     meetsConstrainedMu _ EmptyPath = False
@@ -227,9 +246,26 @@ reduceEqConstraints = go
         | not (unconstrained n) = True
         | null (freeVars n) = False
         | otherwise = nodeMeetsConstrainedMu p (unfoldOuterRec n)
-    nodeMeetsConstrainedMu EmptyPath n = not (null (freeVars n))
+    nodeMeetsConstrainedMu EmptyPath n = not (null (freeVars n)) || reachesConstrainedMu n
     nodeMeetsConstrainedMu p (Node es) = any (\e -> meetsConstrainedMu (edgeChildren e) p) es
     nodeMeetsConstrainedMu _ _ = False
+
+genericReachesConstrainedMuCache :: TypeableMemoCache
+genericReachesConstrainedMuCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE genericReachesConstrainedMuCache #-}
+
+{- | Whether a closed node reaches a recursive node with constraints. A
+recursive node without constraints reaches no constraint at all, so the walk
+does not enter it.
+-}
+reachesConstrainedMu :: forall symbol. (Typeable symbol) => Node symbol -> Bool
+reachesConstrainedMu = memoTypeableWith @symbol genericReachesConstrainedMuCache go
+  where
+    go n | numNestedMu n == 0 = False
+    go n@(InternedMu _) = not (unconstrained n)
+    go (InternedUnion alternatives) = any reachesConstrainedMu (internedUnionMembers alternatives)
+    go (Node es) = any (any reachesConstrainedMu . edgeChildren) es
+    go _ = False
 
 -- | A trie of child positions that must exist. An empty map ends a required path.
 newtype Needed = Needed (IntMap.IntMap Needed)
