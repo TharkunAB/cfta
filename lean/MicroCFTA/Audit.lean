@@ -1778,6 +1778,7 @@ import MicroCFTA.EndpointGateClassModes
 import MicroCFTA.SourceEqualityLazyClassSoundness
 import MicroCFTA.SourceEqualityLazyClassEntry
 import MicroCFTA.SourceEqualityQueryGlobalMemos
+import MicroCFTA.SourceNativeGlobalMemos
 /-!
 # Proof dependency audit
 
