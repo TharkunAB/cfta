@@ -33,7 +33,7 @@ import Data.Either (fromRight)
 import Data.Hashable (Hashable)
 import Data.List (partition, sort)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (mapMaybe)
+import Data.Maybe (isJust, mapMaybe)
 import qualified Data.Set as Set
 import Data.Typeable (Typeable)
 
@@ -159,7 +159,11 @@ child, so there it gives no choice. A part without holes matches one term
 only, so a child has one copy for each such part and one for none, not one
 for each subset of the templates that have such parts. For templates that
 fix their earlier children, as the preorder prefixes of 'preorderPrefix'
-do, this is all the choice there is.
+do, this is all the choice there is. A template also stays alive into a
+child only when its part, with the other parts that the child must match,
+can match the root of an edge of the child, so a copy that no term of the
+child can fill is not made. Many templates whose parts at a child share a
+root that the child has can still give @2^m@ copies.
 -}
 exclude ::
     (Ord symbol, Hashable symbol, Typeable symbol) =>
@@ -183,11 +187,12 @@ refine wanted unwanted node
             Node
                 [ setChildren edge (zipWith (\(wanted'', unwanted') child -> refine wanted'' unwanted' child) parts (edgeChildren edge))
                 | edge <- edges
-                , parts <- edgeCopies wanted' (nubOrd unwanted) (edgeSymbol edge) (length (edgeChildren edge))
+                , parts <- edgeCopies wanted' (nubOrd unwanted) (edgeSymbol edge) (map shapesOf (edgeChildren edge))
                 ]
         Rec _ -> error "exclude: unexpected free recursive reference"
   where
     wanted' = nubOrd (filter (not . trivial) wanted)
+    shapesOf child = [(edgeSymbol edge, length (edgeChildren edge)) | edge <- nodeEdges child]
 
 {- | What the terms of a state of 'excludeFTA' must match: every template of
 the first list, and none of the second.
@@ -248,8 +253,9 @@ obligationRows everywhere transitionsOf templates state = (initial, explore copi
                         parts
                 }
             | transition <- transitionsOf state'
-            , parts <- edgeCopies wanted unwanted (transitionSymbol transition) (length (transitionChildren transition))
+            , parts <- edgeCopies wanted unwanted (transitionSymbol transition) (map shapesOf (transitionChildren transition))
             ]
+    shapesOf child = [(transitionSymbol transition, length (transitionChildren transition)) | transition <- transitionsOf child]
     -- One form for equal obligations, so that equal states are one state.
     obligation wanted unwanted = Obligation (sort (nubOrd (filter (not . trivial) wanted))) (sort (nubOrd unwanted))
 
@@ -288,9 +294,10 @@ excludeAnywhereFTA ::
     [Template symbol] -> FTA state symbol annotation -> FTA (state, Obligation symbol) symbol annotation
 excludeAnywhereFTA templates = excludeBelow templates templates
 
-{- | The copies of an edge with a symbol and a number of children whose terms
-match every wanted template and no unwanted one: for each copy, what each
-child must match and must not.
+{- | The copies of an edge with a symbol and its children whose terms match
+every wanted template and no unwanted one: for each copy, what each child
+must match and must not. A child is given by its shapes: the symbol and the
+number of children of each of its edges.
 
 For each child in turn, the unwanted templates that every earlier child
 matched (alive) split into those that this child matches too and those
@@ -301,18 +308,34 @@ one term only, so the child equals at most one ground part: the split has a
 copy for each ground part, which keeps the templates of that part, and a
 copy for none, which kills them all. The other templates that may stay
 alive split over every subset.
+
+A copy keeps only templates whose parts the child can match together: the
+parts that the child must match, wanted or kept, must all fit the root of
+one shape of the child ('childTemplates'). Another copy has no terms, so it
+is not made, and an edge whose wanted parts fit no shape of a child has no
+copies. A part that fits no shape of the child is not passed to it as a part
+that it must not match: no term of the child matches it. Many parts that fit
+one shape, for example parts with one root symbol that the child has, still
+split over every subset.
 -}
 edgeCopies ::
-    (Ord symbol) => [Template symbol] -> [Template symbol] -> symbol -> Int -> [[([Template symbol], [Template symbol])]]
-edgeCopies wanted unwanted symbol count = case traverse childrenOf wanted of
+    (Ord symbol) =>
+    [Template symbol] ->
+    [Template symbol] ->
+    symbol ->
+    [[(symbol, Int)]] ->
+    [[([Template symbol], [Template symbol])]]
+edgeCopies wanted unwanted symbol shapes = case traverse childrenOf wanted of
     Nothing -> []
-    Just wantedChildren -> copies (zip [0 ..] (transposed wantedChildren)) (mapMaybe childrenOf unwanted)
+    Just wantedChildren -> copies (zip3 [0 ..] (transposed wantedChildren) shapes) (mapMaybe childrenOf unwanted)
   where
+    count = length shapes
     childrenOf template = childTemplates template symbol (Arity count)
     transposed rows = [[row !! index | row <- rows] | index <- [0 .. count - 1]]
     copies [] alive = [[] | null alive]
-    copies ((index, wantedHere) : rest) alive =
-        [ (wantedHere <> map (!! index) kept, map (!! index) killed) : later
+    copies ((index, wantedHere, shapesHere) : rest) alive =
+        [ (wantedHere <> map (!! index) kept, filter (\part -> not (null (fits shapesHere [part]))) (map (!! index) killed))
+            : later
         | (kept, killed) <- choices
         , later <- copies rest kept
         ]
@@ -327,15 +350,31 @@ edgeCopies wanted unwanted symbol count = case traverse childrenOf wanted of
         (groundDying, openDying) = partition (ground . (!! index)) mustDie
         groups = Map.fromListWith (flip (<>)) [(parts !! index, [parts]) | parts <- fixed]
         dying = Set.fromList (map (!! index) groundDying)
-        choices =
-            [(forced <> chosen, mustDie <> fixed <> notChosen) | (chosen, notChosen) <- splits open]
-                <> [ (forced <> group <> chosen, openDying <> notChosen)
-                   | (part, group) <- Map.toList groups
-                   , Set.notMember part dying
-                   , (chosen, notChosen) <- splits open
-                   ]
-    splits [] = [([], [])]
-    splits (value : others) = concat [[(value : chosen, notChosen), (chosen, value : notChosen)] | (chosen, notChosen) <- splits others]
+        -- The shapes that the parts which the child must match all fit.
+        base = fits shapesHere (wantedHere <> map (!! index) forced)
+        choices
+            | null base = []
+            | otherwise =
+                [(forced <> chosen, mustDie <> fixed <> notChosen) | ((chosen, notChosen), _) <- splits base open]
+                    <> [ (forced <> group <> chosen, openDying <> notChosen)
+                       | (part, group) <- Map.toList groups
+                       , Set.notMember part dying
+                       , let narrowed = fits base [part]
+                       , not (null narrowed)
+                       , ((chosen, notChosen), _) <- splits narrowed open
+                       ]
+        -- The subsets of the templates that the child can match together
+        -- within the given shapes, each with the other templates and the
+        -- shapes that the subset fits, in the order of the subset split.
+        splits fitting [] = [(([], []), fitting)]
+        splits fitting (parts : others) =
+            concat
+                [ [((parts : chosen, notChosen), narrowed) | let narrowed = fits remaining [parts !! index], not (null narrowed)]
+                    <> [((chosen, parts : notChosen), remaining)]
+                | ((chosen, notChosen), remaining) <- splits fitting others
+                ]
+    -- The shapes whose root each of the parts fits.
+    fits candidates parts = [(root, arity) | (root, arity) <- candidates, all (\part -> isJust (childTemplates part root (Arity arity))) parts]
 
 -- | Whether a template has no holes, so that it matches one term only.
 ground :: Template symbol -> Bool
