@@ -6,18 +6,20 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,884 jobs and 48,465 theorem dependency checks.
-The [recursive constraint origin proof](notes-recursive-constraint-origins.md)
-carries conditional closure through actual outer recursion, returned child
-scopes, Mu cleanup, and both modifyNode branches. Original normalized syntax
-and checked public success derive final literal, Top, and conjunction origins,
-both source gate memo receipts, exact language, and stable full-state replay.
-Success remains an explicit premise. The
+The audit passes 1,888 jobs and 48,536 theorem dependency checks.
+The [finite constraint inventory](notes-constraint-inventory.md) derives fixed
+original path anchors, bounded segments, alphabet, and guard atoms through
+actual source conjunction. Explicit finite equality and guard lists contain
+every complete derived constraint. Original normalized syntax and checked
+successful public execution derive physical inventory membership throughout
+the heap and returned value, both source gate memo receipts, exact language,
+and stable identical full-state replay. The actual own-payload accessor also
+has a finite image. Success remains an explicit premise. Finite annotations
+do not prove finite node construction or caller termination. Next inspect
+actual narrowed-child node origins, inherited payloads, and a valid rank or
+focused counterexample. The
 [height counterexample](notes-constraint-origins.md) still refutes ordinary
-height as the descent measure. Only the original literal inventory is proved
-finite. Next study finite derived constraint values and a valid measure for
-general constrained caller termination. Finite constraints alone would not
-prove finite node construction or termination.
+height as the descent measure.
 The [closed warm completion proof](notes-closed-warm-completion.md) gives finite
 local execution at arbitrary closed warm scopes under reached word checks.
 The [inherited Region proof](notes-inherited-plain-completion.md) gives finite
@@ -25,7 +27,7 @@ outer execution for equality-free regions with any inherited payload.
 The [Sized comparison](notes-canonical-upstream.md) remains current. Exact
 classes, finite size execution, sequence, and both rank inverse contracts
 retain their source definitions. UVar and synthesis orders remain separate.
-This paragraph supersedes older outer constraint-origin targets.
+This paragraph supersedes older finite derived-constraint targets.
 Older next-target statements below are historical where superseded here.
 The [inherited edge proof](notes-inherited-edge.md) derives actual physical
 constraint combination and trie descent, indexed child obligations, exact

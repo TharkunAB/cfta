@@ -1,5 +1,21 @@
 # Full formalization coverage
 
+## A fixed finite inventory for recursive source constraints
+
+Proof: `3ef4f2e1`, on main `33148e6d`. Read
+[the finite inventory note](notes-constraint-inventory.md). Actual equality
+normalization retains original anchors, bounded path segments, and alphabet.
+Canonical guard conjunctions use original atoms. Explicit finite field lists
+and their product contain every derived complete constraint. Original
+normalized syntax and checked successful public execution derive final heap
+and value membership, both source gate memo receipts, exact language, and
+stable full-state replay. The actual own-payload accessor has a finite image.
+The audit passes 1,888 jobs and 48,536 dependency checks. Finite annotations
+do not prove finite nodes or termination. Next inspect actual narrowed-child
+node origins, inherited payloads, and a valid rank or focused counterexample.
+This section supersedes older finite constraint targets. Root HANDOFF.md
+records preservation and the remaining obligations.
+
 ## Original constraint origins through actual outer recursion
 
 Proof: `228203dd`, on main `33148e6d`. Read

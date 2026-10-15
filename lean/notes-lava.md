@@ -7,6 +7,20 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Finite constraint inventory application (2026-10-15 11:29 CEST)
+
+Actual equality normalization retains original path anchors, bounded segments,
+and alphabet. Canonical guard conjunction retains original atoms. Explicit
+finite field inventories contain every derived complete source constraint.
+Original normalized syntax and checked successful recursive execution derive
+actual heap and value membership, exact language, both source gate memo
+receipts, and stable replay. Read
+[the current note](notes-constraint-inventory.md). Success remains explicit.
+Finite annotations do not prove finite node construction or termination.
+Actual narrowed-child node origins, inherited payloads, a valid caller rank,
+the outer memo table, repeated passes, native containers, GHC scheduling,
+and extraction remain separate. No Lava or Rocq dependency is added.
+
 ## Recursive constraint origin application (2026-10-15 11:16 CEST)
 
 Mutual graph induction now carries conditional constraint closure through

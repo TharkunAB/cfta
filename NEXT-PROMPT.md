@@ -2,6 +2,63 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## A fixed finite inventory for recursive source constraints
+
+Proof: `3ef4f2e1`. Source: `TharkunAB/cfta`, `origin/main` at `33148e6d`.
+Authenticated HTTPS pull succeeded; main is unchanged and is an ancestor
+of `formalize`. Continue on `formalize` and push checkpoints. Read
+`lean/notes-constraint-inventory.md`. This section supersedes the finite
+derived-constraint target below.
+
+Actual source conjunction preserves original path geometry through input
+preparation, component completion, every congruence step, and actual array
+normalization. Original literal paths supply fixed anchors, bounded path
+segments, and a child-index alphabet. Every generated class list has at
+most anchors.length components. Each path lies in the fixed word domain
+of length at most gap * (anchors.length + 1). Canonical classes have no
+repeated paths. Explicit bounded lists contain every generated equality
+payload. The inventory also retains original payloads and contradiction.
+It accounts for paths that normalization creates.
+
+Original guard atoms give a finite list of canonical subset conjunctions.
+Unchanged noncanonical literal fields remain included. The finite product
+of equality and guard inventories contains every actual derived complete
+constraint. The actual own-payload accessor has a finite image of this
+inventory, including failures. Original normalized syntax derives all
+literal checks, initial scope, closed availability, and inventory membership.
+Every checked successful public return retains physical membership throughout
+the heap and returned-value annotations, both source gate memo receipts,
+physical histories, exact public language, and stable identical full-state
+replay. Successful execution and reached native checks remain explicit.
+
+Next inspect actual narrowed-child node origins. Test whether original node
+occurrences and finite constraints can bound actual constructor outputs.
+Prove that bound or retain a focused counterexample before using it in a
+rank. Include physical combination and descent of inherited payloads.
+Finite annotations alone do not prove finite node construction, finite
+caller states, or termination. Do not assume a future finite node inventory,
+decreasing height, caller graph, or successful receipt to prove existence.
+The ordinary-height counterexample still applies. General constrained caller
+termination, the outer reduction memo table, open contexts, repeated fixed
+points, getAllAtPath, native containers, GHC scheduling, and extraction remain
+open.
+
+The audit passes 1,888 jobs and 48,536 dependency checks with only propext,
+Classical.choice, and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-constraint-inventory-20261015-audit.log`.
+No production Haskell or retained reproduction changed. Earlier focused
+height, formatting, 650-example, benchmark-build, and metadata checks were
+not repeated. Starting snapshot:
+`/tmp/mcfta-constraint-inventory-start-20261015-1118/`.
+Closing snapshot: `/tmp/mcfta-constraint-inventory-checkpoint-20261015-1129/`.
+Older proofs except audit imports, counterexamples, marked drafts, stashes,
+and other worktrees remain unchanged. Weekly allowance was 98% at
+2026-10-15 11:27 CEST. Refresh it before work. Stop all work and owned
+workers at 1% or less. Preserve Sized exact classes, finite size execution,
+size order, both distinct rank inverses, the optimized interned core, and
+older constructor and equality work. The read-only HTTP board search could
+not connect. No board posts or deployments.
+
 ## Original constraint origins through actual outer recursion
 
 Proof: `228203dd`. Source: `TharkunAB/cfta`, `origin/main` at `33148e6d`.
