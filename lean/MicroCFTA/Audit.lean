@@ -1499,6 +1499,12 @@ import MicroCFTA.SourceEqualityProjectionUnion
 import MicroCFTA.SourceEqualityProjectionWorker
 import MicroCFTA.SourceEqualityProjectionWorkerComplete
 import MicroCFTA.SourceEqualityProjectionWorkerSound
+import MicroCFTA.SourceEqualityNativeScoped
+import MicroCFTA.SourceEqualityNativeTargetFold
+import MicroCFTA.SourceEqualityNativeTargetExecution
+import MicroCFTA.SourceEqualityNativeProjection
+import MicroCFTA.SourceEqualityNativeTargetNarrowing
+import MicroCFTA.SourceEqualityNativeTargetExamples
 /-!
 # Proof dependency audit
 
