@@ -7,6 +7,8 @@ description:
   asks a model that runs on a server: Ollama's decision API, or the chat API of
   a server that is compatible with OpenAI. The package contains no model.
 
+homepage: https://github.com/TharkunAB/cfta/tree/main/decision-model#readme
+bug-reports: https://github.com/TharkunAB/cfta/issues
 category: AI
 author: Matthias Pall Gissurarson
 maintainer: mpg@mpg.is
@@ -18,6 +20,11 @@ tested-with: ghc ==9.14.1
 extra-doc-files:
   CHANGELOG.md
   README.md
+
+source-repository head
+  type: git
+  location: https://github.com/TharkunAB/cfta.git
+  subdir: decision-model
 
 common warnings
   ghc-options:
@@ -40,12 +47,12 @@ library
 
   other-modules: Decision.Http
   build-depends:
-    aeson >=2.0 && <2.4,
-    base >=4.17 && <5,
-    bytestring >=0.11 && <0.13,
-    http-client >=0.7 && <0.8,
+    aeson >=2.2 && <2.4,
+    base >=4.22 && <4.23,
+    bytestring >=0.12 && <0.13,
+    http-client >=0.7.17 && <0.8,
     http-types >=0.12 && <0.13,
-    text >=2.0 && <2.2,
+    text >=2.1 && <2.2,
 
 test-suite decision-model-test
   import: warnings
@@ -59,5 +66,5 @@ test-suite decision-model-test
     base,
     bytestring,
     decision-model,
-    hspec >=2.10 && <2.12,
+    hspec >=2.11 && <2.12,
     text,

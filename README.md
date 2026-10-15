@@ -17,6 +17,10 @@ holes with programs that Hectare's automaton proposes and GHC's typechecker
 checks, also as a typed-hole plugin (`-fplugin=Data.CFTA.GHC.HoleFits`); it
 is the only package that depends on the `ghc` library.
 
+[`decision-model`](decision-model/README.md) asks a decision model on a
+server, such as Nimble v3 on Ollama, for a score for each option of a
+question. It does not depend on the other packages.
+
 The original ECTA line, `microecta` and `microecta-generator`, lives in
 [Tritlo/microecta](https://github.com/Tritlo/microecta). `microecta` remains on
 Hackage as a separate, ECTA-only package.
