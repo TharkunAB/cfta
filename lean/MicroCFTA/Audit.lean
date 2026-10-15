@@ -1792,6 +1792,9 @@ import MicroCFTA.SourceGhcFitNormalForms
 import MicroCFTA.SourceEqualityOriginalAllocationHistory
 import MicroCFTA.SourceCurrentRequiredComplete
 import MicroCFTA.SourceOrderedBinderComplete
+import MicroCFTA.SourceCurrentClassRequired
+import MicroCFTA.SourceCurriedDefaulting
+import MicroCFTA.SourceProgramRunAccounting
 import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
 import MicroCFTA.SourceCurrentEnumerationStorage
