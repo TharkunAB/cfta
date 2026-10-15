@@ -1595,6 +1595,81 @@ example, which bounds a recursive datatype grammar:
 cabal run cfta-automaton-interop
 ```
 
+### Derived refinement generators
+
+A datatype with a `HasFTA` instance has a grammar. With an invariant it also
+has a refinement generator. `Data.CFTA.Gen.Refinement.Derive` reads the
+constructors of the datatype from `HasFTA` and builds the generator that the
+combinators above give, so the ranks are the ranks of that hand-written
+generator. The invariant is a measure and a contract, written once as Haskell
+functions that are polymorphic over `Symbolic`:
+
+```haskell
+data SortedList = Nil | Cons Integer SortedList
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+
+instance HasLTA SortedList where
+    invariant = Measured headOf sorted
+      where
+        headOf Cons{} [x, _] = x
+        headOf _ _ = 1000001
+        sorted Cons{} [x, restHead] = 0 .<= x .&& x .<= 1000000 .&& x .<= restHead
+        sorted _ _ = true
+
+sortedLists :: Either DeriveLTAError (LTAGen.LTAGen SortedList)
+sortedLists = deriveLTA @SortedList 8 (atom @Integer LTAGen.every)
+```
+
+Each function takes a constructor, matched with a pattern that does not read
+its fields, and the integers of its fields: the value of an atomic field, and
+the measure of a field of the datatype. On `Expr`, the functions give the
+formulas of the generator. Here `sortedLists` is the generator of
+SortedLists.hs: the contract conjuncts that name only the element move to
+its `every` leaf, and the generator has C(1000009, 8) members. On `Integer`,
+`holds` and `measureOf` run the same functions on values, so the property
+of a test reads the invariant of the generator:
+`holds atoms invariant (Cons 3 (Cons 1 Nil))` is `False`.
+
+`deriving anyclass (HasLTA)` gives a datatype without an invariant. The bound
+and the atoms are arguments of `deriveLTA`, as the domains are arguments of
+`deriveFTAWith`, because they belong to one use of the datatype. The bound
+counts the unfoldings of each group of types that refer to each other, as
+`recurUpTo` does. `deriveLTAWith` is the level below: it takes the contracts
+and the measures of the constructors by name, as annotations in the
+expression language.
+
+A datatype with several integers for each value has named measures.
+`MeasuredBy` takes a list of named measures and a contract over the children,
+which read a named measure with `childMeasure`, as `measuredBy` does for the
+combinators. Red-black trees from one datatype:
+
+```haskell
+data Tree = Leaf | Black Tree Tree | Red Tree Tree
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+
+instance HasLTA Tree where
+    invariant = MeasuredBy measures balanced
+      where
+        bh child = childMeasure "bh" child
+        col child = childMeasure "col" child
+        measures Black{} [left, _] = [("bh", bh left + 1), ("col", 0)]
+        measures Red{} [left, _] = [("bh", bh left), ("col", 1)]
+        measures _ _ = [("bh", 0), ("col", 0)]
+        balanced Black{} [left, right] = bh left .== bh right
+        balanced Red{} [left, right] = bh left .== bh right .&& col left .== 0 .&& col right .== 0
+        balanced _ _ = true
+
+trees = (`LTAGen.satisfying` \v -> childMeasure "col" v .== 0 .&& childMeasure "bh" v .<= 3)
+    <$> deriveLTA @Tree 6 mempty
+```
+
+These are the 25,728,160,405 trees of `RedBlackTrees.hs`, at the same ranks.
+Write `bh` with its argument: the monomorphism restriction gives
+`bh = childMeasure "bh"` one type of integers, and the invariant uses it on
+both `Expr` and `Integer`. `measuresOf` gives the named measures of a value.
+
 ## Component synthesis
 
 Two modules use the automata and the generators to synthesize programs from
