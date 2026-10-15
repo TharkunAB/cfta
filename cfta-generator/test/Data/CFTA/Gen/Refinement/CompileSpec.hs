@@ -712,8 +712,8 @@ spec = do
                     forM_ guards $ \guard -> do
                         let generator = LTAGen.refinedNode "p" (const true) guard $ inner digit
                         result <- LTAGen.compileWith solver generator
-                        fmap LTAGen.cardinality result `shouldBe` Left (LTAGen.InexactMeasure "m")
-                        LTAGen.validOutcomes solver generator >>= (`shouldBe` Left (LTAGen.InexactMeasure "m"))
+                        fmap LTAGen.cardinality result `shouldBe` Left (LTAGen.InexactMeasure "m" Nothing [0])
+                        LTAGen.validOutcomes solver generator >>= (`shouldBe` Left (LTAGen.InexactMeasure "m" Nothing [0]))
 
         it "retain independent symbolic measures through both parent condition forms" $
             withZ3 declarations $ \solver -> do

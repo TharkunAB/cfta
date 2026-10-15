@@ -1,7 +1,7 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeFamilies #-}
@@ -10,7 +10,9 @@
 SortedLists, SafeDivision, LiquidPairs, and RedBlackTrees have the cardinality
 and the ranks of the hand-written generators of the examples, the typed
 invariants give the annotations of the expression language byte for byte,
-and a node view that does not fit its datatype is an error.
+and a node view that does not fit its datatype is an error. Measures with a
+choice give the binary search trees, the AVL trees, and the closed terms of
+a language with let-binding that a plain predicate accepts.
 -}
 module Data.CFTA.Gen.Refinement.DeriveSpec (spec) where
 
@@ -19,6 +21,10 @@ module Data.CFTA.Gen.Refinement.DeriveSpec (spec) where
 
 import Control.Monad (forM_, void)
 import Data.Containers.ListUtils (nubOrd)
+import Data.List (sort)
+import Data.Maybe (isJust)
+import Data.Proxy (Proxy (..))
+import Data.Typeable (typeRep)
 import GHC.Generics (Generic)
 import Test.Hspec (Expectation, Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 
@@ -33,9 +39,10 @@ import Data.CFTA.Gen.Refinement.Derive.Internal (
  )
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Generic (HasFTA)
-import Data.CFTA.Index (Arity (..), Cardinality (..), Rank (..))
-import Data.CFTA.Refinement.Expression (Expr, Formula, Refinement, uninterpreted)
-import Data.CFTA.Refinement.Symbolic (Symbolic (..), true, (.&&))
+import Data.CFTA.Index (Arity (..), Cardinality (..), Depth, Rank (..))
+import Data.CFTA.Refinement.Expression (Enumerated (..), Expr, Formula, Literal, Refinement, uninterpreted)
+import Data.CFTA.Refinement.Lattice (latticeEntailment)
+import Data.CFTA.Refinement.Symbolic (Symbolic (..), larger, smaller, true, (.&&))
 
 -- | A list that its invariant keeps sorted.
 data SortedList = Nil | Cons Integer SortedList
@@ -229,6 +236,234 @@ redBlackTrees = LTAGen.recurUpTo 3 $ \blackRooted ->
             (\leftHeight _ -> leftHeight)
             (Red <$> child <*> child)
 
+-- | A binary search tree of keys.
+data SearchTree = Tip | Bin SearchTree Integer SearchTree
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+{- | The measures of a search tree: its least and its greatest key. A 'Tip'
+has the least key 4 and the greatest key -1, so that each key from 0 to 3
+is between the bounds of an empty subtree.
+-}
+data Bounds e = Bounds {lo :: e, hi :: e}
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (MeasureRecord)
+
+-- | One node of a search tree: the measures of the subtrees and the key.
+data SearchTreeNode e = TipNode | BinNode (Bounds e) e (Bounds e)
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | The keys of the left subtree are less than the key, and the keys of the right subtree are greater.
+instance HasLTA SearchTree where
+    type Node SearchTree = SearchTreeNode
+    type Measures SearchTree = Bounds
+    invariant = MeasuredBy bounds ordered
+      where
+        bounds TipNode = Bounds 4 (-1)
+        bounds (BinNode left key right) = Bounds (smaller (lo left) key) (larger (hi right) key)
+        ordered TipNode = true
+        ordered (BinNode left key right) = hi left .< key .&& key .< lo right
+
+-- | Whether the keys of a search tree are in order.
+isSearchTree :: SearchTree -> Bool
+isSearchTree = ascending . keys
+  where
+    keys Tip = []
+    keys (Bin left key right) = keys left <> [key] <> keys right
+    ascending items = and (zipWith (<) items (drop 1 items))
+
+-- | An AVL tree of keys.
+data AVL = Empty | Branch AVL Integer AVL
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | The measures of an AVL tree: its height, and its least and its greatest key.
+data Shape e = Shape {height :: e, least :: e, greatest :: e}
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (MeasureRecord)
+
+-- | One node of an AVL tree: the measures of the subtrees and the key.
+data AVLNode e = EmptyNode | BranchNode (Shape e) e (Shape e)
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | The heights of the subtrees differ by at most one, and the keys are in order.
+instance HasLTA AVL where
+    type Node AVL = AVLNode
+    type Measures AVL = Shape
+    invariant = MeasuredBy shape balanced
+      where
+        shape EmptyNode = Shape 0 4 (-1)
+        shape (BranchNode left key right) =
+            Shape (1 + larger (height left) (height right)) (smaller (least left) key) (larger (greatest right) key)
+        balanced EmptyNode = true
+        balanced (BranchNode left key right) =
+            abs (height left - height right) .<= 1 .&& greatest left .< key .&& key .< least right
+
+-- | Whether the heights of the subtrees of each node differ by at most one, and the keys are in order.
+isAVL :: AVL -> Bool
+isAVL tree = maybe False (const (ascending (keys tree))) (heightOf tree)
+  where
+    heightOf Empty = Just (0 :: Int)
+    heightOf (Branch left _ right) = do
+        leftHeight <- heightOf left
+        rightHeight <- heightOf right
+        if abs (leftHeight - rightHeight) <= 1 then Just (1 + max leftHeight rightHeight) else Nothing
+    keys Empty = []
+    keys (Branch left key right) = keys left <> [key] <> keys right
+    ascending items = and (zipWith (<) items (drop 1 items))
+
+-- | A tree of keys whose measure is its height.
+data Balanced = Stump | Fork Balanced Integer Balanced
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | The height of a tree, as a named measure.
+newtype Height e = Height {tall :: e}
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (MeasureRecord)
+
+-- | One node of a tree: the heights of the subtrees and the key.
+data BalancedNode e = StumpNode | ForkNode (Height e) e (Height e)
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+{- | The heights of the subtrees differ by at most one. The greater height
+comes from 'abs' and 'signum', which give a conditional term as 'ite' does.
+-}
+instance HasLTA Balanced where
+    type Node Balanced = BalancedNode
+    type Measures Balanced = Height
+    invariant = MeasuredBy treeHeight balanced
+      where
+        treeHeight StumpNode = Height 0
+        treeHeight (ForkNode left _ right) = Height (1 + greater (tall left) (tall right))
+        greater a b = a + (b - a) * signum (b - a + abs (b - a))
+        balanced StumpNode = true
+        balanced (ForkNode left _ right) = abs (tall left - tall right) .<= 1
+
+-- | Whether the heights of the subtrees of each node differ by at most one.
+isBalanced :: Balanced -> Bool
+isBalanced = isJust . heightOf
+  where
+    heightOf Stump = Just (0 :: Int)
+    heightOf (Fork left _ right) = do
+        leftHeight <- heightOf left
+        rightHeight <- heightOf right
+        if abs (leftHeight - rightHeight) <= 1 then Just (1 + max leftHeight rightHeight) else Nothing
+
+-- | Terms with de Bruijn variables, a let, and a lambda.
+data Scoped = Zero | Index Int | Plus Scoped Scoped | Let Scoped Scoped | Lambda Scoped
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | One node of a term: the free-variable bounds of the subterms, and the index of a variable.
+data ScopedNode e = ZeroNode | IndexNode e | PlusNode e e | LetNode e e | LambdaNode e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+{- | The measure is one more than the greatest free index, and 0 for a closed
+term. A let binds one variable in its body, and so does a lambda.
+-}
+instance HasLTA Scoped where
+    type Node Scoped = ScopedNode
+    type Measures Scoped = Single
+    invariant = Measured freeBound (const true)
+      where
+        freeBound ZeroNode = 0
+        freeBound (IndexNode index) = index + 1
+        freeBound (PlusNode left right) = larger left right
+        freeBound (LetNode rhs body) = larger rhs (body - 1)
+        freeBound (LambdaNode body) = larger 0 (body - 1)
+
+-- | Whether each variable of a term is under a binder that binds it.
+isClosed :: Scoped -> Bool
+isClosed = go 0
+  where
+    go :: Int -> Scoped -> Bool
+    go _ Zero = True
+    go depth (Index index) = index < depth
+    go depth (Plus left right) = go depth left && go depth right
+    go depth (Let rhs body) = go depth rhs && go (depth + 1) body
+    go depth (Lambda body) = go (depth + 1) body
+
+{- | The number of closed terms up to the bound with the indices 0 to 3, from
+a recurrence: @count n k@ is the number of terms whose free-variable bound
+is at most @k@.
+-}
+closedCount :: Int -> Integer
+closedCount bound = count bound 0
+  where
+    leaves k = 1 + fromIntegral (min k 4)
+    count :: Int -> Int -> Integer
+    count 0 k = leaves k
+    count n k = leaves k + below k * below k + below k * below (k + 1) + below (k + 1)
+      where
+        below = count (n - 1)
+
+-- | A shade, an enumeration that a field of a 'Tiles' value has.
+data Shade = Light | Dark
+    deriving stock (Eq, Ord, Show, Bounded, Enum, Generic)
+    deriving anyclass (HasFTA)
+    deriving (Literal) via (Enumerated Shade)
+
+-- | A row of tiles.
+data Tiles = NoTiles | Tile Shade Tiles
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | One node of a row of tiles: the shade, and the number of dark tiles of the rest.
+data TilesNode e = NoTilesNode | TileNode e e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | The measure is the number of dark tiles: 'Dark' is 1.
+instance HasLTA Tiles where
+    type Node Tiles = TilesNode
+    type Measures Tiles = Single
+    invariant = Measured darkTiles (const true)
+      where
+        darkTiles NoTilesNode = 0
+        darkTiles (TileNode shade rest) = shade + rest
+
+-- | The measures of a sorted list for a condition on its length: the head and the length.
+data ListMeasures e = ListMeasures {front :: e, size :: e}
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (MeasureRecord)
+
+-- | One node of a sorted list, for named measures.
+data SortedListByNode e = NilBy | ConsBy e (ListMeasures e)
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | The head and the length of a sorted list, as named measures.
+byLength :: Invariant SortedListByNode ListMeasures
+byLength = MeasuredBy measures (const true)
+  where
+    measures NilBy = ListMeasures 1000001 0
+    measures (ConsBy x rest) = ListMeasures x (size rest + 1)
+
+-- | The values of a datatype up to the bound, over the atoms, without an invariant, in order.
+valuesUpTo :: forall a. (HasFTA a, Ord a) => Depth -> Atoms -> IO [a]
+valuesUpTo bound atoms = membersOf $ deriveLTAFrom @a bound atoms (Contracted (const true) :: Invariant AnyNode NoMeasures)
+
+-- | The members of a derived generator, in order.
+membersOf :: (Ord a) => Either DeriveLTAError (LTAGen.LTAGen a) -> IO [a]
+membersOf derived = do
+    generator <- either (fail . show) LTAGen.compile derived
+    either (fail . show) (pure . sort) (LTAGen.values generator)
+
+{- | Expect the members of the derived generator to be the values of the
+datatype up to the bound that the predicate accepts.
+-}
+sameMembers ::
+    forall a.
+    (HasFTA a, Ord a, Show a) => Depth -> Atoms -> (a -> Bool) -> Either DeriveLTAError (LTAGen.LTAGen a) -> Expectation
+sameMembers bound atoms accepted derived = do
+    expected <- filter accepted <$> valuesUpTo @a bound atoms
+    membersOf derived >>= (`shouldBe` expected)
+
 {- | Compile both generators, and expect the same cardinality and the same
 value at each checked rank: every rank of a small generator, and the first
 three, the middle, the last two, and 200 ranks of a fixed sequence of a large
@@ -301,6 +536,38 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         holds mempty rules (Black (Black Leaf Leaf) Leaf) `shouldBe` False
         measuresOf mempty rules (Black (Red (Black Leaf Leaf) (Black Leaf Leaf)) (Black Leaf Leaf))
             `shouldBe` TreeMeasures 2 0
+    it "derives search trees with key bounds from measures with a choice" $ do
+        let keys = atom @Integer (LTAGen.elements [0 .. 3])
+        sameMembers 3 keys isSearchTree (deriveLTA @SearchTree 3 keys)
+        membersOf (deriveLTA @SearchTree 3 keys) >>= (`shouldBe` 43) . length
+        measuresOf keys (invariant @SearchTree) (Bin (Bin Tip 0 Tip) 1 (Bin Tip 3 Tip)) `shouldBe` Bounds 0 3
+    it "derives AVL trees whose measures compute the height" $ do
+        let keys = atom @Integer (LTAGen.elements [0 .. 3])
+        sameMembers 3 keys isAVL (deriveLTA @AVL 3 keys)
+        membersOf (deriveLTA @AVL 3 keys) >>= (`shouldBe` 25) . length
+        measuresOf keys (invariant @AVL) (Branch (Branch Empty 0 Empty) 1 Empty) `shouldBe` Shape 2 0 1
+    it "derives height-balanced trees from a named measure with a conditional term" $
+        sameMembers
+            3
+            (atom @Integer (LTAGen.elements [0, 1]))
+            isBalanced
+            (deriveLTA @Balanced 3 (atom @Integer (LTAGen.elements [0, 1])))
+    it "derives the closed terms of a language with let-binding from a free-variable bound" $ do
+        let indices = atom @Int (LTAGen.elements [0 .. 3])
+            closed bound = (`LTAGen.satisfying` (.== 0)) <$> deriveLTA @Scoped bound indices
+        sameMembers 2 indices isClosed (closed 2)
+        compiled <- either (fail . show) LTAGen.compile (closed 3)
+        LTAGen.cardinality compiled `shouldBe` Right (Cardinality (closedCount 3))
+        map (measureOf indices (invariant @Scoped)) [Let Zero (Index 0), Lambda (Index 1), Plus (Index 2) Zero]
+            `shouldBe` [0, 1, 3]
+    it "names the measure and the child of an inexact named measure" $ do
+        generator <- either (fail . show) pure $ deriveLTAFrom @SortedList 4 (atom @Integer LTAGen.every) byLength
+        compiled <- LTAGen.compileWith latticeEntailment generator
+        void compiled `shouldBe` Left (LTAGen.InexactMeasure "Cons" (Just "front") [0])
+    it "reports a field whose type has no integer" $ do
+        void (deriveLTA @Tiles 3 mempty) `shouldBe` Left (UnmeasuredField "Tile" 0 (typeRep (Proxy @Shade)))
+        compiled <- either (fail . show) LTAGen.compile (deriveLTA @Tiles 2 (atom @Shade (LTAGen.elements [Light, Dark])))
+        LTAGen.cardinality compiled `shouldBe` Right (Cardinality 7)
     it "reports annotations that do not fit the datatype" $ do
         let derive annotations = void $ deriveLTAWith @SortedList 8 (atom @Integer LTAGen.every) annotations
         derive [("Cosn", mempty)] `shouldBe` Left (UnknownConstructors ["Cosn"] ["Nil", "Cons"])

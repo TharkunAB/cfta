@@ -1694,6 +1694,36 @@ selector such as `bh` is a Haskell function, so it cannot share a module with
 another function `bh`, such as a Liquid Haskell measure: put the record in its
 own module and import it qualified, or use `OverloadedRecordDot`.
 
+A measure can choose with `ite` of `Data.CFTA.Refinement.Symbolic`, and
+`smaller` and `larger` come from it. An AVL tree computes its height and the
+bounds of its keys, here 0 to 3, with 4 and -1 for an empty tree:
+
+```haskell
+data Shape e = Shape {height :: e, least :: e, greatest :: e}
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (MeasureRecord)
+
+data AVLNode e = EmptyNode | BranchNode (Shape e) e (Shape e)
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+instance HasLTA AVL where
+    type Node AVL = AVLNode
+    type Measures AVL = Shape
+    invariant = MeasuredBy shape balanced
+      where
+        shape EmptyNode = Shape 0 4 (-1)
+        shape (BranchNode left key right) =
+            Shape (1 + larger (height left) (height right)) (smaller (least left) key) (larger (greatest right) key)
+        balanced EmptyNode = true
+        balanced (BranchNode left key right) =
+            abs (height left - height right) .<= 1 .&& greatest left .< key .&& key .< least right
+```
+
+With the keys from `elements [0 .. 3]` and the bound 3, `deriveLTA @AVL 3`
+gives the 25 AVL trees. A named measure reads children with one integer each,
+so draw the keys from `elements` or a pool, not `every`.
+
 ## Component synthesis
 
 Two modules use the automata and the generators to synthesize programs from

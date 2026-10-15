@@ -78,6 +78,21 @@ formulas of the generator. On 'Integer', 'holds', 'measureOf', and
 test. 'measuresAt' gives the measures of a value term, for a condition on the
 root, as in @col (measuresAt v) .== 0@.
 
+A measure can choose with 'Data.CFTA.Refinement.Symbolic.ite', and
+'Data.CFTA.Refinement.Symbolic.smaller' and
+'Data.CFTA.Refinement.Symbolic.larger' come from it. The bounds of a binary
+search tree with the keys 0 to 3 are its least and its greatest key, with 4
+and -1 for an empty tree:
+
+@
+bounds TipNode = Bounds 4 (-1)
+bounds (BinNode left key right) = Bounds (smaller (lo left) key) (larger (hi right) key)
+@
+
+A field that a contract or a measure reads needs an integer: an atom, or a
+measure of its type. A field of an enumeration without an atom is the error
+'UnmeasuredField'.
+
 A selector of a record of measures is a Haskell function, so it cannot have
 the name of another function of the same module, such as a Liquid Haskell
 measure @bh :: Tree -> Int@. Put the record in its own module and import it

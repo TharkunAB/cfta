@@ -154,11 +154,14 @@ tree automata of `cfta`, with QuickCheck integration.
   children, which becomes the constructor's refinement and stays a term of
   children from `every`. A refinement whose defining term mentions the value
   itself, such as `v .== v`, gives no exact measure, and `compile` reports
-  `InexactMeasure` for it.
+  `InexactMeasure` for it, with the name of the measure and the positions of
+  the children without one integer.
   `measuredNode` takes a positional guard in place of the contract.
   `measuredBy` gives a constructor several named measures: uninterpreted
   functions of the value, each one integer, which a contract reads as
-  `uninterpreted name [child]`. `recurUpTo` unfolds a recursive description a bounded number
+  `uninterpreted name [child]`. A measure can choose with `ite`, `smaller`,
+  or `larger`: when the children have one integer each, it takes the branch
+  that the condition chooses, so the measure stays one integer. `recurUpTo` unfolds a recursive description a bounded number
   of times. The module also has liquid automaton and datatype imports,
   `minimizePoolOn`, `compile` with Z3, `compileAssuming`, `compileWith`, and
   `validOutcomes`.
@@ -175,7 +178,8 @@ tree automata of `cfta`, with QuickCheck integration.
   `measureOf`, and `measuresOf` run the invariant on values, and
   `measuresAt` gives the measures of a value term. `atom` gives the
   generator of each atomic field type. A contract conjunct about one atomic
-  field becomes a condition on that field.
+  field becomes a condition on that field. A contract or a measure that reads
+  a field whose type has no atom and no measure is `UnmeasuredField`.
 - `Data.CFTA.Gen.Refinement.Derive.Internal`: the level below, exposed for
   integration and outside the PVP contract. `deriveLTAWith` takes the
   contracts and the measures by constructor name, as annotations
