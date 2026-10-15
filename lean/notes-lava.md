@@ -7,6 +7,18 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Shared target forcing application (2026-10-15 06:11 CEST)
+
+Shared class-target slots now have literal first-force and reuse graphs,
+checked function/graph agreement, finite five-bound edit execution, and exact
+retention of every returned physical target. Actual construction derives local
+leaf language bounds. Compiled original classes retain every accepted term
+that satisfies the class. Read [the current note](notes-shared-class-edits.md).
+Selected-class fold, structural empty propagation, full source correspondence,
+GHC lazy scheduling, and extraction remain separate. The slots model explicit
+source demands; they do not verify the GHC runtime heap. The paper's assumed
+termination does not supply the finite bounds. No Lava or Rocq dependency is added.
+
 ## Demanded class-target application (2026-10-15 05:46 CEST)
 
 Actual source target demand graphs now have finite four-bound execution,

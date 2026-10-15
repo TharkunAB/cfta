@@ -1,6 +1,78 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 05:46 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 06:11 CEST (Europe/Stockholm)**.
+
+## Shared target closures through actual class edit leaves
+
+Proofs: `c0aa73c6`, `cf98225d`, and `cb8b675a`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-shared-class-edits.md`. This section supersedes the
+standalone shared-target forcing target and earlier completion counts.
+
+Each class captures its original input forest once. A logical shared state
+retains the actual full native state and a partial table of returned target
+values. An empty slot is unforced. A first force runs the actual demanded
+target graph at its current warm native state and stores its physical result.
+A hit returns that same value and the identical full shared state. Construction
+receipts derive closed target availability when each leaf reaches it. No eager
+all-target scope or global callback language law is supplied.
+
+Simultaneous edits retain this target table through every native request,
+recursive head read, ordered child scan, row constructor, and final node.
+Returned slots never change. Every later force of a returned slot must reuse
+its exact earlier physical value. Native validity, idle warm tables, semantic
+constructor heaps, captured scope, closed output scope, and cache histories
+hold at each actual completed prefix.
+
+Actual-prefix range checks derive first-force and native leaf completion.
+Finite source control and general head completion derive finite edit graphs.
+The executable edit worker has five independent bounds: edit recursion,
+projection recursion, head reads, comparison, and native requests. Successful
+checked runs and complete graphs agree in both directions. Every complete
+graph has stable identical values and entire shared state at all larger bound
+tuples. Completed graphs have unique values and full returned shared states.
+Incomplete observations retain the actual stage; outer resumption is separate.
+
+The actual signed source compiler stores original natural class paths as
+leaf tokens. Coherent nontrivial classes derive valid supported original
+paths. Independent language bounds show that every output term belonged to
+the input forest. Every accepted original term that satisfies the class
+survives. Under ClassSat, original and edited forest acceptance are equivalent.
+The proof derives local target inclusion from actual first-force receipts.
+It does not claim that one class edit enforces all original equalities.
+
+Kernel checks use a coherent two-path class over two-row nodes. Four physical
+leaves share two first-forced target slots and one warm native node memo cell.
+Later row visits use the stored targets. A repeated batch completes with zero
+projection, head-read, and comparison bounds, with identical full native state
+and slots. Missing signed positions and ignored list-root callbacks force no
+target. Cache hits work at zero bounds for all four target stages.
+
+All eighteen new modules pass focused builds. The aggregate audit passes
+1,745 jobs and 47,143 dependency checks with only propext, Classical.choice,
+and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-shared-class-edits-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-shared-class-checkpoint-20261015-0611/`
+(2,148 Lean-tree files and four root documents). Older proofs are unchanged
+except audit imports. Repros, counterexamples, marked drafts, stashes, other
+worktrees, and production source remain unchanged. The earlier 645 Haskell
+examples and formatter checks apply to the unchanged tree and were not rerun.
+Weekly allowance was 16% at 06:10 CEST. Refresh it before work. Stop all work
+and owned workers immediately at 1% or less.
+
+Next compose actual selected classes in their source ordered right fold.
+Each class must capture the current forest returned by the later classes,
+start its own unforced slots, and retain the same actual native state. Model
+literal structural empty propagation after each class edit. Use the existing
+class ordering, selected/required-path graphs, shared class completion, and
+language bounds. Derive actual-prefix checks instead of assuming whole-fold
+completion or a future cache law. Then connect the complete one-pass worker.
+Full one-pass source correspondence, open contexts, repeated fixed points,
+getAllAtPath, native containers, GHC lazy scheduling, and extraction remain
+open. The shared slots are an explicit demand graph, not verified GHC heap
+extraction. Preserve exact Sized contracts, both rank inverses, the optimized
+interned core, all older constructor/equality proofs, and every boundary artifact.
 
 ## Demanded original class targets and constructed native edits
 

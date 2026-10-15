@@ -6,7 +6,13 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,727 jobs and 46,889 theorem dependency checks.
+The audit passes 1,745 jobs and 47,143 theorem dependency checks.
+The [shared class-edit proof](notes-shared-class-edits.md) now derives actual
+first force, exact target reuse, finite simultaneous edit completion, and
+stable five-bound function/graph agreement. Compiled original class paths
+retain every accepted class-satisfying term. Actual selected-class fold and
+structural empty propagation are next. This paragraph supersedes older shared
+forcing next targets. GHC lazy scheduling and extraction remain separate.
 The [demanded class-target proof](notes-demanded-class-targets.md) derives
 actual projection/merge operands, interleaved first-seeded native target folds,
 finite stable four-bound execution, and original class-subterm preservation.
