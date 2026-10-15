@@ -43,6 +43,23 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   parametricity it cannot use that subterm. `synthesizeFits` puts such fits
   last. `hectareAvoid` is Hectare's rule that a list function is not applied
   to `[]`.
+- `Data.CFTA.GHC.NormalForm`: normal forms of programs, from the bodies that
+  GHC gives the components: the unfolding of each candidate's identifier,
+  translated from Core, with beta, eta, the eta law of pairs, a case of a
+  known constructor, a case of a case, and the identity case. A class
+  method, a body with a class dictionary or a recursive `let`, and an
+  identifier without an unfolding stay leaves. The session and the hole-fit
+  plugin read the unfoldings of the interfaces (no
+  `-fignore-interface-pragmas`, which `-O0` implies). With
+  `optionNormalForms`, on by default, `streamFits` skips a fit with the
+  normal form of an earlier fit (`flip filter xs p` is `filter p xs`), and
+  `Statistics` counts the skipped fits (`statisticsMerged`) and the time of
+  the normal forms. A fit whose normal form drops an argument of the query
+  (`fitDropsArgument`) comes last in `synthesizeFits` and in the hole-fit
+  plugin, as a fit that ignores a part does (`comesLast`). `Candidate` has
+  the name of its identifier (`candidateOrigin`), whose unfolding gives its
+  body, and `normalFormsOf` gives the normal forms of programs over the
+  candidates.
 - `Data.CFTA.GHC.HoleFits`: a typed-hole plugin
   (`-fplugin=Data.CFTA.GHC.HoleFits`). After GHC's own valid hole fits, it
   gives fits of several components, which `streamFits` finds in GHC's `TcM`
@@ -75,4 +92,6 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   compiled with the plugin.
 - The `hectare-ghc` benchmark: the 45 Hoogle+ queries on a library ladder
   read from GHC's exports, one child process per query. The queries come
-  from the sublibrary `cfta-generator:hoogleplus`.
+  from the sublibrary `cfta-generator:hoogleplus`. The name `stackoverflow`
+  runs the 19 Stack Overflow queries, and `HECTARE_GHC_NORMAL_FORMS=off`
+  turns off the normal forms of the fits.

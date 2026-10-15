@@ -2,12 +2,14 @@
 
 {- | The streamed walk of "Data.CFTA.GHC.Fits" end to end, on five easy
 Hoogle+ queries and five queries of higher-kinded types with the Prelude:
-each query gives its expected program, and GHC accepts every fit as a
-program of the query's signature. Also: the
+each query gives its expected program, or a fit with its normal form, and
+GHC accepts every fit as a program of the query's signature. Also: the
 fits that ignore an argument are marked, the walk leaves the goal's
 unification variables as it found them, and the fast rejects keep three
 fits that only the solver can decide (a coercion through a newtype, a given
-equality, and a quantified given).
+equality, and a quantified given). The normal forms merge the fits that
+respell one program, as @flip filter xs p@ and @filter p xs@, keep the fits
+that differ in meaning, and mark the fits that drop an argument.
 -}
 module Main (main) where
 
@@ -15,6 +17,7 @@ import Control.Monad (forM, forM_)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (isJust)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
@@ -70,7 +73,7 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
         -- Whether one program fits a signature, by the steps of the walk.
         checks signature arguments program = do
             Just typ <- typeOfExpression session ("undefined :: " <> signature)
-            let extra = coercions <> [Candidate "sized" sizedType True False]
+            let extra = coercions <> [Candidate "sized" sizedType True False Nothing]
             inSignatureHole session (candidates <> extra) typ arguments $ \hole candidates' goal -> do
                 environment <- newEnvironment hole
                 let leaves = Map.fromList [(candidateName c, Leaf (candidateName c) (candidateType c) (candidateHeads c)) | c <- candidates']
@@ -85,15 +88,18 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 forM_ (queries <> higherKinded) $ \(Query name signature arguments expected) ->
                     it ("finds the expected program of " <> name <> ", and GHC accepts its fits" <> label) $ do
                         Just typ <- typeOfExpression session ("undefined :: " <> signature)
+                        Just normal <- inTypechecker session (normalFormsOf candidates)
                         found <- newIORef []
                         let options = defaultOptions{optionMaximumSize = size expected, optionTypeDomains = domains}
+                            -- The expected program, or an earlier fit with its normal form.
+                            isExpected program = program == expected || (isJust (normal expected) && normal program == normal expected)
                             record fit = do
                                 liftIO (modifyIORef' found (fitProgram fit :))
-                                pure (fitProgram fit /= expected)
+                                pure (not (isExpected (fitProgram fit)))
                         statistics <- fitsForSignature session options candidates typ arguments record
                         fits <- reverse <$> readIORef found
                         fmap statisticsFits statistics `shouldBe` Just (length fits)
-                        fits `shouldSatisfy` elem expected
+                        fits `shouldSatisfy` any isExpected
                         forM_ (take 10 fits) $ \fit ->
                             accepts session ("(\\" <> unwords (map Text.unpack arguments) <> " -> " <> renderProgram fit <> ") :: " <> signature)
                                 `shouldReturn` True
@@ -124,10 +130,52 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                             modifyIORef' found (fit :)
                             fits <- readIORef found
                             pure (not (all (`elem` map fitProgram fits) wanted))
-                    _ <- fitsForSignature session defaultOptions{optionMaximumSize = 4} candidates typ arguments record
+                    _ <-
+                        fitsForSignature
+                            session
+                            defaultOptions{optionMaximumSize = 4, optionNormalForms = False}
+                            candidates
+                            typ
+                            arguments
+                            record
                     fits <- readIORef found
                     pure [lookup program [(fitProgram fit, fitIgnoresPart fit) | fit <- fits] | program <- wanted]
                 marks `shouldBe` [[Just True, Just False], [Just True, Just False]]
+        describe "normal forms" $ do
+            it "merge the respellings of one program, and keep the programs that differ" $ do
+                Just normal <- inTypechecker session (normalFormsOf candidates)
+                let same left right = isJust (normal (parse left)) && normal (parse left) == normal (parse right)
+                map (uncurry same) respellings `shouldBe` map (const True) respellings
+                map (uncurry same) different `shouldBe` map (const False) different
+            it "skip a fit with the normal form of an earlier fit, behind an option" $ do
+                Just typ <- typeOfExpression session "undefined :: (a -> Bool) -> [a] -> [a]"
+                let fitsWith normalForms = do
+                        found <- newIORef []
+                        let record fit = True <$ liftIO (modifyIORef' found (fitProgram fit :))
+                            options = defaultOptions{optionMaximumSize = 4, optionNormalForms = normalForms}
+                        statistics <- fitsForSignature session options candidates typ ["p", "xs"] record
+                        fits <- readIORef found
+                        pure (fits, maybe 0 statisticsMerged statistics)
+                (merged, skipped) <- fitsWith True
+                (unmerged, _) <- fitsWith False
+                merged `shouldSatisfy` elem (parse "filter p xs")
+                merged `shouldSatisfy` notElem (parse "flip filter xs p")
+                unmerged `shouldSatisfy` elem (parse "flip filter xs p")
+                skipped `shouldSatisfy` (> 0)
+                length merged + skipped `shouldBe` length unmerged
+            it "mark a fit whose normal form drops an argument" $ do
+                Just typ <- typeOfExpression session "undefined :: [a] -> Int -> [a]"
+                found <- newIORef []
+                -- const xs n is xs, by the body of const.
+                let wanted = map parse ["const xs n", "take n xs"]
+                    record fit = liftIO $ do
+                        modifyIORef' found (fit :)
+                        fits <- readIORef found
+                        pure (not (all (`elem` map fitProgram fits) wanted))
+                _ <- fitsForSignature session defaultOptions{optionMaximumSize = 4} candidates typ ["xs", "n"] record
+                fits <- readIORef found
+                [lookup program [(fitProgram fit, fitDropsArgument fit) | fit <- fits] | program <- wanted]
+                    `shouldBe` [Just True, Just False]
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->
                 it ("keep the fit of " <> name) $
@@ -157,6 +205,26 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
         [ ("a coercion through a newtype", "[Sum Int] -> [Int]", ["xs"], "coerce xs")
         , ("a given equality", "(a ~ Int) => a -> Int", ["x"], "x")
         , ("a quantified given", "(forall x. Sized (f x)) => f Bool -> Int", ["y"], "sized y")
+        ]
+    -- Programs that respell one program, from the probe of the merges.
+    respellings =
+        [ ("flip filter xs p", "filter p xs")
+        , ("curry snd n (f x)", "f x")
+        , ("(.) length reverse xs", "length (reverse xs)")
+        , ("uncurry id p", "fst p (snd p)")
+        , ("maybe n f (Just x)", "f x")
+        , ("either f g (Left x)", "f x")
+        , ("(,) (fst p) (snd p)", "p")
+        , ("not (not b)", "b")
+        , -- Unsaturated components with a body merge by eta-expansion.
+          ("foldr (flip const) z xs", "foldr (const id) z xs")
+        ]
+    -- Programs that differ in meaning.
+    different =
+        [ ("filter p xs", "takeWhile p xs")
+        , ("fst p", "snd p")
+        , ("flip f x y", "f x y")
+        , ("maybe n f m", "f m")
         ]
     parse = either error id . parseProgram
     size program = case program of

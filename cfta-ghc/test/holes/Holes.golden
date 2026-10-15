@@ -100,8 +100,8 @@ test/holes/Holes.hs:12:11: error: [GHC-88464]
         \x1 x2 -> (<*>) (repeat x1) x2
         \x1 x2 -> (<*>) (pure x1) x2
         \x1 x2 -> (<*>) (return x1) x2
-        \x1 x2 -> flip fmap x2 x1
-        \x1 x2 -> flip (<$>) x2 x1
+        \x1 x2 -> fmap x1 (cycle x2)
+        \x1 x2 -> fmap x1 (init x2)
    |
 12 | mapList = _
    |           ^

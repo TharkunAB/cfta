@@ -129,7 +129,9 @@ withSession = withSessionOptions defaultSessionOptions
 
 {- | 'withSession' with options. The session always has the flags @-w@ and
 @-XQuantifiedConstraints@, so that a signature can have a quantified
-context, and the package @containers@.
+context, @-fno-ignore-interface-pragmas@, so that the identifiers of the
+interfaces have their unfoldings ("Data.CFTA.GHC.NormalForm"), and the
+package @containers@.
 -}
 withSessionOptions :: SessionOptions -> [String] -> (Session -> IO a) -> IO a
 withSessionOptions options imports action = do
@@ -141,7 +143,7 @@ withSessionOptions options imports action = do
                 | sessionCompile options = flags{backend = interpreterBackend, ghcLink = LinkInMemory}
                 | otherwise = flags
             arguments =
-                ["-w", "-XQuantifiedConstraints"]
+                ["-w", "-XQuantifiedConstraints", "-fno-ignore-interface-pragmas"]
                     <> concatMap (\database -> ["-package-db", database]) (sessionPackageDbs options)
                     <> concatMap (\package -> ["-package", package]) ("containers" : sessionPackages options)
                     <> concatMap (\unit -> ["-package-id", unit]) (sessionPackageIds options)
@@ -244,7 +246,7 @@ inSignatureHole session candidates signature arguments search =
         hole <- holeFor level (map (binderVar . snd) skolems) givens
         let (parameters, result) = tcSplitFunTys rho
             arity = length arguments
-            required = [Candidate name (scaledThing parameter) True True | (name, parameter) <- zip arguments parameters]
+            required = [Candidate name (scaledThing parameter) True True Nothing | (name, parameter) <- zip arguments parameters]
             goal = mkScaledFunTys (drop arity parameters) result
         search hole (candidates <> required) goal
 

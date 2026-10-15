@@ -225,6 +225,21 @@ spec = do
             Set.fromList (terms $ exclude [underA] pairs) `shouldBe` Set.fromList [term "b" "a", term "b" "b"]
             Set.fromList (terms $ exclude [underA, TemplateNode "g" [Hole, TemplateNode "b" []]] pairs)
                 `shouldBe` Set.fromList [term "b" "a"]
+            -- g(a, b) may live at the first child, and g(a, _) must die
+            -- there with the same part, so no copy keeps a.
+            Set.fromList (terms $ exclude [TemplateNode "g" [TemplateNode "a" [], TemplateNode "b" []], underA] pairs)
+                `shouldBe` Set.fromList [term "b" "a", term "b" "b"]
+
+        it "excludes many prefixes that fix their first child, one copy for each first child" $ do
+            -- Each template keeps its first child for the second, so a split
+            -- over every subset of the 49 templates would not end. Two
+            -- different first children cannot both match.
+            let leaves = [Symbol (Text.pack ('c' : show index)) | index <- [0 :: Int .. 9]]
+                leaf = Node [Edge symbol [] | symbol <- leaves] :: Node Symbol
+                pairs = Node [Edge "g" [leaf, leaf]]
+                excluded = [TemplateNode "g" [TemplateNode first [], TemplateNode second []] | first <- take 7 leaves, second <- take 7 leaves]
+            result <- timeout 10000000 $ evaluate $ length $ terms $ exclude excluded pairs
+            result `shouldBe` Just (100 - 49)
 
         it "excluding templates from a finite ECTA agrees with filtering its terms" $
             property $

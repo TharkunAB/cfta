@@ -14,8 +14,10 @@ argument of the type is a variable that the fit uses once, as in a Hoogle+
 query. The plugin drops the fits that GHC finds itself (one identifier
 applied to the arguments in order), and the fits that call a definition
 that holds the hole, because such a fit can loop. Hectare's rule
-'hectareAvoid' applies: a list function is not applied to @[]@. A fit that
-ignores part of itself ('fitIgnoresPart') comes after the others.
+'hectareAvoid' applies: a list function is not applied to @[]@. A fit with
+the normal form of an earlier fit is skipped ('optionNormalForms'), and a fit
+that ignores part of itself or drops an argument ('comesLast') comes after
+the others.
 
 The plugin's fits come after GHC's. GHC keeps the first
 @-fmax-valid-hole-fits@ fits after the plugin, so the plugin's driver hook
@@ -31,6 +33,7 @@ The options apply to each hole:
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:fits=5       the number of fits
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:seconds=1    the time of the search
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:programs=N   the number of Hectare's programs
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:normal-forms=off   keep the fits with equal normal forms
 -}
 module Data.CFTA.GHC.HoleFits (
     plugin,
@@ -58,7 +61,12 @@ import GHC.Core.Multiplicity (scaledMult, scaledThing)
 import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
 import GHC.Core.Type (Type, isManyTy)
 import GHC.Data.IOEnv (getEnv, runIOEnv)
-import GHC.Driver.DynFlags (DynFlags (maxValidHoleFits), HasDynFlags (getDynFlags))
+import GHC.Driver.DynFlags (
+    DynFlags (maxValidHoleFits),
+    GeneralFlag (Opt_IgnoreInterfacePragmas),
+    HasDynFlags (getDynFlags),
+    gopt_unset,
+ )
 import GHC.Driver.Env (HscEnv, hscUpdateFlags)
 import GHC.Driver.Plugins (CommandLineOption, Plugin (..), defaultPlugin, purePlugin)
 import GHC.Tc.Errors.Hole.FitTypes (HoleFit (RawHoleFit), HoleFitCandidate (..))
@@ -122,25 +130,29 @@ readOptions = foldM set defaultOptions{optionMaximumSize = 4, optionFits = 5, op
         ("first-order", "") -> Right options{optionCurried = False}
         ("only-defaulted", "") -> Right options{optionCurried = True, optionOnlyDefaulted = True}
         ("type-domains", "") -> Right options{optionCurried = True, optionTypeDomains = True}
+        ("normal-forms", '=' : "on") -> Right options{optionNormalForms = True}
+        ("normal-forms", '=' : "off") -> Right options{optionNormalForms = False}
         _ ->
             Left
                 ( "unknown option "
                     <> argument
-                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, and type-domains"
+                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, type-domains, and normal-forms"
                 )
       where
         number :: (Read a) => String -> Either String a
         number value = maybe (Left ("not a number in " <> argument)) Right (readMaybe value)
 
 {- | Raise @-fmax-valid-hole-fits@ by the plugin's number of fits, because
-GHC cuts the list of fits after the plugin. Stop at a wrong option.
+GHC cuts the list of fits after the plugin, and read the unfoldings of the
+interfaces (no @-fignore-interface-pragmas@, which @-O0@ implies), for the
+normal forms of "Data.CFTA.GHC.NormalForm". Stop at a wrong option.
 -}
 raiseLimit :: [CommandLineOption] -> HscEnv -> IO HscEnv
 raiseLimit arguments environment = case readOptions arguments of
     Left problem -> throwGhcExceptionIO (CmdLineError ("Data.CFTA.GHC.HoleFits: " <> problem))
     Right options -> pure (hscUpdateFlags (raise (optionFits options)) environment)
   where
-    raise fits flags = flags{maxValidHoleFits = (+ fits) <$> maxValidHoleFits flags}
+    raise fits flags = (flags{maxValidHoleFits = (+ fits) <$> maxValidHoleFits flags}) `gopt_unset` Opt_IgnoreInterfacePragmas
 
 {- | The plugin's hooks. GHC calls the candidate hook once for each hole, and
 the fit hook twice: for the valid fits, and for the refinement fits. The
@@ -195,8 +207,8 @@ fitsFor options hole scope = case th_hole hole of
                     (length parameters)
                     [name | index <- [1 :: Int ..], let name = "x" <> Text.pack (show index), name `Set.notMember` used]
             candidates =
-                [Candidate label typ' (heads name) False | (label, (name, typ')) <- named]
-                    <> [Candidate argument (scaledThing parameter) True True | (argument, parameter) <- zip arguments parameters]
+                [Candidate label typ' (heads name) False (Just name) | (label, (name, typ')) <- named]
+                    <> [Candidate argument (scaledThing parameter) True True Nothing | (argument, parameter) <- zip arguments parameters]
             names = Map.fromList [(label, pprPrefixName name) | (label, (name, _)) <- named]
         if not (null variables && null context)
             || not (all (isManyTy . scaledMult) parameters)
@@ -218,10 +230,10 @@ fitsFor options hole scope = case th_hole hole of
                 | otherwise = do
                     updTcRef kept (fit :)
                     fits <- readTcRef kept
-                    pure (length (filter (not . fitIgnoresPart) fits) < optionFits options)
+                    pure (length (filter (not . comesLast) fits) < optionFits options)
         _ <- streamFits options hole candidates result accept
         fits <- reverse <$> readTcRef kept
-        pure (take (optionFits options) (filter (not . fitIgnoresPart) fits <> filter fitIgnoresPart fits))
+        pure (take (optionFits options) (filter (not . comesLast) fits <> filter comesLast fits))
     -- As in Hectare's library, @($)@ and @id@ only appear as arguments; so
     -- does @($!)@, which applies a function as @($)@ does.
     heads name = getOccString name `notElem` ["$", "$!", "id"] || nameModule_maybe name /= Just gHC_INTERNAL_BASE

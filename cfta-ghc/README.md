@@ -102,9 +102,13 @@ How the plugin works:
   arguments in order), and the fits that call the definition that holds the
   hole, because such a fit can loop. Hectare's rule `hectareAvoid` applies:
   a list function is not applied to `[]`.
+- A fit with the normal form of an earlier fit is skipped: the bodies of
+  the components unfold from GHC's unfoldings (`Data.CFTA.GHC.NormalForm`),
+  so `flip map x2 x1` is `map x1 x2`, and `fst ((,) x y)` is `x`.
 - A fit that ignores part of itself (`fitIgnoresPart`: it still fits when
-  one of its argument subterms has a fresh rigid type) comes after the
-  others.
+  one of its argument subterms has a fresh rigid type), or whose normal form
+  drops an argument (`fitDropsArgument`: `const xs n` is `xs`), comes after
+  the others.
 - GHC keeps the first `-fmax-valid-hole-fits` fits (default 6) after the
   plugin. The plugin's driver hook raises that limit by the plugin's number
   of fits, and the plugin puts its fits after as many of GHC's fits as the
@@ -122,6 +126,7 @@ The options apply to each hole:
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:first-order` | off | Hectare's first-order types (see Limits), in place of its curried types. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:only-defaulted` | off | A variable of kind `* -> *` that a fit does not determine takes only its default, the list, and the check has `ExtendedDefaultRules`. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:type-domains` | off | A variable of kind `Type` with classes that the instances decide takes only the types in scope at which those classes can have instances, so `maximum` does not have a goal `a` without `Ord a`. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:normal-forms=off` | on | Keep the fits with the normal form of an earlier fit. |
 
 ## How a hole is filled
 
@@ -225,7 +230,11 @@ query with a heap limit and a time limit:
 ```sh
 cabal bench cfta-ghc                            # three queries, 30 s each
 cabal run hectare-ghc -- base 120 1400M 8            # rung 2, 8 children at a time
+cabal run hectare-ghc -- base 120 1400M 8 stackoverflow   # the 19 Stack Overflow queries
 ```
+
+With the normal forms, a fit with the normal form of the expected solution
+counts as the solution. `HECTARE_GHC_NORMAL_FORMS=off` turns them off.
 
 The tests and the benchmark need `ghc` on the `PATH` (for `ghc --print-libdir`),
 or the variable `GHC_LIBDIR`.
@@ -252,9 +261,15 @@ or the variable `GHC_LIBDIR`.
   With `only-defaulted`, the check of a complete program has GHC's
   `ExtendedDefaultRules`, so `length (pure x)` fits.
 - Many valid programs of the real Prelude are degenerate. `fitIgnoresPart`
-  finds those that ignore a subterm by parametricity (`const xs n`), but not
+  finds those that ignore a subterm by parametricity (`const xs n`), and
+  `fitDropsArgument` those whose normal form drops an argument, but not
   those that ignore it through its type (`length (map f xs)`) or that are
   bottom (`foldl1 asTypeOf []`). Hectare's order decides which come first.
+- The normal forms know each component whose interface has an unfolding
+  without recursion or a class dictionary. These depend on how the library
+  was compiled (none at `-O0`), and they can change with a GHC release. Two
+  programs that are equal through a recursive component
+  (`reverse (reverse xs)` and `xs`) keep their own normal forms.
 - The plugin relies on its driver hook to raise `-fmax-valid-hole-fits`. A
   GHC API client that adds the plugin as a static plugin must call
   `initializeSessionPlugins` before GHC reads the modules, as the `ghc`

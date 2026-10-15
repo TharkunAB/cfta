@@ -18,30 +18,36 @@ limit, as Hectare's evaluation does. Each row gives the query, the rung, the
 outcome (@solved@, @other@ when other programs fit but not the expected one,
 @unsolved@, @timeout@, @oom@, or @crash@), the bound, the size of the first
 fit and of the expected one, the rank of the expected one among the fits
-and among the fits that use every part of themselves ('fitIgnoresPart'),
+and among the fits that use every part of themselves ('comesLast'),
 the programs that Hectare proposed, the solver
 calls, the seconds, the seconds of Hectare's construction, reduction, and
 listing, of the checks in the typechecker, and of the solver calls in the
-checks, the peak memory and the allocation in megabytes, whether GHC accepts
-the first fit as a program of the signature, the typed terms that Hectare
-listed, the fits and the fits that use every part of themselves, and the
-first fit. The walk itself stops at the time limit, so that a row of a
-timeout has its figures too. The search is the one of the tools, with
-'optionFits' at its default.
+checks, the peak memory and the allocation in megabytes, the fits skipped
+for the normal form of an earlier fit, the seconds of the normal forms,
+whether GHC accepts the first fit as a program of the signature, the typed
+terms that Hectare listed, the fits and the fits that use every part of
+themselves, and the first fit. With normal forms, a fit with the normal
+form of the expected solution counts as the solution. The walk itself stops
+at the time limit, so that a row of a timeout has its figures too. The
+search is the one of the tools, with 'optionFits' at its default.
 
 With no arguments, it runs three queries with the Prelude, 30 seconds and a
 heap of 2 GB each, so that @cabal bench@ stays short. The variable
 @HECTARE_GHC_TOP_CORE@ pins child @k@ to that core minus @k@,
 @HECTARE_GHC_LOGS@ names a directory for the children's output, and
 @HECTARE_GHC_TRACE@ makes a child print each program that it checks to its
-standard error, with the seconds and the size. The children search with
-Hectare's curried types; @HECTARE_GHC_FIRST_ORDER@ makes them search with
-its first-order types ('optionCurried'), and @HECTARE_GHC_DEFAULTED@ with
-only the default of a type variable that a program does not determine
-('optionOnlyDefaulted'). @HECTARE_GHC_TYPE_DOMAINS@ gives a type variable
-of kind @Type@ the domain of its classes ('optionTypeDomains'). Next to
-the Hoogle+ queries, the parent takes the names of the differential queries
-('differential'), where the erasure loses information.
+standard error, with the seconds and the size, and @HECTARE_GHC_NORMAL_FORMS=off@
+turns off the normal forms of the fits ('optionNormalForms'). The children
+search with Hectare's curried types; @HECTARE_GHC_FIRST_ORDER@ makes them
+search with its first-order types ('optionCurried'), and
+@HECTARE_GHC_DEFAULTED@ with only the default of a type variable that a
+program does not determine ('optionOnlyDefaulted').
+@HECTARE_GHC_TYPE_DOMAINS@ gives a type variable of kind @Type@ the domain
+of its classes ('optionTypeDomains'). The names @hplus@ and
+@stackoverflow@ stand for the queries of each suite; the Stack Overflow
+queries are the queries of Hectare's evaluation, with GHC's library of the
+rung. Next to the Hoogle+ queries, the parent takes the names of the
+differential queries ('differential'), where the erasure loses information.
 
 > hectare-ghc [RUNG [SECONDS [HEAP [JOBS [NAME...]]]]]
 > hectare-ghc --query NAME RUNG SECONDS
@@ -298,6 +304,9 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
             firstOrder <- isJust <$> lookupEnv "HECTARE_GHC_FIRST_ORDER"
             defaulted <- isJust <$> lookupEnv "HECTARE_GHC_DEFAULTED"
             typeDomains <- isJust <$> lookupEnv "HECTARE_GHC_TYPE_DOMAINS"
+            normalForms <- (/= Just "off") <$> lookupEnv "HECTARE_GHC_NORMAL_FORMS"
+            -- The normal forms of programs, built at the first fit.
+            normalRef <- newIORef Nothing
             -- The walk stops at the time limit; this limit is for the rest.
             outcome <- try . timeout ((seconds + 30) * 1000000) $ withSession (importLines rung) $ \session -> do
                 candidates <- candidatesOf session (rungModules rung)
@@ -315,7 +324,13 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                             , optionCurried = not firstOrder
                             , optionOnlyDefaulted = defaulted
                             , optionTypeDomains = typeDomains
+                            , optionNormalForms = normalForms
                             }
+                    -- With normal forms, a fit with the normal form of the solution is the solution.
+                    isSolution normal program
+                        | normalForms =
+                            maybe False (\solution -> isJust (normal solution) && normal program == normal solution) (ghcSolution query)
+                        | otherwise = Just program == ghcSolution query
                     trace size program = do
                         now <- getMonotonicTime
                         hPutStrLn stderr (printf "%.3f %d %s" (now - start) size (renderProgram program))
@@ -323,13 +338,25 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                         now <- getMonotonicTime
                         printf "size,%d,%s,%.3f\n" size (show statistics) (now - start)
                         hFlush stdout
-                    accept fit = liftIO $ do
-                        known <- readIORef firstFit
-                        when (isNothing known) $ writeIORef firstFit (Just fit)
-                        modifyIORef' counts (\(all', using) -> (all' + 1, if fitIgnoresPart fit then using else using + 1))
-                        if Just (fitProgram fit) == ghcSolution query
-                            then False <$ writeIORef solved (Just (fitSize fit))
-                            else pure True
+                    accept fit = do
+                        normal <-
+                            if normalForms
+                                then do
+                                    built <- liftIO (readIORef normalRef)
+                                    case built of
+                                        Just cached -> pure cached
+                                        Nothing -> do
+                                            fresh <- normalFormsOf candidates
+                                            liftIO (writeIORef normalRef (Just fresh))
+                                            pure fresh
+                                else pure (const Nothing)
+                        liftIO $ do
+                            known <- readIORef firstFit
+                            when (isNothing known) $ writeIORef firstFit (Just fit)
+                            modifyIORef' counts (\(all', using) -> (all' + 1, if comesLast fit then using else using + 1))
+                            if isSolution normal (fitProgram fit)
+                                then False <$ writeIORef solved (Just (fitSize fit))
+                                else pure True
                 statistics <- case signature of
                     Just typ -> fitsForSignature session options candidates typ (map fst (ghcArguments query)) accept
                     Nothing -> pure Nothing
@@ -363,8 +390,8 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                         _ | maybe False statisticsOutOfTime statistics -> "timeout"
                         (Nothing, Just _) -> "other"
                         (Nothing, Nothing) -> "unsolved"
-                programs, calls, parts, checkedText, runs :: String
-                (programs, calls, parts, checkedText, runs) = case outcome of
+                programs, calls, parts, mergedText, checkedText, runs :: String
+                (programs, calls, parts, mergedText, checkedText, runs) = case outcome of
                     Right (Just (Just statistics, checked)) ->
                         ( show (statisticsPrograms statistics)
                         , show (countSolverCalls (statisticsCounters statistics))
@@ -379,12 +406,13 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                                 , countSolverNanos . statisticsCounters
                                 ]
                             ]
+                        , printf "%d,%.4f" (statisticsMerged statistics) (fromIntegral (statisticsNormalNanos statistics) / 1e9 :: Double)
                         , if checked then "yes" else "no"
                         , show (statisticsRuns statistics)
                         )
-                    _ -> ("-", "-", "-,-,-,-,-", "-", "-")
+                    _ -> ("-", "-", "-,-,-,-,-", "-,-", "-", "-")
             printf
-                "result,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%.3f,%s,%d,%d,%s,%s,%d,%d,%s\n"
+                "result,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%.3f,%s,%d,%d,%s,%s,%s,%d,%d,%s\n"
                 name
                 rungName'
                 outcomeText
@@ -399,6 +427,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                 parts
                 memory
                 allocated
+                mergedText
                 checkedText
                 runs
                 rank
@@ -418,7 +447,8 @@ memoryOf = do
 {- | Run each query in a child process with a heap limit and a time limit,
 several at a time, and print the result row of each. With no names, the
 suite is the 45 Hoogle+ queries, or the 19 Stack Overflow queries on the
-rung @so@.
+rung @so@, and the name @stackoverflow@ stands for the 19 Stack Overflow
+queries.
 -}
 runSuite :: String -> Int -> String -> Int -> [String] -> IO ()
 runSuite rung seconds heap jobs names = do
@@ -426,13 +456,17 @@ runSuite rung seconds heap jobs names = do
     top <- fmap read <$> lookupEnv "HECTARE_GHC_TOP_CORE"
     logs <- lookupEnv "HECTARE_GHC_LOGS"
     forM_ logs $ \directory -> createDirectoryIfMissing True (directory <> "/" <> rung)
-    let suite = if rung == "so" then stackOverflowBenchmarks else hooglePlusBenchmarks
-        queries = if null names then map (ghcName . fromBenchmark) suite else names
+    let suite benchmarks = map (ghcName . fromBenchmark) benchmarks
+        queries = case names of
+            [] -> suite (if rung == "so" then stackOverflowBenchmarks else hooglePlusBenchmarks)
+            ["hplus"] -> suite hooglePlusBenchmarks
+            ["stackoverflow"] -> suite stackOverflowBenchmarks
+            _ -> names
     queue <- newMVar queries
     output <- newMVar ()
     done <- newEmptyMVar
     putStrLn
-        "result,query,rung,outcome,bound,first,solved,rank,using,programs,calls,seconds,build,reduce,list,check,solver,memory,allocated,checked,runs,fits,usingfits,program"
+        "result,query,rung,outcome,bound,first,solved,rank,using,programs,calls,seconds,build,reduce,list,check,solver,memory,allocated,merged,normal,checked,runs,fits,usingfits,program"
     hFlush stdout
     forM_ [0 .. jobs - 1] $ \worker -> forkIO $ do
         let loop = do
@@ -453,9 +487,9 @@ runSuite rung seconds heap jobs names = do
                             writeFile (directory <> "/" <> rung <> "/" <> query <> ".log") (out <> err <> "exit " <> show code <> "\n")
                         let row = case (code, [line | line <- lines out, "result," `isPrefixOf` line]) of
                                 (_, line : _) -> line
-                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,,,,"
-                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,,,,"
-                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,,,,"
+                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,,,,,,,,"
+                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,,,,,,,,"
+                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,,,,,,,,"
                         withMVar output $ \() -> putStrLn row >> hFlush stdout
                         loop
         loop
