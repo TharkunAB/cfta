@@ -20,6 +20,14 @@ Before release, the package was called `microcfta`.
 - Expose constructor rows before path traversal, equality edits, and template
   restriction of recursive nodes. Retained empty recursive cycles now return
   empty instead of repeating the same unfolding request.
+- `Data.CFTA.Template.exclude` keeps exactly the terms of an interned graph
+  that match none of some templates at the root, as `matchesNone` says. It
+  splits an edge by what its children match, so an unambiguous input gives
+  an unambiguous result, and counts and ranks over it are exact. It reaches
+  only as deep as the templates.
+  `excludeFTA` does the same for an explicit-state automaton: each result
+  state pairs a source state with an `Obligation`, the templates that its
+  terms must match and those that they must not.
 - Fix `reducePartially` not returning when a node at the end of an equality
   path reaches a recursive node with constraints. The intersection at that
   path unfolded the recursive node, a narrowed child contained its own

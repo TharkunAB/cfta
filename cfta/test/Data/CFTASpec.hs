@@ -26,7 +26,7 @@ import qualified Data.CFTA.Interned as Common
 import Data.CFTA.Interned.Type (MuDepth (..))
 import Data.CFTA.Path (getPath, path)
 import qualified Data.CFTA.Simple as Simple
-import Data.CFTA.Template (Template (..), matchesTemplate, restrict, restrictFTA)
+import Data.CFTA.Template (Template (..), exclude, excludeFTA, matchesNone, matchesTemplate, restrict, restrictFTA)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -383,7 +383,7 @@ spec = do
                 Enumeration.terms (Common.boundDepth depth reduced)
                     `shouldMatchList` Enumeration.terms (Common.boundDepth depth subsumed)
 
-    describe "templates" $
+    describe "templates" $ do
         it "restricts an automaton and an interned graph to the matching terms" $
             case Automaton.mkFTA
                 Expression
@@ -407,6 +407,19 @@ spec = do
                     map (runIdentity . Automaton.acceptsM accept expressions) [zero, add zero zero, add (add zero zero) zero]
                         `shouldBe` [True, True, False]
                     runIdentity (Automaton.acceptsM accept expressions (Term.Node "mul" [zero, zero])) `shouldBe` False
+
+        it "excludes the matching terms from an automaton and an interned graph" $
+            case Automaton.mkFTA
+                Expression
+                [(Expression, [Transition "zero" [] noConstraint, Transition "add" [Expression, Expression] noConstraint])] of
+                Left err -> expectationFailure $ show err
+                Right expressions -> do
+                    let templates = [TemplateNode "add" [TemplateNode "zero" [], Hole], TemplateNode "add" [Hole, TemplateNode "zero" []]]
+                        bounded = Automaton.boundDepth 2 expressions
+                        expected = filter (matchesNone templates) (Automaton.terms bounded)
+                    length expected `shouldBe` 2
+                    Automaton.terms (excludeFTA templates bounded) `shouldMatchList` expected
+                    Enumeration.plainTerms (exclude templates (Common.fromFTA bounded)) `shouldMatchList` expected
 
     describe "explicit-state recognition" $ do
         it "rejects a transition whose guard is Bottom, as the interned view does" $ do
