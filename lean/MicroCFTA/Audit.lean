@@ -1702,6 +1702,8 @@ import MicroCFTA.SourceClosedGateSelection
 import MicroCFTA.SourceEqualityWarmSelectedRequired
 import MicroCFTA.SourceEqualityWarmOnePass
 import MicroCFTA.SourceEqualityWarmNativeEdge
+import MicroCFTA.SourceEqualityPartialHeightBoundary
+import MicroCFTA.SourceRecursiveIntersectionConstraintClosure
 /-!
 # Proof dependency audit
 
