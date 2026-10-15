@@ -97,7 +97,8 @@ labels = map Text.singleton ['A' .. 'T']
 
 {- | The JSON body of the request for a question with at most 20 options. The
 prompt has the state, the question, and one line for each option, with its
-label, its name and its description.
+label, its name and its description. The prompt does not show the name of the
+question.
 -}
 requestBody :: OpenAI -> Question -> LazyByteString.ByteString
 requestBody settings question =

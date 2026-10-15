@@ -5,8 +5,9 @@
 Initial version.
 
 - `Decision`: `Option`, `Question` and `DecisionModel`, the interface between
-  a program that asks a question and a model that scores its options.
-  `fixedModel` is a model without I/O, for tests. `chunked` asks a long
+  a program that asks a question and a model that scores its options. A
+  question has a name, which Ollama's decision API shows to the model;
+  `question` makes a question with the name `q0`. `fixedModel` is a model without I/O, for tests. `chunked` asks a long
   question in parts of equal size, each with the option "none". `bothOrders`
   gives the mean of the scores in the order of the options and in the reverse
   order. `ranked` puts items in the order of their scores.

@@ -7,14 +7,15 @@ external client program.
 ## API
 
 ```haskell
-data Question = Question {questionState, questionText :: Text, questionOptions :: [Option]}
+data Question = Question {questionName, questionState, questionText :: Text, questionOptions :: [Option]}
 newtype DecisionModel = DecisionModel {scoreOptions :: Question -> IO (Either String [Double])}
-Ollama.withOllama Ollama.defaultOllama $ \model -> scoreOptions (chunked 250 (bothOrders model)) question
+Ollama.withOllama Ollama.defaultOllama $ \model -> scoreOptions (chunked 250 (bothOrders model)) (question state text options)
 model <- OpenAI.openAI (OpenAI.defaultOpenAI "gemma4:e2b")   -- a chat model, from its log probabilities
-ranked (questionOptions question) scores                       -- the options, the highest score first
+ranked (questionOptions q) scores                              -- the options, the highest score first
 ```
 
-- `Decision`: the types, `fixedModel` (a model without I/O, for tests),
+- `Decision`: the types, `question` (a question with the name `q0`),
+  `fixedModel` (a model without I/O, for tests),
   `chunked` (a long question in parts, each with the option "none"),
   `bothOrders` (the mean of the scores in the order of the options and in the
   reverse order), and `ranked`.
@@ -27,6 +28,9 @@ ranked (questionOptions question) scores                       -- the options, t
 
 All failures are values (`Left`): no connection, a status that is not a
 success, a bad reply, a missing score, and two options with the same name.
+
+Ollama's decision API shows the name of a question to the model, so the name
+changes the scores.
 
 The scores of a model depend on the order of the options. `bothOrders`
 removes most of this bias. Put it inside `chunked`, so that each part has the

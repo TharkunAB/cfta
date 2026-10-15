@@ -20,6 +20,7 @@ module Decision (
     -- * Questions
     Option (..),
     Question (..),
+    question,
 
     -- * Models
     DecisionModel (..),
@@ -45,14 +46,24 @@ data Option = Option
     }
     deriving (Eq, Show)
 
--- | A question to a model: what it is about, the question, and the options.
+{- | A question to a model: its name, what it is about, the question, and the
+options.
+-}
 data Question = Question
-    { questionState :: Text
+    { questionName :: Text
+    {- ^ The name of the question, such as @q0@ or @best_fit@. Ollama's decision
+    API shows the name to the model, so the name changes the scores.
+    -}
+    , questionState :: Text
     -- ^ What the decision is about, such as the type of the program.
     , questionText :: Text
     , questionOptions :: [Option]
     }
     deriving (Eq, Show)
+
+-- | A question with the name @q0@, from what it is about, the question, and the options.
+question :: Text -> Text -> [Option] -> Question
+question = Question "q0"
 
 {- | A model gives one score for each option of a question, in the order of
 the options. A higher score is likelier, and a score is not negative. A model
@@ -64,7 +75,7 @@ newtype DecisionModel = DecisionModel
 
 -- | A model without I/O: the score of each option comes from the option.
 fixedModel :: (Option -> Double) -> DecisionModel
-fixedModel score = DecisionModel $ \question -> pure $ Right $ map score (questionOptions question)
+fixedModel score = DecisionModel $ \q -> pure $ Right $ map score (questionOptions q)
 
 {- | The questions that @'chunked' n@ asks for a question. A question with at
 most @n@ options stays one question. A question with more options becomes the
@@ -73,12 +84,12 @@ by one at most. Each part has its options in their order, and then the option
 "none" ("None of these options."). A value of @n@ less than 2 counts as 2.
 -}
 chunks :: Int -> Question -> [Question]
-chunks limit question
-    | total <= n = [question]
-    | otherwise = [question{questionOptions = part ++ [none]} | part <- split sizes options]
+chunks limit q
+    | total <= n = [q]
+    | otherwise = [q{questionOptions = part ++ [none]} | part <- split sizes options]
   where
     n = max 2 limit
-    options = questionOptions question
+    options = questionOptions q
     total = length options
     parts = (total + n - 2) `div` (n - 1)
     sizes = [total `div` parts + (if k < total `mod` parts then 1 else 0) | k <- [0 .. parts - 1]]
@@ -93,7 +104,7 @@ the scores of the options of the question, without the scores of the options
 comparison of the scores of two parts is approximate.
 -}
 chunked :: Int -> DecisionModel -> DecisionModel
-chunked n model = DecisionModel $ \question -> case chunks n question of
+chunked n model = DecisionModel $ \q -> case chunks n q of
     [one] -> scoreOptions model one
     parts -> scoreParts parts
   where
@@ -110,12 +121,12 @@ scores. The scores of a model depend on the order of the options, and the
 mean removes most of this bias.
 -}
 bothOrders :: DecisionModel -> DecisionModel
-bothOrders model = DecisionModel $ \question -> do
-    forward <- scoreOptions model question
+bothOrders model = DecisionModel $ \q -> do
+    forward <- scoreOptions model q
     case forward of
         Left problem -> pure (Left problem)
         Right scores -> do
-            backward <- scoreOptions model question{questionOptions = reverse (questionOptions question)}
+            backward <- scoreOptions model q{questionOptions = reverse (questionOptions q)}
             pure $ zipWith (\a b -> (a + b) / 2) scores . reverse <$> backward
 
 {- | Items with their scores, the highest score first. Items with equal scores

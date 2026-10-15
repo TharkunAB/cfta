@@ -127,14 +127,14 @@ withOllama settings action = do
     action model `finally` unload settings
 
 {- | The JSON body of the request for a question with at most 255 options. The
-question has the name @q0@. The criteria have the order of the options.
+key of the question is its name. The criteria have the order of the options.
 -}
 requestBody :: Ollama -> Question -> LazyByteString.ByteString
 requestBody settings question =
     encodingToLazyByteString . pairs $
         "model" .= ollamaModel settings
             <> "state" .= questionState question
-            <> pair "questions" (pairs (pair "q0" (pairs choice)))
+            <> pair "questions" (pairs (pair (Key.fromText (questionName question)) (pairs choice)))
             <> "keep_alive" .= ollamaKeepAlive settings
             <> pair "options" (pairs ("temperature" .= ollamaTemperature settings <> maybe mempty ("seed" .=) (ollamaSeed settings)))
   where
@@ -151,7 +151,9 @@ replyScores :: Question -> LazyByteString.ByteString -> Either String [Double]
 replyScores question body = do
     probabilities <-
         either (Left . ("bad reply: " <>)) Right $
-            eitherDecode body >>= parseEither (withObject "reply" (\o -> o .: "answers" >>= (.: "q0") >>= (.: "probabilities")))
+            eitherDecode body
+                >>= parseEither
+                    (withObject "reply" (\o -> o .: "answers" >>= (.: Key.fromText (questionName question)) >>= (.: "probabilities")))
     traverse (score probabilities . optionName) (questionOptions question)
   where
     score probabilities name =
