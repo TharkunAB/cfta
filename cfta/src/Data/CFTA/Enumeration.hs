@@ -209,11 +209,11 @@ intersectUVarValue _ _ _ = error "intersectUVarValue: Intersecting with enumerat
 
 -- | Mutable state threaded through nondeterministic enumeration branches.
 data EnumerationState symbol = EnumerationState
-    { _uvarCounter :: UVarGen
+    { _uvarCounter :: !UVarGen
     -- ^ Fresh UVar supply.
-    , _uvarRepresentative :: UnionFind
+    , _uvarRepresentative :: !UnionFind
     -- ^ Persistent union-find for equality-constrained UVars.
-    , _uvarValues :: IntMap.IntMap (UVarValue symbol)
+    , _uvarValues :: !(IntMap.IntMap (UVarValue symbol))
     {- ^ Per-UVar contents keyed by 'uvarToInt'. A slot is
     'UVarEliminated' exactly when its UVar is not a representative;
     @findExpandableUVars@ relies on 'assimilateUvarVal' maintaining this.
@@ -230,12 +230,12 @@ data EnumerationState symbol = EnumerationState
     -}
     , _obligations :: [(Constraint, TermFragment symbol)]
     -- ^ Constraints with a 'residual', each with the fragment it guards.
-    , _recursionAncestry :: IntMap.IntMap RecursionAncestry
+    , _recursionAncestry :: !(IntMap.IntMap RecursionAncestry)
     {- ^ For each UVar that the expansion of a constrained recursive node
     reached, directly or through later expansions, the keys of those
     expansions.
     -}
-    , _expansionAncestry :: RecursionAncestry
+    , _expansionAncestry :: !RecursionAncestry
     -- ^ The ancestry that the current expansion gives the UVars it reaches.
     , _canonicalEdges :: IntMap.IntMap [Edge symbol]
     {- ^ The edges of each node that the root reaches, in 'canonicalOrder',

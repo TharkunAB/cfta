@@ -177,7 +177,9 @@ remains a separate ECTA-only package.
   resolves every waiting variable through the union-find, and a write of a
   slot changes only the counts that change. On Hectare's listing of
   headLast at size 5 this cut 13% of instructions and 9% of allocation.
-  The value slots of the UVars are an `IntMap`, not a `Seq`.
+  The value slots of the UVars are an `IntMap`, not a `Seq`, and the hot
+  fields of the enumerator's state are strict, which cut a further 9% of
+  instructions and 8% of allocation on that listing.
 - The refinement layer's `denotationAtMost` runs on the shared enumerator: a
   positive `Same` guard is a path equality solved by unification, so an
   equality-guarded pair costs milliseconds instead of a quadratic candidate
