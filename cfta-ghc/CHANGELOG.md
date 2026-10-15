@@ -48,9 +48,13 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   translated from Core, with beta, eta, the eta law of pairs, a case of a
   known constructor, a case of a case, and the identity case. A class
   method, a body with a class dictionary or a recursive `let`, and an
-  identifier without an unfolding stay leaves. The session and the hole-fit
-  plugin read the unfoldings of the interfaces (no
-  `-fignore-interface-pragmas`, which `-O0` implies). With
+  identifier without an unfolding stay leaves. A normal form has at most
+  20000 nodes, and its evaluation has a fixed fuel, one unit for each beta
+  step and for each node, so it always ends: a reduction that does not end
+  gives no normal form, and its fit is not merged. `Term` exports `TVar`,
+  `TApp`, and `TLam` for terms made by hand.
+  The session and the hole-fit plugin read the unfoldings of the interfaces
+  (no `-fignore-interface-pragmas`, which `-O0` implies). With
   `optionNormalForms`, on by default, `streamFits` skips a fit with the
   normal form of an earlier fit (`flip filter xs p` is `filter p xs`), and
   `Statistics` counts the skipped fits (`statisticsMerged`) and the time of
@@ -85,13 +89,22 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `StateKey`, the state of a walker up to the names of its unification
   variables. The walk keeps the verdict of each step by state and leaf, and
   skips the steps and the solver calls whose verdict it knows.
+- `Data.CFTA.GHC.States`: mode (b), the goals of a hole for the search over
+  states of `Data.CFTA.Gen.Synthesis.States` (`holeGoals`), without Hectare
+  and without erasure. The key of a goal is its `StateKey`, and a
+  refinement is the walk's step of a leaf on the goal, from an index of the
+  leaves by the head of their result. `optionMode` chooses between
+  `Hectare` (mode (a), the default) and `States`, with one checker for
+  both, and `Statistics` have the figures of the states
+  (`statisticsStates`).
 - The `ghc-fits` executable: the programs of a type signature over the
   exports of some modules, checked in GHC's typechecker, with `--first-order`
   and `--only-defaulted`.
 - The `hole-fits-golden` test: GHC's messages for a module with holes,
   compiled with the plugin.
 - The `hectare-ghc` benchmark: the 45 Hoogle+ queries on a library ladder
-  read from GHC's exports, one child process per query. The queries come
-  from the sublibrary `cfta-generator:hoogleplus`. The name `stackoverflow`
-  runs the 19 Stack Overflow queries, and `HECTARE_GHC_NORMAL_FORMS=off`
-  turns off the normal forms of the fits.
+  read from GHC's exports, one child process per query, in the mode of
+  `HECTARE_GHC_MODE`. The queries come from the sublibrary
+  `cfta-generator:hoogleplus`. The name `stackoverflow` runs the 19 Stack
+  Overflow queries, and `HECTARE_GHC_NORMAL_FORMS=off` turns off the normal
+  forms of the fits.
