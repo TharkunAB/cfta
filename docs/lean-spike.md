@@ -1,119 +1,253 @@
-# The Lean spike: where it stands
+# The Lean spike: directions and work in progress
 
-State on 2026-10-15 12:51, when the spike stopped. The branch `lean-spike` is
-`spike/states-automaton` (`16ef6d6a`) with this file.
+The spike stopped on 2026-10-15. This branch, `lean-spike`, is
+`spike/states-automaton` (`16ef6d6a`) with these notes. It holds the generic
+modes of TharkunAB/cfta#10, the cfta-lean package of TharkunAB/cfta#11, and
+the automaton path of mode (b). The notes of the earlier steps stay beside this
+file: `docs/host-checkers.md` (one design for GHC and Lean, and the cost
+cascade) and `docs/host-agnostic-modes.md` (the portfolio and mode (b), as
+designed and as built). The small result files are in `docs/lean-spike/`.
 
-## Directions
+## Direction, current: Lean as an LTA solver behind `Entailment` (draft)
 
-- **Lean as an LTA solver behind `Entailment`.** Matti (2026-10-15 11:5x): the
-  aim of cfta-lean is Lean as a solver in LTAs, as Z3 is, not a tactic.
-  The seam is `Entailment` in `Data.CFTA.Refinement.Verdict`
-  (`entailsWithBindings :: [(Name, Name)] -> Formula -> Formula -> IO Verdict`).
-  The draft note below is the starting point.
-- **Mode (b) as an automaton for each size.** The table of states of mode (b)
-  of #10 is a tree automaton: states are nodes, refinements are edges, and
-  child goals are children. The spike on this branch builds one interned cfta
-  automaton for each size and lists it with cfta's enumerator in the host's
-  order. It gives the same solved sets and first fits as #10's search, and
-  exact counts, ranks, and sampling of the over-approximation. Its cost is the
-  listing of the programs under dead prefixes, which #10's search leaves at
-  once. A Template can restrict the automaton to the programs under a prefix,
-  but it cannot exclude the dead prefixes, because cfta has no complement.
-  Pruning inside the enumerator (`termsPruneWith` with the trie of dead
-  prefixes) needs an effectful oracle; `unsafePerformIO` was ruled out.
+This part is a draft. It was written before any code, and it is not
+reviewed.
 
-## Draft: cfta-lean as an LTA solver (not finished)
+### The aim
 
-What the seam is, from the code:
+Matti, 2026-10-15: "we need to retool cfta-lean. We got it all upside down,
+the idea was to be able to use lean as a solver (think z3) in LTAs, not to
+introduce a tactic". So Lean is to be a second solver, beside Z3, for the
+semantic questions of liquid tree automata.
+
+### The seam
+
+Every semantic question of an LTA goes through `Entailment` in
+`Data.CFTA.Refinement.Verdict`:
+
+```haskell
+entailsWithBindings :: [(Name, Name)] -> Formula -> Formula -> IO Verdict
+data Verdict = Yes | No | Unknown
+```
 
 - `Formula` (`Data.CFTA.Formula`) has `Top`, `And`, `Bottom`, `Or`, `Not`,
   `Atom` (`Eq`, `Ne`, `Gt`, `Ge`, `Lt`, `Le`), `Forall`, and `Exists`.
-  `Term` has integer literals, names, applications of uninterpreted
-  functions (`App`), `Neg`, `Add`, `Sub`, `Mul`, `Div`, `Mod`, `Ite`, and
-  `Cast`. `Sort` has `IntSort`, `RealSort`, `BoolSort`, and `FunctionSort`.
-  There is no sort of data, and a function has no definition.
-- Z3 (`Data.CFTA.Refinement.LiquidFixpoint`): one reused process, one scope
-  (push and pop) for each query, the declarations sent with each query, and
-  the ambient assumptions of `withZ3Assuming` in the scope. Unsat gives
-  `Yes`, sat gives `No`, and unknown gives `Unknown`, or the exception
-  `TimeLimitReached` at the limit (`defaultTimeLimit`, 10 s).
-- Exactness needs `No`: `Unknown` is an error in pruning (`PruneUnknown`),
-  minimization (`SimilarityUnknown`), denotation (`DenotationUnknown`), the
-  guards of `Data.CFTA.Sized` (`GuardUnknown`), and the compiler of LTA
-  generators (`SolverUnknown`). So a solver that gives only `Yes` and
-  `Unknown` helps only where Z3 answers `Unknown`.
-- The LTA examples keep their guards local and integer
-  (`cfta-generator/examples/SortedLists.hs`: the element is at most the
-  head of the rest), and the lattice (`Data.CFTA.Refinement.Lattice`) counts
-  linear integer formulas without a solver. Hegel's measures
-  (`cfta-generator/common/Data/CFTA/Gen/Synthesis/HegelBenchmarks.hs`: `len`,
-  `hd`, `mem`, ...) are uninterpreted functions on integers.
+  `Term` has integer literals, names, applications of uninterpreted functions
+  (`App`), `Neg`, `Add`, `Sub`, `Mul`, `Div`, `Mod`, `Ite`, and `Cast`.
+  `Sort` has `IntSort`, `RealSort`, `BoolSort`, and `FunctionSort`. There is
+  no sort of data, and a function has no definition.
+- A named measure reaches the solver as an uninterpreted `App`, declared by
+  its arity. Hegel's measures (`len`, `hd`, `lst`, `mem`, `at`, ...,
+  `cfta-generator/common/Data/CFTA/Gen/Synthesis/HegelBenchmarks.hs`) are
+  such functions on integers.
+- Z3 (`Data.CFTA.Refinement.LiquidFixpoint`: `withZ3`, `withZ3Assuming`,
+  `withZ3Timeout`) runs as one process for many queries, with one scope (push
+  and pop) for each query. Each query sends its declarations, asserts the
+  ambient assumptions, the antecedent, and the negated consequent, and checks.
+  Unsat gives `Yes`, sat gives `No`, and unknown gives `Unknown`, or the
+  exception `TimeLimitReached` when the check took the whole limit
+  (`defaultTimeLimit`, 10 s).
+- The lattice (`Data.CFTA.Refinement.Lattice`) is another `Entailment`: it
+  counts the integer points of linear formulas, and it answers `Unknown` for
+  an unbounded variable or a non-linear term.
 
-What Lean adds, and what it needs:
+### `No` is necessary
 
-- With the current `Formula`, Lean can decide what Z3 gives up on, as some
-  non-linear integer facts (`grind`, `omega`, `decide`, `simp`). Candidate
-  examples, written down and not yet run: `(x*x - x) % 2 = 0`,
-  `(x*x) % 4 = 0 ∨ (x*x) % 4 = 1`, and `(x*x*x - x) % 6 = 0`. The files are
-  in the scratchpad (`lean-solver/smt/*.smt2` for Z3,
-  `lean-solver/lean/Examples.lean` for Lean).
-- Lean's real gain is definitions: measures with bodies, recursive
-  functions, and inductive types (`len (xs ++ ys) = len xs + len ys` with
-  `List.length`). That needs `Formula` to grow: a sort of data (an
-  uninterpreted sort for Z3, a Lean type for Lean), and a map from function
-  names to Lean definitions. Z3 then treats them as uninterpreted. Its
-  `Yes` stays sound, but its `No` does not, because its countermodel need
-  not respect the definitions.
-- `No` from Lean: Lean finds no models. The options are: Z3's model checked
-  by evaluation in Lean; `decide` on finite domains; or `Unknown`.
-- Transport: the `lean-oracle` process and its line protocol of
-  `feature/cfta-lean` (`d6cfb4c4`), with a request for one entailment, the
-  user's modules as imports, and a heartbeat limit per query. A Lean query
-  costs about 0.1 ms of round trip plus the tactic's time, against well under
-  a millisecond for most Z3 queries. So the useful form is a portfolio: Z3
-  first, Lean on `Unknown`.
-- Acceptance (to keep): the LTA cells and Hegel's 42 queries unchanged with
-  Lean behind Z3, and at least one example that Lean decides and Z3 does not.
-- From #11 (closed, branch kept): the oracle process, its protocol, its
-  imports, and the erasure are reused. The tactic (`Oracle/Tactic.lean`,
-  `Oracle/Suggest.lean`), the proposer executable, and the synthesis
-  benchmark are not needed by the solver.
+Pruning (`PruneUnknown`), minimization (`SimilarityUnknown`), the denotation
+(`DenotationUnknown`), the guards of `Data.CFTA.Sized` (`GuardUnknown`), and
+the compiler of LTA generators (`SolverUnknown`) all fail on `Unknown`. They
+need `Yes` or `No` for each question. So a solver that gives only `Yes` and
+`Unknown` helps only where it turns an `Unknown` of Z3 into `Yes`; to help
+these operations everywhere, it must also answer `No`.
 
-## Work in progress and branch heads
+### What Lean adds
 
-| Branch | Head | State |
+- **Non-linear integer facts** that Z3 can give up on. Candidate examples,
+  in the current `Formula`: `(x*x - x) % 2 = 0`,
+  `(x*x) % 4 = 0 ∨ (x*x) % 4 = 1`, `(x*x*x - x) % 6 = 0`, and
+  `x > 0 ∧ y > 0 → x*y ≥ x`. They are written for Z3 4.15.3
+  (`docs/lean-spike/examples/e1.smt2` to `e4.smt2`, with the 10 s limit) and
+  for Lean 4.35 (`docs/lean-spike/examples/Examples.lean`, with `grind` and
+  `simp`). They were not run: the run waited for the shared machine, and the
+  spike stopped first. Each example still needs both results before it can
+  stand in a note.
+- **Definitions**: measures with bodies, recursive functions, and inductive
+  types, for example `len (xs ++ ys) = len xs + len ys` with `List.length`.
+  This needs `Formula` to grow: a sort of data (an uninterpreted sort for Z3,
+  a Lean type for Lean), and a map from function names to Lean definitions.
+  Z3 then treats the defined functions as uninterpreted. Its `Yes` stays
+  sound, because it holds for every interpretation. Its `No` does not, because
+  its countermodel need not respect the definitions.
+
+### How Lean can answer `No`
+
+Lean proves; it does not find models. The options are:
+
+1. Z3's model, checked in Lean by evaluation of the definitions on the
+   model's values;
+2. `decide` on finite domains (`Bool`, `Fin n`, bounded integers);
+3. `Unknown` otherwise.
+
+### Transport and cost
+
+The `lean-oracle` process of cfta-lean (`feature/cfta-lean`, `d6cfb4c4`) is
+the transport: it starts once, imports the modules named on its command line
+(the user's definitions as Lean modules), and answers tab-separated requests
+on its standard input and output. A solver adds one request, "decide this
+entailment", with the formula as data (not as text to elaborate), and a
+heartbeat limit for each query. A round trip over the pipe costs about
+0.1 ms, and the tactic's time comes on top. Most Z3 queries cost well under a
+millisecond. So the useful form is a portfolio: Z3 first, Lean on `Unknown`.
+
+### Acceptance
+
+- The LTA cells and Hegel's 42 queries give the same results with Lean behind
+  Z3. (The comment in `Data.CFTA.Gen.Refinement.Internal.Witness` says that
+  the test suite and the benchmark cells give no `Unknown` today, so there
+  Lean is not asked.)
+- At least one example that Lean decides and Z3 does not.
+
+## Direction, mode (b): one automaton for each size
+
+The table of states of mode (b) is a tree automaton: the states are nodes, the
+refinements are edges, and the child goals are the children. The direction
+is one interned cfta automaton for each size, with a Template exclude in place
+of the walk of the trie of dead prefixes. An exclude operation for Templates
+is in work elsewhere; cfta has no complement today.
+
+### What is built
+
+- `searchStatesWith :: Walking -> ...` in `Data.CFTA.Gen.Synthesis.States`.
+  `Walking` is `Preorder` (the depth-first search of #10) or `Enumerated
+  EdgeOrder`; `EdgeOrder` is `CanonicalOrder` (`runs`) or `HostOrder`
+  (`runsBy`, with the place of each edge in its state as its weight).
+- `Enumerated` builds the automaton of the states that the root reaches: a
+  node for each state, and an edge for each transition and split, labeled by
+  the leaf's name. Each listed program goes through Hectare's rule for the
+  first argument, the trie of dead prefixes, and the walk's checker.
+- `figuresCount`: the programs of the automata, counted exactly with
+  cfta-generator's `cardinality` of `fromAutomaton`.
+- The `States` mode of cfta-ghc and cfta-lean carries the `Walking`; the
+  benchmarks read `automaton` and `automaton-canonical`. The tests: the
+  generic test gives the same programs through the automaton, and cfta-lean's
+  test fills its goal through it with the oracle.
+
+### The checkpoint
+
+One shared run (12:02 to 12:23, with other jobs on the machine), so the
+seconds only indicate. GHC: Hoogle+ rungs 1 and 2, 120 s, 8 pinned children.
+Lean: core (index) and sweep (index, head). "states" is the depth-first
+search of #10, and "automaton" the automaton in the host's order. The
+summary is `docs/lean-spike/compare.txt`, from `docs/lean-spike/compare.py`.
+
+| | GHC rung 1 | GHC rung 2 | Lean core | Lean sweep |
+| --- | --- | --- | --- | --- |
+| solved, states / automaton | 23 / 23 | 34 / 34 | 22 / 22 | 18 / 18 |
+| solved sets | the same | the same | the same | the same |
+| first fit | the same, 45 of 45 | the same, 45 of 45 | the same, 22 of 22 | the same, 22 of 22 |
+| rank of the expected program | the same, 22 of 23 | the same, 33 of 34 | the same, 22 of 22 | the same, 18 of 18 |
+| solver calls on the solved queries | 441,186 / 441,249 | 1,004,301 / 1,004,530 | - | - |
+| programs checked on the solved queries | 674,997 / 675,056 | 1,334,004 / 1,334,324 | 282,852 / 279,103 | 141,822 / 141,649 |
+| programs in the automata (exact) | 16,161,926,565 | 4,256,649,795 | 2,713,666 | 51,992,460 |
+| seconds on the solved queries | 47.7 / 72.8 (+53%) | 131.6 / 117.0 (-11%) | 42.0 / 42.8 (+2%) | 39.1 / 40.0 (+2%) |
+
+- The host's order gives the same checks as the depth-first search. The rank
+  changes (`zipWithResult`: 82 to 91 on rung 1, 96 to 105 on rung 2) have two
+  causes: interning merges identical edges, so the duplicate runs of #10's
+  search go (`flatten` checks 7 programs, not 19), and an edge that two states
+  share gets its weight from its place in the first state.
+- The cost is the listing of the programs under dead prefixes, one by one,
+  which the depth-first search leaves at once. In a pinned smoke run
+  (`headLast`, 60 s), the listing took 2.4 s against 0.7 s, and the checks
+  took the same time.
+- The canonical order loses: in the smoke run, the expected program of
+  `appBoth` falls from rank 1 to 195, and `headLast` runs out of time.
+- No exclusive timing run took place, so GHC's time is not settled.
+
+### Open item
+
+`termsPruneWith` can prune a branch inside cfta's enumerator, but its oracle
+is pure (`EnumerateM`), and the checker's verdicts come from `IO` or `TcM`. An
+oracle could read the trie of dead prefixes through `unsafeDupablePerformIO`;
+the trie only grows, so the pruning stays monotone. This option was ruled out
+for now.
+
+## Dropped: the `hectare?` tactic
+
+cfta-lean had a tactic, `hectare?` (`Oracle/Tactic.lean`,
+`Oracle/Suggest.lean`, and the `hectare-propose` executable): a portfolio of
+mode (a) and the oracle's own search over states, which closed a goal and
+suggested programs as `exact?` does. TharkunAB/cfta#11 is closed, because Lean
+is to be a solver for LTAs, not a tactic. TharkunAB/cfta#10 is closed for the
+design of an automaton for each size with a Template exclude.
+
+What a solver can reuse of #11 (`feature/cfta-lean`, `d6cfb4c4`):
+
+- the `lean-oracle` process: its start, the imports from its command line,
+  the `ready` line with the import time, and `maxHeartbeats` in its
+  `Core.Context`;
+- the line protocol (`Oracle/Session.lean`): one tab-separated request on a
+  line, one reply, and `error` for a request that fails;
+- the Haskell client's process handling (`withOracle`, the requests and
+  replies, `missingOracle`), and the tests and CI that skip without Lean;
+- `elaborateType` and the entry into a goal's binders, for definitions that
+  come as Lean text.
+
+## Work in progress, and where it stops
+
+| Branch | Head | What it is |
 | --- | --- | --- |
-| `feature/host-agnostic-modes` | `e7ff4f85` | TharkunAB/cfta#10: the generic modes (portfolio, mode (b)), gated |
+| `lean-spike` | this commit | these notes, on `spike/states-automaton` |
+| `spike/states-automaton` | `16ef6d6a` | mode (b) as an automaton for each size |
 | `feature/cfta-lean` | `d6cfb4c4` | TharkunAB/cfta#11, closed: cfta-lean, the oracle, the tactic |
-| `spike/states-automaton` | `16ef6d6a` | mode (b) as an automaton for each size, measured on a shared machine |
-| `spike/host-agnostic-modes` | `148b5cb8` | the spike with steps 1 and 2, `docs/host-agnostic-modes.md`, `STATUS-lean.md` |
-| `spike/lean-oracle` | `56025b5c` | the first Lean spike, `docs/host-checkers.md` |
+| `feature/host-agnostic-modes` | `e7ff4f85` | TharkunAB/cfta#10, closed: the portfolio and mode (b) |
+| `spike/host-agnostic-modes` | `148b5cb8` | steps 1 and 2 of the generic modes, before the PRs |
+| `spike/lean-oracle` | `56025b5c` | the first Lean spike: the oracle, the cascade, the tactic |
 
-The automaton spike's results: GHC rungs 1 and 2 and Lean core and sweep,
-the same solved sets (23, 34, 22, 18) and first fits as #10's search; ranks
-the same except `zipWithResult` (82 to 91, and 96 to 105); Lean's time within
-2%. GHC's time is not settled (+53% and -11% on a shared machine). The files
-are in the scratchpad: `states-automaton/ghc-{states,automaton}-{prelude,base}.csv`,
-`states-automaton/lean-{states,automaton}-{core,sweep}.out`,
-`states-automaton/compare.py`, and `states-automaton/smoke.log`.
+The result files kept here, in `docs/lean-spike/`:
 
-Not done: an exclusive timing run of the automaton spike, the runs of the
-candidate examples on Z3 and Lean, and the design note itself.
+- `compare.py` and `compare.txt`: the comparison of the checkpoint above;
+- `portfolio2.keep`: `hectare?`'s portfolio against `exact?` on 22 queries;
+- `stage3a.out`: the first Lean benchmark stage (the round trip, `exact?`);
+- `STATUS-lean.md`: the status file of the spike, step by step;
+- `examples/`: the candidate examples for a Lean solver, not yet run.
 
-## Lean API traps
+The other result files stay outside the repository: the rows of the GHC
+ladders and the Lean suites of each step.
+
+### Lean API traps
 
 - `unsafe enableInitializersExecution` must come before
   `importModules (loadExts := true)`.
-- `maxHeartbeats := 0` in the `Core.Context` of a standalone process; inside a
-  tactic, a search's heartbeats count against the enclosing elaboration even
-  with `maxHeartbeats := 0`, so the search stops at nine tenths of the limit.
+- A standalone process sets `maxHeartbeats := 0` in its `Core.Context`.
 - `isDefEq` needs `approxDefEq` for `?f ?b =?= Option b`.
 - `partial`, `variable`, and `using` are keywords, not names.
+- Inside a tactic, a search's heartbeats count against the enclosing
+  elaboration even with `maxHeartbeats := 0`, so the search stops at nine
+  tenths of the limit.
 - `findSysroot` needs `lean` on the `PATH` (elan) or `LEAN_SYSROOT`.
 - The locals that are type formers (`m : Type → Type`) are not leaves.
 - `levelZero`, `levelOne`, and `insertCore` are deprecated: use `Level.zero`,
   `Level.one`, and `insertKeyValue`.
-- The Haskell client's `-threaded` runtime adds about 20 µs to each round trip
-  over a pipe.
-- An unoptimized `hectare-propose` does not meet the tactic's 2 s for mode (a),
-  so its tests need `-O2`.
+- The Haskell client's `-threaded` runtime adds about 20 µs to each round
+  trip over a pipe.
+- An unoptimized `hectare-propose` does not meet the tactic's 2 s for mode
+  (a), so the tactic's tests need `-O2`.
+
+## Open questions
+
+- Which extension of `Formula` (a sort of data, a map of definitions) gives
+  Lean its definitions, and how does a user name them?
+- Does Z3's `Yes` stay usable when some functions have Lean definitions?
+- How does Lean answer `No`: Z3's model checked by evaluation, `decide`, or a
+  property tester?
+- Which LTA cell or Hegel query reaches `Unknown` on Z3 today, if any?
+- What does `RealSort` become in Lean, without Mathlib?
+- What heartbeat and time limits does a Lean query get, and does a cache of
+  verdicts help?
+- Does the oracle process serve both the solver and synthesis, or only the
+  solver?
+- What does a Template exclude cost, against the walk of the trie of dead
+  prefixes?
+- What is GHC's time for the automaton path on a quiet machine?
+- Can `termsPruneWith` take an effectful oracle without `unsafePerformIO`?

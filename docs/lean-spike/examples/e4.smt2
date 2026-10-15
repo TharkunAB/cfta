@@ -1,0 +1,5 @@
+(set-option :timeout 10000)
+(declare-fun x () Int)
+(declare-fun y () Int)
+(assert (not (=> (and (> x 0) (> y 0)) (>= (* x y) x))))
+(check-sat)
