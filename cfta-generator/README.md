@@ -1634,8 +1634,7 @@ the same order, and one field for each field: the integer of an atomic field,
 and the measure of a field of the datatype. So GHC checks the number of
 children, and `-Wincomplete-patterns` checks that each constructor has a
 clause. `deriveLTA` checks the node view against the datatype and reports
-`NodeMismatch`. A later `deriveNode` can write the node view from the
-datatype (TODO).
+`NodeMismatch`.
 
 On `Expr`, the functions give the formulas of the generator. Here
 `sortedLists` is the generator of SortedLists.hs: the contract conjuncts that
