@@ -4,7 +4,8 @@ Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004
 
 ## A closed source input repeats the actual outer caller key
 
-Proof and reproduction: `eed062bd`. Source: `TharkunAB/cfta`, main
+Prefix proof and reproduction: `eed062bd`. Typed result-thunk proof:
+`6e4d477d`. Source: `TharkunAB/cfta`, main
 `239feb64`, merged at `b3d06a08`. Upstream comparison checkpoint:
 `83f20c4c`. Main is an ancestor of `formalize`. Continue on `formalize`
 and push checkpoints. Read `lean/notes-outer-caller-cycle.md` and
@@ -36,26 +37,37 @@ exact cycle certificate and source demand analysis. No particular runtime
 exception is claimed. Only the false finite-traversal comment is corrected.
 No production algorithm is repaired.
 
-Next model the outer lazy result memo and strict constructor demands, then
-connect the checked cycle to that operational model. Keep GHC correspondence
-separate. A total intended reduction needs an explicit cycle policy and a
+SourceEqualityOuterCallerMemoCycle reuses FlatMemoThunk. In the actual
+empty-inherited fiber, distinct root and wrapper requests are published and
+demanded before completion. Repeated root lookup returns its original handle.
+Demand observes busy, with neither result in the completed projection.
+actual_pending instantiates this logical trace with the checked source cycle.
+Busy is not a claimed GHC exception, source return, or fallback policy.
+The demand order still needs an adequacy proof from actual outer operations.
+
+Next drive SourceEqualityPartialWorker until its first incomplete child call.
+Retain the actual child and returned warm state, then do the same at the
+wrapper. Connect these outer worker constructor demands to the typed
+result-thunk trace. Extend source comparison beyond the empty-inherited fiber.
+Keep GHC correspondence separate. A total intended reduction needs an explicit cycle policy and a
 finite-progress argument. Pending-key fallback alone does not rule out an
 infinite sequence of distinct keys. Do not resume an unconditional decreasing
 key-rank proof for the unchanged source. Successful-worker, exact-language,
 constraint-inventory, and equality-free Region proofs remain intact.
 
-The aggregate audit passes 1,891 jobs and 48,849 dependency checks with
+The aggregate audit passes 1,892 jobs and 48,855 dependency checks with
 only propext, Classical.choice, and Quot.sound. The older unused inputs
 warning remains. The retained reproduction compiles with -Wall -Werror.
 Fourmolu and all four Cabal-gild checks pass in Nix. Logs:
-`/tmp/mcfta-outer-caller-cycle-*-20261015.log`. The earlier merged strict
+`/tmp/mcfta-outer-caller-cycle-*-20261015.log` and
+`/tmp/mcfta-outer-caller-memo-*-20261015.log`. The earlier merged strict
 build, all six suites (687 examples plus golden tests), benchmark build,
 and package metadata checks pass. They were not repeated for a comment edit.
 
 Starting snapshot: `/tmp/mcfta-main-refresh-start-20261015-1153/`.
-Closing snapshot: `/tmp/mcfta-outer-caller-cycle-checkpoint-20261015-1209/`.
+Closing snapshot: `/tmp/mcfta-outer-caller-memo-checkpoint-20261015-1216/`.
 Backup: `backup/formalize-before-main-239feb64-20261015-1154`.
-Older Lean proofs except Audit imports, repros, marked drafts, stashes, and
+Pre-refresh Lean proofs except Audit imports, repros, marked drafts, stashes, and
 other worktrees remain intact. Both earlier unverified intersection drafts
 retain their original hashes. The source comparison preserves the optimized
 interned core and older constructor/equality work. Sized exact classes,
@@ -64,7 +76,7 @@ finite execution, size order, and both distinct rank inverses are unchanged.
 General caller completion, the outer memo operational bridge, open contexts,
 repeated fixed points, getAllAtPath, native containers, GHC scheduling,
 decision-model, and extraction remain open. Weekly allowance was 97% at
-2026-10-15 12:06 CEST. Refresh it before work. Stop all work and owned
+2026-10-15 12:15 CEST. Refresh it before work. Stop all work and owned
 workers at 1% or less. No board posts or deployments.
 
 ## Upstream main refresh at 239feb64

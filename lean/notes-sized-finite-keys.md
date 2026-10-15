@@ -5,7 +5,7 @@ changing its implementation. Sized changes only that import. Existing exact
 classes, finite execution, size order, and both rank inverses retain their
 source definitions. The optimized dispatch still returns the reference
 sequence. Read [the upstream comparison](notes-canonical-upstream.md).
-The current audit passes 1,891 jobs and 48,849 dependency checks.
+The current audit passes 1,892 jobs and 48,855 dependency checks.
 The later upstream refresh to 33148e6d leaves Sized and canonicalClasses
 unchanged. Its retained traversal repair is identical to the local repair.
 The refresh to main 239feb64 also leaves those source definitions unchanged.

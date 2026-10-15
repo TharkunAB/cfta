@@ -12,8 +12,9 @@ Page references below use the printed page numbers in that PDF.
 The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`
 on main `239feb64`, supersedes unconditional physical-key rank targets.
 Two actual local prefixes return to the same empty-inherited root key.
-The observed key relation is not well founded. The next operational target
-is the lazy result memo and strict constructor demands. GHC correspondence
+The observed key relation is not well founded. The typed result-thunk proof
+in `6e4d477d` reaches busy with neither result completed. The next target
+connects actual outer worker constructor demands to that trace. GHC correspondence
 and whole-library completion remain separate. No production algorithm changes.
 
 ## Source bound counterexamples (2026-10-15 11:48 CEST)

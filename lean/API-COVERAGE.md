@@ -2,7 +2,8 @@
 
 ## A closed source input repeats the actual outer caller key
 
-Proof and reproduction: `eed062bd`, on main `239feb64`. Read
+Prefix proof and reproduction: `eed062bd`; typed-thunk proof: `6e4d477d`,
+on main `239feb64`. Read
 [the caller-cycle note](notes-outer-caller-cycle.md). Kernel evaluation
 follows actual closed source construction, the native root prefix, physical
 combination and descent, and the wrapper prefix at the returned warm state.
@@ -10,8 +11,10 @@ It returns to the same root identity with empty inherited payloads. The
 observed physical-key relation is not well founded. The Haskell certificate
 passes; warm and fresh cold full-pass demands time out after three seconds.
 Only the incorrect finite-traversal comment changes in production source.
-The audit passes 1,891 jobs and 48,849 dependency checks. Next model the outer
-lazy result memo and strict constructor demands. This is not a kernel theorem
+The audit passes 1,892 jobs and 48,855 dependency checks. The existing typed
+thunk model reaches busy after both actual empty-inherited requests start;
+neither result is completed. Next derive that demand order from actual outer
+worker constructor operations, at their returned warm states. This is not a kernel theorem
 of GHC divergence. Existing successful and equality-free proofs remain valid.
 This section supersedes unconditional physical-key rank targets below.
 

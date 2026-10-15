@@ -16,10 +16,12 @@ The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`,
 returns to the original physical root with empty inherited constraints after
 two actual local prefixes. Its observed physical-key relation is not well
 founded. The retained source certificate passes. Cold and warm full-pass
-calls time out. Next model the outer lazy result memo and strict constructor
-demands. No production algorithm is repaired. This supersedes unconditional
+calls time out. The typed result-thunk instantiation in `6e4d477d` reaches
+busy with neither result completed. Next derive that demand order from the
+actual outer worker and its constructor operations. No production algorithm
+is repaired. This supersedes unconditional
 caller-rank targets below. The kernel result does not prove GHC divergence.
-The audit passes 1,891 jobs and 48,849 theorem dependency checks.
+The audit passes 1,892 jobs and 48,855 theorem dependency checks.
 The [source boundary checks](notes-origin-boundaries.md) refute inherited
 literal conjunction closure and a local maximum-path bound. Retained Haskell
 prefixes also refute physical absorption of a repeated intersection factor.
