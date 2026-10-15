@@ -23,6 +23,11 @@ sortedLists :: Either DeriveLTAError (LTAGen SortedList)
 sortedLists = deriveLTA \@SortedList 8 (atom \@Integer every)
 @
 
+A datatype with several integers for each value, such as the color and the
+black height of a red-black tree, has named measures: 'MeasuredBy' gives each
+constructor a list of named measures, and its functions read the measures of
+the children with 'childMeasure'.
+
 The functions are polymorphic over 'Symbolic'. On 'Expr', they give the
 formulas of the generator. On 'Integer', 'holds' and 'measureOf' run them on
 values, so the same text checks the values of a test. 'deriveLTAWith' is the
@@ -56,6 +61,7 @@ module Data.CFTA.Gen.Refinement.Derive (
     Invariant (..),
     holds,
     measureOf,
+    measuresOf,
     Placeholders,
 
     -- * Atomic fields
@@ -69,6 +75,7 @@ module Data.CFTA.Gen.Refinement.Derive (
     Annotation,
     contract,
     measure,
+    measureNamed,
     fieldsContract,
     fieldsMeasure,
     annotationFormulas,
@@ -92,7 +99,7 @@ import Data.CFTA.Formula (Formula (And, Atom, Top), Relation (Eq), conjunction)
 import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Gen.Error (GenError (EmptyGenerator))
 import Data.CFTA.Gen.Internal.Types (pattern Transparent)
-import Data.CFTA.Gen.Refinement (LTAGen, guarded, leaf, measured, node, oneof, satisfying)
+import Data.CFTA.Gen.Refinement (LTAGen, guarded, leaf, measured, measuredBy, node, oneof, satisfying)
 import Data.CFTA.Generic (Constructor (..), Description (..), Field (..), HasFTA (..))
 import Data.CFTA.Index (ArgumentIndex (..), Arity (..), Depth)
 import Data.CFTA.Refinement (contractTermName)
@@ -104,11 +111,13 @@ import Data.CFTA.Refinement.Expression (
     fromExpr,
     substitute,
     toExpr,
+    uninterpreted,
     variable,
+    (.&&),
     (.==),
  )
 import Data.CFTA.Refinement.Guard (ContractBuilder (..), MeasureBuilder (..))
-import Data.CFTA.Refinement.Symbolic (Boolean (true), Symbolic (Truth))
+import Data.CFTA.Refinement.Symbolic (Boolean (true), Measures (Child), NodeIntegers (..), Symbolic (Truth))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -166,39 +175,49 @@ atom generator =
 data Annotation = Annotation
     { annotationContracts :: ![Contract]
     , annotationMeasures :: ![Measure]
+    , annotationNamedMeasures :: ![(String, Measure)]
     }
 
 instance Semigroup Annotation where
-    Annotation contracts measures <> Annotation contracts' measures' =
-        Annotation (contracts <> contracts') (measures <> measures')
+    Annotation contracts measures named <> Annotation contracts' measures' named' =
+        Annotation (contracts <> contracts') (measures <> measures') (named <> named')
 
 instance Monoid Annotation where
-    mempty = Annotation [] []
+    mempty = Annotation [] [] []
 
 {- | A contract: a formula with one term for each field, in order, as for
 'guarded'. Each term is the integer of the field: the value of an atomic
 field, or the measure of a field with constructors.
 -}
 contract :: (ContractBuilder builder) => builder -> Annotation
-contract builder = Annotation [Contract (contractArity builder) (contractFormulaFrom 0 builder)] []
+contract builder = Annotation [Contract (contractArity builder) (contractFormulaFrom 0 builder)] [] []
 
 {- | A measure: the integer of a constructed term, with one term for each field,
 in order, as for 'measured'. The measure of a constructor without fields is
 one term, as in @measure (0 :: Expr)@, and it is the refinement of its leaf.
 -}
 measure :: (MeasureBuilder builder) => builder -> Annotation
-measure builder = Annotation [] [Measure (measureArity builder) (measureTermFrom 0 builder)]
+measure builder = Annotation [] [Measure (measureArity builder) (measureTermFrom 0 builder)] []
+
+{- | A named measure: an uninterpreted function of the value, as for
+'measuredBy'. A constructor can have several named measures, or one measure of
+'measure'. A contract and a named measure read the named measure of a field as
+@uninterpreted name [field]@. The named measures of a constructor without
+fields are its refinement, as in @measureNamed "bh" (0 :: Expr)@.
+-}
+measureNamed :: (MeasureBuilder builder) => String -> builder -> Annotation
+measureNamed name builder = Annotation [] [] [(name, Measure (measureArity builder) (measureTermFrom 0 builder))]
 
 {- | A contract of a constructor with the given number of fields, as a
 function of the list of the terms of the fields. Use it when the number of
 fields is known only at run time, as in a translation of another language.
 -}
 fieldsContract :: Int -> ([Expr] -> Formula) -> Annotation
-fieldsContract count formulaOf = Annotation [Contract (Arity count) (formulaOf $ fieldTerms count)] []
+fieldsContract count formulaOf = Annotation [Contract (Arity count) (formulaOf $ fieldTerms count)] [] []
 
 -- | A measure of a constructor with the given number of fields, as 'fieldsContract' gives a contract.
 fieldsMeasure :: Int -> ([Expr] -> Expr) -> Annotation
-fieldsMeasure count termOf = Annotation [] [Measure (Arity count) (termOf $ fieldTerms count)]
+fieldsMeasure count termOf = Annotation [] [Measure (Arity count) (termOf $ fieldTerms count)] []
 
 -- | The terms of the fields of a constructor, as a contract names them.
 fieldTerms :: Int -> [Expr]
@@ -209,7 +228,7 @@ order of '<>'. A formula names the term of field @i@ as 'contractTermName' @i@.
 Two annotations with equal formulas and terms give the same generator.
 -}
 annotationFormulas :: Annotation -> ([Formula], [Expr])
-annotationFormulas (Annotation contracts measures) =
+annotationFormulas (Annotation contracts measures _) =
     ([formula | Contract _ formula <- contracts], [term | Measure _ term <- measures])
 
 -- | A contract with a known number of terms, which 'guarded' and 'measured' check.
@@ -286,12 +305,17 @@ deriveLTAWith bound (Atoms atoms) named = do
                  in foldlM' reach (Map.insert typ (Just entry) reached) (concatMap snd alternatives)
 
     checkAnnotation constructor = do
-        let Annotation contracts measures = annotationOf constructor
+        let Annotation contracts measures namedMeasures = annotationOf constructor
             arity = Arity $ length $ constructorFields constructor
             name = constructorName constructor
         mapM_ (\supplied -> unless (supplied == arity) $ Left $ AnnotationArityMismatch name arity supplied) $
-            [supplied | Contract supplied _ <- contracts] <> [supplied | Measure supplied _ <- measures]
-        unless (length measures <= 1) $ Left $ SeveralMeasures name
+            [supplied | Contract supplied _ <- contracts]
+                <> [supplied | Measure supplied _ <- measures]
+                <> [supplied | (_, Measure supplied _) <- namedMeasures]
+        unless
+            (length measures + min 1 (length namedMeasures) <= 1 && length (nubOrd $ map fst namedMeasures) == length namedMeasures)
+            $ Left
+            $ SeveralMeasures name
         unless (null contracts || arity > 0) $ Left $ ContractWithoutFields name
 
     -- The types that refer to each other unfold together, as 'recurUpTo'
@@ -317,17 +341,19 @@ deriveLTAWith bound (Atoms atoms) named = do
 
     -- The contract conjuncts that name only one atomic field become
     -- conditions on that field. The other conjuncts stay in the contract.
-    constructorGenerator constructor derivedFields generators = case annotationMeasures annotation of
+    constructorGenerator constructor derivedFields generators = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
         _ | null generators -> leaf (Term.Node constructor []) symbol refinement
-        [measureAnnotation] -> measured symbol remaining measureAnnotation spine
+        ([measureAnnotation], _) -> measured symbol remaining measureAnnotation spine
+        (_, namedMeasures@(_ : _)) -> measuredBy symbol remaining namedMeasures spine
         _
             | remainingFormula == Top -> node symbol spine
             | otherwise -> guarded symbol remaining spine
       where
         annotation = annotationOf constructor
         symbol = fromString $ constructorName constructor
-        refinement = case annotationMeasures annotation of
-            [Measure _ term] -> (.== term)
+        refinement = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
+            ([Measure _ term], _) -> (.== term)
+            (_, namedMeasures@(_ : _)) -> \value -> foldr1 (.&&) [uninterpreted name [value] .== term | (name, Measure _ term) <- namedMeasures]
             _ -> const Top
         conjuncts = concatMap parts [formula | Contract _ formula <- annotationContracts annotation]
         parts (And formulas) = concatMap parts formulas
@@ -368,22 +394,44 @@ the datatype itself. On 'Expr', the functions give the formulas of
 constructor with a pattern that does not read its fields, such as @Black{}@
 or @(_ : _)@: the generator calls each function on a placeholder value, whose
 fields are errors.
+
+'MeasuredBy' gives each constructor several named measures. Its functions
+take the children with the class 'Measures', and read a named measure of a
+child with 'childMeasure'. The black height and the color of a red-black
+tree:
+
+@
+instance HasLTA Tree where
+    invariant = MeasuredBy measures balanced
+      where
+        bh child = childMeasure "bh" child
+        col child = childMeasure "col" child
+        measures Black{} [left, _] = [("bh", bh left + 1), ("col", 0)]
+        measures Red{} [left, _] = [("bh", bh left), ("col", 1)]
+        measures _ _ = [("bh", 0), ("col", 0)]
+        balanced Black{} [left, right] = bh left .== bh right
+        balanced Red{} [left, right] = bh left .== bh right .&& col left .== 0 .&& col right .== 0
+        balanced _ _ = true
+@
+
+Write @bh@ with its argument: the monomorphism restriction gives
+@bh = childMeasure "bh"@ one type of integers, and the invariant uses it on
+both 'Expr' and 'Integer'. On 'Expr', the named measures are uninterpreted
+functions, as for 'measuredBy'. On 'Integer', 'measuresOf' gives the named
+measures of a value.
 -}
 data Invariant a
     = -- | A measure and a contract.
       Measured (forall e. (Symbolic e) => a -> [e] -> e) (forall e. (Symbolic e) => a -> [e] -> Truth e)
     | -- | A contract without a measure.
       Contracted (forall e. (Symbolic e) => a -> [e] -> Truth e)
-
--- | The contract of an invariant.
-contractAt :: (Symbolic e) => Invariant a -> a -> [e] -> Truth e
-contractAt (Measured _ check) = check
-contractAt (Contracted check) = check
-
--- | The measure of an invariant, if it has one.
-measureAt :: (Symbolic e) => Invariant a -> Maybe (a -> [e] -> e)
-measureAt (Measured measureOf' _) = Just measureOf'
-measureAt (Contracted _) = Nothing
+    | {- | Named measures and a contract. The functions take the children of a
+      constructor, and read their named measures with 'childMeasure' and the
+      integers of atomic children with 'childValue'.
+      -}
+      MeasuredBy
+        (forall e. (Measures e) => a -> [Child e] -> [(String, e)])
+        (forall e. (Measures e) => a -> [Child e] -> Truth e)
 
 {- | Derive the refinement generator of a datatype from an invariant. This is
 'deriveLTAWith' with the annotations that the invariant gives on 'Expr'. A
@@ -439,13 +487,17 @@ invariantAnnotations rules =
     [ (name, contractPart <> measurePart)
     | (name, count, placeholder) <- placeholders @a
     , let terms = fieldTerms count
-          formula = contractAt rules placeholder terms
+          formula = case rules of
+            Measured _ check -> check placeholder terms
+            Contracted check -> check placeholder terms
+            MeasuredBy _ check -> check placeholder terms
           contractPart
             | formula == Top = mempty
-            | otherwise = Annotation [Contract (Arity count) formula] []
-          measurePart = case measureAt rules of
-            Just measureOf' -> Annotation [] [Measure (Arity count) (measureOf' placeholder terms)]
-            Nothing -> mempty
+            | otherwise = Annotation [Contract (Arity count) formula] [] []
+          measurePart = case rules of
+            Measured measureOf' _ -> Annotation [] [Measure (Arity count) (measureOf' placeholder terms)] []
+            Contracted _ -> mempty
+            MeasuredBy measures _ -> Annotation [] [] [(measureName, Measure (Arity count) term) | (measureName, term) <- measures placeholder terms]
     ]
 
 {- | Whether each node of the value whose type is the datatype satisfies the
@@ -457,31 +509,41 @@ holds atoms rules = fst . evaluate atoms rules . encodeTerm
 
 -- | The measure of a value, if the invariant has a measure.
 measureOf :: forall a. (HasFTA a, Generic a, Placeholders (Rep a)) => Atoms -> Invariant a -> a -> Maybe Integer
-measureOf atoms rules = snd . evaluate atoms rules . encodeTerm
+measureOf atoms rules = nodeInteger . snd . evaluate atoms rules . encodeTerm
+
+-- | The named measures of a value, if the invariant has named measures.
+measuresOf ::
+    forall a. (HasFTA a, Generic a, Placeholders (Rep a)) => Atoms -> Invariant a -> a -> Map.Map String Integer
+measuresOf atoms rules = nodeMeasures . snd . evaluate atoms rules . encodeTerm
 
 {- | Evaluate the invariant on a term of the datatype, from the leaves up: the
 contracts hold at each node, and the measure of the root.
 -}
 evaluate ::
     forall a.
-    (HasFTA a, Generic a, Placeholders (Rep a)) => Atoms -> Invariant a -> Term Constructor -> (Bool, Maybe Integer)
+    (HasFTA a, Generic a, Placeholders (Rep a)) => Atoms -> Invariant a -> Term Constructor -> (Bool, NodeIntegers)
 evaluate (Atoms atoms) rules = go
   where
     datatype = typeRep $ Proxy @a
     table = Map.fromList [(name, placeholder) | (name, _, placeholder) <- placeholders @a]
     go (Term.Node constructor children) =
-        ( and [below | (below, _) <- fields] && contractAt rules placeholder integers
-        , (\measure' -> measure' placeholder integers) <$> measureAt rules
+        ( and [below | (below, _) <- fields] && here
+        , NodeIntegers value measures
         )
       where
         placeholder = table Map.! constructorName constructor
         fields = zipWith field (constructorFields constructor) children
+        nodes = map snd fields
         -- A field without an integer is an error only if a function reads it.
-        integers = [fromMaybe (noInteger constructor position) integer | (position, (_, integer)) <- zip [0 :: Int ..] fields]
+        integers = [fromMaybe (noInteger constructor position) (nodeInteger child) | (position, child) <- zip [0 :: Int ..] nodes]
+        (here, value, measures) = case rules of
+            Measured measureOf' check -> (check placeholder integers, Just $ measureOf' placeholder integers, Map.empty)
+            Contracted check -> (check placeholder integers, Nothing, Map.empty)
+            MeasuredBy named check -> (check placeholder nodes, Nothing, Map.fromList $ named placeholder nodes)
         field Field{fieldType} child
-            | Just AtomicField{atomInteger} <- Map.lookup fieldType atoms = (True, atomInteger child)
+            | Just AtomicField{atomInteger} <- Map.lookup fieldType atoms = (True, NodeIntegers (atomInteger child) Map.empty)
             | fieldType == datatype = go child
-            | otherwise = (True, Nothing)
+            | otherwise = (True, NodeIntegers Nothing Map.empty)
     noInteger constructor position =
         error $
             "Data.CFTA.Gen.Refinement.Derive: field "

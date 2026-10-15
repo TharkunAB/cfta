@@ -149,6 +149,9 @@ tree automata of `cfta`, with QuickCheck integration.
   `deriveLTAWith` takes the contracts and the measures by constructor name,
   and `atom` gives the generator of each atomic field type. A contract
   conjunct about one atomic field becomes a condition on that field.
+  `MeasuredBy` gives the constructors of a datatype named measures, and
+  `measuresOf` gives the named measures of a value; `measureNamed` is the
+  named measure of an annotation.
 - `compile` folds the recipe of a generator once with the solver. It groups
   child languages by the observations a guard reads, decides each guard once
   for each tuple of groups, and prunes and splits imports by the same
