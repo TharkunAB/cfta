@@ -6,9 +6,9 @@ prefix patterns constrain only the leading children. 'restrict' keeps exactly
 the matching terms of an interned graph, and 'restrictFTA' those of an
 explicit-state automaton. 'exclude' keeps exactly the terms of an interned
 graph that match none of some templates at the root, and 'excludeFTA' those
-of an explicit-state automaton. 'excludeAnywhere' keeps those of an
-interned graph of which no subterm matches one. An unambiguous input gives
-an unambiguous result, so counts and ranks over it stay exact. None of them
+of an explicit-state automaton. 'excludeAnywhere' and 'excludeAnywhereFTA'
+keep those of which no subterm matches one. An unambiguous input gives an
+unambiguous result, so counts and ranks over it stay exact. None of them
 interprets transition annotations; a constraint theory reduces its
 constraints afterwards. 'preorderPrefix' makes the template of a prefix of
 a term in preorder.
@@ -23,6 +23,7 @@ module Data.CFTA.Template (
     exclude,
     excludeFTA,
     excludeAnywhere,
+    excludeAnywhereFTA,
     Obligation (..),
     preorderPrefix,
 ) where
@@ -270,6 +271,18 @@ excludeAnywhere templates root
     | otherwise = uncurry fromRows (Map.fromList <$> obligationRows templates transitionsOf templates root)
   where
     transitionsOf node = [Transition (edgeSymbol edge) (edgeChildren edge) (edgeConstraint edge) | edge <- nodeEdges node]
+
+{- | Keep exactly the terms of an automaton of which no subterm matches one
+of the templates, as 'excludeAnywhere' does for an interned graph.
+
+The states are as for 'excludeFTA', and each child gets the templates
+again. The obligations are finite, so the result is finite, and a cycle of
+the input gives a cycle of the result.
+-}
+excludeAnywhereFTA ::
+    (Ord state, Ord symbol) =>
+    [Template symbol] -> FTA state symbol annotation -> FTA (state, Obligation symbol) symbol annotation
+excludeAnywhereFTA templates = excludeBelow templates templates
 
 {- | The copies of an edge with a symbol and a number of children whose terms
 match every wanted template and no unwanted one: for each copy, what each

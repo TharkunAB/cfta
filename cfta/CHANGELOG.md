@@ -24,10 +24,10 @@ Before release, the package was called `microcfta`.
   `excludeFTA` does the same for an explicit-state automaton: each result
   state pairs a source state with an `Obligation`, the templates that its
   terms must match and those that they must not.
-  `excludeAnywhere` keeps the terms of which no subterm matches one of the
-  templates (`matchesNowhere`), with a recursive result for a recursive
-  input, and `preorderPrefix` gives the template of a prefix of a term in
-  preorder.
+  `excludeAnywhere` and `excludeAnywhereFTA` keep the terms of which no
+  subterm matches one of the templates (`matchesNowhere`), with a recursive
+  result for a recursive input, and `preorderPrefix` gives the template of a
+  prefix of a term in preorder.
   `Data.CFTA.Interned.fromRows` interns the transitions of each state as
   `fromFTA` does, without a ranked alphabet.
 - Fix `reducePartially` not returning when a node at the end of an equality
