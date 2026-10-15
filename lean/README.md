@@ -6,22 +6,20 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,863 jobs and 48,189 theorem dependency checks.
-The [finite caller proof](notes-plain-completion.md) constructs completed
-outer graphs for equality-free ordinary regions above actual Mu and union
-boundaries. Original literal source annotations derive those regions.
-Closed normalized equality-free source syntax therefore has finite exact
-public execution, both source gate memo receipts, physical scope, and stable
-identical full-state replay. No completed outer graph, successful worker
-receipt, native word-range hypothesis, or sufficient bound is supplied.
-Residual full guards remain intact. General selected-narrowing termination
-and the outer memo table remain open. Next extend these finite regions to
-arbitrary inherited payloads, then study a valid general measure.
-The [Sized comparison](notes-canonical-upstream.md) remains valid: the latest
-upstream refresh leaves Sized and canonicalClasses unchanged. Exact classes,
-finite size execution, sequence, and both rank inverse contracts retain the
-same source. New UVar and synthesis sequences remain separate.
-This paragraph supersedes older equality-free finite-existence targets.
+The audit passes 1,869 jobs and 48,204 theorem dependency checks.
+The [inherited completion proof](notes-inherited-plain-completion.md) constructs
+finite actual equality-free Region execution for every inherited payload.
+Original normalized closed source annotations derive the Region and scope.
+Each run has both source gate memo receipts, physical invariants, contextual
+exactness, and stable identical value/full-state replay. No completed graph,
+successful receipt, sufficient bound, inherited well-formedness, or future
+scope is supplied. General selected-narrowing termination remains open.
+Next derive finite closed warm gate selection from actual path traversal,
+then compose general local prefixes under reached word checks.
+The [Sized comparison](notes-canonical-upstream.md) remains current. Exact
+classes, finite size execution, sequence, and both rank inverse contracts
+retain the same source definitions. UVar and synthesis orders remain separate.
+This paragraph supersedes older inherited equality-free completion targets.
 The [inherited edge proof](notes-inherited-edge.md) derives actual physical
 constraint combination and trie descent, indexed child obligations, exact
 callback observations, and direct equal-arity edge rebuilding. Concrete native

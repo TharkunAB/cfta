@@ -7,6 +7,18 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Arbitrary inherited source completion application (2026-10-15 09:50 CEST)
+
+Mutual structural induction now constructs finite actual equality-free
+Region execution for every inherited payload. It retains contradiction,
+empty selected classes, final propagation, actual physical payloads, and
+returned warm states. Original closed syntax derives the initial Region
+and scope. Both source memo receipts, contextual exactness, and stable
+full-state replay follow without supplied success or termination laws.
+Read [the current note](notes-inherited-plain-completion.md). The general
+selected-narrowing case, outer memo table, repeated passes, native containers,
+GHC scheduling, and extraction remain open. No Lava or Rocq dependency is added.
+
 ## Derived finite source caller application (2026-10-15 09:37 CEST)
 
 Structural induction now constructs the complete outer graph for actual

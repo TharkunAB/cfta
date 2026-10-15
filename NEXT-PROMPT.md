@@ -2,6 +2,54 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Finite equality-free source calls for arbitrary inherited payloads
+
+Proofs: `32994d94` and `e4d26e69`. Source: `TharkunAB/cfta`,
+`origin/main` at `33148e6d`. The upstream refresh is current. Continue
+on `formalize` and push checkpoints. Read
+`lean/notes-inherited-plain-completion.md`. This section supersedes the
+arbitrary-inherited-payload completion target below.
+
+Empty own classes select unchanged, contradiction, or the actual live empty
+class list. Selection, required paths, the fold, and final propagation stay
+explicit. Each local output is the original forest or literal empty slots.
+Actual edge readback derives the smaller structural child alternatives.
+No native intersection word request is reached. Physical combination and
+child descent use the actual arbitrary inherited payload.
+
+Mutual structural induction constructs the complete outer graph for each
+closed available Region and every inherited payload. Original normalized
+closed source syntax with empty equality readback derives that Region and
+initial scope. The resulting finite run has both source gate memo receipts,
+all physical invariants, and stable identical value/full-state replay above
+a common seven-bound threshold. Output always narrows input and is exact
+under inherited satisfaction at the independent guarded syntax language.
+No inherited well-formedness, completed graph, successful receipt, sufficient
+bound, recursive termination law, or future scope is an input premise.
+
+Next prove finite source gate selection for closed available forests from
+path length and actual child lookups. Closed calls cannot take open-binder
+unfolding. Reuse actual closed memo receipts without adding or inferring
+an open-unfolding cost heap. Compose required-path and native-fold completion
+at arbitrary warm scopes under actual word ranges. Then study general outer
+graph existence with a valid measure or a focused counterexample. Native
+intersection can increase ordinary depth. General selected-narrowing
+termination, the outer memo table, open contexts, repeated fixed points,
+getAllAtPath, native containers, GHC scheduling, and extraction remain open.
+
+The audit passes 1,869 jobs and 48,204 dependency checks with only propext,
+Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. Log: `/tmp/mcfta-inherited-plain-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-inherited-plain-checkpoint-20261015-0950/`.
+Older proofs except audit imports, counterexamples, marked drafts, production
+source, stashes, and other worktrees remain unchanged. No Haskell source
+changed. The earlier 650 examples, affected benchmark build, formatting,
+and metadata checks were not repeated. Weekly allowance was 99% at
+2026-10-15 09:46 CEST. Refresh it before work. Stop all work and owned
+workers at 1% or less. Preserve Sized exact classes, finite size execution,
+size order, both distinct rank inverses, and the optimized interned core.
+No board posts or deployments.
+
 ## Finite exact public execution for equality-free original syntax
 
 Proofs: `ee4cd6da` and `347a988f`. Source: `TharkunAB/cfta`,

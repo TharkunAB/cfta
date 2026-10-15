@@ -1,5 +1,16 @@
 # Public API and source correspondence
 
+## Finite equality-free source calls under arbitrary inheritance
+
+The current proof is `e4d26e69`, on main `33148e6d`. Read
+[the completion note](notes-inherited-plain-completion.md). Every inherited
+payload now has finite actual Region execution, both source gate memo
+receipts, preserved scope, contextual exactness, and stable full-state replay.
+The audit passes 1,869 jobs and 48,204 dependency checks. Next prove finite
+closed warm gate selection and general local prefix completion. This section
+supersedes the arbitrary inherited-payload target below. Root HANDOFF.md
+records the complete preservation evidence and remaining obligations.
+
 ## Finite exact public execution for equality-free original syntax
 
 Proofs: `ee4cd6da` and `347a988f`. Source: `TharkunAB/cfta`,
