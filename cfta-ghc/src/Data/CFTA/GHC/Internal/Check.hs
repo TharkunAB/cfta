@@ -64,11 +64,14 @@ module Data.CFTA.GHC.Internal.Check (
     Environment,
     newEnvironment,
     environmentCounters,
+    environmentExtendedDefaults,
     Walker (..),
     startWalker,
     step,
     complete,
     entails,
+    mayHold,
+    decides,
 
     -- * States
     StateKey,
@@ -110,8 +113,8 @@ import GHC.Builtin.Names (
     withDictClassKey,
  )
 import GHC.Builtin.Types (liftedTypeKind)
-import GHC.Core.Class (classKey, className)
-import GHC.Core.InstEnv (classInstances, lookupInstEnv, nullUnifiers)
+import GHC.Core.Class (Class, classKey, className)
+import GHC.Core.InstEnv (InstEnvs, classInstances, lookupInstEnv, nullUnifiers)
 import GHC.Core.Predicate (
     EqRel (NomEq),
     Pred (ClassPred, EqPred, ForAllPred),
@@ -127,6 +130,7 @@ import GHC.Core.Type (PredType, anyFreeVarsOfType, coreView, mkTyVarTy, mkVisFun
 import GHC.Core.Unify (BindFlag (BindMe, DontBindMe), UnifyResultM (SurelyApart), alwaysBindFam, tcUnifyTysFG)
 import GHC.Data.Bag (bagToList, listToBag, mapBag, unitBag)
 import GHC.Data.FastString (unpackFS)
+import qualified GHC.LanguageExtensions as LangExt
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
 import GHC.Tc.Solver (simplifyTopWanteds)
 import GHC.Tc.Solver.Monad (runTcSEarlyAbort)
@@ -159,6 +163,7 @@ import GHC.Tc.Utils.Monad (
     liftZonkM,
     newSysName,
     setTcLevel,
+    setXOptM,
     tryCaptureConstraints,
     tryTc,
  )
@@ -253,6 +258,11 @@ data Environment = Environment
     , environmentRigid :: Bool
     , environmentCounters :: IORef Counters
     -- ^ The counters of the walks in this environment.
+    , environmentExtendedDefaults :: Bool
+    {- ^ Whether 'complete' solves with @ExtendedDefaultRules@, as GHCi does:
+    so @length (pure x)@ fits, with the list type for its @t@. 'False' in
+    'newEnvironment'.
+    -}
     }
 
 {- | The environment of a hole. Its level is the level of the innermost
@@ -277,7 +287,8 @@ newEnvironment hole = do
             EqPred{} -> True
             ClassPred cls _ -> isEqualityClass cls
             _ -> False
-    Environment hole level provided (not (any equality (closure <> heads))) <$> liftIO (newIORef emptyCounters)
+    counters <- liftIO (newIORef emptyCounters)
+    pure (Environment hole level provided (not (any equality (closure <> heads))) counters False)
 
 {- | The state of a walk: the unification variables that a later step can
 write, the wanteds of the program so far, and the goals still open, leftmost
@@ -429,12 +440,16 @@ step environment walker leaf children known = case walkerGoals walker of
         EqPred{} -> True
         _ -> False
 
--- | Whether a walker has no open goal and every wanted is solved under the givens.
+{- | Whether a walker has no open goal and every wanted is solved under the
+givens, with the defaulting of 'environmentExtendedDefaults'.
+-}
 complete :: Environment -> Walker -> TcM Bool
 complete environment walker
     | null (walkerGoals walker) =
-        setTcLevel (environmentLevel environment) (discardErrs (satisfiable environment walker False True))
+        setTcLevel (environmentLevel environment) (discardErrs (extended (satisfiable environment walker False True)))
     | otherwise = pure False
+  where
+    extended = if environmentExtendedDefaults environment then setXOptM LangExt.ExtendedDefaultRules else id
 
 {- | Whether GHC solves the predicates under the hole's givens, with the
 instances in scope, as for a complete program. The solver's unifications
@@ -445,26 +460,56 @@ entails environment predicates = setTcLevel (environmentLevel environment) . dis
     evidence <- newWanteds (ExprHoleOrigin Nothing) predicates
     satisfiable environment (Walker (metasOf predicates) (mkSimpleWC evidence) []) False True
 
+{- | Whether a constraint can still hold, by the fast path of 'satisfiable':
+'False' only for a class constraint when the hole has no given equality,
+the class is not built in, it has instances, no given provides it, and no
+instance matches or unifies with its arguments. So @Num (Complex a)@ can
+hold, and @Foldable Int@ cannot.
+-}
+mayHold :: Environment -> InstEnvs -> PredType -> Bool
+mayHold environment instances predicate = case classifyPredType predicate of
+    ClassPred cls arguments
+        | decides environment instances cls
+        , (matches, unifiers, _) <- lookupInstEnv False instances cls arguments ->
+            not (null matches && nullUnifiers unifiers)
+    _ -> True
+
+{- | Whether the instances in scope decide a class for 'mayHold': the hole
+has no given equality, the class is not built in, it has instances, and no
+given provides it.
+-}
+decides :: Environment -> InstEnvs -> Class -> Bool
+decides environment instances cls =
+    environmentRigid environment
+        && classKey cls `notElem` builtIn
+        && not (null (classInstances instances cls))
+        && className cls `notElem` environmentProvided environment
+  where
+    -- The classes that GHC solves without instances.
+    builtIn =
+        [ hasFieldClassNameKey
+        , knownNatClassNameKey
+        , knownSymbolClassNameKey
+        , knownCharClassNameKey
+        , typeableClassKey
+        , ipClassKey
+        , withDictClassKey
+        , dataToTagClassKey
+        , unsatisfiableClassNameKey
+        ]
+
 {- | Whether the wanteds of a walker can still be solved. With the last
 'True', every wanted must be solved, as for a complete program. Otherwise
 the solver runs only when the step brought an equality (the third
 argument), or when some wanted has no unification variable left; only those
 can make a prefix fail. An equality that is surely apart, or a class
-constraint that no instance can match, fails without the solver.
+constraint that cannot hold ('mayHold'), fails without the solver.
 -}
 satisfiable :: Environment -> Walker -> Bool -> Bool -> TcM Bool
 satisfiable environment walker equality finished = do
     current <- liftZonkM (zonkTcTypes (filter (not . isCallStackPredTy) (wantedPredicates (walkerWanteds walker))))
     instances <- tcGetInstEnvs
-    let impossible predicate = case classifyPredType predicate of
-            ClassPred cls arguments
-                | classKey cls `notElem` builtIn
-                , not (null (classInstances instances cls))
-                , className cls `notElem` environmentProvided environment
-                , (matches, unifiers, _) <- lookupInstEnv False instances cls arguments ->
-                    null matches && nullUnifiers unifiers
-            _ -> False
-    if environmentRigid environment && (any apart current || any impossible current)
+    if (environmentRigid environment && any apart current) || not (all (mayHold environment instances) current)
         then False <$ count (\c -> c{countFastRejects = countFastRejects c + 1})
         else
             if not finished && not equality && all open current
@@ -497,18 +542,6 @@ satisfiable environment walker equality finished = do
             _ -> False
         _ -> False
     bindable variable _ = if isTcTyVar variable && isMetaTyVar variable then BindMe else DontBindMe
-    -- The classes that GHC solves without instances.
-    builtIn =
-        [ hasFieldClassNameKey
-        , knownNatClassNameKey
-        , knownSymbolClassNameKey
-        , knownCharClassNameKey
-        , typeableClassKey
-        , ipClassKey
-        , withDictClassKey
-        , dataToTagClassKey
-        , unsatisfiableClassNameKey
-        ]
     open = anyFreeVarsOfType (\variable -> isTcTyVar variable && isMetaTyVar variable)
     count = liftIO . modifyIORef' (environmentCounters environment)
     hole = environmentHole environment

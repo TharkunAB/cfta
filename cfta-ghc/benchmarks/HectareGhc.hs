@@ -9,7 +9,9 @@ The queries have their class constraints restored: an argument
 solution loses its dictionary arguments. The library is a rung of a ladder:
 the Prelude; then also "Data.List", "Data.Maybe", "Data.Either", and
 "Data.Char"; then also "Data.Map", qualified as @Map@. There are no
-dictionary components.
+dictionary components. The Stack Overflow queries have their own rung,
+@so@: the second rung and "Data.Function", for the components that Hectare
+adds for them.
 
 The parent runs each query in a child process with a heap limit and a time
 limit, as Hectare's evaluation does. Each row gives the query, the rung, the
@@ -19,12 +21,15 @@ fit and of the expected one, the rank of the expected one among the fits
 and among the fits that use every part of themselves ('comesLast'),
 the programs that Hectare proposed, the solver
 calls, the seconds, the seconds of Hectare's construction, reduction, and
-listing and of the checks in the typechecker, the peak memory in megabytes,
-the fits skipped for the normal form of an earlier fit, the seconds of the
-normal forms, whether GHC accepts the first fit as a program of the
-signature, and the first fit. With normal forms, a fit with the normal form
-of the expected solution counts as the solution. The walk itself stops at the time limit, so that a row of a
-timeout has its figures too.
+listing, of the checks in the typechecker, and of the solver calls in the
+checks, the peak memory and the allocation in megabytes, the fits skipped
+for the normal form of an earlier fit, the seconds of the normal forms,
+whether GHC accepts the first fit as a program of the signature, the typed
+terms that Hectare listed, the fits and the fits that use every part of
+themselves, and the first fit. With normal forms, a fit with the normal
+form of the expected solution counts as the solution. The walk itself stops
+at the time limit, so that a row of a timeout has its figures too. The
+search is the one of the tools, with 'optionFits' at its default.
 
 With no arguments, it runs three queries with the Prelude, 30 seconds and a
 heap of 2 GB each, so that @cabal bench@ stays short. The variable
@@ -32,10 +37,17 @@ heap of 2 GB each, so that @cabal bench@ stays short. The variable
 @HECTARE_GHC_LOGS@ names a directory for the children's output, and
 @HECTARE_GHC_TRACE@ makes a child print each program that it checks to its
 standard error, with the seconds and the size, and @HECTARE_GHC_NORMAL_FORMS=off@
-turns off the normal forms of the fits ('optionNormalForms'). The names
-@hplus@ and @stackoverflow@ stand for the queries of each suite; the Stack
-Overflow queries are the queries of Hectare's evaluation, with GHC's
-library of the rung.
+turns off the normal forms of the fits ('optionNormalForms'). The children
+search with Hectare's curried types; @HECTARE_GHC_FIRST_ORDER@ makes them
+search with its first-order types ('optionCurried'), and
+@HECTARE_GHC_DEFAULTED@ with only the default of a type variable that a
+program does not determine ('optionOnlyDefaulted').
+@HECTARE_GHC_TYPE_DOMAINS@ gives a type variable of kind @Type@ the domain
+of its classes ('optionTypeDomains'). The names @hplus@ and
+@stackoverflow@ stand for the queries of each suite; the Stack Overflow
+queries are the queries of Hectare's evaluation, with GHC's library of the
+rung. Next to the Hoogle+ queries, the parent takes the names of the
+differential queries ('differential'), where the erasure loses information.
 
 > hectare-ghc [RUNG [SECONDS [HEAP [JOBS [NAME...]]]]]
 > hectare-ghc --query NAME RUNG SECONDS
@@ -54,7 +66,7 @@ import Data.Maybe (isJust, isNothing)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Clock (getMonotonicTime)
-import GHC.Stats (getRTSStats, getRTSStatsEnabled, max_mem_in_use_bytes)
+import GHC.Stats (allocated_bytes, getRTSStats, getRTSStatsEnabled, max_mem_in_use_bytes)
 import System.Directory (createDirectoryIfMissing)
 import System.Environment (getArgs, getExecutablePath, lookupEnv)
 import System.Exit (ExitCode (..))
@@ -66,7 +78,7 @@ import Text.Printf (printf)
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Counters (..))
 import Data.CFTA.GHC.Session
-import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), renderProgram, renderType)
+import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), parseProgram, renderProgram, renderType)
 import Data.CFTA.Gen.Synthesis.HooglePlus (Benchmark (..), hooglePlusBenchmarks, stackOverflowBenchmarks)
 
 main :: IO ()
@@ -86,6 +98,8 @@ main = do
 -- | A Hoogle+ query in GHC's terms.
 data GhcQuery = GhcQuery
     { ghcName :: String
+    , ghcSignature :: String
+    -- ^ The query's signature, in Haskell's syntax.
     , ghcConstraints :: [(String, Text)]
     -- ^ Each class constraint: the class and the type variable.
     , ghcArguments :: [(Text, Type)]
@@ -99,18 +113,21 @@ data GhcQuery = GhcQuery
 -- | A Hoogle+ benchmark with its class constraints restored.
 fromBenchmark :: Benchmark -> GhcQuery
 fromBenchmark benchmark =
-    GhcQuery
-        { ghcName = Text.unpack (benchmarkName benchmark)
-        , ghcConstraints =
-            [ (Text.unpack (Text.drop (Text.length dictionaryPrefix) name), variable)
-            | (_, TCons name [TVar variable]) <- dictionaries
-            ]
-        , ghcArguments = plain
-        , ghcGoal = queryGoal query
-        , ghcSolution = solution
-        , ghcSize = maybe (benchmarkSize benchmark - length dictionaries) programSize solution
-        }
+    signed
+        GhcQuery
+            { ghcName = Text.unpack (benchmarkName benchmark)
+            , ghcSignature = ""
+            , ghcConstraints =
+                [ (Text.unpack (Text.drop (Text.length dictionaryPrefix) name), variable)
+                | (_, TCons name [TVar variable]) <- dictionaries
+                ]
+            , ghcArguments = plain
+            , ghcGoal = queryGoal query
+            , ghcSolution = solution
+            , ghcSize = maybe (benchmarkSize benchmark - length dictionaries) programSize solution
+            }
   where
+    signed ghcQuery = ghcQuery{ghcSignature = signatureOf ghcQuery}
     query = benchmarkQuery benchmark
     (dictionaries, plain) = partition dictionary (queryArguments query)
     dictionary (_, typ) = case typ of
@@ -136,6 +153,8 @@ ghcProgram dictionaries = go
         "Nil" -> "[]"
         "$" -> "($)"
         _
+            -- Hoogle+'s (/=) with an Ord dictionary is GHC's (/=).
+            | Just plain <- Text.stripSuffix "_Ord" name -> ghcName' plain
             | Just inner <- Text.stripPrefix "(" name >>= Text.stripSuffix ")" -> "(" <> unqualified inner <> ")"
             | otherwise -> unqualified name
     unqualified name = case Text.span isAlphaNum name of
@@ -146,6 +165,82 @@ ghcProgram dictionaries = go
             , not (Text.null after) ->
                 unqualified after
         _ -> name
+
+{- | Queries where the erasure loses information: components that are
+polymorphic over a type constructor (Functor, Applicative, Monad, Foldable,
+Traversable) at Maybe, Either e, pairs, lists, or a rigid variable of the
+signature, or at an intermediate type that no head of the signature has, as
+the Maybe in @length (lookup k xs)@, or at the default of GHC's
+@ExtendedDefaultRules@, as the list in @length (pure x)@. Each has its
+signature, its argument names, and its expected program; the arguments'
+Hectare types are not used.
+-}
+differential :: [GhcQuery]
+differential =
+    [ query "hkJoin" "Monad m => m (m a) -> m a" ["x"] "(>>=) x id"
+    , query "hkFmapFst" "Functor f => f (a, b) -> f a" ["x"] "fmap fst x"
+    , query "hkJoinMaybe" "Maybe (Maybe a) -> Maybe a" ["x"] "(>>=) x id"
+    , query "hkBind" "Monad m => (a -> m b) -> m a -> m b" ["f", "x"] "(>>=) x f"
+    , query "hkPureSingleton" "Applicative f => a -> f [a]" ["x"] "pure ((:) x [])"
+    , query "addPairPlus" "Num a => (a, a) -> a" ["p"] "(+) (fst p) (snd p)"
+    , query "mapFunctor" "(a -> b) -> Maybe a -> Maybe b" ["f", "m"] "fmap f m"
+    , query "maybeBind" "Maybe a -> (a -> Maybe b) -> Maybe b" ["m", "f"] "(>>=) m f"
+    , query "eitherBind" "Either e a -> (a -> Either e b) -> Either e b" ["x", "f"] "(>>=) x f"
+    , query "sequenceMaybes" "[Maybe a] -> Maybe [a]" ["xs"] "sequence xs"
+    , query "traverseMaybe" "(a -> Maybe b) -> [a] -> Maybe [b]" ["f", "xs"] "traverse f xs"
+    , query "traverseEither" "(a -> Either e b) -> [a] -> Either e [b]" ["f", "xs"] "traverse f xs"
+    , query "mapSecond" "(b -> c) -> (a, b) -> (a, c)" ["f", "p"] "fmap f p"
+    , query "mapEitherList" "(a -> b) -> Either e [a] -> Either e [b]" ["f", "e"] "fmap (map f) e"
+    , query "liftPair" "Applicative f => f a -> f b -> f (a, b)" ["x", "y"] "liftA2 (,) x y"
+    , query "kleisli" "Monad m => (a -> m b) -> (b -> m c) -> a -> m c" ["f", "g", "x"] "(>>=) (f x) g"
+    , query "foldableSum" "Foldable t => t Int -> Int" ["xs"] "sum xs"
+    , query "foldableToList" "Foldable t => t a -> [a]" ["xs"] "foldr (:) [] xs"
+    , query "traversableSequence" "Traversable t => t (Maybe a) -> Maybe (t a)" ["xs"] "sequenceA xs"
+    , query "concatMaybe" "Maybe [a] -> [a]" ["m"] "concat m"
+    , query "sumMaybe" "Maybe Int -> Int" ["m"] "sum m"
+    , query "lengthPair" "(a, b) -> Int" ["p"] "length p"
+    , -- The gap test: a Foldable or Traversable at an intermediate Maybe, of
+      -- lookup and find (rungs 1 and 2), listToMaybe (rung 2), or Map.lookup
+      -- (rung 3).
+      query "gapLengthLookup" "Eq k => k -> [(k, v)] -> Int" ["k", "xs"] "length (lookup k xs)"
+    , query "gapNullLookup" "Eq k => k -> [(k, v)] -> Bool" ["k", "xs"] "null (lookup k xs)"
+    , query "gapSumLookup" "Eq k => k -> [(k, Int)] -> Int" ["k", "xs"] "sum (lookup k xs)"
+    , query "gapConcatLookup" "Eq k => k -> [(k, [a])] -> [a]" ["k", "xs"] "concat (lookup k xs)"
+    , query "gapAndLookup" "Eq k => k -> [(k, Bool)] -> Bool" ["k", "xs"] "and (lookup k xs)"
+    , query "gapMaximumLookup" "(Eq k, Ord v) => k -> [(k, v)] -> v" ["k", "xs"] "maximum (lookup k xs)"
+    , query "gapElemLookup" "(Eq k, Eq v) => v -> k -> [(k, v)] -> Bool" ["v", "k", "xs"] "elem v (lookup k xs)"
+    , query "gapSequenceLookup" "Eq k => k -> [(k, [a])] -> [Maybe a]" ["k", "xs"] "sequenceA (lookup k xs)"
+    , query "gapTraverseLookup" "Eq k => (v -> [b]) -> k -> [(k, v)] -> [Maybe b]" ["f", "k", "xs"] "traverse f (lookup k xs)"
+    , query "gapToListLookup" "Eq k => k -> [(k, v)] -> [v]" ["k", "xs"] "foldr (:) [] (lookup k xs)"
+    , query "gapLengthFind" "(a -> Bool) -> [a] -> Int" ["p", "xs"] "length (find p xs)"
+    , query "gapNullFind" "(a -> Bool) -> [a] -> Bool" ["p", "xs"] "null (find p xs)"
+    , query "gapSumListToMaybe" "[Int] -> Int" ["xs"] "sum (listToMaybe xs)"
+    , query "gapLengthMapLookup" "Ord k => k -> Map.Map k [a] -> Int" ["k", "m"] "length (Map.lookup k m)"
+    , -- A Functor between them: listToMaybe fixes the variable of fmap, and
+      -- fmap fixes the variable of null (rung 2).
+      query "gapNullFmapListToMaybe" "(a -> b) -> [a] -> Bool" ["f", "xs"] "null (fmap f (listToMaybe xs))"
+    , -- Programs that only a default types: no part fixes the variable of
+      -- kind * -> *, and GHC's ExtendedDefaultRules give it the list type
+      -- (rung 1).
+      query "defaultLengthPure" "a -> Int" ["x"] "length (pure x)"
+    , query "defaultNullPure" "a -> Bool" ["x"] "null (pure x)"
+    ]
+  where
+    query name signature arguments expected =
+        let solution = either error id (parseProgram expected)
+         in GhcQuery
+                { ghcName = name
+                , ghcSignature = signature
+                , ghcConstraints = []
+                , ghcArguments = [(argument, TVar "unused") | argument <- arguments]
+                , ghcGoal = TVar "unused"
+                , ghcSolution = Just solution
+                , ghcSize = programSize solution
+                }
+
+-- | Every query: the Hoogle+ ones, the Stack Overflow ones, then the differential ones.
+allQueries :: [GhcQuery]
+allQueries = map fromBenchmark (hooglePlusBenchmarks <> stackOverflowBenchmarks) <> differential
 
 -- | The number of components and arguments of a program.
 programSize :: Program -> Int
@@ -171,7 +266,7 @@ data Rung = Rung
 
 -- | The library ladder.
 ladder :: [Rung]
-ladder = [prelude, base, withMap]
+ladder = [prelude, base, withMap, stackOverflow]
   where
     prelude = Rung "prelude" [Import "Prelude" Nothing]
     base =
@@ -179,6 +274,7 @@ ladder = [prelude, base, withMap]
             "base"
             (rungModules prelude <> [Import name Nothing | name <- ["Data.List", "Data.Maybe", "Data.Either", "Data.Char"]])
     withMap = Rung "map" (rungModules base <> [Import "Data.Map" (Just "Map")])
+    stackOverflow = Rung "so" (rungModules base <> [Import "Data.Function" Nothing])
 
 -- | The import declarations of a rung.
 importLines :: Rung -> [String]
@@ -194,7 +290,7 @@ expected solution, and print a row for each size and a result row. The
 search stops at the expected solution.
 -}
 runQuery :: String -> String -> Int -> IO ()
-runQuery name rungName' seconds = case [query | query <- map fromBenchmark (hooglePlusBenchmarks <> stackOverflowBenchmarks), ghcName query == name] of
+runQuery name rungName' seconds = case [query | query <- allQueries, ghcName query == name] of
     [] -> fail ("no query " <> name)
     query : _ -> case [rung | rung <- ladder, rungName rung == rungName'] of
         [] -> fail ("no rung " <> rungName')
@@ -205,6 +301,9 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark (hoog
             -- The fits so far, and those that use every part of themselves.
             counts <- newIORef (0 :: Int, 0 :: Int)
             tracing <- isJust <$> lookupEnv "HECTARE_GHC_TRACE"
+            firstOrder <- isJust <$> lookupEnv "HECTARE_GHC_FIRST_ORDER"
+            defaulted <- isJust <$> lookupEnv "HECTARE_GHC_DEFAULTED"
+            typeDomains <- isJust <$> lookupEnv "HECTARE_GHC_TYPE_DOMAINS"
             normalForms <- (/= Just "off") <$> lookupEnv "HECTARE_GHC_NORMAL_FORMS"
             -- The normal forms of programs, built at the first fit.
             normalRef <- newIORef Nothing
@@ -213,7 +312,7 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark (hoog
                 candidates <- candidatesOf session (rungModules rung)
                 printf "candidates,%d\n" (length candidates)
                 hFlush stdout
-                signature <- typeOfExpression session ("undefined :: " <> signatureOf query)
+                signature <- typeOfExpression session ("undefined :: " <> ghcSignature query)
                 ready <- getMonotonicTime
                 let options =
                         defaultOptions
@@ -222,6 +321,9 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark (hoog
                             , optionAvoid = hectareAvoid
                             , optionReport = Just report
                             , optionTrace = if tracing then Just trace else Nothing
+                            , optionCurried = not firstOrder
+                            , optionOnlyDefaulted = defaulted
+                            , optionTypeDomains = typeDomains
                             , optionNormalForms = normalForms
                             }
                     -- With normal forms, a fit with the normal form of the solution is the solution.
@@ -269,12 +371,12 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark (hoog
                                 <> " -> "
                                 <> renderProgram (fitProgram fit)
                                 <> ") :: "
-                                <> signatureOf query
+                                <> ghcSignature query
                             )
                     Nothing -> pure False
                 pure (statistics, checked)
             end <- getMonotonicTime
-            memory <- peakMemory
+            (memory, allocated) <- memoryOf
             found <- readIORef firstFit
             size <- readIORef solved
             (rank, rankUsing) <- readIORef counts
@@ -288,22 +390,29 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark (hoog
                         _ | maybe False statisticsOutOfTime statistics -> "timeout"
                         (Nothing, Just _) -> "other"
                         (Nothing, Nothing) -> "unsolved"
-                programs, calls, parts, mergedText, checkedText :: String
-                (programs, calls, parts, mergedText, checkedText) = case outcome of
+                programs, calls, parts, mergedText, checkedText, runs :: String
+                (programs, calls, parts, mergedText, checkedText, runs) = case outcome of
                     Right (Just (Just statistics, checked)) ->
                         ( show (statisticsPrograms statistics)
                         , show (countSolverCalls (statisticsCounters statistics))
                         , intercalate
                             ","
                             [ printf "%.3f" (fromIntegral (part statistics) / 1e9 :: Double)
-                            | part <- [statisticsBuildNanos, statisticsReduceNanos, statisticsListNanos, statisticsCheckNanos]
+                            | part <-
+                                [ statisticsBuildNanos
+                                , statisticsReduceNanos
+                                , statisticsListNanos
+                                , statisticsCheckNanos
+                                , countSolverNanos . statisticsCounters
+                                ]
                             ]
                         , printf "%d,%.4f" (statisticsMerged statistics) (fromIntegral (statisticsNormalNanos statistics) / 1e9 :: Double)
                         , if checked then "yes" else "no"
+                        , show (statisticsRuns statistics)
                         )
-                    _ -> ("-", "-", "-,-,-,-", "-,-", "-")
+                    _ -> ("-", "-", "-,-,-,-,-", "-,-", "-", "-")
             printf
-                "result,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%.3f,%s,%d,%s,%s,%s\n"
+                "result,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%.3f,%s,%d,%d,%s,%s,%s,%d,%d,%s\n"
                 name
                 rungName'
                 outcomeText
@@ -317,20 +426,29 @@ runQuery name rungName' seconds = case [query | query <- map fromBenchmark (hoog
                 (end - start)
                 parts
                 memory
+                allocated
                 mergedText
                 checkedText
+                runs
+                rank
+                rankUsing
                 (maybe "-" (renderProgram . fitProgram) found)
 
--- | The peak memory in use in megabytes, when the RTS keeps statistics.
-peakMemory :: IO Int
-peakMemory = do
+-- | The peak memory in use and the bytes allocated, in megabytes, when the RTS keeps statistics.
+memoryOf :: IO (Int, Int)
+memoryOf = do
     enabled <- getRTSStatsEnabled
-    if enabled then (\stats -> fromIntegral (max_mem_in_use_bytes stats `div` (1024 * 1024))) <$> getRTSStats else pure 0
+    if enabled
+        then (\stats -> (megabytes (max_mem_in_use_bytes stats), megabytes (allocated_bytes stats))) <$> getRTSStats
+        else pure (0, 0)
+  where
+    megabytes bytes = fromIntegral (bytes `div` (1024 * 1024))
 
 {- | Run each query in a child process with a heap limit and a time limit,
 several at a time, and print the result row of each. With no names, the
-suite is the 45 Hoogle+ queries, and the name @stackoverflow@ stands for the
-19 Stack Overflow queries.
+suite is the 45 Hoogle+ queries, or the 19 Stack Overflow queries on the
+rung @so@, and the name @stackoverflow@ stands for the 19 Stack Overflow
+queries.
 -}
 runSuite :: String -> Int -> String -> Int -> [String] -> IO ()
 runSuite rung seconds heap jobs names = do
@@ -340,7 +458,7 @@ runSuite rung seconds heap jobs names = do
     forM_ logs $ \directory -> createDirectoryIfMissing True (directory <> "/" <> rung)
     let suite benchmarks = map (ghcName . fromBenchmark) benchmarks
         queries = case names of
-            [] -> suite hooglePlusBenchmarks
+            [] -> suite (if rung == "so" then stackOverflowBenchmarks else hooglePlusBenchmarks)
             ["hplus"] -> suite hooglePlusBenchmarks
             ["stackoverflow"] -> suite stackOverflowBenchmarks
             _ -> names
@@ -348,7 +466,7 @@ runSuite rung seconds heap jobs names = do
     output <- newMVar ()
     done <- newEmptyMVar
     putStrLn
-        "result,query,rung,outcome,bound,first,solved,rank,using,programs,calls,seconds,build,reduce,list,check,memory,merged,normal,checked,program"
+        "result,query,rung,outcome,bound,first,solved,rank,using,programs,calls,seconds,build,reduce,list,check,solver,memory,allocated,merged,normal,checked,runs,fits,usingfits,program"
     hFlush stdout
     forM_ [0 .. jobs - 1] $ \worker -> forkIO $ do
         let loop = do
@@ -369,9 +487,9 @@ runSuite rung seconds heap jobs names = do
                             writeFile (directory <> "/" <> rung <> "/" <> query <> ".log") (out <> err <> "exit " <> show code <> "\n")
                         let row = case (code, [line | line <- lines out, "result," `isPrefixOf` line]) of
                                 (_, line : _) -> line
-                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,,,"
-                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,,,"
-                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,,,"
+                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,,,,,,,,"
+                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,,,,,,,,"
+                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,,,,,,,,"
                         withMVar output $ \() -> putStrLn row >> hFlush stdout
                         loop
         loop

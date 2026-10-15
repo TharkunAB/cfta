@@ -15,7 +15,7 @@ depends on `ghc`.
 | --- | --- |
 | `Data.CFTA.GHC.Fits` | The entry point: `streamFits` and `synthesizeFits` for GHC's `TypedHole`, `Candidate`s, and a goal type, and `holeFor` for a driver without a typechecked hole. |
 | `Data.CFTA.GHC.HoleFits` | A typed-hole plugin: fits of several components after GHC's own valid hole fits. |
-| `Data.CFTA.GHC.Erase` | GHC types as Hectare's first-order types, with the class contexts erased. |
+| `Data.CFTA.GHC.Erase` | GHC types as Hectare's types, curried or first-order, with the class contexts erased. |
 | `Data.CFTA.GHC.Internal.Check` | One step of a program walk in `TcM` on the machinery of GHC's hole fits, and freeze and restore of unification variables; exposed for integration, not covered by the PVP contract. |
 
 ## The synthesizer
@@ -36,7 +36,9 @@ The signature can have a class context (`Eq a => a -> [(a, b)] -> Maybe b`),
 which gives the givens of the search. Each argument of the signature is a
 variable that a program uses once. `-m MODULE=Q` imports a module qualified,
 and `-p PACKAGE` exposes a package. `--size`, `--fits`, and `--seconds`
-bound the search (by default five leaves, ten fits, ten seconds). The
+bound the search (by default five leaves, ten fits, ten seconds).
+`--first-order`, `--only-defaulted`, and `--type-domains` are the plugin's
+options `first-order`, `only-defaulted`, and `type-domains` below. The
 figures of the search go to the standard error. The Hoogle+ ladder of
 `hectare-ghc` is its benchmark.
 
@@ -121,6 +123,9 @@ The options apply to each hole:
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:fits=N` | 5 | The number of fits. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:seconds=S` | 1 | The time of the search. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:programs=N` | none | The number of Hectare's programs. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:first-order` | off | Hectare's first-order types (see Limits), in place of its curried types. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:only-defaulted` | off | A variable of kind `* -> *` that a fit does not determine takes only its default, the list, and the check has `ExtendedDefaultRules`. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:type-domains` | off | A variable of kind `Type` with classes that the instances decide takes only the types in scope at which those classes can have instances, so `maximum` does not have a goal `a` without `Ord a`. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:normal-forms=off` | on | Keep the fits with the normal form of an earlier fit. |
 
 ## How a hole is filled
@@ -236,16 +241,25 @@ or the variable `GHC_LIBDIR`.
 
 ## Limits
 
-- The erased types are first-order. A component with a higher-kinded type
-  variable (`fmap`, `pure`, `(>>=)`, the `Applicative` of `traverse`) gets
-  an erased type only at the type heads of the query (`Maybe` in `Maybe a`,
-  or `m` in `Monad m => m (m a) -> m a`) whose class constraints GHC's
-  solver discharges under the hole's givens; not at the list head, which
-  the list functions cover. A `Foldable` or `Traversable` variable becomes a
-  list.
+- The erased types are curried. A type variable of kind `* -> *` (`fmap`,
+  `pure`, `(>>=)`, `length`, both variables of `traverse`) ranges over the
+  type heads of kind `* -> *` in the candidates' types and the query at
+  which an instance of each of its classes can hold, the list among them.
+  So `length (lookup k xs)` is proposed, and the space is larger than the
+  first-order one: more programs to check, and more fits before the
+  expected one. A type head that no candidate and no query has is not
+  tried.
+- With `first-order`, the erased types are first-order. A component with a
+  higher-kinded type variable gets an erased type only at the type heads of
+  the query (`Maybe` in `Maybe a`, or `m` in `Monad m => m (m a) -> m a`)
+  whose class constraints GHC's solver discharges under the hole's givens;
+  not at the list head, which the list functions cover. A `Foldable` or
+  `Traversable` variable becomes a list.
 - A unification variable of the goal becomes a rigid constant in the erased
   goal, so Hectare proposes only programs that keep it abstract.
 - There is no defaulting: a program that needs `Num` defaulting is rejected.
+  With `only-defaulted`, the check of a complete program has GHC's
+  `ExtendedDefaultRules`, so `length (pure x)` fits.
 - Many valid programs of the real Prelude are degenerate. `fitIgnoresPart`
   finds those that ignore a subterm by parametricity (`const xs n`), and
   `fitDropsArgument` those whose normal form drops an argument, but not
