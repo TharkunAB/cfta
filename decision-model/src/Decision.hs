@@ -4,8 +4,8 @@
 
 A program asks a question, such as "which library component is the outermost
 function of the program?", with its options. A decision model gives one score
-for each option. "Decision.Ollama" gives a model that runs on a server.
-'fixedModel' gives a model without I/O, for tests.
+for each option. "Decision.Ollama" and "Decision.OpenAI" give models that run
+on a server. 'fixedModel' gives a model without I/O, for tests.
 
 A model on a server scores a limited number of options in one request, and
 its scores depend on the order of the options. 'chunked' asks a long question

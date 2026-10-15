@@ -1,11 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-{- | The tests of the package. The test with a server runs only on request:
-DECISION_MODEL_LIVE=1 asks Nimble v3 on the local Ollama. The test unloads the
-model at the end.
+{- | The tests of the package. The tests with a server run only on request:
+DECISION_MODEL_LIVE=1 asks Nimble v3 on the local Ollama, and
+DECISION_MODEL_OPENAI=NAME asks the chat model NAME on the API of the local
+Ollama that is compatible with OpenAI. These tests unload the model at the
+end.
 -}
 module Main (main) where
 
+import Control.Exception (finally)
 import Control.Monad (forM_, when)
 import Data.Aeson (Value (..), decode)
 import qualified Data.Aeson.Key as Key
@@ -21,14 +24,18 @@ import Test.Hspec
 
 import Decision
 import qualified Decision.Ollama as Ollama
+import qualified Decision.OpenAI as OpenAI
 
 main :: IO ()
 main = do
     live <- lookupEnv "DECISION_MODEL_LIVE"
+    chatModel <- lookupEnv "DECISION_MODEL_OPENAI"
     hspec $ do
         combinators
         ollama
+        openAI
         when (live == Just "1") liveOllama
+        forM_ chatModel liveOpenAI
 
 -- | A question with options f0, f1, and so on, with descriptions.
 question :: Int -> Question
@@ -156,6 +163,32 @@ ollama = describe "Decision.Ollama" $ do
         model <- Ollama.ollama Ollama.defaultOllama{Ollama.ollamaUrl = "http://127.0.0.1:1"}
         scoreOptions model (question 0) `shouldReturn` Right []
 
+openAI :: Spec
+openAI = describe "Decision.OpenAI" $ do
+    it "encodes the request with the labels in the prompt" $ do
+        let body = OpenAI.requestBody (OpenAI.defaultOpenAI "gemma4:e2b") (question 2)
+            value = decode body :: Maybe Value
+        (at ["top_logprobs"] =<< value) `shouldBe` Just (Number 20)
+        (at ["max_tokens"] =<< value) `shouldBe` Just (Number 1)
+        (at ["reasoning_effort"] =<< value) `shouldBe` Just (String "none")
+        inOrder ["A. f0: f0 :: [Int] -> Int\\nB. f1: f1 :: [Int] -> Int\""] body `shouldBe` True
+    it "reads the scores from the log probabilities of the labels" $ do
+        let reply =
+                "{\"choices\":[{\"logprobs\":{\"content\":[{\"token\":\"B\",\"top_logprobs\":["
+                    <> "{\"token\":\"B\",\"logprob\":-0.5},{\"token\":\" A\",\"logprob\":-1.5},"
+                    <> "{\"token\":\"None\",\"logprob\":-2.0},{\"token\":\"A\",\"logprob\":-3.0}]}]}}]}"
+            a = exp (-1.5) + exp (-3.0)
+            b = exp (-0.5)
+        OpenAI.replyScores (question 3) reply `shouldBe` Right [a / (a + b), b / (a + b), 0]
+    it "fails when no label is one of the likeliest tokens" $
+        OpenAI.replyScores
+            (question 2)
+            "{\"choices\":[{\"logprobs\":{\"content\":[{\"top_logprobs\":[{\"token\":\"<|channel>\",\"logprob\":0}]}]}}]}"
+            `shouldSatisfy` either ("no label" `isPrefixOf`) (const False)
+    it "fails on a reply without log probabilities" $
+        OpenAI.replyScores (question 2) "{\"choices\":[{\"logprobs\":null}]}"
+            `shouldSatisfy` either ("bad reply" `isPrefixOf`) (const False)
+
 -- | The scores of a question asked two times. Each time, the scores sum to about 1.
 askTwice :: DecisionModel -> Question -> IO ([Double], [Double])
 askTwice model q = (,) <$> ask <*> ask
@@ -173,3 +206,15 @@ liveOllama = describe "Nimble v3 on the local Ollama" $
         Ollama.withOllama Ollama.defaultOllama $ \model -> do
             (first, second) <- askTwice model (question 3)
             first `shouldBe` second
+
+{- | Ollama's prompt cache changes the log probabilities a little: the first
+request, without the cache, gets other scores than the next requests.
+-}
+liveOpenAI :: String -> Spec
+liveOpenAI name = describe ("The chat model " <> name <> " on the local Ollama") $
+    it "gives the same order and almost the same scores two times at the temperature 0" $ do
+        model <- OpenAI.openAI (OpenAI.defaultOpenAI (Text.pack name))
+        flip finally (Ollama.unload Ollama.defaultOllama{Ollama.ollamaModel = Text.pack name}) $ do
+            (first, second) <- askTwice model (question 3)
+            map fst (ranked [0 :: Int ..] first) `shouldBe` map fst (ranked [0 ..] second)
+            maximum (zipWith (\a b -> abs (a - b)) first second) `shouldSatisfy` (< 0.01)

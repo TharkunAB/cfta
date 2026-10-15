@@ -10,6 +10,7 @@ external client program.
 data Question = Question {questionState, questionText :: Text, questionOptions :: [Option]}
 newtype DecisionModel = DecisionModel {scoreOptions :: Question -> IO (Either String [Double])}
 Ollama.withOllama Ollama.defaultOllama $ \model -> scoreOptions (chunked 250 (bothOrders model)) question
+model <- OpenAI.openAI (OpenAI.defaultOpenAI "gemma4:e2b")   -- a chat model, from its log probabilities
 ranked (questionOptions question) scores                       -- the options, the highest score first
 ```
 
@@ -20,6 +21,9 @@ ranked (questionOptions question) scores                       -- the options, t
 - `Decision.Ollama`: Ollama's decision API, `POST /v1/systemone`, for a model
   with the capability "decision", such as Nimble v3. `unload` unloads the
   model, and `withOllama` unloads it at the end of an action.
+- `Decision.OpenAI`: the chat API of a server that is compatible with OpenAI,
+  `POST /v1/chat/completions`. The options get the labels A to T, and the
+  score of an option is the probability of its label as the first token.
 
 All failures are values (`Left`): no connection, a status that is not a
 success, a bad reply, a missing score, and two options with the same name.
@@ -59,7 +63,8 @@ use only.
 
 ```sh
 cabal test --test-options='+RTS -M2G -RTS'
-DECISION_MODEL_LIVE=1 cabal test --test-options='+RTS -M2G -RTS'   # Nimble v3 on the local Ollama
+DECISION_MODEL_LIVE=1 cabal test --test-options='+RTS -M2G -RTS'               # Nimble v3 on the local Ollama
+DECISION_MODEL_OPENAI=gemma4:e2b cabal test --test-options='+RTS -M2G -RTS'    # a chat model on Ollama's OpenAI API
 ```
 
-The test with a server unloads the model at the end.
+The tests with a server unload the model at the end.

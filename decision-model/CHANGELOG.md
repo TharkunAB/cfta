@@ -2,4 +2,4 @@
 
 ## 0.1.0.0
 
-- The first version: `Decision` and `Decision.Ollama`.
+- The first version: `Decision`, `Decision.Ollama` and `Decision.OpenAI`.
