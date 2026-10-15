@@ -407,6 +407,33 @@ spec = do
                     _ <- evaluate (nodeCount onePass + nodeCount rounds)
                     pure $ shallowTerms 3 onePass == shallowTerms 3 m && shallowTerms 3 rounds == shallowTerms 3 m
 
+        it "empties a class that ends at a constrained recursive node" $ do
+            -- The input of the next test without the wrappers at the root:
+            -- the class 0 = 1 ends at the constrained 'Mu' 'constrained'
+            -- itself. The intersection of the two children needs the root
+            -- again, so the root accepts no term. With "a" in the second
+            -- child too, the root accepts p(a, a).
+            let wrap child = Node [Edge "w" [child]]
+                same = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
+                plain = Mu $ \r -> Node [Edge "a" [], Edge "p" [wrap r, wrap r]]
+                next = Node [Edge "p" [wrap plain, wrap plain]]
+                constrained = Mu $ \r -> Node [Edge "a" [], mkEdge "p" [wrap r, wrap next] same]
+                bare = Node [mkEdge "p" [constrained, next] same] :: Node Symbol
+                withLeaf = Node [mkEdge "p" [constrained, union [Node [Edge "a" []], next]] same] :: Node Symbol
+                leaf = Term.Node "a" []
+            result <- timeout 10000000 $ do
+                let reduced = (reducePartially bare, reducePartially withLeaf)
+                _ <- evaluate (nodeCount (fst reduced) + nodeCount (snd reduced))
+                pure reduced
+            case result of
+                Nothing -> expectationFailure "the reduction did not finish"
+                Just (reducedBare, reducedWithLeaf) -> do
+                    reducedBare `shouldBe` EmptyNode
+                    forM_ [0 .. 4] $ \depth -> do
+                        terms (boundDepth depth bare) `shouldBe` []
+                        shallowTerms depth reducedWithLeaf `shouldBe` shallowTerms depth withLeaf
+                    accepts reducedWithLeaf (Term.Node "p" [leaf, leaf]) `shouldBe` True
+
         it "stops when a narrowed child contains its ancestor" $ do
             -- The formalization found this closed input. The class 0 = 1 of
             -- the root ends above the constrained 'Mu' 'constrained', and its
