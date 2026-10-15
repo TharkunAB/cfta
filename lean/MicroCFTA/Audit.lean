@@ -1784,6 +1784,8 @@ import MicroCFTA.SourceCurrentSecondaryMemos
 import MicroCFTA.SourceCurrentEqualityClassEntry
 import MicroCFTA.SourceCurrentClassScanGlobalMemos
 import MicroCFTA.SourceCurrentClassEntryGlobalMemos
+import MicroCFTA.SourceCurrentClassConstructionEntry
+import MicroCFTA.SourceCurrentSelectedClassRecords
 import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
 import MicroCFTA.SourceCurrentEnumerationStorage
