@@ -23,6 +23,7 @@ jobs:
             cfta/**/*.hs
             cfta-generator/**/*.hs
             cfta-ghc/**/*.hs
+            cfta-lean/**/*.hs
 
       - name: Set up hlint
         uses: haskell-actions/hlint-setup@v2
@@ -32,7 +33,7 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["cfta", "cfta-generator", "cfta-ghc"]'
+          path: '["cfta", "cfta-generator", "cfta-ghc", "cfta-lean"]'
           fail-on: warning
 
   build-test-bench:
@@ -85,6 +86,7 @@ jobs:
           (cd cfta && cabal check)
           (cd cfta-generator && cabal check)
           (cd cfta-ghc && cabal check)
+          (cd cfta-lean && cabal check)
 
       - name: Build with strict warnings
         run: cabal v2-build all --enable-tests --enable-benchmarks --ghc-options=-Werror
@@ -133,3 +135,66 @@ jobs:
 
       - name: Benchmark
         run: cabal v2-bench all --enable-optimization=2
+
+  # cfta-lean's tests and benchmark above run without Lean, and skip what needs
+  # the oracle. This job builds the oracle with the toolchain of
+  # cfta-lean/oracle/lean-toolchain and runs those parts. It is optional: no
+  # job waits for it, and its failure does not fail the run.
+  lean-oracle:
+    name: Lean oracle (optional)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Haskell
+        uses: haskell-actions/setup@v2
+        id: setup
+        with:
+          ghc-version: "9.14.1"
+          cabal-version: "3.16.1.0"
+          cabal-update: true
+
+      # The tactic's tests give mode (a) a budget of 2 s, which an
+      # unoptimized hectare-propose does not meet.
+      - name: Configure build plan
+        run: cabal v2-build cfta-lean --dry-run --enable-tests --enable-benchmarks --enable-optimization=2
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v5
+        env:
+          key: cabal-store-microecta-ghc-${{ steps.setup.outputs.ghc-version }}-cabal-${{ steps.setup.outputs.cabal-version }}
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ env.key }}-plan-${{ hashFiles('dist-newstyle/cache/plan.json') }}
+          restore-keys: ${{ env.key }}-
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Build the oracle
+        working-directory: cfta-lean/oracle
+        run: lake build
+
+      - name: Build cfta-lean
+        run: cabal v2-build cfta-lean --enable-tests --enable-benchmarks --enable-optimization=2
+
+      - name: Test against the oracle
+        run: cabal v2-test cfta-lean --enable-optimization=2 --test-show-details=direct
+
+      - name: Test the hectare? tactic
+        working-directory: cfta-lean/oracle
+        run: |
+          HECTARE_PROPOSER="$(cd ../.. && cabal list-bin --enable-optimization=2 cfta-lean:exe:hectare-propose)" \
+            lake env lean OracleTest/Tactic.lean
+
+      - name: Benchmark mode (a) and mode (b)
+        run: |
+          cabal v2-bench hectare-lean --enable-optimization=2 --benchmark-options='core 30 firstOr countElem mapFunctor'
+          HECTARE_LEAN_MODES=states cabal v2-bench hectare-lean --enable-optimization=2 \
+            --benchmark-options='core 30 firstOr countElem mapFunctor'
