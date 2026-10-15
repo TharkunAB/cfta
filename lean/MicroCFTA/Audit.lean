@@ -1516,6 +1516,21 @@ import MicroCFTA.SourceEqualityNativeEditWorker
 import MicroCFTA.SourceEqualityNativeEditWorkerComplete
 import MicroCFTA.SourceEqualityNativeEditWorkerSound
 import MicroCFTA.SourceEqualityNativeClassEdits
+import MicroCFTA.SourceMergedCache
+import MicroCFTA.SourceMergedColumns
+import MicroCFTA.SourceMergedComparisonAncestors
+import MicroCFTA.SourceMergedComparisonCertificates
+import MicroCFTA.SourceMergedComparisonEffects
+import MicroCFTA.SourceMergedComparisonSoundness
+import MicroCFTA.SourceMergedContracts
+import MicroCFTA.SourceMergedEdges
+import MicroCFTA.SourceMergedExamples
+import MicroCFTA.SourceMergedGroups
+import MicroCFTA.SourceMergedSelection
+import MicroCFTA.SourceMergedSelectionLanguage
+import MicroCFTA.SourceMergedSoundness
+import MicroCFTA.SourceMergedSource
+import MicroCFTA.SourceMergedWorker
 /-!
 # Proof dependency audit
 
