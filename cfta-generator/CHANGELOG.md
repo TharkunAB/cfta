@@ -64,7 +64,20 @@ tree automata of `cfta`, with QuickCheck integration.
   typed terms that Hectare listed (`progressRuns`). Because it keeps
   a set of the programs, not of the typed terms, the peak memory of the
   Hoogle+ ladder of `cfta-ghc` falls by 30% to 31% (45% to 46% on the
-  queries that time out), with the same results and time.
+  queries that time out), with the same results and time. Its `Progress`
+  tells how it ended (`progressOutcome`: `Solved`, `Exhausted`, or
+  `OutOfTime`), and its caller says which fits are new (`hookNew`). The trie
+  of dead prefixes is exported (`Dead`).
+- `Data.CFTA.Gen.Synthesis.States`: mode (b), a search over states of a
+  host's own goals, without Hectare and without erasure (`searchStates`). A
+  state is the host's key of a goal, a size, and the query arguments to
+  use; the host gives the refinements of a goal (`Goals`), kept by key and
+  number of children, and the search walks the table in preorder and checks
+  each complete program with the walk's `Checker`. With `Enumerated`, the
+  table of each size is one cfta automaton, which cfta's enumerator lists in
+  the host's order or in its own. The programs that Hectare's rule for the
+  first argument drops leave the automaton (`excludeAnywhereFTA`), so its
+  count (`figuresCount`) is that of the programs that remain.
 - `Data.CFTA.Gen.Synthesis.Hybrid`: Hectare's program spaces with Hegel's
   checks. `synthesizeHybrid` lists the programs of the base types of a
   refinement-typed query size by size, in Hectare's order, in the saturated

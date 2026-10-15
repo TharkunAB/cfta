@@ -49,6 +49,13 @@ queries are the queries of Hectare's evaluation, with GHC's library of the
 rung. Next to the Hoogle+ queries, the parent takes the names of the
 differential queries ('differential'), where the erasure loses information.
 
+The variable @HECTARE_GHC_MODE@ gives the mode ('optionMode'): @hectare@
+(mode (a), the default), @states@ (mode (b), "Data.CFTA.GHC.States", in
+preorder), @automaton@ (mode (b) through one cfta automaton for each size,
+in the host's order), or @automaton-canonical@ (in the enumerator's order).
+With mode (b), a child also prints a row @figures@ with the figures of the
+states, and the parent prints it after the result row.
+
 > hectare-ghc [RUNG [SECONDS [HEAP [JOBS [NAME...]]]]]
 > hectare-ghc --query NAME RUNG SECONDS
 -}
@@ -83,6 +90,7 @@ import Data.CFTA.GHC.Rank (holeState, rankFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), parseProgram, renderProgram, renderType)
 import Data.CFTA.Gen.Synthesis.HooglePlus (Benchmark (..), hooglePlusBenchmarks, stackOverflowBenchmarks)
+import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
 import Decision (bothOrders)
 import Decision.Ollama (Ollama (..), defaultOllama, unload, withOllama)
 
@@ -319,6 +327,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
             pool <- (>>= readMaybe) <$> lookupEnv "HECTARE_GHC_POOL"
             pooled <- newIORef []
             solvedAt <- newIORef Nothing
+            mode <- maybe (pure (optionMode defaultOptions)) (either fail pure . readMode) =<< lookupEnv "HECTARE_GHC_MODE"
             -- The walk stops at the time limit; this limit is for the rest.
             outcome <- try . timeout ((seconds + 30) * 1000000) $ withSession (importLines rung) $ \session -> do
                 candidates <- candidatesOf session (rungModules rung)
@@ -331,6 +340,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                             { optionMaximumSize = ghcSize query
                             , optionSeconds = Just (fromIntegral seconds - (ready - start))
                             , optionAvoid = hectareAvoid
+                            , optionMode = mode
                             , optionReport = Just report
                             , optionTrace = if tracing then Just trace else Nothing
                             , optionCurried = not firstOrder
@@ -379,6 +389,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                 statistics <- case signature of
                     Just typ -> fitsForSignature session options candidates typ (map fst (ghcArguments query)) accept
                     Nothing -> pure Nothing
+                forM_ (statisticsStates =<< statistics) $ \figures -> printf "figures,%s,%s\n" name (show figures) >> hFlush stdout
                 -- Check the first fit itself, as a program of the signature.
                 found <- readIORef firstFit
                 checked <- case found of
@@ -464,6 +475,15 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                 rankUsing
                 (maybe "-" (renderProgram . fitProgram) found)
 
+-- | Read a mode: @hectare@, @states@, @automaton@, or @automaton-canonical@.
+readMode :: String -> Either String Mode
+readMode text = case text of
+    "hectare" -> Right Hectare
+    "states" -> Right (States Preorder)
+    "automaton" -> Right (States (Enumerated HostOrder))
+    "automaton-canonical" -> Right (States (Enumerated CanonicalOrder))
+    _ -> Left ("no mode " <> text)
+
 -- | The peak memory in use and the bytes allocated, in megabytes, when the RTS keeps statistics.
 memoryOf :: IO (Int, Int)
 memoryOf = do
@@ -520,8 +540,8 @@ runSuite rung seconds heap jobs names = do
                                 (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,,,,,,,,"
                                 (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,,,,,,,,"
                                 _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,,,,,,,,"
-                        let pools = [line | line <- lines out, "pool," `isPrefixOf` line]
-                        withMVar output $ \() -> mapM_ putStrLn (row : pools) >> hFlush stdout
+                        let extra = [line | line <- lines out, any (`isPrefixOf` line) ["pool,", "figures,"]]
+                        withMVar output $ \() -> mapM_ putStrLn (row : extra) >> hFlush stdout
                         loop
         loop
     replicateM_ jobs (takeMVar done)
