@@ -1701,6 +1701,7 @@ import MicroCFTA.SourceClosedGateComplete
 import MicroCFTA.SourceClosedGateSelection
 import MicroCFTA.SourceEqualityWarmSelectedRequired
 import MicroCFTA.SourceEqualityWarmOnePass
+import MicroCFTA.SourceEqualityWarmNativeEdge
 /-!
 # Proof dependency audit
 
