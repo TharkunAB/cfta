@@ -14,6 +14,15 @@ Exact classes, finite execution, sequence, size order, and both rank inverses
 remain separate contracts. The named-measure frontend and actual parser/codec
 bridges remain open. The optimized interned core and equality code are preserved.
 
+The [physical identity bridge](notes-constraint-identity-renaming.md), `d851d5fb`,
+relates different constraint allocation histories through actual memo operations.
+It transports completed-cell Sound under actual heap preservation and connects
+key equality to signed words under a complete reservation bound. The audit
+passes 1,918 jobs and 49,920 dependency checks. Actual allocation-site receipts,
+cache/hash/IntMap adequacy, unrelated global result history, and the lifetime
+bound remain source obligations. No Haskell files changed. Older counts below
+are historical.
+
 The [completed-cell proof](notes-result-memo-soundness.md), `51a5922c`, derives
 full memo Sound and exact contextual language through actual recursive effects.
 Original closed construction and successful reached checks give exact public

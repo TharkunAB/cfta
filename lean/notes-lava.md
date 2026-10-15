@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Physical identity correspondence (2026-10-15 13:41 CEST)
+
+The [identity bridge](notes-constraint-identity-renaming.md), `d851d5fb`, separates
+physical key equality from allocation ordinals and actual signed machine IDs.
+Independent constraint growth retains corresponding memo publications and cells.
+Completed-cell Sound transports under actual heap preservation. The lifetime
+reservation capacity bound remains explicit. Actual source allocation receipts,
+cache/hash/IntMap adequacy, and unrelated global result-memo histories remain
+separate. The 1,918-job audit passes; production Haskell is unchanged.
+
 ## Completed result-memo soundness (2026-10-15 13:25 CEST)
 
 The [completed-cell proof](notes-result-memo-soundness.md), `51a5922c`, derives

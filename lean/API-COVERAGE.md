@@ -1,5 +1,23 @@
 # Public API and source correspondence
 
+## Physical identity renaming through actual memo operations
+
+Proof `d851d5fb` on main `1eb4ab05`. Read
+[the identity correspondence note](notes-constraint-identity-renaming.md).
+Canonical stored keys derive a stable injective identity relation despite
+extra constraint allocations and different counters. Actual preparation,
+publication, demand, and completion preserve corresponding logical cells.
+The relation derives full table validity and transports completed-cell Sound
+under actual heap preservation. Signed conversion preserves key equality
+under an explicit lifetime reservation bound, including losing candidates.
+The aggregate audit passes 1,918 jobs and 49,920 dependency checks with only
+permitted logical axioms. No Haskell files changed or checks were repeated.
+Actual allocation-site receipts, source cache/hash/IntMap adequacy, the lifetime
+bound, unrelated global result-memo history, and runtime correspondence remain
+open. The earlier completed-cell and distinct Sized contracts remain preserved.
+Next start actual combination/descent receipts, then guard/native allocations.
+This supersedes older identity-interface targets, not whole-library scope.
+
 ## Completed result cells and exact actual public execution
 
 Source main `1eb4ab05`; frame/key proof `45d7249a`, recursive soundness proof

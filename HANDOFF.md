@@ -1,6 +1,70 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 13:26 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 13:41 CEST (Europe/Stockholm)**.
+
+## Physical identity correspondence and signed result-memo keys
+
+Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Proof and audit: `d851d5fb`. Pull is current with no upstream change.
+Continue on `formalize` and push verified checkpoints. Read
+`lean/notes-constraint-identity-renaming.md`, then the completed-cell note.
+This section supersedes the earlier identity-interface next target below.
+
+CacheRenaming relates canonical stored identities through shared complete
+physical keys. Equality is preserved in both directions. Different counters,
+unused reserved candidates, extra production-side constraint entries, and
+independent permitted atomic growth are allowed. Shared-key interning retains
+coverage and derives the actual returned identity pair.
+SourceEqualityPartialConstraintRenaming lifts this to tagged payloads and
+complete result-memo keys. Actual identification and preparation derive the
+relation. Recorded payload transport retains ordered physical trie equality
+and inherited satisfaction. Contradiction and live empty remain distinct.
+
+SourceEqualityPartialMemoRenaming compares corresponding logical result cells
+and publication histories. Actual preparation/publication preserve handles.
+Lookup, demand, phase changes, and completion retain the original requests,
+busy observations, and full returned values. The relation derives full second-
+side table validity. Related.sound transports every completed-cell proof under
+actual native heap preservation. No future Sound or equal replay effects are
+assumed. This relation does not permit arbitrary extra pre-existing result
+cells. It is not a complete process-global result-memo history refinement.
+
+SourceEqualityPartialConstraintWords composes physical renaming with actual
+signed identity conversion. A complete supply count within one full word
+period preserves key equality. Count every lifetime reservation, including
+losing insertion candidates and other callers. The bound is a premise.
+It does not follow from resident entry counts or the current operation.
+Negative identities are included. The existing full-wrap counterexample remains.
+The bits parameter counts magnitude bits; a word with w total bits uses w-1.
+
+The aggregate audit passes 1,918 jobs and 49,920 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Log:
+`/tmp/mcfta-constraint-renaming-audit-20261015.log`.
+The existing unused-input warning remains. No Haskell file changed. Earlier
+Nix, six-suite, format, metadata, and 205-rank checks were not repeated.
+
+Next derive actual allocation-capable payload receipts. Start with inherited/
+local combination and child descent. Then extend through guard extraction
+and native prefixes. The source can allocate entries that never become outer
+requests. Retain actual demand and short-circuit behavior. Do not impose a
+textual event order. Connect reached entries to represented physical keys and
+apply the proved memo interface. Source cache/hash/IntMap adequacy, machine
+index bounds, the global lifetime reservation bound, and unrelated global
+result-memo history remain open. General caller completion, open contexts,
+repeated fixed points, getAllAtPath, GHC scheduling, unsafe IO, native containers,
+decision-model, named-measure/parser/decoder bridges, and extraction remain open.
+Whole-library formalization is not complete. The optimized interned core,
+older constructor/equality proofs, and all distinct Sized contracts remain.
+
+Starting snapshot: `/tmp/mcfta-constraint-renaming-start-20261015-1329/` (2,556 files).
+Closing snapshot: `/tmp/mcfta-constraint-renaming-checkpoint-20261015-1340/` (2,561 files).
+Its preservation.json records exact hashes. All prior Lean proofs except
+Audit imports, reproductions, marked drafts, stashes, and other worktrees are
+unchanged. Both unverified intersection drafts and their limit report retain
+their exact hashes. The source allocation-site audit and build logs are kept
+in the closing snapshot. No external draft or probe is imported.
+Weekly allowance was 96% at 2026-10-15 13:39 CEST. Refresh before work.
+Stop work and owned workers at 1% or less. No board posts or deployments.
 
 ## Completed result-memo invariant and actual public language
 

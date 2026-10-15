@@ -70,6 +70,15 @@ two evaluating requests, no other allocated cells, and no completed answer
 at any key. This is a finite observation. It does not prove a GHC exception,
 divergence, or the absence of success at every larger bound.
 
+## Identity interface status
+
+The [identity correspondence proof](notes-constraint-identity-renaming.md),
+`d851d5fb`, now relates extra constraint allocations and different counters.
+Actual memo operations and completed-cell Sound retain that relation.
+Signed conversion uses an explicit lifetime reservation bound. Actual source
+allocation receipts and runtime adequacy remain open. The target below
+records the earlier completed-cell checkpoint.
+
 ## Remaining source obligations
 
 The constraint identities are reconstructed. Native prefixes do not expose

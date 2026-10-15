@@ -1,5 +1,11 @@
 # Sized execution from a validated finite row map
 
+The [physical identity bridge](notes-constraint-identity-renaming.md) adds
+conditional result-memo correspondence. Sized and canonicalClasses are unchanged.
+Exact classes, finite execution, size order, and both inverses remain distinct.
+The aggregate audit passes 1,918 jobs and 49,920 theorem dependency checks.
+Older counts below describe their historical checkpoints.
+
 The [completed result-memo proof](notes-result-memo-soundness.md) adds actual
 recursive language and cell preservation. It leaves Sized and canonicalClasses
 unchanged. Exact accepted classes, finite execution, canonical sequence,
