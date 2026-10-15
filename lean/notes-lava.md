@@ -7,6 +7,20 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Complete native one-pass application (2026-10-15 06:47 CEST)
+
+The guarded one-pass worker now has checked function/graph agreement,
+independent language preservation, finite six-bound source execution, and
+actual bounded-array agreement. Original closed construction retains both
+gate memo certificates. Read [the current note](notes-native-one-pass.md).
+The complete fixture uses a kernel-checked normalization lemma before cbv
+checks all remaining source stages. This avoids reducing a large normalization
+proof inside the complete fixture. Actual guarded-edge rebuilding and original
+guard/payload readback are next. GHC lazy demand, native containers, and
+extraction remain separate. Neither the paper's call-by-value theorem nor
+its assumed termination closes those boundaries. No Lava or Rocq dependency
+is added.
+
 ## Selected class-fold application (2026-10-15 06:25 CEST)
 
 Actual source selection and required receipts now compose with fresh class-local

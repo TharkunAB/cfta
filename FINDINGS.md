@@ -1,6 +1,83 @@
 # Current formalization findings
 
-Updated: **2026-10-15 06:25 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 06:47 CEST (Europe/Stockholm)**.
+
+## Complete guarded native one-pass worker
+
+Proofs: `565ea4a4`, `b859a782`, and `ed3568fe`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-native-one-pass.md`. This section supersedes the combined
+one-pass worker target and earlier completion counts.
+
+An executable physical-record selector now produces exact actual query
+receipts in source order. Its successful runs and the existing gate traces
+agree in both directions. Every complete trace has finite stable query bounds.
+Selected physical records retain original occurrences and exact source paths.
+
+The combined worker now runs actual prechecks, physical record selection,
+required paths, fresh class-local target captures, native right folds, and one
+final propagation. Unchanged returns bypass propagation. Contradiction erases
+all original child positions immediately. Checked errors and incomplete
+selection, required, and narrowing results retain their exact observations and
+full current scope. No enclosing-control resumption is asserted.
+
+Checked successful workers and full pass graphs agree in both directions.
+Every complete graph derives six independent stable bounds: gate, edit,
+projection/required recursion, head reads, comparison, and native requests.
+All larger tuples return the identical answer and full native state. Complete
+answers are unique. Actual parent-array normalization supplies an additional
+finite bound. At every larger array bound, its entry has the same stable
+source answer. These are explicit worker/function graphs, not GHC extraction.
+
+The pass retains native validity, semantic heaps, histories, and closed outputs.
+Actual combined normalization rejects no term that satisfies both input
+payloads. Under coherent nontrivial own records, independent language laws
+prove output inclusion and preservation of every accepted forest term that
+satisfies both original own and inherited payloads. Own payload validity is
+still explicit; its derivation from the original guard accessor is next.
+
+Original closed construction now derives complete finite one-pass source
+execution for every precheck branch. Initial native validity comes from the
+actual constructor heap. The live branch retains certificates for both actual
+source gate memo call graphs and their returned cache validity. Only actual
+reached native word checks remain explicit. No completed whole-pass or global
+callback law is supplied.
+
+Kernel checks retain immediate unchanged, contradiction, checked-error, and
+live-empty behavior. A complete ordinary fixture uses a proved normalization
+guard and actual selection, required paths, target demands, native work, and
+final propagation. Larger bounds and repeated warm runs retain one native
+node memo cell and identical full native states. A local cbv_eval lemma proves
+the fixture entry equality; it avoids expanding a large normalization proof
+inside the full fixture. General array agreement is proved for all sufficient
+array bounds, rather than by one brute-force fixed-bound evaluation.
+
+All eleven new modules pass focused builds. The aggregate audit passes
+1,770 jobs and 47,483 dependency checks using only propext, Classical.choice,
+and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-one-pass-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-one-pass-checkpoint-20261015-0647/`
+(2,175 Lean-tree files and four root documents). All older proof bytes except
+audit imports, all counterexamples, marked drafts, production source, stashes,
+and other worktrees remain unchanged. The earlier 645 Haskell examples and
+formatter checks apply to the unchanged source and were not rerun.
+Weekly allowance was 16% at 06:46 CEST. Refresh it before work. Stop all work
+and owned workers immediately at 1% or less.
+
+Next connect actual guarded-edge rebuilding. Keep the original symbol and
+complete guard in makeEdge. Derive the own physical class payload and its
+validity from the actual Constraint.equalities/sourceEqualities readback.
+Derive that accepted source guards imply the required own ClassSat facts;
+do not supply a whole-edge language law or assume a guard-to-payload law.
+Use SourceCompactGuards.sourceEqualities, positiveNormalized_support, the
+normalization laws, record construction, and the complete one-pass language
+bounds. Keep inherited satisfaction explicit as the surrounding context.
+Then prove exact independent guarded-edge language and stable native edge
+execution from original construction. Open contexts, repeated fixed points,
+getAllAtPath, native containers, GHC lazy scheduling, and extraction remain
+open. Preserve exact Sized contracts, both rank inverses, the optimized core,
+and all older constructor/equality work and boundary artifacts.
 
 ## Selected class right fold and final empty propagation
 
