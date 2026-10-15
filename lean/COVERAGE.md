@@ -1,5 +1,74 @@
 # Full formalization coverage
 
+## Current executable memo merge and physical class entry
+
+Audited source main is `4101746a`, merged at `0fca52f8`.
+Proof commits are `d86eb552`, `4854718c`, `b990ff2d`, `2f2575ef`,
+and `5cbb09b7`. Audit and notes are in `f1a27d46`.
+Full library scope stays active. Earlier sections retain
+their historical source definitions and proof boundaries.
+
+The memo-aware merge now has an executable interpreter and both directions
+of completed graph correspondence. Actual finite graphs derive sufficient
+work and selection bounds. Every larger pair returns the same output,
+heap, and completed merge table. A common bound follows from the local
+selection receipts. Work fuel bounds interpreter depth, not total work.
+The physical finite/cold endpoints derive their own actual call.
+The same call supplies language coverage, producers, and global receipts.
+
+Actual merge, target, leaf, edit, row, class, and pass graphs now preserve
+normalized physical equality fields. No future field heap or old/new graph
+equality is supplied. Unselected siblings can remain open.
+
+`SourceCurrentMemoPhysicalClassPass.live_scan_pass` composes the live
+physical entry, actual successful Scan, finite required execution, and one
+finite memo-aware class pass under its reached range plan. The same pass
+supplies readiness, costs, fields, stored merge records, producer histories,
+selected domains, original/result availability, fourth-memo correctness,
+ordered global receipts, and independent original-forest language bounds.
+Only its completed merge table starts empty. Original constraint checks
+remain necessary. Successful Scan and reached ranges remain premises.
+
+The new conjunction emptiness proof derives literal tuple coverage, smaller
+requirements, finite exploration, exact source Boolean growth, and fixed-point
+soundness. Completed resident exposure, getPath readback, key faithfulness,
+and actual IntMap/lazy-runtime correspondence remain adapters.
+The new solver command model derives one scope declaration batch per process,
+local cleanup, replacement redeclaration, and unchanged logical requests.
+External SMT/process/bracket/IO behavior remains explicit.
+
+The fit-ranking component proves preservation with complete score vectors
+and no new fits for all vectors. Short vectors lose the unscored pool suffix.
+Failure returns partition order. The recorded pool is an intended request,
+not an IO receipt. A verified zero-timeout source probe makes no model call.
+Score order/stability, Double laws, and server/timeout IO remain open.
+
+The full pinned audit passes 2,206 jobs and 54,469 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Strict Nix build and all six suites pass: 749 examples plus golden.
+Fourmolu passes eight changed Haskell files. Cabal-gild passes four packages.
+Eleven new modules, two notes, and five additive Audit imports preserve every
+earlier non-Audit proof file. Upstream changes twelve source/package files.
+
+Read `lean/notes-current-memo-workers.md` and `lean/notes-main-4101746a.md`.
+Next connect executable target, shared leaf, edit, and class workers to the
+new memo-aware graphs. Continue general Scan/outer constrained completion,
+whole-pass pending publication and GHC demand, checked allocation/native and
+machine bridges, literal HashMap allocation order, import trim/DFS/SCC,
+whole enumeration/waiting counts, templates/refinements, heterogeneous
+generators, decision-model, curried/GHC, synthesis, normal forms, and all
+distinct Sized contracts. Keep the optimized interned core and older proofs.
+
+Start: `/tmp/mcfta-memo-shared-checkpoint-20261016-0128/` (2,901 files).
+Closing: `/tmp/mcfta-memo-workers-checkpoint-20261016-0149/` (2,915 files).
+Script: `/tmp/mcfta-preserve-memo-workers-20261016.py`.
+Evidence and closing preservation use `/tmp/mcfta-memo-workers-*`,
+`/tmp/mcfta-conjunction-emptiness-*`, `/tmp/mcfta-declare-once-*`, and
+`/tmp/mcfta-ghc-ranking-*`. Fourteen external drafts, stashes, and other
+worktrees remain. The last weekly allowance was 81%; it is stale. Stop owned
+work at 1% or less. No board posts or deployments. Push verified formalize
+checkpoints regularly. The full-library goal stays active.
+
 ## Current memo-aware shared class pass
 
 Audited source main is `0696b48d`, merged at `f780009a`.
