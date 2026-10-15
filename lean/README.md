@@ -7,6 +7,20 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current refused-class queries and open Mu boundary
+
+Proofs `e36ecf90` and `38569b85` connect actual seeded class queries to
+completed scoped emptiness decisions. Ordinary paths permit open unvisited
+siblings. A checked open Mu fixture disproves the remaining gate-to-domain
+implication, including sequential gate effects in one exact heap. Read
+[the result and next target](notes-source-refused-class-query.md).
+Next prove open ordinary-head reconstruction, then current caller composition.
+Exact lazy demand, checked native transfer, ranges, completion, and broader
+library obligations remain. The full audit passes 2,027 jobs and 51,762
+dependency checks, with no new warning or axiom. Prior definitions remain
+unchanged except two Audit imports. Haskell source is unchanged.
+Earlier sections retain their historical checkpoint scope.
+
 ## Current completed scoped task-table soundness
 
 Proof checkpoint `3c2346e8` derives saved class semantics, immutable body

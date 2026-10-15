@@ -1,6 +1,8 @@
 # Soundness of completed scoped task tables
 
 Proof checkpoint: `3c2346e8`. Source main: `525d722e`.
+The [seeded caller query note](notes-source-refused-class-query.md) records
+the later query decisions, local path domain, and open Mu counterexample.
 The [earlier task note](notes-source-emptiness-tasks.md) records the physical
 task model. This checkpoint closes its saved-language and accepted-row gaps.
 It does not close its source-demand or native completion gaps.

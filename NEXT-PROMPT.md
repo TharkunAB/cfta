@@ -2,6 +2,42 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Scoped refused-class queries and the open Mu boundary
+
+Proof checkpoints: `e36ecf90` and `38569b85`, pushed to origin/formalize.
+Source main remains `525d722e`. Read
+`lean/notes-source-refused-class-query.md` first. Full library scope remains.
+
+Actual seeded class queries now derive refutation from completed scoped
+emptiness decisions. Ordinary projection paths need closed selected leaves,
+not closed unrelated siblings. Empty-query and absent-key branches retain
+their distinct native effects. No final semantic answer oracle is supplied.
+
+The secondary gate does not imply the new projection domain. A checked open
+Mu fixture gives a true primary gate and a false secondary gate. The latter
+also returns false when run from the exact primary-returned heap, with no
+further heap change. Its original open Mu fails the current path domain.
+This is a proof-domain counterexample, not an emptiness-soundness defect.
+
+Next prove open ordinary-head reconstruction from actual stored unfolding,
+nodeEdges, and makeNode. Keep the input open. Derive exact language, semantic
+readiness, availability, history, and normalized fields. Existing unrestricted
+stored-unfolding and ordinary-node component lemmas supply the local facts.
+Then derive a domain from actual gate traces and compose the current caller.
+Progressive lazy demand, checked native transfer, ranges, general completion,
+waiting counts, template exclusion, and broader API/runtime gaps remain.
+Keep all separate exact Sized contracts and every prior proof and artifact.
+
+The full pinned audit passes 2,027 jobs and 51,762 dependency checks, with
+only permitted axioms and no new warning. All prior Lean definitions except
+two additive Audit imports and all four Haskell package trees are unchanged.
+Their unchanged checks were not repeated. Start:
+`/tmp/mcfta-seeded-query-start-20261015-1837/` (2,684 files). Closing:
+`/tmp/mcfta-refused-query-checkpoint-20261015-1853/` (2,691 files).
+Preservation script: `/tmp/mcfta-preserve-refused-query-20261015.py`.
+Weekly allowance is 87%. Stop owned work at 1% or less. No board posts or
+deployments. Earlier sections retain their historical checkpoint scope.
+
 ## Completed scoped task-table soundness
 
 Proof checkpoint: `3c2346e8`. Source main remains `525d722e`.

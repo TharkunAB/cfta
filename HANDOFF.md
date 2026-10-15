@@ -1,6 +1,49 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 18:32 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 18:59 CEST (Europe/Stockholm)**.
+
+## Scoped refused-class queries and the open Mu boundary
+
+Proof checkpoints `e36ecf90` and `38569b85` are pushed to origin/formalize.
+Source main remains `525d722e`. Read
+`lean/notes-source-refused-class-query.md` first. Full scope remains active.
+
+The actual seeded schedule now derives class refutation from the completed
+scoped emptiness decision. Ordinary path domains permit unrelated open
+siblings at several depths. Recursive heads still require closedness. Query
+decisions preserve empty-query and absent-key shortcuts and native states.
+They do not assume a final semantic answer or global operation oracle.
+
+A checked open Mu construction disproves secondary-gate-to-path-domain
+implication. The primary gate returns true. The sequential secondary gate
+returns false from the exact primary result heap and leaves it unchanged.
+The original Mu remains open and fails the current syntactic path domain.
+This does not establish a library soundness defect or a completed native
+caller. Do not infer input closedness from those gate answers.
+
+Next bundle open ordinary-head reconstruction. Use actual stored unfold
+completion, guarded unfold language, resident edges, and makeNode. Derive
+availability, SemanticReady, both histories, exact independent language,
+and normalized fields without a closed-input premise. Do not derive closed
+output. Then connect gate traces and projection through this head. General
+lazy demand, checked native leaves, ranges and machine identities, completion,
+both gate modes, all three memos, fallback, and whole caller remain open.
+Preserve waiting-count, template exclusion, broader APIs, and separate Sized
+contracts. Older constructor and equality proofs remain secondary targets.
+
+The full pinned audit passes 2,027 jobs and 51,762 dependency checks. Only
+permitted axioms occur. No new warning occurs. Log:
+`/tmp/mcfta-refused-query-status-audit-20261015.log`.
+Prior Lean definitions remain byte-identical except two additive Audit
+imports. All four Haskell package trees match `2652fc98`; their unchanged
+checks were not repeated. Starting snapshot:
+`/tmp/mcfta-seeded-query-start-20261015-1837/` (2,684 files). Closing snapshot:
+`/tmp/mcfta-refused-query-checkpoint-20261015-1853/` (2,691 files).
+Script: `/tmp/mcfta-preserve-refused-query-20261015.py`.
+All earlier repros, marked drafts, external drafts, stashes, and other
+worktrees remain. The new open Mu probe is also retained. Weekly allowance
+is 87%. Stop owned work at 1% or less. No board posts or deployments.
+Earlier sections retain their historical checkpoint scope.
 
 ## Completed scoped task-table soundness
 

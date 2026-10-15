@@ -1,6 +1,41 @@
 # Current formalization findings
 
-Updated: **2026-10-15 18:32 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 18:59 CEST (Europe/Stockholm)**.
+
+## Scoped refused-class queries and the open Mu boundary
+
+Proofs `e36ecf90` and `38569b85` are pushed. Source main remains `525d722e`.
+Read `lean/notes-source-refused-class-query.md`.
+
+Completed scoped decisions now refute the caller's actual seeded query.
+They retain the immediate empty-query branch and the absent-key branch.
+An ordinary projection needs closed selected leaves, not closed unvisited
+siblings. The proof derives its query fields and native state from the
+actual fold. It supplies no final semantic-answer oracle.
+
+The remaining domain implication is false. An actual open Mu construction
+has an active class, true primary gate, and false secondary gate. The
+sequential secondary call starts from the primary-returned heap and leaves
+that exact heap unchanged. The original Mu is open, so the current path
+domain fails. This is a counterexample to a proof premise. It is not a
+counterexample to emptiness soundness or a whole-source ready caller.
+
+Next prove open ordinary-head reconstruction from actual unfolding and
+ordinary allocation. Preserve language, resident values, semantic heaps,
+histories, and normalized fields. Do not assume recursive-input closedness.
+Then compose the current gate/query/fallback caller. Lazy demand, checked
+native transfer, machine ranges, general completion, waiting counts,
+template exclusion, broader APIs, and separate Sized contracts remain open.
+
+The full pinned audit passes 2,027 jobs and 51,762 dependency checks, with
+permitted axioms only and no new warning. Prior definitions remain unchanged
+except two additive Audit imports. All four Haskell package trees match
+`2652fc98`; unchanged checks were not repeated. Start snapshot:
+`/tmp/mcfta-seeded-query-start-20261015-1837/` (2,684 files). Closing snapshot:
+`/tmp/mcfta-refused-query-checkpoint-20261015-1853/` (2,691 files).
+Script: `/tmp/mcfta-preserve-refused-query-20261015.py`.
+All earlier artifacts remain. Weekly allowance is 87%. Full scope remains.
+Earlier sections retain their historical checkpoint scope.
 
 ## Completed scoped task-table soundness
 
