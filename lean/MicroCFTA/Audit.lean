@@ -1608,6 +1608,15 @@ import MicroCFTA.SourceEqualityGuardedEdgeLanguage
 import MicroCFTA.SourceEqualityGuardedEdgeSource
 import MicroCFTA.SourceEqualityGuardedEdgeExamples
 import MicroCFTA.SourceEqualityConstraintConstructors
+import MicroCFTA.SourceEqualityPCSGuard
+import MicroCFTA.SourceEqualityPCSConstructors
+import MicroCFTA.SourceEqualityPCSGuardedEdge
+import MicroCFTA.SourceEqualityPCSNativeEdge
+import MicroCFTA.SourceEqualityAnnotationLanguage
+import MicroCFTA.SourceEqualityAnnotationHeap
+import MicroCFTA.SourceEqualityAnnotationConstruction
+import MicroCFTA.SourceEqualityNormalizedEntry
+import MicroCFTA.SourceEqualityAnnotationStoredSyntax
 /-!
 # Proof dependency audit
 
