@@ -32,6 +32,7 @@ module Data.CFTA.Interned (
     edgeConstraint,
     edgeSymbol,
     nodeIdentity,
+    edgeIdentity,
     numNestedMu,
     freeVars,
     module Data.CFTA.Constraint,
@@ -71,6 +72,7 @@ module Data.CFTA.Interned (
     StateView (..),
     toTree,
     reachable,
+    canonicalClasses,
 ) where
 
 import Data.Bifunctor (first)
@@ -78,6 +80,7 @@ import Data.Graph (SCC (CyclicSCC), flattenSCC, stronglyConnComp)
 import Data.Hashable (Hashable)
 import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
+import Data.List (sort)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
@@ -179,6 +182,37 @@ reachable root = collect IntMap.empty [root]
       where
         NodeId ident = nodeIdentity node
         edges = nodeEdges node
+
+{- | Canonical classes for the nodes of a graph, which can have cycles.
+
+A node is a list of edges, and an edge is a key and the identities of its
+children. The graph and the result use the 'Int' of a 'NodeId' as the key.
+Every node starts in one class. Each round keys a node by its class
+and the sorted keys of its edges with the classes of their children, and
+numbers the classes in the order of those keys. The rounds stop when no class
+splits (ordered partition refinement). The classes depend on the content of
+the graph only, not on the identities of its nodes. A node keeps its class
+first in its key, so two nodes keep their order once a round separates them,
+and the order of two nodes does not depend on the rest of the graph. Two
+nodes share a class when their edges are the same up to the classes of their
+children.
+-}
+canonicalClasses :: (Ord key) => IntMap.IntMap [(key, [NodeId])] -> IntMap.IntMap Int
+canonicalClasses graph = refine (IntMap.map (const 0) graph) (min 1 $ IntMap.size graph)
+  where
+    refine classes count
+        | count' == count = classes'
+        | otherwise = refine classes' count'
+      where
+        keys =
+            IntMap.mapWithKey
+                ( \nodeId edges ->
+                    (classes IntMap.! nodeId, sort [(key, [classes IntMap.! child | NodeId child <- children]) | (key, children) <- edges])
+                )
+                graph
+        numbers = Map.fromList $ zip (Set.toAscList $ Set.fromList $ IntMap.elems keys) [0 ..]
+        classes' = IntMap.map (numbers Map.!) keys
+        count' = Map.size numbers
 
 {- | Intern an explicit-state graph without interpreting constraints.
 

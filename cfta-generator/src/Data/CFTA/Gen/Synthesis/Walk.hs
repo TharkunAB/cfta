@@ -11,9 +11,9 @@ module does the rest:
 
 * Hectare's automaton of each size over the erased leaves: its construction,
   its reduction, and the listing of its programs, smallest size first, in
-  Hectare's enumeration order, with each group representative expanded. Each
-  part has its own time, and a deadline stops the construction or the
-  reduction.
+  Hectare's enumeration order, each program of representatives once, with
+  each group representative expanded. Each part has its own time, and a
+  deadline stops the construction or the reduction.
 * Each program in preorder ('preorder'), checked by the host from the longest
   prefix that it shares with the host's frames. A prefix that fails goes into
   a trie of dead prefixes, and every later program under it is skipped
@@ -73,9 +73,9 @@ import Data.CFTA.Gen.Synthesis (
     Program (..),
     Query (..),
     Type,
+    distinctProgramsIn,
     expand,
     library,
-    programsIn,
     rawSearchSpace,
     reduceFully,
  )
@@ -262,7 +262,7 @@ walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead
                         Just space ->
                             programs
                                 size
-                                [program | representative <- programsIn space, program <- expand hectareLibrary representative]
+                                [program | representative <- distinctProgramsIn space, program <- expand hectareLibrary representative]
                                 state''
     programs size remaining state
         | maybe False (progressPrograms (progressOf state) >=) (limitPrograms limits) = stop state

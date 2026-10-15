@@ -65,10 +65,9 @@ import Data.Maybe (listToMaybe)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalitiesHold, noConstraint, residual)
-import Data.CFTA.Gen.Internal.Automaton (canonicalClasses)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Size (..))
-import Data.CFTA.Interned (NodeId (..))
+import Data.CFTA.Interned (NodeId (..), canonicalClasses)
 import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
 import Data.CFTA.Ranked.Internal.Size (SizedRank (..), countAtSize, sizeClassSelect)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
