@@ -2,6 +2,53 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Actual scoped class queries from secondary gates
+
+Proof checkpoint `602b20a7`, source main `525d722e`. Read
+`lean/notes-source-gate-class-query.md` first. Full scope stays active.
+Earlier sections retain their historical checkpoint scope.
+
+Actual Operand projection now advances the same scoped native state and
+retains its native memo/domain tables. Fold/Seeded derive closed resident
+results, accepted common subtrees, and normalized physical fields from
+anchored support. The seeded source rotation stays exact. An actual false
+secondary class trace plus actual Seeded and a true Decision now refutes
+the original satisfied active class. Proper paths are derived under ClassSat
+before effects/fields. No static whole-forest path domain or semantic oracle
+is supplied. General completion and whole caller remain open.
+
+Next model the reached lazy original-class prefix of the CURRENT caller.
+Do not complete primary partition before an early true query. Primary clear
+keeps its record; primary blocked runs secondary; secondary blocked skips
+query; secondary clear runs Seeded/Decision; false continues and true stops.
+Derive stopped-record membership and use the new refutes_decision. Add
+current enabled primary Path/Class memo wrappers and preserve all three
+gate memo families. Old SourceMemoClassSelection has the wrong primary
+policy. Thread actual global unfolding calls from projection/native queries.
+
+There is a separate cost invariant gap after a queried-false class:
+IdleReady/Keeps/fields do not imply the older gate Ready CostHeap needed by
+the next fresh secondary gate. Derive preservation or a sufficient local
+original-input invariant; Grows alone is insufficient. Do not hide a reached
+gate-ready assumption as a proved caller invariant. Actual native WordRanges,
+completed exploration, checked-state/runtime transfer, fallback, general
+completion, recent features, broader APIs, and Sized remain separate gaps.
+
+Concrete next cost route: actual optionalBinder via maybeMu_eq/build_costs,
+then adapt NativeBudgetHeap.Bounds.budget_heaps to CostHeap and expose
+Step.cost_heap. Carry it through actual Fold/Seeded/Decision work. Existing
+SemanticReady supplies the other old gate Ready fields. This is unproved.
+Original-record cost facts alone do not discharge new execute/hit requests.
+
+Full pinned audit: 2,046 jobs and 51,989 dependency checks, permitted axioms
+only, no new warning. Prior definitions except one additive Audit import
+and all four Haskell package trees remain byte-identical.
+Start: `/tmp/mcfta-gate-projection-checkpoint-20261015-1953/` (2,709 files).
+Closing: `/tmp/mcfta-gate-class-query-checkpoint-20261015-2002/` (2,714 files).
+Script: `/tmp/mcfta-preserve-gate-class-query-20261015.py`.
+All earlier artifacts remain. Weekly allowance is 86%. Stop owned work at
+1% or less. No board posts or deployments. Keep the optimized core.
+
 ## Actual selected projection from secondary gate traces
 
 Proof checkpoint `ea919bfa`, pushed to origin/formalize. Source main stays

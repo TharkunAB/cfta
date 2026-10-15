@@ -7,6 +7,22 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current gate-based scoped class-query proofs
+
+Proof checkpoint `602b20a7`, source main `525d722e`. Read
+[the actual class-query proof and caller limits](notes-source-gate-class-query.md).
+Actual scoped projection and both class folds derive closed resident output,
+common accepted subtrees, and normalized fields from one fixed gate anchor.
+A false secondary class trace and true actual seeded-query Decision refute
+the original active class without a static path domain or semantic oracle.
+The current lazy-prefix caller, gate cost readiness after prior query work,
+three-family memo composition, fallback, checked-state/runtime transfer, and
+general completion remain open. The pinned audit passes 2,046 jobs and
+51,989 dependency checks with no new warning or axiom. Prior definitions
+except one additive Audit import and all four Haskell package trees stay
+unchanged. Full library scope and all separate Sized contracts remain.
+Earlier sections retain historical checkpoint scope.
+
 ## Current selected projection from secondary gates
 
 Proof checkpoint `ea919bfa`, source main `525d722e`. Read

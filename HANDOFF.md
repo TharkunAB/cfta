@@ -1,6 +1,58 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 19:53 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 20:02 CEST (Europe/Stockholm)**.
+
+## Actual scoped class queries from secondary gates
+
+Proof checkpoint `602b20a7`, source main `525d722e`. Read
+`lean/notes-source-gate-class-query.md` first. Full scope stays active.
+
+Actual projection advances the same scoped native state and retains both
+native memo tables and its domain cache. Fold/Seeded derive closed resident
+results, common accepted subtrees, and physical annotations from one fixed
+gate anchor. Concrete constructors derive normalized query fields. The actual
+seeded rotation remains distinct from the analysis foldr1 schedule.
+An actual false secondary ClassTrace, actual seeded query, and true actual
+Decision now refute the original active class. The proof assumes ClassSat
+first, derives proper paths, then derives effects/fields and applies
+Decision.sound. No static path domain or semantic answer oracle is supplied.
+The source scoped native and exploration receipts remain explicit premises.
+
+Next prove a reached lazy-prefix stop theorem for current Equality/Operations.
+Primary clear records accumulate selected classes. Primary blocked records
+run secondary. Secondary blocked skips query; clear runs Seeded/Decision.
+A true decision stops before later primary queries. Exhaustion retains
+selected records for requireAll, class reduction, and empty propagation.
+Derive stopped original membership and apply the new refutes_decision.
+Old complete SourceMemoClassSelection has the free-only primary policy.
+Current enabled primary Path/Class memo wrappers remain absent. Keep the
+unfolding, predicate, and descendant families and actual global unfolding
+calls from later projections/native queries.
+
+After a queried-false class, IdleReady, fields, Keeps, and growth do not
+derive old gate Ready's cost heap for the next fresh gate. Prove actual
+preservation or a sufficient local original-input invariant. Do not infer
+CostHeap from Grows or turn a reached-ready premise into a claimed result.
+Native WordRanges, general native/exploration/fold completion, newer checked
+state, lazy sharing/runtime, fallback/whole caller, recent features, broader
+APIs, and distinct Sized contracts remain open.
+
+Proposed cost route: prove optionalBinder cost retention via maybeMu_eq and
+FreshOrdinaryCosts.build_costs, then adapt NativeBudgetHeap.Bounds.budget_heaps
+to CostHeap and expose Step.cost_heap. Carry it through Fold/Seeded/Decision.
+SemanticReady supplies the other gate Ready fields. This route is unproved;
+local original-record facts do not cover all generated execute/hit requests.
+
+Full audit: 2,046 jobs and 51,989 dependency checks, permitted axioms only,
+no new warning. Log: `/tmp/mcfta-gate-class-query-audit-20261015.log`.
+All prior definitions except one additive Audit import remain unchanged.
+All four Haskell package trees match `702443fe`; checks were not repeated.
+Start: `/tmp/mcfta-gate-projection-checkpoint-20261015-1953/` (2,709 files).
+Closing: `/tmp/mcfta-gate-class-query-checkpoint-20261015-2002/` (2,714 files).
+Script: `/tmp/mcfta-preserve-gate-class-query-20261015.py`.
+All earlier proofs, repros, drafts, stashes, and other worktrees remain.
+Weekly allowance is 86%. Stop owned work at 1% or less. No board posts
+or deployments. Earlier sections retain historical checkpoint scope.
 
 ## Actual selected projection from secondary gate traces
 

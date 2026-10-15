@@ -1,5 +1,11 @@
 # Selected projection from actual secondary gate traces
 
+The [scoped class-query note](notes-source-gate-class-query.md) records the
+later actual Operand/Fold/Seeded transfer, normalized fields, and gate-based
+class refutation. The next target is the current reached lazy class prefix
+and its gate readiness and memo invariants. Earlier limits below retain
+their checkpoint scope.
+
 Source main remains `525d722e`. The starting checkpoint is `5234cbab`.
 Proof checkpoint `ea919bfa` is pushed to origin/formalize.
 The [secondary gate note](notes-source-secondary-gate.md) records the earlier

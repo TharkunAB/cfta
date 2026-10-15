@@ -1,6 +1,47 @@
 # Current formalization findings
 
-Updated: **2026-10-15 19:53 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 20:02 CEST (Europe/Stockholm)**.
+
+## Actual scoped class queries from secondary gates
+
+Proof checkpoint `602b20a7`, source main `525d722e`. Read
+`lean/notes-source-gate-class-query.md`.
+
+Actual Operand/Fold/Seeded traces now derive retained native states, closed
+resident results, accepted common subtrees, and normalized physical fields
+from anchored projection support. A false actual secondary class gate and
+true actual seeded-query Decision refute the original active class. The
+proof derives proper paths under ClassSat before effects and fields. No
+static whole-forest domain or semantic emptiness oracle is supplied.
+
+The current caller needs a reached lazy-prefix model. A true query can stop
+before later primary classifications. Old full SourceMemoClassSelection uses
+the free-only policy and does not certify the enabled primary partition.
+Current primary Path/Class wrappers, all three gate memo families, actual
+global unfolding calls through projection/native work, and fallback remain.
+
+A fresh secondary gate after earlier queried-false work has a separate
+cost-readiness gap. Existing IdleReady/fields/Keeps/growth do not derive
+old Ready CostHeap. Prove actual preservation or a sufficient invariant
+for original inputs. Do not infer the heap from growth or hide it in a
+reached-call assumption. General completion, native word ranges, newer
+checked state, lazy/runtime transfer, recent features, broader APIs, and
+all separate Sized obligations remain open.
+
+Proposed cost route: actual optionalBinder via maybeMu_eq/build_costs, then
+the NativeBudgetHeap.Bounds induction and Step.cost_heap. SemanticReady
+already supplies the other gate Ready fields. Actual Fold/Seeded/Decision
+cost retention remains unproved. Original-record facts alone do not cover
+all reconstructed requests and cache hits in existing cost APIs.
+
+Full audit: 2,046 jobs, 51,989 dependency checks, permitted axioms only,
+no new warning. Prior definitions remain byte-identical except one Audit
+import. All four Haskell package trees match `702443fe`; checks were not
+repeated. Start: `/tmp/mcfta-gate-projection-checkpoint-20261015-1953/`
+(2,709 files). Closing: `/tmp/mcfta-gate-class-query-checkpoint-20261015-2002/`
+(2,714 files). Script: `/tmp/mcfta-preserve-gate-class-query-20261015.py`.
+All prior artifacts remain. Weekly allowance is 86%. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
 
 ## Actual selected projection from secondary gate traces
 
