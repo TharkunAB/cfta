@@ -4,6 +4,9 @@
 
 Before release, the package was called `microcfta`.
 
+- `Data.CFTA.Generic` exports the constructors of `Description`,
+  `AtomicType` and `AlgebraicType`, so that another module can read the
+  constructors and the field types of a datatype.
 - Expose constructor rows before path traversal, equality edits, and template
   restriction of recursive nodes. Retained empty recursive cycles now return
   empty instead of repeating the same unfolding request.
