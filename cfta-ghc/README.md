@@ -151,15 +151,15 @@ the fits keep the plugin's order.
 
 The scores of a model that stays loaded depend on the requests before
 them. So by default the server loads the model for each ranked hole
-(`rank-keep-alive=0`): a hole gets the same order on each compile, and each
-ranked hole costs about 4 s more. With `rank-keep-alive=5m` the model stays
-loaded, and a question takes 0.3 to 0.7 s, but the order of a hole can then
-depend on the holes before it; the plugin unloads the model at the end of
-the module.
+(`rank-keep-alive=0`): a hole gets the same order on each compile, and a
+ranked hole takes about 5 s (the first one also loads the model from the
+disk). With `rank-keep-alive=5m` the model stays loaded, and a question
+takes 0.3 to 0.7 s, but the order of a hole can then depend on the holes
+before it; the plugin unloads the model at the end of the module.
 
-On the Hoogle+ queries of rung 1, the model puts the expected fit first for
-9 of the 14 queries where the plugin's order does not (see the PR of the
-ranking for the numbers).
+On the 23 Hoogle+ queries of rung 1 that the search solves, with Nimble v3
+and the defaults, the expected fit is first for 16 queries (9 in the
+plugin's order) and in the first five for 21 (12).
 
 ## How a hole is filled
 
