@@ -1,5 +1,17 @@
 # Full formalization coverage
 
+## Current main 525d722e: representative waiting counts
+
+Source main `525d722e` is merged at `c12a0420`. Read [the source transfer](notes-main-525d722e.md).
+Waiting counts now use current UF representatives, gained/lost deltas, and
+union rekeying. Correctness is required at compound-operation endpoints.
+Older raw-key index proofs need new aggregate-count, pure-root, scheduler,
+and machine-total bridges. All Lean files and the provablyEmpty body remain
+unchanged. The captured-task semantic target and template exclusion gap remain.
+The repository-required strict Nix build and all six suites pass 704
+examples plus golden checks. Fourmolu passes both changed Haskell files.
+Earlier entries below retain historical source and proof scopes.
+
 ## Current main 54f4c272: template exclusion
 
 Source main `54f4c272` is merged at `29c6cfc7`. Read [the source update](notes-main-54f4c272.md).

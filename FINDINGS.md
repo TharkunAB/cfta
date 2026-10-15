@@ -1,6 +1,46 @@
 # Current formalization findings
 
-Updated: **2026-10-15 18:06 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 18:13 CEST (Europe/Stockholm)**.
+
+## Main 525d722e: representative waiting counts
+
+Current source main is `525d722eefb722be27def2d965b75f56c7a08bdf`.
+Preserving merge: `c12a0420`. Prior checkpoint: `eb3f6d07`.
+Backup: `backup/formalize-before-main-525d722e-20261015-1809`.
+Read `lean/notes-main-525d722e.md`, then the captured-task and template notes.
+Continue on formalize and push verified checkpoints. Full scope remains open.
+
+The source keeps waiting counts by current union-find representative. It uses
+pure root reads, gained/lost slot deltas, and post-union count relocation.
+The paired assimilation writes retain counts. Correctness must hold at the
+compound-operation endpoints; intermediate states can have stale counts.
+The scheduler now reads waiting-map keys without path-compression effects.
+Existing raw-key index proofs remain valid for their prior models. Current
+source needs aggregate-count, differential-write, rekey, pure-root, scheduler,
+and machine class-total bridges. Do not assert identical final UF storage.
+
+provablyEmpty's declaration and body are unchanged. The immediate task target
+remains immutable captured-body receipts and saved common-subtree semantics,
+then accepted-row requirements. Progressive lazy demand, checked native state,
+word bounds, general completion, and the current whole caller remain open.
+Template exclusion and all other full-library gaps remain separate targets.
+
+The repository-required strict Nix build and all six suites pass 704
+examples plus golden checks. Fourmolu passes both changed Haskell files.
+
+All Lean definitions remain unchanged; the prior 2,014-job / 51,484-dependency
+audit was not repeated. Separate Sized and Cabal metadata checks were not
+repeated because their files are unchanged. Production definitions match main.
+Only the retained constructor changelog entry and caller-repro comment differ
+in package trees. All prior proofs, repros, marked drafts, external drafts,
+stashes, and other worktrees remain. Pre-merge snapshot:
+`/tmp/mcfta-main-54f4c272-checkpoint-20261015-1806/` (2,675 files).
+Closing snapshot: `/tmp/mcfta-main-525d722e-checkpoint-20261015-1813` (2,676 files).
+Weekly allowance is 88%. Stop owned work at 1% or less. No board posts or
+deployments. Keep the optimized core and older constructor/equality work.
+Keep exact Sized node-count classes, finite execution, canonical sequence,
+distinct size order, and both signed inverses as separate contracts.
+Earlier entries below retain historical source and proof scopes.
 
 ## Main 54f4c272: template exclusion
 

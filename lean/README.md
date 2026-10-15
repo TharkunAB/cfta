@@ -1,11 +1,23 @@
 # cfta formal model
 
-Current source: `TharkunAB/cfta`, `origin/main` at `54f4c272`, merged at `29c6cfc7`.
+Current source: `TharkunAB/cfta`, `origin/main` at `525d722e`, merged at `c12a0420`.
 Continue on `formalize`; push verified checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`. Public `Data.CFTA.*`
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
+
+## Current main 525d722e: representative waiting counts
+
+Source main `525d722e` is merged at `c12a0420`. Read [the source transfer](notes-main-525d722e.md).
+Waiting counts now use current UF representatives, gained/lost deltas, and
+union rekeying. Correctness is required at compound-operation endpoints.
+Older raw-key index proofs need new aggregate-count, pure-root, scheduler,
+and machine-total bridges. All Lean files and the provablyEmpty body remain
+unchanged. The captured-task semantic target and template exclusion gap remain.
+The repository-required strict Nix build and all six suites pass 704
+examples plus golden checks. Fourmolu passes both changed Haskell files.
+Earlier entries below retain historical source and proof scopes.
 
 ## Current main 54f4c272: template exclusion
 

@@ -1,5 +1,8 @@
 # Main 54f4c272: template exclusion
 
+Main has advanced to 525d722e. Read [the representative-count update](notes-main-525d722e.md).
+The template exclusion source and obligations below remain unchanged.
+
 Current source main is `54f4c272e72c0ab4c9457d56c66653459f5c6f31`.
 The preserving merge is `29c6cfc7`. The prior proof checkpoint is
 `7489c506`. Backup reference:
