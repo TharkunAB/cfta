@@ -1710,6 +1710,10 @@ import MicroCFTA.SourceEqualityConstraintPassClosure
 import MicroCFTA.SourceEqualityConstraintOrigins
 import MicroCFTA.SourceEqualityPartialConstraintClosure
 import MicroCFTA.SourceEqualityPartialConstraintOrigins
+import MicroCFTA.SourceEqualityConstraintGeometry
+import MicroCFTA.SourceEqualityConstraintGuardInventory
+import MicroCFTA.SourceEqualityConstraintPathInventory
+import MicroCFTA.SourceEqualityConstraintInventory
 /-!
 # Proof dependency audit
 
