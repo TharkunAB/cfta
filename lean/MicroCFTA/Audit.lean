@@ -1461,6 +1461,12 @@ import MicroCFTA.SourceEqualityRequiredWorkerSound
 import MicroCFTA.SourceEqualityRequiredWorkerComplete
 import MicroCFTA.SourceEqualityRequiredExecution
 import MicroCFTA.SourceEqualityRequiredExamples
+import MicroCFTA.SourceEqualityRequiredSemanticCache
+import MicroCFTA.SourceEqualityRequiredFuture
+import MicroCFTA.SourceEqualityRequiredHeadLanguage
+import MicroCFTA.SourceEqualityRequiredListFacts
+import MicroCFTA.SourceEqualityRequiredSemanticEffects
+import MicroCFTA.SourceEqualityNeededNonnegative
 /-!
 # Proof dependency audit
 
