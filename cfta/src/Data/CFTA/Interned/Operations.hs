@@ -61,7 +61,7 @@ nodeMapChildren ::
     (Hashable symbol, Typeable symbol) =>
     (Edge symbol -> Edge symbol) -> Node symbol -> Node symbol
 nodeMapChildren _ EmptyNode = EmptyNode
-nodeMapChildren f n@(Mu _) = nodeMapChildren f (unfoldOuterRec n)
+nodeMapChildren f n@(Mu _) = nodeMapChildren f (Node $ nodeEdges n)
 nodeMapChildren f (Node es) = Node (map f es)
 nodeMapChildren f node@(InternedUnion _) = Node (map f $ nodeEdges node)
 nodeMapChildren _ (Rec _) = error "nodeMapChildren: unexpected Rec"
@@ -757,21 +757,21 @@ instance (Hashable symbol, Typeable symbol) => Pathable (Node symbol) (Node symb
 
     getPath _ EmptyNode = EmptyNode
     getPath EmptyPath n = n
-    getPath p n@(Mu _) = getPath p (unfoldOuterRec n)
+    getPath p n@(Mu _) = getPath p (Node $ nodeEdges n)
     getPath p n@(InternedUnion _) = getPath p (Node $ nodeEdges n)
     getPath (ConsPath (ChildIndex p) ps) (Node es) = union (mapMaybe (\e -> getPath ps <$> edgeChildren e !? p) es)
     getPath p _ = error $ "getPath: unexpected path " <> show p <> " for unresolved node"
 
     getAllAtPath _ EmptyNode = []
     getAllAtPath EmptyPath n = [n]
-    getAllAtPath p n@(Mu _) = getAllAtPath p (unfoldOuterRec n)
+    getAllAtPath p n@(Mu _) = getAllAtPath p (Node $ nodeEdges n)
     getAllAtPath p n@(InternedUnion _) = getAllAtPath p (Node $ nodeEdges n)
     getAllAtPath (ConsPath (ChildIndex p) ps) (Node es) = concatMap (getAllAtPath ps) (mapMaybe (\e -> edgeChildren e !? p) es)
     getAllAtPath p _ = error $ "getAllAtPath: unexpected path " <> show p <> " for unresolved node"
 
     modifyAtPath f EmptyPath n = f n
     modifyAtPath _ _ EmptyNode = EmptyNode
-    modifyAtPath f p n@(Mu _) = modifyAtPath f p (unfoldOuterRec n)
+    modifyAtPath f p n@(Mu _) = modifyAtPath f p (Node $ nodeEdges n)
     modifyAtPath f p n@(InternedUnion _) = modifyAtPath f p (Node $ nodeEdges n)
     modifyAtPath f (ConsPath p ps) (Node es) = Node (map goEdge es)
       where
@@ -810,7 +810,7 @@ requirePath ::
     (Hashable symbol, Typeable symbol) => Path -> Node symbol -> Node symbol
 requirePath EmptyPath n = n
 requirePath _ EmptyNode = EmptyNode
-requirePath p n@(Mu _) = requirePath p (unfoldOuterRec n)
+requirePath p n@(Mu _) = requirePath p (Node $ nodeEdges n)
 requirePath p n@(InternedUnion _) = requirePath p (Node $ nodeEdges n)
 requirePath p@(ConsPath (ChildIndex index) _) (Node es) =
     Node
