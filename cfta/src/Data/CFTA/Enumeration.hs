@@ -29,6 +29,7 @@ module Data.CFTA.Enumeration (
     plainTerms,
     plainTermsAtMost,
     unconstrained,
+    provablyEmpty,
 
     -- * Pruning oracles
     termsPrune,
@@ -56,15 +57,17 @@ import Data.Monoid (All (..))
 import Data.Ord (Down (..))
 import Data.Sequence (Seq ((:<|), (:|>)))
 import qualified Data.Sequence as Sequence
+import qualified Data.Set as Set
 import Data.String (IsString (..))
 import System.IO.Unsafe (unsafePerformIO)
 import Type.Reflection (Typeable, typeRep)
 
 import Data.CFTA.Equality.Constraint (
-    EqConstraints (EmptyConstraints),
+    EqConstraints (EmptyConstraints, EqContradiction),
     PathEClass (getPathTrie),
     PathTrie (PathTrie),
     isTerminalPathTrie,
+    unPathEClass,
     unsafeGetEclasses,
  )
 import Data.CFTA.Index (Depth (..))
@@ -73,6 +76,7 @@ import Data.CFTA.Internal.UnionFind (UVar, UVarGen, UnionFind, intToUVar, uvarTo
 import qualified Data.CFTA.Internal.UnionFind as UnionFind
 import Data.CFTA.Interned
 import Data.CFTA.Interned.Memo (TypeableMemoCache, memoTypeableWith, newTypeableMemoCache)
+import Data.CFTA.Path (Pathable (getPath))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 import qualified Data.HashSet as HashSet
@@ -503,6 +507,56 @@ unconstrained = memoTypeableWith @symbol unconstrainedCache $ getAll . crush fre
   where
     free (Node es) = All (all (\e -> equalities (edgeConstraint e) == EmptyConstraints && not (residual (edgeConstraint e))) es)
     free _ = All True
+
+{- | Whether a closed node provably accepts no term. False proves nothing.
+
+A node can accept a term when one of its edges can. An edge can when each of
+its children can, and, for each equality class, the intersection of the
+nodes at the paths of the class can: the subterm that the class shares is in
+each of them. The check takes the least fixed point of this rule over the
+nodes that the node reaches through children and these intersections. A node
+beyond 'emptinessBudget' of them, and a node with free references, counts as
+a node that can accept a term. So true is never wrong.
+
+Emptiness is not decidable for every automaton with path equalities, so the
+check cannot find every empty node. It finds a class whose intersection needs
+the node again, with no other way to a term.
+-}
+provablyEmpty :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Bool
+provablyEmpty start = not (canAccept (grow IntSet.empty) start)
+  where
+    -- For each node that the check reads, the requirements of each edge.
+    rows :: IntMap.IntMap [[Node symbol]]
+    rows = explore emptinessBudget IntMap.empty [start]
+
+    explore _ seen [] = seen
+    explore budget seen (n : rest)
+        | EmptyNode <- n = explore budget seen rest
+        | budget <= 0 || IntMap.member (key n) seen || not (null (freeVars n)) = explore budget seen rest
+        | otherwise = explore (budget - 1) (IntMap.insert (key n) edgeRows seen) (concat edgeRows <> rest)
+      where
+        edgeRows =
+            [ requirements (equalities (edgeConstraint e)) (edgeChildren e)
+            | e <- nodeEdges n
+            , equalities (edgeConstraint e) /= EqContradiction
+            ]
+
+    requirements classes children =
+        children
+            <> [foldr1 intersect [getPath p children | p <- Set.toList (unPathEClass pec)] | pec <- unsafeGetEclasses classes]
+
+    grow known =
+        let next = IntMap.keysSet $ IntMap.filter (any (all (canAccept known))) rows
+         in if next == known then known else grow next
+
+    canAccept _ EmptyNode = False
+    canAccept known n = IntMap.notMember (key n) rows || IntSet.member (key n) known
+
+    key n = let NodeId ident = nodeIdentity n in ident
+
+-- | The number of nodes that 'provablyEmpty' reads before it stops.
+emptinessBudget :: Int
+emptinessBudget = 1000
 
 {- | The edges of each node that a root reaches, in the order of enumeration:
 by arity, then by symbol, then by the canonical classes of their children

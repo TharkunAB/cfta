@@ -4,6 +4,15 @@
 
 Before release, the package was called `microcfta`.
 
+- `Data.CFTA.Generic` exports the constructors of `Description`,
+  `AtomicType` and `AlgebraicType`, so that another module can read the
+  constructors and the field types of a datatype.
+- `Data.CFTA.Refinement.Symbolic`: the classes `Boolean` and `Symbolic`. They
+  give the operators of the refinement logic on values (`Integer` and `Bool`)
+  and on terms (`Expr` and `Formula`), so one polymorphic function is both a
+  predicate and a refinement. `Measures` adds the children of a constructor:
+  a term on `Expr`, and the integers of a node on `Integer`, with
+  `childMeasure` for a named measure of a child.
 - Expose constructor rows before path traversal, equality edits, and template
   restriction of recursive nodes. Retained empty recursive cycles now return
   empty instead of repeating the same unfolding request.
@@ -15,6 +24,19 @@ Before release, the package was called `microcfta`.
   `excludeFTA` does the same for an explicit-state automaton: each result
   state pairs a source state with an `Obligation`, the templates that its
   terms must match and those that they must not.
+- Fix `reducePartially` not returning when a node at the end of an equality
+  path reaches a recursive node with constraints. The intersection at that
+  path unfolded the recursive node, a narrowed child contained its own
+  ancestor, and the memo demanded its own unfinished result. `termsMatching`,
+  the README's `fixUnbounded (withoutRedundantEdges . reducePartially)`, and
+  Hectare's `reduceFully` inherited this. Such a class now stays unreduced.
+  Enumeration and `accepts` still check it, so the language does not change.
+- Add `provablyEmpty`, a sound check that a closed node accepts no term: a
+  least fixed point over the node's children and the intersections of its
+  equality classes, within a budget of nodes. When the endpoint rule of
+  `reduceEqConstraints` leaves a class unreduced and the check proves the
+  intersection at its paths empty, the edge becomes empty. On the input of the
+  previous entry, `reducePartially` now returns `EmptyNode`.
 
 Initial release. `cfta` consolidates an ordinary tree automaton engine,
 equality-constrained tree automata, and liquid tree automata into one package
