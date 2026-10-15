@@ -7,6 +7,22 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current completed scoped task-table soundness
+
+Proof checkpoint `3c2346e8` derives saved class semantics, immutable body
+receipts, accepted final rows, and smaller witnesses for actual complete task
+reads. These derive finite Decomposes and one-sided table/equality-stop loop
+soundness without final-row, inventory, or primitive-operation oracles.
+Original normalized construction gives exclusion at its declared syntax
+language. Read [the proof and its limits](notes-source-emptiness-task-soundness.md).
+Completed scoped exploration remains a premise. Progressive lazy demand,
+original child forcing, checked native transfer, word bounds, completion,
+and current whole-caller composition remain open. Full scope remains.
+The pinned audit passes 2,021 jobs and 51,551 dependency checks, with no new
+warning or axiom. Prior definitions remain unchanged except one Audit import.
+All Haskell package trees are unchanged; their checks were not repeated.
+Earlier sections below retain their historical checkpoint scope.
+
 ## Current main 525d722e: representative waiting counts
 
 Source main `525d722e` is merged at `c12a0420`. Read [the source transfer](notes-main-525d722e.md).

@@ -1,6 +1,46 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 18:13 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 18:32 CEST (Europe/Stockholm)**.
+
+## Completed scoped task-table soundness
+
+Proof checkpoint `3c2346e8` is pushed to origin/formalize. Source main remains
+`525d722e`. Read `lean/notes-source-emptiness-task-soundness.md` first.
+
+Captured-body retention and saved common-subtree semantics now survive actual
+completed task execution. Actual exposure supplies accepted final row bodies.
+Complete final reads derive smaller accepted witnesses for every requirement.
+Literal lookup and physical classification derive finite Decomposes, then
+one-sided table and equality-stop loop soundness. Fresh task scopes derive
+their saved invariant. Original normalized construction derives the initial
+domain and exclusion at the original independent syntax language. No final
+accepted-row, inventory, Decomposes, or global primitive-operation oracle is
+assumed. A completed scoped exploration trace remains a premise.
+
+The next targets are progressive lazy row demand, original child forcing,
+checked native state transfer, reached word bounds and machine identities,
+native/exploration completion, actual per-call emptiness answers, and current
+whole-caller composition. The current row exposure is a complete-record
+abstraction. Both gate modes, all three memo families, the current class scan,
+and selected fallback remain in scope. Waiting counts, template exclusion,
+broader API/runtime gaps, and all separate Sized contracts remain open.
+The refused caller uses a seeded fold, not row foldr1. Prove seeded-query
+refutation. Its existing whole-forest closedness premise does not follow
+from a false secondary gate. That result concerns visited endpoints only.
+Preserve empty-query and absent-key shortcuts when modeling lazy demand.
+
+The full pinned Lean audit passes 2,021 jobs and 51,551 dependency checks.
+Only permitted axioms occur. No new warning occurs. Log:
+`/tmp/mcfta-task-soundness-audit-20261015.log`.
+All earlier Lean definitions are unchanged except one additive Audit import.
+All four Haskell package trees match `811910a2`; prior Nix tests, formatting,
+metadata, and Sized probes were not repeated. All earlier proof/repro/draft
+artifacts, external drafts, stashes, and other worktrees remain.
+Starting snapshot: `/tmp/mcfta-task-language-start-20261015-1816/` (2,676 files).
+Closing snapshot: `/tmp/mcfta-task-soundness-checkpoint-20261015-1832/`
+(2,684 files). Preservation script: `/tmp/mcfta-preserve-task-soundness-20261015.py`.
+Weekly allowance is 88%. Stop owned work at 1% or less. Full scope remains
+active. No board posts or deployments. Earlier sections are historical.
 
 ## Main 525d722e: representative waiting counts
 

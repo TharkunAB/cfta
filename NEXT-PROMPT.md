@@ -2,6 +2,40 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Completed scoped task-table soundness
+
+Proof checkpoint: `3c2346e8`. Source main remains `525d722e`.
+Read `lean/notes-source-emptiness-task-soundness.md` first. Continue on
+formalize and push verified checkpoints. Full library scope remains open.
+
+Actual captured bodies, saved common-subtree semantics, accepted final rows,
+and complete task reads now derive smaller accepted requirements for the
+literal table. SourceEmptinessTaskSoundness derives Decomposes and one-sided
+emptiness soundness without final-row, inventory, or primitive-operation
+oracles. The equality-stop loop has the same sound result. Original normalized
+construction derives the fresh input domain and original syntax exclusion.
+All of these endpoints still require a completed scoped exploration trace.
+
+Next model progressive lazy row demand and original child-thunk forcing.
+Transfer native leaves to checked constraint allocation. Derive word ranges,
+machine key adequacy, native/exploration completion, and actual per-call
+emptiness answers. Compose the current class scan, both gate modes, all three
+memo families, selected fallback, and whole caller. Preserve the separate
+waiting-count, template exclusion, API/runtime, and exact Sized obligations.
+For the refused caller, keep the seeded fold distinct from row foldr1.
+Prove seeded-query refutation next. Do not infer whole-forest closedness from
+a false secondary gate; unrelated original children can remain open.
+
+The full pinned Lean audit passes 2,021 jobs and 51,551 dependency checks,
+with no new warning or axiom. All prior Lean definitions are unchanged except
+one additive Audit import. All four Haskell package trees match `811910a2`;
+their unchanged checks were not repeated. All earlier artifacts remain.
+Starting snapshot: `/tmp/mcfta-task-language-start-20261015-1816/` (2,676 files).
+Closing snapshot: `/tmp/mcfta-task-soundness-checkpoint-20261015-1832/`
+(2,684 files). Preservation script: `/tmp/mcfta-preserve-task-soundness-20261015.py`.
+Weekly allowance is 88%. Stop owned work at 1% or less. No board posts or
+deployments. Older entries below retain their historical checkpoint scope.
+
 ## Main 525d722e: representative waiting counts
 
 Current source main is `525d722eefb722be27def2d965b75f56c7a08bdf`.

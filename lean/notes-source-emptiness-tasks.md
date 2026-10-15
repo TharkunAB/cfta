@@ -1,5 +1,11 @@
 # Captured class tasks and final physical readback
 
+The [completed task-table soundness proof](notes-source-emptiness-task-soundness.md),
+`3c2346e8`, closes the immutable-body, saved-language, and actual-row semantic
+targets below. It derives one-sided soundness from completed scoped traces.
+Progressive lazy demand, checked native transfer, bounds, completion, and
+whole-caller correspondence remain open. Earlier next targets are historical.
+
 Source main has advanced to 54f4c272. The [template exclusion update](notes-main-54f4c272.md)
 leaves equality, emptiness, and all Lean files unchanged. Continue the next
 semantic and source-demand targets below. Earlier heads retain proof scope.

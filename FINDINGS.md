@@ -1,6 +1,44 @@
 # Current formalization findings
 
-Updated: **2026-10-15 18:13 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 18:32 CEST (Europe/Stockholm)**.
+
+## Completed scoped task-table soundness
+
+Proof checkpoint: `3c2346e8`, pushed to origin/formalize. Source main remains
+`525d722e`. Read `lean/notes-source-emptiness-task-soundness.md`.
+
+Physical task readiness alone does not imply saved-result language. The new
+proof derives a separate saved common-subtree invariant from actual folds.
+Immutable body receipts survive completed cells. Actual accepted source rows
+and final reads then derive strictly smaller accepted requirements. Their
+literal classification supplies Decomposes for the existing finite kernel.
+No final-row, inventory, semantic-output, or global native-operation oracle
+is needed. This avoids the invalid assumption that a fixed resident heap
+supports arbitrary future allocating projection and intersection calls.
+
+The completed scoped table and equality-stop loop are sound at the original
+closed query's independent guarded language. Original normalized construction
+also gives exclusion at the declared syntax language. The source corollary
+still assumes a completed scoped exploration trace. It does not prove actual
+lazy Haskell demand, checked-native transfer, word ranges, or completion.
+Current per-call emptiness and whole equality-caller correspondence remain
+open, as do the waiting-count, template exclusion, and broader library gaps.
+
+Caller review preserves two further boundaries. Its intersection uses the
+seeded fold rather than the row analysis foldr1. A false secondary gate
+certifies visited endpoints, not closedness of every original child. The
+existing seeded lemmas require that stronger whole-forest premise. Derive
+path-local premises for the general caller. Exact demand transfer must also
+preserve empty-query and absent-key shortcuts before the fixed-point loop.
+
+The pinned audit passes 2,021 jobs and 51,551 dependency checks with permitted
+axioms only and no new warning. All prior definitions and artifacts remain.
+Audit gains one import. All four Haskell package trees match `811910a2`, so
+their unchanged checks were not repeated. Starting preservation snapshot:
+`/tmp/mcfta-task-language-start-20261015-1816/` (2,676 files).
+Closing snapshot: `/tmp/mcfta-task-soundness-checkpoint-20261015-1832/`
+(2,684 files). All older external drafts remain in its preservation manifest.
+Full scope and the separate exact Sized contracts remain open.
 
 ## Main 525d722e: representative waiting counts
 
