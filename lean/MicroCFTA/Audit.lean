@@ -1761,6 +1761,8 @@ import MicroCFTA.DelayedEmptinessExplore
 import MicroCFTA.SourceEmptinessInventory
 import MicroCFTA.SourceEmptinessTaskTrace
 import MicroCFTA.SourceEmptinessTaskSoundness
+import MicroCFTA.SourceRefusedClassQuery
+import MicroCFTA.SourceRefusedClassDomainBoundary
 /-!
 # Proof dependency audit
 
