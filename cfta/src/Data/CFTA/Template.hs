@@ -25,15 +25,19 @@ module Data.CFTA.Template (
     excludeAnywhere,
     excludeAnywhereFTA,
     Obligation (..),
+    excludePrefixesFTA,
+    Position (..),
     preorderPrefix,
 ) where
 
+import Control.Monad.State.Strict (evalState, gets, modify', runState)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
+import qualified Data.IntMap.Strict as IntMap
 import Data.List (partition, sort)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (isJust, mapMaybe)
+import Data.Maybe (isJust, isNothing, mapMaybe)
 import qualified Data.Set as Set
 import Data.Typeable (Typeable)
 
@@ -293,6 +297,116 @@ excludeAnywhereFTA ::
     (Ord state, Ord symbol) =>
     [Template symbol] -> FTA state symbol annotation -> FTA (state, Obligation symbol) symbol annotation
 excludeAnywhereFTA templates = excludeBelow templates templates
+
+{- | A place in the preorder of a term for 'excludePrefixesFTA': a node of
+the minimal automaton of the prefixes, or 'Free' after a node that no
+prefix continues with. The minimal automaton is the trie of the prefixes
+with each set of equal subtries as one node, so two places with the same
+continuations are one node.
+-}
+data Position = Free | At !Int
+    deriving (Eq, Ord, Read, Show)
+
+{- | Keep exactly the terms of an automaton whose preorder, each node as its
+symbol and its number of children, starts with none of the prefixes, as
+@excludeFTA (map preorderPrefix prefixes)@ does. It is for many prefixes,
+such as the dead prefixes of a search.
+
+A result state is a state of the input, the 'Position' where the preorder
+of its terms begins, and the position where it ends ('Nothing': any, for the
+root). A subtree ends 'Free' unless its whole preorder is a path of the
+prefixes' automaton; then it ends at the node of that path. So a transition
+has a copy for each sequence of the positions where its children end, and a
+term fixes them: each run of the input whose term the result keeps is a run
+of exactly one copy, and an unambiguous input gives an unambiguous result.
+A copy keeps the transition's annotation. A result state holds two nodes,
+not a set of prefixes, so a comparison of two states is cheap.
+-}
+excludePrefixesFTA ::
+    (Ord state, Ord symbol) =>
+    [[(symbol, Int)]] ->
+    FTA state symbol annotation ->
+    FTA (state, Position, Maybe Position) symbol annotation
+excludePrefixesFTA prefixes automaton =
+    -- The input is ranked, so the result is ranked and validation cannot fail.
+    fromRight (error "excludePrefixesFTA: the exclusion from a ranked automaton is ranked") $
+        FTA.mkFTA initial (evalState (walk Set.empty [initial] []) Map.empty)
+  where
+    initial = (FTA.initialState automaton, maybe Free At root, Nothing)
+    -- The minimal automaton of the prefixes. A node maps a token to the next
+    -- node, or to 'Nothing' when the token completes a prefix. The root is
+    -- 'Nothing' when the empty prefix is one of the prefixes.
+    (root, nodes) =
+        fmap (\table -> IntMap.fromList [(node, next) | (next, node) <- Map.toList table]) (runState (build prefixes) Map.empty)
+      where
+        build paths
+            | any null paths = pure Nothing
+            | otherwise = do
+                next <- traverse build (Map.fromListWith (<>) [(token, [rest]) | token : rest <- paths])
+                known <- gets (Map.lookup next)
+                case known of
+                    Just node -> pure (Just node)
+                    Nothing -> do
+                        node <- gets Map.size
+                        modify' (Map.insert next node)
+                        pure (Just node)
+    -- The position after a token, or 'Nothing' when the token completes a prefix.
+    step Free _ = Just Free
+    step (At node) token = case Map.lookup token (IntMap.findWithDefault Map.empty node nodes) of
+        Nothing -> Just Free
+        Just next -> At <$> next
+    tokenOf transition = (transitionSymbol transition, length (transitionChildren transition))
+    -- The reachable states and their transitions, with the ends of each pair of a state and a position as a memo.
+    walk _ [] rows = pure rows
+    walk seen (key : pending) rows
+        | Set.member key seen = walk seen pending rows
+        | otherwise = do
+            row <- transitionsOf key
+            walk (Set.insert key seen) (concatMap transitionChildren row <> pending) ((key, row) : rows)
+    transitionsOf (state, entry, exit)
+        | isNothing root = pure []
+        | otherwise =
+            concat
+                <$> sequence
+                    [ case step entry (tokenOf transition) of
+                        Nothing -> pure []
+                        Just start -> map (\children -> transition{transitionChildren = children}) <$> copies start exit (transitionChildren transition)
+                    | transition <- FTA.transitionsFrom automaton state
+                    ]
+    -- The children of the copies: each child with where it begins and ends,
+    -- the last one ending at the transition's end. A child that begins
+    -- 'Free' ends 'Free'.
+    copies here exit [] = pure [[] | maybe True (== here) exit]
+    copies here exit [child] = case exit of
+        Nothing
+            | here == Free -> pure [[(child, Free, Just Free)]]
+            | otherwise -> pure [[(child, here, Nothing)]]
+        Just end -> do
+            possible <- endsOf child here
+            pure [[(child, here, Just end)] | Set.member end possible]
+    copies here exit (child : rest) = do
+        possible <- endsOf child here
+        concat <$> mapM (\end -> map ((child, here, Just end) :) <$> copies end exit rest) (Set.toList possible)
+    -- Where the terms of a state can end when they begin at a position.
+    endsOf _ Free = pure (Set.singleton Free)
+    endsOf state here = do
+        known <- gets (Map.lookup (state, here))
+        case known of
+            Just result -> pure result
+            Nothing -> do
+                result <-
+                    Set.unions
+                        <$> sequence
+                            [ maybe (pure Set.empty) (\start -> foldEnds start (transitionChildren transition)) (step here (tokenOf transition))
+                            | transition <- FTA.transitionsFrom automaton state
+                            ]
+                modify' (Map.insert (state, here) result)
+                pure result
+    foldEnds start children =
+        foldl
+            (\positions child -> positions >>= \set -> Set.unions <$> mapM (endsOf child) (Set.toList set))
+            (pure (Set.singleton start))
+            children
 
 {- | The copies of an edge with a symbol and its children whose terms match
 every wanted template and no unwanted one: for each copy, what each child

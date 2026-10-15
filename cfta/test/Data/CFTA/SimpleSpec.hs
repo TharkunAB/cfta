@@ -14,14 +14,14 @@ module Data.CFTA.SimpleSpec (spec) where
 import Control.Exception (evaluate)
 import Control.Monad (forM, forM_)
 import Data.Functor.Identity (Identity (..))
-import Data.List (sort)
+import Data.List (isPrefixOf, sort)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
-import Test.QuickCheck (Gen, chooseInt, classify, elements, forAll, property, vectorOf, within)
+import Test.QuickCheck (Gen, chooseInt, classify, elements, forAll, once, property, vectorOf, within)
 
 import Data.CFTA (FTA, Transition (Transition), mapConstraints, mkFTA)
 import qualified Data.CFTA as FTA
@@ -63,9 +63,11 @@ import Data.CFTA.Template (
     excludeAnywhere,
     excludeAnywhereFTA,
     excludeFTA,
+    excludePrefixesFTA,
     matchesNone,
     matchesNowhere,
     matchesTemplate,
+    preorderPrefix,
     restrictFTA,
  )
 import Data.CFTA.Term (Term)
@@ -144,6 +146,33 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
                 forM_ [0 .. deepest explicit] $ \depth ->
                     (depth, [explicitRuns excluded (FTA.initialState excluded) term | term <- underlying depth explicit])
                         `shouldBe` (depth, [if matchesNone shapes term then explicitRuns explicit 0 term else 0 | term <- underlying depth explicit])
+
+    it "exclude preorder prefixes from the explicit view as excludeFTA of their templates does, with the input's runs" $
+        property $
+            forAll ((,) <$> automaton <*> picks) $ \(explicit, chosen) -> within 10000000 $ do
+                let trees = underlying (deepest explicit) explicit
+                    -- Prefixes of the preorders of some trees, so that some trees go.
+                    prefixes = [take count (preorderOf tree) | (index, count) <- chosen, tree <- take 1 (drop index trees)]
+                    dead term = any (`isPrefixOf` preorderOf term) prefixes
+                    viaTrie = excludePrefixesFTA prefixes explicit
+                    viaTemplates = excludeFTA (map preorderPrefix prefixes) explicit
+                forM_ [0 .. deepest explicit] $ \depth -> do
+                    (depth, sort (FTA.terms (FTA.boundDepth depth viaTrie)))
+                        `shouldBe` (depth, sort (FTA.terms (FTA.boundDepth depth viaTemplates)))
+                    (depth, [explicitRuns viaTrie (FTA.initialState viaTrie) term | term <- underlying depth explicit])
+                        `shouldBe` (depth, [if dead term then 0 else explicitRuns explicit 0 term | term <- underlying depth explicit])
+
+    it "exclude many preorder prefixes from the explicit view" $
+        -- The 22,500 prefixes g(ci, cj) with i, j < 150 over 153 leaves remove
+        -- 22,500 of the 23,409 trees.
+        once $
+            within 30000000 $ do
+                let leaves = ['c' : show index | index <- [0 :: Int .. 152]]
+                    explicit =
+                        either (error . show) id $
+                            mkFTA (0 :: Int) [(0, [Transition "g" [1, 1] noConstraint]), (1, [Transition leaf [] noConstraint | leaf <- leaves])]
+                    prefixes = [[("g", 2), (first, 0), (second, 0)] | first <- take 150 leaves, second <- take 150 leaves]
+                length (FTA.terms (excludePrefixesFTA prefixes explicit)) `shouldBe` 153 * 153 - 150 * 150
 
     it "exclude templates anywhere from the explicit view as filtering its trees does" $
         property $
@@ -408,6 +437,14 @@ template = go (2 :: Int)
 -- | At most three random templates.
 templates :: Gen [Template String]
 templates = chooseInt (0, 3) >>= \count -> vectorOf count template
+
+-- | Up to four picks of a tree and a length of its preorder prefix.
+picks :: Gen [(Int, Int)]
+picks = chooseInt (0, 4) >>= \count -> vectorOf count ((,) <$> chooseInt (0, 20) <*> chooseInt (0, 6))
+
+-- | The nodes of a term in preorder, each by its symbol and its number of children.
+preorderOf :: Term String -> [(String, Int)]
+preorderOf (Term.Node symbol children) = (symbol, length children) : concatMap preorderOf children
 
 -- | The automaton without the transitions whose constraints name a child that they do not have.
 withoutMissingChildren :: FTA Int String Constraint -> FTA Int String Constraint
