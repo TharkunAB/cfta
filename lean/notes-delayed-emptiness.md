@@ -1,5 +1,9 @@
 # Delayed worklist traces and inventories from actual entries
 
+Captured task operations now instantiate the local physical laws. Read
+[the current proof and source limits](notes-source-emptiness-tasks.md).
+The next targets below retain their historical checkpoint scope.
+
 Source main remains `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.
 Starting checkpoint: `c0ae83a2`. New proof checkpoint: `2a1e918e`.
 Read [the preceding table proofs](notes-emptiness-table-source.md) for the

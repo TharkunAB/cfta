@@ -8,6 +8,8 @@ Each row keeps its direct children first. Capture then stores one suspended
 class body for each original class, in stored path order. Capture changes
 only task storage. Exposure first completes the actual nodeEdges read and
 retains its returned constructor heap. No class task is forced here.
+Exposure uses a complete row read. The Haskell source can demand later rows
+after child work. This graph does not establish that lazy demand schedule.
 -/
 namespace MicroCFTA.SourceEmptinessTaskRows
 open Language EqualityNormalize InternedConstructorTemplates InternedProbeProvenance

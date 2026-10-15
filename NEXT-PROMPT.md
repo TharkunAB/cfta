@@ -2,6 +2,58 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Captured class tasks and final physical readback
+
+Source main remains `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.
+Starting checkpoint: `7b956d72`. Proofs: `ec3ebf72`, `305da606`,
+`c2321463`, and `66b9c097`. Read `lean/notes-source-emptiness-tasks.md`
+first. Continue on formalize and push verified checkpoints. Full scope remains.
+
+The task graph captures original forests and ordered class paths without
+native work. Actual first forces store native fold results. Hits reuse those
+complete values. Source row capture keeps the original child prefix and class
+order. Local force/exposure effects now derive final record validity,
+complete reads for every stored row task, literal table keys, and physical
+readback without supplied final inventory, coverage, or coherence. Native
+folds and row reads preserve normalized physical fields. Original normalized
+closed construction derives the initial task domain. After row completion,
+the admission budget plus one bounds equality-stop fixed-point checks.
+
+Review found two explicit source limits. Exposure completes nodeEdges reads
+and captures all rows before child work. Haskell reveals rows progressively.
+Exact lazy row demand, original child-thunk forcing, and full cache-effect
+order remain open. Task readiness proves availability and closure, not saved
+result language. No emptiness oracle or whole-caller soundness is claimed.
+
+Next derive immutable class-body receipts through capture, finish, and traces.
+Derive a saved-result common-subtree invariant using each actual Fold.included
+and class_witness. Combine accepted source rows, normalized classes, and final
+reads to derive smaller requirements for the literal table. Do not assume
+that a fixed final resident heap is closed under arbitrary native operations.
+Model progressive row demand and original child forcing. Transfer old scoped
+leaves to checked constraint allocation; derive word ranges and completion.
+Carry both gate modes and all three memo families through the current lazy
+class scan, selected fallback, and caller. General native/whole-caller
+completion remains unproved. Preserve the full intended library semantics.
+
+The pinned audit passes 2,014 jobs and 51,484 dependency checks with only
+permitted axioms. No new warning occurs. All earlier Lean definitions except
+one additive Audit import and all four package trees are unchanged. Prior
+Nix tests, metadata, formatting, and Sized probes were not repeated. All
+proofs, repros, marked drafts, external drafts, stashes, and other worktrees
+remain. Start: `/tmp/mcfta-source-emptiness-thunks-start-20261015-1743/`
+(2,667 files). Closing snapshot: `/tmp/mcfta-source-emptiness-thunks-checkpoint-20261015-1759`
+(2,674 files). Weekly allowance is 89%. Stop owned work at 1% or less.
+No board posts or deployments. Earlier targets and counts are historical.
+
+Keep runtime/source correspondence, InputsThrough, semantic finish receipts,
+sidecar coverage, candidate-parametric Mu contexts, derived refinements, named
+measures, getAllAtPath, decision-model, parser/decoder bridges, recursive
+generators, and extraction as separate targets. Keep the optimized interned
+core and older constructor/equality work. Sized exact node-count classes,
+finite execution, canonical sequence, distinct size order, and both signed
+inverse directions remain separate contracts.
+
 ## Delayed worklist traces and actual entry inventories
 
 Source main remains `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.

@@ -10,6 +10,8 @@ The reached worklist uses actual closed-domain forces and source row reads.
 Local effects derive final resident records and stable shared task results.
 Every new stored row has complete task readout at the final heap. This is
 not a proof that arbitrary native calls or whole source exploration finish.
+Exposure leaves use complete row reads. Exact Haskell row-spine demand and
+evaluation of original child thunks remain separate source transfers.
 -/
 namespace MicroCFTA.SourceEmptinessTaskTrace
 open InternedConstructorTemplates InternedProbeProvenance
@@ -62,7 +64,7 @@ theorem laws [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
   · intro value identity encoded
     exact encode_key value identity true encoded
 
-/-- A source worklist retains the exact force and exposure schedule of the delayed trace. -/
+/-- The delayed trace retains this model's completed-value forces and complete row reads. -/
 abbrev Run [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     {width : Nat} (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) :=
   DelayedEmptinessExplore.Trace (Heap := TaskState width Symbol Guard)

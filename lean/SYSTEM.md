@@ -1,5 +1,20 @@
 # Constrained languages, indexing, and distributions
 
+## Current captured-task and final-readback proofs
+
+Source main remains `a22b2ad4`. Proofs `ec3ebf72`, `305da606`, `c2321463`,
+and `66b9c097` derive captured class sharing, actual fold/row-read effects,
+normalized fields, final stored records, complete task rows, exact table keys,
+and inventory-free physical readback. Read [the proof limits and next target](notes-source-emptiness-tasks.md).
+Exposure uses complete nodeEdges reads; exact lazy row demand and original
+child forcing remain open. Saved-result language and immutable body receipts
+still need proof. Whole oracle/caller soundness, native completion, and the
+checked constraint-state transfer remain open. The pinned audit passes 2,014
+jobs and 51,484 dependency checks with no new warning or axiom. Haskell and
+all prior proof definitions remain unchanged except one additive Audit import.
+Full library scope and separate Sized contracts remain. Earlier entries below
+retain their historical checkpoint scope.
+
 ## Current delayed-worklist and entry-inventory proofs
 
 Proof checkpoint `2a1e918e`, source main unchanged at `a22b2ad4`.
