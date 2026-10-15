@@ -38,7 +38,9 @@ tree automata of `cfta`, with QuickCheck integration.
   them back. `parseType` and `parseProgram` read types
   and programs in Haskell syntax, and `renderType` and `renderProgram` print
   them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
-  suites.
+  suites. Their components and queries are in the public sublibrary
+  `cfta-generator:hoogleplus` (`Data.CFTA.Gen.Synthesis.HooglePlus`), which
+  the benchmarks and tests of this package and of `cfta-ghc` use.
 - `Data.CFTA.Gen.Synthesis.Liquid`: Hegel, the refinement-typed component
   synthesizer of the LTA paper, with liquid qualifiers, the paper's prune,
   similarity, and minimization, conditionals at the goal, and function values
