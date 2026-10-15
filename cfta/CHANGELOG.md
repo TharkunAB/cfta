@@ -97,7 +97,9 @@ remains a separate ECTA-only package.
   `runs`, `truncatedTerms`, `termsPrune`, and `termsPruneWith` need
   `Ord symbol` for this. `runsBy` lists the runs of `runs` with a weight for each
   edge: it tries the edges of a node with larger weights first, and edges
-  with equal weights in the canonical order. `edgeIdentity` of
+  with equal weights in the canonical order. `runsNarrowedBy` also applies
+  a function to the edges of each node of a run before it tries them.
+  `edgeIdentity` of
   `Data.CFTA.Interned` gives the interned identity of an edge.
 - `Data.CFTA.Simple`: the automata defined as simply as possible, on the
   explicit-state automata of `Data.CFTA`. Membership recurses on the term,

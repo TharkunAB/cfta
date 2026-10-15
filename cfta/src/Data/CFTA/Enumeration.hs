@@ -25,6 +25,7 @@ module Data.CFTA.Enumeration (
     termsWith,
     runs,
     runsBy,
+    runsNarrowedBy,
     truncatedTerms,
     plainTerms,
     plainTermsAtMost,
@@ -228,6 +229,8 @@ data EnumerationState symbol = EnumerationState
     {- ^ The weights of 'runsBy'. The enumeration tries the edges of a node
     with larger weights first.
     -}
+    , _narrowing :: Maybe ([Edge symbol] -> [Edge symbol])
+    -- ^ The function of 'runsNarrowedBy' on the edges of each node that the enumeration tries.
     }
 
 {- | The expansions of constrained recursive nodes that a UVar descends from,
@@ -261,8 +264,8 @@ the weights of the edges, if any.
 -}
 initEnumerationState ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
-    Maybe (Edge symbol -> Double) -> Node symbol -> EnumerationState symbol
-initEnumerationState weights n =
+    Maybe (Edge symbol -> Double) -> Maybe ([Edge symbol] -> [Edge symbol]) -> Node symbol -> EnumerationState symbol
+initEnumerationState weights narrowing n =
     let (uvg, uv) = UnionFind.nextUVar UnionFind.initUVarGen
         value = UVarUnenumerated (Just n) Sequence.Empty
      in EnumerationState
@@ -276,6 +279,7 @@ initEnumerationState weights n =
             HashSet.empty
             (maybe id (IntMap.map . byWeight) weights (canonicalOrder n))
             weights
+            narrowing
 
 ---------------------------------------------------------------------------
 ---------------------------- Enumeration monad ----------------------------
@@ -563,7 +567,8 @@ enumerateNode scs n =
                         Nothing -> do
                             weights <- gets _edgeWeights
                             pure $ maybe id byWeight weights (canonicalEdges n)
-                    enumerateEdge scs =<< branches edges
+                    narrowing <- gets _narrowing
+                    enumerateEdge scs =<< branches (maybe edges ($ edges) narrowing)
                 Rec recId ->
                     error $
                         "enumerateNode: unexpected unresolved recursive reference "
@@ -849,7 +854,7 @@ truncatedTerms ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
     Node symbol -> [Term (PartialSymbol symbol)]
 truncatedTerms n = map fst $
-    flip allBranches (initEnumerationState Nothing n) $ do
+    flip allBranches (initEnumerationState Nothing Nothing n) $ do
         enumerateFully
         rootTermFrag >>= expandPartialTermFrag
 
@@ -923,7 +928,7 @@ termsPruneWith ::
     Node symbol ->
     [Term symbol]
 termsPruneWith recursionSymbol ost order oracle n =
-    map fst $ flip allBranches (initEnumerationState Nothing n) $ do
+    map fst $ flip allBranches (initEnumerationState Nothing Nothing n) $ do
         enumerateFully' ost order oracle
         expandUVarWith recursionSymbol (intToUVar 0)
 
@@ -970,7 +975,7 @@ stands for truncated recursion.
 runs ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
     symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
-runs = runsFrom Nothing
+runs = runsFrom Nothing Nothing
 
 {- | 'runs' with a weight for each edge. The enumeration tries the edges of a
 node with larger weights first, and edges with equal weights in the order of
@@ -980,14 +985,34 @@ result has the runs of 'runs', in another order. A weight must not be NaN.
 runsBy ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
     (Edge symbol -> Double) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
-runsBy weight = runsFrom (Just weight)
+runsBy weight = runsFrom (Just weight) Nothing
 
--- | 'runs' with the weights of the edges, if any.
+{- | 'runsBy' with a function on the edges of each node, which the
+enumeration applies before it tries them. It sees the node of the current
+run: in a run, a node that an equality constraint reaches is the
+intersection of the nodes of all the paths of its class, because the
+enumeration expands it only after all of them. A function that keeps a
+subset of the edges keeps a subset of the runs.
+-}
+runsNarrowedBy ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    (Edge symbol -> Double) ->
+    ([Edge symbol] -> [Edge symbol]) ->
+    symbol ->
+    Node symbol ->
+    [(Term symbol, [(Constraint, Term symbol)])]
+runsNarrowedBy weight narrowing = runsFrom (Just weight) (Just narrowing)
+
+-- | 'runs' with the weights of the edges and the function on them, if any.
 runsFrom ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
-    Maybe (Edge symbol -> Double) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
-runsFrom weights recursionSymbol n =
-    map fst $ flip allBranches (initEnumerationState weights n) $ do
+    Maybe (Edge symbol -> Double) ->
+    Maybe ([Edge symbol] -> [Edge symbol]) ->
+    symbol ->
+    Node symbol ->
+    [(Term symbol, [(Constraint, Term symbol)])]
+runsFrom weights narrowing recursionSymbol n =
+    map fst $ flip allBranches (initEnumerationState weights narrowing n) $ do
         enumerateFully
         term <- expandUVarWith recursionSymbol (intToUVar 0)
         obligations <- gets _obligations
