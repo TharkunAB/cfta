@@ -56,6 +56,7 @@ module Data.CFTA.Gen.Synthesis.Walk (
     Progress (..),
     emptyProgress,
     walk,
+    timed,
 
     -- * Dead prefixes
     Dead,

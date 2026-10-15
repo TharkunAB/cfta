@@ -145,7 +145,7 @@ import Data.CFTA.GHC.NormalForm (NormalForm, mentions, normalForm, termOfId)
 import Data.CFTA.GHC.States (holeGoals)
 import Data.CFTA.Gen.Synthesis (Defaulting (..), Encoding (..), Program (..))
 import qualified Data.CFTA.Gen.Synthesis as Hectare
-import Data.CFTA.Gen.Synthesis.States (Figures, searchStates)
+import Data.CFTA.Gen.Synthesis.States (Figures, Walking (..), searchStatesWith)
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
     Erased (..),
@@ -300,8 +300,10 @@ data Options = Options
 data Mode
     = -- | Hectare's programs over the erased candidates (mode (a)).
       Hectare
-    | -- | The programs of states of GHC's own goals (mode (b), "Data.CFTA.GHC.States").
-      States
+    | {- | The programs of states of GHC's own goals (mode (b),
+      "Data.CFTA.GHC.States"), walked as the 'Walking' says.
+      -}
+      States Walking
     deriving (Eq, Show, Read)
 
 -- | Programs of up to five leaves, the first ten fits, mode (a), no other limit, with Hectare's curried types and normal forms.
@@ -439,7 +441,7 @@ streamFits options hole candidates goal accept = do
         decided cls = optionTypeDomains options && decides environment instances cls
     erased <- case optionMode options of
         Hectare -> concat <$> mapM (erasures environment decided) candidates
-        States -> pure []
+        States _ -> pure []
     let encoding
             | optionCurried options =
                 Curried defaulting (domains environment instances <> typeDomains environment instances decided)
@@ -516,14 +518,14 @@ streamFits options hole candidates goal accept = do
                         erasedGoal
                         accept'
             Nothing -> statistics emptyProgress
-        States -> do
+        States walking -> do
             goals <-
                 holeGoals
                     environment
                     [(leafOf candidate, candidateRequired candidate) | candidate <- candidates]
                     (optionMaximumSize options - 1)
                     goal
-            (progress, figures') <- searchStates limits checker hooks goals (optionAvoid options) accept'
+            (progress, figures') <- searchStatesWith walking limits checker hooks goals (optionAvoid options) accept'
             liftIO (writeIORef figures (Just figures'))
             statistics progress
   where

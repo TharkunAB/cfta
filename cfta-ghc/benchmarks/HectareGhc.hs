@@ -50,7 +50,9 @@ rung. Next to the Hoogle+ queries, the parent takes the names of the
 differential queries ('differential'), where the erasure loses information.
 
 The variable @HECTARE_GHC_MODE@ gives the mode ('optionMode'): @hectare@
-(mode (a), the default) or @states@ (mode (b), "Data.CFTA.GHC.States").
+(mode (a), the default), @states@ (mode (b), "Data.CFTA.GHC.States", in
+preorder), @automaton@ (mode (b) through one cfta automaton for each size,
+in the host's order), or @automaton-canonical@ (in the enumerator's order).
 With mode (b), a child also prints a row @figures@ with the figures of the
 states, and the parent prints it after the result row.
 
@@ -85,6 +87,7 @@ import Data.CFTA.GHC.Internal.Check (Counters (..))
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), parseProgram, renderProgram, renderType)
 import Data.CFTA.Gen.Synthesis.HooglePlus (Benchmark (..), hooglePlusBenchmarks, stackOverflowBenchmarks)
+import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
 
 main :: IO ()
 main = do
@@ -442,11 +445,13 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                 rankUsing
                 (maybe "-" (renderProgram . fitProgram) found)
 
--- | Read a mode: @hectare@ or @states@.
+-- | Read a mode: @hectare@, @states@, @automaton@, or @automaton-canonical@.
 readMode :: String -> Either String Mode
 readMode text = case text of
     "hectare" -> Right Hectare
-    "states" -> Right States
+    "states" -> Right (States Preorder)
+    "automaton" -> Right (States (Enumerated HostOrder))
+    "automaton-canonical" -> Right (States (Enumerated CanonicalOrder))
     _ -> Left ("no mode " <> text)
 
 -- | The peak memory in use and the bytes allocated, in megabytes, when the RTS keeps statistics.
