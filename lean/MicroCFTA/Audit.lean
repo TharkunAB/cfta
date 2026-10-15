@@ -1772,6 +1772,8 @@ import MicroCFTA.SourceSecondaryGateHeadHeap
 import MicroCFTA.SourceSecondaryGateProjectionLanguage
 import MicroCFTA.SourceSecondaryGateProjectionHeap
 import MicroCFTA.SourceSecondaryGateRefusedClassQuery
+import MicroCFTA.EndpointMemoGateClasses
+import MicroCFTA.SourceSecondaryGateQueryCosts
 /-!
 # Proof dependency audit
 
