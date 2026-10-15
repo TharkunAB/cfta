@@ -8,6 +8,10 @@ Before release, the package was called `microcfta`.
   references. Reuse that same probe choice when matching a Mu. This avoids
   a pending interning lookup in a closed nested constructor expression.
 
+- Expose constructor rows before path traversal, equality edits, and template
+  restriction of recursive nodes. Retained empty recursive cycles now return
+  empty instead of repeating the same unfolding request.
+
 Initial release. `cfta` consolidates an ordinary tree automaton engine,
 equality-constrained tree automata, and liquid tree automata into one package
 with one representation. The equality layer descends from `microecta`, which

@@ -253,7 +253,7 @@ requireAll paths = requireList (foldr insertNeeded (Needed IntMap.empty) paths)
     requireNode :: Needed -> Node symbol -> Node symbol
     requireNode (Needed children) n | IntMap.null children = n
     requireNode _ EmptyNode = EmptyNode
-    requireNode needed n@(Mu _) = requireNode needed (unfoldOuterRec n)
+    requireNode needed n@(Mu _) = requireNode needed (Node $ nodeEdges n)
     requireNode needed n@(InternedUnion _) = requireNode needed (Node $ nodeEdges n)
     requireNode needed@(Needed children) (Node es) =
         Node
@@ -289,7 +289,7 @@ editAll edits = editList (foldr (uncurry insertEdit) (EditBelow IntMap.empty) ed
     editNode :: Edits symbol -> Node symbol -> Node symbol
     editNode (EditAt f) n = f n
     editNode _ EmptyNode = EmptyNode
-    editNode below n@(Mu _) = editNode below (unfoldOuterRec n)
+    editNode below n@(Mu _) = editNode below (Node $ nodeEdges n)
     editNode below n@(InternedUnion _) = editNode below (Node $ nodeEdges n)
     editNode below (Node es) = Node (map (\e -> setChildren e (editList below (edgeChildren e))) es)
     editNode _ (Rec _) = error "editAll: unexpected Rec"
@@ -301,9 +301,9 @@ position can be narrowed by a concrete pattern at an equal one. 'restrict'
 keeps an edge only if its symbol and arity can match, restricts its children
 with the child templates, and keeps the edge constraints. The reduction only
 narrows the children and removes no accepted term. So the result accepts
-exactly the terms of the node that match the template. 'restrict' does not end
-on a 'Mu' whose body is its own variable, which only 'createMuDontCleanup' can
-build: @createMu (\r -> r)@ is 'EmptyNode'.
+exactly the terms of the node that match the template. Recursive nodes expose
+their constructor rows before restriction. A retained recursive cycle with no
+constructor rows restricts to 'EmptyNode'.
 -}
 termsMatching ::
     (Hashable symbol, Typeable symbol) =>

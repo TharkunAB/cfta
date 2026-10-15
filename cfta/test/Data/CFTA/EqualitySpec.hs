@@ -691,7 +691,7 @@ spec = do
         it "keeping a redundant Mu is what createMuDontCleanup is for" $
             numNestedMu (createMuDontCleanup (\_r -> Node [Edge "f" []]) :: Node Symbol) `shouldBe` 1
 
-        it "bounds retained epsilon binder cycles through their constructor closure" $ do
+        it "bounds and traverses retained epsilon binder cycles through their constructor closure" $ do
             let empty =
                     [ createMuDontCleanup id
                     , createMuDontCleanup $ \outer -> createMuDontCleanup $ const outer
@@ -702,6 +702,16 @@ spec = do
                 expected depth
                     | depth < 0 = []
                     | otherwise = Term.Node "a" [] : [Term.Node symbol [child] | symbol <- ["f", "g"], child <- expected (depth - 1)]
+            forM_ empty $ \node -> do
+                timeout 2000000 (evaluate $ nodeMapChildren id node) `shouldReturn` Just EmptyNode
+                timeout 2000000 (evaluate $ getPath (path [0]) node) `shouldReturn` Just EmptyNode
+                timeout 2000000 (evaluate $ null $ getAllAtPath (path [0]) node) `shouldReturn` Just True
+                timeout 2000000 (evaluate $ modifyAtPath id (path [0]) node) `shouldReturn` Just EmptyNode
+                timeout 2000000 (evaluate $ requirePath (path [0]) node) `shouldReturn` Just EmptyNode
+                timeout 2000000 (evaluate $ termsMatching (TemplateNode "a" []) node) `shouldReturn` Just EmptyNode
+                let classes = mkEqConstraints [[path [0, 0], path [1, 0]]]
+                timeout 2000000 (evaluate $ reduceEqConstraints classes EmptyConstraints [node, node] == [EmptyNode, EmptyNode])
+                    `shouldReturn` Just True
             forM_ [-1 .. 2] $ \depth -> do
                 forM_ empty $ \node -> do
                     freeVars node `shouldBe` Set.empty
