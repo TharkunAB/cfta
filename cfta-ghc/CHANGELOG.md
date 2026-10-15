@@ -68,7 +68,21 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   (`-fplugin=Data.CFTA.GHC.HoleFits`). After GHC's own valid hole fits, it
   gives fits of several components, which `streamFits` finds in GHC's `TcM`
   on the hole's `TypedHole`. Options: `size`, `fits`, `seconds`,
-  `programs`, `first-order`, and `only-defaulted`.
+  `programs`, `first-order`, and `only-defaulted`, and the ranking
+  (`rank`, and with it `rank-pool`, `rank-seconds`, `rank-model`, and
+  `rank-keep-alive`). `readOptions` gives `PluginOptions`.
+- `Data.CFTA.GHC.Rank`: an order of fits by a decision model of the package
+  `decision-model`, on a running Ollama with a model that has the
+  capability "decision" (Nimble v3 by default, or another by name). The
+  model gets one question about a pool of checked fits, with a description
+  of the hole (`holeState`, `fitQuestion`); `rankFits` and `rankedFits` put
+  the fits in the order of the scores, and keep their order when the model
+  fails or does not answer in time. `Ranking` holds the pool (50 by
+  default), the time limit of a question (60 s), and the server, and
+  `rankingModel` gives its model; by default the server loads the model for
+  each request (`keep_alive` 0, about 4 s), so that the scores do not depend
+  on earlier requests. The package depends
+  on `decision-model`, and so on aeson and http-client.
 - `Data.CFTA.GHC.Erase`: GHC types as Hectare's first-order types, with the
   class contexts erased, and `anyResult` for the components that would fit
   every hole once erased. An applied rigid type variable (`f a`) erases to
@@ -99,7 +113,8 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   (`statisticsStates`).
 - The `ghc-fits` executable: the programs of a type signature over the
   exports of some modules, checked in GHC's typechecker, with `--first-order`
-  and `--only-defaulted`.
+  and `--only-defaulted`, and the ranking (`--rank`, and with it
+  `--rank-pool`, `--rank-seconds`, and `--model`).
 - The `hole-fits-golden` test: GHC's messages for a module with holes,
   compiled with the plugin.
 - The `hectare-ghc` benchmark: the 45 Hoogle+ queries on a library ladder
@@ -107,4 +122,5 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `HECTARE_GHC_MODE`. The queries come from the sublibrary
   `cfta-generator:hoogleplus`. The name `stackoverflow` runs the 19 Stack
   Overflow queries, and `HECTARE_GHC_NORMAL_FORMS=off` turns off the normal
-  forms of the fits.
+  forms of the fits. `HECTARE_GHC_POOL` collects pools of fits past the
+  expected fit, and `hectare-ghc --rank` orders them with a decision model.

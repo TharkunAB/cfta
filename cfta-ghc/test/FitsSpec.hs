@@ -14,6 +14,7 @@ that does not end gives no normal form.
 -}
 module Main (main) where
 
+import Control.Concurrent (threadDelay)
 import Control.Exception (evaluate)
 import Control.Monad (forM, forM_)
 import Control.Monad.IO.Class (liftIO)
@@ -26,11 +27,14 @@ import System.Timeout (timeout)
 import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
 
 import Data.CFTA.GHC.Fits
+import Data.CFTA.GHC.HoleFits (PluginOptions (..), readOptions)
 import Data.CFTA.GHC.Internal.Check (Leaf (..), complete, newEnvironment, startWalker, step)
 import Data.CFTA.GHC.NormalForm (Term (TApp, TLam, TVar), normalForm)
+import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, rankFits, rankedFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), parseProgram, renderProgram)
 import Data.CFTA.Gen.Synthesis.Walk (preorder)
+import Decision (DecisionModel (..), Option (..), fixedModel)
 import GHC.Builtin.Types (mkListTy)
 import GHC.Core.Type (liftedTypeKind, mkTyVarTy)
 import GHC.Data.Bag (emptyBag)
@@ -197,6 +201,32 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                     loop = TApp selfApply selfApply
                 timeout 10000000 (evaluate (isNothing (normalForm (const (Just loop)) (Var "loop"))))
                     `shouldReturn` Just True
+        describe "ranking" $ do
+            let model = fixedModel (\option -> if optionName option == "b" then 2 else 1)
+                failing = DecisionModel (const (pure (Left "no server")))
+            it "orders the fits by the model's scores, keeps the order of equal scores, and reports a failure" $ do
+                ranked' <- rankFits model "a hole" id ["a", "b", "c"]
+                fmap (map fst) ranked' `shouldBe` Right ["b", "a", "c"]
+                failed <- rankFits failing "a hole" id ["a"]
+                fmap (map fst) failed `shouldBe` Left "no server"
+            it "orders the pool of a search, keeps the other fits after it, and keeps the order when the model fails" $ do
+                let fit ignores text = Fit (parse text) 1 ignores False
+                    fits = [fit False "a", fit True "e", fit False "b", fit False "c"]
+                    render = Text.pack . renderProgram . fitProgram
+                    ranking = defaultRanking{rankingPool = 2}
+                (ordered, problem) <- rankedFits model ranking "a hole" render fits
+                (map fitProgram ordered, problem) `shouldBe` (map parse ["b", "a", "c", "e"], Nothing)
+                (kept, failure) <- rankedFits failing ranking "a hole" render fits
+                (map fitProgram kept, failure) `shouldBe` (map parse ["a", "b", "c", "e"], Just "no server")
+                -- A model that does not answer in the ranking's time.
+                let slow = DecisionModel (\question -> threadDelay 2000000 >> scoreOptions model question)
+                (waited, late) <- rankedFits slow ranking{rankingSeconds = 0.05} "a hole" render fits
+                (map fitProgram waited, late) `shouldBe` (map parse ["a", "b", "c", "e"], Just "no answer in 5.0e-2 s")
+            it "turns the ranking of the plugin on only with the option rank" $ do
+                fmap (fmap rankingPool . pluginRanking) (readOptions ["rank", "rank-pool=10"]) `shouldBe` Right (Just 10)
+                fmap (fmap rankingPool . pluginRanking) (readOptions []) `shouldBe` Right Nothing
+                fmap (fmap rankingPool . pluginRanking) (readOptions ["rank-pool=10"])
+                    `shouldBe` Left "rank-pool needs the option rank: the ranking is on only with rank"
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->
                 it ("keep the fit of " <> name) $
