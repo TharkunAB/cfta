@@ -1799,6 +1799,10 @@ import MicroCFTA.SourceCurrentClassRequiredReady
 import MicroCFTA.SourceTemplateShapeSplits
 import MicroCFTA.SourceCurrentPhysicalClassPass
 import MicroCFTA.SourceCurrentMergedQueryMemos
+import MicroCFTA.SourceCurrentPhysicalClassPassLanguage
+import MicroCFTA.SourceCurrentMergeResultMemo
+import MicroCFTA.SourceSynthesisStateBudgets
+import MicroCFTA.SourceNormalFormBudget
 import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
 import MicroCFTA.SourceCurrentEnumerationStorage
