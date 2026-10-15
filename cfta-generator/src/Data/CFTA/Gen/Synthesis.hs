@@ -482,33 +482,59 @@ generalize types typ@(Node [Edge symbol _]) = case mapNodes (\node -> if isVaria
     pathsOf variable = pathsMatching (== variable) typ
 generalize _ typ = typ
 
-{- | 'generalize' in an encoding. In the curried encoding, a type variable of
-kind @* -> *@ is replaced by the types over which its class ranges, and the
-equality constraints also tie its occurrences.
+{- | 'generalize' in an encoding. In the curried encoding, a curried variable
+is replaced by the node of its domain ('domainNodes'), and the equality
+constraints also tie its occurrences.
 -}
-generalizeWith :: Encoding -> Node Symbol -> Node Symbol -> Node Symbol
-generalizeWith FirstOrder types typ = generalize types typ
-generalizeWith encoding@(Curried defaulting domains) types typ@(Node [Edge symbol _]) = case mapNodes replace typ of
+generalizeWith :: Encoding -> Map.Map Text (Node Symbol) -> Node Symbol -> Node Symbol -> Node Symbol
+generalizeWith FirstOrder _ types typ = generalize types typ
+generalizeWith (Curried _ _) nodes types typ@(Node [Edge symbol _]) = case mapNodes replace typ of
     Node [Edge _ children] -> Node [mkEdge symbol children (equalityConstraint $ mkEqConstraints $ map pathsOf variables)]
     other -> other
   where
     replace node
         | isVariable node = types
-        | Just className <- higherClass node = domain className
+        | Just className <- higherClass node = Map.findWithDefault (union []) className nodes
         | otherwise = node
-    domain className = case Map.lookup className domains of
-        Just found ->
-            union $
-                [ mapNodes (\node -> if isVariable node then types else node) (typeNodeWith encoding typ')
-                | typ' <- domainTypes found
-                ]
-                    <> domainMarkers defaulting found
-        Nothing -> union []
-    domainTypes (HeadDomain _ types') = types'
-    domainTypes (TypeDomain types') = types'
     variables = nubOrd $ crush (\node -> [node | isVariable node || isJust (higherClass node)]) typ
     pathsOf variable = pathsMatching (== variable) typ
-generalizeWith _ _ typ = typ
+generalizeWith _ _ _ typ = typ
+
+{- | The node of each domain of the curried encoding: its types, with their
+type variables replaced by the node of all types, and its markers
+('domainMarkers'). A curried variable in a type of a domain, as the
+@?Ord x0@ of @List (?Ord x0)@ in the domain of @Ord@, is the node of its
+own domain, unrolled to 'domainDepth' levels; below them it is the node of
+all types, which only adds types. So the domain of @Ord@ holds @(Int, Int)@
+and not a pair with a rigid part, and a deeper type takes the node of all
+types, as without the recursion.
+-}
+domainNodes :: Encoding -> Node Symbol -> Map.Map Text (Node Symbol)
+domainNodes encoding@(Curried defaulting domains) types = iterate deeper (nodesWith (const types)) !! domainDepth
+  where
+    deeper previous = nodesWith (\key -> Map.findWithDefault types key previous)
+    nodesWith argument = Map.map (nodeOf argument) domains
+    nodeOf argument found =
+        union $
+            [mapNodes (replace argument) (typeNodeWith encoding typ) | typ <- domainTypes found]
+                <> domainMarkers defaulting found
+    replace argument node
+        | isVariable node = types
+        | Just key <- higherClass node = argument key
+        | otherwise = node
+    domainTypes (HeadDomain _ types') = types'
+    domainTypes (TypeDomain types') = types'
+domainNodes FirstOrder _ = Map.empty
+
+{- | The levels to which 'domainNodes' unrolls a domain that refers to
+domains. A domain that refers to itself as a 'Mu' makes the reduction of
+some search spaces too large: firstKey at size 3 did not end its reduction
+in 30 seconds. A second level costs about 50 MB of allocation in the
+reduction of each small query, and on the queries that we measured it
+changes no rank.
+-}
+domainDepth :: Int
+domainDepth = 1
 
 {- | The leaves that the domain of a curried variable has beside its types,
 so that the intersection of domains in a run tells whether the program
@@ -706,7 +732,8 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNodeWith encod
   where
     encoding = libraryEncoding lib
     types = typesOf lib query
-    component name typ = Edge (Symbol name) [generalizeWith encoding types (typeNodeWith encoding typ)]
+    nodes = domainNodes encoding types
+    component name typ = Edge (Symbol name) [generalizeWith encoding nodes types (typeNodeWith encoding typ)]
     components = [(name, component name typ) | (name, typ, _) <- libraryGroups lib]
     anyFunction = Node (map snd components)
     argumentOnly = Node [component name typ | (name, typ) <- libraryArgumentOnly lib]

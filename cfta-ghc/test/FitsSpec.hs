@@ -116,7 +116,7 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                         forM_ (take 10 fits) $ \fit ->
                             accepts session ("(\\" <> unwords (map Text.unpack arguments) <> " -> " <> renderProgram fit <> ") :: " <> signature)
                                 `shouldReturn` True
-        describe "optionTypeDomains" $
+        describe "optionTypeDomains" $ do
             it "proposes no maximum at a rigid goal without a given Ord, and keeps head" $ do
                 Just typ <- typeOfExpression session "undefined :: [a] -> a"
                 let proposed domains = do
@@ -133,6 +133,21 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 with <- proposed True
                 (parse "maximum xs" `elem` without, parse "maximum xs" `elem` with, parse "head xs" `elem` with)
                     `shouldBe` (True, False, True)
+            it "follows the instance contexts: no maximum of pairs with a rigid part, a maximum of nested pairs" $ do
+                let proposed signature = do
+                        Just typ <- typeOfExpression session ("undefined :: " <> signature)
+                        traced <- newIORef []
+                        let options =
+                                defaultOptions
+                                    { optionMaximumSize = 2
+                                    , optionTypeDomains = True
+                                    , optionTrace = Just (\_ program -> modifyIORef' traced (program :))
+                                    }
+                        _ <- fitsForSignature session options candidates typ ["xs"] (\_ -> pure True)
+                        readIORef traced
+                rigidPart <- proposed "[(a, Int)] -> (a, Int)"
+                nested <- proposed "[((Int, Int), Int)] -> ((Int, Int), Int)"
+                (parse "maximum xs" `elem` rigidPart, parse "maximum xs" `elem` nested) `shouldBe` (False, True)
         describe "fitIgnoresPart" $
             it "marks the fits that ignore an argument" $ do
                 marks <- forM ignoring $ \(signature, arguments, programs) -> do

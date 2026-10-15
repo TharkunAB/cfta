@@ -30,7 +30,9 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   (`decides`) ranges over the types in scope at which each of those classes
   can have an instance, so `maximum` does not have a rigid goal `a` without
   a given `Ord a`. A run that does not determine such a variable lists one
-  typed term for it.
+  typed term for it. A domain follows the contexts of the instances, so the
+  domain of `Ord` holds `(a, b)` only with `a` and `b` in it; an instance
+  that is not the only one that can apply puts no class on its arguments.
 - `Data.CFTA.GHC.Session`: a GHC session for a program, with the imports in
   scope as in GHCi. `withSession` and `withSessionOptions` start it, with
   more packages by name or identifier, more package databases, more flags,

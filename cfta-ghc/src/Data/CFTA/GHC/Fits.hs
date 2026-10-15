@@ -125,7 +125,7 @@ import Data.IORef (atomicModifyIORef', modifyIORef', newIORef, readIORef, writeI
 import Data.List (nub, sort)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, isJust, mapMaybe)
+import Data.Maybe (catMaybes, fromMaybe, isJust, mapMaybe)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -134,6 +134,7 @@ import GHC.Clock (getMonotonicTimeNSec)
 
 import Data.CFTA.GHC.Erase (
     anyResult,
+    classKey,
     curriedClasses,
     erase,
     eraseCurried,
@@ -168,8 +169,8 @@ import GHC.Builtin.Types.Prim (alphaTy, betaTy)
 import GHC.Core.Class (className)
 import GHC.Core.ConLike (ConLike (RealDataCon))
 import GHC.Core.DataCon (dataConName, dataConNonlinearType, dataConWrapId)
-import GHC.Core.InstEnv (lookupInstEnv)
-import GHC.Core.Predicate (mkClassPred)
+import GHC.Core.InstEnv (instanceSig, lookupInstEnv, nullUnifiers)
+import GHC.Core.Predicate (getClassPredTys_maybe, mkClassPred)
 import GHC.Core.TyCo.Compare (eqType)
 import GHC.Core.TyCo.FVs (tyCoVarsOfType, tyCoVarsOfTypesList)
 import GHC.Core.TyCon (isAlgTyCon, isClassTyCon, tyConResKind, tyConTyVars)
@@ -182,9 +183,12 @@ import GHC.Core.Type (
     mkTyVarTys,
     mkVisFunTyMany,
     splitAppTys,
+    splitTyConApp_maybe,
+    substTheta,
     substTyWith,
     tyConAppTyCon_maybe,
     tyConsOfType,
+    zipTvSubst,
  )
 import GHC.Data.Bag (bagToList, emptyBag)
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
@@ -597,8 +601,7 @@ streamFits options hole candidates goal accept = do
     -- variable has a class only by an instance that matches it, as no given
     -- provides a decided class.
     typeDomains environment instances decided =
-        let keys = Map.fromList (concatMap (typeClasses decided . candidateType) candidates)
-            scope = goal : relevant <> map (body . candidateType) candidates
+        let scope = goal : relevant <> map (body . candidateType) candidates
             constructors =
                 [ mkTyConApp constructor (mkTyVarTys (tyConTyVars constructor))
                 | constructor <- nonDetEltsUniqSet (unionManyUniqSets (map (tyConsOfType . expandTypeSynonyms) scope))
@@ -610,8 +613,47 @@ streamFits options hole candidates goal accept = do
             function = mkVisFunTyMany alphaTy betaTy
             holds classes typ = all (\cls -> mayHold environment instances (mkClassPred cls [typ])) classes
             matches classes typ = all (\cls -> let (found, _, _) = lookupInstEnv False instances cls [typ] in not (null found)) classes
+            -- The classes that the context of the instance of each class puts
+            -- on the arguments of a type constructor, as a key with its
+            -- classes for each argument. An instance that is not the only one
+            -- that can apply (another match, or a unifier) puts no class on
+            -- the arguments, so a domain is never smaller than what GHC
+            -- accepts.
+            restrictions classes typ = case splitTyConApp_maybe typ of
+                Just (_, arguments) ->
+                    [ case nub [cls' | cls <- classes, cls' <- requiredOn cls argument] of
+                        [] -> Nothing
+                        classes' -> Just (classKey classes', classes')
+                    | argument <- arguments
+                    ]
+                Nothing -> []
+              where
+                requiredOn cls argument = case lookupInstEnv False instances cls [typ] of
+                    ([(instance', matched)], unifiers, _)
+                        | nullUnifiers unifiers ->
+                            let (variables, theta, _, _) = instanceSig instance'
+                                substitution = zipTvSubst variables [fromMaybe (mkTyVarTy variable) found | (variable, found) <- zip variables matched]
+                             in [ cls'
+                                | predicate <- substTheta substitution theta
+                                , Just (cls', [argument']) <- [getClassPredTys_maybe predicate]
+                                , argument' `eqType` argument
+                                , decided cls'
+                                ]
+                    _ -> []
+            -- A type constructor of the domain, with the domain of each
+            -- argument that the contexts restrict: ?Ord x0 for the first
+            -- argument of a list of Ord.
+            withArguments classes typ erased = case erased of
+                Hectare.TCons name arguments ->
+                    Hectare.TCons
+                        name
+                        [ maybe argument (\(key, _) -> Hectare.TCons ("?" <> key <> " x" <> Text.pack (show index)) []) restriction
+                        | (index, argument, restriction) <- zip3 [0 :: Int ..] arguments (restrictions classes typ <> repeat Nothing)
+                        ]
+                other -> other
             types classes =
-                sort (mapMaybe (eraseHead rigid) (filter (holds classes) constructors))
+                sort
+                    [withArguments classes typ erased | typ <- filter (holds classes) constructors, Just erased <- [eraseHead rigid typ]]
                     <> [Hectare.TFun (Hectare.TVar "x0") (Hectare.TVar "x1") | holds classes function]
                     <> [ Hectare.TCons name []
                        | variable <- free
@@ -619,7 +661,16 @@ streamFits options hole candidates goal accept = do
                        , matches classes (mkTyVarTy variable)
                        , Just name <- [rigid variable]
                        ]
-         in fmap types keys
+            -- The keys of the variables, and the keys that their domains
+            -- restrict their arguments to, until no new key comes.
+            close known [] = known
+            close known ((key, classes) : rest)
+                | Map.member key known = close known rest
+                | otherwise =
+                    let found = types classes
+                        referenced = [restriction | typ <- filter (holds classes) constructors, Just restriction <- restrictions classes typ]
+                     in close (Map.insert key found known) (rest <> referenced)
+         in close Map.empty (concatMap (typeClasses decided . candidateType) candidates)
     -- With optionOnlyDefaulted, whether a key of the curried variables of
     -- kind * -> * defaults to the list type under ExtendedDefaultRules: a
     -- key of an interactive class (of which Foldable and Traversable have

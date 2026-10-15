@@ -46,7 +46,9 @@ tree automata of `cfta`, with QuickCheck integration.
   (`Defaulting`), a variable of kind `* -> *` that a run does not determine
   takes only the list type, or none; a variable of a `TypeDomain` that a
   run does not determine gives one typed term. Marker leaves in the domains
-  give both, and `runsNarrowedBy` of `cfta` reads them in each run.
+  give both, and `runsNarrowedBy` of `cfta` reads them in each run. A
+  domain type can refer to a domain (`List (?Ord x0)`); Hectare unrolls
+  such a reference to one level, below which it takes any type.
   `parseType` and `parseProgram` read types
   and programs in Haskell syntax, and `renderType` and `renderProgram` print
   them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
