@@ -4,11 +4,11 @@ A 'Template' matches a term by its root symbol and child positions. 'Hole'
 matches any complete subtree. Exact patterns require the complete child list;
 prefix patterns constrain only the leading children. 'restrict' keeps exactly
 the matching terms of an interned graph, and 'restrictFTA' those of an
-explicit-state automaton. 'exclude' keeps exactly the terms that match none
-of some templates, and it keeps one run for each run of the input whose term
-it keeps, so that counts and ranks over the result stay exact. None of them
-interprets transition annotations; a constraint theory reduces its
-constraints afterwards.
+explicit-state automaton. 'exclude' keeps exactly the terms of an interned
+graph that match none of some templates, and 'excludeFTA' those of an
+explicit-state automaton. An unambiguous input gives an unambiguous result,
+so counts and ranks over it stay exact. None of them interprets transition
+annotations; a constraint theory reduces its constraints afterwards.
 -}
 module Data.CFTA.Template (
     Template (..),
@@ -17,11 +17,14 @@ module Data.CFTA.Template (
     restrict,
     restrictFTA,
     exclude,
+    excludeFTA,
+    Obligation (..),
 ) where
 
+import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
-import Data.List (nub, partition)
+import Data.List (nub, partition, sort)
 import Data.Maybe (mapMaybe)
 import Data.Typeable (Typeable)
 
@@ -133,8 +136,9 @@ this child too or not, and the child gets the templates that it must match
 and those that it must not. A copy of the edge whose children match all of
 some template's children has no terms, and it goes. The children of a term
 match what they match, so each run of the input whose term the result keeps
-is a run of exactly one copy: the result is as unambiguous as the input,
-and counts and ranks over it are exact.
+is a run of exactly one copy. An unambiguous input gives an unambiguous
+result, so counts and ranks over it are exact. For an ambiguous input, the
+number of runs of a term can change.
 
 The result differs from the input only as deep as the templates. Below
 them, it shares the input's nodes, and it unfolds a 'Mu' only that deep, as
@@ -161,33 +165,73 @@ refine wanted unwanted node
         EmptyNode -> EmptyNode
         Mu _ -> refine wanted' unwanted (Node $ nodeEdges node)
         InternedUnion _ -> refine wanted' unwanted (Node $ nodeEdges node)
-        Node edges -> Node (concatMap (refineEdge wanted' (nub unwanted)) edges)
+        Node edges ->
+            Node
+                [ setChildren edge (zipWith (\(wanted'', unwanted') child -> refine wanted'' unwanted' child) parts (edgeChildren edge))
+                | edge <- edges
+                , parts <- edgeCopies wanted' (nub unwanted) (edgeSymbol edge) (length (edgeChildren edge))
+                ]
         Rec _ -> error "exclude: unexpected free recursive reference"
   where
     wanted' = nub (filter (not . trivial) wanted)
 
--- | The copies of an edge whose terms match every wanted template and no unwanted one.
-refineEdge ::
-    (Hashable symbol, Typeable symbol) =>
-    [Template symbol] -> [Template symbol] -> Edge symbol -> [Edge symbol]
-refineEdge wanted unwanted edge = case traverse childrenOf wanted of
-    Nothing -> []
-    Just wantedChildren ->
-        map
-            (setChildren edge)
-            (copies (zip3 [0 ..] children (transposed wantedChildren)) (mapMaybe childrenOf unwanted))
+{- | What the terms of a state of 'excludeFTA' must match: every template of
+the first list, and none of the second.
+-}
+data Obligation symbol = Obligation ![Template symbol] ![Template symbol]
+    deriving (Eq, Ord, Read, Show)
+
+{- | Keep exactly the terms of an automaton that match none of the templates
+at the root, as 'exclude' does for an interned graph.
+
+Each result state pairs a source state with what its terms must match and
+must not ('Obligation'). A transition splits as an edge does in 'exclude'
+('edgeCopies'). Only reachable pairs are built.
+-}
+excludeFTA ::
+    (Ord state, Ord symbol) =>
+    [Template symbol] -> FTA state symbol annotation -> FTA (state, Obligation symbol) symbol annotation
+excludeFTA templates automaton =
+    -- The input is ranked, so the result is ranked and validation cannot fail.
+    fromRight (error "excludeFTA: the exclusion from a ranked automaton is ranked")
+        $ FTA.mkFTA initial
+        $ explore excludeTransitions transitionChildren initial
   where
-    children = edgeChildren edge
-    childrenOf template = childTemplates template (edgeSymbol edge) (Arity (length children))
-    transposed rows = [[row !! index | row <- rows] | index <- [0 .. length children - 1]]
-    -- For each child in turn, the unwanted templates that every earlier
-    -- child matched (alive) split into those that this child matches too
-    -- and those that it does not. A template whose part here is a hole
-    -- stays alive; one whose later parts are all holes must die here. A
-    -- copy with a template alive after the last child has no terms.
+    initial = (FTA.initialState automaton, obligation [] templates)
+    excludeTransitions (state, Obligation wanted unwanted)
+        | any trivial unwanted = []
+        | otherwise =
+            [ transition
+                { transitionChildren =
+                    zipWith (\child (wanted', unwanted') -> (child, obligation wanted' unwanted')) (transitionChildren transition) parts
+                }
+            | transition <- FTA.transitionsFrom automaton state
+            , parts <- edgeCopies wanted unwanted (transitionSymbol transition) (length (transitionChildren transition))
+            ]
+    -- One form for equal obligations, so that equal states are one state.
+    obligation wanted unwanted = Obligation (sort (nubOrd (filter (not . trivial) wanted))) (sort (nubOrd unwanted))
+
+{- | The copies of an edge with a symbol and a number of children whose terms
+match every wanted template and no unwanted one: for each copy, what each
+child must match and must not.
+
+For each child in turn, the unwanted templates that every earlier child
+matched (alive) split into those that this child matches too and those
+that it does not. A template whose part here is a hole stays alive; one
+whose later parts are all holes must die here. A copy with a template alive
+after the last child has no terms.
+-}
+edgeCopies ::
+    (Eq symbol) => [Template symbol] -> [Template symbol] -> symbol -> Int -> [[([Template symbol], [Template symbol])]]
+edgeCopies wanted unwanted symbol count = case traverse childrenOf wanted of
+    Nothing -> []
+    Just wantedChildren -> copies (zip [0 ..] (transposed wantedChildren)) (mapMaybe childrenOf unwanted)
+  where
+    childrenOf template = childTemplates template symbol (Arity count)
+    transposed rows = [[row !! index | row <- rows] | index <- [0 .. count - 1]]
     copies [] alive = [[] | null alive]
-    copies ((index, child, wantedHere) : rest) alive =
-        [ refine (wantedHere <> map (!! index) kept) (map (!! index) killed) child : later
+    copies ((index, wantedHere) : rest) alive =
+        [ (wantedHere <> map (!! index) kept, map (!! index) killed) : later
         | (chosen, notChosen) <- splits mayLive
         , let kept = forced <> chosen
               killed = mustDie <> notChosen

@@ -8,6 +8,8 @@ import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable)
 import Data.IORef (modifyIORef, newIORef, readIORef)
 import qualified Data.IntMap.Strict as IntMap
+import Data.Map.Strict (Map)
+import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Set (Set)
 import qualified Data.Set as Set
@@ -229,17 +231,24 @@ spec = do
                     HashSet.fromList (terms $ reducePartially $ exclude templates node)
                         `shouldBe` HashSet.fromList (filter (matchesNone templates) $ terms node)
 
-        it "the runs of exclude and of restrict with one template are the runs of the node" $
+        it "exclude and restrict with one template keep the terms of the node with no new ambiguity" $
+            -- For an ambiguous node, the number of runs of a term can change:
+            -- interning merges copies that become equal, and an equality
+            -- constraint ties the runs of two children that the split makes
+            -- different. A term with one run in the node has one run in the
+            -- result.
             property $
                 mapSize (min 3) $ \(template :: Template Symbol) (node :: Node Symbol) ->
-                    length (runs "Mu" (exclude [template] node)) + length (runs "Mu" (restrict template node))
-                        `shouldBe` length (runs "Mu" node)
+                    classify (all (== 1) (runCounts node)) "unambiguous input" $
+                        termsAndAmbiguity (runCounts (exclude [template] node) <> runCounts (restrict template node)) (runCounts node)
+                            `shouldBe` (Map.keys (runCounts node), [])
 
-        it "excluding templates keeps one run for each run that it keeps" $
+        it "excluding templates keeps the terms that match none with no new ambiguity" $
             property $
                 mapSize (min 3) $ \(templates :: [Template Symbol]) (node :: Node Symbol) ->
-                    length (runs "Mu" (exclude templates node))
-                        `shouldBe` length (filter (matchesNone templates . fst) (runs "Mu" node))
+                    let kept = Map.filterWithKey (\term _ -> matchesNone templates term) (runCounts node)
+                     in classify (all (== 1) (runCounts node)) "unambiguous input" $
+                            termsAndAmbiguity (runCounts (exclude templates node)) kept `shouldBe` (Map.keys kept, [])
 
     describe "recursive union" $ do
         it "retains an enclosing reference through a nested binder" $ do
@@ -997,3 +1006,13 @@ Both examples hold one redundant binder, which 'createMu' would drop, so they ar
 -}
 intTest12 :: Node Symbol
 intTest12 = createMuDontCleanup $ \_r -> createMuDontCleanup $ \r' -> Node [Edge "f" [r']]
+
+-- | The number of runs of each term of a node.
+runCounts :: Node Symbol -> Map (Term Symbol) Int
+runCounts = Map.fromListWith (+) . map (\(term, _) -> (term, 1)) . runs "Mu"
+
+{- | The terms of a result, and the terms with one run in the input that have
+more runs in the result.
+-}
+termsAndAmbiguity :: (Ord term) => Map term Int -> Map term Int -> ([term], [term])
+termsAndAmbiguity result input = (Map.keys result, [term | (term, 1) <- Map.toList input, Map.findWithDefault 0 term result > 1])

@@ -9,9 +9,12 @@ Before release, the package was called `microcfta`.
   empty instead of repeating the same unfolding request.
 - `Data.CFTA.Template.exclude` keeps exactly the terms of an interned graph
   that match none of some templates at the root, as `matchesNone` says. It
-  splits an edge by what its children match, so each run of the input whose
-  term it keeps is a run of exactly one copy, and counts and ranks over the
-  result are exact. It reaches only as deep as the templates.
+  splits an edge by what its children match, so an unambiguous input gives
+  an unambiguous result, and counts and ranks over it are exact. It reaches
+  only as deep as the templates.
+  `excludeFTA` does the same for an explicit-state automaton: each result
+  state pairs a source state with an `Obligation`, the templates that its
+  terms must match and those that they must not.
 
 Initial release. `cfta` consolidates an ordinary tree automaton engine,
 equality-constrained tree automata, and liquid tree automata into one package
