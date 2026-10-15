@@ -36,11 +36,13 @@ rest:
 * In place of the depth-first search, the table of a size can be one
   interned cfta automaton ('Enumerated'): a node for each state that the
   root reaches, and an edge for each transition and split, labeled by the
-  leaf's name. cfta's enumerator lists its programs, in its canonical order
-  or in the host's order, and each one that no dead prefix covers goes to
-  the checker. The enumerator also lists the programs under a dead prefix,
-  which the depth-first search leaves at once, and cfta-generator counts the
-  programs of the automaton exactly ('figuresCount').
+  leaf's name. The programs that Hectare's rule for the first argument
+  drops leave the automaton ('Data.CFTA.Template.excludeAnywhereFTA').
+  cfta's enumerator lists the rest, in its canonical order or in the host's
+  order, and each one that no dead prefix covers goes to the checker. The
+  enumerator also lists the programs under a dead prefix, which the
+  depth-first search leaves at once. cfta-generator counts the programs of
+  the automaton exactly ('figuresCount').
 
 The other way to tie the siblings takes the state of the real goal of each
 child, after the unifications of its siblings. It needs the host at each
@@ -65,6 +67,8 @@ module Data.CFTA.Gen.Synthesis.States (
 
 import Control.Monad (filterM)
 import Control.Monad.IO.Class (MonadIO, liftIO)
+import Data.Containers.ListUtils (nubOrd)
+import Data.Either (fromRight)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
@@ -77,6 +81,7 @@ import Data.Text (Text)
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
+import qualified Data.CFTA as FTA
 import Data.CFTA.Enumeration (runs, runsBy)
 import Data.CFTA.Gen (cardinality, fromAutomaton)
 import Data.CFTA.Gen.Synthesis (Program (..))
@@ -85,6 +90,7 @@ import Data.CFTA.Index (Cardinality (..))
 import Data.CFTA.Interned (Edge, Node, NodeId, edgeChildren, edgeSymbol, nodeIdentity)
 import qualified Data.CFTA.Interned as Interned
 import Data.CFTA.Symbol (Symbol (Symbol), symbolText)
+import Data.CFTA.Template (Template (..), excludeAnywhereFTA)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -428,7 +434,7 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
         -- enumerator, and check each one that no dead prefix covers.
         enumerated order root = do
             table <- searchTable <$> current
-            let (node, places) = automatonOf name table root
+            let (node, places) = automatonOf name avoid table root
                 count = either (const 0) (\(Cardinality n) -> n) (cardinality (fromAutomaton node))
                 weight edge = negate (fromIntegral (Map.findWithDefault 0 (edgeSymbol edge, map nodeIdentity (edgeChildren edge)) places))
                 listed = map (preorderOf . fst) $ case order of
@@ -450,20 +456,13 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
                     then Halt OutOfTime <$ outOfTime
                     else do
                         dead <- isDead tokens . searchDead <$> current
-                        if dead || ruled tokens
+                        if dead
                             then progress (\p -> p{progressSkipped = progressSkipped p + 1}) >> each rest
                             else do
                                 result <- check tokens
                                 case result of
                                     Halt _ -> pure result
                                     _ -> each rest
-        -- Hectare's rule on a whole program: the token after a leaf with
-        -- children is its first child.
-        ruled tokens = or [avoidedPair parent next | (parent, next) <- zip tokens (drop 1 tokens)]
-        avoidedPair (parent, arity) (leaf, children) =
-            arity >= 1
-                && children == 0
-                && or [parent `elem` heads && maybe True (leaf `elem`) arguments | (heads, arguments) <- avoid]
         halt outcome = do
             p <- searchProgress <$> current
             hookSize hooks (progressSize p) p
@@ -485,17 +484,24 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
     preorderOf :: Term Symbol -> [Token]
     preorderOf term = (symbolText (Term.rootLabel term), length (Term.subForest term)) : concatMap preorderOf (Term.subForest term)
 
-{- | The interned automaton of the states of a table that a state reaches: a
-node for each state, with an edge for each transition and split, labeled by
-the leaf's name, whose children are the states of the split. The map gives
-the place of each edge in the host's order (the transitions in their order,
-then the splits), by its symbol and the identities of its children; where
-two states share an edge, the first place counts.
+{- | The automaton of a size: a node for each state that the root reaches,
+and an edge for each transition and split, labeled by the leaf's name, with
+the place of each edge in its state. The programs in which a leaf of a
+rule's first list has a leaf of its second list (with 'Nothing': any leaf)
+as its first child leave it ('excludeAnywhereFTA'), so the counts of the
+automaton are those of the programs that remain. The automaton is first an
+explicit-state automaton over the leaves with their numbers of children,
+so that its alphabet is ranked. Each transition carries its place as its
+annotation, and the exclusion keeps it.
 -}
 automatonOf ::
     (Ord key) =>
-    (Int -> Text) -> Map (key, Budget) [Transition key] -> (key, Budget) -> (Node Symbol, Map (Symbol, [NodeId]) Int)
-automatonOf name table root = (nodes LazyMap.! root, places)
+    (Int -> Text) ->
+    [([Text], Maybe [Text])] ->
+    Map (key, Budget) [Transition key] ->
+    (key, Budget) ->
+    (Node Symbol, Map (Symbol, [NodeId]) Int)
+automatonOf name avoid table root = (nodes LazyMap.! FTA.initialState excluded, places)
   where
     reachable = go Set.empty [root]
     go seen [] = seen
@@ -511,20 +517,50 @@ automatonOf name table root = (nodes LazyMap.! root, places)
                   ]
                     <> rest
                 )
-    nodes = LazyMap.fromList [(state, Interned.Node (map snd (edgesOf state))) | state <- Set.toList reachable]
-    edgesOf state =
-        zip
-            [0 ..]
-            [ Interned.Edge (Symbol (name (transitionLeaf transition))) [nodes LazyMap.! (key, budget) | (budget, key) <- split]
-            | transition <- Map.findWithDefault [] state table
-            , split <- transitionSplits transition
+    -- A leaf has one number of children in each transition, so the pairs are ranked.
+    explicit =
+        fromRight (error "automatonOf: a leaf with its number of children is ranked") $
+            FTA.mkFTA
+                root
+                [ ( state
+                  , [ FTA.Transition (Symbol (name (transitionLeaf transition)), length split) [(key, budget) | (budget, key) <- split] place
+                    | (place, (transition, split)) <-
+                        zip
+                            [0 :: Int ..]
+                            [(transition, split) | transition <- Map.findWithDefault [] state table, split <- transitionSplits transition]
+                    ]
+                  )
+                | state <- Set.toList reachable
+                ]
+    arities =
+        Map.fromListWith
+            (<>)
+            [ (leaf, [count])
+            | state <- FTA.states explicit
+            , FTA.Transition (leaf, count) _ _ <- FTA.transitionsFrom explicit state
+            , count >= 1
             ]
+    rules =
+        [ TemplatePrefix (Symbol parent, count) [child]
+        | (parents, arguments) <- avoid
+        , parent <- parents
+        , count <- nubOrd (Map.findWithDefault [] (Symbol parent) arities)
+        , child <- maybe [AnyNode []] (map (\argument -> TemplateNode (Symbol argument, 0) [])) arguments
+        ]
+    excluded = excludeAnywhereFTA rules explicit
+    nodes = LazyMap.fromList [(state, Interned.Node (map snd (edgesOf state))) | state <- FTA.states excluded]
+    edgesOf state =
+        [ (place, Interned.Edge leaf (map (nodes LazyMap.!) children))
+        | FTA.Transition (leaf, _) children place <- FTA.transitionsFrom excluded state
+        ]
+    -- An edge with an empty child is not in its node, so it needs no place.
     places =
         Map.fromListWith
             (\_ old -> old)
             [ ((edgeSymbol edge, map nodeIdentity (edgeChildren edge)), place)
-            | state <- Set.toList reachable
+            | state <- FTA.states excluded
             , (place, edge) <- edgesOf state :: [(Int, Edge Symbol)]
+            , Interned.EmptyNode `notElem` edgeChildren edge
             ]
 
 {- | The splits of a size and of the arguments to use over @k@ children: the

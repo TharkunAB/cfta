@@ -73,7 +73,11 @@ tree automata of `cfta`, with QuickCheck integration.
   state is the host's key of a goal, a size, and the query arguments to
   use; the host gives the refinements of a goal (`Goals`), kept by key and
   number of children, and the search walks the table in preorder and checks
-  each complete program with the walk's `Checker`.
+  each complete program with the walk's `Checker`. With `Enumerated`, the
+  table of each size is one cfta automaton, which cfta's enumerator lists in
+  the host's order or in its own. The programs that Hectare's rule for the
+  first argument drops leave the automaton (`excludeAnywhereFTA`), so its
+  count (`figuresCount`) is that of the programs that remain.
 - `Data.CFTA.Gen.Synthesis.Hybrid`: Hectare's program spaces with Hegel's
   checks. `synthesizeHybrid` lists the programs of the base types of a
   refinement-typed query size by size, in Hectare's order, in the saturated
