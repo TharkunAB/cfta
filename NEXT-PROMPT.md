@@ -2,6 +2,72 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Scoped warm native state and exact target intersection lists
+
+Proofs: `69de4363`, `e03f2c4d`, and `e145fe27`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`, with retained traversal repair `61f2c939`.
+Continue on `formalize` and push checkpoints. Read
+`lean/notes-native-target-fold.md`. This section supersedes first-request-only
+native leaf completion and the general intersection-list target obligations.
+
+IdleReady retains actual native validity, idle memo tables, and complete
+semantic constructor heaps. Actual constructor growth advances this same
+native state. It preserves the domain cache and both native memo tables.
+Closed available operands derive Original syntax. Existing idle warm progress
+supplies finite native leaf completion. Each successful request derives all
+next-call premises, exact intersection language, closed available results,
+and stable identical full native states at every larger request bound.
+
+The source intersectList uses its first operand as seed and folds its tail
+from right to left. Empty input returns EmptyNode. Its concrete graph and
+worker now retain each actual intermediate native state. Completion follows
+from finite list length and local warm request completion. Exact independent
+language is the conjunction of all operands for nonempty lists; it is false
+for an empty list. Checked worker execution and graphs agree in both directions.
+Complete graphs have a unique result and full final native state. Captured
+operands remain available from their actual earlier base cache through Keeps.
+
+Word-range checks refer only to actual completed tail graphs and their returned
+states. They do not require a law on unrelated caches or reset memo tables.
+These machine-bound premises remain explicit. A common proof bound instruments
+each native request; it is not a new API parameter or whole-fold resume claim.
+
+General forest projection now advances this retained native state. All initial
+and final cache premises, stable execution, and accepted-subterm inclusion
+follow from the completed general getPath proof. Domain and both memo tables
+remain equal across projection. Actual target-list construction followed by
+one actual narrowing request derives exact input-and-target-conjunction
+language and finite completion in the same native state. The graph describes
+one target construction and application; shared repeated target forcing and
+the full simultaneous edit traversal remain separate caller obligations.
+
+The aggregate audit passes 1,677 jobs and 46,148 dependency checks using only
+propext, Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. All six new modules pass focused builds. Kernel checks verify empty
+and singleton shortcuts, first-seeded right-fold order, and actual warm reuse
+of one returned node memo cell across two- and three-operand folds.
+Log: `/tmp/mcfta-native-target-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-native-target-checkpoint-20261015-0424/`
+(2,075 Lean-tree files and four root documents). Older proofs are unchanged
+except added audit imports. Repros, counterexamples, marked drafts, stashes,
+other worktrees, and production source remain. No Haskell source changed;
+the earlier 645 examples and formatter checks apply to the unchanged tree.
+Weekly allowance was 17% at 04:24 CEST; refresh before work.
+Stop all work at 1% or less.
+
+Next carry scoped IdleReady and captured target availability through actual
+simultaneous edit node, child, and row operations. Use actual native Step
+receipts and advanceHeap for constructor effects. Preserve full native state
+and actual leaf word checks. The global LeafLaw still quantifies unrelated
+caches and is not an instantiation for arbitrary captured native targets.
+Derive actual mergeAlternatives independent-language inclusion and semantic
+cache preservation. Existing MergedColdMergeSoundness covers finite prepared
+common-cache graph language, not this final independent language/caller law.
+Then connect original class targets, class edit batches, ordered class folds,
+and empty propagation. Full one-pass correspondence, open contexts, repeated
+fixed points, getAllAtPath, native containers, lazy scheduling, and extraction
+remain open. Preserve exact Sized contracts and the optimized interned core.
+
 ## General closed getPath execution and subterm inclusion
 
 Proofs: `587c633a`, `eb094eb9`, and `3dd8ee3b`. Source: `TharkunAB/cfta`,

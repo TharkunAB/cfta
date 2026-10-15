@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Scoped native target application (2026-10-15 04:24 CEST)
+
+Concrete target-list workers now have physical graphs, two-way execution
+agreement, finite warm progress, and exact independent intersection language.
+Projection and one target application retain full native state and real
+captured cache scope. Read [the current note](notes-native-target-fold.md).
+Word checks stay at actual request states. Shared target forcing, full edits,
+native lazy scheduling, and extraction remain separate. No Lava or Rocq
+dependency is added.
+
 ## General path graph application (2026-10-15 04:13 CEST)
 
 The actual general getPath worker now has two-way physical graph agreement,

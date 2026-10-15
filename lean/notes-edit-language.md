@@ -5,6 +5,15 @@ Proofs: `c6f33d9d`, `172ce399`, and `6359b4a4`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+## Current scoped native target checkpoint
+
+`69de4363`, `e03f2c4d`, and `e145fe27` derive idle warm native leaf
+completion, exact source intersection lists, retained native projection state,
+and one target construction/application. Read
+[the current note](notes-native-target-fold.md). Full simultaneous edits,
+shared target forcing, and independent merger inclusion remain open.
+The earlier first-request and intersection-list next-target text is historical.
+
 ## Current general projection checkpoint
 
 `587c633a`, `eb094eb9`, and `3dd8ee3b` derive the general closed source

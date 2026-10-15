@@ -37,7 +37,7 @@ def WarmResults : SourceRecursiveIntersectionNative.Outcome 8 Nat Unit (Value Na
       intersectList () (fun _ _ => ()) 16 [.empty, .empty] state = .done .empty state
   | _ => False
 
-/-- Two and three actual native requests preserve the same populated memo tables. -/
+/-- Two- and three-operand native folds preserve the same populated memo tables. -/
 theorem warm_reuse : WarmResults (intersectList () (fun _ _ => ()) 16 [.empty, .empty] cold) := by
   set_option maxRecDepth 20000 in
   set_option cbv.maxSteps 30000000 in
