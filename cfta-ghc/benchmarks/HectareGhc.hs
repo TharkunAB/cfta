@@ -404,9 +404,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                 let arguments = [(argument, Text.pack (renderType typ)) | (argument, typ) <- ghcArguments query]
                     state =
                         holeState
-                            (Text.pack name)
-                            (Text.pack (signatureOf query))
-                            (map fst arguments)
+                            (Just (Text.pack name, Text.pack (signatureOf query), map fst arguments))
                             (Text.pack (renderType (ghcGoal query)))
                             arguments
                     expected = lookup True (zip (map snd fits) [0 :: Int ..])

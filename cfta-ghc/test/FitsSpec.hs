@@ -24,7 +24,7 @@ import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
 
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Leaf (..), complete, newEnvironment, startWalker, step)
-import Data.CFTA.GHC.Rank (rankFits)
+import Data.CFTA.GHC.Rank (rankFits, rankedFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), parseProgram, renderProgram)
 import Data.CFTA.Gen.Synthesis.Walk (preorder)
@@ -189,13 +189,22 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 fits <- readIORef found
                 [lookup program [(fitProgram fit, fitDropsArgument fit) | fit <- fits] | program <- wanted]
                     `shouldBe` [Just True, Just False]
-        describe "rankFits" $
+        describe "ranking" $ do
+            let model = fixedModel (\option -> if optionName option == "b" then 2 else 1)
+                failing = DecisionModel (const (pure (Left "no server")))
             it "orders the fits by the model's scores, keeps the order of equal scores, and reports a failure" $ do
-                let model = fixedModel (\option -> if optionName option == "b" then 2 else 1)
                 ranked' <- rankFits model "a hole" id ["a", "b", "c"]
                 fmap (map fst) ranked' `shouldBe` Right ["b", "a", "c"]
-                failed <- rankFits (DecisionModel (const (pure (Left "no server")))) "a hole" id ["a"]
+                failed <- rankFits failing "a hole" id ["a"]
                 fmap (map fst) failed `shouldBe` Left "no server"
+            it "orders the pool of a search, keeps the other fits after it, and keeps the order when the model fails" $ do
+                let fit ignores text = Fit (parse text) 1 ignores False
+                    fits = [fit False "a", fit True "e", fit False "b", fit False "c"]
+                    render = Text.pack . renderProgram . fitProgram
+                (ordered, problem) <- rankedFits model "a hole" 2 render fits
+                (map fitProgram ordered, problem) `shouldBe` (map parse ["b", "a", "c", "e"], Nothing)
+                (kept, failure) <- rankedFits failing "a hole" 2 render fits
+                (map fitProgram kept, failure) `shouldBe` (map parse ["a", "b", "c", "e"], Just "no server")
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->
                 it ("keep the fit of " <> name) $
