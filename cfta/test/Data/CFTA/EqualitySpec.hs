@@ -8,6 +8,9 @@ import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable)
 import Data.IORef (modifyIORef, newIORef, readIORef)
 import qualified Data.IntMap.Strict as IntMap
+import Data.List (sort)
+import Data.Map.Strict (Map)
+import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Set (Set)
 import qualified Data.Set as Set
@@ -214,6 +217,75 @@ spec = do
                     HashSet.fromList (terms $ termsMatching template node)
                         `shouldBe` HashSet.fromList (filter (matchesTemplate template) $ terms node)
 
+        it "excludes the terms under a prefix and keeps the others" $ do
+            let leaf = Node [Edge "a" [], Edge "b" []] :: Node Symbol
+                pairs = Node [Edge "g" [leaf, leaf]]
+                underA = TemplateNode "g" [TemplateNode "a" [], Hole]
+                term first second = Term.Node "g" [Term.Node first [], Term.Node second []]
+            Set.fromList (terms $ exclude [underA] pairs) `shouldBe` Set.fromList [term "b" "a", term "b" "b"]
+            Set.fromList (terms $ exclude [underA, TemplateNode "g" [Hole, TemplateNode "b" []]] pairs)
+                `shouldBe` Set.fromList [term "b" "a"]
+
+        it "excluding templates from a finite ECTA agrees with filtering its terms" $
+            property $
+                mapSize (min 3) $ \(templates :: [Template Symbol]) (node :: Node Symbol) ->
+                    HashSet.fromList (terms $ reducePartially $ exclude templates node)
+                        `shouldBe` HashSet.fromList (filter (matchesNone templates) $ terms node)
+
+        it "exclude and restrict with one template keep the terms of the node with no new ambiguity" $
+            -- For an ambiguous node, the number of runs of a term can change:
+            -- interning merges copies that become equal, and an equality
+            -- constraint ties the runs of two children that the split makes
+            -- different. A term with one run in the node has one run in the
+            -- result.
+            property $
+                mapSize (min 3) $ \(template :: Template Symbol) (node :: Node Symbol) ->
+                    classify (all (== 1) (runCounts node)) "unambiguous input" $
+                        termsAndAmbiguity (runCounts (exclude [template] node) <> runCounts (restrict template node)) (runCounts node)
+                            `shouldBe` (Map.keys (runCounts node), [])
+
+        it "excluding templates keeps the terms that match none with no new ambiguity" $
+            property $
+                mapSize (min 3) $ \(templates :: [Template Symbol]) (node :: Node Symbol) ->
+                    let kept = Map.filterWithKey (\term _ -> matchesNone templates term) (runCounts node)
+                     in classify (all (== 1) (runCounts node)) "unambiguous input" $
+                            termsAndAmbiguity (runCounts (exclude templates node)) kept `shouldBe` (Map.keys kept, [])
+
+        it "excluding templates anywhere from a finite ECTA agrees with filtering its terms" $
+            property $
+                mapSize (min 3) $ \(templates :: [Template Symbol]) (node :: Node Symbol) ->
+                    HashSet.fromList (terms $ reducePartially $ excludeAnywhere templates node)
+                        `shouldBe` HashSet.fromList (filter (matchesNowhere templates) $ terms node)
+
+        it "excluding templates anywhere keeps the terms that match nowhere with no new ambiguity" $
+            property $
+                mapSize (min 3) $ \(templates :: [Template Symbol]) (node :: Node Symbol) ->
+                    let kept = Map.filterWithKey (\term _ -> matchesNowhere templates term) (runCounts node)
+                     in classify (all (== 1) (runCounts node)) "unambiguous input" $
+                            termsAndAmbiguity (runCounts (excludeAnywhere templates node)) kept `shouldBe` (Map.keys kept, [])
+
+        it "excludes a template anywhere in a recursive automaton" $ do
+            let grammar :: Node Symbol
+                grammar = Mu $ \self -> Node [Edge "a" [], Edge "b" [], Edge "wrap" [self]]
+                wrap term = Term.Node "wrap" [term]
+                a = Term.Node "a" []
+                twice = TemplateNode "wrap" [TemplateNode "wrap" [Hole]]
+            Set.fromList (terms (excludeAnywhere [twice] grammar))
+                `shouldBe` Set.fromList [a, Term.Node "b" [], wrap a, wrap (Term.Node "b" [])]
+            Set.fromList (plainTermsAtMost 5 (excludeAnywhere [TemplateNode "b" []] grammar))
+                `shouldBe` Set.fromList (filter (matchesNowhere [TemplateNode "b" []]) (plainTermsAtMost 5 grammar))
+
+        it "gives the template of a prefix in preorder" $ do
+            preorderPrefix [("f" :: Symbol, 2), ("g", 0)] `shouldBe` TemplateNode "f" [TemplateNode "g" [], Hole]
+            preorderPrefix ([] :: [(Symbol, Int)]) `shouldBe` Hole
+
+        it "gives a template that each term with the prefix matches" $
+            property $ \(node :: Node Symbol) (count :: NonNegative Int) ->
+                and
+                    [ matchesTemplate (preorderPrefix (take (getNonNegative count) (preorderOf term))) term
+                    | term <- take 20 (terms node)
+                    ]
+
     describe "recursive union" $ do
         it "retains an enclosing reference through a nested binder" $ do
             let grammar :: Node Symbol
@@ -361,15 +433,83 @@ spec = do
                 shallowTerms depth (fixUnbounded reducePartially n) `shouldBe` shallowTerms depth n
 
         it "stops on classes over recursive children" $
-            -- 'reducePartially'' never enters a 'Mu', so only the fixpoint in
-            -- 'reduceEqConstraints' and repeated rounds can run forever. Each
-            -- case must end within two seconds.
+            -- 'reducePartially'' never enters a 'Mu'. No proof shows that one
+            -- pass, or repeated rounds, end on every input. Each case must end
+            -- within two seconds.
             property $
                 forAll recursiveNode $ \m -> within 2000000 $ ioProperty $ do
                     onePass <- evaluate (reducePartially m)
                     rounds <- evaluate (fixUnbounded reducePartially m)
                     _ <- evaluate (nodeCount onePass + nodeCount rounds)
                     pure $ shallowTerms 3 onePass == shallowTerms 3 m && shallowTerms 3 rounds == shallowTerms 3 m
+
+        it "empties a class that ends at a constrained recursive node" $ do
+            -- The input of the next test without the wrappers at the root:
+            -- the class 0 = 1 ends at the constrained 'Mu' 'constrained'
+            -- itself. The intersection of the two children needs the root
+            -- again, so the root accepts no term. With "a" in the second
+            -- child too, the root accepts p(a, a).
+            let wrap child = Node [Edge "w" [child]]
+                same = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
+                plain = Mu $ \r -> Node [Edge "a" [], Edge "p" [wrap r, wrap r]]
+                next = Node [Edge "p" [wrap plain, wrap plain]]
+                constrained = Mu $ \r -> Node [Edge "a" [], mkEdge "p" [wrap r, wrap next] same]
+                bare = Node [mkEdge "p" [constrained, next] same] :: Node Symbol
+                withLeaf = Node [mkEdge "p" [constrained, union [Node [Edge "a" []], next]] same] :: Node Symbol
+                leaf = Term.Node "a" []
+            result <- timeout 10000000 $ do
+                let reduced = (reducePartially bare, reducePartially withLeaf)
+                _ <- evaluate (nodeCount (fst reduced) + nodeCount (snd reduced))
+                pure reduced
+            case result of
+                Nothing -> expectationFailure "the reduction did not finish"
+                Just (reducedBare, reducedWithLeaf) -> do
+                    reducedBare `shouldBe` EmptyNode
+                    forM_ [0 .. 4] $ \depth -> do
+                        terms (boundDepth depth bare) `shouldBe` []
+                        shallowTerms depth reducedWithLeaf `shouldBe` shallowTerms depth withLeaf
+                    accepts reducedWithLeaf (Term.Node "p" [leaf, leaf]) `shouldBe` True
+
+        it "stops when a narrowed child contains its ancestor" $ do
+            -- The formalization found this closed input. The class 0 = 1 of
+            -- the root ends above the constrained 'Mu' 'constrained', and its
+            -- intersection unfolded that 'Mu'. The narrowed children were
+            -- [w(root), w(root)], so the pass demanded its own result. Only
+            -- "a" is in 'constrained', and no term is in the root: the
+            -- intersection of the class needs the root again. With "a" in the
+            -- second child too, the root accepts p(w(a), w(a)). The
+            -- enumeration merges the two children of the class into that
+            -- intersection, so it ends only if the merge finds it empty.
+            let wrap child = Node [Edge "w" [child]]
+                same = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
+                plain = Mu $ \r -> Node [Edge "a" [], Edge "p" [wrap r, wrap r]]
+                next = Node [Edge "p" [wrap plain, wrap plain]]
+                constrained = Mu $ \r -> Node [Edge "a" [], mkEdge "p" [wrap r, wrap next] same]
+                root = Node [mkEdge "p" [wrap constrained, wrap next] same] :: Node Symbol
+                withLeaf = Node [mkEdge "p" [wrap constrained, wrap (union [Node [Edge "a" []], next])] same] :: Node Symbol
+                leaf = Term.Node "a" []
+                pair = Term.Node "p" [Term.Node "w" [leaf], Term.Node "w" [leaf]]
+            result <- timeout 10000000 $ do
+                let reduced =
+                        [ reducePartially root
+                        , termsMatching (TemplateNode "p" [Hole, Hole]) root
+                        , fixUnbounded (withoutRedundantEdges . reducePartially) root
+                        ]
+                    listed = (terms root, terms withLeaf)
+                _ <- evaluate (sum (map nodeCount (reducePartially withLeaf : reduced)))
+                _ <- evaluate (length (show listed))
+                pure (reduced, listed)
+            case result of
+                Nothing -> expectationFailure "the reduction or the enumeration did not finish"
+                Just (reduced, listed) -> do
+                    reduced `shouldBe` [EmptyNode, EmptyNode, EmptyNode]
+                    listed `shouldBe` ([], [pair])
+                    forM_ [0 .. 4] $ \depth -> do
+                        terms (boundDepth depth root) `shouldBe` []
+                        terms (boundDepth depth constrained) `shouldBe` [leaf]
+                        shallowTerms depth (reducePartially withLeaf) `shouldBe` shallowTerms depth withLeaf
+            accepts root pair `shouldBe` False
+            accepts (reducePartially withLeaf) pair `shouldBe` True
 
         it "reducing child domains preserves constrained terms" $
             property $
@@ -499,6 +639,17 @@ spec = do
             late <- evaluate (Edge "order-b" [] :: Edge Symbol)
             early <- evaluate (Edge "order-a" [])
             terms (Node [late, early]) `shouldBe` [Term.Node "order-a" [], Term.Node "order-b" []]
+
+        it "lists the edges of a node in the order of the automaton with runsInterned" $ do
+            late <- evaluate (Edge "interned-b" [] :: Edge Symbol)
+            early <- evaluate (Edge "interned-a" [])
+            map fst (runsInterned "Mu" (Node [late, early])) `shouldBe` [Term.Node "interned-b" [], Term.Node "interned-a" []]
+            map fst (runs "Mu" (Node [late, early])) `shouldBe` [Term.Node "interned-a" [], Term.Node "interned-b" []]
+
+        it "lists with runsInterned the runs of runs, with constraints" $
+            property $
+                mapSize (min 3) $
+                    \(n :: Node Symbol) -> sort (map fst (runsInterned "Mu" n)) `shouldBe` sort (map fst (runs "Mu" n))
 
         it "lists the edges with larger weights first, and equal weights in the canonical order" $ do
             let node = Node [Edge "weight-a" [], Edge "weight-b" [], Edge "weight-c" []] :: Node Symbol
@@ -970,3 +1121,17 @@ Both examples hold one redundant binder, which 'createMu' would drop, so they ar
 -}
 intTest12 :: Node Symbol
 intTest12 = createMuDontCleanup $ \_r -> createMuDontCleanup $ \r' -> Node [Edge "f" [r']]
+
+-- | The number of runs of each term of a node.
+runCounts :: Node Symbol -> Map (Term Symbol) Int
+runCounts = Map.fromListWith (+) . map (\(term, _) -> (term, 1)) . runs "Mu"
+
+{- | The terms of a result, and the terms with one run in the input that have
+more runs in the result.
+-}
+termsAndAmbiguity :: (Ord term) => Map term Int -> Map term Int -> ([term], [term])
+termsAndAmbiguity result input = (Map.keys result, [term | (term, 1) <- Map.toList input, Map.findWithDefault 0 term result > 1])
+
+-- | The nodes of a term in preorder, each by its symbol and its number of children.
+preorderOf :: Term symbol -> [(symbol, Int)]
+preorderOf (Term.Node symbol children) = (symbol, length children) : concatMap preorderOf children

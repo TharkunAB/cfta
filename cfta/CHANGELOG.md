@@ -4,9 +4,59 @@
 
 Before release, the package was called `microcfta`.
 
+- `Data.CFTA.Generic` exports the constructors of `Description`,
+  `AtomicType` and `AlgebraicType`, so that another module can read the
+  constructors and the field types of a datatype.
+- `Data.CFTA.Refinement.Symbolic`: the classes `Boolean` and `Symbolic`. They
+  give the operators of the refinement logic on values (`Integer` and `Bool`)
+  and on terms (`Expr` and `Formula`), so one polymorphic function is both a
+  predicate and a refinement.
+- `Data.CFTA.Refinement.Symbolic.Internal`: `Measures`, the children of a
+  constructor, a term on `Expr` and the integers of a node on `Integer`, with
+  `childMeasure` for a named measure of a child: the backend of the derived
+  refinement generators of cfta-generator, exposed for integration and
+  outside the PVP contract.
 - Expose constructor rows before path traversal, equality edits, and template
   restriction of recursive nodes. Retained empty recursive cycles now return
   empty instead of repeating the same unfolding request.
+- `Data.CFTA.Template.exclude` keeps exactly the terms of an interned graph
+  that match none of some templates at the root, as `matchesNone` says. It
+  splits an edge by what its children match, so an unambiguous input gives
+  an unambiguous result, and counts and ranks over it are exact. It reaches
+  only as deep as the templates.
+  `excludeFTA` does the same for an explicit-state automaton: each result
+  state pairs a source state with an `Obligation`, the templates that its
+  terms must match and those that they must not.
+  `excludeAnywhere` and `excludeAnywhereFTA` keep the terms of which no
+  subterm matches one of the templates (`matchesNowhere`), with a recursive
+  result for a recursive input, and `preorderPrefix` gives the template of a
+  prefix of a term in preorder.
+  `Data.CFTA.Interned.fromRows` interns the transitions of each state as
+  `fromFTA` does, without a ranked alphabet.
+- Fix `reducePartially` not returning when a node at the end of an equality
+  path reaches a recursive node with constraints. The intersection at that
+  path unfolded the recursive node, a narrowed child contained its own
+  ancestor, and the memo demanded its own unfinished result. `termsMatching`,
+  the README's `fixUnbounded (withoutRedundantEdges . reducePartially)`, and
+  Hectare's `reduceFully` inherited this. Such a class now stays unreduced.
+  Enumeration and `accepts` still check it, so the language does not change.
+- Add `provablyEmpty`, a sound check that a closed node accepts no term: a
+  least fixed point over the node's children and the intersections of its
+  equality classes, within a budget of nodes. When the endpoint rule of
+  `reduceEqConstraints` leaves a class unreduced and the check proves the
+  intersection at its paths empty, the edge becomes empty. On the input of the
+  previous entry, `reducePartially` now returns `EmptyNode`.
+- The check of the previous entry also covers a class whose path ends at a
+  closed recursive node with constraints, such as the input of the entry
+  before it without its wrappers, `p(A, C)` with `0 = 1`: `reducePartially`
+  returns `EmptyNode` for it too.
+- Fix `terms` and `runs` not ending on the input of the previous entries. The
+  enumerator merges the two children of the class into one variable, and the
+  intersection `W(A) ∩ W(C)` is `W(R)`, which needs R again. When a merge
+  intersects two nodes and the result reaches a recursive node with
+  constraints (`reachesConstrainedMu`, now exported), the enumerator runs
+  `provablyEmpty` on it, memoized, and ends the branch when it is empty. No
+  term is lost, because the branch has none. `terms R` now gives `[]`.
 
 Initial release. `cfta` consolidates an ordinary tree automaton engine,
 equality-constrained tree automata, and liquid tree automata into one package
@@ -99,7 +149,9 @@ remains a separate ECTA-only package.
   edge: it tries the edges of a node with larger weights first, and edges
   with equal weights in the canonical order. `runsNarrowedBy` also applies
   a function to the edges of each node of a run before it tries them.
-  `edgeIdentity` of
+  `runsInterned` lists the runs of `runs` in the order of the edges in the
+  automaton, without the canonical classes, for a caller that sorts the runs
+  itself. `edgeIdentity` of
   `Data.CFTA.Interned` gives the interned identity of an edge.
 - `Data.CFTA.Simple`: the automata defined as simply as possible, on the
   explicit-state automata of `Data.CFTA`. Membership recurses on the term,
@@ -131,6 +183,14 @@ remains a separate ECTA-only package.
   intersection memos keep integer keys in an open-addressing table,
   `Data.CFTA.Interned.FlatMemo`, in place of a hash map; on Hectare this cut
   24% of the time of two reduction rounds and 11% of the listing time.
+  The enumerator keeps the count of the suspended constraints that wait for
+  an equality class by the class's representative, so a step no longer
+  resolves every waiting variable through the union-find, and a write of a
+  slot changes only the counts that change. On Hectare's listing of
+  headLast at size 5 this cut 13% of instructions and 9% of allocation.
+  The value slots of the UVars are an `IntMap`, not a `Seq`, and the hot
+  fields of the enumerator's state are strict, which cut a further 9% of
+  instructions and 8% of allocation on that listing.
 - The refinement layer's `denotationAtMost` runs on the shared enumerator: a
   positive `Same` guard is a path equality solved by unification, so an
   equality-guarded pair costs milliseconds instead of a quadratic candidate

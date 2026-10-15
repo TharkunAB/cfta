@@ -149,6 +149,26 @@ tree automata of `cfta`, with QuickCheck integration.
   of times. The module also has liquid automaton and datatype imports,
   `minimizePoolOn`, `compile` with Z3, `compileAssuming`, `compileWith`, and
   `validOutcomes`.
+- `Data.CFTA.Gen.Refinement.Derive`: refinement generators derived from a
+  `HasFTA` datatype. `HasLTA` holds the node view of the datatype (`Node`),
+  its measures (`Measures`), and an `Invariant`: a measure and a contract
+  written once as functions that are polymorphic over `Symbolic`, over the
+  node view, a datatype with the constructors of the datatype and the
+  integers of their fields (`NodeView`). `deriveLTA` builds the generator
+  that the combinators give, with their ranks, and reports a node view that
+  does not fit the datatype (`NodeMismatch`). TODO: a `deriveNode` that
+  writes the node view from the datatype. `Measured` has one measure,
+  `Contracted` none, and `MeasuredBy` named measures, the fields of a record
+  (`MeasureRecord`) whose selector names are the names in the logic. `holds`,
+  `measureOf`, and `measuresOf` run the invariant on values, and
+  `measuresAt` gives the measures of a value term. `atom` gives the
+  generator of each atomic field type. A contract conjunct about one atomic
+  field becomes a condition on that field.
+- `Data.CFTA.Gen.Refinement.Derive.Internal`: the level below, exposed for
+  integration and outside the PVP contract. `deriveLTAWith` takes the
+  contracts and the measures by constructor name, as annotations
+  (`contract`, `measure`, `measureNamed`, `fieldsContract`,
+  `fieldsMeasure`), and `annotationFormulas` gives their formulas and terms.
 - `compile` folds the recipe of a generator once with the solver. It groups
   child languages by the observations a guard reads, decides each guard once
   for each tuple of groups, and prunes and splits imports by the same
