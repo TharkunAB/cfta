@@ -250,6 +250,41 @@ spec = do
                      in classify (all (== 1) (runCounts node)) "unambiguous input" $
                             termsAndAmbiguity (runCounts (exclude templates node)) kept `shouldBe` (Map.keys kept, [])
 
+        it "excluding templates anywhere from a finite ECTA agrees with filtering its terms" $
+            property $
+                mapSize (min 3) $ \(templates :: [Template Symbol]) (node :: Node Symbol) ->
+                    HashSet.fromList (terms $ reducePartially $ excludeAnywhere templates node)
+                        `shouldBe` HashSet.fromList (filter (matchesNowhere templates) $ terms node)
+
+        it "excluding templates anywhere keeps the terms that match nowhere with no new ambiguity" $
+            property $
+                mapSize (min 3) $ \(templates :: [Template Symbol]) (node :: Node Symbol) ->
+                    let kept = Map.filterWithKey (\term _ -> matchesNowhere templates term) (runCounts node)
+                     in classify (all (== 1) (runCounts node)) "unambiguous input" $
+                            termsAndAmbiguity (runCounts (excludeAnywhere templates node)) kept `shouldBe` (Map.keys kept, [])
+
+        it "excludes a template anywhere in a recursive automaton" $ do
+            let grammar :: Node Symbol
+                grammar = Mu $ \self -> Node [Edge "a" [], Edge "b" [], Edge "wrap" [self]]
+                wrap term = Term.Node "wrap" [term]
+                a = Term.Node "a" []
+                twice = TemplateNode "wrap" [TemplateNode "wrap" [Hole]]
+            Set.fromList (terms (excludeAnywhere [twice] grammar))
+                `shouldBe` Set.fromList [a, Term.Node "b" [], wrap a, wrap (Term.Node "b" [])]
+            Set.fromList (plainTermsAtMost 5 (excludeAnywhere [TemplateNode "b" []] grammar))
+                `shouldBe` Set.fromList (filter (matchesNowhere [TemplateNode "b" []]) (plainTermsAtMost 5 grammar))
+
+        it "gives the template of a prefix in preorder" $ do
+            preorderPrefix [("f" :: Symbol, 2), ("g", 0)] `shouldBe` TemplateNode "f" [TemplateNode "g" [], Hole]
+            preorderPrefix ([] :: [(Symbol, Int)]) `shouldBe` Hole
+
+        it "gives a template that each term with the prefix matches" $
+            property $ \(node :: Node Symbol) (count :: NonNegative Int) ->
+                and
+                    [ matchesTemplate (preorderPrefix (take (getNonNegative count) (preorderOf term))) term
+                    | term <- take 20 (terms node)
+                    ]
+
     describe "recursive union" $ do
         it "retains an enclosing reference through a nested binder" $ do
             let grammar :: Node Symbol
@@ -1052,3 +1087,7 @@ more runs in the result.
 -}
 termsAndAmbiguity :: (Ord term) => Map term Int -> Map term Int -> ([term], [term])
 termsAndAmbiguity result input = (Map.keys result, [term | (term, 1) <- Map.toList input, Map.findWithDefault 0 term result > 1])
+
+-- | The nodes of a term in preorder, each by its symbol and its number of children.
+preorderOf :: Term symbol -> [(symbol, Int)]
+preorderOf (Term.Node symbol children) = (symbol, length children) : concatMap preorderOf children
