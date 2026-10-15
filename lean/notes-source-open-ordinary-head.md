@@ -79,6 +79,39 @@ constructor cache. Repeated open Mu exposure, union heads, metadata shortcuts,
 and the exact current memo tables remain in that transfer. Do not assume a
 gate result supplies the old static path domain.
 
+`InternedSourceGateReplay.node_replay`, `path_replay`, and `class_replay`
+already replay a completed gate with the same Boolean and no constructor
+effect. The target must retain the completed final gate heap. Growth from
+the initial gate heap alone is insufficient. The original gate Ready also
+contains CostHeap. Caller availability needs actual history preservation;
+Grows alone does not supply it.
+
+The next proposed endpoint is false_path_complete. Its inputs are a false
+PathTrace from gateBefore to gateFinal, gate Ready and available original
+values at gateBefore, a nonempty path, Grows gateFinal caller, and SemanticReady
+plus available original values at caller. It must derive an actual Forest
+projection from caller, both histories, SemanticReady, and closed resident
+output. A companion theorem must verify any completed actual Forest receipt.
+These statements are proof targets. They are not established by this checkpoint.
+
+Two local bridges remain. First, a node endpoint trace can unfold an open Mu
+before it tests the empty node path. Trace inversion alone does not establish
+original endpoint closedness. InternedPreparedCostRetention.unfold_retains,
+actual execute_costs, and costs_free give a candidate retention chain under
+the explicit cost-heap premise. The forest root path [] must be excluded:
+its gate returns false without inspecting any value.
+
+Second, nodeEdges uses the direct branch only if the first unfolding returns
+an ordinary node. Otherwise it starts collect again on the original Mu,
+with identity tracking and canonicalization. A finite gate unfolding chain
+cannot replace this actual worklist. Prove its completion from the retained
+false trace, including duplicate visits and a closed-Mu stopping case.
+unfold_replay supplies warm recorded prefix steps. nodeEdges_replay transfers
+an already completed read; it does not establish the missing read completion.
+Ordinary row induction must use retained-row membership after canonicalization,
+not identical gate and projection traversal orders. Accepted-subtree inclusion
+is a separate requirement after effects and completion.
+
 Then compose the ordered primary partition, secondary scan, seeded query,
 fallback, and whole caller. Progressive lazy row demand, original child
 forcing, checked native transfer, machine bounds and identities, and general
