@@ -9,7 +9,9 @@ from Stack Overflow. The queries are the Hoogle+ benchmarks and the Stack
 Overflow benchmarks of Hectare's evaluation script, each with its size and
 the solution that the evaluation expects. A size counts the components and
 arguments of a program. This is example data for the specs and the
-benchmarks, not a stable interface.
+benchmarks, not a stable interface. It is the public sublibrary
+@cfta-generator:hoogleplus@, so that the benchmarks of @cfta-ghc@ can use it
+too.
 -}
 module Data.CFTA.Gen.Synthesis.HooglePlus (
     -- * Libraries

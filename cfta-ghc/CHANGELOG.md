@@ -51,4 +51,5 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
 - The `hole-fits-golden` test: GHC's messages for a module with holes,
   compiled with the plugin.
 - The `hectare-ghc` benchmark: the 45 Hoogle+ queries on a library ladder
-  read from GHC's exports, one child process per query.
+  read from GHC's exports, one child process per query. The queries come
+  from the sublibrary `cfta-generator:hoogleplus`.

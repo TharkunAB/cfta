@@ -124,6 +124,19 @@ library
     QuickCheck >=2.14 && <2.19,
     text >=2.1 && <2.2,
 
+-- The Hoogle+ components and the benchmark queries of Hectare's
+-- evaluation, for the benchmarks and the tests of this package and of
+-- cfta-ghc.
+library hoogleplus
+  import: warnings, extensions
+  visibility: public
+  hs-source-dirs: hoogleplus
+  exposed-modules: Data.CFTA.Gen.Synthesis.HooglePlus
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta-generator,
+    text >=2.1 && <2.2,
+
 executable cfta-pairs
   import: warnings
   main-is: FinitePairs.hs
@@ -271,7 +284,6 @@ test-suite gen-tests
     Data.CFTA.Gen.Reference
     Data.CFTA.Gen.ReferenceSpec
     Data.CFTA.Gen.Synthesis.HegelBenchmarks
-    Data.CFTA.Gen.Synthesis.HooglePlus
     Data.CFTA.Gen.SynthesisSpec
     Data.CFTA.Gen.TestSupport
     Data.CFTA.Gen.TypedExpressionLanguage
@@ -284,6 +296,7 @@ test-suite gen-tests
     base >=4.22 && <4.23,
     cfta >=0.1.0.0 && <0.2,
     cfta-generator,
+    cfta-generator:hoogleplus,
     containers >=0.8 && <0.9,
     hashable >=1.5 && <1.6,
     hspec >=2.11 && <2.12,
@@ -459,13 +472,11 @@ benchmark hectare
     -rtsopts
     -with-rtsopts=-M8G
 
-  other-modules:
-    Data.CFTA.Gen.Synthesis.HooglePlus
-
   build-depends:
     base >=4.22 && <4.23,
     cfta,
     cfta-generator,
+    cfta-generator:hoogleplus,
     process >=1.6 && <1.7,
     QuickCheck >=2.14 && <2.19,
     text >=2.1 && <2.2,
@@ -506,11 +517,11 @@ benchmark hybrid
 
   other-modules:
     Data.CFTA.Gen.Synthesis.HegelBenchmarks
-    Data.CFTA.Gen.Synthesis.HooglePlus
 
   build-depends:
     base >=4.22 && <4.23,
     cfta,
     cfta-generator,
+    cfta-generator:hoogleplus,
     process >=1.6 && <1.7,
     text >=2.1 && <2.2,
