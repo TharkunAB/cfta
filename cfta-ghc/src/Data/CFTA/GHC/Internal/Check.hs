@@ -69,6 +69,7 @@ module Data.CFTA.GHC.Internal.Check (
     step,
     complete,
     entails,
+    mayHold,
 
     -- * States
     StateKey,
@@ -111,7 +112,7 @@ import GHC.Builtin.Names (
  )
 import GHC.Builtin.Types (liftedTypeKind)
 import GHC.Core.Class (classKey, className)
-import GHC.Core.InstEnv (classInstances, lookupInstEnv, nullUnifiers)
+import GHC.Core.InstEnv (InstEnvs, classInstances, lookupInstEnv, nullUnifiers)
 import GHC.Core.Predicate (
     EqRel (NomEq),
     Pred (ClassPred, EqPred, ForAllPred),
@@ -445,26 +446,48 @@ entails environment predicates = setTcLevel (environmentLevel environment) . dis
     evidence <- newWanteds (ExprHoleOrigin Nothing) predicates
     satisfiable environment (Walker (metasOf predicates) (mkSimpleWC evidence) []) False True
 
+{- | Whether a constraint can still hold, by the fast path of 'satisfiable':
+'False' only for a class constraint when the hole has no given equality,
+the class is not built in, it has instances, no given provides it, and no
+instance matches or unifies with its arguments. So @Num (Complex a)@ can
+hold, and @Foldable Int@ cannot.
+-}
+mayHold :: Environment -> InstEnvs -> PredType -> Bool
+mayHold environment instances predicate = case classifyPredType predicate of
+    ClassPred cls arguments
+        | environmentRigid environment
+        , classKey cls `notElem` builtIn
+        , not (null (classInstances instances cls))
+        , className cls `notElem` environmentProvided environment
+        , (matches, unifiers, _) <- lookupInstEnv False instances cls arguments ->
+            not (null matches && nullUnifiers unifiers)
+    _ -> True
+  where
+    -- The classes that GHC solves without instances.
+    builtIn =
+        [ hasFieldClassNameKey
+        , knownNatClassNameKey
+        , knownSymbolClassNameKey
+        , knownCharClassNameKey
+        , typeableClassKey
+        , ipClassKey
+        , withDictClassKey
+        , dataToTagClassKey
+        , unsatisfiableClassNameKey
+        ]
+
 {- | Whether the wanteds of a walker can still be solved. With the last
 'True', every wanted must be solved, as for a complete program. Otherwise
 the solver runs only when the step brought an equality (the third
 argument), or when some wanted has no unification variable left; only those
 can make a prefix fail. An equality that is surely apart, or a class
-constraint that no instance can match, fails without the solver.
+constraint that cannot hold ('mayHold'), fails without the solver.
 -}
 satisfiable :: Environment -> Walker -> Bool -> Bool -> TcM Bool
 satisfiable environment walker equality finished = do
     current <- liftZonkM (zonkTcTypes (filter (not . isCallStackPredTy) (wantedPredicates (walkerWanteds walker))))
     instances <- tcGetInstEnvs
-    let impossible predicate = case classifyPredType predicate of
-            ClassPred cls arguments
-                | classKey cls `notElem` builtIn
-                , not (null (classInstances instances cls))
-                , className cls `notElem` environmentProvided environment
-                , (matches, unifiers, _) <- lookupInstEnv False instances cls arguments ->
-                    null matches && nullUnifiers unifiers
-            _ -> False
-    if environmentRigid environment && (any apart current || any impossible current)
+    if (environmentRigid environment && any apart current) || not (all (mayHold environment instances) current)
         then False <$ count (\c -> c{countFastRejects = countFastRejects c + 1})
         else
             if not finished && not equality && all open current
@@ -497,18 +520,6 @@ satisfiable environment walker equality finished = do
             _ -> False
         _ -> False
     bindable variable _ = if isTcTyVar variable && isMetaTyVar variable then BindMe else DontBindMe
-    -- The classes that GHC solves without instances.
-    builtIn =
-        [ hasFieldClassNameKey
-        , knownNatClassNameKey
-        , knownSymbolClassNameKey
-        , knownCharClassNameKey
-        , typeableClassKey
-        , ipClassKey
-        , withDictClassKey
-        , dataToTagClassKey
-        , unsatisfiableClassNameKey
-        ]
     open = anyFreeVarsOfType (\variable -> isTcTyVar variable && isMetaTyVar variable)
     count = liftIO . modifyIORef' (environmentCounters environment)
     hole = environmentHole environment

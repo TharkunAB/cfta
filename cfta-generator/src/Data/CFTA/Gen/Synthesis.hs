@@ -240,10 +240,11 @@ data Encoding
       time by @\@@ edges, so that a type variable can stand for a type
       constructor. A type constructor whose name starts with @?@, as
       @?Foldable t0@, is a type variable of kind @* -> *@. The map gives, by
-      the name of a class (the text after the @?@, up to the first space),
-      the types of kind @* -> *@ over which the variables of the class
-      range, as @Maybe@ or @Either e@ (each as a type constructor with one
-      argument less than its arity).
+      the text after the @?@ up to the first space (the names of the
+      variable's classes, as @Foldable@ or @Applicative,Foldable@), the
+      types of kind @* -> *@ over which the variable ranges, as @Maybe@ or
+      @Either e@ (each as a type constructor with one argument less than its
+      arity).
       -}
       Curried (Map.Map Text [Type])
     deriving (Show)
@@ -379,7 +380,7 @@ typeNodeWith (Curried _) = curried
 typeApplication :: Node Symbol -> Node Symbol -> Node Symbol
 typeApplication function argument = Node [Edge "@" [function, argument]]
 
--- | The class of the leaf of a type variable of kind @* -> *@ in the curried encoding.
+-- | The key of the domain of the leaf of a type variable of kind @* -> *@ in the curried encoding: the names of its classes.
 higherClass :: Node Symbol -> Maybe Text
 higherClass (Node [Edge (Symbol name) []]) = Text.takeWhile (/= ' ') <$> Text.stripPrefix "?" name
 higherClass _ = Nothing

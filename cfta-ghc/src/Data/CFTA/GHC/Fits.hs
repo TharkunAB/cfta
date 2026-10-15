@@ -14,6 +14,13 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   candidate with a higher-kinded type variable, as @fmap@ or @(>>=)@, has
   an erased type at each type head of the query whose class constraints GHC
   solves under the hole's givens ('specializations').
+* With 'optionCurried', Hectare's types are curried
+  ('Data.CFTA.Gen.Synthesis.Encoding'), and every bound type variable of
+  kind @* -> *@, as the @f@ of @fmap@ and the @t@ of @length@, stays a
+  variable of that kind ('eraseCurried'). It ranges over the type heads of
+  kind @* -> *@ of the candidates' types and of the query at which an
+  instance of each of its classes can hold ('mayHold'), so @length@ can take
+  the @Maybe@ that @lookup@ gives. Then no candidate has specializations.
 * Each program is checked in preorder, one leaf at a time
   ("Data.CFTA.GHC.Internal.Check"), as a refinement hole fit, with the
   parts of 'GHC.Tc.Errors.Hole.tcCheckHoleFit': 'tcSubTypeSigma' at the
@@ -91,7 +98,7 @@ import qualified Data.Text as Text
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
-import Data.CFTA.GHC.Erase (anyResult, erase, higherKinded, typeHeads)
+import Data.CFTA.GHC.Erase (anyResult, curriedClasses, erase, eraseCurried, eraseHead, higherKinded, typeHeads)
 import Data.CFTA.GHC.Internal.Check
 import Data.CFTA.Gen.Synthesis (Encoding (..), Program (..))
 import Data.CFTA.Gen.Synthesis.Walk (
@@ -110,12 +117,14 @@ import Data.CFTA.Gen.Synthesis.Walk (
 import qualified Data.CFTA.Gen.Synthesis.Walk as Walk
 import GHC.Builtin.Types (listTyCon)
 import GHC.Core.DataCon (dataConNonlinearType)
+import GHC.Core.Predicate (mkClassPred)
 import GHC.Core.TyCo.FVs (tyCoVarsOfType, tyCoVarsOfTypesList)
-import GHC.Core.Type (Type, substTyWith, tyConAppTyCon_maybe)
+import GHC.Core.Type (Type, getTyVar_maybe, splitAppTys, substTyWith, tyConAppTyCon_maybe)
 import GHC.Data.Bag (bagToList, emptyBag)
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
 import GHC.Tc.Types.Constraint (Implication (..), ctEvPred)
 import GHC.Tc.Types.Origin (SkolemInfoAnon (RuntimeUnkSkol))
+import GHC.Tc.Utils.Env (tcGetInstEnvs)
 import GHC.Tc.Utils.Monad (TcM)
 import GHC.Tc.Utils.TcMType (newImplication, newTcEvBinds)
 import GHC.Tc.Utils.TcType (TcLevel, TcTyVar, mkSpecSigmaTy, tcSplitNestedSigmaTys)
@@ -192,6 +201,8 @@ data Options = Options
     -- ^ A function to call after each size.
     , optionTrace :: Maybe (Int -> Program -> IO ())
     -- ^ A function to call before each program is checked, with its size.
+    , optionCurried :: Bool
+    -- ^ Curried types in Hectare, with the variables of kind @* -> *@ kept, and no specializations.
     }
 
 -- | Programs of up to five leaves, the first ten fits, no other limit.
@@ -205,6 +216,7 @@ defaultOptions =
         , optionAvoid = []
         , optionReport = Nothing
         , optionTrace = Nothing
+        , optionCurried = False
         }
 
 {- | Hectare's pruning rule of the Hoogle+ library, with GHC's names, for
@@ -300,6 +312,7 @@ streamFits options hole candidates goal accept = do
     begin <- liftIO getMonotonicTimeNSec
     let deadline = (\seconds -> begin + round (seconds * 1e9)) <$> optionSeconds options
     erased <- concat <$> mapM (erasures environment) candidates
+    encoding <- if optionCurried options then Curried <$> domains environment else pure FirstOrder
     -- The time of the checks of the fits' parts, which are checks too.
     ignoring <- liftIO (newIORef 0)
     let statistics progress = statisticsOf progress <$> liftIO (readIORef ignoring) <*> readCounters environment
@@ -329,7 +342,7 @@ streamFits options hole candidates goal accept = do
                     accept (Fit (Walk.fitProgram fit) (Walk.fitSize fit) ignoresPart)
             statistics
                 =<< walk
-                    FirstOrder
+                    encoding
                     limits
                     checker
                     hooks
@@ -351,9 +364,13 @@ streamFits options hole candidates goal accept = do
     -- The Hectare types of a candidate, each with its name in Hectare: its
     -- erased type, or else its specializations at the type heads of the
     -- query. The k-th specialization of a candidate has the number after a
-    -- space, which no Haskell name has.
-    erasures environment candidate = case erase rigid (candidateType candidate) of
+    -- space, which no Haskell name has. The curried encoding keeps the
+    -- variables that the specializations replace, so there a candidate has
+    -- its erased type or none.
+    eraseFor = if optionCurried options then eraseCurried else erase
+    erasures environment candidate = case eraseFor rigid (candidateType candidate) of
         Just typ -> pure [(candidate, candidateName candidate, typ) | keep candidate typ]
+        Nothing | optionCurried options -> pure []
         Nothing -> do
             specialized <- specializations environment queryHeads (candidateType candidate)
             pure
@@ -373,6 +390,26 @@ streamFits options hole candidates goal accept = do
         filter
             ((/= Just listTyCon) . tyConAppTyCon_maybe)
             (typeHeads (goal : [candidateType candidate | candidate <- candidates, candidateRequired candidate]))
+    -- The classes of each curried variable of a candidate, by their key
+    -- ('curriedClasses').
+    curriedKeys = Map.fromList (concatMap (curriedClasses . candidateType) candidates)
+    -- The domains of the curried encoding: for each key, the type heads of
+    -- kind * -> * of every candidate's type and of the query at which an
+    -- instance of each of its classes can hold. A head with a bound type
+    -- variable (f in the type of fmap) is not a head here.
+    domains environment = do
+        instances <- tcGetInstEnvs
+        let heads =
+                [ head'
+                | head' <- typeHeads (goal : relevant <> map (body . candidateType) candidates)
+                , maybe True (isJust . rigid) (getTyVar_maybe head')
+                , maybe True (isJust . rigid) (getTyVar_maybe (fst (splitAppTys head')))
+                ]
+            holds classes head' = all (\cls -> mayHold environment instances (mkClassPred cls [head'])) classes
+        pure (fmap (\classes -> nub (mapMaybe (eraseHead rigid) (filter (holds classes) heads))) curriedKeys)
+    -- A candidate's type without its foralls and contexts, so that its heads
+    -- are visible (Maybe in the type of lookup).
+    body typ = let (_, _, rho) = tcSplitNestedSigmaTys typ in rho
     -- Hectare's pruning rules, with the names of every specialization.
     avoid erased =
         [ (concatMap (specializedNames erased) heads, concatMap (specializedNames erased) <$> arguments)
@@ -381,7 +418,7 @@ streamFits options hole candidates goal accept = do
     specializedNames erased text = [name | (candidate, name, _) <- erased, candidateName candidate == text]
     query erased
         | length [() | (candidate, _, _) <- erased, candidateRequired candidate] == length (filter candidateRequired candidates) =
-            erase rigid goal
+            eraseFor rigid goal
         | otherwise = Nothing
     leaves :: Map Text Leaf
     leaves =

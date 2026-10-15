@@ -34,8 +34,9 @@ heap of 2 GB each, so that @cabal bench@ stays short. The variable
 @HECTARE_GHC_TOP_CORE@ pins child @k@ to that core minus @k@,
 @HECTARE_GHC_LOGS@ names a directory for the children's output, and
 @HECTARE_GHC_TRACE@ makes a child print each program that it checks to its
-standard error, with the seconds and the size. Next to the Hoogle+
-queries, the parent takes the names of the differential queries
+standard error, with the seconds and the size. @HECTARE_GHC_CURRIED@ makes
+the children search with Hectare's curried types ('optionCurried'). Next to
+the Hoogle+ queries, the parent takes the names of the differential queries
 ('differential'), where the erasure loses information.
 
 > hectare-ghc [RUNG [SECONDS [HEAP [JOBS [NAME...]]]]]
@@ -280,6 +281,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
             -- The fits so far, and those that use every part of themselves.
             counts <- newIORef (0 :: Int, 0 :: Int)
             tracing <- isJust <$> lookupEnv "HECTARE_GHC_TRACE"
+            curried <- isJust <$> lookupEnv "HECTARE_GHC_CURRIED"
             -- The walk stops at the time limit; this limit is for the rest.
             outcome <- try . timeout ((seconds + 30) * 1000000) $ withSession (importLines rung) $ \session -> do
                 candidates <- candidatesOf session (rungModules rung)
@@ -294,6 +296,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                             , optionAvoid = hectareAvoid
                             , optionReport = Just report
                             , optionTrace = if tracing then Just trace else Nothing
+                            , optionCurried = curried
                             }
                     trace size program = do
                         now <- getMonotonicTime

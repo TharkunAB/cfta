@@ -17,7 +17,12 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   Hectare's pruning rules, and take a report after each size and a trace of
   each program. `Statistics` give the time of Hectare's construction,
   reduction, and listing, and of the checks, and the typed terms that
-  Hectare listed (`statisticsRuns`).
+  Hectare listed (`statisticsRuns`). With `optionCurried`, Hectare's types
+  are curried, and every bound type variable of kind `* -> *` ranges over
+  the type heads in scope at which each of its classes can have an
+  instance (`mayHold` of `Data.CFTA.GHC.Internal.Check`, the test of the
+  fast path), so `length (lookup k xs)` is proposed; no candidate is
+  specialized then.
 - `Data.CFTA.GHC.Session`: a GHC session for a program, with the imports in
   scope as in GHCi. `withSession` and `withSessionOptions` start it, with
   more packages by name or identifier, more package databases, more flags,
@@ -43,6 +48,7 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   the heads for the specializations of `streamFits`: a component with a
   higher-kinded type variable is proposed at each type head of the query
   whose class constraints GHC solves under the hole's givens.
+  `eraseCurried`, `eraseHead`, and `curriedClasses` give the curried types.
 - `Data.CFTA.GHC.Internal.Check`: one step of a program walk as a refinement
   hole fit (`tcSubTypeSigma`, GHC's fast path for insoluble equalities, and
   `simplifyTopWanteds` under `runTcSEarlyAbort` inside the hole's
