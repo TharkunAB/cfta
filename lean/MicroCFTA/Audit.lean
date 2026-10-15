@@ -1697,6 +1697,10 @@ import MicroCFTA.SourceEqualityPartialInheritedPlainChildren
 import MicroCFTA.SourceEqualityPartialInheritedPlainCases
 import MicroCFTA.SourceEqualityPartialInheritedPlainCompletion
 import MicroCFTA.SourceEqualityPartialInheritedPlainSource
+import MicroCFTA.SourceClosedGateComplete
+import MicroCFTA.SourceClosedGateSelection
+import MicroCFTA.SourceEqualityWarmSelectedRequired
+import MicroCFTA.SourceEqualityWarmOnePass
 /-!
 # Proof dependency audit
 
