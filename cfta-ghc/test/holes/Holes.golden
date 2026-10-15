@@ -13,11 +13,11 @@ test/holes/Holes.hs:5:9: error: [GHC-88464]
           with length @[] @a
           (imported from `Prelude' at test/holes/Holes.hs:1:8-12
            (and originally defined in `GHC.Internal.Data.Foldable'))
+        \x1 -> length (cycle x1)
+        \x1 -> length (init x1)
+        \x1 -> length (reverse x1)
+        \x1 -> length (tail x1)
         \x1 -> pred (length x1)
-        \x1 -> succ (length x1)
-        \x1 -> abs (length x1)
-        \x1 -> negate (length x1)
-        \x1 -> signum (length x1)
   |
 5 | count = _
   |         ^
@@ -54,11 +54,11 @@ test/holes/Holes.hs:9:11: error: [GHC-88464]
           with maximum @[] @[a]
           (imported from `Prelude' at test/holes/Holes.hs:1:8-12
            (and originally defined in `GHC.Internal.Data.Foldable'))
-        \x1 -> cycle (mconcat x1)
-        \x1 -> cycle (head x1)
-        \x1 -> cycle (last x1)
-        \x1 -> init (mconcat x1)
-        \x1 -> init (head x1)
+        \x1 -> (=<<) cycle x1
+        \x1 -> (=<<) init x1
+        \x1 -> (=<<) reverse x1
+        \x1 -> (=<<) tail x1
+        \x1 -> (=<<) id x1
         (Some hole fits suppressed; use -fmax-valid-hole-fits=N or -fno-max-valid-hole-fits)
   |
 9 | flatten = _
@@ -97,11 +97,11 @@ test/holes/Holes.hs:12:11: error: [GHC-88464]
           with mempty @((a -> b) -> [a] -> [b])
           (imported from `Prelude' at test/holes/Holes.hs:1:8-12
            (and originally defined in `GHC.Internal.Base'))
-        \x1 x2 -> map x1 (cycle x2)
-        \x1 x2 -> map x1 (init x2)
-        \x1 x2 -> map x1 (reverse x2)
-        \x1 x2 -> map x1 (tail x2)
-        \x1 x2 -> flip map x2 x1
+        \x1 x2 -> (<*>) (repeat x1) x2
+        \x1 x2 -> (<*>) (pure x1) x2
+        \x1 x2 -> (<*>) (return x1) x2
+        \x1 x2 -> flip fmap x2 x1
+        \x1 x2 -> flip (<$>) x2 x1
    |
 12 | mapList = _
    |           ^
@@ -119,11 +119,11 @@ test/holes/Holes.hs:16:16: error: [GHC-88464]
       Valid hole fits include
         countMatches :: (a -> Bool) -> [a] -> Int
           (bound at test/holes/Holes.hs:16:1)
-        \x1 x2 -> length (map x1 x2)
-        \x1 x2 -> length (mapList x1 x2)
-        \x1 x2 -> length (dropWhile x1 x2)
-        \x1 x2 -> length (filter x1 x2)
-        \x1 x2 -> length (takeWhile x1 x2)
+        \x1 x2 -> count (fmap x1 x2)
+        \x1 x2 -> count ((<$>) x1 x2)
+        \x1 x2 -> count (map x1 x2)
+        \x1 x2 -> count (mapList x1 x2)
+        \x1 x2 -> count (dropWhile x1 x2)
    |
 16 | countMatches = _
    |                ^
@@ -143,9 +143,9 @@ test/holes/Holes.hs:20:23: error: [GHC-88464]
         fallback :: a (bound at test/holes/Holes.hs:20:9)
         head xs
         last xs
+        foldl1 asTypeOf Nothing
+        foldr1 asTypeOf Nothing
         foldl1 asTypeOf []
-        foldr1 asTypeOf []
-        foldl1 asTypeOf xs
    |
 20 | firstOr fallback xs = _
    |                       ^

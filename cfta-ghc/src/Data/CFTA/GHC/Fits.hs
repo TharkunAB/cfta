@@ -14,7 +14,7 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   candidate with a higher-kinded type variable, as @fmap@ or @(>>=)@, has
   an erased type at each type head of the query whose class constraints GHC
   solves under the hole's givens ('specializations').
-* With 'optionCurried', Hectare's types are curried
+* With 'optionCurried', the default, Hectare's types are curried
   ('Data.CFTA.Gen.Synthesis.Encoding'), and every bound type variable of
   kind @* -> *@, as the @f@ of @fmap@ and the @t@ of @length@, stays a
   variable of that kind ('eraseCurried'). It ranges over the type heads of
@@ -211,7 +211,9 @@ data Options = Options
     , optionTrace :: Maybe (Int -> Program -> IO ())
     -- ^ A function to call before each program is checked, with its size.
     , optionCurried :: Bool
-    -- ^ Curried types in Hectare, with the variables of kind @* -> *@ kept, and no specializations.
+    {- ^ Curried types in Hectare, with the variables of kind @* -> *@ kept,
+    and no specializations. With 'False', Hectare's first-order types.
+    -}
     , optionOnlyDefaulted :: Bool
     {- ^ With 'optionCurried': a variable of kind @* -> *@ that a program
     does not determine takes only its default, the list type, and the check
@@ -219,7 +221,7 @@ data Options = Options
     -}
     }
 
--- | Programs of up to five leaves, the first ten fits, no other limit.
+-- | Programs of up to five leaves, the first ten fits, no other limit, with Hectare's curried types.
 defaultOptions :: Options
 defaultOptions =
     Options
@@ -230,7 +232,7 @@ defaultOptions =
         , optionAvoid = []
         , optionReport = Nothing
         , optionTrace = Nothing
-        , optionCurried = False
+        , optionCurried = True
         , optionOnlyDefaulted = False
         }
 

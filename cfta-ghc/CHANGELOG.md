@@ -17,12 +17,12 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   Hectare's pruning rules, and take a report after each size and a trace of
   each program. `Statistics` give the time of Hectare's construction,
   reduction, and listing, and of the checks, and the typed terms that
-  Hectare listed (`statisticsRuns`). With `optionCurried`, Hectare's types
-  are curried, and every bound type variable of kind `* -> *` ranges over
-  the type heads in scope at which each of its classes can have an
-  instance (`mayHold` of `Data.CFTA.GHC.Internal.Check`, the test of the
-  fast path), so `length (lookup k xs)` is proposed; no candidate is
-  specialized then. With `optionOnlyDefaulted` too, such a variable that a
+  Hectare listed (`statisticsRuns`). With `optionCurried`, the default,
+  Hectare's types are curried, and every bound type variable of kind
+  `* -> *` ranges over the type heads in scope at which each of its classes
+  can have an instance (`mayHold` of `Data.CFTA.GHC.Internal.Check`, the
+  test of the fast path), so `length (lookup k xs)` is proposed; no
+  candidate is specialized then. With `False`, the types are first-order. With `optionOnlyDefaulted` too, such a variable that a
   program does not determine takes only its default, the list type, as
   under `ExtendedDefaultRules`, and the check of a complete program has
   those rules, so `length (pure x)` fits.
@@ -42,8 +42,8 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
 - `Data.CFTA.GHC.HoleFits`: a typed-hole plugin
   (`-fplugin=Data.CFTA.GHC.HoleFits`). After GHC's own valid hole fits, it
   gives fits of several components, which `streamFits` finds in GHC's `TcM`
-  on the hole's `TypedHole`. Options: `size`, `fits`, `seconds`, and
-  `programs`.
+  on the hole's `TypedHole`. Options: `size`, `fits`, `seconds`,
+  `programs`, `first-order`, and `only-defaulted`.
 - `Data.CFTA.GHC.Erase`: GHC types as Hectare's first-order types, with the
   class contexts erased, and `anyResult` for the components that would fit
   every hole once erased. An applied rigid type variable (`f a`) erases to
@@ -65,7 +65,8 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   variables. The walk keeps the verdict of each step by state and leaf, and
   skips the steps and the solver calls whose verdict it knows.
 - The `ghc-fits` executable: the programs of a type signature over the
-  exports of some modules, checked in GHC's typechecker.
+  exports of some modules, checked in GHC's typechecker, with `--first-order`
+  and `--only-defaulted`.
 - The `hole-fits-golden` test: GHC's messages for a module with holes,
   compiled with the plugin.
 - The `hectare-ghc` benchmark: the 45 Hoogle+ queries on a library ladder

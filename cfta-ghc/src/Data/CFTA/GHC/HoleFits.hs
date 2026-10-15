@@ -108,8 +108,8 @@ plugin =
         }
 
 {- | The options of the plugin, from its @-fplugin-opt@ arguments
-(@NAME=VALUE@). Without them: fits of up to four leaves, five fits, one
-second for each hole.
+(@NAME=VALUE@, or @NAME@ for a switch). Without them: fits of up to four
+leaves, five fits, one second for each hole, and Hectare's curried types.
 -}
 readOptions :: [CommandLineOption] -> Either String Options
 readOptions = foldM set defaultOptions{optionMaximumSize = 4, optionFits = 5, optionSeconds = Just 1, optionAvoid = hectareAvoid}
@@ -119,7 +119,11 @@ readOptions = foldM set defaultOptions{optionMaximumSize = 4, optionFits = 5, op
         ("fits", '=' : value) -> (\fits -> options{optionFits = fits}) <$> number value
         ("seconds", '=' : value) -> (\seconds -> options{optionSeconds = Just seconds}) <$> number value
         ("programs", '=' : value) -> (\programs -> options{optionMaximumPrograms = Just programs}) <$> number value
-        _ -> Left ("unknown option " <> argument <> "; the options are size, fits, seconds, and programs")
+        ("first-order", "") -> Right options{optionCurried = False}
+        ("only-defaulted", "") -> Right options{optionCurried = True, optionOnlyDefaulted = True}
+        _ ->
+            Left
+                ("unknown option " <> argument <> "; the options are size, fits, seconds, programs, first-order, and only-defaulted")
       where
         number :: (Read a) => String -> Either String a
         number value = maybe (Left ("not a number in " <> argument)) Right (readMaybe value)
