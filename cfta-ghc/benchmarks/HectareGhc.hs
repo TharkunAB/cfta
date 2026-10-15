@@ -21,8 +21,8 @@ fit and of the expected one, the rank of the expected one among the fits
 and among the fits that use every part of themselves ('fitIgnoresPart'),
 the programs that Hectare proposed, the solver
 calls, the seconds, the seconds of Hectare's construction, reduction, and
-listing and of the checks in the typechecker, the peak memory in megabytes,
-whether GHC accepts the first fit as a program of the signature, the number
+listing, of the checks in the typechecker, and of the solver calls in the
+checks, the peak memory and the allocation in megabytes, whether GHC accepts the first fit as a program of the signature, the number
 of stages that ran, and the first fit. The walk itself stops at the time
 limit, so that a row of a timeout has its figures too. The search is the one
 of the tools, with 'optionFits' at its default: the second stage runs when
@@ -54,7 +54,7 @@ import Data.Maybe (isJust, isNothing)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Clock (getMonotonicTime)
-import GHC.Stats (getRTSStats, getRTSStatsEnabled, max_mem_in_use_bytes)
+import GHC.Stats (allocated_bytes, getRTSStats, getRTSStatsEnabled, max_mem_in_use_bytes)
 import System.Directory (createDirectoryIfMissing)
 import System.Environment (getArgs, getExecutablePath, lookupEnv)
 import System.Exit (ExitCode (..))
@@ -327,7 +327,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                     Nothing -> pure False
                 pure (statistics, checked)
             end <- getMonotonicTime
-            memory <- peakMemory
+            (memory, allocated) <- memoryOf
             found <- readIORef firstFit
             size <- readIORef solved
             (rank, rankUsing) <- readIORef counts
@@ -349,14 +349,20 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                         , intercalate
                             ","
                             [ printf "%.3f" (fromIntegral (part statistics) / 1e9 :: Double)
-                            | part <- [statisticsBuildNanos, statisticsReduceNanos, statisticsListNanos, statisticsCheckNanos]
+                            | part <-
+                                [ statisticsBuildNanos
+                                , statisticsReduceNanos
+                                , statisticsListNanos
+                                , statisticsCheckNanos
+                                , countSolverNanos . statisticsCounters
+                                ]
                             ]
                         , if checked then "yes" else "no"
                         , if statisticsSecondStage statistics then "2" else "1"
                         )
-                    _ -> ("-", "-", "-,-,-,-", "-", "-")
+                    _ -> ("-", "-", "-,-,-,-,-", "-", "-")
             printf
-                "result,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%.3f,%s,%d,%s,%s,%s\n"
+                "result,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%.3f,%s,%d,%d,%s,%s,%s\n"
                 name
                 rungName'
                 outcomeText
@@ -370,15 +376,20 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                 (end - start)
                 parts
                 memory
+                allocated
                 checkedText
                 stages
                 (maybe "-" (renderProgram . fitProgram) found)
 
--- | The peak memory in use in megabytes, when the RTS keeps statistics.
-peakMemory :: IO Int
-peakMemory = do
+-- | The peak memory in use and the bytes allocated, in megabytes, when the RTS keeps statistics.
+memoryOf :: IO (Int, Int)
+memoryOf = do
     enabled <- getRTSStatsEnabled
-    if enabled then (\stats -> fromIntegral (max_mem_in_use_bytes stats `div` (1024 * 1024))) <$> getRTSStats else pure 0
+    if enabled
+        then (\stats -> (megabytes (max_mem_in_use_bytes stats), megabytes (allocated_bytes stats))) <$> getRTSStats
+        else pure (0, 0)
+  where
+    megabytes bytes = fromIntegral (bytes `div` (1024 * 1024))
 
 {- | Run each query in a child process with a heap limit and a time limit,
 several at a time, and print the result row of each. With no names, the
@@ -397,7 +408,7 @@ runSuite rung seconds heap jobs names = do
     output <- newMVar ()
     done <- newEmptyMVar
     putStrLn
-        "result,query,rung,outcome,bound,first,solved,rank,using,programs,calls,seconds,build,reduce,list,check,memory,checked,stages,program"
+        "result,query,rung,outcome,bound,first,solved,rank,using,programs,calls,seconds,build,reduce,list,check,solver,memory,allocated,checked,stages,program"
     hFlush stdout
     forM_ [0 .. jobs - 1] $ \worker -> forkIO $ do
         let loop = do
@@ -418,9 +429,9 @@ runSuite rung seconds heap jobs names = do
                             writeFile (directory <> "/" <> rung <> "/" <> query <> ".log") (out <> err <> "exit " <> show code <> "\n")
                         let row = case (code, [line | line <- lines out, "result," `isPrefixOf` line]) of
                                 (_, line : _) -> line
-                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,,"
-                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,,"
-                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,,"
+                                (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,,,,"
+                                (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,,,,"
+                                _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,,,,"
                         withMVar output $ \() -> putStrLn row >> hFlush stdout
                         loop
         loop
