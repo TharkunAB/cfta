@@ -36,6 +36,7 @@ The options apply to each hole:
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:normal-forms=off   keep the fits with equal normal forms
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank            order the fits with a decision model
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-pool=50    the number of fits that the model orders
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-seconds=60 the time limit of a question
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-model=NAME the model on the server
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-keep-alive=0   how long the server keeps the model loaded
 
@@ -46,8 +47,8 @@ With @rank@, a decision model orders the plugin's fits
 (Nimble v3, an external model under its own license), or another with
 @rank-model@. The plugin searches for @rank-pool@ fits that use every part,
 the model orders them in one question, and the plugin shows the best @fits@.
-The options @rank-pool@, @rank-model@, and @rank-keep-alive@ also turn the
-ranking on. By default the server loads the model for each ranked hole
+The other @rank-@ options need @rank@. A question that gets no answer in
+@rank-seconds@ (60 by default) counts as no answer. By default the server loads the model for each ranked hole
 (@rank-keep-alive=0@), about 4 s for each hole, so that a module gets the
 same fits each time. With @rank-keep-alive=5m@, the model stays loaded
 between the holes, which is faster, but the order of a hole can then depend
@@ -65,16 +66,16 @@ import Control.Monad (filterM, foldM, void)
 import Control.Monad.IO.Class (liftIO)
 import Data.List (sortBy)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, fromMaybe, listToMaybe)
+import Data.Maybe (catMaybes, listToMaybe)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Text.Read (readMaybe)
 
 import Data.CFTA.GHC.Fits
-import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits)
+import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits, rankingModel)
 import Data.CFTA.Gen.Synthesis (Program (..))
-import Decision.Ollama (Ollama (..), ollama, unload)
+import Decision.Ollama (Ollama (..), unload)
 import GHC.Builtin.Names (gHC_INTERNAL_BASE, gHC_INTERNAL_ERR, gHC_INTERNAL_UNSAFE_COERCE)
 import GHC.Builtin.Types (consDataCon, nilDataCon, tupleDataCon)
 import GHC.Core.ConLike (ConLike (RealDataCon))
@@ -150,38 +151,40 @@ leaves, five fits, one second for each hole, Hectare's curried types, and no
 ranking.
 -}
 readOptions :: [CommandLineOption] -> Either String PluginOptions
-readOptions =
-    foldM
-        set
-        ( PluginOptions
-            defaultOptions{optionMaximumSize = 4, optionFits = 5, optionSeconds = Just 1, optionAvoid = hectareAvoid}
-            Nothing
-        )
+readOptions arguments = do
+    (options, ranking, ranked, settings) <- foldM set (search0, defaultRanking, False, []) arguments
+    case settings of
+        setting : _
+            | not ranked -> Left (setting <> " needs the option rank: the ranking is on only with rank")
+        _ -> Right (PluginOptions options (if ranked then Just ranking else Nothing))
   where
-    set options argument = case break (== '=') argument of
-        ("size", '=' : value) -> (\size -> search options (\o -> o{optionMaximumSize = size})) <$> number value
-        ("fits", '=' : value) -> (\fits -> search options (\o -> o{optionFits = fits})) <$> number value
-        ("seconds", '=' : value) -> (\seconds -> search options (\o -> o{optionSeconds = Just seconds})) <$> number value
-        ("programs", '=' : value) -> (\programs -> search options (\o -> o{optionMaximumPrograms = Just programs})) <$> number value
-        ("first-order", "") -> Right (search options (\o -> o{optionCurried = False}))
-        ("only-defaulted", "") -> Right (search options (\o -> o{optionCurried = True, optionOnlyDefaulted = True}))
-        ("type-domains", "") -> Right (search options (\o -> o{optionCurried = True, optionTypeDomains = True}))
-        ("normal-forms", '=' : "on") -> Right (search options (\o -> o{optionNormalForms = True}))
-        ("normal-forms", '=' : "off") -> Right (search options (\o -> o{optionNormalForms = False}))
-        ("rank", "") -> Right (rank options id)
-        ("rank-pool", '=' : value) -> (\pool -> rank options (\r -> r{rankingPool = pool})) <$> number value
-        ("rank-model", '=' : value) -> Right (rank options (server (\o -> o{ollamaModel = Text.pack value})))
-        ("rank-keep-alive", '=' : value) -> Right (rank options (server (\o -> o{ollamaKeepAlive = Text.pack value})))
+    search0 = defaultOptions{optionMaximumSize = 4, optionFits = 5, optionSeconds = Just 1, optionAvoid = hectareAvoid}
+    set (options, ranking, ranked, settings) argument = case break (== '=') argument of
+        ("size", '=' : value) -> (\size -> search (\o -> o{optionMaximumSize = size})) <$> number value
+        ("fits", '=' : value) -> (\fits -> search (\o -> o{optionFits = fits})) <$> number value
+        ("seconds", '=' : value) -> (\seconds -> search (\o -> o{optionSeconds = Just seconds})) <$> number value
+        ("programs", '=' : value) -> (\programs -> search (\o -> o{optionMaximumPrograms = Just programs})) <$> number value
+        ("first-order", "") -> Right (search (\o -> o{optionCurried = False}))
+        ("only-defaulted", "") -> Right (search (\o -> o{optionCurried = True, optionOnlyDefaulted = True}))
+        ("type-domains", "") -> Right (search (\o -> o{optionCurried = True, optionTypeDomains = True}))
+        ("normal-forms", '=' : "on") -> Right (search (\o -> o{optionNormalForms = True}))
+        ("normal-forms", '=' : "off") -> Right (search (\o -> o{optionNormalForms = False}))
+        ("rank", "") -> Right (options, ranking, True, settings)
+        ("rank-pool", '=' : value) -> (\pool -> setting (\r -> r{rankingPool = pool})) <$> number value
+        ("rank-seconds", '=' : value) -> (\seconds -> setting (\r -> r{rankingSeconds = seconds})) <$> number value
+        ("rank-model", '=' : value) -> Right (setting (server (\o -> o{ollamaModel = Text.pack value})))
+        ("rank-keep-alive", '=' : value) -> Right (setting (server (\o -> o{ollamaKeepAlive = Text.pack value})))
         _ ->
             Left
                 ( "unknown option "
                     <> argument
-                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, type-domains, normal-forms, rank, rank-pool, rank-model, and rank-keep-alive"
+                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, type-domains, normal-forms, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
                 )
       where
-        search current change = current{pluginSearch = change (pluginSearch current)}
-        rank current change = current{pluginRanking = Just (change (fromMaybe defaultRanking (pluginRanking current)))}
-        server change ranking = ranking{rankingServer = change (rankingServer ranking)}
+        search change = (change options, ranking, ranked, settings)
+        -- A setting of the ranking, which needs the option rank.
+        setting change = (options, change ranking, ranked, settings <> [takeWhile (/= '=') argument])
+        server change current = current{rankingServer = change (rankingServer current)}
         number :: (Read a) => String -> Either String a
         number value = maybe (Left ("not a number in " <> argument)) Right (readMaybe value)
 
@@ -290,9 +293,9 @@ fitsFor (PluginOptions options ranking) hole scope = case th_hole hole of
                     -- 'rankedFits' asks a question for two fits or more that use every part.
                     asks pool = length (take pool (filter (not . comesLast) fits)) >= 2
                 (ordered, asked) <- case ranking of
-                    Just (Ranking pool server) -> liftIO $ do
-                        model <- ollama server
-                        (\(order, _) -> (order, asks pool)) <$> rankedFits model state pool (plain . shown) fits
+                    Just ranking' -> liftIO $ do
+                        model <- rankingModel ranking'
+                        (\(order, _) -> (order, asks (rankingPool ranking'))) <$> rankedFits model ranking' state (plain . shown) fits
                     Nothing -> pure (fits, False)
                 pure ([RawHoleFit (shown fit) | fit <- take (optionFits options) ordered], asked)
   where

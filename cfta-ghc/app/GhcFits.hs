@@ -4,7 +4,7 @@
 modules, each checked in GHC's typechecker ("Data.CFTA.GHC.Fits"): a
 synthesizer with GHC as the oracle.
 
-> ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--type-domains] [--rank] [--rank-pool N] [--model NAME] SIGNATURE
+> ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE
 
 For example:
 
@@ -32,14 +32,15 @@ the model orders them, and ghc-fits prints the best @--fits@ of them. The
 model runs on a local Ollama with the capability "decision": by default the
 model of 'Decision.Ollama.defaultOllama' (Nimble v3, an external model
 under its own license), or another with @--model@. The server loads the
-model for the question (about 4 s). @--rank-pool@ and @--model@ also turn
-the ranking on. When the model does not answer, the order stays.
+model for the question (about 4 s). @--rank-pool@, @--rank-seconds@, and
+@--model@ need @--rank@. When the model does not answer in
+@--rank-seconds@ (60 by default), the order stays.
 -}
 module Main (main) where
 
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef)
-import Data.Maybe (fromMaybe, isNothing)
+import Data.Maybe (isNothing)
 import qualified Data.Set as Set
 import qualified Data.Text as Text
 import System.Environment (getArgs)
@@ -50,10 +51,10 @@ import Text.Read (readMaybe)
 
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Counters (..))
-import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits)
+import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits, rankingModel)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (renderProgram)
-import Decision.Ollama (Ollama (..), ollama)
+import Decision.Ollama (Ollama (..))
 import GHC.Core.Multiplicity (scaledThing)
 import GHC.Tc.Utils.TcType (tcSplitFunTys, tcSplitNestedSigmaTys)
 import GHC.Utils.Outputable (showPprUnsafe)
@@ -63,16 +64,23 @@ data Command = Command
     { commandImports :: [Import]
     , commandPackages :: [String]
     , commandOptions :: Options
-    , commandRanking :: Maybe Ranking
+    , commandRank :: Bool
+    , commandRanking :: Ranking
+    , commandRankSettings :: [String]
+    -- ^ The options of the ranking that the command line has, which need @--rank@.
     , commandSignature :: Maybe String
     }
 
 -- | Read the command line; 'Left' gives the problem.
 readCommand :: [String] -> Either String Command
-readCommand = go (Command [] [] defaultOptions{optionAvoid = hectareAvoid, optionSeconds = Just 10} Nothing Nothing)
+readCommand =
+    go (Command [] [] defaultOptions{optionAvoid = hectareAvoid, optionSeconds = Just 10} False defaultRanking [] Nothing)
   where
     go command arguments = case arguments of
-        [] -> Right command
+        [] -> case commandRankSettings command of
+            setting : _
+                | not (commandRank command) -> Left (setting <> " needs --rank: the ranking is on only with --rank")
+            _ -> Right command
         "-m" : module' : rest -> go command{commandImports = commandImports command <> [importOf module']} rest
         "-p" : package : rest -> go command{commandPackages = commandPackages command <> [package]} rest
         "--size" : value : rest -> number value >>= \size -> go (set command (\options -> options{optionMaximumSize = size})) rest
@@ -81,14 +89,16 @@ readCommand = go (Command [] [] defaultOptions{optionAvoid = hectareAvoid, optio
         "--first-order" : rest -> go (set command (\options -> options{optionCurried = False})) rest
         "--only-defaulted" : rest -> go (set command (\options -> options{optionCurried = True, optionOnlyDefaulted = True})) rest
         "--type-domains" : rest -> go (set command (\options -> options{optionCurried = True, optionTypeDomains = True})) rest
-        "--rank" : rest -> go (rank command id) rest
-        "--rank-pool" : value : rest -> number value >>= \pool -> go (rank command (\r -> r{rankingPool = pool})) rest
-        "--model" : model : rest -> go (rank command (\r -> r{rankingServer = (rankingServer r){ollamaModel = Text.pack model}})) rest
+        "--rank" : rest -> go command{commandRank = True} rest
+        "--rank-pool" : value : rest -> number value >>= \pool -> go (rank "--rank-pool" command (\r -> r{rankingPool = pool})) rest
+        "--rank-seconds" : value : rest -> number value >>= \seconds -> go (rank "--rank-seconds" command (\r -> r{rankingSeconds = seconds})) rest
+        "--model" : model : rest -> go (rank "--model" command (\r -> r{rankingServer = (rankingServer r){ollamaModel = Text.pack model}})) rest
         signature : rest
             | isNothing (commandSignature command) && take 1 signature /= "-" -> go command{commandSignature = Just signature} rest
         other : _ -> Left ("unknown argument " <> other)
     set command change = command{commandOptions = change (commandOptions command)}
-    rank command change = command{commandRanking = Just (change (fromMaybe defaultRanking (commandRanking command)))}
+    rank name command change =
+        command{commandRanking = change (commandRanking command), commandRankSettings = commandRankSettings command <> [name]}
     importOf text = case break (== '=') text of
         (name, '=' : qualifier) -> Import name (Just qualifier)
         (name, _) -> Import name Nothing
@@ -101,8 +111,9 @@ main = do
     case readCommand arguments of
         Left problem -> usage problem
         Right Command{commandSignature = Nothing} -> usage "no signature"
-        Right (Command imports' packages options ranking (Just signature)) -> do
+        Right (Command imports' packages options rank ranking' _ (Just signature)) -> do
             let imports = if null imports' then [Import "Prelude" Nothing] else imports'
+                ranking = if rank then Just ranking' else Nothing
             withSessionOptions defaultSessionOptions{sessionPackages = packages} (map importLine imports) $ \session -> do
                 candidates <- candidatesOf session imports
                 typed <- typeOfExpression session ("undefined :: " <> signature)
@@ -126,14 +137,14 @@ main = do
                         statistics <- fitsForSignature session options candidates typ names accept
                         fits <- reverse <$> readIORef found
                         ordered <- case ranking of
-                            Just (Ranking pool server) -> do
-                                model <- ollama server
+                            Just chosen -> do
+                                model <- rankingModel chosen
                                 let state =
                                         holeState
                                             (Just ("f", Text.pack signature, names))
                                             (Text.pack (showPprUnsafe result))
                                             [(name, Text.pack (showPprUnsafe (scaledThing parameter))) | (name, parameter) <- zip names parameters]
-                                fst <$> rankedFits model state pool (Text.pack . renderProgram . fitProgram) fits
+                                fst <$> rankedFits model chosen state (Text.pack . renderProgram . fitProgram) fits
                             Nothing -> pure (filter (not . fitIgnoresPart) fits <> filter fitIgnoresPart fits)
                         let ranked = take (optionFits options) ordered
                             lambda = if null names then "" else "\\" <> unwords (map Text.unpack names) <> " -> "
@@ -157,5 +168,5 @@ main = do
         hPutStrLn stderr problem
         hPutStrLn
             stderr
-            "usage: ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--type-domains] [--rank] [--rank-pool N] [--model NAME] SIGNATURE"
+            "usage: ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE"
         exitFailure

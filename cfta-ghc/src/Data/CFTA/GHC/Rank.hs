@@ -16,6 +16,7 @@ module Data.CFTA.GHC.Rank (
     -- * Rankings
     Ranking (..),
     defaultRanking,
+    rankingModel,
 
     -- * Questions
     holeState,
@@ -30,23 +31,32 @@ import Data.List (partition)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Decision (DecisionModel (..), Option (..), Question (..), ranked)
-import Decision.Ollama (Ollama (..), defaultOllama)
+import Decision.Ollama (Ollama (..), defaultOllama, ollama)
+import System.Timeout (timeout)
 
 import Data.CFTA.GHC.Fits (Fit, comesLast)
 
--- | How a model ranks fits: the number of fits that it orders, and the server and the model.
+{- | How a model ranks fits: the number of fits that it orders, the time
+limit of a question in seconds, and the server and the model.
+-}
 data Ranking = Ranking
     { rankingPool :: Int
+    , rankingSeconds :: Double
     , rankingServer :: Ollama
     }
     deriving (Eq, Show)
 
-{- | A pool of 50 fits, and the model of 'defaultOllama' with the
-'ollamaKeepAlive' @0@: the server loads the model for each request (about
-4 s more for each request), so that no score depends on an earlier request.
+{- | A pool of 50 fits, 60 seconds for a question, and the model of
+'defaultOllama' with the 'ollamaKeepAlive' @0@: the server loads the model
+for each request (about 4 s more for each request), so that no score
+depends on an earlier request.
 -}
 defaultRanking :: Ranking
-defaultRanking = Ranking 50 defaultOllama{ollamaKeepAlive = "0"}
+defaultRanking = Ranking 50 60 defaultOllama{ollamaKeepAlive = "0"}
+
+-- | The model of a ranking on its server, with the ranking's time limit for each request.
+rankingModel :: Ranking -> IO DecisionModel
+rankingModel ranking = ollama (rankingServer ranking){ollamaTimeout = max 1 (ceiling (rankingSeconds ranking))}
 
 {- | The description of a hole: the name, the signature, and the arguments
 of the definition with the hole, when there is one, the type of the hole,
@@ -87,20 +97,21 @@ rankFits :: DecisionModel -> Text -> (a -> Text) -> [a] -> IO (Either String [(a
 rankFits model state render fits = fmap (ranked fits) <$> scoreOptions model (fitQuestion state (map render fits))
 
 {- | The fits of a search in the order of a model: the first fits that use
-every part, as many as the pool, in the order of the model's scores; then
-the other fits that use every part; and then the fits that come last
-('comesLast'), each in their own order. A pool of one fit asks no question.
-When the model fails, the fits keep their order, and the message comes
-with them.
+every part, as many as the pool of the ranking, in the order of the model's
+scores; then the other fits that use every part; and then the fits that
+come last ('comesLast'), each in their own order. A pool of one fit asks no
+question. When the model fails or does not answer in the ranking's time,
+the fits keep their order, and the message comes with them.
 -}
-rankedFits :: DecisionModel -> Text -> Int -> (Fit -> Text) -> [Fit] -> IO ([Fit], Maybe String)
-rankedFits model state pool render fits
+rankedFits :: DecisionModel -> Ranking -> Text -> (Fit -> Text) -> [Fit] -> IO ([Fit], Maybe String)
+rankedFits model ranking state render fits
     | length pooled < 2 = pure (using <> later, Nothing)
     | otherwise = do
-        answer <- rankFits model state render pooled
+        answer <- timeout (round (rankingSeconds ranking * 1000000)) (rankFits model state render pooled)
         pure $ case answer of
-            Right scored -> (map fst scored <> rest <> later, Nothing)
-            Left problem -> (using <> later, Just problem)
+            Just (Right scored) -> (map fst scored <> rest <> later, Nothing)
+            Just (Left problem) -> (using <> later, Just problem)
+            Nothing -> (using <> later, Just ("no answer in " <> show (rankingSeconds ranking) <> " s"))
   where
     (using, later) = partition (not . comesLast) fits
-    (pooled, rest) = splitAt pool using
+    (pooled, rest) = splitAt (rankingPool ranking) using

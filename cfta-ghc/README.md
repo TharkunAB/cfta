@@ -39,7 +39,7 @@ and `-p PACKAGE` exposes a package. `--size`, `--fits`, and `--seconds`
 bound the search (by default five leaves, ten fits, ten seconds).
 `--first-order`, `--only-defaulted`, and `--type-domains` are the plugin's
 options `first-order`, `only-defaulted`, and `type-domains` below, and
-`--rank`, `--rank-pool N`, and `--model NAME` its ranking (see "Ranking
+`--rank`, `--rank-pool N`, `--rank-seconds S`, and `--model NAME` its ranking (see "Ranking
 the fits with a decision model"). The figures of the search go to the
 standard error. The Hoogle+ ladder of
 `hectare-ghc` is its benchmark.
@@ -131,6 +131,7 @@ The options apply to each hole:
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:normal-forms=off` | on | Keep the fits with the normal form of an earlier fit. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank` | off | Order the fits with a decision model (below). |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-pool=N` | 50 | The number of fits that the model orders. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-seconds=S` | 60 | The time limit of a question to the model. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-model=NAME` | `nimble-v3:9b-q4_K_M` | The model on the server. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-keep-alive=D` | `0` | How long the server keeps the model loaded after a request. |
 
@@ -145,9 +146,9 @@ another with `rank-model`. The plugin searches for `rank-pool` fits that use
 every part, asks the model one question about them (which fit a programmer
 most likely intends, with the definition, the hole's type, and the local
 variables), and shows the best `fits` in the model's order; the other fits
-come after them, in the plugin's order. `rank-pool`, `rank-model`, and
-`rank-keep-alive` also turn the ranking on. When the model does not answer,
-the fits keep the plugin's order.
+come after them, in the plugin's order. The other `rank-` options need
+`rank`. When the model does not answer, or does not answer in
+`rank-seconds`, the fits keep the plugin's order.
 
 The scores of a model that stays loaded depend on the requests before
 them. So by default the server loads the model for each ranked hole
