@@ -1760,6 +1760,7 @@ import MicroCFTA.SourceEmptinessExposure
 import MicroCFTA.DelayedEmptinessExplore
 import MicroCFTA.SourceEmptinessInventory
 import MicroCFTA.SourceEmptinessTaskTrace
+import MicroCFTA.SourceEmptinessTaskSoundness
 /-!
 # Proof dependency audit
 
