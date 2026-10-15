@@ -7,6 +7,19 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Recursive constraint origin application (2026-10-15 11:16 CEST)
+
+Mutual graph induction now carries conditional constraint closure through
+actual outer recursion, child returns, row tails, Mu cleanup, and modifyNode.
+Original normalized syntax and actual checked public success derive final
+literal, Top, and conjunction origins together with exact language, both
+source gate memo receipts, and stable replay. Read
+[the current note](notes-recursive-constraint-origins.md). Success remains
+explicit. Finite derived constraint values and general caller termination
+remain separate obligations. The outer memo table, repeated passes, native
+containers, GHC scheduling, and extraction remain open. No Lava or Rocq
+dependency is added.
+
 ## Constraint origin application (2026-10-15 11:09 CEST)
 
 Native intersection and the complete guarded prefix preserve a constraint

@@ -1,6 +1,60 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 11:09 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 11:16 CEST (Europe/Stockholm)**.
+
+## Original constraint origins through actual outer recursion
+
+Proof: `228203dd`. Source: `TharkunAB/cfta`, `origin/main` at `33148e6d`.
+The authenticated HTTPS upstream refresh is current. Main is an ancestor
+of `formalize`. Continue on `formalize` and push checkpoints. Read
+`lean/notes-recursive-constraint-origins.md`. This section supersedes the
+outer constraint-origin target below.
+
+Mutual graph induction carries conditional constraint closure through the
+actual local native prefix, physical combination and descent, recursive
+children, literal edges, returned row tails, and indexed child walks.
+Resident Mu probes derive an unchanged constructor heap after smart cleanup.
+Both modifyNode branches retain the actual returned row heap. Actual child
+effects derive every later scope. No future origin heap, returned scope,
+recursive preservation law, or unconditional property of arbitrary
+conjunction operands is assumed.
+
+Original normalized syntax derives a finite complete literal inventory,
+including raw and smart binder bodies. Checked bounded public success then
+derives its caller graph, final physical guard origins, and annotations
+throughout the returned value. Each guard is a literal, source Top, or
+actual source conjunction. Both source gate memo receipts, recursive Scope,
+physical histories, closed available output, exact public language, and
+stable identical value/full-state replay remain proved. Successful worker
+receipt and reached native checks remain explicit. This is not a theorem
+that every caller succeeds. Only the literal inventory is proved finite;
+its conjunction closure is not proved finite or decreasing. The retained
+ordinary-height counterexample still rules out that proposed measure.
+
+Next derive a finite inventory for actual derived constraint values, or
+retain a focused counterexample to any proposed bound. Inspect canonical
+equality normalization and actual guard conjunction. Then study a valid
+outer termination measure that accounts for constrained bodies below
+ordinary endpoints and actual native narrowing. Finite constraints alone
+would not prove finite node construction or caller termination. General
+constrained caller termination, the outer reduction memo table, open
+contexts, repeated fixed points, getAllAtPath, native containers,
+GHC scheduling, and extraction remain open.
+
+The audit passes 1,884 jobs and 48,465 dependency checks with only propext,
+Classical.choice, and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-recursive-constraint-origins-20261015-audit.log`.
+No production Haskell or retained reproduction changed. Earlier focused
+height, formatting, 650-example, benchmark-build, and metadata checks were
+not repeated. Starting snapshot:
+`/tmp/mcfta-recursive-origins-start-20261015-1111/`.
+Closing snapshot: `/tmp/mcfta-recursive-origins-checkpoint-20261015-1116/`.
+Older proofs except audit imports, counterexamples, marked drafts, stashes,
+and other worktrees remain unchanged. Weekly allowance was 98% at
+2026-10-15 11:14 CEST. Refresh it before work. Stop all work and owned
+workers at 1% or less. Preserve Sized exact classes, finite size execution,
+size order, both distinct rank inverses, the optimized interned core, and
+older constructor and equality work. No board posts or deployments.
 
 ## Original constraint origins and the outer height boundary
 

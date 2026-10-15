@@ -1,5 +1,19 @@
 # Full formalization coverage
 
+## Original constraint origins through actual outer recursion
+
+Proof: `228203dd`, on main `33148e6d`. Read
+[the recursive origin note](notes-recursive-constraint-origins.md). Mutual
+graph induction carries conditional constraint closure through actual native
+prefixes, child returns, row tails, Mu cleanup, and both modifyNode branches.
+Original normalized syntax and checked bounded public success derive final
+literal, Top, and conjunction origins, both source gate memo receipts, exact
+public language, and stable full-state replay. Success remains explicit.
+The audit passes 1,884 jobs and 48,465 dependency checks. Next study finite
+derived constraint values and a valid outer termination measure. Neither is
+proved by this invariant. This section supersedes older outer origin targets.
+Root HANDOFF.md records preservation and the remaining obligations.
+
 ## Original constraint origins and the outer height boundary
 
 Proofs: `c77bb8c4` and `56c94073`, on main `33148e6d`. Read
