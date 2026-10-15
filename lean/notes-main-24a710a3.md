@@ -1,5 +1,12 @@
 # Endpoint recursion guard and preserved source models
 
+Current proof update: `9f6d66a6` adds current-policy stateful execution,
+finite source checks, ordered descendant memo correctness, sequential active
+ancestor separation, and receipts for all three gate memo tables. The complete
+ordered class filter and native memo ownership still need source correspondence.
+Read [the current memo note](notes-endpoint-memo-stateful.md). Older stateful
+next targets and counts below retain their historical context.
+
 ## Main 24a710a3: endpoint recursion guard
 
 Current source main: `24a710a39e5adcc94c4d986f0bda81a8483bdba8`.

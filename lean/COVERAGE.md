@@ -1,5 +1,21 @@
 # Full formalization coverage
 
+## Current stateful gate and descendant memo
+
+Proof checkpoint `9f6d66a6`, source main `24a710a3`. Read
+[the stateful memo note](notes-endpoint-memo-stateful.md). Current-policy
+stateful graphs and finite execution agree with exact returned constructor
+heaps. Original construction derives finite node/path/class checks. The new
+ordered descendant memo derives exact answers, both query-table invariants,
+and preserved completed entries. Strict resident ancestry excludes active
+ancestor reentry in a sequential helper machine. Three-memo gate receipts
+retain actual unfolding, predicate, and descendant calls with source short
+circuits. Original construction derives stable finite node checks and these
+receipts. The old complete class-selection pipeline is still historical.
+Current ordered class receipts/filtering and native runtime ownership remain
+open. The audit passes 1,994 jobs and 51,072 dependency checks. No Haskell or
+Sized source changed. Earlier scopes and counts below are historical.
+
 ## Main 24a710a3: current endpoint recursion guard
 
 Main `24a710a3` is merged at `6a02619c`; proofs are at `3eed507c`.

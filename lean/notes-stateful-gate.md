@@ -1,5 +1,12 @@
 # Ordered source gate execution and coherent unfolding memo
 
+Current proof update: `9f6d66a6` adds current-policy stateful execution,
+finite source checks, ordered descendant memo correctness, sequential active
+ancestor separation, and receipts for all three gate memo tables. The complete
+ordered class filter and native memo ownership still need source correspondence.
+Read [the current memo note](notes-endpoint-memo-stateful.md). Older stateful
+next targets and counts below retain their historical context.
+
 Current source update: main `24a710a3`, merged at `6a02619c`, adds a
 constrained-descendant check at ordinary path endpoints. The pure current
 policy and actual-record finite checks are proved in `3eed507c`. The older
