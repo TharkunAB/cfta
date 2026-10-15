@@ -1,5 +1,12 @@
 # Sized execution from a validated finite row map
 
+The [native demand checkpoint](notes-native-checked-demand.md) passes 1,945
+audit jobs and 50,309 theorem dependency checks. It adds checked native
+execution with retained operation caches and surrounding memo cells. Completed
+semantic provenance and actual heap preservation remain open. Sized and
+canonicalClasses are unchanged. Exact classes, finite execution, sequence,
+size order, and both signed inverse implications remain separate contracts.
+
 The [checked-edge allocation checkpoint](notes-checked-edge-allocation.md)
 passes 1,936 audit jobs and 50,146 theorem dependency checks. It adds source
 constructor receipts and preserves recursive memo cells. Complete native

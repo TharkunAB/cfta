@@ -1,5 +1,24 @@
 # Full formalization coverage
 
+## Resumable checked native edge demand
+
+Proofs `c8d5d219`, `c82daff4`, and `f4687ad9`, on main `1eb4ab05`.
+Read [the native demand note](notes-native-checked-demand.md). The resumable
+interpreter carries complete equality-operation state through native node and
+edge control. Rejection emits sentinel code before child requests exist.
+Read-only original field lookup derives readiness from actual construction.
+Every finite outcome retains valid growing operation caches, native structural
+Shape, previous complete cells, and published handles. A fresh mismatched
+request has a complete five-step publication-to-return receipt. Independent
+language proves stopped branches have no common accepted term. Surrounding
+recursive memo keys and cells survive. Outer Sound retains an explicit actual
+heap-preservation premise. New completed native semantic provenance, heap
+preservation, normalized-field closure, full guarded recursion, and the other
+whole-library/runtime obligations remain open. The old eager Produced relation
+is not assumed. The audit passes 1,945 jobs and 50,309 dependency checks with
+permitted axioms. No Haskell file changed. All distinct Sized contracts remain.
+Older counts and next-target statements below describe earlier checkpoints.
+
 ## Checked edge allocation and native child-demand boundary
 
 Proofs `1fa17554` and `261627c4`, on main `1eb4ab05`. Read

@@ -5,6 +5,16 @@ Constructor proofs: `1fa17554`. Recursive integration and audit: `261627c4`.
 This extends [equality payload allocation](notes-payload-allocation-receipts.md).
 Production Haskell and all older proof definitions are unchanged.
 
+## Resumable execution extension
+
+The [native demand checkpoint](notes-native-checked-demand.md), `f4687ad9`,
+connects these prefixes to typed native publication, delayed child code,
+retained operation caches, stopped language, and surrounding recursive cells.
+Its aggregate audit passes 1,945 jobs and 50,309 dependency checks. Completed
+native semantic provenance and actual heap preservation are the next target.
+Earlier next-target and validation statements below describe this note's
+original checkpoint. The eager Produced relation remains separate.
+
 ## Raw conjunction
 
 `SourceEqualityConjoinAllocation.Constraint` retains an allocated stored

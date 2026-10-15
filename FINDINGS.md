@@ -1,6 +1,86 @@
 # Current formalization findings
 
-Updated: **2026-10-15 14:27 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 14:47 CEST (Europe/Stockholm)**.
+
+## Resumable checked native edge demand
+
+Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Field/code proofs: `c8d5d219`. Native interpreter: `c82daff4`.
+Stopped-language, completion, outer-memo proofs, and audit: `f4687ad9`.
+Pull returned Already up to date. Continue on `formalize` and push verified
+checkpoints. Read `lean/notes-native-checked-demand.md`, then the checked-edge,
+payload, identity, and completed-cell notes. This supersedes the delayed
+child-execution target below. Whole-library formalization remains incomplete.
+
+ConstraintFieldLookup reads original stored fields without interning them
+again. Actual original constructors and retained table growth derive lookup
+success, Ready storage, and literal original readback. Missing live storage
+is unavailable model representation. Malformed physical readback retains
+its checked error. No cached semantic answer or reverse trie law is assumed.
+NativeCheckedCode retains ordered original child requests and exact returned
+fields/arity. Accepted code equals the older compiler only under actual
+conjunction receipts. Rejected effects are not identified with that compiler.
+
+SourceEqualityNativeDemand carries the complete native and completed equality
+operation states in every observation. Non-edge instructions retain existing
+node control. Edge misses publish and start their original thunk, then enter
+an explicit edgeBody. Arity mismatch skips original field lookup. Equal
+arities run actual raw conjunction and checked guards. Rejection demands the
+sentinel empty field and creates no child code. Ready output creates ordered
+child requests, whose actual returned operation states remain in execution.
+Missing field storage retains edgeBody and its original completion handle.
+Ready and busy hits retain the entire state. The generic five-step mismatch
+receipt includes publication, demand, empty-field allocation, sentinel heap,
+and original thunk completion. It needs no child callback or field lookup.
+Bound splitting and stable complete/blocked observations retain exact state.
+The represented open-edge path keeps captured operand order. The closed
+same-symbol wrapper's outer swap and separate cache remain a boundary.
+
+NativeDemandOperations proves valid growing operation caches and full atomic
+interner traces on every finite outcome. FieldsThrough requires only current
+normalized fields along actual reached controls, with no future Valid/Sound.
+NativeDemandMemo retains structural Shape, prior completed request/result
+cells in both native families, and prior published handles on every outcome.
+Running cells can complete. Structural Shape is not completed semantic
+provenance or word-key injectivity. NativeDemandMeaning proves mismatch and
+actual checked rejection have no common accepted finite term. The proof
+uses independent guarded record language before child demand.
+PartialNativeDemand preserves surrounding recursive memo keys and cells from
+actual receipts. Its Sound transport retains an explicit actual heap-Keeps
+premise. General native execution has not derived that heap premise yet.
+
+Next define completed native node/edge provenance from this interpreter's
+actual checked execution and independent language. Earlier NodeGood/EdgeGood
+use the eager kernel's Produced relation; do not assume it here. Prove actual
+heap preservation and available original/results while retaining real handles,
+source errors, unfinished observations, and explicit word ranges. Discharge
+FieldsThrough from original constructor receipts and dynamic edge closure.
+Then instantiate outer Sound transport and connect selected class folds,
+reconstruction, both gate memo families, the complete guarded pass, recursive
+reduction, and original construction. Do not assume replayed physical effects.
+Global histories, pending equality-operation thunks, cache/hash/IntMap and
+signed-index adequacy, lifetime reservation bounds, unsafe IO, GHC execution,
+general caller completion, open contexts, repeated fixed points, getAllAtPath,
+decision-model, named measures, parser/decoder bridges, and extraction remain
+open. Preserve the optimized interned core and older constructor/equality work.
+Sized exact classes, finite execution, canonical sequence, distinct size order,
+and both signed inverse implications remain separate contracts.
+
+The aggregate audit passes 1,945 jobs and 50,309 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Focused endpoints pass
+1,083 jobs. Logs: `/tmp/mcfta-native-demand-audit-20261015.log` and
+`/tmp/mcfta-native-demand-focused-20261015.log`. The old unused-input warning
+remains; the nine new modules have no warnings. No Haskell file changed.
+Prior strict Nix, six-suite, format, metadata, and 205-rank checks were not
+repeated. They retain their prior source evidence.
+Starting snapshot: `/tmp/mcfta-native-demand-start-20261015-1429/` (2,581 files).
+Closing snapshot: `/tmp/mcfta-native-demand-checkpoint-20261015-1446/` (2,591 files).
+All prior Lean definitions except Audit imports, reproductions, marked drafts,
+stashes, and other worktrees retain their hashes. Both external unverified
+intersection drafts and the limit report remain unchanged. Repository modules
+are authoritative. Temporary validation notes and probes stay outside Audit.
+Weekly allowance was 94% at 2026-10-15 14:43 CEST. Refresh before work; stop
+work and owned workers at 1% or less. No board posts or deployments.
 
 ## Checked edge allocation and native child-demand boundary
 

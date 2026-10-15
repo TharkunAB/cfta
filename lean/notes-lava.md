@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Resumable checked native demand (2026-10-15 14:47 CEST)
+
+The [native demand proof](notes-native-checked-demand.md), `f4687ad9`,
+retains full equality-operation state through native memo publication and
+checked bodies before child code. All observations preserve structural
+completed cells and allocation receipts. Stopped language is independently
+empty. Completed native semantic provenance and derived heap preservation
+remain open. Outer Sound transport keeps its explicit actual heap premise.
+The 1,945-job audit passes. Haskell and older definitions remain unchanged.
+
 ## Checked edge allocation (2026-10-15 14:27 CEST)
 
 The [checked-edge proof](notes-checked-edge-allocation.md), `261627c4`,

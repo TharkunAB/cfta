@@ -7,6 +7,14 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+The [resumable native demand proof](notes-native-checked-demand.md),
+`f4687ad9`, carries equality-operation state through actual typed memo
+publication, checked edge bodies, and delayed child code. Every finite
+outcome retains structural native cells and allocation receipts. Stopped
+branches have empty common language. New completed semantic provenance and
+actual heap preservation remain next. The audit passes 1,945 jobs and 50,309
+dependency checks. No Haskell definition changed. Older counts are historical.
+
 The [checked-edge allocation proof](notes-checked-edge-allocation.md),
 `261627c4`, derives exact raw conjunction, demanded arity checks, and sentinel
 allocation. Every satisfying complete term passes. Concrete prefixes and
