@@ -185,6 +185,19 @@ tree automata of `cfta`, with QuickCheck integration.
   contracts and the measures by constructor name, as annotations
   (`contract`, `measure`, `measureNamed`, `fieldsContract`,
   `fieldsMeasure`), and `annotationFormulas` gives their formulas and terms.
+- `Data.CFTA.Gen.Typing`: typed languages with variables, from typing rules
+  for the constructors of a `HasFTA` datatype, by name. `rule` gives a
+  constructor a type from the types of its fields. `subterm` is a field in
+  the environment of the node with some binders in front, `value` is a field
+  with one value, and `variable` reads the environment by de Bruijn index.
+  `fromTypingRules` builds the automaton whose states are an environment, a
+  type, and the nesting that remains. It gives the closed terms of some types
+  up to a bound on the nesting, as a `Gen Symbol a` with the labels and the
+  ranks of `fromDatatype`. It reports a name that no constructor has
+  (`UnknownConstructors`) and a rule that does not fit the fields of its
+  constructor (`FieldMismatch`). A field that holds a subterm has the type of
+  the datatype, so a family of mutually recursive types is not a language
+  here.
 - `compile` folds the recipe of a generator once with the solver. It groups
   child languages by the observations a guard reads, decides each guard once
   for each tuple of groups, and prunes and splits imports by the same
