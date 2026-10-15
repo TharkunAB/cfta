@@ -17,6 +17,14 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   Hectare's pruning rules, and take a report after each size and a trace of
   each program. `Statistics` give the time of Hectare's construction,
   reduction, and listing, and of the checks.
+- `Data.CFTA.GHC.Session`: a GHC session for a program, with the imports in
+  scope as in GHCi. `withSession` and `withSessionOptions` start it, with
+  more packages by name or identifier, more package databases, more flags,
+  and, with `sessionCompile`, the interpreter backend and linking in memory.
+  `typeOfExpression`, `declare`, `compileExpression`, `candidatesOf`, and
+  `inSession` use it; `fitsForSignature` and `inSignatureHole` run a search
+  on the hole of a signature. `ghc-fits`, the tests, and the benchmark use
+  it.
 - `Fit` tells whether a fit ignores part of itself (`fitIgnoresPart`): it
   still fits when one of its argument subterms has a fresh rigid type, so by
   parametricity it cannot use that subterm. `synthesizeFits` puts such fits

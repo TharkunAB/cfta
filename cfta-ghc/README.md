@@ -172,6 +172,33 @@ point past one that the restore makes flexible. The walk also freezes the
 unification variables of the goal and the candidates, and leaves every
 variable as it found it.
 
+## A session from a program
+
+`Data.CFTA.GHC.Session` gives a program a GHC session with imports in scope,
+as GHCi has them. It gives the type of an expression, takes declarations,
+compiles an expression to a value, and searches the fits of a signature, as
+`ghc-fits` does:
+
+```haskell
+import Control.Monad.IO.Class (liftIO)
+import Data.CFTA.GHC.Fits (defaultOptions, fitProgram)
+import Data.CFTA.GHC.Session
+
+main :: IO ()
+main = withSession ["import Prelude"] $ \session -> do
+    candidates <- candidatesOf session [Import "Prelude" Nothing]
+    Just typ <- typeOfExpression session "undefined :: (a -> b) -> [a] -> [b]"
+    _ <- fitsForSignature session defaultOptions candidates typ ["f", "xs"] $ \fit ->
+        False <$ liftIO (print (fitProgram fit))
+    pure ()
+```
+
+`withSessionOptions` takes more packages (by name or by unit identifier),
+more package databases, and more flags. With `sessionCompile`, the session
+uses GHC's interpreter and links in memory, so that `compileExpression`
+gives values; a program that shares values with the session exposes its own
+units, as its QuickCheck, with `sessionPackageIds`.
+
 ## Running the benchmark and the tests
 
 The test suite `ghc-fits-tests` runs the walk on five Hoogle+ queries with
