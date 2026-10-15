@@ -14,10 +14,12 @@ module Data.CFTA.SimpleSpec (spec) where
 import Control.Monad (forM, forM_)
 import Data.Functor.Identity (Identity (..))
 import Data.List (sort)
+import Data.Map.Strict (Map)
+import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
-import Test.QuickCheck (Gen, chooseInt, elements, forAll, property, vectorOf, within)
+import Test.QuickCheck (Gen, chooseInt, classify, elements, forAll, property, vectorOf, within)
 
 import Data.CFTA (FTA, Transition (Transition), mapConstraints, mkFTA)
 import qualified Data.CFTA as FTA
@@ -52,7 +54,7 @@ import Data.CFTA.Index (Depth)
 import qualified Data.CFTA.Interned as Interned
 import Data.CFTA.Path (ChildIndex (..), path, unPath)
 import qualified Data.CFTA.Simple as Simple
-import Data.CFTA.Template (Template (..), matchesTemplate, restrictFTA)
+import Data.CFTA.Template (Template (..), exclude, excludeFTA, matchesNone, matchesTemplate, restrictFTA)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -97,6 +99,30 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
                 forM_ [0 .. deepest explicit] $ \depth ->
                     (depth, sort (FTA.terms (FTA.boundDepth depth (restrictFTA shape explicit))))
                         `shouldBe` (depth, filter (matchesTemplate shape) (underlying depth explicit))
+
+    it "exclude templates from the explicit view as filtering its trees does" $
+        property $
+            forAll ((,) <$> automaton <*> templates) $ \(explicit, shapes) -> within 10000000 $
+                forM_ [0 .. deepest explicit] $ \depth ->
+                    (depth, sort (FTA.terms (FTA.boundDepth depth (excludeFTA shapes explicit))))
+                        `shouldBe` (depth, filter (matchesNone shapes) (underlying depth explicit))
+
+    it "exclude templates from the explicit view and the interned view with no new ambiguity" $
+        -- For an ambiguous input, the number of runs of a term can change:
+        -- interning merges copies that become equal, and an equality
+        -- constraint ties the runs of two children that the split makes
+        -- different. A term with one run in the input has one run in the
+        -- result.
+        property $
+            forAll ((,) <$> automaton <*> templates) $ \(explicit, shapes) ->
+                let node = Interned.fromFTA explicit
+                 in within 10000000 $
+                        classify (all (== 1) (runCounts (deepest explicit) node)) "unambiguous input" $
+                            forM_ [0 .. deepest explicit] $ \depth -> do
+                                let kept = Map.filterWithKey (\term _ -> matchesNone shapes term) (runCounts depth node)
+                                    check result = (depth, termsAndAmbiguity (runCounts depth result) kept) `shouldBe` (depth, (Map.keys kept, []))
+                                check (exclude shapes node)
+                                check (Interned.fromFTA (excludeFTA shapes explicit))
 
     it "enumerate the terms up to each depth that the simple definition lists" $
         property $
@@ -263,6 +289,10 @@ template = go (2 :: Int)
         symbol <- elements ["a", "b", "f", "g"]
         elements [Hole, AnyNode children, TemplateNode symbol children, AnyPrefix children, TemplatePrefix symbol children]
 
+-- | At most three random templates.
+templates :: Gen [Template String]
+templates = chooseInt (0, 3) >>= \count -> vectorOf count template
+
 -- | The automaton without the transitions whose constraints name a child that they do not have.
 withoutMissingChildren :: FTA Int String Constraint -> FTA Int String Constraint
 withoutMissingChildren explicit =
@@ -280,6 +310,16 @@ deepest :: FTA Int String Constraint -> Depth
 deepest explicit
     | length (underlying 2 explicit) <= 40 = 3
     | otherwise = 2
+
+-- | The number of runs of each term of a node up to a depth.
+runCounts :: Depth -> Interned.Node String -> Map (Term String) Int
+runCounts depth = Map.fromListWith (+) . map (\(term, _) -> (term, 1)) . runs "Mu" . Interned.boundDepth depth
+
+{- | The terms of a result, and the terms with one run in the input that have
+more runs in the result.
+-}
+termsAndAmbiguity :: (Ord term) => Map term Int -> Map term Int -> ([term], [term])
+termsAndAmbiguity result input = (Map.keys result, [term | (term, 1) <- Map.toList input, Map.findWithDefault 0 term result > 1])
 
 -- | The trees of the underlying graph up to a depth, without constraints.
 underlying :: Depth -> FTA Int String Constraint -> [Term String]
