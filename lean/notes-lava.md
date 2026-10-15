@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Complete required-path graphs (2026-10-15 03:00 CEST)
+
+The physical required-path worker now has graph/execution agreement in both
+directions and unique complete returned caches. Original source construction
+derives finite stable execution. Worker and head-read proof bounds remain
+separate from source errors. Independent output-language equality remains the
+next theorem. Read [the current note](notes-required-execution.md). This keeps
+the paper's executable/graph distinction explicit without treating a graph
+agreement theorem as a complete semantic specification.
+
 ## Required-path application (2026-10-15 02:30 CEST)
 
 The actual Needed compiler now has independent complete-path term semantics.

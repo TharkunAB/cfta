@@ -1,6 +1,59 @@
 # Current formalization findings
 
-Updated: **2026-10-15 02:37 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 03:00 CEST (Europe/Stockholm)**.
+
+## Complete physical required-path execution
+
+Proofs: `ff6967ec`, `8c0774fd`, `a98f21e8`, and `17e59c87`. Source:
+`TharkunAB/cfta`, `origin/main` at `f201deda`, with retained repair `61f2c939`.
+Continue on `formalize` and push checkpoints. Read
+`lean/notes-required-execution.md`. This section supersedes the finite
+physical required-node execution target.
+
+Actual edge and node reconstruction now derives complete cache readiness,
+both histories, exact child payloads, closed results, and ordinary node heads.
+Actual recursive head normalization has finite completion for all closed
+available values, including raw binders and root unions. Successful head
+bounds return one exact node and cache. The ordinary first-unfolding fast
+path remains explicit.
+
+The required-node, child, and row graphs preserve source branch priority.
+Empty maps return first. The maximum-key row test rejects before child work.
+Finite completion follows by strict finite Needed size and complete head
+exposure, while automaton nodes can remain cyclic. Original source
+construction derives all initial premises. The instrumented worker retains
+pending constructors, unresolved references, worker-bound exhaustion, and
+head-read exhaustion as separate outcomes. Graphs and successful execution
+agree in both directions. Every completed graph supplies two sufficient
+bounds; all larger pairs return the same value and complete final cache.
+The compiled requireAll list entry derives every callback completion premise.
+
+Kernel fixtures check the full worker on the raw self binder, both exhausted
+bounds, and row rejection before an open child is visited. No production
+Haskell source changed in this checkpoint. The previous 645 Haskell examples
+and formatter checks apply to the unchanged production tree. The aggregate
+Lean audit passes 1,633 jobs and 45,652 dependency checks using only the three
+permitted foundations. Only the old unused inputs warning remains. Log:
+`/tmp/mcfta-required-execution-20261015-audit.log`. Snapshot:
+`/tmp/mcfta-required-execution-checkpoint-20261015-0259/`
+(2,025 Lean-tree files and four root documents). All older proofs except added
+audit imports, counterexamples, repros, marked drafts, stashes, and other
+worktrees remain. Weekly allowance was 18% at 03:00 CEST; refresh before work.
+
+Next prove independent output-language preservation. Start with actual head
+normalization at the independent guarded least language, using existing cold
+table soundness, budget completeness, and completed-read replay. A finite
+future table may be a proof witness; add no conversion to the runtime worker.
+Retain semantic probe heaps through the graph. Derive actual node/edge
+language contracts, then apply checked_row_exact for normalized nonnegative
+keys. Connect the compiled requireAll forest law to the physical selection
+caller, deriving any additional ready-cache fields after its actual effects.
+The logical call graphs do not prove native lazy scheduling or allocator
+trace equivalence across different demand orders. Actual edit/narrowing,
+full one-pass correspondence, fixed-point reduction, native containers, and
+verified extraction remain open. Preserve exact Sized contracts, the unary
+ancestor theorem, and the optimized interned core. Stop all work and workers
+at 1% weekly allowance or less.
 
 ## Required-path trie, ordered child fold, and retained-cycle repair
 

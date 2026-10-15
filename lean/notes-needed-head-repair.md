@@ -4,6 +4,15 @@ Updated: 2026-10-15 02:37 CEST.
 Proofs: `06353eab` and `31868723`. Source repair: `61f2c939`.
 Upstream: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 
+## Current physical execution checkpoint
+
+`ff6967ec`, `8c0774fd`, `a98f21e8`, and `17e59c87` complete finite physical
+required-path graphs and the instrumented worker. Actual constructor effects,
+source initial premises, both independent proof bounds, and final-cache
+uniqueness are derived. Read [the current note](notes-required-execution.md).
+Independent language preservation is now the next target. The conditional
+forest law below still needs that derived semantic node contract.
+
 ## Actual Needed construction
 
 `SourceEqualityNeededMap` models ascending entries of the source `IntMap`.
