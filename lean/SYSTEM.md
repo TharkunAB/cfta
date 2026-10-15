@@ -1,5 +1,26 @@
 # Constrained languages, indexing, and distributions
 
+## Main 24a710a3: current endpoint recursion guard
+
+Main `24a710a3` is merged at `6a02619c`; proofs are at `3eed507c`.
+Read [the current policy and source comparison](notes-main-24a710a3.md).
+Six additive modules prove exact stored-record descendant witnesses, the
+stronger pure gate, selected-class containment, conditional pass preservation,
+ranked finite node/path/class checks, and current-policy checks derived from
+original construction. Kernel evaluation confirms the new barrier on the
+preserved caller input. The old stateful gate, memo, class-selection pipeline,
+and cycle witnesses retain their earlier endpoint policy. Their current-source
+correspondence is historical. The new global descendant memo and retargeted
+stateful selection remain open. General caller/fixpoint termination is unproved.
+The preserved cold Haskell caller repro completes; its old default certificate
+fails as expected. All six Nix suites pass 697 examples plus golden checks.
+The strict build and changed-file Fourmolu checks pass. The Lean audit passes
+1,981 jobs and 50,858 dependency checks, with no new warnings or axioms.
+Prior proofs/repros/drafts and the optimized interned core remain. Native
+intersection bodies, Sized, and the uncovered derived-refinement APIs are
+unchanged. All remaining full-library and separate Sized contracts remain.
+Older source heads, counts, and next targets below are historical.
+
 ## Specification
 
 The source baseline is `origin/microcfta` at `de910ea`. This includes the merged
@@ -620,11 +641,13 @@ reference from a root union. This removes the redundant epsilon alternative
 in `A`. The retained [reproduction](repro/RecursiveReduction.hs) passes on
 `de910ea`, including identity stability and bounded language equality.
 
-`ConstrainedRecursionGate` models the current dispatch and ordered short
-circuit. Completed bounded results are stable. The total worker uses path
-length and an explicit rank for same-path open-binder unfolding. Deriving
-that rank for actual interned nodes remains open. Its completed one-pass
-language law uses the existing primitive reduction laws.
+`ConstrainedRecursionGate` retains the endpoint policy before main 24a710a3.
+EndpointRecursionGate models the current stronger dispatch and ordered short
+circuit. SourceEndpointReachability gives exact stored-record witnesses.
+SourceEndpointGateCompletion derives finite pure checks from original source
+construction with the proved actual unfolding rank. The bounded pass law uses
+the existing primitive reduction laws. The earlier stateful/memo selection
+pipeline has not been retargeted. The new descendant memo remains uncovered.
 `RecursiveReductionBarrier` retains the earlier, more conservative gate.
 Its path-only termination theorem does not describe the current source.
 

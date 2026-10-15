@@ -1,5 +1,13 @@
 # A closed input repeats an outer caller key
 
+Current source update: main `24a710a3`, merged at `6a02619c`, adds a
+constrained-descendant check at ordinary path endpoints. The pure current
+policy and actual-record finite checks are proved in `3eed507c`. The older
+stateful/memo selection pipeline below retains its earlier policy. Caller-cycle
+witnesses remain historical; the preserved cold Haskell fixture now completes.
+Read [the current source comparison](notes-main-24a710a3.md). General caller
+termination and the new descendant memo remain open.
+
 The [actual outer-worker proof](notes-outer-worker-demands.md), `7369264b`,
 now supplies complete one-level callee receipts and first-child necessity
 under every recursive callback. It supersedes the first-incomplete-worker

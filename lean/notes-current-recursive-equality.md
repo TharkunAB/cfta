@@ -1,5 +1,13 @@
 # Current recursive equality and root union normalization
 
+Current source update: main `24a710a3`, merged at `6a02619c`, adds a
+constrained-descendant check at ordinary path endpoints. The pure current
+policy and actual-record finite checks are proved in `3eed507c`. The older
+stateful/memo selection pipeline below retains its earlier policy. Caller-cycle
+witnesses remain historical; the preserved cold Haskell fixture now completes.
+Read [the current source comparison](notes-main-24a710a3.md). General caller
+termination and the new descendant memo remain open.
+
 Source checkpoint: `origin/microcfta`, `de910ea`. The relevant source is
 `Equality/Operations.hs` and `Interned/Type.hs`. No Haskell source is changed.
 

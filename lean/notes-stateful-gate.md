@@ -1,5 +1,13 @@
 # Ordered source gate execution and coherent unfolding memo
 
+Current source update: main `24a710a3`, merged at `6a02619c`, adds a
+constrained-descendant check at ordinary path endpoints. The pure current
+policy and actual-record finite checks are proved in `3eed507c`. The older
+stateful/memo selection pipeline below retains its earlier policy. Caller-cycle
+witnesses remain historical; the preserved cold Haskell fixture now completes.
+Read [the current source comparison](notes-main-24a710a3.md). General caller
+termination and the new descendant memo remain open.
+
 Current update (2026-10-15 02:13 CEST): `ae6a0141`, `ac7c1eaf`, `97f987a1`,
 and `a84343e3` derive the physical class sort, source prechecks, actual
 array-normalization readback, and complete guarded selection. The next

@@ -1,5 +1,13 @@
 # Actual running cells and derived normalized fields
 
+Current source update: main `24a710a3`, merged at `6a02619c`, adds a
+constrained-descendant check at ordinary path endpoints. The pure current
+policy and actual-record finite checks are proved in `3eed507c`. The older
+stateful/memo selection pipeline below retains its earlier policy. Caller-cycle
+witnesses remain historical; the preserved cold Haskell fixture now completes.
+Read [the current source comparison](notes-main-24a710a3.md). General caller
+termination and the new descendant memo remain open.
+
 The [main 6fe34ab8 refresh](notes-main-6fe34ab8.md), merged at `9f8d3afc`,
 retains these proofs and their existing source bodies. It adds uncovered
 derived-refinement frontends and two verified source counterexamples.

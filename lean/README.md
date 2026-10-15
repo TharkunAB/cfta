@@ -1,13 +1,34 @@
 # cfta formal model
 
-Current source: `TharkunAB/cfta`, `origin/main` at `1eb4ab05`, merged at `271284df`.
+Current source: `TharkunAB/cfta`, `origin/main` at `24a710a3`, merged at `6a02619c`.
 Continue on `formalize`; push verified checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`. Public `Data.CFTA.*`
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
-The [current main refresh](notes-main-6fe34ab8.md), `9f8d3afc`, preserves
+## Main 24a710a3: current endpoint recursion guard
+
+Main `24a710a3` is merged at `6a02619c`; proofs are at `3eed507c`.
+Read [the current policy and source comparison](notes-main-24a710a3.md).
+Six additive modules prove exact stored-record descendant witnesses, the
+stronger pure gate, selected-class containment, conditional pass preservation,
+ranked finite node/path/class checks, and current-policy checks derived from
+original construction. Kernel evaluation confirms the new barrier on the
+preserved caller input. The old stateful gate, memo, class-selection pipeline,
+and cycle witnesses retain their earlier endpoint policy. Their current-source
+correspondence is historical. The new global descendant memo and retargeted
+stateful selection remain open. General caller/fixpoint termination is unproved.
+The preserved cold Haskell caller repro completes; its old default certificate
+fails as expected. All six Nix suites pass 697 examples plus golden checks.
+The strict build and changed-file Fourmolu checks pass. The Lean audit passes
+1,981 jobs and 50,858 dependency checks, with no new warnings or axioms.
+Prior proofs/repros/drafts and the optimized interned core remain. Native
+intersection bodies, Sized, and the uncovered derived-refinement APIs are
+unchanged. All remaining full-library and separate Sized contracts remain.
+Older source heads, counts, and next targets below are historical.
+
+The [previous main refresh](notes-main-6fe34ab8.md), `9f8d3afc`, preserves
 all proofs, the optimized core, the equality repair, and Sized. New Symbolic
 and automatic derived-refinement APIs remain uncovered. A retained standalone
 repro verifies named-annotation projection loss and strict-field placeholders.
