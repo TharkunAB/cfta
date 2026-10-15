@@ -1189,6 +1189,18 @@ and
 [`SortedLists.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/SortedLists.hs)
 run these programs, and CI runs them with the other examples.
 
+`measuredBy` gives a constructor several named measures. A named measure is
+an uninterpreted function of the value, as a measure of Liquid Haskell is:
+the refinement of a constructed term is `bh(v) == 2 && col(v) == 0` for the
+measures `bh` and `col`. Each measure is a function of the terms of the
+children, as for `measured`, and it reads the measure of a child as
+`uninterpreted "bh" [child]`; a contract reads it the same way. Each measure
+must be one integer. With the black height and the color, one recursive
+generator `oneof [leaf, black tree, red tree]` gives red-black trees, with the
+condition `col v .== 0 .&& bh v .<= 3` at the root and six unfoldings:
+[`RedBlackMeasures.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/RedBlackMeasures.hs)
+gets the counts by size and the ranks of the two-state generator above.
+
 ### Construction and compilation
 
 `elements` and `pool` choose uniformly. `namedPool` takes
