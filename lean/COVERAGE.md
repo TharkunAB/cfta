@@ -1,5 +1,67 @@
 # Full formalization coverage
 
+## Current serial publication and memo-aware targets
+
+Source main remains `a4dd678f`, merged at `1a421c7d`. Proof commits are
+`5662dbad`, `c6f18d2a`, `8ec392bc`, `f90e201d`, and `e93d0190`.
+Full library scope stays active. Earlier sections keep their historical scope.
+
+The new serial graph publishes a captured producer before its body runs.
+Completed maps are proof state for thunk evaluation, not another production
+cache. Actual request bounds derive strict ordinary-height descent and
+exclude running ancestor keys by resident identity. Finite public endpoints
+take no ancestor-exclusion, future-validity, or winner-equality premise.
+The actual completed body leaves its parent lookup unchanged. An absent
+parent stays absent, so an actual miss returns its computed candidate.
+
+Lifting and projection retain the same output, constructor heap, and completed
+memo. Warm captured-record, completed-key, and cache-coverage invariants remain
+explicit. Empty tables derive them. PublishedComplete.native_cold composes
+one finite early-publication history with native state, independent language,
+producer history, and its exact three-global-table receipts. Tickets are
+abstract labels. Concurrent forcing, runtime identities, actual GHC demand,
+and host cache operations remain open.
+
+The new native merge retains native tables and domains. Selected operands
+project the captured original forest, then call that merge. They allow open
+unrelated siblings. The new first-seeded target fold threads its actual
+returned merge table through operands and native intersections. It derives
+readiness, costs, physical entries, common selected-subterm coverage, and
+ordered receipts for that same trace. Multiple native intersections can
+populate native tables. Finite targets still assume actual-prefix word-range
+plans. Original constraint checks remain necessary for the exact caller.
+
+The literal singleton-map insertion fold now derives ordered bucket contents.
+Unique emitted keys and exact lookup membership derive the canonical-group
+permutation. Actual HashMap iteration still needs that finite-map contract.
+The recursive body still uses canonical outer groups. No equal-heap or
+allocation-order theorem follows from a group permutation.
+
+The full pinned Lean build passes 2,178 jobs and 53,977 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Eleven new modules and four additive Audit imports retain every earlier
+non-Audit proof file. Haskell and CI are unchanged. The source-refresh strict
+Nix build, 743 examples plus golden, Fourmolu, and Cabal-gild checks remain
+valid. They were not repeated for these proof-only changes.
+
+Read `lean/notes-current-published-merge.md`. Next thread this merge table
+through shared target closures, leaves, edits, and the full class pass.
+Continue general Scan/outer completion, allocation and checked native transfer,
+machine bounds, import trim/DFS/SCC, enumeration and waiting counts, templates,
+typed refinements, heterogeneous generators, decision-model, curried/GHC,
+state search, normal forms, and all distinct Sized contracts. Keep the
+optimized interned core and older constructor and equality work.
+
+Start: `/tmp/mcfta-memo-aware-checkpoint-20261016-0045/` (2,870 files).
+Closing: `/tmp/mcfta-published-merge-checkpoint-20261016-0104/` (2,882 files).
+Script: `/tmp/mcfta-preserve-published-merge-20261016.py`.
+Evidence: `/tmp/mcfta-published-merge-*`, `/tmp/mcfta-memo-merge-*`,
+`/tmp/mcfta-memo-target-*`, `/tmp/mcfta-memo-demand-target-*`, and
+`/tmp/mcfta-current-merge-grouping-*`. All previous proofs, repros, repairs,
+14 external drafts, stashes, and other worktrees remain. The last weekly
+allowance was 81%; it is stale. Stop owned work at 1% or less. No board posts
+or deployments. Push verified formalize checkpoints. The full goal stays active.
+
 ## Current recursive memo-aware merge completion
 
 Source main remains `a4dd678f`, merged at `1a421c7d`. Proof commits are
