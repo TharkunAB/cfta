@@ -1795,6 +1795,8 @@ import MicroCFTA.SourceOrderedBinderComplete
 import MicroCFTA.SourceCurrentClassRequired
 import MicroCFTA.SourceCurriedDefaulting
 import MicroCFTA.SourceProgramRunAccounting
+import MicroCFTA.SourceCurrentClassRequiredReady
+import MicroCFTA.SourceTemplateShapeSplits
 import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
 import MicroCFTA.SourceCurrentEnumerationStorage
