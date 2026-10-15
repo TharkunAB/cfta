@@ -22,6 +22,7 @@ module Data.CFTA.Gen.Refinement.DeriveSpec (spec) where
 import Control.Monad (forM_, void)
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (sort)
+import Data.Maybe (isJust)
 import Data.Proxy (Proxy (..))
 import Data.Typeable (typeRep)
 import GHC.Generics (Generic)
@@ -313,6 +314,45 @@ isAVL tree = maybe False (const (ascending (keys tree))) (heightOf tree)
     keys (Branch left key right) = keys left <> [key] <> keys right
     ascending items = and (zipWith (<) items (drop 1 items))
 
+-- | A tree of keys whose measure is its height.
+data Balanced = Stump | Fork Balanced Integer Balanced
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | The height of a tree, as a named measure.
+newtype Height e = Height {tall :: e}
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (MeasureRecord)
+
+-- | One node of a tree: the heights of the subtrees and the key.
+data BalancedNode e = StumpNode | ForkNode (Height e) e (Height e)
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+{- | The heights of the subtrees differ by at most one. The greater height
+comes from 'abs' and 'signum', which give a conditional term as 'ite' does.
+-}
+instance HasLTA Balanced where
+    type Node Balanced = BalancedNode
+    type Measures Balanced = Height
+    invariant = MeasuredBy treeHeight balanced
+      where
+        treeHeight StumpNode = Height 0
+        treeHeight (ForkNode left _ right) = Height (1 + greater (tall left) (tall right))
+        greater a b = a + (b - a) * signum (b - a + abs (b - a))
+        balanced StumpNode = true
+        balanced (ForkNode left _ right) = abs (tall left - tall right) .<= 1
+
+-- | Whether the heights of the subtrees of each node differ by at most one.
+isBalanced :: Balanced -> Bool
+isBalanced = isJust . heightOf
+  where
+    heightOf Stump = Just (0 :: Int)
+    heightOf (Fork left _ right) = do
+        leftHeight <- heightOf left
+        rightHeight <- heightOf right
+        if abs (leftHeight - rightHeight) <= 1 then Just (1 + max leftHeight rightHeight) else Nothing
+
 -- | Terms with de Bruijn variables, a let, and a lambda.
 data Scoped = Zero | Index Int | Plus Scoped Scoped | Let Scoped Scoped | Lambda Scoped
     deriving stock (Eq, Ord, Show, Generic)
@@ -506,6 +546,12 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         sameMembers 3 keys isAVL (deriveLTA @AVL 3 keys)
         membersOf (deriveLTA @AVL 3 keys) >>= (`shouldBe` 25) . length
         measuresOf keys (invariant @AVL) (Branch (Branch Empty 0 Empty) 1 Empty) `shouldBe` Shape 2 0 1
+    it "derives height-balanced trees from a named measure with a conditional term" $
+        sameMembers
+            3
+            (atom @Integer (LTAGen.elements [0, 1]))
+            isBalanced
+            (deriveLTA @Balanced 3 (atom @Integer (LTAGen.elements [0, 1])))
     it "derives the closed terms of a language with let-binding from a free-variable bound" $ do
         let indices = atom @Int (LTAGen.elements [0 .. 3])
             closed bound = (`LTAGen.satisfying` (.== 0)) <$> deriveLTA @Scoped bound indices
