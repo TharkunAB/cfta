@@ -56,7 +56,7 @@ import qualified Data.IntSet as IntSet
 import Data.List (compareLength, genericTake, sortOn)
 import Data.Monoid (All (..))
 import Data.Ord (Down (..))
-import Data.Sequence (Seq ((:<|), (:|>)))
+import Data.Sequence (Seq ((:<|)))
 import qualified Data.Sequence as Sequence
 import qualified Data.Set as Set
 import Data.String (IsString (..))
@@ -213,8 +213,8 @@ data EnumerationState symbol = EnumerationState
     -- ^ Fresh UVar supply.
     , _uvarRepresentative :: UnionFind
     -- ^ Persistent union-find for equality-constrained UVars.
-    , _uvarValues :: Seq (UVarValue symbol)
-    {- ^ Per-UVar contents indexed by 'uvarToInt'. A slot is
+    , _uvarValues :: IntMap.IntMap (UVarValue symbol)
+    {- ^ Per-UVar contents keyed by 'uvarToInt'. A slot is
     'UVarEliminated' exactly when its UVar is not a representative;
     @findExpandableUVars@ relies on 'assimilateUvarVal' maintaining this.
     -}
@@ -290,7 +290,7 @@ initEnumerationState weights n =
      in EnumerationState
             uvg
             (UnionFind.withInitialValues [uv])
-            (Sequence.singleton value)
+            (IntMap.singleton (uvarToInt uv) value)
             (if expandable value then IntSet.singleton (uvarToInt uv) else IntSet.empty)
             IntMap.empty
             []
@@ -384,7 +384,7 @@ addUVarValue x = do
     let value = UVarUnenumerated x Sequence.Empty
     modify' $ \s ->
         s
-            { _uvarValues = _uvarValues s :|> value
+            { _uvarValues = IntMap.insert (uvarToInt uv) value (_uvarValues s)
             , _expandableUVars =
                 if expandable value
                     then IntSet.insert (uvarToInt uv) (_expandableUVars s)
@@ -415,7 +415,7 @@ getUVarValue uv = do
     uv' <- getUVarRepresentative uv
     let idx = uvarToInt uv'
     values <- gets _uvarValues
-    return $ Sequence.index values idx
+    return $ values IntMap.! idx
 
 {- | Replace the value of a UVar.
 
@@ -425,7 +425,7 @@ before a union.
 -}
 setUVarValue :: UVar -> UVarValue symbol -> EnumerateM symbol ()
 setUVarValue uv val = do
-    old <- gets (\s -> Sequence.index (_uvarValues s) (uvarToInt uv))
+    old <- gets (\s -> _uvarValues s IntMap.! uvarToInt uv)
     writeUVarValue (suspended val) (suspended old) uv val
   where
     suspended (UVarUnenumerated _ scs) = scs
@@ -440,7 +440,7 @@ writeUVarValue ::
 writeUVarValue gained lost uv val =
     modify' $ \s ->
         s
-            { _uvarValues = Sequence.update idx val (_uvarValues s)
+            { _uvarValues = IntMap.insert idx val (_uvarValues s)
             , _expandableUVars =
                 if expandable val
                     then IntSet.insert idx (_expandableUVars s)
@@ -483,8 +483,8 @@ assimilateUvarVal uvTarg uvSrc
     | uvTarg == uvSrc = return ()
     | otherwise = do
         values <- gets _uvarValues
-        let srcVal = Sequence.index values (uvarToInt uvSrc)
-        let targVal = Sequence.index values (uvarToInt uvTarg)
+        let srcVal = values IntMap.! uvarToInt uvSrc
+        let targVal = values IntMap.! uvarToInt uvTarg
         case srcVal of
             UVarEliminated -> return () -- Happens from duplicate constraints
             _ -> do
@@ -508,7 +508,7 @@ mergeNodeIntoUVarVal uv n scs = do
     let idx = uvarToInt uv'
     values <- gets _uvarValues
     checkEmpty <- gets _constrainedRecursion
-    let new = intersectUVarValue checkEmpty (UVarUnenumerated (Just n) scs) (Sequence.index values idx)
+    let new = intersectUVarValue checkEmpty (UVarUnenumerated (Just n) scs) (values IntMap.! idx)
     -- The slot keeps its suspended constraints and gains these.
     writeUVarValue scs Sequence.Empty uv' new
     inheritAncestry idx
