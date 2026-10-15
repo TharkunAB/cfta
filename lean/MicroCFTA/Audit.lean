@@ -1759,6 +1759,7 @@ import MicroCFTA.SourceEmptinessClassFold
 import MicroCFTA.SourceEmptinessExposure
 import MicroCFTA.DelayedEmptinessExplore
 import MicroCFTA.SourceEmptinessInventory
+import MicroCFTA.SourceEmptinessTaskTrace
 /-!
 # Proof dependency audit
 
