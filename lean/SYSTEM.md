@@ -1,5 +1,66 @@
 # Constrained languages, indexing, and distributions
 
+## Exact current scan/required composition and reconstructed result domains
+
+Main `9a2f9bea` is merged at `d8beb7f5`. Proofs are `b0725b6f`,
+`bfccb6cb`, `5fc66c36`, `3bf2b23c`, and `f5a95755`. Full library scope
+stays active. Earlier sections retain historical source and proof scopes.
+
+Actual primary replay now retains every selected original class at the
+same actual scan-final heap. The canonical selected path union derives
+its original-child required domain. The literal requireAll worker has
+finite stable execution and exact independent conditional filter language.
+Original accepted forests with the original class paths are retained.
+Unselected original siblings can remain open.
+
+All maximal tips, including terminal suffixes, retain original endpoint
+certificates. Actual required-node, child, and row graphs derive structural
+output domains. New open ordinary records need no residency in the earlier
+gate heap. Every proper maximal output tip has the existing closed-path
+projection domain. scan_required_complete composes all these results from
+an actual successful current Scan. Scan memo, cost, and field invariants
+still end at its scan heap. The later required/fallback effects remain open.
+
+Next retain original selected paths that stop being maximal when another
+path extends them. The structural tip domain alone does not imply their
+shorter endpoint closedness. Use actual original endpoint certificates and
+conditional closed-node preservation. Then carry these domains through
+shared targets and class edits. Continue the full current caller, required/
+fallback merge and subsumes memos, costs/fields, actual allocation history,
+checked native/runtime transfer, word bounds, general constrained completion,
+whole enumeration, representative waiting counts, templates, typed refinement
+frontends, heterogeneous generators, decision-model, and every distinct
+Sized contract. Keep the optimized interned core and all older proofs.
+
+Upstream adds curried synthesis, type-variable domains/defaulting, a run-edge
+narrowing hook, and typed-run counters. New source models prove physical
+marker filtering after weighted lookup, exact optional program occurrences,
+first-occurrence deduplication, Walk marker packing and next-program tails.
+Complete curried typing, GHC erasure/instance/domain/defaulting adequacy,
+whole Walk/enumerator scheduling, demand, and machine counters remain open.
+The current fromRows schedule proof retains its separate trim/DFS/SCC,
+constructor, language/run, physical sharing, capacity, and runtime boundaries.
+
+The aggregate audit passes 2,131 jobs and 53,126 dependency checks with only
+the permitted Lean foundations and no new warning. Eleven new modules and
+three additive Audit imports preserve every older non-Audit proof file.
+Required strict Nix build and all six suites pass 735 examples plus the
+golden check. Fourmolu passes all 13 changed Haskell files. Cabal-gild passes
+all four active packages. Haskell changes are exactly the upstream merge;
+the previous equality repair remains intact.
+
+Read `lean/notes-current-required-language.md`,
+`lean/notes-current-required-results.md`, and `lean/notes-main-9a2f9bea.md`.
+The prior Sized, allocation-history, and ordered-import notes remain relevant.
+
+Start: `/tmp/mcfta-required-support-checkpoint-20261015-2257/` (2,807 files).
+Closing: `/tmp/mcfta-required-language-checkpoint-20261015-2322/` (2,821 files).
+Script: `/tmp/mcfta-preserve-required-language-20261015.py`.
+Evidence: `/tmp/mcfta-required-language-*`. All prior proofs, repros,
+repairs, 13 marked external drafts, stashes, and other worktrees remain.
+Weekly allowance is 81%. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
 ## Open required-path completion and ordered source import
 
 Main `5c53de80` is merged at `ea7d8b05`. Proofs are `676fd247`,
