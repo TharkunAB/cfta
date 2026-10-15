@@ -7,6 +7,15 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Actual outer caller cycle (2026-10-15 12:10 CEST)
+
+The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`
+on main `239feb64`, supersedes unconditional physical-key rank targets.
+Two actual local prefixes return to the same empty-inherited root key.
+The observed key relation is not well founded. The next operational target
+is the lazy result memo and strict constructor demands. GHC correspondence
+and whole-library completion remain separate. No production algorithm changes.
+
 ## Source bound counterexamples (2026-10-15 11:48 CEST)
 
 Kernel evaluation refutes a fixed local path-length bound and literal

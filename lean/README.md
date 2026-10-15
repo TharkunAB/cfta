@@ -3,15 +3,23 @@
 Current source: `TharkunAB/cfta`, `origin/main` at `239feb64`.
 Continue on `formalize`; publish completed checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
-`cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`. Public `Data.CFTA.*` modules and
-Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
+`cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`.
+Public `Data.CFTA.*` modules and Lean namespace `MicroCFTA` retain their names.
+The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 The [upstream refresh](notes-main-refresh-20261015.md) preserves every proof.
-Core and generator source files are unchanged. Decision-model and the moved
+Core and generator definitions are unchanged. Decision-model and the moved
 GHC session library remain outside formal source coverage. All six Haskell
 suites pass, with 687 examples plus the golden suite. The strict build,
 formatting, and metadata checks pass for all four packages.
-The audit passes 1,890 jobs and 48,594 theorem dependency checks.
+The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`,
+returns to the original physical root with empty inherited constraints after
+two actual local prefixes. Its observed physical-key relation is not well
+founded. The retained source certificate passes. Cold and warm full-pass
+calls time out. Next model the outer lazy result memo and strict constructor
+demands. No production algorithm is repaired. This supersedes unconditional
+caller-rank targets below. The kernel result does not prove GHC divergence.
+The audit passes 1,891 jobs and 48,849 theorem dependency checks.
 The [source boundary checks](notes-origin-boundaries.md) refute inherited
 literal conjunction closure and a local maximum-path bound. Retained Haskell
 prefixes also refute physical absorption of a repeated intersection factor.
@@ -21,10 +29,9 @@ claim. Exact small normalization receipts retain the actual source result.
 The [finite physical constraint inventory](notes-constraint-inventory.md)
 remains proved for checked successful public calls, with exact language,
 both source gate memo receipts, and stable full-state replay. Inherited
-records and actual node construction need separate bounds. Next derive a
-rank for actual outer child continuations, including stopping at Mu and
-union inputs. The [ordinary-height counterexample](notes-constraint-origins.md)
-still applies.
+records and actual node construction need separate analysis. The caller
+cycle now supersedes that physical-key rank target.
+The [ordinary-height counterexample](notes-constraint-origins.md) still applies.
 The [closed warm completion proof](notes-closed-warm-completion.md) gives finite
 local execution at arbitrary closed warm scopes under reached word checks.
 The [inherited Region proof](notes-inherited-plain-completion.md) gives finite

@@ -1,6 +1,71 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 11:57 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 12:09 CEST (Europe/Stockholm)**.
+
+## A closed source input repeats the actual outer caller key
+
+Proof and reproduction: `eed062bd`. Source: `TharkunAB/cfta`, main
+`239feb64`, merged at `b3d06a08`. Upstream comparison checkpoint:
+`83f20c4c`. Main is an ancestor of `formalize`. Continue on `formalize`
+and push checkpoints. Read `lean/notes-outer-caller-cycle.md` and
+`lean/notes-main-refresh-20261015.md`. This section supersedes unconditional
+caller-rank targets and older source-head statements below.
+
+Use W(n)=w(n), B=mu r.(a | p(W(r),W(r))), C=p(W(B),W(B)),
+A=mu r.(a | p(W(r),W(C)) [0=1]), and R=p(W(A),W(C)) [0=1].
+The live source checks A intersect B=A, C intersect B=C, A intersect C=R,
+and actual root-prefix children [W(R),W(R)]. The selected endpoints are
+closed ordinary wrappers. Both actual inherited descents are empty.
+
+SourceEqualityOuterCallerCycle constructs closed normalized source syntax,
+runs the concrete native root prefix, then runs the wrapper prefix at its
+actual returned warm state. Kernel evaluation identifies the returned node
+reference with R and both physical payloads with literal EmptyConstraints.
+The observed child-to-parent physical-key dependencies form the cycle
+(empty,R) -> (empty,W(R)) -> (empty,R). not_wellFounded proves that this
+observed relation is not well founded. A physical-key rank cannot strictly
+decrease across both calls. Outer Haskell memo/runtime correspondence and
+the absence of every finite monadic graph are not asserted by this theorem.
+
+The Haskell result memo returns the same stored unfinished thunk on a hit.
+modifyNode and edge interning demand child identities before a node can
+return. The retained reproduction checks its finite identity certificate
+and prints Just True. Both warm and fresh cold full-pass demands time out
+after three seconds. This is observed timeout evidence, with a separate
+exact cycle certificate and source demand analysis. No particular runtime
+exception is claimed. Only the false finite-traversal comment is corrected.
+No production algorithm is repaired.
+
+Next model the outer lazy result memo and strict constructor demands, then
+connect the checked cycle to that operational model. Keep GHC correspondence
+separate. A total intended reduction needs an explicit cycle policy and a
+finite-progress argument. Pending-key fallback alone does not rule out an
+infinite sequence of distinct keys. Do not resume an unconditional decreasing
+key-rank proof for the unchanged source. Successful-worker, exact-language,
+constraint-inventory, and equality-free Region proofs remain intact.
+
+The aggregate audit passes 1,891 jobs and 48,849 dependency checks with
+only propext, Classical.choice, and Quot.sound. The older unused inputs
+warning remains. The retained reproduction compiles with -Wall -Werror.
+Fourmolu and all four Cabal-gild checks pass in Nix. Logs:
+`/tmp/mcfta-outer-caller-cycle-*-20261015.log`. The earlier merged strict
+build, all six suites (687 examples plus golden tests), benchmark build,
+and package metadata checks pass. They were not repeated for a comment edit.
+
+Starting snapshot: `/tmp/mcfta-main-refresh-start-20261015-1153/`.
+Closing snapshot: `/tmp/mcfta-outer-caller-cycle-checkpoint-20261015-1209/`.
+Backup: `backup/formalize-before-main-239feb64-20261015-1154`.
+Older Lean proofs except Audit imports, repros, marked drafts, stashes, and
+other worktrees remain intact. Both earlier unverified intersection drafts
+retain their original hashes. The source comparison preserves the optimized
+interned core and older constructor/equality work. Sized exact classes,
+finite execution, size order, and both distinct rank inverses are unchanged.
+
+General caller completion, the outer memo operational bridge, open contexts,
+repeated fixed points, getAllAtPath, native containers, GHC scheduling,
+decision-model, and extraction remain open. Weekly allowance was 97% at
+2026-10-15 12:06 CEST. Refresh it before work. Stop all work and owned
+workers at 1% or less. No board posts or deployments.
 
 ## Upstream main refresh at 239feb64
 

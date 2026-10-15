@@ -1,5 +1,10 @@
 # Inherited and physical-node boundaries for the next caller measure
 
+The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`,
+supersedes the unconditional rank target at the end of this historical note.
+It uses main `239feb64`. The finite inherited and node-factor observations
+below remain valid.
+
 Proofs and reproductions: `b163ddd4`.
 Source: `TharkunAB/cfta`, `origin/main` at `33148e6d`.
 Continue on `formalize` and push checkpoints. This note follows

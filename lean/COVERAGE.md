@@ -1,5 +1,20 @@
 # Full formalization coverage
 
+## A closed source input repeats the actual outer caller key
+
+Proof and reproduction: `eed062bd`, on main `239feb64`. Read
+[the caller-cycle note](notes-outer-caller-cycle.md). Kernel evaluation
+follows actual closed source construction, the native root prefix, physical
+combination and descent, and the wrapper prefix at the returned warm state.
+It returns to the same root identity with empty inherited payloads. The
+observed physical-key relation is not well founded. The Haskell certificate
+passes; warm and fresh cold full-pass demands time out after three seconds.
+Only the incorrect finite-traversal comment changes in production source.
+The audit passes 1,891 jobs and 48,849 dependency checks. Next model the outer
+lazy result memo and strict constructor demands. This is not a kernel theorem
+of GHC divergence. Existing successful and equality-free proofs remain valid.
+This section supersedes unconditional physical-key rank targets below.
+
 ## Upstream main refresh at 239feb64
 
 Merge `b3d06a08` retains all earlier formalization work and main `239feb64`.
