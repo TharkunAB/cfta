@@ -1685,6 +1685,12 @@ import MicroCFTA.SourceEqualityPartialMemoGraph
 import MicroCFTA.SourceEqualityPartialMemoCases
 import MicroCFTA.SourceEqualityPartialMemoProofs
 import MicroCFTA.SourceEqualityPartialMemoSource
+import MicroCFTA.SourceEqualityPartialPlainRegion
+import MicroCFTA.SourceEqualityPartialPlainPrefix
+import MicroCFTA.SourceEqualityPartialPlainCompletionCases
+import MicroCFTA.SourceEqualityPartialPlainCompletion
+import MicroCFTA.SourceEqualityPartialPlainAnnotations
+import MicroCFTA.SourceEqualityPartialPlainSource
 /-!
 # Proof dependency audit
 
