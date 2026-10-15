@@ -1,5 +1,48 @@
 # Constrained languages, indexing, and distributions
 
+## Original allocation origins, primary support, and GHC fit filtering
+
+Source main `e16f3b50` is merged at `50f21a5f`. Proof commits are
+`2aab2f05`, `8ba5ad13`, and `e3be9dd6`. Full library scope stays active.
+Earlier sections retain historical source and proof scopes.
+
+Earlier literal equality constructors and retained canonical table entries
+now derive read-only field lookup for EVERY resident original edge after
+actual graph construction. Current cold entry derives ready loaded fields
+and exact original readback. The scan soundness interface first supplies
+that loaded value; it no longer assumes successful lookup. Actual GHC
+construction must still supply the earlier allocation inventory. Valid
+operation tables, ready inherited storage, actual live prefix, and completed
+Scan remain explicit. No field is allocated at the request site.
+
+Actual false primary node/path/class traces now derive projection support
+at their exact returned heaps. This conversion adds no source gate or memo
+call. Unrelated original siblings can remain open. Support through requireAll,
+rebuilt class forests, shared targets, and edits remains open.
+
+The GHC source adds normal-key fit filtering. Its new completed-fit model
+checks seen insertion BEFORE part checks/callbacks, duplicate skip, unknown
+keys, callback stop/suffix, merge accounting, quota, and stable output order.
+It does not prove Core normalization, whole Walk/GHC execution, or Haskell
+contextual equality. Pair eta has a documented partial-value exception;
+sizeAtMost 20000 is no reduction-fuel or termination bound.
+
+Next derive synchronized physical original-allocation history and compose
+the full current caller. Retain scan-final original children/selected records
+and path-local open-sibling fallback support. Merge/subsumes global reads,
+separate merge memo, costs/fields, checked native/word/runtime transfer,
+general completion, whole enumeration, waiting counts, templates, typed
+refinements, broader APIs, and all distinct Sized contracts remain open.
+
+The aggregate audit passes 2,114 jobs and 52,819 dependency checks with only
+the permitted Lean foundations and no new warning. Four new modules and
+three additive Audit imports preserve every older non-Audit proof file.
+Required strict Nix build and all six suites pass 723 examples plus golden
+checks. Changed-file Fourmolu and all four active Cabal-gild checks pass.
+
+Read `lean/notes-original-field-origins.md`,
+`lean/notes-current-primary-support.md`, and `lean/notes-main-e16f3b50.md`.
+
 ## Original construction through current cold class scan
 
 Source main remains `2ca1644c`. Proofs `dae67292`, `a5b760f1`, and `abe70af7`
