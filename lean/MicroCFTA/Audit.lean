@@ -1505,6 +1505,17 @@ import MicroCFTA.SourceEqualityNativeTargetExecution
 import MicroCFTA.SourceEqualityNativeProjection
 import MicroCFTA.SourceEqualityNativeTargetNarrowing
 import MicroCFTA.SourceEqualityNativeTargetExamples
+import MicroCFTA.SourceEqualityNativeEditAPI
+import MicroCFTA.SourceEqualityNativeEditComplete
+import MicroCFTA.SourceEqualityNativeEditEffects
+import MicroCFTA.SourceEqualityNativeEditExamples
+import MicroCFTA.SourceEqualityNativeEditGraph
+import MicroCFTA.SourceEqualityNativeEditLanguage
+import MicroCFTA.SourceEqualityNativeEditRanges
+import MicroCFTA.SourceEqualityNativeEditWorker
+import MicroCFTA.SourceEqualityNativeEditWorkerComplete
+import MicroCFTA.SourceEqualityNativeEditWorkerSound
+import MicroCFTA.SourceEqualityNativeClassEdits
 /-!
 # Proof dependency audit
 
