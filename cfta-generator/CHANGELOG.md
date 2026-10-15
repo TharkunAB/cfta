@@ -152,7 +152,9 @@ tree automata of `cfta`, with QuickCheck integration.
   `MeasuredBy` gives the constructors of a datatype named measures, and
   `measuresOf` gives the named measures of a value; `measureNamed` is the
   named measure of an annotation, and `fieldsMeasureNamed` gives it for a
-  number of fields that is known only at run time.
+  number of fields that is known only at run time. A named measure of
+  `measuredBy` can choose a term with a conditional on the measures of the
+  children.
 - `compile` folds the recipe of a generator once with the solver. It groups
   child languages by the observations a guard reads, decides each guard once
   for each tuple of groups, and prunes and splits imports by the same

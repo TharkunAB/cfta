@@ -447,7 +447,8 @@ black child =
 
 Each measure must give one integer: a child that a measure reads must have
 that measure as one integer in its refinement, as a conjunct
-@name(v) == value@. A 'leaf' gives its measures in its refinement, as in
+@name(v) == value@. A measure can choose a term with a conditional whose
+condition reads such integers. A 'leaf' gives its measures in its refinement, as in
 @\\v -> bh v .== 0 .&& col v .== 0@. Otherwise 'compile' reports
 'InexactMeasure'. The contract and each measure must take one term for every
 child.
@@ -495,7 +496,29 @@ measuredBy symbol builder measures child
         Formula.Add left right -> Formula.Add <$> resolve known points left <*> resolve known points right
         Formula.Sub left right -> Formula.Sub <$> resolve known points left <*> resolve known points right
         Formula.Mul left right -> Formula.Mul <$> resolve known points left <*> resolve known points right
+        Formula.Ite condition yes no -> do
+            holds <- decide known points condition
+            resolve known points (if holds then yes else no)
         _ -> Nothing
+    -- Decide a condition whose terms resolve to integers.
+    decide known points condition = case condition of
+        Formula.Top -> Just True
+        Formula.Bottom -> Just False
+        Formula.And parts -> and <$> traverse (decide known points) parts
+        Formula.Or parts -> or <$> traverse (decide known points) parts
+        Formula.Not inner -> not <$> decide known points inner
+        Formula.Atom relation left right -> compareWith relation <$> integerOf known points left <*> integerOf known points right
+        _ -> Nothing
+    integerOf known points term = do
+        resolved <- resolve known points term
+        onlyPoint valueName (refinementFormula (.== toExpr resolved))
+    compareWith relation = case relation of
+        Formula.Eq -> (==)
+        Formula.Ne -> (/=)
+        Formula.Lt -> (<)
+        Formula.Le -> (<=)
+        Formula.Gt -> (>)
+        Formula.Ge -> (>=)
 
 {- | The named measures that a refinement fixes: each conjunct
 @name(v) == value@, with @v@ the value.
