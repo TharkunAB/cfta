@@ -24,9 +24,11 @@ import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
 
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Leaf (..), complete, newEnvironment, startWalker, step)
+import Data.CFTA.GHC.Rank (rankFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), parseProgram, renderProgram)
 import Data.CFTA.Gen.Synthesis.Walk (preorder)
+import Decision (DecisionModel (..), Option (..), fixedModel)
 import GHC.Builtin.Types (mkListTy)
 import GHC.Core.Type (liftedTypeKind, mkTyVarTy)
 import GHC.Data.Bag (emptyBag)
@@ -187,6 +189,13 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 fits <- readIORef found
                 [lookup program [(fitProgram fit, fitDropsArgument fit) | fit <- fits] | program <- wanted]
                     `shouldBe` [Just True, Just False]
+        describe "rankFits" $
+            it "orders the fits by the model's scores, keeps the order of equal scores, and reports a failure" $ do
+                let model = fixedModel (\option -> if optionName option == "b" then 2 else 1)
+                ranked' <- rankFits model "a hole" id ["a", "b", "c"]
+                fmap (map fst) ranked' `shouldBe` Right ["b", "a", "c"]
+                failed <- rankFits (DecisionModel (const (pure (Left "no server")))) "a hole" id ["a"]
+                fmap (map fst) failed `shouldBe` Left "no server"
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->
                 it ("keep the fit of " <> name) $
