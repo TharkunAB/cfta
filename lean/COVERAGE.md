@@ -1,5 +1,22 @@
 # Full formalization coverage
 
+## Recursive result memo and current solver sort inference
+
+Source main `1eb4ab05`, merged at `271284df`. Solver proof `3e881cdb`;
+recursive memo proof `b07b8612`. Read [the recursive memo note](notes-result-memo-worker.md)
+and [the upstream comparison](notes-main-1eb4ab05.md). The actual recursive
+worker publishes full physical requests, threads native/interner/memo state,
+and reaches the running root thunk on the original closed fixture. Both
+callers remain unfinished. Constraint-ID renaming and GHC demand correspondence
+remain open. The new full current solver preparation and raw-map Sized bridge
+retain exact classes, finite outcomes, canonical order, coverage, and both
+signed inverses. External replies and completion remain contracts. The new
+named-measure frontend and actual decoder/parser bridges remain open.
+The aggregate audit passes 1,902 jobs and 49,621 theorem dependency checks. All six Haskell suites and strict Nix/format/metadata
+checks pass. Next prove completed-cell language/residency preservation through
+the actual memo worker and warm hits. Older proof modules and counterexamples
+remain intact. Historical source statements below are superseded here.
+
 ## Actual outer requests and necessary first-child completion
 
 Proofs: `7369264b`, on main `239feb64`. Read

@@ -7,6 +7,18 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Recursive memo application (2026-10-15 12:52 CEST)
+
+The actual recursive result-memo worker now retains publication, body demand,
+child/row/native effects, successful completion, and warm ready/busy branches.
+Kernel execution of the closed source fixture reaches the running root thunk.
+Read [the proof note](notes-result-memo-worker.md). This adapter keeps source
+errors and finite-bound exhaustion distinct. It does not prove GHC scheduling.
+Next prove a completed-cell language/residency invariant and transport it to
+warm hits. A nonmemoized replay cannot be assumed to have identical native effects.
+The [new source comparison](notes-main-1eb4ab05.md) keeps the actual inferred
+solver sorts and full original-map Sized contracts separate from this recursion.
+
 ## Actual outer-worker child necessity (2026-10-15 12:33 CEST)
 
 The [worker-demand proof](notes-outer-worker-demands.md), `7369264b`, derives

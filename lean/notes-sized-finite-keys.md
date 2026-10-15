@@ -5,11 +5,19 @@ changing its implementation. Sized changes only that import. Existing exact
 classes, finite execution, size order, and both rank inverses retain their
 source definitions. The optimized dispatch still returns the reference
 sequence. Read [the upstream comparison](notes-canonical-upstream.md).
-The current audit passes 1,894 jobs and 49,138 dependency checks.
+The aggregate audit passes 1,902 jobs and 49,621 theorem dependency checks.
 The later upstream refresh to 33148e6d leaves Sized and canonicalClasses
 unchanged. Its retained traversal repair is identical to the local repair.
 The refresh to main 239feb64 also leaves those source definitions unchanged.
 Read [the source comparison](notes-main-refresh-20261015.md).
+The refresh to main `1eb4ab05` also preserves Sized and canonicalClasses.
+Its applied-name sort inference changes the solver adapter. The additive
+`SourceSizedFiniteKeysAppliedLiquid` endpoint now runs the current full encoded
+preparation on the actual original-state raw fold. It preserves exact size
+classes, finite outcomes, source order, prefix coverage, and both inverse laws.
+Read [the current source comparison](notes-main-1eb4ab05.md). Historical fixed-
+preparation endpoints below retain their older meaning; app-free compatibility
+is proved. The new named-measure frontend remains an uncovered source bridge.
 Later counts in this note are historical component evidence.
 
 The common full query specification now covers original-map reference,

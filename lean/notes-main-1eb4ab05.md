@@ -65,7 +65,7 @@ The strict Nix build includes all libraries, executables, test suites, and
 benchmarks. All six test suites pass: 687 examples and the golden suite.
 Fourmolu checks the changed Haskell files. Cabal-gild and cabal check pass for
 all four packages. The new red-black named-measure example agrees on counts
-through size 10 and values at 205 ranks. SameRanks is its helper module.
+at odd sizes 1 through 21 and values at 205 ranks. SameRanks is its helper module.
 An initial command guessed an incorrect executable name; the corrected
 `cfta-red-black-measures` invocation passes. No Haskell source was changed
 locally after the merge. Existing linker warnings remain build observations.

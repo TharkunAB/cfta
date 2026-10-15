@@ -1,23 +1,31 @@
 # cfta formal model
 
-Current source: `TharkunAB/cfta`, `origin/main` at `239feb64`.
-Continue on `formalize`; publish completed checkpoints to `origin/formalize`.
+Current source: `TharkunAB/cfta`, `origin/main` at `1eb4ab05`, merged at `271284df`.
+Continue on `formalize`; push verified checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
-`cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`.
-Public `Data.CFTA.*` modules and Lean namespace `MicroCFTA` retain their names.
-The Lake package is `cfta`.
-Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The [upstream refresh](notes-main-refresh-20261015.md) preserves every proof.
-Core and generator definitions are unchanged. Decision-model and the moved
-GHC session library remain outside formal source coverage. All six Haskell
-suites pass, with 687 examples plus the golden suite. The strict build,
-formatting, and metadata checks pass for all four packages.
-The [actual outer-worker proof](notes-outer-worker-demands.md), `7369264b`,
-retains both first-child receipts and their returned warm states. A general
-one-row law makes those child completions necessary for successful parent
-bodies under any callback. It composes with the typed result-thunk busy trace.
-Next integrate actual result-memo keys and memo state with the recursive
-worker. This supersedes the earlier first-incomplete-worker target below.
+`cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`. Public `Data.CFTA.*`
+modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
+`cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
+
+The [current upstream comparison](notes-main-1eb4ab05.md) records named measures,
+generic decoding, and inferred solver function sorts. Five additive modules
+restore the current full solver/preparation/public/raw-map Sized bridge.
+Exact classes, finite execution, sequence, size order, and both rank inverses
+remain separate contracts. The named-measure frontend and actual parser/codec
+bridges remain open. The optimized interned core and equality code are preserved.
+
+The [recursive result-memo worker](notes-result-memo-worker.md), `b07b8612`,
+threads full native, constraint-interner, and result-thunk state. Its kernel
+fixture reaches the published running root cell after both actual local prefixes.
+No abstract request trace is supplied. Busy is a logical observation. Constraint
+identity reconstruction, warm completed-cell soundness, full source runtime
+correspondence, and GHC scheduling remain separate obligations. Next prove a
+completed-cell language/residency invariant through actual recursive effects.
+The aggregate audit passes 1,902 jobs and 49,621 theorem dependency checks.
+All six Haskell suites pass (687 examples plus golden
+tests). Strict Nix build, formatting, and metadata checks pass. The new example
+agrees at 205 ranks. Older counts and next targets below are historical.
+
 The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`,
 returns to the original physical root with empty inherited constraints after
 two actual local prefixes. Its observed physical-key relation is not well
@@ -26,7 +34,7 @@ calls time out. The typed result-thunk instantiation in `6e4d477d` reaches
 busy with neither result completed. The actual-worker note now supplies
 its monadic first-child necessity laws. No production algorithm is repaired.
 This supersedes unconditional caller-rank targets below. The kernel result does not prove GHC divergence.
-The audit passes 1,894 jobs and 49,138 theorem dependency checks.
+The older audit counts below describe their historical proof checkpoints.
 The [source boundary checks](notes-origin-boundaries.md) refute inherited
 literal conjunction closure and a local maximum-path bound. Retained Haskell
 prefixes also refute physical absorption of a repeated intersection factor.

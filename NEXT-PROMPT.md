@@ -2,6 +2,93 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Recursive result memo and current solver sort inference
+
+Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Solver preparation proof: `3e881cdb`. Recursive memo proof: `b07b8612`.
+Current original-map API proof: `7366ee10`.
+Main is an ancestor of `formalize`. Continue on `formalize` and push verified
+checkpoints. Read `lean/notes-result-memo-worker.md` and
+`lean/notes-main-1eb4ab05.md`. This section supersedes older source-head and
+result-memo integration targets below.
+
+SourceEqualityPartialMemoWorker threads the full native state, a physical
+constraint interner, and typed result thunks through indexed children and
+ordered rows. Its full key is inherited constraint identity plus source
+NodeRef. Constraint interning compares ordered physical tries and ignores
+cached path sets. IntMap readback requires valid ascending tries. Generic
+cache theorems preserve stored keys, identity equality, and repeated lookup.
+The worker publishes the original request before body evaluation. Ready hits
+reuse complete stored values. Busy, source errors, exhausted bodies, unfinished
+native stages, and pending constructors remain separate observations.
+
+SourceEqualityOuterMemoWorkerCycle constructs the original closed R fixture
+from cold tables. The actual recursive worker executes both native prefixes
+and demands the running root cell. Kernel evaluation retains exactly two
+allocated running requests, empty inheritance, the distinct wrapper, root key,
+and full final state. observation_receipts derives the complete construction
+and recursive execution equalities. This replaces the separate abstract thunk
+trace as the fixture endpoint. It does not prove a GHC exception or divergence.
+
+These constraint identities are reconstructed. Native prefixes do not yet
+expose every production EqConstraints allocation event. Source correspondence
+must relate the constraint tables up to identity renaming. The sequential
+adapter does not prove the full Haskell row demand order. An exhausted body
+has already published and started its thunk. A larger bound must restart at
+the original input state; resuming those evaluating cells would observe busy.
+
+The upstream solver now infers integer function sorts for undeclared applied
+names. Application collection follows the complete source AST and actual
+query/assumption order. Last occurrence selects the arity, including conflicts.
+Five additive SourceAppliedDeclarations/SourceSolverAppliedPreparation/
+SourceSizedLiquidAppliedAmbient/SourceSolverAppliedPublic/
+SourceSizedFiniteKeysAppliedLiquid modules give current complete preparation,
+exact full domains, encoded query meaning, public laws, and actual raw-map
+Sized execution. Applications, casts, quantifiers, and ambient assumptions
+remain supported. App-free/core compatibility preserves the old preparation.
+Correct external responses and finite attempts remain explicit contracts.
+Exact accepted terms per size, finite execution, canonical sequence, distinct
+size order, and both separate signed rank/unrank implications remain covered.
+Historical fixed-preparation wrappers retain historical meanings unless a
+current wrapper or the proved app-free compatibility applies.
+
+Generic constructor dispatch and decimal Integer/Int parsing also changed.
+Their actual malformed-label/parser bridges remain open. The new measuredBy
+named-measure frontend is not yet modeled. The lower formula semantics do not
+by themselves prove its extraction, resolver, arity, or error precedence laws.
+The interned core, equality operations, Sized definitions, older constructor
+proofs, counterexamples, and repairs remain preserved.
+
+The aggregate audit passes 1,902 jobs and 49,621 theorem dependency checks.
+Only propext, Classical.choice, and
+Quot.sound occur. The old unused inputs warning remains. Strict Nix builds
+all packages, test and benchmark executables. All six Haskell suites pass:
+687 examples plus golden tests. Fourmolu, Cabal-gild, and package metadata
+checks pass. The new named-measure example agrees on counts and 205 ranks.
+These checks do not establish whole-library correspondence. Logs are in the
+two proof notes and `/tmp/mcfta-result-memo-audit-20261015.log`.
+
+Next prove a completed-cell invariant for the actual memo worker. Retain the
+original physical request, resident immutable result, and exact contextual
+language under inherited satisfaction. Prove preservation through actual
+children, rows, native effects, and successful completion. Ready hits must
+reuse that proof under heap extension. Do not assume identical native effects
+from replay without a memo hit. Then connect completed executions to the
+existing caller graphs and public language laws. Keep the actual busy cycle.
+
+Starting snapshot: `/tmp/mcfta-result-memo-start-20261015-1236/`.
+Closing snapshot: `/tmp/mcfta-result-memo-checkpoint-20261015-1252/`.
+All older Lean proofs except Audit imports remain byte-identical. Repros,
+marked drafts, stashes, and other worktrees remain unchanged. Both unverified
+intersection drafts and their limit report retain their exact hashes. The
+first-demand scratch precursor remains superseded and unimported.
+
+General caller completion, complete result-memo/source correspondence, open
+contexts, repeated fixed points, getAllAtPath, native containers, GHC scheduling,
+decision-model, named-measure/parser bridges, and extraction remain open.
+Weekly allowance was 97% at 2026-10-15 12:52 CEST. Refresh before work.
+Stop all work and owned workers at 1% or less. No board posts or deployments.
+
 ## Actual outer requests and necessary first-child completion
 
 Proofs: `7369264b`. Source: `TharkunAB/cfta`, main `239feb64`.
