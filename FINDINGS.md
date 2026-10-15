@@ -1,6 +1,41 @@
 # Current formalization findings
 
-Updated: **2026-10-15 20:43 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 21:05 CEST (Europe/Stockholm)**.
+
+## Native instruction unfolding-event transfer
+
+Proof checkpoint `97c525f4`, source main `525d722e`. Read
+`lean/notes-source-native-events.md`. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+Actual typed primitives include a real unfolding-memo operation. A memo hit
+still emits a global event. Actual Runs and absence of such events derive
+table retention. Expanded Work, fresh constructor requests, and fixed native
+callbacks derive these facts without opaque old-outcome adapters.
+Native step/execute retain original fuel, continuations, heaps, memo cells,
+and every bounded outcome. The event transfer has no availability, future
+validity, or successful-completion premise. Scoped native requests derive
+actual silent receipts and same-table coherence for all three gate tables.
+
+This establishes the missing resident-instruction event transfer. It does
+not establish GHC delayed producer forcing, row-spine sharing, original
+child demand, global publication, or predicate/descendant helper-call
+silence. Substitution-plan/per-binder caches remain distinct. Next compose
+actual receipts through Fold/Seeded, delayed exploration/Decision, and Scan,
+using anchored support without whole-original-forest closedness. Concrete
+entry, selected fallback, checked state, machine bounds, general completion,
+waiting counts, template exclusion, broader APIs/runtime, and distinct Sized
+contracts remain open.
+
+Full audit: 2,070 jobs, 52,331 dependency checks, permitted axioms only,
+no new warning. Five new modules and one additive Audit import. Older
+proof definitions and all four Haskell package trees match `1a8d5db0`.
+Unchanged Haskell checks were not repeated.
+Start: `/tmp/mcfta-query-memo-checkpoint-20261015-2043/` (2,736 files).
+Closing: `/tmp/mcfta-native-events-checkpoint-20261015-2105/` (2,742 files).
+Script: `/tmp/mcfta-preserve-native-events-20261015.py`.
+All prior artifacts remain. Weekly allowance is 85%. Stop owned work at
+1% or less. No board posts or deployments. Push verified formalize checkpoints.
 
 ## Actual projection memo receipts and ordered entry
 

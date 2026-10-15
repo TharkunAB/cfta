@@ -2,6 +2,45 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Native instruction unfolding-event transfer
+
+Proof checkpoint `97c525f4`, source main `525d722e`. Read
+`lean/notes-source-native-events.md` first. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+Actual typed primitives now include a real global unfolding-memo action.
+Expanded Work, fresh Build/request, and fixed MaybeMu callbacks derive
+exact erasure, actual primitive Runs, and absence of global unfold events.
+Native step/execute retain original macro-instruction fuel, all outcomes,
+continuations, physical heaps, and both native memo tables. These event
+proofs need no availability, final validity, or successful-completion premise.
+Completed scoped native requests now derive actual silent receipts and
+coherence of the same three gate tables from actual heap effects.
+
+Next compose projection/native receipts through Fold/Seeded, delayed
+Force/Expose/Run/Decision, and the reached Scan. Use existing anchored
+support; do not close the entire original forest. Retain exact returned
+tables and derive coherence at each actual operation. Then connect native
+class-record extraction and initial caller construction, and compose the
+selected requireAll/class reduction/empty propagation fallback.
+
+Resident-value event transfer does not establish GHC delayed producer
+demand, row-spine sharing, original child forcing, or global publication.
+The operational event state tracks the unfolding table; three-table
+coherence is not predicate/descendant helper-call silence. Keep distinct
+substitution-plan/per-binder caches. Checked state, machine bounds, general
+completion, waiting counts, template exclusion, broader APIs/runtime, and
+all separate exact Sized contracts remain open. Keep the optimized core.
+
+Full audit: 2,070 jobs, 52,331 dependency checks, permitted axioms only,
+no new warning. Five new modules and one additive Audit import. Older
+proof definitions and all four Haskell package trees remain unchanged.
+Start: `/tmp/mcfta-query-memo-checkpoint-20261015-2043/` (2,736 files).
+Closing: `/tmp/mcfta-native-events-checkpoint-20261015-2105/` (2,742 files).
+Script: `/tmp/mcfta-preserve-native-events-20261015.py`.
+All prior artifacts remain. Weekly allowance is 85%. Stop owned work at
+1% or less. No board posts or deployments. Push verified formalize checkpoints.
+
 ## Actual projection memo receipts and ordered entry
 
 Proof checkpoint `60a8d3eb`, source main `525d722e`. Read

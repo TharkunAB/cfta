@@ -7,6 +7,23 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current native instruction unfolding events
+
+Proof checkpoint `97c525f4`, source main `525d722e`. Read
+[the native event transfer and its limits](notes-source-native-events.md).
+Actual physical primitives include a real unfolding-memo action. Expanded
+Work, fresh construction, and fixed native callbacks derive exact erasure,
+actual primitive traces, and no global unfolding calls. Native execution
+retains original fuel and all outcomes, continuations, heaps, and memo cells.
+Completed scoped requests derive actual silent receipts and coherence of
+the same three gate tables. GHC producer demand remains a separate boundary.
+Query/Scan memo composition, concrete entry, selected fallback, checked
+state/runtime transfer, general completion, broader library work, and all
+distinct Sized contracts remain open. The full audit passes 2,070 jobs and
+52,331 dependency checks with no new warning or axiom. Five new modules and
+one additive Audit import contain the proof change. Older definitions and
+all four Haskell package trees remain unchanged. Earlier sections are historical.
+
 ## Current query memo receipts and ordered entry
 
 Proof checkpoint `60a8d3eb`, source main `525d722e`. Read
