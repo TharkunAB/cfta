@@ -23,6 +23,12 @@ Before release, the package was called `microcfta`.
   the README's `fixUnbounded (withoutRedundantEdges . reducePartially)`, and
   Hectare's `reduceFully` inherited this. Such a class now stays unreduced.
   Enumeration and `accepts` still check it, so the language does not change.
+- Add `provablyEmpty`, a sound check that a closed node accepts no term: a
+  least fixed point over the node's children and the intersections of its
+  equality classes, within a budget of nodes. When the endpoint rule of
+  `reduceEqConstraints` leaves a class unreduced and the check proves the
+  intersection at its paths empty, the edge becomes empty. On the input of the
+  previous entry, `reducePartially` now returns `EmptyNode`.
 
 Initial release. `cfta` consolidates an ordinary tree automaton engine,
 equality-constrained tree automata, and liquid tree automata into one package
