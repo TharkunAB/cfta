@@ -6,16 +6,22 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,688 jobs and 46,352 theorem dependency checks.
+The audit passes 1,703 jobs and 46,553 theorem dependency checks.
+The [general merged proof](notes-merged-general.md) derives independent
+comparison inclusion, exact child-selection union language, and successful
+merge coverage with complete semantic cache preservation. Original construction
+and actual getPath composition derive source entry. General finite comparison
+and merge completion remain open. Older next-target statements below are
+historical when this paragraph supersedes them.
 The [scoped native edit proof](notes-native-edits.md) now derives full native
 state preservation, finite edit completion, exact retained target language,
 and stable three-bound worker agreement. Coherent physical classes have
-exact original-path readback. Actual target construction and independent
-merger inclusion remain open.
+exact original-path readback. Actual target construction and general finite
+merge completion remain open.
 The [scoped native target proof](notes-native-target-fold.md) now derives finite
 warm native target folds, exact intersection-list language, and target-then-leaf
 narrowing. General projection retains the actual domain and both memo tables.
-Simultaneous edit composition and independent merger inclusion remain open.
+The simultaneous edit composition now has its scoped proof above.
 The [general projection proof](notes-general-projection.md) now derives finite
 stable getPath execution on arbitrary closed nested Mu/Union inputs, exact
 source closed-union language, and accepted-subterm inclusion. It retains

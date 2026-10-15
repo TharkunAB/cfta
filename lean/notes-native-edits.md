@@ -115,6 +115,17 @@ No Haskell source or formatter input changed. The earlier 645 examples and
 format checks apply to the byte-identical tree. They were not rerun.
 Weekly allowance was 17% at 04:43 CEST. Stop at 1% or less.
 
+## Current merger checkpoint
+
+`ebb463b7`, `a58070e7`, and `4522dd07` derive general repaired comparison
+inclusion, exact child-selection union language, and successful merge
+independent-language inclusion with SemanticReady preservation. Read
+[the current note](notes-merged-general.md). Original construction and actual
+getPath derive source entry. General finite comparison and merge completion
+remain open. The older finite merger theorem requires Prepared Mu bodies.
+Do not treat it as general completion. The next-target text below records
+the earlier checkpoint and is historical where this section supersedes it.
+
 ## Next actual caller obligations
 
 Derive mergeAlternatives inclusion for independent guarded language and

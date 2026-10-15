@@ -7,6 +7,15 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## General merger application (2026-10-15 05:14 CEST)
+
+Actual general repaired comparison and successful merge executions now have
+independent language and complete semantic cache laws. Term-height induction
+justifies visited comparison pairs. Original construction and actual getPath
+supply source entry. Read [the current note](notes-merged-general.md). General
+finite comparator and merger completion remain open. The paper's termination
+assumption does not close them. No Lava or Rocq dependency is added.
+
 ## Scoped native edit application (2026-10-15 04:43 CEST)
 
 Simultaneous native edit workers now have physical graphs, two-way checked

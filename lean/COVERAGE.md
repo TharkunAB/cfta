@@ -1,5 +1,69 @@
 # Full formalization coverage
 
+## General repaired comparison and successful merge coverage
+
+Proofs: `ebb463b7`, `a58070e7`, and `4522dd07`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-merged-general.md`. This section supersedes earlier targets
+for independent merger inclusion and semantic cache preservation.
+
+The actual repaired comparison now preserves all semantic heaps and both
+constructor histories on every successful closed available call. A true
+comparison implies independent guarded least-language inclusion. Induction
+on finite term height justifies visited pairs. Ancestors retain coherent
+physical witnesses through every actual intermediate cache. No Prepared,
+NoNewMu, unchanged-cache, or whole-comparison language premise is supplied.
+
+Actual child selection retains every original closed Mu operand. Any removed
+child has an original retained cover. Identity deduplication retains complete
+coherent payloads. The returned list has exactly the original union language.
+SourceMergedWorker uses this actual repaired filter. It keeps source group
+order, complete symbol and arity classes, the four-row threshold, full small
+row guards, large Top guards, and singleton and recursive union boundaries.
+Every successful bounded merge preserves SemanticReady, cache histories,
+closed availability, and independent input-language inclusion. Ordinary
+recursion derives its local certificates. No whole-merger law is supplied.
+
+Original closed construction derives all entry premises. Actual getPath
+followed by a successful merge retains each accepted selected subterm at its
+literal source path and actual returned cache. Merge coverage is inclusion.
+The child-selection union language is exact. These are separate contracts.
+
+Finite completion and stable identical results and full caches for the
+GENERAL repaired comparator and merger remain open. Older
+MergedColdMergeSoundness completion requires Prepared Mu bodies. It cannot
+close this general obligation. A kernel example constructs a nested binder
+whose demanded comparison read allocates a new Mu record. Further kernel
+checks verify the four/five-row threshold and zero ordinary-fuel exhaustion.
+The older MergedFreshOrdinarySelection.lean.incomplete draft is unchanged.
+
+The aggregate audit passes 1,703 jobs and 46,553 dependency checks using only
+propext, Classical.choice, and Quot.sound. Only the older unused inputs
+warning remains. All fifteen new proof modules pass focused builds.
+Log: `/tmp/mcfta-merged-general-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-merged-general-checkpoint-20261015-0514/`
+(2,103 Lean-tree files and four root documents). Older proofs are unchanged
+except added audit imports. Repros, counterexamples, marked drafts, stashes,
+other worktrees, and production source remain unchanged. No Haskell source
+changed. The earlier 645 examples and formatter checks apply to that unchanged
+tree and were not rerun. Weekly allowance was 17% at 05:14 CEST.
+Refresh the allowance before work. Stop all work at 1% or less.
+
+Next prove finite general repaired comparison completion and stable bounds.
+Retain actual read order, fresh Mu allocations, visited physical pairs, and
+full returned caches. Use the existing complete general cold reader and its
+replay laws. Do not replace the actual worker with an eager future-cache run,
+and do not assume whole-comparison or whole-merger completion. Then derive
+finite stable SourceMergedWorker execution by ordinary height. After that,
+construct original class targets from getPath, merging, and first-seeded
+native intersection lists. Connect captured native class edits to actual
+selected classes, the ordered class right fold, and empty propagation.
+Shared lazy target forcing, full one-pass source correspondence, open
+contexts, repeated fixed points, getAllAtPath, native containers, scheduling,
+and extraction remain open. Preserve exact Sized classes, size order, both
+distinct-term rank inverses, the optimized interned core, and older proofs.
+
 ## Scoped simultaneous native edits and original class paths
 
 Proofs: `b2e5fd76`, `f110cc11`, `6dc38a2b`, and `8cc092ee`.
