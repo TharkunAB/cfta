@@ -210,9 +210,10 @@ data EnumerationState symbol = EnumerationState
     a slot updates this set.
     -}
     , _waitingUVars :: !(IntMap.IntMap Int)
-    {- ^ For each UVar, how many suspended constraints of 'UVarUnenumerated'
-    slots name it. A UVar with no such constraint has no entry. Every write of
-    a slot updates this map.
+    {- ^ For each representative UVar, how many suspended constraints of
+    'UVarUnenumerated' slots name a UVar of its class. A class with no such
+    constraint has no entry. Every write of a slot updates this map, and a
+    union moves the count of the old representatives to the new one.
     -}
     , _obligations :: [(Constraint, TermFragment symbol)]
     -- ^ Constraints with a 'residual', each with the fragment it guards.
@@ -405,7 +406,20 @@ Unlike 'getUVarValue', this writes the UVar itself, not its representative.
 before a union.
 -}
 setUVarValue :: UVar -> UVarValue symbol -> EnumerateM symbol ()
-setUVarValue uv val =
+setUVarValue uv val = do
+    old <- gets (\s -> Sequence.index (_uvarValues s) (uvarToInt uv))
+    writeUVarValue (suspended val) (suspended old) uv val
+  where
+    suspended (UVarUnenumerated _ scs) = scs
+    suspended _ = Sequence.Empty
+
+{- | 'setUVarValue' with the suspended constraints that the slot gains and
+loses, for a caller that knows them: the constraints that stay in the slot
+change no count.
+-}
+writeUVarValue ::
+    Seq SuspendedConstraint -> Seq SuspendedConstraint -> UVar -> UVarValue symbol -> EnumerateM symbol ()
+writeUVarValue gained lost uv val =
     modify' $ \s ->
         s
             { _uvarValues = Sequence.update idx val (_uvarValues s)
@@ -413,13 +427,12 @@ setUVarValue uv val =
                 if expandable val
                     then IntSet.insert idx (_expandableUVars s)
                     else IntSet.delete idx (_expandableUVars s)
-            , _waitingUVars =
-                count 1 val (count (-1) (Sequence.index (_uvarValues s) idx) (_waitingUVars s))
+            , _waitingUVars = count (_uvarRepresentative s) 1 gained (count (_uvarRepresentative s) (-1) lost (_waitingUVars s))
             }
   where
     idx = uvarToInt uv
-    count change (UVarUnenumerated _ scs) waiting = Foldable.foldl' (\m sc -> IntMap.alter (add change) (uvarToInt (scGetUVar sc)) m) waiting scs
-    count _ _ waiting = waiting
+    count uf change scs waiting =
+        Foldable.foldl' (\m sc -> IntMap.alter (add change) (uvarToInt (UnionFind.root (scGetUVar sc) uf)) m) waiting scs
     add change old = case maybe change (+ change) old of
         0 -> Nothing
         new -> Just new
@@ -431,13 +444,6 @@ would unfold forever with nothing to stop it.
 expandable :: UVarValue symbol -> Bool
 expandable (UVarUnenumerated (Just node) scs) = not (recursiveBoundary node && Sequence.null scs)
 expandable _ = False
-
--- | Apply a function to the value of a UVar. Like 'setUVarValue', it writes the UVar itself.
-modifyUVarValue ::
-    UVar -> (UVarValue symbol -> UVarValue symbol) -> EnumerateM symbol ()
-modifyUVarValue uv f = do
-    values <- gets _uvarValues
-    setUVarValue uv (f (Sequence.index values (uvarToInt uv)))
 
 ---------------------
 -------- Creating UVar's
@@ -466,8 +472,10 @@ assimilateUvarVal uvTarg uvSrc
             _ -> do
                 let v = intersectUVarValue srcVal targVal
                 guard $ not $ hasEmptyContents v
-                setUVarValue uvTarg v
-                setUVarValue uvSrc UVarEliminated
+                -- The suspended constraints of the source move to the
+                -- target, in the same class, so no count changes.
+                writeUVarValue Sequence.Empty Sequence.Empty uvTarg v
+                writeUVarValue Sequence.Empty Sequence.Empty uvSrc UVarEliminated
                 modify' $ \s -> case IntMap.lookup (uvarToInt uvSrc) (_recursionAncestry s) of
                     Nothing -> s
                     Just ancestry -> s{_recursionAncestry = IntMap.insertWith HashSet.union (uvarToInt uvTarg) ancestry (_recursionAncestry s)}
@@ -479,10 +487,12 @@ mergeNodeIntoUVarVal ::
 mergeNodeIntoUVarVal uv n scs = do
     uv' <- getUVarRepresentative uv
     let idx = uvarToInt uv'
-    modifyUVarValue uv' (intersectUVarValue (UVarUnenumerated (Just n) scs))
+    values <- gets _uvarValues
+    let new = intersectUVarValue (UVarUnenumerated (Just n) scs) (Sequence.index values idx)
+    -- The slot keeps its suspended constraints and gains these.
+    writeUVarValue scs Sequence.Empty uv' new
     inheritAncestry idx
-    newValues <- gets _uvarValues
-    guard $ not $ hasEmptyContents $ Sequence.index newValues idx
+    guard $ not $ hasEmptyContents new
 
 -- | Whether an unenumerated variable has already reduced to the empty node.
 hasEmptyContents :: UVarValue symbol -> Bool
@@ -630,6 +640,12 @@ enumerateNode scs n =
                     modify' $ \s ->
                         s{_uvarRepresentative = UnionFind.union (scGetUVar x) (scGetUVar sc) (_uvarRepresentative s)}
                 uv <- getUVarRepresentative (scGetUVar x)
+                -- The waiting counts of the old representatives go to the new one.
+                let merged = IntSet.delete (uvarToInt uv) (IntSet.fromList (map uvarToInt (Foldable.toList reps)))
+                    move waiting old = case IntMap.lookup old waiting of
+                        Just waits -> IntMap.insertWith (+) (uvarToInt uv) waits (IntMap.delete old waiting)
+                        Nothing -> waiting
+                modify' $ \s -> s{_waitingUVars = IntSet.foldl' move (_waitingUVars s) merged}
                 mapM_ (assimilateUvarVal uv) reps
 
                 mergeNodeIntoUVarVal uv n descendantConstraints
@@ -670,11 +686,10 @@ data ExpandableUVarResult
 
 {- | Find every expandable UVar that no suspended constraint waits for.
 
-The state keeps the expandable slots and the UVars that suspended constraints
-name. Slots merged into another UVar are marked 'UVarEliminated', so every
-expandable slot is a representative. A suspended constraint may still name
-an eliminated UVar, so resolve each named UVar through the union-find and
-write the path compression back once.
+The state keeps the expandable slots and the representatives of the UVars
+that suspended constraints name. Slots merged into another UVar are marked
+'UVarEliminated', so every expandable slot is a representative, and the
+blocked ones are the keys of '_waitingUVars'.
 
 'Nothing' means no candidates remain. @Just empty@ means candidates exist, but
 all of them are blocked by suspended constraints.
@@ -683,17 +698,10 @@ findExpandableUVars :: EnumerateM symbol (Maybe IntSet.IntSet)
 findExpandableUVars = do
     candidates <- gets _expandableUVars
     waiting <- gets _waitingUVars
-    uf0 <- gets _uvarRepresentative
-    let (ruledOut, uf) = IntMap.foldlWithKey' resolve (IntSet.empty, uf0) waiting
-    modify' $ \s -> s{_uvarRepresentative = uf}
     return $
         if IntSet.null candidates
             then Nothing
-            else Just (candidates IntSet.\\ ruledOut)
-  where
-    resolve (ruledOut, uf) uv _ =
-        let (rep, uf') = UnionFind.find (intToUVar uv) uf
-         in (IntSet.insert (uvarToInt rep) ruledOut, uf')
+            else Just (candidates IntSet.\\ IntMap.keysSet waiting)
 
 {- | Which of the currently expandable UVars to expand next.
 
