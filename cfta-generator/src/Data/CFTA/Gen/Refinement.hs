@@ -38,6 +38,7 @@ module Data.CFTA.Gen.Refinement (
     node,
     guarded,
     measured,
+    measuredBy,
     recurUpTo,
     refinedNode,
     measuredNode,
@@ -60,8 +61,10 @@ import Data.Bifunctor (first)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.String (fromString)
+import qualified Data.Text as Text
 
 import qualified Data.CFTA as FTA
+import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Gen hiding (
     Grouped,
     elements,
@@ -109,10 +112,14 @@ import Data.CFTA.Refinement.Expression (
     Refinement,
     definingTerm,
     freeNames,
+    fromExpr,
     literal,
     refinementFormula,
     substitute,
+    toExpr,
     true,
+    uninterpreted,
+    variable,
     (.&&),
     (.<=),
     (.==),
@@ -416,6 +423,93 @@ measured symbol builder measure child
     | contractArity builder /= spineArity child =
         Transparent $ Left $ InvalidSupport $ GuardArityMismatch symbol (spineArity child) (contractArity builder)
     | otherwise = measuredNode symbol (contract builder) measure child
+
+{- | Close a child description with a constructor that has a contract and
+several named measures.
+
+A named measure is an uninterpreted function of the value, as a measure of
+Liquid Haskell is: the refinement of a constructed term is
+@bh(v) == 2 && col(v) == 0@ for the measures @bh@ and @col@. Each measure is a
+function with one term for each child, in order, as for 'measured', and it
+reads a measure of a child by its name, as @uninterpreted "bh" [left]@. A contract
+reads the measures of the children in the same way:
+
+@
+black child =
+    measuredBy
+        "black"
+        (\left right -> bh left .== bh right)
+        [("bh", \left _ -> bh left + 1), ("col", \_ _ -> 0)]
+        (Black \<$\> child \<*\> child)
+  where
+    bh x = uninterpreted "bh" [x]
+@
+
+Each measure must give one integer: a child that a measure reads must have
+that measure as one integer in its refinement, as a conjunct
+@name(v) == value@. A 'leaf' gives its measures in its refinement, as in
+@\\v -> bh v .== 0 .&& col v .== 0@. Otherwise 'compile' reports
+'InexactMeasure'. The contract and each measure must take one term for every
+child.
+-}
+measuredBy ::
+    (ContractBuilder contract, MeasureBuilder measure) =>
+    Symbol ->
+    contract ->
+    [(String, measure)] ->
+    LTAGen a ->
+    LTAGen a
+measuredBy symbol builder measures child
+    | supplied : _ <- [count | count <- contractArity builder : map (measureArity . snd) measures, count /= arity] =
+        Transparent $ Left $ InvalidSupport $ GuardArityMismatch symbol arity supplied
+    | otherwise = closeGuarded symbol (contract builder) child (ClosedBy labelOf) (const Nothing)
+  where
+    arity = spineArity child
+    labelOf roots = do
+        let children = zip (map (Formula.Name . fromString . contractTermName) [0 ..]) roots
+            known =
+                Map.fromList
+                    [ ((term, name), value)
+                    | (term, RefinedSymbol _ refinement) <- children
+                    , (name, value) <- namedValues refinement
+                    ]
+            points =
+                Map.fromList
+                    [(term, value) | (term, RefinedSymbol _ refinement) <- children, Just value <- [onlyPoint valueName refinement]]
+        measureValues <- traverse (valueOf known points) measures
+        pure
+            $ RefinedSymbol symbol
+            $ foldr (.&&) true [uninterpreted name [variable valueName] .== literal value | (name, value) <- measureValues]
+    valueOf known points (name, measure) =
+        case resolve known points (fromExpr $ measureTerm measure) of
+            Just term | Just value <- onlyPoint valueName (refinementFormula (.== toExpr term)) -> Right (name, value)
+            _ -> Left $ InexactMeasure symbol
+    -- Replace each measure of a child, and each child that is one integer, by
+    -- its value. A term that names anything else has no value.
+    resolve known points term = case term of
+        Formula.App (Formula.Name function) [Formula.Var position] ->
+            Formula.Lit <$> Map.lookup (position, Text.unpack function) known
+        Formula.Var position -> Formula.Lit <$> Map.lookup position points
+        Formula.Lit _ -> Just term
+        Formula.Neg inner -> Formula.Neg <$> resolve known points inner
+        Formula.Add left right -> Formula.Add <$> resolve known points left <*> resolve known points right
+        Formula.Sub left right -> Formula.Sub <$> resolve known points left <*> resolve known points right
+        Formula.Mul left right -> Formula.Mul <$> resolve known points left <*> resolve known points right
+        _ -> Nothing
+
+{- | The named measures that a refinement fixes: each conjunct
+@name(v) == value@, with @v@ the value.
+-}
+namedValues :: Formula -> [(String, Integer)]
+namedValues formula = case formula of
+    Formula.And parts -> concatMap namedValues parts
+    Formula.Atom Formula.Eq left right
+        | Just found <- named left right <|> named right left -> [found]
+    _ -> []
+  where
+    named (Formula.App (Formula.Name function) [Formula.Var (Formula.Name argument)]) (Formula.Lit value)
+        | Text.unpack argument == valueName = Just (Text.unpack function, value)
+    named _ _ = Nothing
 
 {- | A recursive description, unfolded a bounded number of times.
 
