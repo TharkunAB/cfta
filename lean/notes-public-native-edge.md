@@ -5,6 +5,13 @@ Proofs: `5680b122`, `062ec3e5`, and `5c15f84c`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+Actual inherited/local physical payload combination and trie descent are now
+proved. Indexed children derive their own obligations and preserve actual
+scopes and language under an explicit recursive-node induction hypothesis.
+The concrete native edge step composes with this inherited continuation.
+The outer node/row worker and actual Mu reconstruction still need to derive
+that hypothesis. Read [the current note](notes-inherited-edge.md).
+
 ## Actual general merge effects
 
 SourceMergedAnnotationComparison.Effect retains source cache histories,

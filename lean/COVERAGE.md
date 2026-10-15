@@ -1,5 +1,65 @@
 # Full formalization coverage
 
+## Concrete inherited edge continuation and indexed child descent
+
+Proofs: `55fd6fed`, `0f8c72b5`, and `07410acf`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-inherited-edge.md`. This section supersedes the inherited
+payload and child-continuation targets below and earlier audit counts.
+
+SourceEqualityDescend follows actual trie descent, the existing structural
+two-path test, lazy ascending path-set reconstruction, and source class sorting.
+It does not normalize again. Actual record construction derives ascending trie
+maps. Coherent fields, ascending maps, and nontrivial classes form the inherited
+payload invariant. Descent preserves it and denotes exactly the surviving
+same-child equality pairs. Parent satisfaction supplies every child obligation.
+
+Actual inherited/local combination derives finite coherent physical readback
+and exact conjunction. The bounded array adapter keeps timeout as incomplete;
+every sufficient work bound returns the identical combined payload. Complete
+source guard readback supplies the local payload and satisfaction without a
+supplied guard-to-payload law. The supported path domain remains nonnegative.
+
+The indexed child worker retains actual callback receipts, zero-based indexes,
+returned warm states, errors, and incomplete observations. Complete graphs and
+successful workers agree in both directions. Arity is preserved, so source
+setChildren takes direct interning. A pointwise graph induction derives native
+scope, histories, annotations, narrowing, and exact forest meaning under the
+parent equalities. It uses one explicit local recursive-node induction hypothesis;
+it does not assume a whole-child-forest preservation law.
+
+Concrete local native edge narrowing now composes with this actual inherited
+continuation. Source payload combination, indexed traversal, and original-label
+edge allocation derive exact contextual public edge meaning. Worker/graph
+agreement holds in both directions. Six native stage bounds are stable for a
+fixed recursive node callback. This is not a complete reducePartially theorem:
+the outer node recursion must still derive that callback law and its execution.
+
+All six new modules pass focused builds. The aggregate audit passes
+1,812 jobs and 47,884 dependency checks using only propext, Classical.choice,
+and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-inherited-edge-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-inherited-edge-checkpoint-20261015-0801/` (2,222 Lean-tree files and four root documents).
+Older proofs except audit imports, all counterexamples, marked drafts,
+production source, stashes, and other worktrees remain unchanged. The earlier
+645 Haskell examples and formatter checks apply to unchanged source and were
+not rerun. Weekly allowance was 15% at 2026-10-15 08:01 CEST. Refresh it before work.
+Stop all work and owned workers immediately at 1% or less.
+
+Next build the actual ordinary node/row traversal around
+SourceEqualityInheritedEdgeWorker. Derive its recursive node Callback by
+traversal-bound induction. Retain modifyNode's unchanged-edge fast path and
+literal source node construction. The Mu branch must reuse actual cached
+probes and perform smart cleanup; do not replace it with node identity or a
+supplied binder language law. Resident keys and existing finish_exact support
+that proof. Preserve all incomplete/error scopes. General caller termination
+remains unproved: local finite passes do not imply it, and native intersection
+can increase ordinary depth. Open contexts, repeated fixed points, getAllAtPath,
+native containers, GHC lazy scheduling, and extraction remain open. Preserve
+Sized exact classes, finite size execution, size order, both rank inverses,
+the optimized interned core, and all older artifacts.
+
 ## Exact public language of the complete concrete guarded native edge pass
 
 Proofs: `5680b122`, `062ec3e5`, and `5c15f84c`.

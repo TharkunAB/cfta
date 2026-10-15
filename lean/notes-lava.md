@@ -7,6 +7,18 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Inherited edge continuation application (2026-10-15 08:01 CEST)
+
+Actual physical payload combination and trie descent now derive their own
+representation and equality meaning. Indexed child execution has two-way graph
+agreement, exact callback observations, and a pointwise language proof. Concrete
+native edge narrowing composes with the inherited continuation. The recursive
+node law remains explicit until the actual outer caller derives it. Read
+[the current note](notes-inherited-edge.md). Stable local stage bounds do not
+prove whole-caller termination. The function and graph method does not supply
+Mu reconstruction, GHC scheduling, native containers, or extraction. No Lava
+or Rocq dependency is added.
+
 ## Complete public guarded-edge application (2026-10-15 07:42 CEST)
 
 The actual general merge worker now preserves physical annotations through

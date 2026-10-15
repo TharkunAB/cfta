@@ -6,7 +6,15 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,806 jobs and 47,797 theorem dependency checks.
+The audit passes 1,812 jobs and 47,884 theorem dependency checks.
+The [inherited edge proof](notes-inherited-edge.md) derives actual physical
+constraint combination and trie descent, indexed child obligations, exact
+callback observations, and direct equal-arity edge rebuilding. Concrete native
+local narrowing composes with that inherited continuation. The pointwise node
+callback remains an explicit induction hypothesis. The outer node/row worker,
+modifyNode fast path, and actual Mu reconstruction remain next. Stable six-stage
+bounds apply to a fixed callback; they do not prove whole-caller termination.
+This paragraph supersedes older inherited payload and child-continuation targets.
 The [public guarded-edge proof](notes-public-native-edge.md) derives annotation
 preservation through actual general merging, captured targets, first forcing,
 shared edits, gate selection, required paths, class folds, and guarded interning.

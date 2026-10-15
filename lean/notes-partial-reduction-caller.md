@@ -1,5 +1,12 @@
 # Inherited equality reduction
 
+Actual inherited/local physical payload combination and trie descent are now
+proved. Indexed children derive their own obligations and preserve actual
+scopes and language under an explicit recursive-node induction hypothesis.
+The concrete native edge step composes with this inherited continuation.
+The outer node/row worker and actual Mu reconstruction still need to derive
+that hypothesis. Read [the current note](notes-inherited-edge.md).
+
 `PartialReductionCaller` models the schedule in
 `Data.CFTA.Equality.Operations.reducePartially'`. It uses the previously proved
 `EqualityReduction.pass` worker once for each edge. This matches the
