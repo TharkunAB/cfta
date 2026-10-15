@@ -19,11 +19,14 @@ The probabilities of a question in a request with more questions are not the
 same as the probabilities of the question alone. Thus each request has one
 question.
 
-At the temperature 0, the same requests after a load of the model get the
-same scores. But the scores of a request change a little with the requests
-before it, because the server keeps parts of earlier prompts. With the
-'ollamaKeepAlive' @0@, each request loads the model again, and the scores do
-not depend on earlier requests. Then a request takes some seconds more.
+At the temperature 0, the scores of a request depend on the requests that the
+server answered after it loaded the model, because the server keeps parts of
+earlier prompts. The same requests after a load get the same scores. Thus a
+run in 'withOllama' that starts when the model is not loaded gets the same
+scores in each run, if no other program uses the model at the same time. With
+the 'ollamaKeepAlive' @0@, each request loads the model again, and the scores
+do not depend on earlier requests. Then a request takes about 5 seconds more
+for Nimble v3.
 -}
 module Decision.Ollama (
     -- * Settings
@@ -65,7 +68,8 @@ data Ollama = Ollama
     , ollamaSeed :: Maybe Int
     , ollamaKeepAlive :: Text
     {- ^ How long the server keeps the model loaded after a request, such as
-    @5m@. The value @0@ unloads the model after each request.
+    @5m@. The value @0@ unloads the model after each request. Then the scores
+    do not depend on earlier requests, but each request loads the model.
     -}
     , ollamaTimeout :: Int
     -- ^ The time limit of a request in seconds. The first request loads the model.

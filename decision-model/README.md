@@ -36,11 +36,14 @@ The scores of a model depend on the order of the options. `bothOrders`
 removes most of this bias. Put it inside `chunked`, so that each part has the
 same options in the two orders.
 
-The default temperature is 0. Then the same requests after a load of the
-model get the same scores. The scores of a request change a little with the
-requests before it, because the server keeps parts of earlier prompts. On
-Ollama, `ollamaKeepAlive = "0"` loads the model for each request, and the
-scores then do not depend on earlier requests.
+The default temperature is 0. Then the scores of a request depend on the
+requests that the server answered after it loaded the model, because the
+server keeps parts of earlier prompts. The same requests after a load get the
+same scores. `withOllama` unloads the model at its end, so a run in
+`withOllama` that starts when the model is not loaded gets the same scores in
+each run. On Ollama, `ollamaKeepAlive = "0"` loads the model for each request.
+Then the scores do not depend on earlier requests, but a request takes about
+5 seconds more for Nimble v3.
 
 ## Ollama
 
@@ -55,6 +58,18 @@ The server keeps a model loaded for the time of `ollamaKeepAlive` (default
 `5m`) after a request. `withOllama` unloads the model at the end. A request
 can have at most 255 options and 64 KiB. The model asks a longer question in
 parts. For long descriptions, use `chunked` with fewer options.
+
+## Known limits
+
+- The chat path (`Decision.OpenAI`) asks at most 19 options and "none" in one
+  request, because a reply gives at most 20 likeliest tokens. A question with
+  n options thus takes about n / 19 requests, and two times as many with
+  `bothOrders`. For questions with hundreds of options, such as the
+  components of a synthesis, it is slow. A decision model on Ollama asks up
+  to 255 options in one request.
+- A chat model often gives almost all of the probability to one label, so its
+  scores separate the options less than the scores of a decision model.
+- No TLS: the clients take `http` URLs only.
 
 ## License
 
