@@ -24,7 +24,8 @@ pair of the two projections of one value is that value), a case of a known
 constructor, a case of a case, and the identity case. A case on a leaf is a
 stuck case. Its alternatives come in the order of the constructor tags, and
 a default alternative expands to the missing constructors when the type is
-known.
+known. The evaluation has a fixed fuel, so it always ends. A program that
+needs more fuel has no normal form.
 
 The normal form is a lower bound of equality: two programs with the same
 normal form are equal, and two equal programs can have different normal
@@ -34,7 +35,7 @@ of its projections is not @undefined@), and the normal form keeps it.
 -}
 module Data.CFTA.GHC.NormalForm (
     -- * Terms
-    Term,
+    Term (TVar, TApp, TLam),
     termOfId,
 
     -- * Normal forms
@@ -43,6 +44,7 @@ module Data.CFTA.GHC.NormalForm (
     mentions,
 ) where
 
+import Control.Monad.Trans.State.Strict (StateT (..), evalStateT)
 import Data.Bifunctor (first)
 import Data.Either (lefts, rights)
 import Data.List (elemIndex, sortOn)
@@ -206,6 +208,10 @@ data Value
     | VCon Con [Value]
     | -- | A stuck case: its alternatives have the case binder (the scrutinee) and take their fields.
       VCase Value [(AltKey, Int, [Value] -> Value)] (Maybe Value)
+    | {- | A beta step, before the value that it gives. Only 'quote' evaluates
+      that value, and it uses fuel for the step.
+      -}
+      VStep Value
 
 -- | The normal form of a program.
 data NormalForm
@@ -217,12 +223,13 @@ data NormalForm
 
 {- | The normal form of a program. The function gives the term of a leaf; a
 leaf without a term (an argument of the query) stays a leaf. 'Nothing' when
-the normal form has more than a fixed number of nodes.
+the normal form has more than a fixed number of nodes, or when the
+evaluation needs more than a fixed fuel.
 -}
 normalForm :: (Text -> Maybe Term) -> Program -> Maybe NormalForm
-normalForm termOf program =
-    let normal = quote 0 (evaluateProgram program)
-     in if sizeAtMost 20000 normal then Just normal else Nothing
+normalForm termOf program = do
+    normal <- evalStateT (quote 0 (evaluateProgram program)) fuel
+    if sizeAtMost 20000 normal then Just normal else Nothing
   where
     evaluateProgram leaf = case leaf of
         Synthesis.Var name -> maybe (VNeutral (Leaf name) []) (valueOf []) (termOf name)
@@ -256,8 +263,10 @@ construct con fields
 -- | Apply a value to an argument.
 apply :: Value -> Value -> Value
 apply function argument = case function of
-    VLam f -> f argument
+    VLam f -> VStep (f argument)
     VNeutral h arguments -> VNeutral h (arguments <> [argument])
+    -- The application comes after the step.
+    VStep next -> VStep (apply next argument)
     -- An argument of a stuck case goes into each alternative.
     VCase scrutinee alternatives fallback ->
         VCase
@@ -281,58 +290,90 @@ caseOn scrutinee alternatives fallback = case scrutinee of
             inner
             [(key, count, \fields -> caseOn (right fields) alternatives fallback) | (key, count, right) <- innerAlternatives]
             ((\right -> caseOn right alternatives fallback) <$> innerFallback)
+    -- The case comes after the step.
+    VStep next -> VStep (caseOn next alternatives fallback)
     VNeutral (Global text) []
         | right : _ <- [right | (ByLiteral literal, _, right) <- alternatives, literal == text] -> right scrutinee []
     VNeutral{} -> stuck
   where
     stuck = VCase scrutinee [(key, count, right scrutinee) | (key, count, right) <- alternatives] (($ scrutinee) <$> fallback)
 
--- | The normal form of a value, with the variables of eta-expansions and alternatives named by their depth.
-quote :: Int -> Value -> NormalForm
-quote depth value = case value of
-    VNeutral h arguments -> NNeutral h (map (quote depth) arguments)
-    VLam f -> NLam (quote (depth + 1) (f (VNeutral (Bound depth) [])))
-    VCon con fields -> case map (quote depth) fields of
-        -- The pair of the two projections of one value is that value.
-        [NCase left [(leftKey, NNeutral (Bound l) [])] Nothing, NCase right [(rightKey, NNeutral (Bound r) [])] Nothing]
-            | conKey con == pairKey
-            , leftKey == pairKey
-            , rightKey == pairKey
-            , l == depth
-            , r == depth + 1
-            , left == right ->
-                left
-        quoted -> NCon (conKey con) quoted
-    VCase scrutinee alternatives fallback ->
-        let scrutinee' = quote depth scrutinee
-            explicit =
-                [ (key, quote (depth + count) (right [VNeutral (Bound (depth + i)) [] | i <- [0 .. count - 1]]))
-                | (key, count, right) <- alternatives
-                ]
-            family = case [conFamily con | (ByCon con, _, _) <- alternatives] of
-                cons : _ -> cons
-                [] -> []
-            present = Set.fromList [altText key | (key, _, _) <- alternatives]
+{- | The fuel of one normal form ('normalForm'). One unit of fuel pays for
+one beta step or for one node that 'quote' builds. Without beta steps, the
+evaluation of a term ends: the term is finite, and it has no recursion.
+Thus the fuel bounds all the work of 'normalForm', and 'normalForm' always
+ends. A reduction that does not end gives 'Nothing', as a self-application
+through a cast that the translation erases. The fuel also counts the
+nodes, because 'quote' builds all of a normal form before the limit of
+20000 nodes applies. That limit is a separate bound. The fits of the tests
+and of the benchmark @hectare-ghc@ (the Hoogle+ queries with the Prelude,
+and the Stack Overflow queries) use at most 695 units and at most 147 beta
+steps. Thus the fuel is more than 1000 times larger than they need.
+-}
+fuel :: Int
+fuel = 1000000
+
+-- | Use one unit of fuel. 'Nothing' when no fuel remains.
+spend :: StateT Int Maybe ()
+spend = StateT (\remaining -> if remaining > 0 then Just ((), remaining - 1) else Nothing)
+
+{- | The normal form of a value, with the variables of eta-expansions and
+alternatives named by their depth. Each beta step and each node uses one
+unit of fuel.
+-}
+quote :: Int -> Value -> StateT Int Maybe NormalForm
+quote depth value =
+    spend >> case value of
+        VStep next -> quote depth next
+        VNeutral h arguments -> NNeutral h <$> traverse (quote depth) arguments
+        VLam f -> NLam <$> quote (depth + 1) (f (VNeutral (Bound depth) []))
+        VCon con fields -> do
+            quoted <- traverse (quote depth) fields
+            pure $ case quoted of
+                -- The pair of the two projections of one value is that value.
+                [NCase left [(leftKey, NNeutral (Bound l) [])] Nothing, NCase right [(rightKey, NNeutral (Bound r) [])] Nothing]
+                    | conKey con == pairKey
+                    , leftKey == pairKey
+                    , rightKey == pairKey
+                    , l == depth
+                    , r == depth + 1
+                    , left == right ->
+                        left
+                _ -> NCon (conKey con) quoted
+        VCase scrutinee alternatives fallback -> do
+            let family = case [conFamily con | (ByCon con, _, _) <- alternatives] of
+                    cons : _ -> cons
+                    [] -> []
+                present = Set.fromList [altText key | (key, _, _) <- alternatives]
+            scrutinee' <- quote depth scrutinee
+            explicit <-
+                sequence
+                    [ (,) key <$> quote (depth + count) (right [VNeutral (Bound (depth + i)) [] | i <- [0 .. count - 1]])
+                    | (key, count, right) <- alternatives
+                    ]
             -- A default expands to the constructors that have no alternative.
-            expanded = case fallback of
+            expanded <- case fallback of
                 Just right
                     | not (null family) ->
-                        [(conKey con, quote (depth + conArity con) right) | con <- family, not (conKey con `Set.member` present)]
-                _ -> []
-            fallback'
-                | null family = quote depth <$> fallback
-                | otherwise = Nothing
-            tags = [(conKey con, conTag con) | con <- family]
-            ordered = sortOn (\(key, _) -> (lookup key tags, key)) (map (first altText) explicit <> expanded)
-            -- An alternative that rebuilds its constructor, or gives the scrutinee.
-            identity (key, right) =
-                right == scrutinee'
-                    || right == NCon key [NNeutral (Bound (depth + i)) [] | i <- [0 .. arityOf key - 1]]
-            arityOf key = maybe 0 conArity (lookup key [(conKey con, con) | con <- family])
-            complete = not (null family) && length ordered == length family
-         in if (complete && all identity ordered) || (null ordered && fallback' == Just scrutinee')
-                then scrutinee'
-                else NCase scrutinee' ordered fallback'
+                        sequence
+                            [ (,) (conKey con) <$> quote (depth + conArity con) right
+                            | con <- family
+                            , not (conKey con `Set.member` present)
+                            ]
+                _ -> pure []
+            fallback' <- if null family then traverse (quote depth) fallback else pure Nothing
+            let tags = [(conKey con, conTag con) | con <- family]
+                ordered = sortOn (\(key, _) -> (lookup key tags, key)) (map (first altText) explicit <> expanded)
+                -- An alternative that rebuilds its constructor, or gives the scrutinee.
+                identity (key, right) =
+                    right == scrutinee'
+                        || right == NCon key [NNeutral (Bound (depth + i)) [] | i <- [0 .. arityOf key - 1]]
+                arityOf key = maybe 0 conArity (lookup key [(conKey con, con) | con <- family])
+                complete = not (null family) && length ordered == length family
+            pure $
+                if (complete && all identity ordered) || (null ordered && fallback' == Just scrutinee')
+                    then scrutinee'
+                    else NCase scrutinee' ordered fallback'
 
 -- | Whether a normal form has at most the given number of nodes.
 sizeAtMost :: Int -> NormalForm -> Bool
