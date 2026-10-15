@@ -1803,6 +1803,7 @@ import MicroCFTA.SourceCurrentPhysicalClassPassLanguage
 import MicroCFTA.SourceCurrentMergeResultMemo
 import MicroCFTA.SourceSynthesisStateBudgets
 import MicroCFTA.SourceNormalFormBudget
+import MicroCFTA.SourceCurrentMemoMergeComplete
 import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
 import MicroCFTA.SourceCurrentEnumerationStorage
