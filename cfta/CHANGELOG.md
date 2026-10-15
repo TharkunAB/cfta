@@ -43,6 +43,13 @@ Before release, the package was called `microcfta`.
   `reduceEqConstraints` leaves a class unreduced and the check proves the
   intersection at its paths empty, the edge becomes empty. On the input of the
   previous entry, `reducePartially` now returns `EmptyNode`.
+- Fix `terms` and `runs` not ending on the input of the previous entries. The
+  enumerator merges the two children of the class into one variable, and the
+  intersection `W(A) ∩ W(C)` is `W(R)`, which needs R again. When a merge
+  intersects two nodes and the result reaches a recursive node with
+  constraints (`reachesConstrainedMu`, now exported), the enumerator runs
+  `provablyEmpty` on it, memoized, and ends the branch when it is empty. No
+  term is lost, because the branch has none. `terms R` now gives `[]`.
 
 Initial release. `cfta` consolidates an ordinary tree automaton engine,
 equality-constrained tree automata, and liquid tree automata into one package
