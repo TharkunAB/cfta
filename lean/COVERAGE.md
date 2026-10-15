@@ -1,5 +1,69 @@
 # Full formalization coverage
 
+## Finite signed simultaneous edit execution
+
+Proofs: `5635846d`, `28bf4f0e`, and `96653514`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`, with retained traversal repair `61f2c939`.
+Continue on `formalize` and push checkpoints. Read
+`lean/notes-edit-execution.md`. This section supersedes the edit compiler,
+finite edit-depth recursion, and graph/execution agreement targets.
+
+The actual signed Edits compiler now retains the source right fold,
+empty-path replacement, ancestor-leaf shadowing, and duplicate-path priority.
+Construction derives ascending unique maps and every retained leaf property
+from original edit pairs. Independent leaf conditions apply only to present
+term positions. Their ordered scan and the source signed right fold agree.
+Negative and missing positions impose no condition.
+
+Physical node, child, row, and list graphs retain actual callback equations,
+head normalization, complete edge guards, and exact returned caches. Node
+leaves execute before inspecting empty or reference inputs. List leaves
+return unchanged without calling the callback. A below-node has no empty-map
+identity shortcut. Every original row is rebuilt without an arity rejection.
+The worker retains pending, unresolved, worker exhaustion, and head-read
+exhaustion as separate outcomes. Native lazy scheduling remains separate.
+
+Finite edit-trie size derives complete graphs from explicit leaf callback
+completion contracts. Actual constructors and complete closed head exposure
+derive every other cache premise. Successful bounded runs give exact graphs.
+Every completed graph supplies stable worker and head-read bounds; every
+larger pair returns the same result and complete final cache. Execution
+uniqueness derives final semantic heaps, histories, and closed/resident outputs
+for every successful graph. Original closed construction derives initial
+premises for node edits and compiled source-edge list edits.
+
+The leaf callback contract is still explicit. It includes its own finite
+completion and actual semantic cache effects. Worker bounds do not bound
+the callback's internal work. This is not yet a proof of the concrete
+equality intersection/projection callbacks or the full reduction pass.
+Kernel fixtures check the actual raw self binder, both exhausted bounds,
+node/list leaf priority, and ignored negative/high child positions.
+
+The aggregate audit passes 1,655 jobs and 45,879 dependency checks using only
+propext, Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. All nine new modules pass focused builds. No Haskell source changed;
+the previous 645 examples and formatter checks apply to the unchanged tree.
+Log: `/tmp/mcfta-edit-execution-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-edit-execution-checkpoint-20261015-0342/`
+(2,048 Lean-tree files and four root documents). The only older Lean proof
+change is added audit imports. Repros, counterexamples, drafts, stashes, and
+other worktrees remain unchanged. Weekly allowance was 18% at
+03:42 CEST; refresh before work.
+
+Next derive the actual edit language law from per-leaf narrowing contracts.
+For a valid edit trie, closed available input, and semantic-ready cache,
+prove meaning result term iff meaning input term and the independent
+SourceEqualityEditMeaning.Matches condition edits term. Use node_verified,
+children_verified, rows_verified, head_exact, and forest_zero. Do not supply
+a whole-worker language law. Then connect compiled conditions to original
+nonoverlapping edit paths and derive the actual intersection, getPath,
+merged-target, and leaf completion contracts. Reuse existing physical proofs
+and the completed unary ancestor theorem. Keep merge over-approximation
+distinct from equality. Compose the class right fold and empty propagation.
+Full one-pass correspondence, open contexts, fixed-point reduction, native
+containers, lazy scheduling, and extraction remain open. Preserve exact Sized
+contracts and the optimized interned core. Stop all workers and work at 1% or less.
+
 ## Exact required-path language and ordered selection composition
 
 Proofs: `68128dd5` and `cfc38752`. Source: `TharkunAB/cfta`,

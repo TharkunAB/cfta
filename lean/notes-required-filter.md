@@ -5,6 +5,14 @@ Proofs: `68128dd5` and `cfc38752`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained source repair is `61f2c939`. Continue on `formalize`.
 
+## Current simultaneous edit checkpoint
+
+`5635846d`, `28bf4f0e`, and `96653514` derive the signed edit compiler,
+independent conditions, physical graphs, finite traversal from stored leaf
+contracts, and exact stable graph/execution agreement. Read
+[the current note](notes-edit-execution.md). Actual output-language agreement
+and concrete narrowing callback contracts remain the next target.
+
 ## Node and row meaning
 
 `SourceEqualityRequiredLanguage.node_exact` proves the full independent

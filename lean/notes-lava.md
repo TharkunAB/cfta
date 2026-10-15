@@ -7,6 +7,17 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Finite edit graph application (2026-10-15 03:42 CEST)
+
+The actual edit worker now has separate physical call graphs and two-way
+instrumented execution agreement. Finite edit depth derives traversal
+completion from explicit stored leaf callback contracts. Original source
+construction derives initial cache premises. Independent leaf conditions
+remain separate from the next output-language theorem. Read
+[the current note](notes-edit-execution.md). Concrete intersection/projection
+callbacks and native scheduling remain open; graph agreement does not close
+those obligations. No Lava or Rocq dependency is added.
+
 ## Complete filter specification (2026-10-15 03:28 CEST)
 
 The actual required-path worker now satisfies its independent node and forest
