@@ -21,6 +21,7 @@ module Data.CFTA.Gen.Synthesis.Portfolio (
     Proposer (..),
     hectare,
     states,
+    statesWith,
 
     -- * Portfolios
     Run (..),
@@ -40,7 +41,7 @@ import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
 import Data.CFTA.Gen.Synthesis (Program, Type)
-import Data.CFTA.Gen.Synthesis.States (Figures, Goals, searchStates)
+import Data.CFTA.Gen.Synthesis.States (Figures, Goals, Walking (..), searchStatesWith)
 import Data.CFTA.Gen.Synthesis.Walk
 
 -- Proposers
@@ -92,9 +93,24 @@ states ::
     Goals m key ->
     [([Text], Maybe [Text])] ->
     Proposer m
-states name budget checker onSize onProgram onFigures goals avoid =
+states = statesWith Preorder
+
+-- | 'states' with a way to walk the table of each size.
+statesWith ::
+    (MonadIO m, Ord key) =>
+    Walking ->
+    Text ->
+    Maybe Double ->
+    Checker m ->
+    (Int -> Progress -> m ()) ->
+    (Int -> Program -> m ()) ->
+    (Figures -> m ()) ->
+    Goals m key ->
+    [([Text], Maybe [Text])] ->
+    Proposer m
+statesWith walking name budget checker onSize onProgram onFigures goals avoid =
     Proposer name budget $ \limits new accept -> do
-        (progress, figures) <- searchStates limits checker (Hooks onSize onProgram new) goals avoid accept
+        (progress, figures) <- searchStatesWith walking limits checker (Hooks onSize onProgram new) goals avoid accept
         progress <$ onFigures figures
 
 -- Portfolios

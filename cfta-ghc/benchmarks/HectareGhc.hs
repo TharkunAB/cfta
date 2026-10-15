@@ -73,6 +73,7 @@ import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), renderProgram, renderType)
 import Data.CFTA.Gen.Synthesis.HooglePlus (Benchmark (..), hooglePlusBenchmarks)
 import Data.CFTA.Gen.Synthesis.Portfolio (Run (..))
+import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
 import Data.CFTA.Gen.Synthesis.Walk (Progress (..))
 
 main :: IO ()
@@ -330,7 +331,9 @@ readModes = mapM mode . words . map (\c -> if c == ',' then ' ' else c)
   where
     mode text = case break (== ':') text of
         ("hectare", budget) -> (,) Hectare <$> seconds budget
-        ("states", budget) -> (,) States <$> seconds budget
+        ("states", budget) -> (,) (States Preorder) <$> seconds budget
+        ("automaton", budget) -> (,) (States (Enumerated HostOrder)) <$> seconds budget
+        ("automaton-canonical", budget) -> (,) (States (Enumerated CanonicalOrder)) <$> seconds budget
         _ -> Left ("no mode " <> text)
     seconds budget = case budget of
         "" -> Right Nothing

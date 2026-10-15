@@ -101,8 +101,8 @@ import Data.CFTA.GHC.Erase (anyResult, erase, higherKinded, typeHeads)
 import Data.CFTA.GHC.Internal.Check
 import Data.CFTA.GHC.States (holeGoals)
 import Data.CFTA.Gen.Synthesis (Program (..))
-import Data.CFTA.Gen.Synthesis.Portfolio (Run (..), combined, flaggedLast, hectare, portfolio, states)
-import Data.CFTA.Gen.Synthesis.States (Figures)
+import Data.CFTA.Gen.Synthesis.Portfolio (Run (..), combined, flaggedLast, hectare, portfolio, statesWith)
+import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Figures, Walking (..))
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
     Erased (..),
@@ -209,8 +209,10 @@ data Options = Options
 data Mode
     = -- | Hectare's programs over the erased candidates (mode (a)).
       Hectare
-    | -- | The programs of states of GHC's own goals (mode (b), "Data.CFTA.GHC.States").
-      States
+    | {- | The programs of states of GHC's own goals (mode (b),
+      "Data.CFTA.GHC.States"), walked as the 'Walking' says.
+      -}
+      States Walking
     deriving (Eq, Show, Read)
 
 -- | Programs of up to five leaves, the first ten fits, mode (a) alone, no other limit.
@@ -354,7 +356,7 @@ streamFits options hole candidates goal accept = do
                         [Erased name typ (role candidate) | (candidate, name, typ) <- erased]
                         (avoid erased)
                         <$> query erased
-            States -> do
+            States walking -> do
                 goals <-
                     holeGoals
                         environment
@@ -362,7 +364,19 @@ streamFits options hole candidates goal accept = do
                         (optionMaximumSize options - 1)
                         goal
                 pure
-                    (Just (states "states" budget checker onSize onProgram (liftIO . writeIORef figures . Just) goals (optionAvoid options)))
+                    ( Just
+                        ( statesWith
+                            walking
+                            (walkingName walking)
+                            budget
+                            checker
+                            onSize
+                            onProgram
+                            (liftIO . writeIORef figures . Just)
+                            goals
+                            (optionAvoid options)
+                        )
+                    )
         -- The walk gives a new fit with the hole as at the start:
         -- check the program with each argument subterm in turn of a
         -- fresh rigid type.
@@ -423,6 +437,10 @@ streamFits options hole candidates goal accept = do
     leaves :: Map Text Leaf
     leaves = Map.fromListWith (\_ old -> old) [(candidateName c, leafOf c) | c <- candidates]
     leafOf c = Leaf (candidateName c) (candidateType c) (candidateHeads c)
+    walkingName walking = case walking of
+        Preorder -> "states"
+        Enumerated HostOrder -> "automaton"
+        Enumerated CanonicalOrder -> "automaton-canonical"
     -- The name of the rigid leaf: a hole, so no candidate has it.
     ignored = "_"
     statisticsOf runs progress ignoring figures counters =

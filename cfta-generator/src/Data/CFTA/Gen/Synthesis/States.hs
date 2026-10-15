@@ -33,6 +33,14 @@ rest:
   skips the same prefix under another split without a call to the host.
 * Hectare's rule for the first argument (as for @head []@), and each fit
   once ('hookNew'), as in the walk.
+* In place of the depth-first search, the table of a size can be one
+  interned cfta automaton ('Enumerated'): a node for each state that the
+  root reaches, and an edge for each transition and split, labeled by the
+  leaf's name. cfta's enumerator lists its programs, in its canonical order
+  or in the host's order, and each one that no dead prefix covers goes to
+  the checker. The enumerator also lists the programs under a dead prefix,
+  which the depth-first search leaves at once, and cfta-generator counts the
+  programs of the automaton exactly ('figuresCount').
 
 The other way to tie the siblings takes the state of the real goal of each
 child, after the unifications of its siblings. It needs the host at each
@@ -46,9 +54,12 @@ module Data.CFTA.Gen.Synthesis.States (
     Refinement (..),
 
     -- * Searches
+    Walking (..),
+    EdgeOrder (..),
     Figures (..),
     emptyFigures,
     searchStates,
+    searchStatesWith,
     budgetSplits,
 ) where
 
@@ -58,14 +69,24 @@ import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
 import Data.List (delete, sort, sortOn)
+import qualified Data.Map.Lazy as LazyMap
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
 import Data.Text (Text)
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
+import Data.CFTA.Enumeration (runs, runsBy)
+import Data.CFTA.Gen (cardinality, fromAutomaton)
 import Data.CFTA.Gen.Synthesis (Program (..))
 import Data.CFTA.Gen.Synthesis.Walk
+import Data.CFTA.Index (Cardinality (..))
+import Data.CFTA.Interned (Edge, Node, NodeId, edgeChildren, edgeSymbol, nodeIdentity)
+import qualified Data.CFTA.Interned as Interned
+import Data.CFTA.Symbol (Symbol (Symbol), symbolText)
+import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 
 -- Hosts
 
@@ -121,12 +142,34 @@ data Figures = Figures
     -- ^ The splits that the empty state of a child left out.
     , figuresSearchSteps :: !Int
     -- ^ The transitions that the search took.
+    , figuresCount :: !Integer
+    -- ^ The programs of the automata of the sizes, by cfta's count ('Enumerated' only).
     }
     deriving (Eq, Show)
 
 -- | The figures before the first state.
 emptyFigures :: Figures
-emptyFigures = Figures 0 0 0 0 0 0 0 0
+emptyFigures = Figures 0 0 0 0 0 0 0 0 0
+
+-- | How the search walks the table of each size.
+data Walking
+    = {- | Depth first over the table, in the host's order, and the subtree under
+      a dead prefix left at once.
+      -}
+      Preorder
+    | {- | Through the interned automaton of the table, with cfta's enumerator:
+      each program that no dead prefix covers goes to the checker.
+      -}
+      Enumerated !EdgeOrder
+    deriving (Eq, Show, Read)
+
+-- | The order of the edges of a node for cfta's enumerator.
+data EdgeOrder
+    = -- | The enumerator's canonical order ('runs').
+      CanonicalOrder
+    | -- | The host's order of the transitions ('refinementRank'), through 'runsBy'.
+      HostOrder
+    deriving (Eq, Show, Read)
 
 {- | A transition: a leaf, its number of children, and the splits of the rest
 of the budget, each child with its budget and the key of its goal.
@@ -182,7 +225,20 @@ searchStates ::
     [([Text], Maybe [Text])] ->
     (Fit -> m Bool) ->
     m (Progress, Figures)
-searchStates limits checker hooks goals avoid accept = do
+searchStates = searchStatesWith Preorder
+
+-- | 'searchStates' with a way to walk the table of each size.
+searchStatesWith ::
+    (MonadIO m, Ord key) =>
+    Walking ->
+    Limits ->
+    Checker m ->
+    Hooks m ->
+    Goals m key ->
+    [([Text], Maybe [Text])] ->
+    (Fit -> m Bool) ->
+    m (Progress, Figures)
+searchStatesWith walking limits checker hooks goals avoid accept = do
     begin <- liftIO getMonotonicTimeNSec
     reference <- liftIO (newIORef (Search Map.empty Map.empty [] emptyDead emptyProgress emptyFigures))
     let current = liftIO (readIORef reference)
@@ -360,12 +416,48 @@ searchStates limits checker hooks goals avoid accept = do
                 if stop
                     then halt OutOfTime
                     else do
-                        result <- search [(budget, root)] [] Nothing
+                        result <- case walking of
+                            Preorder -> search [(budget, root)] [] Nothing
+                            Enumerated order -> enumerated order (root, budget)
                         case result of
                             Halt outcome -> halt outcome
                             _ -> do
                                 hookSize hooks size . searchProgress =<< current
                                 sizes (size + 1)
+        -- List the programs of the automaton of a state with cfta's
+        -- enumerator, and check each one that no dead prefix covers.
+        enumerated order root = do
+            table <- searchTable <$> current
+            let (node, places) = automatonOf name table root
+                weight edge = negate (fromIntegral (Map.findWithDefault 0 (edgeSymbol edge, map nodeIdentity (edgeChildren edge)) places))
+                listed = map (preorderOf . fst) $ case order of
+                    CanonicalOrder -> runs "Mu" node
+                    HostOrder -> runsBy weight "Mu" node
+            figures
+                (\f -> f{figuresCount = figuresCount f + either (const 0) (\(Cardinality n) -> n) (cardinality (fromAutomaton node))})
+            each listed
+        each listed = case listed of
+            [] -> pure Continue
+            tokens : rest -> do
+                stop <- late
+                if stop
+                    then Halt OutOfTime <$ outOfTime
+                    else do
+                        dead <- isDead tokens . searchDead <$> current
+                        if dead || ruled tokens
+                            then progress (\p -> p{progressSkipped = progressSkipped p + 1}) >> each rest
+                            else do
+                                result <- check tokens
+                                case result of
+                                    Halt _ -> pure result
+                                    _ -> each rest
+        -- Hectare's rule on a whole program: the token after a leaf with
+        -- children is its first child.
+        ruled tokens = or [avoidedPair parent next | (parent, next) <- zip tokens (drop 1 tokens)]
+        avoidedPair (parent, arity) (leaf, children) =
+            arity >= 1
+                && children == 0
+                && or [parent `elem` heads && maybe True (leaf `elem`) arguments | (heads, arguments) <- avoid]
         halt outcome = do
             p <- searchProgress <$> current
             hookSize hooks (progressSize p) p
@@ -384,6 +476,50 @@ searchStates limits checker hooks goals avoid accept = do
     childCounts size = if size == 1 then [0] else [1 .. size - 1]
     commonPrefix (x : xs) (y : ys) | x == y = 1 + commonPrefix xs ys
     commonPrefix _ _ = 0 :: Int
+    preorderOf :: Term Symbol -> [Token]
+    preorderOf term = (symbolText (Term.rootLabel term), length (Term.subForest term)) : concatMap preorderOf (Term.subForest term)
+
+{- | The interned automaton of the states of a table that a state reaches: a
+node for each state, with an edge for each transition and split, labeled by
+the leaf's name, whose children are the states of the split. The map gives
+the place of each edge in the host's order (the transitions in their order,
+then the splits), by its symbol and the identities of its children; where
+two states share an edge, the first place counts.
+-}
+automatonOf ::
+    (Ord key) =>
+    (Int -> Text) -> Map (key, Budget) [Transition key] -> (key, Budget) -> (Node Symbol, Map (Symbol, [NodeId]) Int)
+automatonOf name table root = (nodes LazyMap.! root, places)
+  where
+    reachable = go Set.empty [root]
+    go seen [] = seen
+    go seen (state : rest)
+        | state `Set.member` seen = go seen rest
+        | otherwise =
+            go
+                (Set.insert state seen)
+                ( [ (key, budget)
+                  | transition <- Map.findWithDefault [] state table
+                  , split <- transitionSplits transition
+                  , (budget, key) <- split
+                  ]
+                    <> rest
+                )
+    nodes = LazyMap.fromList [(state, Interned.Node (map snd (edgesOf state))) | state <- Set.toList reachable]
+    edgesOf state =
+        zip
+            [0 ..]
+            [ Interned.Edge (Symbol (name (transitionLeaf transition))) [nodes LazyMap.! (key, budget) | (budget, key) <- split]
+            | transition <- Map.findWithDefault [] state table
+            , split <- transitionSplits transition
+            ]
+    places =
+        Map.fromListWith
+            (\_ old -> old)
+            [ ((edgeSymbol edge, map nodeIdentity (edgeChildren edge)), place)
+            | state <- Set.toList reachable
+            , (place, edge) <- edgesOf state :: [(Int, Edge Symbol)]
+            ]
 
 {- | The splits of a size and of the arguments to use over @k@ children: the
 sizes (each at least one), and for each child the arguments that it uses,

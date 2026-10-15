@@ -13,6 +13,7 @@ import System.Environment (lookupEnv)
 import Test.Hspec (describe, hspec, it, pendingWith, shouldSatisfy)
 
 import Data.CFTA.Gen.Synthesis (renderProgram)
+import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
 import Data.CFTA.Gen.Synthesis.Walk (Fit (..))
 import Data.CFTA.Lean
 
@@ -25,7 +26,9 @@ main = do
         it "fills a goal in mode (a)" . withOracleOr $
             fits directory [(Hectare, Nothing)] >>= (`shouldSatisfy` elem "List.count x xs")
         it "fills a goal in mode (b)" . withOracleOr $
-            fits directory [(States, Nothing)] >>= (`shouldSatisfy` elem "List.count x xs")
+            fits directory [(States Preorder, Nothing)] >>= (`shouldSatisfy` elem "List.count x xs")
+        it "fills a goal in mode (b) through the automaton of each size" . withOracleOr $
+            fits directory [(States (Enumerated HostOrder), Nothing)] >>= (`shouldSatisfy` elem "List.count x xs")
 
 -- | The oracle's Lake project: @oracle@ in the package's directory, where cabal runs the tests.
 oracleDirectory :: IO FilePath

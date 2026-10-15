@@ -84,8 +84,8 @@ import System.Process (
  )
 
 import Data.CFTA.Gen.Synthesis (Type, parseType)
-import Data.CFTA.Gen.Synthesis.Portfolio (Run (..), combined, hectare, portfolio, states)
-import Data.CFTA.Gen.Synthesis.States (Figures, Goals (..), Refinement (..))
+import Data.CFTA.Gen.Synthesis.Portfolio (Run (..), combined, hectare, portfolio, statesWith)
+import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Figures, Goals (..), Refinement (..), Walking (..))
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
     Erased (..),
@@ -270,8 +270,8 @@ data Options = Options
 data Mode
     = -- | Hectare's programs over the erased components (mode (a)).
       Hectare
-    | -- | The programs of states of Lean's own goals (mode (b)).
-      States
+    | -- | The programs of states of Lean's own goals (mode (b)), walked as the 'Walking' says.
+      States Walking
     deriving (Eq, Show, Read)
 
 -- | Programs of up to five leaves, mode (a) alone, no other limit.
@@ -304,7 +304,7 @@ streamFits oracle options components goal accept = do
     figures <- newIORef Nothing
     -- Mode (b) has every leaf of the protocol, also the constants without a Hectare type.
     protocol <-
-        if States `elem` map fst (optionModes options)
+        if any (isStates . fst) (optionModes options)
             then Just <$> protocolGoals oracle (optionMaximumSize options)
             else pure Nothing
     let indices = maybe (leafIndices components goal) (\(names, _, _) -> Map.fromList (zip names [0 ..])) protocol
@@ -327,10 +327,11 @@ streamFits oracle options components goal accept = do
         limits = Limits (optionMaximumSize options) Nothing (optionDeadline options)
         proposer (mode, budget) = case mode of
             Hectare -> hectare "hectare" budget checker onSize (\_ _ -> pure ()) leaves (optionAvoid options) <$> goalType goal
-            States ->
+            States walking ->
                 ( \(names, required, root) ->
-                    states
-                        "states"
+                    statesWith
+                        walking
+                        (walkingName walking)
                         budget
                         checker
                         onSize
@@ -344,6 +345,13 @@ streamFits oracle options components goal accept = do
     (count, nanos) <- readIORef trips
     Statistics (combined runs) count nanos runs <$> readIORef figures
   where
+    isStates mode = case mode of
+        States _ -> True
+        Hectare -> False
+    walkingName walking = case walking of
+        Preorder -> "states"
+        Enumerated HostOrder -> "automaton"
+        Enumerated CanonicalOrder -> "automaton-canonical"
     leaves =
         [ Erased
             (componentName c)

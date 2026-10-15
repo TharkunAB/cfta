@@ -85,6 +85,7 @@ import Text.Read (readMaybe)
 
 import Data.CFTA.Gen.Synthesis (Program (..), parseProgram, renderProgram)
 import Data.CFTA.Gen.Synthesis.Portfolio (Run (..))
+import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
 import Data.CFTA.Gen.Synthesis.Walk (Fit (..), Progress (..), preorder)
 import Data.CFTA.Lean
 
@@ -449,7 +450,9 @@ readModes = mapM mode . words . map (\c -> if c == ',' then ' ' else c)
   where
     mode text = case break (== ':') text of
         ("hectare", budget) -> (,) Hectare <$> seconds budget
-        ("states", budget) -> (,) States <$> seconds budget
+        ("states", budget) -> (,) (States Preorder) <$> seconds budget
+        ("automaton", budget) -> (,) (States (Enumerated HostOrder)) <$> seconds budget
+        ("automaton-canonical", budget) -> (,) (States (Enumerated CanonicalOrder)) <$> seconds budget
         _ -> Left ("no mode " <> text)
     seconds budget = case budget of
         "" -> Right Nothing
