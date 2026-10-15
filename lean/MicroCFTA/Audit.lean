@@ -1797,6 +1797,8 @@ import MicroCFTA.SourceCurriedDefaulting
 import MicroCFTA.SourceProgramRunAccounting
 import MicroCFTA.SourceCurrentClassRequiredReady
 import MicroCFTA.SourceTemplateShapeSplits
+import MicroCFTA.SourceCurrentPhysicalClassPass
+import MicroCFTA.SourceCurrentMergedQueryMemos
 import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
 import MicroCFTA.SourceCurrentEnumerationStorage
