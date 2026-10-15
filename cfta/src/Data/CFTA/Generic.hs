@@ -62,6 +62,7 @@ module Data.CFTA.Generic (
 import Control.Applicative ((<|>))
 import Control.Monad (foldM, (<=<))
 import Data.Bifunctor (first)
+import Data.Char (digitToInt, isDigit)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Kind (Type)
 import Data.List (find)
@@ -69,7 +70,8 @@ import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (Proxy))
 import qualified Data.Set as Set
 import Data.Text (Text)
-import Data.Typeable (TypeRep, Typeable, splitTyConApp, tyConModule, tyConName, tyConPackage, typeRep)
+import Data.Type.Equality ((:~:) (Refl))
+import Data.Typeable (TypeRep, Typeable, eqT, splitTyConApp, tyConModule, tyConName, tyConPackage, typeRep)
 import GHC.Generics hiding (Constructor)
 import qualified GHC.Generics as Generic
 import Text.Read (readMaybe)
@@ -345,8 +347,12 @@ instance (GConstructors left, GConstructors right) => GConstructors (left :+: ri
 instance (Generic.Constructor metadata, GFields fields) => GConstructors (M1 C metadata fields) where
     gConstructors typ _ = [(genericConstructor @metadata @fields typ, map snd $ gFields $ Proxy @fields)]
     gEncode typ (M1 fields) = Term.Node (genericConstructor @metadata @fields typ) (gEncodeFields fields)
+
+    -- The type and the name identify a constructor, and the fields check the
+    -- arity, so the decoder does not build the constructor to compare it.
     gDecode typ (Term.Node constructor children)
-        | constructor == genericConstructor @metadata @fields typ = do
+        | constructorType constructor == typ
+        , constructorName constructor == conName (undefined :: M1 C metadata fields ()) = do
             (fields, rest) <- gDecodeFields children
             if null rest then Just $ M1 fields else Nothing
         | otherwise = Nothing
@@ -406,8 +412,28 @@ encodeAtomic value = Term.Node (Constructor (typeRep $ Proxy @a) (show value) []
 -- | Decode a literal only when its type and nullary shape match.
 decodeAtomic :: forall a. (Typeable a, Read a) => Term Constructor -> Maybe a
 decodeAtomic (Term.Node (Constructor typ literal []) [])
-    | typ == typeRep (Proxy @a) = readMaybe literal
+    | typ == typeRep (Proxy @a) = case (eqT @a @Integer, eqT @a @Int) of
+        (Just Refl, _) -> decimal literal
+        (_, Just Refl) -> fromInteger <$> decimal literal
+        _ -> readMaybe literal
 decodeAtomic _ = Nothing
+
+{- | Read the 'Show' text of an integer: an optional minus sign and decimal
+digits. It is 'readMaybe' on that text, without the lexer of 'Read'.
+-}
+decimal :: String -> Maybe Integer
+decimal ('-' : digits@(_ : _)) = negate <$> natural digits
+decimal digits@(_ : _) = natural digits
+decimal [] = Nothing
+
+-- | Read decimal digits.
+natural :: String -> Maybe Integer
+natural = go 0
+  where
+    go !value [] = Just value
+    go !value (character : rest)
+        | isDigit character = go (value * 10 + toInteger (digitToInt character)) rest
+        | otherwise = Nothing
 
 deriving via (Atomic Int) instance HasFTA Int
 deriving via (Atomic Integer) instance HasFTA Integer
