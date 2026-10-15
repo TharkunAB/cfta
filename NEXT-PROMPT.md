@@ -2,6 +2,65 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current required endpoints, physical effects, and global memo composition
+
+Main `45d6538c` is merged at `0694b6f9`. Proof commits are `168ef9ed`,
+`c10e6b1c`, `168802b3`, and `82144334`. Full library scope stays active.
+Earlier sections retain their historical source and proof scopes.
+
+Actual requireAll now retains the projection domain of EVERY original
+selected path, including shorter nonmaximal paths and terminal suffixes.
+The proof uses full original primary certificates and actual demanded child
+lookups. It does not infer original whole-Mu closedness from a false gate.
+Unselected siblings can remain open. Path safety does not imply existence
+of a missing root position; accepted original path witnesses remain separate.
+
+Actual completed required graphs now derive semantic readiness, retained
+entries, stored cost and physical annotation invariants, available results,
+and ordered global memo receipts. The final three tables are valid. Earlier
+scan-final unfolding entries remain. Query tables are unchanged. The fourth
+emptiness memo remains correct through constructor retention.
+scan_required_ready composes these effects with an actual successful Scan,
+finite exact requireAll, every selected endpoint domain, and native IdleReady
+using advanceHeap. Native warm tables are retained. General Scan and outer
+caller completion are not consequences of a supplied successful trace.
+
+Next carry the required result domains through actual shared targets and
+class edits with open unselected siblings. Continue fallback merge/subsumes
+reads, separate merge memo and physical effects, full current caller and
+constrained completion, actual allocation history and checked native/runtime
+transfer, word bounds, whole enumeration, representative waiting counts,
+whole template exclusion, typed refinement frontends, broader generators,
+decision-model, curried/GHC adequacy, and every distinct Sized contract.
+Keep the optimized interned core and all older constructor/equality proofs.
+The fromRows trim/DFS/SCC, constructor, imported-language, and runtime bridges
+remain open. The new endpoint theorem does not close later edit preservation.
+
+Upstream adds child root-shape pruning to template edge copies and changes
+CI scheduling. SourceTemplateShapeSplits proves the exact ordered filtered
+split list, accepted-child preservation, and impossible killed-part removal.
+The full exclusion pipeline and physical inventory bridge remain open.
+Equality, Sized, import, GHC, and curried production bodies are unchanged.
+
+The full audit passes 2,137 jobs and 53,195 dependency checks with only the
+permitted foundations and no new warning. Six new modules and two additive
+Audit imports preserve every older non-Audit proof file. The strict Nix
+build and six suites pass 736 examples plus the golden check. Fourmolu passes
+the two changed Haskell files. Cabal-gild passes all four active packages.
+The Haskell and CI delta is exactly the upstream merge. The local equality
+repair is unchanged.
+
+Read `lean/notes-current-required-endpoints.md`,
+`lean/notes-current-required-memos.md`, and `lean/notes-main-45d6538c.md`.
+
+Start: `/tmp/mcfta-required-language-checkpoint-20261015-2322/` (2,821 files).
+Closing: `/tmp/mcfta-required-endpoints-checkpoint-20261015-2337/` (2,830 files).
+Script: `/tmp/mcfta-preserve-required-endpoints-20261015.py`.
+Evidence: `/tmp/mcfta-required-endpoints-*`. All prior proofs, repros,
+repairs, 13 marked external drafts, stashes, and other worktrees remain.
+Weekly allowance was 81% at the source refresh. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
 ## Exact current scan/required composition and reconstructed result domains
 
 Main `9a2f9bea` is merged at `d8beb7f5`. Proofs are `b0725b6f`,
