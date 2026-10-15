@@ -1704,6 +1704,10 @@ import MicroCFTA.SourceEqualityWarmOnePass
 import MicroCFTA.SourceEqualityWarmNativeEdge
 import MicroCFTA.SourceEqualityPartialHeightBoundary
 import MicroCFTA.SourceRecursiveIntersectionConstraintClosure
+import MicroCFTA.SourceEqualityConstraintClosure
+import MicroCFTA.SourceEqualityConstraintEditClosure
+import MicroCFTA.SourceEqualityConstraintPassClosure
+import MicroCFTA.SourceEqualityConstraintOrigins
 /-!
 # Proof dependency audit
 
