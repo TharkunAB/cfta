@@ -1,20 +1,27 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-{- | A GHC session for the drivers of "Data.CFTA.GHC.Fits": the benchmark and
-the tests. A hole-fit plugin does not need it, because it already runs in
+{- | A GHC session for a program that uses GHC's typechecker outside a
+compilation: @ghc-fits@, the benchmark, the tests, and tools such as
+Specftacular. A hole-fit plugin does not need it, because it already runs in
 GHC's typechecker.
 
 One session runs for the whole process. Its interactive context has the
-imports in scope, as GHCi does. 'fitsForSignature' is the thin wrapper that
-a driver needs: it runs the typechecker in the context, skolemises a
-signature into a hole, and calls 'streamFits' with the signature's arguments
-as required candidates.
+imports in scope, as GHCi does. The session gives the types of expressions
+('typeOfExpression'), takes declarations ('declare'), compiles expressions
+to values ('compileExpression', with 'sessionCompile'), and runs any other
+action of GHC's API ('inSession'). 'fitsForSignature' is the thin wrapper
+that a synthesizer needs: it runs the typechecker in the context,
+skolemises a signature into a hole, and calls 'streamFits' with the
+signature's arguments as required candidates.
 -}
 module Data.CFTA.GHC.Session (
     -- * Sessions
     Session,
+    SessionOptions (..),
+    defaultSessionOptions,
     withSession,
-    withSessionPackages,
+    withSessionOptions,
+    inSession,
 
     -- * Candidates
     Import (..),
@@ -24,6 +31,7 @@ module Data.CFTA.GHC.Session (
     typeOfExpression,
     accepts,
     declare,
+    compileExpression,
 
     -- * Fits
     fitsForSignature,
@@ -43,9 +51,11 @@ import System.Process (readProcess)
 import Data.CFTA.GHC.Fits (Candidate (..), Fit, Options, Statistics, TypedHole, candidateFromId, holeFor, streamFits)
 import GHC (
     Ghc,
+    HValue,
     InteractiveImport (IIDecl),
     TcRnExprMode (TM_Inst),
     TyThing (AConLike, AnId),
+    compileExpr,
     exprType,
     findModule,
     getModuleInfo,
@@ -66,6 +76,8 @@ import GHC.Core.ConLike (ConLike (RealDataCon))
 import GHC.Core.DataCon (dataConWrapId)
 import GHC.Core.Multiplicity (scaledThing)
 import GHC.Core.Type (Type, mkScaledFunTys)
+import GHC.Driver.Backend (interpreterBackend)
+import GHC.Driver.DynFlags (DynFlags (..), GhcLink (LinkInMemory))
 import GHC.Driver.Env (hsc_logger)
 import qualified GHC.Driver.Monad as Driver
 import GHC.Tc.Module (runTcInteractive)
@@ -83,33 +95,64 @@ import GHC.Types.Var (binderVar)
 -- | A running GHC session.
 newtype Session = Session Driver.Session
 
+-- | The options of a session.
+data SessionOptions = SessionOptions
+    { sessionPackages :: [String]
+    -- ^ The packages to expose by their names (@-package@), besides @containers@.
+    , sessionPackageIds :: [String]
+    {- ^ The units to expose by their identifiers (@-package-id@), as the unit
+    of QuickCheck that the program itself uses, so that the values of the
+    session and of the program have the same types.
+    -}
+    , sessionPackageDbs :: [FilePath]
+    -- ^ More package databases (@-package-db@), as the store of cabal.
+    , sessionFlags :: [String]
+    -- ^ More flags of GHC's command line, as @-XGeneralizedNewtypeDeriving@.
+    , sessionCompile :: Bool
+    {- ^ Whether the session can compile expressions to values
+    ('compileExpression'): GHC's interpreter backend, with linking in
+    memory.
+    -}
+    }
+    deriving (Eq, Show)
+
+-- | No more packages, databases, or flags, and no compiling.
+defaultSessionOptions :: SessionOptions
+defaultSessionOptions = SessionOptions [] [] [] [] False
+
 {- | Start a GHC session with the import declarations in scope and run the
 action with it. The library directory comes from the variable @GHC_LIBDIR@,
 or else from @ghc --print-libdir@.
 -}
 withSession :: [String] -> (Session -> IO a) -> IO a
-withSession = withSessionPackages []
+withSession = withSessionOptions defaultSessionOptions
 
--- | 'withSession' with the given packages exposed too, besides @containers@.
-withSessionPackages :: [String] -> [String] -> (Session -> IO a) -> IO a
-withSessionPackages packages imports action = do
+{- | 'withSession' with options. The session always has the flags @-w@ and
+@-XQuantifiedConstraints@, so that a signature can have a quantified
+context, and the package @containers@.
+-}
+withSessionOptions :: SessionOptions -> [String] -> (Session -> IO a) -> IO a
+withSessionOptions options imports action = do
     libdir <- maybe (takeWhile (/= '\n') <$> readProcess "ghc" ["--print-libdir"] "") pure =<< lookupEnv "GHC_LIBDIR"
     runGhc (Just libdir) $ do
         flags <- getSessionDynFlags
         logger <- hsc_logger <$> getSession
-        (parsed, _, _) <-
-            parseDynamicFlags
-                logger
-                flags
-                -- QuantifiedConstraints, so that a signature can have a
-                -- quantified context.
-                (map noLoc ("-w" : "-XQuantifiedConstraints" : concatMap (\package -> ["-package", package]) ("containers" : packages)))
+        let compiling
+                | sessionCompile options = flags{backend = interpreterBackend, ghcLink = LinkInMemory}
+                | otherwise = flags
+            arguments =
+                ["-w", "-XQuantifiedConstraints"]
+                    <> concatMap (\database -> ["-package-db", database]) (sessionPackageDbs options)
+                    <> concatMap (\package -> ["-package", package]) ("containers" : sessionPackages options)
+                    <> concatMap (\unit -> ["-package-id", unit]) (sessionPackageIds options)
+                    <> sessionFlags options
+        (parsed, _, _) <- parseDynamicFlags logger compiling (map noLoc arguments)
         _ <- setSessionDynFlags parsed
         declarations <- traverse parseImportDecl imports
         setContext (map IIDecl declarations)
         Driver.reifyGhc (action . Session)
 
--- | Run a session action from 'IO'.
+-- | Run an action of GHC's API in the session.
 inSession :: Session -> Ghc a -> IO a
 inSession (Session session) action = Driver.reflectGhc action session
 
@@ -208,3 +251,12 @@ inSignatureHole session candidates signature arguments search =
 -- | Add declarations to the interactive context, as GHCi does for a declaration at its prompt.
 declare :: Session -> String -> IO ()
 declare session declarations = inSession session (void (runDecls declarations))
+
+{- | Compile an expression to its value, or 'Nothing' when it does not
+typecheck. The session must compile ('sessionCompile'). The value has the
+type of the expression, and the caller gives it that type with
+'Unsafe.Coerce.unsafeCoerce'.
+-}
+compileExpression :: Session -> String -> IO (Maybe HValue)
+compileExpression session expression =
+    inSession session $ handleSourceError (const (pure Nothing)) (Just <$> compileExpr expression)
