@@ -7,6 +7,20 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Complete public guarded-edge application (2026-10-15 07:42 CEST)
+
+The actual general merge worker now preserves physical annotations through
+allocating comparisons, retention, recursive calls, and both threshold branches.
+Captured targets, shared first forcing and reuse, class edits, selected folds,
+and guarded-edge reconstruction derive public output readback. The complete
+concrete guarded native edge pass has exact public input/output meaning under
+inherited satisfaction. Original normalized syntax derives finite execution,
+both memo receipts, stable stage results, and eventual bounded-array agreement.
+Read [the current note](notes-public-native-edge.md). The next graph is the
+actual inherited caller. The paper's function and graph method does not prove
+that caller's termination, GHC lazy scheduling, or extraction. No Lava or Rocq
+dependency is added.
+
 ## Native annotation application (2026-10-15 07:30 CEST)
 
 Actual compiled calls now derive physical annotation conditions at their

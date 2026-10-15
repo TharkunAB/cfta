@@ -1,5 +1,62 @@
 # Full formalization coverage
 
+## Exact public language of the complete concrete guarded native edge pass
+
+Proofs: `5680b122`, `062ec3e5`, and `5c15f84c`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-public-native-edge.md`. This section supersedes the complete
+one-pass output annotation target below and earlier audit counts.
+
+Actual general source merging now preserves physical annotations. The proof
+includes allocating repaired comparisons, ordered cover and retention scans,
+identity filtering, both retained-union branches, ordered recursive children,
+the four-row threshold, original small-row guards, and literal large-row Top.
+It derives every intermediate scope from actual source effects.
+
+Captured target projection and merging, the first-seeded native right fold,
+shared first forcing and reuse, and simultaneous shared edits retain that
+same invariant. Fresh class captures use each actual tail-returned forest.
+Closed gate selection uses its proved unchanged constructor heap. Required
+paths, selected class folds, the single final propagation, checked one-pass
+branches, and literal guarded-edge reconstruction derive final annotations.
+No future annotation heap or whole-merge language law is supplied.
+
+SourceEqualityPublicNativeEdge.language proves unconditional public narrowing
+and exact public input/output meaning when the inherited constraints hold.
+All controls are concrete source controls. Actual PCS constructor laws and
+normalized annotations discharge guard readback on both sides. It assumes no
+generic public conjunction law on arbitrary malformed raw stored constraints.
+source_edges starts with original normalized syntax and derives finite actual
+execution, both source memo certificates, final idle validity, histories,
+residency, closed children, literal full labels, stable six-bound results,
+and eventual bounded-array results. Only reached native word checks remain.
+The singleton-storage counterexample and all previous proof boundaries remain.
+
+All seven new modules pass focused builds. The aggregate audit passes
+1,806 jobs and 47,797 dependency checks using only propext, Classical.choice,
+and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-public-native-edge-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-public-native-edge-checkpoint-20261015-0742/` (2,215 Lean-tree files and four root documents).
+Older proofs except audit imports, all counterexamples, marked drafts,
+production source, stashes, and other worktrees remain unchanged. The earlier
+645 Haskell examples and formatter checks apply to the unchanged source and
+were not rerun. Weekly allowance was 15% at 2026-10-15 07:42 CEST. Refresh it before work.
+Stop all work and owned workers immediately at 1% or less.
+
+Next connect the actual inherited reduceChildren and reducePartially caller.
+Read PartialReductionCaller and lean/notes-partial-reduction-caller.md. Derive
+actual combined-payload and eqConstraintsDescend readback. Follow literal
+indexed child traversal, original-label setChildren, modifyNode, and the Mu
+smart-constructor branch with actual returned caches. Use this concrete edge
+theorem instead of supplying generic EqualityReduction.Laws. First retain
+completed execution preservation and all incomplete/error observations. Do
+not infer whole-caller termination from finite local passes or original cached
+depth: native intersection can increase ordinary depth. Open contexts, repeated
+fixed points, getAllAtPath, native containers, GHC lazy scheduling, and extraction
+remain open. Preserve Sized exact classes, finite size execution, size order,
+both distinct-term rank inverses, the optimized core, and all older artifacts.
+
 ## Public native intersection and physical annotations through path traversal
 
 Proofs: `da6e72e7`, `ab156db1`, and `854bd6d3`.

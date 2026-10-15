@@ -5,6 +5,13 @@ Proofs: `da6e72e7`, `ab156db1`, and `854bd6d3`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+The complete-pass output annotation target below is now proved. Actual general
+merging, shared targets and edits, closed gate selection, required paths, and
+class folds derive the guarded-edge result annotations. The complete concrete
+guarded native edge pass has public/public exactness under inherited
+satisfaction. The actual inherited caller remains separate. Read
+[the current note](notes-public-native-edge.md).
+
 ## Actual compiled native continuations
 
 SourceRecursiveIntersectionAnnotationCode.Certified checks actual source code.

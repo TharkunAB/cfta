@@ -11,6 +11,13 @@ paths, and general projection also retain annotations. The complete equality
 pass still needs general merging, shared-target edits, gate queries, and fold
 preservation. Read [the current note](notes-native-annotations.md).
 
+The complete-pass output annotation target below is now proved. Actual general
+merging, shared targets and edits, closed gate selection, required paths, and
+class folds derive the guarded-edge result annotations. The complete concrete
+guarded native edge pass has public/public exactness under inherited
+satisfaction. The actual inherited caller remains separate. Read
+[the current note](notes-public-native-edge.md).
+
 ## The independent constraint meaning
 
 EqualityNormalize already defines PCS classes by equality of distinct paths.
