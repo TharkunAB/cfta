@@ -1543,6 +1543,18 @@ import MicroCFTA.SourceMergedCompletionExamples
 import MicroCFTA.SourceMergedEdgeCompletion
 import MicroCFTA.SourceMergedSelectionCompletion
 import MicroCFTA.SourceMergedStability
+import MicroCFTA.SourceEqualityClassTarget
+import MicroCFTA.SourceEqualityClassTargetAPI
+import MicroCFTA.SourceEqualityConstructedClassEdits
+import MicroCFTA.SourceEqualityDemandTarget
+import MicroCFTA.SourceEqualityDemandTargetComplete
+import MicroCFTA.SourceEqualityDemandTargetExamples
+import MicroCFTA.SourceEqualityDemandTargetLanguage
+import MicroCFTA.SourceEqualityDemandTargetWorker
+import MicroCFTA.SourceEqualityDemandTargetWorkerComplete
+import MicroCFTA.SourceEqualityDemandTargetWorkerSound
+import MicroCFTA.SourceEqualityNativeMerge
+import MicroCFTA.SourceEqualityTargetOperand
 /-!
 # Proof dependency audit
 
