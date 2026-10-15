@@ -1,4 +1,6 @@
 import Lean
+import MicroCFTA.SourceEqualityPartialNativeDemand
+import MicroCFTA.SourceEqualityNativeDemandMismatch
 import MicroCFTA.SourceEqualityPartialIntersectionAllocation
 import MicroCFTA.SourceEqualityPartialConjoinAllocation
 import MicroCFTA.SourceEqualityMkEdgeArity
