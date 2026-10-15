@@ -12,16 +12,21 @@ Core and generator definitions are unchanged. Decision-model and the moved
 GHC session library remain outside formal source coverage. All six Haskell
 suites pass, with 687 examples plus the golden suite. The strict build,
 formatting, and metadata checks pass for all four packages.
+The [actual outer-worker proof](notes-outer-worker-demands.md), `7369264b`,
+retains both first-child receipts and their returned warm states. A general
+one-row law makes those child completions necessary for successful parent
+bodies under any callback. It composes with the typed result-thunk busy trace.
+Next integrate actual result-memo keys and memo state with the recursive
+worker. This supersedes the earlier first-incomplete-worker target below.
 The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`,
 returns to the original physical root with empty inherited constraints after
 two actual local prefixes. Its observed physical-key relation is not well
 founded. The retained source certificate passes. Cold and warm full-pass
 calls time out. The typed result-thunk instantiation in `6e4d477d` reaches
-busy with neither result completed. Next derive that demand order from the
-actual outer worker and its constructor operations. No production algorithm
-is repaired. This supersedes unconditional
-caller-rank targets below. The kernel result does not prove GHC divergence.
-The audit passes 1,892 jobs and 48,855 theorem dependency checks.
+busy with neither result completed. The actual-worker note now supplies
+its monadic first-child necessity laws. No production algorithm is repaired.
+This supersedes unconditional caller-rank targets below. The kernel result does not prove GHC divergence.
+The audit passes 1,894 jobs and 49,138 theorem dependency checks.
 The [source boundary checks](notes-origin-boundaries.md) refute inherited
 literal conjunction closure and a local maximum-path bound. Retained Haskell
 prefixes also refute physical absorption of a repeated intersection factor.

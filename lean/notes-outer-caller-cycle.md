@@ -1,5 +1,10 @@
 # A closed input repeats an outer caller key
 
+The [actual outer-worker proof](notes-outer-worker-demands.md), `7369264b`,
+now supplies complete one-level callee receipts and first-child necessity
+under every recursive callback. It supersedes the first-incomplete-worker
+next target below. The result-memo and GHC bridges remain separate.
+
 Source: `TharkunAB/cfta`, main `239feb64`, merged at `b3d06a08`.
 The source-comment correction changes no algorithm. This note supersedes
 the unconditional caller-rank target in [the earlier boundary note](notes-origin-boundaries.md).

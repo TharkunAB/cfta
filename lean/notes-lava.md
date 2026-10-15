@@ -7,6 +7,14 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Actual outer-worker child necessity (2026-10-15 12:33 CEST)
+
+The [worker-demand proof](notes-outer-worker-demands.md), `7369264b`, derives
+both actual first-child receipts and a general one-row necessity law.
+It retains actual warm states and composes with the typed result-thunk busy
+trace. Next integrate the real result memo with the recursive worker.
+GHC, container, and whole-library correspondence remain separate.
+
 ## Actual outer caller cycle (2026-10-15 12:10 CEST)
 
 The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`

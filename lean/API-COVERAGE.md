@@ -1,5 +1,18 @@
 # Public API and source correspondence
 
+## Actual outer requests and necessary first-child completion
+
+Proofs: `7369264b`, on main `239feb64`. Read
+[the worker-demand note](notes-outer-worker-demands.md). Actual one-level
+outer workers supply complete first-child receipts at R and W(R), with
+actual returned warm states and literal empty inheritance. A general one-row
+law proves that successful bodies require those same child calls to succeed.
+The typed-thunk trace reaches busy with neither result complete. The audit
+passes 1,894 jobs and 49,138 dependency checks. No Haskell source changed.
+Next integrate full inherited-identity/node-identity result memo keys and
+memo state with the recursive worker. GHC and container correspondence
+remain separate. This supersedes the earlier first-incomplete-worker target.
+
 ## A closed source input repeats the actual outer caller key
 
 Prefix proof and reproduction: `eed062bd`; typed-thunk proof: `6e4d477d`,

@@ -2,6 +2,80 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Actual outer requests and necessary first-child completion
+
+Proofs: `7369264b`. Source: `TharkunAB/cfta`, main `239feb64`.
+HTTPS pull is current. Main remains an ancestor of `formalize`. Continue on
+`formalize` and push checkpoints. Read `lean/notes-outer-worker-demands.md`,
+then `lean/notes-outer-caller-cycle.md`. This section supersedes the earlier
+first-incomplete-worker target and unconditional physical-key rank targets.
+
+SourceEqualityOuterCallerWorkerCycle runs the actual one-level outer worker
+at the original closed normalized R. It retains the first incomplete callee
+W(R), its actual inherited payload, and its full returned warm state. The
+same worker at that W(R) call reaches R's original physical node reference.
+Both payloads are literal EmptyConstraints. Both callers are distinct
+ordinary nodes with one row. observation_receipts derives the original
+construction and both complete worker-result equalities from execution.
+No completed caller graph, future warm scope, or successful callback is given.
+
+SourceEqualityPartialFirstDemand.first_required is a general one-row
+necessary condition. With the actual one-level child receipt, any successful
+body under any recursive callback requires that same child call to succeed
+at that exact warm state. Native prefix, own readback, combination, and
+indexed child control derive this law. It does not assume termination.
+The fixture required theorem instantiates it at both callers. actual_pending
+combines both necessary demands and full receipts with the existing typed
+result-thunk trace. Repeated root lookup observes busy with neither result
+complete. Busy is not a GHC exception, successful result, or fallback policy.
+
+The Haskell audit distinguishes list-spine demand from child-result demand.
+Equal-arity setChildren checks finite list spines. Edge interning then hashes
+child identities, including on hits. For each verified unfinished one-row
+body with a live payload and positive arity, this requires the first child
+before body completion. A completed result-memo hit can return immediately.
+No all-row eagerness or deep child normal form is asserted. The cached
+hashable 1.5.1.0 source and its archive hash are recorded in the proof note.
+GHC execution, containers, unsafe IO, and blackhole correspondence remain
+separate. No production Haskell, reproduction, or package setting changed.
+
+Next integrate the actual result memo with the recursive worker. Represent
+its full key using inherited EqConstraints identity and node identity.
+Retain trie-based equality of physical class keys; semantic denotation alone
+is insufficient. Thread publication, running cells, completion, and memo
+state through child, row, and native effects. Preserve busy, source errors,
+and exhausted bounds distinctly. Compare completed executions with the
+existing caller graph and exact-language laws. Do not invent a production
+cycle policy or attempt an unconditional decreasing-key rank for this source.
+
+The aggregate audit passes 1,894 jobs and 49,138 dependency checks with
+only propext, Classical.choice, and Quot.sound. The older unused inputs
+warning remains. Focused builds also pass. Logs:
+`/tmp/mcfta-outer-worker-cycle-20261015.log` and
+`/tmp/mcfta-outer-worker-cycle-audit-20261015.log`.
+Exact source excerpts: `/tmp/mcfta-worker-demand-source-audit-20261015.txt`.
+No Haskell tests, benchmark, Fourmolu, Cabal-gild, or metadata checks were
+repeated because their files and definitions are unchanged. The earlier
+six suites (687 examples plus golden tests) and Nix checks remain evidence
+for their prior source checkpoint, not proof of whole-library correspondence.
+
+Starting snapshot: `/tmp/mcfta-worker-demands-start-20261015-1218/`.
+Closing snapshot: `/tmp/mcfta-worker-demands-checkpoint-20261015-1234/`.
+All starting Lean proofs except Audit imports, retained repros, marked drafts,
+stashes, and other worktrees remain unchanged. The optimized interned core,
+older constructor and equality work, and Sized exact classes, finite size
+execution, size order, and both distinct rank inverses retain their source
+definitions. Both earlier unverified intersection drafts retain their hashes.
+The scratch first-demand precursor is retained as
+`/tmp/mcfta-one-row-demand-pre-integration.lean.draft`. Repository modules
+supersede its old namespace dependencies. No theorem is imported from it.
+
+General caller completion, full result-memo correspondence, open contexts,
+repeated fixed points, getAllAtPath, native containers, GHC scheduling,
+decision-model, and extraction remain open. Weekly allowance was 97% at
+2026-10-15 12:33 CEST. Refresh it before work. Stop work and owned workers
+at 1% or less. No board posts or deployments.
+
 ## A closed source input repeats the actual outer caller key
 
 Prefix proof and reproduction: `eed062bd`. Typed result-thunk proof:
