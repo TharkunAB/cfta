@@ -1,4 +1,6 @@
 import Lean
+import MicroCFTA.SourceEqualityPartialMemoRenaming
+import MicroCFTA.SourceEqualityPartialConstraintWords
 import MicroCFTA.SourceEqualityPartialResultMemoSource
 import MicroCFTA.SourceEqualityPartialMemoCompletedExample
 import MicroCFTA.SourceEqualityOuterMemoCycleInvariant
