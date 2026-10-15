@@ -45,6 +45,7 @@ module Data.CFTA.Gen.Synthesis (
     Library (..),
     Encoding (..),
     Defaulting (..),
+    Domain (..),
     library,
     Query (..),
 
@@ -245,14 +246,25 @@ data Encoding
     | {- | A type constructor is a leaf, applied to its arguments one at a
       time by @\@@ edges, so that a type variable can stand for a type
       constructor. A type constructor whose name starts with @?@, as
-      @?Foldable t0@, is a type variable of kind @* -> *@. The map gives, by
-      the text after the @?@ up to the first space (the names of the
-      variable's classes, as @Foldable@ or @Applicative,Foldable@), the
-      types of kind @* -> *@ over which the variable ranges, as @Maybe@ or
-      @Either e@ (each as a type constructor with one argument less than its
-      arity).
+      @?Foldable t0@ or @?Ord t1@, is a type variable whose domain the map
+      gives, by the text after the @?@ up to the first space (the names of
+      the variable's classes, as @Foldable@ or @Applicative,Foldable@).
       -}
-      Curried Defaulting (Map.Map Text [Type])
+      Curried Defaulting (Map.Map Text Domain)
+    deriving (Show)
+
+-- | The types over which a variable of the curried encoding ranges.
+data Domain
+    = {- | Types of kind @* -> *@, as @Maybe@ or @Either e@ (each a type
+      constructor with one argument less than its arity), and whether the
+      list type is the variable's default under 'OnlyDefault'.
+      -}
+      HeadDomain Bool [Type]
+    | {- | Types of kind @*@, as @Int@ or @List x0@. When the program does
+      not determine such a variable, a run lists one typed term for it, not
+      one for each type ('domainMarkers').
+      -}
+      TypeDomain [Type]
     deriving (Show)
 
 {- | Which types of its domain a variable of kind @* -> *@ of the curried
@@ -264,15 +276,13 @@ the run ties it to a type constructor, as @lookup@ ties the @t@ of
 data Defaulting
     = -- | Every type of its domain, so a program has a typed term for each.
       AnyHead
-    | {- | Only the list type, when the map gives 'True' for the key of its
-      domain (or of one of the domains that the run intersects with it);
-      else none, so the run is dropped. GHC's @ExtendedDefaultRules@ default
-      such a variable to the list type when one of its classes is
-      @Foldable@ or @Traversable@. The map has the keys of the variables of
-      kind @* -> *@; a domain whose key it does not have, as one of kind
-      @*@, keeps every type.
+    | {- | Only the list type, when the 'HeadDomain' of the variable (or of
+      one of the domains that the run intersects with it) has the list as
+      its default; else none, so the run is dropped. GHC's
+      @ExtendedDefaultRules@ default such a variable to the list type when
+      one of its classes is @Foldable@ or @Traversable@.
       -}
-      OnlyDefault (Map.Map Text Bool)
+      OnlyDefault
     deriving (Show)
 
 {- | The library of the components, with the components that only appear as
@@ -432,8 +442,8 @@ four type variables, and each type constructor applied to as many types as
 its arity. The arity of a type constructor is the largest number of
 arguments that it has in the types.
 -}
-allCurriedTypes :: Defaulting -> [(Text, Int)] -> Node Symbol
-allCurriedTypes defaulting constructors =
+allCurriedTypes :: Defaulting -> Bool -> [(Text, Int)] -> Node Symbol
+allCurriedTypes defaulting typeDomains constructors =
     createMu $ \types ->
         let ofKind missing =
                 union $
@@ -444,9 +454,15 @@ allCurriedTypes defaulting constructors =
                 [arrowType types types]
                     <> map (\name -> Node [Edge name []]) ["var1", "var2", "var3", "var4"]
                     <> [ofKind 0]
+                    <> [anyTypeMarker | typeDomains]
   where
     arities = Map.toList (Map.fromListWith max [(name, arity) | (name, arity) <- constructors, not ("?" `Text.isPrefixOf` name)])
     largest = maximum (0 : map snd arities)
+
+-- | Whether a domain is a 'TypeDomain'.
+isTypeDomain :: Domain -> Bool
+isTypeDomain (TypeDomain _) = True
+isTypeDomain (HeadDomain _ _) = False
 
 -- | The type constructors of a type with their arities.
 constructorsOf :: Type -> [(Text, Int)]
@@ -480,54 +496,63 @@ generalizeWith encoding@(Curried defaulting domains) types typ@(Node [Edge symbo
         | isVariable node = types
         | Just className <- higherClass node = domain className
         | otherwise = node
-    domain className =
-        union $
-            [ mapNodes (\node -> if isVariable node then types else node) (typeNodeWith encoding head')
-            | head' <- Map.findWithDefault [] className domains
-            ]
-                <> domainMarkers defaulting className
+    domain className = case Map.lookup className domains of
+        Just found ->
+            union $
+                [ mapNodes (\node -> if isVariable node then types else node) (typeNodeWith encoding typ')
+                | typ' <- domainTypes found
+                ]
+                    <> domainMarkers defaulting found
+        Nothing -> union []
+    domainTypes (HeadDomain _ types') = types'
+    domainTypes (TypeDomain types') = types'
     variables = nubOrd $ crush (\node -> [node | isVariable node || isJust (higherClass node)]) typ
     pathsOf variable = pathsMatching (== variable) typ
 generalizeWith _ _ typ = typ
 
-{- | With 'OnlyDefault', the leaves that the domain of a curried variable has
-beside its types, so that the intersection of domains in a run tells
-whether the program determines the variable, and whether it has a default:
+{- | The leaves that the domain of a curried variable has beside its types,
+so that the intersection of domains in a run tells whether the program
+determines the variable, and whether it has a default:
 
-* @?@ is in every domain of a key of the map, and in the types of kind
-  @* -> *@ of the node of all types ('anyMarkers'), but not in a type
-  constructor. So a run that
-  ties the variable to a type constructor, as @Maybe@, loses it.
-* @?nodefault@ is in a domain whose key has 'False', and in the types
-  of kind @* -> *@ of the node of all types. So a run keeps it when no
-  domain of the intersection has a default.
+* @?any@ is in every 'TypeDomain', and in the node of all types when the
+  encoding has a 'TypeDomain', but not in a type constructor. So a run that
+  ties the variable to a type, as @Int@, loses it.
+* With 'OnlyDefault', @?@ is in every 'HeadDomain', and in the types of
+  kind @* -> *@ of the node of all types ('anyMarkers'), but not in a type
+  constructor. So a run that ties the variable to a type constructor, as
+  @Maybe@, loses it.
+* With 'OnlyDefault', @?nodefault@ is in a 'HeadDomain' without the list as
+  its default, and in the types of kind @* -> *@ of the node of all types.
+  So a run keeps it when no domain of the intersection has a default.
 
 'narrowHeads' reads them, and drops them, before the enumeration tries the
 edges of a node.
 -}
-domainMarkers :: Defaulting -> Text -> [Node Symbol]
-domainMarkers AnyHead _ = []
-domainMarkers (OnlyDefault keys) key = case Map.lookup key keys of
-    Just defaults -> [openMarker] <> [noDefaultMarker | not defaults]
-    Nothing -> []
+domainMarkers :: Defaulting -> Domain -> [Node Symbol]
+domainMarkers _ (TypeDomain _) = [anyTypeMarker]
+domainMarkers AnyHead (HeadDomain _ _) = []
+domainMarkers OnlyDefault (HeadDomain defaults _) = [openMarker] <> [noDefaultMarker | not defaults]
 
 -- | The markers of the types of kind @* -> *@ of the node of all types: both, which an intersection keeps.
 anyMarkers :: Defaulting -> [Node Symbol]
 anyMarkers AnyHead = []
-anyMarkers (OnlyDefault _) = [openMarker, noDefaultMarker]
+anyMarkers OnlyDefault = [openMarker, noDefaultMarker]
 
 -- | The leaves of 'domainMarkers'.
-openMarker, noDefaultMarker :: Node Symbol
+openMarker, noDefaultMarker, anyTypeMarker :: Node Symbol
 openMarker = Node [Edge (Symbol "?") []]
 noDefaultMarker = Node [Edge (Symbol "?nodefault") []]
+anyTypeMarker = Node [Edge (Symbol "?any") []]
 
-{- | The edges of a node of a run with 'OnlyDefault' ('domainMarkers'). A
-node without a marker keeps its edges. A node with a marker is the domain of
-a variable that the program does not determine: it keeps the list type when
-it has no @?nodefault@, and no edge when it has.
+{- | The edges of a node of a run with markers ('domainMarkers'). A node
+without a marker keeps its edges. A node with a marker is the domain of a
+variable that the program does not determine. With @?any@, it keeps only
+that leaf, so the run lists one typed term. With @?@, it keeps the list
+type when it has no @?nodefault@, and no edge when it has.
 -}
 narrowHeads :: [Edge Symbol] -> [Edge Symbol]
 narrowHeads edges
+    | any (leaf "?any") edges = filter (leaf "?any") edges
     | not (any (leaf "?") edges) = edges
     | any (leaf "?nodefault") edges = []
     | otherwise = filter (leaf "List") edges
@@ -741,7 +766,7 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNodeWith encod
 typesOf :: Library -> Query -> Node Symbol
 typesOf lib query = case libraryEncoding lib of
     FirstOrder -> allTypes constructors
-    Curried defaulting _ -> allCurriedTypes defaulting constructors
+    Curried defaulting domains -> allCurriedTypes defaulting (any isTypeDomain domains) constructors
   where
     constructors =
         nubOrd $
@@ -843,13 +868,15 @@ distinctProgramsIn = catMaybes . programRuns FirstOrder
 each with its program when no run before it has that program. So the
 programs are those of 'distinctProgramsIn', and the length is the number of
 typed terms that the enumeration lists. A typed term can repeat, as in
-'runs'. With 'OnlyDefault', the runs are narrowed by 'narrowHeads'.
+'runs'. With markers ('domainMarkers'), the runs are narrowed by
+'narrowHeads'.
 -}
 programRuns :: Encoding -> Space -> [Maybe Program]
 programRuns encoding space = go Set.empty $ map (toProgram . fst) $ listRuns "Mu" (spaceNode space)
   where
     listRuns = case encoding of
-        Curried (OnlyDefault _) _ -> runsNarrowedBy (spaceOrder space) narrowHeads
+        Curried OnlyDefault _ -> runsNarrowedBy (spaceOrder space) narrowHeads
+        Curried AnyHead domains | any isTypeDomain domains -> runsNarrowedBy (spaceOrder space) narrowHeads
         _ -> runsBy (spaceOrder space)
     go _ [] = []
     go seen (program : rest)

@@ -34,7 +34,9 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   each of those classes can hold: the type constructors of the candidates'
   types and of the query, the function type, and a rigid variable of the
   query that an instance matches. So @maximum@ does not have a rigid goal
-  @a@ without a given @Ord a@.
+  @a@ without a given @Ord a@. A run that does not determine such a
+  variable lists one typed term for it ('Data.CFTA.Gen.Synthesis.TypeDomain'),
+  not one for each type of its domain.
 * Each program is checked in preorder, one leaf at a time
   ("Data.CFTA.GHC.Internal.Check"), as a refinement hole fit, with the
   parts of 'GHC.Tc.Errors.Hole.tcCheckHoleFit': 'tcSubTypeSigma' at the
@@ -143,7 +145,7 @@ import Data.CFTA.GHC.Erase (
 import Data.CFTA.GHC.Internal.Check
 import Data.CFTA.GHC.NormalForm (NormalForm, mentions, normalForm, termOfId)
 import Data.CFTA.GHC.States (holeGoals)
-import Data.CFTA.Gen.Synthesis (Defaulting (..), Encoding (..), Program (..))
+import Data.CFTA.Gen.Synthesis (Defaulting (..), Domain (..), Encoding (..), Program (..))
 import qualified Data.CFTA.Gen.Synthesis as Hectare
 import Data.CFTA.Gen.Synthesis.States (Figures, Walking (..), searchStatesWith)
 import Data.CFTA.Gen.Synthesis.Walk (
@@ -444,7 +446,11 @@ streamFits options hole candidates goal accept = do
         States _ -> pure []
     let encoding
             | optionCurried options =
-                Curried defaulting (domains environment instances <> typeDomains environment instances decided)
+                Curried
+                    defaulting
+                    ( Map.mapWithKey (HeadDomain . defaults) (domains environment instances)
+                        <> fmap TypeDomain (typeDomains environment instances decided)
+                    )
             | otherwise = FirstOrder
     -- The time of the checks of the fits' parts, which are checks too.
     ignoring <- liftIO (newIORef 0)
@@ -614,15 +620,14 @@ streamFits options hole candidates goal accept = do
                        , Just name <- [rigid variable]
                        ]
          in fmap types keys
-    -- With optionOnlyDefaulted, the keys of the curried variables, each with
-    -- whether it defaults to the list type under ExtendedDefaultRules: a
+    -- With optionOnlyDefaulted, whether a key of the curried variables of
+    -- kind * -> * defaults to the list type under ExtendedDefaultRules: a
     -- key of an interactive class (of which Foldable and Traversable have
     -- kind * -> *), or the key of no class, as a variable without a
     -- constraint fits at any type head.
     defaulted = optionCurried options && optionOnlyDefaulted options
-    defaulting
-        | defaulted = OnlyDefault (fmap (\classes -> null classes || any interactive classes) curriedKeys)
-        | otherwise = AnyHead
+    defaulting = if defaulted then OnlyDefault else AnyHead
+    defaults key = maybe False (\classes -> null classes || any interactive classes) (Map.lookup key curriedKeys)
     interactive cls = className cls `elem` [showClassName, eqClassName, ordClassName, foldableClassName, traversableClassName]
     -- A candidate's type without its foralls and contexts, so that its heads
     -- are visible (Maybe in the type of lookup).
