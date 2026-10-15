@@ -1749,6 +1749,8 @@ import MicroCFTA.SourceEndpointGateCompletion
 import MicroCFTA.SourceEndpointCallerRegression
 import MicroCFTA.SourceEndpointMemoPublicationCorrect
 import MicroCFTA.EndpointMemoGateSource
+import MicroCFTA.EndpointGateModes
+import MicroCFTA.ConservativeEmptiness
 /-!
 # Proof dependency audit
 
