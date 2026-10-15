@@ -168,6 +168,10 @@ constraints, at the end of the path or before it. Unfolding such a node shows
 its constrained edges again, and their reduction unfolds the node again. A
 recursive node without constraints can unfold, because its unfolding has no
 constraints to reduce.
+
+A 'Mu' whose body is its own variable is the exception. Its unfolding is the
+node itself, so a class with a path through it does not end. Only
+'createMuDontCleanup' builds such a node: @createMu id@ is 'EmptyNode'.
 -}
 reduceEqConstraints ::
     forall symbol.

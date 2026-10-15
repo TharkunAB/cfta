@@ -695,6 +695,11 @@ createMu = dropRedundantMu . createMuDontCleanup
 Interning a 'Mu' is what assigns the identity its body refers to, so the redundancy check in 'createMu' can only run
 afterwards. This is that first half, exported for tests that need to observe a redundant node before it is dropped.
 
+The result can be a 'Mu' whose body is its own variable, such as @createMuDontCleanup id@. It accepts no term, but its
+unfolding is the node itself. So an operation that unfolds it to read a path does not end on it: @restrict@ of
+"Data.CFTA.Template", and @reduceEqConstraints@ of "Data.CFTA.Equality.Operations" with a class that has a path through
+it. 'createMu' gives 'EmptyNode' for such a binder.
+
 Interning needs the shape of the body before the node has a 'NodeId'. The shape is the body applied to the placeholder
 selected by 'muPlaceholder'. Its level is at least the depth of the probe
 and exceeds every free ordinary level in that probe. The choice avoids
