@@ -5,6 +5,12 @@ Proofs: `5ac49f0a`, `dbd22112`, and `70d3e67c`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+The unrestricted source guard-law target below is now discharged at the
+existing independent PCS meaning. Public agreement holds on normalized
+annotations. Original construction and optional binders derive the annotation
+heap. Native and shared-edit output annotation preservation remains next.
+Read [the current note](notes-normalized-annotations.md).
+
 ## Actual source payload
 
 Equality/Operations.hs rebuilds reduceEdgeIntersection with the original

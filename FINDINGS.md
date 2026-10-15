@@ -1,6 +1,69 @@
 # Current formalization findings
 
-Updated: **2026-10-15 06:47 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 07:17 CEST (Europe/Stockholm)**.
+
+## Concrete PCS guard laws and normalized source annotation heaps
+
+Proofs: `8fe4544e`, `50bdc097`, and `307f83be`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-normalized-annotations.md`. This section supersedes the
+unrestricted guard-law target and earlier audit counts.
+
+The existing independent PCS meaning now applies to complete source guards.
+It equates distinct paths and treats trivial raw classes as vacuous. Actual
+source normalization and combination preserve this meaning on all raw lists.
+It agrees with public existence-sensitive indicators on active stored classes.
+The singleton-storage boundary remains unchanged and still distinguishes the
+meanings outside the source representation invariant.
+
+Concrete Top, plain, and source conjunction have global laws at PCS meaning.
+The native edge theorem fixes actual source predicates, Top, constraint
+conjunction, and structural guard order. It supplies no generic guard laws.
+Original closed construction derives stable finite guarded-edge execution,
+both memo certificates, literal full labels, and exact independent PCS language
+under inherited satisfaction and reached native word checks.
+
+Annotated stored records have identical PCS and public guarded languages.
+The proof includes ordinary nodes, unions, and independent least-language Mu
+binders. A physical edge-record-key invariant derives all annotations from
+linked available records. Safe constructor work preserves the invariant.
+Original repaired construction derives it through all children, both probes,
+fresh binder reservation, canonical hits, and complete or pending outcomes.
+Stored-body encoding retains original guards. Actual optional source binders
+therefore preserve the annotation heap without a supplied compiled-syntax law.
+
+The normalized source entry derives own payload validity from original syntax.
+It also derives exact public input readback. Its returned PCS edge language
+equals the original public edge language in a satisfying inherited context.
+Public readback of newly constructed outputs remains open. Do not report
+identical public input/output meanings until native and shared-edit annotation
+heap preservation supplies that output invariant.
+
+All nine new modules pass focused builds. The aggregate audit passes
+1,791 jobs and 47,684 dependency checks using only propext, Classical.choice,
+and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-normalized-annotations-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-normalized-annotations-checkpoint-20261015-0717/` (2,196 Lean-tree files and four root documents).
+Older proofs except audit imports, counterexamples, marked drafts, production
+source, stashes, and other worktrees remain unchanged. The earlier 645 Haskell
+examples and formatter checks apply to the unchanged source and were not rerun.
+Weekly allowance was 15% at 2026-10-15 07:17 CEST. Refresh it before work.
+Stop all work and owned workers immediately at 1% or less.
+
+Next prove annotation heap preservation through actual completed native calls
+and shared edits. Use SafeWork for literal edge/node/union effects and the
+stored-syntax optionalBinder theorem. Concrete conjoin always derives cached
+output classes; source empty-edge Top is cached. Follow the existing native
+Bounds.semantic_heap proof with an annotation-specific continuation certificate.
+Retain actual compiled jobs, reached cache scopes, and memo hits. Then carry
+the invariant through projections, required paths, target merge, and class edits.
+Derive public output readback and public/public guarded-edge exactness. Do not
+assume the output annotation invariant or a whole-edge language law. Inherited
+descendant processing, reducePartially traversal, open contexts, repeated fixed
+points, getAllAtPath, native containers, GHC lazy scheduling, and extraction
+remain open. Preserve Sized exact classes, finite execution, size order, both
+distinct-term rank inverses, the optimized core, and all older artifacts.
 
 ## Guarded-edge reconstruction and actual guard readback
 

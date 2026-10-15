@@ -7,6 +7,19 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Normalized annotation application (2026-10-15 07:17 CEST)
+
+Concrete source guard constructors now have global laws at independent PCS
+meaning. Public agreement requires normalized annotations and is proved for
+complete recursive stored records. Original source construction derives the
+physical annotation heap. Actual stored-body compilation and optional binders
+preserve it. Read [the current note](notes-normalized-annotations.md).
+The concrete native edge entry has exact PCS output/public input meaning.
+Public output readback still needs annotation preservation through native
+calls and shared edits. This boundary is explicit. The graph method does not
+replace source representation invariants, GHC scheduling, or extraction.
+No Lava or Rocq dependency is added.
+
 ## Guarded-edge application (2026-10-15 07:04 CEST)
 
 Actual source guard readback now supplies valid own records and satisfaction.

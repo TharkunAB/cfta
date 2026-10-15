@@ -6,7 +6,15 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,782 jobs and 47,576 theorem dependency checks.
+The audit passes 1,791 jobs and 47,684 theorem dependency checks.
+The [normalized annotation proof](notes-normalized-annotations.md) discharges
+all concrete source guard laws at the existing independent PCS meaning.
+It proves public agreement on normalized annotations, derives annotation heaps
+from original construction, and preserves them through actual stored-body
+compilation and optional binders. The concrete source edge entry has exact
+PCS output/public input meaning. Public output readback still needs native
+and shared-edit annotation heap preservation. This paragraph supersedes older
+unrestricted guard-law next targets. GHC extraction remains separate.
 The [guarded-edge proof](notes-guarded-edge.md) now derives actual accessor
 readback, valid physical records, literal original-guard reconstruction, stable
 six-bound and bounded-array execution, and original closed source completion.
