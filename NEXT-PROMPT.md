@@ -2,6 +2,82 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Accepted native child execution and scoped receipts
+
+Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Trace proof: `c3896b48`. Accepted receipt proof: `ff2d49be`.
+Fresh node and accepted self-child proof: `970ef848`.
+Pull returned Already up to date. Continue on `formalize` and push verified
+checkpoints. Read `lean/notes-native-accepted-child-demand.md`, then the
+checked-provenance, native-demand, checked-edge, payload, and memo notes.
+This supersedes the accepted-child target below. Full library scope is open.
+
+NativeDemandContinuation retains actual appended code through every control,
+source error, constraint error, and blocked observation. Trace and TraceSplit
+derive exact finite child/continuation traces and their shared full state.
+WalkExecution derives ordered child runs from actual completed execution,
+without a supplied child result or trace plan. Trace lengths remain exact.
+
+AcceptedLanguage derives literal combined-constraint readback from actual
+field loads and ready-prefix execution. Ordered child languages combine with
+matching source symbols, equal arity, and actual PCS conjunction. ChildWalk
+retains actual child traces and proved physical/language receipts. Its fold
+derives final available children, histories, and exact output arity.
+Checks refers to the actual reached calls. The rejected earlier draft's
+unrestricted arbitrary-state premise has been replaced. Archived compiled
+drafts remain outside Audit in `/tmp/mcfta-native-accepted-*-unrestricted-calls-20261015.lean`.
+AcceptedReceipt composes the real prefix, ordered child fold, and final
+constructor. It derives actual edgeBody completion, checked EdgeProduced,
+heap Keeps, resident output, and literal children. Its child receipts remain
+explicit proof obligations. AcceptedReadback derives the ordered child calls
+and exact constructor from observed body completion. Each child's completing
+bound is strictly below the parent bound. Its semantic theorem still requires
+bounded receipts for walks anchored at the exact post-prefix state. This is
+conditional accepted-body correctness, not a closed general fuel induction.
+
+NodeCalls derives actual fresh pure/self/empty calls and warm completed hits.
+Fresh pure calls yield twice and complete on instruction three. The older
+four-instruction completion bound remains valid. Hits yield once and complete
+on instruction two. Both retain the physical machine and operation state.
+Fresh calls preserve the new checked native Valid invariant with explicit
+word/key bounds. AcceptedSelfChild derives a five-instruction accepted body
+for singleton original child lists with an actual fresh self call. It supplies
+no child receipt or future validity premise. It does not assert an inhabited
+accepted language. Checked NodeMeaning/EdgeMeaning still apply only to closed
+inputs in the exact empty domain. Open contexts need a separate language law.
+
+Next derive reached-child checks through general checked node branches and
+continuations, preserving native validity, real completion frames, and word
+bounds. Mu and repeated-pair branches need an open-context invariant. Derive
+InputsThrough and FieldsThrough from original physical inputs, actual
+constructor receipts, and dynamic constraint closure. Retain matched symbols
+from the actual row join. Then connect class folds, reconstruction, both
+gate memo families, full guarded passes, recursive reduction, and original
+construction. Do not assume the eager Produced relation or replayed effects.
+General completion, global unrelated prehistory, pending equality thunks,
+cache/hash/IntMap and signed-index adequacy, lifetime capacity, unsafe IO, GHC,
+open contexts, repeated fixed points, getAllAtPath, decision-model, named
+measures, parser/decoder bridges, and extraction remain open. Existential
+body witnesses are not complete causal history correspondence. Keep the
+optimized interned core and older constructor/equality targets. Sized exact
+classes, finite execution, sequence, distinct size order, and both signed
+inverse implications remain separate contracts.
+
+The pinned audit passes 1,965 jobs and 50,512 theorem dependency checks using
+only propext, Classical.choice, and Quot.sound. Focused endpoints pass 1,069
+jobs. Logs: `/tmp/mcfta-native-accepted-audit-20261015.log` and
+`/tmp/mcfta-native-accepted-focused-20261015.log`. The old unused-input warning
+remains. The ten new modules have no warnings. No Haskell file changed.
+Prior Nix, six-suite, format, metadata, and 205-rank checks were not repeated.
+Starting snapshot: `/tmp/mcfta-native-accepted-start-20261015-1511/` (2,602 files).
+Closing snapshot: `/tmp/mcfta-native-accepted-checkpoint-20261015-1531/` (2,613 files).
+All earlier Lean definitions except Audit imports, repros, marked drafts,
+stashes, other worktrees, and the optimized Haskell core retain their hashes.
+Both external unverified intersection drafts and the limit report remain.
+Weekly allowance was 93% at 2026-10-15 15:29 CEST. Refresh before work; stop
+work and owned workers at 1% or less. No board posts or deployments.
+Older counts and next targets below are historical.
+
 ## Checked native provenance and actual heap preservation
 
 Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.

@@ -1,5 +1,23 @@
 # Public API and source correspondence
 
+## Accepted native child execution and scoped receipts
+
+Proofs `c3896b48`, `ff2d49be`, and `970ef848`, on main `1eb4ab05`.
+Read [the accepted child note](notes-native-accepted-child-demand.md).
+Actual checked completion derives ordered child traces, exact shared states,
+and the final constructor. Child completion bounds are below the parent bound.
+Reached child receipts derive available ordered results, heap Keeps, resident
+edges, and closed empty-domain language. The observed-result theorem checks
+only walks from the actual ready-prefix state. General reached-child receipt
+derivation and native/Mu invariant preservation remain open. Fresh pure and
+completed-hit child classes are derived. An accepted singleton self-child
+body completes in five instructions without a supplied child receipt. No
+inhabited-language or general termination claim follows. Explicit key bounds,
+field/input closure, full causal history, runtime correspondence, whole-library
+scope, and distinct Sized contracts remain separate. The audit passes 1,965
+jobs and 50,512 dependency checks with only permitted axioms. No Haskell file
+changed. Older counts and next targets below are historical.
+
 ## Checked native provenance and derived heap effects
 
 Proofs `af1c9d19`, `59c41d3a`, and `20982f98`, on main `1eb4ab05`.

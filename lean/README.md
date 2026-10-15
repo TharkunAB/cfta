@@ -7,6 +7,14 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+The [accepted child execution proof](notes-native-accepted-child-demand.md),
+`970ef848`, derives actual ordered child traces, accepted edge constructor
+receipts, and completion of a fresh self-child source class. Observed accepted
+completion has conditional provenance under bounded reached-child checks.
+General node/Mu preservation and derivation of those checks remain open.
+The audit passes 1,965 jobs and 50,512 dependency checks. No Haskell file
+changed. Older counts and next targets below are historical.
+
 The [checked provenance proof](notes-native-checked-provenance.md),
 `20982f98`, derives actual mismatch and constraint-rejection completion,
 checked native cell validity, and surrounding recursive memo Sound. Generic

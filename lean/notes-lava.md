@@ -1,5 +1,11 @@
 # Lava and the cfta proof boundaries
 
+The [accepted child checkpoint](notes-native-accepted-child-demand.md),
+`970ef848`, derives actual child traces and accepted edge receipts. General
+node/Mu correctness and reached-child checks remain open. Its audit passes
+1,965 jobs and 50,512 dependency checks. All Sized contracts and Haskell
+sources remain unchanged. Older next targets below are historical.
+
 The [checked provenance checkpoint](notes-native-checked-provenance.md),
 `20982f98`, derives stopped native completion and outer memo Sound. Actual
 finite heap Keeps follows from reached current-input checks. Accepted

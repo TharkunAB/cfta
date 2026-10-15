@@ -1,5 +1,11 @@
 # Checked native receipts and actual heap preservation
 
+The [accepted child checkpoint](notes-native-accepted-child-demand.md),
+`970ef848`, derives actual child traces and accepted edge receipts. General
+node/Mu correctness and reached-child checks remain open. Its audit passes
+1,965 jobs and 50,512 dependency checks. All Sized contracts and Haskell
+sources remain unchanged. Older next targets below are historical.
+
 Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
 Initial receipt proof: `af1c9d19`. Heap and outer-memo proof: `59c41d3a`.
 Actual rejection and stopped outer-call proof: `20982f98`.
