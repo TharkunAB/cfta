@@ -59,6 +59,7 @@ module Data.CFTA.Gen.Refinement (
 import Control.Applicative ((<|>))
 import Data.Bifunctor (first)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (isNothing)
 import qualified Data.Set as Set
 import Data.String (fromString)
 import qualified Data.Text as Text
@@ -116,7 +117,6 @@ import Data.CFTA.Refinement.Expression (
     literal,
     refinementFormula,
     substitute,
-    toExpr,
     true,
     uninterpreted,
     variable,
@@ -481,21 +481,24 @@ measuredBy symbol builder measures child
             $ RefinedSymbol symbol
             $ foldr (.&&) true [uninterpreted name [variable valueName] .== literal value | (name, value) <- measureValues]
     valueOf known points (name, measure) =
-        case resolve known points (fromExpr $ measureTerm measure) of
-            Just term | Just value <- onlyPoint valueName (refinementFormula (.== toExpr term)) -> Right (name, value)
-            _ -> Left $ InexactMeasure symbol
-    -- Replace each measure of a child, and each child that is one integer, by
-    -- its value. A term that names anything else has no value.
-    resolve known points term = case term of
-        Formula.App (Formula.Name function) [Formula.Var position] ->
-            Formula.Lit <$> Map.lookup (position, Text.unpack function) known
-        Formula.Var position -> Formula.Lit <$> Map.lookup position points
-        Formula.Lit _ -> Just term
-        Formula.Neg inner -> Formula.Neg <$> resolve known points inner
-        Formula.Add left right -> Formula.Add <$> resolve known points left <*> resolve known points right
-        Formula.Sub left right -> Formula.Sub <$> resolve known points left <*> resolve known points right
-        Formula.Mul left right -> Formula.Mul <$> resolve known points left <*> resolve known points right
+        case evaluateTerm (leafValue known points) term of
+            Just value -> Right (name, value)
+            Nothing -> Left $ InexactMeasure symbol (Just name) (missingChildren known points term)
+      where
+        term = fromExpr $ measureTerm measure
+    -- A measure of a child, and a child that is one integer, have that
+    -- integer. A term that names anything else has none.
+    leafValue known points term = case term of
+        Formula.App (Formula.Name function) [Formula.Var position] -> Map.lookup (position, Text.unpack function) known
+        Formula.Var position -> Map.lookup position points
         _ -> Nothing
+    -- The positions of the children that the term reads without an integer.
+    missingChildren known points term =
+        [ index
+        | index <- [0 .. fromEnum arity - 1]
+        , let position = Formula.Name $ fromString $ contractTermName $ ArgumentIndex index
+        , any (isNothing . leafValue known points) (childReads position term)
+        ]
 
 {- | The named measures that a refinement fixes: each conjunct
 @name(v) == value@, with @v@ the value.
@@ -571,17 +574,22 @@ measuredNode symbol guardBuilder measure child
     -- that fixes one integer is that integer.
     labelOf roots =
         let formula =
-                substitute
-                    [ (contractTermName index, term)
-                    | (index, RefinedSymbol _ refinement) <- zip [0 ..] roots
-                    , Just term <- [termOf refinement]
-                    ]
-                    (refinementFormula (.== measureTerm measure))
+                foldConditionals $
+                    substitute
+                        [ (contractTermName index, term)
+                        | (index, RefinedSymbol _ refinement) <- zip [0 ..] roots
+                        , Just term <- [termOf refinement]
+                        ]
+                        (refinementFormula (.== measureTerm measure))
+            missing =
+                [ index
+                | index <- [0 .. fromEnum (measureArity measure) - 1]
+                , contractTermName (ArgumentIndex index) `elem` freeNames formula
+                ]
          in case onlyPoint valueName formula of
                 Just value -> Right $ RefinedSymbol symbol $ refinementFormula (.== literal value)
                 Nothing
-                    | any (`elem` map (contractTermName . ArgumentIndex) [0 .. fromEnum (measureArity measure) - 1]) (freeNames formula) ->
-                        Left $ InexactMeasure symbol
+                    | not (null missing) -> Left $ InexactMeasure symbol Nothing missing
                     | otherwise -> Right $ RefinedSymbol symbol formula
 
     -- Read a singleton or a defining term that does not depend on its own value.
@@ -591,6 +599,92 @@ measuredNode symbol guardBuilder measure child
             if valueName `elem` freeNames (term .== 0)
                 then Nothing
                 else Just term
+
+{- | The integer of a term: arithmetic on literals and on the integers that the
+function gives for the other parts, and a conditional takes the branch that
+its condition chooses. A term with a part that has no integer has none.
+-}
+evaluateTerm :: (Formula.Term -> Maybe Integer) -> Formula.Term -> Maybe Integer
+evaluateTerm leafValue = go
+  where
+    go term = case term of
+        Formula.Lit value -> Just value
+        Formula.Neg inner -> negate <$> go inner
+        Formula.Add left right -> (+) <$> go left <*> go right
+        Formula.Sub left right -> (-) <$> go left <*> go right
+        Formula.Mul left right -> (*) <$> go left <*> go right
+        Formula.Ite condition yes no -> do
+            holds <- evaluateFormula leafValue condition
+            go (if holds then yes else no)
+        _ -> leafValue term
+
+-- | The truth of a formula whose terms have integers, as 'evaluateTerm' gives them. A quantifier has none.
+evaluateFormula :: (Formula.Term -> Maybe Integer) -> Formula.Formula -> Maybe Bool
+evaluateFormula leafValue formula = case formula of
+    Formula.Top -> Just True
+    Formula.Bottom -> Just False
+    Formula.And parts -> and <$> traverse (evaluateFormula leafValue) parts
+    Formula.Or parts -> or <$> traverse (evaluateFormula leafValue) parts
+    Formula.Not inner -> not <$> evaluateFormula leafValue inner
+    Formula.Atom relation left right -> compareBy relation <$> evaluateTerm leafValue left <*> evaluateTerm leafValue right
+    _ -> Nothing
+  where
+    compareBy relation = case relation of
+        Formula.Eq -> (==)
+        Formula.Ne -> (/=)
+        Formula.Lt -> (<)
+        Formula.Le -> (<=)
+        Formula.Gt -> (>)
+        Formula.Ge -> (>=)
+
+{- | Take the branch of each conditional whose condition compares literals. The
+lattice does not count a conditional, so without this a measure of children
+with one integer each stays a term, and the terms grow at each level.
+-}
+foldConditionals :: Formula.Formula -> Formula.Formula
+foldConditionals formula = case formula of
+    Formula.And parts -> Formula.And (map foldConditionals parts)
+    Formula.Or parts -> Formula.Or (map foldConditionals parts)
+    Formula.Not inner -> Formula.Not (foldConditionals inner)
+    Formula.Atom relation left right -> Formula.Atom relation (foldTerm left) (foldTerm right)
+    _ -> formula
+  where
+    foldTerm term = case term of
+        Formula.Ite condition yes no -> case evaluateFormula (const Nothing) condition of
+            Just holds -> foldTerm (if holds then yes else no)
+            Nothing -> Formula.Ite (foldConditionals condition) (foldTerm yes) (foldTerm no)
+        Formula.Neg inner -> Formula.Neg (foldTerm inner)
+        Formula.Add left right -> Formula.Add (foldTerm left) (foldTerm right)
+        Formula.Sub left right -> Formula.Sub (foldTerm left) (foldTerm right)
+        Formula.Mul left right -> Formula.Mul (foldTerm left) (foldTerm right)
+        _ -> term
+
+{- | The parts of a term that read a child: the child itself, and the named
+measures of the child.
+-}
+childReads :: Formula.Name -> Formula.Term -> [Formula.Term]
+childReads position term = case term of
+    Formula.Var name | name == position -> [term]
+    Formula.App _ [Formula.Var name] | name == position -> [term]
+    Formula.App _ arguments -> concatMap (childReads position) arguments
+    Formula.Neg inner -> childReads position inner
+    Formula.Add left right -> childReads position left <> childReads position right
+    Formula.Sub left right -> childReads position left <> childReads position right
+    Formula.Mul left right -> childReads position left <> childReads position right
+    Formula.Div left right -> childReads position left <> childReads position right
+    Formula.Mod left right -> childReads position left <> childReads position right
+    Formula.Ite condition yes no -> formulaReads condition <> childReads position yes <> childReads position no
+    Formula.Cast inner _ -> childReads position inner
+    _ -> []
+  where
+    formulaReads formula = case formula of
+        Formula.And parts -> concatMap formulaReads parts
+        Formula.Or parts -> concatMap formulaReads parts
+        Formula.Not inner -> formulaReads inner
+        Formula.Atom _ left right -> childReads position left <> childReads position right
+        Formula.Forall _ inner -> formulaReads inner
+        Formula.Exists _ inner -> formulaReads inner
+        _ -> []
 
 {- | Close a child description with a constructor whose refinement is computed
 from the labels of its children.
