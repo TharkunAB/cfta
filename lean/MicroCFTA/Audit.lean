@@ -1472,6 +1472,15 @@ import MicroCFTA.SourceEqualityRequiredLanguage
 import MicroCFTA.SourceEqualityRequiredAPI
 import MicroCFTA.SourceClosedGateCache
 import MicroCFTA.SourceEqualitySelectedRequired
+import MicroCFTA.SourceEqualityEdits
+import MicroCFTA.SourceEqualityEditGraph
+import MicroCFTA.SourceEqualityEditWorker
+import MicroCFTA.SourceEqualityEditComplete
+import MicroCFTA.SourceEqualityEditWorkerSound
+import MicroCFTA.SourceEqualityEditWorkerComplete
+import MicroCFTA.SourceEqualityEditExecution
+import MicroCFTA.SourceEqualityEditMeaning
+import MicroCFTA.SourceEqualityEditExamples
 /-!
 # Proof dependency audit
 
