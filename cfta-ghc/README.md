@@ -37,8 +37,8 @@ which gives the givens of the search. Each argument of the signature is a
 variable that a program uses once. `-m MODULE=Q` imports a module qualified,
 and `-p PACKAGE` exposes a package. `--size`, `--fits`, and `--seconds`
 bound the search (by default five leaves, ten fits, ten seconds).
-`--first-order`, `--only-defaulted`, and `--type-domains` are the plugin's
-options `first-order`, `only-defaulted`, and `type-domains` below, and
+`--first-order`, `--only-defaulted`, and `--no-type-domains` are the plugin's
+options `first-order`, `only-defaulted`, and `no-type-domains` below, and
 `--rank`, `--rank-pool N`, `--rank-seconds S`, and `--model NAME` its ranking (see "Ranking
 the fits with a decision model"). The figures of the search go to the
 standard error. The Hoogle+ ladder of
@@ -128,7 +128,7 @@ The options apply to each hole:
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:programs=N` | none | The number of Hectare's programs. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:first-order` | off | Hectare's first-order types (see Limits), in place of its curried types. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:only-defaulted` | off | A variable of kind `* -> *` that a fit does not determine takes only its default, the list, and the check has `ExtendedDefaultRules`. |
-| `-fplugin-opt=Data.CFTA.GHC.HoleFits:type-domains` | off | A variable of kind `Type` with classes that the instances decide takes only the types in scope at which those classes can have instances, so `maximum` does not have a goal `a` without `Ord a`. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:no-type-domains` | off | A variable of kind `Type` with classes takes any type. By default it takes only the types in scope at which the instances of those classes can hold, following the instance contexts, so `maximum` does not have a goal `a` or `(a, Int)` without `Ord a`. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:normal-forms=off` | on | Keep the fits with the normal form of an earlier fit. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank` | off | Order the fits with a decision model (below). |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-pool=N` | 50 | The number of fits that the model orders. |

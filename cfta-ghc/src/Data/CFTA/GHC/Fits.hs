@@ -293,7 +293,7 @@ data Options = Options
     , optionTypeDomains :: Bool
     {- ^ With 'optionCurried': a variable of kind @Type@ with classes that
     the instances decide ranges over the types of the scope at which an
-    instance of each of those classes can hold.
+    instance of each of those classes can hold. On by default.
     -}
     , optionNormalForms :: Bool
     {- ^ Whether to use the normal forms of the fits: a fit with the normal
@@ -312,7 +312,7 @@ data Mode
       States Walking
     deriving (Eq, Show, Read)
 
--- | Programs of up to five leaves, the first ten fits, mode (a), no other limit, with Hectare's curried types and normal forms.
+-- | Programs of up to five leaves, the first ten fits, mode (a), no other limit, with Hectare's curried types, type domains, and normal forms.
 defaultOptions :: Options
 defaultOptions =
     Options
@@ -326,7 +326,7 @@ defaultOptions =
         , optionTrace = Nothing
         , optionCurried = True
         , optionOnlyDefaulted = False
-        , optionTypeDomains = False
+        , optionTypeDomains = True
         , optionNormalForms = True
         }
 

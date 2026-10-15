@@ -33,6 +33,8 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   typed term for it. A domain follows the contexts of the instances, so the
   domain of `Ord` holds `(a, b)` only with `a` and `b` in it; an instance
   that is not the only one that can apply puts no class on its arguments.
+  Type domains are on by default; `--no-type-domains` and the plugin's
+  `no-type-domains` turn them off.
 - `Data.CFTA.GHC.Session`: a GHC session for a program, with the imports in
   scope as in GHCi. `withSession` and `withSessionOptions` start it, with
   more packages by name or identifier, more package databases, more flags,

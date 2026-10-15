@@ -4,7 +4,7 @@
 modules, each checked in GHC's typechecker ("Data.CFTA.GHC.Fits"): a
 synthesizer with GHC as the oracle.
 
-> ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE
+> ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--no-type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE
 
 For example:
 
@@ -21,9 +21,9 @@ programs have up to five leaves, the search stops after ten fits or ten
 seconds, Hectare's rule 'hectareAvoid' applies, and Hectare's types are
 curried ('optionCurried'). @--first-order@ searches with Hectare's
 first-order types, and @--only-defaulted@ gives a variable that a program
-does not determine only its default ('optionOnlyDefaulted'). @--type-domains@
-gives a type variable of kind @Type@ the domain of its classes
-('optionTypeDomains'). The figures of the search go to the standard
+does not determine only its default ('optionOnlyDefaulted').
+@--no-type-domains@ gives a type variable of kind @Type@ any type, not the
+domain of its classes ('optionTypeDomains'). The figures of the search go to the standard
 error.
 
 With @--rank@, a decision model orders the programs ("Data.CFTA.GHC.Rank"):
@@ -88,7 +88,7 @@ readCommand =
         "--seconds" : value : rest -> number value >>= \seconds -> go (set command (\options -> options{optionSeconds = Just seconds})) rest
         "--first-order" : rest -> go (set command (\options -> options{optionCurried = False})) rest
         "--only-defaulted" : rest -> go (set command (\options -> options{optionCurried = True, optionOnlyDefaulted = True})) rest
-        "--type-domains" : rest -> go (set command (\options -> options{optionCurried = True, optionTypeDomains = True})) rest
+        "--no-type-domains" : rest -> go (set command (\options -> options{optionTypeDomains = False})) rest
         "--rank" : rest -> go command{commandRank = True} rest
         "--rank-pool" : value : rest -> number value >>= \pool -> go (rank "--rank-pool" command (\r -> r{rankingPool = pool})) rest
         "--rank-seconds" : value : rest -> number value >>= \seconds -> go (rank "--rank-seconds" command (\r -> r{rankingSeconds = seconds})) rest
@@ -168,5 +168,5 @@ main = do
         hPutStrLn stderr problem
         hPutStrLn
             stderr
-            "usage: ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE"
+            "usage: ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--no-type-domains] [--rank] [--rank-pool N] [--rank-seconds S] [--model NAME] SIGNATURE"
         exitFailure
