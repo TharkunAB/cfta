@@ -23,9 +23,11 @@ the programs that Hectare proposed, the solver
 calls, the seconds, the seconds of Hectare's construction, reduction, and
 listing, of the checks in the typechecker, and of the solver calls in the
 checks, the peak memory and the allocation in megabytes, whether GHC accepts
-the first fit as a program of the signature, and the first fit. The walk
-itself stops at the time limit, so that a row of a timeout has its figures
-too. The search is the one of the tools, with 'optionFits' at its default.
+the first fit as a program of the signature, the typed terms that Hectare
+listed, the fits and the fits that use every part of themselves, and the
+first fit. The walk itself stops at the time limit, so that a row of a
+timeout has its figures too. The search is the one of the tools, with
+'optionFits' at its default.
 
 With no arguments, it runs three queries with the Prelude, 30 seconds and a
 heap of 2 GB each, so that @cabal bench@ stays short. The variable
@@ -340,8 +342,8 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                         _ | maybe False statisticsOutOfTime statistics -> "timeout"
                         (Nothing, Just _) -> "other"
                         (Nothing, Nothing) -> "unsolved"
-                programs, calls, parts, checkedText :: String
-                (programs, calls, parts, checkedText) = case outcome of
+                programs, calls, parts, checkedText, runs :: String
+                (programs, calls, parts, checkedText, runs) = case outcome of
                     Right (Just (Just statistics, checked)) ->
                         ( show (statisticsPrograms statistics)
                         , show (countSolverCalls (statisticsCounters statistics))
@@ -357,10 +359,11 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                                 ]
                             ]
                         , if checked then "yes" else "no"
+                        , show (statisticsRuns statistics)
                         )
-                    _ -> ("-", "-", "-,-,-,-,-", "-")
+                    _ -> ("-", "-", "-,-,-,-,-", "-", "-")
             printf
-                "result,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%.3f,%s,%d,%d,%s,%s\n"
+                "result,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%.3f,%s,%d,%d,%s,%s,%d,%d,%s\n"
                 name
                 rungName'
                 outcomeText
@@ -376,6 +379,9 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                 memory
                 allocated
                 checkedText
+                runs
+                rank
+                rankUsing
                 (maybe "-" (renderProgram . fitProgram) found)
 
 -- | The peak memory in use and the bytes allocated, in megabytes, when the RTS keeps statistics.
@@ -405,7 +411,7 @@ runSuite rung seconds heap jobs names = do
     output <- newMVar ()
     done <- newEmptyMVar
     putStrLn
-        "result,query,rung,outcome,bound,first,solved,rank,using,programs,calls,seconds,build,reduce,list,check,solver,memory,allocated,checked,program"
+        "result,query,rung,outcome,bound,first,solved,rank,using,programs,calls,seconds,build,reduce,list,check,solver,memory,allocated,checked,runs,fits,usingfits,program"
     hFlush stdout
     forM_ [0 .. jobs - 1] $ \worker -> forkIO $ do
         let loop = do

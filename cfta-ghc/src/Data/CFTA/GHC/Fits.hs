@@ -255,6 +255,8 @@ data Fit = Fit
 data Statistics = Statistics
     { statisticsPrograms :: !Int
     -- ^ The programs that Hectare proposed.
+    , statisticsRuns :: !Int
+    -- ^ The typed terms that Hectare listed, of which the programs come.
     , statisticsSkipped :: !Int
     -- ^ The programs under a dead prefix, skipped without a step.
     , statisticsFits :: !Int
@@ -390,6 +392,7 @@ streamFits options hole candidates goal accept = do
     statisticsOf progress ignoring =
         Statistics
             (progressPrograms progress)
+            (progressRuns progress)
             (progressSkipped progress)
             (progressFits progress)
             (progressSize progress)

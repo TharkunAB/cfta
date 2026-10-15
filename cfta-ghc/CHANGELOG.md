@@ -16,7 +16,8 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   `Options` bound the size, the fits, the programs, and the seconds, carry
   Hectare's pruning rules, and take a report after each size and a trace of
   each program. `Statistics` give the time of Hectare's construction,
-  reduction, and listing, and of the checks.
+  reduction, and listing, and of the checks, and the typed terms that
+  Hectare listed (`statisticsRuns`).
 - `Data.CFTA.GHC.Session`: a GHC session for a program, with the imports in
   scope as in GHCi. `withSession` and `withSessionOptions` start it, with
   more packages by name or identifier, more package databases, more flags,

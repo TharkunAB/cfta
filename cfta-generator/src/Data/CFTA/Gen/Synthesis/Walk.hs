@@ -73,9 +73,9 @@ import Data.CFTA.Gen.Synthesis (
     Program (..),
     Query (..),
     Type,
-    distinctProgramsIn,
     expand,
     library,
+    programRuns,
     rawSearchSpace,
     reduceFully,
  )
@@ -174,6 +174,10 @@ data Fit = Fit
 data Progress = Progress
     { progressPrograms :: !Int
     -- ^ The programs that Hectare proposed.
+    , progressRuns :: !Int
+    {- ^ The typed terms that Hectare listed. One program can have several
+    typed terms, and Hectare proposes it once.
+    -}
     , progressSkipped :: !Int
     -- ^ The programs under a dead prefix, skipped without a call to the host.
     , progressFits :: !Int
@@ -194,7 +198,7 @@ data Progress = Progress
 
 -- | The figures before the first program.
 emptyProgress :: Progress
-emptyProgress = Progress 0 0 0 0 False 0 0 0 0
+emptyProgress = Progress 0 0 0 0 0 False 0 0 0 0
 
 {- | The state of a walk: the tokens of the host's frames, the dead prefixes,
 the fits so far, and the figures.
@@ -260,16 +264,22 @@ walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead
                     case reduced of
                         Nothing -> stop (withProgress state'' $ \p -> p{progressOutOfTime = True})
                         Just space ->
+                            -- Each run is a Nothing, then the programs of its
+                            -- representatives if they are new.
                             programs
                                 size
-                                [program | representative <- distinctProgramsIn space, program <- expand hectareLibrary representative]
+                                [ program
+                                | run <- programRuns space
+                                , program <- Nothing : maybe [] (map Just . expand hectareLibrary) run
+                                ]
                                 state''
     programs size remaining state
         | maybe False (progressPrograms (progressOf state) >=) (limitPrograms limits) = stop state
         | otherwise = do
-            (next, listTime) <- liftIO (timed Nothing (nextProgram remaining))
-            let state' = withProgress state $ \p -> p{progressListNanos = progressListNanos p + listTime}
-            case next of
+            (next, listTime) <- liftIO (timed Nothing (nextProgram 0 remaining))
+            let listed = maybe 0 fst next
+                state' = withProgress state $ \p -> p{progressRuns = progressRuns p + listed, progressListNanos = progressListNanos p + listTime}
+            case snd <$> next of
                 Just (Just (program, tokens, rest)) -> do
                     hookProgram hooks size program
                     before <- liftIO getMonotonicTimeNSec
@@ -284,13 +294,15 @@ walk limits checker hooks leaves avoid goal accept = sizes 1 (State [] emptyDead
                             if more then programs size rest state'' else stop state''
                 _ -> hookSize hooks size (progressOf state') >> sizes (size + 1) state'
     -- The next program, with its tokens evaluated, so that the listing has
-    -- its own time.
-    nextProgram remaining = case remaining of
-        [] -> Nothing
-        representative : rest ->
+    -- its own time, and the number of runs before it.
+    nextProgram :: Int -> [Maybe Program] -> (Int, Maybe (Program, [Token], [Maybe Program]))
+    nextProgram listed remaining = case remaining of
+        [] -> listed `seq` (listed, Nothing)
+        Nothing : rest -> nextProgram (listed + 1) rest
+        Just representative : rest ->
             let program = unprefix representative
                 tokens = preorder program
-             in forceTokens tokens `seq` Just (program, tokens, rest)
+             in listed `seq` forceTokens tokens `seq` (listed, Just (program, tokens, rest))
     forceTokens = foldr (\(name, children) rest -> name `seq` children `seq` rest) ()
     stop state = hookSize hooks (progressSize (progressOf state)) (progressOf state) >> finish state
     -- Leave the host as it was before the walk.

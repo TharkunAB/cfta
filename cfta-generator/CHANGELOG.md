@@ -27,7 +27,7 @@ tree automata of `cfta`, with QuickCheck integration.
 - `Data.CFTA.Gen.Synthesis`: Hectare, the type-directed component
   synthesizer of the ECTA paper. `synthesize` lists the programs of a query
   by size, and `distinctProgramsIn` lists each program of a search space
-  once; `programsOfSize` and `programsOfSizeUpToDepth` read the program
+  once (`programRuns` also marks each typed term); `programsOfSize` and `programsOfSizeUpToDepth` read the program
   space of a size as a generator. `rawSaturatedSearchSpace` builds the space of
   the saturated programs of a size, in which each head is applied to all its
   parameters, as in Hegel's terms. Hectare lists the programs of a space in
@@ -53,7 +53,8 @@ tree automata of `cfta`, with QuickCheck integration.
   over erased leaves, each program of representatives once, and checks each
   program in preorder through a host's `Checker` (`checkerTruncate`,
   `checkerExtend`), from the prefix that it shares with the last one, with a
-  trie of dead prefixes, limits, and the time of each part. Because it keeps
+  trie of dead prefixes, limits, the time of each part, and the number of
+  typed terms that Hectare listed (`progressRuns`). Because it keeps
   a set of the programs, not of the typed terms, the peak memory of the
   Hoogle+ ladder of `cfta-ghc` falls by 30% to 31% (45% to 46% on the
   queries that time out), with the same results and time.

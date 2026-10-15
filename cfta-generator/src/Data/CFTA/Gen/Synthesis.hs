@@ -63,6 +63,7 @@ module Data.CFTA.Gen.Synthesis (
     searchSpace,
     programsIn,
     distinctProgramsIn,
+    programRuns,
     solutionsOfSize,
     distinctSolutionsOfSize,
     distinctSaturatedSolutionsOfSize,
@@ -81,7 +82,8 @@ import Data.Hashable (Hashable)
 import Data.List (intercalate, permutations, subsequences)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (catMaybes, fromMaybe)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Generics (Generic)
@@ -581,7 +583,21 @@ typed terms, and a program can have many; this keeps a set of the programs
 only.
 -}
 distinctProgramsIn :: Node Symbol -> [Program]
-distinctProgramsIn = nubOrd . map (toProgram . fst) . runsBy interningOrder "Mu"
+distinctProgramsIn = catMaybes . programRuns
+
+{- | The runs of a search space in Hectare's order, one for each typed term,
+each with its program when no run before it has that program. So the
+programs are those of 'distinctProgramsIn', and the length is the number of
+typed terms that the enumeration lists. A typed term can repeat, as in
+'runs'.
+-}
+programRuns :: Node Symbol -> [Maybe Program]
+programRuns = go Set.empty . map (toProgram . fst) . runsBy interningOrder "Mu"
+  where
+    go _ [] = []
+    go seen (program : rest)
+        | Set.member program seen = Nothing : go seen rest
+        | otherwise = Just program : go (Set.insert program seen) rest
 
 {- | Hectare's order of the edges of a search space, as weights for 'runsBy':
 the order of the edges' identities. That is the order in which the build and
