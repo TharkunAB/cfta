@@ -2,6 +2,54 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Delayed worklist traces and actual entry inventories
+
+Source main remains `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.
+Starting checkpoint: `c0ae83a2`. New proofs: `2a1e918e`.
+Read `lean/notes-delayed-emptiness.md` first. Continue on formalize and push
+verified checkpoints. Full library scope remains open.
+
+Reached stateful traces retain each force before the source tests and each
+admitted value with its exact delayed rows. They derive old-entry retention,
+unique keys, admission bounds, and actual force/exposure receipts. Every task
+in a newly stored row is forced before a completed trace returns, including
+queued tasks reached after budget exhaustion. Zero budget retains the table;
+it does not exclude native effects or prove completion.
+
+Actual entry records now generate their own certified inventory. Closed
+availability and exact keys in one heap derive coverage from literal table-key
+equality. Coherence derives physical readback. An arbitrary inventory or
+separate coverage premise is no longer required. Actual native exploration
+must still derive those entry records in one common final heap.
+
+Next instantiate source Task/Force/Expose with captured class thunks and
+retained force results. Preserve original child traversal before delayed class
+folds. Derive normalized field preservation, final entry validity, and completed
+row readout. Connect source folds and exposure to the certified table supply
+and primitive laws, then instantiate each oracle call. Transfer native leaves
+to checked constraint allocation. Carry both gate modes and all three memo
+families through the lazy refused-class scan, selected fallback, and caller.
+General native completion, internal ranges, and whole current reduction remain
+open. The reached trace is not a whole-source termination theorem.
+
+The pinned Lean audit passes 2,008 jobs and 51,372 dependency checks with only
+permitted axioms. No new warning occurs. All earlier Lean definitions except
+two additive Audit imports, all package trees, repros, marked drafts, external
+drafts, stashes, and other worktrees remain. Haskell checks were not repeated
+because all four package trees match c0ae83a2.
+Start: `/tmp/mcfta-delayed-emptiness-start-20261015-1730/` (2,664 files).
+Closing snapshot: `/tmp/mcfta-delayed-emptiness-checkpoint-20261015-1737/` (2,667 files).
+
+Keep native InputsThrough, semantic finish receipts, sidecar coverage,
+candidate-parametric Mu/repeated-pair contexts, full runtime correspondence,
+derived refinements, named measures, getAllAtPath, decision-model, parser/decoder
+bridges, recursive generator composition, and extraction as separate targets.
+Keep the optimized interned core and older constructor/equality work. Sized
+exact node-count classes, finite execution, canonical sequence, distinct size
+order, and both signed inverses remain separate contracts. Weekly allowance
+was 89% on this checkpoint. Stop work and owned workers at 1% or less. No board
+posts or deployments. Earlier next targets and counts below are historical.
+
 ## Explored emptiness tables and source row readback
 
 Current source main remains `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.

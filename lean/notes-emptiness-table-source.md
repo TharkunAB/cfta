@@ -1,5 +1,10 @@
 # Explored emptiness tables and actual source row reads
 
+The reached delayed trace and entry-derived inventory are now checked at
+`2a1e918e`. Read [the current next target](notes-delayed-emptiness.md).
+The source Task/Force/Expose composition and final native entry validity
+remain open. The checkpoint and next-target statements below are historical.
+
 Source main: `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.
 Starting checkpoint: `7b270679`. Proof commits: `76afeec1`, `e736beeb`,
 and `71b7fd08`. Read [the source update](notes-main-a22b2ad4.md) for the

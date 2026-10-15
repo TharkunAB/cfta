@@ -7,6 +7,22 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current delayed-worklist and entry-inventory proofs
+
+Proof checkpoint `2a1e918e`, source main unchanged at `a22b2ad4`.
+Read [the delayed-worklist note](notes-delayed-emptiness.md).
+Reached traces retain force/exposure states, delayed rows, old entries,
+unique keys, admission bounds, and force receipts for every newly stored row
+task. Zero budget still forces queued tasks. Literal closed entry records
+now derive their own certified inventory, coverage, and coherent readback.
+Actual source Force/Expose, final-heap entry validity, completed row decoding,
+certified primitive laws, and checked native allocation transfer remain open.
+General native and whole-caller completion remain open. The pinned audit
+passes 2,008 jobs and 51,372 dependency checks with no new warning or axiom.
+All Haskell source and prior proof definitions remain unchanged except two
+additive Audit imports. Full scope and the separate Sized contracts remain.
+Earlier checkpoints below are historical.
+
 ## Current explored-table and source-row proofs
 
 Proofs `76afeec1`, `e736beeb`, and `71b7fd08`, on unchanged main `a22b2ad4`.
