@@ -162,8 +162,10 @@ ghcProgram dictionaries = go
 polymorphic over a type constructor (Functor, Applicative, Monad, Foldable,
 Traversable) at Maybe, Either e, pairs, lists, or a rigid variable of the
 signature, or at an intermediate type that no head of the signature has, as
-the Maybe in @length (lookup k xs)@. Each has its signature, its argument
-names, and its expected program; the arguments' Hectare types are not used.
+the Maybe in @length (lookup k xs)@, or at the default of GHC's
+@ExtendedDefaultRules@, as the list in @length (pure x)@. Each has its
+signature, its argument names, and its expected program; the arguments'
+Hectare types are not used.
 -}
 differential :: [GhcQuery]
 differential =
@@ -206,6 +208,14 @@ differential =
     , query "gapNullFind" "(a -> Bool) -> [a] -> Bool" ["p", "xs"] "null (find p xs)"
     , query "gapSumListToMaybe" "[Int] -> Int" ["xs"] "sum (listToMaybe xs)"
     , query "gapLengthMapLookup" "Ord k => k -> Map.Map k [a] -> Int" ["k", "m"] "length (Map.lookup k m)"
+    , -- A Functor between them: listToMaybe fixes the variable of fmap, and
+      -- fmap fixes the variable of null (rung 2).
+      query "gapNullFmapListToMaybe" "(a -> b) -> [a] -> Bool" ["f", "xs"] "null (fmap f (listToMaybe xs))"
+    , -- Programs that only a default types: no part fixes the variable of
+      -- kind * -> *, and GHC's ExtendedDefaultRules give it the list type
+      -- (rung 1).
+      query "defaultLengthPure" "a -> Int" ["x"] "length (pure x)"
+    , query "defaultNullPure" "a -> Bool" ["x"] "null (pure x)"
     ]
   where
     query name signature arguments expected =
