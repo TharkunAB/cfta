@@ -7,6 +7,11 @@ Before release, the package was called `microcfta`.
 - Expose constructor rows before path traversal, equality edits, and template
   restriction of recursive nodes. Retained empty recursive cycles now return
   empty instead of repeating the same unfolding request.
+- `Data.CFTA.Template.exclude` keeps exactly the terms of an interned graph
+  that match none of some templates at the root, as `matchesNone` says. It
+  splits an edge by what its children match, so each run of the input whose
+  term it keeps is a run of exactly one copy, and counts and ranks over the
+  result are exact. It reaches only as deep as the templates.
 
 Initial release. `cfta` consolidates an ordinary tree automaton engine,
 equality-constrained tree automata, and liquid tree automata into one package

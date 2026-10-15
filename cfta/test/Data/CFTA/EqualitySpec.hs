@@ -214,6 +214,33 @@ spec = do
                     HashSet.fromList (terms $ termsMatching template node)
                         `shouldBe` HashSet.fromList (filter (matchesTemplate template) $ terms node)
 
+        it "excludes the terms under a prefix and keeps the others" $ do
+            let leaf = Node [Edge "a" [], Edge "b" []] :: Node Symbol
+                pairs = Node [Edge "g" [leaf, leaf]]
+                underA = TemplateNode "g" [TemplateNode "a" [], Hole]
+                term first second = Term.Node "g" [Term.Node first [], Term.Node second []]
+            Set.fromList (terms $ exclude [underA] pairs) `shouldBe` Set.fromList [term "b" "a", term "b" "b"]
+            Set.fromList (terms $ exclude [underA, TemplateNode "g" [Hole, TemplateNode "b" []]] pairs)
+                `shouldBe` Set.fromList [term "b" "a"]
+
+        it "excluding templates from a finite ECTA agrees with filtering its terms" $
+            property $
+                mapSize (min 3) $ \(templates :: [Template Symbol]) (node :: Node Symbol) ->
+                    HashSet.fromList (terms $ reducePartially $ exclude templates node)
+                        `shouldBe` HashSet.fromList (filter (matchesNone templates) $ terms node)
+
+        it "the runs of exclude and of restrict with one template are the runs of the node" $
+            property $
+                mapSize (min 3) $ \(template :: Template Symbol) (node :: Node Symbol) ->
+                    length (runs "Mu" (exclude [template] node)) + length (runs "Mu" (restrict template node))
+                        `shouldBe` length (runs "Mu" node)
+
+        it "excluding templates keeps one run for each run that it keeps" $
+            property $
+                mapSize (min 3) $ \(templates :: [Template Symbol]) (node :: Node Symbol) ->
+                    length (runs "Mu" (exclude templates node))
+                        `shouldBe` length (filter (matchesNone templates . fst) (runs "Mu" node))
+
     describe "recursive union" $ do
         it "retains an enclosing reference through a nested binder" $ do
             let grammar :: Node Symbol
