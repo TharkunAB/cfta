@@ -376,29 +376,36 @@ spec = do
             -- the root ends above the constrained 'Mu' 'constrained', and its
             -- intersection unfolded that 'Mu'. The narrowed children were
             -- [w(root), w(root)], so the pass demanded its own result. Only
-            -- "a" is in 'constrained', and no term is in the root.
+            -- "a" is in 'constrained', and no term is in the root: the
+            -- intersection of the class needs the root again. With "a" in the
+            -- second child too, the root accepts p(w(a), w(a)).
             let wrap child = Node [Edge "w" [child]]
                 same = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
                 plain = Mu $ \r -> Node [Edge "a" [], Edge "p" [wrap r, wrap r]]
                 next = Node [Edge "p" [wrap plain, wrap plain]]
                 constrained = Mu $ \r -> Node [Edge "a" [], mkEdge "p" [wrap r, wrap next] same]
                 root = Node [mkEdge "p" [wrap constrained, wrap next] same] :: Node Symbol
+                withLeaf = Node [mkEdge "p" [wrap constrained, wrap (union [Node [Edge "a" []], next])] same] :: Node Symbol
                 leaf = Term.Node "a" []
+                pair = Term.Node "p" [Term.Node "w" [leaf], Term.Node "w" [leaf]]
             result <- timeout 10000000 $ do
                 let reduced =
                         [ reducePartially root
                         , termsMatching (TemplateNode "p" [Hole, Hole]) root
                         , fixUnbounded (withoutRedundantEdges . reducePartially) root
                         ]
-                _ <- evaluate (sum (map nodeCount reduced))
+                _ <- evaluate (sum (map nodeCount (reducePartially withLeaf : reduced)))
                 pure reduced
             case result of
                 Nothing -> expectationFailure "the reduction did not finish"
-                Just reduced ->
+                Just reduced -> do
+                    reduced `shouldBe` [EmptyNode, EmptyNode, EmptyNode]
                     forM_ [0 .. 4] $ \depth -> do
-                        forM_ (root : reduced) $ \n -> terms (boundDepth depth n) `shouldBe` []
+                        terms (boundDepth depth root) `shouldBe` []
                         terms (boundDepth depth constrained) `shouldBe` [leaf]
-            accepts root (Term.Node "p" [Term.Node "w" [leaf], Term.Node "w" [leaf]]) `shouldBe` False
+                        shallowTerms depth (reducePartially withLeaf) `shouldBe` shallowTerms depth withLeaf
+            accepts root pair `shouldBe` False
+            accepts (reducePartially withLeaf) pair `shouldBe` True
 
         it "reducing child domains preserves constrained terms" $
             property $
