@@ -21,6 +21,7 @@ module Data.CFTA.Internal.UnionFind (
     withInitialValues,
     union,
     find,
+    root,
 ) where
 
 import Control.Monad (when)
@@ -126,3 +127,11 @@ findRoot uv = do
 -- | Find a variable's representative and return the path-compressed forest.
 find :: UVar -> UnionFind -> (UVar, UnionFind)
 find uv = runState (fst <$> findRoot uv)
+
+{- | The representative of a variable, as 'find' gives it, without the path
+compression: for a reader that cannot write the structure back.
+-}
+root :: UVar -> UnionFind -> UVar
+root uv (UnionFind m) = case IntMap.lookup (uvarToInt uv) m of
+    Just (Parent p) -> root p (UnionFind m)
+    _ -> uv
