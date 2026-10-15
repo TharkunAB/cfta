@@ -38,6 +38,11 @@ Before release, the package was called `microcfta`.
   subterm matches one of the templates (`matchesNowhere`), with a recursive
   result for a recursive input, and `preorderPrefix` gives the template of a
   prefix of a term in preorder.
+  `excludePrefixesFTA` keeps the terms of an explicit-state automaton whose
+  preorder starts with none of some prefixes, as `excludeFTA` of their
+  `preorderPrefix` templates does, with the same runs. A result state pairs a
+  source state with two `Position`s in the minimal automaton of the
+  prefixes, not with a list of templates.
   `Data.CFTA.Interned.fromRows` interns the transitions of each state as
   `fromFTA` does, without a ranked alphabet.
 - `fromFTA` and `fromRows` nest the binders of a strongly connected
