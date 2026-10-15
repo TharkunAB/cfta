@@ -1634,6 +1634,12 @@ import MicroCFTA.SourceEqualityAnnotationTarget
 import MicroCFTA.SourceEqualityAnnotationSharedEdit
 import MicroCFTA.SourceEqualityAnnotationPass
 import MicroCFTA.SourceEqualityPublicNativeEdge
+import MicroCFTA.SourceEqualityDescend
+import MicroCFTA.SourceEqualityInheritedPayload
+import MicroCFTA.SourceEqualityInheritedChildren
+import MicroCFTA.SourceEqualityInheritedChildrenProofs
+import MicroCFTA.SourceEqualityInheritedEdge
+import MicroCFTA.SourceEqualityInheritedEdgeWorker
 /-!
 # Proof dependency audit
 
