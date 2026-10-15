@@ -76,13 +76,14 @@ module Data.CFTA.Interned (
     canonicalClasses,
 ) where
 
+import Control.Monad.State.Strict (State, evalState, gets, modify')
 import Data.Bifunctor (first)
-import Data.Graph (SCC (CyclicSCC), flattenSCC, stronglyConnComp)
+import Data.Graph (flattenSCC, stronglyConnComp)
 import Data.Hashable (Hashable)
 import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
+import qualified Data.IntSet as IntSet
 import Data.List (sort)
-import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import qualified Data.Tree as Tree
@@ -219,14 +220,17 @@ canonicalClasses graph = refine (IntMap.map (const 0) graph) (min 1 $ IntMap.siz
 
 The graph is trimmed first. Each reachable state becomes one node. A state on
 a cycle becomes a 'Mu' whose body refers back to it through 'Rec', so a
-recursive graph imports without a bound. Inside a 'Mu', a state that an
-enclosing 'Mu' binds refers to that binder, and a state becomes a 'Mu' only
-when a cycle through it avoids the bound states. Thus a path through the
-result passes at most one binder for each state of a strongly connected
-component. Each node is built once for each set of enclosing binders. When
-each of the k states of a component refers to all k states, the result can
-have about e * (k - 1)! binders. Constraint layers can annotate the source
-before this conversion.
+recursive graph imports without a bound. The states of each strongly
+connected component get one order: the order in which a depth-first walk
+from the initial state first meets them. The binders on a path nest in that
+order. Inside a 'Mu', a state that an enclosing 'Mu' binds refers to that
+binder. Another state of the component is built under the enclosing binders
+of the states before it only, and it binds the later states again where it
+needs them. A state becomes a 'Mu' only when its body refers to it. Thus a
+node is built once for each set of enclosing binders, and a component of k
+states has at most 2^k of them. (When the binders nested in the order in
+which each path met them, the result could have about e * (k - 1)!.)
+Constraint layers can annotate the source before this conversion.
 -}
 fromFTA ::
     (Ord state, Hashable symbol, Typeable symbol) =>
@@ -240,68 +244,69 @@ fromRows ::
     forall state symbol.
     (Ord state, Hashable symbol, Typeable symbol) =>
     state -> Map.Map state [FTA.Transition state symbol Constraint] -> Node symbol
-fromRows initial rows = shared Map.! initial
+fromRows initial rows = evalState (build IntSet.empty 0) Map.empty
   where
     -- The rows that the initial state reaches and that accept a term, as
     -- 'FTA.trim' keeps them.
     trimmed = Map.insertWith (\_ kept -> kept) initial [] (trimRows FTA.transitionChildren (Map.toList rows) initial)
-    transitionsFrom state = Map.findWithDefault [] state trimmed
-    successors state = concatMap FTA.transitionChildren (transitionsFrom state)
-    components = map flattenSCC (stronglyConnComp [(state, state, successors state) | state <- Map.keys trimmed])
-    component = Map.fromList [(state, index) | (index, states) <- zip [0 :: Int ..] components, state <- states]
-    -- The states of the component of each state.
-    members = Map.fromList [(state, set) | states <- components, let set = Set.fromList states, state <- states]
-    -- The reference to each state while its binder is built.
-    reference = Map.fromList $ zip (Map.keys trimmed) $ map RecState [0 ..]
+    successors state = concatMap FTA.transitionChildren (Map.findWithDefault [] state trimmed)
 
-    -- The given states that are on a cycle through the given states only.
-    cycles states =
-        Set.fromList $
-            concat
-                [ scc
-                | CyclicSCC scc <- stronglyConnComp [(state, state, successors state) | state <- Set.toList states]
+    -- Each state is its position in the order in which a depth-first walk
+    -- from the initial state first meets it. The initial state is 0, and the
+    -- binders of a component nest in this order. A position is also the
+    -- reference to the binder of its state.
+    order = walk Set.empty [initial]
+    walk _ [] = []
+    walk seen (state : pending)
+        | Set.member state seen = walk seen pending
+        | otherwise = state : walk (Set.insert state seen) (successors state <> pending)
+    position = Map.fromList $ zip order [0 :: Int ..]
+    transitionsAt =
+        IntMap.fromList
+            [ ( position Map.! state
+              , [ (transition, map (position Map.!) (FTA.transitionChildren transition))
+                | transition <- Map.findWithDefault [] state trimmed
                 ]
+              )
+            | state <- order
+            ]
+    components = map flattenSCC (stronglyConnComp [(here, here, concatMap snd edges) | (here, edges) <- IntMap.toList transitionsAt])
+    component = IntMap.fromList [(here, index) | (index, members) <- zip [0 :: Int ..] components, here <- members]
 
-    -- The node of each state outside every binder. The lazy map builds each
-    -- node once, when a parent or the root first needs it.
-    shared = LazyMap.fromSet (build (cycles (Map.keysSet component)) Map.empty shared) (Map.keysSet component)
-
-    -- Build the node of a state in one binder context. The context has the
-    -- states of a component that are on a cycle that avoids the bound states,
-    -- the bound states with the references of their binders, and a lazy map
-    -- with the node of each state of the component in the context. Thus each
-    -- node is built once in each context, not once for each occurrence. A
-    -- bound state is its reference. A state on a cycle that avoids the bound
-    -- states gets a binder and starts a new context. Its body is built once,
+    -- Build the node of a state under binders for the given states of its
+    -- component, which all come before it, and remember it for these states.
+    -- One table serves the whole graph, so a node that two parents or two
+    -- entries of a component need is built once. The body is built once,
     -- with a reference to the state, and 'createMu' substitutes for the
     -- reference: 'createMu' applies its function more than once, and building
-    -- the body for each application would build the nested contexts again,
-    -- in time exponential in the depth of the binders. Another state gets no
-    -- binder: the binder would not occur in the body, and 'createMu' would
-    -- remove it.
-    build :: Set.Set state -> Map.Map state (Node symbol) -> Map.Map state (Node symbol) -> state -> Node symbol
-    build free binders nodes state
-        | Just self <- Map.lookup state binders = self
-        | Set.member state free =
-            let free' = cycles (Set.delete state (Set.difference (members Map.! state) (Map.keysSet binders)))
-                binders' = Map.insert state (Rec $ reference Map.! state) binders
-                nodes' = LazyMap.fromSet (build free' binders' nodes') (members Map.! state)
-                open = body nodes' state
-             in createMu $ \self -> substFree (reference Map.! state) self open
-        | otherwise = body nodes state
+    -- the body for each application would build the nested binders again. A
+    -- state whose body does not refer to it gets no binder.
+    build :: IntSet.IntSet -> Int -> State (Map.Map (IntSet.IntSet, Int) (Node symbol)) (Node symbol)
+    build bound here = do
+        known <- gets (Map.lookup (bound, here))
+        case known of
+            Just node -> pure node
+            Nothing -> do
+                open <- body (IntSet.insert here bound) here
+                let node
+                        | Set.member (RecState here) (freeVars open) = createMu $ \self -> substFree (RecState here) self open
+                        | otherwise = open
+                modify' (Map.insert (bound, here) node)
+                pure node
 
-    -- A child in another component cannot reach a bound state, so it is the
-    -- shared node of that child.
-    body nodes state = mkNode (map edge (transitionsFrom state))
+    -- A child in another component cannot reach a bound state, so it is built
+    -- under no binder. A bound child is the reference of its binder. Another
+    -- child is built under the binders of the states before it, so the
+    -- binders on every path nest in the order.
+    body bound here = mkNode <$> mapM edge (transitionsAt IntMap.! here)
       where
-        edge transition =
-            mkEdge
-                (FTA.transitionSymbol transition)
-                (map child (FTA.transitionChildren transition))
-                (FTA.transitionConstraint transition)
+        edge (transition, children) =
+            (\nodes -> mkEdge (FTA.transitionSymbol transition) nodes (FTA.transitionConstraint transition))
+                <$> mapM child children
         child next
-            | component Map.! next == component Map.! state = nodes Map.! next
-            | otherwise = shared Map.! next
+            | component IntMap.! next /= component IntMap.! here = build IntSet.empty next
+            | IntSet.member next bound = pure (Rec (RecState next))
+            | otherwise = build (fst (IntSet.split next bound)) next
 
 -- | Name the empty state or read the shared canonical identity.
 stateOf :: Node symbol -> InternedState

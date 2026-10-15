@@ -144,12 +144,11 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
     it "exclude templates anywhere from the explicit view and the interned view with no new ambiguity" $
         -- As for excludeFTA, a term with one run in the input has one run in
         -- the result. The automata have cycles, so the results of both
-        -- constructions are recursive. Two states at most: a state of the
-        -- result pairs a state with an obligation, and the interned form
-        -- nests a binder for each pair of a cycle on every path, so three
-        -- states can make both constructions take seconds.
+        -- constructions are recursive. A state of the result pairs a state
+        -- with an obligation, so a component of the result can have about ten
+        -- states.
         property $
-            forAll ((,) <$> automatonOf 2 <*> templates) $ \(explicit, shapes) ->
+            forAll ((,) <$> automaton <*> templates) $ \(explicit, shapes) ->
                 let node = Interned.fromFTA explicit
                  in within 10000000 $
                         classify (all (== 1) (runCounts (deepest explicit) node)) "unambiguous input" $
