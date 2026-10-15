@@ -1449,6 +1449,8 @@ import MicroCFTA.SourceEqualityNeededMap
 import MicroCFTA.SourceEqualityNeeded
 import MicroCFTA.SourceEqualityNeededMeaning
 import MicroCFTA.SourceClosedSelfHeadRepair
+import MicroCFTA.SourceEqualityNeededAdjust
+import MicroCFTA.SourceEqualityNeededAdjustMeaning
 /-!
 # Proof dependency audit
 
