@@ -7,6 +7,19 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Checked recursive execution application (2026-10-15 09:10 CEST)
+
+Traversal induction now derives the actual recursive graph from checked
+bounded success. Actual descended payloads, local native checks, physical
+payload calls, and returned warm states determine each child and tail.
+Public exactness and stable replay follow without a Callback law or a
+supplied completed outer graph. Two checked successes have identical values
+and full native states. Read [the current note](notes-checked-recursion.md).
+This proof does not establish termination for every input. Both source gate
+memo receipts remain separate at the Haskell correspondence boundary.
+General outer graph existence, the outer memo table, GHC scheduling, native
+containers, and extraction remain open. No Lava or Rocq dependency is added.
+
 ## Recursive graph and changing-callback application (2026-10-15 08:52 CEST)
 
 Completed outer graphs now retain actual recursive child calls and derive public

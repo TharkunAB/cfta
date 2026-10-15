@@ -1,5 +1,13 @@
 # Sized execution from a validated finite row map
 
+Upstream `c351674e` moves canonicalClasses to Data.CFTA.Interned without
+changing its implementation. Sized changes only that import. Existing exact
+classes, finite execution, size order, and both rank inverses retain their
+source definitions. The optimized dispatch still returns the reference
+sequence. Read [the upstream comparison](notes-canonical-upstream.md).
+The current audit passes 1,850 jobs and 48,149 dependency checks.
+Later counts in this note are historical component evidence.
+
 The common full query specification now covers original-map reference,
 optimized, and actual bounded encoded solver paths in `221bb23a`.
 Read [the common API note](notes-sized-api-laws.md). The current aggregate

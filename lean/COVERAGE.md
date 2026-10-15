@@ -1,5 +1,53 @@
 # Full formalization coverage
 
+## Upstream canonical enumeration and checked recursive success
+
+Source: `TharkunAB/cfta`, `origin/main` at `c351674e`, integrated by
+`79f2e38e`. Proofs: `d4f945dd` and `fa9f89ed`. Continue on `formalize`
+and push checkpoints. Read `lean/notes-canonical-upstream.md` and
+`lean/notes-checked-recursion.md`. This section supersedes the older
+worker-to-graph targets and source base below.
+
+The complete canonicalClasses implementation is byte-identical after its
+move to the core package. Sized changes only that import. Its reference,
+solver-decided, and optimized query sequences retain all existing exact
+node-count classes, finite size execution, size order, and both distinct
+rank inverses. The new UVar canonical order and Hectare program order are
+separate. No equality with the Sized sequence is claimed.
+
+Reached recursive check plans retain actual descended payloads, native
+word ranges, local prefix receipts, physical payload calls, and returned
+warm states. Traversal induction derives the complete recursive graph from
+actual checked bounded success. It assumes no global Callback law, binder
+law, completed outer graph, or future heap invariant. Any two such successes
+return the identical physical value and full native state. Public composition
+from original closed normalized construction derives exact public language,
+all physical invariants, and stable replay at all sufficient seven bounds.
+Errors and incomplete observations remain unchanged.
+
+Next derive source gate memo evidence for every reached warm recursive
+prefix from its actual scope. Retain both memo tables and the concrete
+source predicate. Then study general outer graph existence with a valid
+measure or a focused counterexample. Native intersection can increase
+ordinary depth. General outer termination, the outer memo table, open
+contexts, repeated fixed points, getAllAtPath, native containers, GHC lazy
+scheduling, and extraction remain open. Native word checks remain explicit.
+
+The audit passes 1,850 jobs and 48,149 dependency checks with only propext,
+Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. All 650 existing Haskell examples pass in Nix: 293 core, 210
+generator, and 147 refinement. Fourmolu and active Cabal formatting pass.
+Logs: `/tmp/mcfta-checked-recursion-20261015-audit.log` and
+`/tmp/mcfta-canonical-main-20261015-{tests,format,lean}.log`.
+Snapshot: `/tmp/mcfta-checked-recursion-checkpoint-20261015-0910/`.
+All older proof bytes except audit imports, counterexamples, marked drafts,
+stashes, and other worktrees remain unchanged. All five retained repair
+patches have identical added and removed lines relative to old and new main.
+Backup: `backup/formalize-before-canonical-main-20261015-0902`.
+Weekly allowance was 100% at 2026-10-15 09:07 CEST. Refresh it before work.
+Stop all work and owned workers at 1% or less. Preserve the optimized interned
+core and all older artifacts. No board posts or deployments.
+
 ## Recursive completed graphs and replay with changing callbacks
 
 Proofs: `109dd0f8`, `623de23e`, and `72e32aeb`.

@@ -1,7 +1,10 @@
 # Canonical ordered partition refinement
 
 `MicroCFTA/CanonicalClasses.lean` models `canonicalClasses` in
-`cfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs`.
+`cfta/src/Data/CFTA/Interned.hs`.
+Upstream `c351674e` moves this function from
+`cfta-generator/src/Data/CFTA/Gen/Internal/Automaton.hs` without changing its
+implementation. Sized and the ordinary import use the same function.
 This is the graph class routine used by ordinary automaton row ordering and
 compact import ordering. It is separate from `SymbolicCanonicalOrder`, which
 orders operands of an intersection.
@@ -73,8 +76,11 @@ consequences used by the compact path. They cover keys of the form
 keys and child-class rows.
 
 These statements concern class and edge keys. They do not assert that equal
-classes denote equal constrained languages. The source class key omits edge
-constraints and can use a noninjective symbol order key. They also do not
+classes denote equal constrained languages. Sized and the ordinary import
+omit edge constraints from their class keys. The ordinary import can use a
+noninjective symbol order key. The new interned `canonicalOrder` includes
+equalities and guards in its class keys. Its UVar execution needs a separate
+source correspondence proof. These statements also do not
 assert a unique ordering of distinct transition payloads with equal final
 keys. The source stable `sortOn` tie behavior needs a separate argument when
 such ties are possible.

@@ -1,21 +1,26 @@
 # cfta formal model
 
-Current source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
+Current source: `TharkunAB/cfta`, `origin/main` at `c351674e`.
 Continue on `formalize`; publish completed checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,845 jobs and 48,140 theorem dependency checks.
-The [recursive graph proof](notes-recursive-graphs.md) derives physical scope,
-public narrowing, and contextual exactness from actual completed recursive
-calls. It assumes no Callback or generic binder law. Every completed graph
-has stable actual execution above a common traversal and native-stage bound,
-even when the recursive callback changes. Structural arity and full physical
-determinism are checked. Original normalized source derives the public entry.
-Next prove successful bounded worker-to-graph readback with actual reached
-word checks. General caller termination and the outer Haskell memo table
-remain open. This paragraph supersedes older graph and replay targets.
+The audit passes 1,850 jobs and 48,149 theorem dependency checks.
+The [upstream comparison](notes-canonical-upstream.md) confirms that Sized's
+implementation changes only its canonicalClasses import. All exact class,
+finite execution, sequence, and rank inverse contracts retain the same source.
+The new UVar and synthesis sequences have separate correspondence boundaries.
+The [checked recursive proof](notes-checked-recursion.md) derives complete
+graphs from actual checked bounded worker success by traversal induction.
+It assumes no global Callback law, binder law, or supplied completed graph.
+Any two checked successes have identical physical values and full native states.
+Original closed normalized construction supplies the initial scope. Actual
+public success preserves exact public language and all physical invariants,
+with stable replay at all sufficient seven bounds. General outer termination
+and the outer Haskell memo table remain open. Next retain actual gate memo
+evidence at every warm recursive prefix. This paragraph supersedes older
+worker-to-graph and replay targets.
 The [inherited edge proof](notes-inherited-edge.md) derives actual physical
 constraint combination and trie descent, indexed child obligations, exact
 callback observations, and direct equal-arity edge rebuilding. Concrete native
