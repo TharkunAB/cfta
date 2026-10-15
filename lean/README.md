@@ -6,15 +6,17 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,819 jobs and 47,971 theorem dependency checks.
-The [outer-step proof](notes-partial-node.md) derives exact cached Mu probe
-reuse, actual smart cleanup, ordered native row traversal, and both modifyNode
-branches. The bounded outer worker retains every source branch and incomplete
-observation. Its successful-step theorem keeps smaller-call, reached-word,
-and filtered-probe checks explicit. Propagate the probe invariant through
-actual native effects, then derive the recursive callback and replay across
-larger traversal bounds. Whole-caller completion and the outer Haskell memo
-table remain open. This paragraph supersedes older node/row and Mu targets.
+The audit passes 1,835 jobs and 48,053 theorem dependency checks.
+The [filtered-probe proof](notes-filtered-probes.md) derives both physical Mu
+probe filters through actual source construction and the complete native
+equality pass. Every available Mu at the returned heap executes exact smart
+cleanup with identical full native state. The [outer-step proof](notes-partial-node.md)
+already supplies the bounded worker, ordered rows, and modifyNode branches.
+Next derive mutually recursive completed outer graphs with actual child
+induction hypotheses. Connect them to bounded execution and prove replay across
+larger traversal bounds. Carry the probe invariant explicitly; IdleReady alone
+does not imply it. General caller completion and the outer Haskell memo table
+remain open. This paragraph supersedes older probe and caller targets.
 The [inherited edge proof](notes-inherited-edge.md) derives actual physical
 constraint combination and trie descent, indexed child obligations, exact
 callback observations, and direct equal-arity edge rebuilding. Concrete native

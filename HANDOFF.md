@@ -1,6 +1,58 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 08:19 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 08:33 CEST (Europe/Stockholm)**.
+
+## Filtered Mu probes through actual native equality execution
+
+Proofs: `a93cc716`, `e5aaebde`, and `e1916030`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. The upstream refresh is current. Continue on
+`formalize` and push checkpoints. Read `lean/notes-filtered-probes.md`.
+This section supersedes the probe-invariant propagation target below.
+
+InternedFreshOrdinaryProbeHeap derives the physical invariant for both cached
+Mu probes through actual repaired source execution, including pending outcomes.
+It needs no original-call history for earlier records. Actual stored substitution,
+optional binders, native compiled calls, memo hits, started bodies, completion
+frames, exposure, head reads, required paths, projection, general comparisons,
+retention, merging, captured targets, first forcing and reuse, shared edits,
+class folds, gate selection, one-pass branches, and guarded interning retain it.
+Every intermediate scope comes from actual source effects. No final heap
+invariant or whole-operation preservation law is supplied.
+
+SourceEqualityPartialProbeEntry.guarded_mu connects the complete concrete native
+pass to the actual outer Mu branch. Every available Mu in its returned heap
+has both fixed filters, a resident cache hit, exact smart cleanup, identical
+full native state, and exact independent guarded meaning. Original closed
+construction derives the initial probe heap. IdleReady remains unchanged;
+the new invariant is explicit and must be carried through recursive calls.
+
+Next assemble mutually recursive completed graphs for the outer node, ordered
+rows, and indexed inherited children. Retain the actual checked local native
+prefix, payload combination, Mu request receipts, and modifyNode branches.
+Prove scope, annotations, probe preservation, narrowing, and contextual exactness
+by graph induction using each actual child induction hypothesis. The existing
+Callback quantifies all IdleReady scopes, which do not contain the new probe
+invariant. Do not assume that unrestricted callback law. Then connect these
+graphs to SourceEqualityPartialWorker.run by traversal-bound induction and prove
+replay when traversal bounds increase and recursive callbacks change. Retain
+actual reached word checks. General caller finite execution remains unproved;
+native intersection can increase ordinary depth. The outer Haskell memo table,
+open contexts, repeated fixed points, getAllAtPath, native containers, GHC lazy
+scheduling, and extraction remain separate obligations.
+
+All sixteen new proof modules pass focused builds. The aggregate audit passes
+1,835 jobs and 48,053 dependency checks with only propext, Classical.choice,
+and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-filtered-probes-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-filtered-probes-checkpoint-20261015-0833/` (2,247 Lean-tree files and four root documents).
+Older proof bytes change only in audit imports. All counterexamples, marked
+drafts, production source, stashes, and other worktrees remain unchanged.
+No Haskell source changed, so the earlier 645 examples and formatter checks
+were not rerun. Weekly allowance was 100% at 2026-10-15 08:33 CEST. Refresh it before work.
+Stop all work and owned workers at 1% or less. Preserve Sized exact classes,
+finite size execution, size order, both rank inverses, the optimized interned
+core, and all older artifacts. No board posts or deployments.
 
 ## Actual outer step, ordered rows, and cached Mu reconstruction
 

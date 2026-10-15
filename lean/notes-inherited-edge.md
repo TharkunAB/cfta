@@ -1,5 +1,14 @@
 # Concrete inherited edge continuation and indexed children
 
+Both filtered Mu probes now have an explicit physical heap invariant. Actual
+source and native execution, reads, merging, targets, shared edits, and complete
+guarded passes preserve it. The returned heap supplies exact outer Mu execution.
+Next use mutually recursive completed outer graphs to obtain actual child
+induction hypotheses, then prove bounded worker agreement and replay. Carry
+the probe invariant explicitly; current IdleReady does not contain it. Read
+[the current note](notes-filtered-probes.md). This paragraph supersedes older
+probe propagation and unrestricted callback targets in this note.
+
 The actual outer worker, ordered rows, modifyNode fast path, and cached Mu
 reconstruction are now checked. Successful outer steps derive their local
 language and scope conclusion. The smaller recursive callback and reached

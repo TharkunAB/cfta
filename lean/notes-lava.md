@@ -7,6 +7,19 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Filtered probe invariant application (2026-10-15 08:33 CEST)
+
+Both physical Mu probe filters now survive actual source construction and the
+complete native equality pass. The returned heap supplies the concrete outer
+Mu reconstruction theorem. Read [the current note](notes-filtered-probes.md).
+The next caller graph will retain actual recursive child calls, so graph
+induction supplies each local node law. The existing global Callback premise
+covers all IdleReady scopes and must not stand in for that proof. Worker
+agreement and replay must also account for changing traversal callbacks.
+The function and graph method does not prove caller termination, the outer
+Haskell memo table, GHC lazy scheduling, native containers, or extraction.
+No Lava or Rocq dependency is added.
+
 ## Actual outer-step application (2026-10-15 08:19 CEST)
 
 Actual stored source origins now derive fixed filters on both cached Mu probes.
