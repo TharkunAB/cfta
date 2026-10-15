@@ -1627,6 +1627,13 @@ import MicroCFTA.SourceEqualityAnnotationExposure
 import MicroCFTA.SourceEqualityAnnotationHead
 import MicroCFTA.SourceEqualityAnnotationRequired
 import MicroCFTA.SourceEqualityAnnotationProjection
+import MicroCFTA.SourceMergedAnnotationComparison
+import MicroCFTA.SourceMergedAnnotationSelection
+import MicroCFTA.SourceMergedAnnotationWorker
+import MicroCFTA.SourceEqualityAnnotationTarget
+import MicroCFTA.SourceEqualityAnnotationSharedEdit
+import MicroCFTA.SourceEqualityAnnotationPass
+import MicroCFTA.SourceEqualityPublicNativeEdge
 /-!
 # Proof dependency audit
 
