@@ -2,6 +2,59 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Finite exact native prefixes at arbitrary closed warm scopes
+
+Proofs: `6cef0487` and `438393a0`. Source: `TharkunAB/cfta`,
+`origin/main` at `33148e6d`. Authenticated HTTPS pull succeeded; main is
+unchanged and is an ancestor of `formalize`. Continue on `formalize` and
+push checkpoints. Read `lean/notes-closed-warm-completion.md`. This section
+supersedes the closed gate and warm local completion targets below.
+
+Path-length induction constructs actual closed node queries, indexed child
+lookups, ordered short circuit, classes, and selection. Each returns the
+original constructor heap. The two actual source memo receipts follow
+without an open-unfolding cost heap or original construction history.
+Predicate memo coherence remains explicit for arbitrary initial memos.
+
+Selection and required paths now complete at each actual closed warm heap.
+Their real returned state supplies the native fold and final propagation.
+Every source precheck branch therefore derives finite local execution from
+IdleReady, closed availability, and reached word ranges. No completed prefix,
+fold, worker success, sufficient bound, GateRank.Node, or future scope is an
+input. Native word ranges remain explicit.
+
+The actual guarded-edge entry derives its physical own payload from current
+annotations. Literal reconstruction retains the original symbol and full
+constraint. The result has both source memo receipts, recursive Scope,
+physical histories, closed resident children, stable identical value/full-state
+replay at all sufficient six-stage bounds, and eventual array agreement.
+Its public language narrows the input and is exact under inherited satisfaction.
+Full residual guards remain intact.
+
+Next study general constrained outer graph existence with a valid measure
+or a focused closed normalized counterexample. Examine actual narrowed child
+outputs and source-constraint origins. Gate rejection of constrained Mu is
+proved, but does not itself prove caller termination after narrowing. Do not
+assume structural smaller children, cached-depth decrease, an initial finite
+Mu inventory, a future Region, a completed caller graph, or caller success.
+General outer recursion, the outer reduction memo table, open contexts,
+repeated fixed points, getAllAtPath, native containers, GHC scheduling, and
+extraction remain open.
+
+The audit passes 1,876 jobs and 48,215 dependency checks with only propext,
+Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. Log: `/tmp/mcfta-closed-warm-edge-20261015-audit.log`.
+Starting snapshot: `/tmp/mcfta-closed-gates-start-20261015-102828/`.
+Closing snapshot: `/tmp/mcfta-closed-warm-checkpoint-20261015-1038/`.
+Older proofs except audit imports, counterexamples, marked drafts, production
+source, stashes, and other worktrees remain unchanged. No Haskell source
+changed. The earlier 650 examples, affected benchmark build, formatting,
+and metadata checks were not repeated. Weekly allowance was 99% at
+2026-10-15 10:37 CEST. Refresh it before work. Stop all work and owned
+workers at 1% or less. Preserve Sized exact classes, finite size execution,
+size order, both distinct rank inverses, the optimized interned core, and
+older constructor and equality work. No board posts or deployments.
+
 ## Finite equality-free source calls for arbitrary inherited payloads
 
 Proofs: `32994d94` and `e4d26e69`. Source: `TharkunAB/cfta`,

@@ -7,6 +7,20 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Finite warm source prefix application (2026-10-15 10:38 CEST)
+
+Closed gate progress now follows path length and actual child lookups.
+Both actual source memo receipts need no open-unfolding cost heap.
+Selection, required paths, and native folds derive finite execution at
+arbitrary closed warm scopes under reached word checks. Actual guarded-edge
+construction derives its returned recursive scope, stable full-state replay,
+and exact public language under inherited satisfaction. Read
+[the current note](notes-closed-warm-completion.md). General constrained outer
+recursion still needs a valid measure or a focused counterexample. Local
+prefix completion does not prove caller termination. The outer memo table,
+open contexts, repeated passes, native containers, GHC scheduling, and
+extraction remain separate. No Lava or Rocq dependency is added.
+
 ## Arbitrary inherited source completion application (2026-10-15 09:50 CEST)
 
 Mutual structural induction now constructs finite actual equality-free

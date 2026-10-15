@@ -1,5 +1,20 @@
 # Full formalization coverage
 
+## Finite exact native prefixes at arbitrary closed warm scopes
+
+Proofs: `6cef0487` and `438393a0`, on main `33148e6d`. Read
+[the completion note](notes-closed-warm-completion.md). Closed gate progress
+now follows actual path traversal without an unfolding cost heap. Selection,
+required paths, and the native fold derive finite local execution at arbitrary
+closed warm states under reached word checks. Actual guarded-edge construction
+derives both source memo receipts, returned recursive scope, stable full-state
+replay, and exact public language under inherited satisfaction. No completed
+prefix, successful worker, original construction, or future scope is supplied.
+The audit passes 1,876 jobs and 48,215 dependency checks. General constrained
+outer recursion remains open. Study actual narrowed child origins and a valid
+measure or focused counterexample. This section supersedes older closed gate
+and warm local completion targets. Root HANDOFF.md records preservation.
+
 ## Finite equality-free source calls under arbitrary inheritance
 
 The current proof is `e4d26e69`, on main `33148e6d`. Read
