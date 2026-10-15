@@ -54,7 +54,17 @@ import Data.CFTA.Index (Depth)
 import qualified Data.CFTA.Interned as Interned
 import Data.CFTA.Path (ChildIndex (..), path, unPath)
 import qualified Data.CFTA.Simple as Simple
-import Data.CFTA.Template (Template (..), exclude, excludeFTA, matchesNone, matchesTemplate, restrictFTA)
+import Data.CFTA.Template (
+    Template (..),
+    exclude,
+    excludeAnywhere,
+    excludeAnywhereFTA,
+    excludeFTA,
+    matchesNone,
+    matchesNowhere,
+    matchesTemplate,
+    restrictFTA,
+ )
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -123,6 +133,31 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
                                     check result = (depth, termsAndAmbiguity (runCounts depth result) kept) `shouldBe` (depth, (Map.keys kept, []))
                                 check (exclude shapes node)
                                 check (Interned.fromFTA (excludeFTA shapes explicit))
+
+    it "exclude templates anywhere from the explicit view as filtering its trees does" $
+        property $
+            forAll ((,) <$> automaton <*> templates) $ \(explicit, shapes) -> within 10000000 $
+                forM_ [0 .. deepest explicit] $ \depth ->
+                    (depth, sort (FTA.terms (FTA.boundDepth depth (excludeAnywhereFTA shapes explicit))))
+                        `shouldBe` (depth, filter (matchesNowhere shapes) (underlying depth explicit))
+
+    it "exclude templates anywhere from the explicit view and the interned view with no new ambiguity" $
+        -- As for excludeFTA, a term with one run in the input has one run in
+        -- the result. The automata have cycles, so the results of both
+        -- constructions are recursive. Two states at most: a state of the
+        -- result pairs a state with an obligation, and the interned form
+        -- nests a binder for each pair of a cycle on every path, so three
+        -- states can make both constructions take seconds.
+        property $
+            forAll ((,) <$> automatonOf 2 <*> templates) $ \(explicit, shapes) ->
+                let node = Interned.fromFTA explicit
+                 in within 10000000 $
+                        classify (all (== 1) (runCounts (deepest explicit) node)) "unambiguous input" $
+                            forM_ [0 .. deepest explicit] $ \depth -> do
+                                let kept = Map.filterWithKey (\term _ -> matchesNowhere shapes term) (runCounts depth node)
+                                    check result = (depth, termsAndAmbiguity (runCounts depth result) kept) `shouldBe` (depth, (Map.keys kept, []))
+                                check (excludeAnywhere shapes node)
+                                check (Interned.fromFTA (excludeAnywhereFTA shapes explicit))
 
     it "enumerate the terms up to each depth that the simple definition lists" $
         property $

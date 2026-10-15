@@ -26,7 +26,18 @@ import qualified Data.CFTA.Interned as Common
 import Data.CFTA.Interned.Type (MuDepth (..))
 import Data.CFTA.Path (getPath, path)
 import qualified Data.CFTA.Simple as Simple
-import Data.CFTA.Template (Template (..), exclude, excludeFTA, matchesNone, matchesTemplate, restrict, restrictFTA)
+import Data.CFTA.Template (
+    Template (..),
+    exclude,
+    excludeAnywhere,
+    excludeAnywhereFTA,
+    excludeFTA,
+    matchesNone,
+    matchesNowhere,
+    matchesTemplate,
+    restrict,
+    restrictFTA,
+ )
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -420,6 +431,22 @@ spec = do
                     length expected `shouldBe` 2
                     Automaton.terms (excludeFTA templates bounded) `shouldMatchList` expected
                     Enumeration.plainTerms (exclude templates (Common.fromFTA bounded)) `shouldMatchList` expected
+
+        it "excludes the terms with a matching subterm from a recursive automaton and interned graph" $
+            case Automaton.mkFTA
+                Expression
+                [(Expression, [Transition "zero" [] noConstraint, Transition "add" [Expression, Expression] noConstraint])] of
+                Left err -> expectationFailure $ show err
+                Right expressions -> do
+                    -- No "add" has an "add" as its right child.
+                    let templates = [TemplateNode "add" [Hole, TemplateNode "add" [Hole, Hole]]]
+                        zero = Term.Node "zero" []
+                        add left right = Term.Node "add" [left, right]
+                        expected = filter (matchesNowhere templates) (Automaton.terms (Automaton.boundDepth 2 expressions))
+                    expected `shouldMatchList` [zero, add zero zero, add (add zero zero) zero]
+                    Automaton.terms (Automaton.boundDepth 2 (excludeAnywhereFTA templates expressions)) `shouldMatchList` expected
+                    Enumeration.plainTerms (Common.boundDepth 2 (excludeAnywhere templates (Common.fromFTA expressions)))
+                        `shouldMatchList` expected
 
     describe "explicit-state recognition" $ do
         it "rejects a transition whose guard is Bottom, as the interned view does" $ do

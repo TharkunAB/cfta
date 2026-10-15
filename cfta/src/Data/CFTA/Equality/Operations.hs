@@ -23,14 +23,13 @@ import qualified Data.Set as Set
 import System.IO.Unsafe (unsafePerformIO)
 import Type.Reflection (Typeable)
 
-import Data.CFTA.Enumeration (provablyEmpty, unconstrained)
+import Data.CFTA.Enumeration (provablyEmpty, reachesConstrainedMu, unconstrained)
 import Data.CFTA.Equality.Constraint
 import Data.CFTA.Internal.Tree (adjustAt)
 import Data.CFTA.Interned
 import Data.CFTA.Interned.Memo (
     TypeableMemoCache,
     memo2TypeableWith,
-    memoTypeableWith,
     newTypeableMemoCache,
  )
 import Data.CFTA.Interned.Operations (mergeAlternatives)
@@ -63,7 +62,8 @@ constrained position must agree with every other.
 The pass does not unfold a recursive node that has constraints. A class that
 reaches into such a node, or ends above one, stays unreduced (see
 'reduceEqConstraints'). The language does not change, because enumeration and
-'accepts' still check that class.
+'accepts' still check that class. When the class ends above such a node and
+the nodes at its paths provably share no term, the edge becomes empty instead.
 -}
 reducePartially ::
     (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
@@ -185,10 +185,11 @@ its constrained edges again, and their reduction unfolds the node again. A
 recursive node without constraints can unfold, because its unfolding has no
 constraints to reduce. A class also stays unreduced when a node at the end of
 one of its paths reaches a recursive node with constraints. The intersection
-at that path would unfold the recursive node too. When only this last rule
-refuses a class, and the intersection of the nodes at its paths provably
-accepts no term ('provablyEmpty'), every child becomes empty, as for a
-contradiction.
+at that path would unfold the recursive node too. When only the end of a path
+refuses a class (the nodes at its paths are closed, and one is or reaches a
+recursive node with constraints), and the intersection of the nodes at its
+paths provably accepts no term ('provablyEmpty'), every child becomes empty,
+as for a contradiction.
 -}
 reduceEqConstraints ::
     forall symbol.
@@ -212,8 +213,9 @@ reduceEqConstraints = go
         (refused, eclasses) = partition (any (meetsConstrainedMu True origNs) . unPathEClass) (unsafeSubsumptionOrderedEclasses ecs)
 
         -- Only the end of a path refuses this class: the nodes at its paths
-        -- are closed, and one reaches a recursive node with constraints. The
-        -- check reads their intersection and puts it into no child.
+        -- are closed, and one is or reaches a recursive node with
+        -- constraints. The check reads their intersection and puts it into
+        -- no child.
         emptyBelowEnd :: PathEClass -> Bool
         emptyBelowEnd pec =
             not (any (meetsConstrainedMu False origNs) paths)
@@ -246,9 +248,10 @@ reduceEqConstraints = go
     -- node: pruning a recursive body leaves references to the node that is
     -- being pruned, and its edges are not known there. So does a node with
     -- free references at the end of the path, and an unconstrained recursive
-    -- node with free references is followed through its unfolding. A node at
-    -- the end of the path counts when it reaches a recursive node with
-    -- constraints ('reachesConstrainedMu'), if the first argument is true.
+    -- node with free references is followed through its unfolding. A closed
+    -- node at the end of the path that is, or reaches, a recursive node with
+    -- constraints ('reachesConstrainedMu') counts only if the first argument
+    -- is true.
     meetsConstrainedMu :: Bool -> [Node symbol] -> Path -> Bool
     meetsConstrainedMu belowEnd ns (ConsPath (ChildIndex index) rest) = maybe False (nodeMeetsConstrainedMu belowEnd rest) (ns !? index)
     meetsConstrainedMu _ _ EmptyPath = False
@@ -258,29 +261,14 @@ reduceEqConstraints = go
     nodeMeetsConstrainedMu _ _ (InternedUnion _) = True
     nodeMeetsConstrainedMu _ _ n | numNestedMu n == 0 && null (freeVars n) = False
     nodeMeetsConstrainedMu belowEnd p n@(InternedMu _)
-        | not (unconstrained n) = True
+        | not (unconstrained n) = case p of
+            EmptyPath | null (freeVars n) -> belowEnd
+            _ -> True
         | null (freeVars n) = False
         | otherwise = nodeMeetsConstrainedMu belowEnd p (unfoldOuterRec n)
     nodeMeetsConstrainedMu belowEnd EmptyPath n = not (null (freeVars n)) || (belowEnd && reachesConstrainedMu n)
     nodeMeetsConstrainedMu belowEnd p (Node es) = any (\e -> meetsConstrainedMu belowEnd (edgeChildren e) p) es
     nodeMeetsConstrainedMu _ _ _ = False
-
-genericReachesConstrainedMuCache :: TypeableMemoCache
-genericReachesConstrainedMuCache = unsafePerformIO newTypeableMemoCache
-{-# NOINLINE genericReachesConstrainedMuCache #-}
-
-{- | Whether a closed node reaches a recursive node with constraints. A
-recursive node without constraints reaches no constraint at all, so the walk
-does not enter it.
--}
-reachesConstrainedMu :: forall symbol. (Typeable symbol) => Node symbol -> Bool
-reachesConstrainedMu = memoTypeableWith @symbol genericReachesConstrainedMuCache go
-  where
-    go n | numNestedMu n == 0 = False
-    go n@(InternedMu _) = not (unconstrained n)
-    go (InternedUnion alternatives) = any reachesConstrainedMu (internedUnionMembers alternatives)
-    go (Node es) = any (any reachesConstrainedMu . edgeChildren) es
-    go _ = False
 
 -- | A trie of child positions that must exist. An empty map ends a required path.
 newtype Needed = Needed (IntMap.IntMap Needed)

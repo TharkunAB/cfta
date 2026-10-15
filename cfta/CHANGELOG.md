@@ -28,6 +28,12 @@ Before release, the package was called `microcfta`.
   `excludeFTA` does the same for an explicit-state automaton: each result
   state pairs a source state with an `Obligation`, the templates that its
   terms must match and those that they must not.
+  `excludeAnywhere` and `excludeAnywhereFTA` keep the terms of which no
+  subterm matches one of the templates (`matchesNowhere`), with a recursive
+  result for a recursive input, and `preorderPrefix` gives the template of a
+  prefix of a term in preorder.
+  `Data.CFTA.Interned.fromRows` interns the transitions of each state as
+  `fromFTA` does, without a ranked alphabet.
 - Fix `reducePartially` not returning when a node at the end of an equality
   path reaches a recursive node with constraints. The intersection at that
   path unfolded the recursive node, a narrowed child contained its own
@@ -41,6 +47,17 @@ Before release, the package was called `microcfta`.
   `reduceEqConstraints` leaves a class unreduced and the check proves the
   intersection at its paths empty, the edge becomes empty. On the input of the
   previous entry, `reducePartially` now returns `EmptyNode`.
+- The check of the previous entry also covers a class whose path ends at a
+  closed recursive node with constraints, such as the input of the entry
+  before it without its wrappers, `p(A, C)` with `0 = 1`: `reducePartially`
+  returns `EmptyNode` for it too.
+- Fix `terms` and `runs` not ending on the input of the previous entries. The
+  enumerator merges the two children of the class into one variable, and the
+  intersection `W(A) ∩ W(C)` is `W(R)`, which needs R again. When a merge
+  intersects two nodes and the result reaches a recursive node with
+  constraints (`reachesConstrainedMu`, now exported), the enumerator runs
+  `provablyEmpty` on it, memoized, and ends the branch when it is empty. No
+  term is lost, because the branch has none. `terms R` now gives `[]`.
 
 Initial release. `cfta` consolidates an ordinary tree automaton engine,
 equality-constrained tree automata, and liquid tree automata into one package

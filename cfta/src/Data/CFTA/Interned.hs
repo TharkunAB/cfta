@@ -67,6 +67,7 @@ module Data.CFTA.Interned (
     toRows,
     stateOf,
     fromFTA,
+    fromRows,
     ViewPath,
     ViewStep (..),
     StateView (..),
@@ -90,7 +91,7 @@ import Type.Reflection (Typeable)
 import Data.CFTA (StateView (..), ViewPath, ViewStep (..))
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint
-import Data.CFTA.Internal.Tree (toTreeBy)
+import Data.CFTA.Internal.Tree (toTreeBy, trimRows)
 import Data.CFTA.Interned.Operations
 import Data.CFTA.Interned.Type
 
@@ -228,19 +229,30 @@ have about e * (k - 1)! binders. Constraint layers can annotate the source
 before this conversion.
 -}
 fromFTA ::
-    forall state symbol.
     (Ord state, Hashable symbol, Typeable symbol) =>
     FTA.FTA state symbol Constraint -> Node symbol
-fromFTA graph = shared Map.! FTA.initialState trimmed
+fromFTA graph = fromRows (FTA.initialState graph) (FTA.transitionTable graph)
+
+{- | 'fromFTA' on the transitions of each state and an initial state. The
+symbols need no consistent arity, as for 'toRows'.
+-}
+fromRows ::
+    forall state symbol.
+    (Ord state, Hashable symbol, Typeable symbol) =>
+    state -> Map.Map state [FTA.Transition state symbol Constraint] -> Node symbol
+fromRows initial rows = shared Map.! initial
   where
-    trimmed = FTA.trim graph
-    successors state = concatMap FTA.transitionChildren (FTA.transitionsFrom trimmed state)
-    components = map flattenSCC (stronglyConnComp [(state, state, successors state) | state <- FTA.states trimmed])
+    -- The rows that the initial state reaches and that accept a term, as
+    -- 'FTA.trim' keeps them.
+    trimmed = Map.insertWith (\_ kept -> kept) initial [] (trimRows FTA.transitionChildren (Map.toList rows) initial)
+    transitionsFrom state = Map.findWithDefault [] state trimmed
+    successors state = concatMap FTA.transitionChildren (transitionsFrom state)
+    components = map flattenSCC (stronglyConnComp [(state, state, successors state) | state <- Map.keys trimmed])
     component = Map.fromList [(state, index) | (index, states) <- zip [0 :: Int ..] components, state <- states]
     -- The states of the component of each state.
     members = Map.fromList [(state, set) | states <- components, let set = Set.fromList states, state <- states]
     -- The reference to each state while its binder is built.
-    reference = Map.fromList $ zip (FTA.states trimmed) $ map RecState [0 ..]
+    reference = Map.fromList $ zip (Map.keys trimmed) $ map RecState [0 ..]
 
     -- The given states that are on a cycle through the given states only.
     cycles states =
@@ -280,7 +292,7 @@ fromFTA graph = shared Map.! FTA.initialState trimmed
 
     -- A child in another component cannot reach a bound state, so it is the
     -- shared node of that child.
-    body nodes state = mkNode (map edge (FTA.transitionsFrom trimmed state))
+    body nodes state = mkNode (map edge (transitionsFrom state))
       where
         edge transition =
             mkEdge
