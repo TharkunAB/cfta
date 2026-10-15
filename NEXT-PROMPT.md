@@ -2,6 +2,77 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Actual equality allocation prefixes and recursive memo preservation
+
+Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Constructor/cache proofs: `ee8964d7`. Guard/precheck proofs: `b09fcb39`.
+Recursive memo integration and audit: `bb35a074`. Pull is current.
+Continue on `formalize` and push verified checkpoints. Read
+`lean/notes-payload-allocation-receipts.md`, then the identity correspondence
+and completed-cell notes. This supersedes the earlier constructor-prefix target.
+
+SourceEqualityConstraintAllocation derives complete physical values, original
+normalized-field receipts, exact class readback, and actual abstract interner
+steps. SourceEqualityPhysicalPayloadCanonical proves literal equality from
+coherent physical trie keys. SourceEqualityConstraintMemoAllocation retains
+separate completed combination and descent caches with original arguments.
+Validity checks exact payload computation and canonical Ready values. Empty
+operation tables need no supplied cached answers. Hits preserve the full state.
+Combination bypasses the memo only for contradiction or BOTH live empty.
+Descent bypasses for contradiction or live empty. Other completed operations
+derive literal existing payload results and retained allocation receipts.
+Pending runtime thunks and concurrent schedules remain outside this model.
+
+GuardAllocationPlan separates the pure Maybe syntax test from payload demand.
+Demanded guard plans retain original Same normalization and right-fold steps.
+Unsupported syntax performs no allocation. A contradictory first operand skips
+the second payload. AccessorAllocation retains exact sourceEqualities classes.
+Original normalized-constructor receipts give literal PhysicalPayload.own
+readback. General reverse trie reconstruction is not inferred from WellFormed.
+PrecheckAllocation preserves the full empty fast path and returns the exact
+existing native branch. Its own-first combination can allocate a key that
+never becomes an outer request.
+
+PartialAllocationFrame preserves running requests, returned cells, current
+Sound, and physical key links through actual constructor traces. The partial
+accessor/precheck prefix composes concrete receipts at actual returned states.
+PartialPayloadAllocation models inherited-before-own combination and actual
+selected child descent. Contradiction makes no child request. The proof derives
+exact output, child satisfaction, and existing source identity at preparation
+without a new allocation. These proofs do not assume future Sound or equal
+nonmemoized native effects. Full native Scope remains separate.
+
+The aggregate audit passes 1,929 jobs and 50,083 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Focused integration passes
+1,074 jobs. Logs: `/tmp/mcfta-payload-allocation-audit-20261015.log` and
+`/tmp/mcfta-payload-allocation-focused-20261015.log`.
+The existing unused-input warning remains. No Haskell files changed. Earlier
+strict Nix, six-suite, format, metadata, and 205-rank checks were not repeated.
+
+Next thread concrete allocation effects through the complete guarded native
+pass. Start with actual edge conjunction and mkEdge arity/accessor effects.
+Then retain selected class folds, native intersection calls, reconstruction,
+original guard labels, and both gate memo families. Connect these effects to
+the complete recursive worker and original graph-construction trace. Preserve
+actual demand and short circuits; do not impose textual allocation order.
+Global result-memo prehistory, pending operation thunks, source cache/hash and
+IntMap adequacy, machine indexes, the lifetime reservation bound, unsafe IO,
+and GHC evaluation remain open. Signed conversion keeps its capacity premise.
+General caller completion, open contexts, repeated fixed points, getAllAtPath,
+decision-model, named-measure/parser/decoder bridges, and extraction remain open.
+Whole-library formalization is not complete. The optimized interned core,
+older constructor/equality work, and all distinct Sized contracts remain.
+
+Starting snapshot: `/tmp/mcfta-payload-allocation-start-20261015-1343/` (2,561 files).
+Closing snapshot: `/tmp/mcfta-payload-allocation-checkpoint-20261015-1406/` (2,573 files).
+Its preservation.json records exact hashes. All prior Lean proofs except Audit
+imports, reproductions, marked drafts, stashes, and other worktrees are unchanged.
+Both unverified intersection drafts and their limit report retain their hashes.
+Validation notes and exploratory probes remain outside Audit. Repository proof
+modules are authoritative. Weekly allowance was 95% at 2026-10-15 14:04 CEST.
+Refresh before work. Stop work and owned workers at 1% or less.
+No board posts or deployments.
+
 ## Physical identity correspondence and signed result-memo keys
 
 Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.

@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Concrete equality allocation prefixes (2026-10-15 14:08 CEST)
+
+The [allocation receipt proof](notes-payload-allocation-receipts.md), `bb35a074`,
+retains physical constructors, completed operation caches, delayed guard demand,
+accessor effects, and native precheck allocations. Exact physical readback and
+branch equations compose with running/returned cell preservation and current
+Sound. No future semantic result is assumed. Complete native intersection and
+edge-rebuilding effects, global histories, and runtime adequacy remain separate.
+The 1,929-job audit passes; production Haskell and all older proofs are preserved.
+
 ## Physical identity correspondence (2026-10-15 13:41 CEST)
 
 The [identity bridge](notes-constraint-identity-renaming.md), `d851d5fb`, separates

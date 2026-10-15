@@ -14,6 +14,15 @@ Exact classes, finite execution, sequence, size order, and both rank inverses
 remain separate contracts. The named-measure frontend and actual parser/codec
 bridges remain open. The optimized interned core and equality code are preserved.
 
+The [allocation receipt proof](notes-payload-allocation-receipts.md), `bb35a074`,
+retains actual completed combination/descent caches, delayed guard demand,
+accessor effects, and native prechecks. Concrete prefixes give exact physical
+readback and preserve all result cells and current Sound. Inherited child
+construction retains actual descent and satisfaction. The audit passes 1,929
+jobs and 50,083 dependency checks. Full native conjunction/intersection and
+edge-rebuilding effects remain next. No Haskell files changed. Earlier counts
+below describe historical checkpoints.
+
 The [physical identity bridge](notes-constraint-identity-renaming.md), `d851d5fb`,
 relates different constraint allocation histories through actual memo operations.
 It transports completed-cell Sound under actual heap preservation and connects

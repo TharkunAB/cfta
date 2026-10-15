@@ -1,5 +1,23 @@
 # Public API and source correspondence
 
+## Concrete equality constructor and native-prefix allocation
+
+Proofs `ee8964d7`, `b09fcb39`, and `bb35a074`, on main `1eb4ab05`.
+Read [the allocation receipt note](notes-payload-allocation-receipts.md).
+Actual completed combination/descent caches retain original physical values,
+exact output, and atomic allocation receipts. Delayed guard plans preserve
+Maybe failure and contradiction short circuits. The accessor and native
+precheck return exact existing payloads and branches. Original constructor
+receipts give literal own readback. Inherited child construction derives
+actual descent and child satisfaction, with no request on contradiction.
+Concrete prefixes preserve full result-cell Sound and physical key links.
+The audit passes 1,929 jobs and 50,083 dependency checks with permitted axioms.
+No Haskell files changed or checks were repeated. Whole-library correspondence
+is not proved. Next thread edge conjunction/mkEdge effects through the guarded
+native pass, intersections, both gate memos, and complete recursive execution.
+Global histories, pending runtime thunks, hash/IntMap/word adequacy, GHC, and
+extraction remain separate. Earlier proofs and distinct Sized contracts remain.
+
 ## Physical identity renaming through actual memo operations
 
 Proof `d851d5fb` on main `1eb4ab05`. Read

@@ -92,6 +92,15 @@ The source counter has no overflow guard (`Interned/Cache.hs:83-91,169-177`).
 Existing `full_wrap` and `not_unconditionally_fresh` retain the failure of
 unlimited freshness. This checkpoint does not derive a process lifetime bound.
 
+## Concrete prefix status
+
+The [allocation receipt proof](notes-payload-allocation-receipts.md), `bb35a074`,
+now derives actual completed combination/descent effects, guard/accessor demand,
+and native precheck allocation receipts. These concrete prefixes preserve full
+result-cell Sound. Full native conjunction/intersection, edge rebuilding, and
+original graph-construction effects remain next. The section below records
+the earlier general allocation-interface target.
+
 ## Next source obligations
 
 Record actual allocation-capable payload and native-prefix receipts. Relate

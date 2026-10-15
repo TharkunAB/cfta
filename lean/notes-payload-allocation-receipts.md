@@ -1,6 +1,8 @@
 # Actual equality payload allocation receipts
 
 Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Constructor/cache proofs: `ee8964d7`. Guard/precheck proofs: `b09fcb39`.
+Recursive memo integration and aggregate audit: `bb35a074`.
 This extends [physical identity correspondence](notes-constraint-identity-renaming.md).
 Production Haskell and all older proof definitions are unchanged.
 

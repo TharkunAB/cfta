@@ -1,5 +1,11 @@
 # Sized execution from a validated finite row map
 
+The [allocation receipt proof](notes-payload-allocation-receipts.md) preserves
+Sized and canonicalClasses. Exact classes, finite execution, canonical order,
+distinct size order, and both signed inverses remain separate contracts.
+The aggregate audit passes 1,929 jobs and 50,083 theorem dependency checks.
+Older counts below describe historical checkpoints.
+
 The [physical identity bridge](notes-constraint-identity-renaming.md) adds
 conditional result-memo correspondence. Sized and canonicalClasses are unchanged.
 Exact classes, finite execution, size order, and both inverses remain distinct.
