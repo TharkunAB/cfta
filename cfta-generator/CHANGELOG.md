@@ -148,8 +148,7 @@ tree automata of `cfta`, with QuickCheck integration.
   node view, a datatype with the constructors of the datatype and the
   integers of their fields (`NodeView`). `deriveLTA` builds the generator
   that the combinators give, with their ranks, and reports a node view that
-  does not fit the datatype (`NodeMismatch`). TODO: a `deriveNode` that
-  writes the node view from the datatype. `Measured` has one measure,
+  does not fit the datatype (`NodeMismatch`). `Measured` has one measure,
   `Contracted` none, and `MeasuredBy` named measures, the fields of a record
   (`MeasureRecord`) whose selector names are the names in the logic. `holds`,
   `measureOf`, and `measuresOf` run the invariant on values, and

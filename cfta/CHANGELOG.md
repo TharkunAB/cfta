@@ -27,7 +27,10 @@ Before release, the package was called `microcfta`.
   that match none of some templates at the root, as `matchesNone` says. It
   splits an edge by what its children match, so an unambiguous input gives
   an unambiguous result, and counts and ranks over it are exact. It reaches
-  only as deep as the templates.
+  only as deep as the templates. A split that keeps two different parts
+  without holes at one child has no terms, and it is left out, so the
+  preorder prefixes of a trie give a child one copy for each part that they
+  fix there and one for none, not one copy for each subset of the prefixes.
   `excludeFTA` does the same for an explicit-state automaton: each result
   state pairs a source state with an `Obligation`, the templates that its
   terms must match and those that they must not.
@@ -151,7 +154,9 @@ remains a separate ECTA-only package.
   `runs`, `truncatedTerms`, `termsPrune`, and `termsPruneWith` need
   `Ord symbol` for this. `runsBy` lists the runs of `runs` with a weight for each
   edge: it tries the edges of a node with larger weights first, and edges
-  with equal weights in the canonical order. `edgeIdentity` of
+  with equal weights in the canonical order. `runsInterned` lists the runs
+  of `runs` in the order of the edges in the automaton, without the
+  canonical classes, for a caller that sorts the runs itself. `edgeIdentity` of
   `Data.CFTA.Interned` gives the interned identity of an edge.
 - `Data.CFTA.Simple`: the automata defined as simply as possible, on the
   explicit-state automata of `Data.CFTA`. Membership recurses on the term,
@@ -188,6 +193,9 @@ remains a separate ECTA-only package.
   resolves every waiting variable through the union-find, and a write of a
   slot changes only the counts that change. On Hectare's listing of
   headLast at size 5 this cut 13% of instructions and 9% of allocation.
+  The value slots of the UVars are an `IntMap`, not a `Seq`, and the hot
+  fields of the enumerator's state are strict, which cut a further 9% of
+  instructions and 8% of allocation on that listing.
 - The refinement layer's `denotationAtMost` runs on the shared enumerator: a
   positive `Same` guard is a path equality solved by unification, so an
   equality-guarded pair costs milliseconds instead of a quadratic candidate

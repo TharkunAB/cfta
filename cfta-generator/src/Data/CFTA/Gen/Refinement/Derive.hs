@@ -42,8 +42,7 @@ child: @e@ for 'Measured', the one integer of the child, and a record of
 measures for 'MeasuredBy'. So GHC checks the number of children of each
 constructor, and @-Wincomplete-patterns@ checks that the invariant covers
 each constructor. The derivation checks the node view against the datatype
-and reports 'NodeMismatch'. TODO: a Template Haskell @deriveNode@ that
-writes the node view from the datatype.
+and reports 'NodeMismatch'.
 
 A datatype with several integers for each value, such as the color and the
 black height of a red-black tree, has named measures: a record whose
