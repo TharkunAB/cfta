@@ -1,4 +1,6 @@
 import Lean
+import MicroCFTA.SourceEqualityOuterMemoWorkerCycle
+import MicroCFTA.SourceSolverAppliedPublic
 import MicroCFTA.MergedFreshOrdinaryGraphOrigins
 import MicroCFTA.MergedFreshOrdinaryUnionOrigins
 import MicroCFTA.SourceRecursiveIntersectionUnionOrigins
