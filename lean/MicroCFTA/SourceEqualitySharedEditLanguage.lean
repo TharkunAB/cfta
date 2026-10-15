@@ -1,0 +1,249 @@
+import MicroCFTA.SourceEqualitySharedEditEffects
+import MicroCFTA.SourceEqualityEditMeaning
+import MicroCFTA.SourceEqualityRequiredHeadLanguage
+import MicroCFTA.SourceEqualityEditAPI
+
+/-!
+# Independent language bounds for shared target edits
+
+Every output term belongs to the input language. An accepted original term
+survives if each callback token selects its current subterm in the captured
+original root. Actual first-force receipts derive this local leaf property.
+-/
+namespace MicroCFTA.SourceEqualitySharedEditLanguage
+open Language InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedProvenance (Values Edges)
+open MergedColdReaderClosedInputs (ClosedValues ClosedEdges)
+open SourceEqualityEdits SourceEqualitySharedEditGraph SourceEqualityEditMeaning
+open SourceEqualitySharedEditEffects SourceEqualitySharedTargetState
+open SourceEqualityRequiredCache SourceEqualityRequiredSemanticCache
+open InternedGuardedLanguage (meaning)
+open MergedColdInterpretation (EdgeMeaning)
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (clear : Guard → Bool) (top : Guard)
+variable (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard)) (base : InternedConstructorTemplates.State Symbol Guard)
+variable (known : Values base originals) (originalClosed : ClosedValues originals)
+variable (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+variable (root : Term Symbol)
+variable (rootSymbol : Symbol) (rootTerms : List (Term Symbol))
+local notation "condition" => fun path part => root.atPath path = some part
+
+private def NodeBounds (edits : Edits EqualityNormalize.Path) (value : Value Symbol Guard)
+    (before : SharedState width Symbol Guard) (result : Value Symbol Guard) : Prop :=
+  SourceEqualityEdits.Valid edits → Allowed record edits → Ready emptyGuard conjoin clear top record originals base before →
+    Available before.native.machine.heap value → value.free = [] → ∀ term,
+      (meaning holds ambient result term → meaning holds ambient value term) ∧
+      (All₂ (meaning holds ambient) originals rootTerms → EqualityNormalize.ClassSat root record.paths →
+        Matches condition edits term → meaning holds ambient value term → meaning holds ambient result term)
+
+private def ChildrenBounds (entries : List (Int × Edits EqualityNormalize.Path)) (index : Nat) (values : List (Value Symbol Guard))
+    (before : SharedState width Symbol Guard) (results : List (Value Symbol Guard)) : Prop :=
+  SourceEqualityEdits.Valid (.editBelow entries) → Allowed record (.editBelow entries) → Ready emptyGuard conjoin clear top record originals base before →
+    Values before.native.machine.heap values → ClosedValues values → ∀ terms,
+      (All₂ (meaning holds ambient) results terms → All₂ (meaning holds ambient) values terms) ∧
+      (All₂ (meaning holds ambient) originals rootTerms → EqualityNormalize.ClassSat root record.paths →
+        Forest condition entries index terms → All₂ (meaning holds ambient) values terms → All₂ (meaning holds ambient) results terms)
+
+private def RowsBounds (entries : List (Int × Edits EqualityNormalize.Path)) (edges : List (EdgeValue Symbol Guard))
+    (before : SharedState width Symbol Guard) (results : List (EdgeValue Symbol Guard)) : Prop :=
+  SourceEqualityEdits.Valid (.editBelow entries) → Allowed record (.editBelow entries) → Ready emptyGuard conjoin clear top record originals base before →
+    Edges before.native.machine.heap edges → ClosedEdges edges → ∀ term,
+      ((∃ edge ∈ results, EdgeMeaning (meaning holds ambient) holds edge term) → ∃ edge ∈ edges, EdgeMeaning (meaning holds ambient) holds edge term) ∧
+      (All₂ (meaning holds ambient) originals rootTerms → EqualityNormalize.ClassSat root record.paths →
+        Matches condition (.editBelow entries) term → (∃ edge ∈ edges, EdgeMeaning (meaning holds ambient) holds edge term) →
+        ∃ edge ∈ results, EdgeMeaning (meaning holds ambient) holds edge term)
+
+local notation "NodeLaw" => NodeBounds (width := width) emptyGuard conjoin clear top record originals base holds ambient root rootTerms
+local notation "ChildrenLaw" => ChildrenBounds (width := width) emptyGuard conjoin clear top record originals base holds ambient root rootTerms
+local notation "RowsLaw" => RowsBounds (width := width) emptyGuard conjoin clear top record originals base holds ambient root rootTerms
+
+variable (coherent : SourceEqualityClassOrder.Coherent record) (active : EqualityNormalize.Nontrivial record.paths)
+variable (clearTrue : ∀ guard, clear guard = true → ∀ term, holds guard term = true) (topTrue : ∀ term, holds top term = true)
+variable (conjoined : ∀ first second term, holds (conjoin first second) term = (holds first term && holds second term))
+variable (rootSame : root = .node rootSymbol rootTerms)
+
+include known originalClosed coherent active clearTrue topTrue conjoined rootSymbol rootTerms rootSame
+
+private theorem bounds :
+    (∀ edits (value : Value Symbol Guard) before result after,
+      EditNode emptyGuard conjoin clear top record originals edits value before result after → NodeLaw edits value before result) ∧
+    (∀ entries index (values : List (Value Symbol Guard)) before results after,
+      EditChildren emptyGuard conjoin clear top record originals entries index values before results after → ChildrenLaw entries index values before results) ∧
+    (∀ entries (edges : List (EdgeValue Symbol Guard)) before results after,
+      EditRows emptyGuard conjoin clear top record originals entries edges before results after → RowsLaw entries edges before results) := by
+  have leafCase : ∀ {path value before result after},
+      SourceEqualitySharedTargetLeaf.Leaf emptyGuard conjoin clear top record originals path value before result after → NodeLaw (.editAt path) value before result := by
+    intro path value before result after trace _ allowed ready available closed term
+    have member : path ∈ record.paths := by simpa only [Allowed, All] using allowed
+    refine ⟨trace.narrows ready known originalClosed member available closed holds ambient conjoined term, ?_⟩
+    intro accepted satisfied matched original
+    exact trace.keeps_term ready known originalClosed member available closed coherent active holds ambient clearTrue topTrue conjoined
+      rootSymbol rootTerms term accepted (by simpa only [rootSame] using satisfied) (by simpa only [Matches, rootSame] using matched) original
+  have emptyCase : ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {state},
+      NodeLaw (.editBelow entries) (.empty : Value Symbol Guard) state .empty := by
+    intro entries state _ _ _ _ _ term
+    exact ⟨id, fun _ _ _ accepted => accepted⟩
+  have ordinaryCase : ∀ {entries edges before rebuilt middle result heap entry depth free},
+      EditRows emptyGuard conjoin clear top record originals entries edges before rebuilt middle → run (makeNode rebuilt) middle.native.machine.heap = (result, heap) →
+      RowsLaw entries edges before rebuilt → NodeLaw (.editBelow entries) (.node entry edges depth free) before result := by
+    intro entries edges before rebuilt middle result heap entry depth free trace rebuiltEq rowsIH valid allowed ready available closed term
+    have facts := ready.native.semantic.ready.semantic.1.normal.facts
+    have resident : Edges before.native.machine.heap edges := InternedEdgeResidency.resident_edges _ facts.linked _ available.resident
+    have closedEdges := MergedColdReaderClosed.node_children_closed _ facts entry edges depth free available closed
+    have checked := SourceEqualitySharedEditEffects.rows emptyGuard conjoin clear top record originals base known originalClosed trace allowed ready resident closedEdges
+    have actual := MergedColdInterpretation.makeNode_exact middle.native.machine.heap checked.1.native.semantic.ready.semantic.1.normal.facts
+      (meaning holds ambient) rebuilt checked.2.2.1 holds (InternedGuardedLanguage.laws holds ambient) term
+    have readback : meaning holds ambient result term ↔ ∃ edge ∈ rebuilt, EdgeMeaning (meaning holds ambient) holds edge term := by simpa only [rebuiltEq] using actual
+    have rows := rowsIH valid allowed ready resident closedEdges term
+    rw [readback, (InternedGuardedLanguage.laws holds ambient).node entry edges depth free term]
+    exact rows
+  have recursiveCase : ∀ {entries original before exposed heap result after},
+      SourceEqualityRequiredGraph.Recursive original → SourceEqualityRequiredHead.Head original before.native.machine.heap exposed heap →
+      EditNode emptyGuard conjoin clear top record originals (.editBelow entries) exposed (advanceHeap before heap) result after →
+      NodeLaw (.editBelow entries) exposed (advanceHeap before heap) result → NodeLaw (.editBelow entries) original before result := by
+    intro entries original before exposed heap result after _ trace _ ih valid allowed ready available closed term
+    have nextSemantic := SourceEqualityRequiredSemanticCache.head trace ready.native.semantic available closed
+    have checked := trace.verified ready.native.semantic.ready available closed
+    have body := ih valid allowed (ready.heap heap checked.1 nextSemantic) checked.2.1 checked.2.2.1 term
+    rw [← SourceEqualityRequiredHeadLanguage.head_exact trace ready.native.semantic available closed holds ambient term]
+    exact body
+  have nilChildren : ∀ {entries index state}, ChildrenLaw entries index ([] : List (Value Symbol Guard)) state [] := by
+    intro entries index state _ _ _ _ _ terms
+    exact ⟨id, fun _ _ _ accepted => accepted⟩
+  have unselectedCase : ∀ {entries values before results after value} (index : Nat),
+      SourceEqualityNeededMap.lookup (index : Int) entries = none →
+      EditChildren emptyGuard conjoin clear top record originals entries (index + 1) values before results after → ChildrenLaw entries (index + 1) values before results →
+      ChildrenLaw entries index (value :: values) before (value :: results) := by
+    intro entries values before results after value index absent _ restIH valid allowed ready available closed terms
+    have tail := restIH valid allowed ready (fun child member => available child (List.mem_cons_of_mem _ member))
+      (fun child member => closed child (List.mem_cons_of_mem _ member))
+    cases terms with
+    | nil =>
+        constructor
+        · intro impossible; cases impossible
+        · intro _ _ _ impossible; cases impossible
+    | cons term terms =>
+        constructor
+        · intro run
+          cases run with
+          | cons first rest => exact .cons first ((tail terms).1 rest)
+        · intro accepted satisfied matched run
+          cases run with
+          | cons first rest => exact .cons first ((tail terms).2 accepted satisfied matched.2 rest)
+  have selectedCase : ∀ {entries edits value before result middle values results after} (index : Nat),
+      SourceEqualityNeededMap.lookup (index : Int) entries = some edits →
+      EditNode emptyGuard conjoin clear top record originals edits value before result middle → EditChildren emptyGuard conjoin clear top record originals entries (index + 1) values middle results after →
+      NodeLaw edits value before result → ChildrenLaw entries (index + 1) values middle results → ChildrenLaw entries index (value :: values) before (result :: results) := by
+    intro entries edits value before result middle values results after index found first _ firstIH restIH valid allowed ready available closed terms
+    have member := SourceEqualityNeededMap.lookup_mem _ entries edits found
+    have childValid : SourceEqualityEdits.Valid edits := by rw [SourceEqualityEdits.Valid] at valid; exact valid.2 _ _ member
+    have childAllowed : Allowed record edits := by rw [Allowed, All] at allowed; exact allowed _ _ member
+    have firstAvailable := available value List.mem_cons_self
+    have firstClosed := closed value List.mem_cons_self
+    have checked := SourceEqualitySharedEditEffects.node emptyGuard conjoin clear top record originals base known originalClosed first childAllowed ready firstAvailable firstClosed
+    have tail := restIH valid allowed checked.1
+      (fun child member => checked.2.1.available child (available child (List.mem_cons_of_mem _ member)))
+      (fun child member => closed child (List.mem_cons_of_mem _ member))
+    have head := firstIH childValid childAllowed ready firstAvailable firstClosed
+    cases terms with
+    | nil =>
+        constructor
+        · intro impossible; cases impossible
+        · intro _ _ _ impossible; cases impossible
+    | cons term terms =>
+        constructor
+        · intro run
+          cases run with
+          | cons initial rest => exact .cons ((head term).1 initial) ((tail terms).1 rest)
+        · intro accepted satisfied matched run
+          cases run with
+          | cons initial rest => exact .cons ((head term).2 accepted satisfied (matched.1 edits found) initial) ((tail terms).2 accepted satisfied matched.2 rest)
+  have nilRows : ∀ {entries state}, RowsLaw entries ([] : List (EdgeValue Symbol Guard)) state [] := by
+    intro entries state _ _ _ _ _ term
+    exact ⟨id, fun _ _ _ accepted => accepted⟩
+  have consCase : ∀ {entries before values middle result heap edges results after edge},
+      EditChildren emptyGuard conjoin clear top record originals entries 0 edge.children before values middle →
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.native.machine.heap = (result, heap) →
+      EditRows emptyGuard conjoin clear top record originals entries edges (advanceHeap middle heap) results after → ChildrenLaw entries 0 edge.children before values →
+      RowsLaw entries edges (advanceHeap middle heap) results → RowsLaw entries (edge :: edges) before (result :: results) := by
+    intro entries before values middle result heap edges results after edge childTrace rebuilt _ childIH restIH valid allowed ready resident closed term
+    have facts := ready.native.semantic.ready.semantic.1.normal.facts
+    have available : Values before.native.machine.heap edge.children := facts.cached.edges edge.entry.key edge (resident edge List.mem_cons_self)
+    have checked := SourceEqualitySharedEditEffects.children emptyGuard conjoin clear top record originals base known originalClosed childTrace allowed ready available (closed edge List.mem_cons_self)
+    have edgeSemantic := SourceEqualityRequiredSemanticCache.edge edge.entry.key.symbol edge.entry.key.constraint values middle.native.machine.heap checked.1.native.semantic checked.2.2.1
+    have edgeChecked := SourceEqualityRequiredCache.edge edge.entry.key.symbol edge.entry.key.constraint values middle.native.machine.heap checked.1.native.semantic.ready checked.2.2.1
+    have heapSemantic : SemanticReady heap := by simpa only [rebuilt] using edgeSemantic
+    have edgeKeeps : Keeps middle.native.machine.heap heap := by simpa only [rebuilt] using edgeChecked.1
+    have firstKeeps := checked.2.1.trans edgeKeeps
+    have tail := restIH valid allowed (checked.1.heap heap edgeKeeps heapSemantic)
+      (fun original member => InternedEdgeResidency.edge_grows before.native.machine.heap heap firstKeeps.growth original (resident original (List.mem_cons_of_mem _ member)))
+      (fun original member => closed original (List.mem_cons_of_mem _ member)) term
+    have child := childIH valid allowed ready available (closed edge List.mem_cons_self)
+    have fields := MergedPhysicalGroupEdges.makeEdge_fields middle.native.machine.heap checked.1.native.semantic.ready.semantic.1.normal.facts
+      edge.entry.key.symbol edge.entry.key.constraint values checked.2.2.1
+    have actualFields : result.entry.key.symbol = edge.entry.key.symbol ∧ result.entry.key.constraint = edge.entry.key.constraint ∧ result.children = values := by simpa only [rebuilt] using fields
+    have ordered := (show SourceEqualityNeededMap.Ascending entries ∧ _ from (by simpa only [SourceEqualityEdits.Valid] using valid)).1
+    have head : (EdgeMeaning (meaning holds ambient) holds result term → EdgeMeaning (meaning holds ambient) holds edge term) ∧
+        (All₂ (meaning holds ambient) originals rootTerms → EqualityNormalize.ClassSat root record.paths → Matches condition (.editBelow entries) term → EdgeMeaning (meaning holds ambient) holds edge term → EdgeMeaning (meaning holds ambient) holds result term) := by
+      unfold EdgeMeaning
+      rw [actualFields.1, actualFields.2.1, actualFields.2.2]
+      constructor
+      · rintro ⟨terms, shape, runs, guard⟩
+        exact ⟨terms, shape, (child terms).1 runs, guard⟩
+      · rintro accepted satisfied matched ⟨terms, shape, runs, guard⟩
+        have required := (forest_zero condition entries ordered edge.entry.key.symbol terms).mpr (by simpa only [shape] using matched)
+        exact ⟨terms, shape, (child terms).2 accepted satisfied required runs, guard⟩
+    constructor
+    · rintro ⟨output, member, run⟩
+      rcases List.mem_cons.mp member with rfl | member
+      · exact ⟨edge, List.mem_cons_self, head.1 run⟩
+      · obtain ⟨original, member, run⟩ := tail.1 ⟨output, member, run⟩
+        exact ⟨original, List.mem_cons_of_mem _ member, run⟩
+    · rintro accepted satisfied matched ⟨original, member, run⟩
+      rcases List.mem_cons.mp member with rfl | member
+      · exact ⟨result, List.mem_cons_self, head.2 accepted satisfied matched run⟩
+      · obtain ⟨output, member, run⟩ := tail.2 accepted satisfied matched ⟨original, member, run⟩
+        exact ⟨output, List.mem_cons_of_mem _ member, run⟩
+  refine ⟨?_, ?_, ?_⟩
+  · intro edits value before result after trace
+    exact EditNode.rec (motive_1 := fun edits value before result _ _ => NodeLaw edits value before result)
+      (motive_2 := fun entries index values before results _ _ => ChildrenLaw entries index values before results)
+      (motive_3 := fun entries edges before results _ _ => RowsLaw entries edges before results)
+      leafCase emptyCase ordinaryCase recursiveCase (fun {_ _ _} => nilChildren) unselectedCase selectedCase (fun {_ _} => nilRows) consCase trace
+  · intro entries index values before results after trace
+    exact EditChildren.rec (motive_1 := fun edits value before result _ _ => NodeLaw edits value before result)
+      (motive_2 := fun entries index values before results _ _ => ChildrenLaw entries index values before results)
+      (motive_3 := fun entries edges before results _ _ => RowsLaw entries edges before results)
+      leafCase emptyCase ordinaryCase recursiveCase (fun {_ _ _} => nilChildren) unselectedCase selectedCase (fun {_ _} => nilRows) consCase trace
+  · intro entries edges before results after trace
+    exact EditRows.rec (motive_1 := fun edits value before result _ _ => NodeLaw edits value before result)
+      (motive_2 := fun entries index values before results _ _ => ChildrenLaw entries index values before results)
+      (motive_3 := fun entries edges before results _ _ => RowsLaw entries edges before results)
+      leafCase emptyCase ordinaryCase recursiveCase (fun {_ _ _} => nilChildren) unselectedCase selectedCase (fun {_ _} => nilRows) consCase trace
+
+/-- Node traversal derives language inclusion and retention under original path readback. -/
+theorem node {edits value before result after} (trace : EditNode (width := width) emptyGuard conjoin clear top record originals edits value before result after) :
+    NodeLaw edits value before result :=
+  (bounds emptyGuard conjoin clear top record originals base known originalClosed holds ambient root rootSymbol rootTerms coherent active clearTrue topTrue conjoined rootSame).1 _ _ _ _ _ trace
+
+/-- Child traversal derives ordered forest inclusion and retention under original path readback. -/
+theorem children {entries index values before results after}
+    (trace : EditChildren (width := width) emptyGuard conjoin clear top record originals entries index values before results after) : ChildrenLaw entries index values before results :=
+  (bounds emptyGuard conjoin clear top record originals base known originalClosed holds ambient root rootSymbol rootTerms coherent active clearTrue topTrue conjoined rootSame).2.1 _ _ _ _ _ _ trace
+
+/-- Source child-list edits retain ordered language bounds and ignore root callbacks. -/
+theorem list {edits values before results after}
+    (trace : EditList (width := width) emptyGuard conjoin clear top record originals edits values before results after)
+    (valid : SourceEqualityEdits.Valid edits) (allowed : Allowed record edits) (ready : Ready emptyGuard conjoin clear top record originals base before)
+    (available : Values before.native.machine.heap values) (closed : ClosedValues values) :
+    ∀ terms, (All₂ (meaning holds ambient) results terms → All₂ (meaning holds ambient) values terms) ∧
+      (All₂ (meaning holds ambient) originals rootTerms → EqualityNormalize.ClassSat root record.paths →
+        SourceEqualityEditAPI.ListCondition condition edits terms → All₂ (meaning holds ambient) values terms → All₂ (meaning holds ambient) results terms) := by
+  cases trace with
+  | leaf => exact fun _ => ⟨id, fun _ _ _ accepted => accepted⟩
+  | children trace =>
+      exact children emptyGuard conjoin clear top record originals base known originalClosed holds ambient root rootSymbol rootTerms
+        coherent active clearTrue topTrue conjoined rootSame trace valid allowed ready available closed
+
+end MicroCFTA.SourceEqualitySharedEditLanguage
