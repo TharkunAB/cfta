@@ -1,6 +1,60 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 00:20 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 00:45 CEST (Europe/Stockholm)**.
+
+## Current recursive memo-aware merge completion
+
+Source main remains `a4dd678f`, merged at `1a421c7d`. Proof commits are
+`72df670f`, `85c424ea`, `dda75cf4`, and `4514b014`. Full library scope stays
+active. Earlier sections retain their historical proof and source scopes.
+
+The new mutual instruction and call graphs use literal result-cache requests
+for every recursive small child and retained ordinary union. Hits skip the
+body. Misses execute the memo-aware body and reread the first stored winner.
+Actual induction derives physical effects, available results, conditional
+closedness, independent language coverage, and ordered global memo receipts.
+Warm result tables require initial stored-record and coverage invariants.
+Empty result tables derive both invariants and actual producer histories.
+
+Finite completion uses strict ordinary-height descent of request inputs
+before lookup. Cached result height needs no bound. Each actual selection
+has its own finite comparison bound. No recursive callback completion law,
+future validity, old uncached producer, or whole-forest closedness is supplied.
+`SourceCurrentMemoMergeComplete.source_cold` fixes the current plain/Top
+guards. One actual finite call supplies the language result, physical state,
+stored original producer, and coherent final three-table receipt. The initial
+physical heap can be warm. Guard interpretation laws remain explicit.
+
+The body uses canonical source groups. Literal HashMap outer iteration and
+allocation order still need an adapter. Completed sequential calls do not
+prove lazy thunk publication, pending ancestor forcing, concurrency, or GHC
+correspondence. Existing shared targets and class passes still use the older
+body boundary. Their receipts must be connected to the new requests.
+
+The full pinned Lean build passes 2,167 jobs and 53,797 dependency checks.
+Only the three permitted foundations and the existing unused-input warning
+occur. Nine new modules and one additive Audit import preserve all earlier
+non-Audit proof files. Haskell and CI are unchanged. The strict Nix build,
+six suites with 743 examples plus golden, Fourmolu, and Cabal-gild results
+from the source refresh remain valid and were not repeated.
+
+Read `lean/notes-current-memo-aware-merge.md`. Continue publication/forcing
+and memo-aware target integration, general Scan/outer completion, allocation
+history and checked native transfer, machine bounds, import trim/DFS/SCC,
+whole enumeration, waiting counts, templates, typed refinements, heterogeneous
+generators, decision-model, curried/GHC adequacy, state search, normal forms,
+and all distinct Sized contracts. Keep the optimized interned core and all
+older constructor and equality work.
+
+Start: `/tmp/mcfta-class-language-checkpoint-20261016-0019/` (2,860 files).
+Closing: `/tmp/mcfta-memo-aware-checkpoint-20261016-0045/` (2,870 files).
+Script: `/tmp/mcfta-preserve-memo-aware-20261016.py`.
+Evidence: `/tmp/mcfta-memo-aware-*`, `/tmp/mcfta-memo-merge-*`, and
+`/tmp/mcfta-current-memo-merge-*`. All earlier proofs, repros, repairs,
+13 prior external drafts, stashes, and other worktrees remain. One new marked
+optional proof draft is also retained. The last weekly allowance was 81%;
+that value is stale. Stop owned work at 1% or less. No board posts or
+deployments. Push verified formalize checkpoints. The full goal stays active.
 
 ## Current class-pass language, physical heaps, and actual global memos
 
