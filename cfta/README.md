@@ -1100,11 +1100,14 @@ many threads raced for it. Each hash-consing table is split into 256 such
 maps by the high bits of the key's hash, so each map is a shallow tree and
 writers to different maps do not retry each other's updates. Node
 identities come from one atomic counter, and edge identities from another, so
-a single thread draws them in the order that it interns values. Nodes order their edges by identity, so in a single-threaded
-program enumeration and sampling do not depend on scheduling. When several
-threads intern at the same time, their identities interleave, and edge order
-can change from run to run. The generator ranks an imported automaton by
-arity and symbol, so its ranks do not depend on edge order. The default allocation area makes parallel garbage
+a single thread draws them in the order that it interns values. Nodes order
+their edges by identity. When several threads intern at the same time, their
+identities interleave, and edge order can change from run to run. The
+enumerator does not use this order: it lists the edges of a node by arity,
+symbol, the canonical classes of their children, and their constraint, so its
+order does not depend on scheduling or on the automata that the process built
+before. The generator ranks an imported automaton by arity and symbol, so its
+ranks do not depend on edge order either. The default allocation area makes parallel garbage
 collection limit the speedup; with `+RTS -A64m`, eight capabilities built different
 automata about four times as fast as one. Threads that build the same
 structures at the same time wait for each other's unfinished values, and in a

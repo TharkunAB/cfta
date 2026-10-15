@@ -34,6 +34,7 @@ import Data.CFTA.Enumeration (
     expandPartialTermFrag,
     noExpansionPreference,
     runs,
+    runsBy,
     terms,
     termsPruneWith,
     truncatedTerms,
@@ -108,6 +109,16 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
                     (depth, Set.fromList [term | partial <- truncatedTerms bounded, Just term <- [traverse concrete partial]])
                         `shouldBe` (depth, Set.fromList expected)
                     (depth, Set.fromList [term | (term, []) <- runs "Mu" bounded]) `shouldBe` (depth, Set.fromList expected)
+
+    it "list with weights on the edges the runs that runs lists, in another order" $
+        -- The weights put more children and later symbols first, against the
+        -- canonical order.
+        property $
+            forAll automaton $ \explicit ->
+                forM_ [0 .. deepest explicit] $ \depth -> do
+                    let bounded = Interned.boundDepth depth (Interned.fromFTA explicit)
+                        weight edge = fromIntegral (100 * length (Interned.edgeChildren edge) + sum (map fromEnum (Interned.edgeSymbol edge)))
+                    (depth, sort (map fst (runsBy weight "Mu" bounded))) `shouldBe` (depth, sort (map fst (runs "Mu" bounded)))
 
     it "prune with an oracle as filtering the terms by the oracle does, in either expansion order" $
         -- The oracle rejects every fragment that holds a "b". A fragment only
