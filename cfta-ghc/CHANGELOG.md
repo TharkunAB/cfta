@@ -25,7 +25,11 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   candidate is specialized then. With `False`, the types are first-order. With `optionOnlyDefaulted` too, such a variable that a
   program does not determine takes only its default, the list type, as
   under `ExtendedDefaultRules`, and the check of a complete program has
-  those rules, so `length (pure x)` fits.
+  those rules, so `length (pure x)` fits. With `optionTypeDomains` too, a
+  bound type variable of kind `Type` with classes that the instances decide
+  (`decides`) ranges over the types in scope at which each of those classes
+  can have an instance, so `maximum` does not have a rigid goal `a` without
+  a given `Ord a`.
 - `Data.CFTA.GHC.Session`: a GHC session for a program, with the imports in
   scope as in GHCi. `withSession` and `withSessionOptions` start it, with
   more packages by name or identifier, more package databases, more flags,

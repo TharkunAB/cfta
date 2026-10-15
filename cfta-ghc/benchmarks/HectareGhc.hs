@@ -38,7 +38,8 @@ standard error, with the seconds and the size. The children search with
 Hectare's curried types; @HECTARE_GHC_FIRST_ORDER@ makes them search with
 its first-order types ('optionCurried'), and @HECTARE_GHC_DEFAULTED@ with
 only the default of a type variable that a program does not determine
-('optionOnlyDefaulted'). Next to
+('optionOnlyDefaulted'). @HECTARE_GHC_TYPE_DOMAINS@ gives a type variable
+of kind @Type@ the domain of its classes ('optionTypeDomains'). Next to
 the Hoogle+ queries, the parent takes the names of the differential queries
 ('differential'), where the erasure loses information.
 
@@ -296,6 +297,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
             tracing <- isJust <$> lookupEnv "HECTARE_GHC_TRACE"
             firstOrder <- isJust <$> lookupEnv "HECTARE_GHC_FIRST_ORDER"
             defaulted <- isJust <$> lookupEnv "HECTARE_GHC_DEFAULTED"
+            typeDomains <- isJust <$> lookupEnv "HECTARE_GHC_TYPE_DOMAINS"
             -- The walk stops at the time limit; this limit is for the rest.
             outcome <- try . timeout ((seconds + 30) * 1000000) $ withSession (importLines rung) $ \session -> do
                 candidates <- candidatesOf session (rungModules rung)
@@ -312,6 +314,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                             , optionTrace = if tracing then Just trace else Nothing
                             , optionCurried = not firstOrder
                             , optionOnlyDefaulted = defaulted
+                            , optionTypeDomains = typeDomains
                             }
                     trace size program = do
                         now <- getMonotonicTime

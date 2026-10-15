@@ -28,6 +28,13 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   the program ('Data.CFTA.Gen.Synthesis.OnlyDefault'). The check of a
   complete program has @ExtendedDefaultRules@, as GHCi does, so
   @length (pure x)@ fits.
+* With 'optionTypeDomains' too, a bound type variable of kind @Type@ with
+  classes that the instances decide ('decides'), as the @a@ of @maximum@,
+  ranges over the types of kind @Type@ in scope at which an instance of
+  each of those classes can hold: the type constructors of the candidates'
+  types and of the query, the function type, and a rigid variable of the
+  query that an instance matches. So @maximum@ does not have a rigid goal
+  @a@ without a given @Ord a@.
 * Each program is checked in preorder, one leaf at a time
   ("Data.CFTA.GHC.Internal.Check"), as a refinement hole fit, with the
   parts of 'GHC.Tc.Errors.Hole.tcCheckHoleFit': 'tcSubTypeSigma' at the
@@ -96,7 +103,7 @@ import Control.Applicative ((<|>))
 import Control.Monad (forM)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
-import Data.List (nub)
+import Data.List (nub, sort)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, isJust, mapMaybe)
@@ -105,9 +112,19 @@ import qualified Data.Text as Text
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 
-import Data.CFTA.GHC.Erase (anyResult, curriedClasses, erase, eraseCurried, eraseHead, higherKinded, typeHeads)
+import Data.CFTA.GHC.Erase (
+    anyResult,
+    curriedClasses,
+    erase,
+    eraseCurried,
+    eraseHead,
+    higherKinded,
+    typeClasses,
+    typeHeads,
+ )
 import Data.CFTA.GHC.Internal.Check
 import Data.CFTA.Gen.Synthesis (Defaulting (..), Encoding (..), Program (..))
+import qualified Data.CFTA.Gen.Synthesis as Hectare
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
     Erased (..),
@@ -123,12 +140,28 @@ import Data.CFTA.Gen.Synthesis.Walk (
  )
 import qualified Data.CFTA.Gen.Synthesis.Walk as Walk
 import GHC.Builtin.Names (eqClassName, foldableClassName, ordClassName, showClassName, traversableClassName)
-import GHC.Builtin.Types (listTyCon)
+import GHC.Builtin.Types (liftedTypeKind, listTyCon)
+import GHC.Builtin.Types.Prim (alphaTy, betaTy)
 import GHC.Core.Class (className)
 import GHC.Core.DataCon (dataConNonlinearType)
+import GHC.Core.InstEnv (lookupInstEnv)
 import GHC.Core.Predicate (mkClassPred)
+import GHC.Core.TyCo.Compare (eqType)
 import GHC.Core.TyCo.FVs (tyCoVarsOfType, tyCoVarsOfTypesList)
-import GHC.Core.Type (Type, getTyVar_maybe, splitAppTys, substTyWith, tyConAppTyCon_maybe)
+import GHC.Core.TyCon (isAlgTyCon, isClassTyCon, tyConResKind, tyConTyVars)
+import GHC.Core.Type (
+    Type,
+    expandTypeSynonyms,
+    getTyVar_maybe,
+    mkTyConApp,
+    mkTyVarTy,
+    mkTyVarTys,
+    mkVisFunTyMany,
+    splitAppTys,
+    substTyWith,
+    tyConAppTyCon_maybe,
+    tyConsOfType,
+ )
 import GHC.Data.Bag (bagToList, emptyBag)
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
 import GHC.Tc.Types.Constraint (Implication (..), ctEvPred)
@@ -139,7 +172,8 @@ import GHC.Tc.Utils.TcMType (newImplication, newTcEvBinds)
 import GHC.Tc.Utils.TcType (TcLevel, TcTyVar, mkSpecSigmaTy, tcSplitNestedSigmaTys)
 import GHC.Types.Id (Id, idType, isDataConWorkId_maybe, isDataConWrapId_maybe)
 import GHC.Types.Name (getOccString)
-import GHC.Types.Var (EvVar, isTyVar)
+import GHC.Types.Unique.Set (nonDetEltsUniqSet, unionManyUniqSets)
+import GHC.Types.Var (EvVar, isTyVar, tyVarKind)
 import GHC.Types.Var.Set (elemVarSet)
 
 {- | A hole under one implication with the given skolems and givens, at the
@@ -219,6 +253,11 @@ data Options = Options
     does not determine takes only its default, the list type, and the check
     has @ExtendedDefaultRules@.
     -}
+    , optionTypeDomains :: Bool
+    {- ^ With 'optionCurried': a variable of kind @Type@ with classes that
+    the instances decide ranges over the types of the scope at which an
+    instance of each of those classes can hold.
+    -}
     }
 
 -- | Programs of up to five leaves, the first ten fits, no other limit, with Hectare's curried types.
@@ -234,6 +273,7 @@ defaultOptions =
         , optionTrace = Nothing
         , optionCurried = True
         , optionOnlyDefaulted = False
+        , optionTypeDomains = False
         }
 
 {- | Hectare's pruning rule of the Hoogle+ library, with GHC's names, for
@@ -326,14 +366,20 @@ figures of the search.
 streamFits :: Options -> TypedHole -> [Candidate] -> Type -> (Fit -> TcM Bool) -> TcM Statistics
 streamFits options hole candidates goal accept = do
     environment <- (\e -> e{environmentExtendedDefaults = defaulted}) <$> newEnvironment hole
+    instances <- tcGetInstEnvs
     begin <- liftIO getMonotonicTimeNSec
     let deadline = (\seconds -> begin + round (seconds * 1e9)) <$> optionSeconds options
-    erased <- concat <$> mapM (erasures environment) candidates
-    encoding <- if optionCurried options then Curried defaulting <$> domains environment else pure FirstOrder
+        -- The classes that the domains of the variables of kind Type follow.
+        decided cls = optionTypeDomains options && decides environment instances cls
+    erased <- concat <$> mapM (erasures environment decided) candidates
+    let encoding
+            | optionCurried options =
+                Curried defaulting (domains environment instances <> typeDomains environment instances decided)
+            | otherwise = FirstOrder
     -- The time of the checks of the fits' parts, which are checks too.
     ignoring <- liftIO (newIORef 0)
     let statistics progress = statisticsOf progress <$> liftIO (readIORef ignoring) <*> readCounters environment
-    case query erased of
+    case query decided erased of
         Just erasedGoal -> do
             ignoredLeaf <- rigidLeaf environment ignored
             let start = startWalker environment (map candidateType candidates) goal
@@ -384,8 +430,8 @@ streamFits options hole candidates goal accept = do
     -- space, which no Haskell name has. The curried encoding keeps the
     -- variables that the specializations replace, so there a candidate has
     -- its erased type or none.
-    eraseFor = if optionCurried options then eraseCurried else erase
-    erasures environment candidate = case eraseFor rigid (candidateType candidate) of
+    eraseFor decided = if optionCurried options then eraseCurried decided else erase
+    erasures environment decided candidate = case eraseFor decided rigid (candidateType candidate) of
         Just typ -> pure [(candidate, candidateName candidate, typ) | keep candidate typ]
         Nothing | optionCurried options -> pure []
         Nothing -> do
@@ -414,8 +460,7 @@ streamFits options hole candidates goal accept = do
     -- kind * -> * of every candidate's type and of the query at which an
     -- instance of each of its classes can hold. A head with a bound type
     -- variable (f in the type of fmap) is not a head here.
-    domains environment = do
-        instances <- tcGetInstEnvs
+    domains environment instances =
         let heads =
                 [ head'
                 | head' <- typeHeads (goal : relevant <> map (body . candidateType) candidates)
@@ -423,7 +468,38 @@ streamFits options hole candidates goal accept = do
                 , maybe True (isJust . rigid) (getTyVar_maybe (fst (splitAppTys head')))
                 ]
             holds classes head' = all (\cls -> mayHold environment instances (mkClassPred cls [head'])) classes
-        pure (fmap (\classes -> nub (mapMaybe (eraseHead rigid) (filter (holds classes) heads))) curriedKeys)
+         in fmap (\classes -> nub (mapMaybe (eraseHead rigid) (filter (holds classes) heads))) curriedKeys
+    -- The domains of the variables of kind Type: for each key of decided
+    -- classes ('typeClasses'), the types of kind Type at which an instance
+    -- of each class can hold. These are the type constructors of every
+    -- candidate's type and of the query, each applied to its own type
+    -- variables, the function type, and the rigid variables. A rigid
+    -- variable has a class only by an instance that matches it, as no given
+    -- provides a decided class.
+    typeDomains environment instances decided =
+        let keys = Map.fromList (concatMap (typeClasses decided . candidateType) candidates)
+            scope = goal : relevant <> map (body . candidateType) candidates
+            constructors =
+                [ mkTyConApp constructor (mkTyVarTys (tyConTyVars constructor))
+                | constructor <- nonDetEltsUniqSet (unionManyUniqSets (map (tyConsOfType . expandTypeSynonyms) scope))
+                , isAlgTyCon constructor
+                , not (isClassTyCon constructor)
+                , all ((`eqType` liftedTypeKind) . tyVarKind) (tyConTyVars constructor)
+                , tyConResKind constructor `eqType` liftedTypeKind
+                ]
+            function = mkVisFunTyMany alphaTy betaTy
+            holds classes typ = all (\cls -> mayHold environment instances (mkClassPred cls [typ])) classes
+            matches classes typ = all (\cls -> let (found, _, _) = lookupInstEnv False instances cls [typ] in not (null found)) classes
+            types classes =
+                sort (mapMaybe (eraseHead rigid) (filter (holds classes) constructors))
+                    <> [Hectare.TFun (Hectare.TVar "x0") (Hectare.TVar "x1") | holds classes function]
+                    <> [ Hectare.TCons name []
+                       | variable <- free
+                       , tyVarKind variable `eqType` liftedTypeKind
+                       , matches classes (mkTyVarTy variable)
+                       , Just name <- [rigid variable]
+                       ]
+         in fmap types keys
     -- With optionOnlyDefaulted, the keys of the curried variables, each with
     -- whether it defaults to the list type under ExtendedDefaultRules: a
     -- key of an interactive class (of which Foldable and Traversable have
@@ -443,9 +519,9 @@ streamFits options hole candidates goal accept = do
         | (heads, arguments) <- optionAvoid options
         ]
     specializedNames erased text = [name | (candidate, name, _) <- erased, candidateName candidate == text]
-    query erased
+    query decided erased
         | length [() | (candidate, _, _) <- erased, candidateRequired candidate] == length (filter candidateRequired candidates) =
-            eraseFor rigid goal
+            eraseFor decided rigid goal
         | otherwise = Nothing
     leaves :: Map Text Leaf
     leaves =

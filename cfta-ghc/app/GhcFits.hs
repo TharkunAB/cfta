@@ -4,7 +4,7 @@
 modules, each checked in GHC's typechecker ("Data.CFTA.GHC.Fits"): a
 synthesizer with GHC as the oracle.
 
-> ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] SIGNATURE
+> ghc-fits [-m MODULE[=QUALIFIER]]... [-p PACKAGE]... [--size N] [--fits N] [--seconds S] [--first-order | --only-defaulted] [--type-domains] SIGNATURE
 
 For example:
 
@@ -21,7 +21,9 @@ programs have up to five leaves, the search stops after ten fits or ten
 seconds, Hectare's rule 'hectareAvoid' applies, and Hectare's types are
 curried ('optionCurried'). @--first-order@ searches with Hectare's
 first-order types, and @--only-defaulted@ gives a variable that a program
-does not determine only its default ('optionOnlyDefaulted'). The figures of the search go to the standard
+does not determine only its default ('optionOnlyDefaulted'). @--type-domains@
+gives a type variable of kind @Type@ the domain of its classes
+('optionTypeDomains'). The figures of the search go to the standard
 error.
 -}
 module Main (main) where
@@ -64,6 +66,7 @@ readCommand = go (Command [] [] defaultOptions{optionAvoid = hectareAvoid, optio
         "--seconds" : value : rest -> number value >>= \seconds -> go (set command (\options -> options{optionSeconds = Just seconds})) rest
         "--first-order" : rest -> go (set command (\options -> options{optionCurried = False})) rest
         "--only-defaulted" : rest -> go (set command (\options -> options{optionCurried = True, optionOnlyDefaulted = True})) rest
+        "--type-domains" : rest -> go (set command (\options -> options{optionCurried = True, optionTypeDomains = True})) rest
         signature : rest
             | isNothing (commandSignature command) && take 1 signature /= "-" -> go command{commandSignature = Just signature} rest
         other : _ -> Left ("unknown argument " <> other)

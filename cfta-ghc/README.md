@@ -37,8 +37,8 @@ which gives the givens of the search. Each argument of the signature is a
 variable that a program uses once. `-m MODULE=Q` imports a module qualified,
 and `-p PACKAGE` exposes a package. `--size`, `--fits`, and `--seconds`
 bound the search (by default five leaves, ten fits, ten seconds).
-`--first-order` and `--only-defaulted` are the plugin's options
-`first-order` and `only-defaulted` below. The
+`--first-order`, `--only-defaulted`, and `--type-domains` are the plugin's
+options `first-order`, `only-defaulted`, and `type-domains` below. The
 figures of the search go to the standard error. The Hoogle+ ladder of
 `hectare-ghc` is its benchmark.
 
@@ -121,6 +121,7 @@ The options apply to each hole:
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:programs=N` | none | The number of Hectare's programs. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:first-order` | off | Hectare's first-order types (see Limits), in place of its curried types. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:only-defaulted` | off | A variable of kind `* -> *` that a fit does not determine takes only its default, the list, and the check has `ExtendedDefaultRules`. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:type-domains` | off | A variable of kind `Type` with classes that the instances decide takes only the types in scope at which those classes can have instances, so `maximum` does not have a goal `a` without `Ord a`. |
 
 ## How a hole is filled
 
