@@ -9,7 +9,9 @@ The queries have their class constraints restored: an argument
 solution loses its dictionary arguments. The library is a rung of a ladder:
 the Prelude; then also "Data.List", "Data.Maybe", "Data.Either", and
 "Data.Char"; then also "Data.Map", qualified as @Map@. There are no
-dictionary components.
+dictionary components. The Stack Overflow queries have their own rung,
+@so@: the second rung and "Data.Function", for the components that Hectare
+adds for them.
 
 The parent runs each query in a child process with a heap limit and a time
 limit, as Hectare's evaluation does. Each row gives the query, the rung, the
@@ -65,7 +67,7 @@ import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Counters (..))
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), parseProgram, renderProgram, renderType)
-import Data.CFTA.Gen.Synthesis.HooglePlus (Benchmark (..), hooglePlusBenchmarks)
+import Data.CFTA.Gen.Synthesis.HooglePlus (Benchmark (..), hooglePlusBenchmarks, stackOverflowBenchmarks)
 
 main :: IO ()
 main = do
@@ -139,6 +141,8 @@ ghcProgram dictionaries = go
         "Nil" -> "[]"
         "$" -> "($)"
         _
+            -- Hoogle+'s (/=) with an Ord dictionary is GHC's (/=).
+            | Just plain <- Text.stripSuffix "_Ord" name -> ghcName' plain
             | Just inner <- Text.stripPrefix "(" name >>= Text.stripSuffix ")" -> "(" <> unqualified inner <> ")"
             | otherwise -> unqualified name
     unqualified name = case Text.span isAlphaNum name of
@@ -212,9 +216,9 @@ differential =
                 , ghcSize = programSize solution
                 }
 
--- | Every query: the Hoogle+ ones, then the differential ones.
+-- | Every query: the Hoogle+ ones, the Stack Overflow ones, then the differential ones.
 allQueries :: [GhcQuery]
-allQueries = map fromBenchmark hooglePlusBenchmarks <> differential
+allQueries = map fromBenchmark (hooglePlusBenchmarks <> stackOverflowBenchmarks) <> differential
 
 -- | The number of components and arguments of a program.
 programSize :: Program -> Int
@@ -240,7 +244,7 @@ data Rung = Rung
 
 -- | The library ladder.
 ladder :: [Rung]
-ladder = [prelude, base, withMap]
+ladder = [prelude, base, withMap, stackOverflow]
   where
     prelude = Rung "prelude" [Import "Prelude" Nothing]
     base =
@@ -248,6 +252,7 @@ ladder = [prelude, base, withMap]
             "base"
             (rungModules prelude <> [Import name Nothing | name <- ["Data.List", "Data.Maybe", "Data.Either", "Data.Char"]])
     withMap = Rung "map" (rungModules base <> [Import "Data.Map" (Just "Map")])
+    stackOverflow = Rung "so" (rungModules base <> [Import "Data.Function" Nothing])
 
 -- | The import declarations of a rung.
 importLines :: Rung -> [String]
@@ -377,7 +382,8 @@ peakMemory = do
 
 {- | Run each query in a child process with a heap limit and a time limit,
 several at a time, and print the result row of each. With no names, the
-suite is the 45 Hoogle+ queries.
+suite is the 45 Hoogle+ queries, or the 19 Stack Overflow queries on the
+rung @so@.
 -}
 runSuite :: String -> Int -> String -> Int -> [String] -> IO ()
 runSuite rung seconds heap jobs names = do
@@ -385,7 +391,8 @@ runSuite rung seconds heap jobs names = do
     top <- fmap read <$> lookupEnv "HECTARE_GHC_TOP_CORE"
     logs <- lookupEnv "HECTARE_GHC_LOGS"
     forM_ logs $ \directory -> createDirectoryIfMissing True (directory <> "/" <> rung)
-    let queries = if null names then map (ghcName . fromBenchmark) hooglePlusBenchmarks else names
+    let suite = if rung == "so" then stackOverflowBenchmarks else hooglePlusBenchmarks
+        queries = if null names then map (ghcName . fromBenchmark) suite else names
     queue <- newMVar queries
     output <- newMVar ()
     done <- newEmptyMVar
