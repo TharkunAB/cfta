@@ -66,7 +66,14 @@ tree automata of `cfta`, with QuickCheck integration.
   Hoogle+ ladder of `cfta-ghc` falls by 30% to 31% (45% to 46% on the
   queries that time out), with the same results and time. Its `Progress`
   tells how it ended (`progressOutcome`: `Solved`, `Exhausted`, or
-  `OutOfTime`), and its caller says which fits are new (`hookNew`).
+  `OutOfTime`), and its caller says which fits are new (`hookNew`). The trie
+  of dead prefixes is exported (`Dead`).
+- `Data.CFTA.Gen.Synthesis.States`: mode (b), a search over states of a
+  host's own goals, without Hectare and without erasure (`searchStates`). A
+  state is the host's key of a goal, a size, and the query arguments to
+  use; the host gives the refinements of a goal (`Goals`), kept by key and
+  number of children, and the search walks the table in preorder and checks
+  each complete program with the walk's `Checker`.
 - `Data.CFTA.Gen.Synthesis.Hybrid`: Hectare's program spaces with Hegel's
   checks. `synthesizeHybrid` lists the programs of the base types of a
   refinement-typed query size by size, in Hectare's order, in the saturated
