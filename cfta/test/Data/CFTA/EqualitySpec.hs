@@ -485,6 +485,30 @@ spec = do
                         shallowTerms depth reducedWithLeaf `shouldBe` shallowTerms depth withLeaf
                     accepts reducedWithLeaf (Term.Node "p" [leaf, leaf]) `shouldBe` True
 
+        it "decides the emptiness of a class at a constrained recursive node without nested intersections" $ do
+            -- The seed 38593640 of the property "restrict to a template as
+            -- filtering the terms by the template does" gave this input. The
+            -- class 0 = 1 of g ends at the constrained root. Each term of the
+            -- root is a g term whose two children are equal, so its first
+            -- child is a term of 'loop' and of the root, and 'loop' has no g
+            -- term. When the emptiness check intersected the intersections of
+            -- its requirements, each step was deeper in recursive nodes, and
+            -- the reduction used more than 8 GB.
+            let pairs = equalityConstraint $ mkEqConstraints [[path [0, 0], path [0, 1]]]
+                same = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
+                loop r = Mu $ \s -> Node [Edge "b" [], Edge "f" [r], Edge "f" [s]]
+                root = Mu $ \r -> Node [mkEdge "f" [loop r] pairs, mkEdge "g" [loop r, r] same] :: Node Symbol
+            result <- timeout 10000000 $ evaluate $ termsMatching (AnyPrefix [AnyPrefix []]) root
+            case result of
+                Nothing -> expectationFailure "the reduction did not finish"
+                Just reduced -> do
+                    -- The check removes the edge g. The class of f stays
+                    -- unreduced, and the enumeration checks it.
+                    map edgeSymbol (nodeEdges reduced) `shouldBe` ["f"]
+                    forM_ [0 .. 3] $ \depth -> do
+                        terms (boundDepth depth reduced) `shouldBe` []
+                        terms (boundDepth depth root) `shouldBe` []
+
         it "stops when a narrowed child contains its ancestor" $ do
             -- The formalization found this closed input. The class 0 = 1 of
             -- the root ends above the constrained 'Mu' 'constrained', and its

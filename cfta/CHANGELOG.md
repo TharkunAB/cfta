@@ -84,6 +84,19 @@ Before release, the package was called `microcfta`.
   constraints (`reachesConstrainedMu`, now exported), the enumerator runs
   `provablyEmpty` on it, memoized, and ends the branch when it is empty. No
   term is lost, because the branch has none. `terms R` now gives `[]`.
+- Fix `reducePartially` and `termsMatching` using more than 8 GB on an
+  automaton of two states, through the check of the previous entries.
+  `provablyEmpty` intersected the intersections of its requirements. Each
+  such intersection is a new node, deeper in recursive nodes than its
+  operands, and the cost of an intersection grows with that depth. The check
+  now reads conjunctions: sets of nodes that one term must be in, whose edges
+  it reads together. Two conjunctions of the same nodes are one conjunction,
+  so the fixed point closes. On the input that the seed 38593640 of the
+  property "restrict to a template as filtering the terms by the template
+  does" gives, a copy of the check read 11 nodes in 0.6 s, and the
+  intersection for the next node did not end in a minute. The new test of
+  that input, `termsMatching` and `terms` up to the depth 3, takes 12 ms.
+  The answers on the inputs of the previous entries do not change.
 
 Initial release. `cfta` consolidates an ordinary tree automaton engine,
 equality-constrained tree automata, and liquid tree automata into one package
@@ -308,3 +321,7 @@ remains a separate ECTA-only package.
 - The term-search application layer is not part of the library.
 - The `Pretty` class and the path-trie `Ord` instance are gone; `show` the
   constraint, or compare equality classes by their path lists.
+- The Z3 entailment declares the names of a scope once, when it starts a Z3
+  process, and each query declares only its fresh names. A query sends about
+  a third less text, and the Hegel queries take about 8% less time with the
+  same answers.

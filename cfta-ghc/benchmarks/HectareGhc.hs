@@ -64,12 +64,13 @@ module Main (main) where
 import Control.Concurrent (forkIO)
 import Control.Concurrent.MVar (modifyMVar, newEmptyMVar, newMVar, putMVar, takeMVar, withMVar)
 import Control.Exception (AsyncException (HeapOverflow), try)
-import Control.Monad (forM_, replicateM_, when)
+import Control.Monad (forM_, replicateM_, unless, when)
 import Control.Monad.IO.Class (liftIO)
 import Data.Char (isAlphaNum, isUpper)
 import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
-import Data.List (intercalate, isPrefixOf, partition)
-import Data.Maybe (isJust, isNothing)
+import Data.List (elemIndex, intercalate, isPrefixOf, nub, partition, sortOn)
+import qualified Data.Map.Strict as Map
+import Data.Maybe (fromMaybe, isJust, isNothing)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Clock (getMonotonicTime)
@@ -81,19 +82,24 @@ import System.IO (hFlush, hPutStrLn, stderr, stdout)
 import System.Process (readProcessWithExitCode)
 import System.Timeout (timeout)
 import Text.Printf (printf)
+import Text.Read (readMaybe)
 
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Counters (..))
+import Data.CFTA.GHC.Rank (holeState, rankFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), parseProgram, renderProgram, renderType)
 import Data.CFTA.Gen.Synthesis.HooglePlus (Benchmark (..), hooglePlusBenchmarks, stackOverflowBenchmarks)
 import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
+import Decision (bothOrders)
+import Decision.Ollama (Ollama (..), defaultOllama, unload, withOllama)
 
 main :: IO ()
 main = do
     arguments <- getArgs
     case arguments of
         ["--query", name, rung, seconds] -> runQuery name rung (read seconds)
+        "--rank" : file : rest -> rankPools file rest
         [] -> runSuite "prelude" 30 "2G" 2 ["map", "firstKey", "mergeEither"]
         rung : rest -> case rest of
             [] -> runSuite rung 120 "1400M" 1 []
@@ -315,6 +321,12 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
             normalForms <- (/= Just "off") <$> lookupEnv "HECTARE_GHC_NORMAL_FORMS"
             -- The normal forms of programs, built at the first fit.
             normalRef <- newIORef Nothing
+            -- With a pool size, the walk goes past the solution to that many
+            -- fits that use every part, for 'rankPools'; the counts at the
+            -- solution give its rank.
+            pool <- (>>= readMaybe) <$> lookupEnv "HECTARE_GHC_POOL"
+            pooled <- newIORef []
+            solvedAt <- newIORef Nothing
             mode <- maybe (pure (optionMode defaultOptions)) (either fail pure . readMode) =<< lookupEnv "HECTARE_GHC_MODE"
             -- The walk stops at the time limit; this limit is for the rest.
             outcome <- try . timeout ((seconds + 30) * 1000000) $ withSession (importLines rung) $ \session -> do
@@ -364,9 +376,16 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                             known <- readIORef firstFit
                             when (isNothing known) $ writeIORef firstFit (Just fit)
                             modifyIORef' counts (\(all', using) -> (all' + 1, if comesLast fit then using else using + 1))
-                            if isSolution normal (fitProgram fit)
-                                then False <$ writeIORef solved (Just (fitSize fit))
-                                else pure True
+                            let solution = isSolution normal (fitProgram fit)
+                            first <- isNothing <$> readIORef solved
+                            when (solution && first) $ do
+                                writeIORef solved (Just (fitSize fit))
+                                writeIORef solvedAt . Just =<< readIORef counts
+                            case pool of
+                                Nothing -> pure (not solution)
+                                Just most -> do
+                                    unless (comesLast fit) $ modifyIORef' pooled ((fit, solution && first) :)
+                                    (< most) . length <$> readIORef pooled
                 statistics <- case signature of
                     Just typ -> fitsForSignature session options candidates typ (map fst (ghcArguments query)) accept
                     Nothing -> pure Nothing
@@ -390,7 +409,18 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
             (memory, allocated) <- memoryOf
             found <- readIORef firstFit
             size <- readIORef solved
-            (rank, rankUsing) <- readIORef counts
+            (rank, rankUsing) <- maybe id const <$> readIORef solvedAt <*> readIORef counts
+            forM_ pool $ \_ -> do
+                fits <- reverse <$> readIORef pooled
+                let arguments = [(argument, Text.pack (renderType typ)) | (argument, typ) <- ghcArguments query]
+                    state =
+                        holeState
+                            (Just (Text.pack name, Text.pack (signatureOf query), map fst arguments))
+                            (Text.pack (renderType (ghcGoal query)))
+                            arguments
+                    expected = lookup True (zip (map snd fits) [0 :: Int ..])
+                putStrLn
+                    ("pool," <> show (name, Text.unpack state, expected, [(renderProgram (fitProgram fit), fitSize fit) | (fit, _) <- fits]))
             let outcomeText :: String
                 outcomeText = case outcome of
                     Left HeapOverflow -> "oom"
@@ -510,8 +540,70 @@ runSuite rung seconds heap jobs names = do
                                 (ExitFailure 124, []) -> "result," <> query <> "," <> rung <> ",timeout,,,,,,,,,,,,,,,,,,,,,,"
                                 (ExitFailure 251, []) -> "result," <> query <> "," <> rung <> ",oom,,,,,,,,,,,,,,,,,,,,,,"
                                 _ -> "result," <> query <> "," <> rung <> ",crash,,,,,,,,,,,,,,,,,,,,,,"
-                        let extra = [line | line <- lines out, "figures," `isPrefixOf` line]
+                        let extra = [line | line <- lines out, any (`isPrefixOf` line) ["pool,", "figures,"]]
                         withMVar output $ \() -> mapM_ putStrLn (row : extra) >> hFlush stdout
                         loop
         loop
     replicateM_ jobs (takeMVar done)
+
+{- | Order the pools of fits that the children printed (the @pool,@ lines
+of a file) with a decision model on Ollama, one question at a time, for
+each number of options and with the options in one order or in both orders
+('bothOrders'). The arguments are the numbers of options, and
+@--model NAME@ and @--keep-alive DURATION@ for 'Ollama'. The model is
+unloaded before the first question and at the end. Each row gives the
+query, the number of options, the orders, the rank of the expected fit in
+Hectare's order, in the order of size (then text), and in the model's
+order, the seconds of the question, whether the model answered, the score
+of the expected fit, and a digest of the scores (the sum of each score
+times its position), to compare runs. A pool whose expected fit is not
+among the options gives no row.
+-}
+rankPools :: FilePath -> [String] -> IO ()
+rankPools file arguments = do
+    let (settings, sizes) = parse arguments (defaultOllama, [])
+        parse rest (current, counts) = case rest of
+            "--model" : model : more -> parse more (current{ollamaModel = Text.pack model}, counts)
+            "--keep-alive" : keep : more -> parse more (current{ollamaKeepAlive = Text.pack keep}, counts)
+            count : more -> parse more (current, counts <> [read count])
+            [] -> (current, counts)
+    pools <- map (read . drop 5) . filter ("pool," `isPrefixOf`) . lines <$> readFile file
+    _ <- unload settings
+    putStrLn "rank,query,options,orders,hectare,size,model,seconds,answered,score,digest"
+    hFlush stdout
+    withOllama settings $ \model ->
+        forM_ (pools :: [(String, String, Maybe Int, [(String, Int)])]) $ \(name, state, expected, fits) ->
+            -- A pool with fewer fits than a number of options gets that question once.
+            forM_ (nub [min count (length fits) | count <- sizes]) $ \count -> forM_ [False, True] $ \both -> case (expected, drop (fromMaybe 0 expected) fits) of
+                (Just at, (wanted, _) : _) | at < count -> do
+                    let options = take count fits
+                        rankIn ordered = maybe "-" (show . (+ 1)) (elemIndex wanted ordered)
+                    start <- getMonotonicTime
+                    answer <- rankFits (if both then bothOrders model else model) (Text.pack state) (Text.pack . fst) options
+                    end <- getMonotonicTime
+                    let (modelRank, score, digest, answered) = case answer of
+                            Right scored ->
+                                let scores = Map.fromList [(text, value) | ((text, _), value) <- scored]
+                                 in ( rankIn (map (fst . fst) scored)
+                                    , printf "%.6f" (Map.findWithDefault 0 wanted scores) :: String
+                                    , printf
+                                        "%.6f"
+                                        (sum [fromIntegral position * Map.findWithDefault 0 text scores | (position, (text, _)) <- zip [1 :: Int ..] options]) ::
+                                        String
+                                    , "yes" :: String
+                                    )
+                            Left _ -> ("-", "-", "-", "no")
+                    printf
+                        "rank,%s,%d,%s,%d,%s,%s,%.3f,%s,%s,%s\n"
+                        name
+                        (length options)
+                        (if both then "both" else "one" :: String)
+                        (at + 1)
+                        (rankIn (map fst (sortOn (\(text, size) -> (size, text)) options)))
+                        modelRank
+                        (end - start)
+                        answered
+                        score
+                        digest
+                    hFlush stdout
+                _ -> pure ()

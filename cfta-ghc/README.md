@@ -38,8 +38,10 @@ variable that a program uses once. `-m MODULE=Q` imports a module qualified,
 and `-p PACKAGE` exposes a package. `--size`, `--fits`, and `--seconds`
 bound the search (by default five leaves, ten fits, ten seconds).
 `--first-order`, `--only-defaulted`, and `--type-domains` are the plugin's
-options `first-order`, `only-defaulted`, and `type-domains` below. The
-figures of the search go to the standard error. The Hoogle+ ladder of
+options `first-order`, `only-defaulted`, and `type-domains` below, and
+`--rank`, `--rank-pool N`, `--rank-seconds S`, and `--model NAME` its ranking (see "Ranking
+the fits with a decision model"). The figures of the search go to the
+standard error. The Hoogle+ ladder of
 `hectare-ghc` is its benchmark.
 
 ## The hole-fit plugin
@@ -127,6 +129,38 @@ The options apply to each hole:
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:only-defaulted` | off | A variable of kind `* -> *` that a fit does not determine takes only its default, the list, and the check has `ExtendedDefaultRules`. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:type-domains` | off | A variable of kind `Type` with classes that the instances decide takes only the types in scope at which those classes can have instances, so `maximum` does not have a goal `a` without `Ord a`. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:normal-forms=off` | on | Keep the fits with the normal form of an earlier fit. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank` | off | Order the fits with a decision model (below). |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-pool=N` | 50 | The number of fits that the model orders. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-seconds=S` | 60 | The time limit of a question to the model. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-model=NAME` | `nimble-v3:9b-q4_K_M` | The model on the server. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:rank-keep-alive=D` | `0` | How long the server keeps the model loaded after a request. |
+
+### Ranking the fits with a decision model
+
+With `rank`, a decision model orders the plugin's fits
+(`Data.CFTA.GHC.Rank`, through the package `decision-model`). It needs a
+running [Ollama](https://ollama.com) on `http://localhost:11434` with a
+model that has the capability "decision": by default Nimble v3
+(`nimble-v3:9b-q4_K_M`), an external model under its own license, or
+another with `rank-model`. The plugin searches for `rank-pool` fits that use
+every part, asks the model one question about them (which fit a programmer
+most likely intends, with the definition, the hole's type, and the local
+variables), and shows the best `fits` in the model's order; the other fits
+come after them, in the plugin's order. The other `rank-` options need
+`rank`. When the model does not answer, or does not answer in
+`rank-seconds`, the fits keep the plugin's order.
+
+The scores of a model that stays loaded depend on the requests before
+them. So by default the server loads the model for each ranked hole
+(`rank-keep-alive=0`): a hole gets the same order on each compile, and a
+ranked hole takes about 5 s (the first one also loads the model from the
+disk). With `rank-keep-alive=5m` the model stays loaded, and a question
+takes 0.3 to 0.7 s, but the order of a hole can then depend on the holes
+before it; the plugin unloads the model at the end of the module.
+
+On the 23 Hoogle+ queries of rung 1 that the search solves, with Nimble v3
+and the defaults, the expected fit is first for 16 queries (9 in the
+plugin's order) and in the first five for 21 (12).
 
 ## How a hole is filled
 
@@ -235,6 +269,22 @@ cabal run hectare-ghc -- base 120 1400M 8 stackoverflow   # the 19 Stack Overflo
 
 With the normal forms, a fit with the normal form of the expected solution
 counts as the solution. `HECTARE_GHC_NORMAL_FORMS=off` turns them off.
+
+The ranking has two steps, so that the model gets one request at a time.
+With `HECTARE_GHC_POOL=P`, each query goes on past its expected fit to `P`
+fits that use every part, and prints them in a `pool,` line. Then
+`hectare-ghc --rank FILE SIZES... [--model NAME] [--keep-alive D]` asks the
+model about each pool, for each number of options and with the options in
+one order and in both orders, and prints the rank of the expected fit in
+the plugin's order, in the order of size, and in the model's order:
+
+```sh
+HECTARE_GHC_POOL=255 cabal run hectare-ghc -- prelude 120 1400M 6 > pools.csv
+cabal run hectare-ghc -- --rank pools.csv 20 50 255 --keep-alive 0
+```
+
+Keep the pools and the rows out of the repository: they are outputs of a
+model under its own license.
 
 The tests and the benchmark need `ghc` on the `PATH` (for `ghc --print-libdir`),
 or the variable `GHC_LIBDIR`.

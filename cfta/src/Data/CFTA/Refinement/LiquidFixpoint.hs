@@ -93,7 +93,12 @@ withZ3Timeout milliseconds sorted assumptions action =
 
     config = defConfig{solver = Z3, smtTimeout = Just milliseconds}
 
-    acquire = newMVar =<< SMT.makeContextNoLog config
+    -- A new process, with the declarations of the scope outside the scope of
+    -- each query, so a query sends only its own names.
+    newContext = do
+        context <- SMT.makeContextNoLog config
+        snd <$> runStateT (SMT.smtDecls declarations) context
+    acquire = newMVar =<< newContext
     release contextVar = withMVar contextVar SMT.cleanupContext
 
     query contextVar bindings antecedentFormula consequentFormula =
@@ -126,7 +131,7 @@ withZ3Timeout milliseconds sorted assumptions action =
                             -- Z3 answers the rejected command and then the check-sat.
                             -- Liquid Fixpoint reads only the first answer, so the next
                             -- query would read the second. A new process replaces the
-                            -- old one. Each query sends its own declarations. The test
+                            -- old one, with the declarations of the scope. The test
                             -- "answers correctly after the solver rejects a query"
                             -- gets shifted answers without the new process (checked
                             -- with Z3 4.15.3 and Liquid Fixpoint 0.9.6.3.7).
@@ -140,7 +145,7 @@ withZ3Timeout milliseconds sorted assumptions action =
         consequent = toFixpoint consequentFormula
 
         check freshDeclarations = SMT.smtBracket "cfta entailment" $ do
-            SMT.smtDecls $ declarations <> freshDeclarations
+            SMT.smtDecls freshDeclarations
             SMT.smtAssertDecl $
                 Fixpoint.pAnd (solverAssumptions <> [antecedent, Fixpoint.PNot consequent])
             start <- liftIO getMonotonicTime
@@ -151,7 +156,7 @@ withZ3Timeout milliseconds sorted assumptions action =
         -- Another interruption must not leave the old process in the variable.
         replaceContext context = uninterruptibleMask_ $ do
             _ <- try (SMT.cleanupContext context) :: IO (Either SomeException ())
-            SMT.makeContextNoLog config
+            newContext
 
         freshDeclaration (fresh, original)
             | HashSet.member (nameSymbol fresh) reserved = Nothing
