@@ -2,6 +2,50 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Actual query cost retention and current primary class receipts
+
+Proof checkpoint `09cfb640`, source main `525d722e`. Read
+`lean/notes-source-native-costs.md` first. Full library scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+Actual optional binders and native evaluation now retain CostHeap. Actual
+exposure and path projection retain costs and semantic heaps for open inputs.
+Closed task folds, delayed Force/Expose/Run, and every Decision branch retain
+costs. Anchored Fold/Seeded retain costs without closing the original forest.
+seeded_decision_ready derives final IdleReady, CostHeap, old gate Ready,
+Keeps, and normalized fields after either answer. It needs anchored support,
+not a supplied final invariant. Actual WordRanges and completed exploration
+remain explicit. This closes the cost gap in the supported-query interface.
+It does not prove unconditional readiness of the whole class scan.
+
+EndpointMemoGateClasses now derives enabled primary Path/Class graphs,
+exact worker correspondence, finite certified execution, and three-family
+memo receipts. True paths omit their suffix. No full partition is forced.
+
+Next model the reached lazy original-class prefix of the CURRENT caller.
+Primary clear retains its original selected record; primary blocked runs
+secondary; secondary blocked skips query; secondary clear runs Seeded and
+Decision. False continues; true stops before later primary queries. First
+derive stopped-record membership and apply refutes_decision. Derive reached
+ready states through actual effects, using the new supported-query result.
+ClassSat supplies proper paths in semantic preservation arguments; false
+forest gates alone do not exclude []. Keep all three gate memo families.
+Thread actual global unfolding calls through projection/native queries and
+derive saved-entry coherence. Native node/edge tables are distinct.
+
+Fallback/whole caller, general completion, newer checked state, machine
+word bounds, GHC lazy demand/sharing, waiting counts, template exclusion,
+broader APIs/runtime, and distinct exact Sized contracts remain open.
+
+Full pinned audit: 2,055 jobs, 52,039 dependency checks, permitted axioms only,
+no new warning. Nine new modules and two additive Audit imports. All older
+proof definitions and all four Haskell package trees remain byte-identical.
+Start: `/tmp/mcfta-gate-class-query-checkpoint-20261015-2002/` (2,714 files).
+Closing: `/tmp/mcfta-native-cost-checkpoint-20261015-2020/` (2,724 files).
+Script: `/tmp/mcfta-preserve-native-cost-20261015.py`.
+All earlier artifacts remain. Weekly allowance is 86%. Stop owned work at
+1% or less. No board posts or deployments. Keep the optimized interned core.
+
 ## Actual scoped class queries from secondary gates
 
 Proof checkpoint `602b20a7`, source main `525d722e`. Read

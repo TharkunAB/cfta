@@ -8,6 +8,12 @@ the retained scoped native state and both actual class-fold schedules.
 It derives gate-based class-query refutation without a static path domain.
 The current whole caller and general completion remain open.
 
+The later [native cost proof](notes-source-native-costs.md), checkpoint
+`09cfb640`, now retains costs through the supported actual query and decision.
+It derives old gate Ready after either answer. It also adds current enabled
+primary Path/Class memo receipts. Earlier proposed cost steps below retain
+their historical checkpoint scope. The whole lazy caller remains open.
+
 ## Actual scoped path operands
 
 `SourceSecondaryGateScopedProjection.PathSupport` retains the exact natural

@@ -1,6 +1,52 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 20:02 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 20:20 CEST (Europe/Stockholm)**.
+
+## Actual query cost retention and current primary class receipts
+
+Proof checkpoint `09cfb640`, source main `525d722e`. Read
+`lean/notes-source-native-costs.md` first. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+Actual optionalBinder, native Bounds, and scoped Step now retain CostHeap.
+Actual bounded exposure and completed projection retain costs and semantic
+heaps without closed inputs. Closed-forest Fold/Seeded and delayed task
+Force/Expose/Run retain costs. All Decision branches retain costs without
+fields or language premises. Actual exploration stays explicit.
+
+Anchored Fold/Seeded retain costs with the existing PathSupport interface.
+seeded_decision_ready derives final IdleReady, CostHeap, old gate Ready,
+Keeps, and normalized fields for either answer. It assumes initial costs,
+fields, anchored support, current original availability, and growth. It does
+not assume final readiness or close unrelated original children. Native
+WordRanges and completed exploration remain inside the actual receipts.
+The supported-query cost gap is closed. Whole-scan readiness is not proved.
+
+EndpointMemoGateClasses adds enabled primary Path/Class graphs, exact worker
+correspondence, finite certified class execution, and all three memo receipts.
+True paths omit their suffix. It does not run a full primary partition.
+
+Next model the reached lazy original-class prefix of current Equality/Operations.
+Derive stopped original membership and use refutes_decision. Derive reached
+readiness from actual effects. Keep ClassSat-derived proper paths distinct
+from the false forest gate. Thread unfolding, predicate, and descendant memo
+families. Projection/native global unfolding calls and coherence across
+growth still need composition. The native node/edge tables are distinct.
+Fallback/whole caller, general completion, checked state, machine bounds,
+GHC lazy sharing, recent features, broader APIs/runtime, and Sized remain.
+
+Full audit: 2,055 jobs, 52,039 dependency checks, permitted axioms only,
+no new warning. Log: `/tmp/mcfta-native-cost-audit-20261015.log`.
+Nine new modules and two additive Audit imports contain the proof change.
+All prior definitions and all four Haskell package trees match `a8bbe9b5`;
+unchanged Haskell checks were not repeated.
+Start: `/tmp/mcfta-gate-class-query-checkpoint-20261015-2002/` (2,714 files).
+Closing: `/tmp/mcfta-native-cost-checkpoint-20261015-2020/` (2,724 files).
+Script: `/tmp/mcfta-preserve-native-cost-20261015.py`.
+All earlier artifacts, stashes, and other worktrees remain. New probes,
+source copies, and the marked decision-cost draft are preserved there.
+Weekly allowance is 86%. Stop owned work at 1% or less. No board posts
+or deployments. Keep the optimized interned core.
 
 ## Actual scoped class queries from secondary gates
 

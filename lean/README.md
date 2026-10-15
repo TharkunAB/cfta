@@ -7,6 +7,23 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current query cost and primary class proofs
+
+Proof checkpoint `09cfb640`, source main `525d722e`. Read
+[the actual cost proofs and caller limits](notes-source-native-costs.md).
+CostHeap now passes through actual native requests, open exposure/projection,
+class folds, delayed task exploration, and every Decision branch. Under the
+existing anchored support, seeded_decision_ready derives the next gate's
+Ready, IdleReady, costs, histories, and normalized fields after either answer.
+No final invariant is supplied. Current enabled primary Path/Class graphs
+derive exact execution and all three memo receipts. The lazy class prefix,
+global unfolding composition, fallback/whole caller, checked-state/runtime
+transfer, and general completion remain open. The full audit passes 2,055
+jobs and 52,039 dependency checks with no new warning or axiom. Nine new
+modules and two additive Audit imports contain the proof change. All older
+definitions and all four Haskell package trees remain unchanged. Full scope
+and distinct Sized contracts remain. Earlier sections are historical.
+
 ## Current gate-based scoped class-query proofs
 
 Proof checkpoint `602b20a7`, source main `525d722e`. Read

@@ -1,6 +1,42 @@
 # Current formalization findings
 
-Updated: **2026-10-15 20:02 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 20:20 CEST (Europe/Stockholm)**.
+
+## Actual query cost retention and current primary class receipts
+
+Proof checkpoint `09cfb640`, source main `525d722e`. Read
+`lean/notes-source-native-costs.md`. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+The cost gap in the supported-query interface is closed. Actual optional
+binders, native evaluation, scoped requests, exposure, projection, task
+folds, delayed exploration, and every Decision branch retain CostHeap.
+Exposure and projection effects permit open inputs. Anchored seeded queries
+retain the existing closed-result proofs without closing unrelated children.
+seeded_decision_ready derives final IdleReady, costs, old gate Ready, Keeps,
+and normalized fields after either answer. No final invariant is supplied.
+
+Anchored support and initial costs/fields remain explicit. ClassSat still
+derives proper paths for the refutation proof. A false forest gate alone
+does not exclude root []. Native WordRanges and completed exploration remain
+actual receipt premises. This is not unconditional whole-caller readiness.
+
+Enabled primary Path/Class graphs, exact worker correspondence, finite
+certified class execution, and three-family memo receipts are now proved.
+The current lazy original-class prefix and early stop remain the next target.
+Global unfolding receipts through query work and saved-entry coherence still
+need composition. Native node/edge memos are separate. Fallback, completion,
+checked state, machine bounds, lazy/runtime transfer, waiting counts,
+template exclusion, broader APIs, and all separate Sized contracts remain.
+
+Full audit: 2,055 jobs, 52,039 dependency checks, permitted axioms only,
+no new warning. Nine new modules and two additive Audit imports. Older proof
+definitions and all four Haskell package trees match `a8bbe9b5` unchanged.
+Start: `/tmp/mcfta-gate-class-query-checkpoint-20261015-2002/` (2,714 files).
+Closing: `/tmp/mcfta-native-cost-checkpoint-20261015-2020/` (2,724 files).
+Script: `/tmp/mcfta-preserve-native-cost-20261015.py`.
+All prior artifacts and the new marked task-cost draft remain. Weekly
+allowance is 86%. No unchanged Haskell checks were repeated.
 
 ## Actual scoped class queries from secondary gates
 
