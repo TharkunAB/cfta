@@ -1,0 +1,55 @@
+-- The cfta-concat package and the packages it needs. cfta-concat depends on
+-- the concat plugin, which depends on the ghc library and pins GHC 9.14, so it
+-- is not in cabal.project, and no other package depends on it.
+--
+--   cabal build --project-file=cabal.project.concat cfta-concat --enable-tests
+with-compiler: ghc-9.14.1
+packages:
+  cfta
+  cfta-generator
+  cfta-concat
+
+-- The concat packages: Tritlo/concat, branch ghc-9.14, at 58eabf45. The
+-- commit has the port to GHC 9.14.1 and the plugin option failResiduals.
+-- concat-examples is in the list because an executable of concat-plugin
+-- depends on it, and cabal solves for every executable of a package.
+source-repository-package
+  type: git
+  location: https://github.com/Tritlo/concat.git
+  tag: 58eabf454a92bf9f57474ab547738539e47f392a
+  subdir: inline plugin classes satisfy known examples
+
+-- The bounds of the concat packages exclude the libraries of GHC 9.14.
+allow-newer:
+  concat-inline:*,
+  concat-plugin:*,
+  concat-classes:*,
+  concat-satisfy:*,
+  concat-known:*,
+  concat-examples:*,
+
+package *
+  optimization: False
+
+package hashable
+  optimization: True
+
+package unordered-containers
+  optimization: True
+
+package splitmix
+  optimization: True
+
+package random
+  optimization: True
+
+package QuickCheck
+  optimization: True
+
+package liquid-fixpoint
+  optimization: True
+
+-- The plugin compiles optimized Core, so the modules that call symbolic need
+-- optimization.
+package cfta-concat
+  optimization: True

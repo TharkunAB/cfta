@@ -24,6 +24,7 @@ jobs:
             cfta-generator/**/*.hs
             cfta-ghc/**/*.hs
             decision-model/**/*.hs
+            cfta-concat/**/*.hs
 
       - name: Set up hlint
         uses: haskell-actions/hlint-setup@v2
@@ -33,7 +34,7 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["cfta", "cfta-generator", "cfta-ghc", "decision-model"]'
+          path: '["cfta", "cfta-generator", "cfta-ghc", "decision-model", "cfta-concat"]'
           fail-on: warning
 
   build-test-bench:
@@ -136,3 +137,62 @@ jobs:
 
       - name: Benchmark
         run: cabal v2-bench all --enable-optimization=2
+
+  # cfta-concat depends on the concat plugin, which pins GHC and pulls in the
+  # ghc library, so it has its own project file and its own job.
+  cfta-concat:
+    name: cfta-concat (GHC 9.14.1)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Haskell
+        uses: haskell-actions/setup@v2
+        id: setup
+        with:
+          ghc-version: "9.14.1"
+          cabal-version: "3.16.1.0"
+          cabal-update: true
+
+      - name: Install Z3
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes z3
+
+      - name: Configure build plan
+        run: cabal v2-build --project-file=cabal.project.concat cfta-concat --dry-run --enable-tests
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v5
+        id: deps-cache
+        env:
+          key: cabal-store-cfta-concat-ghc-${{ steps.setup.outputs.ghc-version }}-cabal-${{ steps.setup.outputs.cabal-version }}
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ env.key }}-plan-${{ hashFiles('dist-newstyle/cache/plan.json') }}
+          restore-keys: ${{ env.key }}-
+
+      - name: Install dependencies
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: cabal v2-build --project-file=cabal.project.concat cfta-concat --only-dependencies --enable-tests
+
+      - name: Save cached dependencies
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ steps.deps-cache.outputs.cache-primary-key }}
+
+      - name: Check package metadata
+        run: (cd cfta-concat && cabal check)
+
+      # -Werror applies to cfta-concat only: the concat packages have warnings.
+      - name: Build with strict warnings
+        run: |
+          printf 'package cfta-concat\n  ghc-options: -Werror\n' > cabal.project.concat.local
+          cabal v2-build --project-file=cabal.project.concat cfta-concat --enable-tests
+
+      - name: Test
+        run: cabal v2-test --project-file=cabal.project.concat cfta-concat --test-show-details=direct
