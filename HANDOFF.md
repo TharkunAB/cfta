@@ -1,6 +1,50 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 19:10 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 19:36 CEST (Europe/Stockholm)**.
+
+## Secondary gate replay and exact recursive head exposure
+
+Proof `e7c08d35` is pushed to origin/formalize. Source main stays `525d722e`.
+Read `lean/notes-source-secondary-gate.md` first. Full scope stays active.
+
+Actual gate traces derive semantic effects, physical annotation retention,
+and exact replay above their final heap without the old incidental CostHeap.
+False scans retain every original row/path certificate. False node endpoints
+derive original closedness with the explicit cost invariant. Forest [] is
+excluded because its false gate does not inspect a value.
+
+False traces now derive actual finite head reads through repeated open Mu
+unfolds. The proof retains direct ordinary reads, restarted collect, visited
+identity skips, and canonical rows. Every actual completed head has exactly
+the original independent language and preserves physical annotations. These
+head results assume semantic-ready available inputs and growth from the final
+gate heap. They require no CostHeap, whole-input closedness, preparation,
+acyclicity, future read answer, or final language/annotation oracle.
+
+Next derive support for each selected child of each actual exposed row.
+Anchor support at the final gate heap G: a value is closed, or is available
+in G with an effect-free false node certificate at its remaining path.
+Keep SemanticReady G and endpoint CostHeap G separate. Recover actual raw
+row origins and induct over epsilon reachability; do not lose child positions
+through makeNode_children. Ordinary scans supply shorter certificates.
+Then induct on path length to derive actual finite projection, accepted
+subtrees, and annotations. This support invariant remains a proof plan.
+Compose seeded queries, both gates, all three memos, fallback, and caller.
+Lazy demand, checked native transfer, machine bounds/identities, general
+completion, waiting counts, template exclusion, broader APIs/runtime, and
+all distinct Sized contracts remain open.
+
+The full pinned audit passes 2,037 jobs and 51,930 dependency checks, permitted
+axioms only, no new warning. Log: `/tmp/mcfta-secondary-gate-audit-20261015.log`.
+All prior definitions except four additive Audit imports remain unchanged.
+All four Haskell package trees match `516615d0`; checks were not repeated.
+Starting snapshot: `/tmp/mcfta-open-head-checkpoint-20261015-1910/`
+(2,696 files). Closing: `/tmp/mcfta-secondary-gate-checkpoint-20261015-1936/`
+(2,703 files). Script: `/tmp/mcfta-preserve-secondary-gate-20261015.py`.
+All earlier proofs, repros, drafts, stashes, and other worktrees remain.
+The new failed heap draft is marked and retained outside the proof tree.
+Weekly allowance is 86%. Stop owned work at 1% or less. No board posts
+or deployments. Earlier sections retain their historical checkpoint scope.
 
 ## Open ordinary Mu projection and selected-path completion
 

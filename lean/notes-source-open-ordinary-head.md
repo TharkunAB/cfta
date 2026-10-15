@@ -1,5 +1,10 @@
 # Projection through an open ordinary Mu unfolding
 
+The [secondary gate note](notes-source-secondary-gate.md) records the later
+general head completion, exact language, annotation, and replay results.
+The next target is selected-child support through actual exposed rows.
+The earlier result and limits below retain their checkpoint scope.
+
 Source main remains `525d722e`. The starting checkpoint is `fd279a46`.
 The checked proof checkpoint is `00b4806e`, pushed to origin/formalize.
 The [refused-class query note](notes-source-refused-class-query.md) records

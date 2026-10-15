@@ -7,6 +7,22 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current secondary gate and recursive head proofs
+
+Proof checkpoint `e7c08d35`, source main `525d722e`. Read
+[the effects, language, and remaining projection target](notes-source-secondary-gate.md).
+Actual secondary traces derive semantic effects, physical annotations, and
+exact later-cache replay without CostHeap. False endpoints derive original
+closedness with an explicit cost invariant. Actual recursive head exposure
+then completes through repeated open Mu unfolding and the restarted collect
+worklist. Its language is exactly the original independent language, and
+its physical annotations remain valid. Selected-child support through
+actual exposed rows, general projection, and full caller composition remain
+open. The pinned audit passes 2,037 jobs and 51,930 dependency checks with
+no new warning or axiom. All prior definitions except four additive Audit
+imports and all four Haskell package trees remain unchanged. Full scope and
+all separate Sized contracts remain. Earlier entries retain historical scope.
+
 ## Current open ordinary Mu projection
 
 Proof `00b4806e` derives open ordinary-head language and cache preservation,

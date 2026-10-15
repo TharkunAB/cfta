@@ -1,6 +1,41 @@
 # Current formalization findings
 
-Updated: **2026-10-15 19:10 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 19:36 CEST (Europe/Stockholm)**.
+
+## Secondary gate replay and exact recursive head exposure
+
+Proof `e7c08d35` is pushed. Source main remains `525d722e`. Read
+`lean/notes-source-secondary-gate.md`.
+
+Actual secondary traces preserve semantic heaps, constructor histories, and
+physical annotations. Exact effect-free replay above the completed final
+gate heap no longer requires CostHeap. Every original false row/path keeps
+its certificate. False node endpoints derive original closedness through
+actual free-name retention, with the endpoint cost invariant explicit.
+
+Actual repeated-Mu head reads now complete after a false gate in a retained
+later cache. The proof follows the source collect restart, visited skips,
+and canonicalization. Every completed actual head has exactly the original
+independent language and retains physical annotations. These results need
+no whole-input closedness, CostHeap, preparation, acyclicity, or final answer
+oracle. They do not assert that all exposed children are closed.
+
+The next gap is support of selected children in actual exposed rows. Anchor
+each reusable false certificate at the final gate heap. Recover row origins
+and selected child positions, then induct over epsilon reachability and
+path length. CostHeap is needed only at the anchor's selected endpoint.
+The proposed support invariant is not yet a theorem. General projection,
+seeded caller composition, native/lazy/runtime transfer, recent features,
+general completion, and separate Sized obligations remain open.
+
+Full audit: 2,037 jobs and 51,930 dependency checks, permitted axioms only,
+no new warning. Prior definitions remain byte-identical except four Audit
+imports. All four Haskell package trees match `516615d0`; checks were not
+repeated. Start: `/tmp/mcfta-open-head-checkpoint-20261015-1910/`
+(2,696 files). Closing: `/tmp/mcfta-secondary-gate-checkpoint-20261015-1936/`
+(2,703 files). Script: `/tmp/mcfta-preserve-secondary-gate-20261015.py`.
+All prior artifacts and the new marked draft remain. Weekly allowance is
+86%. Full scope remains active. Earlier entries are historical.
 
 ## Open ordinary Mu projection and selected-path completion
 

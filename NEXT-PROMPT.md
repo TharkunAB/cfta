@@ -2,6 +2,41 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Secondary gate replay and exact recursive head exposure
+
+Proof checkpoint: `e7c08d35`, pushed to origin/formalize. Source main stays
+`525d722e`. Read `lean/notes-source-secondary-gate.md` first. Full scope stays
+active. Earlier entries retain their historical checkpoint scope.
+
+Actual secondary traces now derive semantic effects and exact effect-free
+replay above their final gate heap without CostHeap. False scans supply all
+original row/path certificates. False node endpoints derive original
+closedness with the explicit endpoint cost heap. Actual later-cache head
+reads complete through repeated open Mu unfolds and the restarted collect
+worklist. Every completed head has exactly the original independent language
+and retains physical annotations. These head results need no cost heap,
+whole-input closedness, preparation, or final semantic-answer oracle.
+
+Next prove selected-child support through actual exposed rows. Anchor each
+certificate at the completed gate heap G. Support means closed, or available
+in G with an effect-free false node trace at the remaining path. Retain
+SemanticReady G. CostHeap G is needed only to close endpoint support at [].
+Recover actual row origins through makeNode, canonicalization, and epsilon
+reachability. Preserve row boundaries and selected child positions. Then
+induct on path length for finite projection, accepted-subtree inclusion,
+and annotation retention. Forest [] remains excluded. This support plan
+is not yet a checked theorem. Compose the actual seeded query and whole
+current caller afterward. All broader library and separate Sized gaps remain.
+
+The pinned audit passes 2,037 jobs and 51,930 dependency checks, permitted
+axioms only, no new warning. All prior definitions except four additive
+Audit imports and all four Haskell package trees remain byte-identical.
+Start: `/tmp/mcfta-open-head-checkpoint-20261015-1910/` (2,696 files).
+Closing: `/tmp/mcfta-secondary-gate-checkpoint-20261015-1936/` (2,703 files).
+Script: `/tmp/mcfta-preserve-secondary-gate-20261015.py`.
+All prior artifacts and the new marked heap draft remain. Weekly allowance
+is 86%. Stop owned work at 1% or less. No board posts or deployments.
+
 ## Open ordinary Mu projection and selected-path completion
 
 Proof checkpoint: `00b4806e`, pushed to origin/formalize. Source main remains
