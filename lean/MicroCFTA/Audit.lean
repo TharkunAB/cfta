@@ -1587,6 +1587,17 @@ import MicroCFTA.SourceEqualitySelectedClassFold
 import MicroCFTA.SourceEqualitySelectedFoldSource
 import MicroCFTA.SourceEqualitySelectedNativeScope
 import MicroCFTA.SourceEqualitySelectedRecords
+import MicroCFTA.SourceEqualityOnePassAPI
+import MicroCFTA.SourceEqualityOnePassEffects
+import MicroCFTA.SourceEqualityOnePassExamples
+import MicroCFTA.SourceEqualityOnePassGraph
+import MicroCFTA.SourceEqualityOnePassLanguage
+import MicroCFTA.SourceEqualityOnePassPrecheck
+import MicroCFTA.SourceEqualityOnePassSource
+import MicroCFTA.SourceEqualityOnePassWorker
+import MicroCFTA.SourceEqualityOnePassWorkerProofs
+import MicroCFTA.SourceEqualityRecordSelectionProofs
+import MicroCFTA.SourceEqualityRecordSelectionWorker
 /-!
 # Proof dependency audit
 
