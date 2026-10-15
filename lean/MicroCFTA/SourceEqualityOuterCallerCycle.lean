@@ -121,20 +121,21 @@ theorem emptyPayload_iff (payload : SourceEqualityPrecheck.Constraint) :
 /-- Check physical root identity and both actual inherited payload constructors. -/
 def closes (observed : Observation) : Bool :=
   decide (observed.returned = observed.original) &&
-    emptyPayload observed.firstInherited && emptyPayload observed.secondInherited
+    emptyPayload observed.firstInherited && emptyPayload observed.secondInherited &&
+    decide (observed.wrapper ≠ observed.original)
 
 /-- Kernel evaluation follows original construction, the native prefix, and the warm wrapper prefix. -/
 theorem actual_cycle : observation.map closes = some true := by cbv
 
 /-- Both source child calls return to the identical empty-inherited physical root key. -/
 theorem cycle : ∃ observed, observation = some observed ∧ observed.returned = observed.original ∧
-    observed.firstInherited = some [] ∧ observed.secondInherited = some [] := by
+    observed.firstInherited = some [] ∧ observed.secondInherited = some [] ∧ observed.wrapper ≠ observed.original := by
   cases found : observation with
   | none => have impossible := actual_cycle; simp [found] at impossible
   | some observed =>
       have checked : closes observed = true := by simpa only [found, Option.map_some, Option.some.injEq] using actual_cycle
       simp only [closes, Bool.and_eq_true, decide_eq_true_eq, emptyPayload_iff] at checked
-      exact ⟨observed, rfl, checked.1.1, checked.1.2, checked.2⟩
+      exact ⟨observed, rfl, checked.1.1.1, checked.1.1.2, checked.1.2, checked.2⟩
 
 /-- The observed source prefixes supply both child-to-parent memo-key dependencies. -/
 def Dependency (child parent : Key) : Prop :=
@@ -151,7 +152,7 @@ theorem not_wellFounded : ¬ WellFounded Dependency := by
     | intro key _ ih =>
         intro other forward backward
         exact ih other forward key backward forward
-  obtain ⟨observed, found, same, first, second⟩ := cycle
+  obtain ⟨observed, found, same, first, second, _⟩ := cycle
   have forward : Dependency (some [], observed.wrapper) (some [], observed.original) :=
     ⟨observed, found, Or.inl ⟨by rw [first], rfl⟩⟩
   have backward : Dependency (some [], observed.original) (some [], observed.wrapper) :=

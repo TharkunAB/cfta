@@ -49,11 +49,12 @@ The six worker bounds are `(4,4,2,2,2,1024)`, with 32-bit native words.
 `actual_cycle` checks that the returned physical node reference equals R's
 original reference. It checks that both inherited payloads have the literal
 empty physical constructor. `cycle` retains the actual observation witness.
+It also checks that the wrapper and root references differ.
 `Dependency` contains the two observed child-to-parent key dependencies.
 `not_wellFounded` proves that this relation is not well founded. No strict
 well-founded rank on these physical memo keys can cover both dependencies.
 
-These theorems do not model the outer Haskell result table or GHC evaluation.
+These prefix theorems do not model the outer Haskell result table or GHC evaluation.
 They do not assert that no finite monadic caller graph exists at every
 possible warm state. The next source comparison must retain this boundary.
 Existing successful-worker and equality-free-region theorems remain valid.
@@ -76,6 +77,28 @@ Relevant source locations are `Equality/Operations.hs:79-95,127-130`,
 `Interned/Memo.hs:93-94,120-129`, `Interned/Cache.hs:149-155`, and
 `Interned/Type.hs:321-325,499-525,620-627`.
 
+## Typed result-thunk observation
+
+`SourceEqualityOuterCallerMemoCycle` uses the existing `FlatMemoThunk`
+model. Both actual inherited payloads are empty. Physical node references
+therefore identify the remaining keys in this empty-inherited fiber.
+The result type records a returned node reference.
+
+`PendingCycle` publishes and demands the root request. It then publishes
+and demands the distinct wrapper request before either request completes.
+The repeated root lookup returns its original handle. Its next demand
+observes `busy`. The completed-result projection contains neither result.
+`pending` proves these facts from actual memo publication and demand
+definitions. `actual_pending` instantiates the trace with the kernel-checked
+source observation and both literal empty inherited payloads.
+
+This is a logical demand trace. It retains the demand order from the source
+analysis. A complete adequacy proof for the outer worker's constructor
+demands and the Haskell memo implementation remains open. The theorem does
+not map `busy` to an exception, a successful node, or a pending-key fallback.
+Other inherited payloads and concurrent result-table operations remain
+outside this source instantiation. Existing generic thunk laws are reused.
+
 ## Live reproduction and validation
 
 [The retained reproduction](repro/OuterCallerCycle.hs) prints `Just True`
@@ -90,19 +113,24 @@ The reproduction compiles with `-Wall -Werror` in Nix. Fourmolu and all four
 Cabal-gild checks pass. Logs are
 `/tmp/mcfta-outer-caller-cycle-retained-20261015.log` and
 `/tmp/mcfta-outer-caller-cycle-format-20261015.log`.
-The pinned aggregate Lean audit passes 1,891 jobs and checks dependencies
-of 48,849 theorems. Only `propext`, `Classical.choice`, and `Quot.sound`
+The pinned aggregate Lean audit passes 1,892 jobs and checks dependencies
+of 48,855 theorems. Only `propext`, `Classical.choice`, and `Quot.sound`
 occur. The older unused `inputs` warning remains. Log:
-`/tmp/mcfta-outer-caller-cycle-audit-20261015.log`.
+`/tmp/mcfta-outer-caller-memo-audit-20261015.log`.
+The focused typed-thunk instantiation also passes. Log:
+`/tmp/mcfta-outer-caller-memo-cycle-20261015.log`.
 The upstream integration's strict build, six Haskell suites, benchmark build,
 and metadata checks were not repeated after this comment-only source edit.
 
 ## Next target
 
-Model the outer lazy result memo and the strict constructor demands. Connect
-the checked key cycle to that operational model. Keep runtime correspondence
-separate. A total intended reduction needs an explicit cycle policy and a
-finite-progress argument. A pending-entry fallback alone would not prove
+Drive the actual bounded outer worker until its first incomplete child call.
+Retain that child and its returned warm state, then do the same at the wrapper.
+Connect these worker constructor demands to the typed result-thunk trace.
+Extend the result-table source comparison beyond the empty-inherited fiber.
+Keep runtime correspondence separate. A total intended reduction needs an
+explicit cycle policy and a finite-progress argument.
+A pending-entry fallback alone would not prove
 termination on an infinite sequence of distinct keys. Do not attempt an
 unconditional decreasing physical-key rank for the unchanged source.
 
