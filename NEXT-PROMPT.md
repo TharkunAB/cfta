@@ -2,6 +2,48 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current secondary, fourth-memo scan, and main 7fdebd07
+
+Main `7fdebd07` is merged at `a3e68610`. Proofs are `0992b336`,
+`3e797a74`, and `3be3967c`. Read `lean/notes-current-secondary.md` and
+`lean/notes-main-7fdebd07.md` first. Full scope stays active. Earlier
+sections retain historical source and proof scopes.
+
+Complete current secondary graphs now have exact finite execution,
+returned-heap replay, ranked stable completion, effects, and actual gate
+memo receipts. Selected projection derives finite closed output without
+closing unrelated original siblings. Actual Fold/Seeded queries, current
+Decision, and fourth-memo hits/misses derive query invariants and original
+class refutation. The current reached Scan retains that memo. Independent
+accepted candidates satisfying all original active classes cannot reach
+rejection. Live precheck derives ordered activity and accessor refutation.
+Physical record extraction and initial caller construction remain explicit.
+
+Next compose the SAME three global gate tables through actual Fold/Seeded,
+delayed Force/Expose/Run/Decision, the fourth memo, and current Scan. Use
+existing actual projection/native receipts and anchored support. Derive
+coherence at each call. Do not assume future validity or memo-call silence.
+Then connect physical caller entry and selected requireAll/class reduction/
+empty propagation. Keep general completion, GHC demand/publication, checked
+state, word bounds, whole enumeration, shared reaches-helper effects,
+waiting counts, template exclusion, broader APIs, and all Sized boundaries.
+
+The source adds typed NodeView/MeasureRecord refinement names and two
+exposed Internal backends. Its typed public translation remains uncovered.
+Constructor count/order and field kinds are checked; names are not compared.
+Generic and custom instance laws, Expr/Integer agreement, errors, and exact
+resulting languages/ranks need source bridges. Core gate/Sized bodies stay.
+
+Full audit passes 2,097 jobs and 52,633 dependency checks with permitted
+axioms only and no new warning. Nineteen new modules, two additive Audit
+imports; older proof files remain. Required strict Nix build and all six
+suites pass 714 examples plus golden. Changed-file Fourmolu and active
+Cabal-gild pass. Start: `/tmp/mcfta-main-889-checkpoint-20261015-2122/`
+(2,751 files). Closing: `/tmp/mcfta-current-secondary-checkpoint-20261015-2148/` (2,774 files).
+Script: `/tmp/mcfta-preserve-current-secondary-20261015.py`.
+All prior artifacts remain. Weekly allowance is 83%. Stop at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
 ## Current main 88998669 and retargeted source rules
 
 Main `88998669` is merged at `6d1462c7`. Proofs are `a9eea20e`,

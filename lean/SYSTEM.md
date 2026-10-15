@@ -1,5 +1,23 @@
 # Constrained languages, indexing, and distributions
 
+## Current complete secondary and memoized class scan
+
+Source main `7fdebd07` is merged at `a3e68610`. Proofs `0992b336`,
+`3e797a74`, and `3be3967c` add complete current secondary execution,
+ranked completion, replay, effects, memo receipts, and supported projection.
+Actual query/fourth-memo/Scan proofs derive sound early rejection with
+unrelated original siblings open. Ordered entry reaches accessor refutation.
+Read [the proof scope](notes-current-secondary.md) and
+[the typed refinement source boundary](notes-main-7fdebd07.md).
+The three global gate tables still need whole-query/Scan composition.
+Physical entry, fallback, runtime, completion, and broader obligations remain.
+The typed NodeView/MeasureRecord public translation is uncovered. Its two
+Internal backends replace the previous public string interface.
+The full audit passes 2,097 jobs and 52,633 dependencies, permitted axioms
+only, no new warning. Nineteen new modules and two additive Audit imports.
+Required Nix checks pass 714 examples plus golden; formatting passes.
+Earlier sections retain historical source and proof scopes.
+
 ## Current main 88998669: endpoint and enumeration pruning
 
 Main `88998669` is merged at `6d1462c7`. Read
