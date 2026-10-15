@@ -115,15 +115,16 @@ reducePartially' constraints node =
     -- At this node, we will have to combine the inherited constraints `0=1` and the local constraints `0.0=0.1=1`.
     -- Now, we can see that these two constraints contain a contradiction that requires `0=0.0=0.1`, so we can drop the edge.
     --
-    -- This does not stop every recursive cycle. A cycle through a recursive
-    -- node with constraints stops because 'reduceEqConstraints' does not
-    -- unfold that node. 'go' returns a recursive node unchanged, so one pass
-    -- visits a finite part of the input, and only the fixpoint in
-    -- 'reduceEqConstraints' can repeat. No proof shows that this fixpoint, or
-    -- a repetition of passes, ends on every input. The reduction tests "stops
-    -- on the example that needs inherited constraints", "stops on a class over
-    -- three recursive children", and "stops on classes over recursive
-    -- children" check this example and random recursive inputs.
+    -- This does not stop every recursive cycle. The gate does not unfold a
+    -- constrained recursive node on a selected path. An intersection below
+    -- ordinary endpoints can still return an ordinary ancestor as a narrowed
+    -- descendant. Its inherited constraints can be empty again. The outer
+    -- result memo then demands its own unfinished result. Thus one pass can
+    -- repeat a caller key, even though 'go' returns recursive inputs unchanged.
+    -- See lean/repro/OuterCallerCycle.hs for a closed example. The reduction
+    -- tests "stops on the example that needs inherited constraints", "stops on
+    -- a class over three recursive children", and "stops on classes over
+    -- recursive children" check finite examples, not general termination.
     reduceWithInheritedEcs :: EqConstraints -> [Node symbol] -> [Node symbol]
     reduceWithInheritedEcs EqContradiction children = map (const EmptyNode) children
     reduceWithInheritedEcs inheritedEcs children = zipWith (\i -> reducePartially' (eqConstraintsDescend inheritedEcs i)) [0 ..] children

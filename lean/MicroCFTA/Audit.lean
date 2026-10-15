@@ -1716,6 +1716,7 @@ import MicroCFTA.SourceEqualityConstraintPathInventory
 import MicroCFTA.SourceEqualityConstraintInventory
 import MicroCFTA.SourceEqualityNormalizationReceipt
 import MicroCFTA.SourceEqualityInheritedGrowthBoundary
+import MicroCFTA.SourceEqualityOuterCallerCycle
 /-!
 # Proof dependency audit
 
