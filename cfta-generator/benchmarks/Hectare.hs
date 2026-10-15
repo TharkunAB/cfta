@@ -93,7 +93,7 @@ runQuery name seconds = case find ((== Text.pack name) . benchmarkName . fst) (s
     Just (benchmark, firstOrder) -> do
         -- HECTARE_CURRIED encodes the types curried (with no variable of kind * -> *).
         curried <- isJust <$> lookupEnv "HECTARE_CURRIED"
-        let lib = if curried then firstOrder{libraryEncoding = Curried mempty} else firstOrder
+        let lib = if curried then firstOrder{libraryEncoding = Curried AnyHead mempty} else firstOrder
         start <- getMonotonicTime
         found <- timeout (seconds * 1000000) $ search benchmark lib
         end <- getMonotonicTime
@@ -131,7 +131,7 @@ profileQuery name size = case find ((== Text.pack name) . benchmarkName . fst) (
     Nothing -> fail $ "no query " <> name
     Just (benchmark, firstOrder) -> do
         curried <- isJust <$> lookupEnv "HECTARE_CURRIED"
-        let lib = if curried then firstOrder{libraryEncoding = Curried mempty} else firstOrder
+        let lib = if curried then firstOrder{libraryEncoding = Curried AnyHead mempty} else firstOrder
         t0 <- getMonotonicTime
         let raw = rawSearchSpace lib (benchmarkQuery benchmark) size
         rawNodes <- evaluate (nodeCount raw)

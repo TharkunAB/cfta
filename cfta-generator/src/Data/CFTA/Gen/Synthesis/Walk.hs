@@ -277,7 +277,7 @@ walk encoding limits checker hooks leaves avoid goal accept = sizes 1 (State [] 
                             programs
                                 size
                                 [ program
-                                | run <- programRuns space
+                                | run <- programRuns encoding space
                                 , program <- Nothing : maybe [] (map Just . expand hectareLibrary) run
                                 ]
                                 state''

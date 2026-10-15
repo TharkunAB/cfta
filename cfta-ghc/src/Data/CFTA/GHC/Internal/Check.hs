@@ -64,6 +64,7 @@ module Data.CFTA.GHC.Internal.Check (
     Environment,
     newEnvironment,
     environmentCounters,
+    environmentExtendedDefaults,
     Walker (..),
     startWalker,
     step,
@@ -128,6 +129,7 @@ import GHC.Core.Type (PredType, anyFreeVarsOfType, coreView, mkTyVarTy, mkVisFun
 import GHC.Core.Unify (BindFlag (BindMe, DontBindMe), UnifyResultM (SurelyApart), alwaysBindFam, tcUnifyTysFG)
 import GHC.Data.Bag (bagToList, listToBag, mapBag, unitBag)
 import GHC.Data.FastString (unpackFS)
+import qualified GHC.LanguageExtensions as LangExt
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
 import GHC.Tc.Solver (simplifyTopWanteds)
 import GHC.Tc.Solver.Monad (runTcSEarlyAbort)
@@ -160,6 +162,7 @@ import GHC.Tc.Utils.Monad (
     liftZonkM,
     newSysName,
     setTcLevel,
+    setXOptM,
     tryCaptureConstraints,
     tryTc,
  )
@@ -254,6 +257,11 @@ data Environment = Environment
     , environmentRigid :: Bool
     , environmentCounters :: IORef Counters
     -- ^ The counters of the walks in this environment.
+    , environmentExtendedDefaults :: Bool
+    {- ^ Whether 'complete' solves with @ExtendedDefaultRules@, as GHCi does:
+    so @length (pure x)@ fits, with the list type for its @t@. 'False' in
+    'newEnvironment'.
+    -}
     }
 
 {- | The environment of a hole. Its level is the level of the innermost
@@ -278,7 +286,8 @@ newEnvironment hole = do
             EqPred{} -> True
             ClassPred cls _ -> isEqualityClass cls
             _ -> False
-    Environment hole level provided (not (any equality (closure <> heads))) <$> liftIO (newIORef emptyCounters)
+    counters <- liftIO (newIORef emptyCounters)
+    pure (Environment hole level provided (not (any equality (closure <> heads))) counters False)
 
 {- | The state of a walk: the unification variables that a later step can
 write, the wanteds of the program so far, and the goals still open, leftmost
@@ -430,12 +439,16 @@ step environment walker leaf children known = case walkerGoals walker of
         EqPred{} -> True
         _ -> False
 
--- | Whether a walker has no open goal and every wanted is solved under the givens.
+{- | Whether a walker has no open goal and every wanted is solved under the
+givens, with the defaulting of 'environmentExtendedDefaults'.
+-}
 complete :: Environment -> Walker -> TcM Bool
 complete environment walker
     | null (walkerGoals walker) =
-        setTcLevel (environmentLevel environment) (discardErrs (satisfiable environment walker False True))
+        setTcLevel (environmentLevel environment) (discardErrs (extended (satisfiable environment walker False True)))
     | otherwise = pure False
+  where
+    extended = if environmentExtendedDefaults environment then setXOptM LangExt.ExtendedDefaultRules else id
 
 {- | Whether GHC solves the predicates under the hole's givens, with the
 instances in scope, as for a complete program. The solver's unifications

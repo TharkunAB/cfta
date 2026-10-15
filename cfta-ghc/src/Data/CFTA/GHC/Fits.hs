@@ -21,6 +21,13 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   kind @* -> *@ of the candidates' types and of the query at which an
   instance of each of its classes can hold ('mayHold'), so @length@ can take
   the @Maybe@ that @lookup@ gives. Then no candidate has specializations.
+* With 'optionOnlyDefaulted' too, such a variable that the program does
+  not determine, as the @t@ of @length (pure x)@, takes only the list type,
+  when one of its classes has that default under GHC's
+  @ExtendedDefaultRules@ (@Foldable@ or @Traversable@). Else Hectare drops
+  the program ('Data.CFTA.Gen.Synthesis.OnlyDefault'). The check of a
+  complete program has @ExtendedDefaultRules@, as GHCi does, so
+  @length (pure x)@ fits.
 * Each program is checked in preorder, one leaf at a time
   ("Data.CFTA.GHC.Internal.Check"), as a refinement hole fit, with the
   parts of 'GHC.Tc.Errors.Hole.tcCheckHoleFit': 'tcSubTypeSigma' at the
@@ -100,7 +107,7 @@ import GHC.Clock (getMonotonicTimeNSec)
 
 import Data.CFTA.GHC.Erase (anyResult, curriedClasses, erase, eraseCurried, eraseHead, higherKinded, typeHeads)
 import Data.CFTA.GHC.Internal.Check
-import Data.CFTA.Gen.Synthesis (Encoding (..), Program (..))
+import Data.CFTA.Gen.Synthesis (Defaulting (..), Encoding (..), Program (..))
 import Data.CFTA.Gen.Synthesis.Walk (
     Checker (..),
     Erased (..),
@@ -115,7 +122,9 @@ import Data.CFTA.Gen.Synthesis.Walk (
     walk,
  )
 import qualified Data.CFTA.Gen.Synthesis.Walk as Walk
+import GHC.Builtin.Names (eqClassName, foldableClassName, ordClassName, showClassName, traversableClassName)
 import GHC.Builtin.Types (listTyCon)
+import GHC.Core.Class (className)
 import GHC.Core.DataCon (dataConNonlinearType)
 import GHC.Core.Predicate (mkClassPred)
 import GHC.Core.TyCo.FVs (tyCoVarsOfType, tyCoVarsOfTypesList)
@@ -203,6 +212,11 @@ data Options = Options
     -- ^ A function to call before each program is checked, with its size.
     , optionCurried :: Bool
     -- ^ Curried types in Hectare, with the variables of kind @* -> *@ kept, and no specializations.
+    , optionOnlyDefaulted :: Bool
+    {- ^ With 'optionCurried': a variable of kind @* -> *@ that a program
+    does not determine takes only its default, the list type, and the check
+    has @ExtendedDefaultRules@.
+    -}
     }
 
 -- | Programs of up to five leaves, the first ten fits, no other limit.
@@ -217,6 +231,7 @@ defaultOptions =
         , optionReport = Nothing
         , optionTrace = Nothing
         , optionCurried = False
+        , optionOnlyDefaulted = False
         }
 
 {- | Hectare's pruning rule of the Hoogle+ library, with GHC's names, for
@@ -308,11 +323,11 @@ figures of the search.
 -}
 streamFits :: Options -> TypedHole -> [Candidate] -> Type -> (Fit -> TcM Bool) -> TcM Statistics
 streamFits options hole candidates goal accept = do
-    environment <- newEnvironment hole
+    environment <- (\e -> e{environmentExtendedDefaults = defaulted}) <$> newEnvironment hole
     begin <- liftIO getMonotonicTimeNSec
     let deadline = (\seconds -> begin + round (seconds * 1e9)) <$> optionSeconds options
     erased <- concat <$> mapM (erasures environment) candidates
-    encoding <- if optionCurried options then Curried <$> domains environment else pure FirstOrder
+    encoding <- if optionCurried options then Curried defaulting <$> domains environment else pure FirstOrder
     -- The time of the checks of the fits' parts, which are checks too.
     ignoring <- liftIO (newIORef 0)
     let statistics progress = statisticsOf progress <$> liftIO (readIORef ignoring) <*> readCounters environment
@@ -407,6 +422,16 @@ streamFits options hole candidates goal accept = do
                 ]
             holds classes head' = all (\cls -> mayHold environment instances (mkClassPred cls [head'])) classes
         pure (fmap (\classes -> nub (mapMaybe (eraseHead rigid) (filter (holds classes) heads))) curriedKeys)
+    -- With optionOnlyDefaulted, the keys of the curried variables, each with
+    -- whether it defaults to the list type under ExtendedDefaultRules: a
+    -- key of an interactive class (of which Foldable and Traversable have
+    -- kind * -> *), or the key of no class, as a variable without a
+    -- constraint fits at any type head.
+    defaulted = optionCurried options && optionOnlyDefaulted options
+    defaulting
+        | defaulted = OnlyDefault (fmap (\classes -> null classes || any interactive classes) curriedKeys)
+        | otherwise = AnyHead
+    interactive cls = className cls `elem` [showClassName, eqClassName, ordClassName, foldableClassName, traversableClassName]
     -- A candidate's type without its foralls and contexts, so that its heads
     -- are visible (Maybe in the type of lookup).
     body typ = let (_, _, rho) = tcSplitNestedSigmaTys typ in rho

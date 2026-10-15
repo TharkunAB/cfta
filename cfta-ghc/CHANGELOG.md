@@ -22,7 +22,10 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   the type heads in scope at which each of its classes can have an
   instance (`mayHold` of `Data.CFTA.GHC.Internal.Check`, the test of the
   fast path), so `length (lookup k xs)` is proposed; no candidate is
-  specialized then.
+  specialized then. With `optionOnlyDefaulted` too, such a variable that a
+  program does not determine takes only its default, the list type, as
+  under `ExtendedDefaultRules`, and the check of a complete program has
+  those rules, so `length (pure x)` fits.
 - `Data.CFTA.GHC.Session`: a GHC session for a program, with the imports in
   scope as in GHCi. `withSession` and `withSessionOptions` start it, with
   more packages by name or identifier, more package databases, more flags,

@@ -38,7 +38,10 @@ tree automata of `cfta`, with QuickCheck integration.
   them back. `libraryEncoding` chooses how a space encodes the types
   (`Encoding`): `FirstOrder`, or `Curried`, in which a type constructor is
   a leaf applied by `@` edges, so that a type variable of kind `* -> *`
-  (`?Foldable t0`) ranges over a domain of type constructors.
+  (`?Foldable t0`) ranges over a domain of type constructors. With
+  `Curried (OnlyDefault keys)` (`Defaulting`), such a variable that a run
+  does not determine takes only the list type, or none: marker leaves in
+  its domain, which `runsNarrowedBy` of `cfta` reads in each run.
   `parseType` and `parseProgram` read types
   and programs in Haskell syntax, and `renderType` and `renderProgram` print
   them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
