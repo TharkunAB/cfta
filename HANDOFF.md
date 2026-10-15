@@ -1,6 +1,47 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 20:20 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 20:30 CEST (Europe/Stockholm)**.
+
+## Sound early rejection through reached original classes
+
+Proof checkpoint `3ca8c0c4`, source main `525d722e`. Read
+`lean/notes-source-lazy-class-prefix.md` first. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+Scan records the current enabled primary/secondary/seeded-query schedule.
+A true Decision stops before later primary calls. selected_sublist retains
+original selected order and multiplicity; stopped_member retains original
+stopped membership. Mode equations identify actual meets/classMeets workers
+with every outcome and heap. Current primary gates retain SemanticReady,
+costs, annotations, and both histories without input closedness.
+
+The exact advanced secondary anchor now derives query effects from ClassSat.
+SourceEqualityLazyClassSoundness.verified derives intermediate readiness,
+costs, fields, original availability, and Keeps through the entire reached
+Scan under independent acceptance and all Active original class conditions.
+stopped_refutes proves sound early rejection without a semantic oracle or
+completed fallback. WordRanges and completed exploration remain explicit.
+
+Next compose all three global gate memo families and actual query unfolding
+receipts across Scan. Native node/edge tables already retained in Scan are
+distinct. Connect original ordered normalized source classes and initial
+caller construction to entry assumptions. Compose selected requireAll,
+evolving-forest class reduction, and empty propagation. Exact GHC partition/
+any demand, progressive rows, original child forcing, checked state, machine
+bounds, general completion, recent features, broader APIs/runtime, and all
+distinct Sized contracts remain open.
+
+Full audit: 2,060 jobs, 52,058 dependency checks, permitted axioms only,
+no new warning. Log: `/tmp/mcfta-lazy-prefix-audit-20261015.log`.
+Five new modules and two additive Audit imports contain the change. Older
+proof definitions and all four Haskell package trees match `a421f9cd`;
+unchanged Haskell checks were not repeated.
+Start: `/tmp/mcfta-native-cost-checkpoint-20261015-2020/` (2,724 files).
+Closing: `/tmp/mcfta-lazy-prefix-checkpoint-20261015-2030/` (2,730 files).
+Script: `/tmp/mcfta-preserve-lazy-prefix-20261015.py`.
+All earlier artifacts, stashes, and other worktrees remain. New logs, probes,
+and frozen source copies remain there. Weekly allowance is 85%. Stop owned
+work at 1% or less. No board posts or deployments. Keep the optimized core.
 
 ## Actual query cost retention and current primary class receipts
 

@@ -5,6 +5,12 @@ is `a8bbe9b5`. The optimized interned core and all earlier proofs remain.
 This proof closes the cost-retention gap in the existing supported-query
 interface. It does not prove the complete current caller.
 
+The later [reached-prefix proof](notes-source-lazy-class-prefix.md), checkpoint
+`3ca8c0c4`, now derives intermediate scan readiness and sound early rejection.
+The proposed next prefix target below retains this note's historical scope.
+Global memo composition, source entry extraction, fallback, and runtime
+transfer remain separate caller work.
+
 ## Stored costs and native execution
 
 CostHeap records weighted free-reference readback for each stored Mu payload.

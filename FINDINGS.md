@@ -1,6 +1,41 @@
 # Current formalization findings
 
-Updated: **2026-10-15 20:20 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 20:30 CEST (Europe/Stockholm)**.
+
+## Sound early rejection through reached original classes
+
+Proof checkpoint `3ca8c0c4`, source main `525d722e`. Read
+`lean/notes-source-lazy-class-prefix.md`. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+The current-policy reached-prefix graph and early-rejection theorem are
+proved. Selected records retain original order and multiplicity. A stopped
+class is an original member. A true query stops without later primary
+receipts. Both meets/classMeets mode equations preserve actual full outcomes.
+
+Current primary gates retain semantic readiness, costs, physical fields,
+and histories. The exact secondary anchor derives queried effects from
+ClassSat. verified derives all intermediate scan invariants under independent
+acceptance and satisfaction of all active original classes. stopped_refutes
+excludes such a candidate when the actual scan stops. No reached-ready,
+whole-original-forest closedness, semantic answer oracle, or completed
+fallback premise is supplied. Actual WordRanges and exploration remain.
+
+Global unfolding/predicate/descendant memo composition and actual query
+unfolding receipts remain. Native node/edge tables are separate. Original
+ordered Active class extraction, initial caller invariants, selected fallback,
+GHC demand/sharing, checked state, machine bounds, general completion,
+waiting counts, template exclusion, broader APIs/runtime, and all separate
+Sized contracts remain open.
+
+Full audit: 2,060 jobs, 52,058 dependency checks, permitted axioms only,
+no new warning. Five new modules and two additive Audit imports. Older proof
+definitions and all four Haskell package trees match `a421f9cd` unchanged.
+Start: `/tmp/mcfta-native-cost-checkpoint-20261015-2020/` (2,724 files).
+Closing: `/tmp/mcfta-lazy-prefix-checkpoint-20261015-2030/` (2,730 files).
+Script: `/tmp/mcfta-preserve-lazy-prefix-20261015.py`.
+All prior artifacts remain. Weekly allowance is 85%. No unchanged Haskell
+checks were repeated.
 
 ## Actual query cost retention and current primary class receipts
 

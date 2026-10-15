@@ -7,6 +7,23 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+## Current reached-prefix rejection proof
+
+Proof checkpoint `3ca8c0c4`, source main `525d722e`. Read
+[the reached-prefix proof and remaining caller work](notes-source-lazy-class-prefix.md).
+The current enabled primary and secondary modes have exact class-worker
+equations. Scan retains original selected order/multiplicity and stops before
+later primary checks. verified derives intermediate readiness and heap
+invariants under independent acceptance and all original active class
+conditions. stopped_refutes proves sound early rejection without a semantic
+oracle or completed fallback. Global gate memo composition, original entry
+extraction, selected fallback, GHC demand, checked-state/runtime transfer,
+and general completion remain open. The full audit passes 2,060 jobs and
+52,058 dependency checks with no new warning or axiom. Five new modules and
+two additive Audit imports contain the change. All older definitions and
+all four Haskell package trees remain unchanged. Full library scope and
+distinct Sized contracts remain. Earlier sections are historical.
+
 ## Current query cost and primary class proofs
 
 Proof checkpoint `09cfb640`, source main `525d722e`. Read

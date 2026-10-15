@@ -2,6 +2,50 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Sound early rejection through reached original classes
+
+Proof checkpoint `3ca8c0c4`, source main `525d722e`. Read
+`lean/notes-source-lazy-class-prefix.md` first. Full scope stays active.
+Earlier sections retain historical checkpoint scope.
+
+Current enabled primary gates now retain semantic readiness, costs, fields,
+and histories. Exact meets/classMeets mode equations identify both current
+primary and secondary workers. Scan records only reached original classes:
+primary clear selects; primary blocked runs secondary; secondary blocked
+skips query; secondary clear runs Seeded/Decision; false continues; true
+stops without any later primary receipts. Selected order and multiplicity
+and stopped original membership are proved.
+
+SourceSecondaryGateQueryReady derives exact anchored query effects from
+ClassSat, with no whole-original-forest closedness or reached-ready premise.
+SourceEqualityLazyClassSoundness.verified derives intermediate invariants
+through the entire completed Scan under independent acceptance and all
+original active class conditions. stopped_refutes proves sound early
+rejection. No semantic answer oracle or completed fallback is supplied.
+
+Next compose the three global gate memo families through Scan. Individual
+current primary and secondary receipts already exist. Projection/native
+queries can call global unfoldOuterRec; derive those actual call receipts
+and saved-entry coherence after growth. Native node/edge memos retained in
+Scan are distinct. Connect unsafeSubsumptionOrderedEclasses/normalized source
+constraints to the ordered Active entry list, and derive initial invariants
+from caller construction. Then compose the selected requireAll/class fold/
+empty propagation fallback, using original records and evolving edit forests.
+
+Exact GHC partition/any demand and sharing, progressive row demand, original
+child forcing, checked allocation transfer, machine word bounds, general
+completion, waiting counts, template exclusion, broader APIs/runtime, and
+all separate Sized contracts remain open. Keep the optimized interned core.
+
+Full audit: 2,060 jobs, 52,058 dependency checks, permitted axioms only,
+no new warning. Five new modules and two additive Audit imports. All older
+definitions and all four Haskell package trees remain byte-identical.
+Start: `/tmp/mcfta-native-cost-checkpoint-20261015-2020/` (2,724 files).
+Closing: `/tmp/mcfta-lazy-prefix-checkpoint-20261015-2030/` (2,730 files).
+Script: `/tmp/mcfta-preserve-lazy-prefix-20261015.py`.
+All prior artifacts remain. Weekly allowance is 85%. Stop owned work at
+1% or less. No board posts or deployments. Push verified formalize checkpoints.
+
 ## Actual query cost retention and current primary class receipts
 
 Proof checkpoint `09cfb640`, source main `525d722e`. Read
