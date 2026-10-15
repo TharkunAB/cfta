@@ -17,6 +17,23 @@ local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
 local notation "Worker" => SourceEqualityPartialMemoWorker.State
 local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
 
+/-- Actual allocation and heap receipts preserve the surrounding memo at any native observation. -/
+theorem observed_sound
+    (holds : Guard → Language.Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (worker : Worker width) (operations : Operations) (outcome : Outcome width Output)
+    (same : worker.constraints = operations.constraints)
+    (sound : SourceEqualityPartialMemoSound.Sound holds ambient worker)
+    (growth : SourceEqualityConstraintMemoAllocation.Grows operations outcome.state.operations)
+    (keeps : SourceEqualityRequiredCache.Keeps worker.native.machine.heap outcome.state.native.machine.heap) :
+    SourceEqualityPartialMemoFrame.Frame (SourceEqualityPartialMemoFrame.stateTables worker)
+      (SourceEqualityPartialMemoFrame.stateTables (returned worker outcome)) ∧
+      SourceEqualityPartialMemoSound.Sound holds ambient (returned worker outcome) := by
+  have steps : Cache.Steps worker.constraints outcome.state.operations.constraints := by
+    simpa only [same] using growth.constraints
+  have allocated := SourceEqualityPartialAllocationFrame.steps_sound holds ambient worker _ sound steps
+  exact ⟨SourceEqualityPartialAllocationFrame.steps_frame worker _ sound.valid steps,
+    SourceEqualityPartialMemoSound.Sound.keeps holds ambient allocated rfl keeps⟩
+
 /-- Actual reached input checks derive the heap receipt and preserve every surrounding result cell. -/
 theorem execute_sound [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
     (holds : Guard → Language.Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)

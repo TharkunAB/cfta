@@ -1,4 +1,5 @@
 import Lean
+import MicroCFTA.SourceEqualityPartialNativeStopped
 import MicroCFTA.SourceEqualityPartialNativeHeap
 import MicroCFTA.SourceEqualityNativeDemandMismatchReceipt
 import MicroCFTA.SourceEqualityNativeDemandNodeShortcut
