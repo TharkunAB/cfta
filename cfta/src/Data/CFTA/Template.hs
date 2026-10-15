@@ -5,33 +5,43 @@ matches any complete subtree. Exact patterns require the complete child list;
 prefix patterns constrain only the leading children. 'restrict' keeps exactly
 the matching terms of an interned graph, and 'restrictFTA' those of an
 explicit-state automaton. 'exclude' keeps exactly the terms of an interned
-graph that match none of some templates, and 'excludeFTA' those of an
-explicit-state automaton. An unambiguous input gives an unambiguous result,
-so counts and ranks over it stay exact. None of them interprets transition
-annotations; a constraint theory reduces its constraints afterwards.
+graph that match none of some templates at the root, and 'excludeFTA' those
+of an explicit-state automaton. 'excludeAnywhere' and 'excludeAnywhereFTA'
+keep those of which no subterm matches one. An unambiguous input gives an
+unambiguous result, so counts and ranks over it stay exact. None of them
+interprets transition annotations; a constraint theory reduces its
+constraints afterwards. 'preorderPrefix' makes the template of a prefix of
+a term in preorder.
 -}
 module Data.CFTA.Template (
     Template (..),
     matchesTemplate,
     matchesNone,
+    matchesNowhere,
     restrict,
     restrictFTA,
     exclude,
     excludeFTA,
+    excludeAnywhere,
+    excludeAnywhereFTA,
     Obligation (..),
+    preorderPrefix,
 ) where
 
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
 import Data.List (nub, partition, sort)
+import qualified Data.Map.Strict as Map
 import Data.Maybe (mapMaybe)
+import qualified Data.Set as Set
 import Data.Typeable (Typeable)
 
 import Data.CFTA (FTA, Transition (..))
 import qualified Data.CFTA as FTA
 import Data.CFTA.Index (Arity (..))
 import Data.CFTA.Internal.Tree (explore)
+import Data.CFTA.Interned (fromRows)
 import Data.CFTA.Interned.Operations (nodeEdges)
 import Data.CFTA.Interned.Type
 import Data.CFTA.Term (Term)
@@ -191,25 +201,88 @@ must not ('Obligation'). A transition splits as an edge does in 'exclude'
 excludeFTA ::
     (Ord state, Ord symbol) =>
     [Template symbol] -> FTA state symbol annotation -> FTA (state, Obligation symbol) symbol annotation
-excludeFTA templates automaton =
+excludeFTA = excludeBelow []
+
+{- | Keep exactly the terms of an automaton that match none of the second
+templates at the root, and of which no proper subterm matches one of the
+first templates.
+-}
+excludeBelow ::
+    (Ord state, Ord symbol) =>
+    [Template symbol] ->
+    [Template symbol] ->
+    FTA state symbol annotation ->
+    FTA (state, Obligation symbol) symbol annotation
+excludeBelow everywhere templates automaton =
     -- The input is ranked, so the result is ranked and validation cannot fail.
-    fromRight (error "excludeFTA: the exclusion from a ranked automaton is ranked")
-        $ FTA.mkFTA initial
-        $ explore excludeTransitions transitionChildren initial
+    fromRight (error "excludeBelow: the exclusion from a ranked automaton is ranked") $
+        uncurry FTA.mkFTA (obligationRows everywhere (FTA.transitionsFrom automaton) templates (FTA.initialState automaton))
+
+{- | The pairs of a state and an 'Obligation' that a state reaches, with
+their transitions, when its terms must match none of the second templates
+at the root and none of the first at a proper subterm: the first pair, and
+the rows. A transition splits as an edge does in 'exclude' ('edgeCopies').
+-}
+obligationRows ::
+    (Ord state, Ord symbol) =>
+    [Template symbol] ->
+    (state -> [Transition state symbol annotation]) ->
+    [Template symbol] ->
+    state ->
+    ((state, Obligation symbol), [((state, Obligation symbol), [Transition (state, Obligation symbol) symbol annotation])])
+obligationRows everywhere transitionsOf templates state = (initial, explore copies transitionChildren initial)
   where
-    initial = (FTA.initialState automaton, obligation [] templates)
-    excludeTransitions (state, Obligation wanted unwanted)
+    initial = (state, obligation [] templates)
+    copies (state', Obligation wanted unwanted)
         | any trivial unwanted = []
         | otherwise =
             [ transition
                 { transitionChildren =
-                    zipWith (\child (wanted', unwanted') -> (child, obligation wanted' unwanted')) (transitionChildren transition) parts
+                    zipWith
+                        (\child (wanted', unwanted') -> (child, obligation wanted' (unwanted' <> everywhere)))
+                        (transitionChildren transition)
+                        parts
                 }
-            | transition <- FTA.transitionsFrom automaton state
+            | transition <- transitionsOf state'
             , parts <- edgeCopies wanted unwanted (transitionSymbol transition) (length (transitionChildren transition))
             ]
     -- One form for equal obligations, so that equal states are one state.
     obligation wanted unwanted = Obligation (sort (nubOrd (filter (not . trivial) wanted))) (sort (nubOrd unwanted))
+
+{- | Keep exactly the terms of an interned graph of which no subterm matches
+one of the templates, as 'matchesNowhere' says.
+
+Each position of a term gets the templates again, so the result reaches the
+whole automaton. Its states pair a node of the input with what the terms of
+a position must match and must not ('Obligation'), as for 'excludeFTA'.
+Only the reachable pairs are built, and 'fromRows' interns them: a cycle of
+pairs gets a 'Mu', so a recursive input gives a recursive result, and each
+node is built once for each set of enclosing binders. The obligations are
+subsets of the templates' parts, so there are finitely many. The symbols
+need no consistent arity. As for 'exclude', each run of the input whose
+term the result keeps is a run of exactly one copy of an edge, and an
+unambiguous input gives an unambiguous result.
+-}
+excludeAnywhere ::
+    (Ord symbol, Hashable symbol, Typeable symbol) =>
+    [Template symbol] -> Node symbol -> Node symbol
+excludeAnywhere templates root
+    | not (Set.null (freeVars root)) = error "excludeAnywhere: unexpected free recursive reference"
+    | otherwise = uncurry fromRows (Map.fromList <$> obligationRows templates transitionsOf templates root)
+  where
+    transitionsOf node = [Transition (edgeSymbol edge) (edgeChildren edge) (edgeConstraint edge) | edge <- nodeEdges node]
+
+{- | Keep exactly the terms of an automaton of which no subterm matches one
+of the templates, as 'excludeAnywhere' does for an interned graph.
+
+The states are as for 'excludeFTA', and each child gets the templates
+again. The obligations are finite, so the result is finite, and a cycle of
+the input gives a cycle of the result.
+-}
+excludeAnywhereFTA ::
+    (Ord state, Ord symbol) =>
+    [Template symbol] -> FTA state symbol annotation -> FTA (state, Obligation symbol) symbol annotation
+excludeAnywhereFTA templates = excludeBelow templates templates
 
 {- | The copies of an edge with a symbol and a number of children whose terms
 match every wanted template and no unwanted one: for each copy, what each
@@ -248,3 +321,24 @@ trivial :: Template symbol -> Bool
 trivial Hole = True
 trivial (AnyPrefix []) = True
 trivial _ = False
+
+-- | Whether no subterm of a concrete term matches one of the templates.
+matchesNowhere :: (Eq symbol) => [Template symbol] -> Term symbol -> Bool
+matchesNowhere templates term@(Term.Node _ children) = matchesNone templates term && all (matchesNowhere templates) children
+
+{- | The template of a prefix of a term in preorder: each node by its symbol
+and its number of children, the first node first. The template matches
+exactly the terms whose preorder starts with these nodes: the children that
+the prefix does not reach are holes. So @[(f, 2), (g, 0)]@ gives
+@TemplateNode f [TemplateNode g [], Hole]@, and @[]@ gives 'Hole'.
+-}
+preorderPrefix :: [(symbol, Int)] -> Template symbol
+preorderPrefix = fst . node
+  where
+    node [] = (Hole, [])
+    node ((symbol, count) : rest) = let (children, rest') = nodes count rest in (TemplateNode symbol children, rest')
+    nodes 0 rest = ([], rest)
+    nodes count rest =
+        let (child, rest') = node rest
+            (children, rest'') = nodes (count - 1 :: Int) rest'
+         in (child : children, rest'')
