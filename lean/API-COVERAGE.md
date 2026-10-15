@@ -1,5 +1,20 @@
 # Public API and source correspondence
 
+## Original constraint origins and the outer height boundary
+
+Proofs: `c77bb8c4` and `56c94073`, on main `33148e6d`. Read
+[the origin note](notes-constraint-origins.md). Actual local narrowing can
+return ordinary children taller than the original caller root. Both kernel
+evaluation and a retained live source reproduction verify this boundary.
+Conditional conjunction closure follows native intersection and the complete
+guarded prefix. Original normalized syntax derives the initial finite literal
+inventory. Every prefix guard comes from a literal, Top, or source conjunction.
+The conjunction closure is not proved finite and supplies no decreasing
+measure. The audit passes 1,882 jobs and 48,456 dependency checks. Next carry
+this inventory through actual outer recursion and checked bounded success.
+General constrained caller termination remains open. This section supersedes
+older narrowed-child origin targets. Root HANDOFF.md records preservation.
+
 ## Finite exact native prefixes at arbitrary closed warm scopes
 
 Proofs: `6cef0487` and `438393a0`, on main `33148e6d`. Read

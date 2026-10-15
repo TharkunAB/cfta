@@ -1,6 +1,63 @@
 # Current formalization findings
 
-Updated: **2026-10-15 10:38 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 11:09 CEST (Europe/Stockholm)**.
+
+## Original constraint origins and the outer height boundary
+
+Proofs: `c77bb8c4` and `56c94073`. Source: `TharkunAB/cfta`,
+`origin/main` at `33148e6d`. Authenticated HTTPS pull succeeded; main is
+unchanged and is an ancestor of `formalize`. Continue on `formalize` and
+push checkpoints. Read `lean/notes-constraint-origins.md`. This section
+supersedes the narrowed-child origin target below.
+
+A closed normalized example refutes ordinary-height descent. The gate
+accepts ordinary endpoints above raw unused binders. Intersection removes
+the binders and exposes constrained bodies. The original root has height 2;
+its children have maximum height 1; actual narrowed children have maximum
+height 3. Kernel evaluation proves these values for the source guarded-edge
+worker. The retained Haskell reproduction reports `(2,1,3,4)` and `Just True`
+for local and complete public execution. Both new children retain nonempty
+inner equality. This refutes a proposed measure, not source termination.
+
+Conditional constraint closure now follows actual native intersection,
+captured targets, shared edits, selection, required paths, class folds,
+final propagation, and literal reconstruction. Conjunction needs the property
+of its two actual operands. No unconditional property of arbitrary guards or
+future heap is supplied. Original source syntax gives a finite literal
+inventory, including raw and smart binder bodies. Initial construction and
+the finite closed warm native prefix derive every emitted guard from an
+original literal, source Top, or source conjunction. Exact contextual public
+language, both source gate memo receipts, recursive Scope, physical histories,
+and stable six-stage replay remain available under reached word checks.
+Only the literal inventory is proved finite. Its conjunction closure is not
+proved finite. Origin derivations are not a decreasing measure.
+
+Next carry this original inventory through the actual outer recursive graph.
+Use the real local prefix, physical combination and descent, returned child
+scopes, Mu cleanup, row tails, and modifyNode. Connect the invariant to checked
+bounded caller success. Then study a valid measure that accounts for
+constrained bodies below ordinary endpoints. Do not assume a future origin
+heap, caller graph, caller success, structural height decrease, or initial
+finite Mu inventory to claim general existence. General constrained caller
+termination, the outer reduction memo table, open contexts, repeated fixed
+points, getAllAtPath, native containers, GHC scheduling, and extraction remain
+open.
+
+The audit passes 1,882 jobs and 48,456 dependency checks with only propext,
+Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. Log: `/tmp/mcfta-constraint-origins-20261015-audit.log`.
+The retained Haskell fixture compiles and passes in Nix. Fourmolu and all
+three active Cabal formatting checks pass. No production Haskell changed.
+The earlier 650 examples, affected benchmark build, and metadata checks were
+not repeated. Starting snapshot:
+`/tmp/mcfta-outer-origins-start-20261015-1045/`.
+Closing snapshot: `/tmp/mcfta-constraint-origins-checkpoint-20261015-1109/`.
+Older proofs except audit imports, counterexamples, marked drafts, stashes,
+and other worktrees remain unchanged. Weekly allowance was 98% at
+2026-10-15 11:08 CEST. Refresh it before work. Stop all work and owned
+workers at 1% or less. Preserve Sized exact classes, finite size execution,
+size order, both distinct rank inverses, the optimized interned core, and
+older constructor and equality work. No board posts or deployments.
 
 ## Finite exact native prefixes at arbitrary closed warm scopes
 

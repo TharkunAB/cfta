@@ -6,21 +6,24 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,876 jobs and 48,215 theorem dependency checks.
-The [closed warm completion proof](notes-closed-warm-completion.md) derives
-finite closed gate selection, required paths, and native folds at arbitrary
-warm scopes under reached word checks. Actual guarded-edge construction gives
-both source memo receipts, returned recursive scope, stable full-state replay,
-and exact public language under inherited satisfaction. No completed prefix,
-original construction, sufficient bound, or future scope is supplied.
-The [inherited Region proof](notes-inherited-plain-completion.md) still supplies
-finite outer execution for equality-free regions with any inherited payload.
-General constrained outer recursion remains open. Next study actual narrowed
-child origins and a valid measure or focused counterexample.
+The audit passes 1,882 jobs and 48,456 theorem dependency checks.
+The [constraint origin proof](notes-constraint-origins.md) derives original
+literal, Top, and conjunction origins through the actual guarded native prefix.
+Both kernel evaluation and a retained live source reproduction show narrowed
+ordinary children taller than the original caller root. Ordinary height
+therefore does not prove caller descent. Only the original literal inventory
+is proved finite; its conjunction closure is not a decreasing measure.
+The [closed warm completion proof](notes-closed-warm-completion.md) still gives
+finite local execution, actual source gate memos, stable replay, and contextual
+public exactness under reached word checks. The
+[inherited Region proof](notes-inherited-plain-completion.md) gives finite
+outer execution for equality-free regions with any inherited payload.
+Next carry original constraint origins through actual outer recursion and
+checked bounded success. General constrained caller termination remains open.
 The [Sized comparison](notes-canonical-upstream.md) remains current. Exact
 classes, finite size execution, sequence, and both rank inverse contracts
 retain their source definitions. UVar and synthesis orders remain separate.
-This paragraph supersedes older finite gate and warm local completion targets.
+This paragraph supersedes older narrowed-child origin targets.
 Older next-target statements below are historical where superseded here.
 The [inherited edge proof](notes-inherited-edge.md) derives actual physical
 constraint combination and trie descent, indexed child obligations, exact

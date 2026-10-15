@@ -7,6 +7,19 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Constraint origin application (2026-10-15 11:09 CEST)
+
+Native intersection and the complete guarded prefix preserve a constraint
+property when conjunction preserves its two actual operand properties.
+Original syntax supplies a finite literal inventory, including binder bodies.
+Initial construction and actual closed warm prefixes derive literal, Top,
+and conjunction origins. Read [the current note](notes-constraint-origins.md).
+The conjunction closure is not proved finite. Kernel and live source
+counterexamples refute ordinary-height descent. Next carry origins through
+actual outer recursion. General constrained caller termination, outer memo
+tables, repeated passes, native containers, GHC scheduling, and extraction
+remain separate. No Lava or Rocq dependency is added.
+
 ## Finite warm source prefix application (2026-10-15 10:38 CEST)
 
 Closed gate progress now follows path length and actual child lookups.
