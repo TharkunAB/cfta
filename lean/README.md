@@ -6,20 +6,20 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,888 jobs and 48,536 theorem dependency checks.
-The [finite constraint inventory](notes-constraint-inventory.md) derives fixed
-original path anchors, bounded segments, alphabet, and guard atoms through
-actual source conjunction. Explicit finite equality and guard lists contain
-every complete derived constraint. Original normalized syntax and checked
-successful public execution derive physical inventory membership throughout
-the heap and returned value, both source gate memo receipts, exact language,
-and stable identical full-state replay. The actual own-payload accessor also
-has a finite image. Success remains an explicit premise. Finite annotations
-do not prove finite node construction or caller termination. Next inspect
-actual narrowed-child node origins, inherited payloads, and a valid rank or
-focused counterexample. The
-[height counterexample](notes-constraint-origins.md) still refutes ordinary
-height as the descent measure.
+The audit passes 1,890 jobs and 48,594 theorem dependency checks.
+The [source boundary checks](notes-origin-boundaries.md) refute inherited
+literal conjunction closure and a local maximum-path bound. Retained Haskell
+prefixes also refute physical absorption of a repeated intersection factor.
+The latter kernel identity candidates remain explicitly unverified drafts.
+These are finite boundary checks, with no infinite-growth or termination
+claim. Exact small normalization receipts retain the actual source result.
+The [finite physical constraint inventory](notes-constraint-inventory.md)
+remains proved for checked successful public calls, with exact language,
+both source gate memo receipts, and stable full-state replay. Inherited
+records and actual node construction need separate bounds. Next derive a
+rank for actual outer child continuations, including stopping at Mu and
+union inputs. The [ordinary-height counterexample](notes-constraint-origins.md)
+still applies.
 The [closed warm completion proof](notes-closed-warm-completion.md) gives finite
 local execution at arbitrary closed warm scopes under reached word checks.
 The [inherited Region proof](notes-inherited-plain-completion.md) gives finite
@@ -27,7 +27,7 @@ outer execution for equality-free regions with any inherited payload.
 The [Sized comparison](notes-canonical-upstream.md) remains current. Exact
 classes, finite size execution, sequence, and both rank inverse contracts
 retain their source definitions. UVar and synthesis orders remain separate.
-This paragraph supersedes older finite derived-constraint targets.
+This paragraph supersedes generic factor and inherited-closure candidates.
 Older next-target statements below are historical where superseded here.
 The [inherited edge proof](notes-inherited-edge.md) derives actual physical
 constraint combination and trie descent, indexed child obligations, exact

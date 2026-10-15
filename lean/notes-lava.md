@@ -7,6 +7,19 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Source bound counterexamples (2026-10-15 11:48 CEST)
+
+Kernel evaluation refutes a fixed local path-length bound and literal
+conjunction closure for inherited readback. Retained Haskell local prefixes
+refute physical absorption of a repeated intersection factor. Their kernel
+identity candidates remain explicitly unverified drafts. Exact small
+normalization receipts retain the actual source array result. Read
+[the current note](notes-origin-boundaries.md). Finite physical annotations
+remain proved; neither these counterexamples nor that inventory proves
+general caller termination. Actual child continuations, the outer memo
+table, repeated passes, native containers, GHC scheduling, and extraction
+remain separate. No Lava or Rocq dependency is added.
+
 ## Finite constraint inventory application (2026-10-15 11:29 CEST)
 
 Actual equality normalization retains original path anchors, bounded segments,

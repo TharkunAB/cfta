@@ -1,6 +1,70 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 11:29 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 11:48 CEST (Europe/Stockholm)**.
+
+## Source boundaries for inherited payloads and physical node factors
+
+Proofs and reproductions: `b163ddd4`. Source: `TharkunAB/cfta`,
+`origin/main` at `33148e6d`. HTTPS pull succeeded; main is unchanged and
+is an ancestor of `formalize`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-origin-boundaries.md`. This section supersedes the generic
+node-factor and inherited-closure candidate bounds below.
+
+One fixed normalized local constraint uses `0 = 1.0.0` and `0.1 = 1.0.1`.
+Actual own readback has maximum path length 4. Repeated actual combination
+with that payload and physical child-1 descent gives kernel-checked maximum
+lengths `[0,3,4,5,6]`. Every finite prefix completes with well-formed tries.
+The first descended readback, lifted to a complete Top constraint, lies
+outside the entire conjunction closure of that original local constraint
+and Top. That closure has exactly those two values. The retained Haskell
+probe checks exact classes through seven steps and lengths through 9.
+These facts do not prove an infinite set of inherited states or an actual
+outer caller trace that reaches every step.
+
+Fixed closed unary inputs A and B give B, B intersect A, and its next
+intersection with A with physical graph counts `(2,3,3)`, `(4,6,7)`, and
+`(12,19,26)`. The retained Haskell reproduction checks distinct identities,
+closure, and matching actual local equality-prefix children. A set of
+distinct source factors is not a canonical physical key. This is a finite
+two-step observation, not infinite growth or a nontermination result.
+The attempted kernel identity proofs remain explicitly unverified at
+`/tmp/mcfta-intersection-growth-boundary-draft-20261015.lean` and
+`/tmp/mcfta-intersection-growth-first-kernel.lean`. Exact live handles were
+stopped after more than three minutes and thirty seconds, respectively.
+The snapshot includes these drafts and their limit record. No unverified
+identity theorem is imported by Audit.
+
+Completed normalization schedules now have an exact source receipt theorem.
+A small completed reference receipt identifies the actual array result;
+an incomplete receipt retains the actual source call. No evaluation axiom
+or production change is added. The finite physical constraint inventory
+remains proved. Inherited records and their lifted readback are separate.
+
+Next derive a decreasing rank or finite dependency argument for actual
+constrained outer child continuations. Include narrowing, physical payload
+combination and descent, Mu cleanup, returned ordinary children, and stopping
+at Mu and union inputs. The repeated probe products are not an actual outer
+trace. Do not assume original ordinary height, inherited literal closure,
+physical factor absorption, a future finite node inventory, a completed
+caller graph, or successful receipt to prove general existence. General
+constrained caller termination, the outer reduction memo table, open
+contexts, repeated fixed points, getAllAtPath, native containers,
+GHC scheduling, and extraction remain open.
+
+The audit passes 1,890 jobs and 48,594 dependency checks with only propext,
+Classical.choice, and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-origin-boundaries-20261015-audit.log`.
+Both retained Haskell probes, Fourmolu, and all three active Cabal formatting
+checks pass in Nix. No production Haskell changed. Earlier 650-example,
+benchmark-build, and metadata checks were not repeated. Starting snapshot:
+`/tmp/mcfta-origin-boundaries-start-20261015-1131/`.
+Closing snapshot: `/tmp/mcfta-origin-boundaries-checkpoint-20261015-1148/`.
+Older proofs except audit imports, counterexamples, marked drafts, stashes,
+and other worktrees remain unchanged. Weekly allowance was 98% at
+2026-10-15 11:46 CEST. Refresh it before work. Stop all work and owned
+workers at 1% or less. Preserve Sized exact classes, finite size execution,
+size order, both distinct rank inverses, the optimized interned core, and
+older constructor and equality work. No board posts or deployments.
 
 ## A fixed finite inventory for recursive source constraints
 

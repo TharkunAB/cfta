@@ -1,5 +1,20 @@
 # Public API and source correspondence
 
+## Source boundaries for inherited payloads and physical node factors
+
+Proofs and reproductions: `b163ddd4`, on main `33148e6d`. Read
+[the boundary note](notes-origin-boundaries.md). Kernel checks refute a bound
+on inherited paths by fixed local path length. The first descended payload,
+lifted with Top, leaves the entire original literal conjunction closure.
+Two retained Haskell prefixes also refute physical absorption of a repeated
+source factor. Their kernel identity candidates remain marked drafts in
+the closing snapshot. No infinite-growth or caller-nontermination claim is
+made. Exact small normalization receipts preserve the actual source result.
+The audit passes 1,890 jobs and 48,594 dependency checks. Next derive a rank
+for actual child continuations, including stopping Mu and union inputs.
+This section supersedes generic factor and inherited-closure candidates.
+Root HANDOFF.md records preservation and the remaining obligations.
+
 ## A fixed finite inventory for recursive source constraints
 
 Proof: `3ef4f2e1`, on main `33148e6d`. Read
