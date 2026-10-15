@@ -1602,73 +1602,98 @@ has a refinement generator. `Data.CFTA.Gen.Refinement.Derive` reads the
 constructors of the datatype from `HasFTA` and builds the generator that the
 combinators above give, so the ranks are the ranks of that hand-written
 generator. The invariant is a measure and a contract, written once as Haskell
-functions that are polymorphic over `Symbolic`:
+functions that are polymorphic over `Symbolic`, over the node view of the
+datatype:
 
 ```haskell
 data SortedList = Nil | Cons Integer SortedList
     deriving stock (Eq, Show, Generic)
     deriving anyclass (HasFTA)
 
+-- One node of a sorted list: an element, and the head of the rest.
+data SortedListNode e = NilNode | ConsNode e e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
 instance HasLTA SortedList where
+    type Node SortedList = SortedListNode
+    type Measures SortedList = Single
     invariant = Measured headOf sorted
       where
-        headOf Cons{} [x, _] = x
-        headOf _ _ = 1000001
-        sorted Cons{} [x, restHead] = 0 .<= x .&& x .<= 1000000 .&& x .<= restHead
-        sorted _ _ = true
+        headOf NilNode = 1000001
+        headOf (ConsNode x _) = x
+        sorted NilNode = true
+        sorted (ConsNode x restHead) = 0 .<= x .&& x .<= 1000000 .&& x .<= restHead
 
 sortedLists :: Either DeriveLTAError (LTAGen.LTAGen SortedList)
 sortedLists = deriveLTA @SortedList 8 (atom @Integer LTAGen.every)
 ```
 
-Each function takes a constructor, matched with a pattern that does not read
-its fields, and the integers of its fields: the value of an atomic field, and
-the measure of a field of the datatype. On `Expr`, the functions give the
-formulas of the generator. Here `sortedLists` is the generator of
-SortedLists.hs: the contract conjuncts that name only the element move to
-its `every` leaf, and the generator has C(1000009, 8) members. On `Integer`,
-`holds` and `measureOf` run the same functions on values, so the property
-of a test reads the invariant of the generator:
-`holds atoms invariant (Cons 3 (Cons 1 Nil))` is `False`.
+The node view has one constructor for each constructor of the datatype, in
+the same order, and one field for each field: the integer of an atomic field,
+and the measure of a field of the datatype. So GHC checks the number of
+children, and `-Wincomplete-patterns` checks that each constructor has a
+clause. `deriveLTA` checks the node view against the datatype and reports
+`NodeMismatch`. A later `deriveNode` can write the node view from the
+datatype (TODO).
+
+On `Expr`, the functions give the formulas of the generator. Here
+`sortedLists` is the generator of SortedLists.hs: the contract conjuncts that
+name only the element move to its `every` leaf, and the generator has
+C(1000009, 8) members. On `Integer`, `holds` and `measureOf` run the same
+functions on values, so the property of a test reads the invariant of the
+generator: `holds atoms invariant (Cons 3 (Cons 1 Nil))` is `False`.
 
 `deriving anyclass (HasLTA)` gives a datatype without an invariant. The bound
 and the atoms are arguments of `deriveLTA`, as the domains are arguments of
 `deriveFTAWith`, because they belong to one use of the datatype. The bound
 counts the unfoldings of each group of types that refer to each other, as
-`recurUpTo` does. `deriveLTAWith` is the level below: it takes the contracts
-and the measures of the constructors by name, as annotations in the
-expression language.
+`recurUpTo` does. `Data.CFTA.Gen.Refinement.Derive.Internal` is the level
+below: it takes the contracts and the measures of the constructors by name,
+as annotations in the expression language, for a translation that knows the
+names only at run time.
 
-A datatype with several integers for each value has named measures.
-`MeasuredBy` takes a list of named measures and a contract over the children,
-which read a named measure with `childMeasure`, as `measuredBy` does for the
-combinators. Red-black trees from one datatype:
+A datatype with several integers for each value has named measures: a record
+whose selector names are the names of the measures in the logic. `MeasuredBy`
+takes the measures of a node as the record, and the node view has the record
+of each child, so the invariant reads `bh left`, as `measuredBy` reads
+`uninterpreted "bh" [left]`. Red-black trees from one datatype:
 
 ```haskell
 data Tree = Leaf | Black Tree Tree | Red Tree Tree
     deriving stock (Eq, Show, Generic)
     deriving anyclass (HasFTA)
 
+data TreeMeasures e = TreeMeasures {bh :: e, col :: e}
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (MeasureRecord)
+
+data TreeNode e = LeafNode | BlackNode (TreeMeasures e) (TreeMeasures e) | RedNode (TreeMeasures e) (TreeMeasures e)
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
 instance HasLTA Tree where
+    type Node Tree = TreeNode
+    type Measures Tree = TreeMeasures
     invariant = MeasuredBy measures balanced
       where
-        bh child = childMeasure "bh" child
-        col child = childMeasure "col" child
-        measures Black{} [left, _] = [("bh", bh left + 1), ("col", 0)]
-        measures Red{} [left, _] = [("bh", bh left), ("col", 1)]
-        measures _ _ = [("bh", 0), ("col", 0)]
-        balanced Black{} [left, right] = bh left .== bh right
-        balanced Red{} [left, right] = bh left .== bh right .&& col left .== 0 .&& col right .== 0
-        balanced _ _ = true
+        measures LeafNode = TreeMeasures 0 0
+        measures (BlackNode left _) = TreeMeasures (bh left + 1) 0
+        measures (RedNode left _) = TreeMeasures (bh left) 1
+        balanced LeafNode = true
+        balanced (BlackNode left right) = bh left .== bh right
+        balanced (RedNode left right) = bh left .== bh right .&& col left .== 0 .&& col right .== 0
 
-trees = (`LTAGen.satisfying` \v -> childMeasure "col" v .== 0 .&& childMeasure "bh" v .<= 3)
+trees = (`LTAGen.satisfying` \v -> col (measuresAt v) .== 0 .&& bh (measuresAt v) .<= 3)
     <$> deriveLTA @Tree 6 mempty
 ```
 
 These are the 25,728,160,405 trees of `RedBlackTrees.hs`, at the same ranks.
-Write `bh` with its argument: the monomorphism restriction gives
-`bh = childMeasure "bh"` one type of integers, and the invariant uses it on
-both `Expr` and `Integer`. `measuresOf` gives the named measures of a value.
+`measuresAt` gives the measures of a value term, for a condition on the
+root, and `measuresOf` gives the measures of a value as the record. A
+selector such as `bh` is a Haskell function, so it cannot share a module with
+another function `bh`, such as a Liquid Haskell measure: put the record in its
+own module and import it qualified, or use `OverloadedRecordDot`.
 
 ## Component synthesis
 
