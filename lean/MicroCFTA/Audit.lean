@@ -1467,6 +1467,11 @@ import MicroCFTA.SourceEqualityRequiredHeadLanguage
 import MicroCFTA.SourceEqualityRequiredListFacts
 import MicroCFTA.SourceEqualityRequiredSemanticEffects
 import MicroCFTA.SourceEqualityNeededNonnegative
+import MicroCFTA.SourceEqualityRequiredForestMeaning
+import MicroCFTA.SourceEqualityRequiredLanguage
+import MicroCFTA.SourceEqualityRequiredAPI
+import MicroCFTA.SourceClosedGateCache
+import MicroCFTA.SourceEqualitySelectedRequired
 /-!
 # Proof dependency audit
 
