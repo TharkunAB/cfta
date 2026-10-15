@@ -37,7 +37,7 @@ a literal.
 -}
 module Data.CFTA.Generic (
     HasFTA (..),
-    Description,
+    Description (..),
     atomic,
     Atomic (..),
     TypedFTA,
