@@ -1678,6 +1678,13 @@ import MicroCFTA.SourceEqualityPartialLiftChildren
 import MicroCFTA.SourceEqualityPartialLiftRows
 import MicroCFTA.SourceEqualityPartialWorkerGraph
 import MicroCFTA.SourceEqualityPartialCheckedSource
+import MicroCFTA.SourceClosedGateMemoNodes
+import MicroCFTA.SourceClosedGateMemoSelection
+import MicroCFTA.SourceEqualityClosedMemoReads
+import MicroCFTA.SourceEqualityPartialMemoGraph
+import MicroCFTA.SourceEqualityPartialMemoCases
+import MicroCFTA.SourceEqualityPartialMemoProofs
+import MicroCFTA.SourceEqualityPartialMemoSource
 /-!
 # Proof dependency audit
 
