@@ -1,6 +1,67 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 16:46 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 17:04 CEST (Europe/Stockholm)**.
+
+## Main a22b2ad4: conservative emptiness
+
+Current source main: `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.
+Preserving merge: `e612302b`. Pre-merge checkpoint: `aaeeac64`.
+Proofs: `598ad8dc`, `59b2fbf4`, `0414c98b`, and `dab4eade`.
+Read `lean/notes-main-a22b2ad4.md`, then the stateful memo note. Continue on
+formalize and push verified checkpoints. Full library scope remains open.
+
+The source adds provablyEmpty and an early-empty branch for refused equality
+classes. The primary gate retains the 24a policy. The secondary gate uses the
+older endpoint rule. Five additive modules prove exact mode agreement, finite
+Boolean stabilization and leastness, smaller accepted witnesses for actual
+source-shaped requirement lists, completed-value worklist termination and
+admission bounds, and conditional constrained-term preservation by the new
+pass. The row theorem derives Decomposes from three primitive laws, physical
+readback, and one-level accepted row exposure. The pass theorem requires a
+sound per-call oracle; its actual source graph bridge remains open.
+
+Next connect actual exploration to the finite table. Retain native exposure,
+projection, and both distinct intersection-fold schedules. Derive normalized
+active classes, closed resident requirements, and untagged machine identity
+readback. Then instantiate oracle soundness and carry both gate modes plus
+all three memo families through the actual lazy refused-class scan. Reconnect
+the selected-class fallback and recursive caller. General native and outer
+caller completion remain unproved. The 1000-key budget bounds admissions,
+not native calls, thunk demands, work, or allocation.
+
+The fixture now reduces to EmptyNode. A fresh-process temporary observer
+prints Just True for that comparison. The preserved old identity observer
+cannot observe EmptyNode; its error is not a reduction cycle. Raw malformed
+singleton/empty classes demonstrate why normalized Constraint invariants are
+necessary. They are not counterexamples for valid normalized inputs.
+
+The strict Nix build and all six suites pass: 697 examples plus golden checks.
+Changed-file Fourmolu passes. Metadata and Sized are unchanged; prior metadata
+and separate 205-rank checks were not repeated. The pinned Lean audit passes
+1,999 jobs and 51,206 dependency checks with permitted axioms only. No new
+warning occurs. Logs use `/tmp/mcfta-main-a22b2ad4-*-20261015.log`.
+Repository instructions require the Nix validation.
+
+All production definitions match this main. Only the retained constructor
+changelog entry and caller-repro comment differ in package trees. The reviewed
+upstream delta changes four files. Other optimized interned operations,
+normalization, Sized, and generator source remain unchanged. Prior proofs
+except additive Audit imports, repros, marked drafts, external drafts, stashes,
+and other worktrees remain. Pre-merge snapshot:
+`/tmp/mcfta-endpoint-memo-checkpoint-20261015-1646/` (2,650 files).
+Closing snapshot: `/tmp/mcfta-main-a22b2ad4-checkpoint-20261015-1704/` (2,656 files).
+
+Keep unchanged native InputsThrough, semantic finish receipts, internal ranges,
+sidecar coverage, and candidate-parametric Mu/repeated-pair contexts as separate
+targets. New derived-refinement APIs, named measures, full causal/pending
+correspondence, containers/word adequacy, lifetime capacity, getAllAtPath,
+decision-model, parser/decoder bridges, and extraction remain open. Keep the
+optimized interned core and older constructor/equality work. Sized exact
+node-count classes, finite execution, canonical sequence, distinct size order,
+and both signed inverse implications remain separate contracts.
+Weekly allowance was 90% at 2026-10-15 16:55 CEST. Refresh before work; stop
+work and owned workers at 1% or less. No board posts or deployments.
+The sections below retain historical source heads, observations, and targets.
 
 ## Stateful endpoint checks and three memo families
 

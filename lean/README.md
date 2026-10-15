@@ -1,11 +1,31 @@
 # cfta formal model
 
-Current source: `TharkunAB/cfta`, `origin/main` at `24a710a3`, merged at `6a02619c`.
+Current source: `TharkunAB/cfta`, `origin/main` at `a22b2ad4`, merged at `e612302b`.
 Continue on `formalize`; push verified checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`. Public `Data.CFTA.*`
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
+
+## Current conservative emptiness source
+
+Main `a22b2ad4` is merged at `e612302b`. Read
+[the source comparison and proof limits](notes-main-a22b2ad4.md).
+Proofs `598ad8dc`, `59b2fbf4`, `0414c98b`, and `dab4eade` cover both endpoint
+modes, finite optimistic Boolean stabilization, smaller witnesses for original
+children and foldr1 class intersections, finite completed-value exploration,
+and conditional preservation by the refused-class emptiness branch. The row
+bridge derives Decomposes from primitive laws, physical readback, and local
+accepted-row exposure. Actual graph construction, untagged identity adequacy,
+native call receipts, per-call oracle soundness, and lazy class-scan effects
+remain open. The 1000-key budget bounds admissions, not native work.
+The fixture now returns EmptyNode; the old identity observer is unsuitable.
+Raw malformed class probes confirm the need for normalized input invariants.
+All six Nix suites pass 697 examples plus golden checks; strict build and
+changed-file formatting pass. The pinned Lean audit passes 1,999 jobs and
+51,206 dependency checks with only permitted axioms. All prior proofs/repros/
+drafts remain. The optimized core and distinct Sized contracts remain.
+Earlier source heads, counts, runtime observations, and targets are historical.
 
 ## Current stateful gate and descendant memo
 

@@ -1,5 +1,25 @@
 # Constrained languages, indexing, and distributions
 
+## Current conservative emptiness source
+
+Main `a22b2ad4` is merged at `e612302b`. Read
+[the source comparison and proof limits](notes-main-a22b2ad4.md).
+Proofs `598ad8dc`, `59b2fbf4`, `0414c98b`, and `dab4eade` cover both endpoint
+modes, finite optimistic Boolean stabilization, smaller witnesses for original
+children and foldr1 class intersections, finite completed-value exploration,
+and conditional preservation by the refused-class emptiness branch. The row
+bridge derives Decomposes from primitive laws, physical readback, and local
+accepted-row exposure. Actual graph construction, untagged identity adequacy,
+native call receipts, per-call oracle soundness, and lazy class-scan effects
+remain open. The 1000-key budget bounds admissions, not native work.
+The fixture now returns EmptyNode; the old identity observer is unsuitable.
+Raw malformed class probes confirm the need for normalized input invariants.
+All six Nix suites pass 697 examples plus golden checks; strict build and
+changed-file formatting pass. The pinned Lean audit passes 1,999 jobs and
+51,206 dependency checks with only permitted axioms. All prior proofs/repros/
+drafts remain. The optimized core and distinct Sized contracts remain.
+Earlier source heads, counts, runtime observations, and targets are historical.
+
 ## Current stateful gate and descendant memo
 
 Proof checkpoint `9f6d66a6`, source main `24a710a3`. Read

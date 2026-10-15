@@ -1,5 +1,10 @@
 # Endpoint recursion guard and preserved source models
 
+Current source is a22b2ad4. Read [the emptiness update](notes-main-a22b2ad4.md) first.
+This note retains its 24a710a3 proof scope and runtime observations.
+The primary path component remains applicable. The new class pipeline and
+early-empty branch need the additional source bridges in the update.
+
 Current proof update: `9f6d66a6` adds current-policy stateful execution,
 finite source checks, ordered descendant memo correctness, sequential active
 ancestor separation, and receipts for all three gate memo tables. The complete

@@ -1,5 +1,10 @@
 # Stateful endpoint gate and ordered descendant memo
 
+Current source is a22b2ad4. Read [the emptiness update](notes-main-a22b2ad4.md) first.
+This note retains its 24a710a3 proof scope and runtime observations.
+The primary path component remains applicable. The new class pipeline and
+early-empty branch need the additional source bridges in the update.
+
 ## Stateful endpoint checks and three memo families
 
 Proof source main: `24a710a39e5adcc94c4d986f0bda81a8483bdba8`.
