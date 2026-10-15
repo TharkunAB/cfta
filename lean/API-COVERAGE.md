@@ -1,5 +1,69 @@
 # Public API and source correspondence
 
+## Demanded original class targets and constructed native edits
+
+Proofs: `e38dc119`, `388f111b`, and `92d59cfd`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-demanded-class-targets.md`. This section supersedes the
+standalone original class-target construction target.
+
+A demanded operand now performs actual captured-forest projection and
+general merging inside the existing full native state. Both stages retain
+the actual domain and native memo tables. Local completion derives every
+closed operand. Proper-path inclusion retains each accepted selected subterm.
+The target graph interleaves these demands with actual native intersections.
+It uses the source first path as seed and folds the remaining paths from
+right to left. Left operands are demanded before their tails. The seed is
+demanded at the base. It does not prepare all operands before the fold.
+
+Actual-prefix FoldRanges and TargetRanges check native words only after
+actual operand and recursive fold receipts. Local operand and idle warm
+native progress derive complete finite target graphs. The executable worker
+keeps projection, head-read, comparison, and native-request bounds separate.
+Checked successful runs and complete graphs agree in both directions. Every
+complete graph supplies stable identical targets and full native states at
+every larger bound quadruple. Complete target results are unique. Incomplete
+stage observations remain literal; outer control resumption is not asserted.
+
+Original coherent nontrivial physical classes derive proper nonempty target
+operand lists. Every target uses the ordered other original class paths.
+Equality-satisfying original subterms remain accepted by their constructed
+targets. Constructed receipt witnesses derive target availability and closedness
+at a common retained edit base. Native class edits with those constructed
+targets have finite stable execution from actual-prefix word checks. For terms
+that satisfy the original class, edited forest acceptance equals original
+forest acceptance. No whole-target language or global leaf law is supplied.
+
+Kernel checks verify the empty target and the second/third/first operand
+demand order. Three actual projections and merges on a constructed constant
+feed two native intersections. One warm node memo cell remains. Larger bound
+quadruples and repeated demand return the identical value and full native state.
+
+The aggregate audit passes 1,727 jobs and 46,889 dependency checks using only
+propext, Classical.choice, and Quot.sound. Only the older unused inputs
+warning remains. All twelve new modules pass focused builds.
+Log: `/tmp/mcfta-demanded-targets-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-demanded-targets-checkpoint-20261015-0546/`
+(2,129 Lean-tree files and four root documents). Older proofs are unchanged
+except audit imports. Repros, counterexamples, marked drafts, stashes, other
+worktrees, and production source are unchanged. No Haskell source changed.
+The earlier 645 examples and formatter checks apply to the unchanged tree
+and were not rerun. Weekly allowance was 16% at 05:46 CEST.
+Refresh before work. Stop all work at 1% or less.
+
+Next model the shared target closures through actual native edit leaves.
+Capture each class input forest once. First force must run the demanded
+target graph and store its physical value; later leaves must reuse that
+value. Derive construction receipts at actual prefixes instead of assuming
+all targets were forced before editing. Then compose the selected classes'
+ordered right fold and structural empty propagation with the existing
+selected/required-path graphs. Shared target forcing, full one-pass source
+correspondence, open contexts, repeated fixed points, getAllAtPath, native
+containers, GHC lazy scheduling, and extraction remain open. Keep word checks
+explicit. Preserve exact Sized contracts, both rank inverses, the optimized
+interned core, and all older proof and counterexample artifacts.
+
 ## Finite general repaired comparison and merge execution
 
 Proofs: `bee799da`, `752b5b91`, and `f45607e6`.

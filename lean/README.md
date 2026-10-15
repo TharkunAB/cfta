@@ -6,12 +6,19 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,715 jobs and 46,736 theorem dependency checks.
+The audit passes 1,727 jobs and 46,889 theorem dependency checks.
+The [demanded class-target proof](notes-demanded-class-targets.md) derives
+actual projection/merge operands, interleaved first-seeded native target folds,
+finite stable four-bound execution, and original class-subterm preservation.
+Construction receipts derive captured target scope and no loss of class terms
+through native edits. Shared target forcing and full class-pass composition
+remain open. This paragraph supersedes earlier standalone target construction
+and merge next targets.
 The [finite general merge proof](notes-merged-finite.md) now derives general
 comparison and merger completion, stable identical full caches at larger
 bounds, and original closed source-language inclusion. It uses actual fresh
-Mu allocation and source order. Actual class-target construction and shared
-lazy forcing remain open. This paragraph supersedes older completion targets.
+Mu allocation and source order. Shared target forcing and full class-pass
+composition remain open. This paragraph supersedes older completion targets.
 The [general merged proof](notes-merged-general.md) derives independent
 comparison inclusion, exact child-selection union language, and successful
 merge coverage with complete semantic cache preservation. Original construction
@@ -21,7 +28,8 @@ when this paragraph supersedes them.
 The [scoped native edit proof](notes-native-edits.md) now derives full native
 state preservation, finite edit completion, exact retained target language,
 and stable three-bound worker agreement. Coherent physical classes have
-exact original-path readback. Actual target construction remains open.
+exact original-path readback. Constructed target receipts now supply its
+captured scope in the proof above.
 The [scoped native target proof](notes-native-target-fold.md) now derives finite
 warm native target folds, exact intersection-list language, and target-then-leaf
 narrowing. General projection retains the actual domain and both memo tables.

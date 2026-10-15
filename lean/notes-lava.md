@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Demanded class-target application (2026-10-15 05:46 CEST)
+
+Actual source target demand graphs now have finite four-bound execution,
+two-way checked agreement, stable complete native states, and original
+class-subterm inclusion. Construction receipts derive captured native class
+edit scope. Read [the current note](notes-demanded-class-targets.md). Shared
+target forcing through edit leaves, GHC lazy scheduling, and extraction remain
+separate. Neither the paper's termination assumption nor a whole-target
+language law closes these obligations. No Lava or Rocq dependency is added.
+
 ## Finite general merger application (2026-10-15 05:29 CEST)
 
 The general repaired comparator and merger now have independent finite

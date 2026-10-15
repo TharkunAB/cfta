@@ -5,6 +5,16 @@ Proofs: `bee799da`, `752b5b91`, and `f45607e6`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+## Current demanded target checkpoint
+
+`e38dc119`, `388f111b`, and `92d59cfd` derive actual projection/merge
+operands, interleaved first-seeded native target construction, finite stable
+four-bound execution, and original physical class-subterm inclusion.
+Construction receipts supply captured scope for finite native class edits.
+Read [the current note](notes-demanded-class-targets.md). Shared target forcing
+through edit leaves and complete selected class-pass composition remain open.
+Earlier standalone target construction targets below are historical.
+
 ## Actual comparison progress
 
 SourceMergedComparisonBudget.Budget retains complete semantic effects,
