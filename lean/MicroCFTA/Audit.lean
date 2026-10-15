@@ -1531,6 +1531,18 @@ import MicroCFTA.SourceMergedSelectionLanguage
 import MicroCFTA.SourceMergedSoundness
 import MicroCFTA.SourceMergedSource
 import MicroCFTA.SourceMergedWorker
+import MicroCFTA.SourceMergedAPI
+import MicroCFTA.SourceMergedColumnCompletion
+import MicroCFTA.SourceMergedComparisonBudget
+import MicroCFTA.SourceMergedComparisonCompletion
+import MicroCFTA.SourceMergedComparisonStability
+import MicroCFTA.SourceMergedComparisonStages
+import MicroCFTA.SourceMergedCompleteEffects
+import MicroCFTA.SourceMergedCompletion
+import MicroCFTA.SourceMergedCompletionExamples
+import MicroCFTA.SourceMergedEdgeCompletion
+import MicroCFTA.SourceMergedSelectionCompletion
+import MicroCFTA.SourceMergedStability
 /-!
 # Proof dependency audit
 
