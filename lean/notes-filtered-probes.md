@@ -1,5 +1,13 @@
 # Filtered Mu probes through actual equality execution
 
+Mutually recursive completed outer graphs now derive scope and public language
+without a supplied Callback law. They preserve both physical heaps. Arity,
+changing-callback replay, complete physical determinism, and original closed
+source entry are checked. The next target is the reverse bounded-worker graph
+proof with actual reached word checks. General caller termination remains open.
+Read [the current note](notes-recursive-graphs.md). This paragraph supersedes
+older graph and replay targets in this note.
+
 Updated: 2026-10-15 08:33 CEST.
 Proofs: `a93cc716`, `e5aaebde`, and `e1916030`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.

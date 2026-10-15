@@ -1,5 +1,60 @@
 # Public API and source correspondence
 
+## Recursive completed graphs and replay with changing callbacks
+
+Proofs: `109dd0f8`, `623de23e`, and `72e32aeb`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. The upstream refresh is current. Continue on
+`formalize` and push checkpoints. Read `lean/notes-recursive-graphs.md`.
+This section supersedes the mutual graph and changing-callback targets below.
+
+ReduceNode, ReduceRows, ReduceChildren, and WalkChildren now retain actual
+recursive calls, Mu request receipts, checked concrete native prefixes, physical
+payload calls, child indexes, literal edges, and modifyNode branches. Scope
+carries native readiness, normalized guard annotations, and filtered probes.
+Mutual graph induction derives full output scope, histories, availability,
+closure, public narrowing, and exact public meaning under inherited equality
+satisfaction. No generic binder law, recursive Callback law, complete row law,
+or supplied future heap invariant is assumed. Structural arity proves that
+source setChildren always takes direct equal-arity interning.
+
+Every completed graph now has a common sufficient bound for traversal and all
+six native stages. All sufficient bounds return the identical values and full
+native state. Actual recursive child induction proves replay when traversal
+fuel and the recursive callback change. node_unique derives complete physical
+determinism. Original normalized closed syntax derives the initial scope and
+available closed value. Every completed public graph at empty inherited
+constraints therefore has exact public language and stable actual bounded
+execution. Existence of that outer graph is not assumed to be proved.
+
+Next prove the reverse direction from successful bounded worker execution to
+these recursive graphs. Define a reached-check plan that retains each actual
+native word check, completed local prefix, physical payload call, actual child
+entry, and returned tail state. Walk checks pass the actual descended payload;
+row checks supply child checks only after the actual local native prefix and
+successful physical combination. Prove worker-to-graph by traversal-bound
+induction using this plan, without a global Callback premise. Reuse local
+native worker/graph lemmas and preserve exact error/incomplete observations.
+Keep existing gate-memo evidence at source correspondence boundaries. Then
+compose with the new semantic and replay theorems. General caller termination,
+outer-graph existence for every input, the outer Haskell memo table, open
+contexts, repeated fixed points, getAllAtPath, native containers, GHC lazy
+scheduling, and extraction remain open. Native intersection can increase
+ordinary depth; original cached depth is not a termination measure.
+
+Ten new proof modules pass focused builds. The aggregate audit passes
+1,845 jobs and 48,140 dependency checks with only propext, Classical.choice,
+and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-recursive-graphs-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-recursive-graphs-checkpoint-20261015-0852/` (2,258 Lean-tree files and four root documents).
+All older proofs except audit imports, counterexamples, marked drafts,
+production source, stashes, and other worktrees remain unchanged. The earlier
+645 Haskell examples and formatter checks were not rerun on unchanged source.
+Weekly allowance was 100% at 2026-10-15 08:52 CEST. Refresh it before work. Stop all work
+and owned workers at 1% or less. Preserve Sized exact classes, finite size
+execution, size order, both rank inverses, the optimized interned core, and
+all older artifacts. No board posts or deployments.
+
 ## Filtered Mu probes through actual native equality execution
 
 Proofs: `a93cc716`, `e5aaebde`, and `e1916030`.

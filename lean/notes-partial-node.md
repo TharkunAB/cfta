@@ -1,5 +1,13 @@
 # Actual outer partial-reduction step
 
+Mutually recursive completed outer graphs now derive scope and public language
+without a supplied Callback law. They preserve both physical heaps. Arity,
+changing-callback replay, complete physical determinism, and original closed
+source entry are checked. The next target is the reverse bounded-worker graph
+proof with actual reached word checks. General caller termination remains open.
+Read [the current note](notes-recursive-graphs.md). This paragraph supersedes
+older graph and replay targets in this note.
+
 Both filtered Mu probes now have an explicit physical heap invariant. Actual
 source and native execution, reads, merging, targets, shared edits, and complete
 guarded passes preserve it. The returned heap supplies exact outer Mu execution.

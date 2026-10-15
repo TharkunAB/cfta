@@ -7,6 +7,18 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Recursive graph and changing-callback application (2026-10-15 08:52 CEST)
+
+Completed outer graphs now retain actual recursive child calls and derive public
+language and physical scope without a Callback premise. Their execution theorem
+proves stable actual results and full native states above a common bound, even
+when traversal changes the recursive callback. Read
+[the current note](notes-recursive-graphs.md). The reverse worker-to-graph proof
+still needs an actual reached-check plan. Neither graph preservation nor replay
+proves that every input has a completed outer graph. Caller termination, the
+outer Haskell memo table, GHC lazy scheduling, native containers, and extraction
+remain separate. No Lava or Rocq dependency is added.
+
 ## Filtered probe invariant application (2026-10-15 08:33 CEST)
 
 Both physical Mu probe filters now survive actual source construction and the
