@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Finite general merger application (2026-10-15 05:29 CEST)
+
+The general repaired comparator and merger now have independent finite
+completion proofs and identical full caches at larger bounds. Actual prefix
+progress reduces unfinished Mu degrees or the finite unvisited pair allowance.
+The paper's termination assumption is not used. Original construction derives
+finite stable source merge inclusion. Read [the current note](notes-merged-finite.md).
+Class target construction, lazy forcing, and extraction remain separate.
+No Lava or Rocq dependency is added.
+
 ## General merger application (2026-10-15 05:14 CEST)
 
 Actual general repaired comparison and successful merge executions now have

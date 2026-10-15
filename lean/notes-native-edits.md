@@ -5,6 +5,15 @@ Proofs: `b2e5fd76`, `f110cc11`, `6dc38a2b`, and `8cc092ee`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+## Current finite merger checkpoint
+
+`bee799da`, `752b5b91`, and `f45607e6` now prove finite general repaired
+comparison and merging. All larger bound pairs retain the identical result
+and complete actual cache. Original closed construction derives finite
+source-language inclusion. Read [the current note](notes-merged-finite.md).
+Actual class-target construction and shared lazy forcing remain open.
+The completion targets below are historical where this section supersedes them.
+
 ## Actual native graph and cache scope
 
 SourceEqualityNativeEditGraph specializes simultaneous edits to captured

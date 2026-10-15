@@ -1,6 +1,62 @@
 # Current formalization findings
 
-Updated: **2026-10-15 05:14 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 05:29 CEST (Europe/Stockholm)**.
+
+## Finite general repaired comparison and merge execution
+
+Proofs: `bee799da`, `752b5b91`, and `f45607e6`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-merged-finite.md`. This section supersedes earlier general
+comparison and merge completion targets and older module header comments.
+
+Every successful actual comparison now retains the fixed maximum Mu degree.
+It either reduces the finite vector of unfinished Mu degrees or returns the
+identical cache. The general reader derives this progress. Ordered stages
+compose it through actual prefix states. Allocating prefixes reduce that
+vector. Unchanged prefixes let a fresh ancestor pair reduce the finite
+issued-pair allowance. This measure derives general recursive comparison
+completion without Prepared, NoNewMu, a future-cache run, or a supplied
+whole-comparison completion law. Every larger comparison bound returns the
+identical Boolean and complete actual cache. Successful results are unique.
+
+Actual general child selection, retained columns, small and large rows,
+ordered groups, and final nodes now have stable finite bounds. Ordinary
+height derives all recursive merge calls. Every closed available input has
+finite SourceMergedWorker execution. It retains SemanticReady, both cache
+histories, and a closed available result. Increasing either proof bound
+preserves every completed value and full actual cache. SourceMergedAPI
+combines completion with independent input-language inclusion. Original
+closed construction derives every premise. Merge inclusion remains distinct
+from the exact child-selection union language. No whole-merger law is given.
+
+A kernel check constructs five rows with one nested-Mu child and four
+ordinary children. Actual selection allocates a Mu record. The result keeps
+one merged edge and its five-member recursive union boundary. Increasing
+both bounds returns the identical value and complete cache.
+
+The aggregate audit passes 1,715 jobs and 46,736 dependency checks using only
+propext, Classical.choice, and Quot.sound. Only the older unused inputs
+warning remains. All twelve new proof modules pass focused builds.
+Log: `/tmp/mcfta-merged-finite-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-merged-finite-checkpoint-20261015-0529/`
+(2,116 Lean-tree files and four root documents). Older proofs are unchanged
+except added audit imports. All repros, counterexamples, marked drafts,
+stashes, other worktrees, and production source remain unchanged. No Haskell
+source changed. The earlier 645 examples and formatter checks apply to the
+unchanged tree and were not rerun. Weekly allowance was 17% at
+05:29 CEST. Refresh before work. Stop all work at 1% or less.
+
+Next construct actual original equality-class targets from getPath, general
+merging, and the first-seeded native intersection list. Derive retained
+equality-satisfying subterms and captured physical target availability from
+actual returned caches. Reuse SourceMergedAPI.complete/source and actual
+projection inclusion. Connect NativeClassEdits to actual selected classes,
+the ordered class right fold, and empty propagation. Keep shared lazy target
+forcing explicit. Full one-pass source correspondence, open contexts,
+repeated fixed points, getAllAtPath, native containers, scheduling, and
+extraction remain open. Preserve exact Sized classes, size order, both
+distinct-term rank inverse laws, the optimized interned core, and older proofs.
 
 ## General repaired comparison and successful merge coverage
 
