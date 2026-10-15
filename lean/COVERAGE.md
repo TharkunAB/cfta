@@ -1,5 +1,27 @@
 # Full formalization coverage
 
+## Current main 88998669: endpoint, emptiness, and subtree predicates
+
+Main `88998669` is merged at `6d1462c7`. Read
+[the exact source and proof boundaries](notes-main-88998669.md).
+Proofs `a9eea20e`, `86f70026`, and `60c96c89` add eight modules.
+The primary gate has exact old outcomes. The new secondary closed-Mu
+endpoint has actual predicate receipts. Closed selected endpoints derive
+one-index query refutation without closing unrelated siblings.
+General current secondary trace and Scan transfer remain open; their older
+source correspondence is historical. Current guarded emptiness and actual
+closed rows derive soundness and fixed-point compatibility. The separate
+fourth completed memo retains conservative answers. Ordered pruning has
+language preservation, exact slot errors, and suspended constraints.
+Shared helper-memo effects and full enumerator state wiring remain open.
+matchesNowhere has exact independent path semantics. Complete root/anywhere
+exclusion, unambiguity, obligation closure, fromRows/SCC, and preorderPrefix
+remain open. All broader completion/runtime/caller/Sized obligations remain.
+Full audit: 2,078 jobs and 52,456 dependencies, allowed axioms only, no new
+warning. Required Nix build and six suites pass 713 examples plus golden;
+changed-file Fourmolu and active-package Cabal-gild pass. Earlier sections
+retain historical source scope. All older proof definitions remain.
+
 ## Current main 525d722e: representative waiting counts
 
 Source main `525d722e` is merged at `c12a0420`. Read [the source transfer](notes-main-525d722e.md).

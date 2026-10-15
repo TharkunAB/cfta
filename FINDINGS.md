@@ -1,6 +1,42 @@
 # Current formalization findings
 
-Updated: **2026-10-15 21:05 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 21:22 CEST (Europe/Stockholm)**.
+
+## Current main 88998669 and retargeted source rules
+
+Main `88998669` is merged at `6d1462c7`. Proofs are `a9eea20e`,
+`86f70026`, and `60c96c89`. Read `lean/notes-main-88998669.md`.
+Full scope stays active. Older source descriptions below are historical.
+
+The current primary gate retains the exact old outcome and heap. The
+secondary gate now admits a closed constrained Mu at the exact endpoint.
+Its actual predicate-only receipt is proved. Selected closed one-index
+endpoints derive projection support and actual true-query refutation,
+without closing unrelated siblings. The old disabled/free-worker equation
+does not hold at this endpoint. General current secondary trace transfer
+and current Scan composition remain open.
+
+Current emptiness follows the initial free guard and open-requirement rule.
+Actual completed rows derive fixed-point compatibility. True body results
+derive closedness and exclusion. A distinct fourth completed memo retains
+conservative answers. Actual ordered pruning preserves language, with exact
+source errors and suspended constraints. The reaches guard is still pure
+in that graph; shared helper memo effects and whole enumerator wiring remain.
+
+matchesNowhere has exact independent subterm-path semantics. Full exclusion
+construction, unambiguity, finite obligations, fromRows/SCC, and preorderPrefix
+remain open. The older native event proofs and unchanged source components
+remain available. All broader runtime/completion/caller/Sized obligations stay.
+
+Full audit: 2,078 jobs, 52,456 dependencies, permitted axioms only, no new
+warning. Eight new modules and three additive Audit imports. Older Lean
+definitions remain unchanged. Required strict Nix build and six suites pass
+713 examples plus golden. Changed-file Fourmolu and active Cabal-gild pass.
+Start: `/tmp/mcfta-native-events-checkpoint-20261015-2105/` (2,742 files).
+Closing: `/tmp/mcfta-main-889-checkpoint-20261015-2122/` (2,751 files).
+Script: `/tmp/mcfta-preserve-main-889-20261015.py`.
+All prior artifacts remain. Weekly allowance is 84%. Stop at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
 
 ## Native instruction unfolding-event transfer
 

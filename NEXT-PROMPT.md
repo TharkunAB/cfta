@@ -2,6 +2,49 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current main 88998669 and retargeted source rules
+
+Main `88998669` is merged at `6d1462c7`. Proofs are `a9eea20e`,
+`86f70026`, and `60c96c89`. Read `lean/notes-main-88998669.md` first.
+Full scope stays active. Earlier sections retain historical source scope.
+
+The primary gate has exact full-outcome equivalence. The current secondary
+gate now admits closed constrained Mu endpoints. Its predicate-only memo
+receipt is proved. Closed one-index endpoints derive the projection domain;
+an actual seeded query and current uncached true Decision refute the class.
+Unrelated original siblings can remain open. This is a subclass, not the
+complete new false-secondary bridge. The old disabled/free-worker equality
+and old secondary-dependent Scan correspondence are historical.
+
+Current emptiness guards and actual closed table rows derive fixed-point
+compatibility. A true guarded body derives closedness and sound exclusion.
+A separate fourth completed memo retains conservative answers and old
+entries. Ordered merge pruning derives language preservation. The reaches
+guard there is still a pure read. Its shared memo updates and the complete
+enumerator state/flag/merge integration remain open.
+
+matchesNowhere has exact independent subterm-path semantics. Complete
+excludeAnywhere/edgeCopies, unambiguity, obligation closure, fromRows/SCC,
+and preorderPrefix remain open. Keep older root-exclusion obligations.
+
+Next lift the complete CURRENT secondary trace to effects, projection
+support, and gate memo calls. Then compose Fold/Seeded, delayed tasks and
+Decision, the fourth memo, and current Scan. Retain anchored support and
+the separate native instruction receipts. Connect concrete caller entry
+and selected fallback. GHC demand/publication, checked state, word bounds,
+general completion, waiting counts, broader APIs/runtime, and all distinct
+Sized contracts remain open. Keep the optimized interned core.
+
+Full audit: 2,078 jobs, 52,456 dependencies, permitted axioms only, no new
+warning. Eight new modules and three additive Audit imports. Strict Nix
+build and all six suites pass 713 examples plus golden. Changed-file
+Fourmolu and active-package Cabal-gild pass. Older Lean definitions remain.
+Start: `/tmp/mcfta-native-events-checkpoint-20261015-2105/` (2,742 files).
+Closing: `/tmp/mcfta-main-889-checkpoint-20261015-2122/` (2,751 files).
+Script: `/tmp/mcfta-preserve-main-889-20261015.py`.
+All prior artifacts remain. Weekly allowance is 84%. Stop at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
 ## Native instruction unfolding-event transfer
 
 Proof checkpoint `97c525f4`, source main `525d722e`. Read

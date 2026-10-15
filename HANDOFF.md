@@ -1,6 +1,49 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 21:05 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 21:22 CEST (Europe/Stockholm)**.
+
+## Current main 88998669 and retargeted source rules
+
+Main `88998669` is merged at `6d1462c7`, with proof parent `6e5743d1`.
+Proofs are `a9eea20e`, `86f70026`, and `60c96c89`. Read
+`lean/notes-main-88998669.md` first. Full scope stays active. Earlier
+sections retain historical source scope.
+
+Current primary workers retain exact old outcomes/heaps. Current secondary
+closed constrained-Mu endpoints return false after the actual predicate
+call. The new direct closed-endpoint class derives projection support and
+true-query refutation with unrelated open siblings allowed. General current
+secondary effects/memos/projection remain to lift. The old disabled/free
+identity and old secondary-dependent caller correspondence are historical.
+
+The current emptiness body has an initial open-input guard. Actual complete
+rows derive step/grow compatibility, and true body answers derive closedness
+and sound exclusion. A distinct fourth completed memo derives conservative
+answers and retained entries. Ordered merge pruning preserves language;
+source errors and suspended constraints are exact. Shared reaches-memo
+updates and whole-enumerator integration are not supplied.
+
+matchesNowhere decides independent absence at every subterm path. Complete
+root/anywhere exclusion, unambiguity, obligation closure, fromRows/SCC, and
+preorderPrefix remain open. Native instructions, substitution, plain
+projection, and Sized source are unchanged.
+
+Next lift the complete current secondary trace, then compose all actual
+query/task/Decision/fourth-memo/Scan receipts. Keep anchored support without
+whole-original-forest closedness. Concrete entry, selected fallback, GHC
+demand/publication, checked state, machine bounds, general completion,
+waiting counts, broader APIs/runtime, and distinct Sized contracts remain.
+
+Full audit passes 2,078 jobs and 52,456 dependency checks, allowed axioms
+only and no new warning. Eight new modules and three additive Audit imports.
+All older proof definitions remain. Required strict Nix build and six suites
+pass 713 examples plus golden. Seven changed Haskell files pass Fourmolu;
+four active package files pass Cabal-gild. Logs: `/tmp/mcfta-main-889-*`.
+Start: `/tmp/mcfta-native-events-checkpoint-20261015-2105/` (2,742 files).
+Closing: `/tmp/mcfta-main-889-checkpoint-20261015-2122/` (2,751 files).
+Script: `/tmp/mcfta-preserve-main-889-20261015.py`.
+All prior artifacts, stashes, and other worktrees remain. Weekly allowance
+is 84%. Stop at 1% or less. No board posts or deployments.
 
 ## Native instruction unfolding-event transfer
 

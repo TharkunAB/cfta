@@ -1,5 +1,26 @@
 # Public API and source correspondence
 
+## Current main 88998669: changed source interfaces
+
+Main `88998669` is merged at `6d1462c7`. Read
+[the current interface transfer](notes-main-88998669.md).
+Existing modules add Enumeration.reachesConstrainedMu, Interned.fromRows,
+and Template.matchesNowhere/excludeAnywhere/excludeAnywhereFTA/preorderPrefix.
+fromFTA delegates to fromRows. provablyEmpty adds an initial free guard and
+a separate global memo. Enumeration adds a root recursion flag and guarded
+post-intersection pruning. Equality changes the secondary closed-Mu endpoint.
+Eight additive Lean modules prove current endpoint laws and a query subclass,
+guarded emptiness/closed-row compatibility, a fourth completed memo, ordered
+pruning soundness, and exact matchesNowhere subterm-path semantics.
+The old secondary/free-worker equation and related current-caller claims
+are historical. General new secondary/Scan transfer, shared helper-memo
+updates, whole enumerator integration, exact runtime Boolean replay,
+complete exclusion/unambiguity/obligation closure, fromRows/SCC, and
+preorderPrefix remain open. All broader API and distinct Sized obligations
+remain. Full audit passes 2,078 jobs and 52,456 dependencies. Required Nix
+build and six suites pass 713 examples plus golden. Formatting passes.
+Earlier source sections are historical; older proof definitions remain.
+
 ## Current main 525d722e: representative waiting counts
 
 Source main `525d722e` is merged at `c12a0420`. Read [the source transfer](notes-main-525d722e.md).

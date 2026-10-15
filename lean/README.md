@@ -1,11 +1,27 @@
 # cfta formal model
 
-Current source: `TharkunAB/cfta`, `origin/main` at `525d722e`, merged at `c12a0420`.
+Current source: `TharkunAB/cfta`, `origin/main` at `88998669`, merged at `6d1462c7`.
 Continue on `formalize`; push verified checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`. Public `Data.CFTA.*`
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
+
+## Current main 88998669: endpoint and emptiness transfer
+
+Read [the source update and proof limits](notes-main-88998669.md).
+Proofs `a9eea20e`, `86f70026`, and `60c96c89` retain exact primary gate
+behavior and prove the new closed constrained-Mu endpoint rule and receipt.
+Closed selected endpoints derive a current query-refutation subclass.
+Current guarded emptiness, actual row compatibility, a separate fourth memo,
+and ordered merge-pruning soundness are checked. matchesNowhere has exact
+independent subterm-path semantics. General current secondary/Scan transfer,
+shared helper memos through enumeration, complete exclusion/fromRows, and
+all broader library obligations remain. Earlier sections are historical.
+The full audit passes 2,078 jobs and 52,456 dependency checks with no new
+warning or axiom. Strict Nix build and six suites pass 713 examples plus
+golden. Changed-file Fourmolu and active-package Cabal-gild pass. All older
+proof definitions remain; the upstream source delta is eight files.
 
 ## Current native instruction unfolding events
 

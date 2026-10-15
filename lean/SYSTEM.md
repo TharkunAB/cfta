@@ -1,5 +1,25 @@
 # Constrained languages, indexing, and distributions
 
+## Current main 88998669: endpoint and enumeration pruning
+
+Main `88998669` is merged at `6d1462c7`. Read
+[the source transfer and remaining obligations](notes-main-88998669.md).
+The intended language/index/probability laws below remain the specification.
+Current primary gates have exact old outcomes. Current closed constrained-Mu
+endpoints can reach the secondary query. A selected closed-endpoint subclass
+has actual query refutation, with unrelated open siblings allowed.
+General current secondary/Scan composition remains open. The earlier
+disabled/free-worker identity is historical. Current guarded emptiness
+derives closedness from true results. Completed rows justify its fixed-point
+reuse. A fourth completed memo and actual merge-pruning checks preserve
+conservative answers and language. Shared helper-memo effects and complete
+enumerator wiring remain open. matchesNowhere has exact subterm semantics;
+the exclusion construction, unambiguity, fromRows/SCC, and preorderPrefix
+remain separate obligations. Full library scope and distinct Sized contracts
+remain. The full audit passes 2,078 jobs and 52,456 dependencies. Required
+Nix validation passes 713 examples plus golden across all six suites.
+Older proof definitions remain unchanged. Earlier sections are historical.
+
 ## Current main 525d722e: representative waiting counts
 
 Source main `525d722e` is merged at `c12a0420`. Read [the source transfer](notes-main-525d722e.md).
