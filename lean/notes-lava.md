@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Physical caller application (2026-10-15 02:13 CEST)
+
+The physical class sort and early guards now connect to the complete memo
+selection graphs. Actual array normalization supplies the guard result.
+A source and kernel check finds a closed raw self binder that unfolds to
+itself after the gate clears it. Thus completed gate correspondence still
+does not establish progress of the following required-path worker. Read
+[the current note](notes-physical-class-order-entry.md). Preserve this
+distinction when deriving the next function/graph correspondence theorem.
+
 ## Complete selection application (2026-10-15 01:52 CEST)
 
 The ordered class filter now has separate finite execution and receipt graphs

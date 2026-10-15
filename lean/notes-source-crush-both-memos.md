@@ -1,5 +1,12 @@
 # Exact visited source checks and both gate memos
 
+Current update (2026-10-15 02:13 CEST): `ae6a0141`, `ac7c1eaf`, `97f987a1`,
+and `a84343e3` derive the physical class sort, source prechecks, actual
+array-normalization readback, and complete guarded selection. The next
+requireAll target has a checked closed raw self-binder stutter and Haskell
+reproduction. Read [the current note](notes-physical-class-order-entry.md).
+Earlier next targets below retain their historical context.
+
 Current update (2026-10-15 01:52 CEST): `f3d27627`, `a93d1b35`, and `d0d8ac1f`
 complete the ordered class filter with both memo tables. Each class occurrence
 retains its exact intermediate caches. Derived gate replay connects all

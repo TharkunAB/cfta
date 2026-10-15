@@ -1,6 +1,61 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 01:52 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 02:13 CEST (Europe/Stockholm)**.
+
+## Physical class order, safe entry guards, and raw self-binder boundary
+
+Proofs: `ae6a0141`, `ac7c1eaf`, `97f987a1`, and `a84343e3`. Source:
+`TharkunAB/cfta`, `origin/main` at `f201deda`. Continue on `formalize` and push
+checkpoints. Read `lean/notes-physical-class-order-entry.md`. This section
+supersedes the physical class-order and early caller-guard targets.
+
+The class input now follows the installed GHC 9.14.1/base 4.22 source sortBy.
+It retains natural runs, fused three-way and four-way merges, short-list
+branches, and special five-run and six-run reductions. Every occurrence is
+preserved without a comparator-law premise. Physical trie subsumption has
+exact strict-prefix readback. The source comparison keeps its reverse set
+fallback. Supported path sets derive coherent trie/set records; normalized
+constraints derive exact canonical payloads. A checked raw comparator cycle
+shows that replacing the merge schedule can change source order. Haskell
+confirms the cycle, exact class order, and normalization rejection.
+
+The entry now executes empty and combined-contradiction guards before class
+sorting. The unsafe accessor cannot see contradiction in the live branch.
+Actual finite parent-array normalization derives sufficient work and exact
+guard readback. Original construction derives finite complete physical
+selection with both source memo tables. Early branches retain all caches.
+The scalar source guard wrapper remains noncomputable. Native storage and
+verified Haskell extraction remain separate obligations.
+
+The next required-path primitive has a concrete raw-input boundary.
+`createMuDontCleanup id` is closed and unconstrained, and unfolds to itself.
+The gate clears its paths. Haskell reduction with the class `[[0,0],[1,0]]`
+over two such children times out after two seconds. The kernel proves actual
+repaired construction, closedness, a clear gate at every path, and exact
+unfolding stutter. Repro: `lean/repro/RawClosedSelfRequire.hs`. A timeout is
+runtime evidence, not a native nontermination theorem. Do not infer general
+requireAll termination from the completed gate or the strict open-Mu rank.
+
+The audit passes 1,617 jobs and 45,336 theorem dependency checks. Only the
+three permitted foundations occur. Only the old unused `inputs` warning
+remains. No production Haskell code changed. Audit log:
+`/tmp/mcfta-physical-class-order-entry-20261015-audit.log`. Snapshot:
+`/tmp/mcfta-physical-class-order-entry-checkpoint-20261015-0213/`
+(2,007 Lean-tree files and four root documents). All older proofs except new
+audit imports, counterexamples, fixtures, marked drafts, repairs, backups,
+stashes, and other worktrees remain. Weekly allowance was 19% at 02:13 CEST;
+refresh it before work.
+
+Next model the actual Needed trie and requireAll worker, then address the
+closed raw self-binder stutter with a least-language-preserving repair.
+Keep the full exported input domain; do not silently restrict to smart
+constructors. Audit editAll and other same-path Mu readers for the same
+boundary. Retain the optimized interned core and ordinary fast paths.
+Reuse the completed gate, order, guard, and normalization proofs. Derive
+actual required-path and narrowing contracts before claiming the whole
+native pass. Repeated fixed-point reduction remains separate. Preserve the
+exact Sized contracts and unary ancestor theorem. Stop all work and workers
+at 1% weekly allowance or less.
 
 ## Complete ordered class selection and retained-cache readback
 

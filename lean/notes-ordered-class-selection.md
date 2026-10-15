@@ -1,5 +1,12 @@
 # Complete ordered class selection with both source memos
 
+Current update (2026-10-15 02:13 CEST): `ae6a0141`, `ac7c1eaf`, `97f987a1`,
+and `a84343e3` derive the physical class sort, source prechecks, actual
+array-normalization readback, and complete guarded selection. The next
+requireAll target has a checked closed raw self-binder stutter and Haskell
+reproduction. Read [the current note](notes-physical-class-order-entry.md).
+Earlier next targets below retain their historical context.
+
 Updated: 2026-10-15 01:52 CEST.
 Proofs: `f3d27627`, `a93d1b35`, and `d0d8ac1f`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
