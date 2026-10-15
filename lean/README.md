@@ -7,6 +7,15 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
 
+The [checked-edge allocation proof](notes-checked-edge-allocation.md),
+`261627c4`, derives exact raw conjunction, demanded arity checks, and sentinel
+allocation. Every satisfying complete term passes. Concrete prefixes and
+constructor heap effects preserve current recursive result-cell Sound.
+The audit passes 1,936 jobs and 50,146 dependency checks. Ready native child
+continuations and complete guarded execution remain next. The older eager
+kernel has no proved physical-demand correspondence. No Haskell file changed.
+The older counts and next-target statements below are historical.
+
 The [current upstream comparison](notes-main-1eb4ab05.md) records named measures,
 generic decoding, and inferred solver function sorts. Five additive modules
 restore the current full solver/preparation/public/raw-map Sized bridge.

@@ -6,6 +6,15 @@ Recursive memo integration and aggregate audit: `bb35a074`.
 This extends [physical identity correspondence](notes-constraint-identity-renaming.md).
 Production Haskell and all older proof definitions are unchanged.
 
+## Checked constructor extension
+
+The [checked-edge checkpoint](notes-checked-edge-allocation.md), `261627c4`,
+adds raw conjunction, full arity-accessor demand, sentinel empty-field
+allocation, and recursive memo preservation. Its aggregate audit passes 1,936
+jobs and 50,146 theorem dependency checks. The next target is delayed native
+child execution and complete guarded recursion. Earlier next-target and
+validation statements below describe this note's original checkpoint.
+
 ## Physical constructors and completed operation caches
 
 `SourceEqualityConstraintAllocation.Value` retains the contradiction tag or

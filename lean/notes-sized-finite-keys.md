@@ -1,5 +1,12 @@
 # Sized execution from a validated finite row map
 
+The [checked-edge allocation checkpoint](notes-checked-edge-allocation.md)
+passes 1,936 audit jobs and 50,146 theorem dependency checks. It adds source
+constructor receipts and preserves recursive memo cells. Complete native
+child-demand correspondence remains open. No Sized or Haskell definition
+changed. Exact classes, finite execution, sequence, size order, and both
+signed inverse implications remain separate contracts.
+
 The [allocation receipt proof](notes-payload-allocation-receipts.md) preserves
 Sized and canonicalClasses. Exact classes, finite execution, canonical order,
 distinct size order, and both signed inverses remain separate contracts.

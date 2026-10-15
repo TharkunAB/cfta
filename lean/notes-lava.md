@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Checked edge allocation (2026-10-15 14:27 CEST)
+
+The [checked-edge proof](notes-checked-edge-allocation.md), `261627c4`,
+retains raw conjunction, actual accessor arity demand, and sentinel empty-field
+allocation. Actual selected heap effects preserve current result-cell Sound.
+Satisfying complete terms pass the constructor checks. Native child demand
+and full guarded recursion remain separate. The older eager kernel supplies
+no complete physical-demand refinement. The 1,936-job audit passes; production
+Haskell and all older proof definitions remain unchanged.
+
 ## Concrete equality allocation prefixes (2026-10-15 14:08 CEST)
 
 The [allocation receipt proof](notes-payload-allocation-receipts.md), `bb35a074`,

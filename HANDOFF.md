@@ -1,6 +1,78 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 14:08 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 14:27 CEST (Europe/Stockholm)**.
+
+## Checked edge allocation and native child-demand boundary
+
+Source: `TharkunAB/cfta`, main `1eb4ab05`, merged at `271284df`.
+Constructor proofs: `1fa17554`. Recursive integration and audit: `261627c4`.
+Pull returned Already up to date. Continue on `formalize` and push verified
+checkpoints. Read `lean/notes-checked-edge-allocation.md`, then the earlier
+payload, identity, and completed-cell notes. This supersedes the earlier
+edge-conjunction and mkEdge prefix target. Full library scope remains open.
+
+SourceEqualityConjoinAllocation combines raw stored physical fields and
+merges original guards. It does not demand the full equality accessor.
+Actual completed cache receipts derive Ready output, Cached normalized
+classes, literal constructor readback, and valid growing operation state.
+Original Cached fields still require actual normalized constructor receipts;
+Ready alone is not asserted to imply globally normalized arbitrary lists.
+
+SourceEqualityMkEdgeAllocation checks stored contradiction and Bottom before
+accessor demand. The other branch retains actual full accessor allocations
+and runs the existing signed arity test on represented natural paths.
+SourceEqualityMkEdgeArity derives exact root bounds and actual acceptance
+of every satisfying complete term at matching child arity. Ready supplies
+the active-class premise. Actual build selects the original complete edge
+or the empty-edge sentinel and retains the actual heap and equality effects.
+The sentinel demands noConstraint, which can first allocate the canonical
+empty equality key. Its completed operation tables remain intact. Only the
+contradiction check itself has an unchanged-state guarantee.
+
+SourceEqualityIntersectionEdgeAllocation checks arity mismatch before raw
+conjunction and the checked constructor guard. It derives the exact source
+branch and all reached allocations. Ready output retains literal Cached
+constructor receipts. Children and callbacks are absent from this prefix.
+The operand order is already selected; the closed worker's outer swap is
+separate. PartialConjoinAllocation and PartialMkEdgeAllocation preserve
+current full recursive result-cell Sound and Frame. The partial intersection
+prefix and direct empty-edge continuation retain all cells without assuming
+future Sound. Heap advances retain the domain and both native memo tables.
+Full native Scope remains a separate invariant.
+
+The full audit passes 1,936 jobs and 50,146 theorem dependency checks using
+only propext, Classical.choice, and Quot.sound. Focused endpoints pass 1,077
+jobs. Logs: `/tmp/mcfta-edge-allocation-audit-20261015.log` and
+`/tmp/mcfta-edge-allocation-focused-20261015.log`. The old unused-input warning
+remains. No new target has a warning. No Haskell file changed. Prior Nix,
+six-suite, format, metadata, and 205-rank checks were not repeated.
+
+Next connect these prefixes to delayed actual native child calls. Source
+mkEdge can reject before child results are demanded. The older
+SourceRecursiveIntersectionKernel.edge walks child callbacks before direct
+makeEdge. Equality of those physical effects is not proved. Retain its
+component proofs, but do not use them as complete source demand refinement.
+Add completed-operation state and checked phases to native edge execution.
+Retain actual operand order, both native memo families, errors, unfinished
+observations, and ready child continuations. Then connect selected class
+folds, reconstruction, both gate memo families, the complete guarded pass,
+recursive reduction, and original construction. Do not assume replay effects.
+Global histories, pending thunks, source cache/hash/IntMap adequacy, signed
+indexes, the lifetime reservation bound, unsafe IO, GHC execution, general
+caller completion, open contexts, repeated fixed points, getAllAtPath,
+decision-model, named measures, parser/decoder bridges, and extraction remain
+open. Optimized interned and older constructor/equality work remain intact.
+Exact Sized classes, finite execution, canonical sequence, distinct size
+order, and both signed inverse implications remain separate contracts.
+
+Starting snapshot: `/tmp/mcfta-edge-allocation-start-20261015-1413/` (2,573 files).
+Closing snapshot: `/tmp/mcfta-edge-allocation-checkpoint-20261015-1426/` (2,581 files).
+All prior Lean proofs except Audit imports, reproductions, marked drafts,
+stashes, and other worktrees retain their hashes. Both external unverified
+intersection drafts and their limit report remain unchanged. Repository
+proof modules are authoritative; validation notes and probes stay outside
+Audit. Weekly allowance was 95% at 2026-10-15 14:24 CEST. Refresh before work.
+Stop work and owned workers at 1% or less. No board posts or deployments.
 
 ## Actual equality allocation prefixes and recursive memo preservation
 

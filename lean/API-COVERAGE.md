@@ -1,5 +1,23 @@
 # Public API and source correspondence
 
+## Checked edge allocation and native child-demand boundary
+
+Proofs `1fa17554` and `261627c4`, on main `1eb4ab05`. Read
+[the checked-edge note](notes-checked-edge-allocation.md). Raw conjunction
+retains exact completed-cache output and normalized constructor receipts.
+The checked constructor separates stored contradiction from full accessor
+arity demand. Every satisfying complete term passes. Rejected constructors
+retain accessor effects and the sentinel's actual empty equality allocation.
+The native edge prefix skips conjunction on arity mismatch. Current full
+recursive memo Sound and Frame survive these actual equality and heap effects.
+The audit passes 1,936 jobs and 50,146 dependency checks with permitted axioms.
+No Haskell file changed. Next connect ready prefixes to delayed native child
+calls, both native and gate memo families, and complete guarded recursion.
+The older eager Kernel.edge has no proved physical-demand correspondence.
+Global histories, runtime adequacy, general completion, the other full-library
+obligations, and distinct Sized contracts retain their stated boundaries.
+Earlier checkpoint counts and next-target statements below are historical.
+
 ## Concrete equality constructor and native-prefix allocation
 
 Proofs `ee8964d7`, `b09fcb39`, and `bb35a074`, on main `1eb4ab05`.
