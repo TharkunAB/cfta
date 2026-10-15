@@ -16,6 +16,10 @@ flowchart BT
 holes with programs that Hectare's automaton proposes and GHC's typechecker
 checks, also as a typed-hole plugin (`-fplugin=Data.CFTA.GHC.HoleFits`); it
 is the only package that depends on the `ghc` library.
+[`cfta-lean`](cfta-lean/README.md) does the same for Lean 4: Lean's
+elaborator checks the programs, in a Lake project of the package that runs as
+a child process, and the `hectare?` tactic proposes programs in Lean. Its
+Haskell part builds without Lean; the oracle needs Lean's toolchain.
 
 The original ECTA line, `microecta` and `microecta-generator`, lives in
 [Tritlo/microecta](https://github.com/Tritlo/microecta). `microecta` remains on

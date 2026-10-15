@@ -4,15 +4,14 @@ Component synthesis checked inside Lean's elaborator: Hectare's automaton
 (`Data.CFTA.Gen.Synthesis` of [`cfta-generator`](../cfta-generator/README.md))
 proposes programs over Lean constants, and a walk in Lean's `MetaM` checks
 each program prefix by prefix. It is the Lean instance of the design of
-[`cfta-ghc`](../cfta-ghc/README.md); [the note on host
-checkers](../docs/host-checkers.md) compares the two.
+[`cfta-ghc`](../cfta-ghc/README.md).
 
 The package has two halves:
 
 | Part | Purpose |
 | --- | --- |
 | `oracle/` | A Lake project (Lean 4.35.0, core only) with the executable `lean-oracle`. It erases Lean types to Hectare's types, enters a goal's binders, and checks programs in `MetaM` over a line protocol on its standard input and output. |
-| `Data.CFTA.Lean` | The Haskell client: it runs the oracle as a child process, reads the erased library and goal, and runs the walk of `Data.CFTA.Gen.Synthesis.Walk` with the oracle as its checker. |
+| `Data.CFTA.Lean` | The Haskell client: it runs the oracle as a child process, reads the erased library and goal, and runs the walk of `Data.CFTA.Gen.Synthesis.Walk` with the oracle as its checker. With `optionModes`, it also runs the search over states of `Data.CFTA.Gen.Synthesis.States` on Lean's goals (mode (b)), as a portfolio with the same checker. |
 
 ## How a goal is filled
 
@@ -35,6 +34,24 @@ The package has two halves:
    complete program has no pending instance problem, no metavariable left,
    and passes `Meta.check`. The oracle takes a snapshot (`saveState`) before
    each step, and restores it to backtrack.
+
+## Building the oracle
+
+The Haskell part of the package builds without Lean. The oracle needs
+[elan](https://github.com/leanprover/elan), Lean's toolchain manager: the
+toolchain is pinned in `oracle/lean-toolchain` (`leanprover/lean4:v4.35.0`),
+and elan installs it on the first build. The oracle imports only Lean's core,
+so the Lake project has no dependencies.
+
+```sh
+(cd cfta-lean/oracle && lake build)   # .lake/build/bin/lean-oracle
+cabal test cfta-lean                  # fills a goal in each mode
+```
+
+The oracle finds Lean's library through `lean` on the `PATH` (elan gives it)
+or the variable `LEAN_SYSROOT`. Without the built oracle or without Lean,
+`cabal test cfta-lean` marks the tests that need the oracle pending with the
+reason, and `cabal bench cfta-lean` prints the reason and does nothing.
 
 ## Running the benchmark
 
@@ -64,8 +81,20 @@ leaves `synthInstance?` to the complete program, and `index` makes `--states`
 look up the leaves of a new state in a discrimination tree of their result
 types, as `exact?` does.
 
-The benchmark runs from the repository's root, or with the variable
-`CFTA_LEAN_ORACLE` set to the oracle's directory.
+The variable `HECTARE_LEAN_MODES` runs the modes of `optionModes` in place
+of mode (a) alone, separated by commas, each with an optional budget in
+seconds: `states` is the generic search over states (mode (b), one round
+trip to the oracle for each new goal and each complete program), and
+`hectare:2,states` the portfolio of mode (a) for 2 s, then mode (b):
+
+```sh
+HECTARE_LEAN_MODES=states HECTARE_LEAN_CHECKS=index cabal run hectare-lean -- core 25
+HECTARE_LEAN_MODES=hectare:2,states HECTARE_LEAN_CHECKS=index cabal run hectare-lean -- core 30
+```
+
+The benchmark runs from the repository's root or from the package's
+directory, or with the variable `CFTA_LEAN_ORACLE` set to the oracle's
+directory.
 
 ## The `hectare?` tactic
 
@@ -122,7 +151,15 @@ and class methods (`id`, `Function.const`, `BEq.beq`, `Add.add`,
 `OracleTest/Tactic.lean` has `#guard_msgs` tests: classes (`BEq`, `Add`,
 `Zero`, `Max`), a higher-kinded goal (`Functor.map` on `Option`), a goal over
 a monad variable, `useAll := false`, and a goal without a program. Run them
-with `lake env lean OracleTest/Tactic.lean` after `lake build`.
+with `lake env lean OracleTest/Tactic.lean` after `lake build`, with the
+variable `HECTARE_PROPOSER` naming an optimized `hectare-propose`, so that
+the portfolio's mode (a) runs within its budget of 2 s:
+
+```sh
+cabal build -O2 cfta-lean:exe:hectare-propose
+cd cfta-lean/oracle
+HECTARE_PROPOSER="$(cd ../.. && cabal list-bin -O2 cfta-lean:exe:hectare-propose)" lake env lean OracleTest/Tactic.lean
+```
 
 Against `exact?` on the 22 queries of `hectare-lean` (`hectare-lean
 --suggest 30 BUDGET`: `hectare?`'s portfolio with its own leaves, 30 s, every
