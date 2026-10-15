@@ -1,5 +1,56 @@
 # Public API and source correspondence
 
+## Independent required-head language and semantic cache preservation
+
+Proofs: `9fd64a7b`, `74df3d3b`, and `1bc034a6`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`, with retained traversal repair `61f2c939`.
+Continue on `formalize` and push checkpoints. Read
+`lean/notes-required-head-language.md`. This section supersedes the actual
+head-language and semantic-heap preservation targets.
+
+Actual completed head normalization now preserves the full independent
+guarded least language. A finite future cold-table trace is a proof witness
+for the original root and every exposed child. Existing growth replay gives
+exact returned alternatives in that cache. Cold-table soundness and budget
+completeness give exact independent child languages. Actual row-node
+construction therefore has exactly the input language. No conversion is
+added to the runtime worker. Original closed source construction derives
+finite complete head execution and exact source-expression language, with
+all semantic cache premises derived. Raw retained binders and root unions
+remain in scope.
+
+Both independent semantic probe heaps now survive every complete required-node,
+child, and row graph. Actual head and ordinary constructor effects supply
+each step. Execution uniqueness derives complete intermediate list invariants.
+The finite-worker Ready type and all earlier proofs remain unchanged. The
+actual Needed compiler now also derives nonnegative signed keys at every
+trie depth from normalized nonnegative paths. Raw negative keys remain explicit.
+
+The audit passes 1,639 jobs and 45,676 dependency checks using only the three
+permitted foundations. Only the old unused inputs warning remains. All six
+new modules pass focused builds. No production Haskell source changed; the
+previous 645 Haskell examples and format checks apply to the unchanged tree.
+Log: `/tmp/mcfta-required-head-language-20261015-audit.log`. Snapshot:
+`/tmp/mcfta-required-head-language-checkpoint-20261015-0313/`
+(2,032 Lean-tree files and four root documents). The only older Lean proof
+file change is added audit imports. Repros, counterexamples, marked drafts,
+stashes, and other worktrees remain unchanged. Weekly allowance was 18% at
+03:13 CEST; refresh before work.
+
+Next derive the full required-node language filter law:
+meaning result term iff meaning input term and Matches needed term, for valid
+nonnegative Needed tries. Reuse head_exact, semantic graph preservation, and
+the nonnegative compiler adapter. Prove actual child and row language readback,
+then connect the signed adjustment fold through checked_row_exact. Retain
+actual edge symbols, full guards, child order, and canonical readback. Do not
+assume equal physical identities for outputs computed in different caches.
+Then derive the compiled requireAll forest law and compose actual class
+selection, deriving needed semantic-ready fields after gate effects. Actual
+edit/narrowing, full one-pass correspondence, fixed-point reduction, native
+containers, lazy scheduling, and verified extraction remain open. Preserve
+exact Sized contracts, the unary ancestor theorem, and the optimized interned
+core. Stop all work and workers at 1% weekly allowance or less.
+
 ## Complete physical required-path execution
 
 Proofs: `ff6967ec`, `8c0774fd`, `a98f21e8`, and `17e59c87`. Source:

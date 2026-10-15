@@ -6,7 +6,7 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,633 jobs and 45,652 theorem dependency checks.
+The audit passes 1,639 jobs and 45,676 theorem dependency checks.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open
@@ -60,9 +60,13 @@ The [physical required-path worker](notes-required-execution.md) now derives
 finite stable execution, actual cache effects, and exact graph correspondence
 for arbitrary closed source inputs. Its source entry includes retained raw
 binders. The complete worker has kernel fixtures for the raw cycle and early
-row rejection. Next derive independent output-language preservation and
-compose the actual required-path contract with selection. Native lazy
-scheduling and extraction remain separate. Primitive-operation and native container contracts remain explicit.
+row rejection. The [independent head-language proof](notes-required-head-language.md)
+now identifies actual head normalization with the input guarded least language.
+A finite future cache is a proof witness; runtime conversion is unchanged.
+Both semantic probe heaps survive the full required-path graph. Normalized
+paths derive nonnegative trie keys at every depth. Next prove the complete
+node and forest filter law, then compose the actual required-path contract
+with selection. Native lazy scheduling and extraction remain separate. Primitive-operation and native container contracts remain explicit.
 [The Lava paper note](notes-lava.md) records relevant prior art and its source,
 solver, and termination limits. The [occurrence-cost note](notes-occurrence-costs.md)
 records the full weighted source callback/probe correspondence used here.

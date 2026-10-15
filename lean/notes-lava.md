@@ -7,6 +7,15 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Independent head-language application (2026-10-15 03:13 CEST)
+
+The completed head graph now has an independent guarded least-language theorem.
+A finite future cache supplies exact physical alternatives and independent
+child readback without a runtime conversion. Actual source construction derives
+all initial premises. The full required-path graph retains both semantic probe
+heaps. Read [the current note](notes-required-head-language.md). The complete
+required-node filter specification still needs its separate theorem.
+
 ## Complete required-path graphs (2026-10-15 03:00 CEST)
 
 The physical required-path worker now has graph/execution agreement in both

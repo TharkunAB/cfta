@@ -5,6 +5,15 @@ Proofs: `ff6967ec`, `8c0774fd`, `a98f21e8`, and `17e59c87`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with the retained
 traversal repair `61f2c939`. Publish completed checkpoints on `formalize`.
 
+## Current independent-language checkpoint
+
+`9fd64a7b` proves exact actual head normalization at the independent guarded
+least language and derives its source entry. `74df3d3b` preserves both semantic
+probe heaps through the full required-path graph. `1bc034a6` derives recursive
+nonnegative keys from normalized source paths. Read
+[the current note](notes-required-head-language.md). The complete required-node
+and compiled forest language filter laws are now the next target.
+
 ## Actual cache and head operations
 
 `SourceEqualityRequiredCache.Ready` retains the complete semantic heap,
