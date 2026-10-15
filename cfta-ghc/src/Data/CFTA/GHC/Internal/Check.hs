@@ -71,6 +71,7 @@ module Data.CFTA.GHC.Internal.Check (
     complete,
     entails,
     mayHold,
+    decides,
 
     -- * States
     StateKey,
@@ -112,7 +113,7 @@ import GHC.Builtin.Names (
     withDictClassKey,
  )
 import GHC.Builtin.Types (liftedTypeKind)
-import GHC.Core.Class (classKey, className)
+import GHC.Core.Class (Class, classKey, className)
 import GHC.Core.InstEnv (InstEnvs, classInstances, lookupInstEnv, nullUnifiers)
 import GHC.Core.Predicate (
     EqRel (NomEq),
@@ -468,13 +469,21 @@ hold, and @Foldable Int@ cannot.
 mayHold :: Environment -> InstEnvs -> PredType -> Bool
 mayHold environment instances predicate = case classifyPredType predicate of
     ClassPred cls arguments
-        | environmentRigid environment
-        , classKey cls `notElem` builtIn
-        , not (null (classInstances instances cls))
-        , className cls `notElem` environmentProvided environment
+        | decides environment instances cls
         , (matches, unifiers, _) <- lookupInstEnv False instances cls arguments ->
             not (null matches && nullUnifiers unifiers)
     _ -> True
+
+{- | Whether the instances in scope decide a class for 'mayHold': the hole
+has no given equality, the class is not built in, it has instances, and no
+given provides it.
+-}
+decides :: Environment -> InstEnvs -> Class -> Bool
+decides environment instances cls =
+    environmentRigid environment
+        && classKey cls `notElem` builtIn
+        && not (null (classInstances instances cls))
+        && className cls `notElem` environmentProvided environment
   where
     -- The classes that GHC solves without instances.
     builtIn =

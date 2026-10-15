@@ -121,9 +121,13 @@ readOptions = foldM set defaultOptions{optionMaximumSize = 4, optionFits = 5, op
         ("programs", '=' : value) -> (\programs -> options{optionMaximumPrograms = Just programs}) <$> number value
         ("first-order", "") -> Right options{optionCurried = False}
         ("only-defaulted", "") -> Right options{optionCurried = True, optionOnlyDefaulted = True}
+        ("type-domains", "") -> Right options{optionCurried = True, optionTypeDomains = True}
         _ ->
             Left
-                ("unknown option " <> argument <> "; the options are size, fits, seconds, programs, first-order, and only-defaulted")
+                ( "unknown option "
+                    <> argument
+                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, and type-domains"
+                )
       where
         number :: (Read a) => String -> Either String a
         number value = maybe (Left ("not a number in " <> argument)) Right (readMaybe value)
