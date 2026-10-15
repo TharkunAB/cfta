@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -132,9 +133,11 @@ jobs:
           cabal v2-run cfta-automaton-interop
 
       # The release check builds every dependency again, with documentation,
-      # and takes about 30 minutes. It runs only on pull requests into main.
+      # and takes about 30 minutes. It runs after a merge into main, and on
+      # request (Actions, "Run workflow", on any branch), not on each pull
+      # request.
       - name: Validate release artifacts
-        if: github.base_ref == 'main'
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
           scripts/release.sh cfta --check-only
           scripts/release.sh cfta-generator --check-only
