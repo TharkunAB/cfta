@@ -43,6 +43,10 @@ Before release, the package was called `microcfta`.
   `reduceEqConstraints` leaves a class unreduced and the check proves the
   intersection at its paths empty, the edge becomes empty. On the input of the
   previous entry, `reducePartially` now returns `EmptyNode`.
+- The check of the previous entry also covers a class whose path ends at a
+  closed recursive node with constraints, such as the input of the entry
+  before it without its wrappers, `p(A, C)` with `0 = 1`: `reducePartially`
+  returns `EmptyNode` for it too.
 - Fix `terms` and `runs` not ending on the input of the previous entries. The
   enumerator merges the two children of the class into one variable, and the
   intersection `W(A) ∩ W(C)` is `W(R)`, which needs R again. When a merge
