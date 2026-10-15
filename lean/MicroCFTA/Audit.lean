@@ -1598,6 +1598,16 @@ import MicroCFTA.SourceEqualityOnePassWorker
 import MicroCFTA.SourceEqualityOnePassWorkerProofs
 import MicroCFTA.SourceEqualityRecordSelectionProofs
 import MicroCFTA.SourceEqualityRecordSelectionWorker
+import MicroCFTA.SourceEqualityGuardReadback
+import MicroCFTA.SourceEqualityPhysicalPayload
+import MicroCFTA.SourceEqualityGuardedEdgeGraph
+import MicroCFTA.SourceEqualityGuardedEdgeWorker
+import MicroCFTA.SourceEqualityGuardedEdgeWorkerProofs
+import MicroCFTA.SourceEqualityGuardedEdgeEffects
+import MicroCFTA.SourceEqualityGuardedEdgeLanguage
+import MicroCFTA.SourceEqualityGuardedEdgeSource
+import MicroCFTA.SourceEqualityGuardedEdgeExamples
+import MicroCFTA.SourceEqualityConstraintConstructors
 /-!
 # Proof dependency audit
 
