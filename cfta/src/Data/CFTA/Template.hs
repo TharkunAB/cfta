@@ -23,7 +23,7 @@ import Data.CFTA (FTA, Transition (..))
 import qualified Data.CFTA as FTA
 import Data.CFTA.Index (Arity (..))
 import Data.CFTA.Internal.Tree (explore)
-import Data.CFTA.Interned.Operations (nodeEdges, unfoldOuterRec)
+import Data.CFTA.Interned.Operations (nodeEdges)
 import Data.CFTA.Interned.Type
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -77,7 +77,7 @@ restrict ::
 restrict Hole node = node
 restrict (AnyPrefix []) node = node
 restrict _ EmptyNode = EmptyNode
-restrict template node@(Mu _) = restrict template (unfoldOuterRec node)
+restrict template node@(Mu _) = restrict template (Node $ nodeEdges node)
 restrict template node@(InternedUnion _) = restrict template (Node $ nodeEdges node)
 restrict template (Node edges) = Node (mapMaybe (restrictEdge template) edges)
 restrict _ (Rec _) = error "restrict: unexpected free recursive reference"
