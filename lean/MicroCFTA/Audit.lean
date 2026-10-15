@@ -1763,6 +1763,8 @@ import MicroCFTA.SourceEmptinessTaskTrace
 import MicroCFTA.SourceEmptinessTaskSoundness
 import MicroCFTA.SourceRefusedClassQuery
 import MicroCFTA.SourceRefusedClassDomainBoundary
+import MicroCFTA.SourceEqualityProjectionOpenOrdinary
+import MicroCFTA.SourceRefusedClassOpenHeadBoundary
 /-!
 # Proof dependency audit
 
