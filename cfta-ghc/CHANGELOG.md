@@ -48,9 +48,13 @@ Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).
   translated from Core, with beta, eta, the eta law of pairs, a case of a
   known constructor, a case of a case, and the identity case. A class
   method, a body with a class dictionary or a recursive `let`, and an
-  identifier without an unfolding stay leaves. The session and the hole-fit
-  plugin read the unfoldings of the interfaces (no
-  `-fignore-interface-pragmas`, which `-O0` implies). With
+  identifier without an unfolding stay leaves. A normal form has at most
+  20000 nodes, and its evaluation has a fixed fuel, one unit for each beta
+  step and for each node, so it always ends: a reduction that does not end
+  gives no normal form, and its fit is not merged. `Term` exports `TVar`,
+  `TApp`, and `TLam` for terms made by hand.
+  The session and the hole-fit plugin read the unfoldings of the interfaces
+  (no `-fignore-interface-pragmas`, which `-O0` implies). With
   `optionNormalForms`, on by default, `streamFits` skips a fit with the
   normal form of an earlier fit (`flip filter xs p` is `filter p xs`), and
   `Statistics` counts the skipped fits (`statisticsMerged`) and the time of

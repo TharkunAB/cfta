@@ -483,7 +483,7 @@ streamFits options hole candidates goal accept = do
         accept' fit
             | optionNormalForms options = do
                 before <- liftIO getMonotonicTimeNSec
-                -- A fit without a normal form (too large) is not merged.
+                -- A fit without a normal form (too large, or out of fuel) is not merged.
                 let normal = normalOf (Walk.fitProgram fit)
                 present <- liftIO (readIORef seen)
                 known <- liftIO (evaluate (maybe False (`Set.member` present) normal))
@@ -666,7 +666,8 @@ streamFits options hole candidates goal accept = do
 {- | The normal forms of programs over the candidates, from the unfoldings
 of their identifiers ("Data.CFTA.GHC.NormalForm"). A candidate without a
 name, a local variable, or a name of the current module is a leaf.
-'Nothing' for a program whose normal form is too large.
+'Nothing' for a program whose normal form is too large, or needs more than
+the fuel of 'normalForm'.
 -}
 normalFormsOf :: [Candidate] -> TcM (Program -> Maybe NormalForm)
 normalFormsOf candidates = do

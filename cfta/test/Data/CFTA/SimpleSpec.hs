@@ -11,6 +11,7 @@ has few trees.
 -}
 module Data.CFTA.SimpleSpec (spec) where
 
+import Control.Exception (evaluate)
 import Control.Monad (forM, forM_)
 import Data.Functor.Identity (Identity (..))
 import Data.List (sort)
@@ -18,6 +19,7 @@ import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
+import System.Timeout (timeout)
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 import Test.QuickCheck (Gen, chooseInt, classify, elements, forAll, property, vectorOf, within)
 
@@ -174,6 +176,62 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
                                     check result = (depth, termsAndAmbiguity (runCounts depth result) kept) `shouldBe` (depth, (Map.keys kept, []))
                                 check (excludeAnywhere shapes node)
                                 check (Interned.fromFTA (excludeAnywhereFTA shapes explicit))
+
+    it "exclude templates anywhere from a chain whose function children no template fits" $ do
+        -- A cell of Specftacular's lists-5-1 at size 5, in its curried
+        -- encoding: an application has the children [type, (->), function,
+        -- argument], and a symbol has its type as its one child. Every
+        -- template has the root app, and its function part has a root that
+        -- the function children (f0) do not have. Before #34, the split
+        -- over every subset of the templates at the function child did not
+        -- end within a minute; with the ground parts grouped, it made 3,521
+        -- copies and 190 states; now each edge has one copy. No template
+        -- matches, so the result keeps the one term.
+        let a = TemplateNode "Spectacular.Types.A" []
+            int = TemplateNode "GHC.Internal.Types.Int" []
+            list t = TemplateNode "[]" [t]
+            t ~> u = TemplateNode "->" [TemplateNode "(->)" [], t, u]
+            infixr 5 ~>
+            sym name t = TemplateNode name [t]
+            var t = AnyPrefix [t]
+            app f v = TemplateNode "app" [Hole, Hole, f, v]
+            append = sym "++" (list a ~> list a ~> list a)
+            nil = sym "[]" (list a)
+            len = sym "length" (list a ~> int)
+            rev = sym "reverse" (list a ~> list a)
+            mapping = sym "map" ((a ~> a) ~> list a ~> list a)
+            shapes =
+                [ app (app append nil) (var (list a))
+                , app (app append (var (list a))) nil
+                , app len (app (app append (app rev (var (list a)))) (var (list a)))
+                , app len (app (app append (var (list a))) (app rev (var (list a))))
+                , app len (app (app mapping (var (a ~> a))) (var (list a)))
+                , app len (app rev (var (list a)))
+                , app len nil
+                , app (app mapping (var (a ~> a))) (app rev (var (list a)))
+                , app (app mapping (var (a ~> a))) nil
+                , app rev (app rev (var (list a)))
+                , app rev nil
+                ]
+            leaf symbol = [Transition symbol [] noConstraint]
+            edge symbol children = [Transition symbol children noConstraint]
+            rows =
+                Map.fromList
+                    [ (1, leaf "(->)")
+                    , (2, leaf "Spectacular.Types.A")
+                    , (3, edge "->" [1, 2, 2])
+                    , (29, edge "x0_<A>" [2])
+                    , (52, edge "f0_<A -> A>" [3])
+                    , (53, edge "app" [2, 1, 52, 29])
+                    , (80, edge "app" [2, 1, 52, 53])
+                    , (115, edge "app" [2, 1, 52, 80])
+                    , (143, edge "app" [2, 1, 52, 115])
+                    , (144, edge "filter" [2, 143])
+                    ]
+            space = Interned.fromRows (144 :: Int) rows
+        result <- timeout 10000000 $ evaluate $ runCounts 12 (excludeAnywhere shapes space)
+        result `shouldBe` Just (runCounts 12 space)
+        Map.elems (runCounts 12 space) `shouldBe` [1]
 
     it "enumerate the terms up to each depth that the simple definition lists" $
         property $
