@@ -1,6 +1,7 @@
 import MicroCFTA.SourceCurrentClassScanSupport
 import MicroCFTA.SourceCurrentRequiredLanguage
 import MicroCFTA.SourceCurrentRequiredTipSupport
+import MicroCFTA.SourceCurrentRequiredResultPreservation
 
 /-!
 # Current successful class scans followed by exact required-path execution
@@ -8,6 +9,7 @@ import MicroCFTA.SourceCurrentRequiredTipSupport
 The actual scan supplies its returned constructor heap and the selected
 original paths. Their canonical union derives the required-worker domain.
 The worker then has finite execution and exact filter language at that heap.
+Its reconstructed results retain structural domains and closed maximal tips.
 The scan memo invariants end at the scan heap. Their transfer through the
 required worker and the later class edits remains a separate obligation.
 -/
@@ -66,6 +68,11 @@ theorem scan_required_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol
       SourceEqualityRequiredWorkerComplete.StableRun
         (fun fuel readFuel => SourceEqualityRequiredExecution.requireAll fuel readFuel
           (SourceEqualitySelectedRequired.paths selected) values after.machine.heap) results requiredHeap ∧
+      SourceCurrentRequiredResultDomain.ForestDomain
+        (SourceEqualityNeeded.build (SourceEqualitySelectedRequired.paths selected)) results ∧
+      (∀ index path, SourceCurrentRequiredSupport.Tip
+        (SourceEqualityNeeded.build (SourceEqualitySelectedRequired.paths selected)) (index :: path) →
+        SourceEqualityProjectionPathDomain.ForestClosed ((index :: path).map Int.ofNat) results) ∧
       ∀ holds ambient terms,
         (All₂ (meaning holds ambient) results terms ↔
           All₂ (meaning holds ambient) values terms ∧
@@ -73,7 +80,7 @@ theorem scan_required_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol
         (∀ symbol, (∀ path ∈ classes.flatten, ∃ part, (Term.node symbol terms).atPath path = some part) →
           All₂ (meaning holds ambient) values terms → All₂ (meaning holds ambient) results terms) := by
   obtain ⟨final, reads, finalValid, finalReady, finalCosts, finalFields, kept,
-      finalValues, finalCorrect, extension, _gateReady, _origins, primary, support⟩ :=
+      finalValues, finalCorrect, extension, gateReady, _origins, primary, support⟩ :=
     SourceCurrentClassScanSupport.scan_support trace ready available costs fields proper
       formulas solver correct memos valid
   have tips := SourceCurrentRequiredTipSupport.selected_domain finalReady.semantic finalValues primary
@@ -81,11 +88,19 @@ theorem scan_required_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol
     SourceCurrentRequiredComplete.requireAll_complete source after.machine.heap finalReady.semantic
       (SourceEqualitySelectedRequired.paths selected) (SourceEqualitySelectedRequired.paths_nonnegative selected)
       values after.machine.heap finalReady.semantic finalValues (grows_refl _) support
-  refine ⟨final, results, requiredHeap, reads, finalValid, finalReady, finalCosts, finalFields,
-    finalCorrect, extension, tips, kept.trans requiredKept, requiredKept, requiredSemantic,
-    (fun value member => requiredKept.available value (finalValues value member)), requiredValues, stable, ?_⟩
+  have stableRun := stable
   obtain ⟨fuel, readFuel, enough⟩ := stable
   have done := enough fuel readFuel (Nat.le_refl _) (Nat.le_refl _)
+  have domain := (SourceCurrentRequiredResultPreservation.requireAll_verified source after.machine.heap
+    finalReady.semantic gateReady fuel readFuel _ values results after.machine.heap requiredHeap done
+    (SourceEqualitySelectedRequired.paths_nonnegative selected) finalReady.semantic finalValues
+    (grows_refl _) tips).2.2.2
+  refine ⟨final, results, requiredHeap, reads, finalValid, finalReady, finalCosts, finalFields,
+    finalCorrect, extension, tips, kept.trans requiredKept, requiredKept, requiredSemantic,
+    (fun value member => requiredKept.available value (finalValues value member)), requiredValues, stableRun,
+    domain, ?_, ?_⟩
+  · intro index path tip
+    exact SourceCurrentRequiredResultDomain.forest_tip_closed tip domain requiredSemantic requiredValues
   intro holds ambient terms
   refine ⟨SourceCurrentRequiredLanguage.requireAll_done source after.machine.heap finalReady.semantic
     fuel readFuel _ values results after.machine.heap requiredHeap done
