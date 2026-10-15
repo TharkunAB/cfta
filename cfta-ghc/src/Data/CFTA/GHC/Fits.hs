@@ -18,8 +18,10 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   time, with too few fits, the second stage runs for the rest of the time.
   It also proposes a candidate with a @Foldable@ or @Traversable@ type
   variable, which the erasure makes a list, at the other type heads of the
-  query: so @sum@ at @Maybe@ for @Maybe Int -> Int@. The first stage stays
-  as fast as before where the erasure keeps what the query needs.
+  query and at the closed heads of the components' results: so @sum@ at
+  @Maybe@ for @Maybe Int -> Int@, and @length@ at the @Maybe@ of @lookup@ in
+  @length (lookup k xs)@. The first stage stays as fast as before where the
+  erasure keeps what the query needs.
 * Each program is checked in preorder, one leaf at a time
   ("Data.CFTA.GHC.Internal.Check"), as a refinement hole fit, with the
   parts of 'GHC.Tc.Errors.Hole.tcCheckHoleFit': 'tcSubTypeSigma' at the
@@ -88,7 +90,7 @@ import Control.Applicative ((<|>))
 import Control.Monad (forM, unless)
 import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
-import Data.List (nub)
+import Data.List (nub, nubBy)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, isJust, mapMaybe)
@@ -117,6 +119,7 @@ import Data.CFTA.Gen.Synthesis.Walk (
 import qualified Data.CFTA.Gen.Synthesis.Walk as Walk
 import GHC.Builtin.Types (listTyCon)
 import GHC.Core.DataCon (dataConNonlinearType)
+import GHC.Core.TyCo.Compare (eqType)
 import GHC.Core.TyCo.FVs (tyCoVarsOfType, tyCoVarsOfTypesList)
 import GHC.Core.Type (Type, substTyWith, tyConAppTyCon_maybe)
 import GHC.Data.Bag (bagToList, emptyBag)
@@ -125,7 +128,7 @@ import GHC.Tc.Types.Constraint (Implication (..), ctEvPred)
 import GHC.Tc.Types.Origin (SkolemInfoAnon (RuntimeUnkSkol))
 import GHC.Tc.Utils.Monad (TcM)
 import GHC.Tc.Utils.TcMType (newImplication, newTcEvBinds)
-import GHC.Tc.Utils.TcType (TcLevel, TcTyVar, mkSpecSigmaTy, tcSplitNestedSigmaTys)
+import GHC.Tc.Utils.TcType (TcLevel, TcTyVar, mkSpecSigmaTy, tcSplitFunTys, tcSplitNestedSigmaTys)
 import GHC.Types.Id (Id, idType, isDataConWorkId_maybe, isDataConWrapId_maybe)
 import GHC.Types.Name (getOccString)
 import GHC.Types.Var (EvVar, isTyVar)
@@ -409,9 +412,9 @@ streamFits options hole candidates goal accept = do
     -- specialization of a candidate has the number after a space, which no
     -- Haskell name has.
     erasures environment second candidate = case erase rigid typ of
-        Just erased | not second || null (listKinded typ) -> pure [(candidate, candidateName candidate, erased) | keep candidate erased]
+        Just erased | null heads || null (listKinded typ) -> pure [(candidate, candidateName candidate, erased) | keep candidate erased]
         _ -> do
-            specialized <- specializations environment queryHeads second typ
+            specialized <- specializations environment queryHeads heads typ
             pure
                 [ (candidate, candidateName candidate <> " " <> Text.pack (show index), erased)
                 | (index, erased) <- zip [1 :: Int ..] (mapMaybe (erase rigid) specialized)
@@ -419,6 +422,7 @@ streamFits options hole candidates goal accept = do
                 ]
       where
         typ = candidateType candidate
+        heads = if second then listHeads else []
     keep candidate typ = candidateRequired candidate || not (anyResult typ)
     role candidate
         | candidateRequired candidate = Required
@@ -431,6 +435,17 @@ streamFits options hole candidates goal accept = do
         filter
             ((/= Just listTyCon) . tyConAppTyCon_maybe)
             (typeHeads (goal : [candidateType candidate | candidate <- candidates, candidateRequired candidate]))
+    -- The heads of the second stage for a variable that the erasure makes a
+    -- list: the query's, and the closed heads of the components' results,
+    -- as the Maybe of lookup, which a program can pass on to sum.
+    listHeads =
+        nubBy eqType $
+            queryHeads
+                <> filter
+                    (\head' -> null (tyCoVarsOfTypesList [head']) && tyConAppTyCon_maybe head' /= Just listTyCon)
+                    ( typeHeads
+                        [snd (tcSplitFunTys rho) | candidate <- candidates, let (_, _, rho) = tcSplitNestedSigmaTys (candidateType candidate)]
+                    )
     -- Hectare's pruning rules, with the names of every specialization.
     avoid erased =
         [ (concatMap (specializedNames erased) heads, concatMap (specializedNames erased) <$> arguments)
@@ -525,14 +540,15 @@ newChecker environment leaves start startKey = do
 higher-kinded type variable ('higherKinded') replaced by a head, when GHC
 solves the class constraints on the heads under the hole's givens. So
 @fmap@ gets a type at @Maybe@ when the instances give @Functor Maybe@, and
-at @m@ when the signature gives @Monad m@. With 'True', each variable that
-the erasure makes a list ('listKinded', as @t@ in @length@) is also kept or
-replaced by a head, so @sum@ gets a type at @Maybe@ as well as at lists; the
-first type keeps every list variable, as the erasure does. GHC still checks
-each use of the candidate with its own type.
+at @m@ when the signature gives @Monad m@. With heads in the second list,
+each variable that the erasure makes a list ('listKinded', as @t@ in
+@length@) is also kept or replaced by one of them, so @sum@ gets a type at
+@Maybe@ as well as at lists; the first type keeps every list variable, as
+the erasure does. GHC still checks each use of the candidate with its own
+type.
 -}
-specializations :: Environment -> [Type] -> Bool -> Type -> TcM [Type]
-specializations environment heads withLists typ
+specializations :: Environment -> [Type] -> [Type] -> Type -> TcM [Type]
+specializations environment heads listHeads typ
     | null (higher <> lists) = pure []
     | otherwise = fmap catMaybes . forM (mapM choices (higher <> lists)) $ \choice -> do
         let replaced = [(variable, head') | (variable, Just head') <- zip (higher <> lists) choice]
@@ -544,10 +560,10 @@ specializations environment heads withLists typ
         pure (if solved then Just (mkSpecSigmaTy remaining theta' (instantiate rho)) else Nothing)
   where
     higher = higherKinded typ
-    lists = if withLists then listKinded typ else []
+    lists = if null listHeads then [] else listKinded typ
     choices variable
         | variable `elem` higher = map Just heads
-        | otherwise = Nothing : map Just heads
+        | otherwise = Nothing : map Just listHeads
     (variables, theta, rho) = tcSplitNestedSigmaTys typ
 
 {- | Whether a program fits, from a walker: every step, then the end. The
