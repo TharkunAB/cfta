@@ -25,6 +25,7 @@ module Data.CFTA.Enumeration (
     termsWith,
     runs,
     runsBy,
+    runsInterned,
     truncatedTerms,
     plainTerms,
     plainTermsAtMost,
@@ -1091,6 +1092,16 @@ runsBy ::
     (Hashable symbol, Ord symbol, Typeable symbol) =>
     (Edge symbol -> Double) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
 runsBy weight = runsFrom (canonicalEdgesOf (Just weight))
+
+{- | 'runs' in the order of the edges in the automaton, without
+'canonicalOrder'. The result has the runs of 'runs', in another order, which
+depends on the automata that the process built before. It is for a caller
+that sorts the runs itself, and it saves the canonical classes of the graph.
+-}
+runsInterned ::
+    (Hashable symbol, Typeable symbol) =>
+    symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsInterned = runsFrom (const nodeEdges)
 
 -- | 'runs' with the order of the edges of each node, from the root.
 runsFrom ::

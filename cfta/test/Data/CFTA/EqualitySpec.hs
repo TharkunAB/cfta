@@ -8,6 +8,7 @@ import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable)
 import Data.IORef (modifyIORef, newIORef, readIORef)
 import qualified Data.IntMap.Strict as IntMap
+import Data.List (sort)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
@@ -611,6 +612,17 @@ spec = do
             late <- evaluate (Edge "order-b" [] :: Edge Symbol)
             early <- evaluate (Edge "order-a" [])
             terms (Node [late, early]) `shouldBe` [Term.Node "order-a" [], Term.Node "order-b" []]
+
+        it "lists the edges of a node in the order of the automaton with runsInterned" $ do
+            late <- evaluate (Edge "interned-b" [] :: Edge Symbol)
+            early <- evaluate (Edge "interned-a" [])
+            map fst (runsInterned "Mu" (Node [late, early])) `shouldBe` [Term.Node "interned-b" [], Term.Node "interned-a" []]
+            map fst (runs "Mu" (Node [late, early])) `shouldBe` [Term.Node "interned-a" [], Term.Node "interned-b" []]
+
+        it "lists with runsInterned the runs of runs, with constraints" $
+            property $
+                mapSize (min 3) $
+                    \(n :: Node Symbol) -> sort (map fst (runsInterned "Mu" n)) `shouldBe` sort (map fst (runs "Mu" n))
 
         it "lists the edges with larger weights first, and equal weights in the canonical order" $ do
             let node = Node [Edge "weight-a" [], Edge "weight-b" [], Edge "weight-c" []] :: Node Symbol
