@@ -411,6 +411,11 @@ of children from 'every' stays a term of their integers, so a parent's
 contract relates it without enumerating them. A child without a measure makes
 'compile' report 'InexactMeasure'. The contract and the measure must each take
 one term for every child.
+
+A measure can choose with 'Data.CFTA.Refinement.Symbolic.ite', as
+@\\left right -> 1 + larger left right@ does. When the children have one
+integer each, the measure takes the branch that the condition chooses, so
+the measure is one integer.
 -}
 measured ::
     (ContractBuilder contract, MeasureBuilder measure) =>
@@ -449,7 +454,11 @@ Each measure must give one integer: a child that a measure reads must have
 that measure as one integer in its refinement, as a conjunct
 @name(v) == value@. A 'leaf' gives its measures in its refinement, as in
 @\\v -> bh v .== 0 .&& col v .== 0@. Otherwise 'compile' reports
-'InexactMeasure'. The contract and each measure must take one term for every
+'InexactMeasure', with the measure and the children. A value from 'every'
+stays a term, so a named measure cannot read it. A measure can choose with
+'Data.CFTA.Refinement.Symbolic.ite', as @larger (bh left) (bh right)@ does:
+the condition reads the same integers, and the measure takes the branch that
+it chooses. The contract and each measure must take one term for every
 child.
 -}
 measuredBy ::
