@@ -4,8 +4,8 @@
 {-# LANGUAGE TypeApplications #-}
 
 {- | Tests of "Data.CFTA.Gen.Refinement.Derive": the derived generators of
-SortedLists, SafeDivision, and LiquidPairs have the cardinality and the ranks
-of the hand-written generators of the examples.
+SortedLists, SafeDivision, LiquidPairs, and RedBlackTrees have the cardinality
+and the ranks of the hand-written generators of the examples.
 -}
 module Data.CFTA.Gen.Refinement.DeriveSpec (spec) where
 
@@ -14,6 +14,7 @@ module Data.CFTA.Gen.Refinement.DeriveSpec (spec) where
 
 import Control.Monad (forM_, void)
 import Data.Containers.ListUtils (nubOrd)
+import qualified Data.Map.Strict as Map
 import GHC.Generics (Generic)
 import Test.Hspec (Expectation, Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 
@@ -22,7 +23,7 @@ import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Generic (HasFTA)
 import Data.CFTA.Index (Arity (..), Cardinality (..), Rank (..))
 import Data.CFTA.Refinement.Expression (Expr, Refinement)
-import Data.CFTA.Refinement.Symbolic (Symbolic (..), true, (.&&))
+import Data.CFTA.Refinement.Symbolic (Measures (..), Symbolic (..), true, (.&&))
 
 -- | A list that its invariant keeps sorted.
 data SortedList = Nil | Cons Integer SortedList
@@ -115,6 +116,50 @@ pairs = LTAGen.guarded "pair" (\left right -> left .< right) $ LTAGen.do
     right <- LTAGen.pool ranged
     LTAGen.pure (left, right)
 
+-- | The shape of a red-black tree.
+data Tree = Leaf | Black Tree Tree | Red Tree Tree
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | The black height and the color of each tree, and the rules of red-black trees.
+instance HasLTA Tree where
+    invariant = MeasuredBy measures balanced
+      where
+        bh child = childMeasure "bh" child
+        col child = childMeasure "col" child
+        measures Black{} [left, _] = [("bh", bh left + 1), ("col", 0)]
+        measures Red{} [left, _] = [("bh", bh left), ("col", 1)]
+        measures _ _ = [("bh", 0), ("col", 0)]
+        balanced Black{} [left, right] = bh left .== bh right
+        balanced Red{} [left, right] = bh left .== bh right .&& col left .== 0 .&& col right .== 0
+        balanced _ _ = true
+
+-- | The derived red-black trees: a black root and a black height of at most three.
+derivedTrees :: Either DeriveLTAError (LTAGen.LTAGen Tree)
+derivedTrees = (`LTAGen.satisfying` root) <$> deriveLTA @Tree 6 mempty
+  where
+    root v = childMeasure "col" v .== 0 .&& childMeasure "bh" v .<= 3
+
+-- | The two-state generator of RedBlackTrees.hs, with the bound 3.
+redBlackTrees :: LTAGen.LTAGen Tree
+redBlackTrees = LTAGen.recurUpTo 3 $ \blackRooted ->
+    let anyRooted = LTAGen.oneof [blackRooted, red blackRooted]
+     in LTAGen.oneof [leaf, black anyRooted]
+  where
+    leaf = LTAGen.leaf Leaf "leaf" (.== 0)
+    black child =
+        LTAGen.measured
+            "black"
+            (\leftHeight rightHeight -> leftHeight .== rightHeight)
+            (\leftHeight _ -> leftHeight + 1)
+            (Black <$> child <*> child)
+    red child =
+        LTAGen.measured
+            "red"
+            (\leftHeight rightHeight -> leftHeight .== rightHeight)
+            (\leftHeight _ -> leftHeight)
+            (Red <$> child <*> child)
+
 {- | Compile both generators, and expect the same cardinality and the same
 value at each checked rank: every rank of a small generator, and the first
 three, the middle, the last two, and 200 ranks of a fixed sequence of a large
@@ -160,6 +205,17 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         map (holds atoms rules) [Cons 1 (Cons 2 (Cons 2 Nil)), Cons 3 (Cons 1 Nil), Cons 2000000 Nil]
             `shouldBe` [True, False, False]
         map (measureOf atoms rules) [Cons 4 (Cons 5 Nil), Nil] `shouldBe` [Just 4, Just 1000001]
+    it "derives RedBlackTrees with named measures with the ranks of the two-state generator" $
+        sameRanks redBlackTrees derivedTrees
+    it "checks red-black trees with the named measures of the invariant" $ do
+        let rules = invariant @Tree
+        compiled <- either (fail . show) LTAGen.compile derivedTrees
+        sampled <- either (fail . show) pure $ traverse (LTAGen.unrank compiled . Rank) [0, 257281604 .. 25728160404]
+        filter (not . holds mempty rules) sampled `shouldBe` []
+        holds mempty rules (Black (Red (Red Leaf Leaf) (Red Leaf Leaf)) Leaf) `shouldBe` False
+        holds mempty rules (Black (Black Leaf Leaf) Leaf) `shouldBe` False
+        measuresOf mempty rules (Black (Red (Black Leaf Leaf) (Black Leaf Leaf)) (Black Leaf Leaf))
+            `shouldBe` Map.fromList [("bh", 2), ("col", 0)]
     it "reports annotations that do not fit the datatype" $ do
         let derive annotations = void $ deriveLTAWith @SortedList 8 (atom @Integer LTAGen.every) annotations
         derive [("Cosn", mempty)] `shouldBe` Left (UnknownConstructors ["Cosn"] ["Nil", "Cons"])

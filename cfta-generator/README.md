@@ -1639,6 +1639,37 @@ counts the unfoldings of each group of types that refer to each other, as
 and the measures of the constructors by name, as annotations in the
 expression language.
 
+A datatype with several integers for each value has named measures.
+`MeasuredBy` takes a list of named measures and a contract over the children,
+which read a named measure with `childMeasure`, as `measuredBy` does for the
+combinators. Red-black trees from one datatype:
+
+```haskell
+data Tree = Leaf | Black Tree Tree | Red Tree Tree
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+
+instance HasLTA Tree where
+    invariant = MeasuredBy measures balanced
+      where
+        bh child = childMeasure "bh" child
+        col child = childMeasure "col" child
+        measures Black{} [left, _] = [("bh", bh left + 1), ("col", 0)]
+        measures Red{} [left, _] = [("bh", bh left), ("col", 1)]
+        measures _ _ = [("bh", 0), ("col", 0)]
+        balanced Black{} [left, right] = bh left .== bh right
+        balanced Red{} [left, right] = bh left .== bh right .&& col left .== 0 .&& col right .== 0
+        balanced _ _ = true
+
+trees = (`LTAGen.satisfying` \v -> childMeasure "col" v .== 0 .&& childMeasure "bh" v .<= 3)
+    <$> deriveLTA @Tree 6 mempty
+```
+
+These are the 25,728,160,405 trees of `RedBlackTrees.hs`, at the same ranks.
+Write `bh` with its argument: the monomorphism restriction gives
+`bh = childMeasure "bh"` one type of integers, and the invariant uses it on
+both `Expr` and `Integer`. `measuresOf` gives the named measures of a value.
+
 ## Component synthesis
 
 Two modules use the automata and the generators to synthesize programs from
