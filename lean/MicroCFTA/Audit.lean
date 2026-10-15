@@ -1804,6 +1804,10 @@ import MicroCFTA.SourceCurrentMergeResultMemo
 import MicroCFTA.SourceSynthesisStateBudgets
 import MicroCFTA.SourceNormalFormBudget
 import MicroCFTA.SourceCurrentMemoMergeComplete
+import MicroCFTA.SourceCurrentMergeGrouping
+import MicroCFTA.SourceCurrentMemoMergePublishedComplete
+import MicroCFTA.SourceCurrentMemoMergeNoReentry
+import MicroCFTA.SourceCurrentMemoDemandTarget
 import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
 import MicroCFTA.SourceCurrentEnumerationStorage
