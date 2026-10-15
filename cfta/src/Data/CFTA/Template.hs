@@ -31,7 +31,7 @@ module Data.CFTA.Template (
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
-import Data.List (nub, partition, sort)
+import Data.List (partition, sort)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (mapMaybe)
 import qualified Data.Set as Set
@@ -155,10 +155,14 @@ them, it shares the input's nodes, and it unfolds a 'Mu' only that deep, as
 'restrict' does. An edge with @k@ children and @m@ templates that constrain
 more than one of them can have up to @2^m@ copies for each such child, but
 a template whose later parts are all holes must die at its last constrained
-child, so there it gives no choice.
+child, so there it gives no choice. A part without holes matches one term
+only, so a child has one copy for each such part and one for none, not one
+for each subset of the templates that have such parts. For templates that
+fix their earlier children, as the preorder prefixes of 'preorderPrefix'
+do, this is all the choice there is.
 -}
 exclude ::
-    (Hashable symbol, Typeable symbol) =>
+    (Ord symbol, Hashable symbol, Typeable symbol) =>
     [Template symbol] -> Node symbol -> Node symbol
 exclude = refine []
 
@@ -166,7 +170,7 @@ exclude = refine []
 of the second.
 -}
 refine ::
-    (Hashable symbol, Typeable symbol) =>
+    (Ord symbol, Hashable symbol, Typeable symbol) =>
     [Template symbol] -> [Template symbol] -> Node symbol -> Node symbol
 refine wanted unwanted node
     | any trivial unwanted = EmptyNode
@@ -179,11 +183,11 @@ refine wanted unwanted node
             Node
                 [ setChildren edge (zipWith (\(wanted'', unwanted') child -> refine wanted'' unwanted' child) parts (edgeChildren edge))
                 | edge <- edges
-                , parts <- edgeCopies wanted' (nub unwanted) (edgeSymbol edge) (length (edgeChildren edge))
+                , parts <- edgeCopies wanted' (nubOrd unwanted) (edgeSymbol edge) (length (edgeChildren edge))
                 ]
         Rec _ -> error "exclude: unexpected free recursive reference"
   where
-    wanted' = nub (filter (not . trivial) wanted)
+    wanted' = nubOrd (filter (not . trivial) wanted)
 
 {- | What the terms of a state of 'excludeFTA' must match: every template of
 the first list, and none of the second.
@@ -292,10 +296,14 @@ For each child in turn, the unwanted templates that every earlier child
 matched (alive) split into those that this child matches too and those
 that it does not. A template whose part here is a hole stays alive; one
 whose later parts are all holes must die here. A copy with a template alive
-after the last child has no terms.
+after the last child has no terms. A part without holes ('ground') matches
+one term only, so the child equals at most one ground part: the split has a
+copy for each ground part, which keeps the templates of that part, and a
+copy for none, which kills them all. The other templates that may stay
+alive split over every subset.
 -}
 edgeCopies ::
-    (Eq symbol) => [Template symbol] -> [Template symbol] -> symbol -> Int -> [[([Template symbol], [Template symbol])]]
+    (Ord symbol) => [Template symbol] -> [Template symbol] -> symbol -> Int -> [[([Template symbol], [Template symbol])]]
 edgeCopies wanted unwanted symbol count = case traverse childrenOf wanted of
     Nothing -> []
     Just wantedChildren -> copies (zip [0 ..] (transposed wantedChildren)) (mapMaybe childrenOf unwanted)
@@ -305,16 +313,34 @@ edgeCopies wanted unwanted symbol count = case traverse childrenOf wanted of
     copies [] alive = [[] | null alive]
     copies ((index, wantedHere) : rest) alive =
         [ (wantedHere <> map (!! index) kept, map (!! index) killed) : later
-        | (chosen, notChosen) <- splits mayLive
-        , let kept = forced <> chosen
-              killed = mustDie <> notChosen
+        | (kept, killed) <- choices
         , later <- copies rest kept
         ]
       where
         (forced, free) = partition (\parts -> trivial (parts !! index)) alive
         (mustDie, mayLive) = partition (all trivial . drop (index + 1)) free
+        -- The child equals at most one ground part. If it equals one, the
+        -- templates of that part stay alive, and the other ground parts
+        -- cannot match it, so they need not die here. A part that a
+        -- template which must die has too cannot stay alive.
+        (fixed, open) = partition (ground . (!! index)) mayLive
+        (groundDying, openDying) = partition (ground . (!! index)) mustDie
+        groups = Map.fromListWith (flip (<>)) [(parts !! index, [parts]) | parts <- fixed]
+        dying = Set.fromList (map (!! index) groundDying)
+        choices =
+            [(forced <> chosen, mustDie <> fixed <> notChosen) | (chosen, notChosen) <- splits open]
+                <> [ (forced <> group <> chosen, openDying <> notChosen)
+                   | (part, group) <- Map.toList groups
+                   , Set.notMember part dying
+                   , (chosen, notChosen) <- splits open
+                   ]
     splits [] = [([], [])]
-    splits (value : rest) = concat [[(value : chosen, notChosen), (chosen, value : notChosen)] | (chosen, notChosen) <- splits rest]
+    splits (value : others) = concat [[(value : chosen, notChosen), (chosen, value : notChosen)] | (chosen, notChosen) <- splits others]
+
+-- | Whether a template has no holes, so that it matches one term only.
+ground :: Template symbol -> Bool
+ground (TemplateNode _ children) = all ground children
+ground _ = False
 
 -- | Whether a template matches every term.
 trivial :: Template symbol -> Bool
