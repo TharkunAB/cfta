@@ -6,7 +6,12 @@ The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, and `cfta-ghc`. Public `Data.CFTA.*` modules and
 Lean namespace `MicroCFTA` retain their names. The Lake package is `cfta`.
 Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
-The audit passes 1,662 jobs and 45,923 theorem dependency checks.
+The audit passes 1,671 jobs and 46,049 theorem dependency checks.
+The [general projection proof](notes-general-projection.md) now derives finite
+stable getPath execution on arbitrary closed nested Mu/Union inputs, exact
+source closed-union language, and accepted-subterm inclusion. It retains
+actual reads, full final caches, and signed missing-position behavior.
+Scoped native callback composition and merged targets remain open.
 The [public entry proof](notes-native-public-entry.md) derives finite actual
 entry execution, exact independent root-language readback, and complete
 optimized/reference query-record equality. It includes direct empty/open

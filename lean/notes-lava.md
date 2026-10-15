@@ -7,6 +7,16 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## General path graph application (2026-10-15 04:13 CEST)
+
+The actual general getPath worker now has two-way physical graph agreement,
+finite stable execution, and independent accepted-subterm inclusion. The
+closed union branch retains actual recursive row reads. The language contract
+stays separate from graph agreement and is inclusion because projection
+discards ancestor guards. Read [the current note](notes-general-projection.md).
+Native lazy scheduling and extraction remain separate. No Lava or Rocq
+dependency is added.
+
 ## Exact edit-language application (2026-10-15 03:58 CEST)
 
 The actual edit graph now satisfies its independent leaf-condition language

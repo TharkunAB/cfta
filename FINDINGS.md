@@ -1,6 +1,61 @@
 # Current formalization findings
 
-Updated: **2026-10-15 03:58 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 04:13 CEST (Europe/Stockholm)**.
+
+## General closed getPath execution and subterm inclusion
+
+Proofs: `587c633a`, `eb094eb9`, and `3dd8ee3b`. Source: `TharkunAB/cfta`,
+`origin/main` at `f201deda`, with retained traversal repair `61f2c939`.
+Continue on `formalize` and push checkpoints. Read
+`lean/notes-general-projection.md`. This section supersedes the general
+closed getPath and forest-root union targets in the older edit note.
+
+Actual closed source union reads nodeEdges for each operand, concatenates
+its exposed rows, and makes one ordinary node. It does this even for a
+singleton recursive operand. The proof retains every actual read and cache.
+It does not replace this branch by createUnion or stored ordinary rows.
+Each read and the whole closed union derive exact independent language,
+semantic heaps, complete histories, resident rows, and closed results.
+
+General signed getPath now has complete physical node, row, and forest
+graphs. Finite path length and completed head normalization derive finite
+execution on arbitrary closed available nested Mu/Union values. Original
+source construction derives every initial premise. Successful bounded runs
+and complete graphs agree in both directions. Each graph has one result and
+full final cache. Every larger pair of worker and read bounds returns both
+unchanged. Pending, unresolved, and the two exhausted bounds stay distinct.
+
+Every existing subterm of an accepted original term is accepted by its
+actual projection. Proper forest paths retain the original accepted child
+forest. Forest root projection has exact union language. Projection discards
+ancestor guards, so its general language contract is inclusion. Root node
+lookup keeps source identity priority. Negative and missing signed positions
+retain source behavior. Kernel checks cover bare references, missing forest
+positions, the raw closed self binder, both exhausted bounds, and actual
+singleton closed forest union.
+
+The aggregate audit passes 1,671 jobs and 46,049 dependency checks using only
+propext, Classical.choice, and Quot.sound. Only the older unused inputs warning
+remains. All eleven new modules pass focused builds. No Haskell source changed;
+the earlier 645 examples and format checks apply to the unchanged tree.
+Log: `/tmp/mcfta-projection-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-projection-checkpoint-20261015-0413/`
+(2,068 Lean-tree files and four root documents). The only older proof change
+is added audit imports. All repros, counterexamples, marked drafts, stashes,
+other worktrees, and production source remain. Weekly allowance was 17%
+at 04:13 CEST; refresh before work. Stop all work at 1% or less.
+
+Next derive scoped callback composition and actual merged/intersection-list
+targets. Carry captured target availability from its real base cache through
+Keeps. Retain the full native memo/domain state and checked word ranges at
+each request. Reuse SourceEqualityNativeLeaf.done, complete, captured_target,
+and the new general projection API. Do not instantiate the global LeafLaw
+for arbitrary unrelated caches. Merge has inclusion; intersection is exact.
+Then compose actual class edit batches, the ordered class right fold, and
+empty-child propagation. Reuse the completed unary ancestor theorem.
+getAllAtPath, open contexts, complete one-pass correspondence, repeated
+fixed-point reduction, native containers, lazy scheduling, and extraction
+remain separate. Preserve exact Sized laws and the optimized interned core.
 
 ## Exact edit languages, original paths, and native leaf effects
 

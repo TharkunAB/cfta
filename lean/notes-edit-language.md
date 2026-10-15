@@ -5,6 +5,14 @@ Proofs: `c6f33d9d`, `172ce399`, and `6359b4a4`.
 Source: `TharkunAB/cfta`, `origin/main` at `f201deda`.
 The retained traversal repair is `61f2c939`. Continue on `formalize`.
 
+## Current general projection checkpoint
+
+`587c633a`, `eb094eb9`, and `3dd8ee3b` derive the general closed source
+getPath and forest-root union obligations listed below. Read
+[the current projection note](notes-general-projection.md). Scoped native
+callback composition and merged/intersection-list targets remain open.
+The older next-target text below is historical for general projection.
+
 ## Actual graph language
 
 `SourceEqualityEditLanguage.LeafLaw` contains a per-leaf completion contract
