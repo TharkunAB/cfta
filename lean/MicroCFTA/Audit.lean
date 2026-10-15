@@ -1,4 +1,7 @@
 import Lean
+import MicroCFTA.SourceEqualityPartialNativeHeap
+import MicroCFTA.SourceEqualityNativeDemandMismatchReceipt
+import MicroCFTA.SourceEqualityNativeDemandNodeShortcut
 import MicroCFTA.SourceEqualityPartialNativeDemand
 import MicroCFTA.SourceEqualityNativeDemandMismatch
 import MicroCFTA.SourceEqualityPartialIntersectionAllocation
