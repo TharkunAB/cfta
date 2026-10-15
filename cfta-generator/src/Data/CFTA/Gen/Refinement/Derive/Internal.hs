@@ -115,6 +115,13 @@ data DeriveLTAError
       reaches infinitely many types.
       -}
       TooManyTypes !Int
+    | {- | A contract or a measure of a constructor reads a field whose type
+      gives it no integer: the type has no atom, and no constructor of the
+      type has a measure. Give the type an atom, as
+      @atom \@Color (elements [Red, Black])@, or measures. The fields are the
+      constructor name, the position of the field, and its type.
+      -}
+      UnmeasuredField !String !Int !TypeRep
     deriving (Eq, Show)
 
 -- | Generators for atomic field types, by type.
@@ -262,6 +269,11 @@ deriveLTAWith bound (Atoms atoms) named = do
         typ : _ -> Left $ MissingAtom typ
         [] -> pure ()
     mapM_ checkAnnotation constructors
+    sequence_
+        [ checkFields derived constructor fields
+        | alternatives <- Map.elems derived
+        , Alternative constructor fields <- alternatives
+        ]
     pure $ decode <$> generatorOf (buildAll derived) (typeRep $ Proxy @a)
   where
     annotations = Map.fromListWith (flip (<>)) named
@@ -293,6 +305,25 @@ deriveLTAWith bound (Atoms atoms) named = do
             $ Left
             $ SeveralMeasures name
         unless (null contracts || arity > 0) $ Left $ ContractWithoutFields name
+
+    -- A field that a contract or a measure reads needs an integer: an atom,
+    -- or a measure of a constructor of its type.
+    checkFields derived constructor fields =
+        sequence_
+            [ Left $ UnmeasuredField (constructorName constructor) position typ
+            | (position, typ) <- zip [0 ..] fields
+            , contractTermName (ArgumentIndex position) `elem` readNames
+            , not (Map.member typ atoms)
+            , not (any measuredAlternative (Map.findWithDefault [] typ derived))
+            ]
+      where
+        Annotation contracts measures namedMeasures = annotationOf constructor
+        readNames =
+            concat $
+                [freeNames formula | Contract _ formula <- contracts]
+                    <> [freeNames (term .== 0) | Measure _ term <- measures <> map snd namedMeasures]
+        measuredAlternative (Alternative alternative _) =
+            let Annotation _ measures' named' = annotationOf alternative in not (null measures' && null named')
 
     -- The types that refer to each other unfold together, as 'recurUpTo'
     -- unfolds one type. A group comes after the groups that it refers to.

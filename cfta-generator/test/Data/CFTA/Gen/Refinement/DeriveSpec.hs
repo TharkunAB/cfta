@@ -1,7 +1,7 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeFamilies #-}
@@ -22,6 +22,8 @@ module Data.CFTA.Gen.Refinement.DeriveSpec (spec) where
 import Control.Monad (forM_, void)
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (sort)
+import Data.Proxy (Proxy (..))
+import Data.Typeable (typeRep)
 import GHC.Generics (Generic)
 import Test.Hspec (Expectation, Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 
@@ -37,7 +39,7 @@ import Data.CFTA.Gen.Refinement.Derive.Internal (
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Generic (HasFTA)
 import Data.CFTA.Index (Arity (..), Cardinality (..), Depth, Rank (..))
-import Data.CFTA.Refinement.Expression (Expr, Formula, Refinement, uninterpreted)
+import Data.CFTA.Refinement.Expression (Enumerated (..), Expr, Formula, Literal, Refinement, uninterpreted)
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
 import Data.CFTA.Refinement.Symbolic (Symbolic (..), larger, smaller, true, (.&&))
 
@@ -360,6 +362,31 @@ closedCount bound = count bound 0
       where
         below = count (n - 1)
 
+-- | A shade, an enumeration that a field of a 'Tiles' value has.
+data Shade = Light | Dark
+    deriving stock (Eq, Ord, Show, Bounded, Enum, Generic)
+    deriving anyclass (HasFTA)
+    deriving (Literal) via (Enumerated Shade)
+
+-- | A row of tiles.
+data Tiles = NoTiles | Tile Shade Tiles
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | One node of a row of tiles: the shade, and the number of dark tiles of the rest.
+data TilesNode e = NoTilesNode | TileNode e e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | The measure is the number of dark tiles: 'Dark' is 1.
+instance HasLTA Tiles where
+    type Node Tiles = TilesNode
+    type Measures Tiles = Single
+    invariant = Measured darkTiles (const true)
+      where
+        darkTiles NoTilesNode = 0
+        darkTiles (TileNode shade rest) = shade + rest
+
 -- | The measures of a sorted list for a condition on its length: the head and the length.
 data ListMeasures e = ListMeasures {front :: e, size :: e}
     deriving stock (Eq, Show, Generic)
@@ -491,6 +518,10 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         generator <- either (fail . show) pure $ deriveLTAFrom @SortedList 4 (atom @Integer LTAGen.every) byLength
         compiled <- LTAGen.compileWith latticeEntailment generator
         void compiled `shouldBe` Left (LTAGen.InexactMeasure "Cons" (Just "front") [0])
+    it "reports a field whose type has no integer" $ do
+        void (deriveLTA @Tiles 3 mempty) `shouldBe` Left (UnmeasuredField "Tile" 0 (typeRep (Proxy @Shade)))
+        compiled <- either (fail . show) LTAGen.compile (deriveLTA @Tiles 2 (atom @Shade (LTAGen.elements [Light, Dark])))
+        LTAGen.cardinality compiled `shouldBe` Right (Cardinality 7)
     it "reports annotations that do not fit the datatype" $ do
         let derive annotations = void $ deriveLTAWith @SortedList 8 (atom @Integer LTAGen.every) annotations
         derive [("Cosn", mempty)] `shouldBe` Left (UnknownConstructors ["Cosn"] ["Nil", "Cons"])
