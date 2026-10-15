@@ -1640,6 +1640,13 @@ import MicroCFTA.SourceEqualityInheritedChildren
 import MicroCFTA.SourceEqualityInheritedChildrenProofs
 import MicroCFTA.SourceEqualityInheritedEdge
 import MicroCFTA.SourceEqualityInheritedEdgeWorker
+import MicroCFTA.InternedFreshOrdinaryProbeFilter
+import MicroCFTA.SourceEqualityMuReconstruction
+import MicroCFTA.SourceEqualityInheritedRows
+import MicroCFTA.SourceEqualityInheritedRowsProofs
+import MicroCFTA.SourceEqualityPartialNodeRebuild
+import MicroCFTA.SourceEqualityPartialWorker
+import MicroCFTA.SourceEqualityPartialStepProofs
 /-!
 # Proof dependency audit
 
