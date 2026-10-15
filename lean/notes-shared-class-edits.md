@@ -123,7 +123,7 @@ and formatter checks apply to the unchanged source and were not rerun.
 Compose the actual selected class list in its source ordered right fold. Each
 class captures the forest returned by later classes and starts its own unforced
 slots. Retain actual full native state between classes. Model the literal
-structural empty propagation after each class. Derive prefix range plans,
+structural empty propagation once after the complete fold. Derive prefix range plans,
 finite stable execution, and no loss of class-satisfying terms. Compose these
 results with the existing selected/required-path graph before the whole one-pass
 source worker. Keep full one-pass correspondence, open contexts, repeated fixed

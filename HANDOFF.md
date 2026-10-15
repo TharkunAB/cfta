@@ -1,6 +1,80 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-15 06:11 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 06:25 CEST (Europe/Stockholm)**.
+
+## Selected class right fold and final empty propagation
+
+Proofs: `fe3c4cc4`, `b0c47ec2`, and `2d7eced9`.
+Source: `TharkunAB/cfta`, `origin/main` at `f201deda`, with retained
+traversal repair `61f2c939`. Continue on `formalize` and push checkpoints.
+Read `lean/notes-selected-class-fold.md`. This section supersedes the class-fold
+composition target and earlier completion counts.
+
+Source correction: Equality/Operations.hs applies propagateEmptyNodes once
+after the complete foldr reduceEClass. Earlier restart guidance incorrectly
+placed it after each class. The new graph and worker retain the source order.
+Each class captures the actual forest returned by the completed tail. It starts
+fresh target slots and retains the same full warm native state. Returned target
+slots are shared within that class. They are not reused by the next class.
+Final literal empty propagation has no constructor or native effect and
+preserves the complete independent ordered forest language exactly.
+
+Actual-prefix range plans and local shared edit completion derive finite
+class folds. No completed fold, future-cache law, or global callback language
+law is supplied. Every completed graph derives five independent finite edit
+and target bounds. Every larger tuple returns the same forest and full native
+state. Checked successful workers and complete pass graphs agree in both
+directions. Fold and fold-and-propagate results are unique. Incomplete class
+observations retain the actual captured forest and shared worker stage.
+
+Physical source selection now keeps the original aligned records, including
+repeated clear occurrences. Their paths equal the selected query paths.
+Required paths run on the original forest and return their actual heap.
+Derived cache histories advance that heap in the same native state without
+resetting domain or native memo tables. Native initialization derives idle
+validity from the actual semantic constructor heap and empty domain cache.
+
+The selected live branch now composes actual gate/required receipts, selected
+physical class folds, and final propagation. It narrows the original forest
+and retains every accepted term satisfying the selected classes. Under all
+original class constraints, before and after forest membership are equivalent.
+Original closed source construction derives finite complete selected processing,
+actual source gate memo receipts, stable gate and required-path bounds, and
+stable five-bound native fold execution from reached native word checks.
+The final whole one-pass executable entry remains to be composed.
+
+Kernel checks verify rightmost-first class order, fresh slots for each repeated
+class, one retained warm native node cell, identical larger-bound results,
+ordered repeated record selection, and final-only empty propagation. A repeated
+class with zero projection bounds attempts its own first target demand even
+when the native memo is warm. This distinguishes class-local sharing from
+incorrect cross-class target reuse.
+
+All fourteen new modules pass focused builds. The aggregate audit passes
+1,759 jobs and 47,301 dependency checks using only propext, Classical.choice,
+and Quot.sound. Only the older unused inputs warning remains.
+Log: `/tmp/mcfta-selected-class-fold-20261015-audit.log`.
+Snapshot: `/tmp/mcfta-selected-fold-checkpoint-20261015-0625/`
+(2,163 Lean-tree files and four root documents). Older proofs are unchanged
+except audit imports. Repros, counterexamples, marked drafts, production source,
+stashes, and other worktrees are unchanged. The earlier 645 Haskell examples
+and formatter checks apply to the unchanged source and were not rerun.
+Weekly allowance was 16% at 06:24 CEST. Refresh it before work. Stop all work
+and owned workers immediately at 1% or less.
+
+Next implement the physical-record selection worker and connect the whole
+one-pass native entry. Retain actual precheck/array normalization, unchanged
+and contradiction fast paths, selection and its two memos, required paths,
+class-local captures, the native right fold, and one final propagation. The
+unchanged fast path must not propagate preexisting empty children. Derive
+checked function/graph agreement and stable finite bounds for all phases.
+Then prove exact original guarded-edge language with the guard unchanged.
+Keep actual request word checks explicit. Full one-pass Haskell correspondence,
+open contexts, repeated fixed points, getAllAtPath, native containers, GHC lazy
+scheduling, and extraction remain open. Function/graph agreement is for these
+explicit workers; it is not verified GHC heap extraction. Preserve exact Sized
+contracts, both rank inverses, the optimized interned core, all older constructor
+and equality work, and all boundary artifacts.
 
 ## Shared target closures through actual class edit leaves
 
@@ -64,7 +138,7 @@ and owned workers immediately at 1% or less.
 Next compose actual selected classes in their source ordered right fold.
 Each class must capture the current forest returned by the later classes,
 start its own unforced slots, and retain the same actual native state. Model
-literal structural empty propagation after each class edit. Use the existing
+literal structural empty propagation once after the complete fold. Use the existing
 class ordering, selected/required-path graphs, shared class completion, and
 language bounds. Derive actual-prefix checks instead of assuming whole-fold
 completion or a future cache law. Then connect the complete one-pass worker.

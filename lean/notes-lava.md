@@ -7,6 +7,20 @@ Rocq*, arXiv:2610.14092v1. Matti supplied the local PDF at
 SHA-256: `5d298362a55c4e2dbed97ca9ac35328c74fc93b2e840503f32d7eb24c32516e4`.
 Page references below use the printed page numbers in that PDF.
 
+## Selected class-fold application (2026-10-15 06:25 CEST)
+
+Actual source selection and required receipts now compose with fresh class-local
+target captures, finite native right folds, and one final empty propagation.
+The fold worker has two-way checked graph agreement and stable identical full
+native states at all larger five-bound tuples. Original closed construction
+derives the selected live entry. Read [the current note](notes-selected-class-fold.md).
+The source propagates once after the complete fold; earlier restart guidance
+said after each class and is corrected. Full one-pass worker composition and
+guarded-edge language remain next. The explicit worker schedule does not prove
+GHC's lazy demand or allocation schedule. The paper's call-by-value theorem
+and assumed termination do not close that boundary. No Lava or Rocq dependency
+is added.
+
 ## Shared target forcing application (2026-10-15 06:11 CEST)
 
 Shared class-target slots now have literal first-force and reuse graphs,
