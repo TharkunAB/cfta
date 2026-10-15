@@ -77,7 +77,7 @@ main = do
         Right Command{commandSignature = Nothing} -> usage "no signature"
         Right (Command imports' packages options (Just signature)) -> do
             let imports = if null imports' then [Import "Prelude" Nothing] else imports'
-            withSessionPackages packages (map importLine imports) $ \session -> do
+            withSessionOptions defaultSessionOptions{sessionPackages = packages} (map importLine imports) $ \session -> do
                 candidates <- candidatesOf session imports
                 typed <- typeOfExpression session ("undefined :: " <> signature)
                 case typed of
