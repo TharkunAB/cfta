@@ -10,9 +10,12 @@ Before release, the package was called `microcfta`.
 - `Data.CFTA.Refinement.Symbolic`: the classes `Boolean` and `Symbolic`. They
   give the operators of the refinement logic on values (`Integer` and `Bool`)
   and on terms (`Expr` and `Formula`), so one polymorphic function is both a
-  predicate and a refinement. `Measures` adds the children of a constructor:
-  a term on `Expr`, and the integers of a node on `Integer`, with
-  `childMeasure` for a named measure of a child.
+  predicate and a refinement.
+- `Data.CFTA.Refinement.Symbolic.Internal`: `Measures`, the children of a
+  constructor, a term on `Expr` and the integers of a node on `Integer`, with
+  `childMeasure` for a named measure of a child: the backend of the derived
+  refinement generators of cfta-generator, exposed for integration and
+  outside the PVP contract.
 - Expose constructor rows before path traversal, equality edits, and template
   restriction of recursive nodes. Retained empty recursive cycles now return
   empty instead of repeating the same unfolding request.
