@@ -1,5 +1,9 @@
 # Captured class tasks and final physical readback
 
+Source main has advanced to 54f4c272. The [template exclusion update](notes-main-54f4c272.md)
+leaves equality, emptiness, and all Lean files unchanged. Continue the next
+semantic and source-demand targets below. Earlier heads retain proof scope.
+
 Source main remains `a22b2ad46ffcad57a77b64447c18da7b0850f52f`.
 Starting checkpoint: `7b956d72`. Proofs: `ec3ebf72`, `305da606`,
 `c2321463`, and `66b9c097`. The preceding generic trace and inventory

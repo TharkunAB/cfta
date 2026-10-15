@@ -1,6 +1,44 @@
 # Current formalization findings
 
-Updated: **2026-10-15 17:59 CEST (Europe/Stockholm)**.
+Updated: **2026-10-15 18:06 CEST (Europe/Stockholm)**.
+
+## Main 54f4c272: template exclusion
+
+Current source main is `54f4c272e72c0ab4c9457d56c66653459f5c6f31`.
+Preserving merge: `29c6cfc7`. Prior checked proof checkpoint: `7489c506`.
+Backup: `backup/formalize-before-main-54f4c272-20261015-1802`.
+Read `lean/notes-main-54f4c272.md`, then the captured-task note. Continue on
+formalize and push verified checkpoints. Full library scope remains open.
+
+Upstream adds matchesNone, exclude, excludeFTA, and Obligation. The required
+language is the original language filtered by templates that match at the
+root. Existing matching/restriction proofs survive unchanged. New exclusion
+has no Lean coverage yet. Its central obligation is a complete disjoint
+edge-copy partition, followed by canonical obligations, cyclic explicit FTA
+correctness, interned source correspondence, and recursive completion.
+Unambiguity needs a separate proof; ambiguous run counts can change.
+
+Equality, emptiness, Sized, native, and generator source are unchanged. The
+immediate proof target remains immutable class-body receipts and the saved
+common-subtree invariant, followed by actual accepted-row requirements.
+Progressive lazy row demand, original child forcing, checked native transfer,
+word ranges, general completion, and the current whole caller remain open.
+Keep all broader API/runtime gaps and separate Sized contracts in scope.
+
+The strict Nix build and all six suites pass 704 examples plus golden checks.
+Changed-file Fourmolu and all four active-package cabal-gild checks pass.
+Repository instructions require the Nix validation. Lean files are unchanged;
+the prior full audit of 2,014 jobs and 51,484 dependency checks was not repeated.
+Separate Sized probes were not repeated because their source is unchanged.
+All earlier proofs, repros, marked drafts, external drafts, stashes, and other
+worktrees remain. Production definitions match main. Only the retained
+constructor changelog entry and caller-repro comment differ in package trees.
+
+Pre-merge snapshot: `/tmp/mcfta-source-emptiness-thunks-checkpoint-20261015-1759/`
+(2,674 files). Closing snapshot: `/tmp/mcfta-main-54f4c272-checkpoint-20261015-1806`
+(2,675 files). Weekly allowance is 88%. Stop owned work at 1% or less.
+No board posts or deployments. Earlier source heads, observations, counts,
+and targets below retain their historical checkpoint scope.
 
 ## Captured class tasks and final physical readback
 

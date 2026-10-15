@@ -1,5 +1,18 @@
 # Public API and source correspondence
 
+## Current main 54f4c272: template exclusion
+
+Source main `54f4c272` is merged at `29c6cfc7`. Read [the source update](notes-main-54f4c272.md).
+The new root-template exclusion API needs a complete disjoint edge-copy
+partition proof, cyclic FTA correctness, interned source transfer, and a
+separate unambiguity proof. Existing Template matching/restriction proofs
+survive unchanged. Equality, emptiness, Sized, and all Lean files are unchanged.
+The captured-task semantic invariant remains the immediate proof target.
+Strict Nix build, all six suites (704 examples plus golden), changed-file
+Fourmolu, and active-package Cabal formatting pass. The unchanged Lean tree
+retains its prior 2,014-job / 51,484-dependency audit. Full scope remains open.
+Earlier entries below retain their historical checkpoint scope.
+
 ## Current captured-task and final-readback proofs
 
 Source main remains `a22b2ad4`. Proofs `ec3ebf72`, `305da606`, `c2321463`,
@@ -3295,7 +3308,7 @@ its support has one term rank. See `notes-distinct-rank.md`.
 | `Data.CFTA.Refinement.Verdict` — verdict algebra, scoped entailment, subtype relation, directional semantic intersection | `Guards` proves the three-valued truth tables and semantic-support laws. Scoped entailment must keep fresh bindings distinct; the plain `Entailment` constructor returns `Unknown` for queries requiring bindings. Semantic intersection retains the antecedent only when it entails the consequent; it is not symmetric conjunction. Solver adequacy is an external contract. |
 | `Data.CFTA.Simple` — reference subterm/guard interpretation, monadic acceptance/enumeration, union/intersection/depth bound | `Language` and `Guards` are the corresponding pure reference semantics. Theory callbacks supply annotation meaning. State-pair construction, list/set ordering, and monadic callback effects are source adapters. The reference's complete-term meaning is the comparison target for optimized operations. |
 | `Data.CFTA.Symbol` — interned textual/refined symbols, refinement access, erasure | `CoreFormula` models refinement syntax/meaning; `Cache` models interning identity. The source text/term constructor round trip and typed symbol cache must preserve label identity. Refinement erasure is an explicit projection, not a theorem of equal annotated languages. |
-| `Data.CFTA.Template` — hole, exact node, prefix node, matching, graph/FTA restriction | `Template.childTemplates_length` proves exact child alignment for all five constructors, including prefix padding. `matchesTerm_correct` proves the executable predicate. `restrict_exact` proves the state/template product accepts exactly source terms that match, including cyclic source graphs; `restrict_hole` verifies the identity shortcut. Interned binder manipulation and concrete Map/explore adapters remain source correspondence boundaries. |
+| `Data.CFTA.Template` — hole, exact node, prefix node, matching, graph/FTA restriction and exclusion, Obligation | `Template.childTemplates_length` proves exact child alignment for all five constructors, including prefix padding. `matchesTerm_correct` proves the executable predicate. `restrict_exact` proves the state/template product accepts exactly source terms that match, including cyclic source graphs; `restrict_hole` verifies the identity shortcut. Interned binder manipulation and concrete Map/explore adapters remain source correspondence boundaries. Main 54f4c272 adds matchesNone, refine/exclude, excludeFTA, and Obligation. No exclusion proof exists yet. Complete disjoint edge-copy partitions, obligation normalization, cyclic FTA language, interned traversal, finite completion, and separate unambiguity remain required. Ambiguous run counts can change. |
 | `Data.CFTA.Term` — packed arities, views, indexed edits, associative construction, traversal/folds, rose-tree conversion | `TermRepresentation` proves canonical packing, round trips and lookup. `TermOperations` proves indexed edits, exact preorder traversal and arbitrary tree folds. `ChildBuilder.fromAssocs_correct` and `fromAssocs_valid` prove every specialized and generic indexed child-builder path under the documented complete-index contract. Invalid association lists are not validated by the source. Concrete sequences, machine indexes, hashing and rose-tree adapters remain representation boundaries. |
 
 ## Generator source modules

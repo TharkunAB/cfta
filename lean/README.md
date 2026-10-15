@@ -1,11 +1,24 @@
 # cfta formal model
 
-Current source: `TharkunAB/cfta`, `origin/main` at `a22b2ad4`, merged at `e612302b`.
+Current source: `TharkunAB/cfta`, `origin/main` at `54f4c272`, merged at `29c6cfc7`.
 Continue on `formalize`; push verified checkpoints to `origin/formalize`.
 The former remote remains as `microecta-legacy`. The Haskell packages are
 `cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`. Public `Data.CFTA.*`
 modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
 `cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
+
+## Current main 54f4c272: template exclusion
+
+Source main `54f4c272` is merged at `29c6cfc7`. Read [the source update](notes-main-54f4c272.md).
+The new root-template exclusion API needs a complete disjoint edge-copy
+partition proof, cyclic FTA correctness, interned source transfer, and a
+separate unambiguity proof. Existing Template matching/restriction proofs
+survive unchanged. Equality, emptiness, Sized, and all Lean files are unchanged.
+The captured-task semantic invariant remains the immediate proof target.
+Strict Nix build, all six suites (704 examples plus golden), changed-file
+Fourmolu, and active-package Cabal formatting pass. The unchanged Lean tree
+retains its prior 2,014-job / 51,484-dependency audit. Full scope remains open.
+Earlier entries below retain their historical checkpoint scope.
 
 ## Current captured-task and final-readback proofs
 
