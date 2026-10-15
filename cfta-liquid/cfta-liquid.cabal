@@ -3,10 +3,11 @@ name: cfta-liquid
 version: 0.1.0.0
 synopsis: Refinement generators from Liquid Haskell specifications
 description:
-  Translate the Liquid Haskell specification of a datatype (its data
-  specification, its measure, and its refinement aliases) into the
-  annotations of the refinement generators of cfta-generator. The parser
-  of liquidhaskell-boot reads the specification, without a GHC session.
+  Translate Liquid Haskell specifications, as Liquid Haskell verifies them
+  (data specifications with abstract refinements, measures, and refinement
+  aliases), into the annotations of the refinement generators of
+  cfta-generator. The parser of liquidhaskell-boot reads the
+  specifications, without a GHC session.
 
 homepage: https://github.com/TharkunAB/cfta/tree/main/cfta-liquid#readme
 bug-reports: https://github.com/TharkunAB/cfta/issues
@@ -61,12 +62,19 @@ library
     megaparsec >=9.8 && <9.9,
     pretty >=1.1 && <1.2,
     template-haskell >=2.24 && <2.25,
+    text >=2.1 && <2.2,
 
 test-suite liquid-tests
   import: warnings
   type: exitcode-stdio-1.0
   main-is: LiquidSpec.hs
   hs-source-dirs: test
+  other-modules:
+    Examples.IncList
+    Examples.OList
+    Examples.RBTree
+    Examples.RBTreeColHeight
+
   default-language: Haskell2010
   ghc-options: -rtsopts
   build-depends:

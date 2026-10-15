@@ -4,7 +4,7 @@
 time.
 
 @
-sortedLists = deriveLTAFromLiquid \@IncList 8 (atom \@Integer every) $(liquidSpecifications)
+sortedLists = deriveLTAFromLiquid \@(IncList Integer) 8 (atom \@Integer every) $(liquidSpecifications) "IncListBounded"
 @
 
 The splice reads the source file of the module, and it gives the text of its
