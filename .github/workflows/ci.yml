@@ -23,6 +23,7 @@ jobs:
             cfta/**/*.hs
             cfta-generator/**/*.hs
             cfta-ghc/**/*.hs
+            cfta-liquid/**/*.hs
             decision-model/**/*.hs
 
       - name: Set up hlint
@@ -33,8 +34,65 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["cfta", "cfta-generator", "cfta-ghc", "decision-model"]'
+          path: '["cfta", "cfta-generator", "cfta-ghc", "cfta-liquid", "decision-model"]'
           fail-on: warning
+
+  # cfta-liquid depends on liquidhaskell-boot, which pins the GHC version and
+  # adds its own dependencies. It builds with cabal.liquid.project, so the
+  # build plan of the other packages does not include it.
+  cfta-liquid:
+    name: cfta-liquid, GHC 9.14.1
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Haskell
+        uses: haskell-actions/setup@v2
+        id: setup
+        with:
+          ghc-version: "9.14.1"
+          cabal-version: "3.16.1.0"
+          cabal-update: true
+
+      - name: Install Z3
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes z3
+
+      - name: Configure build plan
+        run: cabal v2-build cfta-liquid --project-file=cabal.liquid.project --dry-run --enable-tests
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v5
+        id: deps-cache
+        env:
+          key: cabal-store-cfta-liquid-ghc-${{ steps.setup.outputs.ghc-version }}-cabal-${{ steps.setup.outputs.cabal-version }}
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ env.key }}-plan-${{ hashFiles('dist-newstyle/cache/plan.json') }}
+          restore-keys: ${{ env.key }}-
+
+      - name: Install dependencies
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: cabal v2-build cfta-liquid --project-file=cabal.liquid.project --only-dependencies --enable-tests
+
+      - name: Save cached dependencies
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ steps.setup.outputs.cabal-store }}
+          key: ${{ steps.deps-cache.outputs.cache-primary-key }}
+
+      - name: Check package metadata
+        run: (cd cfta-liquid && cabal check)
+
+      - name: Build with strict warnings
+        run: cabal v2-build cfta-liquid --project-file=cabal.liquid.project --enable-tests --ghc-options=-Werror
+
+      - name: Test
+        run: cabal v2-test cfta-liquid --project-file=cabal.liquid.project --ghc-options=-Werror --test-show-details=direct
 
   build-test-bench:
     name: GHC 9.14.1
