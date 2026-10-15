@@ -1445,6 +1445,10 @@ import MicroCFTA.SourceEqualityClassOrderExamples
 import MicroCFTA.SourceEqualityPrecheck
 import MicroCFTA.SourceEqualitySelectionEntry
 import MicroCFTA.SourceClosedSelfRequireBoundary
+import MicroCFTA.SourceEqualityNeededMap
+import MicroCFTA.SourceEqualityNeeded
+import MicroCFTA.SourceEqualityNeededMeaning
+import MicroCFTA.SourceClosedSelfHeadRepair
 /-!
 # Proof dependency audit
 
