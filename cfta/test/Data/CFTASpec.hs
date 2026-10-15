@@ -23,7 +23,6 @@ import qualified Data.CFTA.Generic as Datatype
 import Data.CFTA.Index (Depth (..))
 import Data.CFTA.Interned (pathsMatching, requirePath)
 import qualified Data.CFTA.Interned as Common
-import Data.CFTA.Interned.Type (MuDepth (..))
 import Data.CFTA.Path (getPath, path)
 import qualified Data.CFTA.Simple as Simple
 import Data.CFTA.Template (
@@ -187,7 +186,7 @@ spec = do
                         Enumeration.terms (Common.boundDepth depth imported)
                             `shouldMatchList` Automaton.terms (Automaton.boundDepth depth graph)
 
-        it "binds each state of a strongly connected component at most once on a path" $
+        it "builds one node for each set of bound states of a strongly connected component" $
             forM_ [1 .. 4] $ \size -> do
                 -- Every state has a leaf and an edge to every state.
                 let rows =
@@ -200,10 +199,11 @@ spec = do
                     Left err -> expectationFailure $ show err
                     Right graph -> do
                         let imported = Common.fromFTA graph :: Common.Node String
-                        Common.numNestedMu imported `shouldBe` MuDepth size
-                        -- One binder, with one body, for each sequence of distinct
-                        -- states from the root: the sum of (size - 1)! / (size - d)!.
-                        Common.nodeCount imported `shouldBe` [1, 2, 5, 16] !! (size - 1)
+                        -- One binder, with one body, for each state and set of
+                        -- the states before it that contains the root: 2^(size - 1).
+                        -- Binders that nest in the order of each path gave the sum
+                        -- of (size - 1)! / (size - d)!: 1, 2, 5, 16.
+                        Common.nodeCount imported `shouldBe` 2 ^ (size - 1)
                         forM_ [0 .. 2] $ \depth ->
                             Enumeration.terms (Common.boundDepth depth imported)
                                 `shouldMatchList` Automaton.terms (Automaton.boundDepth depth graph)
