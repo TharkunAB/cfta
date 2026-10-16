@@ -1,0 +1,210 @@
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:54:67: error(lean.unknownIdentifier): Unknown constant `Nat.cast_zero`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:54:82: error(lean.unknownIdentifier): Unknown constant `Nat.cast_add`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:54:96: error(lean.unknownIdentifier): Unknown constant `Nat.cast_one`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:55:2: error: Tactic `rfl` failed: The left-hand side
+  match if ↑0 = 1 then some (Edits.editAt path) else none with
+  | none =>
+    match
+      match if ↑(0 + 1) = 1 then some (Edits.editAt path) else none with
+      | none => Outcome.done [input] before
+      | some edits =>
+        match edit record originals 1 0 0 0 0 0 edits input before with
+        | Outcome.done value state => Outcome.done [value] state
+        | Outcome.failed fault state => Outcome.failed fault state with
+    | Outcome.done value state => Outcome.done (Value.reference name :: value) state
+    | Outcome.failed fault state => Outcome.failed fault state
+  | some edits =>
+    match edit record originals 1 0 0 0 0 0 edits (Value.reference name) before with
+    | Outcome.done value state =>
+      match
+        match if ↑(0 + 1) = 1 then some (Edits.editAt path) else none with
+        | none => Outcome.done [input] state
+        | some edits =>
+          match edit record originals 1 0 0 0 0 0 edits input state with
+          | Outcome.done value state => Outcome.done [value] state
+          | Outcome.failed fault state => Outcome.failed fault state with
+      | Outcome.done value_1 state => Outcome.done (value :: value_1) state
+      | Outcome.failed fault state => Outcome.failed fault state
+    | Outcome.failed fault state => Outcome.failed fault state
+is not definitionally equal to the right-hand side
+  Outcome.failed
+    (Fault.leaf
+      (SourceCurrentAllocatedSharedTargetWorker.Fault.native
+        (SourceEqualityNativeDemand.Outcome.yielded
+          (SourceEqualityNativeDemand.Control.code
+            (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain target input))
+          before.checked)))
+    before
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+record : Record
+originals : List (Value Symbol Guard)
+path : Path
+name : InternedBinderProtocol.Reference
+input target : Value Symbol Guard
+before : SharedState width
+present : before.targets path = some target
+⊢ (match if ↑0 = 1 then some (Edits.editAt path) else none with
+    | none =>
+      match
+        match if ↑(0 + 1) = 1 then some (Edits.editAt path) else none with
+        | none => Outcome.done [input] before
+        | some edits =>
+          match edit record originals 1 0 0 0 0 0 edits input before with
+          | Outcome.done value state => Outcome.done [value] state
+          | Outcome.failed fault state => Outcome.failed fault state with
+      | Outcome.done value state => Outcome.done (Value.reference name :: value) state
+      | Outcome.failed fault state => Outcome.failed fault state
+    | some edits =>
+      match edit record originals 1 0 0 0 0 0 edits (Value.reference name) before with
+      | Outcome.done value state =>
+        match
+          match if ↑(0 + 1) = 1 then some (Edits.editAt path) else none with
+          | none => Outcome.done [input] state
+          | some edits =>
+            match edit record originals 1 0 0 0 0 0 edits input state with
+            | Outcome.done value state => Outcome.done [value] state
+            | Outcome.failed fault state => Outcome.failed fault state with
+        | Outcome.done value_1 state => Outcome.done (value :: value_1) state
+        | Outcome.failed fault state => Outcome.failed fault state
+      | Outcome.failed fault state => Outcome.failed fault state) =
+    Outcome.failed
+      (Fault.leaf
+        (SourceCurrentAllocatedSharedTargetWorker.Fault.native
+          (SourceEqualityNativeDemand.Outcome.yielded
+            (SourceEqualityNativeDemand.Control.code
+              (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain target input))
+            before.checked)))
+      before
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:49:55: warning: This simp argument is unused:
+  edit
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, leaf, SourceCurrentAllocatedSharedTargetWorker.leaf,
+    SourceCurrentAllocatedSharedTargetWorker.force, SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, present,
+    SourceCurrentAllocatedSharedTargetWorker.step, SourceEqualityNativeDemand.execute,
+    SourceEqualityNativeDemand.Outcome.state, lift, SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind,
+    Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:49:61: warning: This simp argument is unused:
+  leaf
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, SourceCurrentAllocatedSharedTargetWorker.leaf,
+    SourceCurrentAllocatedSharedTargetWorker.force, SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, present,
+    SourceCurrentAllocatedSharedTargetWorker.step, SourceEqualityNativeDemand.execute,
+    SourceEqualityNativeDemand.Outcome.state, lift, SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind,
+    Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:50:4: warning: This simp argument is unused:
+  SourceCurrentAllocatedSharedTargetWorker.leaf
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, leaf,
+    SourceCurrentAllocatedSharedTargetWorker.force, SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, present,
+    SourceCurrentAllocatedSharedTargetWorker.step, SourceEqualityNativeDemand.execute,
+    SourceEqualityNativeDemand.Outcome.state, lift, SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind,
+    Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:50:51: warning: This simp argument is unused:
+  SourceCurrentAllocatedSharedTargetWorker.force
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, leaf,
+    SourceCurrentAllocatedSharedTargetWorker.leaf, SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, present,
+    SourceCurrentAllocatedSharedTargetWorker.step, SourceEqualityNativeDemand.execute,
+    SourceEqualityNativeDemand.Outcome.state, lift, SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind,
+    Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:51:4: warning: This simp argument is unused:
+  SourceCurrentAllocatedSharedTargetWorker.Outcome.bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, leaf,
+    SourceCurrentAllocatedSharedTargetWorker.leaf, SourceCurrentAllocatedSharedTargetWorker.force, present,
+    SourceCurrentAllocatedSharedTargetWorker.step, SourceEqualityNativeDemand.execute,
+    SourceEqualityNativeDemand.Outcome.state, lift, SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind,
+    Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:51:59: warning: This simp argument is unused:
+  present
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, leaf,
+    SourceCurrentAllocatedSharedTargetWorker.leaf, SourceCurrentAllocatedSharedTargetWorker.force,
+    SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, SourceCurrentAllocatedSharedTargetWorker.step,
+    SourceEqualityNativeDemand.execute, SourceEqualityNativeDemand.Outcome.state, lift,
+    SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind, Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:52:4: warning: This simp argument is unused:
+  SourceCurrentAllocatedSharedTargetWorker.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, leaf,
+    SourceCurrentAllocatedSharedTargetWorker.leaf, SourceCurrentAllocatedSharedTargetWorker.force,
+    SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, present, SourceEqualityNativeDemand.execute,
+    SourceEqualityNativeDemand.Outcome.state, lift, SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind,
+    Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:52:51: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.execute
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, leaf,
+    SourceCurrentAllocatedSharedTargetWorker.leaf, SourceCurrentAllocatedSharedTargetWorker.force,
+    SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, present, SourceCurrentAllocatedSharedTargetWorker.step,
+    SourceEqualityNativeDemand.Outcome.state, lift, SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind,
+    Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:53:4: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.Outcome.state
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, leaf,
+    SourceCurrentAllocatedSharedTargetWorker.leaf, SourceCurrentAllocatedSharedTargetWorker.force,
+    SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, present, SourceCurrentAllocatedSharedTargetWorker.step,
+    SourceEqualityNativeDemand.execute, lift, SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind,
+    Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:53:46: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, leaf,
+    SourceCurrentAllocatedSharedTargetWorker.leaf, SourceCurrentAllocatedSharedTargetWorker.force,
+    SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, present, SourceCurrentAllocatedSharedTargetWorker.step,
+    SourceEqualityNativeDemand.execute, SourceEqualityNativeDemand.Outcome.state,
+    SourceCurrentAllocatedSharedTargetState.advance, Outcome.bind, Nat.cast_zero, Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:54:4: warning: This simp argument is unused:
+  SourceCurrentAllocatedSharedTargetState.advance
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [children, SourceEqualityNeededMap.lookup, edit, leaf,
+    SourceCurrentAllocatedSharedTargetWorker.leaf, SourceCurrentAllocatedSharedTargetWorker.force,
+    SourceCurrentAllocatedSharedTargetWorker.Outcome.bind, present, SourceCurrentAllocatedSharedTargetWorker.step,
+    SourceEqualityNativeDemand.execute, SourceEqualityNativeDemand.Outcome.state, lift, Outcome.bind, Nat.cast_zero,
+    Nat.cast_add, Nat.cast_one]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-edit-worker/worker-kernels.lean:72:49: error: Function expected at
+  Interned
+but this term has type
+  ?m.2
+
+Note: Expected a function because this term is being applied to the argument
+  (EdgeKey Symbol Guard)
+
+Hint: The identifier `Interned` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.

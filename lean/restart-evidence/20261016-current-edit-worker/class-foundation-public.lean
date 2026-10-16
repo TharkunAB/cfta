@@ -1,0 +1,21 @@
+import MicroCFTA.SourceCurrentAllocatedClassWorker
+import MicroCFTA.SourceCurrentAllocatedClassWorkerCompletion
+
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+
+#check MicroCFTA.SourceCurrentAllocatedClassWorker.runClass_failed
+#print axioms MicroCFTA.SourceCurrentAllocatedClassWorker.runClass_failed
+#check MicroCFTA.SourceCurrentAllocatedClassWorker.fold_nil
+#print axioms MicroCFTA.SourceCurrentAllocatedClassWorker.fold_nil
+#check MicroCFTA.SourceCurrentAllocatedClassWorker.pass_nil
+#print axioms MicroCFTA.SourceCurrentAllocatedClassWorker.pass_nil
+#check MicroCFTA.SourceCurrentAllocatedClassWorkerCompletion.bind_stable
+#print axioms MicroCFTA.SourceCurrentAllocatedClassWorkerCompletion.bind_stable
+#check MicroCFTA.SourceCurrentAllocatedClassWorkerCompletion.class_complete
+#print axioms MicroCFTA.SourceCurrentAllocatedClassWorkerCompletion.class_complete
+#check MicroCFTA.SourceCurrentAllocatedClassWorkerCompletion.fold_complete
+#print axioms MicroCFTA.SourceCurrentAllocatedClassWorkerCompletion.fold_complete
+#check MicroCFTA.SourceCurrentAllocatedClassWorkerCompletion.pass_complete
+#print axioms MicroCFTA.SourceCurrentAllocatedClassWorkerCompletion.pass_complete

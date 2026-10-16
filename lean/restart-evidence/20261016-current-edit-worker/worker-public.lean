@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentAllocatedSharedEditWorker
+
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Fault
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Fault
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.state
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.state
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.bind
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.bind
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.lift
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.lift
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.leaf
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.leaf
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.work
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.work
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.head
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.head
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editList
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editList
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editAll
+#check MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editAll

@@ -1,0 +1,536 @@
+'MicroCFTA.SourceCurrentAllocatedSharedTargetWorkerStability.force_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedTargetWorkerStability.step_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedTargetWorkerStability.leaf_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedTargetWorkerStability.leaf_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.leaf_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.head_done_stable' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.children_done_stable' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.rows_done_stable' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.edit_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.editList_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.editAll_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.edit_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.editList_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.editAll_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.rows_edit_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.rows_edit_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedTargetWorkerStability.force_done_stable : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h m s n largerP largerH largerM largerS largerN : Nat} {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.force p h m s n record values path before)
+      (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.Outcome.done value after) →
+    LE.le.{0} p largerP →
+      LE.le.{0} h largerH →
+        LE.le.{0} m largerM →
+          LE.le.{0} s largerS →
+            LE.le.{0} n largerN →
+              Eq.{2}
+                (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.force largerP largerH largerM largerS largerN record
+                  values path before)
+                (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.Outcome.done value after)
+@MicroCFTA.SourceCurrentAllocatedSharedTargetWorkerStability.step_done_stable : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {n largerN : Nat}
+  {target input value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.step n target input before)
+      (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.Outcome.done value after) →
+    LE.le.{0} n largerN →
+      Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.step largerN target input before)
+        (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.Outcome.done value after)
+@MicroCFTA.SourceCurrentAllocatedSharedTargetWorkerStability.leaf_done_stable : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h m s n largerP largerH largerM largerS largerN : Nat} {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {input value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.leaf p h m s n record values path input before)
+      (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.Outcome.done value after) →
+    LE.le.{0} p largerP →
+      LE.le.{0} h largerH →
+        LE.le.{0} m largerM →
+          LE.le.{0} s largerS →
+            LE.le.{0} n largerN →
+              Eq.{2}
+                (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.leaf largerP largerH largerM largerS largerN record
+                  values path input before)
+                (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.Outcome.done value after)
+@MicroCFTA.SourceCurrentAllocatedSharedTargetWorkerStability.leaf_done_unique : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h m s n otherP otherH otherM otherS otherN : Nat} {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {input first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after later : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.leaf p h m s n record values path input before)
+      (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.Outcome.done first after) →
+    Eq.{2}
+        (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.leaf otherP otherH otherM otherS otherN record values path
+          input before)
+        (MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.Outcome.done second later) →
+      Eq.{1} first second ∧ Eq.{2} after later
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.leaf_done_stable : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h m s n largerP largerH largerM largerS largerN : Nat} {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {target : MicroCFTA.EqualityNormalize.Path}
+  {input result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.leaf p h m s n record originals target input before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after) →
+    LE.le.{0} p largerP →
+      LE.le.{0} h largerH →
+        LE.le.{0} m largerM →
+          LE.le.{0} s largerS →
+            LE.le.{0} n largerN →
+              Eq.{2}
+                (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.leaf largerP largerH largerM largerS largerN record
+                  originals target input before)
+                (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after)
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.head_done_stable : ∀ {width : Nat}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {h largerH : Nat}
+  {input result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.head h input before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after) →
+    LE.le.{0} h largerH →
+      Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.head largerH input before)
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after)
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.children_done_stable : ∀ {width : Nat}
+  (recur later :
+    MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width →
+          MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+  (∀ (edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width)
+      (result :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width),
+      Eq.{2} (recur edits value before) (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after) →
+        Eq.{2} (later edits value before)
+          (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after)) →
+    ∀ (entries : List.{0} (Prod.{0, 0} Int (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)))
+      (index : Nat)
+      (values :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      {before after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+      {results :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))},
+      Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children recur entries index values before)
+          (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after) →
+        Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children later entries index values before)
+          (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after)
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.rows_done_stable : ∀ {width : Nat}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (recur later :
+    MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width →
+          MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+  (∀ (edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width)
+      (result :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width),
+      Eq.{2} (recur edits value before) (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after) →
+        Eq.{2} (later edits value before)
+          (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after)) →
+    ∀ (entries : List.{0} (Prod.{0, 0} Int (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)))
+      (edges :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      {before after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+      {results :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))},
+      Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows recur entries edges before)
+          (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after) →
+        Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows later entries edges before)
+          (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after)
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.edit_done_stable : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n largerE largerP largerH largerM largerS largerN : Nat}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+  {input result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n edits input before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after) →
+    LE.le.{0} e largerE →
+      LE.le.{0} p largerP →
+        LE.le.{0} h largerH →
+          LE.le.{0} m largerM →
+            LE.le.{0} s largerS →
+              LE.le.{0} n largerN →
+                Eq.{2}
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals largerE largerP largerH
+                    largerM largerS largerN edits input before)
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done result after)
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.editList_done_stable : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n largerE largerP largerH largerM largerS largerN : Nat}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals values results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2}
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editList
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n) edits values before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after) →
+    LE.le.{0} e largerE →
+      LE.le.{0} p largerP →
+        LE.le.{0} h largerH →
+          LE.le.{0} m largerM →
+            LE.le.{0} s largerS →
+              LE.le.{0} n largerN →
+                Eq.{2}
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editList
+                    (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals largerE largerP largerH
+                      largerM largerS largerN)
+                    edits values before)
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after)
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.editAll_done_stable : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n largerE largerP largerH largerM largerS largerN : Nat}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals values results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {edits : List.{0} (Prod.{0, 0} MicroCFTA.SourceEqualityEdits.Path MicroCFTA.EqualityNormalize.Path)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editAll record originals e p h m s n edits values before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after) →
+    LE.le.{0} e largerE →
+      LE.le.{0} p largerP →
+        LE.le.{0} h largerH →
+          LE.le.{0} m largerM →
+            LE.le.{0} s largerS →
+              LE.le.{0} n largerN →
+                Eq.{2}
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editAll record originals largerE largerP largerH
+                    largerM largerS largerN edits values before)
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after)
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.edit_done_unique : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n otherE otherP otherH otherM otherS otherN : Nat} {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+  {input first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after later : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n edits input before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done first after) →
+    Eq.{2}
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals otherE otherP otherH otherM otherS
+          otherN edits input before)
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done second later) →
+      Eq.{1} first second ∧ Eq.{2} after later
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.editList_done_unique : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n otherE otherP otherH otherM otherS otherN : Nat} {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals values first second :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+  {before after later : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2}
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editList
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n) edits values before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done first after) →
+    Eq.{2}
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editList
+          (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals otherE otherP otherH otherM otherS
+            otherN)
+          edits values before)
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done second later) →
+      Eq.{1} first second ∧ Eq.{2} after later
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.editAll_done_unique : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n otherE otherP otherH otherM otherS otherN : Nat} {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals values first second :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {edits : List.{0} (Prod.{0, 0} MicroCFTA.SourceEqualityEdits.Path MicroCFTA.EqualityNormalize.Path)}
+  {before after later : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editAll record originals e p h m s n edits values before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done first after) →
+    Eq.{2}
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editAll record originals otherE otherP otherH otherM otherS
+          otherN edits values before)
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done second later) →
+      Eq.{1} first second ∧ Eq.{2} after later
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_stable : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n largerE largerP largerH largerM largerS largerN : Nat}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals values results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {entries : List.{0} (Prod.{0, 0} Int (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path))}
+  {index : Nat} {before after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2}
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n) entries index values
+        before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after) →
+    LE.le.{0} e largerE →
+      LE.le.{0} p largerP →
+        LE.le.{0} h largerH →
+          LE.le.{0} m largerM →
+            LE.le.{0} s largerS →
+              LE.le.{0} n largerN →
+                Eq.{2}
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children
+                    (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals largerE largerP largerH
+                      largerM largerS largerN)
+                    entries index values before)
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after)
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.rows_edit_done_stable : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n largerE largerP largerH largerM largerS largerN : Nat}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {edges results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {entries : List.{0} (Prod.{0, 0} Int (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path))}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2}
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n) entries edges before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after) →
+    LE.le.{0} e largerE →
+      LE.le.{0} p largerP →
+        LE.le.{0} h largerH →
+          LE.le.{0} m largerM →
+            LE.le.{0} s largerS →
+              LE.le.{0} n largerN →
+                Eq.{2}
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows
+                    (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals largerE largerP largerH
+                      largerM largerS largerN)
+                    entries edges before)
+                  (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done results after)
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.children_edit_done_unique : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n otherE otherP otherH otherM otherS otherN : Nat} {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals values first second :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {entries : List.{0} (Prod.{0, 0} Int (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path))}
+  {index : Nat} {before after later : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2}
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n) entries index values
+        before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done first after) →
+    Eq.{2}
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children
+          (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals otherE otherP otherH otherM otherS
+            otherN)
+          entries index values before)
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done second later) →
+      Eq.{1} first second ∧ Eq.{2} after later
+@MicroCFTA.SourceCurrentAllocatedSharedEditWorkerStability.rows_edit_done_unique : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {e p h m s n otherE otherP otherH otherM otherS otherN : Nat} {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {edges first second :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {entries : List.{0} (Prod.{0, 0} Int (MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path))}
+  {before after later : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width},
+  Eq.{2}
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n) entries edges before)
+      (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done first after) →
+    Eq.{2}
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows
+          (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit record originals otherE otherP otherH otherM otherS
+            otherN)
+          entries edges before)
+        (MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.done second later) →
+      Eq.{1} first second ∧ Eq.{2} after later

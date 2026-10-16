@@ -1,0 +1,511 @@
+'MicroCFTA.AllocatedEditActualKernels.supplied_return_has_current_ready_globals_and_probes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedEditActualKernels.consecutive_edits_need_no_second_ready_or_model_oracle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedEditActualKernels.signed_compiled_success_retains_actual_reads' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedEditActualKernels.supplied_worker_conditional_language' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@supplied_return_has_current_ready_globals_and_probes : ∀
+  [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (record : SourceEqualityClassOrder.Record)
+  (originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Values (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) base
+      originals →
+    (∀ (path : EqualityNormalize.Path),
+        @Membership.mem EqualityNormalize.Path EqualityNormalize.Class (@List.instMembership EqualityNormalize.Path)
+            record.paths path →
+          @ForestClosed (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) (@List.map Nat Int Int.ofNat path) originals) →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : Inventory) {e p h m s n : Nat} {edits : Edits EqualityNormalize.Path}
+            {values results :
+              List
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+            {before after : SharedState width},
+            @ListRanges width inst inst_1 record originals edits values before →
+              @Populated EqualityNormalize.Path edits →
+                Allowed record edits →
+                  @SourceCurrentAllocatedSharedTargetState.Ready width inst inst_1 formulas solver inventory record
+                      originals base before →
+                    @Values (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceRecursiveIntersectionThunks.State.machine width
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceEqualityNativeDemand.State.native width
+                              (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                        values →
+                      @ListSafe EqualityNormalize.Path edits values →
+                        ∀ (memos : EndpointMemoGateTrace.Memos),
+                          @EndpointMemoGateTrace.Valid inst_1
+                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceEqualityNativeDemand.State.native width
+                                    (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                              memos →
+                            @InternedFreshOrdinaryProbeHeap.Heap (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceRecursiveIntersectionThunks.State.machine width
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceEqualityNativeDemand.State.native width
+                                      (@SourceCurrentAllocatedSharedTargetState.State.checked width before)))) →
+                              @Eq
+                                  (Outcome width
+                                    (List
+                                      (Value (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+                                  (@editList width (@edit width inst inst_1 record originals e p h m s n) edits values
+                                    before)
+                                  (@Outcome.done width
+                                    (List
+                                      (Value (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                    results after) →
+                                @Exists Inventory fun next =>
+                                  @Exists EndpointMemoGateTrace.Memos fun final =>
+                                    And
+                                      (@SourceCurrentAllocatedSharedTargetState.Ready width inst inst_1 formulas solver
+                                        next record originals base after)
+                                      (And
+                                        (@Values (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                          (@SourceRecursiveIntersectionKernel.Machine.heap
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@SourceRecursiveIntersectionThunks.State.machine width
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@SourceEqualityNativeDemand.State.native width
+                                                (@SourceCurrentAllocatedSharedTargetState.State.checked width after))))
+                                          results)
+                                        (And
+                                          (@EndpointMemoGateTrace.Valid inst_1
+                                            (@SourceRecursiveIntersectionKernel.Machine.heap
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@SourceRecursiveIntersectionThunks.State.machine width
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@SourceEqualityNativeDemand.State.native width
+                                                  (@SourceCurrentAllocatedSharedTargetState.State.checked width
+                                                    after))))
+                                            final)
+                                          (And (@Eq SourceEndpointMemo.Memos final.query memos.query)
+                                            (And
+                                              (@Extends InternedBinderProtocol.NodeRef
+                                                (Prod
+                                                  (Value (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                  (Value (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                                memos.unfolding final.unfolding)
+                                              (@InternedFreshOrdinaryProbeHeap.Heap
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceRecursiveIntersectionThunks.State.machine width
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceEqualityNativeDemand.State.native width
+                                                      (@SourceCurrentAllocatedSharedTargetState.State.checked width
+                                                        after)))))))))
+@consecutive_edits_need_no_second_ready_or_model_oracle : ∀
+  [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (record : SourceEqualityClassOrder.Record)
+  (originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Values (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) base
+      originals →
+    (∀ (path : EqualityNormalize.Path),
+        @Membership.mem EqualityNormalize.Path EqualityNormalize.Class (@List.instMembership EqualityNormalize.Path)
+            record.paths path →
+          @ForestClosed (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) (@List.map Nat Int Int.ofNat path) originals) →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : Inventory) {e p h m s n : Nat} {edits secondEdits : Edits EqualityNormalize.Path}
+            {values results :
+              List
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+            {before middle : SharedState width},
+            @ListRanges width inst inst_1 record originals edits values before →
+              @Populated EqualityNormalize.Path edits →
+                Allowed record edits →
+                  @SourceCurrentAllocatedSharedTargetState.Ready width inst inst_1 formulas solver inventory record
+                      originals base before →
+                    @Values (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceRecursiveIntersectionThunks.State.machine width
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceEqualityNativeDemand.State.native width
+                              (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                        values →
+                      @ListSafe EqualityNormalize.Path edits values →
+                        ∀ (memos : EndpointMemoGateTrace.Memos),
+                          @EndpointMemoGateTrace.Valid inst_1
+                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceEqualityNativeDemand.State.native width
+                                    (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                              memos →
+                            @InternedFreshOrdinaryProbeHeap.Heap (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceRecursiveIntersectionThunks.State.machine width
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceEqualityNativeDemand.State.native width
+                                      (@SourceCurrentAllocatedSharedTargetState.State.checked width before)))) →
+                              @Eq
+                                  (Outcome width
+                                    (List
+                                      (Value (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+                                  (@editList width (@edit width inst inst_1 record originals e p h m s n) edits values
+                                    before)
+                                  (@Outcome.done width
+                                    (List
+                                      (Value (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                    results middle) →
+                                @ListRanges width inst inst_1 record originals secondEdits results middle →
+                                  @Populated EqualityNormalize.Path secondEdits →
+                                    Allowed record secondEdits →
+                                      @ListSafe EqualityNormalize.Path secondEdits results →
+                                        @Exists
+                                          (List
+                                            (Value (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                          fun outputs =>
+                                          @Exists (SourceCurrentAllocatedSharedTargetState.State width) fun after =>
+                                            @Exists Inventory fun next =>
+                                              @Exists EndpointMemoGateTrace.Memos fun final =>
+                                                And
+                                                  (@SourceCurrentAllocatedSharedTargetState.Ready width inst inst_1
+                                                    formulas solver next record originals base after)
+                                                  (And
+                                                    (@Values (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                      (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                        (@SourceRecursiveIntersectionThunks.State.machine width
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                          (@SourceEqualityNativeDemand.State.native width
+                                                            (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                                              width after))))
+                                                      outputs)
+                                                    (And
+                                                      (@InternedFreshOrdinaryProbeHeap.Heap
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                        (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                          (@SourceRecursiveIntersectionThunks.State.machine width
+                                                            (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                            (@SourceEqualityNativeDemand.State.native width
+                                                              (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                                                width after)))))
+                                                      (And
+                                                        (@Extends InternedBinderProtocol.NodeRef
+                                                          (SourceCurrentMemoMergeGraph.Entry
+                                                            (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                          (@SourceCurrentAllocatedSharedTargetState.State.memo width
+                                                            before)
+                                                          (@SourceCurrentAllocatedSharedTargetState.State.memo width
+                                                            after))
+                                                        (And (@Eq SourceEndpointMemo.Memos final.query memos.query)
+                                                          (And
+                                                            (@EndpointMemoGateTrace.Valid inst_1
+                                                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                (SourceObservations.Label FullSyntax.Formula)
+                                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                  (@SourceEqualityNativeDemand.State.native width
+                                                                    (@SourceCurrentAllocatedSharedTargetState.State.checked
+                                                                      width after))))
+                                                              final)
+                                                            (@SourceCurrentAllocatedSharedEditWorkerCompletion.StableRun
+                                                              width
+                                                              (List
+                                                                (Value (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                                              (fun e p h m s n =>
+                                                                @editList width
+                                                                  (@edit width inst inst_1 record originals e p h m s n)
+                                                                  secondEdits results middle)
+                                                              outputs after))))))
+@signed_compiled_success_retains_actual_reads : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (record : SourceEqualityClassOrder.Record)
+  (originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Values (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) base
+      originals →
+    (∀ (path : EqualityNormalize.Path),
+        @Membership.mem EqualityNormalize.Path EqualityNormalize.Class (@List.instMembership EqualityNormalize.Path)
+            record.paths path →
+          @ForestClosed (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) (@List.map Nat Int Int.ofNat path) originals) →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : Inventory) {e p h m s n : Nat} {signed : List (Prod Path EqualityNormalize.Path)}
+            {values results :
+              List
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+            {before after : SharedState width},
+            @ListRanges width inst inst_1 record originals (@build EqualityNormalize.Path signed) values before →
+              @Populated EqualityNormalize.Path (@build EqualityNormalize.Path signed) →
+                Allowed record (@build EqualityNormalize.Path signed) →
+                  @SourceCurrentAllocatedSharedTargetState.Ready width inst inst_1 formulas solver inventory record
+                      originals base before →
+                    @Values (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceRecursiveIntersectionThunks.State.machine width
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceEqualityNativeDemand.State.native width
+                              (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                        values →
+                      @ListSafe EqualityNormalize.Path (@build EqualityNormalize.Path signed) values →
+                        ∀ (memos : EndpointMemoGateTrace.Memos),
+                          @EndpointMemoGateTrace.Valid inst_1
+                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceEqualityNativeDemand.State.native width
+                                    (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                              memos →
+                            @InternedFreshOrdinaryProbeHeap.Heap (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceRecursiveIntersectionThunks.State.machine width
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceEqualityNativeDemand.State.native width
+                                      (@SourceCurrentAllocatedSharedTargetState.State.checked width before)))) →
+                              @Eq
+                                  (Outcome width
+                                    (List
+                                      (Value (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+                                  (@editAll width inst inst_1 record originals e p h m s n signed values before)
+                                  (@Outcome.done width
+                                    (List
+                                      (Value (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                    results after) →
+                                @Exists Inventory fun next =>
+                                  @Exists EndpointMemoGateTrace.Memos fun final =>
+                                    @Exists
+                                      (@EditList inst inst_1 width record originals
+                                        (@build EqualityNormalize.Path signed) values before results after)
+                                      fun actual =>
+                                      And
+                                        (@ListReads inst inst_1 width formulas solver base record originals
+                                          (@build EqualityNormalize.Path signed) values before results after actual
+                                          memos final)
+                                        (And
+                                          (@ChildrenReceipt inst inst_1 width formulas solver next record originals base
+                                            values before results after memos final)
+                                          (@InternedFreshOrdinaryProbeHeap.Heap
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@SourceRecursiveIntersectionKernel.Machine.heap
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@SourceRecursiveIntersectionThunks.State.machine width
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@SourceEqualityNativeDemand.State.native width
+                                                  (@SourceCurrentAllocatedSharedTargetState.State.checked width
+                                                    after))))))
+@supplied_worker_conditional_language : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (record : SourceEqualityClassOrder.Record)
+  (originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Values (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) base
+      originals →
+    (∀ (path : EqualityNormalize.Path),
+        @Membership.mem EqualityNormalize.Path EqualityNormalize.Class (@List.instMembership EqualityNormalize.Path)
+            record.paths path →
+          @ForestClosed (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) (@List.map Nat Int Int.ofNat path) originals) →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : Inventory) {e p h m s n : Nat} {edits : Edits EqualityNormalize.Path}
+            {values results :
+              List
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+            {before after : SharedState width},
+            @ListRanges width inst inst_1 record originals edits values before →
+              @SourceEqualityEdits.Valid EqualityNormalize.Path edits →
+                @Populated EqualityNormalize.Path edits →
+                  Allowed record edits →
+                    @SourceCurrentAllocatedSharedTargetState.Ready width inst inst_1 formulas solver inventory record
+                        originals base before →
+                      @Values (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceRecursiveIntersectionThunks.State.machine width
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@SourceEqualityNativeDemand.State.native width
+                                (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                          values →
+                        @ListSafe EqualityNormalize.Path edits values →
+                          ∀ (memos : EndpointMemoGateTrace.Memos),
+                            @EndpointMemoGateTrace.Valid inst_1
+                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceRecursiveIntersectionThunks.State.machine width
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceEqualityNativeDemand.State.native width
+                                      (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                                memos →
+                              @InternedFreshOrdinaryProbeHeap.Heap (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceRecursiveIntersectionKernel.Machine.heap
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceRecursiveIntersectionThunks.State.machine width
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@SourceEqualityNativeDemand.State.native width
+                                        (@SourceCurrentAllocatedSharedTargetState.State.checked width before)))) →
+                                @Eq
+                                    (Outcome width
+                                      (List
+                                        (Value (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+                                    (@editList width (@edit width inst inst_1 record originals e p h m s n) edits values
+                                      before)
+                                    (@Outcome.done width
+                                      (List
+                                        (Value (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                      results after) →
+                                  ∀
+                                    (ambient :
+                                      InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+                                    (symbol : SourceObservations.Label FullSyntax.Formula)
+                                    (rootTerms terms : List (Term (SourceObservations.Label FullSyntax.Formula))),
+                                    @All₂
+                                        (Value (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                        (Term (SourceObservations.Label FullSyntax.Formula))
+                                        (@meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                          (SourceObservations.Label FullSyntax.Formula)
+                                          (@SourceEqualityPCSGuard.holds FullSyntax.Formula
+                                            FormulaExecutable.formulaDecidableEq formulas solver)
+                                          ambient)
+                                        originals rootTerms →
+                                      @EqualityNormalize.ClassSat (SourceObservations.Label FullSyntax.Formula)
+                                          (@Term.node (SourceObservations.Label FullSyntax.Formula) symbol rootTerms)
+                                          record.paths →
+                                        @SourceEqualityEditAPI.ListCondition (List Nat)
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (fun path part =>
+                                              @Eq (Option (Term (SourceObservations.Label FullSyntax.Formula)))
+                                                (@Term.atPath (SourceObservations.Label FullSyntax.Formula)
+                                                  (@Term.node (SourceObservations.Label FullSyntax.Formula) symbol
+                                                    rootTerms)
+                                                  path)
+                                                (@some (Term (SourceObservations.Label FullSyntax.Formula)) part))
+                                            edits terms →
+                                          Iff
+                                            (@All₂
+                                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                              (Term (SourceObservations.Label FullSyntax.Formula))
+                                              (@meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (@SourceEqualityPCSGuard.holds FullSyntax.Formula
+                                                  FormulaExecutable.formulaDecidableEq formulas solver)
+                                                ambient)
+                                              results terms)
+                                            (@All₂
+                                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                              (Term (SourceObservations.Label FullSyntax.Formula))
+                                              (@meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (@SourceEqualityPCSGuard.holds FullSyntax.Formula
+                                                  FormulaExecutable.formulaDecidableEq formulas solver)
+                                                ambient)
+                                              values terms)

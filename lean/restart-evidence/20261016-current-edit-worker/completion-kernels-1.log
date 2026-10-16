@@ -1,0 +1,419 @@
+lean/restart-evidence/20261016-current-edit-worker/completion-kernels.lean:85:17: error: Function expected at
+  Populated
+but this term has type
+  ?m.2
+
+Note: Expected a function because this term is being applied to the argument
+  edits
+
+Hint: The identifier `Populated` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+'MicroCFTA.AllocatedEditCompletionKernels.root_leaf_has_zero_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedEditCompletionKernels.selected_children_keep_order' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedEditCompletionKernels.unselected_open_child_is_retained' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedEditCompletionKernels.row_rebuild_uses_full_guard' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedEditCompletionKernels.recursive_head_then_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedEditCompletionKernels.initial_facts_construct_stable_list_and_same_receipt' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedEditCompletionKernels.compiled_signed_edits_share_uniform_return' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@root_leaf_has_zero_bound : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (record : SourceEqualityClassOrder.Record)
+  (originals values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (target : EqualityNormalize.Path) (before : SharedState width),
+  And
+    (@Eq
+      (Outcome width
+        (List
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+      (@editList width
+        (@edit width inst inst_1 record originals (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+        (@Edits.editAt EqualityNormalize.Path target) values before)
+      (@Outcome.done width
+        (List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+        values before))
+    (@StableRun width
+      (List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (fun e p h m s n =>
+        @editList width (@edit width inst inst_1 record originals e p h m s n)
+          (@Edits.editAt EqualityNormalize.Path target) values before)
+      values before)
+@selected_children_keep_order : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {entries : List (Prod Int (Edits EqualityNormalize.Path))} {firstPath secondPath : EqualityNormalize.Path}
+  {first second firstResult secondResult :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before middle after : SharedState width},
+  @Eq (Option (Edits EqualityNormalize.Path))
+      (@SourceEqualityNeededMap.lookup (Edits EqualityNormalize.Path)
+        (@OfNat.ofNat Int (nat_lit 0) (@instOfNat (nat_lit 0))) entries)
+      (@some (Edits EqualityNormalize.Path) (@Edits.editAt EqualityNormalize.Path firstPath)) →
+    @Eq (Option (Edits EqualityNormalize.Path))
+        (@SourceEqualityNeededMap.lookup (Edits EqualityNormalize.Path)
+          (@OfNat.ofNat Int (nat_lit 1) (@instOfNat (nat_lit 1))) entries)
+        (@some (Edits EqualityNormalize.Path) (@Edits.editAt EqualityNormalize.Path secondPath)) →
+      @SourceCurrentAllocatedSharedTargetLeaf.Leaf width inst inst_1 record originals firstPath first before firstResult
+          middle →
+        @SourceCurrentAllocatedSharedTargetLeaf.Leaf width inst inst_1 record originals secondPath second middle
+            secondResult after →
+          @StableRun width
+            (List
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+            (fun e p h m s n =>
+              @SourceCurrentAllocatedSharedEditWorker.children width
+                (@edit width inst inst_1 record originals e p h m s n) entries
+                (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@List.cons
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  first
+                  (@List.cons
+                    (Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    second
+                    (@List.nil
+                      (Value (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+                before)
+            (@List.cons
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              firstResult
+              (@List.cons
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                secondResult
+                (@List.nil
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+            after
+@unselected_open_child_is_retained : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {entries : List (Prod Int (Edits EqualityNormalize.Path))} {path : EqualityNormalize.Path}
+  (name : InternedBinderProtocol.Reference)
+  {input result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before after : SharedState width},
+  @Eq (Option (Edits EqualityNormalize.Path))
+      (@SourceEqualityNeededMap.lookup (Edits EqualityNormalize.Path)
+        (@OfNat.ofNat Int (nat_lit 0) (@instOfNat (nat_lit 0))) entries)
+      (@none (Edits EqualityNormalize.Path)) →
+    @Eq (Option (Edits EqualityNormalize.Path))
+        (@SourceEqualityNeededMap.lookup (Edits EqualityNormalize.Path)
+          (@OfNat.ofNat Int (nat_lit 1) (@instOfNat (nat_lit 1))) entries)
+        (@some (Edits EqualityNormalize.Path) (@Edits.editAt EqualityNormalize.Path path)) →
+      @SourceCurrentAllocatedSharedTargetLeaf.Leaf width inst inst_1 record originals path input before result after →
+        @StableRun width
+          (List
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (fun e p h m s n =>
+            @SourceCurrentAllocatedSharedEditWorker.children width
+              (@edit width inst inst_1 record originals e p h m s n) entries
+              (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@List.cons
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                (@Value.reference (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) name)
+                (@List.cons
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  input
+                  (@List.nil
+                    (Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+              before)
+          (@List.cons
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            (@Value.reference (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) name)
+            (@List.cons
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              result
+              (@List.nil
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+          after
+@row_rebuild_uses_full_guard : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {entries : List (Prod Int (Edits EqualityNormalize.Path))}
+  {edge result :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before middle : SharedState width}
+  {heap :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @EditChildren inst inst_1 width record originals entries (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) edge)
+      before values middle →
+    @Eq
+        (Prod
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+        (@run (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          inst_1
+          (@makeEdge (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@Interned.key
+                (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) edge)))
+            (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@Interned.key
+                (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) edge)))
+            values)
+          (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceEqualityNativeDemand.State.native width
+                (@SourceCurrentAllocatedSharedTargetState.State.checked width middle)))))
+        (@Prod.mk
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          result heap) →
+      And
+        (@StableRun width
+          (List
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (fun e p h m s n =>
+            @rows width inst_1 (@edit width inst inst_1 record originals e p h m s n) entries
+              (@List.cons
+                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                edge
+                (@List.nil
+                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+              before)
+          (@List.cons
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            result
+            (@List.nil
+              (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+          (@advanceHeap width middle heap))
+        (And
+          (@Eq SourceEqualityConstraintMemoAllocation.State
+            (@SourceEqualityNativeDemand.State.operations width
+              (@SourceCurrentAllocatedSharedTargetState.State.checked width (@advanceHeap width middle heap)))
+            (@SourceEqualityNativeDemand.State.operations width
+              (@SourceCurrentAllocatedSharedTargetState.State.checked width middle)))
+          (And
+            (@Eq
+              (EqualityNormalize.Path →
+                Option
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+              (@SourceCurrentAllocatedSharedTargetState.State.targets width (@advanceHeap width middle heap))
+              (@SourceCurrentAllocatedSharedTargetState.State.targets width middle))
+            (@Eq
+              (SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (@SourceCurrentAllocatedSharedTargetState.State.memo width (@advanceHeap width middle heap))
+              (@SourceCurrentAllocatedSharedTargetState.State.memo width middle))))
+@recursive_head_then_body : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {entries : List (Prod Int (Edits EqualityNormalize.Path))}
+  {original exposed result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before after : SharedState width}
+  {heap :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @SourceEqualityRequiredGraph.Recursive (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula) original →
+    @SourceEqualityRequiredHead.Head (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) inst_1 original
+        (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceEqualityNativeDemand.State.native width
+              (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+        exposed heap →
+      @EditNode inst inst_1 width record originals (@Edits.editBelow EqualityNormalize.Path entries) exposed
+          (@advanceHeap width before heap) result after →
+        @StableRun width
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (fun e p h m s n =>
+            @edit width inst inst_1 record originals e p h m s n (@Edits.editBelow EqualityNormalize.Path entries)
+              original before)
+          result after
+@initial_facts_construct_stable_list_and_same_receipt : ∀
+  [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {x : Sort u_1} {Populated : x} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (record : SourceEqualityClassOrder.Record)
+  (originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (base :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Values (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) base
+      originals →
+    (∀ (path : EqualityNormalize.Path),
+        @Membership.mem EqualityNormalize.Path EqualityNormalize.Class (@List.instMembership EqualityNormalize.Path)
+            record.paths path →
+          @ForestClosed (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) (@List.map Nat Int Int.ofNat path) originals) →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (inventory : Inventory) {edits : Edits EqualityNormalize.Path}
+            {values :
+              List
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+            {before : SharedState width},
+            @SourceCurrentAllocatedSharedEditRanges.ListRanges width inst inst_1 record originals edits values before →
+              ∀
+                (populated :
+                  sorryAx (Unit → Sort u_2) true
+                    (@Function.const Unit Lean.Name Unit.unit
+                      `lean.restart-evidence.20261016-current-edit-worker.completion-kernels.85.17.85.32.17.32._sorry._@.lean.restart-evidence.20261016-current-edit-worker.completion-kernels.2943336516._hygCtx._hyg.334)),
+                Allowed record edits →
+                  @SourceCurrentAllocatedSharedTargetState.Ready width inst inst_1 formulas solver inventory record
+                      originals base before →
+                    @Values (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceRecursiveIntersectionThunks.State.machine width
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceEqualityNativeDemand.State.native width
+                              (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                        values →
+                      @SourceCurrentAllocatedSharedEditEffects.ListSafe EqualityNormalize.Path edits values →
+                        ∀ (memos : EndpointMemoGateTrace.Memos),
+                          @EndpointMemoGateTrace.Valid inst_1
+                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceEqualityNativeDemand.State.native width
+                                    (@SourceCurrentAllocatedSharedTargetState.State.checked width before))))
+                              memos →
+                            @Exists
+                              (List
+                                (Value (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                              fun results =>
+                              @Exists (SharedState width) fun after =>
+                                @Exists Inventory fun next =>
+                                  @Exists EndpointMemoGateTrace.Memos fun final =>
+                                    @Exists
+                                      (@EditList inst inst_1 width record originals edits values before results after)
+                                      fun actual =>
+                                      And
+                                        (@StableRun width
+                                          (List
+                                            (Value (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                          (fun e p h m s n =>
+                                            @editList width (@edit width inst inst_1 record originals e p h m s n) edits
+                                              values before)
+                                          results after)
+                                        (And
+                                          (@ListReads inst inst_1 width formulas solver base record originals edits
+                                            values before results after actual memos final)
+                                          (@SourceCurrentAllocatedSharedEditEffects.ChildrenReceipt inst inst_1 width
+                                            formulas solver next record originals base values before results after memos
+                                            final))
+@compiled_signed_edits_share_uniform_return : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} {record : SourceEqualityClassOrder.Record}
+  {originals :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {signed : List (Prod Path EqualityNormalize.Path)}
+  {values results :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SharedState width},
+  @EditList inst inst_1 width record originals (@build EqualityNormalize.Path signed) values before results after →
+    @Exists Nat fun bound =>
+      ∀ (fuel : Nat),
+        @LE.le Nat instLENat bound fuel →
+          And
+            (@Eq
+              (Outcome width
+                (List
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+              (@editAll width inst inst_1 record originals fuel fuel fuel fuel fuel fuel signed values before)
+              (@Outcome.done width
+                (List
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                results after))
+            (@Eq
+              (Outcome width
+                (List
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+              (@editList width (@edit width inst inst_1 record originals fuel fuel fuel fuel fuel fuel)
+                (@build EqualityNormalize.Path signed) values before)
+              (@Outcome.done width
+                (List
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                results after))

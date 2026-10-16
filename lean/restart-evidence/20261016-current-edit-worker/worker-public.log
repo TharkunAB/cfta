@@ -1,0 +1,179 @@
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Fault' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Fault (width : Nat) : Type 1
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome (width : Nat) (Output : Type) : Type 1
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.state' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.state {width : Nat} {Output : Type} :
+  MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width Output →
+    MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.bind' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome.bind {width : Nat} {Input Output : Type}
+  (first : MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width Input)
+  (next :
+    Input →
+      MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width →
+        MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width Output) :
+  MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width Output
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.lift' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.lift {width : Nat} :
+  MicroCFTA.SourceCurrentAllocatedSharedTargetWorker.Outcome width →
+    MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.leaf {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (p h m s n : Nat) (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (target : MicroCFTA.EqualityNormalize.Path)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width) :
+  MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+    (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.work' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.work {Output : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.InternedConstructorTemplates.Work (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output)
+  (state : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width) :
+  MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width Output
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.head' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.head {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (readFuel : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width) :
+  MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+    (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.children {width : Nat}
+  (recur :
+    MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width →
+          MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (entries : List (Int × MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)) :
+  Nat →
+    List
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+      MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width →
+        MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+          (List
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.rows {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (recur :
+    MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width →
+          MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (entries : List (Int × MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)) :
+  List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+    MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width →
+      MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+        (List
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.edit {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))) :
+  Nat →
+    Nat →
+      Nat →
+        Nat →
+          Nat →
+            Nat →
+              MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path →
+                MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                  MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width →
+                    MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editList' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editList {width : Nat}
+  (recur :
+    MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width →
+          MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (state : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width) :
+  MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+    (List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+'MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editAll' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSharedEditWorker.editAll {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (e p h m s n : Nat) (edits : List (MicroCFTA.SourceEqualityEdits.Path × MicroCFTA.EqualityNormalize.Path))
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (state : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width) :
+  MicroCFTA.SourceCurrentAllocatedSharedEditWorker.Outcome width
+    (List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
