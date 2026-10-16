@@ -16,6 +16,7 @@ import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (..))
 import qualified Specftacular.DecisionTree as DT
+import Specftacular.Pruning (prunedTerms)
 import Specftacular.Rewriting
 import Specftacular.Types
 import Specftacular.Utils
@@ -27,7 +28,6 @@ import Data.CFTA.Equality (
     fixWithin,
     reducePartially,
     refold,
-    runsInterned,
     union,
     withoutRedundantEdges,
  )
@@ -354,21 +354,26 @@ each type to test.
 runPhase :: Settings -> Int -> StEcta -> Search -> IO ([String], Search)
 runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons]
   where
+    -- Only program applications have this shape. Do not exclude matching
+    -- type constructors in a custom signature.
+    canPrune = ("app", 4) `notElem` allConstructors (Map.assocs (sfTypeRep <$> compl_sig))
     go [] s = return ([], s)
     go ((lvl, tc) : rest) s = do
         refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
         let !reduced = searchSpace stecta lvl tc
+            templates
+                | canPrune = pruningTemplates compl_sig lvl (rewrite_rules s)
+                | otherwise = []
         refreshCount progress "Refolding ecta" (" for " ++ show tc) "" lvl (so_far s)
         !folded <- return $ refold reduced
-        -- Each accepting run gives one term. The terms come in the order
-        -- of kboCompare, so that the laws do not depend on the order in
-        -- which cfta interned the nodes and the edges. So the runs need no
-        -- canonical order (runsInterned).
+        -- The oracle rejects partial branches before their remaining type
+        -- choices expand. The bucket has one program size. KBO orders its
+        -- ties before testing; smaller sizes have already supplied rules.
         let terms =
                 sortBy
                     (kboCompare (isGivenVar compl_sig))
                     [ candidate
-                    | (t, _) <- runsInterned "Mu" folded
+                    | t <- prunedTerms templates folded
                     , let candidate = canonicalTypes (npTerm' t)
                     , eligible candidate
                     ]
@@ -609,9 +614,6 @@ refreshCount True pre mid post size i = hPutStr stderr (o ++ fill ++ "\r") >> hF
 --    resolve critical pairs: if a term can be rewritten with two different rules
 --    might not be stable, but we *don't need confluence*. Term indexing:
 --    have a hashtable of the root node. Makes it a lot faster.
--- 4. Look at DbOpt file for examples of how we can apply rewrites directly.
--- 8. We should be able to do the "rewrites" by cleverly constructing the ECTAs
---
 -- 11. make term a pattern synonym and compute the hash when we construct
 --     the term.
 --

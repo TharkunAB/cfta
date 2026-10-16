@@ -10,14 +10,16 @@ module Specftacular.Rewriting (
     Rules,
     emptyRules,
     reducible,
+    pruningTemplates,
     joinable,
     kboCompare,
     addLaw,
 ) where
 
 import Control.Applicative ((<|>))
-import Control.Monad (foldM)
+import Control.Monad (foldM, guard)
 import Data.CFTA.Symbol (Symbol (Symbol))
+import Data.CFTA.Template (Template (..))
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (permutations)
 import Data.Map.Strict (Map)
@@ -136,6 +138,104 @@ instance only when the instance gets smaller.
 reducible :: (Symbol -> Bool) -> Rules -> Term -> Bool
 reducible isVar rules = isJust . rewriteStep (groundGreater isVar) rules
 
+{- | Templates of uniformly decreasing linear rules up to the given size.
+The enumeration oracle rejects partial terms that contain these patterns.
+A pattern can omit type annotations when the original rule matches its
+principal type. Other patterns keep exact carrier annotations. Repeated
+term variables cannot become independent holes.
+-}
+pruningTemplates :: Sig -> Int -> Rules -> [Template Symbol]
+pruningTemplates sig size rules =
+    nubOrd
+        [ template
+        | (l, r) <- allRules rules
+        , let vs = templateVars l
+        , length vs == length (nubOrd vs)
+        , leaves l <= size
+        , Term "app" [_, _, _] <- [l]
+        , template <- case principalType sig l of
+            Just principal
+                | weight l > weight r
+                , kboGreater Map.empty l r
+                , rewrites l r principal ->
+                    [rawTemplate (const Hole) l]
+            _ ->
+                [ rawTemplate exactType l'
+                | Just l' <- [specialize l]
+                , rewrites l r l'
+                , Just bindings <- [matchTemplate l l' Map.empty]
+                , Just r' <- [instantiate bindings r]
+                , kboGreater Map.empty l' r'
+                ]
+        ]
+  where
+    rewrites l r target = isJust (matchTemplate l target Map.empty >>= (`instantiate` r))
+    types = Map.fromList [(Symbol ("<t>" <> name), typeSkeletonToTerm ty) | (ty, name) <- carriers]
+    specialize (Term "app" [ty, f, x]) =
+        (\ty' f' x' -> Term "app" [ty', f', x']) <$> instantiateType types ty <*> specialize f <*> specialize x
+    specialize (Term s [ty]) = (\ty' -> Term s [ty']) <$> instantiateType types ty
+    specialize _ = Nothing
+    exactType (Term s ts) = TemplateNode s (map exactType ts)
+    rawTemplate annotation (Term "app" [ty, f, x]) =
+        TemplateNode "app" [annotation ty, TemplateNode "(->)" [], rawTemplate annotation f, rawTemplate annotation x]
+    rawTemplate annotation (Term s [ty])
+        | isTemplateVar s = case annotation ty of
+            Hole -> Hole
+            t -> AnyPrefix [t]
+        | otherwise = TemplateNode s [annotation ty]
+    rawTemplate _ _ = error "pruningTemplates: invalid rule"
+
+{- | Infer the principal annotations of a linear pattern. Each occurrence
+of a signature constant gets fresh type variables. Given values keep their
+declared types. The rule matcher treats the fresh variables as rigid, so a
+match of the rule against this result proves that it covers every instance.
+-}
+principalType :: Sig -> Term -> Maybe Term
+principalType sig term = do
+    -- Custom signatures can use arbitrary type symbols. Keep the inference
+    -- variables separate from every declared type symbol.
+    guard (not (any (reserved . typeSkeletonToTerm . sfTypeRep) (Map.elems sig)))
+    (annotated, equations) <- annotate "" term
+    substitution <- unify Map.empty equations
+    pure (annotations (substitute substitution) annotated)
+  where
+    fresh path name = Term (Symbol ("<p>" <> path <> ":" <> name)) []
+    annotate path (Term "app" [_, f, x]) = do
+        (f', fs) <- annotate (path <> "f") f
+        (x', xs) <- annotate (path <> "x") x
+        let result = fresh path ""
+        pure (Term "app" [result, f', x'], (typeOf f', Term "->" [Term "(->)" [], typeOf x', result]) : fs ++ xs)
+    annotate path (Term s@(Symbol name) [_])
+        | isTemplateVar s = Just (Term s [fresh path ""], [])
+        | otherwise = do
+            fun <- Map.lookup name sig
+            let ty = case fun of
+                    GivenFun{} -> typeSkeletonToTerm (sfTypeRep fun)
+                    _ -> instanceType path (generalizeType (sfTypeRep fun))
+            pure (Term s [ty], [])
+    annotate _ _ = Nothing
+    instanceType path (TVar name) = fresh path name
+    instanceType path (TCons name args) = Term (Symbol name) (map (instanceType path) args)
+    instanceType path (TFun a b) = Term "->" [Term "(->)" [], instanceType path a, instanceType path b]
+    typeOf (Term _ (ty : _)) = ty
+    typeOf _ = error "principalType: missing annotation"
+    annotations f (Term "app" [ty, g, x]) = Term "app" [f ty, annotations f g, annotations f x]
+    annotations f (Term s [ty]) = Term s [f ty]
+    annotations _ t = t
+    meta (Symbol name) = "<p>" `T.isPrefixOf` name
+    reserved (Term h ts) = meta h || any reserved ts
+    substitute s (Term h ts) = case Map.lookup h s of
+        Just u | null ts -> substitute s u
+        _ -> Term h (map (substitute s) ts)
+    occurs h (Term k ts) = h == k || any (occurs h) ts
+    unify s [] = Just s
+    unify s ((a, b) : rest) = case (substitute s a, substitute s b) of
+        (a', b') | a' == b' -> unify s rest
+        (Term h [], b') | meta h, not (occurs h b') -> unify (Map.insert h b' s) rest
+        (a', Term h []) | meta h, not (occurs h a') -> unify (Map.insert h a' s) rest
+        (Term h as, Term k bs) | h == k, length as == length bs -> unify s (zip as bs ++ rest)
+        _ -> Nothing
+
 {- | Whether the known laws prove a law: the two sides of the law have the
 same normal form, or their normal forms are an instance of a rule (see
 'subsumed'). The variables of the law are constants here. Each step is an
@@ -169,17 +269,23 @@ isTypeVar (Symbol name) = "<t>" `T.isPrefixOf` name
 
 -- | Apply the type substitution once. Its results belong to the target term.
 instantiateType :: Map Symbol Term -> Term -> Maybe Term
+instantiateType _ t | not (hasTypeVars t) = Just t
 instantiateType s (Term h []) | isTypeVar h = Map.lookup h s
 instantiateType s (Term h ts) = Term h <$> traverse (instantiateType s) ts
 
 -- | Match a type with one consistent substitution for all its variables.
 matchTypeTerm :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
+matchTypeTerm p t s | p == t && not (hasTypeVars p) = Just s
 matchTypeTerm (Term h []) t s
     | isTypeVar h
     , not (hasTypeVars t) || t == Term h [] =
         bindMatch h t s
 matchTypeTerm (Term h ts) (Term k us) s
-    | h == k && length ts == length us = foldM (\m (a, b) -> matchTypeTerm a b m) s (zip ts us)
+    | h == k = matchChildren ts us s
+  where
+    matchChildren [] [] m = Just m
+    matchChildren (a : as) (b : bs) m = matchTypeTerm a b m >>= matchChildren as bs
+    matchChildren _ _ _ = Nothing
 matchTypeTerm _ _ _ = Nothing
 
 {- | Completion keeps unresolved type patterns apart. Ground matches can
