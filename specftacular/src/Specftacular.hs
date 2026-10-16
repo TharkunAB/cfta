@@ -40,7 +40,6 @@ import qualified System.Environment as Env
 import qualified Text.Read as TR
 
 import Data.Containers.ListUtils (nubOrd)
-import Data.Function (on)
 import qualified Data.HashSet as HS
 import System.IO (hFlush, hPutStr, hPutStrLn, stderr)
 
@@ -373,23 +372,33 @@ runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. 
         -- which cfta interned the nodes and the edges. So the runs need no
         -- canonical order (runsInterned).
         let terms =
-                map snd $
-                    sortBy
-                        (kboCompare (isGivenVar compl_sig) `on` fst)
-                        [(npTerm' t, t) | (t, _) <- runsInterned "Mu" folded]
+                sortBy
+                    (kboCompare (isGivenVar compl_sig))
+                    [ candidate
+                    | (t, _) <- runsInterned "Mu" folded
+                    , let candidate = npTerm' t
+                    , eligible candidate
+                    ]
+            -- Apply the checks that are already known before retaining the
+            -- sort bucket. The search checks new rules again as it runs.
+            eligible t =
+                not (t `HS.member` seen s)
+                    && not (termSize t > 1 && allFromSig given_sig t)
+                    && either (const False) (sameUpToCarriers tc) (termType inst_sig t)
+                    && not (reducible (isGivenVar inst_sig) (rewrite_rules s) (mostGeneral (isGivenVar inst_sig) schema_vars t))
         -- We want to display a message once the first term is found.
         -- in particular, it hangs after this messages for HugeLists 6
         refreshCount progress "Finding first term " (" for " ++ show tc) "" lvl (so_far s)
         case terms of
             (_ : _) -> refreshCount progress "Folded, exploring " (" for " ++ show tc) "" lvl (so_far s)
             _ -> return ()
-        (laws, s') <- considerAll lvl terms s
+        (laws, s') <- considerAll lvl tc terms s
         (more, s'') <- go rest s'
         return (laws ++ more, s'')
-    considerAll _ [] s = return ([], s)
-    considerAll lvl (t : ts) s = do
-        (laws, s') <- consider env stecta lvl t s
-        (more, s'') <- considerAll lvl ts s'
+    considerAll _ _ [] s = return ([], s)
+    considerAll lvl tc (t : ts) s = do
+        (laws, s') <- consider env stecta lvl (Term "filter" [typeSkeletonToTerm tc, t]) s
+        (more, s'') <- considerAll lvl tc ts s'
         return (laws ++ more, s'')
 
 -- 2. The candidate terms.
