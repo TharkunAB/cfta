@@ -352,7 +352,7 @@ runPhases env size lastPhase instances sig =
 each type to test.
 -}
 runPhase :: Settings -> Int -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, t)) sig_ty_cons]
+runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons]
   where
     go [] s = return ([], s)
     go ((lvl, tc) : rest) s = do

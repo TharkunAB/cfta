@@ -63,6 +63,14 @@ typeSize (TCons _ args) = 1 + sum (map typeSize args)
 typeSize (TFun a b) = 1 + typeSize a + typeSize b
 typeSize (TVar _) = 1
 
+-- | Count concrete leaves to put abstract carrier instances first.
+concreteTypeLeaves :: TypeSkeleton -> Int
+concreteTypeLeaves t | t `elem` map fst carriers = 0
+concreteTypeLeaves (TCons _ []) = 1
+concreteTypeLeaves (TCons _ args) = sum (map concreteTypeLeaves args)
+concreteTypeLeaves (TFun a b) = concreteTypeLeaves a + concreteTypeLeaves b
+concreteTypeLeaves (TVar _) = 0
+
 -- | A term of the automata. The symbols are interned texts.
 type Term = CT.Term Symbol
 

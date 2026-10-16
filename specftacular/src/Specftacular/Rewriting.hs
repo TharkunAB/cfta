@@ -242,9 +242,14 @@ kboCompare isVar s t = compare (weight s) (weight t) <> sameWeight s t
 
 -- | Prefer smaller type instances before comparing their names.
 typeOrder :: [Term] -> [Term] -> Ordering
-typeOrder as bs = compare (sum (map nodes as)) (sum (map nodes bs)) <> compare as bs
+typeOrder as bs = compare (rank as) (rank bs)
   where
+    rank ts = (sum (map nodes ts), sum (map concrete ts), ts)
     nodes (Term _ ts) = 1 + sum (map nodes ts) :: Int
+    concrete t@(Term h [])
+        | isTypeVar h || h == "(->)" || t `elem` map (typeSkeletonToTerm . fst) carriers = 0
+        | otherwise = 1 :: Int
+    concrete (Term _ ts) = sum (map concrete ts)
 
 {- | The Knuth-Bendix order on templates: whether s > t for each instance in
 which the template variables compare as the ranking says. A template
