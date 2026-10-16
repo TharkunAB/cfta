@@ -133,12 +133,6 @@ canonicalLaw vars law = rename law
          in (Map.insert f (n + 1) counts, (v, (vars Map.! f) !! n))
     rename (Term s ts) = Term (Map.findWithDefault s s names) (map rename ts)
 
-typeSkeletonToTerm :: TypeSkeleton -> Term
-typeSkeletonToTerm (TCons s args) =
-    Term (Symbol s) $ map typeSkeletonToTerm args
-typeSkeletonToTerm (TFun f v) =
-    Term "->" [Term "(->)" [], typeSkeletonToTerm f, typeSkeletonToTerm v]
-
 termSize :: Term -> Int
 termSize (Term s []) = 1
 termSize (Term s [_]) = 1
@@ -208,9 +202,8 @@ discoverMonomorphic size = experimentalPhases size 1
 
 {- | The laws of a signature, with the phases from 1 to the given phase.
 Phases 2 to 4 are experimental. Phase 2 keeps A, B, C, D, and Acc apart.
-Phases 3 and 4 generalize the types of the functions, so a term can apply
-a value to an argument of another type. The search does not test such a
-term (see 'termType').
+Phases 3 and 4 instantiate the abstract carrier types of each constant.
+The search checks every instance before evaluation (see 'termType').
 -}
 experimentalPhases :: Int -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
 experimentalPhases size phase extraReps sigs = searchPhases size phase (frontInstances extraReps) (mconcat sigs)
@@ -359,7 +352,7 @@ runPhases env size lastPhase instances sig =
 each type to test.
 -}
 runPhase :: Settings -> Int -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sig_ty_cons]
+runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, t)) sig_ty_cons]
   where
     go [] s = return ([], s)
     go ((lvl, tc) : rest) s = do
@@ -376,7 +369,7 @@ runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. 
                     (kboCompare (isGivenVar compl_sig))
                     [ candidate
                     | (t, _) <- runsInterned "Mu" folded
-                    , let candidate = npTerm' t
+                    , let candidate = canonicalTypes (npTerm' t)
                     , eligible candidate
                     ]
             -- Apply the checks that are already known before retaining the
@@ -501,7 +494,9 @@ consider Settings{..} StEcta{..} lvl full_term s0
     -- does (see 'termType').
     testable t = either (const False) (sameUpToCarriers eq_type) (termType inst_sig t)
     -- The values of a term on the test cases, evaluated when needed.
-    values u = map (\tc -> evalTerm inst_sig tc u) test_cases
+    values u = case compileTerm inst_sig u of
+        Left message -> error message
+        Right evaluateTerm -> map evaluateTerm test_cases
 
     -- The schema equals the representative schema rep. Test the most
     -- general instance of the schema against the instances of rep.

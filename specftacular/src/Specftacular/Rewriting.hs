@@ -16,6 +16,7 @@ module Specftacular.Rewriting (
 ) where
 
 import Control.Applicative ((<|>))
+import Control.Monad (foldM)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (permutations)
@@ -32,9 +33,8 @@ term with any head.
 -}
 type Index = Map (Maybe (Symbol, Int)) [(Term, Term)]
 
-{- | The rules of the laws. An oriented rule makes each instance smaller, so
-it rewrites without a test of the order. An unoriented rule rewrites an
-instance only if the order says that the instance gets smaller. A rule
+{- | The rules of the laws. Orientation uses the order at fixed types.
+Each rewrite checks the order after type instantiation. A rule
 rewrites only if each template variable of its right side is in its left
 side. The other rules cannot rewrite, because a match of the left side
 does not give the right side, but they show that an equation follows
@@ -42,7 +42,7 @@ does not give the right side, but they show that an equation follows
 -}
 data Rules = Rules
     { oriented :: !Index
-    -- ^ The rules that make each instance smaller.
+    -- ^ The rules oriented at fixed types.
     , unoriented :: !Index
     -- ^ The rules that make some instances smaller.
     , nonRewriting :: !Index
@@ -106,6 +106,7 @@ rewriteStep greater rules t =
          | (l, r) <- candidates (oriented rules) t
          , Just s <- [matchTemplate l t Map.empty]
          , Just r' <- [instantiate s r]
+         , greater t r'
          ]
         ++ [ r'
            | (l, r) <- candidates (unoriented rules) t
@@ -151,37 +152,59 @@ joinable isVar rules a b = a' == b' || subsumed rules (a', b') || subsumed rules
 groundGreater :: (Symbol -> Bool) -> Term -> Term -> Bool
 groundGreater isVar a b = kboCompare isVar a b == GT
 
-{- | Replace the template variables of a template by their terms. The types
-of a template have no template variables, so the function does not look
-into them.
+{- | Replace term and type variables with their matched instances.
+An unmatched variable cannot supply a rewrite result.
 -}
 instantiate :: Map Symbol Term -> Term -> Maybe Term
 instantiate s (Term "app" [ty, f, v]) =
-    (\f' v' -> Term "app" [ty, f', v']) <$> instantiate s f <*> instantiate s v
-instantiate s t@(Term h _)
+    (\ty' f' v' -> Term "app" [ty', f', v']) <$> instantiateType s ty <*> instantiate s f <*> instantiate s v
+instantiate s (Term h [ty])
     | isTemplateVar h = Map.lookup h s
-    | otherwise = Just t
+    | otherwise = (\ty' -> Term h [ty']) <$> instantiateType s ty
+instantiate _ _ = Nothing
 
-{- | Match a template against a term, and extend the substitution of the
-template variables. A template variable matches a term of its type. A
-template variable that occurs again must match an equal term.
+-- | Whether a symbol is a type variable in a rule.
+isTypeVar :: Symbol -> Bool
+isTypeVar (Symbol name) = "<t>" `T.isPrefixOf` name
+
+-- | Apply the type substitution once. Its results belong to the target term.
+instantiateType :: Map Symbol Term -> Term -> Maybe Term
+instantiateType s (Term h []) | isTypeVar h = Map.lookup h s
+instantiateType s (Term h ts) = Term h <$> traverse (instantiateType s) ts
+
+-- | Match a type with one consistent substitution for all its variables.
+matchTypeTerm :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
+matchTypeTerm (Term h []) t s
+    | isTypeVar h
+    , not (hasTypeVars t) || t == Term h [] = bindMatch h t s
+matchTypeTerm (Term h ts) (Term k us) s
+    | h == k && length ts == length us = foldM (\m (a,b) -> matchTypeTerm a b m) s (zip ts us)
+matchTypeTerm _ _ _ = Nothing
+
+-- | Completion keeps unresolved type patterns apart. Ground matches can
+-- instantiate a carrier with any checked type.
+hasTypeVars :: Term -> Bool
+hasTypeVars (Term h ts) = isTypeVar h || any hasTypeVars ts
+
+-- | Bind one pattern variable, or check its previous occurrence.
+bindMatch :: Symbol -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
+bindMatch h t s = case Map.lookup h s of
+    Nothing -> Just (Map.insert h t s)
+    Just u | u == t -> Just s
+    _ -> Nothing
+
+{- | Match term and type variables together. A repeated variable must
+have the same term or type at each occurrence.
 -}
 matchTemplate :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
 matchTemplate (Term h [ty]) t s
-    | isTemplateVar h =
-        case t of
-            Term _ (ty' : _) | ty' == ty ->
-                case Map.lookup h s of
-                    Nothing -> Just (Map.insert h t s)
-                    Just u | u == t -> Just s
-                    _ -> Nothing
-            _ -> Nothing
--- The type of an application follows from the types of its leaves, so an
--- application needs no check of its type.
-matchTemplate (Term "app" [_, f, v]) (Term "app" [_, f', v']) s =
-    matchTemplate f f' s >>= matchTemplate v v'
+    | isTemplateVar h = case t of
+        Term _ (ty' : _) -> matchTypeTerm ty ty' s >>= bindMatch h t
+        _ -> Nothing
+matchTemplate (Term "app" [ty, f, v]) (Term "app" [ty', f', v']) s =
+    matchTypeTerm ty ty' s >>= matchTemplate f f' >>= matchTemplate v v'
 matchTemplate (Term a [ty]) (Term b [ty']) s
-    | a == b && ty == ty' = Just s
+    | a == b = matchTypeTerm ty ty' s
 matchTemplate _ _ _ = Nothing
 
 {- | The weight of a term in the Knuth-Bendix order: each symbol has the
@@ -203,7 +226,8 @@ An application is the binary symbol app, which is above the other
 symbols. Of the other symbols, the generated variables are below the
 constants, so that the more general terms come first, and symbols of one
 kind compare by their names, then by their types. The generated
-variables of a term are constants here. The order is total,
+variables of a term are constants here. Smaller type instances come first.
+The order is total,
 well-founded, and closed under contexts, so rewriting with it ends.
 -}
 kboCompare :: (Symbol -> Bool) -> Term -> Term -> Ordering
@@ -214,7 +238,13 @@ kboCompare isVar s t = compare (weight s) (weight t) <> sameWeight s t
     sameWeight (Term "app" _) _ = GT
     sameWeight _ (Term "app" _) = LT
     sameWeight (Term a tys) (Term b tys') =
-        compare (not (isVar a)) (not (isVar b)) <> compare a b <> compare tys tys'
+        compare (not (isVar a)) (not (isVar b)) <> compare a b <> typeOrder tys tys'
+
+-- | Prefer smaller type instances before comparing their names.
+typeOrder :: [Term] -> [Term] -> Ordering
+typeOrder as bs = compare (sum (map nodes as)) (sum (map nodes bs)) <> compare as bs
+  where
+    nodes (Term _ ts) = 1 + sum (map nodes ts) :: Int
 
 {- | The Knuth-Bendix order on templates: whether s > t for each instance in
 which the template variables compare as the ranking says. A template
@@ -265,7 +295,7 @@ kboGreater rank s t =
             case (Map.lookup a rank, Map.lookup b rank) of
                 (Just i, Just j) -> i > j
                 _ -> False
-        | otherwise = (compare a b <> compare tys tys') == GT
+        | otherwise = (compare a b <> typeOrder tys tys') == GT
     sameWeight _ _ = False
 
 {- | The template variables of a template, from left to right, with each
