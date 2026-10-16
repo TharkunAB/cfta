@@ -1,0 +1,86 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardRequired.node' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardRequired.node : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {limit : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits}
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inst
+      needed value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+          value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node Symbol Formula limit value →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node Symbol Formula limit result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardRequired.children' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardRequired.children : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {limit : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results :
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inst
+      entries index values before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+          values →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children Symbol Formula limit values →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children Symbol Formula limit results
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardRequired.rows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardRequired.rows : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {limit : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits}
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inst
+      entries edges before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before edges →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows Symbol Formula limit edges →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows Symbol Formula limit results
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardRequired.requireAll_done' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardRequired.requireAll_done : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (fuel readFuel : Nat) (paths : List.{0} (List.{0} Int))
+  (values results :
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @Eq.{1}
+      (MicroCFTA.SourceEqualityRequiredWorker.Result Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+        (List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+      (@MicroCFTA.SourceEqualityRequiredExecution.requireAll Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+        inst fuel readFuel paths values before)
+      (@MicroCFTA.SourceEqualityRequiredWorker.Result.done Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+        (List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+        results after) →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+          values →
+        ∀ (limit : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children Symbol Formula limit values →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children Symbol Formula limit results

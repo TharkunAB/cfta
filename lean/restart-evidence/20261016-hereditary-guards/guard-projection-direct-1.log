@@ -1,0 +1,28 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardProjection.lean:63:43: error: unexpected token ':='; expected ')', ',' or ':'
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardProjection.lean:63:37: error: Application type mismatch: The argument
+  Guard
+has type
+  Type → Type
+of sort `Type 1` but is expected to have type
+  List Int
+of sort `Type` in the application
+  ProjectRows Guard
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardProjection.lean:62:7: error: Missing cases:
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardProjection.lean:55:94: error: unsolved goals
+Symbol Formula : Type
+inst✝ : DecidableEq (EdgeKey Symbol (Guard Formula))
+rootCase :
+  ∀ {value : Value Symbol (Guard Formula)} {state : InternedConstructorTemplates.State Symbol (Guard Formula)},
+    NodeResult value state value
+emptyCase :
+  ∀ {state : InternedConstructorTemplates.State Symbol (Guard Formula)}, NodeResult Value.empty state Value.empty
+ordinaryCase : sorry
+⊢ (∀ (path : List Int) (value : Value Symbol (Guard Formula))
+      (before : InternedConstructorTemplates.State Symbol (Guard Formula)) (result : Value Symbol (Guard Formula))
+      (after : InternedConstructorTemplates.State Symbol (Guard Formula)),
+      Project path value before result after → NodeResult value before result) ∧
+    ∀ (path : List Int) (index : Int) (edges : List (EdgeValue Symbol (Guard Formula)))
+      (before : InternedConstructorTemplates.State Symbol (Guard Formula))
+      (results : List (Value Symbol (Guard Formula)))
+      (after : InternedConstructorTemplates.State Symbol (Guard Formula)),
+      ProjectRows path index edges before results after → RowsResult edges before results

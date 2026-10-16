@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 2000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.foldLimit
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.foldLimit
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.foldLimit_ge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.foldLimit_ge
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.targetLimit
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.targetLimit
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.operand_receipt
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.operand_receipt
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.fold
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.fold
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.target_reads
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardTarget.target_reads

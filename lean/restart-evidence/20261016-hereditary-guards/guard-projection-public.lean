@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProjection
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 2000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProjection.union
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProjection.union
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProjection.project
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProjection.project
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProjection.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProjection.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProjection.forest
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProjection.forest

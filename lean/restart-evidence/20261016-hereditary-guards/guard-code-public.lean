@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.NodeInputs
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.NodeInputs
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.EdgeInputs
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.EdgeInputs
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.certified_bind
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.certified_bind
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.request_node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.request_node
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.request_edge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.request_edge
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.certified_walk
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.certified_walk

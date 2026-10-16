@@ -1,0 +1,69 @@
+'GuardProjectionRequiredKernels.projection_then_required' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@GuardProjectionRequiredKernels.projection_then_required : ∀ {Symbol Formula : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (path : List.{0} Int) (required : List.{0} (List.{0} Int))
+  (values :
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      before →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before values →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint Formula) values →
+        @Exists.{1}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+          fun projected =>
+          @Exists.{1}
+            (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            fun middle =>
+            @Exists.{1}
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+              fun results =>
+              @Exists.{1}
+                (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                fun after =>
+                And
+                  (@MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inst path values before projected middle)
+                  (And
+                    (@MicroCFTA.SourceEqualityRequiredWorkerComplete.StableRun Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                      (fun fuel readFuel =>
+                        @MicroCFTA.SourceEqualityRequiredExecution.requireAll Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inst fuel readFuel required
+                          (@List.cons.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                            projected
+                            (@List.nil.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+                          middle)
+                      results after)
+                    (And
+                      (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before after)
+                      (And
+                        (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula) after)
+                        (And
+                          (@MicroCFTA.InternedNestedProvenance.Values Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula) after results)
+                          (And
+                            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node Symbol Formula
+                              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.childrenLimits Symbol
+                                Formula values)
+                              projected)
+                            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children Symbol Formula
+                              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.childrenLimits Symbol
+                                Formula values)
+                              results))))))

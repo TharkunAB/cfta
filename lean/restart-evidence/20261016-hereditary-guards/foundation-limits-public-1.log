@@ -1,0 +1,163 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.zero' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.zero : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_refl' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_refl : ∀
+  (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le limits limits
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_trans' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_trans : ∀
+  {first middle last : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first middle →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le middle last →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.zero_le' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.zero_le : ∀
+  (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.zero limits
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_join_left' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_join_left : ∀
+  (first second : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join first second)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_join_right' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_join_right : ∀
+  (first second : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le second
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join first second)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join_le' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join_le : ∀
+  {first second last : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first last →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le second last →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join first second) last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step_ge' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step_ge : ∀
+  (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le limits
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step limits)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_le_step' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_le_step : ∀
+  (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits limits limits)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step limits)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.wordCount_depth_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.wordCount_depth_mono : ∀ (alphabet : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount alphabet first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount alphabet last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.normalizedDepth_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.normalizedDepth_mono : ∀
+  {firstCount lastCount firstDepth lastDepth : Nat},
+  @LE.le.{0} Nat instLENat firstCount lastCount →
+    @LE.le.{0} Nat instLENat firstDepth lastDepth →
+      @LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalizedDepth firstCount firstDepth)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalizedDepth lastCount lastDepth)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.normalizedOccurrences_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.normalizedOccurrences_mono : ∀
+  {firstCount lastCount firstDepth lastDepth : Nat},
+  @LE.le.{0} Nat instLENat firstCount lastCount →
+    @LE.le.{0} Nat instLENat firstDepth lastDepth →
+      @LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.normalizedOccurrences firstCount firstDepth)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.normalizedOccurrences lastCount lastDepth)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.positiveBudget_depth_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.positiveBudget_depth_mono : ∀ {firstDepth lastDepth : Nat},
+  @LE.le.{0} Nat instLENat firstDepth lastDepth →
+    ∀ (count : Nat),
+      And
+        (@LE.le.{0} Nat instLENat
+          (@Prod.fst.{0, 0} Nat Nat
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget firstDepth count))
+          (@Prod.fst.{0, 0} Nat Nat
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget lastDepth count)))
+        (@LE.le.{0} Nat instLENat
+          (@Prod.snd.{0, 0} Nat Nat
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget firstDepth count))
+          (@Prod.snd.{0, 0} Nat Nat
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.positiveBudget lastDepth count)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_mono : ∀
+  {first largerFirst second largerSecond : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first largerFirst →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le second largerSecond →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits first second)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.conjoinLimits largerFirst largerSecond)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join_mono' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join_mono : ∀
+  {first largerFirst second largerSecond : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first largerFirst →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le second largerSecond →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join first second)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join largerFirst largerSecond)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first last →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.effective_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.effective_mono : ∀
+  {first last : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first last →
+    And
+      (@LE.le.{0} Nat instLENat
+        (@Prod.fst.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget first))
+        (@Prod.fst.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget last)))
+      (@LE.le.{0} Nat instLENat
+        (@Prod.snd.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget first))
+        (@Prod.snd.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget last)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.bounds_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.bounds_mono : ∀ {Formula : Type}
+  {first last : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits}
+  (constraint : MicroCFTA.SourceSymbolicIndex.Constraint Formula),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula first constraint →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first last →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula last constraint
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.top_bounds' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.top_bounds : ∀ {Formula : Type}
+  (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula limits
+    (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_step' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_step : ∀ {Formula : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard Formula)]
+  (le : MicroCFTA.SourceGuards.Guard Formula → MicroCFTA.SourceGuards.Guard Formula → Bool)
+  (first second : MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+  (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula limits first →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula limits second →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step limits)
+        (@MicroCFTA.SourceEqualityConstraintConstructors.conjoin Formula inst le first second)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint : {Formula : Type} →
+  MicroCFTA.SourceSymbolicIndex.Constraint Formula → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint_bounds' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint_bounds : ∀ {Formula : Type}
+  (constraint : MicroCFTA.SourceSymbolicIndex.Constraint Formula),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint Formula constraint) constraint

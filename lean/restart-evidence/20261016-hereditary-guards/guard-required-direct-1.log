@@ -1,0 +1,33 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardRequired.lean:49:58: error: unexpected token ':='; expected ')', ',' or ':'
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardRequired.lean:49:52: error: Application type mismatch: The argument
+  Guard
+has type
+  Type → Type
+of sort `Type 1` but is expected to have type
+  List (Int × Needed)
+of sort `Type` in the application
+  RequireRows Guard
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardRequired.lean:48:7: error: Missing cases:
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardRequired.lean:40:91: error: unsolved goals
+Symbol Formula : Type
+inst✝ : DecidableEq (EdgeKey Symbol (Guard Formula))
+identityCase :
+  ∀ {value : Value Symbol (Guard Formula)} {before : InternedConstructorTemplates.State Symbol (Guard Formula)},
+    NodeResult value before value
+emptyCase :
+  ∀ {entries : List (Int × Needed)} {before : InternedConstructorTemplates.State Symbol (Guard Formula)},
+    entries ≠ [] → NodeResult Value.empty before Value.empty
+⊢ (∀ (needed : Needed) (value : Value Symbol (Guard Formula))
+      (before : InternedConstructorTemplates.State Symbol (Guard Formula)) (result : Value Symbol (Guard Formula))
+      (after : InternedConstructorTemplates.State Symbol (Guard Formula)),
+      RequireNode needed value before result after → NodeResult value before result) ∧
+    (∀ (entries : List (Int × Needed)) (index : Nat) (values : List (Value Symbol (Guard Formula)))
+        (before : InternedConstructorTemplates.State Symbol (Guard Formula))
+        (results : List (Value Symbol (Guard Formula)))
+        (after : InternedConstructorTemplates.State Symbol (Guard Formula)),
+        RequireChildren entries index values before results after → ChildrenResult values before results) ∧
+      ∀ (entries : List (Int × Needed)) (edges : List (EdgeValue Symbol (Guard Formula)))
+        (before : InternedConstructorTemplates.State Symbol (Guard Formula))
+        (results : List (EdgeValue Symbol (Guard Formula)))
+        (after : InternedConstructorTemplates.State Symbol (Guard Formula)),
+        RequireRows entries edges before results after → RowsResult edges before results

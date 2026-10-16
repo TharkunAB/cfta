@@ -1,0 +1,808 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate : {Symbol Formula : Type} →
+  MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+    MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored : {Symbol Formula : Type} →
+  MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.self_certificate' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.self_certificate : ∀ {Symbol Formula : Type}
+  (input : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate Symbol Formula input input
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.empty_certificate' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.empty_certificate : ∀ {Symbol Formula : Type}
+  (input : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate Symbol Formula input
+    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.empty_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.empty_stored : ∀ {Symbol Formula : Type},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.remember_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.remember_stored : ∀ {Symbol Formula : Type}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula memo →
+    ∀
+      (input candidate :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate Symbol Formula input candidate →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.remember Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            memo input candidate)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.hit_certificate' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.hit_certificate : ∀ {Symbol Formula : Type}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {input : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)},
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      heap →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) heap input →
+      @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) heap
+          memo →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula memo →
+          @Eq.{1}
+              (Option.{0}
+                (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+              (memo
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) input))
+              (@some.{0}
+                (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                entry) →
+            And
+              (@Eq.{1}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) entry)
+                input)
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate Symbol Formula input
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) entry))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.winner_certificate' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.winner_certificate : ∀ {Symbol Formula : Type}
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {input candidate :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)},
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      heap →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) heap input →
+      @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) heap
+          memo →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula memo →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate Symbol Formula input candidate →
+            And
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate Symbol Formula input
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.winner Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) memo input candidate)))
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.remember Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) memo input candidate))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Contract' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Contract : {Symbol Formula : Type} →
+  MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+        MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified : {Symbol Formula Output : Type} →
+  [DecidableEq.{1} Symbol] →
+    [DecidableEq.{1}
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))] →
+      (MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool) →
+        MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Output →
+          MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+            (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+                Output → Prop) →
+              Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.lift_certified' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.lift_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {Output : Type} (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Output)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (post :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+      Output → Prop),
+  @MicroCFTA.SourceCurrentMemoMergeEffects.Certified Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Output
+      inst edgeEq
+      (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+      clear code before post →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula Output inst edgeEq clear code
+      before post
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.bind_certified' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.bind_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {First Output : Type} (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (first : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) First)
+  (next :
+    First → MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Output)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (intermediate :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+      First → Prop)
+  (post :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+      Output → Prop),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula First inst edgeEq clear first
+      before intermediate →
+    (∀ (value : First)
+        (middle :
+          MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+            middle →
+          intermediate middle value →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula Output inst edgeEq
+              clear (next value) middle post) →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula Output inst edgeEq clear
+        (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.bind Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+          First Output first next)
+        before post
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.map_certified' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.map_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {Request Output : Type} (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (call :
+    Request →
+      MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Output)
+  (pre :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+      Request → Prop)
+  (relation :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+      Request → Output → Prop),
+  (∀
+      (before after :
+        MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+      @MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+          after →
+        ∀ (request : Request), pre before request → pre after request) →
+    (∀
+        (before after :
+          MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+            after →
+          ∀ (request : Request) (value : Output), relation before request value → relation after request value) →
+      ∀ (requests : List.{0} Request),
+        (∀ (request : Request),
+            @Membership.mem.{0, 0} Request (List.{0} Request) (@List.instMembership.{0} Request) requests request →
+              ∀
+                (before :
+                  MicroCFTA.InternedConstructorTemplates.State Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+                @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+                  @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+                    pre before request →
+                      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula Output inst
+                        edgeEq clear (call request) before fun after value => relation after request value) →
+          ∀
+            (before :
+              MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+            @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+              @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                  before →
+                (∀ (request : Request),
+                    @Membership.mem.{0, 0} Request (List.{0} Request) (@List.instMembership.{0} Request) requests
+                        request →
+                      pre before request) →
+                  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+                    (List.{0} Output) inst edgeEq clear
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.map.{0} Request Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Output call requests)
+                    before fun after values => @MicroCFTA.Language.All₂ Request Output (relation after) requests values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.request_certified' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.request_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (input : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.InternedProbeProvenance.Available Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before input →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)) inst
+      edgeEq clear
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.request Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+        input)
+      before fun after output =>
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Contract Symbol Formula input before output after
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.edge_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.edge_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool) (symbol : Symbol)
+  (guard : MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+  (values :
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+          values →
+        ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula limits guard →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children Symbol Formula limits values →
+              @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                inst edgeEq clear
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.work Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) symbol guard values))
+                before fun after edge =>
+                And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.EdgeReady Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) after edge)
+                  (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge Symbol Formula limits edge)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.node_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.node_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (edges :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before edges →
+        ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows Symbol Formula limits edges →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              inst edgeEq clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.work Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) edges))
+              before fun after value =>
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.ValueReady Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) after value)
+                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node Symbol Formula limits value)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.small_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.small_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+          edge →
+        ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge Symbol Formula limits edge →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              inst edgeEq clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.small Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                edge)
+              before (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.EdgePost✝ Symbol Formula limits)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.column_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.column_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (inputs :
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+          inputs →
+        ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children Symbol Formula limits inputs →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              inst edgeEq clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.column Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                inputs)
+              before (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.ValuePost✝ Symbol Formula limits)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.large_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.large_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (first : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (rest :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+          (@List.cons.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            first rest) →
+        ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows Symbol Formula limits
+              (@List.cons.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                first rest) →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              inst edgeEq clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.large (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+                (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula) first rest)
+              before (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.EdgePost✝ Symbol Formula limits)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.group_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.group_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (edges :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before edges →
+        ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows Symbol Formula limits edges →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+              inst edgeEq clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.group (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+                (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula) edges)
+              before (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.GroupPost✝ Symbol Formula limits)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.root_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.root_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (groups :
+    List.{0}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      (∀
+          (group :
+            List.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))),
+          @Membership.mem.{0, 0}
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+              (List.{0}
+                (List.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+              (@List.instMembership.{0}
+                (List.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+              groups group →
+            @MicroCFTA.InternedNestedProvenance.Edges Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+              group) →
+        ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          (∀
+              (group :
+                List.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))),
+              @Membership.mem.{0, 0}
+                  (List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                  (List.{0}
+                    (List.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+                  (@List.instMembership.{0}
+                    (List.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+                  groups group →
+                @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows Symbol Formula limits group) →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              inst edgeEq clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.root (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Symbol
+                (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula) groups)
+              before (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.ValuePost✝ Symbol Formula limits)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.body_certified' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardBody.body_certified : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool)
+  (input : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+          input →
+        ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node Symbol Formula limits input →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              inst edgeEq clear
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.body Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                inst (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula) input)
+              before fun x output =>
+              @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node Symbol Formula limits output
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardProducer.run_guard' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardProducer.run_guard : ∀ {Symbol Formula Output : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool}
+  {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) Output}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {output : Output},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inst edgeEq clear
+      (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula) Output code before memo output after saved →
+    ∀
+      (post :
+        MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) →
+          Output → Prop),
+      @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+        @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+          @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              before memo →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula memo →
+              @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Certified Symbol Formula Output inst edgeEq
+                  clear code before post →
+                And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before after)
+                  (And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula) after saved)
+                    (And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula saved)
+                      (post after output)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardProducer.call_guard' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardProducer.call_guard : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inst edgeEq
+      clear (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula) input before memo output after saved →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+            memo →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula memo →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                before input →
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before after)
+                (And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) after saved)
+                  (And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula saved)
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Contract Symbol Formula input before
+                      output after)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardProducer.cold' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardProducer.cold : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [edgeEq :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint Formula → Bool}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inst edgeEq
+      clear (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula) input before
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)) output
+      after saved →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) before
+            input →
+          And
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              before after)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                after saved)
+              (And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored Symbol Formula saved)
+                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCode.Contract Symbol Formula input before
+                  output after)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardFinite.allocated' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardFinite.allocated : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  @MicroCFTA.SourceCurrentAllocatedMergeGraph.Call inst inst_1 clear input before memo output after saved →
+    @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before →
+      @MicroCFTA.SourceCurrentMemoMergeEffects.Stored (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+          memo →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula memo →
+          @MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+              input →
+            And
+              (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before
+                after)
+              (And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                    after)
+                  saved)
+                (And
+                  (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                    saved)
+                  (And
+                    (@MicroCFTA.InternedProbeProvenance.Available
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                        after)
+                      output)
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                      input output))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardFinite.finite' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardFinite.finite : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo),
+  @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before →
+    @MicroCFTA.SourceCurrentMemoMergeEffects.Stored (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+        memo →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula memo →
+        @MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+            input →
+          ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula limits
+                input →
+              @Exists.{1}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                fun output =>
+                @Exists.{1} MicroCFTA.SourceCurrentAllocatedMergeGraph.State fun after =>
+                  @Exists.{1} MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo fun saved =>
+                    And
+                      (@MicroCFTA.SourceCurrentAllocatedMergeGraph.Call inst inst_1 clear input before memo output after
+                        saved)
+                      (And
+                        (@MicroCFTA.SourceCurrentAllocatedMergeWorkerCompletion.StableCall inst inst_1 clear input
+                          before memo output after saved)
+                        (And
+                          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            MicroCFTA.FullSyntax.Formula before after)
+                          (And
+                            (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                MicroCFTA.FullSyntax.Formula after)
+                              saved)
+                            (And
+                              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                MicroCFTA.FullSyntax.Formula saved)
+                              (And
+                                (@MicroCFTA.InternedProbeProvenance.Available
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    MicroCFTA.FullSyntax.Formula after)
+                                  output)
+                                (And
+                                  (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    MicroCFTA.FullSyntax.Formula input output)
+                                  (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    MicroCFTA.FullSyntax.Formula limits output)))))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardFinite.cold' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardFinite.cold : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State),
+  @MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before →
+    @MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+        input →
+      ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula limits
+            input →
+          @Exists.{1}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            fun output =>
+            @Exists.{1} MicroCFTA.SourceCurrentAllocatedMergeGraph.State fun after =>
+              @Exists.{1} MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo fun saved =>
+                And
+                  (@MicroCFTA.SourceCurrentAllocatedMergeGraph.Call inst inst_1 clear input before
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.empty
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    output after saved)
+                  (And
+                    (@MicroCFTA.SourceCurrentAllocatedMergeWorkerCompletion.StableCall inst inst_1 clear input before
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.empty
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      output after saved)
+                    (And
+                      (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                        before after)
+                      (And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            MicroCFTA.FullSyntax.Formula after)
+                          saved)
+                        (And
+                          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            MicroCFTA.FullSyntax.Formula saved)
+                          (And
+                            (@MicroCFTA.InternedProbeProvenance.Available
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                MicroCFTA.FullSyntax.Formula after)
+                              output)
+                            (And
+                              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Certificate
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                MicroCFTA.FullSyntax.Formula input output)
+                              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                MicroCFTA.FullSyntax.Formula limits output)))))))

@@ -1,0 +1,207 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.NodeInputs' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.NodeInputs : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.EdgeInputs' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.EdgeInputs : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified : {A : Type} →
+  [DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A →
+      MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        (MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            A → Prop) →
+          Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.certified_bind' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.certified_bind : ∀ {A B : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (code :
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+  (next :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Valid (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state) →
+      ∀
+        (intermediate :
+          MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            A → Prop)
+        (post :
+          MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            B → Prop),
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified A inst code state intermediate →
+          (∀ (value : A)
+              (after :
+                MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              @MicroCFTA.SourceRecursiveIntersectionKernel.Valid
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after →
+                @MicroCFTA.SourceRecursiveIntersectionKernel.Extension
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state after →
+                  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after) →
+                    intermediate after value →
+                      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified B inst (next value) after
+                        post) →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified B inst
+              (@MicroCFTA.SourceRecursiveIntersectionCode.Code.bind
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A B code next)
+              state post
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.request_node' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.request_node : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.NodeInputs request →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      inst
+      (@MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request))
+      state fun x value =>
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardStored.NodeCertificate
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula request value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.request_edge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.request_edge : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.EdgeInputs request →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      inst
+      (@MicroCFTA.SourceRecursiveIntersectionCode.requestEdge
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.right
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request))
+      state fun x value =>
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardStored.EdgeCertificate
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula request value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.certified_walk' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.certified_walk : ∀ {A B : Type}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (call :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (values : List.{0} A)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @MicroCFTA.SourceRecursiveIntersectionKernel.Valid (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state) →
+      ∀ (law : A → B → Prop),
+        (∀ (input : A),
+            @Membership.mem.{0, 0} A (List.{0} A) (@List.instMembership.{0} A) values input →
+              ∀
+                (after :
+                  MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                @MicroCFTA.SourceRecursiveIntersectionKernel.Valid
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after →
+                  @MicroCFTA.SourceRecursiveIntersectionKernel.Extension
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state after →
+                    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after) →
+                      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified B inst (call input) after
+                        fun x output => law input output) →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardCode.Certified (List.{0} B) inst
+            (@MicroCFTA.SourceRecursiveIntersectionCode.walk.{0} A
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B call values)
+            state fun x outputs => @MicroCFTA.Language.All₂ A B law values outputs

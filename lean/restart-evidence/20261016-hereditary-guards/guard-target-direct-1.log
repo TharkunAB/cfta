@@ -1,0 +1,152 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardTarget.lean:46:21: error: Type mismatch
+  SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_trans ih
+has type
+  Le (foldLimit limits count) ?m.15 → Le limits ?m.15
+but is expected to have type
+  Le limits (foldLimit limits (count + 1))
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardTarget.lean:47:6: error: unexpected token '('; expected command
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardTarget.lean:97:19: error: don't know how to synthesize implicit argument `last`
+  @SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.mono Symbol FullSyntax.Formula value✝ limits
+    (foldLimit limits ?m.315) head.right.right (foldLimit_ge limits ?m.315)
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+memos final : Memos
+actual : Fold values seed paths before memo result after saved
+path✝ : List Int
+values✝ : List (Value Symbol Guard)
+before✝ : Checked width
+memo✝ : Memo
+value✝ : Value Symbol Guard
+middle✝ : Checked width
+current✝ : Memo
+seed✝ : List Int
+paths✝ : List (List Int)
+tail✝ : Value Symbol Guard
+later✝ : Checked width
+saved✝ : Memo
+result✝ : Value Symbol Guard
+after✝ : Checked width
+inventory✝ : Inventory
+memos✝ nextMemos✝ lastMemos✝ : Memos
+nextInventory✝ : Inventory
+operand✝ : Operand path✝ values✝ before✝ memo✝ value✝ middle✝ current✝
+rest✝ : Fold values✝ seed✝ paths✝ middle✝ current✝ tail✝ later✝ saved✝
+step✝ : SourceCurrentAllocatedTargetQuery.Step value✝ tail✝ later✝ result✝ after✝
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory✝ path✝ values✝ before✝ memo✝ value✝ middle✝
+    current✝ memos✝ nextMemos✝
+remaining : FoldReads formulas solver rest✝ nextMemos✝ lastMemos✝
+query :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver nextInventory✝ value✝ tail✝ later✝ result✝ after✝ lastMemos✝
+ih :
+  Ready middle✝ →
+    Values middle✝.native.machine.heap values✝ →
+      PhysicalStored middle✝.native.machine.heap current✝ →
+        MergeStored current✝ →
+          NativeStored middle✝.native →
+            ∀ (limits : Limits),
+              Children limits values✝ →
+                Ready later✝ ∧
+                  Effects (physical middle✝) (physical later✝) ∧
+                    PhysicalStored later✝.native.machine.heap saved✝ ∧
+                      MergeStored saved✝ ∧
+                        NativeStored later✝.native ∧
+                          Available later✝.native.machine.heap tail✝ ∧ Node (foldLimit limits paths✝.length) tail✝
+ready : Ready before✝
+available : Values before✝.native.machine.heap values✝
+physicalStored : PhysicalStored before✝.native.machine.heap memo✝
+merged : MergeStored memo✝
+native : NativeStored before✝.native
+limits : Limits
+profile : Children limits values✝
+head : MergeStored current✝ ∧ NativeStored middle✝.native ∧ Node limits value✝
+tail :
+  Ready later✝ ∧
+    Effects (physical middle✝) (physical later✝) ∧
+      PhysicalStored later✝.native.machine.heap saved✝ ∧
+        MergeStored saved✝ ∧
+          NativeStored later✝.native ∧
+            Available later✝.native.machine.heap tail✝ ∧ Node (foldLimit limits paths✝.length) tail✝
+⊢ Limits
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardTarget.lean:98:29: error: don't know how to synthesize placeholder for argument `count`
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+memos final : Memos
+actual : Fold values seed paths before memo result after saved
+path✝ : List Int
+values✝ : List (Value Symbol Guard)
+before✝ : Checked width
+memo✝ : Memo
+value✝ : Value Symbol Guard
+middle✝ : Checked width
+current✝ : Memo
+seed✝ : List Int
+paths✝ : List (List Int)
+tail✝ : Value Symbol Guard
+later✝ : Checked width
+saved✝ : Memo
+result✝ : Value Symbol Guard
+after✝ : Checked width
+inventory✝ : Inventory
+memos✝ nextMemos✝ lastMemos✝ : Memos
+nextInventory✝ : Inventory
+operand✝ : Operand path✝ values✝ before✝ memo✝ value✝ middle✝ current✝
+rest✝ : Fold values✝ seed✝ paths✝ middle✝ current✝ tail✝ later✝ saved✝
+step✝ : SourceCurrentAllocatedTargetQuery.Step value✝ tail✝ later✝ result✝ after✝
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory✝ path✝ values✝ before✝ memo✝ value✝ middle✝
+    current✝ memos✝ nextMemos✝
+remaining : FoldReads formulas solver rest✝ nextMemos✝ lastMemos✝
+query :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver nextInventory✝ value✝ tail✝ later✝ result✝ after✝ lastMemos✝
+ih :
+  Ready middle✝ →
+    Values middle✝.native.machine.heap values✝ →
+      PhysicalStored middle✝.native.machine.heap current✝ →
+        MergeStored current✝ →
+          NativeStored middle✝.native →
+            ∀ (limits : Limits),
+              Children limits values✝ →
+                Ready later✝ ∧
+                  Effects (physical middle✝) (physical later✝) ∧
+                    PhysicalStored later✝.native.machine.heap saved✝ ∧
+                      MergeStored saved✝ ∧
+                        NativeStored later✝.native ∧
+                          Available later✝.native.machine.heap tail✝ ∧ Node (foldLimit limits paths✝.length) tail✝
+ready : Ready before✝
+available : Values before✝.native.machine.heap values✝
+physicalStored : PhysicalStored before✝.native.machine.heap memo✝
+merged : MergeStored memo✝
+native : NativeStored before✝.native
+limits : Limits
+profile : Children limits values✝
+head : MergeStored current✝ ∧ NativeStored middle✝.native ∧ Node limits value✝
+tail :
+  Ready later✝ ∧
+    Effects (physical middle✝) (physical later✝) ∧
+      PhysicalStored later✝.native.machine.heap saved✝ ∧
+        MergeStored saved✝ ∧
+          NativeStored later✝.native ∧
+            Available later✝.native.machine.heap tail✝ ∧ Node (foldLimit limits paths✝.length) tail✝
+⊢ Nat
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryGuardTarget.lean:97:11: error: failed to infer `have` declaration type

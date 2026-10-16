@@ -1,0 +1,183 @@
+'MicroCFTA.GuardFoundationChecks.computed_conjoin' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.GuardFoundationChecks.computed_conjoin : ∀ {Formula : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard Formula)]
+  (le : MicroCFTA.SourceGuards.Guard Formula → MicroCFTA.SourceGuards.Guard Formula → Bool)
+  (first second : MicroCFTA.SourceSymbolicIndex.Constraint Formula),
+  have common :=
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint Formula first)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint Formula second));
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds
+    (@Prod.fst.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget common))
+    (@Prod.snd.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget common))
+    (@MicroCFTA.SourceCompactGuards.sourceEqualities Formula
+      (@MicroCFTA.SourceEqualityConstraintConstructors.conjoin Formula inst le first second))
+'MicroCFTA.GuardFoundationChecks.effective_order' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.GuardFoundationChecks.effective_order : ∀
+  (first second : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  And
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le first
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join first second)))
+    (And
+      (@LE.le.{0} Nat instLENat
+        (@Prod.fst.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget first))
+        (@Prod.fst.{0, 0} Nat Nat
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join first second)))))
+      (@LE.le.{0} Nat instLENat
+        (@Prod.snd.{0, 0} Nat Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget first))
+        (@Prod.snd.{0, 0} Nat Nat
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.effectiveBudget
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join first second))))))
+'MicroCFTA.GuardFoundationChecks.nested_initial' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.GuardFoundationChecks.nested_initial : ∀ {Symbol Formula : Type}
+  (values :
+    List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint Formula) values →
+    ∀ (root : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+      @Membership.mem.{0, 0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+          (List.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+          (@List.instMembership.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+          values root →
+        ∀
+          (outer :
+            MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+          @Membership.mem.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+              (@List.instMembership.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                root)
+              outer →
+            ∀
+              (child :
+                MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+              @Membership.mem.{0, 0}
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                  (@List.instMembership.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) outer)
+                  child →
+                ∀
+                  (inner :
+                    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+                  @Membership.mem.{0, 0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                      (@List.instMembership.{0}
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula) child)
+                      inner →
+                    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula
+                      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.childrenLimits Symbol Formula
+                        values)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                        (@MicroCFTA.Cache.Interned.key
+                          (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint Formula) inner)))
+'MicroCFTA.GuardFoundationChecks.native_literal_edge' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.GuardFoundationChecks.native_literal_edge : ∀ {Symbol Formula : Type}
+  (le : MicroCFTA.SourceGuards.Guard Formula → MicroCFTA.SourceGuards.Guard Formula → Bool)
+  (first second :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (common : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge Symbol Formula common first →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge Symbol Formula common second →
+      ∀ (identity : Nat),
+        have key :=
+          @MicroCFTA.InternedConstructorTemplates.EdgeKey.mk Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (@MicroCFTA.Cache.Interned.key
+                (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) first)))
+            (@List.map.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              MicroCFTA.InternedBinderProtocol.NodeRef
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula) first))
+            (@MicroCFTA.SourceEqualityConstraintConstructors.conjoin Formula
+              (fun a b => Classical.propDecidable (@Eq.{1} (MicroCFTA.SourceGuards.Guard Formula) a b)) le
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@MicroCFTA.Cache.Interned.key
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) first)))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+                (@MicroCFTA.Cache.Interned.key
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) second))));
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge Symbol Formula
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step common)
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            (@MicroCFTA.Cache.Interned.mk
+              (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              identity key)
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) first))
+'MicroCFTA.GuardFoundationChecks.top_sentinel' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.GuardFoundationChecks.top_sentinel : ∀ {Symbol Formula : Type} (symbol : Symbol) (identity : Nat)
+  (common : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  have key :=
+    @MicroCFTA.InternedConstructorTemplates.EdgeKey.mk Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) symbol
+      (@List.cons.{0} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeRef))
+      (@MicroCFTA.SourceEqualityConstraintConstructors.top Formula);
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge Symbol Formula common
+    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      (@MicroCFTA.Cache.Interned.mk
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+        identity key)
+      (@List.cons.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+        (@List.nil.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))))
+'MicroCFTA.GuardFoundationChecks.concrete_full_guard' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.GuardFoundationChecks.concrete_full_guard : And
+  (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node Unit Unit
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.limits Unit Unit
+      MicroCFTA.GuardFoundationChecks.literalNode)
+    MicroCFTA.GuardFoundationChecks.literalNode)
+  (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Unit
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.limits Unit Unit
+      MicroCFTA.GuardFoundationChecks.literalNode)
+    MicroCFTA.GuardFoundationChecks.completeGuard)

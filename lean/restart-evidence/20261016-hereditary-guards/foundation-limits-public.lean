@@ -1,0 +1,84 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.Le
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.zero
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.zero
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_refl
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_refl
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_trans
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_trans
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.zero_le
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.zero_le
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_join_left
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_join_left
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_join_right
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.le_join_right
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join_le
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join_le
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step_ge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step_ge
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_le_step
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_le_step
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.wordCount_depth_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.wordCount_depth_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.normalizedDepth_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.normalizedDepth_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.normalizedOccurrences_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.normalizedOccurrences_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.positiveBudget_depth_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.positiveBudget_depth_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.join_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.step_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.effective_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.effective_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.bounds_mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.bounds_mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.top_bounds
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.top_bounds
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_step
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.conjoin_step
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint_bounds
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLimits.of_constraint_bounds

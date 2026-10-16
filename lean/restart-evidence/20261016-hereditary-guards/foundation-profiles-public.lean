@@ -1,0 +1,120 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.empty
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.empty
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.ordinary
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.ordinary
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.nil
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.nil
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.cons
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.cons
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.mk
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.mk
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.nil
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.nil
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.cons
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.cons
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.member
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.member
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.member
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.member
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.rows_of_members
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.rows_of_members
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.children_of_members
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.children_of_members
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.nodeEdges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.nodeEdges
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.guard
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.guard
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.child
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.child
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node.domain
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Rows.domain
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge.domain
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children.domain
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.limits
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.limits
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.rowsLimits
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.rowsLimits
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.edgeLimits
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.edgeLimits
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.childrenLimits
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.childrenLimits
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.node_self
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.node_self
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.rows_self
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.rows_self
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.edge_self
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.edge_self
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.children_self
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.children_self
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.node_of_root
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.node_of_root
