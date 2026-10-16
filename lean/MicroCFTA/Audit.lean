@@ -2024,6 +2024,7 @@ import MicroCFTA.SourceCurrentAllocatedConjunctionWorker
 import MicroCFTA.SourceCurrentAllocatedConjunctionWorkerActual
 import MicroCFTA.SourceCurrentAllocatedSeededWorkerActual
 import MicroCFTA.SourceCurrentAllocatedScanWorkerActual
+import MicroCFTA.SourceCurrentAllocatedLocalWorkerActual
 /-!
 # Proof dependency audit
 
