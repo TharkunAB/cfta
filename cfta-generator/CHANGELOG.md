@@ -197,7 +197,9 @@ tree automata of `cfta`, with QuickCheck integration.
   generator of each atomic field type. `fieldAtoms` gives fields their own
   generators through the node view, with `drawnFrom` on a field that a node
   pattern binds, so two fields of one type can have two pools
-  (`FieldAtomMismatch` and `FieldAtomTerm` for a pool that does not fit). A
+  (`FieldAtomMismatch` and `FieldAtomTerm` for a pool that does not fit, and
+  `FieldAtomOnDatatype` for a field of the datatype itself, which the
+  invariant must check at each node). A
   contract conjunct about one atomic
   field becomes a condition on that field. A contract or a measure that reads
   a field whose type has no atom and no measure is `UnmeasuredField`. The

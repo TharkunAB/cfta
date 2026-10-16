@@ -146,6 +146,11 @@ data DeriveLTAError
       name.
       -}
       FieldAtomTerm !String
+    | {- | A field atom is for a field of the datatype itself. The invariant
+      holds at each node, so the derivation must build such a field. The
+      fields are the constructor name and the position of the field.
+      -}
+      FieldAtomOnDatatype !String !Int
     deriving (Eq, Show)
 
 {- | Generators for atomic fields: by the type of the field ('atom'), and by
@@ -445,6 +450,11 @@ derivation (Atoms atoms fieldMap problems) named = do
          , take 1 (drop position (map fieldType (constructorFields constructor))) /= [typ]
          ] of
         (constructor, position, typ) : _ -> Left $ FieldAtomMismatch (constructorName constructor) position typ
+        [] -> pure ()
+    -- A pool for a field of the datatype would give subterms that the
+    -- invariant does not check, so such a field cannot have a field atom.
+    case [(constructor, position) | ((constructor, position), (typ, _)) <- Map.toList fieldMap, typ == root] of
+        (constructor, position) : _ -> Left $ FieldAtomOnDatatype (constructorName constructor) position
         [] -> pure ()
     -- An atomic type needs an atom where a field of that type has no field
     -- atom, and where it is the datatype itself.
