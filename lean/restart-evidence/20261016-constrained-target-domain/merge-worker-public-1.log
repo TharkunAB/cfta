@@ -1,0 +1,61 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker.verified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker.verified : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool} {workFuel selectionFuel : Nat}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear workFuel selectionFuel input before memo =
+      MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done output after saved →
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+      MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.heap memo →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+          MicroCFTA.InternedProbeProvenance.Available before.heap input →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+              MicroCFTA.SourceCurrentAllocatedMergeGraph.Call clear input before memo output after saved ∧
+                MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects before after ∧
+                  MicroCFTA.SourceCurrentMemoMergeEffects.Stored after.heap saved ∧
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored saved ∧
+                      MicroCFTA.InternedProbeProvenance.Available after.heap output ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node output
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker.finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker.finite : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.heap memo →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+        MicroCFTA.InternedProbeProvenance.Available before.heap input →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+            ∃ workFuel selectionFuel output after saved,
+              MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear workFuel selectionFuel input before memo =
+                  MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done output after saved ∧
+                (∀ (largerWork largerSelection : Nat),
+                    workFuel ≤ largerWork →
+                      selectionFuel ≤ largerSelection →
+                        MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear largerWork largerSelection input before
+                            memo =
+                          MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done output after saved) ∧
+                  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects before after ∧
+                    MicroCFTA.SourceCurrentMemoMergeEffects.Stored after.heap saved ∧
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored saved ∧
+                        MicroCFTA.InternedProbeProvenance.Available after.heap output ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node output

@@ -1,0 +1,52 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.empty_stored' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.empty_stored : ∀ {Symbol Guard : Type},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored MicroCFTA.SourceCurrentMemoMergeGraph.empty
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.remember_stored' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.remember_stored : ∀ {Symbol Guard : Type}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+    ∀ (input candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node candidate) →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored
+          (MicroCFTA.SourceCurrentMemoMergeGraph.remember memo input candidate)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.hit_domain' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.hit_domain : ∀ {Symbol Guard : Type} [DecidableEq Symbol]
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady heap →
+    MicroCFTA.InternedProbeProvenance.Available heap input →
+      MicroCFTA.SourceCurrentMemoMergeEffects.Stored heap memo →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+            memo input.referenceOf = some entry →
+              entry.original = input ∧ MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node entry.result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.winner_original' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.winner_original : ∀ {Symbol Guard : Type} [DecidableEq Symbol]
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  (candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady heap →
+    MicroCFTA.InternedProbeProvenance.Available heap input →
+      MicroCFTA.SourceCurrentMemoMergeEffects.Stored heap memo →
+        (MicroCFTA.SourceCurrentMemoMergeGraph.winner memo input candidate).original = input
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.winner_domain' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.winner_domain : ∀ {Symbol Guard : Type} [DecidableEq Symbol]
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard}
+  {input candidate : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady heap →
+    MicroCFTA.InternedProbeProvenance.Available heap input →
+      MicroCFTA.SourceCurrentMemoMergeEffects.Stored heap memo →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node candidate →
+              (MicroCFTA.SourceCurrentMemoMergeGraph.winner memo input candidate).original = input ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node
+                  (MicroCFTA.SourceCurrentMemoMergeGraph.winner memo input candidate).result

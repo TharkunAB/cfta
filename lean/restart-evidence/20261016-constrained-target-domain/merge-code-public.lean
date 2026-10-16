@@ -1,0 +1,25 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode
+
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.ValuePost
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.ValuePost
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.EdgePost
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.EdgePost
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.Certified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.Certified
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.bind_certified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.bind_certified
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.value_grows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.value_grows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.edge_grows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.edge_grows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.map_certified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.map_certified
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.root_certified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.root_certified
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.body_certified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.body_certified

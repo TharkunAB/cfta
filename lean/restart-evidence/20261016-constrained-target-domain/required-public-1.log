@@ -1,0 +1,98 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard →
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.head' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.head : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value →
+          And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard value result)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.node' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value →
+          And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard value result)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.children' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.children : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+          And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after results)
+                (And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard results)
+                  (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) values results))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.rows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.rows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before edges →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges →
+          And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedNestedProvenance.Edges Symbol Guard after results)
+                (And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard results)
+                  (@Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    fun (selected : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) =>
+                    And
+                      (@List.Sublist.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) selected edges)
+                      (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard) selected
+                        results)))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.requireAll_done' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.requireAll_done : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (fuel readFuel : Nat)
+  (paths : List.{0} (List.{0} Int))
+  (values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @Eq.{1}
+      (MicroCFTA.SourceEqualityRequiredWorker.Result Symbol Guard
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      (@MicroCFTA.SourceEqualityRequiredExecution.requireAll Symbol Guard inst fuel readFuel paths values before)
+      (@MicroCFTA.SourceEqualityRequiredWorker.Result.done Symbol Guard
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results after) →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+          And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after results)
+                (And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard results)
+                  (@MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) values results))))

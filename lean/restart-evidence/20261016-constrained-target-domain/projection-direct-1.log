@@ -1,0 +1,30 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryProjection.lean:113:63: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+rootCase :
+  ∀ {value : Value Symbol Guard} {state : InternedConstructorTemplates.State Symbol Guard},
+    NodeResult value state value state
+emptyCase : ∀ {state : InternedConstructorTemplates.State Symbol Guard}, NodeResult Value.empty state Value.empty state
+ordinaryCase :
+  ∀ {path : List Int} {index : Int} {edges : List (EdgeValue Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {values : List (Value Symbol Guard)}
+    {middle : InternedConstructorTemplates.State Symbol Guard} {result : Value Symbol Guard}
+    {after : InternedConstructorTemplates.State Symbol Guard} {entry : Interned InternedBinderProtocol.NodeKey}
+    {depth : Nat} {free : List InternedBinderProtocol.Reference},
+    ProjectRows path index edges before values middle →
+      SourceEqualityProjectionUnion.Union values middle result after →
+        RowsResult edges before values middle → NodeResult (Value.node entry edges depth free) before result after
+recursiveCase :
+  ∀ {original : Value Symbol Guard} {before : InternedConstructorTemplates.State Symbol Guard}
+    {exposed : Value Symbol Guard} {middle : InternedConstructorTemplates.State Symbol Guard} {path : List Int}
+    {index : Int} {result : Value Symbol Guard} {after : InternedConstructorTemplates.State Symbol Guard},
+    SourceEqualityRequiredGraph.Recursive original →
+      SourceEqualityRequiredHead.Head original before exposed middle →
+        Project (index :: path) exposed middle result after →
+          NodeResult exposed middle result after → NodeResult original before result after
+state : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady state
+a✝¹ : Edges state []
+a✝ : DRows []
+⊢ Values state [] ∧ DChildren []

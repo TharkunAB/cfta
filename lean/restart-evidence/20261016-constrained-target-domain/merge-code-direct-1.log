@@ -1,0 +1,69 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeCode.lean:54:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.value_grows`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeCode.lean:59:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.edge_grows`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeCode.lean:89:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.0.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCode.values_closed`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeCode.lean:133:18: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    Certified clear
+      (if _a then Code.work (makeUnion values)
+      else (Code.work (MergedOrdinaryHeight.ordinaryUnion values)).bind Code.request)
+      before ValuePost
+Error: Application type mismatch: The argument
+  instDecidableEqBool false true
+has type
+  Decidable (false = true)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite (Code Symbol Guard (Value Symbol Guard)) _a (instDecidableEqBool false true)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+inputs : List (Value Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+valid✝ : ∀ (value : Value Symbol Guard), value ∈ inputs → ValuePost before value
+values : List (Value Symbol Guard)
+valid : ∀ (value : Value Symbol Guard), value ∈ values → ValuePost before value
+boundary : values.any MergedOrdinaryHeight.recursiveBoundary = false
+⊢ Certified clear
+    (if false = true then Code.work (makeUnion values)
+    else (Code.work (MergedOrdinaryHeight.ordinaryUnion values)).bind Code.request)
+    before ValuePost
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeCode.lean:155:93: error: Application type mismatch: The argument
+  done
+has type
+  SourceMergedSelection.select clear fuel inputs before = MergedSourceComparison.Result.done values after
+but is expected to have type
+  MergedSourceSelection.select clear fuel inputs before = MergedSourceComparison.Result.done values after
+in the application
+  MergedSourceSelection.select_subset clear fuel inputs before values after done
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeCode.lean:247:14: error: Invalid `⟨...⟩` notation: The expected type
+  Certified clear (body top (Value.node entry edges depth free)) before ValuePost
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor

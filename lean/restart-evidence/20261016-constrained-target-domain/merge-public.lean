@@ -1,0 +1,17 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge
+
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.run_domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.run_domain
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.call_domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.call_domain
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.allocated
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.allocated
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.finite
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.merge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMerge.merge

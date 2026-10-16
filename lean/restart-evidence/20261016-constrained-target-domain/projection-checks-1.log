@@ -1,0 +1,327 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.read_domain' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.read_domain : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst value before edges after →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value →
+      And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges)
+        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) after before)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.readAll_domain' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.readAll_domain : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceEqualityProjectionUnion.ReadAll Symbol Guard inst values before edges after →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+      And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges)
+        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) after before)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.union_domain' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.union_domain : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionUnion.Union Symbol Guard inst values before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.project' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.project : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path : List.{0} Int}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value →
+          And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard result)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.rows' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.rows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path : List.{0} Int}
+  {index : Int} {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Symbol Guard inst path index edges before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before edges →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges →
+          And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard after results)
+                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard results)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.forest' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryProjection.forest : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path : List.{0} Int}
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst path values before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+          And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+            (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard result)))
+lean/restart-evidence/20261016-constrained-target-domain/projection-checks.lean:33:8: warning: Variable name `trace` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _trace
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-constrained-target-domain/projection-checks.lean:55:17: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq.{1}
+    (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/restart-evidence/20261016-constrained-target-domain/projection-checks.lean:58:14: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq.{1}
+    (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/restart-evidence/20261016-constrained-target-domain/projection-checks.lean:62:76: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq.{1}
+    (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/restart-evidence/20261016-constrained-target-domain/projection-checks.lean:62:63: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq.{1}
+    (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/restart-evidence/20261016-constrained-target-domain/projection-checks.lean:64:29: error: Application type mismatch: The argument
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children.cons ?m.254 ?m.255
+    (@MicroCFTA.InternedConstructorTemplates.Value.empty ?m.254 ?m.255)
+    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value ?m.254 ?m.255)
+      (@MicroCFTA.InternedConstructorTemplates.Value.empty ?m.254 ?m.255)
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value ?m.254 ?m.255)))
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node.empty ?m.254 ?m.255)
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children.cons ?m.254 ?m.255
+      (@MicroCFTA.InternedConstructorTemplates.Value.empty ?m.254 ?m.255)
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value ?m.254 ?m.255))
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node.empty ?m.254 ?m.255)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children.nil ?m.254 ?m.255))
+has type
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children ?m.254 ?m.255
+    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value ?m.254 ?m.255)
+      (@MicroCFTA.InternedConstructorTemplates.Value.empty ?m.254 ?m.255)
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value ?m.254 ?m.255)
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty ?m.254 ?m.255)
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value ?m.254 ?m.255))))
+but is expected to have type
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol
+    (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint Formula) ?m.241)
+in the application
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows.cons Symbol
+    (MicroCFTA.SourceSymbolicIndex.Constraint Formula) ?m.240 ?m.241
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children.cons ?m.254 ?m.255
+      (@MicroCFTA.InternedConstructorTemplates.Value.empty ?m.254 ?m.255)
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value ?m.254 ?m.255)
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty ?m.254 ?m.255)
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value ?m.254 ?m.255)))
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node.empty ?m.254 ?m.255)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children.cons ?m.254 ?m.255
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty ?m.254 ?m.255)
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value ?m.254 ?m.255))
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node.empty ?m.254 ?m.255)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children.nil ?m.254 ?m.255)))
+lean/restart-evidence/20261016-constrained-target-domain/projection-checks.lean:62:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq.{1}
+    (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+'FiniteOrdinaryProjectionChecks.ordinary_read' depends on axioms: [propext, Quot.sound.{u}]
+@FiniteOrdinaryProjectionChecks.ordinary_read : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges →
+    And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges)
+      (@Exists.{0}
+        (@MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) state edges state)
+        fun
+          (trace :
+            @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst
+              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) state edges
+              state) =>
+        @Eq.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) state state)
+'FiniteOrdinaryProjectionChecks.negative_forest' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@FiniteOrdinaryProjectionChecks.negative_forest : ∀ {Symbol Guard : Type}
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard state →
+    @MicroCFTA.InternedNestedProvenance.Values Symbol Guard state values →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+        And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard state state)
+          (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard state)
+            (And
+              (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard state
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))))
+'FiniteOrdinaryProjectionChecks.full_guard_root' depends on axioms: [propext, sorryAx.{u}, Quot.sound.{u}]
+@FiniteOrdinaryProjectionChecks.full_guard_root : ∀ {Symbol Formula : Type} (symbol : Symbol)
+  (guard : MicroCFTA.SourceGuards.Guard Formula)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+      state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) state
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+          (@MicroCFTA.Cache.Interned.mk MicroCFTA.InternedBinderProtocol.NodeKey
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (MicroCFTA.InternedBinderProtocol.NodeKey.node
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@List.nil.{0} Nat))))
+          (@List.cons.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (@MicroCFTA.Cache.Interned.mk
+                (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeKey.mk Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula) symbol
+                  (@List.cons.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                    MicroCFTA.InternedBinderProtocol.NodeRef.empty
+                    (@List.cons.{0} MicroCFTA.InternedBinderProtocol.NodeRef
+                      MicroCFTA.InternedBinderProtocol.NodeRef.empty
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeRef)))
+                  (@MicroCFTA.SourceSymbolicIndex.Constraint.mk Formula
+                    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@List.cons.{0} (List.{0} MicroCFTA.SourceGuards.Path)
+                        (@List.cons.{0} MicroCFTA.SourceGuards.Path
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.nil.{0} Nat))
+                          (@List.cons.{0} MicroCFTA.SourceGuards.Path
+                            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@List.nil.{0} Nat))
+                            (@List.nil.{0} MicroCFTA.SourceGuards.Path)))
+                        (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+                    guard)))
+              (@List.cons.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (@List.cons.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                  (@List.nil.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))))
+            (@List.nil.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)) →
+      have edge :=
+        @MicroCFTA.InternedConstructorTemplates.EdgeValue.mk Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+          (@MicroCFTA.Cache.Interned.mk
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.mk Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula) symbol
+              (@List.cons.{0} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+                (@List.cons.{0} MicroCFTA.InternedBinderProtocol.NodeRef MicroCFTA.InternedBinderProtocol.NodeRef.empty
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.NodeRef)))
+              (@MicroCFTA.SourceSymbolicIndex.Constraint.mk Formula
+                (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                  (@List.cons.{0} (List.{0} MicroCFTA.SourceGuards.Path)
+                    (@List.cons.{0} MicroCFTA.SourceGuards.Path
+                      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@List.nil.{0} Nat))
+                      (@List.cons.{0} MicroCFTA.SourceGuards.Path
+                        (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                          (@List.nil.{0} Nat))
+                        (@List.nil.{0} MicroCFTA.SourceGuards.Path)))
+                    (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+                guard)))
+          (@List.cons.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            (@List.cons.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (@List.nil.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))));
+      have built :=
+        sorryAx.{1}
+          (Unit →
+            Prod.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+          Bool.true
+          (@Function.const.{1, 1} Unit Lean.Name Unit.unit
+            `lean.restart-evidence.20261016-constrained-target-domain.projection-checks.55.17.55.44.17.44._sorry._@.lean.restart-evidence.20261016-constrained-target-domain.projection-checks.1765624505._hygCtx._hyg.156);
+      And
+        (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula) state
+          (@Prod.snd.{0, 0}
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+            built))
+        (And
+          (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+            (@Prod.snd.{0, 0}
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+              built))
+          (And
+            (@MicroCFTA.InternedProbeProvenance.Available Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (@Prod.snd.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                built)
+              (@Prod.fst.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                built))
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+              (@Prod.fst.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                (MicroCFTA.InternedConstructorTemplates.State Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+                built))))
+'FiniteOrdinaryProjectionChecks.serial' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@FiniteOrdinaryProjectionChecks.serial : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {firstPath secondPath : List.{0} Int} {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {result output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst firstPath values before result middle →
+    @MicroCFTA.SourceEqualityProjectionGraph.Forest Symbol Guard inst secondPath
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+        middle output after →
+      @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+            And (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+              (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after output)
+                  (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard output)))

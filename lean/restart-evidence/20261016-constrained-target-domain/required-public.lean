@@ -1,0 +1,19 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.head
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.head
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.node
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.children
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.requireAll_done
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.requireAll_done

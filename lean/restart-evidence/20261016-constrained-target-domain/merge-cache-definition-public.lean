@@ -1,0 +1,7 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored

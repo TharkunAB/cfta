@@ -1,0 +1,74 @@
+'MicroCFTA.FiniteOrdinaryMergeWorkerReview.serial_supplied_calls' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.FiniteOrdinaryMergeWorkerReview.serial_supplied_calls : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) (w₁ s₁ w₂ s₂ : Nat)
+  (input first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before middle after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State)
+  (memo current saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.heap memo →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+        MicroCFTA.InternedProbeProvenance.Available before.heap input →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+            MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear w₁ s₁ input before memo =
+                MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done first middle current →
+              MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear w₂ s₂ first middle current =
+                  MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done second after saved →
+                MicroCFTA.SourceCurrentAllocatedMergeGraph.Call clear input before memo first middle current ∧
+                  MicroCFTA.SourceCurrentAllocatedMergeGraph.Call clear first middle current second after saved ∧
+                    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects before after ∧
+                      MicroCFTA.SourceCurrentMemoMergeEffects.Stored after.heap saved ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored saved ∧
+                          MicroCFTA.InternedProbeProvenance.Available after.heap first ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node first ∧
+                              MicroCFTA.InternedProbeProvenance.Available after.heap second ∧
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node second
+'MicroCFTA.FiniteOrdinaryMergeWorkerReview.finite_then_generated' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.FiniteOrdinaryMergeWorkerReview.finite_then_generated : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.heap memo →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+        MicroCFTA.InternedProbeProvenance.Available before.heap input →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node input →
+            ∃ w₁ s₁ first middle current w₂ s₂ second after saved,
+              MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear w₁ s₁ input before memo =
+                  MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done first middle current ∧
+                MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear w₂ s₂ first middle current =
+                    MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done second after saved ∧
+                  (∀ (w s : Nat),
+                      w₁ ≤ w →
+                        s₁ ≤ s →
+                          MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear w s input before memo =
+                            MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done first middle current) ∧
+                    (∀ (w s : Nat),
+                        w₂ ≤ w →
+                          s₂ ≤ s →
+                            MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear w s first middle current =
+                              MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done second after saved) ∧
+                      MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects before after ∧
+                        MicroCFTA.SourceCurrentMemoMergeEffects.Stored after.heap saved ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored saved ∧
+                            MicroCFTA.InternedProbeProvenance.Available after.heap first ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node first ∧
+                                MicroCFTA.InternedProbeProvenance.Available after.heap second ∧
+                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node second

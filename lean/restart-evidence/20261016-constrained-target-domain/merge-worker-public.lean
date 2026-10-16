@@ -1,0 +1,6 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker.verified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker.finite

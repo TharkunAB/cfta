@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.Stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.Stored
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.initial_stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.initial_stored
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.advance_stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.advance_stored
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.advance_heap_stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.advance_heap_stored
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.store_stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.store_stored
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.force
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.force
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.force_finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.force_finite
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.leaf
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.leaf
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.leaf_finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.leaf_finite
