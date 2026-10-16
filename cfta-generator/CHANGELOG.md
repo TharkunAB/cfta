@@ -198,19 +198,26 @@ tree automata of `cfta`, with QuickCheck integration.
   constructor a type from the types of its fields. `subterm` is a field in
   the environment of the node with some binders in front, `value` is a field
   with one value, and `variable` reads the environment by de Bruijn index.
-  `fromTypingRules` builds the automaton whose states are an environment, a
-  type, and the nesting that remains. It gives the closed terms of some types
-  up to a bound on the nesting, as a `Gen Symbol a` with the labels and the
-  ranks of `fromDatatype`. It reports a name that no constructor has
-  (`UnknownConstructors`) and a rule that does not fit the fields of its
-  constructor (`FieldMismatch`). A field that holds a subterm has the type of
-  the datatype, so a family of mutually recursive types is not a language
-  here. A fixed value in a field of the datatype gives `FieldMismatch`.
+  A `Typing` holds the bound (`Nesting` or `Binders`), the inputs, the root
+  types, and the rules (`typingBound`, `typingInputs`, `typingRoots`,
+  `typingRules`). `typingAutomaton` builds the explicit automaton over
+  `Constructor` whose states (`TypingState`) are an environment, a type, and
+  the nesting that remains, so that a caller can intersect, annotate,
+  restrict, or exclude it as any `FTA`. `fromConstructorAutomaton` reads an
+  automaton over the constructors of a datatype as a `Gen Symbol a` with the
+  labels and the ranks of `fromDatatype`, and `fromTypingRules` is the two in
+  one: the closed terms of the root types up to a bound on the nesting. It
+  reports a name that no constructor has (`UnknownConstructors`), a rule that
+  does not fit the fields of its constructor (`FieldMismatch`), and inputs
+  or `Binders`, which are not implemented yet (`NotImplemented`). A field
+  that holds a subterm has the type of the datatype, so a family of mutually
+  recursive types is not a language here.
+  A fixed value in a field of the datatype gives `FieldMismatch`.
   Recursive fields must use `subterm` to check their environment and nesting.
-  The ranks order the constructors of each type that the datatype reaches in
+  The ranks order the constructors of each type in the automaton in
   declaration order, as `fromDatatype` does. Literals have no declared
-  position and follow the order of their labels.
-  The positions come only from the types in the typing rows, so a field of a
+  position and follow the order of their labels. The positions come only
+  from the types of the constructors of the automaton, so a field of a
   non-regular type that no rule uses does not stop the build.
 - `compile` folds the recipe of a generator once with the solver. It groups
   child languages by the observations a guard reads, decides each guard once
