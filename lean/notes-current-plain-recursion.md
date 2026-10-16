@@ -99,8 +99,12 @@ The plain Region is an intermediate domain. General nonempty own equality
 classes need their actual finite range checks and a progress argument
 that survives class edits, intersections, and constraint migration.
 The plain original/erased/sentinel Shape does not cover those edits.
-Read the next-general review in this evidence directory before choosing
-the next measure. Do not assume a finite inventory of future recursive
+Read `next-general-review.md` in this evidence directory before choosing
+the next measure. The first stage is constrained finite ordinary input:
+prove actual native domain closure and height no greater than each
+operand, with structural certificates for actual warm producers. Then
+compose class edits and a generalized parent certificate. General Mu
+constraint migration remains separate. Do not assume a finite inventory of future recursive
 keys, a successful future body, or the desired semantic answer.
 
 Unequal-length path classes and repeated-pass convergence remain open.
