@@ -34,9 +34,8 @@ ranks order the constructors of a node by arity, then in declaration order,
 as for 'Data.CFTA.Gen.fromDatatype'. This holds for the constructors of each
 type that the datatype reaches. A literal has no declared position, so the
 literals of one type follow the order of their labels. For numbers that are
-not negative and have at most nine digits, that is the numeric order, but it
-puts 'True' before 'False'. 'Data.CFTA.Gen.fromDatatype' orders literals as
-their domain lists them.
+not negative and have at most nine digits, that is the numeric order.
+'Data.CFTA.Gen.fromDatatype' orders literals as their domain lists them.
 
 Limits:
 
@@ -157,7 +156,7 @@ fromTypingRules (Depth bound) roots rules = do
         symbols = nubOrd [FTA.transitionSymbol transition | transitions <- Map.elems rows, transition <- transitions]
     pure $ case undecodableConstructor (null . decodeTerm @a) automaton of
         Just constructor -> Transparent $ Left $ UndecodableConstructor $ constructorName constructor
-        Nothing -> decode symbols <$> Flat.fromAutomaton order (Interned.fromRows Root (Map.map (map labelled) rows))
+        Nothing -> decode symbols <$> Flat.fromAutomaton (order symbols) (Interned.fromRows Root (Map.map (map labelled) rows))
   where
     declared = case describeType (Proxy @a) of
         AlgebraicType _ alternatives -> map fst alternatives
@@ -212,22 +211,24 @@ fromTypingRules (Depth bound) roots rules = do
     -- The key of 'Data.CFTA.Gen.fromDatatype': the declaration position of a
     -- constructor in its type, for each type that the datatype reaches, and
     -- the label text. A literal has no declared position.
-    positions =
-        Map.fromList
-            [ (Text.pack (constructorLabel constructor), position)
-            | alternatives <- reachable Set.empty [describeType (Proxy @a)]
-            , (position, (constructor, _)) <- zip [0 :: Int ..] alternatives
-            ]
-    order (Symbol label) = (Map.findWithDefault 0 label positions, label)
+    order symbols =
+        let needed = Set.fromList (map constructorType symbols)
+            positions =
+                Map.fromList
+                    [ (Text.pack (constructorLabel constructor), position)
+                    | alternatives <- reachable needed Set.empty [describeType (Proxy @a)]
+                    , (position, (constructor, _)) <- zip [0 :: Int ..] alternatives
+                    ]
+         in \(Symbol label) -> (Map.findWithDefault 0 label positions, label)
 
     -- The constructors of each algebraic type in the descriptions and their
-    -- fields. A recursive type has a cyclic description, so the walk keeps
-    -- the types that it saw.
-    reachable _ [] = []
-    reachable seen (AtomicType _ : pending) = reachable seen pending
-    reachable seen (AlgebraicType typ alternatives : pending)
-        | Set.member typ seen = reachable seen pending
-        | otherwise = alternatives : reachable (Set.insert typ seen) (concatMap snd alternatives <> pending)
+    -- fields. Read only types in the finite typing rows. An unused field
+    -- can have a non-regular description. Repeated types reuse their row.
+    reachable _ _ [] = []
+    reachable needed seen (AtomicType _ : pending) = reachable needed seen pending
+    reachable needed seen (AlgebraicType typ alternatives : pending)
+        | Set.notMember typ needed || Set.member typ seen = reachable needed seen pending
+        | otherwise = alternatives : reachable needed (Set.insert typ seen) (concatMap snd alternatives <> pending)
 
     -- A label is found by its hash, then by the identity of the symbol, as
     -- 'Data.CFTA.Gen.Internal.Automaton.datatypeDecoder' does.
