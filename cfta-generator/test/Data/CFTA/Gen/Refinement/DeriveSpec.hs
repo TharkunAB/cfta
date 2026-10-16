@@ -74,6 +74,16 @@ data ShortNode e = ShortNil | ShortCons e
     deriving stock (Generic)
     deriving anyclass (NodeView)
 
+-- | An integer with a sign.
+data Signed = Negative Integer | Positive Integer
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | A node view with the constructors of 'Signed' in the other order. Their shapes are the same.
+data SignedNode e = PositiveNode e | NegativeNode e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
 -- | A row of flags.
 data Flags = NoFlags | Flag Bool Flags
     deriving stock (Eq, Show, Generic)
@@ -533,6 +543,9 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         typed @Division (invariant @Division)
             `shouldBe` Right (formulas [("Divide", contract (\d -> 0 .<= d .&& d .<= 5 .&& d ./= (0 :: Expr)))])
         typed @Pair (invariant @Pair) `shouldBe` Right (formulas [("Pair", contract (\left right -> left .< (right :: Expr)))])
+    it "reports a node view whose constructors are in another order" $
+        void (deriveLTAFrom @Signed 0 (atom @Integer LTAGen.every) (Contracted (\_ -> true) :: Invariant SignedNode NoMeasures))
+            `shouldBe` Left (NodeMismatch "Negative" "the node view has PositiveNode in its place, a name that does not start with Negative")
     it "names a value of an enumeration with literal on values and on terms" $ do
         let atoms = atom @Bool (LTAGen.elements [False, True])
         compiled <- either (fail . show) LTAGen.compile (deriveLTA @Flags 3 atoms)

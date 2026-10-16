@@ -141,6 +141,7 @@ module Data.CFTA.Gen.Refinement.Derive (
 
 import Control.Monad (unless, when)
 import qualified Data.Kind as Kind
+import Data.List (isPrefixOf)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Proxy (Proxy (Proxy))
@@ -433,6 +434,12 @@ checkNodeView names rules = case nodeShape (Proxy @node) of
         sequence_
             [ checkConstructor (constructorName constructor) children kinds
             | ((constructor, children), (_, kinds)) <- zip constructors shape
+            ]
+        sequence_
+            [ Left $ NodeMismatch name ("the node view has " <> viewName <> " in its place, a name that does not start with " <> name)
+            | ((constructor, _), (viewName, _)) <- zip constructors shape
+            , let name = constructorName constructor
+            , not (name `isPrefixOf` viewName)
             ]
   where
     expected isChild
