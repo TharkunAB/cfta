@@ -1,5 +1,59 @@
 # Constrained languages, indexing, and distributions
 
+## Current checked target folds, historical slots, and leaf narrowing
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`8df6baa2`. Proof commits are `49ae70ae`, `5f547424`, and `94a5c1b1`.
+No Haskell implementation or test changes occur. The external Haskell fix
+registry remains first in root FINDINGS.md. Add each later fix there with
+its failure case, files, commit, checks, and upstream status.
+
+Seven additive modules construct the first-seeded target fold in the CURRENT
+checked state. Each actual query computes its next inventory at its literal
+entry heap. Projection, allocated merge, recursive tail, and checked native
+query retain source order, live equality operations, both native tables,
+domain cache, warm merge entries, and global receipts. Only selected path
+domains must be closed. Other original siblings can remain open.
+
+Class-specific target inclusion follows from class satisfaction. Shared slots
+retain historical target receipts independently of the current inventory.
+A hit returns the identical complete state and global bundle without a new
+range plan. A miss constructs the target once. The actual leaf then queries
+target/input at the force return and retains all slots across the computed
+next inventory. Its language narrows the input and preserves the selected
+subterm of an original class-satisfying forest. No future successful native
+call, final model, admission oracle, or result-language law is supplied.
+Initial legitimate warm invariants and reached machine checks remain explicit.
+
+The pinned full Audit passes 2349 jobs and 56708 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur. Public
+probes, integration kernels, and independent reviews pass. Evidence and
+frozen sources are in lean/restart-evidence/20261016-checked-target/.
+All 3864 starting files remain. All 2341 older non-Audit proof sources retain
+identical bytes. Sixteen frozen manifests, stashes, other worktree records,
+and the Haskell registry remain. Earlier unavailable external drafts are not
+claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-checked-targets.md and checked-class-edit-next.md in
+the evidence directory. Next port structural edits with a returned current
+inventory, then the compiled class and right-folded class pass. Same-arity
+source setChildren reuses raw internEdge and the original guard. Positional
+edits preserve child count. Each class captures the actual preceding tail
+and clears only its class-local slots. Final empty propagation, inherited
+constraints, and the general constrained outer caller remain open.
+
+The full goal still requires exact generation, count/rank inverses,
+probability laws, each optimization's stated semantics, and correspondence
+with the current Haskell. Broader frontend and runtime-family adapters and
+all separate Sized contracts stay active. The pure selection noConstraint
+CAF allocation and GHC forcing adapter remain open. Containers, publication,
+concurrency, identity lifetime, machine capacity, solver IO, random draws,
+callbacks, and codecs retain explicit boundaries. Preserve the optimized
+interned core and every older constructor and equality proof. No board posts
+or deployments. Push verified formalize checkpoints regularly. The full goal
+remains active; this checkpoint is progress.
+
 ## Current checked allocated merge and selected target operands
 
 Source main remains `8f85ddb6`. The preceding published checkpoint is
