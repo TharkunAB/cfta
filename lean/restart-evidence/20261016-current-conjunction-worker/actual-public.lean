@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentConjunctionRowsWorkerActual
+
+set_option pp.explicit true
+set_option pp.universes true
+
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.exposures_graph
+#check @MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.exposures_graph
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.projections_graph
+#check @MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.projections_graph
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.classes_graph
+#check @MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.classes_graph
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.requirements_graph
+#check @MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.requirements_graph
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.tuple_graph
+#check @MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.tuple_graph
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.tuples_graph
+#check @MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.tuples_graph
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.rows_graph
+#check @MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.rows_graph
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.rows_finite
+#check @MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.rows_finite
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.rows_verified
+#check @MicroCFTA.SourceCurrentConjunctionRowsWorkerActual.rows_verified

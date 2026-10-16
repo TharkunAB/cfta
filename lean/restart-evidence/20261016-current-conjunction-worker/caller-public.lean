@@ -1,0 +1,12 @@
+import MicroCFTA.SourceCurrentAllocatedConjunctionCaller
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option pp.fullNames true
+
+#check MicroCFTA.SourceCurrentAllocatedConjunctionCaller.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedConjunctionCaller.verified
+#check MicroCFTA.SourceCurrentAllocatedConjunctionCaller.actual
+#print axioms MicroCFTA.SourceCurrentAllocatedConjunctionCaller.actual
+#check MicroCFTA.SourceCurrentAllocatedConjunctionCaller.finite
+#print axioms MicroCFTA.SourceCurrentAllocatedConjunctionCaller.finite

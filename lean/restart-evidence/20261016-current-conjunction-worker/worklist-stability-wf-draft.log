@@ -1,0 +1,809 @@
+/tmp/mcfta-conjunction-stability-wf.lean:52:0: error: unsolved goals
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h largerP largerH : Nat
+final : Table Symbol Formula
+after : Physical Symbol Formula
+enoughP : p ≤ largerP
+enoughH : h ≤ largerH
+_x :
+  (budget : Nat) ×'
+    (table : Table Symbol Formula) ×'
+      (pending : List (List (Value Symbol Guard))) ×'
+        (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝⁴ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y _x →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+budget : Nat
+table✝ :
+  (table : Table Symbol Formula) ×'
+    (pending : List (List (Value Symbol Guard))) ×'
+      (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝³ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, table✝⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+table : Table Symbol Formula
+pending✝ :
+  (pending : List (List (Value Symbol Guard))) ×'
+    (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝² :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, pending✝⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+pending : List (List (Value Symbol Guard))
+before✝ : (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝¹ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, before✝⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+before : Physical Symbol Formula
+actual✝ : explore p h budget table pending before = Outcome.done final after
+a✝ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, ⟨before, actual✝⟩⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+nodes : List (Value Symbol Guard)
+rest : List (List (Value Symbol Guard))
+h✝³ : pending = nodes :: rest
+actual :
+  (match nodes :: rest with
+    | [] => Outcome.done table before
+    | nodes :: rest =>
+      if nodes.any SourceCurrentConjunctionRequirements.isEmpty = true then explore p h budget table rest before
+      else
+        if
+            SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table
+                nodes =
+              true then
+          explore p h budget table rest before
+        else
+          match SourceCurrentConjunctionRowsWorker.rows p h nodes before with
+          | SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle =>
+            explore p h (budget - 1) ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ rest)
+              middle
+          | SourceCurrentConjunctionRowsWorker.Outcome.failed fault after =>
+            Outcome.failed (Fault.rows fault table (nodes :: rest)) after) =
+    Outcome.done final after
+h✝² impossible : nodes.any SourceCurrentConjunctionRequirements.isEmpty = false
+h✝¹ skipped :
+  SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table nodes = false
+requirements : List (List (List (Value Symbol Guard)))
+middle : SourceCurrentConjunctionRowsWorker.Physical Symbol Formula
+h✝ rows :
+  SourceCurrentConjunctionRowsWorker.rows p h nodes before =
+    SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle
+stable :
+  SourceCurrentConjunctionRowsWorker.rows largerP largerH nodes before =
+    SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle
+⊢ Prod.Lex (fun a₁ a₂ => a₁ < a₂) (fun a₁ a₂ => a₁ < a₂) (budget - 1, (requirements.flatten ++ rest).length)
+    (budget, pending.length)
+
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h largerP largerH : Nat
+final : Table Symbol Formula
+after : Physical Symbol Formula
+enoughP : p ≤ largerP
+enoughH : h ≤ largerH
+_x :
+  (budget : Nat) ×'
+    (table : Table Symbol Formula) ×'
+      (pending : List (List (Value Symbol Guard))) ×'
+        (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝⁴ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y _x →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+budget : Nat
+table✝ :
+  (table : Table Symbol Formula) ×'
+    (pending : List (List (Value Symbol Guard))) ×'
+      (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝³ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, table✝⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+table : Table Symbol Formula
+pending✝ :
+  (pending : List (List (Value Symbol Guard))) ×'
+    (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝² :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, pending✝⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+pending : List (List (Value Symbol Guard))
+before✝ : (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝¹ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, before✝⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+before : Physical Symbol Formula
+actual✝ : explore p h budget table pending before = Outcome.done final after
+a✝ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, ⟨before, actual✝⟩⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+nodes : List (Value Symbol Guard)
+rest : List (List (Value Symbol Guard))
+h✝² : pending = nodes :: rest
+actual :
+  (match nodes :: rest with
+    | [] => Outcome.done table before
+    | nodes :: rest =>
+      if nodes.any SourceCurrentConjunctionRequirements.isEmpty = true then explore p h budget table rest before
+      else
+        if
+            SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table
+                nodes =
+              true then
+          explore p h budget table rest before
+        else
+          match SourceCurrentConjunctionRowsWorker.rows p h nodes before with
+          | SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle =>
+            explore p h (budget - 1) ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ rest)
+              middle
+          | SourceCurrentConjunctionRowsWorker.Outcome.failed fault after =>
+            Outcome.failed (Fault.rows fault table (nodes :: rest)) after) =
+    Outcome.done final after
+h✝¹ impossible : nodes.any SourceCurrentConjunctionRequirements.isEmpty = false
+h✝ skipped :
+  SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table nodes = true
+⊢ Prod.Lex (fun a₁ a₂ => a₁ < a₂) (fun a₁ a₂ => a₁ < a₂) (budget, rest.length) (budget, pending.length)
+
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h largerP largerH : Nat
+final : Table Symbol Formula
+after : Physical Symbol Formula
+enoughP : p ≤ largerP
+enoughH : h ≤ largerH
+_x :
+  (budget : Nat) ×'
+    (table : Table Symbol Formula) ×'
+      (pending : List (List (Value Symbol Guard))) ×'
+        (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝⁴ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y _x →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+budget : Nat
+table✝ :
+  (table : Table Symbol Formula) ×'
+    (pending : List (List (Value Symbol Guard))) ×'
+      (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝³ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, table✝⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+table : Table Symbol Formula
+pending✝ :
+  (pending : List (List (Value Symbol Guard))) ×'
+    (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝² :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, pending✝⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+pending : List (List (Value Symbol Guard))
+before✝ : (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝¹ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, before✝⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+before : Physical Symbol Formula
+actual✝ : explore p h budget table pending before = Outcome.done final after
+a✝ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, ⟨before, actual✝⟩⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+nodes : List (Value Symbol Guard)
+rest : List (List (Value Symbol Guard))
+h✝¹ : pending = nodes :: rest
+actual :
+  (match nodes :: rest with
+    | [] => Outcome.done table before
+    | nodes :: rest =>
+      if nodes.any SourceCurrentConjunctionRequirements.isEmpty = true then explore p h budget table rest before
+      else
+        if
+            SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table
+                nodes =
+              true then
+          explore p h budget table rest before
+        else
+          match SourceCurrentConjunctionRowsWorker.rows p h nodes before with
+          | SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle =>
+            explore p h (budget - 1) ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ rest)
+              middle
+          | SourceCurrentConjunctionRowsWorker.Outcome.failed fault after =>
+            Outcome.failed (Fault.rows fault table (nodes :: rest)) after) =
+    Outcome.done final after
+h✝ impossible : nodes.any SourceCurrentConjunctionRequirements.isEmpty = true
+⊢ Prod.Lex (fun a₁ a₂ => a₁ < a₂) (fun a₁ a₂ => a₁ < a₂) (budget, rest.length) (budget, pending.length)
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h largerP largerH : Nat
+final : Table Symbol Formula
+after : Physical Symbol Formula
+enoughP : p ≤ largerP
+enoughH : h ≤ largerH
+_x :
+  (budget : Nat) ×'
+    (table : Table Symbol Formula) ×'
+      (pending : List (List (Value Symbol Guard))) ×'
+        (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝⁴ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y _x →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+budget : Nat
+table✝ :
+  (table : Table Symbol Formula) ×'
+    (pending : List (List (Value Symbol Guard))) ×'
+      (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝³ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, table✝⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+table : Table Symbol Formula
+pending✝ :
+  (pending : List (List (Value Symbol Guard))) ×'
+    (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝² :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, pending✝⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+pending : List (List (Value Symbol Guard))
+before✝ : (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝¹ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, before✝⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+before : Physical Symbol Formula
+actual✝ : explore p h budget table pending before = Outcome.done final after
+a✝ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, ⟨before, actual✝⟩⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+nodes : List (Value Symbol Guard)
+rest : List (List (Value Symbol Guard))
+h✝³ : pending = nodes :: rest
+actual :
+  (match nodes :: rest with
+    | [] => Outcome.done table before
+    | nodes :: rest =>
+      if nodes.any SourceCurrentConjunctionRequirements.isEmpty = true then explore p h budget table rest before
+      else
+        if
+            SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table
+                nodes =
+              true then
+          explore p h budget table rest before
+        else
+          match SourceCurrentConjunctionRowsWorker.rows p h nodes before with
+          | SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle =>
+            explore p h (budget - 1) ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ rest)
+              middle
+          | SourceCurrentConjunctionRowsWorker.Outcome.failed fault after =>
+            Outcome.failed (Fault.rows fault table (nodes :: rest)) after) =
+    Outcome.done final after
+h✝² impossible : nodes.any SourceCurrentConjunctionRequirements.isEmpty = false
+h✝¹ skipped :
+  SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table nodes = false
+requirements : List (List (List (Value Symbol Guard)))
+middle : SourceCurrentConjunctionRowsWorker.Physical Symbol Formula
+h✝ rows :
+  SourceCurrentConjunctionRowsWorker.rows p h nodes before =
+    SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle
+stable :
+  SourceCurrentConjunctionRowsWorker.rows largerP largerH nodes before =
+    SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle
+⊢ Prod.Lex (fun a₁ a₂ => a₁ < a₂) (fun a₁ a₂ => a₁ < a₂) (budget - 1, (requirements.flatten ++ rest).length)
+    (budget, pending.length)
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h largerP largerH : Nat
+final : Table Symbol Formula
+after : Physical Symbol Formula
+enoughP : p ≤ largerP
+enoughH : h ≤ largerH
+_x :
+  (budget : Nat) ×'
+    (table : Table Symbol Formula) ×'
+      (pending : List (List (Value Symbol Guard))) ×'
+        (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝⁴ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y _x →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+budget : Nat
+table✝ :
+  (table : Table Symbol Formula) ×'
+    (pending : List (List (Value Symbol Guard))) ×'
+      (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝³ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, table✝⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+table : Table Symbol Formula
+pending✝ :
+  (pending : List (List (Value Symbol Guard))) ×'
+    (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝² :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, pending✝⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+pending : List (List (Value Symbol Guard))
+before✝ : (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝¹ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, before✝⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+before : Physical Symbol Formula
+actual✝ : explore p h budget table pending before = Outcome.done final after
+a✝ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, ⟨before, actual✝⟩⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+nodes : List (Value Symbol Guard)
+rest : List (List (Value Symbol Guard))
+h✝² : pending = nodes :: rest
+actual :
+  (match nodes :: rest with
+    | [] => Outcome.done table before
+    | nodes :: rest =>
+      if nodes.any SourceCurrentConjunctionRequirements.isEmpty = true then explore p h budget table rest before
+      else
+        if
+            SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table
+                nodes =
+              true then
+          explore p h budget table rest before
+        else
+          match SourceCurrentConjunctionRowsWorker.rows p h nodes before with
+          | SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle =>
+            explore p h (budget - 1) ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ rest)
+              middle
+          | SourceCurrentConjunctionRowsWorker.Outcome.failed fault after =>
+            Outcome.failed (Fault.rows fault table (nodes :: rest)) after) =
+    Outcome.done final after
+h✝¹ impossible : nodes.any SourceCurrentConjunctionRequirements.isEmpty = false
+h✝ skipped :
+  SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table nodes = true
+⊢ Prod.Lex (fun a₁ a₂ => a₁ < a₂) (fun a₁ a₂ => a₁ < a₂) (budget, rest.length) (budget, pending.length)
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+p h largerP largerH : Nat
+final : Table Symbol Formula
+after : Physical Symbol Formula
+enoughP : p ≤ largerP
+enoughH : h ≤ largerH
+_x :
+  (budget : Nat) ×'
+    (table : Table Symbol Formula) ×'
+      (pending : List (List (Value Symbol Guard))) ×'
+        (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝⁴ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y _x →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+budget : Nat
+table✝ :
+  (table : Table Symbol Formula) ×'
+    (pending : List (List (Value Symbol Guard))) ×'
+      (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝³ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, table✝⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+table : Table Symbol Formula
+pending✝ :
+  (pending : List (List (Value Symbol Guard))) ×'
+    (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝² :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, pending✝⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+pending : List (List (Value Symbol Guard))
+before✝ : (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after
+a✝¹ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, before✝⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+before : Physical Symbol Formula
+actual✝ : explore p h budget table pending before = Outcome.done final after
+a✝ :
+  ∀
+    (y :
+      (budget : Nat) ×'
+        (table : Table Symbol Formula) ×'
+          (pending : List (List (Value Symbol Guard))) ×'
+            (before : Physical Symbol Formula) ×' explore p h budget table pending before = Outcome.done final after),
+    (invImage
+            (fun x =>
+              PSigma.casesOn x fun budget table =>
+                PSigma.casesOn table fun table pending =>
+                  PSigma.casesOn pending fun pending before =>
+                    PSigma.casesOn before fun before actual => (budget, pending.length))
+            Prod.instWellFoundedRelation).1
+        y ⟨budget, ⟨table, ⟨pending, ⟨before, actual✝⟩⟩⟩⟩ →
+      explore largerP largerH y.1 y.2.1 y.2.2.1 y.2.2.2.1 = Outcome.done final after
+nodes : List (Value Symbol Guard)
+rest : List (List (Value Symbol Guard))
+h✝¹ : pending = nodes :: rest
+actual :
+  (match nodes :: rest with
+    | [] => Outcome.done table before
+    | nodes :: rest =>
+      if nodes.any SourceCurrentConjunctionRequirements.isEmpty = true then explore p h budget table rest before
+      else
+        if
+            SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget table
+                nodes =
+              true then
+          explore p h budget table rest before
+        else
+          match SourceCurrentConjunctionRowsWorker.rows p h nodes before with
+          | SourceCurrentConjunctionRowsWorker.Outcome.done requirements middle =>
+            explore p h (budget - 1) ({ nodes := nodes, rows := requirements } :: table) (requirements.flatten ++ rest)
+              middle
+          | SourceCurrentConjunctionRowsWorker.Outcome.failed fault after =>
+            Outcome.failed (Fault.rows fault table (nodes :: rest)) after) =
+    Outcome.done final after
+h✝ impossible : nodes.any SourceCurrentConjunctionRequirements.isEmpty = true
+⊢ Prod.Lex (fun a₁ a₂ => a₁ < a₂) (fun a₁ a₂ => a₁ < a₂) (budget, rest.length) (budget, pending.length)

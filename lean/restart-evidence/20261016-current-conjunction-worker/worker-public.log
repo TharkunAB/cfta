@@ -1,0 +1,108 @@
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical' does not depend on any axioms
+MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical (Symbol Formula : Type) : Type
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.Job' does not depend on any axioms
+MicroCFTA.SourceCurrentConjunctionRowsWorker.Job (Symbol Formula : Type) : Type
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.Fault' does not depend on any axioms
+MicroCFTA.SourceCurrentConjunctionRowsWorker.Fault : Type
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome' does not depend on any axioms
+MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome (Symbol Formula Output : Type) : Type
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome.state' does not depend on any axioms
+MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome.state {Symbol Formula Output : Type} :
+  MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula Output →
+    MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical Symbol Formula
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome.bind' does not depend on any axioms
+MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome.bind {Symbol Formula Input Output : Type}
+  (first : MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula Input)
+  (next :
+    Input →
+      MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical Symbol Formula →
+        MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula Output) :
+  MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula Output
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.exposures' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentConjunctionRowsWorker.exposures {Symbol Formula : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (readFuel : Nat) :
+  List (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)) →
+    MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical Symbol Formula →
+      MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula
+        (List
+          (List
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.projections' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentConjunctionRowsWorker.projections {Symbol Formula : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (projectionFuel readFuel : Nat) :
+  List (MicroCFTA.SourceCurrentConjunctionRowsWorker.Job Symbol Formula) →
+    MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical Symbol Formula →
+      MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula
+        (List (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.classes' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentConjunctionRowsWorker.classes {Symbol Formula : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (projectionFuel readFuel : Nat)
+  (forests :
+    List
+      (List (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))) :
+  MicroCFTA.EqualityNormalize.Constraints →
+    MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical Symbol Formula →
+      MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula
+        (List
+          (List
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.requirements' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentConjunctionRowsWorker.requirements {Symbol Formula : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (projectionFuel readFuel : Nat)
+  (edges :
+    List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (constraints : MicroCFTA.EqualityNormalize.Constraints)
+  (before : MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical Symbol Formula) :
+  MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula
+    (List
+      (List (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.tuple' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentConjunctionRowsWorker.tuple {Symbol Formula : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (projectionFuel readFuel : Nat)
+  (edges :
+    List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (before : MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical Symbol Formula) :
+  MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula
+    (Option
+      (List
+        (List
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))))
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.tuples' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentConjunctionRowsWorker.tuples {Symbol Formula : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (projectionFuel readFuel : Nat) :
+  List
+      (List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))) →
+    MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical Symbol Formula →
+      MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula
+        (List
+          (List
+            (List
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))))
+'MicroCFTA.SourceCurrentConjunctionRowsWorker.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentConjunctionRowsWorker.rows {Symbol Formula : Type} [DecidableEq Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (projectionFuel readFuel : Nat)
+  (nodes :
+    List (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (before : MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical Symbol Formula) :
+  MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome Symbol Formula
+    (List
+      (List
+        (List
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))))

@@ -1,0 +1,62 @@
+lean/MicroCFTA/SourceCurrentAllocatedConjunctionWorker.lean:70:22: error: Application type mismatch: The argument
+  observed
+has type
+  SourceCurrentConjunctionWorker.call p h budget memo query (physical before) =
+    SourceCurrentConjunctionWorker.Outcome.done (result, current) reached
+but is expected to have type
+  SourceCurrentConjunctionWorker.Outcome.done (result, current) reached =
+    SourceCurrentConjunctionWorker.Outcome.done (result, current) reached
+in the application
+  And.intro observed
+lean/MicroCFTA/SourceCurrentAllocatedConjunctionWorker.lean:71:25: error: unsolved goals
+case failed
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width p h budget : Nat
+query : Value Symbol Guard
+before after : Checked width
+memo saved : Memo
+answer : Bool
+fault : Fault
+reached : SourceCurrentConjunctionWorker.Physical Symbol FullSyntax.Formula
+observed :
+  SourceCurrentConjunctionWorker.call p h budget memo query (physical before) =
+    SourceCurrentConjunctionWorker.Outcome.failed fault reached
+done : Outcome.failed fault (advancePhysical before reached) memo = Outcome.done answer after saved
+⊢ ∃ reached_1,
+    SourceCurrentConjunctionWorker.Outcome.failed fault reached =
+        SourceCurrentConjunctionWorker.Outcome.done (answer, saved) reached_1 ∧
+      after = advancePhysical before reached_1
+lean/MicroCFTA/SourceCurrentAllocatedConjunctionWorker.lean:81:24: error: unsolved goals
+case done
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width p h budget : Nat
+query : Value Symbol Guard
+before after : Checked width
+memo saved : Memo
+fault : Fault
+reached : SourceCurrentConjunctionWorker.Physical Symbol FullSyntax.Formula
+result : Bool
+current : Memo
+observed :
+  SourceCurrentConjunctionWorker.call p h budget memo query (physical before) =
+    SourceCurrentConjunctionWorker.Outcome.done (result, current) reached
+failed : Outcome.done result (advancePhysical before reached) current = Outcome.failed fault after saved
+⊢ saved = memo ∧
+    ∃ reached_1,
+      SourceCurrentConjunctionWorker.Outcome.done (result, current) reached =
+          SourceCurrentConjunctionWorker.Outcome.failed fault reached_1 ∧
+        after = advancePhysical before reached_1
+lean/MicroCFTA/SourceCurrentAllocatedConjunctionWorker.lean:87:27: error: Application type mismatch: The argument
+  observed
+has type
+  SourceCurrentConjunctionWorker.call p h budget memo query (physical before) =
+    SourceCurrentConjunctionWorker.Outcome.failed observedFault reached
+but is expected to have type
+  SourceCurrentConjunctionWorker.Outcome.failed observedFault reached =
+    SourceCurrentConjunctionWorker.Outcome.failed observedFault reached
+in the application
+  And.intro observed

@@ -1,0 +1,48 @@
+import MicroCFTA.SourceCurrentConjunctionWorkerCompletion
+import MicroCFTA.SourceCurrentConjunctionWorkerStability
+
+#print axioms MicroCFTA.SourceCurrentConjunctionWorker.call_failed
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorker.call_failed
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_sound
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_sound
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_complete
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_complete
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerCompletion.decision_sound
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerCompletion.decision_sound
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerCompletion.decision_complete
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerCompletion.decision_complete
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_sound
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_sound
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_complete
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_complete
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_finite
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_finite
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_finite
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_finite
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerStability.explore_done_stable
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerStability.explore_done_stable
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerStability.decision_done_stable
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerStability.decision_done_stable
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerStability.explore_done_unique
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerStability.explore_done_unique
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerStability.decision_done_unique
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerStability.decision_done_unique
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerStability.call_done_stable
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerStability.call_done_stable
+#print axioms MicroCFTA.SourceCurrentConjunctionWorkerStability.call_done_unique
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentConjunctionWorkerStability.call_done_unique

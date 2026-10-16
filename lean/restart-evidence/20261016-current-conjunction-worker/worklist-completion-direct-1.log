@@ -1,0 +1,127 @@
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:57:31: error: `simp` made no progress
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:58:31: error: `simp` made no progress
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:61:65: error(lean.unknownIdentifier): Unknown identifier `skipped`
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:62:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 1
+where
+ a := ↑budget
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:76:69: error: unexpected identifier; expected '⟩'
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:70:40: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  explore ?p ?h ?budget ?table ?pending ?before
+in the target expression
+  (fun p h => explore p h budget✝ table✝ [] state✝) largerP✝ largerH✝ = Outcome.done table✝ state✝
+
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+budget : Nat
+table final : Table Symbol Formula
+pending : List (List (Value Symbol Guard))
+before after : Physical Symbol Formula
+budget✝ : Nat
+table✝ : List (SourceCurrentConjunctionEmptinessTable.Entry (Value Symbol Guard))
+state✝ : SourceCurrentConjunctionRowsAllocation.State Symbol Formula
+largerP✝ largerH✝ : Nat
+a✝¹ : 0 ≤ largerP✝
+a✝ : 0 ≤ largerH✝
+⊢ (fun p h => explore p h budget✝ table✝ [] state✝) largerP✝ largerH✝ = Outcome.done table✝ state✝
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:73:53: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  explore ?p ?h ?budget ?table ?pending ?before
+in the target expression
+  (fun p h => explore p h budget✝ table✝ (nodes✝ :: pending✝) before✝) P H = Outcome.done final✝ after✝
+
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+budget : Nat
+table final : Table Symbol Formula
+pending : List (List (Value Symbol Guard))
+before after : Physical Symbol Formula
+budget✝ : Nat
+table✝ : List (SourceCurrentConjunctionEmptinessTable.Entry (Value Symbol Guard))
+pending✝ : List (List (Value Symbol Guard))
+before✝ : SourceCurrentConjunctionRowsAllocation.State Symbol Formula
+final✝ : List (SourceCurrentConjunctionEmptinessTable.Entry (Value Symbol Guard))
+after✝ : SourceCurrentConjunctionRowsAllocation.State Symbol Formula
+nodes✝ : List (Value Symbol Guard)
+impossible : nodes✝.any SourceCurrentConjunctionRequirements.isEmpty = true
+rest : Run budget✝ table✝ pending✝ before✝ final✝ after✝
+p h : Nat
+later :
+  ∀ (largerP largerH : Nat),
+    p ≤ largerP →
+      h ≤ largerH →
+        (fun p h => explore p h budget✝ table✝ pending✝ before✝) largerP largerH = Outcome.done final✝ after✝
+P H : Nat
+enoughP : p ≤ P
+enoughH : h ≤ H
+⊢ (fun p h => explore p h budget✝ table✝ (nodes✝ :: pending✝) before✝) P H = Outcome.done final✝ after✝
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:76:53: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  explore ?p ?h ?budget ?table ?pending ?before
+in the target expression
+  (fun p h => explore p h budget✝ table✝ (nodes✝ :: pending✝) before✝) P H = Outcome.done final✝ after✝
+
+Symbol Formula : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+budget : Nat
+table final : Table Symbol Formula
+pending : List (List (Value Symbol Guard))
+before after : Physical Symbol Formula
+budget✝ : Nat
+table✝ : List (SourceCurrentConjunctionEmptinessTable.Entry (Value Symbol Guard))
+nodes✝ : List (Value Symbol Guard)
+pending✝ : List (List (Value Symbol Guard))
+before✝ : SourceCurrentConjunctionRowsAllocation.State Symbol Formula
+final✝ : List (SourceCurrentConjunctionEmptinessTable.Entry (Value Symbol Guard))
+after✝ : SourceCurrentConjunctionRowsAllocation.State Symbol Formula
+nonempty : nodes✝.any SourceCurrentConjunctionRequirements.isEmpty = false
+skipped :
+  SourceCurrentConjunctionEmptinessTable.skip SourceCurrentConjunctionRequirements.key closed budget✝ table✝ nodes✝ =
+    true
+rest : Run budget✝ table✝ pending✝ before✝ final✝ after✝
+p h : Nat
+later :
+  ∀ (largerP largerH : Nat),
+    p ≤ largerP →
+      h ≤ largerH →
+        (fun p h => explore p h budget✝ table✝ pending✝ before✝) largerP largerH = Outcome.done final✝ after✝
+P H : Nat
+enoughP : p ≤ P
+enoughH : h ≤ H
+⊢ (fun p h => explore p h budget✝ table✝ (nodes✝ :: pending✝) before✝) P H = Outcome.done final✝ after✝
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:69:2: error: Alternative `admit` has not been provided
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:107:89: error(lean.unknownIdentifier): Unknown identifier `current`
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:118:48: error: unexpected identifier; expected '⟩'
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:118:19: error: unsolved goals
+Symbol Formula : Type
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+budget : Nat
+start : Value Symbol Guard
+before after : Physical Symbol Formula
+table✝ : List (SourceCurrentConjunctionEmptinessTable.Entry (Value Symbol Guard))
+known✝ : SourceCurrentConjunctionEmptinessTable.State SourceCurrentConjunctionRequirements.key table✝ → Bool
+admitted : closed start = true
+grown :
+  (SourceCurrentConjunctionEmptinessTable.grow Value.empty SourceCurrentConjunctionRequirements.key closed table✝
+      (budget + 1) fun x => false) =
+    some known✝
+explored : Run budget [] [[start]] before table✝ after
+p h : Nat
+later :
+  ∀ (largerP largerH : Nat),
+    p ≤ largerP →
+      h ≤ largerH → (fun p h => explore p h budget [] [[start]] before) largerP largerH = Outcome.done table✝ after
+P H : Nat
+enoughP : p ≤ P
+enoughH : h ≤ H
+⊢ (fun p h => decision p h budget start before) P H =
+    Outcome.done
+      (SourceCurrentConjunctionEmptinessTable.answer Value.empty SourceCurrentConjunctionRequirements.key closed table✝
+        known✝ start)
+      after
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:145:68: error(lean.unknownIdentifier): Unknown identifier `result`
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean:145:75: error(lean.unknownIdentifier): Unknown identifier `current`

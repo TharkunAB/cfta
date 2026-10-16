@@ -1,0 +1,211 @@
+'MicroCFTA.CurrentConjunctionRowsKernels.contradiction_skips_projection_at_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.CurrentConjunctionRowsKernels.unequal_arity_requires_explicit_graph_scope' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.CurrentConjunctionRowsKernels.repeated_jobs_keep_both_occurrences' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.CurrentConjunctionRowsKernels.initial_facts_supply_uniform_worker' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.CurrentConjunctionRowsKernels.generated_requirement_starts_next_finite_rows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.CurrentConjunctionRowsKernels.raw_success_has_source_matching_tuples' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.CurrentConjunctionRowsKernels.incomparable_successes_keep_whole_physical_state' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@contradiction_skips_projection_at_zero : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))]
+  {edges : List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula))} {before : Physical Symbol Formula}
+  {result : SourceEqualityConstraintAllocation.Value},
+  @Eq (Except String (Option SourceEqualityConstraintAllocation.Value))
+      (@Prod.fst (Except String (Option SourceEqualityConstraintAllocation.Value))
+        SourceEqualityConstraintMemoAllocation.State
+        (@SourceCurrentConjunctionEquality.fold Symbol Formula edges
+          (@SourceCurrentConjunctionRowsAllocation.State.equality Symbol Formula before)))
+      (@Except.ok String (Option SourceEqualityConstraintAllocation.Value)
+        (@some SourceEqualityConstraintAllocation.Value result)) →
+    @Eq (Option EqualityNormalize.Constraints) (SourceEqualityInheritedPayload.classes result.payload)
+        (@none EqualityNormalize.Constraints) →
+      And
+        (@Eq (Outcome Symbol Formula (Option (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))))
+          (@tuple Symbol Formula inst (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) edges before)
+          (@Outcome.done Symbol Formula (Option (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+            (@none (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+            (@SourceCurrentConjunctionRowsAllocation.State.mk Symbol Formula
+              (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before)
+              (@Prod.snd (Except String (Option SourceEqualityConstraintAllocation.Value))
+                SourceEqualityConstraintMemoAllocation.State
+                (@SourceCurrentConjunctionEquality.fold Symbol Formula edges
+                  (@SourceCurrentConjunctionRowsAllocation.State.equality Symbol Formula before))))))
+        (@StableRun Symbol Formula (Option (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+          (fun p h => @tuple Symbol Formula inst p h edges before)
+          (@none (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+          (@SourceCurrentConjunctionRowsAllocation.State.mk Symbol Formula
+            (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before)
+            (@Prod.snd (Except String (Option SourceEqualityConstraintAllocation.Value))
+              SourceEqualityConstraintMemoAllocation.State
+              (@SourceCurrentConjunctionEquality.fold Symbol Formula edges
+                (@SourceCurrentConjunctionRowsAllocation.State.equality Symbol Formula before)))))
+@unequal_arity_requires_explicit_graph_scope : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))]
+  (edges : List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula))) (before : Physical Symbol Formula),
+  Not (@SourceCurrentConjunctionRequirements.SameArity Symbol (SourceSymbolicIndex.Constraint Formula) edges) →
+    And
+      (@Eq (Outcome Symbol Formula (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+        (@requirements Symbol Formula inst (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) edges (@List.nil EqualityNormalize.Class) before)
+        (@Outcome.done Symbol Formula (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))
+          (@List.map (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))
+            (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))
+            (@SourceCurrentConjunctionRequirements.canonical Symbol (SourceSymbolicIndex.Constraint Formula))
+            (@SourceCurrentConjunctionRequirements.columns Symbol (SourceSymbolicIndex.Constraint Formula) edges))
+          before))
+      (Not
+        (@SourceCurrentConjunctionRequirements.Requirements Symbol (SourceSymbolicIndex.Constraint Formula) inst edges
+          (@List.nil EqualityNormalize.Class) (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before)
+          (@List.map (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))
+            (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))
+            (@SourceCurrentConjunctionRequirements.canonical Symbol (SourceSymbolicIndex.Constraint Formula))
+            (@SourceCurrentConjunctionRequirements.columns Symbol (SourceSymbolicIndex.Constraint Formula) edges))
+          (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before)))
+@repeated_jobs_keep_both_occurrences : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))]
+  {forest : List (Value Symbol (SourceSymbolicIndex.Constraint Formula))} {path : EqualityNormalize.Path}
+  {before middle after : InternedConstructorTemplates.State Symbol (SourceSymbolicIndex.Constraint Formula)}
+  {first second : Value Symbol (SourceSymbolicIndex.Constraint Formula)},
+  @SourceEqualityProjectionGraph.Forest Symbol (SourceSymbolicIndex.Constraint Formula) inst
+      (@List.map Nat Int Int.ofNat path) forest before first middle →
+    @SourceEqualityProjectionGraph.Forest Symbol (SourceSymbolicIndex.Constraint Formula) inst
+        (@List.map Nat Int Int.ofNat path) forest middle second after →
+      ∀ (operations : SourceEqualityConstraintMemoAllocation.State),
+        @StableRun Symbol Formula (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))
+          (fun p h =>
+            @projections Symbol Formula inst p h
+              (@SourceCurrentConjunctionCompletionReads.jobs Symbol (SourceSymbolicIndex.Constraint Formula)
+                (@List.cons (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))) forest
+                  (@List.nil (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+                (@List.cons EqualityNormalize.Path path
+                  (@List.cons EqualityNormalize.Path path (@List.nil EqualityNormalize.Path))))
+              (@SourceCurrentConjunctionRowsAllocation.State.mk Symbol Formula before operations))
+          (@List.cons (Value Symbol (SourceSymbolicIndex.Constraint Formula)) first
+            (@List.cons (Value Symbol (SourceSymbolicIndex.Constraint Formula)) second
+              (@List.nil (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+          (@SourceCurrentConjunctionRowsAllocation.State.mk Symbol Formula after operations)
+@initial_facts_supply_uniform_worker : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))] [inst_1 : DecidableEq Symbol]
+  (nodes : List (Value Symbol (SourceSymbolicIndex.Constraint Formula))) (before : Physical Symbol Formula),
+  @SourceCurrentConjunctionRowsAllocation.Ready Symbol Formula before →
+    @Values Symbol (SourceSymbolicIndex.Constraint Formula)
+        (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) nodes →
+      @ClosedValues Symbol (SourceSymbolicIndex.Constraint Formula) nodes →
+        @InternedFreshOrdinaryProbeHeap.Heap Symbol (SourceSymbolicIndex.Constraint Formula)
+            (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) →
+          @Exists (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))) fun rows =>
+            @Exists (SourceCurrentConjunctionRowsAllocation.State Symbol Formula) fun after =>
+              @Exists Nat fun bound =>
+                And (@SourceCurrentConjunctionRowsAllocation.Effects Symbol Formula before after)
+                  (And (@SourceCurrentConjunctionRowsAllocation.RowsReady Symbol Formula after rows)
+                    (And
+                      (@InternedFreshOrdinaryProbeHeap.Heap Symbol (SourceSymbolicIndex.Constraint Formula)
+                        (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula after))
+                      (∀ (fuel : Nat),
+                        @LE.le Nat instLENat bound fuel →
+                          @Eq
+                            (Outcome Symbol Formula
+                              (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))))
+                            (@SourceCurrentConjunctionRowsWorker.rows Symbol Formula inst_1 inst fuel fuel nodes before)
+                            (@Outcome.done Symbol Formula
+                              (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))) rows
+                              after))))
+@generated_requirement_starts_next_finite_rows : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))] [inst_1 : DecidableEq Symbol]
+  {p h : Nat} {nodes : List (Value Symbol (SourceSymbolicIndex.Constraint Formula))}
+  {before middle : Physical Symbol Formula}
+  {rows : List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))},
+  @SourceCurrentConjunctionRowsAllocation.Ready Symbol Formula before →
+    @Values Symbol (SourceSymbolicIndex.Constraint Formula)
+        (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) nodes →
+      @ClosedValues Symbol (SourceSymbolicIndex.Constraint Formula) nodes →
+        @InternedFreshOrdinaryProbeHeap.Heap Symbol (SourceSymbolicIndex.Constraint Formula)
+            (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) →
+          @Eq (Outcome Symbol Formula (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))))
+              (@SourceCurrentConjunctionRowsWorker.rows Symbol Formula inst_1 inst p h nodes before)
+              (@Outcome.done Symbol Formula (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+                rows middle) →
+            ∀ {row : List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))}
+              {requirement : List (Value Symbol (SourceSymbolicIndex.Constraint Formula))},
+              @Membership.mem (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))
+                  (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+                  (@List.instMembership (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))) rows
+                  row →
+                @Membership.mem (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))
+                    (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))
+                    (@List.instMembership (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))) row
+                    requirement →
+                  @Exists (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))) fun generated =>
+                    @Exists (SourceCurrentConjunctionRowsAllocation.State Symbol Formula) fun after =>
+                      And (@SourceCurrentConjunctionRowsAllocation.Effects Symbol Formula before after)
+                        (And (@SourceCurrentConjunctionRowsAllocation.RowsReady Symbol Formula after generated)
+                          (And
+                            (@InternedFreshOrdinaryProbeHeap.Heap Symbol (SourceSymbolicIndex.Constraint Formula)
+                              (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula after))
+                            (@StableRun Symbol Formula
+                              (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+                              (fun p h =>
+                                @SourceCurrentConjunctionRowsWorker.rows Symbol Formula inst_1 inst p h requirement
+                                  middle)
+                              generated after)))
+@raw_success_has_source_matching_tuples : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))] [inst_1 : DecidableEq Symbol]
+  {p h : Nat} {nodes : List (Value Symbol (SourceSymbolicIndex.Constraint Formula))}
+  {before after : Physical Symbol Formula}
+  {rows : List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))},
+  @Eq (Outcome Symbol Formula (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))))
+      (@SourceCurrentConjunctionRowsWorker.rows Symbol Formula inst_1 inst p h nodes before)
+      (@Outcome.done Symbol Formula (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))) rows
+        after) →
+    @Exists (List (List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula)))) fun edges =>
+      @Exists (InternedConstructorTemplates.State Symbol (SourceSymbolicIndex.Constraint Formula)) fun heap =>
+        And
+          (@SourceCurrentConjunctionCompletionReads.Exposures Symbol (SourceSymbolicIndex.Constraint Formula) inst nodes
+            (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula before) edges heap)
+          (And
+            (@SourceCurrentConjunctionRowsAllocation.Tuples Symbol Formula inst
+              (@SourceCurrentConjunctionTuples.tuples Symbol (SourceSymbolicIndex.Constraint Formula) inst_1 edges)
+              (@SourceCurrentConjunctionRowsAllocation.State.mk Symbol Formula heap
+                (@SourceCurrentConjunctionRowsAllocation.State.equality Symbol Formula before))
+              rows after)
+            (∀ (tuple : List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula))),
+              @Membership.mem (List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula)))
+                  (List (List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula))))
+                  (@List.instMembership (List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula))))
+                  (@SourceCurrentConjunctionTuples.tuples Symbol (SourceSymbolicIndex.Constraint Formula) inst_1 edges)
+                  tuple →
+                @SourceCurrentConjunctionRequirements.SameArity Symbol (SourceSymbolicIndex.Constraint Formula) tuple))
+@incomparable_successes_keep_whole_physical_state : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))] [inst_1 : DecidableEq Symbol]
+  {p h otherP otherH : Nat} {nodes : List (Value Symbol (SourceSymbolicIndex.Constraint Formula))}
+  {before after later : Physical Symbol Formula}
+  {first second : List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))},
+  @Eq (Outcome Symbol Formula (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))))
+      (@rows Symbol Formula inst_1 inst p h nodes before)
+      (@Outcome.done Symbol Formula (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))) first
+        after) →
+    @Eq (Outcome Symbol Formula (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))))
+        (@rows Symbol Formula inst_1 inst otherP otherH nodes before)
+        (@Outcome.done Symbol Formula (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))))
+          second later) →
+      And (@Eq (List (List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))) first second)
+        (And
+          (@Eq (InternedConstructorTemplates.State Symbol (SourceSymbolicIndex.Constraint Formula))
+            (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula after)
+            (@SourceCurrentConjunctionRowsAllocation.State.heap Symbol Formula later))
+          (@Eq SourceEqualityConstraintMemoAllocation.State
+            (@SourceCurrentConjunctionRowsAllocation.State.equality Symbol Formula after)
+            (@SourceCurrentConjunctionRowsAllocation.State.equality Symbol Formula later)))

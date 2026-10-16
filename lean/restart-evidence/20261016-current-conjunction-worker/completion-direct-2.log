@@ -1,0 +1,40 @@
+lean/MicroCFTA/SourceCurrentConjunctionRowsWorkerCompletion.lean:103:19: error: unsolved goals
+Symbol Formula : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+edges : List (EdgeValue Symbol Guard)
+before : Physical Symbol Formula
+result✝ : SourceEqualityConstraintAllocation.Value
+constraints✝ : EqualityNormalize.Constraints
+rows✝ : List (List (Value Symbol Guard))
+heap✝ : State Symbol Guard
+classes : SourceEqualityInheritedPayload.classes result✝.payload = some constraints✝
+folded : (SourceCurrentConjunctionEquality.fold edges before.equality).fst = Except.ok (some result✝)
+actual : SourceCurrentConjunctionRequirements.Requirements edges constraints✝ before.heap rows✝ heap✝
+p h : Nat
+done :
+  ∀ (p_1 h_1 : Nat),
+    p ≤ p_1 →
+      h ≤ h_1 →
+        (fun p h =>
+              requirements p h edges constraints✝
+                { heap := before.heap, equality := (SourceCurrentConjunctionEquality.fold ?m.142 before.equality).snd })
+            p_1 h_1 =
+          Outcome.done rows✝
+            { heap := heap✝, equality := (SourceCurrentConjunctionEquality.fold ?m.142 before.equality).snd }
+a b : Nat
+ep : p ≤ a
+eh : h ≤ b
+⊢ (match
+      requirements a b edges constraints✝
+        { heap := before.heap, equality := (SourceCurrentConjunctionEquality.fold edges before.equality).snd } with
+    | Outcome.done value state => Outcome.done (some value) state
+    | Outcome.failed fault state => Outcome.failed fault state) =
+    Outcome.done (some rows✝)
+      { heap := heap✝, equality := (SourceCurrentConjunctionEquality.fold edges before.equality).snd }
+lean/MicroCFTA/SourceCurrentConjunctionRowsWorkerCompletion.lean:103:74: warning: This simp argument is unused:
+  done a b ep eh
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [tuple, folded, classes, Outcome.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,247 @@
+'MicroCFTA.SourceCurrentAllocatedConjunctionCaller.verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedConjunctionCaller.verified
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {budget : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool} {saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {actual :
+    MicroCFTA.SourceCurrentConjunctionMemo.Call budget before.fourth query
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before.checked) answer after saved}
+  (reads : MicroCFTA.SourceCurrentConjunctionGlobalMemos.CallReads actual memos final)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap query) :
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory before
+      (MicroCFTA.SourceCurrentAllocatedPartialState.advance before
+        (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before.checked after) saved before.merge)
+      final ∧
+    MicroCFTA.SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+      MicroCFTA.InternedProbeProvenance.Available after.heap query ∧
+        MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+'MicroCFTA.SourceCurrentAllocatedConjunctionCaller.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedConjunctionCaller.actual
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {budget : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool} {saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (call :
+    MicroCFTA.SourceCurrentConjunctionMemo.Call budget before.fourth query
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before.checked) answer after saved)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap query) :
+  ∃ final,
+    MicroCFTA.SourceCurrentConjunctionGlobalMemos.CallReads call memos final ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory before
+          (MicroCFTA.SourceCurrentAllocatedPartialState.advance before
+            (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before.checked after) saved before.merge)
+          final ∧
+        MicroCFTA.SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+          MicroCFTA.InternedProbeProvenance.Available after.heap query ∧
+            MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+'MicroCFTA.SourceCurrentAllocatedConjunctionCaller.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedConjunctionCaller.finite
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos} (budget : Nat)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap query) :
+  ∃ answer after saved final call,
+    MicroCFTA.SourceCurrentConjunctionGlobalMemos.CallReads call memos final ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory before
+          (MicroCFTA.SourceCurrentAllocatedPartialState.advance before
+            (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before.checked after) saved before.merge)
+          final ∧
+        MicroCFTA.SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+          MicroCFTA.InternedProbeProvenance.Available after.heap query ∧
+            MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+'MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome (width : Nat) : Type 1
+'MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.state' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.state {width : Nat} :
+  MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width → MicroCFTA.SourceEqualityNativeDemand.State width
+'MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.memo' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.memo {width : Nat} :
+  MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width → MicroCFTA.SourceCurrentEmptinessMemo.Memo
+'MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (p h budget : Nat)
+  (query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width) (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo) :
+  MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_lift
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width p h budget : Nat}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {answer : Bool}
+  {after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula}
+  (done :
+    MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before) =
+      MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done (answer, saved) after) :
+  MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call p h budget query before memo =
+    MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.done answer
+      (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after) saved
+'MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_failed_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_failed_lift
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width p h budget : Nat}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {fault :
+    MicroCFTA.SourceCurrentConjunctionWorker.Fault (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula}
+  {after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula}
+  (failed :
+    MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before) =
+      MicroCFTA.SourceCurrentConjunctionWorker.Outcome.failed fault after) :
+  MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call p h budget query before memo =
+    MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault
+      (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after) memo
+'MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_done
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width p h budget : Nat}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo} {answer : Bool}
+  (done :
+    MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call p h budget query before memo =
+      MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.done answer after saved) :
+  ∃ reached,
+    MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query
+          (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before) =
+        MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done (answer, saved) reached ∧
+      after = MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before reached
+'MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_failed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_failed
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width p h budget : Nat}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {fault :
+    MicroCFTA.SourceCurrentConjunctionWorker.Fault (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula}
+  (failed :
+    MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call p h budget query before memo =
+      MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault after saved) :
+  saved = memo ∧
+    ∃ reached,
+      MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before) =
+          MicroCFTA.SourceCurrentConjunctionWorker.Outcome.failed fault reached ∧
+        after = MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before reached
+'MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_tables' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call_tables
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width p h budget : Nat}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo} {answer : Bool}
+  (done :
+    MicroCFTA.SourceCurrentAllocatedConjunctionWorker.call p h budget query before memo =
+      MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.done answer after saved) :
+  after.native.nodes = before.native.nodes ∧
+    after.native.edges = before.native.edges ∧ after.native.machine.domains = before.native.machine.domains

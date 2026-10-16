@@ -1,0 +1,335 @@
+'MicroCFTA.SourceCurrentConjunctionWorker.call_failed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorker.call_failed : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (p h budget : Nat) (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after :
+    MicroCFTA.SourceCurrentConjunctionWorker.Physical (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula)
+  (fault :
+    MicroCFTA.SourceCurrentConjunctionWorker.Fault (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula),
+  Eq.{1} (memo query.referenceOf) none.{0} →
+    Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.decision p h budget query before)
+        (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.failed fault after) →
+      Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query before)
+        (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.failed fault after)
+'MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_sound : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (p h budget : Nat) (table : MicroCFTA.SourceCurrentConjunctionWorker.Table Symbol Formula)
+  (pending :
+    List.{0}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+  (before : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula)
+  (final : MicroCFTA.SourceCurrentConjunctionWorker.Table Symbol Formula)
+  (after : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula),
+  Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.explore p h budget table pending before)
+      (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done final after) →
+    MicroCFTA.SourceCurrentConjunctionWorklist.Run budget table pending before final after
+'MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_complete : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {budget : Nat} {table final : MicroCFTA.SourceCurrentConjunctionWorker.Table Symbol Formula}
+  {pending :
+    List.{0}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {before after : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula},
+  MicroCFTA.SourceCurrentConjunctionWorklist.Run budget table pending before final after →
+    MicroCFTA.SourceCurrentConjunctionWorkerCompletion.StableRun
+      (fun p h => MicroCFTA.SourceCurrentConjunctionWorker.explore p h budget table pending before) final after
+'MicroCFTA.SourceCurrentConjunctionWorkerCompletion.decision_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.decision_sound : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (p h budget : Nat)
+  (start : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (before : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula) (answer : Bool)
+  (after : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula),
+  Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.decision p h budget start before)
+      (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done answer after) →
+    MicroCFTA.SourceCurrentConjunctionDecision.Decision budget start before answer after
+'MicroCFTA.SourceCurrentConjunctionWorkerCompletion.decision_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.decision_complete : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {budget : Nat}
+  {start : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {before after : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula} {answer : Bool},
+  MicroCFTA.SourceCurrentConjunctionDecision.Decision budget start before answer after →
+    MicroCFTA.SourceCurrentConjunctionWorkerCompletion.StableRun
+      (fun p h => MicroCFTA.SourceCurrentConjunctionWorker.decision p h budget start before) answer after
+'MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_sound : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (p h budget : Nat) (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.SourceCurrentConjunctionWorker.Physical (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula)
+  (answer : Bool)
+  (after :
+    MicroCFTA.SourceCurrentConjunctionWorker.Physical (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula)
+  (saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo),
+  Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query before)
+      (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done (Prod.mk.{0, 0} answer saved) after) →
+    MicroCFTA.SourceCurrentConjunctionMemo.Call budget memo query before answer after saved
+'MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_complete : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat} {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.SourceCurrentConjunctionWorker.Physical (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula}
+  {answer : Bool},
+  MicroCFTA.SourceCurrentConjunctionMemo.Call budget memo query before answer after saved →
+    MicroCFTA.SourceCurrentConjunctionWorkerCompletion.StableRun
+      (fun p h => MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query before)
+      (Prod.mk.{0, 0} answer saved) after
+'MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.explore_finite : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  (budget : Nat) (table : MicroCFTA.SourceCurrentConjunctionWorker.Table Symbol Formula)
+  (pending :
+    List.{0}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))))
+  (before : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.SourceCurrentConjunctionWorklist.TableReady before table →
+      MicroCFTA.SourceCurrentConjunctionWorklist.PendingReady before pending →
+        Exists.{1} fun final =>
+          Exists.{1} fun after =>
+            MicroCFTA.SourceCurrentConjunctionWorkerCompletion.StableRun
+                (fun p h => MicroCFTA.SourceCurrentConjunctionWorker.explore p h budget table pending before) final
+                after ∧
+              MicroCFTA.SourceCurrentConjunctionWorklist.Run budget table pending before final after ∧
+                MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects before after
+'MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerCompletion.call_finite : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (budget : Nat) (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.SourceCurrentConjunctionWorker.Physical (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.InternedProbeProvenance.Available before.heap query →
+      Exists.{1} fun answer =>
+        Exists.{1} fun after =>
+          Exists.{1} fun saved =>
+            MicroCFTA.SourceCurrentConjunctionWorkerCompletion.StableRun
+                (fun p h => MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query before)
+                (Prod.mk.{0, 0} answer saved) after ∧
+              MicroCFTA.SourceCurrentConjunctionMemo.Call budget memo query before answer after saved ∧
+                MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects before after
+'MicroCFTA.SourceCurrentConjunctionWorkerStability.explore_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerStability.explore_done_stable : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {p h largerP largerH budget : Nat} {table final : MicroCFTA.SourceCurrentConjunctionWorker.Table Symbol Formula}
+  {pending :
+    List.{0}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {before after : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula},
+  Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.explore p h budget table pending before)
+      (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done final after) →
+    LE.le.{0} p largerP →
+      LE.le.{0} h largerH →
+        Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.explore largerP largerH budget table pending before)
+          (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done final after)
+'MicroCFTA.SourceCurrentConjunctionWorkerStability.decision_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerStability.decision_done_stable : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {p h largerP largerH budget : Nat}
+  {start : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {before after : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula} {answer : Bool},
+  Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.decision p h budget start before)
+      (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done answer after) →
+    LE.le.{0} p largerP →
+      LE.le.{0} h largerH →
+        Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.decision largerP largerH budget start before)
+          (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done answer after)
+'MicroCFTA.SourceCurrentConjunctionWorkerStability.explore_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerStability.explore_done_unique : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {p h otherP otherH budget : Nat} {table first second : MicroCFTA.SourceCurrentConjunctionWorker.Table Symbol Formula}
+  {pending :
+    List.{0}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))}
+  {before after later : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula},
+  Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.explore p h budget table pending before)
+      (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done first after) →
+    Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.explore otherP otherH budget table pending before)
+        (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done second later) →
+      Eq.{1} first second ∧ Eq.{1} after later
+'MicroCFTA.SourceCurrentConjunctionWorkerStability.decision_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerStability.decision_done_unique : ∀ {Symbol Formula : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula))]
+  {p h otherP otherH budget : Nat}
+  {start : MicroCFTA.InternedConstructorTemplates.Value Symbol (MicroCFTA.SourceSymbolicIndex.Constraint Formula)}
+  {before after later : MicroCFTA.SourceCurrentConjunctionWorker.Physical Symbol Formula} {first second : Bool},
+  Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.decision p h budget start before)
+      (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done first after) →
+    Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.decision otherP otherH budget start before)
+        (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done second later) →
+      Eq.{1} first second ∧ Eq.{1} after later
+'MicroCFTA.SourceCurrentConjunctionWorkerStability.call_done_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerStability.call_done_stable : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h largerP largerH budget : Nat} {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.SourceCurrentConjunctionWorker.Physical (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula}
+  {answer : Bool},
+  Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query before)
+      (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done (Prod.mk.{0, 0} answer saved) after) →
+    LE.le.{0} p largerP →
+      LE.le.{0} h largerH →
+        Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.call largerP largerH budget memo query before)
+          (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done (Prod.mk.{0, 0} answer saved) after)
+'MicroCFTA.SourceCurrentConjunctionWorkerStability.call_done_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentConjunctionWorkerStability.call_done_unique : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {p h otherP otherH budget : Nat} {memo saved current : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after later :
+    MicroCFTA.SourceCurrentConjunctionWorker.Physical (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.FullSyntax.Formula}
+  {first second : Bool},
+  Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.call p h budget memo query before)
+      (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done (Prod.mk.{0, 0} first saved) after) →
+    Eq.{2} (MicroCFTA.SourceCurrentConjunctionWorker.call otherP otherH budget memo query before)
+        (MicroCFTA.SourceCurrentConjunctionWorker.Outcome.done (Prod.mk.{0, 0} second current) later) →
+      Eq.{1} first second ∧ Eq.{1} after later ∧ Eq.{1} saved current

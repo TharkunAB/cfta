@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentConjunctionRowsWorker
+
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.Physical
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.Job
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.Job
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.Fault
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.Fault
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome.state
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome.state
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome.bind
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.Outcome.bind
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.exposures
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.exposures
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.projections
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.projections
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.classes
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.classes
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.requirements
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.requirements
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.tuple
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.tuple
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.tuples
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.tuples
+#print axioms MicroCFTA.SourceCurrentConjunctionRowsWorker.rows
+#check MicroCFTA.SourceCurrentConjunctionRowsWorker.rows
