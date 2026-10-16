@@ -1,8 +1,16 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 13:35 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 13:43 CEST (Europe/Stockholm)**.
 
 ## Current literal seeded queries and class scanning
+
+Publication readback at 13:43 CEST found main `c0cc8a05`. It is fetched,
+but not merged or locally validated. First read
+lean/restart-evidence/20261016-drawn-field-fix-pending.md and refresh its
+seven-file delta. PR #64 adds drawn typing fields. PR #65 repairs the
+recursive field-pool finding with `FieldAtomOnDatatype`. Root FINDINGS.md
+records that repair first. The Audit and Haskell checks below cover source
+`5399d310`. Checkpoint `9a3e102a` is published.
 
 Audited source main is `5399d310`, merged at `82d47236`. The starting
 published checkpoint is `e75e8c5c`. Twelve additive modules implement

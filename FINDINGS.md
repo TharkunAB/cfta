@@ -2,6 +2,13 @@
 
 ## Haskell fix handoff for external work
 
+Publication readback at 13:43 CEST found main `c0cc8a05`. It is fetched,
+but not merged or locally validated. PR #65 repairs the recursive field-pool
+finding below. The historical "confirmed, unfixed" entry describes audited
+source `5399d310`. PR #64 also adds drawn typing fields. Read
+`lean/restart-evidence/20261016-drawn-field-fix-pending.md` before the next
+source refresh. The passing checks below cover `5399d310` only.
+
 Audited source main is `5399d310`. It is merged into `formalize` at `82d47236`.
 PR #63 adds qualified typing do-notation. The prior field-specific atoms,
 node-view typing rules, and negative-bound repair remain included.
@@ -30,6 +37,25 @@ The previous source baseline was `999c04a5`, merged at `9aaffc95`.
 Use the current source before applying an older repair. The entries below
 separate a behavior fix from a remaining documentation change.
 
+- **Recursive field-pool repair: upstream, local validation pending.**
+  Repair `b9219b9e` is merged by PR #65 at `c0cc8a05`. For
+  `data Chain = End Bool | Next Chain`, a child pool containing `End False`
+  could generate `Next (End False)` while `holds` accepted an invariant
+  that requires `End True` at each Chain node. The repair rejects a field
+  pool whose field type is the datatype being derived. It returns
+  `FieldAtomOnDatatype "Next" 0` for that example. It does not silently
+  filter the supplied subtree. Affected paths are
+  `cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs`,
+  `cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs`,
+  `cfta-generator/test/Data/CFTA/Gen/Refinement/DeriveSpec.hs`, and
+  `cfta-generator/CHANGELOG.md`. The new regression expects that error
+  even with a trivially true invariant. The original executable counterexample
+  remains in the preceding evidence directory, as recorded below.
+  Source inspection confirms the rejection and regression. This checkout
+  still executes the older implementation. Merge the fetched source, run
+  the strict Nix build and suites, and rerun the reproducer before claiming
+  local validation. The new error and its validation order also need a
+  source adapter. No local Haskell patch is added here.
 - **Negative typed-language bounds.** Upstream repair `443e3458` is included
   in PR #62 and main `999c04a5`. It changes
   `cfta-generator/src/Data/CFTA/Gen/Typing.hs` and
