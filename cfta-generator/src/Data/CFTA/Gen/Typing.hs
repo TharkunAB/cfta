@@ -7,7 +7,8 @@ The language is the terms of a 'HasFTA' datatype that have one of some types,
 with a nesting of at most a bound. Each rule gives a type to a constructor of
 the datatype, by its name. A variable has a de Bruijn index: the index 0 is
 the innermost binder. The environment of a term is the list of the types of
-its binders, innermost first.
+its binders, innermost first, and then the inputs: the variables in scope at
+the root. With inputs, the language is the programs over those inputs.
 
 @
 data Ty = TInt | TBool
@@ -52,9 +53,16 @@ Limits:
 * A field that holds a subterm has the type of the datatype. A field of
   another type holds one fixed value. So a family of mutually recursive
   types is not a language here.
-* The bound is on the nesting, so the language is finite. The automaton has
-  about T^(D + 1) environments for T types and the bound D. A bound on the
-  binders ('Binders') and inputs are not implemented yet.
+* With a bound on the nesting, the language is finite. The automaton has
+  about T^(D + 1) environments for T types and the bound D. With a bound on
+  the binders ('Binders'), the automaton is cyclic and the generator is
+  counted by size. It must give each term one typing: an automaton with two
+  runs for one term gives 'Data.CFTA.Gen.AmbiguousAutomaton'.
+
+An input is a variable, so a binder above its use moves its index up by one.
+A datatype with its own constructor for the inputs, such as @Arg !Int@, needs
+no inputs in the 'Typing': each input is a rule,
+@[rule \"Arg\" [value position] typ | (position, typ) <- zip [0 ..] inputTypes]@.
 -}
 module Data.CFTA.Gen.Typing (
     -- * Rules
@@ -146,7 +154,7 @@ data Typing ty = Typing
     { typingBound :: !Bound
     -- ^ The bound on the terms.
     , typingInputs :: ![ty]
-    -- ^ The types of the variables in scope at the root, innermost first. Not implemented yet: it must be empty.
+    -- ^ The types of the variables in scope at the root: the input @i@ has the index @i@ at the root.
     , typingRoots :: ![ty]
     -- ^ The types of the terms of the language.
     , typingRules :: ![Rule ty]
@@ -160,7 +168,11 @@ data Bound
       field uses one level.
       -}
       Nesting !Depth
-    | -- | The number of binders around each position. Not implemented yet.
+    | {- | The number of binders around each position; the inputs are not
+      binders. The terms can be of any size, so the automaton is cyclic, and
+      'fromConstructorAutomaton' gives a generator counted by size, which
+      'Data.CFTA.Gen.upToSize' bounds.
+      -}
       Binders !Int
     deriving (Eq, Show)
 
@@ -176,20 +188,19 @@ data TypingError
       another type than its field.
       -}
       FieldMismatch !String
-    | -- | A part of 'Typing' that is not implemented yet: inputs, or a bound on the binders.
-      NotImplemented !String
     deriving (Eq, Show)
 
 {- | A state of the automaton of a typed language: the root, a term of a type
 in an environment, or one value. The nesting that remains is 'Just' for a
-'Nesting' bound. The root has the transitions of the terms of each root
+'Nesting' bound and 'Nothing' for 'Binders'. The root has the transitions of the terms of each root
 type, so a transition of the root does not say its type; its children do.
 -}
 data TypingState ty = Root | Goal ![ty] !ty !(Maybe Int) | Fixed !(Term Constructor)
     deriving (Eq, Ord, Show)
 
-{- | The terms of the datatype that have one of the root types, within the
-bound. A constructor without a rule is not in the language.
+{- | The terms of the datatype that have one of the root types in the
+environment of the inputs, within the bound. A constructor without a rule is
+not in the language.
 -}
 fromTypingRules :: forall a ty. (HasFTA a, Ord ty) => Typing ty -> Either TypingError (Gen Symbol a)
 fromTypingRules typing = fromConstructorAutomaton @a <$> typingAutomaton @a typing
@@ -204,10 +215,6 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
     let unknown = nubOrd [name | name <- map ruleName rules, Map.notMember name constructors]
     unless (null unknown) $ Left $ UnknownConstructors unknown (map constructorName declared)
     mapM_ checked [(name, children) | Rule name children _ <- rules]
-    unless (null inputs) $ Left $ NotImplemented "inputs"
-    case bound of
-        Nesting _ -> Right ()
-        Binders _ -> Left $ NotImplemented "a bound on the binders"
     rows <- close Map.empty [Root]
     pure
         $ fromRight (error "cfta-generator bug in Data.CFTA.Gen.Typing: an invalid automaton")
@@ -230,22 +237,27 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
             transitions <- row state
             close (Map.insert state transitions rows) (concatMap FTA.transitionChildren transitions <> pending)
 
-    row Root = concat <$> traverse (\typ -> row (Goal [] typ nesting)) (nubOrd roots)
+    row Root = concat <$> traverse (\typ -> row (Goal inputs typ nesting)) (nubOrd roots)
     row (Fixed term) = Right [FTA.Transition (Term.rootLabel term) (map Fixed (Term.subForest term)) noConstraint]
     row (Goal env goal remaining) =
         traverse
             transition
-            ( [(name, children) | Rule name children result <- rules, result == goal, nests children]
+            ( [(name, children) | Rule name children result <- rules, result == goal, allowed children]
                 <> [ (name, children)
                    | Variable name fields <- rules
                    , (index, typ) <- zip [0 ..] env
                    , typ == goal
                    , let children = fields index typ
-                   , nests children
+                   , allowed children
                    ]
             )
       where
-        nests children = maybe True (> 0) remaining || null [() | Subterm _ _ <- children]
+        -- A subterm needs a level of the nesting, and its binders must stay
+        -- within a bound on the binders. The inputs are not binders.
+        allowed children = and [maybe True (> 0) remaining && withinBinders binds | Subterm binds _ <- children]
+        withinBinders binds = case bound of
+            Nesting _ -> True
+            Binders limit -> length binds + length env - length inputs <= limit
         transition alternative@(_, children) = do
             constructor <- checked alternative
             pure $ FTA.Transition constructor (map child children) noConstraint

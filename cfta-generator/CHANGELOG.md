@@ -40,10 +40,15 @@ tree automata of `cfta`, with QuickCheck integration.
   `programRuns` list a `Space`. `libraryEncoding` chooses how a space encodes the types
   (`Encoding`): `FirstOrder`, or `Curried`, in which a type constructor is
   a leaf applied by `@` edges, so that a type variable of kind `* -> *`
-  (`?Foldable t0`) ranges over a domain of type constructors. With
-  `Curried (OnlyDefault keys)` (`Defaulting`), such a variable that a run
-  does not determine takes only the list type, or none: marker leaves in
-  its domain, which `runsNarrowedBy` of `cfta` reads in each run.
+  (`?Foldable t0`) ranges over a domain of type constructors. Each key of
+  the domains has its kind (`Domain`): a `HeadDomain` of type constructors
+  of kind `* -> *`, or a `TypeDomain` of types. With `Curried OnlyDefault`
+  (`Defaulting`), a variable of kind `* -> *` that a run does not determine
+  takes only the list type, or none; a variable of a `TypeDomain` that a
+  run does not determine gives one typed term. Marker leaves in the domains
+  give both, and `runsNarrowedBy` of `cfta` reads them in each run. A
+  domain type can refer to a domain (`List (?Ord x0)`); Hectare unrolls
+  such a reference to one level, below which it takes any type.
   `parseType` and `parseProgram` read types
   and programs in Haskell syntax, and `renderType` and `renderProgram` print
   them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow
@@ -197,6 +202,16 @@ tree automata of `cfta`, with QuickCheck integration.
   contracts and the measures by constructor name, as annotations
   (`contract`, `measure`, `measureNamed`, `fieldsContract`,
   `fieldsMeasure`), and `annotationFormulas` gives their formulas and terms.
+- `deriveLTAOn` and `deriveLTAOnFrom` in `Data.CFTA.Gen.Refinement.Derive`,
+  and `deriveLTAOnWith` in its internal module, derive the refinement
+  generator of the terms of an automaton over the constructors of a
+  datatype, such as a typed language of `Data.CFTA.Gen.Typing`, so that the
+  measures and the contracts of an invariant hold on its terms. Each state
+  is a `oneof` of its transitions, and each transition is the generator of
+  its constructor, as `deriveLTAWith` builds one over the field types. The
+  ranks follow the generators. An automaton with a cycle gives
+  `CyclicAutomaton`, and a transition with a constraint gives
+  `ConstrainedTransition`.
 - `Data.CFTA.Gen.Typing`: typed languages with variables, from typing rules
   for the constructors of a `HasFTA` datatype, by name. `rule` gives a
   constructor a type from the types of its fields. `subterm` is a field in
@@ -210,10 +225,12 @@ tree automata of `cfta`, with QuickCheck integration.
   restrict, or exclude it as any `FTA`. `fromConstructorAutomaton` reads an
   automaton over the constructors of a datatype as a `Gen Symbol a` with the
   labels and the ranks of `fromDatatype`, and `fromTypingRules` is the two in
-  one: the closed terms of the root types up to a bound on the nesting. It
-  reports a name that no constructor has (`UnknownConstructors`), a rule that
-  does not fit the fields of its constructor (`FieldMismatch`), and inputs
-  or `Binders`, which are not implemented yet (`NotImplemented`). A field
+  one: the terms of the root types up to a bound on the nesting. The inputs
+  are the variables in scope at the root, so the terms are programs over
+  them. It reports a name that no constructor has (`UnknownConstructors`), a
+  rule that does not fit the fields of its constructor (`FieldMismatch`).
+  With `Binders`, a bound on the binders around each position, the
+  automaton is cyclic and the generator is counted by size. A field
   that holds a subterm has the type of the datatype, so a family of mutually
   recursive types is not a language here.
   A fixed value in a field of the datatype gives `FieldMismatch`.
