@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current recursive Merge profile and reservation proofs add no Haskell change.
+The current Merge and Target resource proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -31,7 +31,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The current pinned Lean Audit passes: 2593 jobs and 60187 dependency checks.
+The current pinned Lean Audit passes: 2599 jobs and 60278 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -165,6 +165,54 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current Target resources and derived prefix capacity
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `db01dbc3`. Read lean/notes-current-target-resources.md
+and lean/restart-evidence/20261016-constrained-target-resources/.
+This section supersedes older statements that leave Target resources open.
+
+Six additive modules construct the complete Target from initial forest
+limits and cumulative constructor headroom. The actual head Operand runs
+before the tail and their checked intersection. Every stage uses the same
+returned heaps, inventories, Merge table, and global memo bundles.
+Output profiles and later query capacity follow from preceding returns.
+The endpoint retains the full Receipt, TargetReads, stable literal worker,
+actual Work trace, request bounds, and final supply capacity. Empty targets
+have zero cost. Target retains common-subtree inclusion on proper paths.
+No unconditional exact Target language equality is asserted.
+
+The exact native prefix journal follows the same checked Steps. Non-Work
+instructions preserve the whole constructor heap. Native structural and
+output certificates survive physical Operand changes and actual queries.
+Pure numeric recurrences are monotone in all original limits and path count.
+
+TargetInitialCapacity identifies arbitrary raw completed Operand and Fold
+returns through stable literal worker uniqueness. It derives the EXISTING
+universal FoldCapacity and TargetCapacity from initial total headroom.
+The Target plan is no longer a supplied future-capacity premise. This does
+not discharge the whole outer root's reached-parent numeric capacity plan.
+
+The full Audit passes 2599 jobs and 60278 dependency checks. All 47 declared
+public axiom/full-signature pairs pass. Integration checks construct serial
+full queries and two three-path Targets from initial total headroom.
+Only propext, Classical.choice, and Quot.sound occur. Preservation retains
+7315 starting files, 2592 older proof sources, all 234 Haskell files,
+45 frozen manifests with 356 entries, stashes, and other worktrees.
+
+Next compose shared edits, class passes, local and parent calls, then outer
+cumulative resources. Derive the root numeric plan from initial inputs.
+General Mu/reference/union progress, repeated-pass convergence, current
+frontends, concrete Haskell, and full-pipeline composition remain open.
+Retain separate language, transformation, exact size/count/order/rank,
+generator, and probability contracts. The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external handoff first. Record each later
+repair with failure, reproducer, paths, commit, checks, and upstream status.
+Reuse unchanged strict Nix validation, 798 examples plus golden, six-file
+Fourmolu, and four-package Cabal-gild and metadata checks.
 
 ## Current Merge and Operand constructor budgets
 
