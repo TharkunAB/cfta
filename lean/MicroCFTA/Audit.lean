@@ -2040,6 +2040,9 @@ import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterInitial
 /-!
 # Proof dependency audit
 
