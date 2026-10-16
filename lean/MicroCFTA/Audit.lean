@@ -1990,6 +1990,11 @@ import MicroCFTA.SourceCurrentAllocatedPartialChecks
 import MicroCFTA.SourceCurrentAllocatedPartialForestLanguage
 import MicroCFTA.SourceCurrentAllocatedPartialCallSteps
 import MicroCFTA.SourceCurrentAllocatedPartialActual
+import MicroCFTA.SourceCurrentAllocatedMergeWorker
+import MicroCFTA.SourceCurrentAllocatedMergeWorkerSound
+import MicroCFTA.SourceCurrentAllocatedMergeWorkerCompletion
+import MicroCFTA.SourceCurrentAllocatedMergeWorkerActual
+import MicroCFTA.SourceCurrentCurriedDefaulting
 /-!
 # Proof dependency audit
 
