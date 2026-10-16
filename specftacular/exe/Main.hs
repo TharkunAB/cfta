@@ -9,7 +9,7 @@ module Main where
 import Specftacular
 
 main =
-    tacularSpec
+    ftacularSpec
         [ con "reverse" (reverse :: [A] -> [A])
         , con "++" ((++) :: [A] -> [A] -> [A])
         , con "[]" ([] :: [A])

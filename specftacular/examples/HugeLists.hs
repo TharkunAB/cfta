@@ -12,7 +12,7 @@ import QuickSpec.Internal.Utils (usort)
 import Specftacular
 
 main =
-    tacularSpec
+    ftacularSpec
         [ con "length" (length :: [A] -> Int)
         , con "sort" (sort :: [Int] -> [Int])
         , con "scanr" (scanr :: (A -> B -> B) -> B -> [A] -> [B])

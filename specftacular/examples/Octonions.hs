@@ -69,7 +69,7 @@ extraReps t | t == typeSkeletonOf (Proxy :: Proxy It) = Just $ genRepFromProxy (
 extraReps _ = Nothing
 
 main =
-    tacularSpec
+    ftacularSpec
         [ con "*" ((*) :: It -> It -> It)
         , (con "inv" (recip :: It -> It))
         , con "1" (1 :: It)

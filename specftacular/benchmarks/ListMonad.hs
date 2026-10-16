@@ -8,7 +8,7 @@ import System.Environment (getArgs)
 
 main = do
     [s, p] <- map read <$> getArgs
-    -- tacularSpec' 7 3 extraReps [
+    -- ftacularSpec' 7 3 extraReps [
     res <-
         experimentalPhases
             s

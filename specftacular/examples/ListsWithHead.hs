@@ -4,7 +4,7 @@
 import Specftacular
 
 main =
-    tacularSpec
+    ftacularSpec
         [ con "head" (head :: [A] -> A)
         , con "cons" ((:) :: A -> [A] -> [A])
         , con "++" ((++) :: [A] -> [A] -> [A])

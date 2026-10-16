@@ -8,7 +8,7 @@
 import Specftacular
 
 main =
-    tacularSpec
+    ftacularSpec
         [ con "reverse" (reverse :: [A] -> [A])
         , con "[]" ([] :: [A])
         , con "null" (null :: [A] -> Bool)

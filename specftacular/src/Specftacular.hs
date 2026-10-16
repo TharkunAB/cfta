@@ -5,7 +5,7 @@
 module Specftacular (
     module Specftacular.Types,
     module Data.Proxy,
-    tacularSpec,
+    ftacularSpec,
     discoverMonomorphic,
     experimentalPhases,
     searchPhases,
@@ -190,8 +190,8 @@ data Settings = Settings
 program argument gives (6 by default). The types are monomorphic, as in
 'discoverMonomorphic'.
 -}
-tacularSpec :: [Sig] -> IO ()
-tacularSpec sigs =
+ftacularSpec :: [Sig] -> IO ()
+ftacularSpec sigs =
     do
         args <- Env.getArgs
         let size = case args of

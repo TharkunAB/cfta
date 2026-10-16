@@ -152,7 +152,7 @@ extraReps _ = Nothing
 --   monoType (Proxy :: Proxy Sym) ]
 
 main =
-    tacularSpec
+    ftacularSpec
         [ con "char" (Char :: Sym -> Regex Sym)
         , con "any" (AnyChar :: Regex Sym)
         , con "e" (Epsilon :: Regex Sym)

@@ -5,7 +5,7 @@ import Control.Monad
 import Specftacular
 
 main =
-    tacularSpec
+    ftacularSpec
         [ con "return" (return :: A -> [A])
         , con ">>=" ((>>=) :: [A] -> (A -> [B]) -> [B])
         , con "++" ((++) :: [A] -> [A] -> [A])
