@@ -1,0 +1,100 @@
+lean/restart-evidence/20261016-constrained-merge-profile-producer/body-kernels.lean:46:2: error: Type mismatch: After simplification, term
+  SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.group_certified clear top
+    (fiveRows first second third fourth fifth values) before semantic costs resident 5 arity bound profiled
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg LE.le
+            (congrFun'
+              (congrArg HAdd.hAdd
+                (congrFun'
+                  (congrArg HAdd.hAdd
+                    (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (Nat.zero_add 1)) 1)) 1))
+                  1))
+              1))
+          5)
+        (Std.le_refl._simp_1 5)))
+    heightBound
+ has type
+  @Certified Symbol Guard (List (EdgeValue Symbol Guard)) inst✝¹ inst✝ clear
+    (group top
+      [EdgeValue.mk first values, EdgeValue.mk second values, EdgeValue.mk third values, EdgeValue.mk fourth values,
+        EdgeValue.mk fifth values])
+    before fun heap values_1 =>
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.GroupPost✝ (envelope 5 (bound + 1)) arity bound heap
+      [EdgeValue.mk first values, EdgeValue.mk second values, EdgeValue.mk third values, EdgeValue.mk fourth values,
+        EdgeValue.mk fifth values]
+      values_1
+but is expected to have type
+  @Certified Symbol Guard (List (EdgeValue Symbol Guard)) inst✝¹ inst✝ clear
+    (group top
+      [EdgeValue.mk first values, EdgeValue.mk second values, EdgeValue.mk third values, EdgeValue.mk fourth values,
+        EdgeValue.mk fifth values])
+    before fun heap outputs =>
+    outputs.length ≤ 5 ∧
+      ∀ (edge : EdgeValue Symbol Guard),
+        edge ∈ outputs →
+          EdgeResident heap edge ∧ EdgeShape (envelope 5 (bound + 1)) arity edge ∧ edgeHeight edge ≤ bound
+'MergeProfileBodyChecks.five_row_threshold' depends on axioms: [propext, Quot.sound]
+@five_row_threshold : ∀ {Symbol Guard : Type} (top : Guard)
+  (first second third fourth fifth : Interned (EdgeKey Symbol Guard)) (values : List (Value Symbol Guard)),
+  group top (fiveRows first second third fourth fifth values) =
+    (large top (EdgeValue.mk first values)
+          [EdgeValue.mk second values, EdgeValue.mk third values, EdgeValue.mk fourth values,
+            EdgeValue.mk fifth values]).bind
+      fun edge => Code.pure [edge]
+'MergeProfileBodyChecks.five_row_columns' depends on axioms: [propext, sorryAx, Quot.sound]
+@five_row_columns : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (clear : Guard → Bool) (top : Guard) (first second third fourth fifth : Interned (EdgeKey Symbol Guard))
+  (values : List (Value Symbol Guard)) (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before →
+      Edges before (fiveRows first second third fourth fifth values) →
+        ∀ (arity bound : Nat),
+          ChildrenShape 5 arity values →
+            values.length ≤ arity →
+              childrenHeight values ≤ bound →
+                Certified clear (group top (fiveRows first second third fourth fifth values)) before fun heap outputs =>
+                  outputs.length ≤ 5 ∧
+                    ∀ (edge : EdgeValue Symbol Guard),
+                      edge ∈ outputs →
+                        EdgeResident heap edge ∧ EdgeShape (envelope 5 (bound + 1)) arity edge ∧ edgeHeight edge ≤ bound
+'MergeProfileBodyChecks.five_row_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+@five_row_body : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (clear : Guard → Bool) (top : Guard) (entry : Interned InternedBinderProtocol.NodeKey)
+  (first second third fourth fifth : Interned (EdgeKey Symbol Guard)) (values : List (Value Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before →
+      Available before (Value.node entry (fiveRows first second third fourth fifth values) 0 []) →
+        ∀ (arity bound : Nat),
+          ChildrenShape 5 arity values →
+            values.length ≤ arity →
+              childrenHeight values ≤ bound →
+                Certified clear (body top (Value.node entry (fiveRows first second third fourth fifth values) 0 []))
+                  before fun x output => NodeShape (envelope 5 (bound + 1)) arity output ∧ height output ≤ bound + 1
+'MergeProfileBodyChecks.ordered_children' depends on axioms: [propext, Quot.sound]
+@ordered_children : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (clear : Guard → Bool) (values : List (Value Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before →
+      Values before values →
+        ∀ (rows arity bound : Nat),
+          ChildrenShape rows arity values →
+            childrenHeight values ≤ bound →
+              Certified clear (map Code.request values) before fun heap outputs =>
+                Language.All₂
+                    (fun original output =>
+                      Available heap output ∧
+                        NodeShape (envelope rows bound) arity output ∧ height output ≤ height original)
+                    values outputs ∧
+                  outputs.length = values.length
+'MergeProfileBodyChecks.empty_column' depends on axioms: [propext, Classical.choice, Quot.sound]
+@empty_column : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (clear : Guard → Bool) (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before →
+      retainedColumn [] = (Code.work (MergedOrdinaryHeight.ordinaryUnion [])).bind Code.request ∧
+        Certified clear (column []) before fun heap output =>
+          Available heap output ∧ NodeShape (envelope 0 1) 0 output ∧ height output ≤ 0

@@ -1,0 +1,45 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.lean:150:69: warning: Variable name `costs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _costs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.lean:229:29: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case isTrue
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+top : Guard
+edges : List (EdgeValue Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady before
+costs : CostHeap before
+resident : Edges before edges
+rows arity bound : Nat
+profile : RowsShape rows arity edges
+count : edges.length ≤ rows
+bounded : edgesHeight edges ≤ bound
+h✝ : edges.length ≤ 4
+edge : InternedConstructorTemplates.State Symbol Guard
+member : List (EdgeValue Symbol Guard)
+heap : Language.All₂ (fun x edge_1 => EdgePost (envelope rows (bound + 1)) arity bound edge edge_1) edges member
+⊢ GroupPost (envelope rows (bound + 1)) arity bound edge edges member
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.lean:233:39: error: Application type mismatch: The argument
+  related
+has type
+  InternedConstructorTemplates.State Symbol Guard
+of sort `Type` but is expected to have type
+  Language.All₂ (fun x value => EdgePost ?m.139 ?m.140 ?m.141 ?m.142 value) ?m.137 ?m.138
+of sort `Prop` in the application
+  row_collection related
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.lean:250:82: error(lean.unknownIdentifier): Unknown identifier `first.length`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.lean:323:14: error: Invalid `⟨...⟩` notation: The expected type
+  SourceCurrentMemoMergeEffects.Certified Contract clear (body top (Value.node entry edges depth free)) before
+    fun x output =>
+    NodeShape (envelope rows (height (Value.node entry edges depth free))) arity output ∧
+      height output ≤ height (Value.node entry edges depth free)
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor

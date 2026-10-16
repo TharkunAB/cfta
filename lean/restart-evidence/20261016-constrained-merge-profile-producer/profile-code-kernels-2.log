@@ -1,0 +1,46 @@
+'MicroCFTA.MergeProfileCodeKernels.ordered_requests' depends on axioms: [propext, Quot.sound]
+@ordered_requests : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (clear : Guard → Bool) (inputs : List (Value Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before →
+      ∀ (rows arity bound : Nat),
+        (∀ (input : Value Symbol Guard),
+            input ∈ inputs → ValueReady before input ∧ NodeShape rows arity input ∧ height input ≤ bound) →
+          Certified clear (map Code.request inputs) before fun after values =>
+            Language.All₂
+                (fun input output =>
+                  ValueReady after output ∧ NodeShape (envelope rows bound) arity output ∧ height output ≤ height input)
+                inputs values ∧
+              values.length = inputs.length
+'MicroCFTA.MergeProfileCodeKernels.nullary_duplicate_constructor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@nullary_duplicate_constructor : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (clear : Guard → Bool) (symbol : Symbol) (guard : Guard)
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before →
+      Certified clear ((Code.work (makeEdge symbol guard [])).bind fun edge => Code.work (makeNode [edge, edge])) before
+        fun after value => ValueReady after value ∧ NodeShape 2 0 value ∧ height value ≤ 1
+'MicroCFTA.MergeProfileCodeKernels.lifted_physical_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+@lifted_physical_body : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (clear : Guard → Bool) (top : Guard) (input : Value Symbol Guard)
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before → Available before input → input.free = [] → Certified clear (body top input) before ValueReady
+'MicroCFTA.MergeProfileCodeKernels.warm_node_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+@warm_node_work : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (clear : Guard → Bool) (edges : List (EdgeValue Symbol Guard))
+  (before : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady before →
+    CostHeap before →
+      InternedNestedProvenance.Edges before edges →
+        ∀ (rows arity bound : Nat),
+          RowsShape rows arity edges →
+            edges.length ≤ rows →
+              (∀ (edge : EdgeValue Symbol Guard), edge ∈ edges → edgeHeight edge + 1 ≤ bound) →
+                have built := run (makeNode edges) before;
+                run (makeNode edges) built.snd = (built.fst, built.snd) ∧
+                  Certified clear (Code.work (makeNode edges)) built.snd fun after value =>
+                    ValueReady after value ∧ NodeShape rows arity value ∧ height value ≤ bound

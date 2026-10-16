@@ -1,0 +1,21 @@
+'MergeOrdinarySelectionIntegration.duplicate_column' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeOrdinarySelectionIntegration.duplicate_column : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (top : Guard) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (memo : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard) (rows arity : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity value →
+    MicroCFTA.SourceCurrentMemoMergeGraph.Run clear top (MicroCFTA.SourceCurrentMemoMergeGraph.column [value, value])
+        before memo value before memo ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before before []
+'MergeOrdinarySelectionIntegration.actual_selection_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeOrdinarySelectionIntegration.actual_selection_trace : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {fuel : Nat} {inputs values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {rows arity : Nat},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity inputs →
+    MicroCFTA.SourceMergedSelection.select clear fuel inputs before =
+        MicroCFTA.MergedSourceComparison.Result.done values after →
+      values = MicroCFTA.InternedConstructorTemplates.distinctNodes inputs ∧
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before after [] ∧
+          after.nodes.next = before.nodes.next ∧ after.edges.next = before.edges.next

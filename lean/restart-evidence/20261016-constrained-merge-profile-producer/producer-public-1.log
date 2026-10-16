@@ -1,0 +1,53 @@
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileProducer.run_profile : ∀ {Symbol Guard Output : Type}
+  [inst : DecidableEq Symbol] [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {clear : Guard → Bool} {top : Guard} {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output},
+  MicroCFTA.SourceCurrentMemoMergeGraph.Run clear top code before memo output after saved →
+    ∀ (post : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Output → Prop),
+      MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+        MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored before memo →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Certified clear code before post →
+                MicroCFTA.SourceCurrentMemoMergeEffects.Effect before after ∧
+                  MicroCFTA.SourceCurrentMemoMergeEffects.Stored after saved ∧
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧ post after output
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileProducer.run_profile' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileProducer.call_profile : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq Symbol] [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {clear : Guard → Bool} {top : Guard} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  MicroCFTA.SourceCurrentMemoMergeGraph.Call clear top input before memo output after saved →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.SourceCurrentMemoMergeEffects.Stored before memo →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+            MicroCFTA.InternedProbeProvenance.Available before input →
+              MicroCFTA.SourceCurrentMemoMergeEffects.Effect before after ∧
+                MicroCFTA.SourceCurrentMemoMergeEffects.Stored after saved ∧
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Contract input before output after
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileProducer.call_profile' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileProducer.cold : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq Symbol] [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {clear : Guard → Bool} {top : Guard} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  MicroCFTA.SourceCurrentMemoMergeGraph.Call clear top input before MicroCFTA.SourceCurrentMemoMergeGraph.empty output
+      after saved →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedProbeProvenance.Available before input →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Effect before after ∧
+            MicroCFTA.SourceCurrentMemoMergeEffects.Stored after saved ∧
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Contract input before output after
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileProducer.cold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

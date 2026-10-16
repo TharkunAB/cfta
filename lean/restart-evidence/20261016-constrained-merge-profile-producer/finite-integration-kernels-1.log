@@ -1,0 +1,87 @@
+'MergeProfileFiniteIntegration.generated_native_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeProfileFiniteIntegration.generated_native_budget : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (input right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.InternedProbeProvenance.Available before.heap input →
+      ∀ (rows arity bound : Nat),
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity input →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity right →
+            MicroCFTA.MergedOrdinaryHeight.height input ≤ bound →
+              MicroCFTA.MergedOrdinaryHeight.height right ≤ bound →
+                ∃ output after saved,
+                  MicroCFTA.SourceCurrentAllocatedMergeGraph.Call clear input before
+                      MicroCFTA.SourceCurrentMemoMergeGraph.empty output after saved ∧
+                    MicroCFTA.SourceCurrentAllocatedMergeWorkerCompletion.StableCall clear input before
+                        MicroCFTA.SourceCurrentMemoMergeGraph.empty output after saved ∧
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                        MicroCFTA.InternedProbeProvenance.Available after.heap output ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget output right ≤
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows bound)
+                              arity bound
+'MergeProfileFiniteIntegration.serial_generated_profiles' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeProfileFiniteIntegration.serial_generated_profiles : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.InternedProbeProvenance.Available before.heap input →
+      ∀ (rows arity bound : Nat),
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity input →
+          MicroCFTA.MergedOrdinaryHeight.height input ≤ bound →
+            ∃ first middle current output after saved,
+              MicroCFTA.SourceCurrentAllocatedMergeWorkerCompletion.StableCall clear input before
+                  MicroCFTA.SourceCurrentMemoMergeGraph.empty first middle current ∧
+                MicroCFTA.SourceCurrentAllocatedMergeWorkerCompletion.StableCall clear first middle current output after
+                    saved ∧
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                    MicroCFTA.InternedProbeProvenance.Available after.heap output ∧
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope
+                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows bound)
+                            bound)
+                          arity output ∧
+                        MicroCFTA.MergedOrdinaryHeight.height output ≤ MicroCFTA.MergedOrdinaryHeight.height input
+'MergeProfileFiniteIntegration.completed_owner_replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MergeProfileFiniteIntegration.completed_owner_replay : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.InternedProbeProvenance.Available before.heap input →
+      ∀ (rows arity bound : Nat),
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity input →
+          MicroCFTA.MergedOrdinaryHeight.height input ≤ bound →
+            ∃ output after saved,
+              MicroCFTA.SourceCurrentAllocatedMergeWorkerCompletion.StableCall clear input before
+                  MicroCFTA.SourceCurrentMemoMergeGraph.empty output after saved ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows bound) arity
+                      output ∧
+                    ∀ (selectionFuel : Nat),
+                      MicroCFTA.SourceCurrentAllocatedMergeWorker.call clear 1 selectionFuel input after saved =
+                        MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done output after saved

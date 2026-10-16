@@ -1,0 +1,115 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.small_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@small_certified : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before edge →
+        ∀ (rows arity bound : Nat),
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape rows arity edge →
+            MicroCFTA.MergedOrdinaryHeight.edgeHeight edge ≤ bound →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Certified clear
+                (MicroCFTA.SourceCurrentMemoMergeGraph.small edge) before
+                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.EdgePost✝
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows (bound + 1)) arity
+                  bound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.column_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@column_certified : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (inputs : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+      MicroCFTA.InternedNestedProvenance.Values before inputs →
+        ∀ (rows arity bound : Nat),
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity inputs →
+            inputs.length ≤ rows →
+              MicroCFTA.MergedOrdinaryHeight.childrenHeight inputs ≤ bound →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Certified clear
+                  (MicroCFTA.SourceCurrentMemoMergeGraph.column inputs) before
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.ValuePost✝
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows (bound + 1)) arity
+                    bound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.large_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@large_certified : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (top : Guard) (first : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (rest : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+      MicroCFTA.InternedNestedProvenance.Edges before (first :: rest) →
+        ∀ (rows arity bound : Nat),
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rows arity (first :: rest) →
+            (first :: rest).length ≤ rows →
+              MicroCFTA.MergedOrdinaryHeight.edgesHeight (first :: rest) ≤ bound →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Certified clear
+                  (MicroCFTA.SourceCurrentMemoMergeGraph.large top first rest) before
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.EdgePost✝
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows (bound + 1)) arity
+                    bound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.group_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@group_certified : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (top : Guard) (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+      MicroCFTA.InternedNestedProvenance.Edges before edges →
+        ∀ (rows arity bound : Nat),
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rows arity edges →
+            edges.length ≤ rows →
+              MicroCFTA.MergedOrdinaryHeight.edgesHeight edges ≤ bound →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Certified clear
+                  (MicroCFTA.SourceCurrentMemoMergeGraph.group top edges) before fun heap values =>
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.GroupPost✝
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows (bound + 1)) arity
+                    bound heap edges values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.root_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@root_certified : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (top : Guard) (groups : List (List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+      (∀ (group : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+          group ∈ groups → MicroCFTA.InternedNestedProvenance.Edges before group) →
+        ∀ (rows arity bound : Nat),
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.RowsShape rows arity groups.flatten →
+            groups.flatten.length ≤ rows →
+              MicroCFTA.MergedOrdinaryHeight.edgesHeight groups.flatten ≤ bound →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Certified clear
+                  (MicroCFTA.SourceCurrentMemoMergeGraph.root top groups) before
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.ValuePost✝
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows (bound + 1)) arity
+                    (bound + 1))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBody.body_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@body_certified : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (top : Guard) (input : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+    MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+      MicroCFTA.InternedProbeProvenance.Available before input →
+        ∀ (rows arity : Nat),
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity input →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCode.Certified clear
+              (MicroCFTA.SourceCurrentMemoMergeGraph.body top input) before fun x output =>
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope rows
+                    (MicroCFTA.MergedOrdinaryHeight.height input))
+                  arity output ∧
+                MicroCFTA.MergedOrdinaryHeight.height output ≤ MicroCFTA.MergedOrdinaryHeight.height input
