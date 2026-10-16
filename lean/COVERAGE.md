@@ -1,5 +1,51 @@
 # Full formalization coverage
 
+## Current Merge and Operand constructor budgets
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `490f7509`. Read lean/notes-current-merge-reservations.md
+for the top-level objective, current proof map, and remaining obligations.
+Evidence is in lean/restart-evidence/20261016-constrained-merge-reservations/.
+This section supersedes older statements that leave Merge reservations open.
+
+Six additive modules prove initial-profile Merge constructor budgets and
+compose the actual checked Operand. Merge counts its complete recursive
+body, including a candidate that loses to the current first winner.
+Its finite endpoint constructs the allocated and stable literal return.
+Its full caller retains the same semantic Post and language inclusion.
+Operand constructs Projection followed by Merge. Their Work traces meet
+at the actual intermediate heap. No future result profile, completion,
+capacity, body contract, or supplied request count is an initial premise.
+
+The resource conclusion constructs a WorkTrace witness for the actual
+returned heaps and bounds final node and edge supplies. It does not bound
+all instructions, host evaluations, or total memory. Other resource
+families, concurrent losers, lazy forcing, and signed counters stay separate.
+
+The full Audit passes 2593 jobs and 60187 dependency checks. All 45 declared
+public axiom/full-signature pairs and 11 component integration pairs pass.
+Only propext, Classical.choice, and Quot.sound occur. Independent review
+finds no material defect within this component scope. Preservation retains
+7233 starting files, 2586 older proof sources, all 234 Haskell files,
+44 frozen manifests with 350 module entries, stashes, and other worktrees.
+
+Next compose Target's rotated right fold and native queries. Then compose
+edits, class passes, local and parent calls, and the outer pass. The numeric
+root capacity plan is still an explicit premise. Derive it from initial
+inputs and resources. General Mu/reference/union progress, repeated-pass
+convergence, current frontend adapters, concrete Haskell, and full-pipeline
+correspondence remain open. There is no completed whole-library theorem.
+Keep language, transformations, exact size/count/order/rank, generator,
+and probability contracts separate. The full-library goal remains active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external handoff first. The Chain
+reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`. Standalone
+`holds` still treats pools as opaque. Record each later repair with failure,
+reproducer, paths, commit, checks, and upstream status. Reuse unchanged
+strict Nix validation, 798 examples plus golden, six-file Fourmolu,
+and four-package Cabal-gild and metadata checks.
+
 ## Current recursive Merge profile production
 
 Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
