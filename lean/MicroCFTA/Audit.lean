@@ -2029,6 +2029,10 @@ import MicroCFTA.SourceCurrentAllocatedParentWorkerActual
 import MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion
 import MicroCFTA.SourceCurrentAllocatedPartialWorkerStability
 import MicroCFTA.SourceCurrentAllocatedPartialWorkerActual
+import MicroCFTA.SourceCurrentAllocatedPartialConstructedRoot
+import MicroCFTA.SourceCurrentAllocatedPartialActiveOrder
+import MicroCFTA.SourceCurrentAllocatedPartialActiveFrames
+import MicroCFTA.SourceCurrentAllocatedLocalPlain
 /-!
 # Proof dependency audit
 
