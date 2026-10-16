@@ -1,0 +1,13 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardRoot
+
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardRoot.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardRoot.finite
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardRoot.constructed_root
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardRoot.constructed_root

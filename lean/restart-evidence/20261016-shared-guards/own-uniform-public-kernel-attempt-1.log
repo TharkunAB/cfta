@@ -1,0 +1,325 @@
+lean/restart-evidence/20261016-shared-guards/own-uniform-public-kernel.lean:9:0: error: Unknown option `pp.maxDepth`
+lean/restart-evidence/20261016-shared-guards/own-uniform-public-kernel.lean:10:0: error: Unknown option `pp.width`
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classSteps' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classSteps : List.{0} MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classSteps_eq' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classSteps_eq : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+  @Eq.{1} Nat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classSteps records)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@List.length.{0} MicroCFTA.EqualityNormalize.Path
+        (@List.flatten.{0} MicroCFTA.EqualityNormalize.Path
+          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+            MicroCFTA.SourceEqualityClassOrder.Record.paths records)))
+      (@List.length.{0} MicroCFTA.SourceEqualityClassOrder.Record records))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.precheck' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.precheck : ∀ {Formula : Type}
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+  (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula limits original →
+    MicroCFTA.SourceEqualityGuardReadback.Cached
+        (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities Formula original) →
+      ∀ (own inherited : MicroCFTA.SourceEqualityPrecheck.Constraint),
+        @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+            (@MicroCFTA.SourceEqualityPhysicalPayload.own Formula original)
+            (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint own) →
+          ∀ (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+            @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch)
+                (MicroCFTA.SourceEqualityPrecheck.precheck own inherited)
+                (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch
+                  (MicroCFTA.SourceEqualityPrecheck.Branch.classes records)) →
+              And
+                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget limits)
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth limits)
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+                (And
+                  (@LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.SourceEqualityClassOrder.Record records)
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget limits))
+                  (And
+                    (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+                      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+                        @LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths)
+                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget limits))
+                    (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+                      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+                        ∀ (path : MicroCFTA.EqualityNormalize.Path),
+                          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+                            @LE.le.{0} Nat instLENat (@List.length.{0} Nat path)
+                              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth limits))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.precheck_steps' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.precheck_steps : ∀ {Formula : Type}
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+  (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds Formula limits original →
+    MicroCFTA.SourceEqualityGuardReadback.Cached
+        (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities Formula original) →
+      ∀ (own inherited : MicroCFTA.SourceEqualityPrecheck.Constraint),
+        @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+            (@MicroCFTA.SourceEqualityPhysicalPayload.own Formula original)
+            (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint own) →
+          ∀ (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+            @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch)
+                (MicroCFTA.SourceEqualityPrecheck.precheck own inherited)
+                (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch
+                  (MicroCFTA.SourceEqualityPrecheck.Branch.classes records)) →
+              @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classSteps records)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget limits))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.receipt' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.receipt : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record},
+  @MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt width inst inst_1 formulas solver inventory original loaded
+      inherited before own (MicroCFTA.SourceEqualityPrecheck.Branch.classes records) →
+    ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds MicroCFTA.FullSyntax.Formula limits original →
+        And
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget limits)
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth limits)
+            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+              MicroCFTA.SourceEqualityClassOrder.Record.paths records))
+          (And
+            (@LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.SourceEqualityClassOrder.Record records)
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget limits))
+            (And
+              (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+                @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+                  @LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths)
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget limits))
+              (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+                @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                    (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+                  ∀ (path : MicroCFTA.EqualityNormalize.Path),
+                    @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+                      @LE.le.{0} Nat instLENat (@List.length.{0} Nat path)
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth limits))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.receipt_steps' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.receipt_steps : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record},
+  @MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt width inst inst_1 formulas solver inventory original loaded
+      inherited before own (MicroCFTA.SourceEqualityPrecheck.Branch.classes records) →
+    ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds MicroCFTA.FullSyntax.Formula limits original →
+        @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classSteps records)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget limits))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows : Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows : Nat → Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parentRows' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parentRows : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows_ge' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows_ge : ∀
+  (paths rows count depth height : Nat),
+  @LE.le.{0} Nat instLENat rows
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows paths rows count depth height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows_mono : ∀ (paths count depth height : Nat)
+  {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows paths first count depth height)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows paths last count depth height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.class_rows' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.class_rows : ∀
+  (record : MicroCFTA.SourceEqualityClassOrder.Record) (paths rows count depth height : Nat),
+  @LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths) paths →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassResources.outputRows record rows count depth height)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.classRows paths rows count depth height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows_ge' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows_ge : ∀
+  (paths count depth height classes rows : Nat),
+  @LE.le.{0} Nat instLENat rows
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows paths count depth height classes rows)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows_rows_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows_rows_mono : ∀
+  (paths count depth height classes : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows paths count depth height classes
+        first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows paths count depth height classes
+        last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows_count_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows_count_mono : ∀
+  (paths count depth height rows : Nat) {first last : Nat},
+  @LE.le.{0} Nat instLENat first last →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows paths count depth height first rows)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows paths count depth height last rows)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.pass_rows' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.pass_rows : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (paths classes rows count depth height : Nat),
+  (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+      @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+          (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+        @LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths) paths) →
+    @LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.SourceEqualityClassOrder.Record records) classes →
+      @LE.le.{0} Nat instLENat
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.outputRows records rows count depth height)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.passRows paths count depth height classes
+          rows)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.pass_arity' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.pass_arity : ∀
+  (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record) (arity : Nat),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.outputArity records arity)
+    (@max.{0} Nat Nat.instMax arity (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.receipt_rows' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.receipt_rows : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record},
+  @MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt width inst inst_1 formulas solver inventory original loaded
+      inherited before own (MicroCFTA.SourceEqualityPrecheck.Branch.classes records) →
+    ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds MicroCFTA.FullSyntax.Formula limits original →
+        ∀ (rows count height : Nat),
+          @LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassResources.outputRows records rows count
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth limits) height)
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parentRows limits rows count height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.local_rows' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.local_rows : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  @MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt width inst inst_1 formulas solver inventory original loaded
+      inherited before own branch →
+    ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds MicroCFTA.FullSyntax.Formula limits original →
+        ∀ (rows count height : Nat),
+          @LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.outputRows loaded inherited
+              (@MicroCFTA.SourceEqualityNativeDemand.State.operations width before) rows count
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth limits) height)
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parentRows limits rows count height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parent_rows' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parent_rows : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  @MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt width inst inst_1 formulas solver inventory original loaded
+      inherited before own branch →
+    ∀ (limits : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds MicroCFTA.FullSyntax.Formula limits original →
+        ∀ (rows count height : Nat),
+          @LE.le.{0} Nat instLENat
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentResources.outputRows original loaded inherited
+              (@MicroCFTA.SourceEqualityNativeDemand.State.operations width before) rows count
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth limits) height)
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parentRows limits rows count height)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.local_arity' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.local_arity : ∀
+  (loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State) (arity : Nat),
+  @LE.le.{0} Nat instLENat
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.outputArity loaded inherited operations arity)
+    (@max.{0} Nat Nat.instMax arity (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parent_arity' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parent_arity : ∀
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State) (arity count : Nat),
+  @LE.le.{0} Nat instLENat count arity →
+    @LE.le.{0} Nat instLENat
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentResources.outputArity original loaded inherited operations
+        arity count)
+      (@max.{0} Nat Nat.instMax arity (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))

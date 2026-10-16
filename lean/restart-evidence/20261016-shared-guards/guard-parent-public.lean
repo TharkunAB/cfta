@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardParentFinite
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+open MicroCFTA
+
+#print axioms SourceCurrentAllocatedFiniteOrdinaryGuardLocal.outputLimit
+#check @SourceCurrentAllocatedFiniteOrdinaryGuardLocal.outputLimit
+
+#print axioms SourceCurrentAllocatedFiniteOrdinaryGuardLocal.stage
+#check @SourceCurrentAllocatedFiniteOrdinaryGuardLocal.stage
+
+#print axioms SourceCurrentAllocatedFiniteOrdinaryGuardLocal.local_reads
+#check @SourceCurrentAllocatedFiniteOrdinaryGuardLocal.local_reads
+
+#print axioms SourceCurrentAllocatedFiniteOrdinaryGuardParent.outputLimit
+#check @SourceCurrentAllocatedFiniteOrdinaryGuardParent.outputLimit
+
+#print axioms SourceCurrentAllocatedFiniteOrdinaryGuardParent.structure_from_reads
+#check @SourceCurrentAllocatedFiniteOrdinaryGuardParent.structure_from_reads
+
+#print axioms SourceCurrentAllocatedFiniteOrdinaryGuardParentFinite.complete
+#check @SourceCurrentAllocatedFiniteOrdinaryGuardParentFinite.complete

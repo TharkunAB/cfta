@@ -1,0 +1,95 @@
+'MicroCFTA.SharedGuardEvidence.constructed_own_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SharedGuardEvidence.constructed_own_bounds : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) {width : Nat}
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  @MicroCFTA.SourceCurrentConjunctionClassScan.Ready width before →
+    @MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At width formulas solver inventory before →
+      ∀
+        (edge :
+          MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        @MicroCFTA.InternedEdgeResidency.EdgeResident (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+            edge →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) edge →
+            ∀ (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+              MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.operations width before).constraints inherited →
+                ∀ (rows count height : Nat),
+                  @Exists.{1} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+                    fun loaded =>
+                    @Exists.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value fun own =>
+                      @Exists.{1} MicroCFTA.SourceEqualityPrecheck.Branch fun branch =>
+                        And
+                          (@MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt width inst inst_1 formulas solver inventory
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) edge)))
+                            loaded inherited before own branch)
+                          (And
+                            (@LE.le.{0} Nat instLENat
+                              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.outputRows loaded inherited
+                                (@MicroCFTA.SourceEqualityNativeDemand.State.operations width before) rows count
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth
+                                  (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.edgeLimits
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    MicroCFTA.FullSyntax.Formula edge))
+                                height)
+                              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentUniformNumbers.parentRows
+                                (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.edgeLimits
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  MicroCFTA.FullSyntax.Formula edge)
+                                rows count height))
+                            (∀ (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+                              @Eq.{1} MicroCFTA.SourceEqualityPrecheck.Branch branch
+                                  (MicroCFTA.SourceEqualityPrecheck.Branch.classes records) →
+                                And
+                                  (@LE.le.{0} Nat instLENat
+                                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classSteps records)
+                                    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.classBudget
+                                        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.edgeLimits
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          MicroCFTA.FullSyntax.Formula edge))))
+                                  (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+                                    @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                        (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                        (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records
+                                        record →
+                                      ∀ (path : MicroCFTA.EqualityNormalize.Path),
+                                        @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path
+                                            MicroCFTA.EqualityNormalize.Class
+                                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths
+                                            path →
+                                          @LE.le.{0} Nat instLENat (@List.length.{0} Nat path)
+                                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth
+                                              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.edgeLimits
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                MicroCFTA.FullSyntax.Formula edge)))))

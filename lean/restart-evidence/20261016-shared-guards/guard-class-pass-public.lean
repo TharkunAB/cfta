@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.classLimit
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.classLimit
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.passLimit
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.passLimit
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.passLimit_eq
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.passLimit_eq
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.passLimit_le_count
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.passLimit_le_count
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.class_reads
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.class_reads
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.fold
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.fold
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.pass
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.pass

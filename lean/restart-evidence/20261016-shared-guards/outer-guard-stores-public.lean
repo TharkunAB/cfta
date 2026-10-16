@@ -1,0 +1,44 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.Stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.Stored
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.Stored.structural
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.Stored.structural
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.initial
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.initial
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.caller_stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.caller_stored
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.node_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.node_call
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.node_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.node_body
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.edge_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.edge_call
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.edge_body
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.descendants
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.walk
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterGuardStores.walk

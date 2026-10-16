@@ -1,0 +1,1481 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLocal.outputLimit' does not depend on any axioms
+SourceCurrentAllocatedFiniteOrdinaryGuardLocal.outputLimit : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits → SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLocal.stage' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SourceCurrentAllocatedFiniteOrdinaryGuardLocal.stage : ∀
+  [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory) {budget : Nat}
+  {records : List.{0} SourceEqualityClassOrder.Record}
+  {values results :
+    List.{0}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width} {fourth savedFourth : SourceCurrentEmptinessMemo.Memo}
+  {memo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {outcome : Option.{0} EqualityNormalize.Class} {memos final : EndpointMemoGateTrace.Memos}
+  {actual :
+    @SourceCurrentConjunctionScanClassPass.Reduction inst inst_1 inst_2 width budget records values before fourth memo
+      outcome results after savedFourth saved},
+  @SourceCurrentConjunctionScanClassPassActual.Reads inst inst_1 inst_2 width formulas solver budget records values
+      results before after fourth savedFourth memo saved outcome actual memos final →
+    @SourceCurrentConjunctionClassScan.Ready width before →
+      @SourceCurrentAllocatedNativeInventoryState.At width formulas solver inventory before →
+        @InternedNestedProvenance.Values (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceEqualityNativeDemand.State.native width before)))
+            values →
+          (∀ (record : SourceEqualityClassOrder.Record),
+              @Membership.mem.{0, 0} SourceEqualityClassOrder.Record (List.{0} SourceEqualityClassOrder.Record)
+                  (@List.instMembership.{0} SourceEqualityClassOrder.Record) records record →
+                ∀ (path : EqualityNormalize.Path),
+                  @Membership.mem.{0, 0} EqualityNormalize.Path EqualityNormalize.Class
+                      (@List.instMembership.{0} EqualityNormalize.Path) record.paths path →
+                    @Ne.{1} EqualityNormalize.Path path (@List.nil.{0} Nat)) →
+            (∀ (record : SourceEqualityClassOrder.Record),
+                @Membership.mem.{0, 0} SourceEqualityClassOrder.Record (List.{0} SourceEqualityClassOrder.Record)
+                    (@List.instMembership.{0} SourceEqualityClassOrder.Record) records record →
+                  And (SourceEqualityClassOrder.Coherent record)
+                    (And (EqualityTrie.Ascending record.trie) (EqualityNormalize.Nontrivial record.paths))) →
+              SourceCurrentEmptinessMemo.Correct formulas solver
+                  (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionThunks.State.machine width
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceEqualityNativeDemand.State.native width before)))
+                  fourth →
+                @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before)))
+                    memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                      @SourceCurrentMemoMergeLanguage.CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq formulas
+                          solver)
+                        ambient memo) →
+                    @SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before) →
+                      @SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) memo →
+                        @EndpointMemoGateTrace.Valid inst_1
+                            (@SourceRecursiveIntersectionKernel.Machine.heap
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@SourceRecursiveIntersectionThunks.State.machine width
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceEqualityNativeDemand.State.native width before)))
+                            memos →
+                          @SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored width
+                              (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                              (@SourceEqualityNativeDemand.State.native width before) →
+                            @SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula memo →
+                              ∀ (limits : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+                                @SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children
+                                    (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula limits values →
+                                  And
+                                    (@SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                      (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula saved)
+                                    (And
+                                      (@SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored width
+                                        (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                        (@SourceEqualityNativeDemand.State.native width after))
+                                      (@SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children
+                                        (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                        (SourceCurrentAllocatedFiniteOrdinaryGuardClassPass.passLimit limits records)
+                                        results))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardLocal.local_reads' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SourceCurrentAllocatedFiniteOrdinaryGuardLocal.local_reads : ∀
+  [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (original : SourceSymbolicIndex.Constraint FullSyntax.Formula) {budget : Nat}
+  {loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula}
+  {inherited : SourceEqualityConstraintAllocation.Value}
+  {values results :
+    List.{0}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width} {fourth savedFourth : SourceCurrentEmptinessMemo.Memo}
+  {memo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {memos final : EndpointMemoGateTrace.Memos}
+  {actual :
+    @SourceCurrentAllocatedLocalReduction.Reduction inst inst_1 inst_2 width budget loaded inherited values before
+      fourth memo results after savedFourth saved},
+  @SourceCurrentAllocatedLocalReductionActual.Reads inst inst_1 inst_2 width formulas solver budget loaded inherited
+      values results before after fourth savedFourth memo saved actual memos final →
+    @SourceCurrentConjunctionClassScan.Ready width before →
+      @SourceCurrentAllocatedNativeInventoryState.At width formulas solver inventory before →
+        SourceEqualityGuardReadback.Cached (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula original) →
+          @Eq.{1} (Except.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+              (@SourceEqualityConstraintFieldLookup.load FullSyntax.Formula original
+                (@SourceEqualityNativeDemand.State.operations width before).constraints)
+              (@Except.ok.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                (@some.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) loaded)) →
+            SourceEqualityConstraintAllocation.Ready
+                (@SourceEqualityNativeDemand.State.operations width before).constraints inherited →
+              @InternedNestedProvenance.Values (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionThunks.State.machine width
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceEqualityNativeDemand.State.native width before)))
+                  values →
+                SourceCurrentEmptinessMemo.Correct formulas solver
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before)))
+                    fourth →
+                  @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionThunks.State.machine width
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native width before)))
+                      memo →
+                    (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                        @SourceCurrentMemoMergeLanguage.CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                            formulas solver)
+                          ambient memo) →
+                      @SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native width before) →
+                        @SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored
+                            (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) memo →
+                          @EndpointMemoGateTrace.Valid inst_1
+                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceEqualityNativeDemand.State.native width before)))
+                              memos →
+                            @SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored width
+                                (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                (@SourceEqualityNativeDemand.State.native width before) →
+                              @SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                  (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula memo →
+                                ∀ (ownLimits inputLimits : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+                                  @SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds FullSyntax.Formula ownLimits
+                                      original →
+                                    @SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children
+                                        (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula inputLimits
+                                        values →
+                                      And
+                                        (@SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                          (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula saved)
+                                        (And
+                                          (@SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored width
+                                            (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                            (@SourceEqualityNativeDemand.State.native width after))
+                                          (@SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Children
+                                            (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                            (SourceCurrentAllocatedFiniteOrdinaryGuardLocal.outputLimit ownLimits
+                                              inputLimits)
+                                            results))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardParent.outputLimit' does not depend on any axioms
+SourceCurrentAllocatedFiniteOrdinaryGuardParent.outputLimit : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits →
+  SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardParent.structure_from_reads' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SourceCurrentAllocatedFiniteOrdinaryGuardParent.structure_from_reads : ∀ {width : Nat}
+  [inst :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_1 : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_2 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (original :
+    InternedConstructorTemplates.EdgeValue (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  {budget : Nat} {loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula}
+  {inherited : SourceEqualityConstraintAllocation.Value} {before after : SourceEqualityNativeDemand.State width}
+  {result :
+    InternedConstructorTemplates.EdgeValue (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {fourth savedFourth : SourceCurrentEmptinessMemo.Memo}
+  {memo saved :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {memos final : EndpointMemoGateTrace.Memos}
+  {actual :
+    @SourceCurrentAllocatedParentEdge.Edge inst_1 inst inst_2 width budget
+      (@InternedConstructorTemplates.EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Cache.Interned.key
+          (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+      (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Cache.Interned.key
+          (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+      loaded inherited
+      (@InternedConstructorTemplates.EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)
+      before fourth memo result after savedFourth saved},
+  @SourceCurrentAllocatedParentEdgeActual.Reads inst_1 inst inst_2 width formulas solver budget
+      (@InternedConstructorTemplates.EdgeKey.symbol (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Cache.Interned.key
+          (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+      (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Cache.Interned.key
+          (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+      loaded inherited
+      (@InternedConstructorTemplates.EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)
+      before after result fourth savedFourth memo saved actual memos final →
+    @SourceCurrentConjunctionClassScan.Ready width before →
+      @SourceCurrentAllocatedNativeInventoryState.At width formulas solver inventory before →
+        (@Eq.{1} Bool
+              (@SourceEqualityMkEdgeAllocation.contradictory FullSyntax.Formula
+                (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@Cache.Interned.key
+                    (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) original))))
+              false →
+            And
+              (SourceEqualityGuardReadback.Cached
+                (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula
+                  (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@Cache.Interned.key
+                      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                      (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))))
+              (And
+                (@Eq.{1}
+                  (Except.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+                  (@SourceEqualityConstraintFieldLookup.load FullSyntax.Formula
+                    (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@Cache.Interned.key
+                        (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+                    (@SourceEqualityNativeDemand.State.operations width before).constraints)
+                  (@Except.ok.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                    (@some.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) loaded)))
+                (And
+                  (SourceEqualityConstraintAllocation.Ready
+                    (@SourceEqualityNativeDemand.State.operations width before).constraints inherited)
+                  (@InternedNestedProvenance.Values (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before)))
+                    (@InternedConstructorTemplates.EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) original))))) →
+          ∀ (limits : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+            @SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge (SourceObservations.Label FullSyntax.Formula)
+                FullSyntax.Formula limits original →
+              SourceCurrentEmptinessMemo.Correct formulas solver
+                  (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionThunks.State.machine width
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceEqualityNativeDemand.State.native width before)))
+                  fourth →
+                @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before)))
+                    memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                      @SourceCurrentMemoMergeLanguage.CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq formulas
+                          solver)
+                        ambient memo) →
+                    @SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width before) →
+                      @SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) memo →
+                        @EndpointMemoGateTrace.Valid inst
+                            (@SourceRecursiveIntersectionKernel.Machine.heap
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@SourceRecursiveIntersectionThunks.State.machine width
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceEqualityNativeDemand.State.native width before)))
+                            memos →
+                          @SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored width
+                              (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                              (@SourceEqualityNativeDemand.State.native width before) →
+                            @SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula memo →
+                              And
+                                (@SourceCurrentAllocatedFiniteOrdinaryStored.Stored width
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceEqualityNativeDemand.State.native width after))
+                                (And
+                                  (@SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored width
+                                    (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                    (@SourceEqualityNativeDemand.State.native width after))
+                                  (And
+                                    (@SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                      (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula saved)
+                                    (And
+                                      (@SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge
+                                        (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                        (SourceCurrentAllocatedFiniteOrdinaryGuardParent.outputLimit limits) result)
+                                      (@SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) original result))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardParentFinite.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@SourceCurrentAllocatedFiniteOrdinaryGuardParentFinite.complete : ∀
+  [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.Value (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory) (bits budget : Nat)
+  (original :
+    InternedConstructorTemplates.EdgeValue (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+  (inherited : SourceEqualityConstraintAllocation.Value)
+  (before :
+    SourceEqualityNativeDemand.State
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+  (fourth : SourceCurrentEmptinessMemo.Memo)
+  (memo :
+    SourceCurrentMemoMergeGraph.Memo (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @SourceCurrentConjunctionClassScan.Ready
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      before →
+    @SourceCurrentAllocatedNativeInventoryState.At
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        formulas solver inventory before →
+      SourceEqualityGuardReadback.Cached
+          (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula
+            (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@Cache.Interned.key
+                (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))) →
+        @Eq.{1} (Except.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+            (@SourceEqualityConstraintFieldLookup.load FullSyntax.Formula
+              (@InternedConstructorTemplates.EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@Cache.Interned.key
+                  (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  (@InternedConstructorTemplates.EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) original)))
+              (@SourceEqualityNativeDemand.State.operations
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  before).constraints)
+            (@Except.ok.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+              (@some.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) loaded)) →
+          SourceEqualityConstraintAllocation.Ready
+              (@SourceEqualityNativeDemand.State.operations
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  before).constraints
+              inherited →
+            @InternedNestedProvenance.Values (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceRecursiveIntersectionThunks.State.machine
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceEqualityNativeDemand.State.native
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      before)))
+                (@InternedConstructorTemplates.EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) original) →
+              SourceCurrentEmptinessMemo.Correct formulas solver
+                  (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionThunks.State.machine
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceEqualityNativeDemand.State.native
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        before)))
+                  fourth →
+                @SourceCurrentMemoMergeEffects.Stored (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                          before)))
+                    memo →
+                  @SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                      (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      memo →
+                    @SourceCurrentAllocatedFiniteOrdinaryStored.Stored
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                          before) →
+                      @SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            before) →
+                        (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                            @SourceCurrentMemoMergeLanguage.CacheCovers
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                                formulas solver)
+                              ambient memo) →
+                          ∀ (memos : EndpointMemoGateTrace.Memos),
+                            @EndpointMemoGateTrace.Valid inst_1
+                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceRecursiveIntersectionThunks.State.machine
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                    (@SourceEqualityNativeDemand.State.native
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                      before)))
+                                memos →
+                              ∀ (limits : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits),
+                                @SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge
+                                    (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula limits original →
+                                  @SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                      (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+                                      (@SourceEqualityNativeDemand.State.native
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                        before) →
+                                    @SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                        (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula memo →
+                                      ∀ (rows arity count bound : Nat),
+                                        @SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) rows arity
+                                            (@InternedConstructorTemplates.EdgeValue.children
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) original) →
+                                          @LE.le.{0} Nat instLENat
+                                              (@List.length.{0}
+                                                (InternedConstructorTemplates.Value
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                (@InternedConstructorTemplates.EdgeValue.children
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) original))
+                                              count →
+                                            @LE.le.{0} Nat instLENat
+                                                (@MergedOrdinaryHeight.childrenHeight
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@InternedConstructorTemplates.EdgeValue.children
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) original))
+                                                bound →
+                                              @LE.le.{0} Nat instLENat
+                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                    (@Cache.State.next InternedBinderProtocol.NodeKey
+                                                      (@InternedConstructorTemplates.State.nodes
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                        (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                          (@SourceRecursiveIntersectionThunks.State.machine
+                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                (instOfNatNat (nat_lit 2))))
+                                                            (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                            (@SourceEqualityNativeDemand.State.native
+                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                  (instOfNatNat (nat_lit 2))))
+                                                              before)))))
+                                                    (SourceCurrentAllocatedFiniteOrdinaryParentResources.nodeBudget
+                                                      (@InternedConstructorTemplates.EdgeKey.constraint
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                        (@Cache.Interned.key
+                                                          (InternedConstructorTemplates.EdgeKey
+                                                            (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                          (@InternedConstructorTemplates.EdgeValue.entry
+                                                            (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                            original)))
+                                                      loaded inherited
+                                                      (@SourceEqualityNativeDemand.State.operations
+                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                          bits
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                        before)
+                                                      rows arity count
+                                                      (SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth limits)
+                                                      bound))
+                                                  (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                                    (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                    bits) →
+                                                @LE.le.{0} Nat instLENat
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      (@Cache.State.next
+                                                        (InternedConstructorTemplates.EdgeKey
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                        (@InternedConstructorTemplates.State.edges
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                          (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                            (SourceObservations.Label FullSyntax.Formula)
+                                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                            (@SourceRecursiveIntersectionThunks.State.machine
+                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                  (instOfNatNat (nat_lit 2))))
+                                                              (SourceObservations.Label FullSyntax.Formula)
+                                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                              (@SourceEqualityNativeDemand.State.native
+                                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                  (@instHAdd.{0} Nat instAddNat) bits
+                                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                    (instOfNatNat (nat_lit 2))))
+                                                                before)))))
+                                                      (SourceCurrentAllocatedFiniteOrdinaryParentResources.edgeBudget
+                                                        (@InternedConstructorTemplates.EdgeKey.constraint
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                          (@Cache.Interned.key
+                                                            (InternedConstructorTemplates.EdgeKey
+                                                              (SourceObservations.Label FullSyntax.Formula)
+                                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                            (@InternedConstructorTemplates.EdgeValue.entry
+                                                              (SourceObservations.Label FullSyntax.Formula)
+                                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                              original)))
+                                                        loaded inherited
+                                                        (@SourceEqualityNativeDemand.State.operations
+                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2))))
+                                                          before)
+                                                        rows arity count
+                                                        (SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth limits)
+                                                        bound))
+                                                    (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                                      (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        bits
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                          (instOfNatNat (nat_lit 2))))) →
+                                                  @Exists.{1}
+                                                    (InternedConstructorTemplates.EdgeValue
+                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                    fun result =>
+                                                    @Exists.{2}
+                                                      (SourceEqualityNativeDemand.State
+                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                          bits
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                            (instOfNatNat (nat_lit 2)))))
+                                                      fun after =>
+                                                      @Exists.{1}
+                                                        (SourceCurrentMemoMergeGraph.Memo
+                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                        fun saved =>
+                                                        @Exists.{1} SourceCurrentAllocatedNativeInventoryState.Inventory
+                                                          fun next =>
+                                                          @Exists.{1} EndpointMemoGateTrace.Memos fun final =>
+                                                            @Exists.{1}
+                                                              (List.{0}
+                                                                (SourceCurrentAllocatedFiniteOrdinaryReservations.Request
+                                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                                              fun requests =>
+                                                              @Exists.{0}
+                                                                (@SourceCurrentAllocatedParentEdge.Edge inst inst_1
+                                                                  inst_2
+                                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                    (@instHAdd.{0} Nat instAddNat) bits
+                                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                      (instOfNatNat (nat_lit 2))))
+                                                                  budget
+                                                                  (@InternedConstructorTemplates.EdgeKey.symbol
+                                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    (@Cache.Interned.key
+                                                                      (InternedConstructorTemplates.EdgeKey
+                                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                                        (SourceSymbolicIndex.Constraint
+                                                                          FullSyntax.Formula))
+                                                                      (@InternedConstructorTemplates.EdgeValue.entry
+                                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                                        (SourceSymbolicIndex.Constraint
+                                                                          FullSyntax.Formula)
+                                                                        original)))
+                                                                  (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    (@Cache.Interned.key
+                                                                      (InternedConstructorTemplates.EdgeKey
+                                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                                        (SourceSymbolicIndex.Constraint
+                                                                          FullSyntax.Formula))
+                                                                      (@InternedConstructorTemplates.EdgeValue.entry
+                                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                                        (SourceSymbolicIndex.Constraint
+                                                                          FullSyntax.Formula)
+                                                                        original)))
+                                                                  loaded inherited
+                                                                  (@InternedConstructorTemplates.EdgeValue.children
+                                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                                    original)
+                                                                  before fourth memo result after fourth saved)
+                                                                fun actual =>
+                                                                And
+                                                                  (@SourceCurrentAllocatedParentEdgeActual.Reads inst
+                                                                    inst_1 inst_2
+                                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                      (@instHAdd.{0} Nat instAddNat) bits
+                                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                        (instOfNatNat (nat_lit 2))))
+                                                                    formulas solver budget
+                                                                    (@InternedConstructorTemplates.EdgeKey.symbol
+                                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                                      (SourceSymbolicIndex.Constraint
+                                                                        FullSyntax.Formula)
+                                                                      (@Cache.Interned.key
+                                                                        (InternedConstructorTemplates.EdgeKey
+                                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                                          (SourceSymbolicIndex.Constraint
+                                                                            FullSyntax.Formula))
+                                                                        (@InternedConstructorTemplates.EdgeValue.entry
+                                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                                          (SourceSymbolicIndex.Constraint
+                                                                            FullSyntax.Formula)
+                                                                          original)))
+                                                                    (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                                      (SourceSymbolicIndex.Constraint
+                                                                        FullSyntax.Formula)
+                                                                      (@Cache.Interned.key
+                                                                        (InternedConstructorTemplates.EdgeKey
+                                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                                          (SourceSymbolicIndex.Constraint
+                                                                            FullSyntax.Formula))
+                                                                        (@InternedConstructorTemplates.EdgeValue.entry
+                                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                                          (SourceSymbolicIndex.Constraint
+                                                                            FullSyntax.Formula)
+                                                                          original)))
+                                                                    loaded inherited
+                                                                    (@InternedConstructorTemplates.EdgeValue.children
+                                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                                      (SourceSymbolicIndex.Constraint
+                                                                        FullSyntax.Formula)
+                                                                      original)
+                                                                    before after result fourth fourth memo saved actual
+                                                                    memos final)
+                                                                  (And
+                                                                    (@SourceCurrentAllocatedParentEdge.Receipt inst_1
+                                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                        (@instHAdd.{0} Nat instAddNat) bits
+                                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                          (instOfNatNat (nat_lit 2))))
+                                                                      formulas solver next
+                                                                      (@InternedConstructorTemplates.EdgeKey.symbol
+                                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                                        (SourceSymbolicIndex.Constraint
+                                                                          FullSyntax.Formula)
+                                                                        (@Cache.Interned.key
+                                                                          (InternedConstructorTemplates.EdgeKey
+                                                                            (SourceObservations.Label
+                                                                              FullSyntax.Formula)
+                                                                            (SourceSymbolicIndex.Constraint
+                                                                              FullSyntax.Formula))
+                                                                          (@InternedConstructorTemplates.EdgeValue.entry
+                                                                            (SourceObservations.Label
+                                                                              FullSyntax.Formula)
+                                                                            (SourceSymbolicIndex.Constraint
+                                                                              FullSyntax.Formula)
+                                                                            original)))
+                                                                      (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                                        (SourceSymbolicIndex.Constraint
+                                                                          FullSyntax.Formula)
+                                                                        (@Cache.Interned.key
+                                                                          (InternedConstructorTemplates.EdgeKey
+                                                                            (SourceObservations.Label
+                                                                              FullSyntax.Formula)
+                                                                            (SourceSymbolicIndex.Constraint
+                                                                              FullSyntax.Formula))
+                                                                          (@InternedConstructorTemplates.EdgeValue.entry
+                                                                            (SourceObservations.Label
+                                                                              FullSyntax.Formula)
+                                                                            (SourceSymbolicIndex.Constraint
+                                                                              FullSyntax.Formula)
+                                                                            original)))
+                                                                      loaded inherited
+                                                                      (@InternedConstructorTemplates.EdgeValue.children
+                                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                                        (SourceSymbolicIndex.Constraint
+                                                                          FullSyntax.Formula)
+                                                                        original)
+                                                                      before result after fourth fourth memo saved
+                                                                      final)
+                                                                    (And
+                                                                      (@SourceCurrentAllocatedParentWorkerCompletion.StableRun
+                                                                        (InternedConstructorTemplates.EdgeValue
+                                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                                          (SourceSymbolicIndex.Constraint
+                                                                            FullSyntax.Formula))
+                                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                          (@instHAdd.{0} Nat instAddNat) bits
+                                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                            (instOfNatNat (nat_lit 2))))
+                                                                        (fun g s r e p h m c n =>
+                                                                          @SourceCurrentAllocatedParentWorker.edge inst
+                                                                            inst_1 inst_2
+                                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                (instOfNatNat (nat_lit 2))))
+                                                                            g s r e p h m c n budget
+                                                                            (@InternedConstructorTemplates.EdgeKey.symbol
+                                                                              (SourceObservations.Label
+                                                                                FullSyntax.Formula)
+                                                                              (SourceSymbolicIndex.Constraint
+                                                                                FullSyntax.Formula)
+                                                                              (@Cache.Interned.key
+                                                                                (InternedConstructorTemplates.EdgeKey
+                                                                                  (SourceObservations.Label
+                                                                                    FullSyntax.Formula)
+                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                    FullSyntax.Formula))
+                                                                                (@InternedConstructorTemplates.EdgeValue.entry
+                                                                                  (SourceObservations.Label
+                                                                                    FullSyntax.Formula)
+                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                    FullSyntax.Formula)
+                                                                                  original)))
+                                                                            (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                              (SourceObservations.Label
+                                                                                FullSyntax.Formula)
+                                                                              (SourceSymbolicIndex.Constraint
+                                                                                FullSyntax.Formula)
+                                                                              (@Cache.Interned.key
+                                                                                (InternedConstructorTemplates.EdgeKey
+                                                                                  (SourceObservations.Label
+                                                                                    FullSyntax.Formula)
+                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                    FullSyntax.Formula))
+                                                                                (@InternedConstructorTemplates.EdgeValue.entry
+                                                                                  (SourceObservations.Label
+                                                                                    FullSyntax.Formula)
+                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                    FullSyntax.Formula)
+                                                                                  original)))
+                                                                            inherited
+                                                                            (@InternedConstructorTemplates.EdgeValue.children
+                                                                              (SourceObservations.Label
+                                                                                FullSyntax.Formula)
+                                                                              (SourceSymbolicIndex.Constraint
+                                                                                FullSyntax.Formula)
+                                                                              original)
+                                                                            before fourth memo)
+                                                                        result after fourth saved)
+                                                                      (And
+                                                                        (@SourceCurrentAllocatedFiniteOrdinaryStored.Stored
+                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                              (instOfNatNat (nat_lit 2))))
+                                                                          (SourceObservations.Label FullSyntax.Formula)
+                                                                          (SourceSymbolicIndex.Constraint
+                                                                            FullSyntax.Formula)
+                                                                          (@SourceEqualityNativeDemand.State.native
+                                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                (instOfNatNat (nat_lit 2))))
+                                                                            after))
+                                                                        (And
+                                                                          (@SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+                                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                (instOfNatNat (nat_lit 2))))
+                                                                            (SourceObservations.Label
+                                                                              FullSyntax.Formula)
+                                                                            (SourceSymbolicIndex.Constraint
+                                                                              FullSyntax.Formula)
+                                                                            (@SourceEqualityNativeDemand.State.native
+                                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                  (instOfNatNat (nat_lit 2))))
+                                                                              after))
+                                                                          (And
+                                                                            (@SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                                                                              (SourceObservations.Label
+                                                                                FullSyntax.Formula)
+                                                                              (SourceSymbolicIndex.Constraint
+                                                                                FullSyntax.Formula)
+                                                                              saved)
+                                                                            (And
+                                                                              (@SourceCurrentAllocatedFiniteOrdinaryNativeProfile.EdgeShape
+                                                                                (SourceObservations.Label
+                                                                                  FullSyntax.Formula)
+                                                                                (SourceSymbolicIndex.Constraint
+                                                                                  FullSyntax.Formula)
+                                                                                (SourceCurrentAllocatedFiniteOrdinaryParentResources.outputRows
+                                                                                  (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                                    (SourceObservations.Label
+                                                                                      FullSyntax.Formula)
+                                                                                    (SourceSymbolicIndex.Constraint
+                                                                                      FullSyntax.Formula)
+                                                                                    (@Cache.Interned.key
+                                                                                      (InternedConstructorTemplates.EdgeKey
+                                                                                        (SourceObservations.Label
+                                                                                          FullSyntax.Formula)
+                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                          FullSyntax.Formula))
+                                                                                      (@InternedConstructorTemplates.EdgeValue.entry
+                                                                                        (SourceObservations.Label
+                                                                                          FullSyntax.Formula)
+                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                          FullSyntax.Formula)
+                                                                                        original)))
+                                                                                  loaded inherited
+                                                                                  (@SourceEqualityNativeDemand.State.operations
+                                                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                      (@instHAdd.{0} Nat instAddNat)
+                                                                                      bits
+                                                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                        (instOfNatNat (nat_lit 2))))
+                                                                                    before)
+                                                                                  rows count
+                                                                                  (SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth
+                                                                                    limits)
+                                                                                  bound)
+                                                                                (SourceCurrentAllocatedFiniteOrdinaryParentResources.outputArity
+                                                                                  (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                                    (SourceObservations.Label
+                                                                                      FullSyntax.Formula)
+                                                                                    (SourceSymbolicIndex.Constraint
+                                                                                      FullSyntax.Formula)
+                                                                                    (@Cache.Interned.key
+                                                                                      (InternedConstructorTemplates.EdgeKey
+                                                                                        (SourceObservations.Label
+                                                                                          FullSyntax.Formula)
+                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                          FullSyntax.Formula))
+                                                                                      (@InternedConstructorTemplates.EdgeValue.entry
+                                                                                        (SourceObservations.Label
+                                                                                          FullSyntax.Formula)
+                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                          FullSyntax.Formula)
+                                                                                        original)))
+                                                                                  loaded inherited
+                                                                                  (@SourceEqualityNativeDemand.State.operations
+                                                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                                      (@instHAdd.{0} Nat instAddNat)
+                                                                                      bits
+                                                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                        (instOfNatNat (nat_lit 2))))
+                                                                                    before)
+                                                                                  arity count)
+                                                                                result)
+                                                                              (And
+                                                                                (@SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow
+                                                                                  (SourceObservations.Label
+                                                                                    FullSyntax.Formula)
+                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                    FullSyntax.Formula)
+                                                                                  original result)
+                                                                                (And
+                                                                                  (@SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace
+                                                                                    (SourceObservations.Label
+                                                                                      FullSyntax.Formula)
+                                                                                    (SourceSymbolicIndex.Constraint
+                                                                                      FullSyntax.Formula)
+                                                                                    inst_1
+                                                                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                                      (SourceObservations.Label
+                                                                                        FullSyntax.Formula)
+                                                                                      (SourceSymbolicIndex.Constraint
+                                                                                        FullSyntax.Formula)
+                                                                                      (@SourceRecursiveIntersectionThunks.State.machine
+                                                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat
+                                                                                          Nat
+                                                                                          (@instHAdd.{0} Nat instAddNat)
+                                                                                          bits
+                                                                                          (@OfNat.ofNat.{0} Nat
+                                                                                            (nat_lit 2)
+                                                                                            (instOfNatNat (nat_lit 2))))
+                                                                                        (SourceObservations.Label
+                                                                                          FullSyntax.Formula)
+                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                          FullSyntax.Formula)
+                                                                                        (@SourceEqualityNativeDemand.State.native
+                                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat
+                                                                                            Nat
+                                                                                            (@instHAdd.{0} Nat
+                                                                                              instAddNat)
+                                                                                            bits
+                                                                                            (@OfNat.ofNat.{0} Nat
+                                                                                              (nat_lit 2)
+                                                                                              (instOfNatNat
+                                                                                                (nat_lit 2))))
+                                                                                          before)))
+                                                                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                                      (SourceObservations.Label
+                                                                                        FullSyntax.Formula)
+                                                                                      (SourceSymbolicIndex.Constraint
+                                                                                        FullSyntax.Formula)
+                                                                                      (@SourceRecursiveIntersectionThunks.State.machine
+                                                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat
+                                                                                          Nat
+                                                                                          (@instHAdd.{0} Nat instAddNat)
+                                                                                          bits
+                                                                                          (@OfNat.ofNat.{0} Nat
+                                                                                            (nat_lit 2)
+                                                                                            (instOfNatNat (nat_lit 2))))
+                                                                                        (SourceObservations.Label
+                                                                                          FullSyntax.Formula)
+                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                          FullSyntax.Formula)
+                                                                                        (@SourceEqualityNativeDemand.State.native
+                                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat
+                                                                                            Nat
+                                                                                            (@instHAdd.{0} Nat
+                                                                                              instAddNat)
+                                                                                            bits
+                                                                                            (@OfNat.ofNat.{0} Nat
+                                                                                              (nat_lit 2)
+                                                                                              (instOfNatNat
+                                                                                                (nat_lit 2))))
+                                                                                          after)))
+                                                                                    requests)
+                                                                                  (And
+                                                                                    (@LE.le.{0} Nat instLENat
+                                                                                      (@SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                                                                                        (SourceObservations.Label
+                                                                                          FullSyntax.Formula)
+                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                          FullSyntax.Formula)
+                                                                                        requests)
+                                                                                      (SourceCurrentAllocatedFiniteOrdinaryParentResources.nodeBudget
+                                                                                        (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                                          (SourceObservations.Label
+                                                                                            FullSyntax.Formula)
+                                                                                          (SourceSymbolicIndex.Constraint
+                                                                                            FullSyntax.Formula)
+                                                                                          (@Cache.Interned.key
+                                                                                            (InternedConstructorTemplates.EdgeKey
+                                                                                              (SourceObservations.Label
+                                                                                                FullSyntax.Formula)
+                                                                                              (SourceSymbolicIndex.Constraint
+                                                                                                FullSyntax.Formula))
+                                                                                            (@InternedConstructorTemplates.EdgeValue.entry
+                                                                                              (SourceObservations.Label
+                                                                                                FullSyntax.Formula)
+                                                                                              (SourceSymbolicIndex.Constraint
+                                                                                                FullSyntax.Formula)
+                                                                                              original)))
+                                                                                        loaded inherited
+                                                                                        (@SourceEqualityNativeDemand.State.operations
+                                                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat
+                                                                                            Nat
+                                                                                            (@instHAdd.{0} Nat
+                                                                                              instAddNat)
+                                                                                            bits
+                                                                                            (@OfNat.ofNat.{0} Nat
+                                                                                              (nat_lit 2)
+                                                                                              (instOfNatNat
+                                                                                                (nat_lit 2))))
+                                                                                          before)
+                                                                                        rows arity count
+                                                                                        (SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth
+                                                                                          limits)
+                                                                                        bound))
+                                                                                    (And
+                                                                                      (@LE.le.{0} Nat instLENat
+                                                                                        (@SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                                                                                          (SourceObservations.Label
+                                                                                            FullSyntax.Formula)
+                                                                                          (SourceSymbolicIndex.Constraint
+                                                                                            FullSyntax.Formula)
+                                                                                          requests)
+                                                                                        (SourceCurrentAllocatedFiniteOrdinaryParentResources.edgeBudget
+                                                                                          (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                                            (SourceObservations.Label
+                                                                                              FullSyntax.Formula)
+                                                                                            (SourceSymbolicIndex.Constraint
+                                                                                              FullSyntax.Formula)
+                                                                                            (@Cache.Interned.key
+                                                                                              (InternedConstructorTemplates.EdgeKey
+                                                                                                (SourceObservations.Label
+                                                                                                  FullSyntax.Formula)
+                                                                                                (SourceSymbolicIndex.Constraint
+                                                                                                  FullSyntax.Formula))
+                                                                                              (@InternedConstructorTemplates.EdgeValue.entry
+                                                                                                (SourceObservations.Label
+                                                                                                  FullSyntax.Formula)
+                                                                                                (SourceSymbolicIndex.Constraint
+                                                                                                  FullSyntax.Formula)
+                                                                                                original)))
+                                                                                          loaded inherited
+                                                                                          (@SourceEqualityNativeDemand.State.operations
+                                                                                            (@HAdd.hAdd.{0, 0, 0} Nat
+                                                                                              Nat Nat
+                                                                                              (@instHAdd.{0} Nat
+                                                                                                instAddNat)
+                                                                                              bits
+                                                                                              (@OfNat.ofNat.{0} Nat
+                                                                                                (nat_lit 2)
+                                                                                                (instOfNatNat
+                                                                                                  (nat_lit 2))))
+                                                                                            before)
+                                                                                          rows arity count
+                                                                                          (SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth
+                                                                                            limits)
+                                                                                          bound))
+                                                                                      (And
+                                                                                        (SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity
+                                                                                          bits after)
+                                                                                        (And
+                                                                                          (@LE.le.{0} Nat instLENat
+                                                                                            (@Cache.State.next
+                                                                                              InternedBinderProtocol.NodeKey
+                                                                                              (@InternedConstructorTemplates.State.nodes
+                                                                                                (SourceObservations.Label
+                                                                                                  FullSyntax.Formula)
+                                                                                                (SourceSymbolicIndex.Constraint
+                                                                                                  FullSyntax.Formula)
+                                                                                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                                                  (SourceObservations.Label
+                                                                                                    FullSyntax.Formula)
+                                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                                    FullSyntax.Formula)
+                                                                                                  (@SourceRecursiveIntersectionThunks.State.machine
+                                                                                                    (@HAdd.hAdd.{0, 0,
+                                                                                                          0}
+                                                                                                      Nat Nat Nat
+                                                                                                      (@instHAdd.{0} Nat
+                                                                                                        instAddNat)
+                                                                                                      bits
+                                                                                                      (@OfNat.ofNat.{0}
+                                                                                                        Nat (nat_lit 2)
+                                                                                                        (instOfNatNat
+                                                                                                          (nat_lit 2))))
+                                                                                                    (SourceObservations.Label
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (SourceSymbolicIndex.Constraint
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (@SourceEqualityNativeDemand.State.native
+                                                                                                      (@HAdd.hAdd.{0, 0,
+                                                                                                            0}
+                                                                                                        Nat Nat Nat
+                                                                                                        (@instHAdd.{0}
+                                                                                                          Nat
+                                                                                                          instAddNat)
+                                                                                                        bits
+                                                                                                        (@OfNat.ofNat.{0}
+                                                                                                          Nat
+                                                                                                          (nat_lit 2)
+                                                                                                          (instOfNatNat
+                                                                                                            (nat_lit
+                                                                                                              2))))
+                                                                                                      after)))))
+                                                                                            (@HAdd.hAdd.{0, 0, 0} Nat
+                                                                                              Nat Nat
+                                                                                              (@instHAdd.{0} Nat
+                                                                                                instAddNat)
+                                                                                              (@Cache.State.next
+                                                                                                InternedBinderProtocol.NodeKey
+                                                                                                (@InternedConstructorTemplates.State.nodes
+                                                                                                  (SourceObservations.Label
+                                                                                                    FullSyntax.Formula)
+                                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                                    FullSyntax.Formula)
+                                                                                                  (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                                                    (SourceObservations.Label
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (SourceSymbolicIndex.Constraint
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (@SourceRecursiveIntersectionThunks.State.machine
+                                                                                                      (@HAdd.hAdd.{0, 0,
+                                                                                                            0}
+                                                                                                        Nat Nat Nat
+                                                                                                        (@instHAdd.{0}
+                                                                                                          Nat
+                                                                                                          instAddNat)
+                                                                                                        bits
+                                                                                                        (@OfNat.ofNat.{0}
+                                                                                                          Nat
+                                                                                                          (nat_lit 2)
+                                                                                                          (instOfNatNat
+                                                                                                            (nat_lit
+                                                                                                              2))))
+                                                                                                      (SourceObservations.Label
+                                                                                                        FullSyntax.Formula)
+                                                                                                      (SourceSymbolicIndex.Constraint
+                                                                                                        FullSyntax.Formula)
+                                                                                                      (@SourceEqualityNativeDemand.State.native
+                                                                                                        (@HAdd.hAdd.{0,
+                                                                                                              0, 0}
+                                                                                                          Nat Nat Nat
+                                                                                                          (@instHAdd.{0}
+                                                                                                            Nat
+                                                                                                            instAddNat)
+                                                                                                          bits
+                                                                                                          (@OfNat.ofNat.{0}
+                                                                                                            Nat
+                                                                                                            (nat_lit 2)
+                                                                                                            (instOfNatNat
+                                                                                                              (nat_lit
+                                                                                                                2))))
+                                                                                                        before)))))
+                                                                                              (SourceCurrentAllocatedFiniteOrdinaryParentResources.nodeBudget
+                                                                                                (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                                                  (SourceObservations.Label
+                                                                                                    FullSyntax.Formula)
+                                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                                    FullSyntax.Formula)
+                                                                                                  (@Cache.Interned.key
+                                                                                                    (InternedConstructorTemplates.EdgeKey
+                                                                                                      (SourceObservations.Label
+                                                                                                        FullSyntax.Formula)
+                                                                                                      (SourceSymbolicIndex.Constraint
+                                                                                                        FullSyntax.Formula))
+                                                                                                    (@InternedConstructorTemplates.EdgeValue.entry
+                                                                                                      (SourceObservations.Label
+                                                                                                        FullSyntax.Formula)
+                                                                                                      (SourceSymbolicIndex.Constraint
+                                                                                                        FullSyntax.Formula)
+                                                                                                      original)))
+                                                                                                loaded inherited
+                                                                                                (@SourceEqualityNativeDemand.State.operations
+                                                                                                  (@HAdd.hAdd.{0, 0, 0}
+                                                                                                    Nat Nat Nat
+                                                                                                    (@instHAdd.{0} Nat
+                                                                                                      instAddNat)
+                                                                                                    bits
+                                                                                                    (@OfNat.ofNat.{0}
+                                                                                                      Nat (nat_lit 2)
+                                                                                                      (instOfNatNat
+                                                                                                        (nat_lit 2))))
+                                                                                                  before)
+                                                                                                rows arity count
+                                                                                                (SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth
+                                                                                                  limits)
+                                                                                                bound)))
+                                                                                          (And
+                                                                                            (@LE.le.{0} Nat instLENat
+                                                                                              (@Cache.State.next
+                                                                                                (InternedConstructorTemplates.EdgeKey
+                                                                                                  (SourceObservations.Label
+                                                                                                    FullSyntax.Formula)
+                                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                                    FullSyntax.Formula))
+                                                                                                (@InternedConstructorTemplates.State.edges
+                                                                                                  (SourceObservations.Label
+                                                                                                    FullSyntax.Formula)
+                                                                                                  (SourceSymbolicIndex.Constraint
+                                                                                                    FullSyntax.Formula)
+                                                                                                  (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                                                    (SourceObservations.Label
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (SourceSymbolicIndex.Constraint
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (@SourceRecursiveIntersectionThunks.State.machine
+                                                                                                      (@HAdd.hAdd.{0, 0,
+                                                                                                            0}
+                                                                                                        Nat Nat Nat
+                                                                                                        (@instHAdd.{0}
+                                                                                                          Nat
+                                                                                                          instAddNat)
+                                                                                                        bits
+                                                                                                        (@OfNat.ofNat.{0}
+                                                                                                          Nat
+                                                                                                          (nat_lit 2)
+                                                                                                          (instOfNatNat
+                                                                                                            (nat_lit
+                                                                                                              2))))
+                                                                                                      (SourceObservations.Label
+                                                                                                        FullSyntax.Formula)
+                                                                                                      (SourceSymbolicIndex.Constraint
+                                                                                                        FullSyntax.Formula)
+                                                                                                      (@SourceEqualityNativeDemand.State.native
+                                                                                                        (@HAdd.hAdd.{0,
+                                                                                                              0, 0}
+                                                                                                          Nat Nat Nat
+                                                                                                          (@instHAdd.{0}
+                                                                                                            Nat
+                                                                                                            instAddNat)
+                                                                                                          bits
+                                                                                                          (@OfNat.ofNat.{0}
+                                                                                                            Nat
+                                                                                                            (nat_lit 2)
+                                                                                                            (instOfNatNat
+                                                                                                              (nat_lit
+                                                                                                                2))))
+                                                                                                        after)))))
+                                                                                              (@HAdd.hAdd.{0, 0, 0} Nat
+                                                                                                Nat Nat
+                                                                                                (@instHAdd.{0} Nat
+                                                                                                  instAddNat)
+                                                                                                (@Cache.State.next
+                                                                                                  (InternedConstructorTemplates.EdgeKey
+                                                                                                    (SourceObservations.Label
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (SourceSymbolicIndex.Constraint
+                                                                                                      FullSyntax.Formula))
+                                                                                                  (@InternedConstructorTemplates.State.edges
+                                                                                                    (SourceObservations.Label
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (SourceSymbolicIndex.Constraint
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                                                                      (SourceObservations.Label
+                                                                                                        FullSyntax.Formula)
+                                                                                                      (SourceSymbolicIndex.Constraint
+                                                                                                        FullSyntax.Formula)
+                                                                                                      (@SourceRecursiveIntersectionThunks.State.machine
+                                                                                                        (@HAdd.hAdd.{0,
+                                                                                                              0, 0}
+                                                                                                          Nat Nat Nat
+                                                                                                          (@instHAdd.{0}
+                                                                                                            Nat
+                                                                                                            instAddNat)
+                                                                                                          bits
+                                                                                                          (@OfNat.ofNat.{0}
+                                                                                                            Nat
+                                                                                                            (nat_lit 2)
+                                                                                                            (instOfNatNat
+                                                                                                              (nat_lit
+                                                                                                                2))))
+                                                                                                        (SourceObservations.Label
+                                                                                                          FullSyntax.Formula)
+                                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                                          FullSyntax.Formula)
+                                                                                                        (@SourceEqualityNativeDemand.State.native
+                                                                                                          (@HAdd.hAdd.{0,
+                                                                                                                0, 0}
+                                                                                                            Nat Nat Nat
+                                                                                                            (@instHAdd.{0}
+                                                                                                              Nat
+                                                                                                              instAddNat)
+                                                                                                            bits
+                                                                                                            (@OfNat.ofNat.{0}
+                                                                                                              Nat
+                                                                                                              (nat_lit
+                                                                                                                2)
+                                                                                                              (instOfNatNat
+                                                                                                                (nat_lit
+                                                                                                                  2))))
+                                                                                                          before)))))
+                                                                                                (SourceCurrentAllocatedFiniteOrdinaryParentResources.edgeBudget
+                                                                                                  (@InternedConstructorTemplates.EdgeKey.constraint
+                                                                                                    (SourceObservations.Label
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (SourceSymbolicIndex.Constraint
+                                                                                                      FullSyntax.Formula)
+                                                                                                    (@Cache.Interned.key
+                                                                                                      (InternedConstructorTemplates.EdgeKey
+                                                                                                        (SourceObservations.Label
+                                                                                                          FullSyntax.Formula)
+                                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                                          FullSyntax.Formula))
+                                                                                                      (@InternedConstructorTemplates.EdgeValue.entry
+                                                                                                        (SourceObservations.Label
+                                                                                                          FullSyntax.Formula)
+                                                                                                        (SourceSymbolicIndex.Constraint
+                                                                                                          FullSyntax.Formula)
+                                                                                                        original)))
+                                                                                                  loaded inherited
+                                                                                                  (@SourceEqualityNativeDemand.State.operations
+                                                                                                    (@HAdd.hAdd.{0, 0,
+                                                                                                          0}
+                                                                                                      Nat Nat Nat
+                                                                                                      (@instHAdd.{0} Nat
+                                                                                                        instAddNat)
+                                                                                                      bits
+                                                                                                      (@OfNat.ofNat.{0}
+                                                                                                        Nat (nat_lit 2)
+                                                                                                        (instOfNatNat
+                                                                                                          (nat_lit 2))))
+                                                                                                    before)
+                                                                                                  rows arity count
+                                                                                                  (SourceCurrentAllocatedFiniteOrdinaryGuardOwn.pathDepth
+                                                                                                    limits)
+                                                                                                  bound)))
+                                                                                            (And
+                                                                                              (@SourceCurrentAllocatedFiniteOrdinaryGuardStored.Stored
+                                                                                                (@HAdd.hAdd.{0, 0, 0}
+                                                                                                  Nat Nat Nat
+                                                                                                  (@instHAdd.{0} Nat
+                                                                                                    instAddNat)
+                                                                                                  bits
+                                                                                                  (@OfNat.ofNat.{0} Nat
+                                                                                                    (nat_lit 2)
+                                                                                                    (instOfNatNat
+                                                                                                      (nat_lit 2))))
+                                                                                                (SourceObservations.Label
+                                                                                                  FullSyntax.Formula)
+                                                                                                FullSyntax.Formula
+                                                                                                (@SourceEqualityNativeDemand.State.native
+                                                                                                  (@HAdd.hAdd.{0, 0, 0}
+                                                                                                    Nat Nat Nat
+                                                                                                    (@instHAdd.{0} Nat
+                                                                                                      instAddNat)
+                                                                                                    bits
+                                                                                                    (@OfNat.ofNat.{0}
+                                                                                                      Nat (nat_lit 2)
+                                                                                                      (instOfNatNat
+                                                                                                        (nat_lit 2))))
+                                                                                                  after))
+                                                                                              (And
+                                                                                                (@SourceCurrentAllocatedFiniteOrdinaryMergeGuardCache.Stored
+                                                                                                  (SourceObservations.Label
+                                                                                                    FullSyntax.Formula)
+                                                                                                  FullSyntax.Formula
+                                                                                                  saved)
+                                                                                                (@SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge
+                                                                                                  (SourceObservations.Label
+                                                                                                    FullSyntax.Formula)
+                                                                                                  FullSyntax.Formula
+                                                                                                  (SourceCurrentAllocatedFiniteOrdinaryGuardParent.outputLimit
+                                                                                                    limits)
+                                                                                                  result))))))))))))))))

@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEdit
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEdit.node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEdit.node
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEdit.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEdit.children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEdit.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEdit.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEdit.list
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryGuardEdit.list
