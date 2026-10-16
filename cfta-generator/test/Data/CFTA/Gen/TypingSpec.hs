@@ -24,6 +24,7 @@ import Data.CFTA.Generic (
     constructorLabel,
     datatypeFTA,
     decodeLabelledTerm,
+    deriveFTA,
     deriveFTAWith,
     domain,
  )
@@ -211,6 +212,18 @@ total generator = case Gen.cardinality generator of
 members :: (Ord a) => Gen.Gen symbol a -> [a]
 members = sort . either (error . show) id . Gen.values
 
+-- * The order of a helper type
+
+-- | A helper type. Its constructors are declared in the reverse order of their labels.
+data Letter = Z | A
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | A language with one constructor, whose field has the helper type.
+newtype Lettered = Lit Letter
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
 spec :: Spec
 spec = describe "Data.CFTA.Gen.Typing" $ do
     describe "the language of the binders spike" $ do
@@ -263,3 +276,9 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
                 , variable "Var" (\_ _ -> [value False])
                 ]
                 `shouldBe` Just (FieldMismatch "Var")
+    describe "the order of the values" $
+        it "orders the constructors of a helper type in declaration order, as fromDatatype does" $ do
+            let typed = either (error . show) id $ fromTypingRules @Lettered 0 [()] [rule "Lit" [value A] (), rule "Lit" [value Z] ()]
+                derived = Gen.fromDatatype $ either (error . show) id $ deriveFTA @Lettered
+            Gen.values derived `shouldBe` Right [Lit Z, Lit A]
+            Gen.values typed `shouldBe` Right [Lit Z, Lit A]
