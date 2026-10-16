@@ -1,6 +1,63 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 16:24 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 16:51 CEST (Europe/Stockholm)**.
+
+## Current finite ordinary target domains and shared leaves
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `c47ad331`. Read lean/notes-current-constrained-target-domain.md
+for the top-level proof objective, proved contracts, and remaining areas.
+Evidence is in lean/restart-evidence/20261016-constrained-target-domain/.
+Eight additive modules close the current target-domain prerequisites.
+Commits are `d9d86a5e` (actual memo-aware merge and literal worker),
+`522a037a` (projection, required paths, and targets), and `7b60eca2`
+(shared Force/Leaf and Audit imports).
+
+Actual merge calls retain physical and structural cache certificates.
+Each hit identifies its complete captured original. Each miss proves its
+actual memo-aware body before it remembers and rereads the current winner.
+Finite merge constructs literal success and every larger work/selection
+bound at the same output, full physical state, and memo. It has no supplied
+success, future body, or result-domain premise.
+
+Actual projection and target folds derive finite ordinary result domain.
+Target derives signed path support from its available captured forest.
+Its finite endpoint constructs its own actual graph and full receipt.
+Native and merge structural certificates survive every actual prefix.
+Required paths preserve domain and height at each child position; rows can
+be deleted. Guards and equality classes remain unrestricted in the finite
+ordinary domain. Mu, references, and explicit unions are outside that domain.
+
+Shared.Stored tracks native results, merge results, and target slots.
+Actual Force derives domain from its warm slot or actual target miss.
+Actual Leaf derives NodeNarrow relative to INPUT from the native bound for
+its second operand. No target-height or equal-path-length premise is needed.
+Finite Force/Leaf construct their own complete receipts and preserve all
+three tables at the same returned state. Initial readiness, semantic
+admission, domain facts, and reached WordRanges remain explicit.
+
+Next compose positional bounds through actual shared edits, Class/Pass,
+Scan, local reduction, and parent construction. Then construct a new finite
+ordinary outer recursion proof with a certificate tied to each captured
+node/edge owner. First derive zero cached Mu depth and the primary scan
+fast branch. General refused scans need a separate seeded structural proof.
+Read next-class-stage-review.md in the evidence directory.
+The old plain Shape is too strong for generated intersected children.
+General Mu constraint migration, unequal-length classes, repeated-pass
+convergence, current frontend adapters, concrete Haskell runtime transfer,
+and full-pipeline composition remain open. The full-library objective also
+retains exact size classes, finite execution, counts, ordered ranks, both
+inverses, probability, transformations, and older constructor/equality work.
+
+The full Audit passes 2508 jobs and 59107 dependency checks. Preservation
+retains all 5965 starting files and 2499 older non-Audit proof sources.
+Thirty-four frozen manifests check 265 module entries. Historical repairs,
+stashes, other worktrees, and the optimized interned core remain.
+No Haskell file changes. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+each later repair there with failure, reproducer, paths, commit, checks,
+and upstream status. This checkpoint is progress; the full goal stays active.
 
 ## Current constrained finite ordinary native structure
 
