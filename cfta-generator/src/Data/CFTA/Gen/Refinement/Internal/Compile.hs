@@ -21,6 +21,7 @@ module Data.CFTA.Gen.Refinement.Internal.Compile (
     reportTimeLimit,
     spineArity,
     isIntegerName,
+    namedTerms,
 ) where
 
 import Control.Applicative ((<|>))
@@ -45,6 +46,7 @@ import Unsafe.Coerce (unsafeCoerce)
 
 import qualified Data.CFTA as FTA (fromTerms)
 import Data.CFTA.Equality.Constraint (EqConstraints (EmptyConstraints))
+import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Gen
 import Data.CFTA.Gen.Internal.Bucket (
     KeyedBucket (..),
@@ -931,13 +933,28 @@ compileOpenNode compiler requested labelling constraint child
                     if valueName `elem` freeNames (term .== 0)
                         then Nothing
                         else Just term
-            targetTerm part target = maybe (Left $ IntegerLeafRead $ Just part) Right $ case unPath target of
-                [] -> termOf labelRefinement
-                [index] -> termOf . (\(RefinedSymbol _ refinement) -> refinement) =<< renamedRoot childKeys index
+            refinementAt target = case unPath target of
+                [] -> Just labelRefinement
+                [index] -> (\(RefinedSymbol _ refinement) -> refinement) <$> renamedRoot childKeys index
                 _ -> Nothing
+            -- A part reads a named measure of a target as the term that the
+            -- refinement of the target gives for it, and a target as its value.
+            readTargets part names targets formula = do
+                refinements <- maybe (Left $ IntegerLeafRead $ Just part) Right $ traverse refinementAt targets
+                let applied =
+                        replaceNamedReads
+                            [(Formula.Name $ fromString name, namedTerms refinement) | (name, refinement) <- zip names refinements]
+                            formula
+                targetValues <-
+                    sequence
+                        [ maybe (Left $ IntegerLeafRead $ Just part) (Right . (,) name) (termOf refinement)
+                        | (name, refinement) <- zip names refinements
+                        , name `elem` freeNames applied
+                        ]
+                pure $ substitute targetValues applied
             partFormula part = case part of
-                Satisfies target formula -> (\term -> substitute [(valueName, term)] formula) <$> targetTerm part target
-                Holds targets formula -> (\named -> substitute (zip (map contractTermName [0 ..]) named) formula) <$> traverse (targetTerm part) targets
+                Satisfies target formula -> readTargets part [valueName] [target] formula
+                Holds targets formula -> readTargets part (map contractTermName [0 ..]) targets formula
                 _ -> Left $ IntegerLeafRead $ Just part
         openFormulas <- traverse partFormula $ filter (readsOpen childKeys label) parts
         let formula = foldr (.&&) true $ renamedFormulas childKeys <> openFormulas
@@ -1047,6 +1064,53 @@ fillHoles point = snd . fill point
             let named = substitute [(integerName index, literal value) | (index, value) <- zip [0 ..] remaining] refinement
              in RefinedSymbol symbol $ maybe named (\value -> refinementFormula (.== literal value)) $ onlyPoint valueName named
         | otherwise = label
+
+{- | The terms of the named measures that a refinement fixes: each conjunct
+@name(v) == t@ whose term does not read the value @v@.
+-}
+namedTerms :: Formula.Formula -> [(String, Formula.Term)]
+namedTerms formula = case formula of
+    Formula.And parts -> concatMap namedTerms parts
+    Formula.Atom Formula.Eq left right
+        | Just found <- named left right <|> named right left -> [found]
+    _ -> []
+  where
+    value = Formula.Name $ fromString valueName
+    named (Formula.App (Formula.Name function) [Formula.Var argument]) term
+        | argument == value
+        , value `notElem` Formula.freeNames (Formula.Atom Formula.Eq term (Formula.Lit 0)) =
+            Just (Text.unpack function, term)
+    named _ _ = Nothing
+
+{- | Replace each read of a named measure of a target, @name(target)@, by the
+term that the table gives for it. Other applications stay.
+-}
+replaceNamedReads :: [(Formula.Name, [(String, Formula.Term)])] -> Formula.Formula -> Formula.Formula
+replaceNamedReads table = formulaWith
+  where
+    formulaWith formula = case formula of
+        Formula.And parts -> Formula.And (map formulaWith parts)
+        Formula.Or parts -> Formula.Or (map formulaWith parts)
+        Formula.Not inner -> Formula.Not (formulaWith inner)
+        Formula.Atom relation left right -> Formula.Atom relation (termWith left) (termWith right)
+        Formula.Forall bound inner -> Formula.Forall bound (formulaWith inner)
+        Formula.Exists bound inner -> Formula.Exists bound (formulaWith inner)
+        _ -> formula
+    termWith term = case term of
+        Formula.App (Formula.Name function) [Formula.Var target]
+            | Just named <- lookup target table
+            , Just replacement <- lookup (Text.unpack function) named ->
+                replacement
+        Formula.App function arguments -> Formula.App function (map termWith arguments)
+        Formula.Neg inner -> Formula.Neg (termWith inner)
+        Formula.Add left right -> Formula.Add (termWith left) (termWith right)
+        Formula.Sub left right -> Formula.Sub (termWith left) (termWith right)
+        Formula.Mul left right -> Formula.Mul (termWith left) (termWith right)
+        Formula.Div left right -> Formula.Div (termWith left) (termWith right)
+        Formula.Mod left right -> Formula.Mod (termWith left) (termWith right)
+        Formula.Ite condition yes no -> Formula.Ite (formulaWith condition) (termWith yes) (termWith no)
+        Formula.Cast inner sort -> Formula.Cast (termWith inner) sort
+        _ -> term
 
 -- | The top-level conjuncts of a guard.
 conjuncts :: Guard -> [Guard]
