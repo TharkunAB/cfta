@@ -1,0 +1,43 @@
+'MicroCFTA.SourceCurrentAllocatedMkEdge.build' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMkEdge.reject' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedMkEdge.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMkEdge.build_contradictory' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMkEdge.reject_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt.empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMkEdge.Receipt.language' depends on axioms: [propext, Classical.choice, Quot.sound]
+@finite : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (symbol : Symbol) (constraint : Allocated) (children : List (Value Symbol Guard))
+  (before : Checked width),
+  Ready before →
+    At formulas solver inventory before →
+      SourceEqualityConstraintAllocation.Ready before.operations.constraints constraint.stored →
+        SourceCurrentConjunctionEquality.FieldAvailable before.operations
+            (SourceEqualityConjoinAllocation.readback constraint) →
+          InternedNestedProvenance.Values before.native.machine.heap children →
+            ∃ result after, Receipt formulas solver inventory symbol constraint children before result after
+@build_contradictory : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat} (symbol : Symbol)
+  (constraint : Allocated) (children : List (Value Symbol Guard)) (before : Checked width),
+  SourceEqualityMkEdgeAllocation.contradictory (SourceEqualityConjoinAllocation.readback constraint) = true →
+    build symbol constraint children before = (Except.ok (reject symbol before).fst, (reject symbol before).snd)
+@reject_correct : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (symbol : Symbol) (before : Checked width),
+  Ready before →
+    At formulas solver inventory before →
+      RejectReceipt formulas solver inventory symbol before (reject symbol before).fst (reject symbol before).snd
+@Receipt.language : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {symbol : Symbol} {constraint : Allocated} {children : List (Value Symbol Guard)}
+  {before after : Checked width} {result : EdgeValue Symbol Guard},
+  Receipt formulas solver inventory symbol constraint children before result after →
+    SourceEqualityConstraintAllocation.Ready before.operations.constraints constraint.stored →
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+        InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+          ∃ terms,
+            term = Term.node symbol terms ∧
+              All₂ (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) children
+                  terms ∧
+                SourceEqualityPCSGuard.holds formulas solver (SourceEqualityConjoinAllocation.readback constraint)
+                    term =
+                  true

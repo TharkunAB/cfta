@@ -1,0 +1,246 @@
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:82:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentAllocatedMkEdge.0.MicroCFTA.SourceCurrentAllocatedMkEdge.raw_physical`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:127:8: error: Type mismatch: After simplification, term
+  rfl
+ has type
+  True
+but is expected to have type
+  (Except.ok
+        (run
+            (if
+                accepted (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard)
+                    children.length =
+                  true then
+              makeEdge symbol (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard) children
+            else makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+            before.native.machine.heap).fst,
+      advancePhysical before
+        {
+          heap :=
+            (run
+                (if
+                    accepted (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard)
+                        children.length =
+                      true then
+                  makeEdge symbol (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard)
+                    children
+                else makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+                before.native.machine.heap).snd,
+          equality :=
+            if
+                accepted (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard)
+                    children.length =
+                  true then
+              (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+                  before.operations).snd
+            else
+              SourceEqualityMkEdgeAllocation.emptyField
+                (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+                    before.operations).snd }) =
+    (Except.ok (run (makeEdge symbol (raw constraint) children) before.native.machine.heap).fst,
+      advancePhysical before
+        { heap := (run (makeEdge symbol (raw constraint) children) before.native.machine.heap).snd,
+          equality :=
+            (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+                before.operations).snd })
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:140:46: error: invalid `▸` notation, argument
+  member
+has type
+  child ∈ [Value.empty]
+equality expected
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:144:6: error: unsolved goals
+case false.refine_1
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+symbol : Symbol
+constraint : Allocated
+children : List (Value Symbol Guard)
+before : Checked width
+ready : Ready before
+admitted : At formulas solver inventory before
+storedReady : SourceEqualityConstraintAllocation.Ready before.operations.constraints constraint.stored
+field : FieldAvailable before.operations (raw constraint)
+available : Values before.native.machine.heap children
+checked :
+  (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length before.operations).fst =
+      Except.ok
+        (accepted (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard) children.length) ∧
+    SourceEqualityConstraintMemoAllocation.Valid
+        (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+            before.operations).snd ∧
+      SourceEqualityConstraintMemoAllocation.Grows before.operations
+        (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length before.operations).snd
+built :
+  have constraint_1 := SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard;
+  have built :=
+    run (SourceEqualityMkEdgeAllocation.work symbol constraint_1 children (accepted constraint_1 children.length))
+      before.native.machine.heap;
+  SourceEqualityMkEdgeAllocation.build symbol constraint.stored constraint.guard children before.operations
+        before.native.machine.heap =
+      (Except.ok built.fst,
+        SourceEqualityMkEdgeAllocation.outputState
+          (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+              before.operations).snd
+          (accepted constraint_1 children.length),
+        built.snd) ∧
+    SourceEqualityConstraintMemoAllocation.Valid
+        (SourceEqualityMkEdgeAllocation.build symbol constraint.stored constraint.guard children before.operations
+              before.native.machine.heap).snd.fst ∧
+      SourceEqualityConstraintMemoAllocation.Grows before.operations
+        (SourceEqualityMkEdgeAllocation.build symbol constraint.stored constraint.guard children before.operations
+              before.native.machine.heap).snd.fst
+keep : accepted (raw constraint) children.length = false
+valid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.emptyField
+      (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length before.operations).snd)
+growth :
+  SourceEqualityConstraintMemoAllocation.Grows
+    (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length before.operations).snd
+    (SourceEqualityMkEdgeAllocation.emptyField
+      (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length before.operations).snd)
+topField :
+  FieldAvailable
+    (SourceEqualityMkEdgeAllocation.emptyField
+      (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length before.operations).snd)
+    SourceEqualityConstraintConstructors.top
+totalGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before.operations
+    (SourceEqualityMkEdgeAllocation.emptyField
+      (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length before.operations).snd)
+emptyAvailable : Values before.native.machine.heap [Value.empty]
+receipt :
+  PhysicalReceipt formulas solver inventory before
+    (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty]) before.native.machine.heap).fst
+    (advancePhysical before
+      {
+        heap :=
+          (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty]) before.native.machine.heap).snd,
+        equality :=
+          SourceEqualityMkEdgeAllocation.emptyField
+            (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+                before.operations).snd })
+symbolEq :
+  (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+              before.native.machine.heap).fst.entry.key.symbol =
+    symbol
+guardEq :
+  (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+              before.native.machine.heap).fst.entry.key.constraint =
+    SourceEqualityConstraintConstructors.top
+childrenEq :
+  (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+          before.native.machine.heap).fst.children =
+    [Value.empty]
+⊢ (Except.ok
+        (run
+            (if
+                accepted (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard)
+                    children.length =
+                  true then
+              makeEdge symbol (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard) children
+            else makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+            before.native.machine.heap).fst,
+      advancePhysical before
+        {
+          heap :=
+            (run
+                (if
+                    accepted (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard)
+                        children.length =
+                      true then
+                  makeEdge symbol (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard)
+                    children
+                else makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+                before.native.machine.heap).snd,
+          equality :=
+            if
+                accepted (SourceEqualityAccessorAllocation.constraint constraint.stored constraint.guard)
+                    children.length =
+                  true then
+              (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+                  before.operations).snd
+            else
+              SourceEqualityMkEdgeAllocation.emptyField
+                (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+                    before.operations).snd }) =
+    (Except.ok
+        (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty]) before.native.machine.heap).fst,
+      advancePhysical before
+        {
+          heap :=
+            (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+                before.native.machine.heap).snd,
+          equality :=
+            SourceEqualityMkEdgeAllocation.emptyField
+              (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+                  before.operations).snd })
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:146:8: error: Type mismatch: After simplification, term
+  guardEq
+ has type
+  @Eq Guard
+    (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+              before.native.machine.heap).fst.entry.key.constraint
+    SourceEqualityConstraintConstructors.top
+but is expected to have type
+  @Eq Guard
+    (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+              before.native.machine.heap).fst.entry.key.constraint
+    (if false = true then raw constraint else SourceEqualityConstraintConstructors.top)
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:147:8: error: Type mismatch: After simplification, term
+  childrenEq
+ has type
+  @Eq (List (Value Symbol Guard))
+    (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+          before.native.machine.heap).fst.children
+    [Value.empty]
+but is expected to have type
+  @Eq (List (Value Symbol Guard))
+    (run (makeEdge symbol SourceEqualityConstraintConstructors.top [Value.empty])
+          before.native.machine.heap).fst.children
+    (if false = true then children else [Value.empty])
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:144:35: warning: This simp argument is unused:
+  keep
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [build, built.1, SourceEqualityMkEdgeAllocation.work, SourceEqualityMkEdgeAllocation.outputState,
+    ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:145:54: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [build, built.1, keep, SourceEqualityMkEdgeAllocation.work,
+    SourceEqualityMkEdgeAllocation.outputState]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:150:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedMkEdge.build_contradictory`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:176:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt.empty`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:199:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+lean/MicroCFTA/SourceCurrentAllocatedMkEdge.lean:201:55: error: Type mismatch: After simplification, term
+  receipt.children
+ has type
+  @Eq (List (Value Symbol Guard)) result.children (if false = true then children else [Value.empty])
+but is expected to have type
+  @Eq (List (Value Symbol Guard)) result.children [Value.empty]

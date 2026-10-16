@@ -1,0 +1,259 @@
+'MicroCFTA.SourceCurrentAllocatedPrecheck.state_native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.state_operations' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.loaded_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.resident_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.own_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.own_accepted' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.combined_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.empty_excludes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.empty_guard' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.classes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.classes_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPrecheck.state_native : ∀ {width : Nat}
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+  (MicroCFTA.SourceCurrentAllocatedPrecheck.state before loaded inherited).native = before.native
+@MicroCFTA.SourceCurrentAllocatedPrecheck.state_operations : ∀ {width : Nat}
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+  (MicroCFTA.SourceCurrentAllocatedPrecheck.state before loaded inherited).operations =
+    (MicroCFTA.SourceEqualityPartialPrecheckAllocation.run loaded.stored loaded.guard inherited before.operations).snd
+@MicroCFTA.SourceCurrentAllocatedPrecheck.loaded_complete : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      ∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+        MicroCFTA.SourceEqualityGuardReadback.Cached original.equalities →
+          ∀ (loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula),
+            MicroCFTA.SourceEqualityConstraintFieldLookup.load original before.operations.constraints =
+                Except.ok (some loaded) →
+              ∀ (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+                MicroCFTA.SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited →
+                  ∃ own branch,
+                    MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited
+                      before own branch
+@MicroCFTA.SourceCurrentAllocatedPrecheck.complete : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      ∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+        MicroCFTA.SourceCurrentConjunctionEquality.FieldAvailable before.operations original →
+          ∀ (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+            MicroCFTA.SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited →
+              ∃ loaded own branch,
+                MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited
+                  before own branch
+@MicroCFTA.SourceCurrentAllocatedPrecheck.resident_complete : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      ∀
+        (edge :
+          MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.InternedEdgeResidency.EdgeResident before.native.machine.heap edge →
+          ∀ (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+            MicroCFTA.SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited →
+              ∃ loaded own branch,
+                MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory edge.entry.key.constraint
+                  loaded inherited before own branch
+@MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.own_exact : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before own
+      branch →
+    ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceEqualityPrecheck.Sat term own.payload ↔
+        MicroCFTA.SourceEqualityGuardReadback.Sat term (MicroCFTA.SourceCompactGuards.sourceEqualities original)
+@MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.own_accepted : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before own
+      branch →
+    ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceEqualityPCSGuard.holds formulas solver original term = true →
+        MicroCFTA.SourceEqualityPrecheck.Sat term own.payload
+@MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.combined_exact : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before own
+      branch →
+    ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.EqualityNormalize.RunSat term (MicroCFTA.SourceEqualityPrecheck.combine own.payload inherited.payload) ↔
+        MicroCFTA.SourceEqualityGuardReadback.Sat term (MicroCFTA.SourceCompactGuards.sourceEqualities original) ∧
+          MicroCFTA.SourceEqualityPrecheck.Sat term inherited.payload
+@MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.unchanged : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before own
+      branch →
+    branch = MicroCFTA.SourceEqualityPrecheck.Branch.unchanged →
+      own.payload = some [] ∧
+        inherited.payload = some [] ∧ MicroCFTA.SourceCompactGuards.sourceEqualities original = some []
+@MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.empty_excludes : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before own
+      branch →
+    branch = MicroCFTA.SourceEqualityPrecheck.Branch.emptyChildren →
+      ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+        ¬(MicroCFTA.SourceEqualityGuardReadback.Sat term (MicroCFTA.SourceCompactGuards.sourceEqualities original) ∧
+            MicroCFTA.SourceEqualityPrecheck.Sat term inherited.payload)
+@MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.empty_guard : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before own
+      branch →
+    branch = MicroCFTA.SourceEqualityPrecheck.Branch.emptyChildren →
+      ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.SourceEqualityPCSGuard.holds formulas solver original term = true →
+          ¬MicroCFTA.SourceEqualityPrecheck.Sat term inherited.payload
+@MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.classes : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before own
+      branch →
+    ∀ (output : List MicroCFTA.SourceEqualityClassOrder.Record),
+      branch = MicroCFTA.SourceEqualityPrecheck.Branch.classes output →
+        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+            paths ∈ List.map MicroCFTA.SourceEqualityClassOrder.Record.paths output →
+              ∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ paths → path ≠ []) ∧
+          ∃ records,
+            MicroCFTA.SourceEqualityPhysicalPayload.own original = Except.ok (some records) ∧
+              MicroCFTA.SourceCompactGuards.sourceEqualities original =
+                  some (List.map MicroCFTA.SourceEqualityClassOrder.Record.paths records) ∧
+                output = MicroCFTA.SourceEqualityClassOrder.ordered records ∧
+                  ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+                    record ∈ output →
+                      MicroCFTA.SourceEqualityClassOrder.Coherent record ∧
+                        MicroCFTA.EqualityTrie.Ascending record.trie ∧
+                          MicroCFTA.EqualityNormalize.Nontrivial record.paths
+@MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt.classes_exact : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited own : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {branch : MicroCFTA.SourceEqualityPrecheck.Branch},
+  MicroCFTA.SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before own
+      branch →
+    ∀ (output : List MicroCFTA.SourceEqualityClassOrder.Record),
+      branch = MicroCFTA.SourceEqualityPrecheck.Branch.classes output →
+        ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.EqualityNormalize.Satisfies term (List.map MicroCFTA.SourceEqualityClassOrder.Record.paths output) ↔
+            MicroCFTA.SourceEqualityGuardReadback.Sat term (MicroCFTA.SourceCompactGuards.sourceEqualities original)

@@ -1,0 +1,70 @@
+'MicroCFTA.SourceCurrentAllocatedParentEdge.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedParentEdge.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedParentEdge.RawMeaning' depends on axioms: [propext, Quot.sound]
+@rejected : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (symbol : Symbol)
+  (original : Guard) (loaded : Allocated) (inherited : EqValue) (values : List (Value Symbol Guard))
+  (before : Checked width) (fourth : Fourth) (memo : Memo),
+  Ready before →
+    At formulas solver inventory before →
+      SourceEqualityMkEdgeAllocation.contradictory original = true →
+        SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth →
+          SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+            (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                  memo) →
+              ∀ (memos : Memos),
+                Valid before.native.machine.heap memos →
+                  ∃ actual,
+                    Reads formulas solver actual memos memos ∧
+                      Receipt formulas solver inventory symbol original loaded inherited values before
+                        (SourceCurrentAllocatedMkEdge.reject symbol before).fst
+                        (SourceCurrentAllocatedMkEdge.reject symbol before).snd fourth fourth memo memo memos
+@finite : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (symbol : Symbol)
+  (original : Guard) (loaded : Allocated) (inherited : EqValue) (values : List (Value Symbol Guard))
+  (before : Checked width) (fourth : Fourth) (memo : Memo),
+  Ready before →
+    At formulas solver inventory before →
+      SourceEqualityGuardReadback.Cached original.equalities →
+        SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded) →
+          SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited →
+            Values before.native.machine.heap values →
+              SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth →
+                SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                  (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                      SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                        memo) →
+                    Ranges budget original loaded inherited values before fourth memo →
+                      ∀ (memos : Memos),
+                        Valid before.native.machine.heap memos →
+                          ∃ result after savedFourth saved next final actual,
+                            Reads formulas solver actual memos final ∧
+                              Receipt formulas solver next symbol original loaded inherited values before result after
+                                fourth savedFourth memo saved final
+@Receipt.language : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {symbol : Symbol} {original : Guard} {loaded : Allocated} {inherited : EqValue}
+  {values : List (Value Symbol Guard)} {before : Checked width} {result : EdgeValue Symbol Guard}
+  {after : Checked width} {fourth savedFourth : Fourth} {memo saved : Memo} {final : Memos},
+  Receipt formulas solver inventory symbol original loaded inherited values before result after fourth savedFourth memo
+      saved final →
+    ∀ (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+      (edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term →
+          RawMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient symbol original values term) ∧
+        (SourceEqualityPrecheck.Sat term inherited.payload →
+          (edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+            RawMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient symbol original values term))
+@Receipt.construction : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {symbol : Symbol} {original : Guard} {loaded : Allocated} {inherited : EqValue}
+  {values : List (Value Symbol Guard)} {before : Checked width} {result : EdgeValue Symbol Guard}
+  {after : Checked width} {fourth savedFourth : Fourth} {memo saved : Memo} {final : Memos},
+  Receipt formulas solver inventory symbol original loaded inherited values before result after fourth savedFourth memo
+      saved final →
+    SourceCurrentAllocatedMkEdge.RejectReceipt formulas solver inventory symbol before result after ∨
+      ∃ children middle,
+        children.length = values.length ∧
+          SourceCurrentAllocatedMkEdge.Receipt formulas solver inventory symbol loaded children middle result after

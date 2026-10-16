@@ -1,0 +1,51 @@
+'MicroCFTA.SourceCurrentAllocatedMkEdgeProbes.resident_constructor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedMkEdgeProbes.resident_constructor : ∀ {width : Nat}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      ∀
+        (edge :
+          MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.InternedEdgeResidency.EdgeResident before.native.machine.heap edge →
+          ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+            MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+              ∀ (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo),
+                MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth →
+                  ∃ loaded result after,
+                    MicroCFTA.SourceEqualityConstraintFieldLookup.load edge.entry.key.constraint
+                          before.operations.constraints =
+                        Except.ok (some loaded) ∧
+                      MicroCFTA.SourceCurrentAllocatedMkEdge.Receipt formulas solver inventory edge.entry.key.symbol
+                          loaded edge.children before result after ∧
+                        MicroCFTA.EndpointMemoGateTrace.Valid after.native.machine.heap memos ∧
+                          MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap
+                              fourth ∧
+                            ∀
+                              (ambient :
+                                MicroCFTA.InternedGuardedLanguage.Env
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                              (term :
+                                MicroCFTA.Language.Term
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                              MicroCFTA.InternedGuardedLanguage.edgeMeaning
+                                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+                                ∃ terms,
+                                  term = MicroCFTA.Language.Term.node edge.entry.key.symbol terms ∧
+                                    MicroCFTA.Language.All₂
+                                        (MicroCFTA.InternedGuardedLanguage.meaning
+                                          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient)
+                                        edge.children terms ∧
+                                      MicroCFTA.SourceEqualityPCSGuard.holds formulas solver edge.entry.key.constraint
+                                          term =
+                                        true

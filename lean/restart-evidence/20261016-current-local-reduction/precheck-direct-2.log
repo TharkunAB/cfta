@@ -1,0 +1,52 @@
+lean/MicroCFTA/SourceCurrentAllocatedPrecheck.lean:207:18: error: don't know how to synthesize implicit argument `a`
+  @List.Perm.mem_iff Class ?m.78 (List.map Record.paths (ordered records)) (List.map Record.paths records)
+    (List.Perm.map Record.paths (ordered_perm records))
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+original : Guard
+loaded : Allocated
+inherited own : EqValue
+before : Checked width
+branch : SourceEqualityPrecheck.Branch
+receipt : Receipt formulas solver inventory original loaded inherited before own branch
+output : List Record
+same : branch = SourceEqualityPrecheck.Branch.classes output
+term : Term Symbol
+left✝¹ : ∀ (paths : Class), paths ∈ List.map Record.paths output → ∀ (path : Path), path ∈ paths → path ≠ []
+records : List Record
+left✝ : SourceEqualityPhysicalPayload.own original = Except.ok (some records)
+classes : SourceCompactGuards.sourceEqualities original = some (List.map Record.paths records)
+order : output = ordered records
+right✝ :
+  ∀ (record : Record), record ∈ output → Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+⊢ Class
+lean/MicroCFTA/SourceCurrentAllocatedPrecheck.lean:207:7: error: failed to infer `have` declaration type
+lean/MicroCFTA/SourceCurrentAllocatedPrecheck.lean:203:94: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+original : Guard
+loaded : Allocated
+inherited own : EqValue
+before : Checked width
+branch : SourceEqualityPrecheck.Branch
+receipt : Receipt formulas solver inventory original loaded inherited before own branch
+output : List Record
+same : branch = SourceEqualityPrecheck.Branch.classes output
+term : Term Symbol
+left✝¹ : ∀ (paths : Class), paths ∈ List.map Record.paths output → ∀ (path : Path), path ∈ paths → path ≠ []
+records : List Record
+left✝ : SourceEqualityPhysicalPayload.own original = Except.ok (some records)
+classes : SourceCompactGuards.sourceEqualities original = some (List.map Record.paths records)
+order : output = ordered records
+right✝ :
+  ∀ (record : Record), record ∈ output → Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+⊢ Satisfies term (List.map Record.paths (ordered records)) ↔ Satisfies term (List.map Record.paths records)

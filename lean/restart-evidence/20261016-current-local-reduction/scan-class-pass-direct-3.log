@@ -1,0 +1,445 @@
+lean/MicroCFTA/SourceCurrentConjunctionScanClassPass.lean:130:50: warning: Try `simp at impossible` instead of `simpa using impossible`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+lean/MicroCFTA/SourceCurrentConjunctionScanClassPass.lean:212:8: error: don't know how to synthesize implicit argument `required`
+  @Reads.completed inst✝² inst✝¹ inst✝ width formulas solver budget records kept values requiredValues results before
+    middle after fourth savedFourth memo saved selected heap actualScan ?m.815 ?m.816 ?m.817 ?m.818 passActual memos
+    firstMemos requiredMemos final firstReads requiredReads passReads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+records : List SourceEqualityClassOrder.Record
+values : List (Value Symbol Guard)
+before : Checked width
+fourth : Fourth
+memo : Memo
+selected : Constraints
+middle : Checked width
+savedFourth : Fourth
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+proper :
+  ∀ (record : SourceEqualityClassOrder.Record), record ∈ records → ∀ (path : Path), path ∈ record.paths → path ≠ []
+fields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ records →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : Ranges budget records values before fourth memo
+memos : Memos
+valid : Valid before.native.machine.heap memos
+pathsProper :
+  ∀ (paths : Class),
+    paths ∈ List.map SourceEqualityClassOrder.Record.paths records → ∀ (path : Path), path ∈ paths → path ≠ []
+pathsActive : ∀ (paths : Class), paths ∈ List.map SourceEqualityClassOrder.Record.paths records → Nontrivial paths
+scanMemos : Memos
+scanInventory : Inventory
+scanValid : Valid middle.native.machine.heap scanMemos
+scanReady : Ready middle
+scanAdmitted : At formulas solver scanInventory middle
+scanEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+scanValues : Values middle.native.machine.heap values
+scanCorrect : SourceCurrentEmptinessMemo.Correct formulas solver middle.native.machine.heap savedFourth
+fourthRetained : SourceCurrentEmptinessMemo.Extends fourth savedFourth
+actualScan :
+  Scan budget unconstrained reaches values (List.map SourceEqualityClassOrder.Record.paths records) before fourth none
+    selected middle savedFourth
+scanReads : SourceCurrentConjunctionClassScanGlobalMemos.ScanReads actualScan memos scanMemos
+sound :
+  ∀ (paths : Class),
+    none = some paths →
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol) (symbol : Symbol) (terms : List (Term Symbol)),
+        All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms →
+          ¬ClassSat (Term.node symbol terms) paths
+kept : List SourceEqualityClassOrder.Record
+firstMemos requiredMemos : Memos
+requiredInventory : Inventory
+requiredValues : List (Value Symbol Guard)
+heap : Heap
+retained : Retained actualScan records kept
+sublist : kept.Sublist records
+selectedEq : List.map SourceEqualityClassOrder.Record.paths kept = selected
+keptFields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ kept →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+firstReads : SourceCurrentConjunctionClassScanGlobalMemos.ScanReads actualScan memos firstMemos
+required :
+  SourceCurrentConjunctionRequired.Receipt formulas solver requiredInventory selected values requiredValues middle
+    (advanceHeap middle heap)
+requiredReads :
+  SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths selected) values requiredValues
+    middle.native.machine.heap heap firstMemos requiredMemos
+requiredValid : Valid heap requiredMemos
+right✝ : SourceCurrentEmptinessMemo.Correct formulas solver heap savedFourth
+fuel readFuel : Nat
+enough :
+  ∀ (workerFuel headFuel : Nat),
+    fuel ≤ workerFuel →
+      readFuel ≤ headFuel →
+        (fun fuel readFuel =>
+              SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected)
+                values middle.native.machine.heap)
+            workerFuel headFuel =
+          SourceEqualityRequiredWorker.Result.done requiredValues (advanceHeap middle heap).native.machine.heap
+requiredDone :
+  (fun fuel readFuel =>
+        SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected) values
+          middle.native.machine.heap)
+      fuel readFuel =
+    SourceEqualityRequiredWorker.Result.done requiredValues (advanceHeap middle heap).native.machine.heap
+passRanges : SourceCurrentAllocatedClassPass.Ranges kept requiredValues (advanceHeap middle heap) memo
+results : List (Value Symbol Guard)
+after : Checked width
+saved : Memo
+next : Inventory
+final : Memos
+passActual : SourceCurrentAllocatedClassPass.Pass kept requiredValues (advanceHeap middle heap) memo results after saved
+passReads : SourceCurrentAllocatedClassPass.PassReads formulas solver passActual requiredMemos final
+checked :
+  SourceCurrentConjunctionRequiredClassPass.Receipt formulas solver next kept selected values requiredValues middle
+    (advanceHeap middle heap) memo results after saved requiredMemos final
+⊢ SourceEqualityRequiredExecution.requireAll ?m.816 ?m.817 (SourceEqualitySelectedRequired.paths selected) values
+      middle.native.machine.heap =
+    SourceEqualityRequiredWorker.Result.done requiredValues heap
+lean/MicroCFTA/SourceCurrentConjunctionScanClassPass.lean:212:8: error: don't know how to synthesize implicit argument `readFuel`
+  @Reads.completed inst✝² inst✝¹ inst✝ width formulas solver budget records kept values requiredValues results before
+    middle after fourth savedFourth memo saved selected heap actualScan ?m.815 ?m.816 ?m.817 ?m.818 passActual memos
+    firstMemos requiredMemos final firstReads requiredReads passReads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+records : List SourceEqualityClassOrder.Record
+values : List (Value Symbol Guard)
+before : Checked width
+fourth : Fourth
+memo : Memo
+selected : Constraints
+middle : Checked width
+savedFourth : Fourth
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+proper :
+  ∀ (record : SourceEqualityClassOrder.Record), record ∈ records → ∀ (path : Path), path ∈ record.paths → path ≠ []
+fields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ records →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : Ranges budget records values before fourth memo
+memos : Memos
+valid : Valid before.native.machine.heap memos
+pathsProper :
+  ∀ (paths : Class),
+    paths ∈ List.map SourceEqualityClassOrder.Record.paths records → ∀ (path : Path), path ∈ paths → path ≠ []
+pathsActive : ∀ (paths : Class), paths ∈ List.map SourceEqualityClassOrder.Record.paths records → Nontrivial paths
+scanMemos : Memos
+scanInventory : Inventory
+scanValid : Valid middle.native.machine.heap scanMemos
+scanReady : Ready middle
+scanAdmitted : At formulas solver scanInventory middle
+scanEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+scanValues : Values middle.native.machine.heap values
+scanCorrect : SourceCurrentEmptinessMemo.Correct formulas solver middle.native.machine.heap savedFourth
+fourthRetained : SourceCurrentEmptinessMemo.Extends fourth savedFourth
+actualScan :
+  Scan budget unconstrained reaches values (List.map SourceEqualityClassOrder.Record.paths records) before fourth none
+    selected middle savedFourth
+scanReads : SourceCurrentConjunctionClassScanGlobalMemos.ScanReads actualScan memos scanMemos
+sound :
+  ∀ (paths : Class),
+    none = some paths →
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol) (symbol : Symbol) (terms : List (Term Symbol)),
+        All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms →
+          ¬ClassSat (Term.node symbol terms) paths
+kept : List SourceEqualityClassOrder.Record
+firstMemos requiredMemos : Memos
+requiredInventory : Inventory
+requiredValues : List (Value Symbol Guard)
+heap : Heap
+retained : Retained actualScan records kept
+sublist : kept.Sublist records
+selectedEq : List.map SourceEqualityClassOrder.Record.paths kept = selected
+keptFields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ kept →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+firstReads : SourceCurrentConjunctionClassScanGlobalMemos.ScanReads actualScan memos firstMemos
+required :
+  SourceCurrentConjunctionRequired.Receipt formulas solver requiredInventory selected values requiredValues middle
+    (advanceHeap middle heap)
+requiredReads :
+  SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths selected) values requiredValues
+    middle.native.machine.heap heap firstMemos requiredMemos
+requiredValid : Valid heap requiredMemos
+right✝ : SourceCurrentEmptinessMemo.Correct formulas solver heap savedFourth
+fuel readFuel : Nat
+enough :
+  ∀ (workerFuel headFuel : Nat),
+    fuel ≤ workerFuel →
+      readFuel ≤ headFuel →
+        (fun fuel readFuel =>
+              SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected)
+                values middle.native.machine.heap)
+            workerFuel headFuel =
+          SourceEqualityRequiredWorker.Result.done requiredValues (advanceHeap middle heap).native.machine.heap
+requiredDone :
+  (fun fuel readFuel =>
+        SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected) values
+          middle.native.machine.heap)
+      fuel readFuel =
+    SourceEqualityRequiredWorker.Result.done requiredValues (advanceHeap middle heap).native.machine.heap
+passRanges : SourceCurrentAllocatedClassPass.Ranges kept requiredValues (advanceHeap middle heap) memo
+results : List (Value Symbol Guard)
+after : Checked width
+saved : Memo
+next : Inventory
+final : Memos
+passActual : SourceCurrentAllocatedClassPass.Pass kept requiredValues (advanceHeap middle heap) memo results after saved
+passReads : SourceCurrentAllocatedClassPass.PassReads formulas solver passActual requiredMemos final
+checked :
+  SourceCurrentConjunctionRequiredClassPass.Receipt formulas solver next kept selected values requiredValues middle
+    (advanceHeap middle heap) memo results after saved requiredMemos final
+⊢ Nat
+lean/MicroCFTA/SourceCurrentConjunctionScanClassPass.lean:212:8: error: don't know how to synthesize implicit argument `fuel`
+  @Reads.completed inst✝² inst✝¹ inst✝ width formulas solver budget records kept values requiredValues results before
+    middle after fourth savedFourth memo saved selected heap actualScan ?m.815 ?m.816 ?m.817 ?m.818 passActual memos
+    firstMemos requiredMemos final firstReads requiredReads passReads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+records : List SourceEqualityClassOrder.Record
+values : List (Value Symbol Guard)
+before : Checked width
+fourth : Fourth
+memo : Memo
+selected : Constraints
+middle : Checked width
+savedFourth : Fourth
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+proper :
+  ∀ (record : SourceEqualityClassOrder.Record), record ∈ records → ∀ (path : Path), path ∈ record.paths → path ≠ []
+fields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ records →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : Ranges budget records values before fourth memo
+memos : Memos
+valid : Valid before.native.machine.heap memos
+pathsProper :
+  ∀ (paths : Class),
+    paths ∈ List.map SourceEqualityClassOrder.Record.paths records → ∀ (path : Path), path ∈ paths → path ≠ []
+pathsActive : ∀ (paths : Class), paths ∈ List.map SourceEqualityClassOrder.Record.paths records → Nontrivial paths
+scanMemos : Memos
+scanInventory : Inventory
+scanValid : Valid middle.native.machine.heap scanMemos
+scanReady : Ready middle
+scanAdmitted : At formulas solver scanInventory middle
+scanEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+scanValues : Values middle.native.machine.heap values
+scanCorrect : SourceCurrentEmptinessMemo.Correct formulas solver middle.native.machine.heap savedFourth
+fourthRetained : SourceCurrentEmptinessMemo.Extends fourth savedFourth
+actualScan :
+  Scan budget unconstrained reaches values (List.map SourceEqualityClassOrder.Record.paths records) before fourth none
+    selected middle savedFourth
+scanReads : SourceCurrentConjunctionClassScanGlobalMemos.ScanReads actualScan memos scanMemos
+sound :
+  ∀ (paths : Class),
+    none = some paths →
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol) (symbol : Symbol) (terms : List (Term Symbol)),
+        All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms →
+          ¬ClassSat (Term.node symbol terms) paths
+kept : List SourceEqualityClassOrder.Record
+firstMemos requiredMemos : Memos
+requiredInventory : Inventory
+requiredValues : List (Value Symbol Guard)
+heap : Heap
+retained : Retained actualScan records kept
+sublist : kept.Sublist records
+selectedEq : List.map SourceEqualityClassOrder.Record.paths kept = selected
+keptFields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ kept →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+firstReads : SourceCurrentConjunctionClassScanGlobalMemos.ScanReads actualScan memos firstMemos
+required :
+  SourceCurrentConjunctionRequired.Receipt formulas solver requiredInventory selected values requiredValues middle
+    (advanceHeap middle heap)
+requiredReads :
+  SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths selected) values requiredValues
+    middle.native.machine.heap heap firstMemos requiredMemos
+requiredValid : Valid heap requiredMemos
+right✝ : SourceCurrentEmptinessMemo.Correct formulas solver heap savedFourth
+fuel readFuel : Nat
+enough :
+  ∀ (workerFuel headFuel : Nat),
+    fuel ≤ workerFuel →
+      readFuel ≤ headFuel →
+        (fun fuel readFuel =>
+              SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected)
+                values middle.native.machine.heap)
+            workerFuel headFuel =
+          SourceEqualityRequiredWorker.Result.done requiredValues (advanceHeap middle heap).native.machine.heap
+requiredDone :
+  (fun fuel readFuel =>
+        SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected) values
+          middle.native.machine.heap)
+      fuel readFuel =
+    SourceEqualityRequiredWorker.Result.done requiredValues (advanceHeap middle heap).native.machine.heap
+passRanges : SourceCurrentAllocatedClassPass.Ranges kept requiredValues (advanceHeap middle heap) memo
+results : List (Value Symbol Guard)
+after : Checked width
+saved : Memo
+next : Inventory
+final : Memos
+passActual : SourceCurrentAllocatedClassPass.Pass kept requiredValues (advanceHeap middle heap) memo results after saved
+passReads : SourceCurrentAllocatedClassPass.PassReads formulas solver passActual requiredMemos final
+checked :
+  SourceCurrentConjunctionRequiredClassPass.Receipt formulas solver next kept selected values requiredValues middle
+    (advanceHeap middle heap) memo results after saved requiredMemos final
+⊢ Nat
+lean/MicroCFTA/SourceCurrentConjunctionScanClassPass.lean:212:8: error: don't know how to synthesize implicit argument `retained`
+  @Reads.completed inst✝² inst✝¹ inst✝ width formulas solver budget records kept values requiredValues results before
+    middle after fourth savedFourth memo saved selected heap actualScan ?m.815 ?m.816 ?m.817 ?m.818 passActual memos
+    firstMemos requiredMemos final firstReads requiredReads passReads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+records : List SourceEqualityClassOrder.Record
+values : List (Value Symbol Guard)
+before : Checked width
+fourth : Fourth
+memo : Memo
+selected : Constraints
+middle : Checked width
+savedFourth : Fourth
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+proper :
+  ∀ (record : SourceEqualityClassOrder.Record), record ∈ records → ∀ (path : Path), path ∈ record.paths → path ≠ []
+fields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ records →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : Ranges budget records values before fourth memo
+memos : Memos
+valid : Valid before.native.machine.heap memos
+pathsProper :
+  ∀ (paths : Class),
+    paths ∈ List.map SourceEqualityClassOrder.Record.paths records → ∀ (path : Path), path ∈ paths → path ≠ []
+pathsActive : ∀ (paths : Class), paths ∈ List.map SourceEqualityClassOrder.Record.paths records → Nontrivial paths
+scanMemos : Memos
+scanInventory : Inventory
+scanValid : Valid middle.native.machine.heap scanMemos
+scanReady : Ready middle
+scanAdmitted : At formulas solver scanInventory middle
+scanEffects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical middle)
+scanValues : Values middle.native.machine.heap values
+scanCorrect : SourceCurrentEmptinessMemo.Correct formulas solver middle.native.machine.heap savedFourth
+fourthRetained : SourceCurrentEmptinessMemo.Extends fourth savedFourth
+actualScan :
+  Scan budget unconstrained reaches values (List.map SourceEqualityClassOrder.Record.paths records) before fourth none
+    selected middle savedFourth
+scanReads : SourceCurrentConjunctionClassScanGlobalMemos.ScanReads actualScan memos scanMemos
+sound :
+  ∀ (paths : Class),
+    none = some paths →
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol) (symbol : Symbol) (terms : List (Term Symbol)),
+        All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms →
+          ¬ClassSat (Term.node symbol terms) paths
+kept : List SourceEqualityClassOrder.Record
+firstMemos requiredMemos : Memos
+requiredInventory : Inventory
+requiredValues : List (Value Symbol Guard)
+heap : Heap
+retained : Retained actualScan records kept
+sublist : kept.Sublist records
+selectedEq : List.map SourceEqualityClassOrder.Record.paths kept = selected
+keptFields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ kept →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+firstReads : SourceCurrentConjunctionClassScanGlobalMemos.ScanReads actualScan memos firstMemos
+required :
+  SourceCurrentConjunctionRequired.Receipt formulas solver requiredInventory selected values requiredValues middle
+    (advanceHeap middle heap)
+requiredReads :
+  SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths selected) values requiredValues
+    middle.native.machine.heap heap firstMemos requiredMemos
+requiredValid : Valid heap requiredMemos
+right✝ : SourceCurrentEmptinessMemo.Correct formulas solver heap savedFourth
+fuel readFuel : Nat
+enough :
+  ∀ (workerFuel headFuel : Nat),
+    fuel ≤ workerFuel →
+      readFuel ≤ headFuel →
+        (fun fuel readFuel =>
+              SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected)
+                values middle.native.machine.heap)
+            workerFuel headFuel =
+          SourceEqualityRequiredWorker.Result.done requiredValues (advanceHeap middle heap).native.machine.heap
+requiredDone :
+  (fun fuel readFuel =>
+        SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected) values
+          middle.native.machine.heap)
+      fuel readFuel =
+    SourceEqualityRequiredWorker.Result.done requiredValues (advanceHeap middle heap).native.machine.heap
+passRanges : SourceCurrentAllocatedClassPass.Ranges kept requiredValues (advanceHeap middle heap) memo
+results : List (Value Symbol Guard)
+after : Checked width
+saved : Memo
+next : Inventory
+final : Memos
+passActual : SourceCurrentAllocatedClassPass.Pass kept requiredValues (advanceHeap middle heap) memo results after saved
+passReads : SourceCurrentAllocatedClassPass.PassReads formulas solver passActual requiredMemos final
+checked :
+  SourceCurrentConjunctionRequiredClassPass.Receipt formulas solver next kept selected values requiredValues middle
+    (advanceHeap middle heap) memo results after saved requiredMemos final
+⊢ Retained actualScan records kept
