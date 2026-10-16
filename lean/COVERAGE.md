@@ -1,5 +1,51 @@
 # Full formalization coverage
 
+## Current actual result scope and closed exact cold returns
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`9fab9f35`. No Haskell implementation or test changes in this update. The
+Haskell fix handoff near the top of FINDINGS.md remains current.
+Proof commits are `6d6f142e`, `bf2669ee`, and `db8f6efa`.
+
+Seven additive modules derive scope through actual checked execution.
+Returned node and edge cells retain the scope of their original request.
+The paired independent request induction derives each local scope before
+its actual protected finish. Static certificates follow all actual source
+branches and guarded edge prefixes. They require no input-language model.
+
+The cold scope endpoint derives initial scoped tables and Idle, then proves
+result.free = []. ColdClosedExact combines this with the independent language
+proof by completed-result uniqueness. Both the literal value and complete
+checked state are equal. The same contextual Receipt therefore carries
+scoped tables, final Idle, an empty result free list, and exact original
+intersection language. No parent law, parent scope, completed child callback,
+final invariant, or future physical plan is a public premise.
+Initial Good, SemanticReady, and actual-prefix WordRanges remain explicit.
+
+The pinned full Audit passes 2289 jobs and 55998 theorem dependency checks.
+Focused validation passes 40 public axiom reports, 40 signatures, 32 kernel
+examples, and one named kernel theorem. Only standard foundations and the old
+unused-input warning occur. Independent reviews found no material defect.
+Reuse unchanged-source strict Nix build, 777 examples plus golden, five-file
+Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-closed-scope.md. Evidence and frozen source
+copies are repository-local. All 3229 baseline files remain. All 2281 older
+non-Audit proof sources and the preceding nineteen frozen modules retain
+identical bytes. Earlier missing external draft bytes remain unavailable and
+are not claimed recovered or reverified.
+
+Next admit warm caches from actual serial histories in one fixed model.
+A model for two initial roots need not validate later roots. Source residency
+alone is insufficient; derive coverage of the full finite query inventory.
+Then compose complete original allocation, normalization, and loaded-field
+histories with the current class Scan and constrained outer caller. Keep
+runtime/GHC forcing and publication, concurrency, concrete containers, and
+machine ranges explicit. Every other full-library and separate Sized target
+remains active. Preserve the optimized interned core and every older proof.
+No board posts or deployments. Push verified formalize checkpoints regularly.
+The full goal remains active; this checkpoint is progress.
+
 ## Current actual contextual completion and cold root exactness
 
 Source main remains `8f85ddb6`. The preceding published proof checkpoint is
