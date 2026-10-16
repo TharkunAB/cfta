@@ -2043,6 +2043,7 @@ import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterInitial
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterRoot
 /-!
 # Proof dependency audit
 
