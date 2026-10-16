@@ -1,0 +1,265 @@
+'MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.node_unchanged' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.node_unchanged : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver { inherited := inherited, value := value }
+    value
+'MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.node_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.node_empty : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
+    { inherited := inherited, value := MicroCFTA.InternedConstructorTemplates.Value.empty }
+    MicroCFTA.InternedConstructorTemplates.Value.empty
+'MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.node_union' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.node_union : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (members :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
+    { inherited := inherited, value := MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free }
+    (MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free)
+'MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.rows_nil' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.rows_nil : ∀ {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (budget : Nat) (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsLaw formulas solver ⋯
+'MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.rows_cons' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.rows_cons : ∀ {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat} {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {original narrowed result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {originals results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before middle afterChildren after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  (edge :
+    MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall budget { inherited := inherited, value := original } before
+      narrowed middle)
+  (children :
+    MicroCFTA.SourceCurrentAllocatedPartialGraph.Descendants budget inherited narrowed middle result afterChildren)
+  (tail : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows budget inherited originals afterChildren results after),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver { inherited := inherited, value := original }
+      narrowed →
+    MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver
+        { inherited := inherited, value := narrowed } result →
+      MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsLaw formulas solver tail →
+        MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsLaw formulas solver ⋯
+'MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsLaw.exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsLaw.exact : ∀ {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat} {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {values results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows budget inherited values before results after},
+  MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsLaw formulas solver actual →
+    ∀
+      (ambient :
+        MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+      (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceEqualityPrecheck.Sat term inherited.payload →
+        (MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsMeaning formulas solver ambient results term ↔
+          MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsMeaning formulas solver ambient values term)
+'MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.descendants' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.descendants : ∀ {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat} {inherited combined : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {edge result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before middle : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {prefixInventory rebuildInventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory},
+  MicroCFTA.SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver prefixInventory edge.entry.key.constraint
+      inherited before.checked combined →
+    ∀
+      (children :
+        MicroCFTA.SourceCurrentAllocatedPartialGraph.Children budget combined edge.children
+          (MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState before edge inherited) values middle),
+      MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.ChildrenLaw formulas solver children →
+        MicroCFTA.SourceCurrentAllocatedRawRebuild.EdgeReceipt formulas solver rebuildInventory edge values
+            middle.checked result after →
+          MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver
+            { inherited := inherited, value := edge } result
+'MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.ordinary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.ordinary : ∀ {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat} {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {edges results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {depth : Nat} {free : List MicroCFTA.InternedBinderProtocol.Reference}
+  {before middle : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  (rows : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows budget inherited edges before results middle),
+  MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsLaw formulas solver rows →
+    MicroCFTA.SourceCurrentAllocatedRawRebuild.NodeReceipt formulas solver inventory
+        (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free) edges results middle.checked result
+        after →
+      MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
+        { inherited := inherited, value := MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free }
+        result
+'MicroCFTA.PartialForestLanguageIndependent.unchanged_union_contradiction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+unchanged_union_contradiction : ∀ (F : SourceGuards.Formulas FullSyntax.Formula)
+  (S : SourceGuards.Entailment FullSyntax.Formula) (entry : Interned InternedBinderProtocol.NodeKey)
+  (members : List (Value Symbol Guard)) (depth : Nat) (free : List InternedBinderProtocol.Reference),
+  NodeLaw F S
+    { inherited := SourceEqualityConstraintAllocation.Value.contradiction,
+      value := Value.union entry members depth free }
+    (Value.union entry members depth free)
+'MicroCFTA.PartialForestLanguageIndependent.unchanged_empty_contradiction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+unchanged_empty_contradiction : ∀ (F : SourceGuards.Formulas FullSyntax.Formula)
+  (S : SourceGuards.Entailment FullSyntax.Formula),
+  NodeLaw F S { inherited := SourceEqualityConstraintAllocation.Value.contradiction, value := Value.empty } Value.empty
+'MicroCFTA.PartialForestLanguageIndependent.descendants_from_physical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+descendants_from_physical : ∀ (F : SourceGuards.Formulas FullSyntax.Formula)
+  (S : SourceGuards.Entailment FullSyntax.Formula) [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  {width budget : Nat} {inherited combined : EqValue} {edge : EdgeValue Symbol Guard}
+  {values : List (Value Symbol Guard)} {before middle : Caller width} {prefixInventory : Inventory}
+  (inventory : Inventory),
+  SourceCurrentAllocatedInheritedPrefix.Receipt F S prefixInventory edge.entry.key.constraint inherited before.checked
+      combined →
+    ∀ (children : Children budget combined edge.children (prefixState before edge inherited) values middle),
+      ChildrenLaw F S children →
+        Ready middle.checked →
+          At F S inventory middle.checked →
+            InternedEdgeResidency.EdgeResident middle.checked.native.machine.heap edge →
+              InternedNestedProvenance.Values middle.checked.native.machine.heap values →
+                values.length = edge.children.length →
+                  EdgeLaw F S { inherited := inherited, value := edge }
+                    (SourceCurrentAllocatedRawRebuild.edge edge values middle.checked).fst
+'MicroCFTA.PartialForestLanguageIndependent.ordinary_from_physical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+ordinary_from_physical : ∀ (F : SourceGuards.Formulas FullSyntax.Formula)
+  (S : SourceGuards.Entailment FullSyntax.Formula) [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  {width budget : Nat} {inherited : EqValue} {entry : Interned InternedBinderProtocol.NodeKey}
+  {edges results : List (EdgeValue Symbol Guard)} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+  {before middle : Caller width} (inventory : Inventory) (rows : Rows budget inherited edges before results middle),
+  RowsLaw F S rows →
+    Ready middle.checked →
+      At F S inventory middle.checked →
+        Available middle.checked.native.machine.heap (Value.node entry edges depth free) →
+          InternedNestedProvenance.Edges middle.checked.native.machine.heap results →
+            NodeLaw F S { inherited := inherited, value := Value.node entry edges depth free }
+              (SourceCurrentAllocatedRawRebuild.modify (Value.node entry edges depth free) edges results
+                  middle.checked).fst
+'MicroCFTA.PartialForestLanguageIndependent.two_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+two_rows : ∀ (F : SourceGuards.Formulas FullSyntax.Formula) (S : SourceGuards.Entailment FullSyntax.Formula)
+  [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width budget : Nat} {inherited : EqValue}
+  {left leftNarrowed leftResult right rightNarrowed rightResult : EdgeValue Symbol Guard}
+  {before first afterFirst second afterSecond : Caller width}
+  (leftCall : EdgeCall budget { inherited := inherited, value := left } before leftNarrowed first)
+  (leftChildren : Descendants budget inherited leftNarrowed first leftResult afterFirst)
+  (rightCall : EdgeCall budget { inherited := inherited, value := right } afterFirst rightNarrowed second)
+  (rightChildren : Descendants budget inherited rightNarrowed second rightResult afterSecond),
+  EdgeLaw F S { inherited := inherited, value := left } leftNarrowed →
+    EdgeLaw F S { inherited := inherited, value := leftNarrowed } leftResult →
+      EdgeLaw F S { inherited := inherited, value := right } rightNarrowed →
+        EdgeLaw F S { inherited := inherited, value := rightNarrowed } rightResult → RowsLaw F S ⋯

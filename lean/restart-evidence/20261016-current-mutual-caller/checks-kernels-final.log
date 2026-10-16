@@ -1,0 +1,359 @@
+'MicroCFTA.PartialChecksKernels.nested_evaluated_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.PartialChecksKernels.returned_edge_descendants_and_tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.PartialChecksKernels.live_descendants_head_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.PartialChecksKernels.ready_hit_no_ranges' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.PartialChecksKernels.node_metadata' depends on axioms: [propext, Classical.choice, Quot.sound]
+@nested_evaluated_owner : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} {request : SourceCurrentAllocatedPartialState.NodeRequest}
+  {inherited : SourceEqualityConstraintAllocation.Value}
+  {before running : SourceCurrentAllocatedPartialState.State width} {nodeHandle : Nat}
+  {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+  {original :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {originals :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {owner : SourceCurrentAllocatedPartialState.EdgeRequest} {edgeHandle : Nat}
+  {edgeRunning : SourceCurrentAllocatedPartialState.State width}
+  {narrowed result :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {edgeMiddle afterChildren afterRows : SourceCurrentAllocatedPartialState.State width}
+  {results :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  (nodeStarted :
+    @Eq
+      (Prod Nat
+        (Prod
+          (FlatMemoThunk.Observation SourceCurrentAllocatedPartialState.NodeRequest
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (SourceCurrentAllocatedPartialState.State width)))
+      (@beginNode width request before)
+      (@Prod.mk Nat
+        (Prod
+          (FlatMemoThunk.Observation SourceCurrentAllocatedPartialState.NodeRequest
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (SourceCurrentAllocatedPartialState.State width))
+        nodeHandle
+        (@Prod.mk
+          (FlatMemoThunk.Observation SourceCurrentAllocatedPartialState.NodeRequest
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (SourceCurrentAllocatedPartialState.State width)
+          (@FlatMemoThunk.Observation.evaluate SourceCurrentAllocatedPartialState.NodeRequest
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            { inherited := inherited,
+              value :=
+                @Value.node (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) entry
+                  (@List.cons
+                    (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    original originals)
+                  depth free })
+          running)))
+  (edgeStarted :
+    @Eq
+      (Prod Nat
+        (Prod
+          (FlatMemoThunk.Observation SourceCurrentAllocatedPartialState.EdgeRequest
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (SourceCurrentAllocatedPartialState.State width)))
+      (@beginEdge width { inherited := inherited, value := original } running)
+      (@Prod.mk Nat
+        (Prod
+          (FlatMemoThunk.Observation SourceCurrentAllocatedPartialState.EdgeRequest
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (SourceCurrentAllocatedPartialState.State width))
+        edgeHandle
+        (@Prod.mk
+          (FlatMemoThunk.Observation SourceCurrentAllocatedPartialState.EdgeRequest
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (SourceCurrentAllocatedPartialState.State width)
+          (@FlatMemoThunk.Observation.evaluate SourceCurrentAllocatedPartialState.EdgeRequest
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            owner)
+          edgeRunning)))
+  (body : @EdgeBody inst inst_1 inst_2 width budget owner edgeRunning narrowed edgeMiddle)
+  (children :
+    @Descendants inst inst_1 inst_2 width budget inherited narrowed (@finishEdge width edgeHandle narrowed edgeMiddle)
+      result afterChildren)
+  (tail : @Rows inst inst_1 inst_2 width budget inherited originals afterChildren results afterRows),
+  @Checks inst inst_1 inst_2 width budget
+      (@nodeCallTrace inst inst_1 inst_2 width budget request
+        (@Prod.fst
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (SourceEqualityNativeDemand.State width)
+          (@SourceCurrentAllocatedRawRebuild.modify inst_1 width
+            (@Value.node (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) entry
+              (@List.cons
+                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                original originals)
+              depth free)
+            (@List.cons
+              (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              original originals)
+            (@List.cons
+              (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              result results)
+            (@SourceCurrentAllocatedPartialState.State.checked width afterRows)))
+        before
+        (@finishNode width nodeHandle
+          (@Prod.fst
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            (SourceEqualityNativeDemand.State width)
+            (@SourceCurrentAllocatedRawRebuild.modify inst_1 width
+              (@Value.node (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) entry
+                (@List.cons
+                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  original originals)
+                depth free)
+              (@List.cons
+                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                original originals)
+              (@List.cons
+                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                result results)
+              (@SourceCurrentAllocatedPartialState.State.checked width afterRows)))
+          (@SourceCurrentAllocatedPartialState.advance width afterRows
+            (@Prod.snd
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (SourceEqualityNativeDemand.State width)
+              (@SourceCurrentAllocatedRawRebuild.modify inst_1 width
+                (@Value.node (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) entry
+                  (@List.cons
+                    (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    original originals)
+                  depth free)
+                (@List.cons
+                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  original originals)
+                (@List.cons
+                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  result results)
+                (@SourceCurrentAllocatedPartialState.State.checked width afterRows)))
+            (@SourceCurrentAllocatedPartialState.State.fourth width afterRows)
+            (@SourceCurrentAllocatedPartialState.State.merge width afterRows)))
+        ⋯) →
+    @SourceCurrentAllocatedPartialEdgeActual.Ranges inst inst_1 inst_2 width budget owner edgeRunning
+@returned_edge_descendants_and_tail : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} {inherited : SourceEqualityConstraintAllocation.Value}
+  {original narrowed result :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {originals results :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before middle afterChildren after : SourceCurrentAllocatedPartialState.State width}
+  (edge :
+    @EdgeCall inst inst_1 inst_2 width budget { inherited := inherited, value := original } before narrowed middle)
+  (children : @Descendants inst inst_1 inst_2 width budget inherited narrowed middle result afterChildren)
+  (tail : @Rows inst inst_1 inst_2 width budget inherited originals afterChildren results after),
+  @Checks inst inst_1 inst_2 width budget
+      (@rowsTrace inst inst_1 inst_2 width budget inherited
+        (@List.cons
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          original originals)
+        (@List.cons
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          result results)
+        before after ⋯) →
+    And
+      (@Checks inst inst_1 inst_2 width budget
+        (@edgeCallTrace inst inst_1 inst_2 width budget { inherited := inherited, value := original } narrowed before
+          middle edge))
+      (And
+        (@Checks inst inst_1 inst_2 width budget
+          (@descendantsTrace inst inst_1 inst_2 width budget inherited narrowed result middle afterChildren children))
+        (@Checks inst inst_1 inst_2 width budget
+          (@rowsTrace inst inst_1 inst_2 width budget inherited originals results afterChildren after tail)))
+@live_descendants_head_tail : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat}
+  {edge : EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {inherited : SourceEqualityConstraintAllocation.Value} {before : SourceCurrentAllocatedPartialState.State width}
+  {identity : Nat} {records : List SourceEqualityClassOrder.Record}
+  {value result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {values results :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {middle after : SourceCurrentAllocatedPartialState.State width}
+  (shape :
+    @Eq (List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (@EdgeValue.children (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) edge)
+      (@List.cons
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)) value
+        values))
+  (combined :
+    @Eq (Except String (Option SourceEqualityConstraintAllocation.Value))
+      (@Prod.fst (Except String (Option SourceEqualityConstraintAllocation.Value))
+        SourceEqualityConstraintMemoAllocation.State
+        (SourceCurrentAllocatedInheritedPrefix.run
+          (@EdgeKey.constraint (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@Interned.key
+              (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (@EdgeValue.entry (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) edge)))
+          inherited
+          (@SourceEqualityNativeDemand.State.operations width
+            (@SourceCurrentAllocatedPartialState.State.checked width before))))
+      (@Except.ok String (Option SourceEqualityConstraintAllocation.Value)
+        (@some SourceEqualityConstraintAllocation.Value
+          (SourceEqualityConstraintAllocation.Value.live identity records))))
+  (head :
+    @NodeCall inst inst_1 inst_2 width budget
+      {
+        inherited :=
+          @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+            (@descend width (@prefixState width before edge inherited)
+              (SourceEqualityConstraintAllocation.Value.live identity records)
+              (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))),
+        value := value }
+      (@Prod.snd SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+        (@descend width (@prefixState width before edge inherited)
+          (SourceEqualityConstraintAllocation.Value.live identity records)
+          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+      result middle)
+  (tail :
+    @Walk inst inst_1 inst_2 width budget (SourceEqualityConstraintAllocation.Value.live identity records)
+      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      values middle results after),
+  @Checks inst inst_1 inst_2 width budget
+      (@descendantsTrace inst inst_1 inst_2 width budget inherited edge
+        (@Prod.fst
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (SourceEqualityNativeDemand.State width)
+          (@SourceCurrentAllocatedRawRebuild.edge inst_1 width edge
+            (@List.cons
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              result results)
+            (@SourceCurrentAllocatedPartialState.State.checked width after)))
+        before
+        (@SourceCurrentAllocatedPartialState.advance width after
+          (@Prod.snd
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            (SourceEqualityNativeDemand.State width)
+            (@SourceCurrentAllocatedRawRebuild.edge inst_1 width edge
+              (@List.cons
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                result results)
+              (@SourceCurrentAllocatedPartialState.State.checked width after)))
+          (@SourceCurrentAllocatedPartialState.State.fourth width after)
+          (@SourceCurrentAllocatedPartialState.State.merge width after))
+        ⋯) →
+    And
+      (@Checks inst inst_1 inst_2 width budget
+        (@nodeCallTrace inst inst_1 inst_2 width budget
+          {
+            inherited :=
+              @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+                (@descend width (@prefixState width before edge inherited)
+                  (SourceEqualityConstraintAllocation.Value.live identity records)
+                  (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))),
+            value := value }
+          result
+          (@Prod.snd SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+            (@descend width (@prefixState width before edge inherited)
+              (SourceEqualityConstraintAllocation.Value.live identity records)
+              (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+          middle head))
+      (@Checks inst inst_1 inst_2 width budget
+        (@walkTrace inst inst_1 inst_2 width budget (SourceEqualityConstraintAllocation.Value.live identity records)
+          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          values results middle after tail))
+@ready_hit_no_ranges : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} {request : SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before running : SourceCurrentAllocatedPartialState.State width} {handle : Nat}
+  {result :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @Eq
+      (Prod Nat
+        (Prod
+          (FlatMemoThunk.Observation SourceCurrentAllocatedPartialState.EdgeRequest
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (SourceCurrentAllocatedPartialState.State width)))
+      (@beginEdge width request before)
+      (@Prod.mk Nat
+        (Prod
+          (FlatMemoThunk.Observation SourceCurrentAllocatedPartialState.EdgeRequest
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (SourceCurrentAllocatedPartialState.State width))
+        handle
+        (@Prod.mk
+          (FlatMemoThunk.Observation SourceCurrentAllocatedPartialState.EdgeRequest
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (SourceCurrentAllocatedPartialState.State width)
+          (@FlatMemoThunk.Observation.ready SourceCurrentAllocatedPartialState.EdgeRequest
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            result)
+          running)) →
+    @SourceCurrentAllocatedPartialEdgeActual.CallRanges inst inst_1 inst_2 width budget request before
+@node_metadata : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} {firstRequest secondRequest : SourceCurrentAllocatedPartialState.NodeRequest}
+  {firstBefore secondBefore firstAfter secondAfter : SourceCurrentAllocatedPartialState.State width}
+  {firstResult secondResult :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {first : @NodeCall inst inst_1 inst_2 width budget firstRequest firstBefore firstResult firstAfter}
+  {second : @NodeCall inst inst_1 inst_2 width budget secondRequest secondBefore secondResult secondAfter},
+  @Eq (@Trace inst inst_1 inst_2 width budget)
+      (@nodeCallTrace inst inst_1 inst_2 width budget firstRequest firstResult firstBefore firstAfter first)
+      (@nodeCallTrace inst inst_1 inst_2 width budget secondRequest secondResult secondBefore secondAfter second) →
+    And (@Eq SourceCurrentAllocatedPartialState.NodeRequest firstRequest secondRequest)
+      (And (@Eq (SourceCurrentAllocatedPartialState.State width) firstBefore secondBefore)
+        (And
+          (@Eq (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            firstResult secondResult)
+          (@Eq (SourceCurrentAllocatedPartialState.State width) firstAfter secondAfter)))

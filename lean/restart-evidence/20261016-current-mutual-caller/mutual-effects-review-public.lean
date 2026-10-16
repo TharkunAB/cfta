@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentAllocatedPartialActual
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActual.node_call
+#check MicroCFTA.SourceCurrentAllocatedPartialActual.node_call
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActual.node_body
+#check MicroCFTA.SourceCurrentAllocatedPartialActual.node_body
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActual.edge_call
+#check MicroCFTA.SourceCurrentAllocatedPartialActual.edge_call
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActual.edge_body
+#check MicroCFTA.SourceCurrentAllocatedPartialActual.edge_body
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActual.rows
+#check MicroCFTA.SourceCurrentAllocatedPartialActual.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActual.descendants
+#check MicroCFTA.SourceCurrentAllocatedPartialActual.descendants
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActual.children
+#check MicroCFTA.SourceCurrentAllocatedPartialActual.children
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActual.walk
+#check MicroCFTA.SourceCurrentAllocatedPartialActual.walk
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActual.root_exact
+#check MicroCFTA.SourceCurrentAllocatedPartialActual.root_exact

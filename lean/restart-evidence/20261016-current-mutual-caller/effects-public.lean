@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentAllocatedPartialStepEffects
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context
+#check MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post
+#check MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context.rebase
+#check MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context.rebase
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post.refl
+#check MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post.refl
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post.trans
+#check MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post.trans
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post.rebase
+#check MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post.rebase
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialStepEffects.raw_edge
+#check MicroCFTA.SourceCurrentAllocatedPartialStepEffects.raw_edge
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialStepEffects.modify
+#check MicroCFTA.SourceCurrentAllocatedPartialStepEffects.modify
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialStepEffects.inherited_prefix
+#check MicroCFTA.SourceCurrentAllocatedPartialStepEffects.inherited_prefix
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialStepEffects.descent
+#check MicroCFTA.SourceCurrentAllocatedPartialStepEffects.descent

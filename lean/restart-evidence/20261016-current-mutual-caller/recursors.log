@@ -1,0 +1,862 @@
+MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads.rec
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {motive_1 :
+    {budget : Nat} →
+      {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest} →
+        {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+          {result :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall budget request before result after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver a a_1 a_2 → Prop}
+  {motive_2 :
+    {budget : Nat} →
+      {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest} →
+        {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+          {result :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody budget request before result after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeBodyReads formulas solver a a_1 a_2 → Prop}
+  {motive_3 :
+    {budget : Nat} →
+      {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest} →
+        {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+          {result :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall budget request before result after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver a a_1 a_2 → Prop}
+  {motive_4 :
+    {budget : Nat} →
+      {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest} →
+        {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+          {result :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody budget request before result after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver a a_1 a_2 → Prop}
+  {motive_5 :
+    {budget : Nat} →
+      {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value} →
+        {values :
+            List
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+          {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+            {results :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+              {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+                (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows budget inherited values before results after) →
+                  (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.RowsReads formulas solver a a_1 a_2 → Prop}
+  {motive_6 :
+    {budget : Nat} →
+      {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value} →
+        {value :
+            MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+          {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+            {result :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+              {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+                (a :
+                    MicroCFTA.SourceCurrentAllocatedPartialGraph.Descendants budget inherited value before result
+                      after) →
+                  (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.DescendantsReads formulas solver a a_1 a_2 →
+                      Prop}
+  {motive_7 :
+    {budget : Nat} →
+      {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value} →
+        {values :
+            List
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+          {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+            {results :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+              {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+                (a :
+                    MicroCFTA.SourceCurrentAllocatedPartialGraph.Children budget inherited values before results
+                      after) →
+                  (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.ChildrenReads formulas solver a a_1 a_2 → Prop}
+  {motive_8 :
+    {budget : Nat} →
+      {combined : MicroCFTA.SourceEqualityConstraintAllocation.Value} →
+        {index : Nat} →
+          {values :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+            {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              {results :
+                  List
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+                {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+                  (a :
+                      MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk budget combined index values before results
+                        after) →
+                    (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.WalkReads formulas solver a a_1 a_2 → Prop}
+  (hit :
+    ∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+      {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {x_3 : Nat}
+      {x_4 :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+      {started :
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginNode x_1 x_2 =
+          (x_3, MicroCFTA.FlatMemoThunk.Observation.ready x_4, x_5)}
+      {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_1 ⋯ memos memos ⋯)
+  (evaluate :
+    ∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+      {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+      {x_3 :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {x_4 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+      {body : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody x x_1 x_2 x_3 x_4}
+      {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+      {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+      {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {x_7 : Nat}
+      {started :
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginNode x_5 x_6 =
+          (x_7, MicroCFTA.FlatMemoThunk.Observation.evaluate x_1, x_2)}
+      (reads : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeBodyReads formulas solver body memos saved),
+      motive_2 body memos saved reads → motive_1 ⋯ memos saved ⋯)
+  (empty :
+    ∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+      {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+      motive_2 ⋯ memos memos ⋯)
+  (union :
+    ∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+      {x_2 : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+      {x_3 :
+        List
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+      {x_4 : Nat} {x_5 : List MicroCFTA.InternedBinderProtocol.Reference}
+      {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+      motive_2 ⋯ memos memos ⋯)
+  (binder :
+    ∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+      {x_2 : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+      {x_3 x_4 x_5 :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+      {x_7 :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {x_8 :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {actual :
+        MicroCFTA.SourceEqualityMuReconstruction.rebuild x_2 x_3 x_4 x_5 x_6.checked.native.machine.heap =
+          MicroCFTA.InternedNestedConstruction.Outcome.done x_7 x_8}
+      {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_2 ⋯ memos memos ⋯)
+  (ordinary :
+    ∀ {x : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {x_1 : Nat}
+      {x_2 : List MicroCFTA.InternedBinderProtocol.Reference} {x_3 : Nat}
+      {x_4 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+      {x_5 :
+        List
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+      {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+      {x_7 :
+        List
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+      {x_8 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+      {rows : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows x_3 x_4 x_5 x_6 x_7 x_8}
+      {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+      (reads : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.RowsReads formulas solver rows memos saved),
+      motive_5 rows memos saved reads → motive_2 ⋯ memos saved ⋯) :
+  (∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+      {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {x_3 : Nat}
+      {x_4 :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+      {started :
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge x_1 x_2 =
+          (x_3, MicroCFTA.FlatMemoThunk.Observation.ready x_4, x_5)}
+      {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_3 ⋯ memos memos ⋯) →
+    (∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+        {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+        {x_3 :
+          MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+        {x_4 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+        {body : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody x x_1 x_2 x_3 x_4}
+        {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+        {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+        {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {x_7 : Nat}
+        {started :
+          MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge x_5 x_6 =
+            (x_7, MicroCFTA.FlatMemoThunk.Observation.evaluate x_1, x_2)}
+        (reads : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver body memos saved),
+        motive_4 body memos saved reads → motive_3 ⋯ memos saved ⋯) →
+      ∀
+        (parent :
+          ∀ {x : Nat}
+            {x_1 :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_2 : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+            {x_3 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+            {x_4 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {x_5 :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_6 : MicroCFTA.SourceEqualityNativeDemand.State width} {x_7 : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+            {x_8 :
+              MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {actual :
+              MicroCFTA.SourceCurrentAllocatedParentEdge.Edge x x_1.entry.key.symbol x_1.entry.key.constraint x_2 x_3
+                x_1.children x_4.checked x_4.fourth x_4.merge x_5 x_6 x_7 x_8}
+            {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+            {field :
+              MicroCFTA.SourceEqualityMkEdgeAllocation.contradictory x_1.entry.key.constraint = false →
+                MicroCFTA.SourceEqualityConstraintFieldLookup.load x_1.entry.key.constraint
+                    x_4.checked.operations.constraints =
+                  Except.ok (some x_2)}
+            (reads : MicroCFTA.SourceCurrentAllocatedParentEdgeActual.Reads formulas solver actual memos saved),
+            motive_4 ⋯ memos saved ⋯)
+        (nil :
+          ∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+            {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_5 ⋯ memos memos ⋯)
+        (cons :
+          ∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+            {x_2 :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_3 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {x_4 :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {first :
+              MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall x { inherited := x_1, value := x_2 } x_3 x_4 x_5}
+            {memos middle : MicroCFTA.EndpointMemoGateTrace.Memos}
+            {x_6 :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_7 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {child : MicroCFTA.SourceCurrentAllocatedPartialGraph.Descendants x x_1 x_4 x_5 x_6 x_7}
+            {later : MicroCFTA.EndpointMemoGateTrace.Memos}
+            {x_8 x_9 :
+              List
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {x_10 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {tail : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows x x_1 x_8 x_7 x_9 x_10}
+            {saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+            (edge : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver first memos middle)
+            (children :
+              MicroCFTA.SourceCurrentAllocatedPartialSourceReads.DescendantsReads formulas solver child middle later)
+            (rest : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.RowsReads formulas solver tail later saved),
+            motive_3 first memos middle edge →
+              motive_6 child middle later children → motive_5 tail later saved rest → motive_5 ⋯ memos saved ⋯)
+        (run :
+          ∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+            {x_2 :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_3 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {x_4 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+            {x_5 :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {children :
+              MicroCFTA.SourceCurrentAllocatedPartialGraph.Children x x_1 x_2.children
+                (MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState x_3 x_2 x_4) x_5 x_6}
+            {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+            {combined :
+              (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run x_2.entry.key.constraint x_4
+                    x_3.checked.operations).fst =
+                Except.ok (some x_1)}
+            (reads :
+              MicroCFTA.SourceCurrentAllocatedPartialSourceReads.ChildrenReads formulas solver children memos saved),
+            motive_7 children memos saved reads → motive_6 ⋯ memos saved ⋯)
+        (contradiction :
+          ∀ {x : Nat}
+            {x_1 :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_7 ⋯ memos memos ⋯)
+        (live :
+          ∀ {x x_1 : Nat} {x_2 : List MicroCFTA.SourceEqualityClassOrder.Record}
+            {x_3 :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {x_4 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {x_5 :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {actual :
+              MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk x
+                (MicroCFTA.SourceEqualityConstraintAllocation.Value.live x_1 x_2) 0 x_3 x_4 x_5 x_6}
+            {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+            (reads : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.WalkReads formulas solver actual memos saved),
+            motive_8 actual memos saved reads → motive_7 ⋯ memos saved ⋯),
+        (∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value} {x_2 : Nat}
+            {x_3 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_8 ⋯ memos memos ⋯) →
+          (∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+              {x_2 : MicroCFTA.SourceEqualityConstraintAllocation.Value} {x_3 : Nat}
+              {x_4 x_5 :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+              {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+              {first :
+                MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall x
+                  { inherited := (MicroCFTA.SourceCurrentAllocatedPartialGraph.descend x_1 x_2 x_3).fst, value := x_4 }
+                  (MicroCFTA.SourceCurrentAllocatedPartialGraph.descend x_1 x_2 x_3).snd x_5 x_6}
+              {memos middle : MicroCFTA.EndpointMemoGateTrace.Memos}
+              {x_7 x_8 :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+              {x_9 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+              {tail : MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk x x_2 (x_3 + 1) x_7 x_6 x_8 x_9}
+              {saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+              (head :
+                MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver first memos middle)
+              (rest : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.WalkReads formulas solver tail middle saved),
+              motive_1 first memos middle head → motive_8 tail middle saved rest → motive_8 ⋯ memos saved ⋯) →
+            ∀ {budget : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+              {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+              {result :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+              {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+              {a : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall budget request before result after}
+              {a✝ a✝¹ : MicroCFTA.EndpointMemoGateTrace.Memos}
+              (t : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver a a✝ a✝¹),
+              motive_1 a a✝ a✝¹ t
+recursor MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads.rec : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {motive_1 :
+    {budget : Nat} →
+      {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest} →
+        {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+          {result :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall budget request before result after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver a a_1 a_2 → Prop}
+  {motive_2 :
+    {budget : Nat} →
+      {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest} →
+        {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+          {result :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody budget request before result after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeBodyReads formulas solver a a_1 a_2 → Prop}
+  {motive_3 :
+    {budget : Nat} →
+      {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest} →
+        {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+          {result :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall budget request before result after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver a a_1 a_2 → Prop}
+  {motive_4 :
+    {budget : Nat} →
+      {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest} →
+        {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+          {result :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody budget request before result after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver a a_1 a_2 → Prop}
+  {motive_5 :
+    {budget : Nat} →
+      {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value} →
+        {values :
+            List
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+          {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+            {results :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+              {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+                (a : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows budget inherited values before results after) →
+                  (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.RowsReads formulas solver a a_1 a_2 → Prop}
+  {motive_6 :
+    {budget : Nat} →
+      {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value} →
+        {value :
+            MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+          {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+            {result :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+              {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+                (a :
+                    MicroCFTA.SourceCurrentAllocatedPartialGraph.Descendants budget inherited value before result
+                      after) →
+                  (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.DescendantsReads formulas solver a a_1 a_2 →
+                      Prop}
+  {motive_7 :
+    {budget : Nat} →
+      {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value} →
+        {values :
+            List
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+          {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+            {results :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+              {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+                (a :
+                    MicroCFTA.SourceCurrentAllocatedPartialGraph.Children budget inherited values before results
+                      after) →
+                  (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.ChildrenReads formulas solver a a_1 a_2 → Prop}
+  {motive_8 :
+    {budget : Nat} →
+      {combined : MicroCFTA.SourceEqualityConstraintAllocation.Value} →
+        {index : Nat} →
+          {values :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+            {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+              {results :
+                  List
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+                {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width} →
+                  (a :
+                      MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk budget combined index values before results
+                        after) →
+                    (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.WalkReads formulas solver a a_1 a_2 → Prop},
+  (∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+      {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {x_3 : Nat}
+      {x_4 :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+      {started :
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginNode x_1 x_2 =
+          (x_3, MicroCFTA.FlatMemoThunk.Observation.ready x_4, x_5)}
+      {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_1 ⋯ memos memos ⋯) →
+    (∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+        {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+        {x_3 :
+          MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+        {x_4 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+        {body : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody x x_1 x_2 x_3 x_4}
+        {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+        {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+        {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {x_7 : Nat}
+        {started :
+          MicroCFTA.SourceCurrentAllocatedPartialState.beginNode x_5 x_6 =
+            (x_7, MicroCFTA.FlatMemoThunk.Observation.evaluate x_1, x_2)}
+        (reads : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeBodyReads formulas solver body memos saved),
+        motive_2 body memos saved reads → motive_1 ⋯ memos saved ⋯) →
+      (∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+          {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+          {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_2 ⋯ memos memos ⋯) →
+        (∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+            {x_2 : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+            {x_3 :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+            {x_4 : Nat} {x_5 : List MicroCFTA.InternedBinderProtocol.Reference}
+            {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+            {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_2 ⋯ memos memos ⋯) →
+          (∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+              {x_2 : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+              {x_3 x_4 x_5 :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+              {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+              {x_7 :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+              {x_8 :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+              {actual :
+                MicroCFTA.SourceEqualityMuReconstruction.rebuild x_2 x_3 x_4 x_5 x_6.checked.native.machine.heap =
+                  MicroCFTA.InternedNestedConstruction.Outcome.done x_7 x_8}
+              {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_2 ⋯ memos memos ⋯) →
+            (∀ {x : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {x_1 : Nat}
+                {x_2 : List MicroCFTA.InternedBinderProtocol.Reference} {x_3 : Nat}
+                {x_4 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+                {x_5 :
+                  List
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                {x_7 :
+                  List
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                {x_8 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                {rows : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows x_3 x_4 x_5 x_6 x_7 x_8}
+                {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                (reads : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.RowsReads formulas solver rows memos saved),
+                motive_5 rows memos saved reads → motive_2 ⋯ memos saved ⋯) →
+              (∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+                  {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {x_3 : Nat}
+                  {x_4 :
+                    MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                  {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                  {started :
+                    MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge x_1 x_2 =
+                      (x_3, MicroCFTA.FlatMemoThunk.Observation.ready x_4, x_5)}
+                  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_3 ⋯ memos memos ⋯) →
+                (∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+                    {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                    {x_3 :
+                      MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                    {x_4 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                    {body : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody x x_1 x_2 x_3 x_4}
+                    {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                    {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+                    {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {x_7 : Nat}
+                    {started :
+                      MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge x_5 x_6 =
+                        (x_7, MicroCFTA.FlatMemoThunk.Observation.evaluate x_1, x_2)}
+                    (reads :
+                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver body memos
+                        saved),
+                    motive_4 body memos saved reads → motive_3 ⋯ memos saved ⋯) →
+                  (∀ {x : Nat}
+                      {x_1 :
+                        MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                      {x_2 : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+                      {x_3 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+                      {x_4 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                      {x_5 :
+                        MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                      {x_6 : MicroCFTA.SourceEqualityNativeDemand.State width}
+                      {x_7 : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+                      {x_8 :
+                        MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                      {actual :
+                        MicroCFTA.SourceCurrentAllocatedParentEdge.Edge x x_1.entry.key.symbol x_1.entry.key.constraint
+                          x_2 x_3 x_1.children x_4.checked x_4.fourth x_4.merge x_5 x_6 x_7 x_8}
+                      {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                      {field :
+                        MicroCFTA.SourceEqualityMkEdgeAllocation.contradictory x_1.entry.key.constraint = false →
+                          MicroCFTA.SourceEqualityConstraintFieldLookup.load x_1.entry.key.constraint
+                              x_4.checked.operations.constraints =
+                            Except.ok (some x_2)}
+                      (reads :
+                        MicroCFTA.SourceCurrentAllocatedParentEdgeActual.Reads formulas solver actual memos saved),
+                      motive_4 ⋯ memos saved ⋯) →
+                    (∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+                        {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                        {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_5 ⋯ memos memos ⋯) →
+                      (∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+                          {x_2 :
+                            MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                          {x_3 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                          {x_4 :
+                            MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                          {x_5 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                          {first :
+                            MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall x { inherited := x_1, value := x_2 }
+                              x_3 x_4 x_5}
+                          {memos middle : MicroCFTA.EndpointMemoGateTrace.Memos}
+                          {x_6 :
+                            MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                          {x_7 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                          {child : MicroCFTA.SourceCurrentAllocatedPartialGraph.Descendants x x_1 x_4 x_5 x_6 x_7}
+                          {later : MicroCFTA.EndpointMemoGateTrace.Memos}
+                          {x_8 x_9 :
+                            List
+                              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                          {x_10 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                          {tail : MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows x x_1 x_8 x_7 x_9 x_10}
+                          {saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                          (edge :
+                            MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver first memos
+                              middle)
+                          (children :
+                            MicroCFTA.SourceCurrentAllocatedPartialSourceReads.DescendantsReads formulas solver child
+                              middle later)
+                          (rest :
+                            MicroCFTA.SourceCurrentAllocatedPartialSourceReads.RowsReads formulas solver tail later
+                              saved),
+                          motive_3 first memos middle edge →
+                            motive_6 child middle later children →
+                              motive_5 tail later saved rest → motive_5 ⋯ memos saved ⋯) →
+                        (∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+                            {x_2 :
+                              MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                            {x_3 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                            {x_4 : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+                            {x_5 :
+                              List
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                            {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                            {children :
+                              MicroCFTA.SourceCurrentAllocatedPartialGraph.Children x x_1 x_2.children
+                                (MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState x_3 x_2 x_4) x_5 x_6}
+                            {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                            {combined :
+                              (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run x_2.entry.key.constraint x_4
+                                    x_3.checked.operations).fst =
+                                Except.ok (some x_1)}
+                            (reads :
+                              MicroCFTA.SourceCurrentAllocatedPartialSourceReads.ChildrenReads formulas solver children
+                                memos saved),
+                            motive_7 children memos saved reads → motive_6 ⋯ memos saved ⋯) →
+                          (∀ {x : Nat}
+                              {x_1 :
+                                List
+                                  (MicroCFTA.InternedConstructorTemplates.Value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                              {x_2 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                              {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_7 ⋯ memos memos ⋯) →
+                            (∀ {x x_1 : Nat} {x_2 : List MicroCFTA.SourceEqualityClassOrder.Record}
+                                {x_3 :
+                                  List
+                                    (MicroCFTA.InternedConstructorTemplates.Value
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                                {x_4 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                                {x_5 :
+                                  List
+                                    (MicroCFTA.InternedConstructorTemplates.Value
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                                {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                                {actual :
+                                  MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk x
+                                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live x_1 x_2) 0 x_3 x_4 x_5 x_6}
+                                {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                                (reads :
+                                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.WalkReads formulas solver actual
+                                    memos saved),
+                                motive_8 actual memos saved reads → motive_7 ⋯ memos saved ⋯) →
+                              (∀ {x : Nat} {x_1 : MicroCFTA.SourceEqualityConstraintAllocation.Value} {x_2 : Nat}
+                                  {x_3 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                                  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_8 ⋯ memos memos ⋯) →
+                                (∀ {x : Nat} {x_1 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                                    {x_2 : MicroCFTA.SourceEqualityConstraintAllocation.Value} {x_3 : Nat}
+                                    {x_4 x_5 :
+                                      MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                                    {x_6 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                                    {first :
+                                      MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall x
+                                        {
+                                          inherited :=
+                                            (MicroCFTA.SourceCurrentAllocatedPartialGraph.descend x_1 x_2 x_3).fst,
+                                          value := x_4 }
+                                        (MicroCFTA.SourceCurrentAllocatedPartialGraph.descend x_1 x_2 x_3).snd x_5 x_6}
+                                    {memos middle : MicroCFTA.EndpointMemoGateTrace.Memos}
+                                    {x_7 x_8 :
+                                      List
+                                        (MicroCFTA.InternedConstructorTemplates.Value
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                                    {x_9 : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                                    {tail :
+                                      MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk x x_2 (x_3 + 1) x_7 x_6 x_8 x_9}
+                                    {saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                                    (head :
+                                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver
+                                        first memos middle)
+                                    (rest :
+                                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.WalkReads formulas solver tail
+                                        middle saved),
+                                    motive_1 first memos middle head →
+                                      motive_8 tail middle saved rest → motive_8 ⋯ memos saved ⋯) →
+                                  ∀ {budget : Nat} {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+                                    {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                                    {result :
+                                      MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                                    {after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+                                    {a :
+                                      MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall budget request before result
+                                        after}
+                                    {a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos}
+                                    (t :
+                                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver a
+                                        a_1 a_2),
+                                    motive_1 a a_1 a_2 t
+number of parameters: 6
+number of indices: 8
+number of motives: 8
+number of minors: 16
+rules:
+for MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads.hit (8 fields): fun
+    [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    {width} formulas solver motive_1 motive_2 motive_3 motive_4 motive_5 motive_6 motive_7 motive_8 hit evaluate empty
+    union binder ordinary hit_1 evaluate_1 parent nil cons run contradiction live nil_1 cons_1 {x} {x_1} {x_2} {x_3}
+    {x_4} {x_5} {started} {memos} =>
+  hit
+for MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads.evaluate (13 fields): fun
+    [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    {width} formulas solver motive_1 motive_2 motive_3 motive_4 motive_5 motive_6 motive_7 motive_8 hit evaluate empty
+    union binder ordinary hit_1 evaluate_1 parent nil cons run contradiction live nil_1 cons_1 {x} {x_1} {x_2} {x_3}
+    {x_4} {body} {memos saved} {x_5} {x_6} {x_7} {started} reads =>
+  evaluate reads
+    (MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeBodyReads.rec hit evaluate empty union binder ordinary hit_1
+      evaluate_1 parent nil cons run contradiction live nil_1 cons_1 reads)
+lean/restart-evidence/20261016-current-mutual-caller/recursors.lean:4:7: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginNode_evaluate_sound`
+lean/restart-evidence/20261016-current-mutual-caller/recursors.lean:5:7: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.SourceCurrentAllocatedPartialMemoSound.finishNode_sound`
+lean/restart-evidence/20261016-current-mutual-caller/recursors.lean:6:7: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.SourceCurrentAllocatedPartialFrames.node_body`

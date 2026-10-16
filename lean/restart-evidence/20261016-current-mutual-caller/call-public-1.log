@@ -1,0 +1,273 @@
+'MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_refl' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_refl : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver request request.value
+'MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_start' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_start : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {request original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before running : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos} {handle : Nat},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before =
+            (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate original, running) →
+          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory running memos ∧
+            MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeGood formulas solver running.checked
+                { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+              original.key = request.key ∧
+                running.nodeResults.cells handle =
+                  some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating }
+'MicroCFTA.SourceCurrentAllocatedPartialCallSteps.edge_start' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialCallSteps.edge_start : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {request original : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before running : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos} {handle : Nat},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before =
+            (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate original, running) →
+          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory running memos ∧
+            MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver running.checked
+                { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+              original.key = request.key ∧
+                running.edgeResults.cells handle =
+                  some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating }
+'MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_hit : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos} {handle : Nat}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before =
+            (handle, MicroCFTA.FlatMemoThunk.Observation.ready result, after) →
+          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory before after memos ∧
+            MicroCFTA.InternedProbeProvenance.Available after.checked.native.machine.heap result ∧
+              MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver request result
+'MicroCFTA.SourceCurrentAllocatedPartialCallSteps.edge_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialCallSteps.edge_hit : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos} {handle : Nat}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before =
+            (handle, MicroCFTA.FlatMemoThunk.Observation.ready result, after) →
+          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory before after memos ∧
+            MicroCFTA.InternedEdgeResidency.EdgeResident after.checked.native.machine.heap result ∧
+              MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver request result
+'MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_finish' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_finish : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {budget : Nat}
+  {request original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before running middle : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos} {handle : Nat}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before =
+            (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate original, running) →
+          MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody budget original running result middle →
+            MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next running middle final →
+              MicroCFTA.InternedProbeProvenance.Available middle.checked.native.machine.heap result →
+                MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver original result →
+                  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result middle) final ∧
+                    MicroCFTA.InternedProbeProvenance.Available
+                        (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result
+                                  middle).checked.native.machine.heap
+                        result ∧
+                      MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver request result
+'MicroCFTA.SourceCurrentAllocatedPartialCallSteps.edge_finish' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialCallSteps.edge_finish : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {budget : Nat}
+  {request original : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before running middle : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos} {handle : Nat}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before =
+            (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate original, running) →
+          MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody budget original running result middle →
+            MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next running middle final →
+              MicroCFTA.InternedEdgeResidency.EdgeResident middle.checked.native.machine.heap result →
+                MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver original result →
+                  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result middle) final ∧
+                    MicroCFTA.InternedEdgeResidency.EdgeResident
+                        (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result
+                                  middle).checked.native.machine.heap
+                        result ∧
+                      MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver request result
+'MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_binder' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialCallSteps.node_binder : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {body depth ordinary result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap
+        (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+      MicroCFTA.SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap =
+          MicroCFTA.InternedNestedConstruction.Outcome.done result heap →
+        MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory before
+            (MicroCFTA.SourceCurrentAllocatedPartialState.advance before
+              (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+                { heap := heap, equality := before.checked.operations })
+              before.fourth before.merge)
+            memos ∧
+          MicroCFTA.InternedProbeProvenance.Available heap result ∧
+            MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
+              { inherited := inherited,
+                value := MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary }
+              result
+'MicroCFTA.PartialCallStepsIndependent.node_finish_retains_owner' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@node_finish_retains_owner : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  {width : Nat} (F : SourceGuards.Formulas FullSyntax.Formula) (S : SourceGuards.Entailment FullSyntax.Formula)
+  {inventory next : Inventory} {budget : Nat} {request original : NodeRequest} {before running middle : Caller width}
+  {memos final : Memos} {handle : Nat} {result : Value Symbol Guard},
+  Context F S inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited →
+      Available before.checked.native.machine.heap request.value →
+        beginNode request before = (handle, FlatMemoThunk.Observation.evaluate original, running) →
+          NodeBody budget original running result middle →
+            Post F S next running middle final →
+              Available middle.checked.native.machine.heap result →
+                NodeLaw F S original result →
+                  Post F S next before (finishNode handle result middle) final ∧
+                    NodeLaw F S request result ∧
+                      (finishNode handle result middle).nodeResults.cells handle =
+                        some { request := original, status := FlatMemoThunk.Status.returned result }
+'MicroCFTA.PartialCallStepsIndependent.edge_finish_retains_owner' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@edge_finish_retains_owner : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  {width : Nat} (F : SourceGuards.Formulas FullSyntax.Formula) (S : SourceGuards.Entailment FullSyntax.Formula)
+  {inventory next : Inventory} {budget : Nat} {request original : EdgeRequest} {before running middle : Caller width}
+  {memos final : Memos} {handle : Nat} {result : EdgeValue Symbol Guard},
+  Context F S inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited →
+      Resident before.checked.native.machine.heap request.value →
+        beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate original, running) →
+          EdgeBody budget original running result middle →
+            Post F S next running middle final →
+              Resident middle.checked.native.machine.heap result →
+                EdgeLaw F S original result →
+                  Post F S next before (finishEdge handle result middle) final ∧
+                    EdgeLaw F S request result ∧
+                      (finishEdge handle result middle).edgeResults.cells handle =
+                        some { request := original, status := FlatMemoThunk.Status.returned result }
+'MicroCFTA.PartialCallStepsIndependent.binder_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+@binder_call : ∀ [DecidableEq Symbol] [inst : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [DecidableEq (Value Symbol Guard)] {width : Nat} (F : SourceGuards.Formulas FullSyntax.Formula)
+  (S : SourceGuards.Entailment FullSyntax.Formula) {inventory : Inventory} (budget : Nat) {request : NodeRequest}
+  {inherited : SourceEqualityConstraintAllocation.Value} {entry : Interned InternedBinderProtocol.NodeKey}
+  {body depth ordinary : Value Symbol Guard} {before running : Caller width} {memos : Memos} {handle : Nat},
+  Context F S inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited →
+      Available before.checked.native.machine.heap request.value →
+        beginNode request before =
+            (handle,
+              FlatMemoThunk.Observation.evaluate
+                { inherited := inherited, value := Value.mu entry body depth ordinary },
+              running) →
+          SourceEqualityMuReconstruction.rebuild entry body depth ordinary running.checked.native.machine.heap =
+              InternedNestedConstruction.Outcome.done (cleanup (Value.mu entry body depth ordinary))
+                running.checked.native.machine.heap ∧
+            Post F S inventory before (finishNode handle (cleanup (Value.mu entry body depth ordinary)) running) memos ∧
+              NodeLaw F S request (cleanup (Value.mu entry body depth ordinary)) ∧
+                (finishNode handle (cleanup (Value.mu entry body depth ordinary)) running).nodeResults.cells handle =
+                  some
+                    { request := { inherited := inherited, value := Value.mu entry body depth ordinary },
+                      status := FlatMemoThunk.Status.returned (cleanup (Value.mu entry body depth ordinary)) }

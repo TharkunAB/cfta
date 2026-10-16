@@ -1,0 +1,223 @@
+'MicroCFTA.PartialActualIndependentKernels.root_exact_with_frames' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.PartialActualIndependentKernels.two_actual_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.PartialActualIndependentKernels.actual_walk_without_child_oracle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@root_exact_with_frames : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {inventory : Inventory} {identity : Nat}
+  {value result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before after : SourceCurrentAllocatedPartialState.State width} {memos final : EndpointMemoGateTrace.Memos}
+  {actual :
+    @NodeCall inst inst_1 inst_2 width budget
+      { inherited := SourceEqualityConstraintAllocation.Value.live identity (@List.nil SourceEqualityClassOrder.Record),
+        value := value }
+      before result after},
+  @NodeCallReads inst inst_1 inst_2 width formulas solver budget
+      { inherited := SourceEqualityConstraintAllocation.Value.live identity (@List.nil SourceEqualityClassOrder.Record),
+        value := value }
+      before result after actual memos final →
+    @Checks inst inst_1 inst_2 width budget
+        (@nodeCallTrace inst inst_1 inst_2 width budget
+          {
+            inherited :=
+              SourceEqualityConstraintAllocation.Value.live identity (@List.nil SourceEqualityClassOrder.Record),
+            value := value }
+          result before after actual) →
+      @Context inst_1 width formulas solver inventory before memos →
+        SourceEqualityConstraintAllocation.Ready
+            (@SourceEqualityNativeDemand.State.operations width (@State.checked width before)).constraints
+            (SourceEqualityConstraintAllocation.Value.live identity (@List.nil SourceEqualityClassOrder.Record)) →
+          @Available (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native width (@State.checked width before))))
+              value →
+            @Exists Inventory fun next =>
+              And (@Post inst_1 width formulas solver next before after final)
+                (And
+                  (@Available (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width (@State.checked width after))))
+                    result)
+                  (And (@SourceCurrentAllocatedPartialFrames.Frame width before after)
+                    (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+                      (term : Term (SourceObservations.Label FullSyntax.Formula)),
+                      Iff
+                        (@InternedGuardedLanguage.meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                            formulas solver)
+                          ambient result term)
+                        (@InternedGuardedLanguage.meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                            formulas solver)
+                          ambient value term))))
+@two_actual_calls : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {inventory : Inventory}
+  {firstRequest secondRequest : NodeRequest} {before middle after : SourceCurrentAllocatedPartialState.State width}
+  {firstResult secondResult :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {memos middleMemos final : EndpointMemoGateTrace.Memos}
+  {first : @NodeCall inst inst_1 inst_2 width budget firstRequest before firstResult middle}
+  {second : @NodeCall inst inst_1 inst_2 width budget secondRequest middle secondResult after},
+  @NodeCallReads inst inst_1 inst_2 width formulas solver budget firstRequest before firstResult middle first memos
+      middleMemos →
+    @NodeCallReads inst inst_1 inst_2 width formulas solver budget secondRequest middle secondResult after second
+        middleMemos final →
+      @Checks inst inst_1 inst_2 width budget
+          (@nodeCallTrace inst inst_1 inst_2 width budget firstRequest firstResult before middle first) →
+        @Checks inst inst_1 inst_2 width budget
+            (@nodeCallTrace inst inst_1 inst_2 width budget secondRequest secondResult middle after second) →
+          @Context inst_1 width formulas solver inventory before memos →
+            SourceEqualityConstraintAllocation.Ready
+                (@SourceEqualityNativeDemand.State.operations width (@State.checked width before)).constraints
+                firstRequest.inherited →
+              SourceEqualityConstraintAllocation.Ready
+                  (@SourceEqualityNativeDemand.State.operations width (@State.checked width before)).constraints
+                  secondRequest.inherited →
+                @Available (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width (@State.checked width before))))
+                    firstRequest.value →
+                  @Available (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionThunks.State.machine width
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native width (@State.checked width before))))
+                      secondRequest.value →
+                    @Exists Inventory fun next =>
+                      And (@Post inst_1 width formulas solver next before after final)
+                        (And
+                          (@Available (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@SourceRecursiveIntersectionKernel.Machine.heap
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@SourceRecursiveIntersectionThunks.State.machine width
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceEqualityNativeDemand.State.native width (@State.checked width after))))
+                            firstResult)
+                          (And
+                            (@Available (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@SourceEqualityNativeDemand.State.native width (@State.checked width after))))
+                              secondResult)
+                            (And (NodeLaw formulas solver firstRequest firstResult)
+                              (NodeLaw formulas solver secondRequest secondResult))))
+@actual_walk_without_child_oracle : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {inventory : Inventory}
+  {combined : SourceEqualityConstraintAllocation.Value} {index : Nat}
+  {values results :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceCurrentAllocatedPartialState.State width} {memos final : EndpointMemoGateTrace.Memos}
+  {actual : @Walk inst inst_1 inst_2 width budget combined index values before results after},
+  @WalkReads inst inst_1 inst_2 width formulas solver budget combined index values before results after actual memos
+      final →
+    @Checks inst inst_1 inst_2 width budget
+        (@walkTrace inst inst_1 inst_2 width budget combined index values results before after actual) →
+      @Context inst_1 width formulas solver inventory before memos →
+        SourceEqualityConstraintAllocation.Ready
+            (@SourceEqualityNativeDemand.State.operations width (@State.checked width before)).constraints combined →
+          @Values (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native width (@State.checked width before))))
+              values →
+            @Exists Inventory fun next =>
+              And (@Post inst_1 width formulas solver next before after final)
+                (And
+                  (@Values (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (@SourceRecursiveIntersectionThunks.State.machine width
+                        (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceEqualityNativeDemand.State.native width (@State.checked width after))))
+                    results)
+                  (And
+                    (@Eq Nat
+                      (@List.length
+                        (Value (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        results)
+                      (@List.length
+                        (Value (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        values))
+                    (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+                      (terms : List (Term (SourceObservations.Label FullSyntax.Formula))),
+                      DescendedSat combined index terms →
+                        Iff
+                          (@All₂
+                            (Value (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                            (Term (SourceObservations.Label FullSyntax.Formula))
+                            (@InternedGuardedLanguage.meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                                formulas solver)
+                              ambient)
+                            results terms)
+                          (@All₂
+                            (Value (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                            (Term (SourceObservations.Label FullSyntax.Formula))
+                            (@InternedGuardedLanguage.meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                                formulas solver)
+                              ambient)
+                            values terms))))

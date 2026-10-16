@@ -1,0 +1,51 @@
+import MicroCFTA.SourceCurrentAllocatedPartialChecks
+
+set_option pp.explicit true
+set_option pp.universes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialChecks.Reach.direct
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Reach.direct
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialChecks.Reach.trans
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Reach.trans
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.reached
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.reached
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.restrict
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.restrict
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.edge_body
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.edge_reached
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.edge_reached
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.edge_call_ranges
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks.edge_call_ranges
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Trace
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.nodeCallTrace
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.nodeBodyTrace
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.edgeCallTrace
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.edgeBodyTrace
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.rowsTrace
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.descendantsTrace
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.childrenTrace
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.walkTrace
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Reach
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Trace.nodeCall
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Trace.nodeBody
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Trace.edgeCall
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Trace.edgeBody
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Trace.rows
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Trace.descendants
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Trace.children
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Trace.walk
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.node_evaluate
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.node_ordinary
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.edge_evaluate
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.rows_edge
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.rows_descendants
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.rows_tail
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.descendants_children
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.children_walk
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.walk_head
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Direct.walk_tail
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Reach.refl
+#check @MicroCFTA.SourceCurrentAllocatedPartialChecks.Reach.step
