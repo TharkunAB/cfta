@@ -1,0 +1,350 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node : {Symbol Guard : Type} →
+  Nat → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows : {Symbol Guard : Type} →
+  Nat → List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children : {Symbol Guard : Type} →
+  Nat → List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge : {Symbol Guard : Type} →
+  Nat → MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.domain' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.domain : ∀ {Symbol Guard : Type} {bits : Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits value →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.member' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.member : ∀ {Symbol Guard : Type} {bits : Nat}
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children Symbol Guard bits values →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.of_members' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.of_members : ∀ {Symbol Guard : Type} (bits : Nat)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits value) →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children Symbol Guard bits values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.member' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.member : ∀ {Symbol Guard : Type} {bits : Nat}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits edges →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.of_members' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.of_members : ∀ {Symbol Guard : Type} (bits : Nat)
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+  (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges edge →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits edge) →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.rows' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.rows : ∀ {Symbol Guard : Type} {bits : Nat}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} {depth : Nat}
+  {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits
+      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.nodeEdges' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.nodeEdges : ∀ {Symbol Guard : Type} {bits : Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits value →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits
+      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard value)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.child' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.child : ∀ {Symbol Guard : Type} {bits : Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits value →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard value) edge →
+        ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) child →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits child
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.domain' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.domain : ∀ {Symbol Guard : Type} {bits : Nat}
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children Symbol Guard bits values →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.domain' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.domain : ∀ {Symbol Guard : Type} {bits : Nat}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits edges →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge.domain' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge.domain : ∀ {Symbol Guard : Type} {bits : Nat}
+  {edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits edge →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge Symbol Guard edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.safe' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.safe : ∀ {Symbol Guard : Type} {bits : Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits value →
+    @Exists.{1} MicroCFTA.IntersectSchedule.Input fun input =>
+      And
+        (@Eq.{1} (Option.{0} MicroCFTA.IntersectSchedule.Input)
+          (MicroCFTA.IntersectionFlatMemoKey.input
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value))
+          (@Option.some.{0} MicroCFTA.IntersectSchedule.Input input))
+        (MicroCFTA.IntersectionFlatMemoKey.Safe
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          input)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.safe_encoded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.safe_encoded : ∀ {Symbol Guard : Type} {bits : Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits value →
+    ∀ (input : MicroCFTA.IntersectSchedule.Input),
+      @Eq.{1} (Option.{0} MicroCFTA.IntersectSchedule.Input)
+          (MicroCFTA.IntersectionFlatMemoKey.input
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value))
+          (@Option.some.{0} MicroCFTA.IntersectSchedule.Input input) →
+        MicroCFTA.IntersectionFlatMemoKey.Safe
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          input
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe : ∀ {Symbol Guard : Type} {bits : Nat}
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain)
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+    ∀ {left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits left →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits right →
+          @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            domain left right
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe_empty' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe_empty : ∀ {Symbol Guard : Type} {bits : Nat}
+  {left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits left →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits right →
+      @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe : ∀ {Symbol Guard : Type} {bits : Nat}
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain)
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+    ∀ {left right : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits left →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits right →
+          @MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe Symbol Guard
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            domain left right
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe_empty' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe_empty : ∀ {Symbol Guard : Type} {bits : Nat}
+  {left right : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits left →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits right →
+      @MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe Symbol Guard
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe_swap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe_swap : ∀ {Symbol Guard : Type} {bits : Nat}
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain)
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+    ∀ {left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits left →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits right →
+          @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            domain right left
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe_swap' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe_swap : ∀ {Symbol Guard : Type} {bits : Nat}
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain)
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+    ∀ {left right : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits left →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits right →
+          @MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe Symbol Guard
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            domain right left
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.of_available' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.of_available : ∀ {Symbol Guard : Type} (bits : Nat)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedEdgeResidency.Linked Symbol Guard state →
+      @LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+        @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+            (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+          ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+              @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value →
+                @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.children_of_available' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.children_of_available : ∀ {Symbol Guard : Type} (bits : Nat)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedEdgeResidency.Linked Symbol Guard state →
+      @LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+        @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+            (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+          ∀ (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+            (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                    value →
+                  @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value) →
+              @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+                @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children Symbol Guard bits values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.of_resident' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.of_resident : ∀ {Symbol Guard : Type} (bits : Nat)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @LE.le.{0} Nat instLENat
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+      @LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+        ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard state edge →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge Symbol Guard edge →
+              @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge Symbol Guard bits edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.rows_of_resident' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.rows_of_resident : ∀ {Symbol Guard : Type} (bits : Nat)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+    @LE.le.{0} Nat instLENat
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+      @LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+        ∀ (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)),
+          (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) rows edge →
+                @MicroCFTA.InternedEdgeResidency.EdgeResident Symbol Guard state edge) →
+            @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard rows →
+              @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits rows
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.empty' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.empty : ∀ {Symbol Guard : Type} {bits : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits
+    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.ordinary' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.ordinary : ∀ {Symbol Guard : Type} {bits : Nat}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {depth : Nat}
+  {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference},
+  @LT.lt.{0} Nat instLTNat (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry)
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits edges →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.nil' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.nil : ∀ {Symbol Guard : Type} {bits : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits
+    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.cons' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.cons : ∀ {Symbol Guard : Type} {bits : Nat}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @LT.lt.{0} Nat instLTNat
+      (@MicroCFTA.Cache.Interned.identity (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard edge))
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children Symbol Guard bits
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge) →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits edges →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows Symbol Guard bits
+          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) edge edges)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.nil' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.nil : ∀ {Symbol Guard : Type} {bits : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children Symbol Guard bits
+    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.cons' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.cons : ∀ {Symbol Guard : Type} {bits : Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node Symbol Guard bits value →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children Symbol Guard bits values →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children Symbol Guard bits
+        (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value values)

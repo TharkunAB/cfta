@@ -1,0 +1,86 @@
+'FiniteOrdinaryBoundedFiniteKernels.warm_originals' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryBoundedFiniteKernels.warm_originals : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored state.native →
+        MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native →
+          ∀
+            (left right :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap left →
+              MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap right →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node bits left →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node bits right →
+                    ∃ fuel value after second result final,
+                      MicroCFTA.SourceEqualityNativeDemand.execute (fuel + 1)
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                            state =
+                          MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after ∧
+                        MicroCFTA.SourceEqualityNativeDemand.execute (second + 1)
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                              after =
+                            MicroCFTA.SourceEqualityNativeDemand.Outcome.done result final ∧
+                          MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good final ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored final.native ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node result ∧
+                                MicroCFTA.MergedOrdinaryHeight.height result ≤
+                                    MicroCFTA.MergedOrdinaryHeight.height left ∧
+                                  MicroCFTA.MergedOrdinaryHeight.height result ≤
+                                    MicroCFTA.MergedOrdinaryHeight.height right
+'FiniteOrdinaryBoundedFiniteKernels.constructed_execution' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryBoundedFiniteKernels.constructed_execution : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored state.native →
+        MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native →
+          state.native.machine.heap.nodes.next ≤ 2 ^ bits →
+            state.native.machine.heap.edges.next ≤ 2 ^ (bits + 2) →
+              ∀
+                (left right :
+                  MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap left →
+                  MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap right →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node left →
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node right →
+                        ∃ fuel value after,
+                          MicroCFTA.SourceEqualityNativeDemand.execute (fuel + 1)
+                                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                  (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                    MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                                state =
+                              MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after ∧
+                            MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good after ∧
+                              MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap value ∧
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node value ∧
+                                  MicroCFTA.MergedOrdinaryHeight.height value ≤
+                                      MicroCFTA.MergedOrdinaryHeight.height left ∧
+                                    MicroCFTA.MergedOrdinaryHeight.height value ≤
+                                      MicroCFTA.MergedOrdinaryHeight.height right

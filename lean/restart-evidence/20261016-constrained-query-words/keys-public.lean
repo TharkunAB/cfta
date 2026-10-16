@@ -1,0 +1,105 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.domain
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.member
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.member
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.of_members
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.of_members
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.member
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.member
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.of_members
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.of_members
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.nodeEdges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.nodeEdges
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.child
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.child
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.domain
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.domain
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge.domain
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Edge.domain
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.safe
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.safe
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.safe_encoded
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.safe_encoded
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe_empty
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe_empty
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe_empty
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe_empty
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe_swap
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.node_key_safe_swap
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe_swap
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.edge_key_safe_swap
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.of_available
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.of_available
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.children_of_available
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.children_of_available
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.of_resident
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.of_resident
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.rows_of_resident
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.rows_of_resident
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.empty
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.empty
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.ordinary
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Node.ordinary
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.nil
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.nil
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.cons
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Rows.cons
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.nil
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.nil
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.cons
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys.Children.cons
+

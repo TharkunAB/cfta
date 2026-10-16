@@ -1,0 +1,36 @@
+lean/restart-evidence/20261016-constrained-query-words/keys-kernels.lean:20:7: error: unexpected token 'syntax'; expected '(', ':=', '|' or term
+lean/restart-evidence/20261016-constrained-query-words/keys-kernels.lean:20:7: error: Missing cases:
+lean/restart-evidence/20261016-constrained-query-words/keys-kernels.lean:19:115: error: unsolved goals
+⊢ actualBuild.snd.nodes.next = 2 ∧
+    Node 1 actualBuild.fst ∧
+      SourceRecursiveIntersectionMemo.KeySafe 3 IntersectionEmptyDomain.emptyDomain actualBuild.fst actualBuild.fst
+lean/restart-evidence/20261016-constrained-query-words/keys-kernels.lean:20:13: error: unexpected token ':'; expected identifier or stx
+lean/restart-evidence/20261016-constrained-query-words/keys-kernels.lean:23:80: error: unexpected token 'have'; expected identifier or stx
+'MicroCFTA.FiniteOrdinaryKeyKernels.actual_constructed_keys' depends on axioms: [propext, sorryAx, Quot.sound]
+actual_constructed_keys : actualBuild.snd.nodes.next = 2 ∧
+  Node 1 actualBuild.fst ∧
+    SourceRecursiveIntersectionMemo.KeySafe 3 IntersectionEmptyDomain.emptyDomain actualBuild.fst actualBuild.fst
+'MicroCFTA.FiniteOrdinaryKeyKernels.joined_children_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+@joined_children_keys : ∀ {Symbol Guard : Type} {bits : Nat} {left right : Value Symbol Guard},
+  Node bits left →
+    Node bits right →
+      ∀ {a b : EdgeValue Symbol Guard},
+        a ∈ InternedEdgeResidency.nodeEdges left →
+          b ∈ InternedEdgeResidency.nodeEdges right →
+            ∀ {child : Value Symbol Guard × Value Symbol Guard},
+              child ∈ a.children.zip b.children →
+                SourceRecursiveIntersectionEdgeMemo.KeySafe (bits + 2) IntersectionEmptyDomain.emptyDomain a b ∧
+                  SourceRecursiveIntersectionMemo.KeySafe (bits + 2) IntersectionEmptyDomain.emptyDomain child.fst
+                    child.snd
+'MicroCFTA.FiniteOrdinaryKeyKernels.exact_node_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+exact_node_boundary : IntersectionFlatMemoKey.Safe 4 (IntersectSchedule.Input.node 3) ∧
+  IntersectionFlatMemoKey.machine 4 (IntersectSchedule.Input.node 4) =
+    IntersectionFlatMemoKey.machine 4 (IntersectSchedule.Input.node 0)
+'MicroCFTA.FiniteOrdinaryKeyKernels.reset_and_swap' depends on axioms: [propext, Classical.choice, Quot.sound]
+@reset_and_swap : ∀ {Symbol Guard : Type} {bits : Nat} {left right : Value Symbol Guard},
+  Node bits left →
+    Node bits right →
+      ∀ (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        domain.identity < 2 ^ (bits + 1) →
+          SourceRecursiveIntersectionMemo.KeySafe (bits + 2) domain right left ∧
+            SourceRecursiveIntersectionMemo.KeySafe (bits + 2) IntersectionEmptyDomain.emptyDomain left right

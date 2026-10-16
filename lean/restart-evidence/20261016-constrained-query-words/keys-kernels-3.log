@@ -1,0 +1,65 @@
+lean/restart-evidence/20261016-constrained-query-words/keys-kernels.lean:30:76: error: Tactic `decide` failed for proposition
+  actualBuild.snd.nodes.next ≤ 2 ^ 1
+because its `Decidable` instance
+  actualBuild.snd.nodes.next.decLe (2 ^ 1)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match actualBuild.snd.nodes.next.ble (2 ^ 1), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+lean/restart-evidence/20261016-constrained-query-words/keys-kernels.lean:30:88: error: Tactic `decide` failed for proposition
+  actualBuild.snd.edges.next ≤ 2 ^ (1 + 2)
+because its `Decidable` instance
+  actualBuild.snd.edges.next.decLe (2 ^ (1 + 2))
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match actualBuild.snd.edges.next.ble (2 ^ (1 + 2)), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+lean/restart-evidence/20261016-constrained-query-words/keys-kernels.lean:32:12: error: Tactic `decide` failed for proposition
+  actualBuild.snd.nodes.next = 2
+because its `Decidable` instance
+  instDecidableEqNat actualBuild.snd.nodes.next 2
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqNat` and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h : actualBuild.snd.nodes.next.beq 2 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+'MicroCFTA.FiniteOrdinaryKeyKernels.actual_constructed_keys' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+actual_constructed_keys : actualBuild.snd.nodes.next = 2 ∧
+  Node 1 actualBuild.fst ∧
+    SourceRecursiveIntersectionMemo.KeySafe 3 IntersectionEmptyDomain.emptyDomain actualBuild.fst actualBuild.fst
+'MicroCFTA.FiniteOrdinaryKeyKernels.joined_children_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+@joined_children_keys : ∀ {Symbol Guard : Type} {bits : Nat} {left right : Value Symbol Guard},
+  Node bits left →
+    Node bits right →
+      ∀ {a b : EdgeValue Symbol Guard},
+        a ∈ InternedEdgeResidency.nodeEdges left →
+          b ∈ InternedEdgeResidency.nodeEdges right →
+            ∀ {child : Value Symbol Guard × Value Symbol Guard},
+              child ∈ a.children.zip b.children →
+                SourceRecursiveIntersectionEdgeMemo.KeySafe (bits + 2) IntersectionEmptyDomain.emptyDomain a b ∧
+                  SourceRecursiveIntersectionMemo.KeySafe (bits + 2) IntersectionEmptyDomain.emptyDomain child.fst
+                    child.snd
+'MicroCFTA.FiniteOrdinaryKeyKernels.exact_node_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+exact_node_boundary : IntersectionFlatMemoKey.Safe 4 (IntersectSchedule.Input.node 3) ∧
+  IntersectionFlatMemoKey.machine 4 (IntersectSchedule.Input.node 4) =
+    IntersectionFlatMemoKey.machine 4 (IntersectSchedule.Input.node 0)
+'MicroCFTA.FiniteOrdinaryKeyKernels.reset_and_swap' depends on axioms: [propext, Classical.choice, Quot.sound]
+@reset_and_swap : ∀ {Symbol Guard : Type} {bits : Nat} {left right : Value Symbol Guard},
+  Node bits left →
+    Node bits right →
+      ∀ (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        domain.identity < 2 ^ (bits + 1) →
+          SourceRecursiveIntersectionMemo.KeySafe (bits + 2) domain right left ∧
+            SourceRecursiveIntersectionMemo.KeySafe (bits + 2) IntersectionEmptyDomain.emptyDomain left right

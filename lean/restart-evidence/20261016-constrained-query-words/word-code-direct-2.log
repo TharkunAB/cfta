@@ -1,0 +1,67 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:15:52: error: unexpected token '('; expected command
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:112:86: error: Application type mismatch: The argument
+  leftAvailable
+has type
+  Available source.heap { domain := emptyDomain, left := left, right := right }.left
+but is expected to have type
+  Available source.heap (NodeRequest.right ?m.122)
+in the application
+  ⟨?m.136, leftAvailable⟩
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:122:18: error: Type mismatch: After simplification, term
+  rows_certified bits source left right (SourceCurrentAllocatedFiniteOrdinaryKeys.Node.rows leftKeys)
+    (SourceCurrentAllocatedFiniteOrdinaryKeys.Node.rows rightKeys)
+    (resident_edges source.heap valid.left.linked
+      { domain := emptyDomain, left := Value.node first left leftDepth leftFree,
+          right := Value.node second right rightDepth rightFree }.left
+      (Available.resident leftAvailable))
+    (resident_edges source.heap valid.left.linked
+      { domain := emptyDomain, left := Value.node first left leftDepth leftFree,
+          right := Value.node second right rightDepth rightFree }.right
+      (Available.resident rightAvailable))
+ has type
+  @Certified Node bits source (compileRows { identity := 0, key := IntersectionEmptyDomain.emptyKey } left right)
+but is expected to have type
+  @Certified Node bits source
+    (match
+      if
+          SourceRecursiveIntersectionControl.pair first.identity second.identity ∈
+            IntersectionEmptyDomain.emptyKey.seen then
+        SourceRecursiveIntersectionControl.Branch.repeated
+          (SourceRecursiveIntersectionControl.pair first.identity second.identity)
+      else SourceRecursiveIntersectionControl.Branch.ordinary with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode { identity := 0, key := IntersectionEmptyDomain.emptyKey } (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.node first left leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.swap =>
+      requestNode { identity := 0, key := IntersectionEmptyDomain.emptyKey }
+        (Value.node second right rightDepth rightFree) (Value.node first left leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu =>
+      compileMu { identity := 0, key := IntersectionEmptyDomain.emptyKey } (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftMu =>
+      compileMu { identity := 0, key := IntersectionEmptyDomain.emptyKey } (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightMu =>
+      compileMu { identity := 0, key := IntersectionEmptyDomain.emptyKey } (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      compileRows { identity := 0, key := IntersectionEmptyDomain.emptyKey } left right
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree))

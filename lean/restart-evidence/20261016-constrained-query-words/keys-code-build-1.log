@@ -1,0 +1,364 @@
+⚠ [758/815] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [1099/1100] Built MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryKeys (758ms)
+✖ [1100/1100] Building MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordCode (1.2s)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.setup.json --json
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:99:66: Unknown identifier `«emptyDomain».key`
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:101:6: Type mismatch
+  request_node bits { domain := emptyDomain, left := left, right := right } ⟨rfl, ⟨leftKeys, rightKeys⟩⟩
+has type
+  Certified bits
+    (requestNode { domain := emptyDomain, left := left, right := right }.domain
+      { domain := emptyDomain, left := left, right := right }.left
+      { domain := emptyDomain, left := left, right := right }.right)
+but is expected to have type
+  Certified bits
+    (match
+      if SourceRecursiveIntersectionControl.reset emptyDomain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if SourceRecursiveIntersectionControl.closedSelf left right = true then
+          SourceRecursiveIntersectionControl.Branch.self
+        else
+          if SourceRecursiveIntersectionControl.greater left right = true then
+            SourceRecursiveIntersectionControl.Branch.swap
+          else
+            match SourceRecursiveIntersectionControl.identity left,
+              SourceRecursiveIntersectionControl.identity right with
+            | some first, some second =>
+              if SourceRecursiveIntersectionControl.pair first second ∈ emptyDomain.key.seen then
+                SourceRecursiveIntersectionControl.Branch.repeated
+                  (SourceRecursiveIntersectionControl.pair first second)
+              else SourceRecursiveIntersectionControl.payload left right
+            | x, x_1 => SourceRecursiveIntersectionControl.Branch.unsupported with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset => requestNode emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+    | SourceRecursiveIntersectionControl.Branch.swap => requestNode emptyDomain right left
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      match left with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode emptyDomain member right) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      match right with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode emptyDomain left member) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      match left with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference emptyDomain name right true
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      match right with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference emptyDomain name left false
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      match left, right with
+      | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+        compileRows emptyDomain first second
+      | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.unsupported => SourceRecursiveIntersectionCode.unsupported left right)
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:103:6: unsolved goals
+case pos
+inst✝ : DecidableEq Symbol
+bits : Nat
+left right : Node
+leftKeys : KNode bits { domain := emptyDomain, left := left, right := right }.left
+rightKeys : KNode bits { domain := emptyDomain, left := left, right := right }.right
+emptyCase : ¬SourceRecursiveIntersectionControl.hasEmpty left right = true
+resetCase : ¬SourceRecursiveIntersectionControl.reset sorry left right = true
+selfCase : SourceRecursiveIntersectionControl.closedSelf left right = true
+⊢ Certified bits
+    (match
+      if SourceRecursiveIntersectionControl.reset emptyDomain.key left right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else SourceRecursiveIntersectionControl.Branch.self with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset => requestNode emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure left
+    | SourceRecursiveIntersectionControl.Branch.swap => requestNode emptyDomain right left
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu emptyDomain left right
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      match left with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode emptyDomain member right) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      match right with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode emptyDomain left member) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      match left with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference emptyDomain name right true
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      match right with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) => compileReference emptyDomain name left false
+      | x => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      match left, right with
+      | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+        compileRows emptyDomain first second
+      | x, x_1 => SourceRecursiveIntersectionCode.unsupported left right
+    | SourceRecursiveIntersectionControl.Branch.unsupported => SourceRecursiveIntersectionCode.unsupported left right)
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:106:53: Application type mismatch: The argument
+  leftKeys
+has type
+  KNode bits { domain := emptyDomain, left := left, right := right }.left
+but is expected to have type
+  KNode bits (NodeRequest.right ?m.102)
+in the application
+  ⟨?m.110, leftKeys⟩
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:111:77: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.166 ?m.167 → Value ?m.166 ?m.167 → Code ?m.166 ?m.167 ?m.168
+  
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.166 ?m.167 →
+    Value ?m.166 ?m.167 → Machine ?m.166 ?m.167 → Result ?m.166 ?m.167 ?m.168
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:111:18: unsolved goals
+case neg.empty
+inst✝ : DecidableEq Symbol
+bits : Nat
+right : Node
+leftKeys : KNode bits { domain := emptyDomain, left := Value.empty, right := right }.left
+rightKeys : KNode bits { domain := emptyDomain, left := Value.empty, right := right }.right
+emptyCase : ¬SourceRecursiveIntersectionControl.hasEmpty Value.empty right = true
+resetCase : ¬SourceRecursiveIntersectionControl.reset sorry Value.empty right = true
+selfCase : ¬SourceRecursiveIntersectionControl.closedSelf Value.empty right = true
+swapCase : ¬SourceRecursiveIntersectionControl.greater Value.empty right = true
+secondDomain :
+  SourceCurrentAllocatedFiniteOrdinaryDomain.Node { domain := emptyDomain, left := Value.empty, right := right }.right
+⊢ Certified bits
+    (match
+      if SourceRecursiveIntersectionControl.reset emptyDomain.key Value.empty right = true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else SourceRecursiveIntersectionControl.Branch.unsupported with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset => requestNode emptyDomain Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.swap => requestNode emptyDomain right Value.empty
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu emptyDomain Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu emptyDomain Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu emptyDomain Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      match right with
+      | Value.union entry members depth free =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode emptyDomain Value.empty member) members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | x => SourceRecursiveIntersectionCode.unsupported Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      match right with
+      | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+        compileReference emptyDomain name Value.empty false
+      | x => SourceRecursiveIntersectionCode.unsupported Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty right
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      SourceRecursiveIntersectionCode.unsupported Value.empty right)
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:114:81: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.233 ?m.234 → Value ?m.233 ?m.234 → Code ?m.233 ?m.234 ?m.235
+  
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.233 ?m.234 →
+    Value ?m.233 ?m.234 → Machine ?m.233 ?m.234 → Result ?m.233 ?m.234 ?m.235
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:114:22: unsolved goals
+case neg.ordinary.empty
+inst✝ : DecidableEq Symbol
+bits : Nat
+left : List Edge
+first : Interned InternedBinderProtocol.NodeKey
+leftDepth : Nat
+leftFree : List InternedBinderProtocol.Reference
+leftRows : SourceCurrentAllocatedFiniteOrdinaryDomain.Rows left
+leftKeys :
+  KNode bits { domain := emptyDomain, left := Value.node first left leftDepth leftFree, right := Value.empty }.left
+rightKeys :
+  KNode bits { domain := emptyDomain, left := Value.node first left leftDepth leftFree, right := Value.empty }.right
+emptyCase : ¬SourceRecursiveIntersectionControl.hasEmpty (Value.node first left leftDepth leftFree) Value.empty = true
+resetCase :
+  ¬SourceRecursiveIntersectionControl.reset sorry (Value.node first left leftDepth leftFree) Value.empty = true
+selfCase : ¬SourceRecursiveIntersectionControl.closedSelf (Value.node first left leftDepth leftFree) Value.empty = true
+swapCase : ¬SourceRecursiveIntersectionControl.greater (Value.node first left leftDepth leftFree) Value.empty = true
+⊢ Certified bits
+    (match
+      if
+          SourceRecursiveIntersectionControl.reset emptyDomain.key (Value.node first left leftDepth leftFree)
+              Value.empty =
+            true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else SourceRecursiveIntersectionControl.Branch.unsupported with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode emptyDomain (Value.node first left leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.node first left leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.swap =>
+      requestNode emptyDomain Value.empty (Value.node first left leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu =>
+      compileMu emptyDomain (Value.node first left leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.leftMu =>
+      compileMu emptyDomain (Value.node first left leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.rightMu =>
+      compileMu emptyDomain (Value.node first left leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree) Value.empty
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree) Value.empty)
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:116:18: Type mismatch: After simplification, term
+  rows_certified bits left right (SourceCurrentAllocatedFiniteOrdinaryKeys.Node.rows leftKeys)
+    (SourceCurrentAllocatedFiniteOrdinaryKeys.Node.rows rightKeys)
+ has type
+  Certified bits (compileRows { identity := 0, key := IntersectionEmptyDomain.emptyKey } left right)
+but is expected to have type
+  Certified bits
+    (match
+      if
+          SourceRecursiveIntersectionControl.reset IntersectionEmptyDomain.emptyKey
+              (Value.node first left leftDepth leftFree) (Value.node second right rightDepth rightFree) =
+            true then
+        SourceRecursiveIntersectionControl.Branch.reset
+      else
+        if
+            SourceRecursiveIntersectionControl.pair first.identity second.identity ∈
+              IntersectionEmptyDomain.emptyKey.seen then
+          SourceRecursiveIntersectionControl.Branch.repeated
+            (SourceRecursiveIntersectionControl.pair first.identity second.identity)
+        else SourceRecursiveIntersectionControl.Branch.ordinary with
+    | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+    | SourceRecursiveIntersectionControl.Branch.reset =>
+      requestNode { identity := 0, key := IntersectionEmptyDomain.emptyKey } (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.self => Code.pure (Value.node first left leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.swap =>
+      requestNode { identity := 0, key := IntersectionEmptyDomain.emptyKey }
+        (Value.node second right rightDepth rightFree) (Value.node first left leftDepth leftFree)
+    | SourceRecursiveIntersectionControl.Branch.repeated key =>
+      Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+    | SourceRecursiveIntersectionControl.Branch.bothMu =>
+      compileMu { identity := 0, key := IntersectionEmptyDomain.emptyKey } (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftMu =>
+      compileMu { identity := 0, key := IntersectionEmptyDomain.emptyKey } (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightMu =>
+      compileMu { identity := 0, key := IntersectionEmptyDomain.emptyKey } (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.leftReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.rightReference =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree)
+    | SourceRecursiveIntersectionControl.Branch.ordinary =>
+      compileRows { identity := 0, key := IntersectionEmptyDomain.emptyKey } left right
+    | SourceRecursiveIntersectionControl.Branch.unsupported =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node first left leftDepth leftFree)
+        (Value.node second right rightDepth rightFree))
+warning: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:100:86: This simp argument is unused:
+  resetCase
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, Bool.false_eq_true, ite_false,
+    ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:100:128: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, resetCase, Bool.false_eq_true,
+    ite_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:103:88: This simp argument is unused:
+  resetCase
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, selfCase, Bool.false_eq_true,
+    ite_false, ite_true, Certified]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:103:150: This simp argument is unused:
+  Certified
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, resetCase, selfCase,
+    Bool.false_eq_true, ite_false, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:105:90: This simp argument is unused:
+  resetCase
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, selfCase, swapCase,
+    Bool.false_eq_true, ite_false, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:107:90: This simp argument is unused:
+  resetCase
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileNode, SourceRecursiveIntersectionControl.decision, emptyCase, selfCase, swapCase,
+    Bool.false_eq_true, ite_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:111:90: This simp argument is unused:
+  Certified
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, unsupported]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryWordCode.lean:114:94: This simp argument is unused:
+  Certified
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionControl.identity, unsupported]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordCode
+error: build failed

@@ -1,0 +1,13 @@
+# Initial key component boundary
+
+Reviewed at 2026-10-16 17:59 CEST.
+
+The mutual `Node`, `Rows`, and `Children` certificates contain only initial immutable record identities and their recursive children. Ordinary nodes use `identity < 2^bits`. Edges use `identity < 2^(bits+2)`. Empty is permitted. Mu, union, and reference records have no constructor. Full guards, equality classes, cached free lists, and cached depth values are unrestricted. The domain theorems derive finite ordinary structure; they do not infer physical residency or metadata coherence.
+
+`node_key_safe` derives the literal complete `SourceRecursiveIntersectionMemo.KeySafe` from two initial node certificates and an explicit domain identity bound. `edge_key_safe` does the same for raw edge identities. Their empty-domain endpoints use the actual identity zero. The width is always `bits+2`, so positive width is derived without truncated natural subtraction. Node encoding presence and tagged arithmetic come from the actual `IntersectionFlatMemoKey.input` and `safe_range` definitions. Swapping uses the existing ordered-key safety law; it does not identify the two ordered requests.
+
+`of_available` derives the recursive initial bounds from current coherent records, `Linked`, the actual available node, its finite ordinary domain, and two inclusive supply inequalities. `Linked` is necessary: Coherent plus Available does not establish residency of each stored edge row. Node availability recursively covers child nodes but does not itself relate each row to the canonical edge table. The proof reads that table through Linked, then obtains the row's actual issued identity from Coherent. `of_resident` uses Facts so its child availability comes from Cached. Neither theorem assumes a future record, final state, completed query, or future key inventory.
+
+The node supply bound is `state.nodes.next ≤ 2^bits`; the edge bound is `state.edges.next ≤ 2^(bits+2)`. These are sufficient for this fragment because all ordinary entry identities are strictly below the current supply. The stronger reference-sentinel condition used by the general capacity helper is not needed. These inequalities bound only the current supplies at operand admission. This module does not prove their retention across allocations.
+
+The component supplies initial request and descendant safety to the new checked-prefix proof. It does not prove WordRanges, current recursive completion, body semantics, output key bounds, whole EntryPlan capacity, or runtime identity freshness and ordering. It also does not transfer the older unallocated native interpreter. Source finite-width overflow and concurrent reservation limits remain unchanged.

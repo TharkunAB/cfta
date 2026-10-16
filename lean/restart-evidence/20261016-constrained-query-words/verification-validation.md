@@ -1,0 +1,15 @@
+# Actual finite ordinary outer verification without supplied checks
+
+Date: 2026-10-16 17:59 CEST.
+
+The new source has 303 lines and SHA-256 `99727859a76e2991e72b7619c8e8739e7e3d7307b78fdd9de5d94cc6f2579bd2`. Direct attempt 1 passed without warnings. The root canonical batch passed 1522 jobs in `code-outer-build-2.log`, with only the historical dependency warning. Source bytes did not change after that build.
+
+All eight public theorem signatures and axiom reports pass in `verification-checks-1.log`. Both substantive integration signatures and axiom reports pass in `verification-kernels-1.log`. These final direct and probe logs have no error, warning, or `sorryAx`. Only `propext`, `Classical.choice`, and `Quot.sound` occur in axiom reports.
+
+The eight endpoints cover NodeCall, NodeBody, EdgeCall, EdgeBody, Rows, Descendants, Children, and Walk. They take supplied strict Reads for the actual completed graph and initial Context, inherited readiness, resident domain input, and the three causal certificates. They do not take Checks, machine ranges, desired result laws, final Context, or future completion callbacks. They return the graph's own Checks and a computed inventory with full Post, result residency, all three causal certificates, original-relative Narrow or ordered All2, and the independent conditional language law.
+
+The private mutual proof derives Checks only. It does not assume the conclusion of an unverified parent. At a parent leaf it uses the finite ordinary primary false shortcut. In Rows it verifies the actual edge prefix first, then uses that prefix's independently derived Post and structural bound for returned descendants. The descendant prefix supplies the exact current Context and ready payload before child verification. Walk verifies the literal indexed node request before using its returned Context and certificates for the suffix. Only after deriving each smaller graph's checks does the proof invoke the older semantic and structural verification theorem on that same smaller graph. There is no graph-existence argument in this module.
+
+The first external integration verifies two actual node-read schedules in sequence. The second starts at the actual first return. Its residency, domain, inherited readiness, Context, and causal tables are all derived from the first receipt. The final result law and original-relative bound compose. No range premise is supplied for either call. The second integration constructs the exact ordinary NodeBody from supplied RowsReads and verifies the literal raw modify result and complete returned state without caller-supplied Checks.
+
+This result removes Scan-only assumptions from actual graph verification. It does not remove the independent reached target/leaf capacity plan from finite graph construction. The existing supplied graph and strict Reads are explicit execution evidence, not hidden future premises. General Mu/reference/union completion, machine reservation bounds, repeated passes, and concrete Haskell demand, table implementation, solver, and runtime transfer remain separate. No older proof, Haskell, Audit, Git state, or restart authority was changed.
