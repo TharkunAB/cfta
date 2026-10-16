@@ -1,0 +1,100 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialPlainRows.lean:56:76: error: don't know how to synthesize implicit argument `combined`
+  @DescendantsReads.run inst✝² inst✝¹ inst✝ width formulas solver budget combined edge before inherited results middle
+    children memos final ?m.333 reads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget rank : Nat
+inherited : EqValue
+edge : Edge
+initial : Context formulas solver inventory before memos
+inheritedReady : EqReady before.checked.operations.constraints inherited
+resident : EdgeResident before.checked.native.machine.heap edge
+regions : SourceEqualityPartialPlainRegion.Children edge.children
+smaller : ∀ (value : Node), value ∈ edge.children → nodeRank { inherited := inherited, value := value } < rank
+stored : Stored before
+active : ActiveAbove (rank - 1) before
+ih : Below formulas solver budget rank
+combined : EqValue
+prefixReceipt :
+  SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory edge.entry.key.constraint inherited
+    before.checked combined
+prefixPost : Post formulas solver inventory before (prefixState before edge inherited) memos
+prefixStored : Stored (prefixState before edge inherited)
+prefixActive :
+  SourceCurrentAllocatedPartialActiveOrder.ActiveExcept (rank - 1) none none (prefixState before edge inherited)
+available : ∀ (child : Node), child ∈ edge.children → Available before.checked.native.machine.heap child
+prefixAvailable : Values (prefixState before edge inherited).checked.native.machine.heap edge.children
+results : List Node
+middle : Caller width
+childInventory : Inventory
+final : Memos
+children : Children budget combined edge.children (prefixState before edge inherited) results middle
+reads : ChildrenReads formulas solver children memos final
+checks : Checks (childrenTrace children)
+childPost : Post formulas solver childInventory (prefixState before edge inherited) middle final
+_available : Values middle.checked.native.machine.heap results
+childStored : Stored middle
+actual : Descendants budget inherited edge before
+  (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).fst
+  (advance middle (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).snd middle.fourth
+    middle.merge) := ⋯
+⊢ (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).fst =
+    Except.ok (some combined)
+lean/MicroCFTA/SourceCurrentAllocatedPartialPlainRows.lean:45:125: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget rank : Nat
+inherited : EqValue
+edge : Edge
+initial : Context formulas solver inventory before memos
+inheritedReady : EqReady before.checked.operations.constraints inherited
+resident : EdgeResident before.checked.native.machine.heap edge
+regions : SourceEqualityPartialPlainRegion.Children edge.children
+smaller : ∀ (value : Node), value ∈ edge.children → nodeRank { inherited := inherited, value := value } < rank
+stored : Stored before
+active : ActiveAbove (rank - 1) before
+ih : Below formulas solver budget rank
+combined : EqValue
+prefixReceipt :
+  SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory edge.entry.key.constraint inherited
+    before.checked combined
+prefixPost : Post formulas solver inventory before (prefixState before edge inherited) memos
+prefixStored : Stored (prefixState before edge inherited)
+prefixActive :
+  SourceCurrentAllocatedPartialActiveOrder.ActiveExcept (rank - 1) none none (prefixState before edge inherited)
+available : ∀ (child : Node), child ∈ edge.children → Available before.checked.native.machine.heap child
+prefixAvailable : Values (prefixState before edge inherited).checked.native.machine.heap edge.children
+results : List Node
+middle : Caller width
+childInventory : Inventory
+final : Memos
+children : Children budget combined edge.children (prefixState before edge inherited) results middle
+reads : ChildrenReads formulas solver children memos final
+checks : Checks (childrenTrace children)
+childPost : Post formulas solver childInventory (prefixState before edge inherited) middle final
+_available : Values middle.checked.native.machine.heap results
+childStored : Stored middle
+actual : Descendants budget inherited edge before
+  (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).fst
+  (advance middle (SourceCurrentAllocatedRawRebuild.edge edge results middle.checked).snd middle.fourth middle.merge) :=
+  Descendants.run prefixReceipt.actual children
+⊢ ∃ result after next final actual,
+    DescendantsReads formulas solver actual memos final ∧
+      Checks (descendantsTrace actual) ∧
+        Post formulas solver next before after final ∧
+          EdgeResident after.checked.native.machine.heap result ∧ Stored after

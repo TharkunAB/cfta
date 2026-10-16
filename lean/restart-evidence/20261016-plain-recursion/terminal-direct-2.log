@@ -1,0 +1,46 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialPlainTerminal.lean:106:103: error: don't know how to synthesize implicit argument `actual`
+  @NodeBodyReads.binder inst✝² inst✝¹ inst✝ width formulas solver budget inherited entry body depth ordinary before
+    (cleanup (Value.mu entry body depth ordinary)) before.checked.native.machine.heap ?m.427 memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget : Nat
+initial : Context formulas solver inventory before memos
+stored : Stored before
+inherited : SourceEqualityConstraintAllocation.Value
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Node
+inheritedReady :
+  SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints
+    { inherited := inherited, value := Value.mu entry body depth ordinary }.inherited
+available :
+  Available before.checked.native.machine.heap
+    { inherited := inherited, value := Value.mu entry body depth ordinary }.value
+rebuilt :
+  SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap =
+      InternedNestedConstruction.Outcome.done (cleanup (Value.mu entry body depth ordinary))
+        before.checked.native.machine.heap ∧
+    Available before.checked.native.machine.heap (cleanup (Value.mu entry body depth ordinary)) ∧
+      (cleanup (Value.mu entry body depth ordinary)).free = (Value.mu entry body depth ordinary).free ∧
+        ∀ (holds : Guard → Language.Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol),
+          InternedGuardedLanguage.meaning holds ambient (cleanup (Value.mu entry body depth ordinary)) =
+            InternedGuardedLanguage.meaning holds ambient (Value.mu entry body depth ordinary)
+unchanged :
+  SourceCurrentAllocatedPartialState.advance before
+      (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+        { heap := before.checked.native.machine.heap, equality := before.checked.operations })
+      before.fourth before.merge =
+    before
+actual :
+  NodeBody budget { inherited := inherited, value := Value.mu entry body depth ordinary } before
+    (cleanup (Value.mu entry body depth ordinary)) before
+⊢ SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap =
+    InternedNestedConstruction.Outcome.done (cleanup (Value.mu entry body depth ordinary))
+      before.checked.native.machine.heap

@@ -1,0 +1,6 @@
+import MicroCFTA.SourceCurrentAllocatedPartialPlainNode
+
+set_option pp.universes true in
+#check @MicroCFTA.SourceCurrentAllocatedPartialPlainNode.finite
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialPlainNode.finite
