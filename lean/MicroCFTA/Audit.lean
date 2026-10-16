@@ -2038,6 +2038,8 @@ import MicroCFTA.SourceCurrentAllocatedPartialPlainRoot
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFinite
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned
 /-!
 # Proof dependency audit
 
