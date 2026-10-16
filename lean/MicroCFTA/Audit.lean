@@ -2022,6 +2022,8 @@ import MicroCFTA.SourceCurrentConjunctionWorkerStability
 import MicroCFTA.SourceCurrentAllocatedConjunctionCaller
 import MicroCFTA.SourceCurrentAllocatedConjunctionWorker
 import MicroCFTA.SourceCurrentAllocatedConjunctionWorkerActual
+import MicroCFTA.SourceCurrentAllocatedSeededWorkerActual
+import MicroCFTA.SourceCurrentAllocatedScanWorkerActual
 /-!
 # Proof dependency audit
 
