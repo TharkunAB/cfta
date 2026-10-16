@@ -2,6 +2,8 @@
 
 [![DOI](https://zenodo.org/badge/471054656.svg)](https://zenodo.org/badge/latestdoi/471054656)
 
+[Comparison with the ICST 2023 Spectacular artifact](docs/SPECTACULAR_COMPARISON.md)
+
 Specftacular discovers equational laws with ECTAs. It is based on
 [QuickSpec](https://hackage.haskell.org/package/quickspec).
 Import `Specftacular` to construct signatures and discover laws.
