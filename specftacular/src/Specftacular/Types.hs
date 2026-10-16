@@ -33,6 +33,7 @@ import GHC.Exts (Any)
 import Test.QuickCheck (Arbitrary (..), Gen (..))
 import qualified Test.QuickCheck as QC
 import Test.QuickCheck.Gen (unGen)
+import Test.QuickCheck.Gen.Unsafe (promote)
 import Test.QuickCheck.Random (mkQCGen)
 import qualified Type.Reflection as TR
 import Unsafe.Coerce
@@ -121,23 +122,71 @@ toInstance rep =
 these, and of the types that the function gives.
 -}
 frontInstances :: (TypeSkeleton -> Maybe GeneratedInstance) -> TypeSkeleton -> Maybe Instance
-frontInstances extraReps = fmap toInstance . genRep
+frontInstances extraReps t = case genRep t of
+    Just rep -> Just (toInstance rep)
+    Nothing -> trace ("*** Warning: Could not generate instances for '" ++ show t ++ "', ignoring...") Nothing
   where
     genRep :: TypeSkeleton -> Maybe GeneratedInstance
     genRep (TVar a) | Just t <- lookup a [(v, t) | (t, v) <- carriers] = genRep t
+    genRep t | Just g <- extraReps t = Just g
     genRep t | Just g <- lookup t builtinReps = Just g
     genRep (TCons "[]" [ts]) = g_li_i <$> genRep ts
-    genRep (TFun _ _) = Nothing
-    --- To allow for types not considered here
-    --- Not sure if this is the best way to go about it
-    genRep x =
-        case extraReps x of
-            Just t -> Just t
-            Nothing -> trace ("*** Warning: Could not generate instances for '" ++ (show x) ++ "', ignoring...") Nothing
+    genRep (TFun a b) = do
+        CoarbitraryType (Proxy :: Proxy x) <- coarbitraryType a
+        result <- genRep b
+        case g_arb result of
+            DynGen g -> Just $ generatedNoEq $ DynGen $ promote (\(x :: x) -> QC.coarbitrary x g)
+    genRep _ = Nothing
 
-{- | The types of a signature that the search needs instances of: the
-types of the functions, their parts, and the lists of these types, after
-the function changes them.
+-- | A type with the evidence needed to generate functions from it.
+data CoarbitraryType where
+    CoarbitraryType :: (Typeable a, QC.CoArbitrary a) => Proxy a -> CoarbitraryType
+
+-- | Resolve function domains from the built-in types, lists, and pairs.
+coarbitraryType :: TypeSkeleton -> Maybe CoarbitraryType
+coarbitraryType (TVar a) = lookup a [(v, t) | (t, v) <- carriers] >>= coarbitraryType
+coarbitraryType (TCons "[]" [a]) = do
+    CoarbitraryType (Proxy :: Proxy x) <- coarbitraryType a
+    return (CoarbitraryType (Proxy :: Proxy [x]))
+coarbitraryType (TCons "(,)" [a, b]) = do
+    CoarbitraryType (Proxy :: Proxy x) <- coarbitraryType a
+    CoarbitraryType (Proxy :: Proxy y) <- coarbitraryType b
+    return (CoarbitraryType (Proxy :: Proxy (x, y)))
+coarbitraryType t = lookup t types
+  where
+    types =
+        [ entry (Proxy :: Proxy A)
+        , entry (Proxy :: Proxy B)
+        , entry (Proxy :: Proxy C)
+        , entry (Proxy :: Proxy D)
+        , entry (Proxy :: Proxy Acc)
+        , entry (Proxy :: Proxy ())
+        , entry (Proxy :: Proxy Int)
+        , entry (Proxy :: Proxy Integer)
+        , entry (Proxy :: Proxy Bool)
+        , entry (Proxy :: Proxy Char)
+        , entry (Proxy :: Proxy Word)
+        , entry (Proxy :: Proxy Double)
+        , entry (Proxy :: Proxy Float)
+        , entry (Proxy :: Proxy Ordering)
+        ]
+    entry :: (Typeable a, QC.CoArbitrary a) => Proxy a -> (TypeSkeleton, CoarbitraryType)
+    entry p = (typeSkeletonOf p, CoarbitraryType p)
+
+-- | A generator with its type and list generator, without function equality.
+generatedNoEq :: DynGen -> GeneratedInstance
+generatedNoEq dg@(DynGen (g :: Gen a)) =
+    Gend
+        { g_tr = typeRep (Proxy :: Proxy a)
+        , g_arb = dg
+        , g_eq = Nothing
+        , g_li_i = generatedNoEq (DynGen (QC.listOf g))
+        }
+
+{- | The argument and result types that need generators, and their list
+types. A function type needs a generator when it is an argument, as in
+map or bind. The full type of each signature function does not need a
+generated variable.
 -}
 instanceTypes :: (TypeSkeleton -> TypeSkeleton) -> Sig -> [TypeSkeleton]
 instanceTypes typeMod sigs = nubOrd $ concatMap addLi $ Set.toList $ Set.unions $ map cons trs
@@ -145,8 +194,8 @@ instanceTypes typeMod sigs = nubOrd $ concatMap addLi $ Set.toList $ Set.unions 
     trs = map (typeMod . sfTypeRep) $ Map.elems sigs
     -- we specialcase lists
     cons :: TypeSkeleton -> Set TypeSkeleton
-    cons t@(TCons _ r) = Set.unions $ (Set.singleton t) : (map cons r)
-    cons t@(TFun arg ret) = Set.singleton t <> cons arg <> cons ret
+    cons t@(TCons _ r) = Set.insert t $ Set.unions [Set.insert a (cons a) | a <- r]
+    cons (TFun arg ret) = Set.insert arg (cons arg <> cons ret)
     cons (TVar _) = Set.empty
     addLi :: TypeSkeleton -> [TypeSkeleton]
     addLi t = t : (addLi' 1 t) -- bump this to get more [A], [[A]],
