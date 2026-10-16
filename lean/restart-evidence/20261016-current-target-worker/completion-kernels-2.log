@@ -1,0 +1,284 @@
+lean/restart-evidence/20261016-current-target-worker/completion-kernels.lean:85:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.AllocatedTargetCompletionKernels.recursive_projection_success_stable`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'MicroCFTA.AllocatedTargetCompletionKernels.two_path_source_order' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedTargetCompletionKernels.three_path_memo_and_native_order' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedTargetCompletionKernels.literal_success_matches_actual_graph' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedTargetCompletionKernels.initial_facts_derive_stable_worker_and_same_receipt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedTargetCompletionKernels.warm_hit_stable_with_open_sibling' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedTargetCompletionKernels.recursive_projection_success_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedTargetCompletionKernels.native_success_stable_without_physical_oracle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.AllocatedTargetCompletionKernels.failed_tail_skips_native' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@two_path_source_order : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {seed path : List Int} {before middle later after : Checked width} {memo current saved : Memo}
+  {head tail result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @Operand width inst inst_1 path values before memo head middle current →
+    @Operand width inst inst_1 seed values middle current tail later saved →
+      @Step width inst inst_1 head tail later result after →
+        @StableRun width
+          (fun p h m s n =>
+            @target width inst inst_1 p h m s n values
+              (@List.cons (List Int) seed (@List.cons (List Int) path (@List.nil (List Int)))) before memo)
+          result after saved
+@three_path_memo_and_native_order : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {seed path nextPath : List Int} {before firstState secondState seedState innerState after : Checked width}
+  {memo firstMemo secondMemo saved : Memo}
+  {head next seedValue inner result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @Operand width inst inst_1 path values before memo head firstState firstMemo →
+    @Operand width inst inst_1 nextPath values firstState firstMemo next secondState secondMemo →
+      @Operand width inst inst_1 seed values secondState secondMemo seedValue seedState saved →
+        @Step width inst inst_1 next seedValue seedState inner innerState →
+          @Step width inst inst_1 head inner innerState result after →
+            @StableRun width
+              (fun p h m s n =>
+                @target width inst inst_1 p h m s n values
+                  (@List.cons (List Int) seed
+                    (@List.cons (List Int) path (@List.cons (List Int) nextPath (@List.nil (List Int)))))
+                  before memo)
+              result after saved
+@literal_success_matches_actual_graph : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {paths : List (List Int)} {before after later : Checked width} {memo saved current : Memo}
+  {result expected :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {p h m s n : Nat},
+  @Target width inst inst_1 values paths before memo expected later current →
+    @Eq (Outcome width) (@target width inst inst_1 p h m s n values paths before memo)
+        (@Outcome.done width result after saved) →
+      And
+        (@Eq (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          result expected)
+        (And (@Eq (Checked width) after later) (@Eq Memo saved current))
+@initial_facts_derive_stable_worker_and_same_receipt : ∀
+  [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  (values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (paths : List (List Int)) (before : Checked width) (memo : Memo),
+  @SourceCurrentConjunctionClassScan.Ready width before →
+    @At width formulas solver inventory before →
+      @Values (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceEqualityNativeDemand.State.native width before)))
+          values →
+        (∀ (path : List Int),
+            @Membership.mem (List Int) (List (List Int)) (@List.instMembership (List Int)) paths path →
+              @SourceEqualityProjectionPathDomain.ForestClosed (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) path values) →
+          @Stored (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native width before)))
+              memo →
+            (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+                @CacheCovers (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (SourceObservations.Label FullSyntax.Formula)
+                  (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq formulas
+                    solver)
+                  ambient memo) →
+              @TargetRanges width inst inst_1 values paths before memo →
+                ∀ (memos : EndpointMemoGateTrace.Memos),
+                  @EndpointMemoGateTrace.Valid inst_1
+                      (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                        (@SourceRecursiveIntersectionThunks.State.machine width
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@SourceEqualityNativeDemand.State.native width before)))
+                      memos →
+                    @Exists
+                      (Value (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                      fun result =>
+                      @Exists (Checked width) fun after =>
+                        @Exists Memo fun saved =>
+                          @Exists Inventory fun next =>
+                            @Exists EndpointMemoGateTrace.Memos fun final =>
+                              And
+                                (@StableRun width
+                                  (fun p h m s n => @target width inst inst_1 p h m s n values paths before memo) result
+                                  after saved)
+                                (@Exists (@Target width inst inst_1 values paths before memo result after saved)
+                                  fun actual =>
+                                  And
+                                    (@SourceCurrentAllocatedTargetComplete.TargetReads width inst inst_1 formulas solver
+                                      values paths before after memo saved result actual memos final)
+                                    (@SourceCurrentAllocatedTargetComplete.Receipt width inst inst_1 formulas solver
+                                      next values paths before memo result after saved memos final))
+@warm_hit_stable_with_open_sibling : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat}
+  (input : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (name : InternedBinderProtocol.Reference) (before : Checked width) (memo : Memo)
+  (entry :
+    SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Eq
+      (Option
+        (SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (memo
+        (@Value.referenceOf (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) input))
+      (@some
+        (SourceCurrentMemoMergeGraph.Entry (SourceObservations.Label FullSyntax.Formula)
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        entry) →
+    @StableRun width
+      (fun p h m s n =>
+        @target width inst inst_1 p h m s n
+          (@List.cons
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            input
+            (@List.cons
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (@Value.reference (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) name)
+              (@List.nil
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+          (@List.cons (List Int)
+            (@List.cons Int (@OfNat.ofNat Int (nat_lit 0) (@instOfNat (nat_lit 0))) (@List.nil Int))
+            (@List.nil (List Int)))
+          before memo)
+      (@SourceCurrentMemoMergeGraph.Entry.result (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) entry)
+      before memo
+@recursive_projection_success_stable : ∀ [DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {p h largerP largerH : Nat} {index : Int} {path : List Int} {entry : Cache.Interned InternedBinderProtocol.NodeKey}
+  {body result depthShape ordinaryShape :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before after :
+    State (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @Eq
+      (SourceEqualityRequiredWorker.Result (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (@SourceEqualityProjectionWorker.forest (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) inst p h
+        (@List.cons Int (@OfNat.ofNat Int (nat_lit 0) (@instOfNat (nat_lit 0))) (@List.cons Int index path))
+        (@List.cons
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@Value.mu (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            entry body depthShape ordinaryShape)
+          (@List.nil
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+        before)
+      (@SourceEqualityRequiredWorker.Result.done (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)) result
+        after) →
+    @LE.le Nat instLENat p largerP →
+      @LE.le Nat instLENat h largerH →
+        @Eq
+          (SourceEqualityRequiredWorker.Result (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+          (@SourceEqualityProjectionWorker.forest (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) inst largerP largerH
+            (@List.cons Int (@OfNat.ofNat Int (nat_lit 0) (@instOfNat (nat_lit 0))) (@List.cons Int index path))
+            (@List.cons
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (@Value.mu (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) entry body depthShape ordinaryShape)
+              (@List.nil
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+            before)
+          (@SourceEqualityRequiredWorker.Result.done (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            result after)
+@native_success_stable_without_physical_oracle : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width n larger : Nat}
+  {left right result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before after : Checked width} (memo : Memo),
+  @Eq
+      (SourceEqualityNativeDemand.Outcome width
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (@SourceEqualityNativeDemand.execute
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)) width
+        inst inst_1 n
+        (@SourceEqualityNativeDemand.Control.code
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@SourceRecursiveIntersectionCode.requestNode (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) IntersectionEmptyDomain.emptyDomain left right))
+        before)
+      (@SourceEqualityNativeDemand.Outcome.done width
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)) result
+        after) →
+    @LE.le Nat instLENat n larger →
+      @Eq (Outcome width) (@leaf width inst inst_1 larger left right before memo)
+        (@Outcome.done width result after memo)
+@failed_tail_skips_native : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width p h m s n : Nat}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {seed path : List Int} {paths : List (List Int)} {before middle after : Checked width} {memo current saved : Memo}
+  {head : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {fault : Fault width},
+  @Eq (Outcome width) (@operand width inst inst_1 p h m s path values before memo)
+      (@Outcome.done width head middle current) →
+    @Eq (Outcome width) (@fold width inst inst_1 p h m s n values seed paths middle current)
+        (@Outcome.failed width fault after saved) →
+      @Eq (Outcome width) (@fold width inst inst_1 p h m s n values seed (@List.cons (List Int) path paths) before memo)
+        (@Outcome.failed width fault after saved)

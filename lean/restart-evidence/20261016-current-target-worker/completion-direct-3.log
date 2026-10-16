@@ -1,0 +1,39 @@
+lean/MicroCFTA/SourceCurrentAllocatedTargetWorkerCompletion.lean:239:70: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 1
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑largerRead
+ b := ↑readFuel
+ c := ↑remaining
+ d := ↑fuel
+ e := ↑(?m.250 child state)
+lean/MicroCFTA/SourceCurrentAllocatedTargetWorkerCompletion.lean:242:18: error: Type mismatch
+  union_done_stable built readEnough
+has type
+  SourceEqualityProjectionWorker.union largerRead values middle = SourceEqualityRequiredWorker.Result.done value after
+but is expected to have type
+  (match
+      SourceEqualityProjectionWorker.rows (SourceEqualityProjectionWorker.project remaining largerRead path) index edges
+        before with
+    | SourceEqualityRequiredWorker.Result.done value state =>
+      SourceEqualityProjectionWorker.union largerRead value state
+    | SourceEqualityRequiredWorker.Result.pending key state => SourceEqualityRequiredWorker.Result.pending key state
+    | SourceEqualityRequiredWorker.Result.unresolved name state =>
+      SourceEqualityRequiredWorker.Result.unresolved name state
+    | SourceEqualityRequiredWorker.Result.exhausted limit state =>
+      SourceEqualityRequiredWorker.Result.exhausted limit state) =
+    SourceEqualityRequiredWorker.Result.done value after
+lean/MicroCFTA/SourceCurrentAllocatedTargetWorkerCompletion.lean:240:69: warning: This simp argument is unused:
+  rowsStable
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityProjectionWorker.project, SourceEqualityRequiredWorker.Result.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

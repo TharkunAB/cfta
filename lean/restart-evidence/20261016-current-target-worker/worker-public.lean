@@ -1,0 +1,42 @@
+import MicroCFTA.SourceCurrentAllocatedTargetWorkerSound
+
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.Fault
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.Fault
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.state
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.state
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.memo
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.memo
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.bind
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.bind
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.projection
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.projection
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.merge
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.merge
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.operand
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.operand
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.leaf
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.leaf
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.fold
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.fold
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorker.target
+#check MicroCFTA.SourceCurrentAllocatedTargetWorker.target
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.bind_done
+#check MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.bind_done
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.projection_sound
+#check MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.projection_sound
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.merge_sound
+#check MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.merge_sound
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.operand_sound
+#check MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.operand_sound
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.leaf_sound
+#check MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.leaf_sound
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.fold_sound
+#check MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.fold_sound
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.target_sound
+#check MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.target_sound

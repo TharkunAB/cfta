@@ -1,0 +1,318 @@
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked (width : Nat) : Type 1
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo : Type
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.Fault' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedTargetWorker.Fault (width : Nat) : Type 1
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome (width : Nat) : Type 1
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.state' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.state {width : Nat} :
+  MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width →
+    MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.memo' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.memo {width : Nat} :
+  MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width → MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.bind' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.bind {width : Nat}
+  (first : MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width)
+  (next :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width →
+        MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo →
+          MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width) :
+  MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.projection' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorker.projection {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel readFuel : Nat) (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo) :
+  MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.merge' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorker.merge {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (mergeFuel selectionFuel : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo) :
+  MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.operand' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorker.operand {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (projectionFuel readFuel mergeFuel selectionFuel : Nat) (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo) :
+  MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorker.leaf {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo) :
+  MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorker.fold {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (projectionFuel readFuel mergeFuel selectionFuel nativeFuel : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (seed : List Int) :
+  List (List Int) →
+    MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width →
+      MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo → MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedTargetWorker.target' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorker.target {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (projectionFuel readFuel mergeFuel selectionFuel nativeFuel : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List (List Int)) (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo) :
+  MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.bind_done' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.bind_done {width : Nat}
+  (first : MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width)
+  (next :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width →
+        MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo → MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo) :
+  first.bind next = MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.done result after saved ↔
+    ∃ value middle current,
+      first = MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.done value middle current ∧
+        next value middle current = MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.done result after saved
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.projection_sound' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.projection_sound {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel readFuel : Nat) (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedTargetWorker.projection fuel readFuel path values before memo =
+      MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.done result after saved) :
+  ∃ heap,
+    MicroCFTA.SourceEqualityProjectionGraph.Forest path values before.native.machine.heap result heap ∧
+      after =
+          MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before
+            { heap := heap, equality := before.operations } ∧
+        saved = memo
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.merge_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.merge_sound {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (mergeFuel selectionFuel : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedTargetWorker.merge mergeFuel selectionFuel value before memo =
+      MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.done result after saved) :
+  MicroCFTA.SourceCurrentAllocatedMerge.Merge MicroCFTA.SourceCurrentAllocatedMerge.literalClear value before memo
+    result after saved
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.operand_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.operand_sound {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (projectionFuel readFuel mergeFuel selectionFuel : Nat) (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedTargetWorker.operand projectionFuel readFuel mergeFuel selectionFuel path values
+        before memo =
+      MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.done result after saved) :
+  MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand path values before memo result after saved
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.leaf_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.leaf_sound {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native)
+  (leftAvailable : MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left)
+  (rightAvailable : MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right)
+  (leftClosed : left.free = []) (rightClosed : right.free = [])
+  (ranges :
+    MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+          right))
+      before)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedTargetWorker.leaf fuel left right before memo =
+      MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.done result after saved) :
+  MicroCFTA.SourceCurrentAllocatedTargetQuery.Step left right before result after ∧ saved = memo
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.fold_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.fold_sound {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (projectionFuel readFuel mergeFuel selectionFuel nativeFuel : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (seed : List Int) (paths : List (List Int)) (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (ready : MicroCFTA.SourceCurrentConjunctionClassScan.Ready before)
+  (admitted : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (domains :
+    ∀ (path : List Int), path ∈ seed :: paths → MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed path values)
+  (stored : MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+  (covered :
+    ∀
+      (ambient :
+        MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+        ambient memo)
+  (ranges : MicroCFTA.SourceCurrentAllocatedTargetGraph.FoldRanges values seed paths before memo)
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (valid : MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedTargetWorker.fold projectionFuel readFuel mergeFuel selectionFuel nativeFuel values
+        seed paths before memo =
+      MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.done result after saved) :
+  MicroCFTA.SourceCurrentAllocatedTargetGraph.Fold values seed paths before memo result after saved
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.target_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedTargetWorkerSound.target_sound {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (projectionFuel readFuel mergeFuel selectionFuel nativeFuel : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List (List Int)) (before : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (memo : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (ready : MicroCFTA.SourceCurrentConjunctionClassScan.Ready before)
+  (admitted : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (domains : ∀ (path : List Int), path ∈ paths → MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed path values)
+  (stored : MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+  (covered :
+    ∀
+      (ambient :
+        MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+        ambient memo)
+  (ranges : MicroCFTA.SourceCurrentAllocatedTargetGraph.TargetRanges values paths before memo)
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (valid : MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceCurrentAllocatedTargetWorker.Checked width)
+  (saved : MicroCFTA.SourceCurrentAllocatedTargetWorker.Memo)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedTargetWorker.target projectionFuel readFuel mergeFuel selectionFuel nativeFuel
+        values paths before memo =
+      MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome.done result after saved) :
+  MicroCFTA.SourceCurrentAllocatedTargetGraph.Target values paths before memo result after saved

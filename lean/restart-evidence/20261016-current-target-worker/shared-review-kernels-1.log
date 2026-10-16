@@ -1,0 +1,192 @@
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:23:14: error: Ambiguous term
+  State
+Possible interpretations:
+  SourceCurrentAllocatedSharedTargetState.State width : Type 1
+  
+  Cache.State width : Type
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:32:14: error: Ambiguous term
+  State
+Possible interpretations:
+  SourceCurrentAllocatedSharedTargetState.State width : Type 1
+  
+  Cache.State width : Type
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:32:71: error: Application type mismatch: The argument
+  width
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  Nat
+of sort `Type` in the application
+  SourceEqualityNativeDemand.State width
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:34:54: error: Application type mismatch: The argument
+  width
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  Nat
+of sort `Type` in the application
+  SourceCurrentAllocatedTargetWorker.Fault width
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:39:30: error: `sorryAx` is not a structure
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:48:50: error: Ambiguous term
+  State
+Possible interpretations:
+  SourceCurrentAllocatedSharedTargetState.State width : Type 1
+  
+  Cache.State width : Type
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:52:86: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Type
+record : Record
+values : List (Value Symbol Guard)
+path : Path
+target input : Value Symbol Guard
+before : sorry
+present : sorry = some target
+⊢ (match
+      match sorry.targets path with
+      | some value => Outcome.done value sorry
+      | none =>
+        match
+          SourceCurrentAllocatedTargetWorker.target 0 0 0 0 0 values
+            (SourceEqualityClassTarget.operandPaths record.paths path) sorry.checked sorry.memo with
+        | SourceCurrentAllocatedTargetWorker.Outcome.done value checked saved =>
+          Outcome.done value (store sorry path value checked saved)
+        | SourceCurrentAllocatedTargetWorker.Outcome.failed fault checked saved =>
+          Outcome.failed (Fault.target fault) { checked := checked, targets := sorry.targets, memo := saved } with
+    | Outcome.done value state =>
+      Outcome.failed
+        (Fault.native
+          (SourceEqualityNativeDemand.Outcome.yielded
+            (SourceEqualityNativeDemand.Control.code
+              (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain value input))
+            state.checked))
+        { checked := state.checked, targets := state.targets, memo := state.memo }
+    | Outcome.failed fault state => Outcome.failed fault state) =
+    Outcome.failed
+      (Fault.native
+        (SourceEqualityNativeDemand.Outcome.yielded
+          (SourceEqualityNativeDemand.Control.code
+            (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain target input))
+          sorry))
+      sorry
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:53:26: warning: This simp argument is unused:
+  present
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [leaf, force, Outcome.bind, step, SourceEqualityNativeDemand.execute,
+    SourceEqualityNativeDemand.Outcome.state, advance]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:58:14: error: Ambiguous term
+  State
+Possible interpretations:
+  SourceCurrentAllocatedSharedTargetState.State width : Type 1
+  
+  Cache.State width : Type
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:58:71: error: Application type mismatch: The argument
+  width
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  Nat
+of sort `Type` in the application
+  SourceEqualityNativeDemand.State width
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:67:2: error: unsolved goals
+case left
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Type
+p h m s n : Nat
+record : Record
+values : List (Value Symbol Guard)
+path other : Path
+before : sorry
+checked : SourceEqualityNativeDemand.State sorry
+saved : SourceCurrentAllocatedTargetWorker.Memo
+value earlier : Value Symbol Guard
+absent : sorry = none
+different : other ≠ path
+old : sorry = some earlier
+done :
+  SourceCurrentAllocatedTargetWorker.target p h m s n values (SourceEqualityClassTarget.operandPaths record.paths path)
+      sorry sorry =
+    SourceCurrentAllocatedTargetWorker.Outcome.done value checked saved
+⊢ (match sorry.targets path with
+    | some value => Outcome.done value sorry
+    | none =>
+      match
+        SourceCurrentAllocatedTargetWorker.target p h m s n values
+          (SourceEqualityClassTarget.operandPaths record.paths path) sorry.checked sorry.memo with
+      | SourceCurrentAllocatedTargetWorker.Outcome.done value checked saved =>
+        Outcome.done value (store sorry path value checked saved)
+      | SourceCurrentAllocatedTargetWorker.Outcome.failed fault checked saved =>
+        Outcome.failed (Fault.target fault) { checked := checked, targets := sorry.targets, memo := saved }) =
+    Outcome.done value (store sorry path value checked saved)
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:67:22: warning: This simp argument is unused:
+  absent
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [force, done]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:67:30: warning: This simp argument is unused:
+  done
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [force, absent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:73:71: error: Ambiguous term
+  State
+Possible interpretations:
+  SourceCurrentAllocatedSharedTargetState.State width : Type 1
+  
+  Cache.State width : Type
+lean/restart-evidence/20261016-current-target-worker/shared-review-kernels.lean:90:110: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Type
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+record : Record
+values : List (Value Symbol Guard)
+base : InternedConstructorTemplates.State Symbol Guard
+before : sorry
+ready : Ready formulas solver inventory record values base sorry
+known : Values base values
+domains : ∀ (own : Path), own ∈ record.paths → Domain (List.map Int.ofNat own) values
+coherent : SourceEqualityClassOrder.Coherent record
+active : EqualityNormalize.Nontrivial record.paths
+path : Path
+member : path ∈ record.paths
+input : Value Symbol Guard
+available : Available sorry input
+closed : input.free = []
+ranges : LeafRanges record values path input sorry
+memos : Memos
+valid : EndpointMemoGateTrace.Valid sorry memos
+probes : ProbeHeap sorry
+result : Value Symbol Guard
+after : SourceCurrentAllocatedSharedTargetState.State ?m.256
+next : Inventory
+final : Memos
+stable :
+  SourceCurrentAllocatedSharedTargetWorkerCompletion.StableRun
+    (fun p h m s n => leaf p h m s n record values path input sorry) result after
+receipt :
+  SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record values base path input sorry result after
+    memos final
+probe : ProbeHeap after.checked.native.machine.heap
+⊢ ∃ result after next final,
+    SourceCurrentAllocatedSharedTargetWorkerCompletion.StableRun
+        (fun p h m s n => leaf p h m s n record values path input sorry) result after ∧
+      Ready formulas solver next record values base after ∧
+        EndpointMemoGateTrace.Valid after.checked.native.machine.heap final ∧
+          ProbeHeap after.checked.native.machine.heap ∧
+            result.free = [] ∧
+              SourceCurrentAllocatedSharedTargetForce.Retains sorry after ∧
+                ∀ (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term →
+                    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient input term

@@ -1,0 +1,108 @@
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerNative.of_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerNative.of_done_ready' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedTargetWorkerNative.step_iff_done' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedTargetWorkerNative.of_done : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+      MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left →
+        MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right →
+          Eq.{1} left.free List.nil.{0} →
+            Eq.{1} right.free List.nil.{0} →
+              MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain
+                      left right))
+                  before →
+                Eq.{2}
+                    (MicroCFTA.SourceEqualityNativeDemand.execute fuel
+                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                          MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                      before)
+                    (MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after) →
+                  MicroCFTA.SourceCurrentAllocatedTargetQuery.Step left right before value after
+@MicroCFTA.SourceCurrentAllocatedTargetWorkerNative.of_done_ready : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left →
+      MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right →
+        Eq.{1} left.free List.nil.{0} →
+          Eq.{1} right.free List.nil.{0} →
+            MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain
+                    left right))
+                before →
+              Eq.{2}
+                  (MicroCFTA.SourceEqualityNativeDemand.execute fuel
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                    before)
+                  (MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after) →
+                MicroCFTA.SourceCurrentAllocatedTargetQuery.Step left right before value after
+@MicroCFTA.SourceCurrentAllocatedTargetWorkerNative.step_iff_done : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+      MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left →
+        MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right →
+          Eq.{1} left.free List.nil.{0} →
+            Eq.{1} right.free List.nil.{0} →
+              MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain
+                      left right))
+                  before →
+                (MicroCFTA.SourceCurrentAllocatedTargetQuery.Step left right before value after ↔
+                  Exists.{1} fun fuel =>
+                    Eq.{2}
+                      (MicroCFTA.SourceEqualityNativeDemand.execute fuel
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                            MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                        before)
+                      (MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after))
