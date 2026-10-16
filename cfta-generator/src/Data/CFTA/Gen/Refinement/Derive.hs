@@ -42,7 +42,9 @@ child: @e@ for 'Measured', the one integer of the child, and a record of
 measures for 'MeasuredBy'. So GHC checks the number of children of each
 constructor, and @-Wincomplete-patterns@ checks that the invariant covers
 each constructor. The derivation checks the node view against the datatype
-and reports 'NodeMismatch'.
+and reports 'NodeMismatch'. The name of each constructor of the view starts
+with the name of the constructor of the datatype in its place, as
+@ConsNode@ for @Cons@, so two constructors of one shape cannot change places.
 
 A datatype with several integers for each value, such as the color and the
 black height of a red-black tree, has named measures: a record whose
@@ -75,12 +77,50 @@ instance HasLTA Tree where
 The functions are polymorphic over 'Symbolic'. On 'Expr', they give the
 formulas of the generator. On 'Integer', 'holds', 'measureOf', and
 'measuresOf' run them on values, so the same text checks the values of a
-test. 'measuresAt' gives the measures of a value term, for a condition on the
-root, as in @col (measuresAt v) .== 0@.
+test.
 
-A measure can choose with 'Data.CFTA.Refinement.Symbolic.ite', and
-'Data.CFTA.Refinement.Symbolic.smaller' and
-'Data.CFTA.Refinement.Symbolic.larger' come from it. The bounds of a binary
+A condition on the root reads the measures of the root, and it is written
+once in the same way. 'deriveLTARooted' takes it, and 'holdsRooted' runs it
+on values:
+
+@
+blackRooted :: Either DeriveLTAError (LTAGen Tree)
+blackRooted = deriveLTARooted \@Tree 6 mempty (\\root -> col root .== 0 .&& bh root .<= 3)
+@
+
+The measures of a 'Measured' invariant are 'Single', as in
+@\\(Single height) -> height .<= 3@. 'measuresAt' gives the measures of a
+value term for other conditions, as in @col (measuresAt v) .== 0@.
+
+'literal' names a value of an enumeration on both sides, as in
+@color .== literal Black@. A constant in the @where@ of an instance needs a
+type signature, as @black :: (Num e) => e@: without it, the monomorphism
+restriction gives it one type, and GHC reports the two functions of the
+invariant, not the constant. A function of the @where@ that reads a parameter
+of the invariant, as @top@ in @byLength top@, needs a signature too, when
+@TypeFamilies@ or @GADTs@ turn on @MonoLocalBinds@.
+
+The class is not necessary. A top-level invariant with a type signature and
+'deriveLTAFrom' give the same generator, without the associated types, and
+one datatype can have several invariants:
+
+@
+byLength :: Invariant SortedListByNode ListMeasures
+byLength = MeasuredBy measures increasing
+  where
+    measures NilBy = ListMeasures 1000001 0
+    measures (ConsBy x rest) = ListMeasures x (size rest + 1)
+    increasing NilBy = true
+    increasing (ConsBy x rest) = x .< front rest
+
+sortedOfLength :: Either DeriveLTAError (LTAGen SortedList)
+sortedOfLength = deriveLTAFromRooted \@SortedList 8 (atom \@Integer (elements [0 .. 9])) byLength (\\root -> size root .== 3)
+@
+
+'holds', 'measuresOf', and 'holdsRooted' take such an invariant too.
+
+A measure can choose with 'ite', and 'smaller' and 'larger' come from it.
+The bounds of a binary
 search tree with the keys 0 to 3 are its least and its greatest key, with 4
 and -1 for an empty tree:
 

@@ -160,7 +160,7 @@ remains a separate ECTA-only package.
   gives the integer that stands for each value of a type, the value of each
   integer, and the range of a bounded type. It has instances for integral
   types, `Bool`, `Char`, `Ordering`, and `()`, and for enumerations through
-  `Enumerated`. `literal` writes a value as a term. `substitute` replaces named values by terms,
+  `Enumerated`. `literal` writes a value as its integer on any `Num`: a term on `Expr`, and the integer on `Integer`. `substitute` replaces named values by terms,
   `definingTerm` reads the term of a formula `v .== t`, and `freeNames` lists
   the names of a formula. `substitute` renames a bound name together with the
   nullary applications that refer to it, and it replaces a function head only
