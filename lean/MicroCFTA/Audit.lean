@@ -1984,6 +1984,12 @@ import MicroCFTA.SourceCurrentConjunctionScanClassPassActual
 import MicroCFTA.SourceCurrentPrimaryReadsCounterexample
 import MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage
 import MicroCFTA.SourceCurrentAllocatedPartialEdgeActual
+import MicroCFTA.SourceCurrentAllocatedPartialInvariant
+import MicroCFTA.SourceCurrentAllocatedPartialStepEffects
+import MicroCFTA.SourceCurrentAllocatedPartialChecks
+import MicroCFTA.SourceCurrentAllocatedPartialForestLanguage
+import MicroCFTA.SourceCurrentAllocatedPartialCallSteps
+import MicroCFTA.SourceCurrentAllocatedPartialActual
 /-!
 # Proof dependency audit
 
