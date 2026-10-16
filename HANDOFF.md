@@ -1,6 +1,67 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 07:24 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 07:47 CEST (Europe/Stockholm)**.
+
+## Current causal memo admission through exact native queries
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`6ba5d18b`. New proof commits are `f2e119b9`, `4b1d8e25`, and `49184f18`.
+Audit and scope note commit is `ff561e50`.
+No Haskell implementation or test changes occur. The external Haskell fix
+registry remains at the top of FINDINGS.md. Add every later Haskell fix
+there with its failure case, affected files, commit, checks, and upstream status.
+
+Nine additive modules derive causal admission for every native memo phase.
+Exact source requests derive model membership and captured seen-pair
+coverage before lookup publishes them. Demand, finish, and machine effects
+retain the same original requests. The invariant transports through actual
+input-model growth and derives returned-only Admitted and SeenAdmitted.
+
+Local certificates cover the literal node compiler and actual checked-edge
+prefix. Union members, Mu bodies, row pairs, zipped children, and grown-heap
+binder reads derive admission from source scope and finite-input closure.
+Recursive continuations supply only physical resident-value facts. No child
+result law or completed callback supplies membership. The actual trace
+simulation derives each reached publication check and every final cell's
+coverage. Its static branch families are concretely instantiated.
+
+The exact query endpoint now derives coverage of newly returned internal
+requests. The generated-operand endpoint exposes the actual expanded root
+inventory and its finiteInput, retains the same warm tables, and returns
+that coverage for later model expansion. The preceding one-next-query
+coverage gap is closed under the stated initial invariants and word checks.
+Initial Good, Contextual, all-cell Covered, Scoped, SemanticReady, Idle,
+source growth/history, and reached WordRanges remain explicit for a warm
+entry. Empty modeled tables derive initial Covered. No Haskell global reset
+or complete generated-history theorem is claimed.
+
+The pinned full Audit passes 2320 jobs and 56321 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur.
+Independent source reviews found no material defect. Focused checks pass
+68 public axiom reports, 78 complete signatures, and 46 kernel integrations.
+Eight named kernels have additional permitted-foundation axiom reports.
+A two-generated-query kernel uses the first actual receipt for every second
+cache invariant; only its next reached WordRanges is new. Reuse the
+unchanged-source strict Nix build, 777 examples plus golden, five-file
+Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-admission-history.md. Evidence and frozen
+sources are in lean/restart-evidence/20261016-admission-history/.
+All 3538 baseline files remain. All 2310 older non-Audit proof sources
+retain identical bytes. Prior frozen proofs, stashes, other worktree
+records, and the root Haskell registry remain. Earlier unavailable external
+drafts are not claimed recovered or reverified.
+
+Next carry the concrete expanded inventory and admission through the
+complete source seeded fold. Derive common-subtree inclusion, the actual
+checked class witness, and current stopped-class rejection soundness.
+Compose actual allocated precheck state, all gate memo receipts, selected
+required paths, and the general constrained outer caller. Keep every other
+full-library and separate Sized contract active. Preserve the optimized
+interned core and every older constructor and equality proof. Runtime,
+container, allocation, machine, solver, and callback boundaries remain
+explicit. No board posts or deployments. Push verified formalize checkpoints
+regularly. The full goal remains active; this checkpoint is progress.
 
 ## Current semantic input admission and actual allocated Scan entry
 
