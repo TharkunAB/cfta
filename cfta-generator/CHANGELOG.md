@@ -238,6 +238,10 @@ tree automata of `cfta`, with QuickCheck integration.
   them. It reports a node view that does not fit the datatype
   (`NodeViewMismatch`), a rule that does not fit the fields of its
   constructor (`FieldMismatch`), and a negative bound (`NegativeBound`).
+  `Data.CFTA.Gen.Typing.Do` writes the rules of a constructor in qualified
+  do-notation, as premises (`sub`, `under`), choices from lists (`each`,
+  which can read earlier choices), conditions (`guard`), and a conclusion
+  (`yields`); a block gives one rule for each combination of its choices.
   With `Binders`, a bound on the binders around each position, the
   automaton is cyclic and the generator is counted by size. A field
   that holds a subterm has the type of the datatype, so a family of mutually

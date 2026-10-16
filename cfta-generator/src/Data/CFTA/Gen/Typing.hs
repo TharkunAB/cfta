@@ -33,6 +33,9 @@ closed :: Either TypingError (Gen Symbol Typed)
 closed = fromTypingRules Typing{typingBound = Nesting 3, typingInputs = [], typingRoots = [TInt, TBool], typingRules = typedRules}
 @
 
+"Data.CFTA.Gen.Typing.Do" writes the rules of a constructor as an inference
+rule, with premises, choices, and a conclusion, in do-notation.
+
 The node view has one constructor for each constructor of the datatype, in
 order, with the same number of fields, and each name starts with the name of
 the datatype's constructor, as for an invariant. So a rule names its
