@@ -1,5 +1,65 @@
 # cfta formal model
 
+## Current numeric query capacity and reservation bounds
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `a86c09dd`. Read lean/notes-current-constrained-capacity.md
+and lean/restart-evidence/20261016-constrained-query-capacity/.
+Thirteen additive modules derive causal numeric query plans and reservation
+bounds. Proof commits are `baffd471`, `a66edeb5`, and `bb913e55`.
+
+Capacity contains only current node/edge supply inequalities at width bits+2.
+Target, Force, Leaf, simultaneous edits, Class, Pass, Scan stage, precheck,
+and Parent derive existing range checks from numeric plans. Each suffix uses
+only an earlier actual prefix return. Shorter-prefix induction derives its
+checks before constructing or verifying that prefix. Complete worker
+uniqueness identifies the same output and every returned state component.
+Finite endpoints construct their own graphs, reads, receipts, domains, and
+structural bounds. Numeric outer edge calls retain full Post, independent
+language law, causal certificates, and stable literal execution.
+
+Primitive Work observations count actual requests and cache misses. Exact
+counter equations count every reservation, including losing atomic
+candidates. Raw yielded native prefixes retain those equations without a
+completed receipt or query. Their request-budget adapter still takes a
+bound on the ACTUAL prefix request count. It is not a static total-work
+bound for reduction. Equality-interner and host reservations remain separate.
+
+Ordinary source construction has STATIC input-only bounds: node occurrences
+bound node reservations and row occurrences bound edge reservations. It
+constructs its own successful return from any heap and environment. Initial
+Facts and resident domain inputs add the same result domain and residency.
+Closed construction and field preparation derive complete initial Context,
+three structural certificates, actual empty inherited identity, and initial
+Capacity whenever the syntax counts fit. Later query capacity remains open.
+
+The earlier whole-root endpoint still requires OuterEntries.Plan. Its raw
+Reach relation needs a separate admission proof at every entry. Next verify
+earlier raw graphs through all eight outer families, construct their reads,
+and derive Context, domains, and Stored at each reached parent. Only then
+can numeric parent plans imply the frozen global range plan. Read
+outer-capacity-next-review.md. Do not use enclosing root completion or
+future readiness to prove its own plan. Derive total reduction reservation
+budgets from initial resources after that numeric composition.
+
+The full Audit passes 2551 jobs and 59587 dependency checks. All 88 declared
+public axiom/full-signature pairs and 39 imported integration pairs pass.
+Public coverage includes indented mutual and noncomputable declarations.
+Only the permitted foundations occur. Preservation retains 6528 starting
+files and 2537 older non-Audit proof sources. Thirty-eight frozen manifests
+check 308 module entries. Historical repairs, drafts, stashes, other
+worktrees, and the optimized interned core remain.
+
+General Mu/reference/union progress, repeated-pass convergence, current
+frontends, concrete Haskell execution, and full-pipeline composition remain
+open. Retain separate exact language, transformation, size, count, order,
+rank/inverse, generator, and sampling contracts. No Haskell file changes.
+Reuse strict Nix validation, 798 examples plus golden, six-file Fourmolu,
+and four-package Cabal-gild and metadata checks. Root FINDINGS.md keeps
+the external Haskell repair handoff first. Record every later repair there
+with failure, executable reproducer, affected paths, commit, checks, and
+upstream status. The full-library goal remains active.
+
 ## Current finite ordinary query word bounds
 
 Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
