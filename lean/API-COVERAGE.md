@@ -1,5 +1,37 @@
 # Public API and source correspondence
 
+## Current outer profile retention and proof boundary
+
+Updated: 2026-10-16 22:41 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `b3801702`. Proof commits are
+`f1c23cf2`, `a125732a`, and `be7b86da`. Read
+`lean/notes-current-proof-state.md` and
+`lean/restart-evidence/20261016-constrained-outer-profiles/`.
+
+Six additive modules retain native output and Merge profile certificates
+through actual Edit, Class/Pass, Stage/Local/Parent, and all eight outer
+read families. Each public outer endpoint derives its own reached Checks.
+The root constructs its own graph and retains these certificates at that
+same return. Its numeric capacity Plan remains an explicit premise.
+A separate guard module derives actual raw and effective conjunction
+bounds from initial stored-field and guard-syntax vectors. It does not
+establish hereditary guard bounds through native or outer execution.
+
+The full pinned Audit passes 2630 jobs and 60745 dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. These component
+proofs do not establish whole-library verification. Next derive hereditary
+guard and quantitative warm outer certificates, then cumulative initial
+headroom and the root Plan. General recursive progress, repeated-pass
+convergence, current frontend adapters, concrete Haskell execution, and
+complete public pipelines remain open. The full-library goal stays active.
+
+No Haskell change or new Haskell defect. Repair `b9219b9e` is merged by
+PR #65. The Chain reproducer returns `Left (FieldAtomOnDatatype "Next" 0)`.
+Root FINDINGS keeps the external repair handoff first. Record later fixes
+there with failure, reproducer, paths, commit, checks, and upstream status.
+Reuse unchanged strict Nix validation: 798 examples plus golden, six-file
+Fourmolu, and four-package Cabal-gild and metadata checks.
+
 ## Current supporting outer resource proofs
 
 Three additive modules prove raw outer rebuild Work and profiles, strong
