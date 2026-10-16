@@ -1,0 +1,25 @@
+import MicroCFTA.SourceCurrentAllocatedPartialGraph
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk.length
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialGraph.Children.length
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows.length
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall.not_busy
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall.not_busy
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody.reference_error
+
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.descend
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.Descendants
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.Children
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.Walk.length
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.Children.length
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.Rows.length
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall.not_busy
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall.not_busy
+#check @MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeBody.reference_error

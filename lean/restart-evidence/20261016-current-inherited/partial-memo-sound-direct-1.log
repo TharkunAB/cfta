@@ -1,0 +1,60 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialMemoSound.lean:156:62: error: don't know how to synthesize placeholder for argument `handle`
+context:
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+width : Nat
+request : NodeRequest
+before : Caller width
+sound : Sound formulas solver before
+inherited : EqReady before.checked.operations.constraints request.inherited
+available : Available before.checked.native.machine.heap request.value
+fresh : NodeGood formulas solver before.checked { request := request, status := FlatMemoThunk.Status.suspended }
+published :
+  FlatMemoThunk.Valid (NodeLinked before.checked.operations.constraints) (NodeGood formulas solver before.checked)
+    (FlatMemoThunk.lookupOrInsert request.key request before.nodeResults).snd
+⊢ Nat
+lean/MicroCFTA/SourceCurrentAllocatedPartialMemoSound.lean:156:7: error: failed to infer `have` declaration type
+lean/MicroCFTA/SourceCurrentAllocatedPartialMemoSound.lean:151:60: error: unsolved goals
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+width : Nat
+request : NodeRequest
+before : Caller width
+sound : Sound formulas solver before
+inherited : EqReady before.checked.operations.constraints request.inherited
+available : Available before.checked.native.machine.heap request.value
+fresh : NodeGood formulas solver before.checked { request := request, status := FlatMemoThunk.Status.suspended }
+published :
+  FlatMemoThunk.Valid (NodeLinked before.checked.operations.constraints) (NodeGood formulas solver before.checked)
+    (FlatMemoThunk.lookupOrInsert request.key request before.nodeResults).snd
+⊢ Sound formulas solver (beginNode request before).snd.snd
+lean/MicroCFTA/SourceCurrentAllocatedPartialMemoSound.lean:168:62: error: don't know how to synthesize placeholder for argument `handle`
+context:
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+width : Nat
+request : EdgeRequest
+before : Caller width
+sound : Sound formulas solver before
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+fresh : EdgeGood formulas solver before.checked { request := request, status := FlatMemoThunk.Status.suspended }
+published :
+  FlatMemoThunk.Valid (EdgeLinked before.checked.operations.constraints) (EdgeGood formulas solver before.checked)
+    (FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).snd
+⊢ Nat
+lean/MicroCFTA/SourceCurrentAllocatedPartialMemoSound.lean:168:7: error: failed to infer `have` declaration type
+lean/MicroCFTA/SourceCurrentAllocatedPartialMemoSound.lean:163:60: error: unsolved goals
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+width : Nat
+request : EdgeRequest
+before : Caller width
+sound : Sound formulas solver before
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+fresh : EdgeGood formulas solver before.checked { request := request, status := FlatMemoThunk.Status.suspended }
+published :
+  FlatMemoThunk.Valid (EdgeLinked before.checked.operations.constraints) (EdgeGood formulas solver before.checked)
+    (FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).snd
+⊢ Sound formulas solver (beginEdge request before).snd.snd

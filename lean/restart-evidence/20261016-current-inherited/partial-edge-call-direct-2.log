@@ -1,0 +1,104 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:117:50: error: Type mismatch: After simplification, term
+  ready
+ has type
+  Ready before.checked
+but is expected to have type
+  Ready running.checked
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:120:10: error: Type mismatch: After simplification, term
+  admitted
+ has type
+  At formulas solver inventory before.checked
+but is expected to have type
+  At formulas solver inventory running.checked
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:121:10: error: Type mismatch: After simplification, term
+  correct
+ has type
+  SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+but is expected to have type
+  SourceCurrentEmptinessMemo.Correct formulas solver running.checked.native.machine.heap running.fourth
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:122:10: error: Type mismatch: After simplification, term
+  stored
+ has type
+  SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+but is expected to have type
+  SourceCurrentMemoMergeEffects.Stored running.checked.native.machine.heap running.merge
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:123:10: error: Type mismatch: After simplification, term
+  covered
+ has type
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+but is expected to have type
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient running.merge
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:124:10: error: Type mismatch: After simplification, term
+  valid
+ has type
+  GlobalsValid before.checked.native.machine.heap memos
+but is expected to have type
+  GlobalsValid running.checked.native.machine.heap memos
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:133:24: error: Type mismatch: After simplification, term
+  inherited
+ has type
+  SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+but is expected to have type
+  SourceEqualityConstraintAllocation.Ready running.checked.operations.constraints request.inherited
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:134:20: error: Type mismatch: After simplification, term
+  resident
+ has type
+  Resident before.checked.native.machine.heap request.value
+but is expected to have type
+  Resident running.checked.native.machine.heap request.value
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:110:74: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+handle : Nat
+original : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate original, running)
+ranges : Ranges budget original running
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+runningSound : Sound formulas solver running
+cell : running.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.evaluating }
+owner :
+  SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver running.checked
+    { request := original, status := FlatMemoThunk.Status.evaluating }
+key : original.key = request.key
+checkedSame : (handle, FlatMemoThunk.Observation.evaluate original, running).snd.snd.checked = before.checked
+mergeSame : (handle, FlatMemoThunk.Observation.evaluate original, running).snd.snd.merge = before.merge
+fourthSame : (handle, FlatMemoThunk.Observation.evaluate original, running).snd.snd.fourth = before.fourth
+nodesSame : (handle, FlatMemoThunk.Observation.evaluate original, running).snd.snd.nodeResults = before.nodeResults
+runningReady : Ready running.checked
+result : Edge
+middle : Caller width
+next : Inventory
+final : Memos
+body : SourceCurrentAllocatedPartialGraph.EdgeBody budget original running result middle
+reads : SourceCurrentAllocatedPartialReads.EdgeBodyReads formulas solver body memos final
+tables : middle.edgeResults = running.edgeResults
+receipt : Receipt formulas solver next original running result middle final
+current : middle.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.evaluating }
+completed : Sound formulas solver (finishEdge handle result middle)
+law : EdgeLaw formulas solver request result
+⊢ ∃ result after next final actual,
+    SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos final ∧
+      after.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.returned result } ∧
+        Receipt formulas solver next request before result after final

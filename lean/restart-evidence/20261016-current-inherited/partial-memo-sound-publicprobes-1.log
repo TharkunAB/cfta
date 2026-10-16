@@ -1,0 +1,327 @@
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw.of_key' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw.of_key' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.initial_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeGood.grows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeGood.grows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound.advance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginNode_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginEdge_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginNode_fresh' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginEdge_fresh' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginNode_evaluate_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginEdge_evaluate_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginNode_ready_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginEdge_ready_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.finishNode_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialMemoSound.finishEdge_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw : MicroCFTA.SourceGuards.Formulas
+    MicroCFTA.FullSyntax.Formula →
+  MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+    MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Prop
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw : MicroCFTA.SourceGuards.Formulas
+    MicroCFTA.FullSyntax.Formula →
+  MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+    MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest →
+      MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Prop
+@MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeGood : {width : Nat} →
+  MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+    MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.SourceEqualityNativeDemand.State width →
+        MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+          Prop
+@MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeGood : {width : Nat} →
+  MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+    MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.SourceEqualityNativeDemand.State width →
+        MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+          Prop
+@MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound : {width : Nat} →
+  MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+    MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width → Prop
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw.of_key : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (cache : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key)
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (original candidate : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.Cache.Valid cache →
+    MicroCFTA.InternedRecordCoherence.Coherent heap →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready cache original.inherited →
+        MicroCFTA.SourceEqualityConstraintAllocation.Ready cache candidate.inherited →
+          MicroCFTA.InternedProbeProvenance.Available heap original.value →
+            MicroCFTA.InternedProbeProvenance.Available heap candidate.value →
+              original.key = candidate.key →
+                MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver original result →
+                  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver candidate result
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw.of_key : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (cache : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key)
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (original candidate : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.Cache.Valid cache →
+    MicroCFTA.InternedRecordCoherence.Coherent heap →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready cache original.inherited →
+        MicroCFTA.SourceEqualityConstraintAllocation.Ready cache candidate.inherited →
+          MicroCFTA.InternedEdgeResidency.EdgeResident heap original.value →
+            MicroCFTA.InternedEdgeResidency.EdgeResident heap candidate.value →
+              original.key = candidate.key →
+                MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver original result →
+                  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver candidate result
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.initial_sound : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver
+    (MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth)
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeGood.grows : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {cell :
+    MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))},
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeGood formulas solver before cell →
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before)
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) →
+      MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeGood formulas solver after cell
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeGood.grows : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {cell :
+    MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))},
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver before cell →
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before)
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) →
+      MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver after cell
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound.advance : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width},
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+    ∀ (checked : MicroCFTA.SourceEqualityNativeDemand.State width) (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+      (merge :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+          (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before.checked)
+          (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical checked) →
+        MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver
+          (MicroCFTA.SourceCurrentAllocatedPartialState.advance before checked fourth merge)
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginNode_sound : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver
+          (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before).snd.snd
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginEdge_sound : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver
+          (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before).snd.snd
+@MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginNode_fresh : ∀ {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  before.nodeResults.table request.key = none →
+    MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before =
+        (before.nodeResults.next, MicroCFTA.FlatMemoThunk.Observation.evaluate request,
+          { checked := before.checked, merge := before.merge, fourth := before.fourth,
+            nodeResults :=
+              MicroCFTA.FlatMemoThunk.setStatus before.nodeResults.next MicroCFTA.FlatMemoThunk.Status.evaluating
+                (MicroCFTA.FlatMemoThunk.lookupOrInsert request.key request before.nodeResults).snd,
+            edgeResults := before.edgeResults }) ∧
+      (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before).snd.snd.nodeResults.cells
+          before.nodeResults.next =
+        some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating }
+@MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginEdge_fresh : ∀ {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  before.edgeResults.table request.key = none →
+    MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before =
+        (before.edgeResults.next, MicroCFTA.FlatMemoThunk.Observation.evaluate request,
+          { checked := before.checked, merge := before.merge, fourth := before.fourth,
+            nodeResults := before.nodeResults,
+            edgeResults :=
+              MicroCFTA.FlatMemoThunk.setStatus before.edgeResults.next MicroCFTA.FlatMemoThunk.Status.evaluating
+                (MicroCFTA.FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).snd }) ∧
+      (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before).snd.snd.edgeResults.cells
+          before.edgeResults.next =
+        some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating }
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginNode_evaluate_sound : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value →
+        ∀ (handle : Nat) (original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+          (running : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+          MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before =
+              (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate original, running) →
+            MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver running ∧
+              running.nodeResults.cells handle =
+                  some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+                MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeGood formulas solver running.checked
+                    { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+                  original.key = request.key
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginEdge_evaluate_sound : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        ∀ (handle : Nat) (original : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+          (running : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+          MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before =
+              (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate original, running) →
+            MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver running ∧
+              running.edgeResults.cells handle =
+                  some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+                MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver running.checked
+                    { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+                  original.key = request.key
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginNode_ready_sound : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+    MicroCFTA.Cache.Valid before.checked.operations.constraints →
+      MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap →
+        MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value →
+            ∀ (handle : Nat)
+              (result :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (after : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+              MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before =
+                  (handle, MicroCFTA.FlatMemoThunk.Observation.ready result, after) →
+                after = before ∧
+                  MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap result ∧
+                    MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver request result
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.beginEdge_ready_sound : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+    MicroCFTA.Cache.Valid before.checked.operations.constraints →
+      MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap →
+        MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+            ∀ (handle : Nat)
+              (result :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (after : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+              MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before =
+                  (handle, MicroCFTA.FlatMemoThunk.Observation.ready result, after) →
+                after = before ∧
+                  MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap result ∧
+                    MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver request result
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.finishNode_sound : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat} (handle : Nat)
+  (original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+    before.nodeResults.cells handle =
+        some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap result →
+        MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver original result →
+          MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver
+            (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result before)
+MicroCFTA.SourceCurrentAllocatedPartialMemoSound.finishEdge_sound : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {width : Nat} (handle : Nat)
+  (original : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+    before.edgeResults.cells handle =
+        some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap result →
+        MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver original result →
+          MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver
+            (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before)

@@ -1,0 +1,902 @@
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.body_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.evaluated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.ready_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.fresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.finite_or_busy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@body_finite : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  Ranges budget request before →
+                    ∀ (memos : Memos),
+                      GlobalsValid before.checked.native.machine.heap memos →
+                        ∃ result after next final actual,
+                          SourceCurrentAllocatedPartialReads.EdgeBodyReads formulas solver actual memos final ∧
+                            after.edgeResults = before.edgeResults ∧
+                              Receipt formulas solver next request before result after final
+@evaluated : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  ∀ (handle : Nat) (original : EdgeRequest) (running : Caller width),
+                    beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate original, running) →
+                      Ranges budget original running →
+                        ∀ (memos : Memos),
+                          GlobalsValid before.checked.native.machine.heap memos →
+                            ∃ result after next final actual,
+                              SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos final ∧
+                                after.edgeResults.cells handle =
+                                    some { request := original, status := FlatMemoThunk.Status.returned result } ∧
+                                  Receipt formulas solver next request before result after final
+@ready_hit : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  ∀ (handle : Nat) (result : Edge) (after : Caller width),
+                    beginEdge request before = (handle, FlatMemoThunk.Observation.ready result, after) →
+                      ∀ (memos : Memos),
+                        GlobalsValid before.checked.native.machine.heap memos →
+                          after = before ∧
+                            ∃ actual,
+                              SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos memos ∧
+                                Receipt formulas solver inventory request before result after memos
+@fresh : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  before.edgeResults.table request.key = none →
+                    Ranges budget request (beginEdge request before).snd.snd →
+                      ∀ (memos : Memos),
+                        GlobalsValid before.checked.native.machine.heap memos →
+                          ∃ result after next final actual,
+                            SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos final ∧
+                              after.edgeResults.cells before.edgeResults.next =
+                                  some { request := request, status := FlatMemoThunk.Status.returned result } ∧
+                                Receipt formulas solver next request before result after final
+@finite_or_busy : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  CallRanges budget request before →
+                    ∀ (memos : Memos),
+                      GlobalsValid before.checked.native.machine.heap memos →
+                        (∃ handle running,
+                            beginEdge request before = (handle, FlatMemoThunk.Observation.busy, running)) ∨
+                          ∃ result after next final actual,
+                            SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos final ∧
+                              Receipt formulas solver next request before result after final
+@Ranges : [DecidableEq Symbol] →
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    [DecidableEq (Value Symbol Guard)] → {width : Nat} → Nat → EdgeRequest → Caller width → Prop
+@CallRanges : [DecidableEq Symbol] →
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    [DecidableEq (Value Symbol Guard)] → {width : Nat} → Nat → EdgeRequest → Caller width → Prop
+@Receipt : [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+  {width : Nat} →
+    SourceGuards.Formulas FullSyntax.Formula →
+      SourceGuards.Entailment FullSyntax.Formula →
+        Inventory → EdgeRequest → Caller width → Edge → Caller width → Memos → Prop
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:53:14: error: unsolved goals
+case some.suspended
+width handle : Nat
+result : Edge
+before : Caller width
+cell : FlatMemoThunk.Cell EdgeRequest Edge
+found : before.edgeResults.cells handle = some cell
+phase : cell.status = FlatMemoThunk.Status.suspended
+⊢ (match some cell with
+      | some { request := request, status := FlatMemoThunk.Status.evaluating } =>
+        { table := before.edgeResults.table,
+          cells :=
+            put before.edgeResults.cells handle
+              { request := cell.request, status := FlatMemoThunk.Status.returned result },
+          next := before.edgeResults.next }
+      | x => before.edgeResults).table =
+    before.edgeResults.table
+
+case some.evaluating
+width handle : Nat
+result : Edge
+before : Caller width
+cell : FlatMemoThunk.Cell EdgeRequest Edge
+found : before.edgeResults.cells handle = some cell
+phase : cell.status = FlatMemoThunk.Status.evaluating
+⊢ (match some cell with
+      | some { request := request, status := FlatMemoThunk.Status.evaluating } =>
+        { table := before.edgeResults.table,
+          cells :=
+            put before.edgeResults.cells handle
+              { request := cell.request, status := FlatMemoThunk.Status.returned result },
+          next := before.edgeResults.next }
+      | x => before.edgeResults).table =
+    before.edgeResults.table
+
+case some.returned
+width handle : Nat
+result : Edge
+before : Caller width
+cell : FlatMemoThunk.Cell EdgeRequest Edge
+found : before.edgeResults.cells handle = some cell
+value✝ : Edge
+phase : cell.status = FlatMemoThunk.Status.returned value✝
+⊢ (match some cell with
+      | some { request := request, status := FlatMemoThunk.Status.evaluating } =>
+        { table := before.edgeResults.table,
+          cells :=
+            put before.edgeResults.cells handle
+              { request := cell.request, status := FlatMemoThunk.Status.returned result },
+          next := before.edgeResults.next }
+      | x => before.edgeResults).table =
+    before.edgeResults.table
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:53:94: warning: This simp argument is unused:
+  phase
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [finishEdge, FlatMemoThunk.finish, found, FlatMemoThunk.setStatus]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:86:6: error: don't know how to synthesize implicit argument `width`
+  @State.edgeResults (?m.133 handle owner running started ranges result) after
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+⊢ Nat
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:85:6: error: don't know how to synthesize implicit argument `width`
+  @State.edgeResults (?m.133 handle owner running started ranges result) after
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+⊢ Nat
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:84:4: error: don't know how to synthesize implicit argument `α`
+  @Exists (Caller (?m.133 handle owner running started ranges result)) fun after =>
+    ∃ next final,
+      ?m.71 = some { request := owner, status := FlatMemoThunk.Status.returned result } ∧
+        ?m.76 = some handle ∧
+          beginEdge request after = (handle, FlatMemoThunk.Observation.ready result, after) ∧
+            ∃ actual,
+              SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual final final ∧
+                Receipt formulas solver next request after result after final
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+⊢ Type 1
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:88:6: error: don't know how to synthesize implicit argument `α`
+  @Exists (EdgeCall budget request after result after) fun actual =>
+    SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual final final ∧
+      Receipt formulas solver next request after result after final
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+⊢ Prop
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:90:8: error: don't know how to synthesize implicit argument `width`
+  @Receipt inst✝¹ (?m.133 handle owner running started ranges result) formulas solver next request after result after
+    final
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+actual : EdgeCall budget request after result after
+⊢ Nat
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:89:8: error: don't know how to synthesize implicit argument `width`
+  @SourceCurrentAllocatedPartialReads.EdgeCallReads inst✝² inst✝¹ inst✝
+    (?m.133 handle owner running started ranges result) formulas solver budget request after result after ⋯ final final
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+actual : EdgeCall budget request after result after
+⊢ Nat
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:88:17: error: don't know how to synthesize implicit argument `width`
+  @EdgeCall inst✝² inst✝¹ inst✝ (?m.133 handle owner running started ranges result) budget request after result after
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+⊢ Nat
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:87:6: error: don't know how to synthesize implicit argument `α`
+  @Eq (Nat × FlatMemoThunk.Observation EdgeRequest Edge × Caller (?m.133 handle owner running started ranges result))
+    (beginEdge request after) (handle, FlatMemoThunk.Observation.ready result, after)
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+⊢ Type 1
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:87:32: error: don't know how to synthesize implicit argument `β`
+  @Prod.mk Nat (FlatMemoThunk.Observation EdgeRequest Edge × Caller (?m.133 handle owner running started ranges result))
+    handle (FlatMemoThunk.Observation.ready result, after)
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+⊢ Type 1
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:87:32: error: don't know how to synthesize implicit argument `β`
+  @Prod.mk (FlatMemoThunk.Observation EdgeRequest Edge) (Caller (?m.133 handle owner running started ranges result))
+    (FlatMemoThunk.Observation.ready result) after
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+⊢ Type 1
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:87:6: error: don't know how to synthesize implicit argument `width`
+  @beginEdge (?m.133 handle owner running started ranges result) request after
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.133 handle owner running started ranges result)
+next : Inventory
+final : Memos
+⊢ Nat
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:84:13: error(lean.inferBinderTypeFailed): Failed to infer type of binder `after`
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:92:30: error(lean.unknownIdentifier): Unknown identifier `inventory`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:92:62: error(lean.unknownIdentifier): Unknown identifier `ready`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:92:68: error(lean.unknownIdentifier): Unknown identifier `admitted`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:92:77: error(lean.unknownIdentifier): Unknown identifier `sound`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:92:83: error(lean.unknownIdentifier): Unknown identifier `inherited`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:92:93: error(lean.unknownIdentifier): Unknown identifier `resident`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:92:102: error(lean.unknownIdentifier): Unknown identifier `correct`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:92:110: error(lean.unknownIdentifier): Unknown identifier `stored`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:92:117: error(lean.unknownIdentifier): Unknown identifier `covered`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:93:42: error(lean.unknownIdentifier): Unknown identifier `memos`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:93:48: error(lean.unknownIdentifier): Unknown identifier `valid`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:100:25: error(lean.unknownIdentifier): Unknown identifier `inherited.grows`
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:90:73: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+request : EdgeRequest
+before : Caller width
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller width
+next : Inventory
+final : Memos
+actual : EdgeCall budget request before result after
+left✝ : SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual sorry final
+returned : after.edgeResults.cells handle = some { request := owner, status := FlatMemoThunk.Status.returned result }
+receipt : Receipt formulas solver next request before result after final
+published :
+  (handle, FlatMemoThunk.Observation.evaluate owner, running).snd.snd.edgeResults.table request.key =
+    some (handle, FlatMemoThunk.Observation.evaluate owner, running).fst
+retained : after.edgeResults.table request.key = some handle
+again : beginEdge request after = (handle, FlatMemoThunk.Observation.ready result, after)
+⊢ ∃ result after next final,
+    ?m.71 = some { request := owner, status := FlatMemoThunk.Status.returned result } ∧
+      ?m.76 = some handle ∧
+        beginEdge request after = (handle, FlatMemoThunk.Observation.ready result, after) ∧
+          ∃ actual,
+            SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual final final ∧
+              Receipt formulas solver next request after result after final
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:111:6: error: don't know how to synthesize implicit argument `width`
+  @State.edgeResults (?m.103 handle owner running started ranges result) after
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.103 handle owner running started ranges result)
+next : Inventory
+final : ?m.104 handle owner running started ranges result after next
+⊢ Nat
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:110:4: error: don't know how to synthesize implicit argument `α`
+  @Exists (Caller (?m.103 handle owner running started ranges result)) fun after =>
+    ∃ next final,
+      ?m.71 = some { request := owner, status := FlatMemoThunk.Status.returned result } ∧
+        EdgeLaw formulas solver request result ∧ Sound formulas solver after ∧ At formulas solver next after.checked
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+⊢ Type 1
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:110:4: error: don't know how to synthesize implicit argument `α`
+  @Exists (?m.104 handle owner running started ranges result after next) fun final =>
+    ?m.71 = some { request := owner, status := FlatMemoThunk.Status.returned result } ∧
+      EdgeLaw formulas solver request result ∧ Sound formulas solver after ∧ At formulas solver next after.checked
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.103 handle owner running started ranges result)
+next : Inventory
+⊢ Sort ?u.43
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:113:6: error: don't know how to synthesize implicit argument `width`
+  @At (?m.103 handle owner running started ranges result) formulas solver next after.checked
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.103 handle owner running started ranges result)
+next : Inventory
+final : ?m.104 handle owner running started ranges result after next
+⊢ Nat
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:113:30: error: don't know how to synthesize implicit argument `width`
+  @State.checked (?m.103 handle owner running started ranges result) after
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.103 handle owner running started ranges result)
+next : Inventory
+final : ?m.104 handle owner running started ranges result after next
+⊢ Nat
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:112:47: error: don't know how to synthesize implicit argument `width`
+  @Sound (?m.103 handle owner running started ranges result) formulas solver after
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+handle : Nat
+owner : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+ranges : Ranges budget owner running
+result : Edge
+after : Caller (?m.103 handle owner running started ranges result)
+next : Inventory
+final : ?m.104 handle owner running started ranges result after next
+⊢ Nat
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:110:24: error(lean.inferBinderTypeFailed): Failed to infer type of binder `final`
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:110:13: error(lean.inferBinderTypeFailed): Failed to infer type of binder `after`
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:117:30: error: Application type mismatch: The argument
+  final
+has type
+  Memos
+of sort `Type` but is expected to have type
+  ?m.104 handle owner running started ranges result after next
+of sort `Sort u_1` in the application
+  Exists.intro final
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:165:14: error(lean.unknownIdentifier): Unknown constant `evaluated_repeat`
+'MicroCFTA.PartialEdgeCallIndependentProbe.call_table' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

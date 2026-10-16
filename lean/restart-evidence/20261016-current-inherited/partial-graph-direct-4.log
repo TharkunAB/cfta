@@ -1,0 +1,34 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:124:2: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case cons
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+combined : EqValue
+index : Nat
+values results : List (Value Symbol Guard)
+before after : Caller width
+actual : Walk budget combined index values before results after
+⊢ ∀ {before : Caller width} {combined : EqValue} {index : Nat} {value result : Value Symbol Guard}
+    {middle : Caller width} {values results : List (Value Symbol Guard)} {after : Caller width},
+    NodeCall budget { inherited := (descend before combined index).fst, value := value }
+        (descend before combined index).snd result middle →
+      Walk budget combined (index + 1) values middle results after →
+        True → results.length = values.length → (result :: results).length = (value :: values).length
+lean/MicroCFTA/SourceCurrentAllocatedPartialGraph.lean:145:2: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case cons
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+inherited : EqValue
+values results : List (EdgeValue Symbol Guard)
+before after : Caller width
+actual : Rows budget inherited values before results after
+⊢ ∀ {before : Caller width} {combined : EqValue} {index : Nat} {value result : Value Symbol Guard}
+    {middle : Caller width} {values results : List (Value Symbol Guard)} {after : Caller width},
+    NodeCall budget { inherited := (descend before combined index).fst, value := value }
+        (descend before combined index).snd result middle →
+      Walk budget combined (index + 1) values middle results after → True → True → True

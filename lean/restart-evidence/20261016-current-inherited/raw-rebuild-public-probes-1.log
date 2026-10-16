@@ -1,0 +1,57 @@
+'MicroCFTA.SourceCurrentAllocatedRawRebuild.edge' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedRawRebuild.edge_same_arity' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedRawRebuild.modify' depends on axioms: [propext, Quot.sound]
+'modify' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedRawRebuild.edge_verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRawRebuild.EdgeReceipt.language' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRawRebuild.modify_unchanged' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRawRebuild.modify_verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+@edge_verified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (original : EdgeValue Symbol Guard) (children : List (Value Symbol Guard))
+  (before : Checked width),
+  Ready before →
+    At formulas solver inventory before →
+      EdgeResident before.native.machine.heap original →
+        Values before.native.machine.heap children →
+          children.length = original.children.length →
+            EdgeReceipt formulas solver inventory original children before (edge original children before).fst
+              (edge original children before).snd
+@EdgeReceipt.language : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {original result : EdgeValue Symbol Guard} {children : List (Value Symbol Guard)}
+  {before after : Checked width},
+  EdgeReceipt formulas solver inventory original children before result after →
+    ∀ (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+      InternedGuardedLanguage.edgeMeaning holds ambient result term ↔
+        ∃ terms,
+          term = Term.node original.entry.key.symbol terms ∧
+            All₂ (InternedGuardedLanguage.meaning holds ambient) children terms ∧
+              holds original.entry.key.constraint term = true
+@modify_verified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (entry : Interned InternedBinderProtocol.NodeKey)
+  (oldRows newRows : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+  (before : Checked width),
+  Ready before →
+    At formulas solver inventory before →
+      Available before.native.machine.heap (Value.node entry oldRows depth free) →
+        Edges before.native.machine.heap newRows →
+          NodeReceipt formulas solver inventory (Value.node entry oldRows depth free) oldRows newRows before
+            (SourceCurrentAllocatedRawRebuild.modify (Value.node entry oldRows depth free) oldRows newRows before).fst
+            (SourceCurrentAllocatedRawRebuild.modify (Value.node entry oldRows depth free) oldRows newRows before).snd
+@NodeReceipt.language : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {original : Value Symbol Guard} {oldRows newRows : List (EdgeValue Symbol Guard)}
+  {before : Checked width} {result : Value Symbol Guard} {after : Checked width},
+  NodeReceipt formulas solver inventory original oldRows newRows before result after →
+    ∀ (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+      InternedGuardedLanguage.meaning holds ambient result term ↔
+        ∃ row, row ∈ newRows ∧ InternedGuardedLanguage.edgeMeaning holds ambient row term
+lean/restart-evidence/20261016-current-inherited/raw-rebuild-public-probes.lean:65:13: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Nat) →
+    Value Symbol Guard →
+      List (EdgeValue Symbol Guard) → List (EdgeValue Symbol Guard) → Checked x_0 → Value Symbol Guard × Checked x_0
+lean/restart-evidence/20261016-current-inherited/raw-rebuild-public-probes.lean:65:2: error: `simp` made no progress

@@ -1,0 +1,102 @@
+'MicroCFTA.SourceCurrentAllocatedMuRebuild.constructed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMuRebuild.work_heap' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMuRebuild.optionalBinder_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMuRebuild.step_heap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMuRebuild.execute_heap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMuRebuild.execute_heap_of_physical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMuRebuild.trace_heap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMuRebuild.resident_rebuild' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMuRebuild.actual_rebuild' depends on axioms: [propext, Classical.choice, Quot.sound]
+@constructed : ∀ {«Symbol» «Guard» : Type} [inst : DecidableEq (EdgeKey «Symbol» «Guard»)]
+  (expression : InternedNestedConstruction.Syntax «Symbol» «Guard») (value : Value «Symbol» «Guard»)
+  (heap : InternedConstructorTemplates.State «Symbol» «Guard»),
+  InternedFreshOrdinaryConstruction.build expression [] empty = InternedNestedConstruction.Outcome.done value heap →
+    ProbeHeap heap
+@work_heap : ∀ {Output «Symbol» «Guard» : Type} [inst : DecidableEq (EdgeKey «Symbol» «Guard»)]
+  (job : Work «Symbol» «Guard» Output) (heap : InternedConstructorTemplates.State «Symbol» «Guard»),
+  ProbeHeap heap → WorkInputs heap job → ProbeHeap (run job heap).snd
+@optionalBinder_heap : ∀ {«Symbol» «Guard» : Type} [inst : DecidableEq (EdgeKey «Symbol» «Guard»)] (pair : Nat × Nat)
+  (body : Value «Symbol» «Guard») (heap : InternedConstructorTemplates.State «Symbol» «Guard»),
+  SemanticReady heap →
+    ProbeHeap heap → Available heap body → ProbeHeap (SourceRecursiveIntersectionMaybeMu.maybeMu pair body heap).state
+@step_heap : ∀ {width : Nat} {Output : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (control : Control Output) (state : Checked width),
+  SemanticReady state.native.machine.heap →
+    ProbeHeap state.native.machine.heap →
+      SourceEqualityNativeDemandHeap.Inputs control state → ProbeHeap (step control state).state.native.machine.heap
+@execute_heap : ∀ {width : Nat} {Output : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (control : Control Output) (state : Checked width),
+  SemanticReady state.native.machine.heap →
+    ProbeHeap state.native.machine.heap →
+      SourceEqualityNativeDemandHeap.InputsThrough fuel control state →
+        ProbeHeap (execute fuel control state).state.native.machine.heap
+@execute_heap_of_physical : ∀ {width : Nat} {Output : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (control : Control Output) (state : Checked width),
+  SemanticReady state.native.machine.heap →
+    ProbeHeap state.native.machine.heap →
+      SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel control state →
+        ProbeHeap (execute fuel control state).state.native.machine.heap
+@trace_heap : ∀ {width : Nat} {Output : Type} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  {fuel : Nat} {control : Control Output} {before after : Checked width} {value : Output},
+  SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel control before (Control.code (Code.pure value)) after →
+    SemanticReady before.native.machine.heap →
+      ProbeHeap before.native.machine.heap → ProbeHeap after.native.machine.heap
+@resident_rebuild : ∀ {width : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)] (before : Checked width),
+  Ready before →
+    ProbeHeap before.native.machine.heap →
+      ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Value Symbol Guard),
+        Available before.native.machine.heap (Value.mu entry body depth ordinary) →
+          SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.native.machine.heap =
+              InternedNestedConstruction.Outcome.done (cleanup (Value.mu entry body depth ordinary))
+                before.native.machine.heap ∧
+            Available before.native.machine.heap (cleanup (Value.mu entry body depth ordinary)) ∧
+              (cleanup (Value.mu entry body depth ordinary)).free = (Value.mu entry body depth ordinary).free ∧
+                ∀ (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol),
+                  InternedGuardedLanguage.meaning holds ambient (cleanup (Value.mu entry body depth ordinary)) =
+                    InternedGuardedLanguage.meaning holds ambient (Value.mu entry body depth ordinary)
+@actual_rebuild : ∀ {width : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)] (before : Checked width),
+  Ready before →
+    ProbeHeap before.native.machine.heap →
+      ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Value Symbol Guard),
+        Available before.native.machine.heap (Value.mu entry body depth ordinary) →
+          ∀ (result : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard),
+            SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.native.machine.heap =
+                InternedNestedConstruction.Outcome.done result heap →
+              result = cleanup (Value.mu entry body depth ordinary) ∧ heap = before.native.machine.heap
+lean/restart-evidence/20261016-current-inherited/mu-rebuild-probes.lean:114:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceCurrentAllocatedQueryMemo.advancePhysical ?before (SourceCurrentAllocatedNativeEffects.physical ?before)
+in the target expression
+  SourceCurrentAllocatedPartialState.advance before
+      (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+        { heap := before.checked.native.machine.heap, equality := before.checked.operations })
+      before.fourth before.merge =
+    before
+
+case binder
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+budget : Nat
+inherited : SourceEqualityConstraintAllocation.Value
+before : Caller width
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+body depth ordinary result : Value Symbol Guard
+ready : Ready before.checked
+probes : ProbeHeap before.checked.native.machine.heap
+available : Available before.checked.native.machine.heap (Value.mu entry body depth ordinary)
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+actual :
+  SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap =
+    InternedNestedConstruction.Outcome.done result heap✝
+resultSame : result = cleanup (Value.mu entry body depth ordinary)
+heapSame : heap✝ = before.checked.native.machine.heap
+⊢ SourceCurrentAllocatedPartialState.advance before
+      (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+        { heap := before.checked.native.machine.heap, equality := before.checked.operations })
+      before.fourth before.merge =
+    before

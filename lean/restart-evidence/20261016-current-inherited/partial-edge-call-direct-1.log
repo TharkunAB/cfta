@@ -1,0 +1,101 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:86:37: error: don't know how to synthesize implicit argument `field`
+  @SourceCurrentAllocatedPartialReads.EdgeBodyReads.parent inst✝² inst✝¹ inst✝ width formulas solver budget
+    request.value loaded request.inherited before result checked fourth merge actual memos final ?m.339 reads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+ranges : Ranges budget request before
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+cached : SourceEqualityGuardReadback.Cached request.value.entry.key.constraint.equalities
+loaded : Allocated
+found :
+  SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint before.checked.operations.constraints =
+    Except.ok (some loaded)
+available :
+  ∀ (child : Value Symbol Guard), child ∈ request.value.children → Available before.checked.native.machine.heap child
+result : Edge
+checked : Checked width
+fourth : SourceCurrentEmptinessMemo.Memo
+merge : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+next : Inventory
+final : Memos
+actual :
+  SourceCurrentAllocatedParentEdge.Edge budget request.value.entry.key.symbol request.value.entry.key.constraint loaded
+    request.inherited request.value.children before.checked before.fourth before.merge result checked fourth merge
+reads : SourceCurrentAllocatedParentEdge.Reads formulas solver actual memos final
+receipt :
+  SourceCurrentAllocatedParentEdge.Receipt formulas solver next request.value.entry.key.symbol
+    request.value.entry.key.constraint loaded request.inherited request.value.children before.checked result checked
+    before.fourth fourth before.merge merge final
+law : EdgeLaw formulas solver request result
+⊢ SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint = false →
+    SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint before.checked.operations.constraints =
+      Except.ok (some loaded)
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:70:74: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+ranges : Ranges budget request before
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+cached : SourceEqualityGuardReadback.Cached request.value.entry.key.constraint.equalities
+loaded : Allocated
+found :
+  SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint before.checked.operations.constraints =
+    Except.ok (some loaded)
+available :
+  ∀ (child : Value Symbol Guard), child ∈ request.value.children → Available before.checked.native.machine.heap child
+result : Edge
+checked : Checked width
+fourth : SourceCurrentEmptinessMemo.Memo
+merge : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+next : Inventory
+final : Memos
+actual :
+  SourceCurrentAllocatedParentEdge.Edge budget request.value.entry.key.symbol request.value.entry.key.constraint loaded
+    request.inherited request.value.children before.checked before.fourth before.merge result checked fourth merge
+reads : SourceCurrentAllocatedParentEdge.Reads formulas solver actual memos final
+receipt :
+  SourceCurrentAllocatedParentEdge.Receipt formulas solver next request.value.entry.key.symbol
+    request.value.entry.key.constraint loaded request.inherited request.value.children before.checked result checked
+    before.fourth fourth before.merge merge final
+law : EdgeLaw formulas solver request result
+⊢ ∃ result after next final actual,
+    SourceCurrentAllocatedPartialReads.EdgeBodyReads formulas solver actual memos final ∧
+      Receipt formulas solver next request before result after final

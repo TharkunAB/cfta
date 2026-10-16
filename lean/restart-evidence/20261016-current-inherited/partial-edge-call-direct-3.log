@@ -1,0 +1,108 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:137:4: error: don't know how to synthesize implicit argument `started`
+  @SourceCurrentAllocatedPartialReads.EdgeCallReads.evaluate inst✝² inst✝¹ inst✝ width formulas solver budget original
+    running result middle body memos final request before handle ?m.426 reads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+handle : Nat
+original : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate original, running)
+ranges : Ranges budget original running
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+runningSound : Sound formulas solver running
+cell : running.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.evaluating }
+owner :
+  SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver running.checked
+    { request := original, status := FlatMemoThunk.Status.evaluating }
+key : original.key = request.key
+checkedSame : running.checked = before.checked
+mergeSame : running.merge = before.merge
+fourthSame : running.fourth = before.fourth
+nodesSame : running.nodeResults = before.nodeResults
+runningReady : Ready running.checked
+result : Edge
+middle : Caller width
+next : Inventory
+final : Memos
+body : SourceCurrentAllocatedPartialGraph.EdgeBody budget original running result middle
+reads : SourceCurrentAllocatedPartialReads.EdgeBodyReads formulas solver body memos final
+tables : middle.edgeResults = running.edgeResults
+receipt : Receipt formulas solver next original running result middle final
+current : middle.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.evaluating }
+completed : Sound formulas solver (finishEdge handle result middle)
+law : EdgeLaw formulas solver request result
+⊢ beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate original, running)
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:110:74: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+handle : Nat
+original : EdgeRequest
+running : Caller width
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate original, running)
+ranges : Ranges budget original running
+memos : Memos
+valid : GlobalsValid before.checked.native.machine.heap memos
+runningSound : Sound formulas solver running
+cell : running.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.evaluating }
+owner :
+  SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver running.checked
+    { request := original, status := FlatMemoThunk.Status.evaluating }
+key : original.key = request.key
+checkedSame : running.checked = before.checked
+mergeSame : running.merge = before.merge
+fourthSame : running.fourth = before.fourth
+nodesSame : running.nodeResults = before.nodeResults
+runningReady : Ready running.checked
+result : Edge
+middle : Caller width
+next : Inventory
+final : Memos
+body : SourceCurrentAllocatedPartialGraph.EdgeBody budget original running result middle
+reads : SourceCurrentAllocatedPartialReads.EdgeBodyReads formulas solver body memos final
+tables : middle.edgeResults = running.edgeResults
+receipt : Receipt formulas solver next original running result middle final
+current : middle.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.evaluating }
+completed : Sound formulas solver (finishEdge handle result middle)
+law : EdgeLaw formulas solver request result
+⊢ ∃ result after next final actual,
+    SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos final ∧
+      after.edgeResults.cells handle = some { request := original, status := FlatMemoThunk.Status.returned result } ∧
+        Receipt formulas solver next request before result after final

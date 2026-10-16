@@ -1,0 +1,50 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialReads.lean:113:117: error: unsolved goals
+case evaluate
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+request : NodeReq
+before : Caller width
+handle : Nat
+result : Value Symbol Guard
+memos saved : Memos
+x✝³ : NodeReq
+x✝² x✝¹ : Caller width
+x✝ : Nat
+started✝ :
+  SourceCurrentAllocatedPartialState.beginNode request before = (x✝, FlatMemoThunk.Observation.evaluate x✝³, x✝²)
+body✝ : NodeBody budget x✝³ x✝² result x✝¹
+started :
+  SourceCurrentAllocatedPartialState.beginNode request before =
+    (handle, FlatMemoThunk.Observation.ready result, SourceCurrentAllocatedPartialState.finishNode x✝ result x✝¹)
+reads✝ : NodeBodyReads formulas solver body✝ memos saved
+⊢ saved = memos
+lean/MicroCFTA/SourceCurrentAllocatedPartialReads.lean:122:117: error: unsolved goals
+case evaluate
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+request : EdgeReq
+before : Caller width
+handle : Nat
+result : EdgeValue Symbol Guard
+memos saved : Memos
+x✝³ : EdgeReq
+x✝² x✝¹ : Caller width
+x✝ : Nat
+started✝ :
+  SourceCurrentAllocatedPartialState.beginEdge request before = (x✝, FlatMemoThunk.Observation.evaluate x✝³, x✝²)
+body✝ : EdgeBody budget x✝³ x✝² result x✝¹
+started :
+  SourceCurrentAllocatedPartialState.beginEdge request before =
+    (handle, FlatMemoThunk.Observation.ready result, SourceCurrentAllocatedPartialState.finishEdge x✝ result x✝¹)
+reads✝ : EdgeBodyReads formulas solver body✝ memos saved
+⊢ saved = memos

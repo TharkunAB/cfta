@@ -1,0 +1,816 @@
+'MicroCFTA.SourceCurrentAllocatedPartialReads.node_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialReads.edge_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialReads.children_contradiction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NodeCallReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {request : NodeReq} →
+                {before : Caller width} →
+                  {result : Value Symbol Guard} →
+                    {after : Caller width} → NodeCall budget request before result after → Memos → Memos → Prop
+@NodeBodyReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {request : NodeReq} →
+                {before : Caller width} →
+                  {result : Value Symbol Guard} →
+                    {after : Caller width} → NodeBody budget request before result after → Memos → Memos → Prop
+@EdgeCallReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {request : SourceCurrentAllocatedPartialState.EdgeRequest} →
+                {before : Caller width} →
+                  {result : EdgeValue Symbol Guard} →
+                    {after : Caller width} → EdgeCall budget request before result after → Memos → Memos → Prop
+@EdgeBodyReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {request : SourceCurrentAllocatedPartialState.EdgeRequest} →
+                {before : Caller width} →
+                  {result : EdgeValue Symbol Guard} →
+                    {after : Caller width} → EdgeBody budget request before result after → Memos → Memos → Prop
+@RowsReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {inherited : SourceEqualityConstraintAllocation.Value} →
+                {values : List (EdgeValue Symbol Guard)} →
+                  {before : Caller width} →
+                    {results : List (EdgeValue Symbol Guard)} →
+                      {after : Caller width} → Rows budget inherited values before results after → Memos → Memos → Prop
+@DescendantsReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {inherited : SourceEqualityConstraintAllocation.Value} →
+                {value : EdgeValue Symbol Guard} →
+                  {before : Caller width} →
+                    {result : EdgeValue Symbol Guard} →
+                      {after : Caller width} →
+                        Descendants budget inherited value before result after → Memos → Memos → Prop
+@ChildrenReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {inherited : SourceEqualityConstraintAllocation.Value} →
+                {values : List (Value Symbol Guard)} →
+                  {before : Caller width} →
+                    {results : List (Value Symbol Guard)} →
+                      {after : Caller width} →
+                        Children budget inherited values before results after → Memos → Memos → Prop
+@WalkReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {combined : SourceEqualityConstraintAllocation.Value} →
+                {index : Nat} →
+                  {values : List (Value Symbol Guard)} →
+                    {before : Caller width} →
+                      {results : List (Value Symbol Guard)} →
+                        {after : Caller width} →
+                          Walk budget combined index values before results after → Memos → Memos → Prop
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:35:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.PartialReadsPublicProbe.warmNode_started`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+  [DecidableEq (Value Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:47:2: error: don't know how to synthesize implicit argument `started`
+  @NodeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget request
+    (warmNode checked merge fourth request result)
+    (?m.39 _example formulas solver budget checked merge fourth request result memos) result
+    (warmNode checked merge fourth request result)
+    (?m.40 _example formulas solver budget checked merge fourth request result memos) memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+checked : Checked width
+merge : Memo
+fourth : Fourth
+request : NodeReq
+result : Value Symbol Guard
+memos : Memos
+⊢ SourceCurrentAllocatedPartialState.beginNode request (warmNode checked merge fourth request result) =
+    (?m.39 _example formulas solver budget checked merge fourth request result memos,
+      FlatMemoThunk.Observation.ready result, warmNode checked merge fourth request result)
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:47:2: error: don't know how to synthesize implicit argument
+  @NodeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget request
+    (warmNode checked merge fourth request result)
+    (?m.39 _example formulas solver budget checked merge fourth request result memos) result
+    (warmNode checked merge fourth request result)
+    (?m.40 _example formulas solver budget checked merge fourth request result memos) memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+checked : Checked width
+merge : Memo
+fourth : Fourth
+request : NodeReq
+result : Value Symbol Guard
+memos : Memos
+⊢ Nat
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:55:2: error: don't know how to synthesize implicit argument `handle`
+  @node_hit inst✝² inst✝¹ inst✝ width formulas solver budget request (warmNode checked merge fourth request result)
+    (warmNode checked merge fourth request result)
+    (?m.41 _example formulas solver budget checked merge fourth request result memos saved reads) result memos saved
+    (?m.42 _example formulas solver budget checked merge fourth request result memos saved reads) reads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+checked : Checked width
+merge : Memo
+fourth : Fourth
+request : NodeReq
+result : Value Symbol Guard
+memos saved : Memos
+reads : NodeCallReads formulas solver ⋯ memos saved
+⊢ Nat
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:55:11: error: don't know how to synthesize placeholder for argument `started`
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+checked : Checked width
+merge : Memo
+fourth : Fourth
+request : NodeReq
+result : Value Symbol Guard
+memos saved : Memos
+reads : NodeCallReads formulas solver ⋯ memos saved
+⊢ SourceCurrentAllocatedPartialState.beginNode request (warmNode checked merge fourth request result) =
+    (?m.41 _example formulas solver budget checked merge fourth request result memos saved reads,
+      FlatMemoThunk.Observation.ready result, warmNode checked merge fourth request result)
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:63:2: error: don't know how to synthesize implicit argument `started`
+  @NodeCallReads.evaluate inst✝² inst✝¹ inst✝ width formulas solver budget
+    { inherited := ?m.69 _example formulas solver budget request inherited before running handle memos started,
+      value := Value.empty }
+    running Value.empty running NodeBody.empty memos memos request before handle
+    (?m.70 _example formulas solver budget request inherited before running handle memos started) NodeBodyReads.empty
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+request : NodeReq
+inherited : SourceEqualityConstraintAllocation.Value
+before running : Caller width
+handle : Nat
+memos : Memos
+started :
+  SourceCurrentAllocatedPartialState.beginNode request before =
+    (handle, FlatMemoThunk.Observation.evaluate { inherited := inherited, value := Value.empty }, running)
+⊢ SourceCurrentAllocatedPartialState.beginNode request before =
+    (handle,
+      FlatMemoThunk.Observation.evaluate
+        { inherited := ?m.69 _example formulas solver budget request inherited before running handle memos started,
+          value := Value.empty },
+      running)
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:63:2: error: don't know how to synthesize implicit argument `body`
+  @NodeCallReads.evaluate inst✝² inst✝¹ inst✝ width formulas solver budget
+    { inherited := ?m.69 _example formulas solver budget request inherited before running handle memos started,
+      value := Value.empty }
+    running Value.empty running NodeBody.empty memos memos request before handle
+    (?m.70 _example formulas solver budget request inherited before running handle memos started) NodeBodyReads.empty
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+request : NodeReq
+inherited : SourceEqualityConstraintAllocation.Value
+before running : Caller width
+handle : Nat
+memos : Memos
+started :
+  SourceCurrentAllocatedPartialState.beginNode request before =
+    (handle, FlatMemoThunk.Observation.evaluate { inherited := inherited, value := Value.empty }, running)
+⊢ NodeBody budget
+    { inherited := ?m.69 _example formulas solver budget request inherited before running handle memos started,
+      value := Value.empty }
+    running Value.empty running
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:63:2: error: don't know how to synthesize implicit argument
+  @NodeCallReads.evaluate inst✝² inst✝¹ inst✝ width formulas solver budget
+    { inherited := ?m.69 _example formulas solver budget request inherited before running handle memos started,
+      value := Value.empty }
+    running Value.empty running NodeBody.empty memos memos request before handle
+    (?m.70 _example formulas solver budget request inherited before running handle memos started) NodeBodyReads.empty
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+request : NodeReq
+inherited : SourceEqualityConstraintAllocation.Value
+before running : Caller width
+handle : Nat
+memos : Memos
+started :
+  SourceCurrentAllocatedPartialState.beginNode request before =
+    (handle, FlatMemoThunk.Observation.evaluate { inherited := inherited, value := Value.empty }, running)
+⊢ NodeReq
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:63:12: error: don't know how to synthesize implicit argument
+  @NodeBodyReads.empty inst✝² inst✝¹ inst✝ width formulas solver budget
+    (?m.69 _example formulas solver budget request inherited before running handle memos started) running memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+request : NodeReq
+inherited : SourceEqualityConstraintAllocation.Value
+before running : Caller width
+handle : Nat
+memos : Memos
+started :
+  SourceCurrentAllocatedPartialState.beginNode request before =
+    (handle, FlatMemoThunk.Observation.evaluate { inherited := inherited, value := Value.empty }, running)
+⊢ SourceEqualityConstraintAllocation.Value
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:2: error: don't know how to synthesize implicit argument `tail`
+  @WalkReads.cons inst✝² inst✝¹ inst✝ width formulas solver budget before combined index first firstResult
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    (NodeCall.hit
+      (?m.197 _example formulas solver budget combined index first second firstResult secondResult before middle after
+        firstHandle secondHandle memos firstStarted secondStarted))
+    memos memos [second] [secondResult] after
+    (Walk.cons
+      (NodeCall.hit
+        (?m.199 _example formulas solver budget combined index first second firstResult secondResult before middle after
+          firstHandle secondHandle memos firstStarted secondStarted))
+      Walk.nil)
+    memos NodeCallReads.hit (WalkReads.cons NodeCallReads.hit WalkReads.nil)
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ Walk budget combined (index + 1) [second]
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    [secondResult] after
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:2: error: don't know how to synthesize implicit argument `first`
+  @WalkReads.cons inst✝² inst✝¹ inst✝ width formulas solver budget before combined index first firstResult
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    (NodeCall.hit
+      (?m.197 _example formulas solver budget combined index first second firstResult secondResult before middle after
+        firstHandle secondHandle memos firstStarted secondStarted))
+    memos memos [second] [secondResult] after
+    (Walk.cons
+      (NodeCall.hit
+        (?m.199 _example formulas solver budget combined index first second firstResult secondResult before middle after
+          firstHandle secondHandle memos firstStarted secondStarted))
+      Walk.nil)
+    memos NodeCallReads.hit (WalkReads.cons NodeCallReads.hit WalkReads.nil)
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ NodeCall budget { inherited := (descend before combined index).fst, value := first }
+    (descend before combined index).snd firstResult
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:2: error: don't know how to synthesize implicit argument
+  @WalkReads.cons inst✝² inst✝¹ inst✝ width formulas solver budget before combined index first firstResult
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    (NodeCall.hit
+      (?m.197 _example formulas solver budget combined index first second firstResult secondResult before middle after
+        firstHandle secondHandle memos firstStarted secondStarted))
+    memos memos [second] [secondResult] after
+    (Walk.cons
+      (NodeCall.hit
+        (?m.199 _example formulas solver budget combined index first second firstResult secondResult before middle after
+          firstHandle secondHandle memos firstStarted secondStarted))
+      Walk.nil)
+    memos NodeCallReads.hit (WalkReads.cons NodeCallReads.hit WalkReads.nil)
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ Caller width
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:14: error: don't know how to synthesize implicit argument `first`
+  @WalkReads.cons inst✝² inst✝¹ inst✝ width formulas solver budget
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    combined (index + 1) second secondResult after
+    (NodeCall.hit
+      (?m.199 _example formulas solver budget combined index first second firstResult secondResult before middle after
+        firstHandle secondHandle memos firstStarted secondStarted))
+    memos memos [] [] after Walk.nil memos NodeCallReads.hit WalkReads.nil
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ NodeCall budget
+    {
+      inherited :=
+        (descend
+            (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle
+              after firstHandle secondHandle memos firstStarted secondStarted)
+            combined (index + 1)).fst,
+      value := second }
+    (descend
+        (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+          firstHandle secondHandle memos firstStarted secondStarted)
+        combined (index + 1)).snd
+    secondResult after
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:14: error: don't know how to synthesize implicit argument
+  @WalkReads.cons inst✝² inst✝¹ inst✝ width formulas solver budget
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    combined (index + 1) second secondResult after
+    (NodeCall.hit
+      (?m.199 _example formulas solver budget combined index first second firstResult secondResult before middle after
+        firstHandle secondHandle memos firstStarted secondStarted))
+    memos memos [] [] after Walk.nil memos NodeCallReads.hit WalkReads.nil
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ Caller width
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:20: error: don't know how to synthesize implicit argument `started`
+  @NodeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget
+    {
+      inherited :=
+        (descend
+            (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle
+              after firstHandle secondHandle memos firstStarted secondStarted)
+            combined (index + 1)).fst,
+      value := second }
+    (descend
+        (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+          firstHandle secondHandle memos firstStarted secondStarted)
+        combined (index + 1)).snd
+    (?m.198 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    secondResult after
+    (?m.199 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ SourceCurrentAllocatedPartialState.beginNode
+      {
+        inherited :=
+          (descend
+              (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle
+                after firstHandle secondHandle memos firstStarted secondStarted)
+              combined (index + 1)).fst,
+        value := second }
+      (descend
+          (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle
+            after firstHandle secondHandle memos firstStarted secondStarted)
+          combined (index + 1)).snd =
+    (?m.198 _example formulas solver budget combined index first second firstResult secondResult before middle after
+        firstHandle secondHandle memos firstStarted secondStarted,
+      FlatMemoThunk.Observation.ready secondResult, after)
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:20: error: don't know how to synthesize implicit argument
+  @NodeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget
+    {
+      inherited :=
+        (descend
+            (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle
+              after firstHandle secondHandle memos firstStarted secondStarted)
+            combined (index + 1)).fst,
+      value := second }
+    (descend
+        (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+          firstHandle secondHandle memos firstStarted secondStarted)
+        combined (index + 1)).snd
+    (?m.198 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    secondResult after
+    (?m.199 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ Nat
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:20: error: don't know how to synthesize implicit argument
+  @NodeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget
+    {
+      inherited :=
+        (descend
+            (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle
+              after firstHandle secondHandle memos firstStarted secondStarted)
+            combined (index + 1)).fst,
+      value := second }
+    (descend
+        (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+          firstHandle secondHandle memos firstStarted secondStarted)
+        combined (index + 1)).snd
+    (?m.198 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    secondResult after
+    (?m.199 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ Caller width
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:20: error: don't know how to synthesize implicit argument
+  @NodeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget
+    {
+      inherited :=
+        (descend
+            (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle
+              after firstHandle secondHandle memos firstStarted secondStarted)
+            combined (index + 1)).fst,
+      value := second }
+    (descend
+        (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+          firstHandle secondHandle memos firstStarted secondStarted)
+        combined (index + 1)).snd
+    (?m.198 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    secondResult after
+    (?m.199 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ NodeReq
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:8: error: don't know how to synthesize implicit argument `started`
+  @NodeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget
+    { inherited := (descend before combined index).fst, value := first } (descend before combined index).snd
+    (?m.196 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    firstResult
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    (?m.197 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (?m.196 _example formulas solver budget combined index first second firstResult secondResult before middle after
+        firstHandle secondHandle memos firstStarted secondStarted,
+      FlatMemoThunk.Observation.ready firstResult,
+      ?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+        firstHandle secondHandle memos firstStarted secondStarted)
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:8: error: don't know how to synthesize implicit argument
+  @NodeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget
+    { inherited := (descend before combined index).fst, value := first } (descend before combined index).snd
+    (?m.196 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    firstResult
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    (?m.197 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ Caller width
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:89:8: error: don't know how to synthesize implicit argument
+  @NodeCallReads.hit inst✝² inst✝¹ inst✝ width formulas solver budget
+    { inherited := (descend before combined index).fst, value := first } (descend before combined index).snd
+    (?m.196 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    firstResult
+    (?m.195 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    (?m.197 _example formulas solver budget combined index first second firstResult secondResult before middle after
+      firstHandle secondHandle memos firstStarted secondStarted)
+    memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : SourceEqualityConstraintAllocation.Value
+index : Nat
+first second firstResult secondResult : Value Symbol Guard
+before middle after : Caller width
+firstHandle secondHandle : Nat
+memos : Memos
+firstStarted :
+  SourceCurrentAllocatedPartialState.beginNode { inherited := (descend before combined index).fst, value := first }
+      (descend before combined index).snd =
+    (firstHandle, FlatMemoThunk.Observation.ready firstResult, middle)
+secondStarted :
+  SourceCurrentAllocatedPartialState.beginNode
+      { inherited := (descend middle combined (index + 1)).fst, value := second }
+      (descend middle combined (index + 1)).snd =
+    (secondHandle, FlatMemoThunk.Observation.ready secondResult, after)
+⊢ Nat
+lean/restart-evidence/20261016-current-inherited/partial-reads-public-probes.lean:102:2: error: don't know how to synthesize implicit argument `field`
+  @EdgeBodyReads.parent inst✝² inst✝¹ inst✝ width formulas solver budget original loaded inherited before result checked
+    fourth merge actual memos saved (?m.100 _example formulas solver field actual reads) reads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+inherited : SourceEqualityConstraintAllocation.Value
+original result : EdgeValue Symbol Guard
+before : Caller width
+loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+checked : Checked width
+fourth : Fourth
+merge : Memo
+memos saved : Memos
+field :
+  SourceEqualityMkEdgeAllocation.contradictory original.entry.key.constraint = false →
+    SourceEqualityConstraintFieldLookup.load original.entry.key.constraint before.checked.operations.constraints =
+      Except.ok (some loaded)
+actual :
+  SourceCurrentAllocatedParentEdge.Edge budget original.entry.key.symbol original.entry.key.constraint loaded inherited
+    original.children before.checked before.fourth before.merge result checked fourth merge
+reads : SourceCurrentAllocatedParentEdge.Reads formulas solver actual memos saved
+⊢ SourceEqualityMkEdgeAllocation.contradictory original.entry.key.constraint = false →
+    SourceEqualityConstraintFieldLookup.load original.entry.key.constraint before.checked.operations.constraints =
+      Except.ok (some loaded)
+'MicroCFTA.PartialReadsPublicProbe.warmNode_started' depends on axioms: [propext]

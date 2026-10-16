@@ -1,0 +1,102 @@
+'MicroCFTA.SourceCurrentAllocatedPartialReads.node_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialReads.edge_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialReads.children_contradiction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@NodeCallReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {request : NodeReq} →
+                {before : Caller width} →
+                  {result : Value Symbol Guard} →
+                    {after : Caller width} → NodeCall budget request before result after → Memos → Memos → Prop
+@NodeBodyReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {request : NodeReq} →
+                {before : Caller width} →
+                  {result : Value Symbol Guard} →
+                    {after : Caller width} → NodeBody budget request before result after → Memos → Memos → Prop
+@EdgeCallReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {request : SourceCurrentAllocatedPartialState.EdgeRequest} →
+                {before : Caller width} →
+                  {result : EdgeValue Symbol Guard} →
+                    {after : Caller width} → EdgeCall budget request before result after → Memos → Memos → Prop
+@EdgeBodyReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {request : SourceCurrentAllocatedPartialState.EdgeRequest} →
+                {before : Caller width} →
+                  {result : EdgeValue Symbol Guard} →
+                    {after : Caller width} → EdgeBody budget request before result after → Memos → Memos → Prop
+@RowsReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {inherited : SourceEqualityConstraintAllocation.Value} →
+                {values : List (EdgeValue Symbol Guard)} →
+                  {before : Caller width} →
+                    {results : List (EdgeValue Symbol Guard)} →
+                      {after : Caller width} → Rows budget inherited values before results after → Memos → Memos → Prop
+@DescendantsReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {inherited : SourceEqualityConstraintAllocation.Value} →
+                {value : EdgeValue Symbol Guard} →
+                  {before : Caller width} →
+                    {result : EdgeValue Symbol Guard} →
+                      {after : Caller width} →
+                        Descendants budget inherited value before result after → Memos → Memos → Prop
+@ChildrenReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {inherited : SourceEqualityConstraintAllocation.Value} →
+                {values : List (Value Symbol Guard)} →
+                  {before : Caller width} →
+                    {results : List (Value Symbol Guard)} →
+                      {after : Caller width} →
+                        Children budget inherited values before results after → Memos → Memos → Prop
+@WalkReads : [inst : DecidableEq Symbol] →
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] →
+    [inst_2 : DecidableEq (Value Symbol Guard)] →
+      {width : Nat} →
+        SourceGuards.Formulas FullSyntax.Formula →
+          SourceGuards.Entailment FullSyntax.Formula →
+            {budget : Nat} →
+              {combined : SourceEqualityConstraintAllocation.Value} →
+                {index : Nat} →
+                  {values : List (Value Symbol Guard)} →
+                    {before : Caller width} →
+                      {results : List (Value Symbol Guard)} →
+                        {after : Caller width} →
+                          Walk budget combined index values before results after → Memos → Memos → Prop
+'MicroCFTA.PartialReadsPublicProbe.warmNode_started' depends on axioms: [propext]

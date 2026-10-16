@@ -1,0 +1,80 @@
+'MicroCFTA.SourceCurrentAllocatedPartialStateProbes.nested_families' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialStateProbes.complete_both' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialStateProbes.allocation_retains_ready' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialStateProbes.absent_observation' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedPartialStateProbes.nested_families : ∀ {width : Nat}
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) (node : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (edge : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  have start := MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth;
+  have first := (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode node start).snd.snd;
+  have second := (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge edge first).snd.snd;
+  (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode node start).fst = 0 ∧
+    (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode node start).snd.fst =
+        MicroCFTA.FlatMemoThunk.Observation.evaluate node ∧
+      (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge edge first).fst = 0 ∧
+        (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge edge first).snd.fst =
+            MicroCFTA.FlatMemoThunk.Observation.evaluate edge ∧
+          MicroCFTA.SourceCurrentAllocatedPartialState.beginNode node second =
+              (0, MicroCFTA.FlatMemoThunk.Observation.busy, second) ∧
+            second.checked = checked ∧ second.merge = merge ∧ second.fourth = fourth
+@MicroCFTA.SourceCurrentAllocatedPartialStateProbes.complete_both : ∀ {width : Nat}
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (node : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (edge : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (nodeResult :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (edgeResult :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (nodeHandle edgeHandle : Nat),
+  before.nodeResults.table node.key = some nodeHandle →
+    before.edgeResults.table edge.key = some edgeHandle →
+      before.nodeResults.cells nodeHandle =
+          some { request := node, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+        before.edgeResults.cells edgeHandle =
+            some { request := edge, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+          have after :=
+            MicroCFTA.SourceCurrentAllocatedPartialState.finishNode nodeHandle nodeResult
+              (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge edgeHandle edgeResult before);
+          MicroCFTA.SourceCurrentAllocatedPartialState.beginNode node after =
+              (nodeHandle, MicroCFTA.FlatMemoThunk.Observation.ready nodeResult, after) ∧
+            MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge edge after =
+                (edgeHandle, MicroCFTA.FlatMemoThunk.Observation.ready edgeResult, after) ∧
+              after.checked = before.checked ∧ after.merge = before.merge ∧ after.fourth = before.fourth
+@MicroCFTA.SourceCurrentAllocatedPartialStateProbes.allocation_retains_ready : ∀ {width : Nat}
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width) (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedPartialState.Valid before →
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before.checked)
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) →
+      ∀ (candidate original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest) (handle : Nat)
+        (result :
+          MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        before.nodeResults.table candidate.key = some handle →
+          before.nodeResults.cells handle =
+              some { request := original, status := MicroCFTA.FlatMemoThunk.Status.returned result } →
+            MicroCFTA.SourceCurrentAllocatedPartialState.Valid
+                (MicroCFTA.SourceCurrentAllocatedPartialState.advance before after fourth merge) ∧
+              MicroCFTA.SourceCurrentAllocatedPartialState.beginNode candidate
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.advance before after fourth merge) =
+                (handle, MicroCFTA.FlatMemoThunk.Observation.ready result,
+                  MicroCFTA.SourceCurrentAllocatedPartialState.advance before after fourth merge)
+@MicroCFTA.SourceCurrentAllocatedPartialStateProbes.absent_observation : ∀ {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (handle : Nat),
+  before.nodeResults.table request.key = some handle →
+    before.nodeResults.cells handle = none →
+      MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before =
+        (handle, MicroCFTA.FlatMemoThunk.Observation.absent, before)

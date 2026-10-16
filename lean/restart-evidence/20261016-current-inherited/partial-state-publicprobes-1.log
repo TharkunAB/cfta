@@ -1,0 +1,281 @@
+'MicroCFTA.SourceCurrentAllocatedPartialState.initial_components' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedPartialState.advance_tables' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_components' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_components' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_components' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_components' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_ready' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_ready' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_busy' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_busy' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_suspended' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_suspended' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_returned' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_returned' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_ready' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_ready' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.initial_valid' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.Valid.advance' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_valid' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_valid' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey : Type
+MicroCFTA.SourceCurrentAllocatedPartialState.EdgeKey : Type
+MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest : Type
+MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest : Type
+MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest.key : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest →
+  MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest.key : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest →
+  MicroCFTA.SourceCurrentAllocatedPartialState.EdgeKey
+MicroCFTA.SourceCurrentAllocatedPartialState.State : Nat → Type 1
+@MicroCFTA.SourceCurrentAllocatedPartialState.initial : {width : Nat} →
+  MicroCFTA.SourceEqualityNativeDemand.State width →
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentEmptinessMemo.Memo → MicroCFTA.SourceCurrentAllocatedPartialState.State width
+@MicroCFTA.SourceCurrentAllocatedPartialState.advance : {width : Nat} →
+  MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+    MicroCFTA.SourceEqualityNativeDemand.State width →
+      MicroCFTA.SourceCurrentEmptinessMemo.Memo →
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          MicroCFTA.SourceCurrentAllocatedPartialState.State width
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginNode : {width : Nat} →
+  MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest →
+    MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+      Nat ×
+        MicroCFTA.FlatMemoThunk.Observation MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ×
+          MicroCFTA.SourceCurrentAllocatedPartialState.State width
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge : {width : Nat} →
+  MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest →
+    MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+      Nat ×
+        MicroCFTA.FlatMemoThunk.Observation MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ×
+          MicroCFTA.SourceCurrentAllocatedPartialState.State width
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishNode : {width : Nat} →
+  Nat →
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+        MicroCFTA.SourceCurrentAllocatedPartialState.State width
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge : {width : Nat} →
+  Nat →
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+        MicroCFTA.SourceCurrentAllocatedPartialState.State width
+MicroCFTA.SourceCurrentAllocatedPartialState.NodeLinked : MicroCFTA.Cache.State
+    MicroCFTA.SourceEqualityPartialConstraintKey.Key →
+  MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest → MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey → Prop
+MicroCFTA.SourceCurrentAllocatedPartialState.EdgeLinked : MicroCFTA.Cache.State
+    MicroCFTA.SourceEqualityPartialConstraintKey.Key →
+  MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest → MicroCFTA.SourceCurrentAllocatedPartialState.EdgeKey → Prop
+@MicroCFTA.SourceCurrentAllocatedPartialState.Valid : {width : Nat} →
+  MicroCFTA.SourceCurrentAllocatedPartialState.State width → Prop
+@MicroCFTA.SourceCurrentAllocatedPartialState.initial_components : ∀ {width : Nat}
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo),
+  (MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth).checked = checked ∧
+    (MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth).merge = merge ∧
+      (MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth).fourth = fourth ∧
+        (MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth).nodeResults =
+            MicroCFTA.FlatMemoThunk.empty ∧
+          (MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth).edgeResults =
+            MicroCFTA.FlatMemoThunk.empty
+@MicroCFTA.SourceCurrentAllocatedPartialState.advance_tables : ∀ {width : Nat}
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width) (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  (MicroCFTA.SourceCurrentAllocatedPartialState.advance before checked fourth merge).checked = checked ∧
+    (MicroCFTA.SourceCurrentAllocatedPartialState.advance before checked fourth merge).fourth = fourth ∧
+      (MicroCFTA.SourceCurrentAllocatedPartialState.advance before checked fourth merge).merge = merge ∧
+        (MicroCFTA.SourceCurrentAllocatedPartialState.advance before checked fourth merge).nodeResults =
+            before.nodeResults ∧
+          (MicroCFTA.SourceCurrentAllocatedPartialState.advance before checked fourth merge).edgeResults =
+            before.edgeResults
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_components : ∀ {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  have after := (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before).snd.snd;
+  after.checked = before.checked ∧
+    after.merge = before.merge ∧ after.fourth = before.fourth ∧ after.edgeResults = before.edgeResults
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_components : ∀ {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  have after := (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before).snd.snd;
+  after.checked = before.checked ∧
+    after.merge = before.merge ∧ after.fourth = before.fourth ∧ after.nodeResults = before.nodeResults
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_components : ∀ {width : Nat} (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result before).checked = before.checked ∧
+    (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result before).merge = before.merge ∧
+      (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result before).fourth = before.fourth ∧
+        (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result before).edgeResults = before.edgeResults
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_components : ∀ {width : Nat} (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before).checked = before.checked ∧
+    (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before).merge = before.merge ∧
+      (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before).fourth = before.fourth ∧
+        (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before).nodeResults = before.nodeResults
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_ready : ∀ {width : Nat}
+  (candidate original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  before.nodeResults.table candidate.key = some handle →
+    before.nodeResults.cells handle =
+        some { request := original, status := MicroCFTA.FlatMemoThunk.Status.returned result } →
+      MicroCFTA.SourceCurrentAllocatedPartialState.beginNode candidate before =
+        (handle, MicroCFTA.FlatMemoThunk.Observation.ready result, before)
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_ready : ∀ {width : Nat}
+  (candidate original : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  before.edgeResults.table candidate.key = some handle →
+    before.edgeResults.cells handle =
+        some { request := original, status := MicroCFTA.FlatMemoThunk.Status.returned result } →
+      MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge candidate before =
+        (handle, MicroCFTA.FlatMemoThunk.Observation.ready result, before)
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_busy : ∀ {width : Nat}
+  (candidate original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (handle : Nat),
+  before.nodeResults.table candidate.key = some handle →
+    before.nodeResults.cells handle =
+        some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.SourceCurrentAllocatedPartialState.beginNode candidate before =
+        (handle, MicroCFTA.FlatMemoThunk.Observation.busy, before)
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_busy : ∀ {width : Nat}
+  (candidate original : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (handle : Nat),
+  before.edgeResults.table candidate.key = some handle →
+    before.edgeResults.cells handle =
+        some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge candidate before =
+        (handle, MicroCFTA.FlatMemoThunk.Observation.busy, before)
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_suspended : ∀ {width : Nat}
+  (candidate original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (handle : Nat),
+  before.nodeResults.table candidate.key = some handle →
+    before.nodeResults.cells handle = some { request := original, status := MicroCFTA.FlatMemoThunk.Status.suspended } →
+      MicroCFTA.SourceCurrentAllocatedPartialState.beginNode candidate before =
+        (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate original,
+          { checked := before.checked, merge := before.merge, fourth := before.fourth,
+            nodeResults :=
+              MicroCFTA.FlatMemoThunk.setStatus handle MicroCFTA.FlatMemoThunk.Status.evaluating before.nodeResults,
+            edgeResults := before.edgeResults })
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_suspended : ∀ {width : Nat}
+  (candidate original : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (handle : Nat),
+  before.edgeResults.table candidate.key = some handle →
+    before.edgeResults.cells handle = some { request := original, status := MicroCFTA.FlatMemoThunk.Status.suspended } →
+      MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge candidate before =
+        (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate original,
+          { checked := before.checked, merge := before.merge, fourth := before.fourth,
+            nodeResults := before.nodeResults,
+            edgeResults :=
+              MicroCFTA.FlatMemoThunk.setStatus handle MicroCFTA.FlatMemoThunk.Status.evaluating before.edgeResults })
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_returned : ∀ {width : Nat} (handle : Nat)
+  (original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  before.nodeResults.cells handle = some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+    (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result before).nodeResults.cells handle =
+      some { request := original, status := MicroCFTA.FlatMemoThunk.Status.returned result }
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_returned : ∀ {width : Nat} (handle : Nat)
+  (original : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  before.edgeResults.cells handle = some { request := original, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+    (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before).edgeResults.cells handle =
+      some { request := original, status := MicroCFTA.FlatMemoThunk.Status.returned result }
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_ready : ∀ {width : Nat} (handle : Nat)
+  (original : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  before.nodeResults.cells handle =
+      some { request := original, status := MicroCFTA.FlatMemoThunk.Status.returned first } →
+    MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle second before = before
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_ready : ∀ {width : Nat} (handle : Nat)
+  (original : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (first second :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  before.edgeResults.cells handle =
+      some { request := original, status := MicroCFTA.FlatMemoThunk.Status.returned first } →
+    MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle second before = before
+@MicroCFTA.SourceCurrentAllocatedPartialState.initial_valid : ∀ {width : Nat}
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo),
+  MicroCFTA.SourceCurrentAllocatedPartialState.Valid
+    (MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth)
+@MicroCFTA.SourceCurrentAllocatedPartialState.Valid.advance : ∀ {width : Nat}
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width) (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedPartialState.Valid before →
+    MicroCFTA.Cache.Extends before.checked.operations.constraints.table checked.operations.constraints.table →
+      MicroCFTA.SourceCurrentAllocatedPartialState.Valid
+        (MicroCFTA.SourceCurrentAllocatedPartialState.advance before checked fourth merge)
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_valid : ∀ {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialState.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Stored before.checked.operations.constraints request.inherited →
+      MicroCFTA.SourceCurrentAllocatedPartialState.Valid
+        (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before).snd.snd
+@MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_valid : ∀ {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialState.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Stored before.checked.operations.constraints request.inherited →
+      MicroCFTA.SourceCurrentAllocatedPartialState.Valid
+        (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before).snd.snd
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_valid : ∀ {width : Nat} (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialState.Valid before →
+    MicroCFTA.SourceCurrentAllocatedPartialState.Valid
+      (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result before)
+@MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_valid : ∀ {width : Nat} (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width),
+  MicroCFTA.SourceCurrentAllocatedPartialState.Valid before →
+    MicroCFTA.SourceCurrentAllocatedPartialState.Valid
+      (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before)

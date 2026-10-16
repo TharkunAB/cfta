@@ -1,0 +1,110 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:202:48: error: unsolved goals
+case suspended
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+request : EdgeRequest
+before : Caller width
+valid : SourceCurrentAllocatedPartialState.Valid before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+published : Nat × FlatMemoThunk.State SourceCurrentAllocatedPartialState.EdgeKey EdgeRequest Edge :=
+  FlatMemoThunk.lookupOrInsert request.key request before.edgeResults
+next :
+  FlatMemoThunk.Valid (EdgeLinked before.checked.operations.constraints) (fun x => True)
+    (FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).snd
+cell : FlatMemoThunk.Cell EdgeRequest Edge
+found : (FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).snd.cells published.fst = some cell
+right✝ : EdgeLinked before.checked.operations.constraints cell.request request.key
+phase : cell.status = FlatMemoThunk.Status.suspended
+⊢ ¬(match published.snd.cells published.fst with
+        | none => (FlatMemoThunk.Observation.absent, published.snd)
+        | some cell =>
+          match cell.status with
+          | FlatMemoThunk.Status.suspended =>
+            (FlatMemoThunk.Observation.evaluate cell.request,
+              FlatMemoThunk.setStatus published.fst FlatMemoThunk.Status.evaluating published.snd)
+          | FlatMemoThunk.Status.evaluating => (FlatMemoThunk.Observation.busy, published.snd)
+          | FlatMemoThunk.Status.returned value => (FlatMemoThunk.Observation.ready value, published.snd)).fst =
+      FlatMemoThunk.Observation.absent
+
+case evaluating
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+request : EdgeRequest
+before : Caller width
+valid : SourceCurrentAllocatedPartialState.Valid before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+published : Nat × FlatMemoThunk.State SourceCurrentAllocatedPartialState.EdgeKey EdgeRequest Edge :=
+  FlatMemoThunk.lookupOrInsert request.key request before.edgeResults
+next :
+  FlatMemoThunk.Valid (EdgeLinked before.checked.operations.constraints) (fun x => True)
+    (FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).snd
+cell : FlatMemoThunk.Cell EdgeRequest Edge
+found : (FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).snd.cells published.fst = some cell
+right✝ : EdgeLinked before.checked.operations.constraints cell.request request.key
+phase : cell.status = FlatMemoThunk.Status.evaluating
+⊢ ¬(match published.snd.cells published.fst with
+        | none => (FlatMemoThunk.Observation.absent, published.snd)
+        | some cell =>
+          match cell.status with
+          | FlatMemoThunk.Status.suspended =>
+            (FlatMemoThunk.Observation.evaluate cell.request,
+              FlatMemoThunk.setStatus published.fst FlatMemoThunk.Status.evaluating published.snd)
+          | FlatMemoThunk.Status.evaluating => (FlatMemoThunk.Observation.busy, published.snd)
+          | FlatMemoThunk.Status.returned value => (FlatMemoThunk.Observation.ready value, published.snd)).fst =
+      FlatMemoThunk.Observation.absent
+
+case returned
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+request : EdgeRequest
+before : Caller width
+valid : SourceCurrentAllocatedPartialState.Valid before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+published : Nat × FlatMemoThunk.State SourceCurrentAllocatedPartialState.EdgeKey EdgeRequest Edge :=
+  FlatMemoThunk.lookupOrInsert request.key request before.edgeResults
+next :
+  FlatMemoThunk.Valid (EdgeLinked before.checked.operations.constraints) (fun x => True)
+    (FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).snd
+cell : FlatMemoThunk.Cell EdgeRequest Edge
+found : (FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).snd.cells published.fst = some cell
+right✝ : EdgeLinked before.checked.operations.constraints cell.request request.key
+value✝ : Edge
+phase : cell.status = FlatMemoThunk.Status.returned value✝
+⊢ ¬(match published.snd.cells published.fst with
+        | none => (FlatMemoThunk.Observation.absent, published.snd)
+        | some cell =>
+          match cell.status with
+          | FlatMemoThunk.Status.suspended =>
+            (FlatMemoThunk.Observation.evaluate cell.request,
+              FlatMemoThunk.setStatus published.fst FlatMemoThunk.Status.evaluating published.snd)
+          | FlatMemoThunk.Status.evaluating => (FlatMemoThunk.Observation.busy, published.snd)
+          | FlatMemoThunk.Status.returned value => (FlatMemoThunk.Observation.ready value, published.snd)).fst =
+      FlatMemoThunk.Observation.absent
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:208:65: warning: This simp argument is unused:
+  found
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [FlatMemoThunk.demand, phase]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:208:72: warning: This simp argument is unused:
+  phase
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [FlatMemoThunk.demand, found]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeCall.lean:239:43: error: Application type mismatch: The argument
+  started
+has type
+  beginEdge request before = (handle, FlatMemoThunk.Observation.busy, running)
+but is expected to have type
+  (handle, FlatMemoThunk.Observation.busy, running) = (handle, FlatMemoThunk.Observation.busy, running)
+in the application
+  Exists.intro running started

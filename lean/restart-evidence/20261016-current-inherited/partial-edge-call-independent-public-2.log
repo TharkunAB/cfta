@@ -1,0 +1,139 @@
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.body_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.evaluated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.ready_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.fresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.finite_or_busy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@body_finite : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  Ranges budget request before →
+                    ∀ (memos : Memos),
+                      GlobalsValid before.checked.native.machine.heap memos →
+                        ∃ result after next final actual,
+                          SourceCurrentAllocatedPartialReads.EdgeBodyReads formulas solver actual memos final ∧
+                            after.edgeResults = before.edgeResults ∧
+                              Receipt formulas solver next request before result after final
+@evaluated : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  ∀ (handle : Nat) (original : EdgeRequest) (running : Caller width),
+                    beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate original, running) →
+                      Ranges budget original running →
+                        ∀ (memos : Memos),
+                          GlobalsValid before.checked.native.machine.heap memos →
+                            ∃ result after next final actual,
+                              SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos final ∧
+                                after.edgeResults.cells handle =
+                                    some { request := original, status := FlatMemoThunk.Status.returned result } ∧
+                                  Receipt formulas solver next request before result after final
+@ready_hit : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  ∀ (handle : Nat) (result : Edge) (after : Caller width),
+                    beginEdge request before = (handle, FlatMemoThunk.Observation.ready result, after) →
+                      ∀ (memos : Memos),
+                        GlobalsValid before.checked.native.machine.heap memos →
+                          after = before ∧
+                            ∃ actual,
+                              SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos memos ∧
+                                Receipt formulas solver inventory request before result after memos
+@fresh : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  before.edgeResults.table request.key = none →
+                    Ranges budget request (beginEdge request before).snd.snd →
+                      ∀ (memos : Memos),
+                        GlobalsValid before.checked.native.machine.heap memos →
+                          ∃ result after next final actual,
+                            SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos final ∧
+                              after.edgeResults.cells before.edgeResults.next =
+                                  some { request := request, status := FlatMemoThunk.Status.returned result } ∧
+                                Receipt formulas solver next request before result after final
+@finite_or_busy : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (request : EdgeRequest)
+  (before : Caller width),
+  Ready before.checked →
+    At formulas solver inventory before.checked →
+      Sound formulas solver before →
+        SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+          Resident before.checked.native.machine.heap request.value →
+            SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth →
+              SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      before.merge) →
+                  CallRanges budget request before →
+                    ∀ (memos : Memos),
+                      GlobalsValid before.checked.native.machine.heap memos →
+                        (∃ handle running,
+                            beginEdge request before = (handle, FlatMemoThunk.Observation.busy, running)) ∨
+                          ∃ result after next final actual,
+                            SourceCurrentAllocatedPartialReads.EdgeCallReads formulas solver actual memos final ∧
+                              Receipt formulas solver next request before result after final
+@Ranges : [DecidableEq Symbol] →
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    [DecidableEq (Value Symbol Guard)] → {width : Nat} → Nat → EdgeRequest → Caller width → Prop
+@CallRanges : [DecidableEq Symbol] →
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    [DecidableEq (Value Symbol Guard)] → {width : Nat} → Nat → EdgeRequest → Caller width → Prop
+@Receipt : [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+  {width : Nat} →
+    SourceGuards.Formulas FullSyntax.Formula →
+      SourceGuards.Entailment FullSyntax.Formula →
+        Inventory → EdgeRequest → Caller width → Edge → Caller width → Memos → Prop
+lean/restart-evidence/20261016-current-inherited/partial-edge-call-independent-public.lean:113:65: warning: Variable name `final` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _final
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'MicroCFTA.PartialEdgeCallIndependentProbe.evaluated_repeat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.PartialEdgeCallIndependentProbe.call_table' depends on axioms: [propext, Classical.choice, Quot.sound]

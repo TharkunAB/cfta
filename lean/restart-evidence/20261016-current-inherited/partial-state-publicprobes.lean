@@ -1,0 +1,63 @@
+import MicroCFTA.SourceCurrentAllocatedPartialState
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.initial_components
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.advance_tables
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_components
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_components
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_components
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_components
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_ready
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_ready
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_busy
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_busy
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_suspended
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_suspended
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_returned
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_returned
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_ready
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_ready
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.initial_valid
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.Valid.advance
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_valid
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_valid
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_valid
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_valid
+
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.EdgeKey
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest.key
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest.key
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.State
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.initial
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.advance
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginNode
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishNode
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.NodeLinked
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.EdgeLinked
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.Valid
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.initial_components
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.advance_tables
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_components
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_components
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_components
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_components
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_ready
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_ready
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_busy
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_busy
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_suspended
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_suspended
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_returned
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_returned
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_ready
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_ready
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.initial_valid
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.Valid.advance
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginNode_valid
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge_valid
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishNode_valid
+#check @MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge_valid

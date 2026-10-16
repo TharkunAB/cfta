@@ -1,0 +1,79 @@
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:28:32: error: Ambiguous term
+  State
+Possible interpretations:
+  SourceCurrentAllocatedPartialState.State width : Type 1
+  
+  Cache.State width : Type
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:32:62: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:33:62: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:37:98: error: unsolved goals
+width : Type
+before : sorry
+node : NodeRequest
+edge : EdgeRequest
+nodeResult : Node
+edgeResult : Edge
+nodeHandle edgeHandle : Nat
+nodePublished : sorry = some nodeHandle
+edgePublished : sorry = some edgeHandle
+nodeRunning : sorry = some sorry
+edgeRunning : sorry = some sorry
+⊢ let after := finishNode nodeHandle nodeResult (finishEdge edgeHandle edgeResult sorry);
+  beginNode node after = (nodeHandle, FlatMemoThunk.Observation.ready nodeResult, after) ∧
+    beginEdge edge after = (edgeHandle, FlatMemoThunk.Observation.ready edgeResult, after) ∧
+      after.checked = sorry ∧ after.merge = sorry ∧ after.fourth = sorry
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:49:43: error: Ambiguous term
+  State
+Possible interpretations:
+  SourceCurrentAllocatedPartialState.State width : Type 1
+  
+  Cache.State width : Type
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:49:73: error: Application type mismatch: The argument
+  width
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  Nat
+of sort `Type` in the application
+  Checked width
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:55:55: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:62:61: error: Ambiguous term
+  State
+Possible interpretations:
+  SourceCurrentAllocatedPartialState.State width : Type 1
+  
+  Cache.State width : Type
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:65:40: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.absent` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `InternedUnionFilterFusion.absent`
+  [apply] `SourceGuards.absent`
+  [apply] `FlatMemoThunk.Observation.absent`
+  [apply] `SourceEqualityPartialMemoWorker.Observation.absent`
+  [apply] `Symbolic.Resolution.absent`
+'MicroCFTA.SourceCurrentAllocatedPartialStateProbes.nested_families' depends on axioms: [propext]
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:71:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentAllocatedPartialStateProbes.complete_both`
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:72:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentAllocatedPartialStateProbes.allocation_retains_ready`
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:73:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentAllocatedPartialStateProbes.absent_observation`
+@MicroCFTA.SourceCurrentAllocatedPartialStateProbes.nested_families : ∀ {width : Nat}
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) (node : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (edge : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  have start := MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth;
+  have first := (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode node start).snd.snd;
+  have second := (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge edge first).snd.snd;
+  (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode node start).fst = 0 ∧
+    (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode node start).snd.fst =
+        MicroCFTA.FlatMemoThunk.Observation.evaluate node ∧
+      (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge edge first).fst = 0 ∧
+        (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge edge first).snd.fst =
+            MicroCFTA.FlatMemoThunk.Observation.evaluate edge ∧
+          MicroCFTA.SourceCurrentAllocatedPartialState.beginNode node second =
+              (0, MicroCFTA.FlatMemoThunk.Observation.busy, second) ∧
+            second.checked = checked ∧ second.merge = merge ∧ second.fourth = fourth
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:75:8: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.SourceCurrentAllocatedPartialStateProbes.complete_both`
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:76:8: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.SourceCurrentAllocatedPartialStateProbes.allocation_retains_ready`
+lean/restart-evidence/20261016-current-inherited/partial-state-kernels.lean:77:8: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.SourceCurrentAllocatedPartialStateProbes.absent_observation`

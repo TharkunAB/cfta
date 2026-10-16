@@ -1,0 +1,92 @@
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run_contradiction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run_missing' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run_combine' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.state_native' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.state_operations' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.state_contradiction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.Receipt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.contradiction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.resident_finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedInheritedPrefix.Receipt.guard_satisfied' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+run : Guard → EqValue → Operations → Except String (Option EqValue) × Operations
+run_contradiction : ∀ (original : Guard) (before : Operations),
+  run original SourceEqualityConstraintAllocation.Value.contradiction before =
+    (Except.ok (some SourceEqualityConstraintAllocation.Value.contradiction), before)
+run_error : ∀ (original : Guard) (identity : Nat) (records : List SourceEqualityClassOrder.Record) (before : Operations)
+  (message : String),
+  (SourceCurrentConjunctionEquality.accessor original before).fst = Except.error message →
+    run original (SourceEqualityConstraintAllocation.Value.live identity records) before =
+      (Except.error message, (SourceCurrentConjunctionEquality.accessor original before).snd)
+run_missing : ∀ (original : Guard) (identity : Nat) (records : List SourceEqualityClassOrder.Record)
+  (before : Operations),
+  (SourceCurrentConjunctionEquality.accessor original before).fst = Except.ok none →
+    run original (SourceEqualityConstraintAllocation.Value.live identity records) before =
+      (Except.ok none, (SourceCurrentConjunctionEquality.accessor original before).snd)
+run_combine : ∀ (original : Guard) (identity : Nat) (records : List SourceEqualityClassOrder.Record)
+  (before : Operations) (own : EqValue),
+  (SourceCurrentConjunctionEquality.accessor original before).fst = Except.ok (some own) →
+    run original (SourceEqualityConstraintAllocation.Value.live identity records) before =
+      (Except.map some
+          (SourceEqualityConstraintMemoAllocation.combine
+              (SourceEqualityConstraintAllocation.Value.live identity records) own
+              (SourceCurrentConjunctionEquality.accessor original before).snd).fst,
+        (SourceEqualityConstraintMemoAllocation.combine (SourceEqualityConstraintAllocation.Value.live identity records)
+            own (SourceCurrentConjunctionEquality.accessor original before).snd).snd)
+@state : {width : Nat} → Checked width → Guard → EqValue → Checked width
+@state_native : ∀ {width : Nat} (before : Checked width) (original : Guard) (inherited : EqValue),
+  (state before original inherited).native = before.native
+@state_operations : ∀ {width : Nat} (before : Checked width) (original : Guard) (inherited : EqValue),
+  (state before original inherited).operations = (run original inherited before.operations).snd
+@state_contradiction : ∀ {width : Nat} (before : Checked width) (original : Guard),
+  state before original SourceEqualityConstraintAllocation.Value.contradiction = before
+@Receipt : {width : Nat} →
+  SourceGuards.Formulas FullSyntax.Formula →
+    SourceGuards.Entailment FullSyntax.Formula → Inventory → Guard → EqValue → Checked width → EqValue → Prop
+@contradiction : ∀ {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (original : Guard)
+  (before : Checked width),
+  Ready before →
+    At formulas solver inventory before →
+      Receipt formulas solver inventory original SourceEqualityConstraintAllocation.Value.contradiction before
+        SourceEqualityConstraintAllocation.Value.contradiction
+@finite : ∀ {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (original : Guard) (inherited : EqValue)
+  (before : Checked width),
+  Ready before →
+    At formulas solver inventory before →
+      SourceCurrentConjunctionEquality.FieldAvailable before.operations original →
+        EqReady before.operations.constraints inherited →
+          ∃ combined, Receipt formulas solver inventory original inherited before combined
+@resident_finite : ∀ {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (edge : EdgeValue Symbol Guard)
+  (inherited : EqValue) (before : Checked width),
+  Ready before →
+    At formulas solver inventory before →
+      EdgeResident before.native.machine.heap edge →
+        EqReady before.operations.constraints inherited →
+          ∃ combined, Receipt formulas solver inventory edge.entry.key.constraint inherited before combined
+@Receipt.guard_satisfied : ∀ {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory} {original : Guard}
+  {inherited combined : EqValue} {before : Checked width},
+  Receipt formulas solver inventory original inherited before combined →
+    ∀ (term : Term Symbol),
+      SourceEqualityPCSGuard.holds formulas solver original term = true →
+        SourceEqualityPrecheck.Sat term inherited.payload → SourceEqualityPrecheck.Sat term combined.payload
