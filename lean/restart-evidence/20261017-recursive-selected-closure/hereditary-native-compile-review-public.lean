@@ -1,0 +1,38 @@
+import MicroCFTA.SourceCurrentHereditaryNativeCompile
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.Binders
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.Binders
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.causal_binders
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.causal_binders
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.rows_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.rows_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.left_union_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.left_union_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.right_union_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.right_union_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.optional_binder_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.optional_binder_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.mu_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.mu_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.reference_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.reference_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.node_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.node_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCompile.node_with_store
+#check @MicroCFTA.SourceCurrentHereditaryNativeCompile.node_with_store

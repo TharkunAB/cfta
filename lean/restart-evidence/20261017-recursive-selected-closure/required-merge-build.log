@@ -1,0 +1,228 @@
+⚠ [749/841] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✖ [1110/1110] Building MicroCFTA.SourceCurrentHereditaryRequiredMerge (727ms)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentHereditaryRequiredMerge.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentHereditaryRequiredMerge.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentHereditaryRequiredMerge.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentHereditaryRequiredMerge.setup.json --json
+error: MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean:131:6: typeclass instance problem is stuck
+  DecidableEq (EdgeKey ?m.1296 ?m.1297)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `DecidableEq` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+error: MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean:118:75: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+identityCase :
+  ∀ {value : Value Symbol Guard} {state : InternedConstructorTemplates.State Symbol Guard},
+    NodeResult valid value state value state
+emptyCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {state : InternedConstructorTemplates.State Symbol Guard},
+    entries ≠ [] → NodeResult valid Value.empty state Value.empty state
+ordinaryCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {edges : List (EdgeValue Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {rebuilt : List (EdgeValue Symbol Guard)}
+    {middle : InternedConstructorTemplates.State Symbol Guard} {result : Value Symbol Guard}
+    {after : InternedConstructorTemplates.State Symbol Guard} {entry : Interned InternedBinderProtocol.NodeKey}
+    {depth : Nat} {free : List InternedBinderProtocol.Reference},
+    entries ≠ [] →
+      RequireRows entries edges before rebuilt middle →
+        run (makeNode rebuilt) middle = (result, after) →
+          RowsResult valid edges before rebuilt middle →
+            NodeResult valid (Value.node entry edges depth free) before result after
+recursiveCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {original : Value Symbol Guard}
+    {before : InternedConstructorTemplates.State Symbol Guard} {exposed : Value Symbol Guard}
+    {middle : InternedConstructorTemplates.State Symbol Guard} {result : Value Symbol Guard}
+    {after : InternedConstructorTemplates.State Symbol Guard},
+    entries ≠ [] →
+      Recursive original →
+        SourceEqualityRequiredHead.Head original before exposed middle →
+          RequireNode (SourceEqualityNeeded.Needed.node entries) exposed middle result after →
+            NodeResult valid exposed middle result after → NodeResult valid original before result after
+nilChildren :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {index : Nat}
+    {state : InternedConstructorTemplates.State Symbol Guard}, ChildrenResult valid [] state [] state
+unselectedCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {values : List (Value Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {results : List (Value Symbol Guard)}
+    {after : InternedConstructorTemplates.State Symbol Guard} {value : Value Symbol Guard} (index : Nat),
+    SourceEqualityNeededMap.lookup (↑index) entries = none →
+      RequireChildren entries (index + 1) values before results after →
+        ChildrenResult valid values before results after →
+          ChildrenResult valid (value :: values) before (value :: results) after
+selectedCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {needed : SourceEqualityNeeded.Needed}
+    {value : Value Symbol Guard} {before : InternedConstructorTemplates.State Symbol Guard}
+    {result : Value Symbol Guard} {middle : InternedConstructorTemplates.State Symbol Guard}
+    {values results : List (Value Symbol Guard)} {after : InternedConstructorTemplates.State Symbol Guard}
+    (index : Nat),
+    SourceEqualityNeededMap.lookup (↑index) entries = some needed →
+      RequireNode needed value before result middle →
+        RequireChildren entries (index + 1) values middle results after →
+          NodeResult valid value before result middle →
+            ChildrenResult valid values middle results after →
+              ChildrenResult valid (value :: values) before (result :: results) after
+nilRows :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {state : InternedConstructorTemplates.State Symbol Guard},
+    RowsResult valid [] state [] state
+rejectedCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {edges : List (EdgeValue Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {results : List (EdgeValue Symbol Guard)}
+    {after : InternedConstructorTemplates.State Symbol Guard} {edge : EdgeValue Symbol Guard},
+    SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node entries) edge.children.length = false →
+      RequireRows entries edges before results after →
+        RowsResult valid edges before results after → RowsResult valid (edge :: edges) before results after
+entries : List (Int × SourceEqualityNeeded.Needed)
+before : InternedConstructorTemplates.State Symbol Guard
+values : List (Value Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+result : EdgeValue Symbol Guard
+afterEdge : InternedConstructorTemplates.State Symbol Guard
+edges results : List (EdgeValue Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+edge : EdgeValue Symbol Guard
+a✝¹ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node entries) edge.children.length = true
+children : RequireChildren entries 0 edge.children before values middle
+built : run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle = (result, afterEdge)
+a✝ : RequireRows entries edges afterEdge results after
+childIH : ChildrenResult valid edge.children before values middle
+restIH : RowsResult valid edges afterEdge results after
+semantic : SemanticReady before
+costs : CostHeap before
+resident : Edges before (edge :: edges)
+closed : ClosedEdges (edge :: edges)
+stored : MuStored valid before
+annotated :
+  ∀ (edge_1 : EdgeValue Symbol Guard), edge_1 ∈ edge :: edges → SourceCurrentHereditaryConstructors.Edge valid edge_1
+original : SourceCurrentHereditaryConstructors.Edge valid edge
+available : Values before edge.children
+middleStored : MuStored valid middle
+childAnnotations : ∀ (value : Value Symbol Guard), value ∈ values → Annotated valid value
+effects :
+  Keeps before middle ∧
+    SemanticReady middle ∧
+      CostHeap middle ∧ SourceEqualityAnnotationHeap.Heap (fun x => True) middle ∧ Values middle values
+edgeStored : MuStored valid afterEdge
+edgeAnnotations : SourceCurrentHereditaryConstructors.Edge valid result
+constructor :
+  Keeps middle (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle).snd ∧
+    InternedEdgeResidency.EdgeResident
+        (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle).snd
+        (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle).fst ∧
+      (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle).fst.children = values
+afterKept : Keeps middle afterEdge
+afterSemantic : SemanticReady afterEdge
+⊢ MuStored valid after ∧
+    ∀ (edge : EdgeValue Symbol Guard), edge ∈ result :: results → SourceCurrentHereditaryConstructors.Edge valid edge
+error: MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean:40:174: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+identityCase :
+  ∀ {value : Value Symbol Guard} {state : InternedConstructorTemplates.State Symbol Guard},
+    NodeResult valid value state value state
+emptyCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {state : InternedConstructorTemplates.State Symbol Guard},
+    entries ≠ [] → NodeResult valid Value.empty state Value.empty state
+ordinaryCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {edges : List (EdgeValue Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {rebuilt : List (EdgeValue Symbol Guard)}
+    {middle : InternedConstructorTemplates.State Symbol Guard} {result : Value Symbol Guard}
+    {after : InternedConstructorTemplates.State Symbol Guard} {entry : Interned InternedBinderProtocol.NodeKey}
+    {depth : Nat} {free : List InternedBinderProtocol.Reference},
+    entries ≠ [] →
+      RequireRows entries edges before rebuilt middle →
+        run (makeNode rebuilt) middle = (result, after) →
+          RowsResult valid edges before rebuilt middle →
+            NodeResult valid (Value.node entry edges depth free) before result after
+recursiveCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {original : Value Symbol Guard}
+    {before : InternedConstructorTemplates.State Symbol Guard} {exposed : Value Symbol Guard}
+    {middle : InternedConstructorTemplates.State Symbol Guard} {result : Value Symbol Guard}
+    {after : InternedConstructorTemplates.State Symbol Guard},
+    entries ≠ [] →
+      Recursive original →
+        SourceEqualityRequiredHead.Head original before exposed middle →
+          RequireNode (SourceEqualityNeeded.Needed.node entries) exposed middle result after →
+            NodeResult valid exposed middle result after → NodeResult valid original before result after
+nilChildren :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {index : Nat}
+    {state : InternedConstructorTemplates.State Symbol Guard}, ChildrenResult valid [] state [] state
+unselectedCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {values : List (Value Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {results : List (Value Symbol Guard)}
+    {after : InternedConstructorTemplates.State Symbol Guard} {value : Value Symbol Guard} (index : Nat),
+    SourceEqualityNeededMap.lookup (↑index) entries = none →
+      RequireChildren entries (index + 1) values before results after →
+        ChildrenResult valid values before results after →
+          ChildrenResult valid (value :: values) before (value :: results) after
+selectedCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {needed : SourceEqualityNeeded.Needed}
+    {value : Value Symbol Guard} {before : InternedConstructorTemplates.State Symbol Guard}
+    {result : Value Symbol Guard} {middle : InternedConstructorTemplates.State Symbol Guard}
+    {values results : List (Value Symbol Guard)} {after : InternedConstructorTemplates.State Symbol Guard}
+    (index : Nat),
+    SourceEqualityNeededMap.lookup (↑index) entries = some needed →
+      RequireNode needed value before result middle →
+        RequireChildren entries (index + 1) values middle results after →
+          NodeResult valid value before result middle →
+            ChildrenResult valid values middle results after →
+              ChildrenResult valid (value :: values) before (result :: results) after
+nilRows :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {state : InternedConstructorTemplates.State Symbol Guard},
+    RowsResult valid [] state [] state
+rejectedCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {edges : List (EdgeValue Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {results : List (EdgeValue Symbol Guard)}
+    {after : InternedConstructorTemplates.State Symbol Guard} {edge : EdgeValue Symbol Guard},
+    SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node entries) edge.children.length = false →
+      RequireRows entries edges before results after →
+        RowsResult valid edges before results after → RowsResult valid (edge :: edges) before results after
+keptCase :
+  ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {before : InternedConstructorTemplates.State Symbol Guard}
+    {values : List (Value Symbol Guard)} {middle : InternedConstructorTemplates.State Symbol Guard}
+    {result : EdgeValue Symbol Guard} {afterEdge : InternedConstructorTemplates.State Symbol Guard}
+    {edges results : List (EdgeValue Symbol Guard)} {after : InternedConstructorTemplates.State Symbol Guard}
+    {edge : EdgeValue Symbol Guard},
+    SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node entries) edge.children.length = true →
+      RequireChildren entries 0 edge.children before values middle →
+        run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle = (result, afterEdge) →
+          RequireRows entries edges afterEdge results after →
+            ChildrenResult valid edge.children before values middle →
+              RowsResult valid edges afterEdge results after →
+                RowsResult valid (edge :: edges) before (result :: results) after
+⊢ (∀ (needed : SourceEqualityNeeded.Needed) (value : Value Symbol Guard)
+      (before : InternedConstructorTemplates.State Symbol Guard) (result : Value Symbol Guard)
+      (after : InternedConstructorTemplates.State Symbol Guard),
+      RequireNode needed value before result after → NodeResult valid value before result after) ∧
+    (∀ (entries : List (Int × SourceEqualityNeeded.Needed)) (index : Nat) (values : List (Value Symbol Guard))
+        (before : InternedConstructorTemplates.State Symbol Guard) (results : List (Value Symbol Guard))
+        (after : InternedConstructorTemplates.State Symbol Guard),
+        RequireChildren entries index values before results after → ChildrenResult valid values before results after) ∧
+      ∀ (entries : List (Int × SourceEqualityNeeded.Needed)) (edges : List (EdgeValue Symbol Guard))
+        (before : InternedConstructorTemplates.State Symbol Guard) (results : List (EdgeValue Symbol Guard))
+        (after : InternedConstructorTemplates.State Symbol Guard),
+        RequireRows entries edges before results after → RowsResult valid edges before results after
+error: MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean:131:47: unexpected identifier; expected command
+error: MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean:197:13: failed to synthesize instance of type class
+  DecidableEq (EdgeKey CurrentSymbol CurrentGuard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean:203:6: `simp` made no progress
+error: MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean:211:13: failed to synthesize instance of type class
+  DecidableEq (EdgeKey CurrentSymbol CurrentGuard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean:216:59: failed to synthesize instance of type class
+  DecidableEq (EdgeKey CurrentSymbol CurrentGuard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+error: MicroCFTA/SourceCurrentHereditaryRequiredMerge.lean:216:9: Tactic `rcases` failed: `x✝ : ?m.36` is not an inductive datatype
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentHereditaryRequiredMerge
+error: build failed

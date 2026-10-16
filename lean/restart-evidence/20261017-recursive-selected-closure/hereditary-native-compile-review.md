@@ -1,0 +1,9 @@
+# Independent current native compiler review
+
+The final source is `SourceCurrentHereditaryNativeCompile` at SHA-256 `0ff6c334f187f496900c757a32bbb82d09da51b275b725ef0021391aa54666fd`. Its ten imported public axiom/signature pairs and the two-Mu integration pair pass without diagnostics or `sorryAx`. No material defect was found in the stated local-certificate scope.
+
+Ordinary compilation retains both actual row inputs and constructs a node from the actual returned rows. Left and right union compilation retain the exact member occurrence and the other original operand. Mu compilation derives bindings from the actual canonical `enter` result. Bound reference compilation reads the original available annotated source Mu after legitimate heap growth and issued-reference extension. The repeated-pair branch returns an annotated reference. Unsupported and failed branches remain explicit failures in the code certificate.
+
+`Binders` is a local primitive-result obligation. `causal_binders` discharges it from `SourceCurrentHereditaryConstruction.optionalBinder` using `MuStored`. `node_with_store` supplies that proved instance to every compiler branch. Thus this final endpoint does not accept an arbitrary optional-binder annotation callback. The integration kernel derives actual entered bindings from two locally annotated available source Mu operands and uses `causal_binders` for the compiled Mu branch.
+
+The certificate still requires the representation predicate at primitive and recursive returns. The actual native query interpreter must prove that retention jointly with local returned node and edge laws before completion frames publish results. A local compiled code certificate is not a completed native query, termination theorem, or recursive selected-progress theorem. Unrelated constrained records remain permitted throughout.

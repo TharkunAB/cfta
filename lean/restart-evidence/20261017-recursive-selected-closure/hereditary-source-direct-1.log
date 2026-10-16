@@ -1,0 +1,50 @@
+lean/MicroCFTA/SourceCurrentHereditaryUnconstrained.lean:64:11: error: Tactic `rfl` failed: The left-hand side
+  (InternedSourceCrush.visitMany plain [] seen).fst
+is not definitionally equal to the right-hand side
+  true
+
+case nil
+Guard Symbol : Type
+plain : Guard → Bool
+all :
+  ∀ (value : Value Symbol Guard),
+    value ∈ [] → ∀ (seen : List Nat), (InternedSourceCrush.visit plain value seen).fst = true
+seen : List Nat
+⊢ (InternedSourceCrush.visitMany plain [] seen).fst = true
+lean/MicroCFTA/SourceCurrentHereditaryUnconstrained.lean:73:11: error: Tactic `rfl` failed: The left-hand side
+  (InternedSourceCrush.visitEdges plain [] seen).fst
+is not definitionally equal to the right-hand side
+  true
+
+case nil
+Guard Symbol : Type
+plain : Guard → Bool
+all :
+  ∀ (value : Value Symbol Guard),
+    value ∈ List.flatMap EdgeValue.children [] →
+      ∀ (seen : List Nat), (InternedSourceCrush.visit plain value seen).fst = true
+seen : List Nat
+⊢ (InternedSourceCrush.visitEdges plain [] seen).fst = true
+lean/MicroCFTA/SourceCurrentHereditaryUnconstrained.lean:90:25: error: Tactic `rfl` failed: The left-hand side
+  (InternedSourceCrush.visit plain Value.empty seen).fst
+is not definitionally equal to the right-hand side
+  true
+
+case empty
+Guard Symbol : Type
+plain : Guard → Bool
+value : Value Symbol Guard
+seen : List Nat
+⊢ (InternedSourceCrush.visit plain Value.empty seen).fst = true
+lean/MicroCFTA/SourceCurrentHereditaryUnconstrained.lean:90:25: error: Tactic `rfl` failed: The left-hand side
+  (InternedSourceCrush.visit plain (Value.reference name✝) seen).fst
+is not definitionally equal to the right-hand side
+  true
+
+case reference
+Guard Symbol : Type
+plain : Guard → Bool
+value : Value Symbol Guard
+name✝ : InternedBinderProtocol.Reference
+seen : List Nat
+⊢ (InternedSourceCrush.visit plain (Value.reference name✝) seen).fst = true

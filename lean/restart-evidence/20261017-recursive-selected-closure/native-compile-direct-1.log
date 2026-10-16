@@ -1,0 +1,89 @@
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:43:119: error: Application type mismatch: The argument
+  known.right
+has type
+  SourceCurrentHereditaryConstructors.Edge annotation pair.snd
+but is expected to have type
+  SourceCurrentHereditaryConstructors.Edge annotation (EdgeRequest.right ?m.120)
+in the application
+  request_edge annotation source representation ?m.120 current ?m.121 ?m.124 known.right
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:68:118: error: Application type mismatch: The argument
+  rightAnnotated
+has type
+  Annotated annotation right
+but is expected to have type
+  Annotated annotation (NodeRequest.right ?m.124)
+in the application
+  request_node annotation source representation ?m.124 current ?m.125 ?m.126 rightAnnotated
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:89:126: error: Application type mismatch: The argument
+  known
+has type
+  Annotated annotation value
+but is expected to have type
+  Annotated annotation (NodeRequest.right ?m.124)
+in the application
+  request_node annotation source representation ?m.124 current ?m.125 ?m.126 known
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:110:76: error(lean.unknownIdentifier): Unknown identifier `result`
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:150:85: error: Application type mismatch: The argument
+  boundAnnotated
+has type
+  Annotated annotation bound
+but is expected to have type
+  Annotated annotation (NodeRequest.right ?m.129)
+in the application
+  request_node annotation source representation ?m.129 state ?m.130 ?m.131 boundAnnotated
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:151:90: error: Application type mismatch: The argument
+  annotated
+has type
+  Annotated annotation other
+but is expected to have type
+  Annotated annotation (NodeRequest.right ?m.136)
+in the application
+  request_node annotation source representation ?m.136 state ?m.137 ?m.138 annotated
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:170:10: error: Application type mismatch: The argument
+  SourceCurrentHereditaryNativeScope.empty annotation source
+has type
+  Bindings annotation source IntersectionEmptyDomain.emptyDomain.key
+but is expected to have type
+  Bindings annotation source { domain := domain, left := left, right := right }.domain.key
+in the application
+  request_node annotation source representation { domain := domain, left := left, right := right } state
+    (SourceCurrentHereditaryNativeScope.empty annotation source)
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:172:118: error: Application type mismatch: The argument
+  rightAnnotated
+has type
+  Annotated annotation { domain := domain, left := left, right := right }.right
+but is expected to have type
+  Annotated annotation { domain := domain, left := left, right := right }.left
+in the application
+  request_node annotation source representation { domain := domain, left := left, right := right } state bindings
+    rightAnnotated
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:184:79: error(lean.unknownIdentifier): Unknown identifier `members`
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:190:85: error(lean.unknownIdentifier): Unknown identifier `members`
+lean/MicroCFTA/SourceCurrentHereditaryNativeCompile.lean:211:21: error: Tactic `assumption` failed
+
+case mk.unsupported
+Symbol Guard : Type
+annotation : Guard → Prop
+source : InternedConstructorTemplates.State Symbol Guard
+representation : InternedConstructorTemplates.State Symbol Guard → Prop
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+binders : Binders annotation representation
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+represented : representation state.heap
+growth : Grows source state.heap
+history : Extends source.nodes.issued state.heap.nodes.issued
+domain : Interned DomainKey
+left right : Value Symbol Guard
+bindings : Bindings annotation source { domain := domain, left := left, right := right }.domain.key
+leftAvailable : Available source { domain := domain, left := left, right := right }.left
+rightAvailable : Available source { domain := domain, left := left, right := right }.right
+leftAnnotated : Annotated annotation { domain := domain, left := left, right := right }.left
+rightAnnotated : Annotated annotation { domain := domain, left := left, right := right }.right
+ready : NodeReady state { domain := domain, left := left, right := right }
+selected :
+  SourceRecursiveIntersectionControl.decision domain.key left right =
+    SourceRecursiveIntersectionControl.Branch.unsupported
+⊢ Certified annotation source representation (compileNode { domain := domain, left := left, right := right }) state
+    fun after value => Available after.heap value ∧ Annotated annotation value

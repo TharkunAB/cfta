@@ -1,0 +1,206 @@
+'MicroCFTA.SourceCurrentHereditaryRequiredMerge.node' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryRequiredMerge.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst needed value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+              @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value →
+                And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                  (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result)
+'MicroCFTA.SourceCurrentHereditaryRequiredMerge.children' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryRequiredMerge.children : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireChildren Symbol Guard inst entries index values before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard values →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                      value →
+                    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+                And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) results
+                        value →
+                      @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value)
+'MicroCFTA.SourceCurrentHereditaryRequiredMerge.rows' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryRequiredMerge.rows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {entries : List.{0} (Prod.{0, 0} Int MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredGraph.RequireRows Symbol Guard inst entries edges before results after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before edges →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard edges →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+              (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) edges
+                      edge →
+                    @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Symbol Guard valid edge) →
+                And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                  (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        results edge →
+                      @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Symbol Guard valid edge)
+'MicroCFTA.SourceCurrentHereditaryRequiredMerge.requireAll' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryRequiredMerge.requireAll : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  {paths : List.{0} (List.{0} Int)}
+  {values results :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos},
+  @MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads inst paths values results before after memos saved →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+        @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before values →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) values →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) valid before →
+              (∀
+                  (value :
+                    MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                  @Membership.mem.{0, 0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@List.instMembership.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      values value →
+                    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) value) →
+                And
+                  (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) valid after)
+                  (∀
+                    (value :
+                      MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                    @Membership.mem.{0, 0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (List.{0}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        (@List.instMembership.{0}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        results value →
+                      @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) value)
+'MicroCFTA.SourceCurrentHereditaryRequiredMerge.merge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryRequiredMerge.merge : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {top : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula},
+  valid top →
+    ∀
+      {input output :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {before after :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {memo saved :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+      @MicroCFTA.SourceCurrentMemoMergeQueryMemos.CallReads inst inst_1 clear top input before memo output after saved
+          memos final →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo →
+              @MicroCFTA.SourceCurrentHereditaryMerge.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid memo →
+                @MicroCFTA.InternedProbeProvenance.Available
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before input →
+                  @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) input →
+                    And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                      (And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                        (And
+                          (@MicroCFTA.SourceCurrentHereditaryMerge.Stored
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid saved)
+                          (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) valid
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) output)))

@@ -1,0 +1,78 @@
+import MicroCFTA.SourceCurrentHereditaryNativeCode
+import MicroCFTA.SourceCurrentHereditaryNativeCache
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.NodeLaw
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.NodeLaw
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.EdgeLaw
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.EdgeLaw
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.Certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.Certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.certified_bind
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.certified_bind
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.certified_walk
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.certified_walk
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.request_node
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.request_node
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.request_edge
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.request_edge
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.edge_work
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.edge_work
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.node_work
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.node_work
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCode.union_work
+#check @MicroCFTA.SourceCurrentHereditaryNativeCode.union_work
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.Stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.Stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.initial_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.initial_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.advance_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.advance_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.lookupNode_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.lookupNode_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.lookupEdge_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.lookupEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.demandNode_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.demandNode_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.demandEdge_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.demandEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.finishNode_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.finishNode_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.finishEdge_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.finishEdge_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.node_observed_ready
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.node_observed_ready
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.edge_observed_ready
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.edge_observed_ready
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.node_started
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.node_started
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeCache.edge_started
+#check @MicroCFTA.SourceCurrentHereditaryNativeCache.edge_started

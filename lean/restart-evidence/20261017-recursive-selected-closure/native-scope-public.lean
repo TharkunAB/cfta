@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentHereditaryNativeScope
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings
+#check @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeScope.empty
+#check @MicroCFTA.SourceCurrentHereditaryNativeScope.empty
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeScope.bindings_annotated
+#check @MicroCFTA.SourceCurrentHereditaryNativeScope.bindings_annotated
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.extend
+#check @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.extend
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.enter
+#check @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.enter
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.read
+#check @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.read
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeScope.body_annotated
+#check @MicroCFTA.SourceCurrentHereditaryNativeScope.body_annotated
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeScope.node_edge
+#check @MicroCFTA.SourceCurrentHereditaryNativeScope.node_edge
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeScope.edge_child
+#check @MicroCFTA.SourceCurrentHereditaryNativeScope.edge_child

@@ -1,0 +1,207 @@
+'MicroCFTA.HereditaryConstructionIndependentChecks.closed_then_constrained_cap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.HereditaryConstructionIndependentChecks.closed_then_constrained_cap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceEqualityAnnotationConstruction.Allowed Guard Symbol valid expression →
+    ∀ (symbol : Symbol) (guard : Guard),
+      Not (valid guard) →
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+            And
+              (@Eq.{1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value state))
+              (have edge :=
+                @MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard
+                    (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  state;
+              have cap :=
+                @MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard
+                    (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) edge)
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))))
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) edge);
+              And
+                (@MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard
+                  (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) cap))
+                (And
+                  (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) cap)
+                    value)
+                  (And
+                    (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid
+                      (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) cap))
+                    (And
+                      (Not
+                        (@MicroCFTA.SourceEqualityAnnotationHeap.Heap Guard Symbol valid
+                          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) cap)))
+                      (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                          And
+                            (@MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value
+                              (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) cap)
+                              result after)
+                            (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                              (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result)))))))
+'MicroCFTA.HereditaryConstructionIndependentChecks.exact_warm_build' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.HereditaryConstructionIndependentChecks.exact_warm_build : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceEqualityAnnotationConstruction.Allowed Guard Symbol valid expression →
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun state =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value state))
+          (And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) state)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value state))
+            (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid state)
+              (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value)))
+'MicroCFTA.HereditaryConstructionIndependentChecks.optional_binder_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.HereditaryConstructionIndependentChecks.optional_binder_complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (key : Prod.{0, 0} Nat Nat) (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredCache.Ready Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state body →
+      @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol body →
+        @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid state →
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+              And
+                (@Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst key body state)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+                (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                  (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value))
+'MicroCFTA.HereditaryConstructionIndependentChecks.recursive_boolean_cap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.HereditaryConstructionIndependentChecks.recursive_boolean_cap : ∀ (smart : Bool),
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun value =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun state =>
+      And
+        (@Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+            (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+            (fun a b =>
+              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                instDecidableEqBool a b)
+            (@MicroCFTA.InternedNestedConstruction.Syntax.binder Nat Bool smart
+              (@MicroCFTA.InternedNestedConstruction.Syntax.union Nat Bool
+                (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                  (@MicroCFTA.InternedNestedConstruction.Syntax.node Nat Bool
+                    (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Nat Bool)
+                      (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk Nat Bool
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) Bool.true
+                        (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                          (@MicroCFTA.InternedNestedConstruction.Syntax.var Nat Bool
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                          (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool))))
+                      (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Nat Bool))))
+                  (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax.node Nat Bool
+                      (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Nat Bool)
+                        (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk Nat Bool
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) Bool.true
+                          (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)))
+                        (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Nat Bool))))
+                    (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool))))))
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+            (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+            (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value state))
+        (have edge :=
+          @MicroCFTA.InternedConstructorTemplates.run Nat Bool
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool)
+            (fun a b =>
+              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                instDecidableEqBool a b)
+            (@MicroCFTA.InternedConstructorTemplates.makeEdge Nat Bool
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) Bool.false
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)))
+            state;
+        have cap :=
+          @MicroCFTA.InternedConstructorTemplates.run Nat Bool (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+            (fun a b =>
+              @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                instDecidableEqBool a b)
+            (@MicroCFTA.InternedConstructorTemplates.makeNode Nat Bool
+              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool)
+                (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool)
+                  (MicroCFTA.InternedConstructorTemplates.State Nat Bool) edge)
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool))))
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool)
+              (MicroCFTA.InternedConstructorTemplates.State Nat Bool) edge);
+        And
+          (@MicroCFTA.SourceEqualityRequiredCache.Ready Nat Bool
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+              (MicroCFTA.InternedConstructorTemplates.State Nat Bool) cap))
+          (And
+            (@MicroCFTA.InternedProbeProvenance.Available Nat Bool
+              (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                (MicroCFTA.InternedConstructorTemplates.State Nat Bool) cap)
+              value)
+            (And
+              (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Bool Nat (fun b => @Eq.{1} Bool b Bool.true)
+                (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                  (MicroCFTA.InternedConstructorTemplates.State Nat Bool) cap))
+              (And
+                (Not
+                  (@MicroCFTA.SourceEqualityAnnotationHeap.Heap Bool Nat (fun b => @Eq.{1} Bool b Bool.true)
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                      (MicroCFTA.InternedConstructorTemplates.State Nat Bool) cap)))
+                (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun result =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun after =>
+                    And
+                      (@MicroCFTA.SourceEqualityRequiredHead.Head Nat Bool
+                        (fun a b =>
+                          @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                            instDecidableEqBool a b)
+                        value
+                        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool)
+                          (MicroCFTA.InternedConstructorTemplates.State Nat Bool) cap)
+                        result after)
+                      (And
+                        (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Bool Nat
+                          (fun b => @Eq.{1} Bool b Bool.true) after)
+                        (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Bool (fun b => @Eq.{1} Bool b Bool.true)
+                          Nat result)))))))

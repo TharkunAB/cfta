@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentUnconstrainedGuardClosure
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentUnconstrainedGuardClosure.plain_fields
+#check @MicroCFTA.SourceCurrentUnconstrainedGuardClosure.plain_fields
+#print axioms MicroCFTA.SourceCurrentUnconstrainedGuardClosure.top_plain
+#check @MicroCFTA.SourceCurrentUnconstrainedGuardClosure.top_plain
+#print axioms MicroCFTA.SourceCurrentUnconstrainedGuardClosure.conjoin_plain
+#check @MicroCFTA.SourceCurrentUnconstrainedGuardClosure.conjoin_plain
+#print axioms MicroCFTA.SourceCurrentUnconstrainedGuardClosure.ready_active
+#check @MicroCFTA.SourceCurrentUnconstrainedGuardClosure.ready_active
+#print axioms MicroCFTA.SourceCurrentUnconstrainedGuardClosure.conjoin_result_plain
+#check @MicroCFTA.SourceCurrentUnconstrainedGuardClosure.conjoin_result_plain
+#print axioms MicroCFTA.SourceCurrentUnconstrainedGuardClosure.ready_plain
+#check @MicroCFTA.SourceCurrentUnconstrainedGuardClosure.ready_plain
+#print axioms MicroCFTA.SourceCurrentUnconstrainedGuardClosure.loaded_ready_plain
+#check @MicroCFTA.SourceCurrentUnconstrainedGuardClosure.loaded_ready_plain

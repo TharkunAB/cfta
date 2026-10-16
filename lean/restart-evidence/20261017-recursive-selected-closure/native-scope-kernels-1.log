@@ -1,0 +1,98 @@
+lean/restart-evidence/20261017-recursive-selected-closure/native-scope-kernels.lean:70:72: error: Ambiguous term
+  bindings
+Possible interpretations:
+  @SourceRecursiveIntersectionEnvironment.bindings ?m.95
+    ?m.96 : Value ?m.95 ?m.96 → Value ?m.95 ?m.96 → List.{0} (Prod.{0, 0} Nat (Value ?m.95 ?m.96))
+  
+  InternedBinderProtocol.bindings : List.{0} Reference →
+    (Reference → Option.{0} NodeRef) → List.{0} (Prod.{0, 0} Reference NodeRef)
+lean/restart-evidence/20261017-recursive-selected-closure/native-scope-kernels.lean:70:66: error: `simp` made no progress
+lean/restart-evidence/20261017-recursive-selected-closure/native-scope-kernels.lean:75:77: error: Ambiguous term
+  bindings
+Possible interpretations:
+  @SourceRecursiveIntersectionEnvironment.bindings ?m.120
+    ?m.121 : Value ?m.120 ?m.121 → Value ?m.120 ?m.121 → List.{0} (Prod.{0, 0} Nat (Value ?m.120 ?m.121))
+  
+  InternedBinderProtocol.bindings : List.{0} Reference →
+    (Reference → Option.{0} NodeRef) → List.{0} (Prod.{0, 0} Reference NodeRef)
+lean/restart-evidence/20261017-recursive-selected-closure/native-scope-kernels.lean:75:71: error: `simp` made no progress
+'MicroCFTA.HereditaryNativeScopeIndependent.entered_binding_read' depends on axioms: [propext, Quot.sound.{u}]
+@entered_binding_read : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (source current : InternedConstructorTemplates.State Symbol Guard),
+  @Facts Symbol Guard current →
+    @Grows Symbol Guard source current →
+      @Extends Nat NodeKey (@State.issued NodeKey (@State.nodes Symbol Guard source))
+          (@State.issued NodeKey (@State.nodes Symbol Guard current)) →
+        ∀ (domain : DomainKey),
+          @Bindings Symbol Guard valid source domain →
+            ∀ (left right : Value Symbol Guard),
+              @Available Symbol Guard source left →
+                @Available Symbol Guard source right →
+                  @Annotated Guard valid Symbol left →
+                    @Annotated Guard valid Symbol right →
+                      ∀ (cache : Cache.State DomainKey),
+                        @Cache.Valid DomainKey cache →
+                          ∀ (first second : Nat) (binding : Prod.{0, 0} Nat (Value Symbol Guard)),
+                            @Membership.mem.{0, 0} (Prod.{0, 0} Nat (Value Symbol Guard))
+                                (List.{0} (Prod.{0, 0} Nat (Value Symbol Guard)))
+                                (@List.instMembership.{0} (Prod.{0, 0} Nat (Value Symbol Guard)))
+                                (@SourceRecursiveIntersectionEnvironment.bindings Symbol Guard left right) binding →
+                              have actual := @enter Symbol Guard cache domain left right first second;
+                              And
+                                (@Bindings Symbol Guard valid source
+                                  (@Interned.key DomainKey
+                                    (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey) actual)))
+                                (And
+                                  (@Eq.{1} (Option.{0} (Value Symbol Guard))
+                                    (@SourcePreparedSharedRows.read Symbol Guard current
+                                      (@Prod.fst.{0, 0} Nat (Value Symbol Guard) binding))
+                                    (@some.{0} (Value Symbol Guard)
+                                      (@Prod.snd.{0, 0} Nat (Value Symbol Guard) binding)))
+                                  (And
+                                    (@Available Symbol Guard current
+                                      (@Prod.snd.{0, 0} Nat (Value Symbol Guard) binding))
+                                    (And
+                                      (@Annotated Guard valid Symbol
+                                        (@Prod.snd.{0, 0} Nat (Value Symbol Guard) binding))
+                                      (@Annotated Guard valid Symbol
+                                        (@body Symbol Guard (@Prod.snd.{0, 0} Nat (Value Symbol Guard) binding))))))
+'MicroCFTA.HereditaryNativeScopeIndependent.two_mu_entries' depends on axioms: [propext, sorryAx.{u}, Quot.sound.{u}]
+@two_mu_entries : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (source current : InternedConstructorTemplates.State Symbol Guard),
+  @Facts Symbol Guard current →
+    @Grows Symbol Guard source current →
+      @Extends Nat NodeKey (@State.issued NodeKey (@State.nodes Symbol Guard source))
+          (@State.issued NodeKey (@State.nodes Symbol Guard current)) →
+        ∀ (left right : Interned NodeKey)
+          (leftBody rightBody leftDepth rightDepth leftOrdinary rightOrdinary : Value Symbol Guard),
+          @Available Symbol Guard source (@Value.mu Symbol Guard left leftBody leftDepth leftOrdinary) →
+            @Available Symbol Guard source (@Value.mu Symbol Guard right rightBody rightDepth rightOrdinary) →
+              @Annotated Guard valid Symbol leftBody →
+                @Annotated Guard valid Symbol rightBody →
+                  ∀ (cache : Cache.State DomainKey),
+                    @Cache.Valid DomainKey cache →
+                      have actual :=
+                        @enter Symbol Guard cache IntersectionEmptyDomain.emptyKey
+                          (@Value.mu Symbol Guard left leftBody leftDepth leftOrdinary)
+                          (@Value.mu Symbol Guard right rightBody rightDepth rightOrdinary)
+                          (@Interned.identity NodeKey left) (@Interned.identity NodeKey right);
+                      And
+                        (@Bindings Symbol Guard valid source
+                          (@Interned.key DomainKey
+                            (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey) actual)))
+                        (And
+                          (@Eq.{1} (Option.{0} (Value Symbol Guard))
+                            (@SourcePreparedSharedRows.read Symbol Guard current (@Interned.identity NodeKey left))
+                            (@some.{0} (Value Symbol Guard)
+                              (@Value.mu Symbol Guard left leftBody leftDepth leftOrdinary)))
+                          (And
+                            (@Eq.{1} (Option.{0} (Value Symbol Guard))
+                              (@SourcePreparedSharedRows.read Symbol Guard current (@Interned.identity NodeKey right))
+                              (@some.{0} (Value Symbol Guard)
+                                (@Value.mu Symbol Guard right rightBody rightDepth rightOrdinary)))
+                            (And
+                              (@Annotated Guard valid Symbol
+                                (@body Symbol Guard (@Value.mu Symbol Guard left leftBody leftDepth leftOrdinary)))
+                              (@Annotated Guard valid Symbol
+                                (@body Symbol Guard
+                                  (@Value.mu Symbol Guard right rightBody rightDepth rightOrdinary))))))

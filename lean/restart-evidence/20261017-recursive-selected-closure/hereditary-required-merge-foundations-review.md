@@ -1,0 +1,15 @@
+# Current local annotation closure foundations
+
+The current constructor and Merge sources pass strict direct checks with all linters enabled. Imported public probes check 16 declaration axiom reports and full explicit signatures. Three imported integration kernels pass without diagnostics or `sorryAx`.
+
+`SourceCurrentHereditaryConstructors` uses the existing `SourceEqualityAnnotationLanguage.Annotated`. The premises concern only the supplied records. `makeEdge` reads back the complete requested key and children. `makeNode` selects supplied rows after filtering and canonicalization. `makeUnion` checks complete canonical member readback, including the warm union branch. No theorem requires `Heap P`.
+
+`SourceCurrentHereditaryMerge` proves the actual current `SourceCurrentMemoMergeGraph.Run` and `Call` interpreter. It does not transfer the historical eager merge worker. A warm completed table carries a conditional local law from each captured original to its result. Physical hit identity transfers that exact original to the current request. On a miss, the same smaller body graph supplies physical facts and its candidate annotation law. The candidate law is proved before `remember`. A current earlier winner uses its own retained law. All small and large group branches are covered. The large branch requires `P top`. Actual selection output membership suffices; comparison heaps need no global annotation condition.
+
+The first kernel constructs a full current ordinary Merge graph with a recursive Mu child request, ordered maps, row work, final node work, and memo publication. Its initial heap can contain unrelated constrained records. The second derives an exact heap-and-table warm replay from a produced entry. The third checks that a different later candidate cannot replace an earlier winner's law.
+
+The public `run` endpoint accepts a local instruction certificate. Public `call` and `cold` discharge the entire body and recursive request induction. Neither public completed-call endpoint assumes a recursive result law, another completed graph, a future output annotation, or completion. The annotation invariant alone does not assert availability, termination, or source runtime correspondence; the returned physical effect and physical stored invariant remain explicit.
+
+The Required adapter is a separate pending dependency at this foundation freeze. Recursive local head closure needs a causal Mu cache invariant in addition to physical facts. Physical coherence alone does not relate an arbitrary warm Mu body's guards to its exact probes. A global `Heap P` substitute would incorrectly forbid unrelated constrained caps. No Required closure or full recursive selected-progress claim follows from this foundation manifest.
+
+Failed direct attempts and kernel attempts remain in this directory. The first Merge direct attempt used an incomplete isolated import tree. The second reached one reducibility mismatch in the pure branch. The third is clean. The first two constructor attempts exposed elaboration issues only. Final constructor direct attempt 3 and Merge direct attempt 3 are clean.

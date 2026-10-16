@@ -1,0 +1,32 @@
+import MicroCFTA.SourceCurrentHereditaryUnconstrained
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.annotated_mono
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.annotated_mono
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.node_edge
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.node_edge
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.source_child
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.source_child
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.union_member
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.union_member
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.mu_body
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.mu_body
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.annotated_visit
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.annotated_visit
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.plain_equalities
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.plain_equalities
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.plain_positive
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.plain_positive
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.plain_physical
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.plain_physical
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.unconstrained
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.unconstrained
+#print axioms MicroCFTA.SourceCurrentHereditaryUnconstrained.to_plain_region
+#check @MicroCFTA.SourceCurrentHereditaryUnconstrained.to_plain_region

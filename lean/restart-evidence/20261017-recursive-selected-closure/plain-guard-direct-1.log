@@ -1,0 +1,53 @@
+lean/MicroCFTA/SourceCurrentUnconstrainedGuardClosure.lean:42:11: error: Tactic `rfl` failed: The left-hand side
+  GuardConjunction.atoms «Guard».top
+is not definitionally equal to the right-hand side
+  []
+
+case top
+Formula : Type
+empty : positive «Guard».top = some []
+⊢ GuardConjunction.atoms «Guard».top = []
+lean/MicroCFTA/SourceCurrentUnconstrainedGuardClosure.lean:43:17: error: Type mismatch
+  positive_list_empty_atoms parts empty
+has type
+  List.flatMap GuardConjunction.atoms parts = []
+but is expected to have type
+  GuardConjunction.atoms («Guard».and parts) = []
+lean/MicroCFTA/SourceCurrentUnconstrainedGuardClosure.lean:74:11: error: unsolved goals
+case none
+guard : Guard
+active : ActiveOption guard.equalities
+plain : SourceMemoGate.plain guard = true
+checks : decide (sourceEqualities guard = some []) = true ∧ (positiveNormalized guard.guard).isSome = true
+empty : sourceEqualities guard = some []
+support : (positive guard.guard).isSome = true
+raw : List (List Path)
+extracted : positive guard.guard = some raw
+found : positiveNormalized guard.guard = some none
+addedActive : ActiveOption none
+exactAdded :
+  ∀ (term : Term Unit),
+    ConstraintIndicators.equalityValue (SymbolicDriver.classTest term) none = raw.all (SymbolicDriver.classTest term)
+⊢ (match
+      match guard.equalities, none with
+      | none, x => none
+      | x, none => none
+      | some [], some [] => some []
+      | some first, some second => SourceCompactGuards.normalize (first ++ second) with
+    | none => false
+    | some classes => classes.all (SymbolicDriver.classTest (Term.node () []))) =
+    false
+lean/MicroCFTA/SourceCurrentUnconstrainedGuardClosure.lean:99:2: error: Type mismatch: After simplification, term
+  top_plain
+ has type
+  @Eq Bool (SourceMemoGate.plain SourceEqualityConstraintConstructors.top) true
+but is expected to have type
+  @Eq Bool (SourceMemoGate.plain { equalities := some [], guard := «Guard».top }) true
+lean/MicroCFTA/SourceCurrentUnconstrainedGuardClosure.lean:118:58: error: Application type mismatch: The argument
+  member
+has type
+  record.paths ∈ List.map SourceEqualityClassOrder.Record.paths records
+but is expected to have type
+  record ∈ records
+in the application
+  ready.right records ?m.105 record member

@@ -1,0 +1,68 @@
+'MicroCFTA.HereditaryRequiredMergeRequiredKernels.constructed_required_then_merge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.HereditaryRequiredMergeRequiredKernels.constructed_required_then_merge : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (clear : Guard → Bool) (top : Guard),
+  valid top →
+    ∀ (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+      @MicroCFTA.SourceEqualityAnnotationConstruction.Allowed Guard Symbol valid expression →
+        ∀ (needed : MicroCFTA.SourceEqualityNeeded.Needed),
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun original =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun before =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun required =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                      @Exists.{1} (MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard) fun memo =>
+                        And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst_1 expression
+                              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) original before))
+                          (And
+                            (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst_1 needed original
+                              before required middle)
+                            (And
+                              (@MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top required
+                                middle (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard) result after memo)
+                              (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid middle)
+                                (And (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol required)
+                                  (And (@MicroCFTA.SourceCurrentHereditaryMerge.Stored Symbol Guard valid memo)
+                                    (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol
+                                      result))))))
+'MicroCFTA.HereditaryRequiredMergeRequiredKernels.raw_self_selected' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.HereditaryRequiredMergeRequiredKernels.raw_self_selected : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop),
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun original =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun before =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun result =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+          And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard Bool.false
+                  (@MicroCFTA.InternedNestedConstruction.Syntax.var Symbol Guard
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+                (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) original before))
+            (And
+              (@MicroCFTA.SourceEqualityRequiredGraph.RequireNode Symbol Guard inst
+                (MicroCFTA.SourceEqualityNeeded.build
+                  (@List.cons.{0} MicroCFTA.SourceEqualityNeeded.Path
+                    (@List.cons.{0} Int (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) (@List.nil.{0} Int))
+                    (@List.nil.{0} MicroCFTA.SourceEqualityNeeded.Path)))
+                original before result after)
+              (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol result)))

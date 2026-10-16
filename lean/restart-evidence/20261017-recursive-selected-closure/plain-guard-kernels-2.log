@@ -1,0 +1,176 @@
+lean/restart-evidence/20261017-recursive-selected-closure/plain-guard-kernels.lean:30:62: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityConstraintConstructors.conjoin, leftEmpty, rightEmpty, combineEqualities,
+    GuardConjunction.merge, GuardConjunction.normalize, GuardConjunction.atoms, List.flatMap_cons, List.flatMap_nil,
+    List.append_nil, leftAtoms, rightAtoms, GuardConjunction.canonical, List.eraseDups_nil, List.mergeSort_nil,
+    GuardConjunction.conjoin, SourceEqualityConstraintConstructors.top]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261017-recursive-selected-closure/plain-guard-kernels.lean:110:41: error(lean.unknownIdentifier): Unknown identifier `SourceRecursiveIntersectionKernel.EdgeRequest`
+'MicroCFTA.PlainGuardIndependent.current_loads_ready' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@current_loads_ready : ∀ [inst : DecidableEq.{1} (SourceGuards.Guard FullSyntax.Formula)]
+  (le : SourceGuards.Guard FullSyntax.Formula → SourceGuards.Guard FullSyntax.Formula → Bool)
+  (left right : SourceSymbolicIndex.Constraint FullSyntax.Formula)
+  (first second : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) (arity : Nat)
+  (before : SourceEqualityConstraintMemoAllocation.State),
+  SourceEqualityConstraintMemoAllocation.Valid before →
+    SourceEqualityGuardReadback.Cached (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula left) →
+      SourceEqualityGuardReadback.Cached (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula right) →
+        @Eq.{1} (Except.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+            (@SourceEqualityConstraintFieldLookup.load FullSyntax.Formula left before.constraints)
+            (@Except.ok.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+              (@some.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) first)) →
+          @Eq.{1} (Except.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+              (@SourceEqualityConstraintFieldLookup.load FullSyntax.Formula right before.constraints)
+              (@Except.ok.{0, 0} String (Option.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                (@some.{0} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) second)) →
+            @Eq.{1} Bool (SourceMemoGate.plain left) true →
+              @Eq.{1} Bool (SourceMemoGate.plain right) true →
+                @Exists.{1} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) fun result =>
+                  And
+                    (@Eq.{1}
+                      (Except.{0, 0} String
+                        (SourceEqualityIntersectionEdgeAllocation.Branch
+                          (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+                      (@Prod.fst.{0, 0}
+                        (Except.{0, 0} String
+                          (SourceEqualityIntersectionEdgeAllocation.Branch
+                            (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+                        SourceEqualityConstraintMemoAllocation.State
+                        (@SourceEqualityIntersectionEdgeAllocation.run FullSyntax.Formula inst le first second arity
+                          arity before))
+                      (@Except.ok.{0, 0} String
+                        (SourceEqualityIntersectionEdgeAllocation.Branch
+                          (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                        (@SourceEqualityIntersectionEdgeAllocation.Branch.ready
+                          (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) result)))
+                    (And
+                      (SourceEqualityConstraintMemoAllocation.Valid
+                        (@Prod.snd.{0, 0}
+                          (Except.{0, 0} String
+                            (SourceEqualityIntersectionEdgeAllocation.Branch
+                              (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+                          SourceEqualityConstraintMemoAllocation.State
+                          (@SourceEqualityIntersectionEdgeAllocation.run FullSyntax.Formula inst le first second arity
+                            arity before)))
+                      (And
+                        (SourceEqualityConstraintMemoAllocation.Grows before
+                          (@Prod.snd.{0, 0}
+                            (Except.{0, 0} String
+                              (SourceEqualityIntersectionEdgeAllocation.Branch
+                                (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+                            SourceEqualityConstraintMemoAllocation.State
+                            (@SourceEqualityIntersectionEdgeAllocation.run FullSyntax.Formula inst le first second arity
+                              arity before)))
+                        (And
+                          (Ready
+                            (@Prod.snd.{0, 0}
+                                (Except.{0, 0} String
+                                  (SourceEqualityIntersectionEdgeAllocation.Branch
+                                    (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)))
+                                SourceEqualityConstraintMemoAllocation.State
+                                (@SourceEqualityIntersectionEdgeAllocation.run FullSyntax.Formula inst le first second
+                                  arity arity before)).constraints
+                            (@SourceEqualityConjoinAllocation.Constraint.stored FullSyntax.Formula result))
+                          (@Eq.{1} Bool
+                            (SourceMemoGate.plain (@SourceEqualityConjoinAllocation.readback FullSyntax.Formula result))
+                            true))))
+'MicroCFTA.PlainGuardIndependent.construct_then_two_conjoins' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@construct_then_two_conjoins : ∀ [inst : DecidableEq.{1} (SourceGuards.Guard FullSyntax.Formula)]
+  (le : SourceGuards.Guard FullSyntax.Formula → SourceGuards.Guard FullSyntax.Formula → Bool)
+  (left right : SourceSymbolicIndex.Constraint FullSyntax.Formula)
+  (before : SourceEqualityConstraintMemoAllocation.State),
+  SourceEqualityConstraintMemoAllocation.Valid before →
+    SourceEqualityGuardReadback.Cached (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula left) →
+      SourceEqualityGuardReadback.Cached (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula right) →
+        @Eq.{1} Bool (SourceMemoGate.plain left) true →
+          @Eq.{1} Bool (SourceMemoGate.plain right) true →
+            @Exists.{1} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) fun first =>
+              @Exists.{1} SourceEqualityConstraintMemoAllocation.State fun middle =>
+                @Exists.{1} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) fun second =>
+                  @Exists.{1} SourceEqualityConstraintMemoAllocation.State fun loaded =>
+                    @Exists.{1} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) fun combined =>
+                      @Exists.{1} (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) fun result =>
+                        And
+                          (@Eq.{1}
+                            (Prod.{0, 0}
+                              (Except.{0, 0} String (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                              SourceEqualityConstraintMemoAllocation.State)
+                            (@SourceEqualityConjoinAllocation.construct FullSyntax.Formula
+                              (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula left)
+                              (@SourceSymbolicIndex.Constraint.guard FullSyntax.Formula left) before)
+                            (@Prod.mk.{0, 0}
+                              (Except.{0, 0} String (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                              SourceEqualityConstraintMemoAllocation.State
+                              (@Except.ok.{0, 0} String (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+                                first)
+                              middle))
+                          (And
+                            (@Eq.{1}
+                              (Prod.{0, 0}
+                                (Except.{0, 0} String (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                                SourceEqualityConstraintMemoAllocation.State)
+                              (@SourceEqualityConjoinAllocation.construct FullSyntax.Formula
+                                (@SourceSymbolicIndex.Constraint.equalities FullSyntax.Formula right)
+                                (@SourceSymbolicIndex.Constraint.guard FullSyntax.Formula right) middle)
+                              (@Prod.mk.{0, 0}
+                                (Except.{0, 0} String (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                                SourceEqualityConstraintMemoAllocation.State
+                                (@Except.ok.{0, 0} String
+                                  (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) second)
+                                loaded))
+                            (And
+                              (@Eq.{1}
+                                (Except.{0, 0} String (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                                (@Prod.fst.{0, 0}
+                                  (Except.{0, 0} String (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                                  SourceEqualityConstraintMemoAllocation.State
+                                  (@SourceEqualityConjoinAllocation.conjoin FullSyntax.Formula inst le first second
+                                    loaded))
+                                (@Except.ok.{0, 0} String
+                                  (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) combined))
+                              (And
+                                (@Eq.{1}
+                                  (Except.{0, 0} String (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                                  (@Prod.fst.{0, 0}
+                                    (Except.{0, 0} String
+                                      (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                                    SourceEqualityConstraintMemoAllocation.State
+                                    (@SourceEqualityConjoinAllocation.conjoin FullSyntax.Formula inst le combined second
+                                      (@Prod.snd.{0, 0}
+                                        (Except.{0, 0} String
+                                          (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                                        SourceEqualityConstraintMemoAllocation.State
+                                        (@SourceEqualityConjoinAllocation.conjoin FullSyntax.Formula inst le first
+                                          second loaded))))
+                                  (@Except.ok.{0, 0} String
+                                    (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) result))
+                                (And
+                                  (@Eq.{1} Bool
+                                    (SourceMemoGate.plain
+                                      (@SourceEqualityConjoinAllocation.readback FullSyntax.Formula combined))
+                                    true)
+                                  (And
+                                    (@Eq.{1} Bool
+                                      (SourceMemoGate.plain
+                                        (@SourceEqualityConjoinAllocation.readback FullSyntax.Formula result))
+                                      true)
+                                    (SourceEqualityConstraintMemoAllocation.Valid
+                                      (@Prod.snd.{0, 0}
+                                        (Except.{0, 0} String
+                                          (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                                        SourceEqualityConstraintMemoAllocation.State
+                                        (@SourceEqualityConjoinAllocation.conjoin FullSyntax.Formula inst le combined
+                                          second
+                                          (@Prod.snd.{0, 0}
+                                            (Except.{0, 0} String
+                                              (SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula))
+                                            SourceEqualityConstraintMemoAllocation.State
+                                            (@SourceEqualityConjoinAllocation.conjoin FullSyntax.Formula inst le first
+                                              second loaded))))))))))
+lean/restart-evidence/20261017-recursive-selected-closure/plain-guard-kernels.lean:125:14: error(lean.unknownIdentifier): Unknown constant `sentinel_without_load`
+lean/restart-evidence/20261017-recursive-selected-closure/plain-guard-kernels.lean:126:8: error(lean.unknownIdentifier): Unknown identifier `sentinel_without_load`

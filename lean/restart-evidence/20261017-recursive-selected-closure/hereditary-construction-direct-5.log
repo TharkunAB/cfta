@@ -1,0 +1,40 @@
+lean/MicroCFTA/SourceCurrentHereditaryConstruction.lean:372:30: error: Dependent elimination failed: Failed to solve equation
+  InternedStoredSubstitution.manyLeaves [] = leaf :: as✝
+lean/MicroCFTA/SourceCurrentHereditaryConstruction.lean:385:30: error: Dependent elimination failed: Failed to solve equation
+  InternedStoredSubstitution.edgeLeaves [] = leaf :: as✝
+lean/MicroCFTA/SourceCurrentHereditaryConstruction.lean:403:17: warning: Possibly looping simp theorem: `InternedStoredSubstitution.leaves.eq_def`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+
+Note: This linter can be disabled with `set_option linter.loopingSimpArgs false`
+lean/MicroCFTA/SourceCurrentHereditaryConstruction.lean:407:17: warning: Possibly looping simp theorem: `InternedStoredSubstitution.leaves.eq_def`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+
+Note: This linter can be disabled with `set_option linter.loopingSimpArgs false`
+lean/MicroCFTA/SourceCurrentHereditaryConstruction.lean:468:8: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (fun name => if name = Reference.interned entry.identity then some (Value.mu entry body depth ordinary) else none)
+      name =
+    some replacement
+of `found`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case mu.replacements
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+valid : Guard → Prop
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+stored : MuStored valid state
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+available : Available state (Value.mu entry body depth ordinary)
+annotated : Annotated valid (Value.mu entry body depth ordinary)
+name : Reference
+replacement : Value Symbol Guard
+found :
+  (fun name => if name = Reference.interned entry.identity then some (Value.mu entry body depth ordinary) else none)
+      name =
+    some replacement
+⊢ Available state replacement

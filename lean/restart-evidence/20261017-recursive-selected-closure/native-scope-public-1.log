@@ -1,0 +1,131 @@
+'MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings' does not depend on any axioms
+@MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings : {Symbol Guard : Type} →
+  (Guard → Prop) →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard → MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey → Prop
+'MicroCFTA.SourceCurrentHereditaryNativeScope.empty' does not depend on any axioms
+@MicroCFTA.SourceCurrentHereditaryNativeScope.empty : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings Symbol Guard valid source
+    (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+'MicroCFTA.SourceCurrentHereditaryNativeScope.bindings_annotated' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentHereditaryNativeScope.bindings_annotated : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol left →
+    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol right →
+      ∀ (binding : Prod.{0, 0} Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+        @Membership.mem.{0, 0} (Prod.{0, 0} Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (List.{0} (Prod.{0, 0} Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@List.instMembership.{0} (Prod.{0, 0} Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@MicroCFTA.SourceRecursiveIntersectionEnvironment.bindings Symbol Guard left right) binding →
+          @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol
+            (@Prod.snd.{0, 0} Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) binding)
+'MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.extend' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.extend : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings Symbol Guard valid source domain →
+    ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source left →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source right →
+          @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol left →
+            @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol right →
+              ∀ (key : Prod.{0, 0} Nat Nat),
+                @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings Symbol Guard valid source
+                  (MicroCFTA.SourceRecursiveIntersectionDomain.extend domain
+                    (@List.map.{0, 0} (Prod.{0, 0} Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                      (@Prod.fst.{0, 0} Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.SourceRecursiveIntersectionEnvironment.bindings Symbol Guard left right))
+                    key)
+'MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.enter' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.enter : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings Symbol Guard valid source domain →
+    ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source left →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source right →
+          @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol left →
+            @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol right →
+              ∀ (cache : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+                @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey cache →
+                  ∀ (first second : Nat),
+                    @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings Symbol Guard valid source
+                      (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                        (@Prod.fst.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                          (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                          (@MicroCFTA.SourceRecursiveIntersectionEnvironment.enter Symbol Guard cache domain left right
+                            first second)))
+'MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.read' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings.read : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (source current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard current →
+    @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard source current →
+      @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)) →
+        ∀ (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+          @MicroCFTA.SourceCurrentHereditaryNativeScope.Bindings Symbol Guard valid source domain →
+            ∀ (name : Nat),
+              @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+                  (MicroCFTA.SourceRecursiveIntersectionDomain.names domain) name →
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+                  And
+                    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.SourcePreparedSharedRows.read Symbol Guard current name)
+                      (@some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value))
+                    (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard source value)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard current value)
+                        (And
+                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard value)
+                            (MicroCFTA.InternedBinderProtocol.NodeRef.mu name))
+                          (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value))))
+'MicroCFTA.SourceCurrentHereditaryNativeScope.body_annotated' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentHereditaryNativeScope.body_annotated : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value →
+    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.body Symbol Guard value)
+'MicroCFTA.SourceCurrentHereditaryNativeScope.node_edge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryNativeScope.node_edge : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value →
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard value) edge →
+        @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Symbol Guard valid edge
+'MicroCFTA.SourceCurrentHereditaryNativeScope.edge_child' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentHereditaryNativeScope.edge_child : ∀ {Symbol Guard : Type} (valid : Guard → Prop)
+  (left right : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Symbol Guard valid left →
+    @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Symbol Guard valid right →
+      ∀
+        (children :
+          Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+        @Membership.mem.{0, 0}
+            (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (List.{0}
+              (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@List.instMembership.{0}
+              (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@List.zip.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard left)
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard right))
+            children →
+          And
+            (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol
+              (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) children))
+            (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol
+              (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) children))

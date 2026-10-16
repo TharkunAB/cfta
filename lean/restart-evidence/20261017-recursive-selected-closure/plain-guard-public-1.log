@@ -1,0 +1,190 @@
+'MicroCFTA.SourceCurrentUnconstrainedGuardClosure.plain_fields' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentUnconstrainedGuardClosure.plain_fields : ∀
+  (guard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  MicroCFTA.SourceCompactGuards.ActiveOption
+      (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula guard) →
+    @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) true →
+      And
+        (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+          (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula guard)
+          (@some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+            (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))))
+        (@Eq.{1} (List.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula))
+          (@MicroCFTA.GuardConjunction.atoms MicroCFTA.FullSyntax.Formula
+            (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula guard))
+          (@List.nil.{0} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)))
+'MicroCFTA.SourceCurrentUnconstrainedGuardClosure.top_plain' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentUnconstrainedGuardClosure.top_plain : @Eq.{1} Bool
+  (MicroCFTA.SourceMemoGate.plain (@MicroCFTA.SourceEqualityConstraintConstructors.top MicroCFTA.FullSyntax.Formula))
+  true
+'MicroCFTA.SourceCurrentUnconstrainedGuardClosure.conjoin_plain' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentUnconstrainedGuardClosure.conjoin_plain : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)]
+  (le :
+    MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula → Bool)
+  (first second : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  MicroCFTA.SourceCompactGuards.ActiveOption
+      (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula first) →
+    MicroCFTA.SourceCompactGuards.ActiveOption
+        (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula second) →
+      @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain first) true →
+        @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain second) true →
+          @Eq.{1} Bool
+            (MicroCFTA.SourceMemoGate.plain
+              (@MicroCFTA.SourceEqualityConstraintConstructors.conjoin MicroCFTA.FullSyntax.Formula inst le first
+                second))
+            true
+'MicroCFTA.SourceCurrentUnconstrainedGuardClosure.ready_active' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentUnconstrainedGuardClosure.ready_active : ∀
+  (value : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (cache : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key),
+  MicroCFTA.SourceEqualityConstraintAllocation.Ready cache
+      (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored MicroCFTA.FullSyntax.Formula value) →
+    MicroCFTA.SourceCompactGuards.ActiveOption
+      (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula
+        (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula value))
+'MicroCFTA.SourceCurrentUnconstrainedGuardClosure.conjoin_result_plain' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentUnconstrainedGuardClosure.conjoin_result_plain : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)]
+  (le :
+    MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula → Bool)
+  (first second : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints
+        (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored MicroCFTA.FullSyntax.Formula first) →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints
+          (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored MicroCFTA.FullSyntax.Formula second) →
+        @Eq.{1} Bool
+            (MicroCFTA.SourceMemoGate.plain
+              (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula first))
+            true →
+          @Eq.{1} Bool
+              (MicroCFTA.SourceMemoGate.plain
+                (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula second))
+              true →
+            ∀ (result : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula),
+              @Eq.{1}
+                  (Except.{0, 0} String
+                    (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@Prod.fst.{0, 0}
+                    (Except.{0, 0} String
+                      (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (@MicroCFTA.SourceEqualityConjoinAllocation.conjoin MicroCFTA.FullSyntax.Formula inst le first
+                      second before))
+                  (@Except.ok.{0, 0} String
+                    (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula) result) →
+                @Eq.{1} Bool
+                  (MicroCFTA.SourceMemoGate.plain
+                    (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula result))
+                  true
+'MicroCFTA.SourceCurrentUnconstrainedGuardClosure.ready_plain' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentUnconstrainedGuardClosure.ready_plain : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)]
+  (le :
+    MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula → Bool)
+  (first second : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (firstArity secondArity : Nat) (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints
+        (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored MicroCFTA.FullSyntax.Formula first) →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints
+          (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored MicroCFTA.FullSyntax.Formula second) →
+        @Eq.{1} Bool
+            (MicroCFTA.SourceMemoGate.plain
+              (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula first))
+            true →
+          @Eq.{1} Bool
+              (MicroCFTA.SourceMemoGate.plain
+                (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula second))
+              true →
+            ∀ (result : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula),
+              @Eq.{1}
+                  (Except.{0, 0} String
+                    (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch
+                      (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@Prod.fst.{0, 0}
+                    (Except.{0, 0} String
+                      (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch
+                        (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (@MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run MicroCFTA.FullSyntax.Formula inst le first
+                      second firstArity secondArity before))
+                  (@Except.ok.{0, 0} String
+                    (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch
+                      (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch.ready
+                      (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula) result)) →
+                @Eq.{1} Bool
+                  (MicroCFTA.SourceMemoGate.plain
+                    (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula result))
+                  true
+'MicroCFTA.SourceCurrentUnconstrainedGuardClosure.loaded_ready_plain' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentUnconstrainedGuardClosure.loaded_ready_plain : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula)]
+  (le :
+    MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula → Bool)
+  (left right : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (first second : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (firstArity secondArity : Nat) (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityGuardReadback.Cached
+        (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula left) →
+      MicroCFTA.SourceEqualityGuardReadback.Cached
+          (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula right) →
+        @Eq.{1}
+            (Except.{0, 0} String
+              (Option.{0} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+            (@MicroCFTA.SourceEqualityConstraintFieldLookup.load MicroCFTA.FullSyntax.Formula left before.constraints)
+            (@Except.ok.{0, 0} String
+              (Option.{0} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+              (@some.{0} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula) first)) →
+          @Eq.{1}
+              (Except.{0, 0} String
+                (Option.{0} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@MicroCFTA.SourceEqualityConstraintFieldLookup.load MicroCFTA.FullSyntax.Formula right
+                before.constraints)
+              (@Except.ok.{0, 0} String
+                (Option.{0} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+                (@some.{0} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+                  second)) →
+            @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain left) true →
+              @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain right) true →
+                ∀ (result : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula),
+                  @Eq.{1}
+                      (Except.{0, 0} String
+                        (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch
+                          (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@Prod.fst.{0, 0}
+                        (Except.{0, 0} String
+                          (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch
+                            (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (@MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run MicroCFTA.FullSyntax.Formula inst le
+                          first second firstArity secondArity before))
+                      (@Except.ok.{0, 0} String
+                        (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch
+                          (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch.ready
+                          (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula) result)) →
+                    @Eq.{1} Bool
+                      (MicroCFTA.SourceMemoGate.plain
+                        (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula result))
+                      true
