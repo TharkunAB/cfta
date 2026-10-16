@@ -36,8 +36,9 @@ or complete generated-history theorem is claimed.
 The pinned full Audit passes 2320 jobs and 56321 theorem dependency checks.
 Only standard foundations and the old unused-input warning occur.
 Independent source reviews found no material defect. Focused checks pass
-68 public axiom reports, 78 complete signatures, and 46 kernel integrations.
-Eight named kernels have additional permitted-foundation axiom reports.
+68 public axiom reports, 78 public signatures, and 46 kernel integrations.
+Eight named kernels have additional axiom and signature checks. All use
+only the permitted foundations.
 A two-generated-query kernel uses the first actual receipt for every second
 cache invariant; only its next reached WordRanges is new. Reuse the
 unchanged-source strict Nix build, 777 examples plus golden, five-file
