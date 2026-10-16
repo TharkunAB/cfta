@@ -539,7 +539,8 @@ consider Settings{..} StEcta{..} lvl full_term s0
         | not (testable i) = return (Knew, s)
         | otherwise = do
             let table = Map.findWithDefault DT.empty rep (instance_trees s)
-            inserted <- DT.insert (valuesEqual eq_inst) test_cases i (values i) table
+                known a b = a == b || joinable isVar (rewrite_rules s) a b
+            inserted <- DT.insertWith known (valuesEqual eq_inst) test_cases i (values i) table
             case inserted of
                 DT.Untested -> return (Knew, s)
                 DT.Distinct table' ->

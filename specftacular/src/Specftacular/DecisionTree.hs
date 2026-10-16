@@ -10,6 +10,7 @@ module Specftacular.DecisionTree (
     empty,
     leaf,
     insert,
+    insertWith,
     size,
 ) where
 
@@ -28,7 +29,7 @@ data DecisionTree
 data Inserted
     = -- | The term is a new representative, in this tree.
       Distinct DecisionTree
-    | -- | The term has the values of this representative on all test cases.
+    | -- | Tests or the supplied predicate equate the term with this representative.
       EqualTo Term
     | -- | A comparison threw, so the term cannot be tested.
       Untested
@@ -59,7 +60,21 @@ insert ::
     (TestCase -> Value) ->
     DecisionTree ->
     IO Inserted
-insert equal cases t eval = go
+insert = insertWith (const (const False))
+
+{- | Insert a term, but skip the test schedule when the predicate proves
+that it equals the representative. Branch comparisons still select the
+representative. New equalities still use the complete test schedule.
+-}
+insertWith ::
+    (Term -> Term -> Bool) ->
+    (Value -> Value -> IO (Maybe Bool)) ->
+    [TestCase] ->
+    Term ->
+    (TestCase -> Value) ->
+    DecisionTree ->
+    IO Inserted
+insertWith known equal cases t eval = go
   where
     go Empty = return (Distinct (Leaf t eval))
     go (Branch tc children) = find [] children
@@ -74,7 +89,9 @@ insert equal cases t eval = go
                 Just True ->
                     below (\sub' -> Branch tc (reverse before ++ (w, sub') : after))
                         <$> go sub
-    go (Leaf y evalY) = compareCases cases
+    go (Leaf y evalY)
+        | known t y = return (EqualTo y)
+        | otherwise = compareCases cases
       where
         compareCases [] = return (EqualTo y)
         compareCases (tc : rest) = do
