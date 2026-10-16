@@ -128,6 +128,13 @@ module Data.CFTA.Gen.Refinement.Derive (
     Atoms,
     atom,
 
+    -- * The logic
+    Boolean (..),
+    Symbolic (..),
+    smaller,
+    larger,
+    literal,
+
     -- * Errors
     DeriveLTAError (..),
 ) where
@@ -160,8 +167,8 @@ import Data.CFTA.Gen.Refinement (LTAGen)
 import Data.CFTA.Gen.Refinement.Derive.Internal
 import Data.CFTA.Generic (Constructor (..), Description (..), Field (..), HasFTA (..))
 import Data.CFTA.Index (Arity (..), Depth)
-import Data.CFTA.Refinement.Expression (Expr, uninterpreted)
-import Data.CFTA.Refinement.Symbolic (Boolean (true), Symbolic (Truth))
+import Data.CFTA.Refinement.Expression (Expr, literal, uninterpreted)
+import Data.CFTA.Refinement.Symbolic (Boolean (..), Symbolic (..), larger, smaller)
 import qualified Data.CFTA.Refinement.Symbolic.Internal as Children
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
