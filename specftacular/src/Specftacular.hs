@@ -376,7 +376,6 @@ runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. 
             -- sort bucket. The search checks new rules again as it runs.
             eligible t =
                 not (t `HS.member` seen s)
-                    && not (termSize t > 1 && allFromSig given_sig t)
                     && either (const False) (sameUpToCarriers tc) (termType inst_sig t)
                     && not (reducible (isGivenVar inst_sig) (rewrite_rules s) (mostGeneral (isGivenVar inst_sig) schema_vars t))
         -- We want to display a message once the first term is found.
@@ -435,10 +434,6 @@ consider Settings{..} StEcta{..} lvl full_term s0
     | reducible isVar (rewrite_rules s0) most_general = return ([], s0)
     -- if we've seen it before, we can immediately skip.
     | np_term `HS.member` seen s0 = return ([], s0{so_far = so_far s0 + 1})
-    -- We don't want terms that are all variables.
-    | termSize np_term > 1
-    , allFromSig given_sig np_term =
-        return ([], s0{so_far = so_far s0 + 1, seen = HS.insert np_term (seen s0)})
     -- An application of the schema does not fit its argument, or its
     -- equality does not fit its values, so the search does not test it.
     | not (testable np_term) = return ([], s0{so_far = so_far s0 + 1})
@@ -583,9 +578,6 @@ ppNpTerm t
     ppTerm' _ (Term (Symbol t) _) = T.unpack t
     parIfReq s@(c : _) | c /= '(', c /= '[', not (isAlphaNum c) = "(" <> s <> ")"
     parIfReq s = s
-
-allFromSig sig (Term "app" [_, f, v]) = allFromSig sig f && allFromSig sig v
-allFromSig sig (Term (Symbol t) _) = t `Map.member` sig
 
 {- | Show the progress of the search on one line of stderr, if the first
 argument is True.
