@@ -35,7 +35,7 @@ import System.Timeout (timeout)
 import qualified Test.QuickCheck as QC
 import Text.Printf (printf)
 
-import Data.CFTA.Equality (edgeCount, nodeCount, reducePartially, refold, withoutRedundantEdges)
+import Data.CFTA.Equality (edgeCount, nodeCount, reducePartially, withoutRedundantEdges)
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Synthesis
 import Data.CFTA.Gen.Synthesis.HooglePlus
@@ -123,8 +123,8 @@ search benchmark lib = go 1 0
                     go (size + 1) (listed + count)
 
 {- | The seconds of each phase of one size of a query: building the automaton,
-reducing it, refolding it, and listing its programs, with the node and edge
-counts after each phase.
+reducing it, refolding it with Hectare's order of its edges, and listing its
+programs, with the node and edge counts after each phase.
 -}
 profileQuery :: String -> Int -> IO ()
 profileQuery name size = case find ((== Text.pack name) . benchmarkName . fst) (suiteQueries "all") of
@@ -136,16 +136,17 @@ profileQuery name size = case find ((== Text.pack name) . benchmarkName . fst) (
         let raw = rawSearchSpace lib (benchmarkQuery benchmark) size
         rawNodes <- evaluate (nodeCount raw)
         t1 <- getMonotonicTime
-        reduced <- rounds (0 :: Int) raw
+        spaces <- rounds (0 :: Int) raw
+        let reduced = last spaces
         reducedNodes <- evaluate (nodeCount reduced)
         t2 <- getMonotonicTime
-        let folded = refold reduced
-        foldedNodes <- evaluate (nodeCount folded)
+        space <- evaluate (orderedSpace spaces)
+        foldedNodes <- evaluate (nodeCount (spaceNode space))
         t3 <- getMonotonicTime
-        listed <- evaluate (length (programsIn folded))
+        listed <- evaluate (length (programsIn space))
         t4 <- getMonotonicTime
         printf
-            "%s size %d: build %.3f s (%d nodes, %d edges), reduce %.3f s (%d nodes, %d edges), refold %.3f s (%d nodes), list %.3f s (%d programs)\n"
+            "%s size %d: build %.3f s (%d nodes, %d edges), reduce %.3f s (%d nodes, %d edges), refold and order %.3f s (%d nodes), list %.3f s (%d programs)\n"
             name
             size
             (t1 - t0)
@@ -159,7 +160,7 @@ profileQuery name size = case find ((== Text.pack name) . benchmarkName . fst) (
             (t4 - t3)
             listed
   where
-    -- The rounds of 'reduceFully', each with its time and size.
+    -- The spaces of 'reductions', each round with its time and size.
     rounds count node = do
         start <- getMonotonicTime
         next <- evaluate (withoutRedundantEdges (reducePartially node))
@@ -167,7 +168,11 @@ profileQuery name size = case find ((== Text.pack name) . benchmarkName . fst) (
         end <- getMonotonicTime
         printf "round %d: %.3f s, %d nodes, %d edges\n" count (end - start) nodes (edgeCount next)
         hFlush stdout
-        if next == node || count + 1 >= reductionRounds then pure next else rounds (count + 1) next
+        more count node next
+    more count node next
+        | next == node = pure [node]
+        | count + 1 >= reductionRounds = pure [node, next]
+        | otherwise = (node :) <$> rounds (count + 1) next
 
 {- | The programs of one size of a query as a generator: the count, the rank
 of the expected solution, a check that the ranks list the programs of the

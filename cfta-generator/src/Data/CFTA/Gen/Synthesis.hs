@@ -63,6 +63,9 @@ module Data.CFTA.Gen.Synthesis (
     reduceFully,
     reductionRounds,
     searchSpace,
+    Space (..),
+    reduceWithOrder,
+    orderedSpace,
     programsIn,
     distinctProgramsIn,
     programRuns,
@@ -81,6 +84,8 @@ import Data.Bifunctor (first)
 import Data.Char (isAlphaNum, isLower, isSpace, isUpper)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Hashable (Hashable)
+import qualified Data.IntMap.Strict as IntMap
+import qualified Data.IntSet as IntSet
 import Data.List (intercalate, permutations, subsequences)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
@@ -559,12 +564,18 @@ solution. Reduction does not change the language, so the bound only stops
 earlier.
 -}
 reduceFully :: Node Symbol -> Node Symbol
-reduceFully = go reductionRounds
+reduceFully = last . reductions
+
+{- | The spaces of 'reduceFully': the input, and the space after each round,
+until a round changes nothing or after 'reductionRounds' rounds.
+-}
+reductions :: Node Symbol -> [Node Symbol]
+reductions = go reductionRounds
   where
-    go 0 node = node
+    go 0 node = [node]
     go rounds node
-        | next == node = node
-        | otherwise = go (rounds - 1) next
+        | next == node = [node]
+        | otherwise = node : go (rounds - 1) next
       where
         next = withoutRedundantEdges (reducePartially node)
 
@@ -578,6 +589,91 @@ components and arguments of a program.
 -}
 searchSpace :: Library -> Query -> Int -> Node Symbol
 searchSpace lib query = refold . reduceFully . rawSearchSpace lib query
+
+{- | A search space after the reduction, with Hectare's order of its edges
+('reduceWithOrder').
+-}
+data Space = Space
+    { spaceNode :: !(Node Symbol)
+    -- ^ The automaton, reduced and refolded.
+    , spaceOrder :: !(Edge Symbol -> Double)
+    -- ^ The weights of 'runsBy': an edge from an earlier round of the reduction is heavier.
+    }
+
+{- | 'reduceFully' and 'refold', with Hectare's order of the edges: an edge
+that is in the space after an earlier round of the reduction comes first,
+and the canonical order of 'runsBy' orders the edges of one round. The input
+is round 0. An edge of the refolded space has the earliest round of the
+edges that refold makes it from. An edge that the enumeration builds, as an
+intersection, comes after the edges of the space. The order depends only on
+the automata, not on what the process built before, so it is the same in
+every process.
+
+On the Hoogle+ and Stack Overflow suites, with 60 seconds for each query,
+this order solves the same 53 queries as the order of the edge identities,
+which depends on what the process built before, and lists the expected
+solutions at 1.07 times their rank in that order (the geometric mean of the
+rank plus one). The canonical order alone lists them at 1.32 times that rank,
+and solves 51.
+-}
+reduceWithOrder :: Node Symbol -> Space
+reduceWithOrder = orderedSpace . reductions
+
+{- | The last space of a reduction ('reductions'), refolded, with Hectare's
+order of its edges ('reduceWithOrder').
+-}
+orderedSpace :: [Node Symbol] -> Space
+orderedSpace spaces = rounds `seq` Space folded order
+  where
+    (born, final, count) = births spaces
+    (folded, refolded) = refoldEdges final
+    rounds =
+        IntMap.unionWith min born $
+            IntMap.fromListWith
+                min
+                [ (edgeKey (refolded edge), index)
+                | edges <- IntMap.elems (reachable final)
+                , edge <- edges
+                , Just index <- [IntMap.lookup (edgeKey edge) born]
+                ]
+    order edge = negate (fromIntegral (IntMap.findWithDefault count (edgeKey edge) rounds))
+
+{- | The first round of each edge of the spaces of a reduction, by its
+identity, with the last space and the number of spaces. A round reads the
+edges that the enumeration reads ('reachable'), and it stops at the nodes of
+the rounds before: their edges have a round already.
+-}
+births :: [Node Symbol] -> (IntMap.IntMap Int, Node Symbol, Int)
+births = go 0 IntSet.empty IntMap.empty
+  where
+    go _ _ _ [] = error "births: no space"
+    go index seen born (space : rest) = case rest of
+        [] -> (born', space, index + 1)
+        _ -> go (index + 1) seen' born' rest
+      where
+        (seen', born') = visit index seen born [space]
+    -- The nodes that a round reaches and the rounds before did not.
+    visit _ !seen !born [] = (seen, born)
+    visit index !seen !born (EmptyNode : pending) = visit index seen born pending
+    visit index !seen !born (node : pending)
+        | IntSet.member ident seen = visit index seen born pending
+        | otherwise =
+            visit
+                index
+                (IntSet.insert ident seen)
+                (foldl' (\table edge -> IntMap.insertWith (\_ old -> old) (edgeKey edge) index table) born edges)
+                (concatMap edgeChildren edges <> pending)
+      where
+        NodeId ident = nodeIdentity node
+        edges = nodeEdges node
+
+-- | The identity of an edge as a key of a table.
+edgeKey :: Edge Symbol -> Int
+edgeKey edge = let EdgeId identity = edgeIdentity edge in identity
+
+-- | 'searchSpace', with Hectare's order of its edges.
+orderedSearchSpace :: Library -> Query -> Int -> Space
+orderedSearchSpace lib query = reduceWithOrder . rawSearchSpace lib query
 
 -- | The automaton of 'searchSpace' before the reduction.
 rawSearchSpace :: Library -> Query -> Int -> Node Symbol
@@ -728,19 +824,19 @@ rawSaturatedSearchSpace saturation lib query size =
         ]
 
 {- | The programs of a size in the saturated search space that solve the
-query, each once, in Hectare's order ('interningOrder'), as
+query, each once, in Hectare's order ('reduceWithOrder'), as
 'distinctSolutionsOfSize' gives them for 'rawSearchSpace'.
 -}
 distinctSaturatedSolutionsOfSize :: Saturation -> Library -> Query -> Int -> [Program]
 distinctSaturatedSolutionsOfSize saturation lib query =
-    distinctProgramsIn . refold . reduceFully . rawSaturatedSearchSpace saturation lib query
+    distinctProgramsIn . reduceWithOrder . rawSaturatedSearchSpace saturation lib query
 
 {- | The programs of a search space, each once, in Hectare's order: the order
 in which 'programsIn' first lists them. 'programsIn' keeps a set of the
 typed terms, and a program can have many; this keeps a set of the programs
 only.
 -}
-distinctProgramsIn :: Node Symbol -> [Program]
+distinctProgramsIn :: Space -> [Program]
 distinctProgramsIn = catMaybes . programRuns FirstOrder
 
 {- | The runs of a search space in Hectare's order, one for each typed term,
@@ -749,29 +845,16 @@ programs are those of 'distinctProgramsIn', and the length is the number of
 typed terms that the enumeration lists. A typed term can repeat, as in
 'runs'. With 'OnlyDefault', the runs are narrowed by 'narrowHeads'.
 -}
-programRuns :: Encoding -> Node Symbol -> [Maybe Program]
-programRuns encoding = go Set.empty . map (toProgram . fst) . listRuns "Mu"
+programRuns :: Encoding -> Space -> [Maybe Program]
+programRuns encoding space = go Set.empty $ map (toProgram . fst) $ listRuns "Mu" (spaceNode space)
   where
     listRuns = case encoding of
-        Curried (OnlyDefault _) _ -> runsNarrowedBy interningOrder narrowHeads
-        _ -> runsBy interningOrder
+        Curried (OnlyDefault _) _ -> runsNarrowedBy (spaceOrder space) narrowHeads
+        _ -> runsBy (spaceOrder space)
     go _ [] = []
     go seen (program : rest)
         | Set.member program seen = Nothing : go seen rest
         | otherwise = Just program : go (Set.insert program seen) rest
-
-{- | Hectare's order of the edges of a search space, as weights for 'runsBy':
-the order of the edges' identities. That is the order in which the build and
-the reduction of the space created the edges, so Hectare's order depends on
-what the process built before, unlike the canonical order of the enumerator.
-Hectare's results depend on this order, and no stable key that we tried gives
-them back: on the Hoogle+ and Stack Overflow suites, with 60 seconds for each
-query, the canonical order solves 51 queries against 53, and lists the
-expected solutions at 1.32 times their rank (the geometric mean of the rank
-plus one).
--}
-interningOrder :: Edge Symbol -> Double
-interningOrder edge = let EdgeId identity = edgeIdentity edge in negate (fromIntegral identity)
 
 -- | The programs of a term of the search space: the types go.
 toProgram :: Term Symbol -> Program
@@ -780,13 +863,13 @@ toProgram term = case (Term.rootLabel term, Term.subForest term) of
     ("filter", children@(_ : _)) -> toProgram $ last children
     (symbol, _) -> Var (symbolText symbol)
 
--- | The programs of an automaton of the search space, one for each typed term, in Hectare's order.
-programsIn :: Node Symbol -> [Program]
-programsIn = map toProgram . nubOrd . map fst . runsBy interningOrder "Mu"
+-- | The programs of a search space, one for each typed term, in Hectare's order.
+programsIn :: Space -> [Program]
+programsIn space = map toProgram $ nubOrd $ map fst $ runsBy (spaceOrder space) "Mu" (spaceNode space)
 
 -- | The programs of a size that solve the query, with representatives.
 solutionsOfSize :: Library -> Query -> Int -> [Program]
-solutionsOfSize lib query = programsIn . searchSpace lib query
+solutionsOfSize lib query = programsIn . orderedSearchSpace lib query
 
 {- | The programs of a size that solve the query, each once, in the order in
 which 'solutionsOfSize' first lists them. 'solutionsOfSize' keeps a set of
@@ -795,7 +878,7 @@ of the search space and keeps a set of the programs only, which needs much
 less memory.
 -}
 distinctSolutionsOfSize :: Library -> Query -> Int -> [Program]
-distinctSolutionsOfSize lib query = distinctProgramsIn . searchSpace lib query
+distinctSolutionsOfSize lib query = distinctProgramsIn . orderedSearchSpace lib query
 
 -- | The programs up to a size that solve the query, smallest first.
 synthesize :: Library -> Query -> Int -> [Program]

@@ -222,8 +222,9 @@ fromTypingRules (Depth bound) roots rules = do
          in \(Symbol label) -> (Map.findWithDefault 0 label positions, label)
 
     -- The constructors of each algebraic type in the descriptions and their
-    -- fields. Read only types in the finite typing rows. An unused field
-    -- can have a non-regular description. Repeated types reuse their row.
+    -- fields, for the types in the typing rows only. A field that no rule
+    -- uses can have a non-regular type, whose description reaches infinitely
+    -- many types. The walk keeps the types that it saw.
     reachable _ _ [] = []
     reachable needed seen (AtomicType _ : pending) = reachable needed seen pending
     reachable needed seen (AlgebraicType typ alternatives : pending)

@@ -31,11 +31,13 @@ tree automata of `cfta`, with QuickCheck integration.
   space of a size as a generator. `rawSaturatedSearchSpace` builds the space of
   the saturated programs of a size, in which each head is applied to all its
   parameters, as in Hegel's terms. Hectare lists the programs of a space in
-  the order of the edges' identities, through `runsBy`: the order in which
-  the build and the reduction created them. So, unlike the enumerator's
-  canonical order, Hectare's order depends on what the process built before.
-  Its results depend on this order, and no stable key that we tried gives
-  them back. `libraryEncoding` chooses how a space encodes the types
+  the order of the rounds of the reduction, through `runsBy`: an edge that is
+  in the space after an earlier round comes first, and the canonical order
+  orders the edges of one round (`reduceWithOrder`, which gives a `Space`:
+  the refolded automaton and the order). The order depends only on the
+  automata, so it is the same in every process, also when the process built
+  other spaces before. `programsIn`, `distinctProgramsIn`, and
+  `programRuns` list a `Space`. `libraryEncoding` chooses how a space encodes the types
   (`Encoding`): `FirstOrder`, or `Curried`, in which a type constructor is
   a leaf applied by `@` edges, so that a type variable of kind `* -> *`
   (`?Foldable t0`) ranges over a domain of type constructors. With
@@ -208,8 +210,8 @@ tree automata of `cfta`, with QuickCheck integration.
   The ranks order the constructors of each type that the datatype reaches in
   declaration order, as `fromDatatype` does. Literals have no declared
   position and follow the order of their labels.
-  Declaration lookup reads only types in the finite typing graph. An unused
-  non-regular field does not block ranking.
+  The positions come only from the types in the typing rows, so a field of a
+  non-regular type that no rule uses does not stop the build.
 - `compile` folds the recipe of a generator once with the solver. It groups
   child languages by the observations a guard reads, decides each guard once
   for each tuple of groups, and prunes and splits imports by the same

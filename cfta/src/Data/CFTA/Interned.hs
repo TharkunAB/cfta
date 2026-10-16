@@ -43,6 +43,7 @@ module Data.CFTA.Interned (
     crush,
     unfoldOuterRec,
     refold,
+    refoldEdges,
     nodeEdges,
     unfoldBounded,
     boundDepth,

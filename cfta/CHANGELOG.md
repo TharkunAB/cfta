@@ -8,6 +8,9 @@ Before release, the package was called `microcfta`.
   references. Reuse that same probe choice when matching a Mu. This avoids
   a pending interning lookup in a closed nested constructor expression.
 
+- `refoldEdges` is `refold` with the edge of the result that each edge of
+  the input becomes, so that a caller can carry data about the edges of a
+  graph through `refold`, whose new edges have new identities.
 - `Data.CFTA.Generic` exports the constructors of `Description`,
   `AtomicType` and `AlgebraicType`, so that another module can read the
   constructors and the field types of a datatype.
