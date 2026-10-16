@@ -1,0 +1,301 @@
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.NameCovered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenCovered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.language' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.name_rank' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.name_language' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.name_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.seen_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.sound_pairs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.complete_pairs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.initial_seen' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.advance_seen' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.seen_admitted' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.node_inputs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.edge_inputs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.admitted' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.row_language' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.row_rank' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.node_law' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.edge_law' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextRebase.rebase' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement : {Symbol : Type} →
+  {oldView newView : MicroCFTA.IntersectSchedule.View Symbol} →
+    MicroCFTA.IntersectSchedule.FiniteInput oldView → MicroCFTA.IntersectSchedule.FiniteInput newView → Prop
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.NameCovered : {Symbol : Type} →
+  {oldView : MicroCFTA.IntersectSchedule.View Symbol} → MicroCFTA.IntersectSchedule.FiniteInput oldView → Nat → Prop
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenCovered : {Symbol : Type} →
+  {oldView : MicroCFTA.IntersectSchedule.View Symbol} →
+    MicroCFTA.IntersectSchedule.FiniteInput oldView → MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey → Prop
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted : {Symbol Guard : Type} →
+  {oldView : MicroCFTA.IntersectSchedule.View Symbol} →
+    {width : Nat} →
+      MicroCFTA.IntersectSchedule.FiniteInput oldView →
+        MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard → Prop
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.language : ∀ {Symbol : Type}
+  {oldView newView : MicroCFTA.IntersectSchedule.View Symbol} {before : MicroCFTA.IntersectSchedule.FiniteInput oldView}
+  {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀ (input : MicroCFTA.IntersectSchedule.Input),
+      before.valid input →
+        ∀ (term : MicroCFTA.Language.Term Symbol),
+          MicroCFTA.IntersectSchedule.inputLanguage (MicroCFTA.IntersectSchedule.finiteLanguages newView after) input
+              term ↔
+            MicroCFTA.IntersectSchedule.inputLanguage (MicroCFTA.IntersectSchedule.finiteLanguages oldView before) input
+              term
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.name_rank : ∀ {Symbol : Type}
+  {oldView newView : MicroCFTA.IntersectSchedule.View Symbol} {before : MicroCFTA.IntersectSchedule.FiniteInput oldView}
+  {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀ (name : Nat),
+      MicroCFTA.SourceCurrentAllocatedNativeContextRebase.NameCovered before name →
+        ∀ (rank : Nat) (term : MicroCFTA.Language.Term Symbol),
+          MicroCFTA.IntersectSchedule.finiteRanks newView after name rank term ↔
+            MicroCFTA.IntersectSchedule.finiteRanks oldView before name rank term
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.name_language : ∀ {Symbol : Type}
+  {oldView newView : MicroCFTA.IntersectSchedule.View Symbol} {before : MicroCFTA.IntersectSchedule.FiniteInput oldView}
+  {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀ (name : Nat),
+      MicroCFTA.SourceCurrentAllocatedNativeContextRebase.NameCovered before name →
+        ∀ (term : MicroCFTA.Language.Term Symbol),
+          MicroCFTA.IntersectSchedule.finiteLanguages newView after name term ↔
+            MicroCFTA.IntersectSchedule.finiteLanguages oldView before name term
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.name_covered : ∀ {Symbol : Type}
+  {oldView newView : MicroCFTA.IntersectSchedule.View Symbol} {before : MicroCFTA.IntersectSchedule.FiniteInput oldView}
+  {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀ {name : Nat},
+      MicroCFTA.SourceCurrentAllocatedNativeContextRebase.NameCovered before name →
+        MicroCFTA.SourceCurrentAllocatedNativeContextRebase.NameCovered after name
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.seen_covered : ∀ {Symbol : Type}
+  {oldView newView : MicroCFTA.IntersectSchedule.View Symbol} {before : MicroCFTA.IntersectSchedule.FiniteInput oldView}
+  {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀ {domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+      MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenCovered before domain →
+        MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenCovered after domain
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.sound_pairs : ∀ {Symbol : Type}
+  {oldView newView : MicroCFTA.IntersectSchedule.View Symbol} {before : MicroCFTA.IntersectSchedule.FiniteInput oldView}
+  {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀ {domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+      MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenCovered before domain →
+        ∀ {output : MicroCFTA.InternedGuardedLanguage.Env Symbol},
+          MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs
+              (MicroCFTA.IntersectSchedule.finiteLanguages newView after) domain output →
+            MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs
+              (MicroCFTA.IntersectSchedule.finiteLanguages oldView before) domain output
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.complete_pairs : ∀ {Symbol : Type}
+  {oldView newView : MicroCFTA.IntersectSchedule.View Symbol} {before : MicroCFTA.IntersectSchedule.FiniteInput oldView}
+  {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀ {domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+      MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenCovered before domain →
+        ∀ {bound : Nat} {output : MicroCFTA.InternedGuardedLanguage.Env Symbol},
+          MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs
+              (MicroCFTA.IntersectSchedule.finiteRanks newView after) bound domain output →
+            MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs
+              (MicroCFTA.IntersectSchedule.finiteRanks oldView before) bound domain output
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.initial_seen : ∀ {Symbol Guard : Type}
+  {oldView : MicroCFTA.IntersectSchedule.View Symbol} (inputs : MicroCFTA.IntersectSchedule.FiniteInput oldView)
+  (width : Nat) (machine : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted inputs
+    (MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine)
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.advance_seen : ∀ {Symbol Guard : Type}
+  {oldView : MicroCFTA.IntersectSchedule.View Symbol} {width : Nat}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput oldView)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (after : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted inputs state →
+    MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted inputs
+      (MicroCFTA.SourceRecursiveIntersectionThunks.advance state after)
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.seen_admitted : ∀ {Symbol Guard : Type}
+  {oldView newView : MicroCFTA.IntersectSchedule.View Symbol} {width : Nat}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀ (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard),
+      MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted before state →
+        MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted after state
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.node_inputs : ∀
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀
+      {request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+      MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeInputs oldView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before) request →
+        MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeInputs newView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning newView after) request
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.edge_inputs : ∀
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀
+      {request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+      MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeInputs oldView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before) request →
+        MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeInputs newView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning newView after) request
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.admitted : ∀ {width : Nat}
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀
+      (state :
+        MicroCFTA.SourceRecursiveIntersectionThunks.State width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted oldView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before) state →
+        MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted newView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning newView after) state
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.row_language : ∀
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (edge :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      (∀
+          (child :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          child ∈ edge.children → before.valid (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf child)) →
+        ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.RowLanguage holds
+              (MicroCFTA.IntersectSchedule.finiteLanguages newView after) edge term ↔
+            MicroCFTA.SourceCurrentAllocatedNativeContextCache.RowLanguage holds
+              (MicroCFTA.IntersectSchedule.finiteLanguages oldView before) edge term
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement.row_rank : ∀
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (edge :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      (∀
+          (child :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          child ∈ edge.children → before.valid (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf child)) →
+        ∀ (rank : Nat)
+          (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.RowAt holds
+              (MicroCFTA.IntersectSchedule.finiteRanks newView after) rank edge term ↔
+            MicroCFTA.SourceCurrentAllocatedNativeContextCache.RowAt holds
+              (MicroCFTA.IntersectSchedule.finiteRanks oldView before) rank edge term
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.node_law : ∀
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (result :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeInputs oldView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before) request →
+        MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenCovered before request.domain.key →
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw oldView
+              (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before)
+              (MicroCFTA.IntersectSchedule.finiteRankedInput oldView before) holds request result →
+            MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw newView
+              (MicroCFTA.IntersectSchedule.finiteInputMeaning newView after)
+              (MicroCFTA.IntersectSchedule.finiteRankedInput newView after) holds request result
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.edge_law : ∀
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (result :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeInputs oldView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before) request →
+        MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenCovered before request.domain.key →
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeLaw oldView
+              (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before)
+              (MicroCFTA.IntersectSchedule.finiteRankedInput oldView before) holds request result →
+            MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeLaw newView
+              (MicroCFTA.IntersectSchedule.finiteInputMeaning newView after)
+              (MicroCFTA.IntersectSchedule.finiteRankedInput newView after) holds request result
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.contextual : ∀ {width : Nat}
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (state :
+        MicroCFTA.SourceRecursiveIntersectionThunks.State width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted oldView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before) state →
+        MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted before state →
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual oldView
+              (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before)
+              (MicroCFTA.IntersectSchedule.finiteRankedInput oldView before) holds state →
+            MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual newView
+              (MicroCFTA.IntersectSchedule.finiteInputMeaning newView after)
+              (MicroCFTA.IntersectSchedule.finiteRankedInput newView after) holds state
+@MicroCFTA.SourceCurrentAllocatedNativeContextRebase.rebase : ∀ {width : Nat}
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView},
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (state :
+        MicroCFTA.SourceRecursiveIntersectionThunks.State width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted oldView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before) state →
+        MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted before state →
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual oldView
+              (MicroCFTA.IntersectSchedule.finiteInputMeaning oldView before)
+              (MicroCFTA.IntersectSchedule.finiteRankedInput oldView before) holds state →
+            MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual newView
+                (MicroCFTA.IntersectSchedule.finiteInputMeaning newView after)
+                (MicroCFTA.IntersectSchedule.finiteRankedInput newView after) holds state ∧
+              MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted newView
+                  (MicroCFTA.IntersectSchedule.finiteInputMeaning newView after) state ∧
+                MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted after state

@@ -1,0 +1,233 @@
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.ranks_eq' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.languages_eq' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.reachable_mono' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.inventory_representative' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.inventory_valid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.inventory_ranks' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.inventory_languages' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.initial_admitted' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.advance_admitted' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.admitted_mono' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.node_law' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.edge_law' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.contextual' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.ranks_eq : ∀ {Symbol : Type}
+  (view : MicroCFTA.IntersectSchedule.View Symbol) (before after : MicroCFTA.IntersectSchedule.FiniteInput view),
+  before.representative = after.representative →
+    MicroCFTA.IntersectSchedule.finiteRanks view before = MicroCFTA.IntersectSchedule.finiteRanks view after
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.languages_eq : ∀ {Symbol : Type}
+  (view : MicroCFTA.IntersectSchedule.View Symbol) (before after : MicroCFTA.IntersectSchedule.FiniteInput view),
+  before.representative = after.representative →
+    MicroCFTA.IntersectSchedule.finiteLanguages view before = MicroCFTA.IntersectSchedule.finiteLanguages view after
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.reachable_mono : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+  (before after : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ before → value ∈ after) →
+    ∀ (input : MicroCFTA.IntersectSchedule.Input),
+      MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.Reachable source holds before input →
+        MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.Reachable source holds after input
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.inventory_representative : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (facts : MicroCFTA.InternedNestedFacts.Facts source) (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+  (before after : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (beforeOriginal :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ before → MicroCFTA.SourceRecursiveIntersectionInputView.Original value)
+  (beforeAvailable : MicroCFTA.InternedNestedProvenance.Values source before)
+  (beforeClosed :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ before → value.free = [])
+  (afterOriginal :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ after → MicroCFTA.SourceRecursiveIntersectionInputView.Original value)
+  (afterAvailable : MicroCFTA.InternedNestedProvenance.Values source after)
+  (afterClosed :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ after → value.free = []),
+  (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds before beforeOriginal
+        beforeAvailable beforeClosed).representative =
+    (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds after afterOriginal
+        afterAvailable afterClosed).representative
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.inventory_valid : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (facts : MicroCFTA.InternedNestedFacts.Facts source) (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+  (before after : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (beforeOriginal :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ before → MicroCFTA.SourceRecursiveIntersectionInputView.Original value)
+  (beforeAvailable : MicroCFTA.InternedNestedProvenance.Values source before)
+  (beforeClosed :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ before → value.free = [])
+  (afterOriginal :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ after → MicroCFTA.SourceRecursiveIntersectionInputView.Original value)
+  (afterAvailable : MicroCFTA.InternedNestedProvenance.Values source after)
+  (afterClosed :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ after → value.free = []),
+  (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ before → value ∈ after) →
+    ∀ (input : MicroCFTA.IntersectSchedule.Input),
+      (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds before beforeOriginal
+              beforeAvailable beforeClosed).valid
+          input →
+        (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds after afterOriginal
+              afterAvailable afterClosed).valid
+          input
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.inventory_ranks : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (facts : MicroCFTA.InternedNestedFacts.Facts source) (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+  (before after : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (beforeOriginal :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ before → MicroCFTA.SourceRecursiveIntersectionInputView.Original value)
+  (beforeAvailable : MicroCFTA.InternedNestedProvenance.Values source before)
+  (beforeClosed :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ before → value.free = [])
+  (afterOriginal :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ after → MicroCFTA.SourceRecursiveIntersectionInputView.Original value)
+  (afterAvailable : MicroCFTA.InternedNestedProvenance.Values source after)
+  (afterClosed :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ after → value.free = []),
+  MicroCFTA.IntersectSchedule.finiteRanks (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds)
+      (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds before beforeOriginal
+        beforeAvailable beforeClosed) =
+    MicroCFTA.IntersectSchedule.finiteRanks (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds)
+      (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds after afterOriginal
+        afterAvailable afterClosed)
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.inventory_languages : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (facts : MicroCFTA.InternedNestedFacts.Facts source) (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+  (before after : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (beforeOriginal :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ before → MicroCFTA.SourceRecursiveIntersectionInputView.Original value)
+  (beforeAvailable : MicroCFTA.InternedNestedProvenance.Values source before)
+  (beforeClosed :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ before → value.free = [])
+  (afterOriginal :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ after → MicroCFTA.SourceRecursiveIntersectionInputView.Original value)
+  (afterAvailable : MicroCFTA.InternedNestedProvenance.Values source after)
+  (afterClosed :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), value ∈ after → value.free = []),
+  MicroCFTA.IntersectSchedule.finiteLanguages (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds)
+      (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds before beforeOriginal
+        beforeAvailable beforeClosed) =
+    MicroCFTA.IntersectSchedule.finiteLanguages (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds)
+      (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds after afterOriginal
+        afterAvailable afterClosed)
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted : {width : Nat} →
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)) →
+    MicroCFTA.IntersectSchedule.InputMeaning view →
+      MicroCFTA.SourceRecursiveIntersectionThunks.State width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Prop
+MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.initial_admitted : ∀
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (model : MicroCFTA.IntersectSchedule.InputMeaning view) (width : Nat)
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted view model
+    (MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine)
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.advance_admitted : ∀ {width : Nat}
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (model : MicroCFTA.IntersectSchedule.InputMeaning view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted view model state →
+    MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted view model
+      (MicroCFTA.SourceRecursiveIntersectionThunks.advance state after)
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.admitted_mono : ∀ {width : Nat}
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.IntersectSchedule.InputMeaning view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  (∀ (input : MicroCFTA.IntersectSchedule.Input), before.valid input → after.valid input) →
+    MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted view before state →
+      MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted view after state
+MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.node_law : ∀
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.IntersectSchedule.FiniteInput view),
+  before.representative = after.representative →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (result :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeInputs view
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning view before) request →
+        MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw view
+            (MicroCFTA.IntersectSchedule.finiteInputMeaning view before)
+            (MicroCFTA.IntersectSchedule.finiteRankedInput view before) holds request result →
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw view
+            (MicroCFTA.IntersectSchedule.finiteInputMeaning view after)
+            (MicroCFTA.IntersectSchedule.finiteRankedInput view after) holds request result
+MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.edge_law : ∀
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.IntersectSchedule.FiniteInput view),
+  before.representative = after.representative →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (result :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeInputs view
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning view before) request →
+        MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeLaw view
+            (MicroCFTA.IntersectSchedule.finiteInputMeaning view before)
+            (MicroCFTA.IntersectSchedule.finiteRankedInput view before) holds request result →
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeLaw view
+            (MicroCFTA.IntersectSchedule.finiteInputMeaning view after)
+            (MicroCFTA.IntersectSchedule.finiteRankedInput view after) holds request result
+@MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.contextual : ∀ {width : Nat}
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.IntersectSchedule.FiniteInput view),
+  before.representative = after.representative →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (state :
+        MicroCFTA.SourceRecursiveIntersectionThunks.State width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted view
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning view before) state →
+        MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual view
+            (MicroCFTA.IntersectSchedule.finiteInputMeaning view before)
+            (MicroCFTA.IntersectSchedule.finiteRankedInput view before) holds state →
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual view
+            (MicroCFTA.IntersectSchedule.finiteInputMeaning view after)
+            (MicroCFTA.IntersectSchedule.finiteRankedInput view after) holds state

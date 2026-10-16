@@ -1,0 +1,45 @@
+✖ [460/460] Building MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels (406ms)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeInputGrowthModels.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedNativeInputGrowthModels.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedNativeInputGrowthModels.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedNativeInputGrowthModels.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedNativeInputGrowthModels.setup.json --json
+error: MicroCFTA/SourceCurrentAllocatedNativeInputGrowthModels.lean:66:17: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case nil
+Symbol : Type
+before after : View Symbol
+valid : Input → Prop
+references : ∀ (name : Nat), valid (Input.ref name) → valid (Input.mu name)
+same : ViewAgreement before after valid
+input : Input
+rank : Nat
+term : Term Symbol
+rank✝ : Nat
+a✝ : ∀ (child : Input), child ∈ [] → valid child
+⊢ InputForestDerivation after rank✝ [] []
+error: MicroCFTA/SourceCurrentAllocatedNativeInputGrowthModels.lean:68:12: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case cons
+Symbol : Type
+before after : View Symbol
+valid : Input → Prop
+references : ∀ (name : Nat), valid (Input.ref name) → valid (Input.mu name)
+same : ViewAgreement before after valid
+input : Input
+rank : Nat
+term : Term Symbol
+child✝ : Input
+smaller✝ : Nat
+term✝ : Term Symbol
+rank✝ : Nat
+children✝ : List Input
+terms✝ : List (Term Symbol)
+head : InputDerivation before child✝ smaller✝ term✝
+bounded : smaller✝ ≤ rank✝
+tail : InputForestDerivation before rank✝ children✝ terms✝
+first : valid child✝ → InputDerivation after child✝ smaller✝ term✝
+rest : (∀ (child : Input), child ∈ children✝ → valid child) → InputForestDerivation after rank✝ children✝ terms✝
+a✝ : ∀ (child : Input), child ∈ child✝ :: children✝ → valid child
+⊢ InputForestDerivation after rank✝ (child✝ :: children✝) (term✝ :: terms✝)
+error: MicroCFTA/SourceCurrentAllocatedNativeInputGrowthModels.lean:87:12: Unknown constant `MicroCFTA.Language.All₂.imp_mem`
+error: MicroCFTA/SourceCurrentAllocatedNativeInputGrowthModels.lean:90:12: Unknown constant `MicroCFTA.Language.All₂.imp_mem`
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels
+error: build failed

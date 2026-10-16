@@ -1,0 +1,308 @@
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.closed_originals' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.reachable_grows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.valid_grows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.rank_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.language_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.name_rank_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.name_language_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.target_root_valid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@closed_originals : ∀ {Symbol Guard : Type} (target : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts target →
+    ∀ (roots : List (Value Symbol Guard)),
+      Values target roots →
+        (∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) →
+          ∀ (root : Value Symbol Guard), root ∈ roots → Original root
+@reachable_grows : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    InternedNestedFacts.Facts target →
+      Grows source target →
+        Extends source.nodes.issued target.nodes.issued →
+          ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard)),
+            (∀ (root : Value Symbol Guard), root ∈ roots → Original root) →
+              Values source roots →
+                (∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) →
+                  ∀ (input : Input),
+                    SourceCurrentAllocatedNativeInputInventoryModels.Reachable source holds roots input →
+                      SourceCurrentAllocatedNativeInputInventoryModels.Reachable target holds roots input
+@valid_grows : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots ⋯
+                    targetAvailable targetClosed).valid
+                input
+@rank_exact : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              ∀ (rank : Nat) (term : Term Symbol),
+                inputAt
+                    (finiteRanks (view target holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots
+                        ⋯ targetAvailable targetClosed))
+                    input rank term ↔
+                  inputAt
+                    (finiteRanks (view source holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots
+                        originals available closed))
+                    input rank term
+@language_exact : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              ∀ (term : Term Symbol),
+                inputLanguage
+                    (finiteLanguages (view target holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots
+                        ⋯ targetAvailable targetClosed))
+                    input term ↔
+                  inputLanguage
+                    (finiteLanguages (view source holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots
+                        originals available closed))
+                    input term
+@name_rank_exact : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              input ≠ Input.empty →
+                ∀ (rank : Nat) (term : Term Symbol),
+                  finiteRanks (view target holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots
+                        ⋯ targetAvailable targetClosed)
+                      (identity input) rank term ↔
+                    finiteRanks (view source holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots
+                        originals available closed)
+                      (identity input) rank term
+@name_language_exact : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              input ≠ Input.empty →
+                ∀ (term : Term Symbol),
+                  finiteLanguages (view target holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots
+                        ⋯ targetAvailable targetClosed)
+                      (identity input) term ↔
+                    finiteLanguages (view source holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots
+                        originals available closed)
+                      (identity input) term
+@target_root_valid : ∀ {Symbol Guard : Type} (target : InternedConstructorTemplates.State Symbol Guard)
+  (facts : InternedNestedFacts.Facts target) (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+  (available : Values target roots) (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+  (root : Value Symbol Guard),
+  root ∈ roots →
+    (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target facts holds roots ⋯ available closed).valid
+      (inputOf root)
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:33:0: warning: Definition `first_verified` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:46:0: warning: Definition `second_verified` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:97:38: error: Tactic `decide` failed for proposition
+  inputOf left ≠ Input.empty
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableNot`, `instDecidableEqInput`, and `instDecidableEqInput.decEq`, reduction got stuck at the `Decidable` instance
+  match inputOf left, Input.empty with
+  | Input.empty, Input.empty => isTrue ⋯
+  | Input.empty, Input.node identity => isFalse ⋯
+  | Input.empty, Input.mu identity => isFalse ⋯
+  | Input.empty, Input.union identity => isFalse ⋯
+  | Input.empty, Input.ref identity => isFalse ⋯
+  | Input.node identity, Input.empty => isFalse ⋯
+  | Input.node a, Input.node b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.node identity, Input.mu identity_1 => isFalse ⋯
+  | Input.node identity, Input.union identity_1 => isFalse ⋯
+  | Input.node identity, Input.ref identity_1 => isFalse ⋯
+  | Input.mu identity, Input.empty => isFalse ⋯
+  | Input.mu identity, Input.node identity_1 => isFalse ⋯
+  | Input.mu a, Input.mu b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.mu identity, Input.union identity_1 => isFalse ⋯
+  | Input.mu identity, Input.ref identity_1 => isFalse ⋯
+  | Input.union identity, Input.empty => isFalse ⋯
+  | Input.union identity, Input.node identity_1 => isFalse ⋯
+  | Input.union identity, Input.mu identity_1 => isFalse ⋯
+  | Input.union a, Input.union b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.union identity, Input.ref identity_1 => isFalse ⋯
+  | Input.ref identity, Input.empty => isFalse ⋯
+  | Input.ref identity, Input.node identity_1 => isFalse ⋯
+  | Input.ref identity, Input.mu identity_1 => isFalse ⋯
+  | Input.ref identity, Input.union identity_1 => isFalse ⋯
+  | Input.ref a, Input.ref b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:98:45: error: Tactic `decide` failed for proposition
+  inputOf right ≠ inputOf left
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableNot`, `instDecidableEqInput`, and `instDecidableEqInput.decEq`, reduction got stuck at the `Decidable` instance
+  match inputOf right, inputOf left with
+  | Input.empty, Input.empty => isTrue ⋯
+  | Input.empty, Input.node identity => isFalse ⋯
+  | Input.empty, Input.mu identity => isFalse ⋯
+  | Input.empty, Input.union identity => isFalse ⋯
+  | Input.empty, Input.ref identity => isFalse ⋯
+  | Input.node identity, Input.empty => isFalse ⋯
+  | Input.node a, Input.node b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.node identity, Input.mu identity_1 => isFalse ⋯
+  | Input.node identity, Input.union identity_1 => isFalse ⋯
+  | Input.node identity, Input.ref identity_1 => isFalse ⋯
+  | Input.mu identity, Input.empty => isFalse ⋯
+  | Input.mu identity, Input.node identity_1 => isFalse ⋯
+  | Input.mu a, Input.mu b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.mu identity, Input.union identity_1 => isFalse ⋯
+  | Input.mu identity, Input.ref identity_1 => isFalse ⋯
+  | Input.union identity, Input.empty => isFalse ⋯
+  | Input.union identity, Input.node identity_1 => isFalse ⋯
+  | Input.union identity, Input.mu identity_1 => isFalse ⋯
+  | Input.union a, Input.union b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.union identity, Input.ref identity_1 => isFalse ⋯
+  | Input.ref identity, Input.empty => isFalse ⋯
+  | Input.ref identity, Input.node identity_1 => isFalse ⋯
+  | Input.ref identity, Input.mu identity_1 => isFalse ⋯
+  | Input.ref identity, Input.union identity_1 => isFalse ⋯
+  | Input.ref a, Input.ref b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:113:70: error: Tactic `decide` failed for proposition
+  inputOf left ≠ Input.empty
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableNot`, `instDecidableEqInput`, and `instDecidableEqInput.decEq`, reduction got stuck at the `Decidable` instance
+  match inputOf left, Input.empty with
+  | Input.empty, Input.empty => isTrue ⋯
+  | Input.empty, Input.node identity => isFalse ⋯
+  | Input.empty, Input.mu identity => isFalse ⋯
+  | Input.empty, Input.union identity => isFalse ⋯
+  | Input.empty, Input.ref identity => isFalse ⋯
+  | Input.node identity, Input.empty => isFalse ⋯
+  | Input.node a, Input.node b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.node identity, Input.mu identity_1 => isFalse ⋯
+  | Input.node identity, Input.union identity_1 => isFalse ⋯
+  | Input.node identity, Input.ref identity_1 => isFalse ⋯
+  | Input.mu identity, Input.empty => isFalse ⋯
+  | Input.mu identity, Input.node identity_1 => isFalse ⋯
+  | Input.mu a, Input.mu b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.mu identity, Input.union identity_1 => isFalse ⋯
+  | Input.mu identity, Input.ref identity_1 => isFalse ⋯
+  | Input.union identity, Input.empty => isFalse ⋯
+  | Input.union identity, Input.node identity_1 => isFalse ⋯
+  | Input.union identity, Input.mu identity_1 => isFalse ⋯
+  | Input.union a, Input.union b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.union identity, Input.ref identity_1 => isFalse ⋯
+  | Input.ref identity, Input.empty => isFalse ⋯
+  | Input.ref identity, Input.node identity_1 => isFalse ⋯
+  | Input.ref identity, Input.mu identity_1 => isFalse ⋯
+  | Input.ref identity, Input.union identity_1 => isFalse ⋯
+  | Input.ref a, Input.ref b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:118:70: error: Tactic `decide` failed for proposition
+  inputOf left ≠ Input.empty
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableNot`, `instDecidableEqInput`, and `instDecidableEqInput.decEq`, reduction got stuck at the `Decidable` instance
+  match inputOf left, Input.empty with
+  | Input.empty, Input.empty => isTrue ⋯
+  | Input.empty, Input.node identity => isFalse ⋯
+  | Input.empty, Input.mu identity => isFalse ⋯
+  | Input.empty, Input.union identity => isFalse ⋯
+  | Input.empty, Input.ref identity => isFalse ⋯
+  | Input.node identity, Input.empty => isFalse ⋯
+  | Input.node a, Input.node b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.node identity, Input.mu identity_1 => isFalse ⋯
+  | Input.node identity, Input.union identity_1 => isFalse ⋯
+  | Input.node identity, Input.ref identity_1 => isFalse ⋯
+  | Input.mu identity, Input.empty => isFalse ⋯
+  | Input.mu identity, Input.node identity_1 => isFalse ⋯
+  | Input.mu a, Input.mu b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.mu identity, Input.union identity_1 => isFalse ⋯
+  | Input.mu identity, Input.ref identity_1 => isFalse ⋯
+  | Input.union identity, Input.empty => isFalse ⋯
+  | Input.union identity, Input.node identity_1 => isFalse ⋯
+  | Input.union identity, Input.mu identity_1 => isFalse ⋯
+  | Input.union a, Input.union b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | Input.union identity, Input.ref identity_1 => isFalse ⋯
+  | Input.ref identity, Input.empty => isFalse ⋯
+  | Input.ref identity, Input.node identity_1 => isFalse ⋯
+  | Input.ref identity, Input.mu identity_1 => isFalse ⋯
+  | Input.ref identity, Input.union identity_1 => isFalse ⋯
+  | Input.ref a, Input.ref b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:120:2: error: 'change' tactic failed, pattern
+  InputDerivation (view source holds) (Input.node 0) 0 (Term.node 0 [])
+is not definitionally equal to target
+  InputDerivation (view source holds) (inputOf left) 0 (Term.node 0 [])
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:127:2: error: 'change' tactic failed, pattern
+  InputDerivation (view source holds) (Input.node 0) 0 (Term.node 0 [])
+is not definitionally equal to target
+  InputDerivation (view source holds) (inputOf left) 0 (Term.node 0 [])

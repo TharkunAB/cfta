@@ -1,0 +1,62 @@
+'MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.derivation_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.forest_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.lift' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.lifted_rank' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.lifted_language' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.inventory_agreement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.derivation_exact {Symbol : Type}
+  {before after : MicroCFTA.IntersectSchedule.View Symbol} (inputs : MicroCFTA.IntersectSchedule.FiniteInput before)
+  (same : MicroCFTA.IntersectSchedule.ViewAgreement before after inputs.valid)
+  (input : MicroCFTA.IntersectSchedule.Input) (valid : inputs.valid input) (rank : Nat)
+  (term : MicroCFTA.Language.Term Symbol) :
+  MicroCFTA.IntersectSchedule.InputDerivation after input rank term ↔
+    MicroCFTA.IntersectSchedule.InputDerivation before input rank term
+MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.forest_exact {Symbol : Type}
+  {before after : MicroCFTA.IntersectSchedule.View Symbol} (inputs : MicroCFTA.IntersectSchedule.FiniteInput before)
+  (same : MicroCFTA.IntersectSchedule.ViewAgreement before after inputs.valid) (rank : Nat)
+  (children : List MicroCFTA.IntersectSchedule.Input)
+  (valid : ∀ (child : MicroCFTA.IntersectSchedule.Input), child ∈ children → inputs.valid child)
+  (terms : List (MicroCFTA.Language.Term Symbol)) :
+  MicroCFTA.IntersectSchedule.InputForestDerivation after rank children terms ↔
+    MicroCFTA.IntersectSchedule.InputForestDerivation before rank children terms
+MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.lift {Symbol : Type}
+  {before after : MicroCFTA.IntersectSchedule.View Symbol} (inputs : MicroCFTA.IntersectSchedule.FiniteInput before)
+  (same : MicroCFTA.IntersectSchedule.ViewAgreement before after inputs.valid) :
+  MicroCFTA.IntersectSchedule.FiniteInput after
+MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.lifted_rank {Symbol : Type}
+  {before after : MicroCFTA.IntersectSchedule.View Symbol} (inputs : MicroCFTA.IntersectSchedule.FiniteInput before)
+  (same : MicroCFTA.IntersectSchedule.ViewAgreement before after inputs.valid)
+  (input : MicroCFTA.IntersectSchedule.Input) (valid : inputs.valid input) (rank : Nat)
+  (term : MicroCFTA.Language.Term Symbol) :
+  MicroCFTA.IntersectSchedule.inputAt
+      (MicroCFTA.IntersectSchedule.finiteRanks after
+        (MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.lift inputs same))
+      input rank term ↔
+    MicroCFTA.IntersectSchedule.inputAt (MicroCFTA.IntersectSchedule.finiteRanks before inputs) input rank term
+MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.lifted_language {Symbol : Type}
+  {before after : MicroCFTA.IntersectSchedule.View Symbol} (inputs : MicroCFTA.IntersectSchedule.FiniteInput before)
+  (same : MicroCFTA.IntersectSchedule.ViewAgreement before after inputs.valid)
+  (input : MicroCFTA.IntersectSchedule.Input) (valid : inputs.valid input) (term : MicroCFTA.Language.Term Symbol) :
+  MicroCFTA.IntersectSchedule.inputLanguage
+      (MicroCFTA.IntersectSchedule.finiteLanguages after
+        (MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.lift inputs same))
+      input term ↔
+    MicroCFTA.IntersectSchedule.inputLanguage (MicroCFTA.IntersectSchedule.finiteLanguages before inputs) input term
+MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels.inventory_agreement {Symbol Guard : Type}
+  (source target : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : MicroCFTA.InternedNestedFacts.Facts source) (targetFacts : MicroCFTA.InternedNestedFacts.Facts target)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows source target)
+  (history : MicroCFTA.Cache.Extends source.nodes.issued target.nodes.issued)
+  (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+  (roots : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (originals :
+    ∀ (root : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      root ∈ roots → MicroCFTA.SourceRecursiveIntersectionInputView.Original root)
+  (available : MicroCFTA.InternedNestedProvenance.Values source roots)
+  (closed : ∀ (root : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard), root ∈ roots → root.free = []) :
+  MicroCFTA.IntersectSchedule.ViewAgreement (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds)
+    (MicroCFTA.SourceRecursiveIntersectionInputView.view target holds)
+    (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+        available closed).valid

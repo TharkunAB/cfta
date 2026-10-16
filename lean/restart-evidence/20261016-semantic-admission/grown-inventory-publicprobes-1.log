@@ -1,0 +1,185 @@
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.closed_originals' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.reachable_grows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.valid_grows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.rank_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.language_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.name_rank_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.name_language_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGrownInventory.target_root_valid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@closed_originals : ∀ {Symbol Guard : Type} (target : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts target →
+    ∀ (roots : List (Value Symbol Guard)),
+      Values target roots →
+        (∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) →
+          ∀ (root : Value Symbol Guard), root ∈ roots → Original root
+@reachable_grows : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    InternedNestedFacts.Facts target →
+      Grows source target →
+        Extends source.nodes.issued target.nodes.issued →
+          ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard)),
+            (∀ (root : Value Symbol Guard), root ∈ roots → Original root) →
+              Values source roots →
+                (∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) →
+                  ∀ (input : Input),
+                    SourceCurrentAllocatedNativeInputInventoryModels.Reachable source holds roots input →
+                      SourceCurrentAllocatedNativeInputInventoryModels.Reachable target holds roots input
+@valid_grows : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots ⋯
+                    targetAvailable targetClosed).valid
+                input
+@rank_exact : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              ∀ (rank : Nat) (term : Term Symbol),
+                inputAt
+                    (finiteRanks (view target holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots
+                        ⋯ targetAvailable targetClosed))
+                    input rank term ↔
+                  inputAt
+                    (finiteRanks (view source holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots
+                        originals available closed))
+                    input rank term
+@language_exact : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              ∀ (term : Term Symbol),
+                inputLanguage
+                    (finiteLanguages (view target holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots
+                        ⋯ targetAvailable targetClosed))
+                    input term ↔
+                  inputLanguage
+                    (finiteLanguages (view source holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots
+                        originals available closed))
+                    input term
+@name_rank_exact : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              input ≠ Input.empty →
+                ∀ (rank : Nat) (term : Term Symbol),
+                  finiteRanks (view target holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots
+                        ⋯ targetAvailable targetClosed)
+                      (identity input) rank term ↔
+                    finiteRanks (view source holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots
+                        originals available closed)
+                      (identity input) rank term
+@name_language_exact : ∀ {Symbol Guard : Type} (source target : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target),
+  Grows source target →
+    Extends source.nodes.issued target.nodes.issued →
+      ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+        (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+        (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+        (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+        (targetClosed : ∀ (root : Value Symbol Guard), root ∈ targetRoots → root.free = []),
+        (∀ (root : Value Symbol Guard), root ∈ roots → root ∈ targetRoots) →
+          ∀ (input : Input),
+            (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals
+                    available closed).valid
+                input →
+              input ≠ Input.empty →
+                ∀ (term : Term Symbol),
+                  finiteLanguages (view target holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target targetFacts holds targetRoots
+                        ⋯ targetAvailable targetClosed)
+                      (identity input) term ↔
+                    finiteLanguages (view source holds)
+                      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots
+                        originals available closed)
+                      (identity input) term
+@target_root_valid : ∀ {Symbol Guard : Type} (target : InternedConstructorTemplates.State Symbol Guard)
+  (facts : InternedNestedFacts.Facts target) (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+  (available : Values target roots) (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = [])
+  (root : Value Symbol Guard),
+  root ∈ roots →
+    (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target facts holds roots ⋯ available closed).valid
+      (inputOf root)
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:33:30: error: unexpected token ':='; expected ':'
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:34:16: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:35:16: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:46:31: error: unexpected token ':='; expected ':'
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:48:16: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:49:16: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:51:16: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:52:16: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:97:35: error: unsolved goals
+⊢ Input.node 0 = Input.empty → False
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:98:42: error: unsolved goals
+⊢ Input.node 1 = Input.node 0 → False
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:113:67: error: unsolved goals
+rank : Nat
+term : Term Nat
+⊢ Input.node 0 = Input.empty → False
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:118:67: error: unsolved goals
+term : Term Nat
+⊢ Input.node 0 = Input.empty → False
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:120:38: error: unsolved goals
+⊢ List.Mem { label := 0, children := [], guard := fun x => true } (?m.25.1 ?m.15)
+lean/restart-evidence/20261016-semantic-admission/grown-inventory-publicprobes.lean:125:38: error: unsolved goals
+⊢ List.Mem { label := 0, children := [], guard := fun x => true } (?m.40.1 ?m.30)
