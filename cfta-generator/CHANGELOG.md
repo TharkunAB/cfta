@@ -192,14 +192,18 @@ tree automata of `cfta`, with QuickCheck integration.
   `measuresAt` gives the measures of a value term. `deriveLTARooted` and
   `deriveLTAFromRooted` take a condition on the measures of the root, written
   once over `Symbolic`, and `holdsRooted` runs it on values. `atom` gives the
-  generator of each atomic field type. A contract conjunct about one atomic
+  generator of each atomic field type. `fieldAtoms` gives fields their own
+  generators through the node view, with `drawnFrom` on a field that a node
+  pattern binds, so two fields of one type can have two pools
+  (`FieldAtomMismatch` and `FieldAtomTerm` for a pool that does not fit). A
+  contract conjunct about one atomic
   field becomes a condition on that field. A contract or a measure that reads
   a field whose type has no atom and no measure is `UnmeasuredField`. The
   module re-exports `Boolean`, `Symbolic`, `smaller`, `larger`, and
   `literal`.
 - `Data.CFTA.Gen.Refinement.Derive.Internal`: the level below, exposed for
   integration and outside the PVP contract. `deriveLTAWith` takes the
-  contracts and the measures by constructor name, as annotations
+  contracts and the measures of each `Constructor`, as annotations
   (`contract`, `measure`, `measureNamed`, `fieldsContract`,
   `fieldsMeasure`), and `annotationFormulas` gives their formulas and terms.
 - `deriveLTAOn` and `deriveLTAOnFrom` in `Data.CFTA.Gen.Refinement.Derive`,
