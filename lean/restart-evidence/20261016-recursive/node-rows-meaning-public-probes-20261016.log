@@ -1,0 +1,327 @@
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.row_forest' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.node_language' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.node_rank' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.joined_inputs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.common_pair' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.rows_law' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.Walk.actual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.Walk.effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.rows_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.rows_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeNodeRowsMeaning.ordinary_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+row_forest : ∀
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (relation : IntersectSchedule.Input → Term (SourceObservations.Label FullSyntax.Formula) → Prop)
+  (edge : EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (terms : List (Term (SourceObservations.Label FullSyntax.Formula))),
+  All₂ relation (row holds edge).children terms ↔
+    All₂ (fun child term => relation (inputOf child) term) edge.children terms
+node_language : ∀
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀
+      (holds :
+        SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+      (model : IntersectSchedule.InputMeaning (view source holds)) (entry : Interned InternedBinderProtocol.NodeKey)
+      (edges :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List Reference),
+      Available source (Value.node entry edges depth free) →
+        model.valid (IntersectSchedule.Input.node entry.identity) →
+          ∀ (term : Term (SourceObservations.Label FullSyntax.Formula)),
+            IntersectSchedule.inputLanguage model.languages (inputOf (Value.node entry edges depth free)) term ↔
+              ∃ edge, edge ∈ edges ∧ RowLanguage holds model.languages edge term
+node_rank : ∀
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀
+      (holds :
+        SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+      (model : IntersectSchedule.InputMeaning (view source holds))
+      (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+      (entry : Interned InternedBinderProtocol.NodeKey)
+      (edges :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List Reference),
+      Available source (Value.node entry edges depth free) →
+        model.valid (IntersectSchedule.Input.node entry.identity) →
+          ∀ (rank : Nat) (term : Term (SourceObservations.Label FullSyntax.Formula)),
+            IntersectSchedule.inputAt ranked.languages (inputOf (Value.node entry edges depth free)) rank term →
+              ∃ edge, edge ∈ edges ∧ RowAt holds ranked.languages rank edge term
+@joined_inputs : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀
+      (holds :
+        SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+      (model : IntersectSchedule.InputMeaning (view source holds))
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (first : Interned InternedBinderProtocol.NodeKey)
+      (left :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (leftDepth : Nat) (leftFree : List Reference) (second : Interned InternedBinderProtocol.NodeKey)
+      (right :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (rightDepth : Nat) (rightFree : List Reference),
+      Available source (Value.node first left leftDepth leftFree) →
+        Available source (Value.node second right rightDepth rightFree) →
+          NodeInputs (view source holds) model
+              { domain := domain, left := Value.node first left leftDepth leftFree,
+                right := Value.node second right rightDepth rightFree } →
+            ∀
+              (pair :
+                EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) ×
+                  EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+              pair ∈ SourceRecursiveIntersectionKernel.pairs left right →
+                EdgeInputs (view source holds) model { domain := domain, left := pair.fst, right := pair.snd }
+@common_pair : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (ranks : Nat → Nat → Lang (SourceObservations.Label FullSyntax.Formula))
+  (left right :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (first second :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  first ∈ left →
+    second ∈ right →
+      ∀ (a b : Nat) (term : Term (SourceObservations.Label FullSyntax.Formula)),
+        RowAt holds ranks a first term ∧ RowAt holds ranks b second term →
+          (first, second) ∈ SourceRecursiveIntersectionKernel.pairs left right
+@rows_law : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀
+      (holds :
+        SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+      (model : IntersectSchedule.InputMeaning (view source holds))
+      (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (first : Interned InternedBinderProtocol.NodeKey)
+      (left :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (leftDepth : Nat) (leftFree : List Reference) (second : Interned InternedBinderProtocol.NodeKey)
+      (right :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (rightDepth : Nat) (rightFree : List Reference),
+      Available source (Value.node first left leftDepth leftFree) →
+        Available source (Value.node second right rightDepth rightFree) →
+          ∀
+            (state :
+              InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+            InternedNestedFacts.Facts state →
+              ∀
+                (values :
+                  List
+                    (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))),
+                InternedNestedProvenance.Edges state values →
+                  All₂
+                      (fun pair value =>
+                        EdgeLaw (view source holds) model ranked holds
+                          { domain := domain, left := pair.fst, right := pair.snd } value)
+                      (SourceRecursiveIntersectionKernel.pairs left right) values →
+                    NodeLaw (view source holds) model ranked holds
+                      { domain := domain, left := Value.node first left leftDepth leftFree,
+                        right := Value.node second right rightDepth rightFree }
+                      (InternedConstructorTemplates.run (makeNode values) state).fst
+@Walk.actual : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  {domain : Interned IntersectionFlatMemoKeyDomain.DomainKey}
+  {inputs :
+    List
+      (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) ×
+        EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width}
+  {values :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {fuel : Nat},
+  Walk view model ranked holds domain inputs before values after fuel →
+    SourceEqualityNativeDemandWalkExecution.Walk (fun pair => requestEdge domain pair.fst pair.snd) inputs before values
+      after fuel
+@Walk.effects : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  {domain : Interned IntersectionFlatMemoKeyDomain.DomainKey}
+  {inputs :
+    List
+      (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) ×
+        EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width}
+  {values :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {fuel : Nat},
+  Walk view model ranked holds domain inputs before values after fuel →
+    SourceEqualityRequiredCache.Ready before.native.machine.heap →
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+        InternedNestedProvenance.Edges after.native.machine.heap values ∧
+          All₂
+            (fun pair value =>
+              EdgeLaw view model ranked holds { domain := domain, left := pair.fst, right := pair.snd } value)
+            inputs values
+@rows_trace : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (before after : SourceEqualityNativeDemand.State width)
+  (values :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (fuel : Nat),
+  Walk view model ranked holds domain (SourceRecursiveIntersectionKernel.pairs left right) before values after fuel →
+    have built := InternedConstructorTemplates.run (makeNode values) after.native.machine.heap;
+    SourceEqualityNativeDemand.Steps (fuel + 1) (Control.code (compileRows domain left right)) before
+      (Control.code (Code.pure built.fst))
+      {
+        native :=
+          advance after.native
+            (have __src := after.native.machine;
+            { heap := built.snd, domains := __src.domains }),
+        operations := after.operations }
+@rows_body : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀
+      (holds :
+        SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+      (model : IntersectSchedule.InputMeaning (view source holds))
+      (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (first : Interned InternedBinderProtocol.NodeKey)
+      (left :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (leftDepth : Nat) (leftFree : List Reference) (second : Interned InternedBinderProtocol.NodeKey)
+      (right :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (rightDepth : Nat) (rightFree : List Reference),
+      Available source (Value.node first left leftDepth leftFree) →
+        Available source (Value.node second right rightDepth rightFree) →
+          ∀ (before middle : SourceEqualityNativeDemand.State width)
+            (values :
+              List
+                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+            (fuel : Nat),
+            SourceEqualityRequiredCache.Ready before.native.machine.heap →
+              Walk (view source holds) model ranked holds domain (SourceRecursiveIntersectionKernel.pairs left right)
+                  before values middle fuel →
+                have built := InternedConstructorTemplates.run (makeNode values) middle.native.machine.heap;
+                have after :=
+                  {
+                    native :=
+                      advance middle.native
+                        (have __src := middle.native.machine;
+                        { heap := built.snd, domains := __src.domains }),
+                    operations := middle.operations };
+                execute (fuel + 2) (Control.code (compileRows domain left right)) before =
+                    Outcome.done built.fst after ∧
+                  NodeLaw (view source holds) model ranked holds
+                      { domain := domain, left := Value.node first left leftDepth leftFree,
+                        right := Value.node second right rightDepth rightFree }
+                      built.fst ∧
+                    SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+                      Available after.native.machine.heap built.fst
+@ordinary_body : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts source →
+    ∀
+      (holds :
+        SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+      (model : IntersectSchedule.InputMeaning (view source holds))
+      (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (first : Interned InternedBinderProtocol.NodeKey)
+      (left :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (leftDepth : Nat) (leftFree : List Reference) (second : Interned InternedBinderProtocol.NodeKey)
+      (right :
+        List
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (rightDepth : Nat) (rightFree : List Reference),
+      Available source (Value.node first left leftDepth leftFree) →
+        Available source (Value.node second right rightDepth rightFree) →
+          SourceRecursiveIntersectionControl.decision domain.key (Value.node first left leftDepth leftFree)
+                (Value.node second right rightDepth rightFree) =
+              SourceRecursiveIntersectionControl.Branch.ordinary →
+            ∀ (before middle : SourceEqualityNativeDemand.State width)
+              (values :
+                List
+                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+              (fuel : Nat),
+              SourceEqualityRequiredCache.Ready before.native.machine.heap →
+                Walk (view source holds) model ranked holds domain (SourceRecursiveIntersectionKernel.pairs left right)
+                    before values middle fuel →
+                  have request :=
+                    { domain := domain, left := Value.node first left leftDepth leftFree,
+                      right := Value.node second right rightDepth rightFree };
+                  have built := InternedConstructorTemplates.run (makeNode values) middle.native.machine.heap;
+                  have after :=
+                    {
+                      native :=
+                        advance middle.native
+                          (have __src := middle.native.machine;
+                          { heap := built.snd, domains := __src.domains }),
+                      operations := middle.operations };
+                  execute (fuel + 2) (Control.code (compileNode request)) before = Outcome.done built.fst after ∧
+                    NodeLaw (view source holds) model ranked holds request built.fst ∧
+                      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+                        Available after.native.machine.heap built.fst

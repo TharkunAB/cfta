@@ -1,0 +1,42 @@
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.work_checked' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.node_step_valid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.edge_step_valid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.step_valid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.step_extension' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.inputs_heap' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.code_inputs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.through_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.step_invariants' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.execute_invariants' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.node_busy_impossible' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.edge_busy_impossible' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.code_inputs {width : Nat} {A : Type} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (code : Code Symbol Guard A) (state : Checked width)
+  (operands : SourceCurrentAllocatedNativeCodeProgress.Operands code state.native.machine)
+  (words : SourceCurrentAllocatedNativeRequestBounds.Words width (Control.code code)) : Inputs (Control.code code) state
+MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.execute_invariants {width : Nat} {Output : Type}
+  [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (control : Control Output)
+  (state : Checked width) (valid : SourceCurrentAllocatedNativePhysicalCache.Valid state.native)
+  (ready : SourceEqualityRequiredCache.Ready state.native.machine.heap) (inputs : InputsThrough fuel control state) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (SourceEqualityNativeDemand.execute fuel control state).state.native ∧
+    Extension state.native.machine (SourceEqualityNativeDemand.execute fuel control state).state.native.machine ∧
+      SourceEqualityRequiredCache.Keeps state.native.machine.heap
+        (SourceEqualityNativeDemand.execute fuel control state).state.native.machine.heap

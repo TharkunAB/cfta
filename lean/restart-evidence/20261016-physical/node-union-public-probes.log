@@ -1,0 +1,159 @@
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.original_closed_language' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.original_closed_language
+  (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+  (holds : Guard → Term Symbol → Bool)
+  (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+  (value : Value Symbol Guard) (original : SourceRecursiveIntersectionInputView.Original value)
+  (available : InternedProbeProvenance.Available source value) (closed : value.free = [])
+  (valid : model.valid (SourceRecursiveIntersectionInputView.inputOf value))
+  (output : InternedGuardedLanguage.Env Symbol) :
+  InternedGuardedLanguage.meaning holds output value =
+    IntersectSchedule.inputLanguage model.languages (SourceRecursiveIntersectionInputView.inputOf value)
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.original_closed_rank' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.original_closed_rank
+  (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+  (holds : Guard → Term Symbol → Bool)
+  (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+  (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+  (value : Value Symbol Guard) (original : SourceRecursiveIntersectionInputView.Original value)
+  (available : InternedProbeProvenance.Available source value) (closed : value.free = [])
+  (valid : model.valid (SourceRecursiveIntersectionInputView.inputOf value)) (rank : Nat) (term : Term Symbol)
+  (accepted : IntersectSchedule.inputAt ranked.languages (SourceRecursiveIntersectionInputView.inputOf value) rank term)
+  (output : InternedGuardedLanguage.Env Symbol) : InternedGuardedLanguage.meaning holds output value term
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.empty_law' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.empty_law (view : IntersectSchedule.View Symbol)
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds : Guard → Term Symbol → Bool) (request : NodeRequest Symbol Guard)
+  (literal : request.left = Value.empty ∨ request.right = Value.empty) :
+  NodeLaw view model ranked holds request Value.empty
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.swap_law' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.swap_law (view : IntersectSchedule.View Symbol)
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds : Guard → Term Symbol → Bool) (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+  (child :
+    NodeLaw view model ranked holds { domain := request.domain, left := request.right, right := request.left } value) :
+  NodeLaw view model ranked holds request value
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.reset_law' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.reset_law (view : IntersectSchedule.View Symbol)
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds : Guard → Term Symbol → Bool) (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+  (child :
+    NodeLaw view model ranked holds
+      { domain := IntersectionEmptyDomain.emptyDomain, left := request.left, right := request.right } value) :
+  NodeLaw view model ranked holds request value
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.repeated_law' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.repeated_law (view : IntersectSchedule.View Symbol)
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds : Guard → Term Symbol → Bool) (request : NodeRequest Symbol Guard) (first second : Nat)
+  (leftIdentity : SourceRecursiveIntersectionControl.identity request.left = some first)
+  (rightIdentity : SourceRecursiveIntersectionControl.identity request.right = some second)
+  (leftNonempty : SourceRecursiveIntersectionInputView.inputOf request.left ≠ IntersectSchedule.Input.empty)
+  (rightNonempty : SourceRecursiveIntersectionInputView.inputOf request.right ≠ IntersectSchedule.Input.empty)
+  (seen : SourceRecursiveIntersectionControl.pair first second ∈ request.domain.key.seen) :
+  NodeLaw view model ranked holds request
+    (SourceRecursiveIntersectionControl.repeatedValue (SourceRecursiveIntersectionControl.pair first second))
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.union_members' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.union_members
+  (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+  (holds : Guard → Term Symbol → Bool) (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+  (members : List (Value Symbol Guard)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+  (available : InternedProbeProvenance.Available source (Value.union entry members depth free)) :
+  (SourceRecursiveIntersectionInputView.view source holds).members entry.identity =
+    List.map SourceRecursiveIntersectionInputView.inputOf members
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.left_union_law' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.left_union_law [DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard) (sourceFacts : InternedNestedFacts.Facts source)
+  (holds : Guard → Term Symbol → Bool)
+  (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+  (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+  (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey)
+  (entry : Cache.Interned InternedBinderProtocol.NodeKey) (members : List (Value Symbol Guard)) (depth : Nat)
+  (free : List InternedBinderProtocol.Reference) (right : Value Symbol Guard)
+  (available : InternedProbeProvenance.Available source (Value.union entry members depth free))
+  (state : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts state)
+  (values : List (Value Symbol Guard)) (resident : InternedNestedProvenance.Values state values)
+  (laws :
+    All₂
+      (fun member value =>
+        NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+          { domain := domain, left := member, right := right } value)
+      members values) :
+  NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+    { domain := domain, left := Value.union entry members depth free, right := right }
+    (run (makeUnion values) state).fst
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.right_union_law' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.right_union_law [DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard) (sourceFacts : InternedNestedFacts.Facts source)
+  (holds : Guard → Term Symbol → Bool)
+  (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+  (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+  (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey)
+  (entry : Cache.Interned InternedBinderProtocol.NodeKey) (members : List (Value Symbol Guard)) (depth : Nat)
+  (free : List InternedBinderProtocol.Reference) (left : Value Symbol Guard)
+  (available : InternedProbeProvenance.Available source (Value.union entry members depth free))
+  (state : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts state)
+  (values : List (Value Symbol Guard)) (resident : InternedNestedProvenance.Values state values)
+  (laws :
+    All₂
+      (fun member value =>
+        NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+          { domain := domain, left := left, right := member } value)
+      members values) :
+  NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+    { domain := domain, left := left, right := Value.union entry members depth free } (run (makeUnion values) state).fst
+'MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.self_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeNodeBranches.self_law (source : InternedConstructorTemplates.State Symbol Guard)
+  (facts : InternedNestedFacts.Facts source) (holds : Guard → Term Symbol → Bool)
+  (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+  (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+  (request : NodeRequest Symbol Guard) (leftAvailable : InternedProbeProvenance.Available source request.left)
+  (rightAvailable : InternedProbeProvenance.Available source request.right)
+  (self : SourceRecursiveIntersectionControl.closedSelf request.left request.right = true) :
+  NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds request request.left
+'MicroCFTA.SourceCurrentAllocatedNativeUnionMeaning.union_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeUnionMeaning.union_body {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (holds : Guard → Term Symbol → Bool)
+  (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+  (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+  (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey)
+  (entry : Cache.Interned InternedBinderProtocol.NodeKey) (members : List (Value Symbol Guard)) (depth : Nat)
+  (free : List InternedBinderProtocol.Reference) (other : Value Symbol Guard) (side : Bool)
+  (available : InternedProbeProvenance.Available source (Value.union entry members depth free))
+  (before middle : SourceEqualityNativeDemand.State width) (values : List (Value Symbol Guard)) (fuel : Nat)
+  (ready : SourceEqualityRequiredCache.Ready before.native.machine.heap)
+  (selected :
+    SourceRecursiveIntersectionControl.decision domain.key
+        (if side = true then Value.union entry members depth free else other)
+        (if side = true then other else Value.union entry members depth free) =
+      if side = true then SourceRecursiveIntersectionControl.Branch.leftUnion
+      else SourceRecursiveIntersectionControl.Branch.rightUnion)
+  (walk :
+    SourceCurrentAllocatedNativeEdgeMeaning.Walk (SourceRecursiveIntersectionInputView.view source holds) model ranked
+      holds domain (List.map (fun member => if side = true then (member, other) else (other, member)) members) before
+      values middle fuel) :
+  have request :=
+    { domain := domain, left := if side = true then Value.union entry members depth free else other,
+      right := if side = true then other else Value.union entry members depth free };
+  have built := run (makeUnion values) middle.native.machine.heap;
+  have after :=
+    {
+      native :=
+        advance middle.native
+          (have __src := middle.native.machine;
+          { heap := built.snd, domains := __src.domains }),
+      operations := middle.operations };
+  execute (fuel + 2) (Control.code (compileNode request)) before = Outcome.done built.fst after ∧
+    NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds request built.fst ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+        InternedProbeProvenance.Available after.native.machine.heap built.fst

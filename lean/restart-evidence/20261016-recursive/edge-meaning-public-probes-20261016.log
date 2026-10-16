@@ -1,0 +1,316 @@
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.joined_symbols' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.zip_inputs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.edge_law' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.Walk.actual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.Walk.effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.children_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.accepted_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.rowAt_mismatch' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.rejected_source' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.rowAt_rejected' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.sentinel_edge_law' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.mismatch_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeMeaning.rejected_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@joined_symbols : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  (left right :
+    List (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (pair :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) ×
+      EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  pair ∈ SourceRecursiveIntersectionKernel.pairs left right → pair.fst.entry.key.symbol = pair.snd.entry.key.symbol
+zip_inputs : ∀ (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view)
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  EdgeInputs view model request →
+    ∀
+      (pair :
+        Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) ×
+          Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      pair ∈ request.left.children.zip request.right.children →
+        NodeInputs view model { domain := request.domain, left := pair.fst, right := pair.snd }
+edge_law : ∀ (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (result :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  request.left.children.length = request.right.children.length →
+    request.left.entry.key.symbol = request.right.entry.key.symbol →
+      result.entry.key.symbol = request.left.entry.key.symbol →
+        (∀ (term : Term (SourceObservations.Label FullSyntax.Formula)),
+            holds result.entry.key.constraint term =
+              (holds request.left.entry.key.constraint term && holds request.right.entry.key.constraint term)) →
+          All₂
+              (fun pair child =>
+                NodeLaw view model ranked holds { domain := request.domain, left := pair.fst, right := pair.snd } child)
+              (request.left.children.zip request.right.children) result.children →
+            EdgeLaw view model ranked holds request result
+@Walk.actual : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  {domain : Interned IntersectionFlatMemoKeyDomain.DomainKey}
+  {pairs :
+    List
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) ×
+        Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {fuel : Nat},
+  Walk view model ranked holds domain pairs before values after fuel →
+    SourceEqualityNativeDemandWalkExecution.Walk (fun pair => requestNode domain pair.fst pair.snd) pairs before values
+      after fuel
+@Walk.effects : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  {domain : Interned IntersectionFlatMemoKeyDomain.DomainKey}
+  {pairs :
+    List
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) ×
+        Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {before after : SourceEqualityNativeDemand.State width}
+  {values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))}
+  {fuel : Nat},
+  Walk view model ranked holds domain pairs before values after fuel →
+    SourceEqualityRequiredCache.Ready before.native.machine.heap →
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+        InternedNestedProvenance.Values after.native.machine.heap values ∧
+          All₂
+            (fun pair value =>
+              NodeLaw view model ranked holds { domain := domain, left := pair.fst, right := pair.snd } value)
+            pairs values
+@children_trace : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+  (before after : SourceEqualityNativeDemand.State width)
+  (values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (fuel : Nat),
+  Walk view model ranked holds request.domain (request.left.children.zip request.right.children) before values after
+      fuel →
+    have built :=
+      InternedConstructorTemplates.run
+        (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+        after.native.machine.heap;
+    SourceEqualityNativeDemand.Steps (fuel + 1)
+      (Control.code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined))
+      before (Control.code (Code.pure built.fst))
+      {
+        native :=
+          advance after.native
+            (have __src := after.native.machine;
+            { heap := built.snd, domains := __src.domains }),
+        operations := after.operations }
+@accepted_body : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (before middle : SourceEqualityNativeDemand.State width)
+  (first second combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+  (values :
+    List (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (fuel : Nat),
+  SourceEqualityConstraintMemoAllocation.Valid before.operations →
+    SourceEqualityRequiredCache.Ready before.native.machine.heap →
+      SourceEqualityGuardReadback.Cached request.left.entry.key.constraint.equalities →
+        SourceEqualityGuardReadback.Cached request.right.entry.key.constraint.equalities →
+          request.left.children.length = request.right.children.length →
+            request.left.entry.key.symbol = request.right.entry.key.symbol →
+              SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints =
+                  Except.ok (some first) →
+                SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint
+                      before.operations.constraints =
+                    Except.ok (some second) →
+                  (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                          request.left.children.length request.right.children.length before.operations).fst =
+                      Except.ok (SourceEqualityIntersectionEdgeAllocation.Branch.ready combined) →
+                    Walk view model ranked (SourceEqualityPCSGuard.holds formulas solver) request.domain
+                        (request.left.children.zip request.right.children)
+                        { native := before.native,
+                          operations :=
+                            (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                                request.left.children.length request.right.children.length before.operations).snd }
+                        values middle fuel →
+                      have built :=
+                        InternedConstructorTemplates.run
+                          (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined)
+                            values)
+                          middle.native.machine.heap;
+                      have after :=
+                        {
+                          native :=
+                            advance middle.native
+                              (have __src := middle.native.machine;
+                              { heap := built.snd, domains := __src.domains }),
+                          operations := middle.operations };
+                      execute (fuel + 3) (Control.edgeBody request Code.pure) before = Outcome.done built.fst after ∧
+                        EdgeLaw view model ranked (SourceEqualityPCSGuard.holds formulas solver) request built.fst ∧
+                          SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+                            InternedEdgeResidency.EdgeResident after.native.machine.heap built.fst
+rowAt_mismatch : ∀
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (ranks : Nat → Nat → Lang (SourceObservations.Label FullSyntax.Formula))
+  (left right :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  left.children.length ≠ right.children.length →
+    ∀ (first second : Nat) (term : Term (SourceObservations.Label FullSyntax.Formula)),
+      ¬(RowAt holds ranks first left term ∧ RowAt holds ranks second right term)
+@rejected_source : ∀ {width : Nat}
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (state : SourceEqualityNativeDemand.State width),
+  SourceEqualityConstraintMemoAllocation.Valid state.operations →
+    SourceEqualityGuardReadback.Cached request.left.entry.key.constraint.equalities →
+      SourceEqualityGuardReadback.Cached request.right.entry.key.constraint.equalities →
+        ∀ (first second : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula),
+          SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints =
+              Except.ok (some first) →
+            SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint state.operations.constraints =
+                Except.ok (some second) →
+              (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                      request.left.children.length request.right.children.length state.operations).fst =
+                  Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.rejected →
+                SourceEqualityIntersectionEdgeAllocation.source GuardStructuralOrder.le
+                    request.left.entry.key.constraint request.right.entry.key.constraint request.left.children.length
+                    request.right.children.length =
+                  SourceEqualityIntersectionEdgeAllocation.Branch.rejected
+rowAt_rejected : ∀ (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (ranks : Nat → Nat → Lang (SourceObservations.Label FullSyntax.Formula))
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  SourceEqualityGuardReadback.Cached request.left.entry.key.constraint.equalities →
+    SourceEqualityGuardReadback.Cached request.right.entry.key.constraint.equalities →
+      SourceEqualityIntersectionEdgeAllocation.source GuardStructuralOrder.le request.left.entry.key.constraint
+            request.right.entry.key.constraint request.left.children.length request.right.children.length =
+          SourceEqualityIntersectionEdgeAllocation.Branch.rejected →
+        ∀ (first second : Nat) (term : Term (SourceObservations.Label FullSyntax.Formula)),
+          ¬(RowAt (SourceEqualityPCSGuard.holds formulas solver) ranks first request.left term ∧
+              RowAt (SourceEqualityPCSGuard.holds formulas solver) ranks second request.right term)
+sentinel_edge_law : ∀ (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (result :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  result.children = [Value.empty] →
+    (∀ (first second : Nat) (term : Term (SourceObservations.Label FullSyntax.Formula)),
+        ¬(RowAt holds ranked.languages first request.left term ∧
+            RowAt holds ranked.languages second request.right term)) →
+      EdgeLaw view model ranked holds request result
+@mismatch_body : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (before : SourceEqualityNativeDemand.State width),
+  SourceEqualityRequiredCache.Ready before.native.machine.heap →
+    request.left.children.length ≠ request.right.children.length →
+      have built :=
+        InternedConstructorTemplates.run
+          (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [Value.empty])
+          before.native.machine.heap;
+      have after :=
+        {
+          native :=
+            advance before.native
+              (have __src := before.native.machine;
+              { heap := built.snd, domains := __src.domains }),
+          operations := SourceEqualityMkEdgeAllocation.emptyField before.operations };
+      execute 3 (Control.edgeBody request Code.pure) before = Outcome.done built.fst after ∧
+        EdgeLaw view model ranked holds request built.fst ∧
+          SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+            InternedEdgeResidency.EdgeResident after.native.machine.heap built.fst
+@rejected_body : ∀ {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (before : SourceEqualityNativeDemand.State width)
+  (first second : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula),
+  SourceEqualityConstraintMemoAllocation.Valid before.operations →
+    SourceEqualityRequiredCache.Ready before.native.machine.heap →
+      SourceEqualityGuardReadback.Cached request.left.entry.key.constraint.equalities →
+        SourceEqualityGuardReadback.Cached request.right.entry.key.constraint.equalities →
+          request.left.children.length = request.right.children.length →
+            SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints =
+                Except.ok (some first) →
+              SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint
+                    before.operations.constraints =
+                  Except.ok (some second) →
+                (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                        request.left.children.length request.right.children.length before.operations).fst =
+                    Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.rejected →
+                  have checked :=
+                    SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                      request.left.children.length request.right.children.length before.operations;
+                  have built :=
+                    InternedConstructorTemplates.run
+                      (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [Value.empty])
+                      before.native.machine.heap;
+                  have after :=
+                    {
+                      native :=
+                        advance before.native
+                          (have __src := before.native.machine;
+                          { heap := built.snd, domains := __src.domains }),
+                      operations := SourceEqualityMkEdgeAllocation.emptyField checked.snd };
+                  execute 3 (Control.edgeBody request Code.pure) before = Outcome.done built.fst after ∧
+                    EdgeLaw view model ranked (SourceEqualityPCSGuard.holds formulas solver) request built.fst ∧
+                      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+                        InternedEdgeResidency.EdgeResident after.native.machine.heap built.fst

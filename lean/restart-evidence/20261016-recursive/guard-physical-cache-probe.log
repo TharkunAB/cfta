@@ -1,0 +1,79 @@
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.initial_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid.shape' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.NodeGood.grows' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.EdgeGood.grows' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.advance_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.lookupNode_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.lookupEdge_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.demandNode_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.demandEdge_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.finishNode_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.finishEdge_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.node_request_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.edge_request_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.node_ready_receipt' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.edge_ready_receipt' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.node_ready' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.edge_ready' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.node_started' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.edge_started' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.lookupNode_retains' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.lookupEdge_retains' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.demandNode_retains' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.demandEdge_retains' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.advance_retains' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.finishNode_running_other' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.finishEdge_running_other' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.of_provenance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) : Prop
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.finishNode_valid {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (valid : SourceCurrentAllocatedNativePhysicalCache.Valid state) (handle : Nat) (request : NodeRequest Symbol Guard)
+  (value : Value Symbol Guard)
+  (running : state.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating })
+  (available : Available state.machine.heap value) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (finishNode handle value state)
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.finishEdge_valid {width : Nat} {Symbol Guard : Type}
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  (valid : SourceCurrentAllocatedNativePhysicalCache.Valid state) (handle : Nat) (request : EdgeRequest Symbol Guard)
+  (value : EdgeValue Symbol Guard)
+  (running : state.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating })
+  (resident : EdgeResident state.machine.heap value) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (finishEdge handle value state)
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.node_ready {width : Nat} {Symbol Guard : Type}
+  (request : NodeRequest Symbol Guard)
+  (before chosen after : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (value : Value Symbol Guard) (valid : SourceCurrentAllocatedNativePhysicalCache.Valid before)
+  (ready : NodeReady before.machine request)
+  (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupNode width request before = (NodeSelection.memoized handle, chosen))
+  (demanded : demandNode handle chosen = (FlatMemoThunk.Observation.ready value, after)) :
+  chosen.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned value } ∧
+    after = chosen ∧ Available after.machine.heap value
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.edge_ready {width : Nat} {Symbol Guard : Type}
+  (request : EdgeRequest Symbol Guard)
+  (before chosen after : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (value : EdgeValue Symbol Guard) (valid : SourceCurrentAllocatedNativePhysicalCache.Valid before)
+  (ready : EdgeReady before.machine request)
+  (safe : SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupEdge width request before = (handle, chosen))
+  (demanded : demandEdge handle chosen = (FlatMemoThunk.Observation.ready value, after)) :
+  chosen.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.returned value } ∧
+    after = chosen ∧ EdgeResident after.machine.heap value
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.node_started {width : Nat} {Symbol Guard : Type}
+  (request actual : NodeRequest Symbol Guard)
+  (before chosen running : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (valid : SourceCurrentAllocatedNativePhysicalCache.Valid before) (ready : NodeReady before.machine request)
+  (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupNode width request before = (NodeSelection.memoized handle, chosen))
+  (demanded : demandNode handle chosen = (FlatMemoThunk.Observation.evaluate actual, running)) : actual = request
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.edge_started {width : Nat} {Symbol Guard : Type}
+  (request actual : EdgeRequest Symbol Guard)
+  (before chosen running : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (valid : SourceCurrentAllocatedNativePhysicalCache.Valid before) (ready : EdgeReady before.machine request)
+  (safe : SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupEdge width request before = (handle, chosen))
+  (demanded : demandEdge handle chosen = (FlatMemoThunk.Observation.evaluate actual, running)) : actual = request

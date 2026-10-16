@@ -1,0 +1,78 @@
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.step_fields' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.step_invariants' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.execute_invariants' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.node_step_yields' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.edge_step_yields' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.body_prefix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.pure_miss_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.node_step_yields {Output : Type} {width : Nat}
+  [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (view : IntersectSchedule.View Symbol)
+  (holds : Guard → Language.Term Symbol → Bool) (bound : Nat) (request : NodeRequest Symbol Guard)
+  (next : Value Symbol Guard → Code Symbol Guard Output) (state : Checked width) (valid : Good state)
+  (ready : NodeReady state.native.machine request)
+  (active : SourceRecursiveIntersectionNative.ActiveAbove view holds bound state.native)
+  (complete : IntersectSchedule.Completes view (SourceRecursiveIntersectionNative.nodeSemantic request))
+  (smaller :
+    IntersectSchedule.requiredFuel view (SourceRecursiveIntersectionNative.nodeSemantic request) complete < bound)
+  (words : SourceCurrentAllocatedNativeRequestBounds.Words width (Control.code (Code.node request next)))
+  (fields :
+    ∀ (value : Value Symbol Guard), SourceCurrentAllocatedNativeCodeFields.Fields state.operations (next value)) :
+  ∃ control after,
+    step (Control.code (Code.node request next)) state = Outcome.yielded control after ∧
+      Good after ∧
+        Extension state.native.machine after.native.machine ∧
+          SourceEqualityRequiredCache.Keeps state.native.machine.heap after.native.machine.heap ∧
+            SourceEqualityConstraintMemoAllocation.Grows state.operations after.operations ∧
+              SourceCurrentAllocatedNativeFieldClosure.Fields control after
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.body_prefix {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard)
+  (facts : InternedNestedFacts.Facts source) (holds : Guard → Language.Term Symbol → Bool)
+  (request : EdgeRequest Symbol Guard) (scope : EdgeScope source request)
+  (complete :
+    IntersectSchedule.Completes (SourceRecursiveIntersectionInputView.view source holds)
+      (SourceRecursiveIntersectionNative.edgeSemantic holds request))
+  (state : Checked width) (valid : Good state) (ready : EdgeReady state.native.machine request) :
+  ∃ code operations,
+    step (Control.edgeBody request Code.pure) state =
+        Outcome.yielded (Control.code code) { native := state.native, operations := operations } ∧
+      Good { native := state.native, operations := operations } ∧
+        SourceEqualityConstraintMemoAllocation.Grows state.operations operations ∧
+          SourceCurrentAllocatedNativeCodeFields.Fields operations code ∧
+            (Safe code state.native.machine fun after value => EdgeResident after.heap value) ∧
+              SourceCurrentAllocatedNativeCodeProgress.Operands code state.native.machine ∧
+                Below source holds
+                  (IntersectSchedule.requiredFuel (SourceRecursiveIntersectionInputView.view source holds)
+                    (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete)
+                  code state.native.machine
+MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.pure_miss_complete {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (request : NodeRequest Symbol Guard) (state : Checked width) (valid : Good state)
+  (ready : NodeReady state.native.machine request)
+  (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+  (key : IntersectionFlatMemoKeyDomain.Triple width)
+  (requested : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key)
+  (missing : state.native.nodes.table key = none) (value : Value Symbol Guard)
+  (pureBody : compileNode request = Code.pure value) :
+  ∃ after,
+    SourceEqualityNativeDemand.execute 3 (Control.code (requestNode request.domain request.left request.right)) state =
+        Outcome.done value after ∧
+      Steps 2 (Control.code (requestNode request.domain request.left request.right)) state
+          (Control.code (Code.pure value)) after ∧
+        SourceCurrentAllocatedNativePhysicalExecution.InputsThrough 3
+            (Control.code (requestNode request.domain request.left request.right)) state ∧
+          Good after ∧
+            after.native.machine = state.native.machine ∧
+              after.operations = state.operations ∧ Available after.native.machine.heap value
