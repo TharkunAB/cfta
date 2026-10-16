@@ -86,6 +86,79 @@ Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
 
+## Current literal checked edits and class passes
+
+Source main remains `ccebf0f7`. The preceding published checkpoint is
+`67f2b5d0`. Nine additive modules implement current structural edits and
+compiled class passes. Proof commits are `87ad619b`, `2cbebf92`, `2f1af1cf`,
+and `ca2fe823`. No Haskell implementation or test changes occur.
+Root FINDINGS.md keeps the external Haskell fix registry first. Record each
+later repair there with failure, reproducer, files, commit, checks, and
+upstream status.
+
+Read lean/notes-current-edit-worker.md for the full objective and proof map.
+The goal is correspondence between the specified constrained tree languages
+and generators and the current Haskell library. Exact size classes, finite
+execution, counts, rank inverses, probability laws, and each transformation's
+semantics remain distinct contracts. There is no completed whole-library
+correspondence theorem.
+
+SharedEditWorker interprets current EditNode, Children, Rows, and List with
+six separate stage bounds. Head exposure retains pending, unresolved, and
+exhausted outcomes. A failed prefix retains the complete reached checked
+state, local slots, merge memo, and diagnostic. Unselected children retain
+their values. Raw same-arity reconstruction retains the original full guard.
+It does not allocate a new equality field for the raw edge rebuild.
+
+Completion constructs stable sufficient bounds from finite current graphs.
+Target and edit success stability is unconditional. Whole-state uniqueness
+aligns any supplied successful return with the graph constructed from initial
+selected support. Actual derives the same graph, Reads, physical receipt,
+probe heap, and computed inventory. list_language derives narrowing and
+preservation of class-satisfying selected terms. Unrelated open siblings
+need not satisfy selected path closure.
+
+ClassWorker runs compiled edits with empty class-local slots over the full
+supplied checked state and warm merge table. The right fold executes the
+tail first; the head captures that tail's actual forest, state, and merge.
+Final propagation follows only a completed fold. Failures retain all reached
+slots. Class completion derives stable six-stage bounds. Stability proves
+unconditional success monotonicity and exact forest/Checked/memo uniqueness.
+
+ClassWorkerActual.caller_finite constructs stable literal pass execution and
+the full caller Post at the computed next inventory from legitimate initial
+Context, resident values, coherent nontrivial records, selected domains, and
+actual-prefix ranges. Both outer result families and the fourth memo remain
+valid. Supplied success receives the same endpoint facts. Language narrows;
+membership agrees with the input for forests satisfying every class. No
+future body law or completed pass is a premise of caller_finite.
+
+The outer root_exact theorem remains conditional on a completed strict-read
+recursive call and its legitimate initial facts. Global-query read receipts
+remain logical evidence. These workers do not execute concrete host global
+tables or prove GHC forcing, lazy publication, or the noConstraint CAF.
+
+Pinned Lean 4.34.1 passes the full Audit: 2434 jobs and 57891 theorem dependency
+checks. Only the permitted three foundations and old unused-input warning
+remain. Public probes, integration kernels, independent reviews, frozen
+sources, and preservation evidence are in
+lean/restart-evidence/20261016-current-edit-worker/.
+All Haskell package sources remain unchanged. Reuse the strict Nix build,
+788 examples plus golden, 15-file Fourmolu, and four-package Cabal-gild and
+metadata checks from the preceding source refresh.
+
+Next implement dynamic conjunction rows/worklists, its decision and fourth
+memo, Scan, local reduction, parent construction, and the mutual outer worker.
+Read conjunction-worker-next.md in the evidence directory. General constrained
+outer termination, unequal-length path classes, and repeated-pass convergence
+remain open. The public reducePartially performs one pass. Concrete host
+runtime, containers, identities, concurrency, machine bounds, solvers,
+random draws, callbacks, codecs, frontend and generator adapters, separate
+Sized contracts, and older constructor/equality work remain active. Preserve
+the optimized interned core and all local proofs, counterexamples, repairs,
+and drafts. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress toward the full objective.
+
 ## Current literal checked targets and shared leaves
 
 Source main remains `ccebf0f7`. The preceding published checkpoint is
