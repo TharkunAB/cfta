@@ -1,0 +1,13 @@
+# Local comparison certificate review
+
+`SourceCurrentHereditaryComparison.lean` proves local causal Mu store preservation for the literal repaired comparison. It uses the final frozen construction and exposure producers. It does not take a global annotation heap.
+
+The public `read` theorem consumes an actual `SourceEqualityProjectionRead.Read`. It obtains physical readiness, row residency, closed children, and cache histories from that same graph. `SourceCurrentHereditaryExposure.nodeEdges` derives each returned row annotation and the causal Mu store. The exact read outcome also supplies the stored cost invariant. No other selected reader result is substituted.
+
+The comparison follows the source branch order: empty narrow, empty wide, equal reference, identity lookup, ancestor reuse, fuel exhaustion, narrow read, and ordered wide-row cover search. The read and each earlier successful comparison supply the literal state for the next bind. False answers retain their effects. Child comparison follows the source zip stopping rule, including an early end of either list. Cover search retains rejected-candidate effects and skips incompatible rows without a read.
+
+Private helper callbacks take initial local annotations and the causal store. The fuel induction discharges this contract for the actual recursive comparison. Public `check`, `children`, `anyCover`, and `allRows` expose no callback or future body law. They verify supplied literal successful results. They do not assert that every fuel completes. Closedness is explicit and is restricted to the compared values and rows. The `clear` test remains an arbitrary source Boolean function; annotation preservation does not need solver completeness or a semantic guard implication.
+
+All eleven public declaration pairs pass. Three integration pairs also pass. The first constructs two finite actual comparisons and starts the second at the exact first returned cache. It derives the second semantic, cost, availability, and causal-store inputs from the first result. The second constructs a recursive Mu/union source family, its local causal store, and its own finite actual row read. The third constructs an actual complete comparison and uses that return to execute the literal singleton child zip. None supplies a completed enclosing comparison or a future output certificate as an initial premise.
+
+The component does not prove store preservation after failed comparison outcomes. It does not infer an arbitrary warm Mu certificate from physical Facts. It does not complete the whole native annotation induction, general recursive selected outer progress, convergence, or full Haskell runtime correspondence.

@@ -1,0 +1,136 @@
+'MicroCFTA.HereditaryComparisonIndependentChecks.serial_comparisons' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.HereditaryComparisonIndependentChecks.serial_comparisons : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (clear : Guard → Bool) (wide narrow : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before wide →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before narrow →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard wide)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard narrow)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+              @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol wide →
+                @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol narrow →
+                  @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                    @Exists.{1} Nat fun firstBound =>
+                      @Exists.{1} Bool fun firstAnswer =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun middle =>
+                          And
+                            (@Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                              (@MicroCFTA.MergedFreshOrdinaryComparison.check Symbol Guard inst_1 inst clear firstBound
+                                (@List.nil.{0} (Prod.{0, 0} Nat Nat)) wide narrow before)
+                              (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool firstAnswer middle))
+                            (And (@MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before middle)
+                              (@Exists.{1} Nat fun secondBound =>
+                                @Exists.{1} Bool fun secondAnswer =>
+                                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                                    And
+                                      (@Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                                        (@MicroCFTA.MergedFreshOrdinaryComparison.check Symbol Guard inst_1 inst clear
+                                          secondBound (@List.nil.{0} (Prod.{0, 0} Nat Nat)) narrow wide middle)
+                                        (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool secondAnswer
+                                          after))
+                                      (And
+                                        (@MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid middle
+                                          after)
+                                        (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid
+                                          after))))
+'MicroCFTA.HereditaryComparisonIndependentChecks.recursive_source_read' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.HereditaryComparisonIndependentChecks.recursive_source_read : ∀ (smart : Bool),
+  have expression :=
+    @MicroCFTA.InternedNestedConstruction.Syntax.binder Nat Bool smart
+      (@MicroCFTA.InternedNestedConstruction.Syntax.union Nat Bool
+        (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+          (@MicroCFTA.InternedNestedConstruction.Syntax.node Nat Bool
+            (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Nat Bool)
+              (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk Nat Bool
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) Bool.true
+                (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+                  (@MicroCFTA.InternedNestedConstruction.Syntax.var Nat Bool
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                  (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool))))
+              (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Nat Bool))))
+          (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)
+            (@MicroCFTA.InternedNestedConstruction.Syntax.node Nat Bool
+              (@List.cons.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Nat Bool)
+                (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk Nat Bool
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) Bool.true
+                  (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)))
+                (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Nat Bool))))
+            (@List.nil.{0} (MicroCFTA.InternedNestedConstruction.Syntax Nat Bool)))));
+  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) fun value =>
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun before =>
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool)) fun edges =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Nat Bool) fun after =>
+          And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Nat Bool
+                (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Nat Bool
+                (fun a b =>
+                  @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                    instDecidableEqBool a b)
+                expression (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Nat Bool))
+                (@MicroCFTA.InternedConstructorTemplates.empty Nat Bool))
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Nat Bool
+                (MicroCFTA.InternedConstructorTemplates.Value Nat Bool) value before))
+            (And
+              (@MicroCFTA.SourceEqualityProjectionRead.Read Nat Bool
+                (fun a b =>
+                  @MicroCFTA.InternedConstructorTemplates.instDecidableEqEdgeKey Nat Bool instDecidableEqNat
+                    instDecidableEqBool a b)
+                value before edges after)
+              (And
+                (@MicroCFTA.SourceCurrentHereditaryComparison.Effect Bool Nat (fun b => @Eq.{1} Bool b Bool.true) before
+                  after)
+                (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Nat Bool)) edges
+                      edge →
+                    @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Nat Bool (fun b => @Eq.{1} Bool b Bool.true)
+                      edge)))
+'MicroCFTA.HereditaryComparisonIndependentChecks.singleton_zip' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.HereditaryComparisonIndependentChecks.singleton_zip : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (clear : Guard → Bool) (wide narrow : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before wide →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before narrow →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard wide)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard narrow)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+              @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol wide →
+                @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol narrow →
+                  @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                    @Exists.{1} Nat fun fuel =>
+                      @Exists.{1} Bool fun answer =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                          And
+                            (@Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                              (@MicroCFTA.MergedSourceComparison.children Symbol Guard
+                                (@MicroCFTA.MergedFreshOrdinaryComparison.check Symbol Guard inst_1 inst clear fuel
+                                  (@List.nil.{0} (Prod.{0, 0} Nat Nat)))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) wide
+                                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) narrow
+                                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                before)
+                              (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after))
+                            (@MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after)

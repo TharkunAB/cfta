@@ -1,0 +1,56 @@
+lean/MicroCFTA/SourceCurrentHereditaryNativeTraceInduction.lean:107:4: error: Invalid `⟨...⟩` notation: The expected type
+  match ?m.393, middle with
+  | Control.code (Code.work job next), state =>
+    SourceEqualityNativeDemandHeapPrimitives.WorkInputs state.native.machine.heap job
+  | Control.code (Code.enter domain left right first second next), state =>
+    Domain state.native.machine domain ∧
+      Available state.native.machine.heap left ∧ Available state.native.machine.heap right
+  | Control.code (Code.optionalBinder key value next), state => Available state.native.machine.heap value
+  | Control.code (Code.node request next), state =>
+    NodeReady state.native.machine request ∧
+      ∀ (key : IntersectionFlatMemoKeyDomain.Triple (bits + 2)),
+        SourceRecursiveIntersectionMemo.requestKey (bits + 2) request.domain request.left request.right = some key →
+          SourceRecursiveIntersectionMemo.KeySafe (bits + 2) request.domain request.left request.right
+  | Control.code (Code.edge request next), state =>
+    EdgeReady state.native.machine request ∧
+      SourceRecursiveIntersectionEdgeMemo.KeySafe (bits + 2) request.domain request.left request.right
+  | Control.code (Code.finishNode handle value next), state =>
+    ∃ request,
+      state.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating } ∧
+        Available state.native.machine.heap value
+  | Control.code (Code.finishEdge handle value next), state =>
+    ∃ request,
+      state.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating } ∧
+        EdgeResident state.native.machine.heap value
+  | x, x_1 => True
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+lean/MicroCFTA/SourceCurrentHereditaryNativeTraceInduction.lean:154:4: error: Invalid `⟨...⟩` notation: The expected type
+  match ?m.393, middle with
+  | Control.code (Code.work job next), state =>
+    SourceEqualityNativeDemandHeapPrimitives.WorkInputs state.native.machine.heap job
+  | Control.code (Code.enter domain left right first second next), state =>
+    Domain state.native.machine domain ∧
+      Available state.native.machine.heap left ∧ Available state.native.machine.heap right
+  | Control.code (Code.optionalBinder key value next), state => Available state.native.machine.heap value
+  | Control.code (Code.node request next), state =>
+    NodeReady state.native.machine request ∧
+      ∀ (key : IntersectionFlatMemoKeyDomain.Triple (bits + 2)),
+        SourceRecursiveIntersectionMemo.requestKey (bits + 2) request.domain request.left request.right = some key →
+          SourceRecursiveIntersectionMemo.KeySafe (bits + 2) request.domain request.left request.right
+  | Control.code (Code.edge request next), state =>
+    EdgeReady state.native.machine request ∧
+      SourceRecursiveIntersectionEdgeMemo.KeySafe (bits + 2) request.domain request.left request.right
+  | Control.code (Code.finishNode handle value next), state =>
+    ∃ request,
+      state.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating } ∧
+        Available state.native.machine.heap value
+  | Control.code (Code.finishEdge handle value next), state =>
+    ∃ request,
+      state.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating } ∧
+        EdgeResident state.native.machine.heap value
+  | x, x_1 => True
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor

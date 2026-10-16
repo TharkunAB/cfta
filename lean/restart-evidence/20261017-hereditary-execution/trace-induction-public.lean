@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentHereditaryNativeTraceInduction
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.Plain
+#check @MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.Plain
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.Preserves
+#check @MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.Preserves
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.bind
+#check @MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.bind
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.node_bind
+#check @MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.node_bind
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.edge_bind
+#check @MicroCFTA.SourceCurrentHereditaryNativeTraceInduction.edge_bind

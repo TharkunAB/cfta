@@ -1,0 +1,95 @@
+import MicroCFTA.SourceCurrentHereditaryNativeEffects
+import MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile
+import MicroCFTA.SourceCurrentHereditaryNativeEffectsEdge
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.pure
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.pure
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.bind
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.bind
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.makeEdge
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.makeEdge
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.makeNode
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.makeNode
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.makeUnion
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.WorkSafe.makeUnion
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.work_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.work_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.optionalBinder_stored
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.optionalBinder_stored
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.optionalBinder_result
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.optionalBinder_result
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.Certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.Certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.forget
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.forget
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.certified_bind
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.certified_bind
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.certified_walk
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.certified_walk
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.request_node
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.request_node
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.request_edge
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.request_edge
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.edge_work
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.edge_work
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.node_work
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.node_work
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.union_work
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.union_work
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffects.optional_binder_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffects.optional_binder_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.rows_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.rows_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.left_union_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.left_union_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.right_union_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.right_union_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.mu_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.mu_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.reference_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.reference_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.node_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffectsCompile.node_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffectsEdge.children_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffectsEdge.children_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffectsEdge.sentinel_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffectsEdge.sentinel_certified
+
+#print axioms MicroCFTA.SourceCurrentHereditaryNativeEffectsEdge.body_certified
+#check @MicroCFTA.SourceCurrentHereditaryNativeEffectsEdge.body_certified

@@ -1,0 +1,13 @@
+# Local selection and Merge store review
+
+The two producer modules preserve the causal Mu store on the exact supplied executions. They add no global guard predicate on the heap. Existing memo annotation and physical contracts remain unchanged.
+
+`SourceCurrentHereditarySelection` checks the actual ordered comparisons. Each compared operand is available, closed, and locally annotated. `Comparison.check` produces the causal store at the actual stopping heap. The physical effect transports the remaining original operands. Retention and deduplication select original values, so the final selected annotations follow from membership.
+
+`SourceCurrentHereditaryMergeStore.Certified` checks each local instruction. Constructor work must create no new Mu. Selection operands and recursive request operands have local annotations. The mutual actual Run/Call induction discharges every recursive request. In a miss, the smaller actual body proof supplies the causal store. The old Merge producer supplies its existing physical and conditional result contracts on the same full call, including the current keep-first winner. Publication changes the memo, not the heap. The proof does not transfer a losing candidate's annotation law to an earlier winner.
+
+The public `call` needs no input closedness premise. Closedness is checked where the source body processes closed ordinary rows. It has no future completed callback, output annotation, or future causal-store premise. `run_store` is an explicit instruction interpreter. Its local `Certified` input is not an unrestricted whole-query completion theorem.
+
+Imported validation has seven public axiom/signature pairs and two integration pairs. The first kernel constructs an allowed source, adds an unrelated guard that violates the local predicate, constructs an actual cold Merge call, replays its produced warm entry at the exact heap and table, and constructs a later Head. The later Head receives the Mu store produced by that same Merge. The kernel proves that the global heap predicate is false. The second kernel checks complete warm result, heap, and memo uniqueness from a produced entry. Neither kernel assumes a future callback or whole-heap annotation witness.
+
+Both imported probe logs have no errors, warnings, or sorryAx. The first MergeStore direct attempt is retained. It failed because a hit did not fix the implicit `clear` parameter. The final source fixes that parameter; it changes no contract. Canonical builds pass in `selection-build.log` and `companions-build.log`. These local closure producers do not prove general selected reduction progress. The joint native execution induction is separate work.

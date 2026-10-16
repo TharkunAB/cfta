@@ -1,0 +1,172 @@
+'MicroCFTA.SourceCurrentHereditarySelection.anyAccepts' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditarySelection.anyAccepts : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (clear : Guard → Bool) (fuel : Nat) (narrow : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (wides : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before narrow →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before wides →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard narrow)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard wides →
+              @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol narrow →
+                (∀ (wide : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) wides
+                        wide →
+                      @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol wide) →
+                  @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                    ∀ (answer : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                          (@MicroCFTA.SourceMergedSelection.anyAccepts Symbol Guard inst inst_1 clear fuel narrow wides
+                            before)
+                          (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after) →
+                        @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after
+'MicroCFTA.SourceCurrentHereditarySelection.retain' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditarySelection.retain : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (clear : Guard → Bool) (fuel : Nat)
+  (recursive inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before recursive →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before inputs →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard recursive →
+            @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard inputs →
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) recursive
+                      value →
+                    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+                (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs
+                        value →
+                      @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+                  @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                    ∀ (retained : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1}
+                          (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                          (@MicroCFTA.SourceMergedSelection.retain Symbol Guard inst inst_1 clear fuel recursive inputs
+                            before)
+                          (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) retained after) →
+                        @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after
+'MicroCFTA.SourceCurrentHereditarySelection.select' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditarySelection.select : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  (clear : Guard → Bool) (fuel : Nat) (inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before inputs →
+        @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard inputs →
+          (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs value →
+                @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+              ∀ (selected : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @Eq.{1}
+                    (MicroCFTA.MergedSourceComparison.Result Symbol Guard
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    (@MicroCFTA.SourceMergedSelection.select Symbol Guard inst inst_1 clear fuel inputs before)
+                    (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) selected after) →
+                  And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                    (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          selected value →
+                        @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value)
+'MicroCFTA.SourceCurrentHereditaryMergeStore.Certified' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryMergeStore.Certified : {Symbol Guard Output : Type} →
+  [DecidableEq.{1} Symbol] →
+    [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+      (Guard → Prop) →
+        (Guard → Bool) →
+          MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output →
+            MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Output → Prop) → Prop
+'MicroCFTA.SourceCurrentHereditaryMergeStore.run_store' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryMergeStore.run_store : ∀ {Symbol Guard Output : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {clear : Guard → Bool} {top : Guard},
+  valid top →
+    ∀ {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear top Output code before memo output after
+          saved →
+        ∀ (post : MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Output → Prop),
+          @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+            @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+              @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard before memo →
+                @MicroCFTA.SourceCurrentHereditaryMerge.Stored Symbol Guard valid memo →
+                  @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                    @MicroCFTA.SourceCurrentHereditaryMergeStore.Certified Symbol Guard Output inst inst_1 valid clear
+                        code before post →
+                      And (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+                        (And (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard after saved)
+                          (And (@MicroCFTA.SourceCurrentHereditaryMerge.Stored Symbol Guard valid saved)
+                            (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                              (post after output))))
+'MicroCFTA.SourceCurrentHereditaryMergeStore.call' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryMergeStore.call : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {clear : Guard → Bool} {top : Guard},
+  valid top →
+    ∀ {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top input before memo output after
+          saved →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard before memo →
+              @MicroCFTA.SourceCurrentHereditaryMerge.Stored Symbol Guard valid memo →
+                @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                  @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before input →
+                    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol input →
+                      And (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+                        (And (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard after saved)
+                          (And (@MicroCFTA.SourceCurrentHereditaryMerge.Stored Symbol Guard valid saved)
+                            (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                              (@MicroCFTA.SourceCurrentHereditaryMerge.Contract Symbol Guard valid input before output
+                                after))))
+'MicroCFTA.SourceCurrentHereditaryMergeStore.cold' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryMergeStore.cold : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {clear : Guard → Bool} {top : Guard},
+  valid top →
+    ∀ {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+      {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top input before
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard) output after saved →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+            @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+              @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before input →
+                @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol input →
+                  And (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect Symbol Guard before after)
+                    (And (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored Symbol Guard after saved)
+                      (And (@MicroCFTA.SourceCurrentHereditaryMerge.Stored Symbol Guard valid saved)
+                        (And (@MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after)
+                          (@MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol output))))

@@ -1,0 +1,28 @@
+# Local native constructor effects
+
+Checked at 2026-10-17T01:48:38.395517+02:00. All three new modules are frozen and validated. No older production source was changed.
+
+`SourceCurrentHereditaryNativeEffects.WorkSafe` records the literal finite Work job's Mu-store effect. The pure, bind, makeEdge, makeNode, and makeUnion producers derive it from actual actions. It is not a counter-difference definition or a completed-query premise. The ordinary constructor producers require no guard predicate for unrelated rows. They change no complete Mu payload.
+
+The companion `Certified annotation source code state post` retains the state-aware post and exact continuations of the older `NativeCode.Certified`. Its Work case adds WorkSafe. Its optionalBinder case exposes the current available and annotated body. Its node and edge cases expose source Bindings and both actual input annotations. Returned recursive calls receive only Valid, Extension, MuStored, physical availability or residency, and the conditional law for their own request. `forget` recovers the unchanged older annotation contract with MuStored representation.
+
+`work_stored` derives the actual returned representation from the incoming MuStored and WorkSafe producer. `optionalBinder_stored` derives the representation of the exact stopping heap for both success and pending. `optionalBinder_result` also derives the annotation for an actual successful result. Both optional-binder proofs use the earlier constructive local construction theorem. They do not assume an annotation for the combined result or for every resident guard.
+
+`NativeEffectsCompile.node_certified` certifies every literal node compiler branch. It has no Binders premise. It derives actual Mu entry Bindings from the original annotated operands. It annotates each actual stored body without inspecting either probe for that projection. Its child request receives a causal returned Mu store. Optional binding then uses that returned annotated body and its actual current store. Reference branches recover exact stored source payloads through the local binding invariant and actual heap growth. Ordered ordinary rows and union members use the same input positions and returned heaps.
+
+`NativeEffectsEdge.body_certified` certifies the code emitted by the actual checked edge body. Arity mismatch and rejection emit the literal Top sentinel. The accepted branch uses exact current field loads and actual allocated conjunction readback. Both original guards must be plain. The proof derives the combined guard's plain predicate through the existing guard-closure producer. The body retains the entire native state while equality operations can grow. The companion certificate describes the actual returned native machine. The actual yielded equation retains the equality state externally.
+
+The node compiler producer is generic in Symbol, Guard, and the annotation predicate. The checked edge producer uses the current concrete Symbol and Guard and the source plain predicate. Physical initial validity, source operand availability, current readiness, source-to-current growth, and the causal Mu store remain explicit where needed. Unrelated constrained records remain permitted.
+
+These certificates are local producers. They do not prove the joint completed-trace induction. Recursive continuation representation and result laws must come from smaller actual trace proofs. They do not claim general completion, capacity, an all-prefix property, a lazy GHC schedule, or whole-library correctness. The parent task owns actual finish protection and the joint native trace induction. No finish helper was duplicated here.
+
+Strict direct validation passed for the three production modules with all linters enabled and no diagnostics. Canonical companions-build passed 1177 jobs. The owned canonical copy retains the shared build log and its historical dependency warning. Final imported public checks cover all 28 declarations: 19 Effects, 6 Compile, and 3 Edge. Each has `#print axioms` and a full explicit `#check @` signature. Four imported integration kernels also pass. Their final canonical-import log is `native-effects-kernels-canonical-1.log`. Both final probe logs have no warnings, errors, sorryAx, or truncated signatures.
+
+The four kernels test these joins:
+
+1. A literal mismatched checked body emits its sentinel and exact field-allocation state. Actual sentinel Work derives its own MuStored result before the annotation continuation runs.
+2. A literal accepted nullary body uses two current loads and an actual ready conjunction. Its emitted Work derives the returned Mu store and complete row annotation. No returned representation is assumed.
+3. A prepared local optional binder constructs its own actual result from initial physical facts, coverage, local annotations, and MuStored. It derives the returned Mu store. Exact replay at that same returned heap constructs a warm repeated result with no new state.
+4. An allowed closed source expression constructs its own value, physical facts, annotation, and causal Mu store. These facts certify its literal native node compilation. No callback or completed native execution is an input. This kernel uses the same constructed value in both operand positions; the compiler certificate remains a local result.
+
+Failed sources and raw logs remain available. The first Effects attempt had a reserved identifier. The first isolated Compile attempt lacked namespace dependency links. The first two kernel attempts had evidence-only identifier errors. Final production bytes are unchanged after their successful strict checks and canonical build.

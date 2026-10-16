@@ -1,0 +1,180 @@
+'MicroCFTA.SourceCurrentHereditaryComparison.Effect' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.Effect : {Guard Symbol : Type} →
+  (Guard → Prop) →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard → Prop
+'MicroCFTA.SourceCurrentHereditaryComparison.Effect.keeps' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.Effect.keeps : ∀ {Guard Symbol : Type} {valid : Guard → Prop}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after →
+    @MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after
+'MicroCFTA.SourceCurrentHereditaryComparison.Effect.semantic' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.Effect.semantic : ∀ {Guard Symbol : Type} {valid : Guard → Prop}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after
+'MicroCFTA.SourceCurrentHereditaryComparison.Effect.costs' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.Effect.costs : ∀ {Guard Symbol : Type} {valid : Guard → Prop}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after
+'MicroCFTA.SourceCurrentHereditaryComparison.Effect.stored' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.Effect.stored : ∀ {Guard Symbol : Type} {valid : Guard → Prop}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after →
+    @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid after
+'MicroCFTA.SourceCurrentHereditaryComparison.Effect.trans' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.Effect.trans : ∀ {Guard Symbol : Type} {valid : Guard → Prop}
+  {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before middle →
+    @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid middle after →
+      @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after
+'MicroCFTA.SourceCurrentHereditaryComparison.read' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.read : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (valid : Guard → Prop)
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst value before edges after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value →
+              @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                And (@MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after)
+                  (And (@MicroCFTA.InternedNestedProvenance.Edges Symbol Guard after edges)
+                    (And (@MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard edges)
+                      (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            edges edge →
+                          @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Symbol Guard valid edge)))
+'MicroCFTA.SourceCurrentHereditaryComparison.check' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.check : ∀ {Guard Symbol : Type} (valid : Guard → Prop)
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (fuel : Nat) (above : List.{0} (Prod.{0, 0} Nat Nat))
+  (wide narrow : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before wide →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before narrow →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard wide)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard narrow)
+                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+              @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol wide →
+                @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol narrow →
+                  @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                    ∀ (answer : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                          (@MicroCFTA.MergedFreshOrdinaryComparison.check Symbol Guard inst_1 inst clear fuel above wide
+                            narrow before)
+                          (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after) →
+                        @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after
+'MicroCFTA.SourceCurrentHereditaryComparison.children' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.children : ∀ {Guard Symbol : Type} (valid : Guard → Prop)
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (fuel : Nat) (above : List.{0} (Prod.{0, 0} Nat Nat))
+  (wides narrows : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before wides →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before narrows →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard wides →
+            @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard narrows →
+              (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                  @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) wides
+                      value →
+                    @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+                (∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) narrows
+                        value →
+                      @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol value) →
+                  @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                    ∀ (answer : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                          (@MicroCFTA.MergedSourceComparison.children Symbol Guard
+                            (@MicroCFTA.MergedFreshOrdinaryComparison.check Symbol Guard inst_1 inst clear fuel above)
+                            wides narrows before)
+                          (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after) →
+                        @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after
+'MicroCFTA.SourceCurrentHereditaryComparison.anyCover' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.anyCover : ∀ {Guard Symbol : Type} (valid : Guard → Prop)
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (clear : Guard → Bool)
+  (fuel : Nat) (above : List.{0} (Prod.{0, 0} Nat Nat))
+  (narrow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (wides : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard narrow) →
+        @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before wides →
+          @MicroCFTA.MergedColdReaderClosedInputs.ClosedValues Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard narrow) →
+            @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard wides →
+              @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Symbol Guard valid narrow →
+                (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) wides
+                        edge →
+                      @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Symbol Guard valid edge) →
+                  @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                    ∀ (answer : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                          (@MicroCFTA.MergedSourceComparison.anyCover Symbol Guard inst clear
+                            (@MicroCFTA.MergedFreshOrdinaryComparison.check Symbol Guard inst_1 inst clear fuel above)
+                            narrow wides before)
+                          (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after) →
+                        @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after
+'MicroCFTA.SourceCurrentHereditaryComparison.allRows' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentHereditaryComparison.allRows : ∀ {Guard Symbol : Type} (valid : Guard → Prop)
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (readFuel : Nat)
+  (clear : Guard → Bool) (fuel : Nat) (above : List.{0} (Prod.{0, 0} Nat Nat))
+  (wide : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (narrows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before wide →
+        @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard before narrows →
+          @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard wide)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges Symbol Guard narrows →
+              @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard valid Symbol wide →
+                (∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                    @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        narrows edge →
+                      @MicroCFTA.SourceCurrentHereditaryConstructors.Edge Symbol Guard valid edge) →
+                  @MicroCFTA.SourceCurrentHereditaryConstruction.MuStored Guard Symbol valid before →
+                    ∀ (answer : Bool) (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                      @Eq.{1} (MicroCFTA.MergedSourceComparison.Result Symbol Guard Bool)
+                          (@MicroCFTA.MergedFreshOrdinaryComparison.allRows Symbol Guard inst_1 inst readFuel clear
+                            (@MicroCFTA.MergedFreshOrdinaryComparison.check Symbol Guard inst_1 inst clear fuel above)
+                            wide narrows before)
+                          (@MicroCFTA.MergedSourceComparison.Result.done Symbol Guard Bool answer after) →
+                        @MicroCFTA.SourceCurrentHereditaryComparison.Effect Guard Symbol valid before after
