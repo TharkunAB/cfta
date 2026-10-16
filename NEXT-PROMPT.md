@@ -2,6 +2,60 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current finite ordinary query word bounds
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `1bbb75c4`. Read lean/notes-current-constrained-query-words.md
+for the current top-level objective, proof map, and missing areas. Evidence
+is in lean/restart-evidence/20261016-constrained-query-words/.
+Seven additive modules remove future word checks from one native query.
+Proof commits are `ae8b53b5` (initial keys and raw actual prefixes) and
+`ee54b123` (Scan checks, supplied reads, and bounded finite completion).
+
+Recursive key certificates derive from initial resident ordinary records
+and initial node/edge supplies. The static actual code requests only original
+operand subrecords. Fixed-source memo origins retain captured operands in
+all phases and place no condition on returned identities. Raw actual
+Demand.Steps derive every reached word check without a completed physical
+Trace, future readiness, or a final result premise.
+
+Words.node/edge derive checked WordRanges from initial Good and recursive
+operand keys. Their domain adapters use only initial supply bounds at width
+bits+2. BoundedFinite constructs its own complete native Receipt and retains
+final physical invariants, semantic readiness, structural tables, domain,
+and both original height bounds. Initial Good, SemanticReady, Stored, Idle,
+and resident domain operands remain explicit. No future WordRanges is input.
+
+ScanRanges derives ordinary Scan-only checks. OuterVerification derives
+Checks, full Post, structural bounds, and independent language laws for all
+eight supplied actual strict read families. It verifies a supplied graph;
+it does not construct the graph. The earlier constructed finite ordinary
+root still requires its independently reached parent entry range plan.
+
+Next derive numeric capacity at actual Target/Leaf query entries, then bound
+primitive reservations from initial resources. Generated earlier results
+need fresh identity bounds when used as later operands. Height and domain
+alone do not give those bounds. General Mu/reference/union progress,
+repeated-pass convergence, current frontends, concrete Haskell execution,
+and full-pipeline composition remain open. Exact size, count, ordered rank,
+both inverses, transformations, and sampling retain separate contracts.
+
+The full Audit passes 2538 jobs and 59423 dependency checks. All 76 declared
+public axiom/full-signature pairs pass. Imported kernels retain raw prefixes,
+complete warm owners, initial counter boundaries, actual supplied-read
+prefixes, and two constructed queries at the same actual warm return.
+Only the permitted foundations occur. Preservation retains 6422 starting
+files and 2530 older non-Audit proof sources. Thirty-seven frozen manifests
+check 295 module entries. Older repairs, drafts, stashes, other worktrees,
+and the optimized interned core remain.
+
+No Haskell file changes. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+The field-pool repair b9219b9e is already merged by PR #65 and validated.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+every later repair there with failure, executable reproducer, affected paths,
+commit, checks, and upstream status. The full-library goal remains active.
+
 ## Current constrained finite ordinary outer completion
 
 Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint

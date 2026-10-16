@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current constrained finite ordinary outer proof adds no Haskell change.
+The current finite ordinary query-word proof adds no Haskell change.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
 For external handoff, record every later repair here with its failure,
 executable reproducer, affected paths, commit, checks, and upstream status.
@@ -29,7 +29,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The current pinned Lean Audit passes: 2531 jobs and 59275 dependency checks.
+The current pinned Lean Audit passes: 2538 jobs and 59423 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -163,6 +163,60 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current finite ordinary query word bounds
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `1bbb75c4`. Read lean/notes-current-constrained-query-words.md
+for the current top-level objective, proof map, and missing areas. Evidence
+is in lean/restart-evidence/20261016-constrained-query-words/.
+Seven additive modules remove future word checks from one native query.
+Proof commits are `ae8b53b5` (initial keys and raw actual prefixes) and
+`ee54b123` (Scan checks, supplied reads, and bounded finite completion).
+
+Recursive key certificates derive from initial resident ordinary records
+and initial node/edge supplies. The static actual code requests only original
+operand subrecords. Fixed-source memo origins retain captured operands in
+all phases and place no condition on returned identities. Raw actual
+Demand.Steps derive every reached word check without a completed physical
+Trace, future readiness, or a final result premise.
+
+Words.node/edge derive checked WordRanges from initial Good and recursive
+operand keys. Their domain adapters use only initial supply bounds at width
+bits+2. BoundedFinite constructs its own complete native Receipt and retains
+final physical invariants, semantic readiness, structural tables, domain,
+and both original height bounds. Initial Good, SemanticReady, Stored, Idle,
+and resident domain operands remain explicit. No future WordRanges is input.
+
+ScanRanges derives ordinary Scan-only checks. OuterVerification derives
+Checks, full Post, structural bounds, and independent language laws for all
+eight supplied actual strict read families. It verifies a supplied graph;
+it does not construct the graph. The earlier constructed finite ordinary
+root still requires its independently reached parent entry range plan.
+
+Next derive numeric capacity at actual Target/Leaf query entries, then bound
+primitive reservations from initial resources. Generated earlier results
+need fresh identity bounds when used as later operands. Height and domain
+alone do not give those bounds. General Mu/reference/union progress,
+repeated-pass convergence, current frontends, concrete Haskell execution,
+and full-pipeline composition remain open. Exact size, count, ordered rank,
+both inverses, transformations, and sampling retain separate contracts.
+
+The full Audit passes 2538 jobs and 59423 dependency checks. All 76 declared
+public axiom/full-signature pairs pass. Imported kernels retain raw prefixes,
+complete warm owners, initial counter boundaries, actual supplied-read
+prefixes, and two constructed queries at the same actual warm return.
+Only the permitted foundations occur. Preservation retains 6422 starting
+files and 2530 older non-Audit proof sources. Thirty-seven frozen manifests
+check 295 module entries. Older repairs, drafts, stashes, other worktrees,
+and the optimized interned core remain.
+
+No Haskell file changes. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+The field-pool repair b9219b9e is already merged by PR #65 and validated.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+every later repair there with failure, executable reproducer, affected paths,
+commit, checks, and upstream status. The full-library goal remains active.
 
 ## Current constrained finite ordinary outer completion
 
