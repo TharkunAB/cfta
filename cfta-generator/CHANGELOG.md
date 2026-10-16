@@ -185,7 +185,9 @@ tree automata of `cfta`, with QuickCheck integration.
   that the combinators give, with their ranks, and reports a node view that
   does not fit the datatype (`NodeMismatch`): the shapes of the constructors
   differ, or the name of a constructor of the view does not start with the
-  name of the constructor in its place. `Measured` has one measure,
+  name of the constructor in its place (`checkNodeShape`). `nodeFields`
+  reads the position of the constructor of a node and its fields. `Measured`
+  has one measure,
   `Contracted` none, and `MeasuredBy` named measures, the fields of a record
   (`MeasureRecord`) whose selector names are the names in the logic. `holds`,
   `measureOf`, and `measuresOf` run the invariant on values, and
@@ -217,7 +219,9 @@ tree automata of `cfta`, with QuickCheck integration.
   `CyclicAutomaton`, and a transition with a constraint gives
   `ConstrainedTransition`.
 - `Data.CFTA.Gen.Typing`: typed languages with variables, from typing rules
-  for the constructors of a `HasFTA` datatype, by name. `rule` gives a
+  for the constructors of a `HasFTA` datatype, written as nodes of its node
+  view (`NodeView`), so a rule names its constructor and its fields by type:
+  `rule (TAddNode (subterm [] TInt) (subterm [] TInt)) TInt`. `rule` gives a
   constructor a type from the types of its fields. `subterm` is a field in
   the environment of the node with some binders in front, `value` is a field
   with one value, and `variable` reads the environment by de Bruijn index.
@@ -231,8 +235,9 @@ tree automata of `cfta`, with QuickCheck integration.
   labels and the ranks of `fromDatatype`, and `fromTypingRules` is the two in
   one: the terms of the root types up to a bound on the nesting. The inputs
   are the variables in scope at the root, so the terms are programs over
-  them. It reports a name that no constructor has (`UnknownConstructors`), a
-  rule that does not fit the fields of its constructor (`FieldMismatch`).
+  them. It reports a node view that does not fit the datatype
+  (`NodeViewMismatch`) and a rule that does not fit the fields of its
+  constructor (`FieldMismatch`).
   With `Binders`, a bound on the binders around each position, the
   automaton is cyclic and the generator is counted by size. A field
   that holds a subterm has the type of the datatype, so a family of mutually
