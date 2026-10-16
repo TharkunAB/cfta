@@ -224,6 +224,17 @@ newtype Lettered = Lit Letter
     deriving stock (Eq, Ord, Show, Generic)
     deriving anyclass (HasFTA)
 
+-- | A non-regular type: each level nests its element type in a list.
+data Nested a = Here a | Deeper (Nested [a])
+    deriving stock (Eq, Ord, Show, Generic)
+
+instance (HasFTA a) => HasFTA (Nested a)
+
+-- | A language with a field of the non-regular type, which no rule uses.
+data Holding = Plain | Other | Holder (Nested Int)
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
 spec :: Spec
 spec = describe "Data.CFTA.Gen.Typing" $ do
     describe "the language of the binders spike" $ do
@@ -276,9 +287,12 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
                 , variable "Var" (\_ _ -> [value False])
                 ]
                 `shouldBe` Just (FieldMismatch "Var")
-    describe "the order of the values" $
+    describe "the order of the values" $ do
         it "orders the constructors of a helper type in declaration order, as fromDatatype does" $ do
             let typed = either (error . show) id $ fromTypingRules @Lettered 0 [()] [rule "Lit" [value A] (), rule "Lit" [value Z] ()]
                 derived = Gen.fromDatatype $ either (error . show) id $ deriveFTA @Lettered
             Gen.values derived `shouldBe` Right [Lit Z, Lit A]
             Gen.values typed `shouldBe` Right [Lit Z, Lit A]
+        it "reads only the types of the rules, so a non-regular field that no rule uses does not stop it" $
+            Gen.values (either (error . show) id $ fromTypingRules @Holding 0 [()] [rule "Other" [] (), rule "Plain" [] ()])
+                `shouldBe` Right [Plain, Other]
