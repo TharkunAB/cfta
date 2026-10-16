@@ -2,6 +2,55 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current finite plain recursion and constructed root execution
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `8f063c09`. Read lean/notes-current-plain-recursion.md
+and lean/restart-evidence/20261016-plain-recursion/.
+Seven additive modules construct plain recursive execution. Commits are
+`39a2925a` (induction interfaces), `99296e30` (exact prefixes), `57d517ce`
+(terminals), `c2c3f694` (child loops), `99de70a4` (rows/descendants),
+`06d7a970` (strong node induction), and `00abe685` (exact root composition).
+
+PlainNode.finite constructs stable literal node execution, its own graph,
+strict Reads, Checks, full Post, output availability, Stored after, and
+NodeLaw from initial Context, inherited Ready, available Region input,
+Stored, and active order. Strong node-rank induction discharges every
+smaller-call callback. Each actual prefix derives the next Context and
+Stored. Completed frames restore the original ancestor bound before each
+suffix. Warm calls retain their exact captured owners and finish handles.
+
+PlainRoot.constructed_root derives initial Context, Stored, and active
+order from covered construction. It returns finite literal execution and
+full language equivalence without a worker-success or future-range premise.
+prepared_root also derives its actual ordered field History and Receipt.
+Construction success and Region remain explicit inputs. Region stops at
+Mu and union. Traversed rows use the complete effective own accessor.
+Mu cleanup can remove its binder, so no returned-node Region is promised.
+
+Next address general constrained progress outside Region. Read the
+next-general review in the evidence directory. Nonempty own classes can
+change child structure through edits and intersections; the plain Shape
+and original height argument do not cover them. Derive actual reached
+range checks and an independent progress measure. Do not assume future
+execution, future semantic answers, or a finite inventory of future keys.
+Unequal-length classes and repeated-pass convergence remain open.
+The full-library scope still includes languages, transformations, exact
+size classes, finite execution, counts, ordered ranks and both inverses,
+probability, frontends, runtime, and full-pipeline composition. Preserve
+all older constructor/equality work and the optimized interned core.
+
+The full Audit passes 2492 jobs and 58889 dependency checks. Preservation
+retains all 5730 starting files and 2484 older non-Audit proof sources.
+Thirty-two frozen manifests check 249 module entries. Historical repair
+records, stashes, and the three other worktrees remain. No Haskell file
+changes. Reuse current source validation: strict Nix build, 798 examples
+plus golden, six-file Fourmolu, and four-package Cabal-gild and metadata.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Add each
+later repair there with failure, executable reproducer, paths, commit,
+checks, and upstream status. Earlier sections are historical checkpoints.
+This is progress; the full objective remains active.
+
 ## Current plain parent and outer edge-call completion
 
 Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
