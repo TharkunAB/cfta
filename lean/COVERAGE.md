@@ -1,5 +1,63 @@
 # Full formalization coverage
 
+## Current finite conjunction class scans and constructed entry
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`2805ce87`. Proof commits are `79a00157`, `14fcff90`, `d03bced1`, and
+`e103bb55`. Audit and scope note commit is `b5d30312`. No Haskell
+implementation or test changes occur. The Haskell fix handoff at the top
+of FINDINGS.md remains current for external agents.
+
+Six additive modules connect the CURRENT conjunction decision and memo to
+finite checked class Scan. Actual projections retain the same operation
+state. The source first-seeded right fold uses the actual checked native
+engine. Closed available operands derive Original syntax at each actual
+returned heap. Scope completion and actual physical traces derive final
+Good, loaded fields, stored costs, Scoped, Idle, and closed resident queries.
+No native memo table is reset between queries.
+
+The whole finite Scan derives its own gates, seeded queries, and current
+memo calls. It retains source order, repeated selected occurrences, fourth
+memo correctness, and earlier entries. A true answer stops before the suffix.
+Reached ranges supply machine checks, not future successful callbacks.
+No completed historical Scan, desired result law, or final invariant is a
+premise. A covered original field history and actual source build derive
+initial Scan.Ready. The cold wrapper also derives empty fourth correctness.
+Available forest values, proper paths, coverage, and reached ranges remain
+explicit. Only modeled native/domain/operation tables start cold over the
+retained equality interner. No Haskell global reset is claimed.
+
+This is finite PHYSICAL completion. Original-class rejection soundness still
+needs common-subtree inclusion in the actual seeded query. Closed residency
+and Original syntax do not admit a generated operand to a fixed semantic
+model or revalidate old warm-cell laws after model expansion.
+
+The pinned full Audit passes 2305 jobs and 56121 theorem dependency checks.
+Focused validation passes 29 public axiom reports, 29 signatures, 28 kernel
+examples, and one named kernel theorem with its additional axiom report.
+Only standard foundations and the old unused-input warning occur.
+Independent reviews found no material defect. Reuse unchanged-source strict
+Nix build, 777 examples plus golden, five-file Fourmolu, and four-package
+Cabal-gild.
+
+Read lean/notes-current-conjunction-class-scan.md. Evidence and frozen source
+copies are repository-local in lean/restart-evidence/20261016-conjunction-scan/.
+All 3401 baseline files remain. All 2298 older non-Audit proof sources and
+prior frozen modules retain identical bytes. Earlier unavailable external
+drafts are not claimed recovered or reverified.
+
+Next derive semantic input-model admission and warm-cache law transport for
+generated operands, then an actual checked class_witness and stopped-class
+soundness. Compose actual allocated precheck records/state, the three global
+gate memo receipts, selected required paths, and the general constrained
+outer caller. Do not infer semantic cache validity from physical scope.
+Arbitrary warm operation tables, GHC forcing and publication, allocation
+order, concurrency, concrete containers, and machine capacity retain explicit
+boundaries. Every other full-library and separate Sized contract remains
+active. Preserve the optimized interned core and every older constructor and
+equality proof. No board posts or deployments. Push verified formalize
+checkpoints regularly. The full goal remains active; this checkpoint is progress.
+
 ## Current native entry from original allocation and construction histories
 
 Source main remains `8f85ddb6`. The preceding published proof checkpoint is

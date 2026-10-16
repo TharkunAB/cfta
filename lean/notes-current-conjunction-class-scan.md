@@ -112,7 +112,8 @@ earlier contextual laws, or derive an equivalent semantic cache invariant
 from the actual history. Do not infer this transport from scope validity.
 
 Then derive common-subtree inclusion and stopped-class soundness for this
-current Scan. Compose the three global gate memo receipts, selected required
+current Scan. Compose actual allocated precheck records and their returned
+operation state, the three global gate memo receipts, selected required
 paths, and the general constrained outer caller. Arbitrary warm operation
 tables, full cache admission, GHC forcing and publication, allocation order,
 concurrency, concrete containers, and machine capacity remain explicit.
