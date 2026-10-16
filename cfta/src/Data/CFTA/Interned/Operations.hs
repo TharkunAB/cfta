@@ -7,6 +7,7 @@ module Data.CFTA.Interned.Operations (
     crush,
     unfoldOuterRec,
     refold,
+    refoldEdges,
     nodeEdges,
     unfoldBounded,
     boundDepth,
@@ -198,15 +199,43 @@ refold node = memoTypeableWith @symbol genericRefoldCache go node
             then n
             else fixUnbounded (mapNodes tryUnfold) n
       where
-        muNodeMap =
-            crush
-                ( \case
-                    x@(Mu _) -> HashMap.singleton (unfoldOuterRec x) x
-                    _ -> HashMap.empty
-                )
-                n
-
+        muNodeMap = recursiveUnfoldings n
         tryUnfold x = fromMaybe x (HashMap.lookup x muNodeMap)
+
+{- | 'refold', and the edge of the result that each edge of the input
+becomes. Refold rebuilds an edge with the refolded nodes of its children, so
+an edge with no changed child becomes itself. The function is for the edges
+of the input.
+-}
+{-# INLINEABLE refoldEdges #-}
+refoldEdges ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) => Node symbol -> (Node symbol, Edge symbol -> Edge symbol)
+refoldEdges n
+    | HashMap.null muNodeMap = (n, id)
+    | otherwise = go n id
+  where
+    muNodeMap = recursiveUnfoldings n
+    -- One table for all the steps, as in 'refold'.
+    step = mapNodes (\x -> fromMaybe x (HashMap.lookup x muNodeMap))
+    {-# NOINLINE step #-}
+    go x edgeOf
+        | x' == x = (x, edgeOf)
+        | otherwise = go x' (rebuild . edgeOf)
+      where
+        x' = step x
+    rebuild e = setChildren e (map step (edgeChildren e))
+
+-- | The unfolding of each recursive node of a graph, with the node.
+{-# INLINEABLE recursiveUnfoldings #-}
+recursiveUnfoldings ::
+    (Hashable symbol, Typeable symbol) => Node symbol -> HashMap.HashMap (Node symbol) (Node symbol)
+recursiveUnfoldings =
+    crush
+        ( \case
+            x@(Mu _) -> HashMap.singleton (unfoldOuterRec x) x
+            _ -> HashMap.empty
+        )
 
 {- | Unfold recursive nodes at most the given number of rounds.
 

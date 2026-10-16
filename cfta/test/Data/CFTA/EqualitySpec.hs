@@ -652,6 +652,13 @@ spec = do
         it "refold folds the simplest unrolled input" $
             refold (Node [Edge "f" [infiniteFNode]]) `shouldBe` infiniteFNode
 
+        it "refoldEdges refolds as refold does, and gives the edge that each input edge becomes" $ do
+            let outer = Edge "g" [Node [Edge "f" [infiniteFNode]]]
+                (result, edgeOf) = refoldEdges (Node [outer])
+            result `shouldBe` refold (Node [outer])
+            result `shouldBe` Node [Edge "g" [infiniteFNode]]
+            edgeOf outer `shouldBe` Edge "g" [infiniteFNode]
+
     describe "traversals" $ do
         it "mapNodes calls its function once for each node, by count" $
             -- Note: If the Arbitrary Node instance is changed to return empty or mu nodes, this will need to change
