@@ -2033,6 +2033,7 @@ import MicroCFTA.SourceCurrentAllocatedPartialConstructedRoot
 import MicroCFTA.SourceCurrentAllocatedPartialActiveOrder
 import MicroCFTA.SourceCurrentAllocatedPartialActiveFrames
 import MicroCFTA.SourceCurrentAllocatedLocalPlain
+import MicroCFTA.SourceCurrentAllocatedPartialPlainEdgeCall
 /-!
 # Proof dependency audit
 
