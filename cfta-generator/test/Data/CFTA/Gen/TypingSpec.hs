@@ -253,6 +253,9 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
             mismatch [rule "Plus" [subterm [] IntType] IntType] `shouldBe` Just (FieldMismatch "Plus")
             mismatch [rule "Num" [subterm [] IntType] IntType] `shouldBe` Just (FieldMismatch "Num")
             mismatch [rule "Num" [value True] IntType] `shouldBe` Just (FieldMismatch "Num")
+            mismatch [rule "Let" [value (Var 99), subterm [IntType] IntType] IntType] `shouldBe` Just (FieldMismatch "Let")
+            mismatch [rule "Let" [value (Plus (Num 0) (Num 0)), subterm [IntType] IntType] IntType]
+                `shouldBe` Just (FieldMismatch "Let")
             mismatch [rule "Let" [value (0 :: Int), subterm [IntType] IntType] IntType] `shouldBe` Just (FieldMismatch "Let")
             mismatch
                 [ rule "Num" [value (0 :: Int)] IntType
