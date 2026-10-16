@@ -197,7 +197,8 @@ tree automata of `cfta`, with QuickCheck integration.
   (`UnknownConstructors`) and a rule that does not fit the fields of its
   constructor (`FieldMismatch`). A field that holds a subterm has the type of
   the datatype, so a family of mutually recursive types is not a language
-  here.
+  here. A fixed value in a field of the datatype gives `FieldMismatch`.
+  Recursive fields must use `subterm` to check their environment and nesting.
 - `compile` folds the recipe of a generator once with the solver. It groups
   child languages by the observations a guard reads, decides each guard once
   for each tuple of groups, and prunes and splits imports by the same
