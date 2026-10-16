@@ -1,5 +1,61 @@
 # Constrained languages, indexing, and distributions
 
+## Current initial resources for local reduction and parent calls
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `02b94fcd`. Proof commits are `c830cde5`, `84831149`,
+`3a6ea273`, and `86fe4ef1`. Read lean/notes-current-local-resources.md
+and lean/restart-evidence/20261016-constrained-local-resources/.
+This section supersedes older statements that leave initial local or
+parent constructor resources, or their existing prefix plans, open.
+
+Eleven additive modules derive the existing edit, class, pass, stage,
+local, and resident-parent capacity predicates from initial profiles and
+cumulative headroom. Each universal earlier-prefix obligation identifies
+its supplied earlier return through exact literal worker uniqueness.
+No enclosing completion or future capacity plan is an input.
+
+Stage constructs allocation-free Scan, Required, then Pass at the same
+actual Required return. Local reads the deterministic initial precheck.
+Unchanged and erased branches make no constructor request. Live classes
+start at the exact returned equality operations and retained native state.
+Parent constructs that local return, then its checked edge. Raw rejection
+makes zero node requests and one sentinel edge request. Its separate
+endpoint needs no field, inherited readiness, or child facts.
+
+ParentCaller retains the same graph as the actual outer EdgeBody. It
+returns strict Reads, the full edge and caller receipts, language law,
+ProbeHeap, warm outer-cell Sound, global memos, and stable literal execution.
+All resources retain causal output profiles, actual Work, constructor
+request bounds, final capacity, and both final supply bounds. Rejection
+can return one Empty child, so output arity need not equal input arity.
+
+The full Audit passes 2621 jobs and 60599 dependency checks. All 35 public
+axiom/full-signature pairs and 20 integration pairs pass. Combined probes
+have no diagnostic or signature truncation. Only propext, Classical.choice,
+and Quot.sound occur. Independent reviews find no material component
+defect. Preservation retains 7721 starting files, 2609 older non-Audit
+proofs, all 234 Haskell files, 48 frozen manifests with 378 module entries,
+stashes, other worktrees, repairs, counterexamples, and marked drafts.
+
+Next prove cumulative outer resources and discharge the root's reached
+parent Plan. Its existing Context and structural Stored do not provide
+row/arity profiles, lower output certificates, constraint envelopes, or
+remaining headroom at all reached entries. Preserve native OutputStored
+and Merge profiles through the actual outer families. Add causal output
+certificates for warm outer returns, bound normalized constraint/path
+growth, and pay for every parent and raw descendant/node rebuild. Read
+next-outer-resources.md in the evidence directory. General recursive
+progress, repeated-pass convergence, other resource families, current
+frontends, concrete Haskell, and complete public pipelines remain open.
+The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external repair handoff first. Record
+later repairs with failure, reproducer, paths, commit, checks, and upstream
+status. Reuse unchanged strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
 ## Current initial resources for edits and the class pass
 
 Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts

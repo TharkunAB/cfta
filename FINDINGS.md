@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current edit and class-pass resource proofs add no Haskell change.
+The current local and parent resource proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -31,7 +31,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2610 jobs and 60501 dependency checks.
+The last completed pinned Lean Audit passes: 2621 jobs and 60599 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -166,6 +166,62 @@ Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
 
+## Current initial resources for local reduction and parent calls
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `02b94fcd`. Proof commits are `c830cde5`, `84831149`,
+`3a6ea273`, and `86fe4ef1`. Read lean/notes-current-local-resources.md
+and lean/restart-evidence/20261016-constrained-local-resources/.
+This section supersedes older statements that leave initial local or
+parent constructor resources, or their existing prefix plans, open.
+
+Eleven additive modules derive the existing edit, class, pass, stage,
+local, and resident-parent capacity predicates from initial profiles and
+cumulative headroom. Each universal earlier-prefix obligation identifies
+its supplied earlier return through exact literal worker uniqueness.
+No enclosing completion or future capacity plan is an input.
+
+Stage constructs allocation-free Scan, Required, then Pass at the same
+actual Required return. Local reads the deterministic initial precheck.
+Unchanged and erased branches make no constructor request. Live classes
+start at the exact returned equality operations and retained native state.
+Parent constructs that local return, then its checked edge. Raw rejection
+makes zero node requests and one sentinel edge request. Its separate
+endpoint needs no field, inherited readiness, or child facts.
+
+ParentCaller retains the same graph as the actual outer EdgeBody. It
+returns strict Reads, the full edge and caller receipts, language law,
+ProbeHeap, warm outer-cell Sound, global memos, and stable literal execution.
+All resources retain causal output profiles, actual Work, constructor
+request bounds, final capacity, and both final supply bounds. Rejection
+can return one Empty child, so output arity need not equal input arity.
+
+The full Audit passes 2621 jobs and 60599 dependency checks. All 35 public
+axiom/full-signature pairs and 20 integration pairs pass. Combined probes
+have no diagnostic or signature truncation. Only propext, Classical.choice,
+and Quot.sound occur. Independent reviews find no material component
+defect. Preservation retains 7721 starting files, 2609 older non-Audit
+proofs, all 234 Haskell files, 48 frozen manifests with 378 module entries,
+stashes, other worktrees, repairs, counterexamples, and marked drafts.
+
+Next prove cumulative outer resources and discharge the root's reached
+parent Plan. Its existing Context and structural Stored do not provide
+row/arity profiles, lower output certificates, constraint envelopes, or
+remaining headroom at all reached entries. Preserve native OutputStored
+and Merge profiles through the actual outer families. Add causal output
+certificates for warm outer returns, bound normalized constraint/path
+growth, and pay for every parent and raw descendant/node rebuild. Read
+next-outer-resources.md in the evidence directory. General recursive
+progress, repeated-pass convergence, other resource families, current
+frontends, concrete Haskell, and complete public pipelines remain open.
+The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external repair handoff first. Record
+later repairs with failure, reproducer, paths, commit, checks, and upstream
+status. Reuse unchanged strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
 ## Current initial resources for edits and the class pass
 
 Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
@@ -285,19 +341,22 @@ a stable modeled execution and proves full guarded-language equality.
 That root still takes a numeric capacity plan for later parent entries.
 Its domain excludes Mu, references, and explicit unions.
 
-Target, shared Force and Leaf, edits, classes, and the tail-first class
-pass now construct their own executions and constructor budgets from
-initial profiles and total headroom. Actual callback counts include Empty
-and repeated positions. The full Audit includes these modules. The next
-composition is Required, local calls, parents, and the outer traversal.
-The root still takes a numeric plan for later parent entries.
+Target, shared Force and Leaf, edits, classes, the tail-first class pass,
+Required stages, local reduction, and parents now construct their own
+executions and constructor budgets from initial profiles and headroom.
+Actual callback counts include Empty and repeated positions. Existing
+universal prefix capacity plans follow from these initial bounds. Parent
+returns the full actual outer caller receipt. The remaining composition
+is the whole outer traversal. Its root still takes a numeric plan for
+later parent entries.
 
 The main remaining obligations are:
 
-- Compose Required and Pass resources through local calls and parents.
-  Derive universal earlier-prefix capacity from initial budgets. Extend
-  outer warm-cache profiles and constraint bounds, then derive one initial
-  resource bound for the complete outer root.
+- Derive one cumulative initial resource bound for the complete outer
+  traversal. Preserve lower output profiles, certify warm outer returns,
+  and bound normalized constraints and path depths at every reached entry.
+  Apply the completed parent capacity producer there to discharge the
+  root's remaining reached-parent Plan.
 - Prove general recursive progress for Mu, references, and unions. Treat
   repeated-pass convergence separately from the public single pass.
 - Complete current frontend adapters, validation errors, codecs, and
