@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentAllocatedPartialWorker
+set_option pp.universes true
+set_option pp.explicit true
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_ready
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_ready
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_ready
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_ready
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_busy
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_busy
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_absent
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_absent
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_busy
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_busy
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_absent
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_absent
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_body_failed
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_body_failed
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_body_failed
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_body_failed
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_body_done
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall_body_done
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_body_done
+#check @MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall_body_done

@@ -1,0 +1,11 @@
+import MicroCFTA.SourceCurrentAllocatedParentWorker
+set_option pp.universes true
+set_option pp.explicit true
+#print axioms MicroCFTA.SourceCurrentAllocatedParentWorker.edge_rejected
+#check @MicroCFTA.SourceCurrentAllocatedParentWorker.edge_rejected
+#print axioms MicroCFTA.SourceCurrentAllocatedParentWorker.edge_field_error
+#check @MicroCFTA.SourceCurrentAllocatedParentWorker.edge_field_error
+#print axioms MicroCFTA.SourceCurrentAllocatedParentWorker.edge_missing_field
+#check @MicroCFTA.SourceCurrentAllocatedParentWorker.edge_missing_field
+#print axioms MicroCFTA.SourceCurrentAllocatedParentWorker.build_error
+#check @MicroCFTA.SourceCurrentAllocatedParentWorker.build_error
