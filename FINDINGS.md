@@ -2,28 +2,31 @@
 
 ## Haskell fix handoff for external work
 
-Audited source main is `999c04a5`. It is merged into `formalize` at `9aaffc95`.
-This refresh adds field-specific atoms and typing rules through node views.
-It also rejects negative typing bounds. It changes no interned core or Sized
-implementation.
+Audited source main is `5399d310`. It is merged into `formalize` at `82d47236`.
+PR #63 adds qualified typing do-notation. The prior field-specific atoms,
+node-view typing rules, and negative-bound repair remain included.
+The interned core and Sized implementation do not change.
 No local Haskell behavior repair is added. The historical repairs below
 remain upstream. The only local Haskell-tree differences are the retained
 constructor changelog entry and reproducer comment.
 
-Remote main advanced to `5399d310` during publication. PR #63 adds qualified
-typing do-notation. That five-file delta is fetched but not merged or checked.
-The repair and counterexample entries below refer to audited main `999c04a5`.
+The PR #63 delta is merged and validated. Its notation preserves ordinary
+list order and duplicate choices. The old typing builder implementation
+changes only in its documentation. Current-source notation and frontend
+adapters remain distinct from the preserved Lean component proofs.
+The repair and counterexample entries retain their earlier checkpoint refs.
+The recursive field-pool implementation files are unchanged from `999c04a5`.
 
 The current source validation is recorded in
-`lean/restart-evidence/20261016-frontend-node-view-refresh/`.
+`lean/restart-evidence/20261016-typing-do-seeded-worker/`.
 The strict Nix all-component build passes with `-Werror`, tests, and benchmarks.
-All six suites pass: 321 core, 238 generator, 175 refinement, 35 GHC-fit,
+All six suites pass: 321 core, 240 generator, 175 refinement, 35 GHC-fit,
 and 22 decision-model examples, plus the hole-fit golden check. This is
-791 examples plus golden. The seven changed Haskell files pass Fourmolu.
+793 examples plus golden. The three changed Haskell files pass Fourmolu.
 All four active packages pass Cabal-gild and metadata checks. Read
 `source-validation.md` and the raw logs in that evidence directory.
-The pinned Lean Audit passes unchanged: 2444 jobs and 58082 dependency checks.
-The previous source baseline was `ccebf0f7`, merged at `44ba7bf1`.
+The pinned Lean Audit passes: 2456 jobs and 58268 dependency checks.
+The previous source baseline was `999c04a5`, merged at `9aaffc95`.
 Use the current source before applying an older repair. The entries below
 separate a behavior fix from a remaining documentation change.
 
@@ -131,6 +134,63 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current literal seeded queries and class scanning
+
+Audited source main is `5399d310`, merged at `82d47236`. The starting
+published checkpoint is `e75e8c5c`. Twelve additive modules implement
+literal first-seeded queries, current primary and secondary gates, and Scan
+with full caller receipts. Proof commits are `8978d180`, `19f90e9c`, and
+`2b26e442`. PR #63 adds qualified typing do-notation. No local Haskell
+behavior repair occurs. Root FINDINGS.md keeps the external repair registry
+first, including the confirmed, unfixed recursive field-pool contract gap.
+
+Read lean/notes-current-scan-worker.md. SeededWorker projects without
+mergeAlternatives. Head projection precedes the tail, then checked native
+intersection uses the exact tail return. Three stage bounds remain distinct.
+Completion derives stable bounds from finite graphs. Success stability and
+whole-state uniqueness need no physical premise. Initial selected support
+derives the same graph, physical facts, probes, and full caller Post at the
+computed inventory. The language law preserves common selected subtrees.
+
+GateWorker runs literal current policies with concrete source predicates.
+Strict primary reads use the actual queried node. Scan retains five stage
+bounds and a fixed conjunction budget. Primary false selects; secondary true
+skips; a true current conjunction answer stops before the suffix. False uses
+its exact returned checked state and fourth memo. Failed selected suffixes
+retain their selected prefix. Order and repeated classes remain.
+
+ScanCompletion constructs stable literal execution from every finite current
+graph. ScanStability identifies the complete Result, Checked, and fourth memo
+across successful bounds. ScanWorkerActual.finite derives execution and full
+caller facts from initial Context, resident values, proper nontrivial classes,
+and reached word bounds. verified derives the same facts for a supplied
+literal return. Strict Reads, probes, original values, and stopped-class
+exclusion belong to that same return. No future graph, body law, or final
+invariant is a public premise. Only a no-stop completion reads the full class
+partition. A stopped result retains the selected prefix it reached.
+
+The pinned full Audit passes 2456 jobs and 58268 theorem dependency checks.
+Only the permitted foundations and old unused-input warning remain. Current
+strict Nix build, 793 examples plus golden, three-file Fourmolu, four-package
+Cabal-gild and metadata checks pass. Preservation checks retain all 5135
+starting files, 2443 older proof sources, six repair/counterexample entries,
+stashes, and three other worktree records. Twenty-six frozen manifests check
+213 module entries. Evidence is in
+lean/restart-evidence/20261016-typing-do-seeded-worker/.
+
+The full library objective remains active. Read local-worker-next.md in that
+directory. Next compose literal local precheck/reduction, required children,
+and class passes, then parent construction and the mutual outer worker.
+root_exact still assumes a completed strict-read outer call. General
+constrained termination, unequal-length path classes, and repeated-pass
+convergence remain open. Current reducePartially performs one pass. Logical
+global reads do not prove host demand, table events, lazy publication, or the
+noConstraint CAF. All frontend, Sized, generator, rank, probability, solver,
+callback, codec, concrete-runtime, and older constructor/equality obligations
+remain. Preserve the optimized interned core and every proof, counterexample,
+repair, and draft. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress, not goal completion.
 
 ## Current generator node views and source refresh
 
