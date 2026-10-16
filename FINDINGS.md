@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current static native budget proof adds no Haskell change.
+The current native output-profile proof adds no Haskell change.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
 For external handoff, record every later repair here with its failure,
 executable reproducer, affected paths, commit, checks, and upstream status.
@@ -29,7 +29,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The current pinned Lean Audit passes: 2562 jobs and 59773 dependency checks.
+The current pinned Lean Audit passes: 2570 jobs and 59925 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -163,6 +163,67 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current native output profiles and serial reservations
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `a3db345a`. Read lean/notes-current-output-profile.md
+and lean/restart-evidence/20261016-constrained-output-profile/.
+Eight additive modules prove native output profiles and serial reservations.
+Proof commits are `1c24089f` and `5f2bf869`.
+
+OutputStored relates each returned result to its own captured request.
+Empty-seen operands with uniform profile R,A give result profile
+R*R,max(A,1), at every ordinary descendant. Empty tables derive the invariant.
+Lookup, demand, advance, exact-owner finish, and warm hits preserve it.
+OutputConstructors proves actual makeNode/makeEdge profiles, including
+coherent cache hits, filtering, canonicalization, and positional All₂ lists.
+
+OutputCode, OutputNode, and OutputEdge prove the literal dispatcher, joined
+rows, accepted child zip, rejected sentinel, and checked-body yield obey
+their local certificates. OutputExecution interprets the ACTUAL checked
+trace. Shorter body traces derive their profiles before exact-owner finish.
+No final profile, recursive callback law, or eager execution is supplied.
+The node and edge endpoints retain OutputStored at the same returned state.
+The sentinel has one Empty child even when input arity is zero.
+
+ProfileBudget proves computed limits fit any uniform input profile and
+complete query budgets are monotone in rows, arity, and height.
+OutputFinite constructs its own receipt, both stored invariants, Idle,
+semantic readiness, output profile, height bounds, and final capacity from
+initial headroom. Its cold endpoint derives the stored invariants from empty
+tables. Its serial endpoint constructs two queries, where the second uses
+the first result. Reserve N(R,A,H)+N(R*R,max(A,1),H) before either query.
+The second result profile and completion are derived from the first return.
+
+The full Audit passes 2570 jobs and 59925 dependency checks. All 54 declared
+public axiom/full-signature pairs and 21 integration pairs pass. Coverage
+retains Unicode All₂ names and named sections. Only the permitted foundations occur. Preservation
+retains 6867 starting files and 2561 older non-Audit sources. Forty-one
+frozen manifests check 327 module entries. Older proofs, repairs, drafts,
+counterexamples, stashes, other worktrees, and the optimized core remain.
+
+The native returned-profile gap is closed. Next prove Projection forest
+profile/height/count bounds, Required profile retention, and memo-aware Merge
+producer profiles and reservations. Merge columns can enlarge descendant
+row limits. Keep-first finish must retain the actual winner's certificate.
+Then compose Operand, the rotated Target right fold, edits, class passes,
+local/parent calls, and outer cumulative budgets. The root numeric plan is
+still an explicit premise. Read next-cumulative-profile-review.md.
+
+Mu/reference/union progress, repeated-pass convergence, current frontends,
+concrete runtime, and full-pipeline composition remain open. Keep separate
+language, transformation, exact size/count/order/rank, generator, and
+probability contracts. Equality/sidecar/thunk resources, host interleavings,
+concurrent losing candidates, lazy forcing, and signed host counters remain
+separate from these two constructor supplies.
+
+No Haskell change. Reuse strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild/metadata checks. Repair
+`b9219b9e` is already merged by PR #65. Root FINDINGS keeps the external
+Haskell fix handoff first. Add every later repair there with failure,
+reproducer, paths, commit, checks, and upstream status. The full-library
+goal remains active.
 
 ## Current input-derived native reservation budgets
 
