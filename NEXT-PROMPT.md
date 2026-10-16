@@ -2,6 +2,77 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current source-aligned reads and caller prerequisites
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`abd6a170`. Proof commits are `6f300927`, `5b391983`, `2e3f0fd4`, and
+`4b2995ee`. This checkpoint adds 35 Lean modules. No Haskell implementation
+or test file changes. The external Haskell fix registry remains first in
+root FINDINGS.md. Record every later repair there with its failure case,
+affected files, commit, checks, and upstream status.
+
+The old primary closed-endpoint read relation can query a different node
+from its pure trace input. A kernel counterexample starts from actual closed
+construction, a resident gate input, and valid three-table memos. The old
+receipt queries an uninstalled node with identity 999 and returns invalid
+tables. This is a Lean receipt defect, not a demonstrated Haskell defect.
+The strict primary relation ties the query to the actual source node.
+Completed execution constructs it. Erasure retains the old receipt;
+the old relation alone does not supply the refinement.
+
+Required, Projection, Gate, Seeded, Query, Conjunction, and Scan validity
+now follow their supplied actual reads and literal returned tables.
+Uniqueness is used only at a recorded fixed exposure budget. Equal returned
+heaps do not identify different schedules. Strict Scan, local, and parent
+schedules are constructed from legitimate initial invariants and reached
+range checks. The new actual receipt endpoints describe the supplied result,
+state, and globals. Rejected parents need no live child or range premise.
+
+Thirteen Probe modules retain the explicit filtered-probe heap through
+current gates, queries, native merges, Scan, required paths, target folds,
+structural edits, class passes, local reduction, and parent construction.
+The strict supplied-parent endpoint proves probes at that same actual return.
+Independent kernels combine its full receipt and literal resident Mu cleanup
+on the same heap. Initial ProbeHeap remains explicit; original construction
+derives it. Ready, Effects, and Keeps alone do not imply it.
+
+Current caller frames retain both result families' protected evaluating and
+returned cells through all eight mutual graphs. Indexed descent derives its
+literal payload. Walk and Children language lemmas compose smaller actual
+call laws at their exact source offsets. These are induction steps.
+Strict outer reads retain the source-aligned parent schedule and erase to
+the old graph. Actual reduced-edge calls derive their full receipt, probes,
+owner body law, exact finish cell, and candidate law through physical keys.
+No future result law or final validity is supplied.
+
+Pinned Lean 4.34.1 passes the complete Audit: 2406 jobs and 57445 theorem
+dependency checks. Only the standard three foundations and the existing
+unused-input warning remain. Public probes, integration kernels, independent
+reviews, source hashes, and raw logs are retained in
+lean/restart-evidence/20261016-current-caller-invariants/.
+All 4276 starting files remain. All 2370 older non-Audit proof sources retain
+their bytes. Twenty frozen manifests, stashes, other worktree records, and
+the first Haskell registry remain. Earlier unavailable external drafts are
+not claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-caller-invariants.md and mutual-current-next.md in
+the evidence directory. Next prove the full mutual physical and language
+invariant for current NodeCall, NodeBody, Rows, Descendants, Children, and Walk.
+Use the new strict reads, actual smaller calls, protected frames, actual edge
+receipts, probes, inherited descent, raw rebuilding, and modifyNode.
+Do not supply a callback that assumes the desired recursive body law.
+
+General constrained outer completion, unequal-length path classes, and the
+literal bounded executable worker remain open. Serial graphs do not prove
+GHC forcing, lazy IntMap/list demand, or pending publication. The full-library
+goal, all frontend and recursive-generator adapters, separate Sized contracts,
+noConstraint CAF, concrete containers, concurrency, identity lifetime, machine
+limits, solver IO, random draws, callbacks, codecs, and older constructor and
+equality work remain active. Preserve the optimized interned core.
+No board posts or deployments. Push verified formalize checkpoints regularly.
+This checkpoint is progress.
+
 ## Current inherited descent and reduced-edge result memos
 
 Source main remains `8f85ddb6`. The preceding published checkpoint is
