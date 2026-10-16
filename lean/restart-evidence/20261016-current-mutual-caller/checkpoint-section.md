@@ -72,4 +72,3 @@ lifetime, machine limits, solver IO, random draws, callbacks, codecs, and
 older constructor and equality work remain active. Preserve the optimized
 interned core. No board posts or deployments. Push verified formalize
 checkpoints regularly. This checkpoint is progress.
-
