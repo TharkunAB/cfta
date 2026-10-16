@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current shared and outer guard proofs add no Haskell change.
+The current quantitative outer owner proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -31,7 +31,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2658 jobs and 61077 dependency checks.
+The last completed pinned Lean Audit passes: 2671 jobs and 61168 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -165,6 +165,37 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current quantitative outer owner certificates
+
+Updated: 2026-10-16 23:43 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `5c629f72`. Proof commits are
+`ab06fc12`, `38d45835`, `6751e604`, and `1ee825f2`.
+Read `lean/notes-current-quantitative-prefixes.md` and
+`lean/restart-evidence/20261016-quantitative-prefixes/`.
+
+Thirteen additive modules derive quantitative profiles from supplied actual
+Target, Shared, Edit, Class/Pass, Stage/Local/Parent reads without constructor
+headroom. Exact outer owners receive produced universal row, arity, and guard
+certificates before finish. Warm hits use complete coherent owner readback.
+All eight actual outer read families and the same constructed root retain
+these laws and every earlier strong store. The root numeric Plan remains an
+explicit input. Next derive cumulative initial Work, remaining headroom,
+ParentInitialCapacity, and that Plan. Read next-initial-outer-headroom.md.
+
+The full pinned Audit passes 2671 jobs and 61168 dependency checks.
+All 58 public axiom/full-signature pairs and 12 integration pairs pass.
+Only propext, Classical.choice, and Quot.sound occur. Independent reviews
+find no material defect. Preservation retains 8465 starting files, 2657
+older non-Audit proofs, 234 Haskell files, and 53 frozen manifests with
+428 entries. One earlier reviewed draft is resolved by its exact snapshot.
+
+General recursive progress, constrained recursive narrowing, convergence,
+current frontend and concrete runtime correspondence, and complete public
+pipelines remain open. The full-library goal stays active. No Haskell change
+or new defect occurs. FINDINGS keeps merged repair b9219b9e and the external
+handoff first. Reuse unchanged strict Nix validation: 798 examples plus golden,
+Fourmolu, and Cabal-gild. Preserve the optimized core and all earlier evidence.
 
 ## Current shared and outer guard certificate retention
 
