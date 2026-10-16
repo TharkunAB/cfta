@@ -641,17 +641,62 @@ untypedInstance inst = inst{inst_gen = untypedGenerator (inst_gen inst), inst_eq
 untypedGenerator :: Generator -> Generator
 untypedGenerator (Generator g) = Generator (\seed size -> untyped (g seed size))
 
-{- | The test cases of a signature: a value for each generated variable.
-Test case k has the size k of 'testSizes'. Each variable takes its value
-from a seed of its own, so a variable has the same values in each phase.
+{- | The test cases of a signature. Keep the n random cases unchanged.
+Add eight random cases with separate seeds. Add 32 cases that combine
+Int boundaries with empty and singleton lists. Each variable has the same
+values in each phase.
 -}
 testCases :: Int -> Sig -> [VarVals]
-testCases n sig =
-    [ Map.fromList [(v, value g k size v) | (v, GivenFun{given_info = GivenVar _ _ _ g}) <- Map.assocs sig]
-    | (k, size) <- zip [0 :: Int ..] (testSizes n)
-    ]
+testCases n sig = randomCases ++ validationCases ++ boundaryCases
   where
-    value (Generator g) k size v = g (hash (k, v)) size
+    variables =
+        [(v, i, g, t) | (v, GivenFun (GivenVar _ _ i g) t) <- Map.assocs sig]
+    randomCases =
+        [ Map.fromList [(v, generate g (hash (k, v)) size) | (v, _, g, _) <- variables]
+        | (k, size) <- zip [0 :: Int ..] (testSizes n)
+        ]
+    validationCases =
+        [ Map.fromList
+            [(v, generate g (hash ("validation" :: String, k, v)) size) | (v, _, g, _) <- variables]
+        | (k, size) <- zip [0 :: Int ..] (testSizes 8)
+        ]
+    boundaryCases =
+        [ Map.fromList
+            [ ( v
+              , fromMaybe
+                    (generate g (hash ("boundary" :: String, k, active, v)) 100)
+                    (lookup t (if i `mod` 4 == active then nonempty else empty))
+              )
+            | (v, i, g, t) <- variables
+            ]
+        | (k, boundary) <- zip [0 :: Int ..] [minBound, minBound + 1, -1, 0, 1, 2, maxBound - 1, maxBound]
+        , let empty = boundaryValues boundary False
+        , let nonempty = boundaryValues boundary True
+        , active <- [0 .. 3]
+        ]
+    generate (Generator g) seed size = g seed size
+
+{- | Values for Int and the carrier types, and their first three list
+types. A selected list contains one zero value. Every other list is empty.
+Each value keeps its exact Haskell type. Other types use their generators.
+-}
+boundaryValues :: Int -> Bool -> [(TypeSkeleton, Value)]
+boundaryValues boundary nonempty =
+    [ entry boundary
+    , entry (A boundary)
+    , entry (B boundary)
+    , entry (C boundary)
+    , entry (D boundary)
+    , entry (Acc boundary)
+    ]
+        ++ concat [lists (0 :: Int), lists (A 0), lists (B 0), lists (C 0), lists (D 0), lists (Acc 0)]
+  where
+    entry :: (Typeable a) => a -> (TypeSkeleton, Value)
+    entry value = (typeRepToTypeSkeleton (typeOf value), toValue value)
+    lists :: (Typeable a) => a -> [(TypeSkeleton, Value)]
+    lists value = [entry (pick value), entry (pick (pick value)), entry (pick (pick (pick value)))]
+    pick :: a -> [a]
+    pick value = [value | nonempty]
 
 {- | The sizes of n test cases, as QuickSpec chooses them (run in
 QuickSpec.Internal.Testing.QuickCheck of quickspec-2.2.2). 1% of the test
