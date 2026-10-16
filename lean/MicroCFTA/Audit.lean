@@ -2036,6 +2036,8 @@ import MicroCFTA.SourceCurrentAllocatedLocalPlain
 import MicroCFTA.SourceCurrentAllocatedPartialPlainEdgeCall
 import MicroCFTA.SourceCurrentAllocatedPartialPlainRoot
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryFinite
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeWorker
 /-!
 # Proof dependency audit
 
