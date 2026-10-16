@@ -1,0 +1,111 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:54:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (FlatMemoThunk.demand handle memo).2
+in the target expression
+  FlatMemoThunk.Running (FlatMemoThunk.demand handle memo).snd memo
+
+Key Request Result : Type
+handle : Nat
+memo : FlatMemoThunk.State Key Request Result
+value : Result
+ready : (FlatMemoThunk.demand handle memo).fst = FlatMemoThunk.Observation.ready value
+w✝ : Request
+left✝ : memo.cells handle = some { request := w✝, status := FlatMemoThunk.Status.returned value }
+same : (FlatMemoThunk.demand handle memo).2 = memo
+⊢ FlatMemoThunk.Running (FlatMemoThunk.demand handle memo).snd memo
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:59:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.0.MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.node_other`:
+  [DecidableEq Symbol]
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [DecidableEq Node]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq
+  Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [DecidableEq Node] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:66:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.0.MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.edge_other`:
+  [DecidableEq Symbol]
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [DecidableEq Node]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq
+  Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [DecidableEq Node] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:81:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  beginNode request before
+in the target expression
+  FlatMemoThunk.Running (FlatMemoThunk.demand published.fst published.snd).snd before.nodeResults
+
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+request : NodeRequest
+before running : Caller width
+handle : Nat
+result : Node
+started : beginNode request before = (handle, FlatMemoThunk.Observation.ready result, running)
+published : Nat × FlatMemoThunk.State NodeKey NodeRequest Node :=
+  FlatMemoThunk.lookupOrInsert request.key request before.nodeResults
+ready : (FlatMemoThunk.demand published.fst published.snd).fst = FlatMemoThunk.Observation.ready result
+nodes : FlatMemoThunk.Running (FlatMemoThunk.demand published.fst published.snd).snd before.nodeResults
+components :
+  have after := (beginNode request before).snd.snd;
+  after.checked = before.checked ∧
+    after.merge = before.merge ∧ after.fourth = before.fourth ∧ after.edgeResults = before.edgeResults
+⊢ NoNewActive before running
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:92:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  beginEdge request before
+in the target expression
+  FlatMemoThunk.Running (FlatMemoThunk.demand published.fst published.snd).snd before.edgeResults
+
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+request : EdgeRequest
+before running : Caller width
+handle : Nat
+result : Edge
+started : beginEdge request before = (handle, FlatMemoThunk.Observation.ready result, running)
+published : Nat × FlatMemoThunk.State SourceCurrentAllocatedPartialState.EdgeKey EdgeRequest Edge :=
+  FlatMemoThunk.lookupOrInsert request.key request before.edgeResults
+ready : (FlatMemoThunk.demand published.fst published.snd).fst = FlatMemoThunk.Observation.ready result
+edges : FlatMemoThunk.Running (FlatMemoThunk.demand published.fst published.snd).snd before.edgeResults
+components :
+  have after := (beginEdge request before).snd.snd;
+  after.checked = before.checked ∧
+    after.merge = before.merge ∧ after.fourth = before.fourth ∧ after.nodeResults = before.nodeResults
+⊢ NoNewActive before running
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:108:62: error: unexpected token '('; expected ')', ',' or ':'
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:108:10: error: Type mismatch: After simplification, term
+  body.nodes other original
+ has type
+  middle.nodeResults.cells other = some { request := original, status := FlatMemoThunk.Status.evaluating } →
+    running.nodeResults.cells other = some { request := original, status := FlatMemoThunk.Status.evaluating }
+but is expected to have type
+  running.nodeResults.cells other = some { request := original, status := FlatMemoThunk.Status.evaluating }
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:98:98: error: unsolved goals
+case edges
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+width : Nat
+request owner : NodeRequest
+before running middle : Caller width
+handle : Nat
+result : Node
+started : beginNode request before = (handle, FlatMemoThunk.Observation.evaluate owner, running)
+body : NoNewActive running middle
+components :
+  have after := (handle, FlatMemoThunk.Observation.evaluate owner, running).snd.snd;
+  after.checked = before.checked ∧
+    after.merge = before.merge ∧ after.fourth = before.fourth ∧ after.edgeResults = before.edgeResults
+⊢ FlatMemoThunk.Running (finishNode handle result middle).edgeResults before.edgeResults
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:128:62: error: unexpected token '('; expected ')', ',' or ':'
+lean/MicroCFTA/SourceCurrentAllocatedPartialActiveFrames.lean:128:10: error: Type mismatch: After simplification, term
+  body.edges other original
+ has type
+  middle.edgeResults.cells other = some { request := original, status := FlatMemoThunk.Status.evaluating } →
+    running.edgeResults.cells other = some { request := original, status := FlatMemoThunk.Status.evaluating }
+but is expected to have type
+  running.edgeResults.cells other = some { request := original, status := FlatMemoThunk.Status.evaluating }

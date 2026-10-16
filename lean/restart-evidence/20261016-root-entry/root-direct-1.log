@@ -1,0 +1,91 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialConstructedRoot.lean:48:6: error: Function expected at
+  Available
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  after.checked.native.machine.heap
+
+Hint: The identifier `Available` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+lean/MicroCFTA/SourceCurrentAllocatedPartialConstructedRoot.lean:90:8: error: Function expected at
+  Available
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  after.checked.native.machine.heap
+
+Hint: The identifier `Available` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+lean/MicroCFTA/SourceCurrentAllocatedPartialConstructedRoot.lean:92:111: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+x✝ : Sort u_1
+Available : x✝
+width : Nat
+initialCache : Cache.State Key
+valid : Cache.Valid initialCache
+expression : InternedNestedConstruction.Syntax Symbol Guard
+cached :
+  ∀ (original : Guard),
+    original ∈ SourceEqualityConstraintOrigins.guards expression →
+      SourceEqualityGuardReadback.Cached original.equalities
+value : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built : InternedFreshOrdinaryConstruction.build expression [] empty = InternedNestedConstruction.Outcome.done value heap
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+fuel g s r e p h m c n budget : Nat
+result : Node
+after : Caller width
+ranges :
+  SourceCurrentAllocatedPartialWorkerRanges.nodeCall fuel g s r e p h m c n budget
+    {
+      inherited :=
+        emptyValue
+          (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+              initialCache).snd,
+      value := value }
+    (caller width
+      (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+          initialCache).snd
+      heap)
+done :
+  nodeCall fuel g s r e p h m c n budget
+      {
+        inherited :=
+          emptyValue
+            (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+                initialCache).snd,
+        value := value }
+      (caller width
+        (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+            initialCache).snd
+        heap) =
+    Outcome.done result after
+cache : Cache.State Key :=
+  (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+      initialCache).snd
+fields : List SourceEqualityConstraintAllocation.Value
+finalCache : Cache.State Key
+prepared :
+  SourceEqualityOriginalAllocationPreparation.Receipt (SourceEqualityConstraintOrigins.guards expression) initialCache
+    fields finalCache
+sameCache : cache = finalCache
+receipt :
+  SourceEqualityOriginalAllocationPreparation.Receipt (SourceEqualityConstraintOrigins.guards expression) initialCache
+    fields cache
+⊢ let cache :=
+    (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+        initialCache).snd;
+  ∃ fields,
+    SourceEqualityOriginalAllocationPreparation.Receipt (SourceEqualityConstraintOrigins.guards expression) initialCache
+        fields cache ∧
+      ∃ next final actual,
+        NodeCallReads formulas solver actual globals final ∧
+          Checks (nodeCallTrace actual) ∧
+            Post formulas solver next (caller width cache heap) after final ∧
+              sorry ∧
+                ∀ (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+                    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term

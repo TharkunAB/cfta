@@ -1,0 +1,311 @@
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest) : Nat
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest) : Nat
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.rank' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.rank :
+  MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest ⊕ MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest →
+    Nat
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.wellFounded' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.wellFounded :
+  WellFounded fun child parent =>
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.rank child <
+      MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.rank parent
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edge_lt_node' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edge_lt_node
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (member : edge ∈ edges) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank { inherited := inherited, value := edge } <
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank
+      { inherited := inherited, value := MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free }
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.child_lt_edge' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.child_lt_edge
+  (parentInherited childInherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (child :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (member : child ∈ edge.children) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank { inherited := childInherited, value := child } <
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank { inherited := parentInherited, value := edge }
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank_of_key' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank_of_key
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent heap)
+  (first second : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (firstAvailable : MicroCFTA.InternedProbeProvenance.Available heap first.value)
+  (secondAvailable : MicroCFTA.InternedProbeProvenance.Available heap second.value) (same : first.key = second.key) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank first =
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank second
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank_of_key' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank_of_key
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent heap)
+  (first second : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (firstResident : MicroCFTA.InternedEdgeResidency.EdgeResident heap first.value)
+  (secondResident : MicroCFTA.InternedEdgeResidency.EdgeResident heap second.value) (same : first.key = second.key) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank first =
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank second
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept {width : Nat} (bound : Nat)
+  (nodeSkip edgeSkip : Option Nat) (state : MicroCFTA.SourceCurrentAllocatedPartialState.State width) : Prop
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove {width : Nat} (bound : Nat)
+  (state : MicroCFTA.SourceCurrentAllocatedPartialState.State width) : Prop
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.initial_above' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.initial_above {width : Nat} (bound : Nat)
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove bound
+    (MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth)
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept.mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept.mono {width small bound : Nat}
+  {nodeSkip edgeSkip : Option Nat} {state : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  (active : MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept bound nodeSkip edgeSkip state)
+  (below : small ≤ bound) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept small nodeSkip edgeSkip state
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept.advance' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept.advance {width bound : Nat}
+  {nodeSkip edgeSkip : Option Nat} {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  (active : MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept bound nodeSkip edgeSkip before)
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width) (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept bound nodeSkip edgeSkip
+    (MicroCFTA.SourceCurrentAllocatedPartialState.advance before checked fourth merge)
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.finishNode_above' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.finishNode_above {width bound handle : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (active : MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept bound (some handle) none before) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove bound
+    (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result before)
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.finishEdge_above' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.finishEdge_above {width bound handle : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (active : MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept bound none (some handle) before) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove bound
+    (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before)
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.beginNode_except' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.beginNode_except {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) {bound : Nat}
+  (active : MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove bound before) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept bound
+    (some (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before).fst) none
+    (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before).snd.snd
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.beginEdge_except' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.beginEdge_except {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) {bound : Nat}
+  (active : MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove bound before) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveExcept bound none
+    (some (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before).fst)
+    (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before).snd.snd
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.node_owner_rank' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.node_owner_rank {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {request owner : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before running : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {handle : Nat}
+  (sound : MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+  (inherited :
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value)
+  (started :
+    MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before =
+      (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate owner, running)) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank owner =
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank request
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edge_owner_rank' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edge_owner_rank {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {request owner : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before running : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {handle : Nat}
+  (sound : MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+  (inherited :
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+  (resident : MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value)
+  (started :
+    MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before =
+      (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate owner, running)) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank owner =
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.node_begin_safe' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.node_begin_safe {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (sound : MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value)
+  (active :
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+      (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank request) before) :
+  (∃ value,
+      (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before).snd.fst =
+        MicroCFTA.FlatMemoThunk.Observation.ready value) ∨
+    ∃ owner,
+      (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before).snd.fst =
+        MicroCFTA.FlatMemoThunk.Observation.evaluate owner
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edge_begin_safe' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edge_begin_safe {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (sound : MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+  (resident : MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value)
+  (active :
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+      (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request) before) :
+  (∃ value,
+      (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before).snd.fst =
+        MicroCFTA.FlatMemoThunk.Observation.ready value) ∨
+    ∃ owner,
+      (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before).snd.fst =
+        MicroCFTA.FlatMemoThunk.Observation.evaluate owner
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.node_push' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.node_push {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {request owner : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before running : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {handle lower : Nat}
+  (sound : MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+  (inherited :
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value)
+  (active :
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+      (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank request) before)
+  (smaller : lower < MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank request)
+  (started :
+    MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before =
+      (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate owner, running)) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove lower running
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edge_push' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edge_push {width : Nat}
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {request owner : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before running : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {handle lower : Nat}
+  (sound : MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+  (inherited :
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+  (resident : MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value)
+  (active :
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+      (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request) before)
+  (smaller : lower < MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request)
+  (started :
+    MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before =
+      (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate owner, running)) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove lower running
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds {width : Nat}
+  (state : MicroCFTA.SourceCurrentAllocatedPartialState.State width) : Prop
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.initial_bounds' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.initial_bounds {width : Nat}
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds
+    (MicroCFTA.SourceCurrentAllocatedPartialState.initial checked merge fourth)
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds.advance' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds.advance {width : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  (bounds : MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds before)
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width) (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds
+    (MicroCFTA.SourceCurrentAllocatedPartialState.advance before checked fourth merge)
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.original_or_erased_bound' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.original_or_erased_bound
+  (original result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (shape :
+    result.children = original.children ∨
+      result.children = List.map (fun x => MicroCFTA.InternedConstructorTemplates.Value.empty) original.children) :
+  MicroCFTA.MergedOrdinaryHeight.edgeHeight result ≤ MicroCFTA.MergedOrdinaryHeight.edgeHeight original
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.returned_child_lt' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.returned_child_lt {width : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  (bounds : MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds before) {handle : Nat}
+  {owner : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (returned :
+    before.edgeResults.cells handle =
+      some { request := owner, status := MicroCFTA.FlatMemoThunk.Status.returned result })
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  {child :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (member : child ∈ result.children) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank { inherited := inherited, value := child } <
+    MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank owner
+'MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds.finishEdge' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds.finishEdge {width : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  (bounds : MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds before) {handle : Nat}
+  {owner : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (running :
+    before.edgeResults.cells handle = some { request := owner, status := MicroCFTA.FlatMemoThunk.Status.evaluating })
+  (bounded : MicroCFTA.MergedOrdinaryHeight.edgeHeight result ≤ MicroCFTA.MergedOrdinaryHeight.edgeHeight owner.value) :
+  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ReturnedBounds
+    (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before)

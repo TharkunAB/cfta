@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentAllocatedPartialActiveFrames
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.NoNewActive
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.NoNewActive.refl
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.NoNewActive.refl
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.NoNewActive.trans
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.NoNewActive.trans
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.advance
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.advance
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.NoNewActive.activeExcept
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.NoNewActive.activeExcept
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.node_call
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.node_call
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.node_body
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.node_body
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.edge_call
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.edge_call
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.edge_body
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.rows
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.descendants
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.descendants
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.children
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.children
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.walk
+#check @MicroCFTA.SourceCurrentAllocatedPartialActiveFrames.walk

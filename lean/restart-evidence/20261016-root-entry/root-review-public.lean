@@ -1,0 +1,9 @@
+import MicroCFTA.SourceCurrentAllocatedPartialConstructedRoot
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConstructedRoot.constructed_root
+#check @MicroCFTA.SourceCurrentAllocatedPartialConstructedRoot.constructed_root
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialConstructedRoot.prepared_root
+#check @MicroCFTA.SourceCurrentAllocatedPartialConstructedRoot.prepared_root
