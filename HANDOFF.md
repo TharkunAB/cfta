@@ -1,6 +1,50 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 05:41 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 06:01 CEST (Europe/Stockholm)**.
+
+## Current actual contextual completion and cold root exactness
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`4d74d00c`. No Haskell implementation or test changes in this update. The
+Haskell fix handoff near the top of FINDINGS.md remains current.
+Proof commits are `551371b0`, `809fa691`, and `4b14d7be`.
+
+Nine additive modules prove actual paired contextual completion. The strong
+independent request induction discharges both node and edge body obligations.
+Local source certificates derive every node branch and actual checked edge
+prefix. A miss derives its local language law before its actual finish. A
+warm hit recovers the exact requested law from both cache invariants.
+
+cold_complete derives fixed original input models and ranks from closed,
+available Original operands. Empty native memo tables derive initial
+Contextual and Idle. Initial Good, SemanticReady, and actual-prefix WordRanges
+remain explicit. It returns one actual checked Receipt with physical effects,
+final Contextual and SemanticReady, result availability, final Idle, and exact
+original intersection language for every output environment and term.
+No own-root finish law, completed body callback, final validity, or future
+physical input plan is a premise. The older FinishThrough endpoints retain
+their conditional scope; this cold endpoint independently derives root meaning.
+
+The full pinned Audit passes 2282 jobs and 55887 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur. Focused validation passes 66 public axiom reports, 66 signatures, and
+43 kernel examples across all nine modules. Each has saved logs.
+Reuse the unchanged-source strict Nix build, 777 examples plus golden,
+five-file Fourmolu, and four-package Cabal-gild results.
+
+Read lean/notes-current-native-contextual-root.md. New evidence and frozen
+source copies are repository-local. All 3147 baseline files remain. All 2272
+older non-Audit proof sources and the previous ten frozen modules retain
+identical bytes. Earlier missing external draft bytes remain unavailable and
+are not claimed recovered or reverified.
+
+Next derive result Scope and cached free-list closedness, admit warm caches
+from real histories, and compose complete original allocation and annotation
+history with the current class Scan and constrained outer caller. Runtime/GHC
+forcing and publication, concurrency, concrete containers, and machine ranges
+remain explicit. All other full-library and separate Sized targets remain
+active. Keep the optimized interned core and every older constructor/equality
+proof. No board posts or deployments. Push verified formalize checkpoints
+regularly. The full goal remains active; this checkpoint is progress.
 
 ## Current paired physical completion and actual Mu/reference meaning
 
