@@ -1,5 +1,38 @@
 # Full formalization coverage
 
+## Current hereditary native, Merge, and Target guards
+
+Updated: 2026-10-16 23:02 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `84dbcd1d`. Proof commits are
+`b61737c8`, `9c0704de`, `bc891744`, `7437f286`, and `baa017cf`.
+Read `lean/notes-current-hereditary-guards.md` and
+`lean/restart-evidence/20261016-hereditary-guards/`.
+
+Sixteen additive modules derive initial hereditary raw guard limits,
+retain them through actual constructors, signed projections, and Required,
+and produce universal native and Merge returned-cell certificates.
+Native uses one monotone conjunction step at every nested edge per query.
+Merge retains the original guard bound, including its literal Top branch.
+Both producers derive candidate laws before the exact actual finish.
+The finite native adapter keeps the entire earlier receipt and resource
+conclusion. Target derives its bound in actual head, tail, query order.
+Its nonempty n-operand fold charges n minus one native guard steps.
+
+The full pinned Audit passes 2646 jobs and 60976 dependency checks.
+All 145 public axiom/full-signature pairs and 16 integration pairs pass.
+Only propext, Classical.choice, and Quot.sound occur. Independent reviews
+find no material defect. Preservation retains 8145 starting files, 2629
+older proofs, 234 Haskell files, and 51 frozen manifests with 403 entries.
+
+Next retain these new guard stores through shared Force/Leaf slots, edits,
+class passes, local/parent calls, and all outer families. Derive quantitative
+warm outer certificates and cumulative initial headroom, then the root Plan.
+General recursive progress, convergence, current frontend and runtime
+adapters, and complete public pipelines remain open. The full-library goal
+stays active. No Haskell change or new defect. FINDINGS keeps repair
+`b9219b9e` and the external Haskell handoff first. Reuse unchanged strict
+Nix validation: 798 examples plus golden, Fourmolu, and Cabal-gild.
+
 ## Current outer profile retention and proof boundary
 
 Updated: 2026-10-16 22:41 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
