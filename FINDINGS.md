@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current quantitative outer owner proofs add no Haskell change.
+The current initial-resource outer proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -31,7 +31,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2671 jobs and 61168 dependency checks.
+The last completed pinned Lean Audit passes: 2687 jobs and 61361 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -165,6 +165,41 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current ordinary root execution from initial resources
+
+Updated: 2026-10-17 00:11 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `02fd5af7`. Proof commits are
+`f65b0d46`, `81eeeba1`, `de8e09e6`, and `e076324b`.
+Read `lean/notes-current-initial-outer-resources.md` and
+`lean/restart-evidence/20261016-outer-initial-headroom/`.
+
+Sixteen additive modules derive uniform parent capacity and actual constructor
+Work through all eight outer families. Strong node-rank and ordered-list
+induction construct the finite ordinary outer root from initial computed
+profiles and constructor headroom. Its constructed_root and prepared_root
+endpoints assume no reached-entry Plan or completed outer graph. The same
+return retains exact full guarded-language equality, every earlier strong
+store, universal output profiles, actual Work, and both final supply bounds.
+This section supersedes older statements that require Plan for root existence.
+The old universal raw Reach NumericPlan bridge remains a separate obligation.
+
+The full pinned Audit passes 2687 jobs and 61361 dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Strict new-module and
+imported public probes pass. Preservation retains 8627 starting files,
+2670 older non-Audit proofs, 234 Haskell files, and 54 frozen production
+manifests with 444 entries. Older repairs, counterexamples, and drafts remain.
+The canonical build replays one pre-existing unused-variable warning.
+No earlier proof is changed to suppress it.
+
+Next derive the old universal raw Reach numeric capacity invariant from
+initial resources without circular admission. Read next-raw-reach-capacity.md.
+General recursive progress, constrained recursive narrowing, convergence,
+current frontend and concrete runtime correspondence, and complete public
+pipelines remain open. The full-library goal stays active. No Haskell change
+or new defect occurs. FINDINGS keeps merged repair b9219b9e and the external
+handoff first. Reuse unchanged strict Nix validation: 798 examples plus golden,
+Fourmolu, and Cabal-gild. Preserve the optimized core and all earlier evidence.
 
 ## Current quantitative outer owner certificates
 
