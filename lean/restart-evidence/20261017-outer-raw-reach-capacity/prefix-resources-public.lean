@@ -1,0 +1,17 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterPrefixResources
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterPrefixResources.node_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterPrefixResources.node_call
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterPrefixResources.edge_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterPrefixResources.edge_call
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterPrefixResources.descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterPrefixResources.descendants

@@ -1,0 +1,72 @@
+lean/restart-evidence/20261017-outer-raw-reach-capacity/entry-defs-kernels.lean:50:21: error: unexpected identifier; expected ','
+'MicroCFTA.ResourceEntryKernels.supplied_parent_has_own_reads' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@supplied_parent_has_own_reads : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {bits budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {request : EdgeRequest}
+  {before after :
+    SourceCurrentAllocatedPartialState.State
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))}
+  {result : EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  (actual :
+    @EdgeBody inst inst_1 inst_2
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      budget request before result after),
+  @Admitted inst_1 bits formulas solver
+      (@SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.edgeBody
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        request before) →
+    @Exists.{1} EndpointMemoGateTrace.Memos fun memos =>
+      @Exists.{1} EndpointMemoGateTrace.Memos fun final =>
+        And
+          (@EdgeBodyReads inst inst_1 inst_2
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            formulas solver budget request before result after actual memos final)
+          (@Exists.{1} SourceCurrentAllocatedNativeInventoryState.Inventory fun next =>
+            And
+              (@Post inst_1
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                formulas solver next before after final)
+              (And
+                (@Stored
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  after)
+                (EdgeCertificate request result)))
+'MicroCFTA.ResourceEntryKernels.admitted_node_constructs_own_run' depends on axioms: [propext,
+ sorryAx.{u},
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@admitted_node_constructs_own_run : ∀ [DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {bits : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (budget : Nat) (request : NodeRequest)
+  (before :
+    SourceCurrentAllocatedPartialState.State
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))),
+  @Admitted inst bits formulas solver
+      (@SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        request before) →
+    @Exists.{1} EndpointMemoGateTrace.Memos fun memos =>
+      sorryAx.{1} (Unit → Prop) true
+        (@Function.const.{1, 1} Unit Lean.Name Unit.unit
+          `lean.restart-evidence.20261017-outer-raw-reach-capacity.entry-defs-kernels.50.4.50.21.4.21._sorry._@.lean.restart-evidence.20261017-outer-raw-reach-capacity.entry-defs-kernels.2521804209._hygCtx._hyg.71)

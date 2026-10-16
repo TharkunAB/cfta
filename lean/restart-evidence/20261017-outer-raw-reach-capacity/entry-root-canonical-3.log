@@ -1,0 +1,99 @@
+⚠ [761/782] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [1684/1685] Built MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryReach (800ms)
+✖ [1685/1685] Building MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot (821ms)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.setup.json --json
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.lean:72:15: don't know how to synthesize implicit argument `budget`
+  @SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryReach.numeric_plan inst✝² inst✝¹ inst✝ bits formulas solver
+    ?m.147 (SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall request before) admitted
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+bits : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : SourceCurrentAllocatedNativeInventoryState.Inventory
+before : SourceCurrentAllocatedPartialState.State (bits + 2)
+memos : EndpointMemoGateTrace.Memos
+budget : Nat
+request : NodeRequest
+initial : SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+available : Available before.checked.native.machine.heap request.value
+domain : SourceCurrentAllocatedFiniteOrdinaryDomain.Node request.value
+stored : Stored before
+active :
+  SourceCurrentAllocatedPartialActiveOrder.ActiveAbove (SourceCurrentAllocatedPartialActiveOrder.nodeRank request)
+    before
+rows arity bound : Nat
+limits : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+profile : SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity request.value
+guards : SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node limits request.value
+heightBound : MergedOrdinaryHeight.height request.value ≤ bound
+room :
+  Headroom bits before.checked.native.machine.heap (nodeNodes rows arity limits bound)
+    (nodeEdges rows arity limits bound)
+admitted :
+  SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryDefs.Admitted bits formulas solver
+    (SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall request before)
+⊢ Nat
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.lean:72:7: failed to infer `have` declaration type
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot.lean:69:89: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+bits : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : SourceCurrentAllocatedNativeInventoryState.Inventory
+before : SourceCurrentAllocatedPartialState.State (bits + 2)
+memos : EndpointMemoGateTrace.Memos
+budget : Nat
+request : NodeRequest
+initial : SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+available : Available before.checked.native.machine.heap request.value
+domain : SourceCurrentAllocatedFiniteOrdinaryDomain.Node request.value
+stored : Stored before
+active :
+  SourceCurrentAllocatedPartialActiveOrder.ActiveAbove (SourceCurrentAllocatedPartialActiveOrder.nodeRank request)
+    before
+rows arity bound : Nat
+limits : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Limits
+profile : SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity request.value
+guards : SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Node limits request.value
+heightBound : MergedOrdinaryHeight.height request.value ≤ bound
+room :
+  Headroom bits before.checked.native.machine.heap (nodeNodes rows arity limits bound)
+    (nodeEdges rows arity limits bound)
+admitted :
+  SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryDefs.Admitted bits formulas solver
+    (SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall request before)
+⊢ SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Plan bits budget
+      (SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall request before) ∧
+    ∃ result after next final,
+      SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+          (fun f g s r e p h m c n =>
+            SourceCurrentAllocatedPartialWorker.nodeCall f g s r e p h m c n budget request before)
+          result after ∧
+        ∃ actual,
+          NodeCallReads formulas solver actual memos final ∧
+            Checks (nodeCallTrace actual) ∧
+              Post formulas solver next before after final ∧
+                Available after.checked.native.machine.heap result ∧
+                  Stored after ∧
+                    NodeNarrow request.value result ∧
+                      NodeCertificate request result ∧
+                        WorkBounds before.checked.native.machine.heap after.checked.native.machine.heap
+                            (nodeNodes rows arity limits bound) (nodeEdges rows arity limits bound) ∧
+                          Headroom bits after.checked.native.machine.heap 0 0 ∧
+                            SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver request result
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceEntryRoot
+error: build failed

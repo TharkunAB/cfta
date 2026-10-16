@@ -1,0 +1,121 @@
+'MicroCFTA.ResourceEntryKernels.supplied_parent_has_own_reads' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@supplied_parent_has_own_reads : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {bits budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {request : EdgeRequest}
+  {before after :
+    SourceCurrentAllocatedPartialState.State
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))}
+  {result : EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  (actual :
+    @EdgeBody inst inst_1 inst_2
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      budget request before result after),
+  @Admitted inst_1 bits formulas solver
+      (@SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.edgeBody
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        request before) →
+    @Exists.{1} EndpointMemoGateTrace.Memos fun memos =>
+      @Exists.{1} EndpointMemoGateTrace.Memos fun final =>
+        And
+          (@EdgeBodyReads inst inst_1 inst_2
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            formulas solver budget request before result after actual memos final)
+          (@Exists.{1} SourceCurrentAllocatedNativeInventoryState.Inventory fun next =>
+            And
+              (@Post inst_1
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                formulas solver next before after final)
+              (And
+                (@Stored
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  after)
+                (EdgeCertificate request result)))
+'MicroCFTA.ResourceEntryKernels.admitted_node_constructs_own_run' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@admitted_node_constructs_own_run : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {bits : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (budget : Nat) (request : NodeRequest)
+  (before :
+    SourceCurrentAllocatedPartialState.State
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))),
+  @Admitted inst_1 bits formulas solver
+      (@SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        request before) →
+    @Exists.{1} EndpointMemoGateTrace.Memos fun memos =>
+      @Exists.{1}
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        fun result =>
+        @Exists.{2}
+          (SourceCurrentAllocatedPartialState.State
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+          fun after =>
+          @Exists.{1} SourceCurrentAllocatedNativeInventoryState.Inventory fun next =>
+            @Exists.{1} EndpointMemoGateTrace.Memos fun final =>
+              And
+                (@SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  (fun f g s r e p h m c n =>
+                    @SourceCurrentAllocatedPartialWorker.nodeCall inst inst_1 inst_2
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      f g s r e p h m c n budget request before)
+                  result after)
+                (@Exists.{0}
+                  (@NodeCall inst inst_1 inst_2
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    budget request before result after)
+                  fun actual =>
+                  And
+                    (@NodeCallReads inst inst_1 inst_2
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      formulas solver budget request before result after actual memos final)
+                    (And
+                      (@Checks inst inst_1 inst_2
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        budget
+                        (@nodeCallTrace inst inst_1 inst_2
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                          budget request result before after actual))
+                      (And
+                        (@Post inst_1
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                          formulas solver next before after final)
+                        (And
+                          (@Stored
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            after)
+                          (NodeCertificate request result)))))
