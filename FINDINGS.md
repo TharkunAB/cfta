@@ -1,5 +1,47 @@
 # Current formalization findings
 
+## Haskell fix handoff for external work
+
+Current source main is `d44b2a0f`. It is merged into `formalize` at `b09f4ebb`.
+Use the current source before applying an older repair. The entries below
+separate a behavior fix from a remaining documentation change.
+
+- **Finite typing metadata discovery.** `ca0e9a65` fixes
+  `cfta-generator/src/Data/CFTA/Gen/Typing.hs`. Before the fix, two leaf rules
+  could force the description of an unused non-regular field forever.
+  The declaration-position walk now visits only constructor types present
+  in the finite typing rows. It retains each type's full declaration indices.
+  Upstream adopts the same implementation in `b3f4de44` and PR #53.
+  The current file matches main. No additional patch is needed.
+  `cfta-generator/test/Data/CFTA/Gen/TypingSpec.hs` now contains the regression
+  "reads only the types of the rules, so a non-regular field that no rule uses
+  does not stop it". Its expected result is `Right [Plain, Other]`.
+  The declaration-order regression also checks `Right [Lit Z, Lit A]`.
+  Standard `Bool` uses `False` before `True`; the old contrary comment is fixed.
+- **Fresh recursive constructor probes.** Historical repair `fbc3097`
+  (formerly `e0e1b37`) changes the old
+  `microcfta/src/Data/CFTA/Interned/Type.hs`, now
+  `cfta/src/Data/CFTA/Interned/Type.hs`. It selects a probe above captured
+  ordinary references and uses the same observation in `matchMu`.
+  The old protocol can demand an unfinished interning result on a closed
+  nested expression. See `lean/notes-paired-pending-boundary.md` and
+  `lean/notes-fresh-ordinary-candidate.md` for the counterexample and repair.
+  The current implementation file matches main. The extra local changelog
+  entry records this historical repair; it is not an outstanding code patch.
+- **Constrained recursive equality endpoint.** The retained reproducer is
+  `lean/repro/OuterCallerCycle.hs`. Current main includes the endpoint guard
+  and emptiness checks. The only remaining local difference in
+  `cfta/src/Data/CFTA/Equality/Operations.hs` is a comment that names that
+  reproducer. Do not treat that comment as a separate behavior fix.
+
+Validation at this source refresh: the strict Nix build of all components
+passes. All six existing suites pass: 321 core, 226 generator, 167 refinement,
+34 GHC-fit, and 22 decision-model examples, plus the hole-fit golden check.
+This is 770 examples plus golden. No local test file is added or changed.
+Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
+to identify an outstanding source patch. Add each later Haskell fix here
+with its failure case, affected file, commit, checks, and upstream status.
+
 ## Current recursive pair contexts and finite typing order
 
 Source main is `885a446e`, merged at `aa981389`. Upstream fixes ordinary
