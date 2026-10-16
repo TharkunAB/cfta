@@ -210,10 +210,11 @@ tree automata of `cfta`, with QuickCheck integration.
   restrict, or exclude it as any `FTA`. `fromConstructorAutomaton` reads an
   automaton over the constructors of a datatype as a `Gen Symbol a` with the
   labels and the ranks of `fromDatatype`, and `fromTypingRules` is the two in
-  one: the closed terms of the root types up to a bound on the nesting. It
-  reports a name that no constructor has (`UnknownConstructors`), a rule that
-  does not fit the fields of its constructor (`FieldMismatch`), and inputs
-  or `Binders`, which are not implemented yet (`NotImplemented`). A field
+  one: the terms of the root types up to a bound on the nesting. The inputs
+  are the variables in scope at the root, so the terms are programs over
+  them. It reports a name that no constructor has (`UnknownConstructors`), a
+  rule that does not fit the fields of its constructor (`FieldMismatch`),
+  and `Binders`, which is not implemented yet (`NotImplemented`). A field
   that holds a subterm has the type of the datatype, so a family of mutually
   recursive types is not a language here.
   A fixed value in a field of the datatype gives `FieldMismatch`.

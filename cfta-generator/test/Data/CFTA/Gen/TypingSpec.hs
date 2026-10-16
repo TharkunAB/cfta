@@ -75,14 +75,19 @@ typedRules =
 
 -- | The closed well-typed terms up to the bound, from the rules.
 typedLanguage :: Int -> Gen.Gen Symbol Typed
-typedLanguage bound = either (error . show) id $ fromTypingRules (Typing (Nesting (fromIntegral bound)) [] [TInt, TBool] typedRules)
+typedLanguage = typedPrograms []
 
-{- | The number of closed well-typed terms up to the bound, from a recurrence
-over the environment: @count n env typ@ is the number of terms of the type in
-the environment with a nesting of at most @n@.
+-- | The well-typed terms over the inputs up to the bound, from the rules.
+typedPrograms :: [Ty] -> Int -> Gen.Gen Symbol Typed
+typedPrograms inputTypes bound =
+    either (error . show) id $ fromTypingRules (Typing (Nesting (fromIntegral bound)) inputTypes [TInt, TBool] typedRules)
+
+{- | The number of well-typed terms over the inputs up to the bound, from a
+recurrence over the environment: @count n env typ@ is the number of terms of
+the type in the environment with a nesting of at most @n@.
 -}
-typedCount :: Int -> Integer
-typedCount bound = count bound [] TInt + count bound [] TBool
+typedCount :: [Ty] -> Int -> Integer
+typedCount inputTypes bound = count bound inputTypes TInt + count bound inputTypes TBool
   where
     leaves env typ = 1 + fromIntegral (length (filter (== typ) env))
     count :: Int -> [Ty] -> Ty -> Integer
@@ -95,6 +100,32 @@ typedCount bound = count bound [] TInt + count bound [] TBool
         operator = case typ of
             TInt -> count (n - 1) env TInt * count (n - 1) env TInt
             TBool -> count (n - 1) env TInt
+
+-- | The type of a typed term in an environment, if it has one.
+typeOf :: [Ty] -> Typed -> Maybe Ty
+typeOf _ TZero = Just TInt
+typeOf _ TTrue = Just TBool
+typeOf env (TAdd left right) = do
+    TInt <- typeOf env left
+    TInt <- typeOf env right
+    Just TInt
+typeOf env (TIsZero inner) = do
+    TInt <- typeOf env inner
+    Just TBool
+typeOf env (TVar index typ)
+    | index >= 0, index < length env, env !! index == typ = Just typ
+    | otherwise = Nothing
+typeOf env (TLet rhs body) = do
+    rhsType <- typeOf env rhs
+    typeOf (rhsType : env) body
+
+-- | The nesting of a typed term: the constructors with subterms on the longest path.
+nesting :: Typed -> Int
+nesting term = case term of
+    TAdd left right -> 1 + max (nesting left) (nesting right)
+    TIsZero inner -> 1 + nesting inner
+    TLet rhs body -> 1 + max (nesting rhs) (nesting body)
+    _ -> 0
 
 -- | A state of the hand-written automaton (path (b) of the binders spike).
 data State = HandRoot | HandTyping ![Ty] !Ty !Int | Index !Int | TypeState !Ty
@@ -152,7 +183,15 @@ data ArithType = IntType | BoolType
     deriving stock (Eq, Ord, Show)
 
 -- | Arithmetic with literals, a comparison, a conditional, and let-binding. A variable has no type.
-data Arith = Num !Int | Flag !Bool | Plus Arith Arith | Less Arith Arith | If Arith Arith Arith | Var !Int | Let Arith Arith
+data Arith
+    = Num !Int
+    | Flag !Bool
+    | Plus Arith Arith
+    | Less Arith Arith
+    | If Arith Arith Arith
+    | Var !Int
+    | Let Arith Arith
+    | Arg !Int
     deriving stock (Eq, Ord, Show, Generic)
     deriving anyclass (HasFTA)
 
@@ -171,6 +210,14 @@ arithRules =
 -- | The typed arithmetic language up to the bound.
 arithTyping :: Int -> Typing ArithType
 arithTyping bound = Typing (Nesting (fromIntegral bound)) [] [IntType, BoolType] arithRules
+
+-- | The typed arithmetic over the inputs up to the bound, with the inputs as variables or as arguments.
+arithPrograms :: [ArithType] -> [ArithType] -> Int -> Gen.Gen Symbol Arith
+arithPrograms inputTypes argumentTypes bound =
+    either (error . show) id $
+        fromTypingRules (Typing (Nesting (fromIntegral bound)) inputTypes [IntType, BoolType] withArguments)
+  where
+    withArguments = arithRules <> [rule "Arg" [value position] typ | (position, typ) <- zip [0 :: Int ..] argumentTypes]
 
 -- | The closed well-typed arithmetic terms up to the bound, from the rules.
 arithLanguage :: Int -> Gen.Gen Symbol Arith
@@ -207,6 +254,7 @@ equalIntBranches env term = case term of
 arithType :: [ArithType] -> Arith -> Maybe ArithType
 arithType _ (Num n) = if n `elem` [0, 1] then Just IntType else Nothing
 arithType _ (Flag _) = Just BoolType
+arithType _ (Arg _) = Nothing
 arithType env (Plus left right) = do
     IntType <- arithType env left
     IntType <- arithType env right
@@ -236,9 +284,9 @@ arithNesting term = case term of
     Let rhs body -> 1 + max (arithNesting rhs) (arithNesting body)
     _ -> 0
 
--- | The number of closed well-typed arithmetic terms up to the bound, from a recurrence over the environment.
-arithCount :: Int -> Integer
-arithCount bound = count bound [] IntType + count bound [] BoolType
+-- | The number of well-typed arithmetic terms over the inputs up to the bound, from a recurrence over the environment.
+arithCount :: [ArithType] -> Int -> Integer
+arithCount inputTypes bound = count bound inputTypes IntType + count bound inputTypes BoolType
   where
     leaves env typ = 2 + fromIntegral (length (filter (== typ) env))
     count :: Int -> [ArithType] -> ArithType -> Integer
@@ -294,20 +342,20 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
             members (typedLanguage 3) `shouldBe` members (handWritten 3)
             length (members (typedLanguage 2)) `shouldBe` 222
         it "counts the terms of the recurrence up to the bound 6" $
-            map (total . typedLanguage) [0 .. 6] `shouldBe` map typedCount [0 .. 6]
+            map (total . typedLanguage) [0 .. 6] `shouldBe` map (typedCount []) [0 .. 6]
         it "gives each value the rank of its term" $ do
             let generator = typedLanguage 2
             mapM (Gen.rankOfValue generator) (either (error . show) id (Gen.values generator))
                 `shouldBe` Right (map Rank [0 .. total generator - 1])
     describe "typed arithmetic" $ do
         it "counts the terms of the recurrence up to the bound 6" $
-            map (total . arithLanguage) [0 .. 6] `shouldBe` map arithCount [0 .. 6]
+            map (total . arithLanguage) [0 .. 6] `shouldBe` map (arithCount []) [0 .. 6]
         it "gives distinct well-typed terms of a nesting up to the bound 2, as many as the recurrence" $ do
             let listed = either (error . show) id (Gen.values (arithLanguage 2))
             filter (isNothing . arithType []) listed `shouldBe` []
             filter ((> 2) . arithNesting) listed `shouldBe` []
             length (nubOrd listed) `shouldBe` length listed
-            fromIntegral (length listed) `shouldBe` arithCount 2
+            fromIntegral (length listed) `shouldBe` arithCount [] 2
         it "decodes sampled ranks to well-typed terms up to the bound 3, and ranks them back" $ do
             let generator = arithLanguage 3
                 count = total generator
@@ -316,6 +364,18 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
             filter (isNothing . arithType []) decoded `shouldBe` []
             filter ((> 3) . arithNesting) decoded `shouldBe` []
             mapM (Gen.rankOfValue generator) decoded `shouldBe` Right ranks
+    describe "inputs" $ do
+        it "count the programs over the inputs as the recurrence does up to the bound 6" $ do
+            map (total . typedPrograms [TInt, TBool]) [0 .. 6] `shouldBe` map (typedCount [TInt, TBool]) [0 .. 6]
+            map (total . arithPrograms [IntType, BoolType] []) [0 .. 6] `shouldBe` map (arithCount [IntType, BoolType]) [0 .. 6]
+        it "give distinct programs that type-check in the inputs, of a nesting up to the bound 2, as many as the recurrence" $ do
+            let listed = either (error . show) id (Gen.values (typedPrograms [TInt, TBool] 2))
+            filter (isNothing . typeOf [TInt, TBool]) listed `shouldBe` []
+            filter ((> 2) . nesting) listed `shouldBe` []
+            length (nubOrd listed) `shouldBe` length listed
+            fromIntegral (length listed) `shouldBe` typedCount [TInt, TBool] 2
+        it "count as arguments that are static rules, which binders do not move" $
+            map (total . arithPrograms [] [IntType, BoolType]) [0 .. 5] `shouldBe` map (arithCount [IntType, BoolType]) [0 .. 5]
     describe "the automaton" $ do
         let derived = either (error . show) id $ deriveFTAWith @Arith (domain [0, 1 :: Int])
             same left right = if left == right then Just left else Nothing
@@ -354,11 +414,10 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
                 Just
                 (const Nothing)
                 (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] [rule "Num" [value (0 :: Int)] IntType, rule "Mul" [] IntType]))
-                `shouldBe` Just (UnknownConstructors ["Mul"] ["Num", "Flag", "Plus", "Less", "If", "Var", "Let"])
-        it "report inputs and a bound on the binders as not implemented" $ do
-            let failure typing = either Just (const Nothing) (fromTypingRules @Arith typing)
-            failure (Typing (Nesting 1) [IntType] [IntType] arithRules) `shouldBe` Just (NotImplemented "inputs")
-            failure (Typing (Binders 1) [] [IntType] arithRules) `shouldBe` Just (NotImplemented "a bound on the binders")
+                `shouldBe` Just (UnknownConstructors ["Mul"] ["Num", "Flag", "Plus", "Less", "If", "Var", "Let", "Arg"])
+        it "report a bound on the binders as not implemented" $
+            either Just (const Nothing) (fromTypingRules @Arith (Typing (Binders 1) [] [IntType] arithRules))
+                `shouldBe` Just (NotImplemented "a bound on the binders")
         it "fit the fields of their constructor" $ do
             let mismatch given = either Just (const Nothing) (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] given))
             mismatch [rule "Plus" [subterm [] IntType] IntType] `shouldBe` Just (FieldMismatch "Plus")
