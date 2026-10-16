@@ -1,6 +1,66 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 09:07 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 09:34 CEST (Europe/Stockholm)**.
+
+## Current checked structural edits and full class pass
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`b992e324`. Proof commits are `63310da4`, `251fa392`, `1e54e3cb`,
+`9cdb80c5`, and `7f00cf8e`. No Haskell implementation or test changes occur.
+The external Haskell fix registry remains first in root FINDINGS.md. Add each
+later fix there with its failure case, files, commit, checks, and upstream status.
+
+Nine additive modules connect CURRENT checked leaf narrowing to structural
+edits, compiled classes, the complete right fold, and final empty propagation.
+Finite endpoints construct actual read annotations from initial invariants
+and reached raw-prefix ranges. No future successful edit, readiness, model,
+admission oracle, or result-language law is supplied. Each returned inventory,
+checked state, and global bundle enters the next selected call. Positional
+child edits preserve arity. Raw same-arity setChildren retains the original
+complete guard and operation state. Other original siblings can remain open.
+
+Each class captures its actual tail-returned forest. Only its local slots
+start empty. Both native tables, domain cache, equality operations, warm merge
+entries, and global receipts remain. Full-pass language narrows the input and
+has identical membership for terms satisfying all selected classes. Final
+literal empty propagation preserves exact forest language and the full state.
+No unconditional output-class-satisfaction claim follows.
+
+The current Required receipt derives every selected class domain. Its actual
+return feeds the new finite pass. Merge Stored grows from the pre-required
+heap. Class satisfaction derives the required paths. Therefore class-satisfying
+terms have identical membership before required preparation and after the full
+pass. Composed effects retain original values and fourth-memo correctness.
+Initial legitimate warm coverage, selected-record coherence, actual-prefix
+machine checks, and global validity at the actual required return remain inputs.
+The earlier RequiredGlobalMemos endpoint derives that global validity.
+
+The pinned full Audit passes 2358 jobs and 56817 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur. Public
+probes, integration kernels, and independent reviews pass. Evidence and
+frozen sources are in lean/restart-evidence/20261016-checked-edits/.
+All 3948 starting files remain. All 2348 older non-Audit proof sources retain
+identical bytes. Seventeen frozen manifests, stashes, other worktree records,
+and the Haskell registry remain. Earlier unavailable external drafts are not
+claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-checked-class-pass.md and checked-outer-entry-next.md
+in the evidence directory. Next compose actual allocated precheck and Scan
+with Required and this pass. Parent reconstruction uses mkEdge, whose early
+contradiction test can skip the child thunk. FieldAvailable alone does not
+prove constructor acceptance. Later inherited descent reads the RETURNED edge
+and combines inherited constraints first. Final setChildren is a separate raw
+same-arity step. General constrained outer completion and its literal worker
+transfer remain open. Completed sequential graphs do not establish GHC or
+IntMap demand order. Keep the pure selection noConstraint CAF adapter explicit.
+
+The full library goal, broader frontend and recursive-generator adapters,
+all separate Sized contracts, concrete containers, publication, concurrency,
+identity lifetime, machine capacity, solver IO, random draws, callbacks, and
+codecs stay active. Preserve the optimized interned core and every older
+constructor and equality proof. No board posts or deployments. Push verified
+formalize checkpoints regularly. This checkpoint is progress.
 
 ## Current checked target folds, historical slots, and leaf narrowing
 
