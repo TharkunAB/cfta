@@ -1,0 +1,141 @@
+'MicroCFTA.SourceCurrentAllocatedNativeContextualReferenceCertificates.resolve' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualReferenceCertificates.left_code' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualReferenceCertificates.right_code' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualReferenceCertificates.left_reference' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualReferenceCertificates.right_reference' depends on axioms: [propext,
+ Quot.sound]
+resolve : ∀
+  (source current :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  InternedNestedFacts.Facts current →
+    Grows source current →
+      Extends source.nodes.issued current.nodes.issued →
+        ∀ (domain : IntersectionFlatMemoKeyDomain.DomainKey),
+          OriginalBindings source domain →
+            ∀ (name : Nat),
+              name ∈ SourceRecursiveIntersectionDomain.names domain →
+                ∃ entry body depth ordinary,
+                  entry.identity = name ∧
+                    Original (Value.mu entry body depth ordinary) ∧
+                      Available source (Value.mu entry body depth ordinary) ∧
+                        SourcePreparedSharedRows.read current name = some (Value.mu entry body depth ordinary)
+@left_code : ∀
+  [inst :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (model : IntersectSchedule.InputMeaning (view source holds))
+  (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+  OriginalBindings source domain.key →
+    ∀ (name : Nat)
+      (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+      (state :
+        Machine (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      SourceRecursiveIntersectionKernel.Valid state →
+        Grows source state.heap →
+          Extends source.nodes.issued state.heap.nodes.issued →
+            Certified (view source holds) model ranked holds (compileReference domain name other true) state
+              fun x result =>
+              NodeLaw (view source holds) model ranked holds
+                { domain := domain, left := Value.reference (InternedBinderProtocol.Reference.interned name),
+                  right := other }
+                result
+@right_code : ∀
+  [inst :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (model : IntersectSchedule.InputMeaning (view source holds))
+  (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+  OriginalBindings source domain.key →
+    ∀ (name : Nat)
+      (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+      (state :
+        Machine (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      SourceRecursiveIntersectionKernel.Valid state →
+        Grows source state.heap →
+          Extends source.nodes.issued state.heap.nodes.issued →
+            Certified (view source holds) model ranked holds (compileReference domain name other false) state
+              fun x result =>
+              NodeLaw (view source holds) model ranked holds
+                { domain := domain, left := other,
+                  right := Value.reference (InternedBinderProtocol.Reference.interned name) }
+                result
+@left_reference : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (model : IntersectSchedule.InputMeaning (view source holds))
+  (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+  OriginalBindings source domain.key →
+    ∀ (name : Nat)
+      (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+      (state :
+        Machine (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      SourceRecursiveIntersectionKernel.Valid state →
+        Grows source state.heap →
+          Extends source.nodes.issued state.heap.nodes.issued →
+            SourceRecursiveIntersectionControl.decision domain.key
+                  (Value.reference (InternedBinderProtocol.Reference.interned name)) other =
+                SourceRecursiveIntersectionControl.Branch.leftReference →
+              Certified (view source holds) model ranked holds
+                (compileNode
+                  { domain := domain, left := Value.reference (InternedBinderProtocol.Reference.interned name),
+                    right := other })
+                state fun x result =>
+                NodeLaw (view source holds) model ranked holds
+                  { domain := domain, left := Value.reference (InternedBinderProtocol.Reference.interned name),
+                    right := other }
+                  result
+@right_reference : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (model : IntersectSchedule.InputMeaning (view source holds))
+  (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+  (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+  OriginalBindings source domain.key →
+    ∀ (name : Nat)
+      (other : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+      (state :
+        Machine (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      SourceRecursiveIntersectionKernel.Valid state →
+        Grows source state.heap →
+          Extends source.nodes.issued state.heap.nodes.issued →
+            SourceRecursiveIntersectionControl.decision domain.key other
+                  (Value.reference (InternedBinderProtocol.Reference.interned name)) =
+                SourceRecursiveIntersectionControl.Branch.rightReference →
+              Certified (view source holds) model ranked holds
+                (compileNode
+                  { domain := domain, left := other,
+                    right := Value.reference (InternedBinderProtocol.Reference.interned name) })
+                state fun x result =>
+                NodeLaw (view source holds) model ranked holds
+                  { domain := domain, left := other,
+                    right := Value.reference (InternedBinderProtocol.Reference.interned name) }
+                  result

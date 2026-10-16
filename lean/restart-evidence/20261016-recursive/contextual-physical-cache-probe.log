@@ -1,0 +1,139 @@
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.initial_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.advance' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.lookupNode' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.lookupEdge' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.demandNode' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.demandEdge' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.finishNode' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.finishEdge' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.node_observed_ready' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.edge_observed_ready' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.node_started' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.edge_started' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.initial_valid {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (machine : Machine Symbol Guard) (physical : SourceRecursiveIntersectionKernel.Valid machine) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (initial width machine) ∧
+    Contextual view model ranked holds (initial width machine)
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.advance {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (after : Machine Symbol Guard)
+  (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+  (contextual : Contextual view model ranked holds state) (checked : SourceRecursiveIntersectionKernel.Valid after)
+  (growth : Extension state.machine after) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (advance state after) ∧
+    Contextual view model ranked holds (advance state after)
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.lookupNode {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (request : NodeRequest Symbol Guard)
+  (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+  (contextual : Contextual view model ranked holds state) (ready : NodeReady state.machine request)
+  (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (lookupNode width request state).snd ∧
+    Contextual view model ranked holds (lookupNode width request state).snd
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.lookupEdge {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (request : EdgeRequest Symbol Guard)
+  (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+  (contextual : Contextual view model ranked holds state) (ready : EdgeReady state.machine request)
+  (safe : SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (lookupEdge width request state).snd ∧
+    Contextual view model ranked holds (lookupEdge width request state).snd
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.demandNode {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+  (contextual : Contextual view model ranked holds state) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (demandNode handle state).snd ∧
+    Contextual view model ranked holds (demandNode handle state).snd
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.demandEdge {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+  (contextual : Contextual view model ranked holds state) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (demandEdge handle state).snd ∧
+    Contextual view model ranked holds (demandEdge handle state).snd
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.finishNode {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (request : NodeRequest Symbol Guard) (result : Value Symbol Guard)
+  (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+  (contextual : Contextual view model ranked holds state)
+  (running : state.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating })
+  (available : Available state.machine.heap result) (localLaw : NodeLaw view model ranked holds request result) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (finishNode handle result state) ∧
+    Contextual view model ranked holds (finishNode handle result state)
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.finishEdge {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (request : EdgeRequest Symbol Guard) (result : EdgeValue Symbol Guard)
+  (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+  (contextual : Contextual view model ranked holds state)
+  (running : state.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating })
+  (resident : InternedEdgeResidency.EdgeResident state.machine.heap result)
+  (localLaw : EdgeLaw view model ranked holds request result) :
+  SourceCurrentAllocatedNativePhysicalCache.Valid (finishEdge handle result state) ∧
+    Contextual view model ranked holds (finishEdge handle result state)
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.node_observed_ready {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request : NodeRequest Symbol Guard)
+  (before chosen after : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : Value Symbol Guard) (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before)
+  (contextual : Contextual view model ranked holds before) (ready : NodeReady before.machine request)
+  (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupNode width request before = (NodeSelection.memoized handle, chosen))
+  (demanded : demandNode handle chosen = (FlatMemoThunk.Observation.ready result, after)) :
+  NodeLaw view model ranked holds request result ∧
+    Contextual view model ranked holds after ∧ after = chosen ∧ Available after.machine.heap result
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.edge_observed_ready {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request : EdgeRequest Symbol Guard)
+  (before chosen after : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (result : EdgeValue Symbol Guard) (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before)
+  (contextual : Contextual view model ranked holds before) (ready : EdgeReady before.machine request)
+  (safe : SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupEdge width request before = (handle, chosen))
+  (demanded : demandEdge handle chosen = (FlatMemoThunk.Observation.ready result, after)) :
+  EdgeLaw view model ranked holds request result ∧
+    Contextual view model ranked holds after ∧
+      after = chosen ∧ InternedEdgeResidency.EdgeResident after.machine.heap result
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.node_started {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request actual : NodeRequest Symbol Guard)
+  (before chosen running : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before)
+  (contextual : Contextual view model ranked holds before) (ready : NodeReady before.machine request)
+  (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupNode width request before = (NodeSelection.memoized handle, chosen))
+  (demanded : demandNode handle chosen = (FlatMemoThunk.Observation.evaluate actual, running)) :
+  actual = request ∧
+    SourceCurrentAllocatedNativePhysicalCache.Valid running ∧
+      Contextual view model ranked holds running ∧
+        running.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+MicroCFTA.SourceCurrentAllocatedNativeContextualPhysicalCache.edge_started {width : Nat}
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request actual : EdgeRequest Symbol Guard)
+  (before chosen running : SourceRecursiveIntersectionThunks.State width Symbol Guard) (handle : Nat)
+  (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before)
+  (contextual : Contextual view model ranked holds before) (ready : EdgeReady before.machine request)
+  (safe : SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupEdge width request before = (handle, chosen))
+  (demanded : demandEdge handle chosen = (FlatMemoThunk.Observation.evaluate actual, running)) :
+  actual = request ∧
+    SourceCurrentAllocatedNativePhysicalCache.Valid running ∧
+      Contextual view model ranked holds running ∧
+        running.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }

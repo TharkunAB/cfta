@@ -1,0 +1,20 @@
+'MicroCFTA.SourceCurrentAllocatedNativeContextualNodeCertificates.empty_literal' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualNodeCertificates.node_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+empty_literal : ∀ (left right : Value Symbol Guard),
+  SourceRecursiveIntersectionControl.hasEmpty left right = true → left = Value.empty ∨ right = Value.empty
+@node_certified : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (model : IntersectSchedule.InputMeaning (view source holds))
+      (ranked : IntersectSchedule.RankedInput (view source holds) model.valid) (request : NodeRequest Symbol Guard),
+      NodeScope source request →
+        ∀ (state : Machine Symbol Guard),
+          SourceRecursiveIntersectionKernel.Valid state →
+            SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+              NodeReady state request →
+                Grows source state.heap →
+                  Extends source.nodes.issued state.heap.nodes.issued →
+                    Certified (view source holds) model ranked holds (compileNode request) state fun x value =>
+                      NodeLaw (view source holds) model ranked holds request value

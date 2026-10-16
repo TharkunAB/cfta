@@ -1,0 +1,201 @@
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.inputs_before_bind' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.code_fields_before_bind' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.fields_before_bind' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.after_step' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.current_inputs' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.work_readback' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.bind_inverse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.bind_readback' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.Walk.trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.walk_readback' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.cons_readback' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.walk_work_readback' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@inputs_before_bind : ∀ {A B : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (control : Control A)
+  (next : A → Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) B)
+  (state : SourceEqualityNativeDemand.State width),
+  SourceCurrentAllocatedNativePhysicalExecution.Inputs (control.bind next) state →
+    SourceCurrentAllocatedNativePhysicalExecution.Inputs control state
+@code_fields_before_bind : ∀ {A B : Type} (operations : SourceEqualityConstraintMemoAllocation.State)
+  (code : Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) A)
+  (next : A → Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) B),
+  SourceCurrentAllocatedNativeCodeFields.Fields operations (code.bind next) →
+    SourceCurrentAllocatedNativeCodeFields.Fields operations code
+@fields_before_bind : ∀ {A B : Type} {width : Nat} (control : Control A)
+  (next : A → Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) B)
+  (state : SourceEqualityNativeDemand.State width), Fields (control.bind next) state → Fields control state
+@after_step : ∀ {A : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (fuel : Nat) (control next : Control A) (before middle after : SourceEqualityNativeDemand.State width) (value : A),
+  Trace fuel control before (Control.code (Code.pure value)) after →
+    step control before = Outcome.yielded next middle →
+      ∃ restFuel, fuel = restFuel + 1 ∧ Trace restFuel next middle (Control.code (Code.pure value)) after
+@current_inputs : ∀ {A : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {fuel : Nat} {control : Control A} {before after : SourceEqualityNativeDemand.State width} {value : A},
+  Trace fuel control before (Control.code (Code.pure value)) after →
+    SourceCurrentAllocatedNativePhysicalExecution.Inputs control before
+@work_readback : ∀ {A : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (job : Work (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) A)
+  (fuel : Nat) (before after : SourceEqualityNativeDemand.State width) (value : A),
+  Trace fuel (Control.code (Code.work job Code.pure)) before (Control.code (Code.pure value)) after →
+    fuel = 1 ∧
+      value = (run job before.native.machine.heap).fst ∧
+        after =
+            {
+              native :=
+                advance before.native
+                  (have __src := before.native.machine;
+                  { heap := (run job before.native.machine.heap).snd, domains := __src.domains }),
+              operations := before.operations } ∧
+          SourceEqualityNativeDemandHeapPrimitives.WorkInputs before.native.machine.heap job
+@bind_inverse : ∀ {A B : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (fuel : Nat) (control : Control A)
+  (next : A → Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) B)
+  (state after : SourceEqualityNativeDemand.State width) (value : B),
+  Trace fuel (control.bind next) state (Control.code (Code.pure value)) after →
+    ∃ inner outer result middle,
+      inner + outer = fuel ∧
+        Trace inner control state (Control.code (Code.pure result)) middle ∧
+          Trace outer (Control.code (next result)) middle (Control.code (Code.pure value)) after
+@effects : ∀ {A : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {fuel : Nat} {control rest : Control A} {before after : SourceEqualityNativeDemand.State width},
+  Trace fuel control before rest after →
+    Good before →
+      Fields control before →
+        Good after ∧
+          SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine ∧
+            SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+              SourceEqualityConstraintMemoAllocation.Grows before.operations after.operations ∧ Fields rest after
+@bind_readback : ∀ {A B : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (fuel : Nat) (control : Control A)
+  (next : A → Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) B)
+  (before after : SourceEqualityNativeDemand.State width) (value : B),
+  Trace fuel (control.bind next) before (Control.code (Code.pure value)) after →
+    Good before →
+      Fields (control.bind next) before →
+        WordRanges (control.bind next) before →
+          ∃ inner outer result middle,
+            inner + outer = fuel ∧
+              Trace inner control before (Control.code (Code.pure result)) middle ∧
+                Trace outer (Control.code (next result)) middle (Control.code (Code.pure value)) after ∧
+                  Good middle ∧
+                    SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine ∧
+                      SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap ∧
+                        SourceEqualityConstraintMemoAllocation.Grows before.operations middle.operations ∧
+                          Fields (Control.code (next result)) middle ∧
+                            WordRanges control before ∧ WordRanges (Control.code (next result)) middle
+@Walk.trace : ∀ {A B : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {call : A → Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) B}
+  {inputs : List A} {before after : SourceEqualityNativeDemand.State width} {values : List B} {fuel : Nat},
+  Walk call inputs before values after fuel →
+    Trace fuel (Control.code (SourceRecursiveIntersectionCode.walk call inputs)) before
+      (Control.code (Code.pure values)) after
+@walk_readback : ∀ {A B : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (call : A → Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) B)
+  (inputs : List A) (fuel : Nat) (before after : SourceEqualityNativeDemand.State width) (values : List B),
+  Trace fuel (Control.code (walk call inputs)) before (Control.code (Code.pure values)) after →
+    Walk call inputs before values after fuel
+@cons_readback : ∀ {A B : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (call : A → Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) B)
+  (first : A) (rest : List A) (fuel : Nat) (before after : SourceEqualityNativeDemand.State width) (outputs : List B),
+  Trace fuel (Control.code (walk call (first :: rest))) before (Control.code (Code.pure outputs)) after →
+    Good before →
+      Fields (Control.code (walk call (first :: rest))) before →
+        WordRanges (Control.code (walk call (first :: rest))) before →
+          ∃ firstFuel restFuel value values middle,
+            firstFuel + restFuel = fuel ∧
+              outputs = value :: values ∧
+                Trace firstFuel (Control.code (call first)) before (Control.code (Code.pure value)) middle ∧
+                  Trace restFuel (Control.code (walk call rest)) middle (Control.code (Code.pure values)) after ∧
+                    Good middle ∧
+                      SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine ∧
+                        SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap ∧
+                          SourceEqualityConstraintMemoAllocation.Grows before.operations middle.operations ∧
+                            Fields (Control.code (walk call rest)) middle ∧
+                              WordRanges (Control.code (call first)) before ∧
+                                WordRanges (Control.code (walk call rest)) middle
+@walk_work_readback : ∀ {A B C : Type} {width : Nat} [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (call : A → Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) B)
+  (inputs : List A)
+  (finish :
+    List B → Work (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) C)
+  (fuel : Nat) (before after : SourceEqualityNativeDemand.State width) (value : C),
+  Trace fuel (Control.code ((walk call inputs).bind fun values => Code.work (finish values) Code.pure)) before
+      (Control.code (Code.pure value)) after →
+    Good before →
+      Fields (Control.code ((walk call inputs).bind fun values => Code.work (finish values) Code.pure)) before →
+        WordRanges (Control.code ((walk call inputs).bind fun values => Code.work (finish values) Code.pure)) before →
+          ∃ walkFuel values middle,
+            fuel = walkFuel + 1 ∧
+              Walk call inputs before values middle walkFuel ∧
+                Good middle ∧
+                  SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine ∧
+                    SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap ∧
+                      SourceEqualityConstraintMemoAllocation.Grows before.operations middle.operations ∧
+                        SourceEqualityNativeDemandHeapPrimitives.WorkInputs middle.native.machine.heap (finish values) ∧
+                          value = (run (finish values) middle.native.machine.heap).fst ∧
+                            after =
+                                {
+                                  native :=
+                                    advance middle.native
+                                      (have __src := middle.native.machine;
+                                      { heap := (run (finish values) middle.native.machine.heap).snd,
+                                        domains := __src.domains }),
+                                  operations := middle.operations } ∧
+                              WordRanges (Control.code (walk call inputs)) before

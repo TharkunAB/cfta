@@ -1,0 +1,255 @@
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.node_walk_certified' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.edge_walk_certified' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.compileRows_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.left_union_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.right_union_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.children_certified' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.sentinel_certified' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.empty_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.reset_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.swap_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.repeated_certified' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.self_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.children_source_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.mismatch_certified' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.rejected_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualCertificates.prefix_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SourceCurrentAllocatedNativeContextualCertificates.node_walk_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool) {A : Type}
+  (request : A → NodeRequest Symbol Guard) (inputs : List A) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+      Certified view model ranked holds
+        (SourceRecursiveIntersectionCode.walk (fun input => Code.node (request input) Code.pure) inputs) state
+        fun after values =>
+        InternedNestedProvenance.Values after.heap values ∧
+          All₂ (fun input value => NodeLaw view model ranked holds (request input) value) inputs values
+@SourceCurrentAllocatedNativeContextualCertificates.edge_walk_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool) {A : Type}
+  (request : A → EdgeRequest Symbol Guard) (inputs : List A),
+  (∀ (input : A), input ∈ inputs → (request input).left.entry.key.symbol = (request input).right.entry.key.symbol) →
+    ∀ (state : Machine Symbol Guard),
+      SourceRecursiveIntersectionKernel.Valid state →
+        SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+          Certified view model ranked holds
+            (SourceRecursiveIntersectionCode.walk (fun input => Code.edge (request input) Code.pure) inputs) state
+            fun after values =>
+            InternedNestedProvenance.Edges after.heap values ∧
+              All₂ (fun input value => EdgeLaw view model ranked holds (request input) value) inputs values
+@SourceCurrentAllocatedNativeContextualCertificates.compileRows_certified : ∀
+  [inst : DecidableEq (EdgeKey Symbol Guard)] [inst_1 : DecidableEq Symbol]
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool)
+      (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+      (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (first : Interned InternedBinderProtocol.NodeKey)
+      (left : List (EdgeValue Symbol Guard)) (leftDepth : Nat) (leftFree : List Reference)
+      (second : Interned InternedBinderProtocol.NodeKey) (right : List (EdgeValue Symbol Guard)) (rightDepth : Nat)
+      (rightFree : List Reference),
+      Available source (Value.node first left leftDepth leftFree) →
+        Available source (Value.node second right rightDepth rightFree) →
+          ∀ (state : Machine Symbol Guard),
+            SourceRecursiveIntersectionKernel.Valid state →
+              SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+                Certified (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+                  (compileRows domain left right) state fun x value =>
+                  NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+                    { domain := domain, left := Value.node first left leftDepth leftFree,
+                      right := Value.node second right rightDepth rightFree }
+                    value
+@SourceCurrentAllocatedNativeContextualCertificates.left_union_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool)
+      (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+      (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (entry : Interned InternedBinderProtocol.NodeKey)
+      (members : List (Value Symbol Guard)) (depth : Nat) (free : List Reference) (right : Value Symbol Guard),
+      Available source (Value.union entry members depth free) →
+        ∀ (state : Machine Symbol Guard),
+          SourceRecursiveIntersectionKernel.Valid state →
+            SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+              Certified (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+                ((SourceRecursiveIntersectionCode.walk (fun member => requestNode domain member right) members).bind
+                  fun values => Code.work (makeUnion values) Code.pure)
+                state fun x value =>
+                NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+                  { domain := domain, left := Value.union entry members depth free, right := right } value
+@SourceCurrentAllocatedNativeContextualCertificates.right_union_certified : ∀
+  [inst : DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool)
+      (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+      (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (entry : Interned InternedBinderProtocol.NodeKey)
+      (members : List (Value Symbol Guard)) (depth : Nat) (free : List Reference) (left : Value Symbol Guard),
+      Available source (Value.union entry members depth free) →
+        ∀ (state : Machine Symbol Guard),
+          SourceRecursiveIntersectionKernel.Valid state →
+            SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+              Certified (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+                ((SourceRecursiveIntersectionCode.walk (fun member => requestNode domain left member) members).bind
+                  fun values => Code.work (makeUnion values) Code.pure)
+                state fun x value =>
+                NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+                  { domain := domain, left := left, right := Value.union entry members depth free } value
+@SourceCurrentAllocatedNativeContextualCertificates.children_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request : EdgeRequest Symbol Guard) (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula),
+  request.left.children.length = request.right.children.length →
+    request.left.entry.key.symbol = request.right.entry.key.symbol →
+      (∀ (term : Term Symbol),
+          holds (SourceEqualityConjoinAllocation.readback combined) term =
+            (holds request.left.entry.key.constraint term && holds request.right.entry.key.constraint term)) →
+        ∀ (state : Machine Symbol Guard),
+          SourceRecursiveIntersectionKernel.Valid state →
+            SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+              Certified view model ranked holds
+                (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) state
+                fun x value => EdgeLaw view model ranked holds request value
+@SourceCurrentAllocatedNativeContextualCertificates.sentinel_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request : EdgeRequest Symbol Guard),
+  (∀ (first second : Nat) (term : Term Symbol),
+      ¬(RowAt holds ranked.languages first request.left term ∧
+          RowAt holds ranked.languages second request.right term)) →
+    ∀ (state : Machine Symbol Guard),
+      SourceRecursiveIntersectionKernel.Valid state →
+        Certified view model ranked holds (SourceEqualityNativeCheckedCode.sentinel request.left) state fun x value =>
+          EdgeLaw view model ranked holds request value
+@SourceCurrentAllocatedNativeContextualCertificates.empty_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request : NodeRequest Symbol Guard),
+  request.left = Value.empty ∨ request.right = Value.empty →
+    ∀ (state : Machine Symbol Guard),
+      Certified view model ranked holds (Code.pure Value.empty) state fun x value =>
+        NodeLaw view model ranked holds request value
+@SourceCurrentAllocatedNativeContextualCertificates.reset_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request : NodeRequest Symbol Guard) (state : Machine Symbol Guard),
+  Certified view model ranked holds (requestNode IntersectionEmptyDomain.emptyDomain request.left request.right) state
+    fun x value => NodeLaw view model ranked holds request value
+@SourceCurrentAllocatedNativeContextualCertificates.swap_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request : NodeRequest Symbol Guard) (state : Machine Symbol Guard),
+  Certified view model ranked holds (requestNode request.domain request.right request.left) state fun x value =>
+    NodeLaw view model ranked holds request value
+@SourceCurrentAllocatedNativeContextualCertificates.repeated_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request : NodeRequest Symbol Guard) (first second : Nat),
+  SourceRecursiveIntersectionControl.identity request.left = some first →
+    SourceRecursiveIntersectionControl.identity request.right = some second →
+      SourceRecursiveIntersectionInputView.inputOf request.left ≠ IntersectSchedule.Input.empty →
+        SourceRecursiveIntersectionInputView.inputOf request.right ≠ IntersectSchedule.Input.empty →
+          SourceRecursiveIntersectionControl.pair first second ∈ request.domain.key.seen →
+            ∀ (state : Machine Symbol Guard),
+              Certified view model ranked holds
+                (Code.pure
+                  (SourceRecursiveIntersectionControl.repeatedValue
+                    (SourceRecursiveIntersectionControl.pair first second)))
+                state fun x value => NodeLaw view model ranked holds request value
+@SourceCurrentAllocatedNativeContextualCertificates.self_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool)
+      (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+      (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid)
+      (request : NodeRequest Symbol Guard),
+      Available source request.left →
+        Available source request.right →
+          SourceRecursiveIntersectionControl.closedSelf request.left request.right = true →
+            ∀ (state : Machine Symbol Guard),
+              Certified (SourceRecursiveIntersectionInputView.view source holds) model ranked holds
+                (Code.pure request.left) state fun x value =>
+                NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds request value
+@SourceCurrentAllocatedNativeContextualCertificates.children_source_certified : ∀
+  [inst : DecidableEq (EdgeKey Symbol Guard)] (view : IntersectSchedule.View Symbol)
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (request : EdgeRequest Symbol Guard) (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula),
+  request.left.children.length = request.right.children.length →
+    request.left.entry.key.symbol = request.right.entry.key.symbol →
+      SourceEqualityConjoinAllocation.readback combined =
+          SourceEqualityConstraintConstructors.conjoin GuardStructuralOrder.le request.left.entry.key.constraint
+            request.right.entry.key.constraint →
+        ∀ (state : Machine Symbol Guard),
+          SourceRecursiveIntersectionKernel.Valid state →
+            SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+              Certified view model ranked (SourceEqualityPCSGuard.holds formulas solver)
+                (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) state
+                fun x value => EdgeLaw view model ranked (SourceEqualityPCSGuard.holds formulas solver) request value
+@SourceCurrentAllocatedNativeContextualCertificates.mismatch_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+  (request : EdgeRequest Symbol Guard),
+  request.left.children.length ≠ request.right.children.length →
+    ∀ (state : Machine Symbol Guard),
+      SourceRecursiveIntersectionKernel.Valid state →
+        Certified view model ranked holds (SourceEqualityNativeCheckedCode.sentinel request.left) state fun x value =>
+          EdgeLaw view model ranked holds request value
+@SourceCurrentAllocatedNativeContextualCertificates.rejected_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (request : EdgeRequest Symbol Guard),
+  SourceEqualityGuardReadback.Cached request.left.entry.key.constraint.equalities →
+    SourceEqualityGuardReadback.Cached request.right.entry.key.constraint.equalities →
+      SourceEqualityIntersectionEdgeAllocation.source GuardStructuralOrder.le request.left.entry.key.constraint
+            request.right.entry.key.constraint request.left.children.length request.right.children.length =
+          SourceEqualityIntersectionEdgeAllocation.Branch.rejected →
+        ∀ (state : Machine Symbol Guard),
+          SourceRecursiveIntersectionKernel.Valid state →
+            Certified view model ranked (SourceEqualityPCSGuard.holds formulas solver)
+              (SourceEqualityNativeCheckedCode.sentinel request.left) state fun x value =>
+              EdgeLaw view model ranked (SourceEqualityPCSGuard.holds formulas solver) request value
+@SourceCurrentAllocatedNativeContextualCertificates.prefix_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} [inst_1 : DecidableEq Symbol] (view : IntersectSchedule.View Symbol)
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (request : EdgeRequest Symbol Guard) (before : SourceEqualityNativeDemand.State width)
+  (code : Code Symbol Guard (EdgeValue Symbol Guard)) (operations : SourceEqualityConstraintMemoAllocation.State),
+  SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+      EdgeReady before.native.machine request →
+        request.left.entry.key.symbol = request.right.entry.key.symbol →
+          SourceEqualityNativeDemand.step (SourceEqualityNativeDemand.Control.edgeBody request Code.pure) before =
+              SourceEqualityNativeDemand.Outcome.yielded (SourceEqualityNativeDemand.Control.code code)
+                { native := before.native, operations := operations } →
+            Certified view model ranked (SourceEqualityPCSGuard.holds formulas solver) code before.native.machine
+              fun x value => EdgeLaw view model ranked (SourceEqualityPCSGuard.holds formulas solver) request value
+lean/restart-evidence/20261016-recursive/contextual-certificates-probe.lean:104:4: error: Application type mismatch: The argument
+  cached
+has type
+  SourceEqualityGuardReadback.Cached none
+but is expected to have type
+  SourceEqualityGuardReadback.Cached (EdgeRequest.left ?m.54).entry.key.constraint.equalities
+in the application
+  SourceCurrentAllocatedNativeContextualCertificates.rejected_certified view model ranked formulas solver ?m.54 cached

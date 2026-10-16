@@ -1,0 +1,43 @@
+'MicroCFTA.SourceCurrentAllocatedNativeRequestResults.finish_node_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeRequestResults.finish_edge_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeRequestResults.original_key' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeRequestResults.node_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeRequestResults.edge_result' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@finish_node_result : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (fuel handle : Nat) (result value : Value Symbol Guard) (before after : SourceEqualityNativeDemand.State width),
+  Trace fuel (Control.code (Code.finishNode handle result (Code.pure result))) before (Control.code (Code.pure value))
+      after →
+    result = value ∧ Available after.native.machine.heap value
+@finish_edge_result : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (fuel handle : Nat) (result value : EdgeValue Symbol Guard) (before after : SourceEqualityNativeDemand.State width),
+  Trace fuel (Control.code (Code.finishEdge handle result (Code.pure result))) before (Control.code (Code.pure value))
+      after →
+    result = value ∧ EdgeResident after.native.machine.heap value
+@original_key : ∀ {width : Nat} (request : NodeRequest Symbol Guard),
+  Original request.left →
+    Original request.right →
+      ∃ key, SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key
+@node_result : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat)
+  (request : NodeRequest Symbol Guard) (before after : SourceEqualityNativeDemand.State width)
+  (value : Value Symbol Guard),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+    Original request.left →
+      Original request.right →
+        Trace fuel (Control.code (requestNode request.domain request.left request.right)) before
+            (Control.code (Code.pure value)) after →
+          Available after.native.machine.heap value
+@edge_result : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat)
+  (request : EdgeRequest Symbol Guard) (before after : SourceEqualityNativeDemand.State width)
+  (value : EdgeValue Symbol Guard),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+    Trace fuel (Control.code (requestEdge request.domain request.left request.right)) before
+        (Control.code (Code.pure value)) after →
+      EdgeResident after.native.machine.heap value

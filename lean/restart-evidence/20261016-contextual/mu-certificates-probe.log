@@ -1,0 +1,107 @@
+'MicroCFTA.SourceCurrentAllocatedNativeContextualMuCertificates.identity_nonempty' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualMuCertificates.payload_recursive' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualMuCertificates.selected_fresh' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualMuCertificates.optional_law' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextualMuCertificates.mu_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+identity_nonempty : ∀ (value : Value Symbol Guard),
+  Original value →
+    ∀ (name : Nat),
+      SourceRecursiveIntersectionControl.identity value = some name → inputOf value ≠ IntersectSchedule.Input.empty
+payload_recursive : ∀ (left right : Value Symbol Guard),
+  SourceRecursiveIntersectionControl.payload left right = SourceRecursiveIntersectionControl.Branch.bothMu ∨
+      SourceRecursiveIntersectionControl.payload left right = SourceRecursiveIntersectionControl.Branch.leftMu ∨
+        SourceRecursiveIntersectionControl.payload left right = SourceRecursiveIntersectionControl.Branch.rightMu →
+    (∃ name, inputOf left = IntersectSchedule.Input.mu name) ∨ ∃ name, inputOf right = IntersectSchedule.Input.mu name
+@selected_fresh : ∀ [DecidableEq Symbol] (request : NodeRequest Symbol Guard) (first second : Nat),
+  SourceRecursiveIntersectionControl.identity request.left = some first →
+    SourceRecursiveIntersectionControl.identity request.right = some second →
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+            SourceRecursiveIntersectionControl.Branch.bothMu ∨
+          SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+              SourceRecursiveIntersectionControl.Branch.leftMu ∨
+            SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+              SourceRecursiveIntersectionControl.Branch.rightMu →
+        ¬SourceRecursiveIntersectionControl.pair first second ∈ request.domain.key.seen ∧
+          (SourceRecursiveIntersectionControl.payload request.left request.right =
+              SourceRecursiveIntersectionControl.Branch.bothMu ∨
+            SourceRecursiveIntersectionControl.payload request.left request.right =
+                SourceRecursiveIntersectionControl.Branch.leftMu ∨
+              SourceRecursiveIntersectionControl.payload request.left request.right =
+                SourceRecursiveIntersectionControl.Branch.rightMu)
+@optional_law : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Language.Term Symbol → Bool) (model : IntersectSchedule.InputMeaning (view source holds))
+      (ranked : IntersectSchedule.RankedInput (view source holds) model.valid) (request : NodeRequest Symbol Guard),
+      SourceRecursiveIntersectionCode.NodeScope source request →
+        ∀ (cache : Cache.State IntersectionFlatMemoKeyDomain.DomainKey),
+          Cache.Valid cache →
+            ∀ (first second : Nat),
+              SourceRecursiveIntersectionControl.identity request.left = some first →
+                SourceRecursiveIntersectionControl.identity request.right = some second →
+                  inputOf request.left ≠ IntersectSchedule.Input.empty →
+                    inputOf request.right ≠ IntersectSchedule.Input.empty →
+                      ((∃ name, inputOf request.left = IntersectSchedule.Input.mu name) ∨
+                          ∃ name, inputOf request.right = IntersectSchedule.Input.mu name) →
+                        ¬SourceRecursiveIntersectionControl.pair first second ∈ request.domain.key.seen →
+                          ∀ (bodyValue value : Value Symbol Guard)
+                            (before after : SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+                            SourceEqualityRequiredSemanticCache.SemanticReady before.heap →
+                              Available before.heap bodyValue →
+                                SourceCurrentAllocatedNativeContextCache.NodeLaw (view source holds) model ranked holds
+                                    {
+                                      domain :=
+                                        (SourceRecursiveIntersectionEnvironment.enter cache request.domain.key
+                                            request.left request.right first second).fst,
+                                      left := SourceRecursiveIntersectionKernel.body request.left,
+                                      right := SourceRecursiveIntersectionKernel.body request.right }
+                                    bodyValue →
+                                  SourceRecursiveIntersectionKernel.construction
+                                        (SourceRecursiveIntersectionMaybeMu.maybeMu
+                                          (SourceRecursiveIntersectionControl.pair first second) bodyValue before.heap)
+                                        before =
+                                      SourceRecursiveIntersectionKernel.Result.done value after →
+                                    SourceCurrentAllocatedNativeContextCache.NodeLaw (view source holds) model ranked
+                                      holds request value
+@mu_certified : ∀ [DecidableEq Symbol] [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Language.Term Symbol → Bool) (model : IntersectSchedule.InputMeaning (view source holds))
+      (ranked : IntersectSchedule.RankedInput (view source holds) model.valid) (request : NodeRequest Symbol Guard),
+      SourceRecursiveIntersectionCode.NodeScope source request →
+        ∀ (state : SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+          SourceRecursiveIntersectionKernel.Valid state →
+            NodeReady state request →
+              SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+                    SourceRecursiveIntersectionControl.Branch.bothMu ∨
+                  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+                      SourceRecursiveIntersectionControl.Branch.leftMu ∨
+                    SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+                      SourceRecursiveIntersectionControl.Branch.rightMu →
+                SourceCurrentAllocatedNativeContextualCode.Certified (view source holds) model ranked holds
+                  (SourceRecursiveIntersectionCode.compileMu request.domain request.left request.right) state
+                  fun x value =>
+                  SourceCurrentAllocatedNativeContextCache.NodeLaw (view source holds) model ranked holds request value
+restart-evidence/20261016-contextual/mu-certificates-probe.lean:19:17: error: Function expected at
+  Interned
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  InternedBinderProtocol.NodeKey
+
+Hint: The identifier `Interned` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+restart-evidence/20261016-contextual/mu-certificates-probe.lean:25:17: error: Function expected at
+  Interned
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  InternedBinderProtocol.NodeKey
+
+Hint: The identifier `Interned` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
