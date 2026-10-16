@@ -1,5 +1,60 @@
 # Full formalization coverage
 
+## Current loaded-field closure through checked native execution
+
+Source main stays `894a74af`. No Haskell source changes. Proof commits are
+`ec36d774`, `1b035257`, `0f6968e2`, and `d77c8389`. Audit and scope note are
+in `86171cb4`. The optimized interned core and all older proof definitions
+stay. Full library scope remains active.
+
+Actual constructor, conjunction, ready intersection, and sentinel allocation
+receipts now derive successful field loads in the exact returned operation
+cache. Normalized Top alone has a verified cold-cache miss. No universal
+conjoin-cache closure is assumed. Allocation-aware compiled continuations
+retain their loads through actual cache growth and raw constructor effects.
+
+The checked body derives its original loads from resident initial Fields.
+Ready and sentinel branches derive new annotations from their actual
+allocation receipts. Every native step retains loaded fields at its returned
+cache. Finite execution derives the reached field checks, full physical and
+operation histories, and the actual yielded continuation. Errors and blocked
+outcomes keep their real states. Blocked continuations are not certified by
+the OutcomeFields predicate. The source guard equality instance stays pinned.
+
+Actual primary/secondary gates, nodeEdges, heads, and supported projections
+retain the same loaded fields with unchanged operation state. A false class
+trace derives finite projection for a selected proper path at its exact
+anchor. Unrelated original siblings can remain open.
+
+The execution plan still includes reached word checks and actual finish-cell
+NodeProduced/EdgeProduced receipts. This is field closure, not a general
+checked native completion proof. Initial whole-heap allocation history still
+needs composition. The older scoped Fold/Seeded has no operation-cache state.
+Do not erase its execution differences or reuse the historical Scan body.
+Next define the reached allocation-aware query. Derive its completion, input
+receipts, independent language, SemanticReady, and CostHeap at the same final
+heap. Then enter the new conjunction memo and define the current Scan.
+Continue general constrained outer completion and every other full-library
+and separate Sized target. Keep older constructor and equality work.
+
+The full audit passes 2,247 jobs and 55,211 dependency checks. Thirty-nine
+public axiom probes, twenty-one endpoint signatures, and thirty-one kernel
+examples pass. Only the standard foundations and old unused-input warning
+occur. Independent review found no cache-indexing or circularity defect.
+Haskell is unchanged, so the prior strict Nix build, six suites with 763
+examples plus golden, post-repair 224 generator examples, Fourmolu, and
+Cabal-gild are reused. Read lean/notes-current-allocated-native-fields.md.
+
+Start: /tmp/mcfta-typing-checkpoint-20261016-0318/ (2,961 files).
+Closing: /tmp/mcfta-allocated-fields-checkpoint-20261016-0331/ (2,967 files).
+Script: /tmp/mcfta-preserve-allocated-fields-20261016.py. Evidence uses
+/tmp/mcfta-allocated-*, /tmp/mcfta-current-allocated-*, and
+/tmp/mcfta-conjunction-field-allocation-*. Sixteen external marked drafts,
+stashes, and other worktrees are preserved. No board posts or deployments.
+Push verified formalize checkpoints regularly. The last allowance observation
+was 81 percent and is stale. Stop owned work at 1 percent or less.
+The full-library goal stays active.
+
 ## Current typed-rule graph exactness and source repair
 
 Source main is `894a74af`. It includes the typing API from `c52d5c3e` and
