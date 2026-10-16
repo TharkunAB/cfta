@@ -236,8 +236,8 @@ tree automata of `cfta`, with QuickCheck integration.
   one: the terms of the root types up to a bound on the nesting. The inputs
   are the variables in scope at the root, so the terms are programs over
   them. It reports a node view that does not fit the datatype
-  (`NodeViewMismatch`) and a rule that does not fit the fields of its
-  constructor (`FieldMismatch`).
+  (`NodeViewMismatch`), a rule that does not fit the fields of its
+  constructor (`FieldMismatch`), and a negative bound (`NegativeBound`).
   With `Binders`, a bound on the binders around each position, the
   automaton is cyclic and the generator is counted by size. A field
   that holds a subterm has the type of the datatype, so a family of mutually
