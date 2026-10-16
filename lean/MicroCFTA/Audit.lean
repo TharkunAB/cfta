@@ -1883,6 +1883,12 @@ import MicroCFTA.SourceCurrentEmptinessMerge
 import MicroCFTA.SourceTemplateAnywhere
 import MicroCFTA.SourceCurrentEnumerationStorage
 import MicroCFTA.SourceCurrentEnumerationOrder
+import MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport
+import MicroCFTA.SourceCurrentAllocatedNativeInputGrowthModels
+import MicroCFTA.SourceCurrentAllocatedNativeGrownInventory
+import MicroCFTA.SourceCurrentAllocatedNativeContextRebase
+import MicroCFTA.SourceCurrentAllocatedNativeAdmittedQuery
+import MicroCFTA.SourceCurrentConjunctionAllocatedClassEntry
 /-!
 # Proof dependency audit
 
