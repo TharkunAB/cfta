@@ -2,10 +2,24 @@
 
 ## Haskell fix handoff for external work
 
-Current source main is `d44b2a0f`. It is merged into `formalize` at `b09f4ebb`.
+Current source main is `8f85ddb6`. It is merged into `formalize` at `7dccd588`.
 Use the current source before applying an older repair. The entries below
 separate a behavior fix from a remaining documentation change.
 
+- **Named measures over open integer children.** Upstream repair `1b3ebf09`
+  is included in PR #54 and main `eda6919b`. It changes
+  `cfta-generator/src/Data/CFTA/Gen/Refinement.hs` and
+  `cfta-generator/src/Data/CFTA/Gen/Refinement/Internal/Compile.hs`.
+  Previously, `measuredBy` required an integer value for a child's named
+  measure. A child built with `every` could therefore cause `InexactMeasure`.
+  The repair retains symbolic measure terms and substitutes named reads
+  before open-node counting. No additional local patch is needed.
+  `cfta-generator/test/Data/CFTA/Gen/Refinement/DeriveSpec.hs` contains the
+  regressions. Sorted lists of length three over keys zero through nine
+  have cardinality 120 and match explicit enumeration. Keys zero through
+  one million have cardinality 166666666666500000. The last rank decodes
+  to `[999998, 999999, 1000000]`. Both regressions pass in the current suite.
+  The complete source correspondence for this frontend remains open.
 - **Finite typing metadata discovery.** `ca0e9a65` fixes
   `cfta-generator/src/Data/CFTA/Gen/Typing.hs`. Before the fix, two leaf rules
   could force the description of an unused non-regular field forever.
@@ -34,10 +48,21 @@ separate a behavior fix from a remaining documentation change.
   `cfta/src/Data/CFTA/Equality/Operations.hs` is a comment that names that
   reproducer. Do not treat that comment as a separate behavior fix.
 
+PR #55 (`47b06bbe`, merged at `8f85ddb6`) exposes `typingAutomaton` and
+`fromConstructorAutomaton`. `fromTypingRules` now takes a `Typing` record.
+Nonempty root inputs and `Binders` return `NotImplemented`. The finite
+needed-type discovery repair remains in the new decoder helper. Existing
+typing proofs retain their earlier interfaces; the new public wrappers,
+validation order, and `Maybe Int` state representation need source adapters.
+
 Validation at this source refresh: the strict Nix build of all components
-passes. All six existing suites pass: 321 core, 226 generator, 167 refinement,
+passes. All six existing suites pass: 321 core, 231 generator, 169 refinement,
 34 GHC-fit, and 22 decision-model examples, plus the hole-fit golden check.
-This is 770 examples plus golden. No local test file is added or changed.
+This is 777 examples plus golden. Five changed Haskell files pass Fourmolu.
+All four active packages pass Cabal-gild. Evidence is in
+`lean/restart-evidence/20261016-physical/source-pr55-strict-build.log` and
+`lean/restart-evidence/20261016-physical/source-pr55-tests.log`.
+No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
