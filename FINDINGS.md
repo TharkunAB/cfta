@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current outer correctness proof work adds no Haskell change.
+The current constructed-root and progress proof work adds no Haskell change.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
 For external handoff, record every later repair here with its failure,
 executable reproducer, affected paths, commit, checks, and upstream status.
@@ -29,7 +29,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The current pinned Lean Audit passes: 2475 jobs and 58753 dependency checks.
+The current pinned Lean Audit passes: 2480 jobs and 58830 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -163,6 +163,58 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current constructed root entry and active-owner progress
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. The starting
+published checkpoint is `a3b275f3`. Five additive modules derive the root
+caller from construction and establish current progress prerequisites.
+Initialization is `8443666c`; exact root composition is `083ad542`;
+active-owner order is `fc31eae4`; completed active frames are `199965d5`;
+and literal empty-own local completion is `6abcd365`.
+Read lean/notes-current-constructed-root.md and the evidence in
+lean/restart-evidence/20261016-root-entry/.
+
+Covered allocation history and actual fresh original construction derive
+all eight initial Context fields and a computed singleton inventory.
+Empty inherited allocation uses the retained interner's actual canonical
+identity and returned cache. constructed_root supplies the initial facts
+to the existing literal successful-worker theorem. prepared_root derives
+its own ordered field History and retains the actual preparation Receipt.
+The same result has its own graph, strict Reads, reached Checks, full Post,
+output support, and exact full-language law. Reached machine checks and
+literal worker success remain explicit.
+
+Current node/edge height ranks exclude busy and absent demand below active
+owners. Actual begin protects other owners and admits smaller bounds.
+Actual finish restores ancestor order. Every completed graph in all eight
+families leaves no new evaluating owner. Its reverse frame transports
+arbitrary active bounds and excluded handles after completed prefixes.
+Separate forward frames retain protected earlier owners.
+
+The current local worker completes at ALL bounds when the complete source
+own accessor has empty effective equalities. It returns original or erased
+children at the exact allocated prefix state with unchanged fourth/merge
+memos. Positive guard extraction is part of that accessor. Empty stored
+payload alone is insufficient. No historical execution is transferred.
+
+Next derive current parent returned-height and structural support, then
+construct actual outer completion with the active-owner order. The plain
+Region is an intermediate domain, not the full objective. General
+constrained completion, unequal-length classes, and repeated-pass
+convergence remain open. Concrete runtime and shared warm initialization,
+frontends, Sized, generators, rank/probability, solvers, random sources,
+callbacks, codecs, full-pipeline composition, and older constructor/equality
+work remain in scope. Preserve the optimized interned core.
+
+The full Audit passes 2480 jobs and 58830 dependency checks. Preservation
+retains all 5561 starting files and 2474 older non-Audit proof sources.
+Thirty frozen manifests check 237 module entries. Historical repairs,
+stashes, and the three other worktrees remain. No Haskell file changes.
+Reuse the strict Nix build, 798 examples plus golden, six-file Fourmolu,
+and four-package Cabal-gild and metadata checks for source `c0cc8a05`.
+Root FINDINGS.md keeps the Haskell repair handoff first. Earlier sections
+are historical checkpoints. This is progress; the full goal remains active.
 
 ## Current literal outer correctness and root language preservation
 

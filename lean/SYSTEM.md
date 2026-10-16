@@ -1,5 +1,57 @@
 # Constrained languages, indexing, and distributions
 
+## Current constructed root entry and active-owner progress
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. The starting
+published checkpoint is `a3b275f3`. Five additive modules derive the root
+caller from construction and establish current progress prerequisites.
+Initialization is `8443666c`; exact root composition is `083ad542`;
+active-owner order is `fc31eae4`; completed active frames are `199965d5`;
+and literal empty-own local completion is `6abcd365`.
+Read lean/notes-current-constructed-root.md and the evidence in
+lean/restart-evidence/20261016-root-entry/.
+
+Covered allocation history and actual fresh original construction derive
+all eight initial Context fields and a computed singleton inventory.
+Empty inherited allocation uses the retained interner's actual canonical
+identity and returned cache. constructed_root supplies the initial facts
+to the existing literal successful-worker theorem. prepared_root derives
+its own ordered field History and retains the actual preparation Receipt.
+The same result has its own graph, strict Reads, reached Checks, full Post,
+output support, and exact full-language law. Reached machine checks and
+literal worker success remain explicit.
+
+Current node/edge height ranks exclude busy and absent demand below active
+owners. Actual begin protects other owners and admits smaller bounds.
+Actual finish restores ancestor order. Every completed graph in all eight
+families leaves no new evaluating owner. Its reverse frame transports
+arbitrary active bounds and excluded handles after completed prefixes.
+Separate forward frames retain protected earlier owners.
+
+The current local worker completes at ALL bounds when the complete source
+own accessor has empty effective equalities. It returns original or erased
+children at the exact allocated prefix state with unchanged fourth/merge
+memos. Positive guard extraction is part of that accessor. Empty stored
+payload alone is insufficient. No historical execution is transferred.
+
+Next derive current parent returned-height and structural support, then
+construct actual outer completion with the active-owner order. The plain
+Region is an intermediate domain, not the full objective. General
+constrained completion, unequal-length classes, and repeated-pass
+convergence remain open. Concrete runtime and shared warm initialization,
+frontends, Sized, generators, rank/probability, solvers, random sources,
+callbacks, codecs, full-pipeline composition, and older constructor/equality
+work remain in scope. Preserve the optimized interned core.
+
+The full Audit passes 2480 jobs and 58830 dependency checks. Preservation
+retains all 5561 starting files and 2474 older non-Audit proof sources.
+Thirty frozen manifests check 237 module entries. Historical repairs,
+stashes, and the three other worktrees remain. No Haskell file changes.
+Reuse the strict Nix build, 798 examples plus golden, six-file Fourmolu,
+and four-package Cabal-gild and metadata checks for source `c0cc8a05`.
+Root FINDINGS.md keeps the Haskell repair handoff first. Earlier sections
+are historical checkpoints. This is progress; the full goal remains active.
+
 ## Current literal outer correctness and root language preservation
 
 Source main remains `c0cc8a05`, merged at `896b0a1c`. The preceding
