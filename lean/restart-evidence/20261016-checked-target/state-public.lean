@@ -1,0 +1,15 @@
+import MicroCFTA.SourceCurrentAllocatedSharedTargetState
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial_ready
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial_ready
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.grows
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.grows
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.available
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.available
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.included
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.included
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.advance
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.advance
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.physical
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.physical
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.store
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.store

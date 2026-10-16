@@ -1,0 +1,234 @@
+'MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial_ready' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial_ready : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready checked →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory checked →
+      MicroCFTA.SourceEqualityRequiredCache.Keeps base checked.native.machine.heap →
+        MicroCFTA.SourceCurrentMemoMergeEffects.Stored checked.native.machine.heap memo →
+          (∀
+              (ambient :
+                MicroCFTA.InternedGuardedLanguage.Env
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+            MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values base
+              (MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial checked memo)
+'MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.grows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.grows : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memo saved :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt width formulas solver record values before memo path
+      value →
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after →
+      MicroCFTA.Cache.Extends memo saved →
+        MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt width formulas solver record values after saved
+          path value
+'MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.available' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.available : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt width formulas solver record values heap memo path
+      value →
+    MicroCFTA.InternedProbeProvenance.Available heap value ∧ value.free = []
+'MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.included' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt.included : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedSharedTargetState.SlotReceipt width formulas solver record values heap memo path
+      value →
+    MicroCFTA.SourceEqualityClassOrder.Coherent record →
+      MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+        MicroCFTA.SourceCurrentAllocatedClassTarget.SelectedIncludes formulas solver record values path value
+'MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.advance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.advance : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width},
+  MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values base before →
+    ∀ (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+      (checked : MicroCFTA.SourceEqualityNativeDemand.State width),
+      MicroCFTA.SourceCurrentConjunctionClassScan.Ready checked →
+        MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver next checked →
+          MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+              (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before.checked)
+              (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical checked) →
+            MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver next record values base
+              (MicroCFTA.SourceCurrentAllocatedSharedTargetState.advance before checked)
+'MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.physical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.physical : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width},
+  MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values base before →
+    ∀
+      (after :
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula),
+      MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+          (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before.checked) after →
+        MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values base
+          (MicroCFTA.SourceCurrentAllocatedSharedTargetState.advance before
+            (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before.checked after))
+'MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.store' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.store : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width},
+  MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values base before →
+    ∀ (path : MicroCFTA.EqualityNormalize.Path),
+      path ∈ record.paths →
+        ∀
+          {value :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+          {after : MicroCFTA.SourceEqualityNativeDemand.State width}
+          {saved :
+            MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+          {memos final : MicroCFTA.EndpointMemoGateTrace.Memos}
+          (actual :
+            MicroCFTA.SourceCurrentAllocatedTargetGraph.Target values
+              (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) before.checked before.memo value
+              after saved),
+          MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads formulas solver actual memos final →
+            MicroCFTA.SourceCurrentAllocatedTargetComplete.Receipt formulas solver next values
+                (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) before.checked before.memo value
+                after saved memos final →
+              MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver next record values base
+                (MicroCFTA.SourceCurrentAllocatedSharedTargetState.store before path value after saved)

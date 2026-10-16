@@ -1,0 +1,7 @@
+import MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf.complete
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf.complete
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf.Leaf.verified
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf.Leaf.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf.Receipt.fourth_correct
+#check @MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf.Receipt.fourth_correct

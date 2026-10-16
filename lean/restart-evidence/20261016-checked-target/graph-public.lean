@@ -1,0 +1,13 @@
+import MicroCFTA.SourceCurrentAllocatedTargetGraph
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand.verified
+#check @MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetGraph.of_receipt
+#check @MicroCFTA.SourceCurrentAllocatedTargetGraph.of_receipt
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand.complete
+#check @MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand.complete
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand.extends
+#check @MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand.extends
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetGraph.Fold.extends
+#check @MicroCFTA.SourceCurrentAllocatedTargetGraph.Fold.extends
+#print axioms MicroCFTA.SourceCurrentAllocatedTargetGraph.Target.extends
+#check @MicroCFTA.SourceCurrentAllocatedTargetGraph.Target.extends

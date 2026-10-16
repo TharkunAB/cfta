@@ -1,0 +1,100 @@
+⚠ [751/863] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✖ [1278/1278] Building MicroCFTA.SourceCurrentAllocatedTargetComplete (834ms)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedTargetComplete.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedTargetComplete.setup.json --json
+error: MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:104:56: Application type mismatch: The argument
+  before.native.machine.domains
+has type
+  Cache.State IntersectionFlatMemoKeyDomain.DomainKey
+but is expected to have type
+  Table ?m.74 ?m.75
+in the application
+  extends_refl before.native.machine.domains
+error: MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:123:117: Application type mismatch: The argument
+  before.native.machine.domains
+has type
+  Cache.State IntersectionFlatMemoKeyDomain.DomainKey
+but is expected to have type
+  Table ?m.136 ?m.137
+in the application
+  extends_refl before.native.machine.domains
+error: MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:158:31: don't know how to synthesize implicit argument `operand`
+  @FoldReads.nil width inst✝¹ inst✝ formulas solver seed values before✝ memo✝ result✝ after✝ saved✝ inventory memos
+    final ?m.137 receipt
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+before✝ : Checked width
+memo✝ : Memo
+result✝ : Value Symbol Guard
+after✝ : Checked width
+saved✝ : Memo
+operand : Operand seed values before✝ memo✝ result✝ after✝ saved✝
+inventory : Inventory
+ready : Ready before✝
+admitted : At formulas solver inventory before✝
+available : Values before✝.native.machine.heap values
+domains : ∀ (path : List Int), path ∈ [seed] → Domain path values
+stored : Stored before✝.native.machine.heap memo✝
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo✝
+ranges : FoldRanges values seed [] before✝ memo✝
+memos : Memos
+valid : Valid before✝.native.machine.heap memos
+final : Memos
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory seed values before✝ memo✝ result✝ after✝ saved✝
+    memos final
+⊢ Operand seed values before✝ memo✝ result✝ after✝ saved✝
+error: MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:186:67: don't know how to synthesize implicit argument `operand`
+  @FoldReads.nil width inst✝¹ inst✝ formulas solver seed values before memo result after saved inventory memos final
+    ?m.167 receipt
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+inventory : Inventory
+before : Checked width
+memo : Memo
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+domains : ∀ (path : List Int), path ∈ [seed] → Domain path values
+stored : Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : FoldRanges values seed [] before memo
+memos : Memos
+valid : Valid before.native.machine.heap memos
+result : Value Symbol Guard
+after : Checked width
+saved : Memo
+final : Memos
+operand : Operand seed values before memo result after saved
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory seed values before memo result after saved memos
+    final
+⊢ Operand seed values before memo result after saved
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentAllocatedTargetComplete
+error: build failed

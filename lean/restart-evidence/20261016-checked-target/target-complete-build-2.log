@@ -1,0 +1,288 @@
+⚠ [751/845] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✖ [1278/1278] Building MicroCFTA.SourceCurrentAllocatedTargetComplete (911ms)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedTargetComplete.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedTargetComplete.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedTargetComplete.setup.json --json
+error: MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:168:31: don't know how to synthesize implicit argument `step`
+  @FoldReads.cons width inst✝¹ inst✝ formulas solver path✝ values before✝ memo✝ head✝ middle✝ current✝ seed paths✝ tail✝
+    later✝ saved✝ result✝ after✝ inventory memos currentMemos laterMemos next ?m.508 rest ?m.510 first tailReads query
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+path✝ : List Int
+before✝ : Checked width
+memo✝ : Memo
+head✝ : Value Symbol Guard
+middle✝ : Checked width
+current✝ : Memo
+paths✝ : List (List Int)
+tail✝ : Value Symbol Guard
+later✝ : Checked width
+saved✝ : Memo
+result✝ : Value Symbol Guard
+after✝ : Checked width
+operand : Operand path✝ values before✝ memo✝ head✝ middle✝ current✝
+rest : Fold values seed paths✝ middle✝ current✝ tail✝ later✝ saved✝
+step : SourceCurrentAllocatedTargetQuery.Step head✝ tail✝ later✝ result✝ after✝
+ih :
+  ∀ (inventory : Inventory),
+    Ready middle✝ →
+      At formulas solver inventory middle✝ →
+        Values middle✝.native.machine.heap values →
+          (∀ (path : List Int), path ∈ seed :: paths✝ → Domain path values) →
+            Stored middle✝.native.machine.heap current✝ →
+              (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                  CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient current✝) →
+                FoldRanges values seed paths✝ middle✝ current✝ →
+                  ∀ (memos : Memos),
+                    Valid middle✝.native.machine.heap memos →
+                      ∃ next final,
+                        FoldReads formulas solver rest memos final ∧
+                          Receipt formulas solver next values (seed :: paths✝) middle✝ current✝ tail✝ later✝ saved✝
+                            memos final
+inventory : Inventory
+ready : Ready before✝
+admitted : At formulas solver inventory before✝
+available : Values before✝.native.machine.heap values
+domains : ∀ (path : List Int), path ∈ seed :: path✝ :: paths✝ → Domain path values
+stored : Stored before✝.native.machine.heap memo✝
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo✝
+ranges : FoldRanges values seed (path✝ :: paths✝) before✝ memo✝
+memos : Memos
+valid : Valid before✝.native.machine.heap memos
+currentMemos : Memos
+first :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path✝ values before✝ memo✝ head✝ middle✝ current✝
+    memos currentMemos
+tailInventory : Inventory
+laterMemos : Memos
+tailReads : FoldReads formulas solver rest currentMemos laterMemos
+remaining :
+  Receipt formulas solver tailInventory values (seed :: paths✝) middle✝ current✝ tail✝ later✝ saved✝ currentMemos
+    laterMemos
+next : Inventory
+left✝¹ : next.source = later✝.native.machine.heap
+left✝ : next.roots = tailInventory.roots ++ [head✝, tail✝]
+query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver next head✝ tail✝ later✝ result✝ after✝ laterMemos
+⊢ SourceCurrentAllocatedTargetQuery.Step head✝ tail✝ later✝ result✝ after✝
+error: MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:168:31: don't know how to synthesize implicit argument `operand`
+  @FoldReads.cons width inst✝¹ inst✝ formulas solver path✝ values before✝ memo✝ head✝ middle✝ current✝ seed paths✝ tail✝
+    later✝ saved✝ result✝ after✝ inventory memos currentMemos laterMemos next ?m.508 rest ?m.510 first tailReads query
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+path✝ : List Int
+before✝ : Checked width
+memo✝ : Memo
+head✝ : Value Symbol Guard
+middle✝ : Checked width
+current✝ : Memo
+paths✝ : List (List Int)
+tail✝ : Value Symbol Guard
+later✝ : Checked width
+saved✝ : Memo
+result✝ : Value Symbol Guard
+after✝ : Checked width
+operand : Operand path✝ values before✝ memo✝ head✝ middle✝ current✝
+rest : Fold values seed paths✝ middle✝ current✝ tail✝ later✝ saved✝
+step : SourceCurrentAllocatedTargetQuery.Step head✝ tail✝ later✝ result✝ after✝
+ih :
+  ∀ (inventory : Inventory),
+    Ready middle✝ →
+      At formulas solver inventory middle✝ →
+        Values middle✝.native.machine.heap values →
+          (∀ (path : List Int), path ∈ seed :: paths✝ → Domain path values) →
+            Stored middle✝.native.machine.heap current✝ →
+              (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                  CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient current✝) →
+                FoldRanges values seed paths✝ middle✝ current✝ →
+                  ∀ (memos : Memos),
+                    Valid middle✝.native.machine.heap memos →
+                      ∃ next final,
+                        FoldReads formulas solver rest memos final ∧
+                          Receipt formulas solver next values (seed :: paths✝) middle✝ current✝ tail✝ later✝ saved✝
+                            memos final
+inventory : Inventory
+ready : Ready before✝
+admitted : At formulas solver inventory before✝
+available : Values before✝.native.machine.heap values
+domains : ∀ (path : List Int), path ∈ seed :: path✝ :: paths✝ → Domain path values
+stored : Stored before✝.native.machine.heap memo✝
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo✝
+ranges : FoldRanges values seed (path✝ :: paths✝) before✝ memo✝
+memos : Memos
+valid : Valid before✝.native.machine.heap memos
+currentMemos : Memos
+first :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path✝ values before✝ memo✝ head✝ middle✝ current✝
+    memos currentMemos
+tailInventory : Inventory
+laterMemos : Memos
+tailReads : FoldReads formulas solver rest currentMemos laterMemos
+remaining :
+  Receipt formulas solver tailInventory values (seed :: paths✝) middle✝ current✝ tail✝ later✝ saved✝ currentMemos
+    laterMemos
+next : Inventory
+left✝¹ : next.source = later✝.native.machine.heap
+left✝ : next.roots = tailInventory.roots ++ [head✝, tail✝]
+query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver next head✝ tail✝ later✝ result✝ after✝ laterMemos
+⊢ Operand path✝ values before✝ memo✝ head✝ middle✝ current✝
+error: MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:198:8: don't know how to synthesize implicit argument `step`
+  @FoldReads.cons width inst✝¹ inst✝ formulas solver path values before memo head middle current seed paths tail later
+    saved result after inventory memos currentMemos laterMemos next ?m.631 rest ?m.633 first tailReads query
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked width) (memo : Memo),
+    Ready before →
+      At formulas solver inventory before →
+        Values before.native.machine.heap values →
+          (∀ (path : List Int), path ∈ seed :: paths → Domain path values) →
+            Stored before.native.machine.heap memo →
+              (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                  CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                FoldRanges values seed paths before memo →
+                  ∀ (memos : Memos),
+                    Valid before.native.machine.heap memos →
+                      ∃ result after saved next final actual,
+                        FoldReads formulas solver actual memos final ∧
+                          Receipt formulas solver next values (seed :: paths) before memo result after saved memos final
+inventory : Inventory
+before : Checked width
+memo : Memo
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+domains : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → Domain path_1 values
+stored : Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : FoldRanges values seed (path :: paths) before memo
+memos : Memos
+valid : Valid before.native.machine.heap memos
+head : Value Symbol Guard
+middle : Checked width
+current : Memo
+currentMemos : Memos
+operand : Operand path values before memo head middle current
+first :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before memo head middle current memos
+    currentMemos
+tail : Value Symbol Guard
+later : Checked width
+saved : Memo
+tailInventory : Inventory
+laterMemos : Memos
+rest : Fold values seed paths middle current tail later saved
+tailReads : FoldReads formulas solver rest currentMemos laterMemos
+remaining :
+  Receipt formulas solver tailInventory values (seed :: paths) middle current tail later saved currentMemos laterMemos
+next : Inventory
+result : Value Symbol Guard
+after : Checked width
+left✝¹ : next.source = later.native.machine.heap
+left✝ : next.roots = tailInventory.roots ++ [head, tail]
+query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver next head tail later result after laterMemos
+⊢ SourceCurrentAllocatedTargetQuery.Step head tail later result after
+error: MicroCFTA/SourceCurrentAllocatedTargetComplete.lean:198:8: don't know how to synthesize implicit argument `operand`
+  @FoldReads.cons width inst✝¹ inst✝ formulas solver path values before memo head middle current seed paths tail later
+    saved result after inventory memos currentMemos laterMemos next ?m.631 rest ?m.633 first tailReads query
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked width) (memo : Memo),
+    Ready before →
+      At formulas solver inventory before →
+        Values before.native.machine.heap values →
+          (∀ (path : List Int), path ∈ seed :: paths → Domain path values) →
+            Stored before.native.machine.heap memo →
+              (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                  CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                FoldRanges values seed paths before memo →
+                  ∀ (memos : Memos),
+                    Valid before.native.machine.heap memos →
+                      ∃ result after saved next final actual,
+                        FoldReads formulas solver actual memos final ∧
+                          Receipt formulas solver next values (seed :: paths) before memo result after saved memos final
+inventory : Inventory
+before : Checked width
+memo : Memo
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+domains : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → Domain path_1 values
+stored : Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : FoldRanges values seed (path :: paths) before memo
+memos : Memos
+valid : Valid before.native.machine.heap memos
+head : Value Symbol Guard
+middle : Checked width
+current : Memo
+currentMemos : Memos
+operand : Operand path values before memo head middle current
+first :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before memo head middle current memos
+    currentMemos
+tail : Value Symbol Guard
+later : Checked width
+saved : Memo
+tailInventory : Inventory
+laterMemos : Memos
+rest : Fold values seed paths middle current tail later saved
+tailReads : FoldReads formulas solver rest currentMemos laterMemos
+remaining :
+  Receipt formulas solver tailInventory values (seed :: paths) middle current tail later saved currentMemos laterMemos
+next : Inventory
+result : Value Symbol Guard
+after : Checked width
+left✝¹ : next.source = later.native.machine.heap
+left✝ : next.roots = tailInventory.roots ++ [head, tail]
+query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver next head tail later result after laterMemos
+⊢ Operand path values before memo head middle current
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentAllocatedTargetComplete
+error: build failed
