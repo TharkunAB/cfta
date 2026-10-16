@@ -1,0 +1,19 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentShapes
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+open MicroCFTA
+
+#print axioms SourceCurrentAllocatedFiniteOrdinaryStageShapes.profile_from_reads
+#check @SourceCurrentAllocatedFiniteOrdinaryStageShapes.profile_from_reads
+
+#print axioms SourceCurrentAllocatedFiniteOrdinaryParentShapes.local_reads
+#check @SourceCurrentAllocatedFiniteOrdinaryParentShapes.local_reads
+
+#print axioms SourceCurrentAllocatedFiniteOrdinaryParentShapes.structure_from_reads
+#check @SourceCurrentAllocatedFiniteOrdinaryParentShapes.structure_from_reads
