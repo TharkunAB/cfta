@@ -40,7 +40,7 @@ import Data.CFTA.Gen.Refinement.Derive.Internal (
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Generic (Constructor (..), HasFTA (..))
 import Data.CFTA.Index (Arity (..), Cardinality (..), Depth, Rank (..))
-import Data.CFTA.Refinement.Expression (Enumerated (..), Expr, Formula, Literal, Refinement, uninterpreted)
+import Data.CFTA.Refinement.Expression (Enumerated (..), Expr, Formula, Literal (..), Refinement, uninterpreted)
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
 import qualified Data.CFTA.Term as Term
 
@@ -454,6 +454,25 @@ heightedKeys :: Heighted -> [Int]
 heightedKeys Hollow = []
 heightedKeys (Knot _ left key right) = heightedKeys left <> [key] <> heightedKeys right
 
+-- | A chain of links that ends in a flag.
+data Chain = End Bool | Next Chain
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | The integer of a chain, for a field atom: 0 or 1 for an end, and 2 more for each link.
+instance Literal Chain where
+    toLiteral (End flag) = if flag then 1 else 0
+    toLiteral (Next rest) = 2 + toLiteral rest
+    fromLiteral n
+        | n < 2 = End (n == 1)
+        | otherwise = Next (fromLiteral (n - 2))
+    literalRange = (Just (End False), Nothing)
+
+-- | One node of a chain.
+data ChainNode e = EndNode e | NextNode e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
 -- | Terms with de Bruijn variables, a let, and a lambda.
 data Scoped = Zero | Index Int | Plus Scoped Scoped | Let Scoped Scoped | Lambda Scoped
     deriving stock (Eq, Ord, Show, Generic)
@@ -723,6 +742,11 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         derive (fieldAtoms @Heighted (const [] :: AVLNode Expr -> [FieldPool]) <> keys)
             `shouldBe` Left (NodeMismatch "Knot" "the constructor has 4 fields, the node view 3")
         derive (fieldAtoms @Heighted keptPools) `shouldBe` Left (MissingAtom (typeRep (Proxy @Int)))
+    it "reports a field atom for a field of the datatype itself, which the invariant must check" $ do
+        let rest (NextNode next) = [next `drawnFrom` LTAGen.elements [End False]]
+            rest (EndNode _) = []
+        void (deriveLTAFrom @Chain 0 (fieldAtoms @Chain rest) (Contracted (const true) :: Invariant ChainNode NoMeasures))
+            `shouldBe` Left (FieldAtomOnDatatype "Next" 0)
   where
     isMissingAtom (MissingAtom _) = True
     isMissingAtom _ = False

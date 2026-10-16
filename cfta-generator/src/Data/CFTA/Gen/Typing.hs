@@ -36,6 +36,12 @@ closed = fromTypingRules Typing{typingBound = Nesting 3, typingInputs = [], typi
 "Data.CFTA.Gen.Typing.Do" writes the rules of a constructor as an inference
 rule, with premises, choices, and a conclusion, in do-notation.
 
+A value field can draw its values from a refinement generator ('drawn'), such
+as 'Data.CFTA.Gen.Refinement.every' with a condition, in place of one rule
+for each value. 'typingLTA' and 'typingLTAFrom' build the refinement generator
+of such a language, and 'Data.CFTA.Gen.Refinement.compile' counts it without
+listing the values.
+
 The node view has one constructor for each constructor of the datatype, in
 order, with the same number of fields, and each name starts with the name of
 the datatype's constructor, as for an invariant. So a rule names its
@@ -88,12 +94,17 @@ module Data.CFTA.Gen.Typing (
     variable,
     subterm,
     value,
+    drawn,
 
     -- * Languages
     Typing (..),
     Bound (..),
     TypingError (..),
     fromTypingRules,
+
+    -- * Refinement generators
+    typingLTA,
+    typingLTAFrom,
 
     -- * The automaton
     TypingState (..),
@@ -107,6 +118,7 @@ import Data.Either (fromRight)
 import Data.Hashable (hash)
 import qualified Data.IntMap.Strict as IntMap
 import qualified Data.Map.Strict as Map
+import Data.Maybe (fromMaybe, isJust)
 import Data.Proxy (Proxy (Proxy))
 import qualified Data.Set as Set
 import Data.String (fromString)
@@ -119,10 +131,25 @@ import Data.CFTA.Gen.Error (GenError (UndecodableConstructor))
 import Data.CFTA.Gen.Internal.Automaton (undecodableConstructor)
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import Data.CFTA.Gen.Internal.Types (Gen, pattern Transparent)
-import Data.CFTA.Gen.Refinement.Derive (DeriveLTAError (NodeMismatch), NodeView (..), checkNodeShape)
+import Data.CFTA.Gen.Refinement (LTAGen)
+import Data.CFTA.Gen.Refinement.Derive (
+    DeriveLTAError (NodeMismatch),
+    Invariant,
+    NodeView (..),
+    checkNodeShape,
+    invariantAnnotations,
+ )
+import Data.CFTA.Gen.Refinement.Derive.Internal (
+    Annotation,
+    AtomicField (..),
+    Atoms (..),
+    atomicField,
+    deriveLTAOnPools,
+ )
 import Data.CFTA.Generic (Constructor (..), Description (..), Field (..), HasFTA (..), constructorLabel)
 import Data.CFTA.Index (Depth (..))
 import qualified Data.CFTA.Interned as Interned
+import Data.CFTA.Refinement.Expression (Literal)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -136,6 +163,7 @@ data Rule node ty
 data Child ty
     = Subterm ![ty] !ty
     | Value !(Term Constructor)
+    | Drawn !TypeRep !AtomicField
 
 {- | @rule node result@: the constructor of the node has the type @result@ in
 each environment when its fields are the children of the node, as in
@@ -166,6 +194,17 @@ Use 'subterm' for a field of that datatype.
 -}
 value :: (HasFTA v) => v -> Child ty
 value = Value . encodeTerm
+
+{- | A field whose values come from a refinement generator, such as
+@'Data.CFTA.Gen.Refinement.every' \`satisfying\` (\\v -> 0 .<= v .&& v .<= 1000000)@,
+in place of one rule for each value. 'typingLTA' reads it, and 'compile'
+counts its values without listing them. The plain 'fromTypingRules' and
+'typingAutomaton' report it as 'DrawnField'. As 'value', the field must have
+a type other than the datatype of the language. A 'variable' rule cannot have
+one.
+-}
+drawn :: forall v ty. (HasFTA v, Literal v) => LTAGen v -> Child ty
+drawn generator = Drawn (typeRep $ Proxy @v) (atomicField generator)
 
 -- | A typed language: the bound, the environment at the root, the types at the root, and the rules.
 data Typing node ty = Typing
@@ -211,14 +250,22 @@ data TypingError
       FieldMismatch !String
     | -- | The bound is negative.
       NegativeBound !Bound
+    | {- | A rule of the constructor has a 'drawn' field, which only 'typingLTA'
+      and 'typingLTAFrom' read.
+      -}
+      DrawnField !String
+    | -- | The refinement generator of 'typingLTA' or 'typingLTAFrom' cannot be derived.
+      RefinementError !DeriveLTAError
     deriving (Eq, Show)
 
 {- | A state of the automaton of a typed language: the root, a term of a type
-in an environment, or one value. The nesting that remains is 'Just' for a
-'Nesting' bound and 'Nothing' for 'Binders'. The root has the transitions of the terms of each root
-type, so a transition of the root does not say its type; its children do.
+in an environment, one value, or a 'drawn' field, by the position of its rule
+in the rules and the position of the field. The nesting that remains is 'Just'
+for a 'Nesting' bound and 'Nothing' for 'Binders'. The root has the
+transitions of the terms of each root type, so a transition of the root does
+not say its type; its children do.
 -}
-data TypingState ty = Root | Goal ![ty] !ty !(Maybe Int) | Fixed !(Term Constructor)
+data TypingState ty = Root | Goal ![ty] !ty !(Maybe Int) | Fixed !(Term Constructor) | Pool !Int !Int
     deriving (Eq, Ord, Show)
 
 {- | The terms of the datatype that have one of the root types in the
@@ -231,14 +278,78 @@ fromTypingRules typing = fromConstructorAutomaton @a <$> typingAutomaton @a typi
 
 {- | The automaton of a typed language over the constructors of the datatype
 @a@ and of the values. Each state has a row, and each constructor has the
-arity of its fields.
+arity of its fields. A rule with a 'drawn' field is the error 'DrawnField':
+the automaton has no place for a generator, and 'typingLTA' reads it.
 -}
 typingAutomaton ::
     forall a node ty.
     (HasFTA a, NodeView node, Ord ty) =>
     Typing node ty ->
     Either TypingError (FTA.FTA (TypingState ty) Constructor Constraint)
-typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots = roots, typingRules = rules} = do
+typingAutomaton typing = do
+    (automaton, pools) <- typingParts @a typing
+    case pools of
+        (_, _, constructor, _, _) : _ -> Left $ DrawnField (constructorName constructor)
+        [] -> pure automaton
+
+{- | The refinement generator of a typed language: the terms of the datatype
+that have one of the root types, within the bound, as
+'Data.CFTA.Gen.Refinement.Derive.deriveLTAOn' derives them from the
+automaton. A 'drawn' field draws its values from its generator, so 'compile'
+counts the language without listing the values. The atoms give the integers
+of the other atomic fields. The ranks follow the generators, as for
+'Data.CFTA.Gen.Refinement.Derive.deriveLTAOn', and they are not the ranks of
+'fromTypingRules'.
+-}
+typingLTA ::
+    forall a node ty. (HasFTA a, NodeView node, Ord ty) => Typing node ty -> Atoms -> Either TypingError (LTAGen a)
+typingLTA typing atoms = typingWith @a typing atoms []
+
+{- | 'typingLTA' with an invariant over a node view of the datatype, as
+'Data.CFTA.Gen.Refinement.Derive.deriveLTAOnFrom': the measures and the
+contracts of the invariant hold on each term.
+-}
+typingLTAFrom ::
+    forall a node ty invariantNode m.
+    (HasFTA a, NodeView node, NodeView invariantNode, Ord ty) =>
+    Typing node ty ->
+    Atoms ->
+    Invariant invariantNode m ->
+    Either TypingError (LTAGen a)
+typingLTAFrom typing atoms invariant = do
+    annotations <- either (Left . RefinementError) Right (invariantAnnotations @a invariant)
+    typingWith @a typing atoms annotations
+
+-- | The refinement generator of a typed language with the annotations.
+typingWith ::
+    forall a node ty.
+    (HasFTA a, NodeView node, Ord ty) =>
+    Typing node ty ->
+    Atoms ->
+    [(Constructor, Annotation)] ->
+    Either TypingError (LTAGen a)
+typingWith typing atoms annotations = do
+    (automaton, pools) <- typingParts @a typing
+    -- A drawn field gives its own generator to its state, and covers its
+    -- field as a field atom, so its type needs no atom.
+    let generators = Map.fromList [(Pool rule' field, atomGenerator atomic) | (rule', field, _, _, atomic) <- pools]
+        covered =
+            Atoms
+                Map.empty
+                (Map.fromList [((constructor, field), (typ, atomic)) | (_, field, constructor, typ, atomic) <- pools])
+                []
+    either (Left . RefinementError) Right (deriveLTAOnPools @a automaton (atoms <> covered) annotations generators)
+
+{- | The automaton of a typed language, and its drawn fields: the position of
+the rule, the position of the field, the constructor, the type, and the
+generator.
+-}
+typingParts ::
+    forall a node ty.
+    (HasFTA a, NodeView node, Ord ty) =>
+    Typing node ty ->
+    Either TypingError (FTA.FTA (TypingState ty) Constructor Constraint, [(Int, Int, Constructor, TypeRep, AtomicField)])
+typingParts Typing{typingBound = bound, typingInputs = inputs, typingRoots = roots, typingRules = rules} = do
     case bound of
         Nesting depth | depth < 0 -> Left $ NegativeBound bound
         Binders limit | limit < 0 -> Left $ NegativeBound bound
@@ -247,13 +358,19 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
         Left (NodeMismatch name difference) -> Left $ NodeViewMismatch name difference
         Left other -> Left $ NodeViewMismatch "" (show other)
         Right () -> pure ()
-    mapM_ checked [node | Rule node _ <- rules]
+    checkedRules <-
+        traverse (\(index, node) -> (,) index <$> checked (Just index) node) [(index, node) | (index, Rule node _) <- numbered]
     rows <- close Map.empty [Root]
     pure
-        $ fromRight (error "cfta-generator bug in Data.CFTA.Gen.Typing: an invalid automaton")
-        $ FTA.mkFTA Root (Map.toList rows)
+        ( fromRight (error "cfta-generator bug in Data.CFTA.Gen.Typing: an invalid automaton") $ FTA.mkFTA Root (Map.toList rows)
+        , [ (index, field, constructor, typ, atomic)
+          | (index, (constructor, children)) <- checkedRules
+          , (field, Drawn typ atomic) <- zip [0 ..] children
+          ]
+        )
   where
     declared = constructorsOf (describeType (Proxy @a))
+    numbered = zip [0 :: Int ..] rules
 
     -- The nesting at the root.
     nesting = case bound of
@@ -269,15 +386,20 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
 
     row Root = concat <$> traverse (\typ -> row (Goal inputs typ nesting)) (nubOrd roots)
     row (Fixed term) = Right [FTA.Transition (Term.rootLabel term) (map Fixed (Term.subForest term)) noConstraint]
+    -- A drawn field has one placeholder transition, so that the automaton
+    -- keeps its state; the refinement generator takes its generator instead.
+    row (Pool index field) = Right [FTA.Transition (placeholder index field) [] noConstraint]
     row (Goal env goal remaining) = do
         alternatives <-
             traverse
-                checked
-                ( [node | Rule node result <- rules, result == goal]
-                    <> [node index typ | Variable node <- rules, (index, typ) <- zip [0 ..] env, typ == goal]
+                (\(index, node) -> (,) index <$> checked index node)
+                ( [(Just index, node) | (index, Rule node result) <- numbered, result == goal]
+                    <> [(Nothing, node index typ) | Variable node <- rules, (index, typ) <- zip [0 ..] env, typ == goal]
                 )
         pure
-            [ FTA.Transition constructor (map child children) noConstraint | (constructor, children) <- alternatives, allowed children
+            [ FTA.Transition constructor (zipWith (child index) [0 ..] children) noConstraint
+            | (index, (constructor, children)) <- alternatives
+            , allowed children
             ]
       where
         -- A subterm needs a level of the nesting, and its binders must stay
@@ -286,17 +408,20 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
         withinBinders binds = case bound of
             Nesting _ -> True
             Binders limit -> length binds + length env - length inputs <= limit
-        child (Subterm binds typ) = Goal (binds <> env) typ (subtract 1 <$> remaining)
-        child (Value term) = Fixed term
+        child _ _ (Subterm binds typ) = Goal (binds <> env) typ (subtract 1 <$> remaining)
+        child _ _ (Value term) = Fixed term
+        child index field (Drawn _ _) =
+            Pool (fromMaybe (error "cfta-generator bug in Data.CFTA.Gen.Typing: a drawn field in a variable rule") index) field
 
     -- The constructor of the node of a rule, and its children, when they fit
     -- its fields. The node view fits the datatype, so the position is one of
     -- its constructors and the node has as many fields.
-    checked node = case drop position declared of
+    checked index node = case drop position declared of
         constructor : _
             | Just children <- sequence fields
             , length children == length (constructorFields constructor)
-            , and (zipWith fits (constructorFields constructor) children) ->
+            , and (zipWith fits (constructorFields constructor) children)
+            , isJust index || null [() | Drawn _ _ <- children] ->
                 Right (constructor, children)
             | otherwise -> Left $ FieldMismatch (constructorName constructor)
         [] -> Left $ NodeViewMismatch "" ("the node view has no constructor at the position " <> show position)
@@ -306,6 +431,18 @@ typingAutomaton Typing{typingBound = bound, typingInputs = inputs, typingRoots =
     fits field (Value term) =
         fieldType field /= typeRep (Proxy @a)
             && fieldType field == constructorType (Term.rootLabel term)
+    fits field (Drawn typ _) = fieldType field /= typeRep (Proxy @a) && fieldType field == typ
+
+    -- The placeholder transition of a drawn field, of the type of its field.
+    placeholder index field =
+        case [ typ
+             | (index', Rule node _) <- numbered
+             , index' == index
+             , (field', Just (Drawn typ _)) <- zip [0 ..] (snd (nodeFields node))
+             , field' == field
+             ] of
+            typ : _ -> Constructor typ ("drawn " <> show index <> " " <> show field) []
+            [] -> error "cfta-generator bug in Data.CFTA.Gen.Typing: a drawn field without its rule"
 
 {- | Read an automaton over the constructors of the datatype @a@ and of its
 field values as a generator of values of @a@, as 'Data.CFTA.Gen.fromAutomaton'

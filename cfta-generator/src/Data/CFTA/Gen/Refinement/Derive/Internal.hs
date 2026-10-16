@@ -36,6 +36,7 @@ module Data.CFTA.Gen.Refinement.Derive.Internal (
     -- * Annotations by constructor
     deriveLTAWith,
     deriveLTAOnWith,
+    deriveLTAOnPools,
     Annotation (..),
     Contract (..),
     Measure (..),
@@ -146,6 +147,11 @@ data DeriveLTAError
       name.
       -}
       FieldAtomTerm !String
+    | {- | A field atom is for a field of the datatype itself. The invariant
+      holds at each node, so the derivation must build such a field. The
+      fields are the constructor name and the position of the field.
+      -}
+      FieldAtomOnDatatype !String !Int
     deriving (Eq, Show)
 
 {- | Generators for atomic fields: by the type of the field ('atom'), and by
@@ -372,7 +378,23 @@ deriveLTAOnWith ::
     Atoms ->
     [(Constructor, Annotation)] ->
     Either DeriveLTAError (LTAGen a)
-deriveLTAOnWith automaton atoms named = do
+deriveLTAOnWith automaton atoms named = deriveLTAOnPools @a automaton atoms named Map.empty
+
+{- | 'deriveLTAOnWith' with the generators of some states given. The generator
+of such a state is the given one, and its transitions are not read, so a
+state can stand for a field whose terms come from a generator, such as
+'Data.CFTA.Gen.Refinement.every' with a condition. The state needs a
+transition, so that the automaton keeps it.
+-}
+deriveLTAOnPools ::
+    forall a state.
+    (HasFTA a, Ord state) =>
+    FTA.FTA state Constructor Constraint ->
+    Atoms ->
+    [(Constructor, Annotation)] ->
+    Map.Map state (LTAGen (Term Constructor)) ->
+    Either DeriveLTAError (LTAGen a)
+deriveLTAOnPools automaton atoms named pools = do
     Derivation derived annotationOf <- derivation @a atoms named
     unless (Set.null $ FTA.cyclicStates trimmed) $ Left CyclicAutomaton
     case [constructorName symbol | FTA.Transition symbol _ constraint <- concat (Map.elems rows), constraint /= noConstraint] of
@@ -380,7 +402,10 @@ deriveLTAOnWith automaton atoms named = do
         [] -> pure ()
     -- The automaton is acyclic, so each generator of the lazy map reads only
     -- the generators of states below it.
-    let generators = LazyMap.map (stateGenerator derived annotationOf generators) rows
+    let generators =
+            LazyMap.mapWithKey
+                (\state transitions -> fromMaybe (stateGenerator derived annotationOf generators transitions) (Map.lookup state pools))
+                rows
     pure $ decodeValue <$> Map.findWithDefault emptyGenerator (FTA.initialState trimmed) generators
   where
     trimmed = FTA.trim automaton
@@ -445,6 +470,11 @@ derivation (Atoms atoms fieldMap problems) named = do
          , take 1 (drop position (map fieldType (constructorFields constructor))) /= [typ]
          ] of
         (constructor, position, typ) : _ -> Left $ FieldAtomMismatch (constructorName constructor) position typ
+        [] -> pure ()
+    -- A pool for a field of the datatype would give subterms that the
+    -- invariant does not check, so such a field cannot have a field atom.
+    case [(constructor, position) | ((constructor, position), (typ, _)) <- Map.toList fieldMap, typ == root] of
+        (constructor, position) : _ -> Left $ FieldAtomOnDatatype (constructorName constructor) position
         [] -> pure ()
     -- An atomic type needs an atom where a field of that type has no field
     -- atom, and where it is the datatype itself.

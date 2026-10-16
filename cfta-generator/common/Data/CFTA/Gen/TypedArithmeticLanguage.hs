@@ -13,6 +13,7 @@ module Data.CFTA.Gen.TypedArithmeticLanguage (
     Arith (..),
     ArithNode (..),
     arithRules,
+    arithOperatorRules,
     arithTyping,
     arithLanguage,
     arithAutomaton,
@@ -72,11 +73,14 @@ data ArithNode e
     deriving stock (Generic)
     deriving anyclass (NodeView)
 
--- | The typing rules of 'Arith'. The type of a conditional is the type of its branches.
+-- | The typing rules of 'Arith': the literals 0 and 1, and 'arithOperatorRules'.
 arithRules :: [Rule ArithNode ArithType]
-arithRules =
-    [rule (NumNode (value n)) IntType | n <- [0, 1 :: Int]]
-        <> [rule (FlagNode (value b)) BoolType | b <- [False, True]]
+arithRules = [rule (NumNode (value n)) IntType | n <- [0, 1 :: Int]] <> arithOperatorRules
+
+-- | The typing rules of 'Arith' other than the numbers. The type of a conditional is the type of its branches.
+arithOperatorRules :: [Rule ArithNode ArithType]
+arithOperatorRules =
+    [rule (FlagNode (value b)) BoolType | b <- [False, True]]
         <> [ rule (PlusNode (subterm [] IntType) (subterm [] IntType)) IntType
            , rule (LessNode (subterm [] IntType) (subterm [] IntType)) BoolType
            , variable (\index _ -> VarNode (value index))
