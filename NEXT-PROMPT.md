@@ -2,6 +2,61 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current semantic input admission and actual allocated Scan entry
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`f37a8fe5`. New proof commits are `953f3b1a`, `61ce6cff`, and `048d9fce`.
+Audit and scope note commit is `3b02d00c`.
+No Haskell implementation or test changes occur. The external Haskell fix
+registry stays at the top of FINDINGS.md. Add every later Haskell fix there
+with its failure case, affected files, commit, checks, and upstream status.
+
+Six additive modules derive exact old-domain rank and language agreement
+through actual heap growth. An enlarged current inventory admits newly
+listed closed resident operands. Cross-view transport retains the same
+returned native cells and their contextual laws. It needs explicit old
+returned-request admission and coverage of both names in every captured
+seen pair. Conditional contextual laws alone do not establish that coverage.
+
+The next-query theorem constructs `oldRoots ++ [left, right]` at the actual
+current heap. It derives target Original syntax, input membership, and warm
+cache transport, then completes the same checked query with a closed
+resident result and exact physical intersection language. No target model,
+target contextual law, future return, or desired result law is supplied.
+This proves one next query. Causal admission of newly returned internal
+cells remains open, so an arbitrary generated-query history and the whole
+seeded class fold do not follow yet.
+
+The allocated class-entry adapter uses the precheck's actual returned
+operation state. It derives physical Scan.Ready, original proper paths,
+actual child availability, ordered original records, and finite current
+Scan with fourth memo correctness. No completed historical Scan is a
+premise. Original-class rejection soundness remains separate.
+
+The pinned full Audit passes 2311 jobs and 56189 theorem dependency checks.
+Focused validation passes 57 public axiom reports, 57 full signatures,
+and 34 kernel examples. Only standard foundations and the old unused-input
+warning occur. Independent reviews found no material defect. Reuse the
+unchanged-source strict Nix build, 777 examples plus golden, five-file
+Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-semantic-admission.md. Evidence and frozen
+sources are in lean/restart-evidence/20261016-semantic-admission/.
+All 3463 baseline files remain. All 2304 older non-Audit proof sources
+retain identical bytes. Earlier unavailable external drafts are not
+claimed recovered or reverified.
+
+Next derive returned-request and seen-pair admission from actual execution,
+then iterate the bridge through the seeded fold. Derive common-subtree
+inclusion, the checked class witness, and current stopped-class soundness.
+Compose actual allocated precheck state, all gate memo receipts, selected
+required paths, and the general constrained outer caller. Keep every other
+full-library and separate Sized contract active. Retain explicit runtime,
+container, allocation, machine-range, solver, and callback boundaries.
+Preserve the optimized interned core and every older constructor and equality
+proof. No board posts or deployments. Push verified formalize checkpoints
+regularly. The full goal remains active; this checkpoint is progress.
+
 ## Current finite conjunction class scans and constructed entry
 
 Source main remains `8f85ddb6`. The preceding published proof checkpoint is
