@@ -1,6 +1,75 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 12:04 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 12:19 CEST (Europe/Stockholm)**.
+
+## Current literal checked targets and shared leaves
+
+Source main remains `ccebf0f7`. The preceding published checkpoint is
+`740c6e5c`. Proof commits are `817e4459`, `0d636786`, and `2a8afe4d`.
+Eight additive modules implement current allocated Target,
+shared Force, and checked Leaf execution. No Haskell implementation or test
+changes occur. Root FINDINGS.md keeps the external Haskell fix registry first.
+Record each later repair there with failure, reproducer, files, commit,
+validation, and upstream status.
+
+Read lean/notes-current-target-worker.md. TargetWorker retains the complete
+NativeDemand.State and allocated merge memo. Projection precedes merge.
+The source seed executes at the fold base. Each head precedes the tail;
+checked intersection uses that tail's returned state. Five stage bounds
+remain separate. Failed prefixes retain their exact observations and full
+states and skip continuations. Empty targets return the identical state.
+
+TargetWorkerNative derives physical Step at a supplied native done from
+initial Good, idle cells, closed resident operands, and reached word ranges.
+It independently constructs the physical trace and aligns the whole return
+by success uniqueness. Arbitrary native success does not imply those checks.
+TargetWorkerSound derives actual fold prefixes from legitimate initial
+Ready/At, available captured values, selected path domains, warm merge laws,
+actual-prefix ranges, and initial global validity. No future body law is
+a public premise.
+
+TargetWorkerCompletion derives stable sufficient bounds from every finite
+current graph. It also proves unconditional successful execution stability
+and whole-return uniqueness under different bounds. TargetWorkerActual
+derives each supplied success's own checked receipt and probes. Its finite
+endpoint constructs stable literal execution from initial selected support.
+caller and caller_finite retain both outer result families and the fourth
+memo in a full Post at the computed next inventory.
+
+SharedTargetWorker executes literal ready hits, target misses, and checked
+leaf requests. A hit ignores every bound and retains the complete state.
+A miss stores only a completed target. Failure retains its returned checked
+state and merge table without installing a slot. Completion and Actual
+derive stable execution, actual graphs and reads, full receipts, probes,
+narrowing, and preservation of class-satisfying selected subterms.
+Target language is inclusion, not exact equality. Global query receipts
+remain logical evidence; these workers do not execute concrete host tables.
+
+Pinned Lean 4.34.1 passes the full Audit: 2425 jobs and 57723 theorem dependency
+checks. Only the permitted three foundations and old unused-input warning
+remain. Public probes, integration kernels, independent reviews, frozen
+sources, and preservation evidence are in
+lean/restart-evidence/20261016-current-target-worker/.
+All Haskell package sources remain unchanged. Reuse the strict Nix build,
+788 examples plus golden, 15-file Fourmolu, and four-package Cabal-gild and
+metadata checks from the preceding refresh.
+
+Next implement literal checked EditNode/Children/Rows/List, compiled class
+editing, and the class right fold with final empty propagation. Preserve
+actual Head exposure, same-arity raw rebuilding, full guards, selected path
+positions, and unrelated open siblings. Each class resets only local slots.
+Read checked-edits-next.md in the evidence directory. Then implement dynamic
+conjunction, Scan, local reduction, parent construction, and the outer worker.
+
+General constrained outer termination, unequal-length path classes, and
+repeated-pass convergence remain open. Current reducePartially performs
+one pass. Host forcing, publication, noConstraint CAF, containers, identities,
+concurrency, machine bounds, solver IO, random draws, callbacks, codecs,
+all frontend and generator adapters, separate Sized contracts, and older
+constructor/equality work remain active. Preserve the optimized interned
+core and every local proof, counterexample, repair, and draft. No board posts
+or deployments. Push verified formalize checkpoints regularly. This
+checkpoint is progress toward the full-library objective.
 
 ## Current source refresh and literal merge execution
 
