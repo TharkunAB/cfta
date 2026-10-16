@@ -26,11 +26,14 @@ Construction success and Region remain explicit inputs. Region stops at
 Mu and union. Traversed rows use the complete effective own accessor.
 Mu cleanup can remove its binder, so no returned-node Region is promised.
 
-Next address general constrained progress outside Region. Read the
-next-general review in the evidence directory. Nonempty own classes can
-change child structure through edits and intersections; the plain Shape
-and original height argument do not cover them. Derive actual reached
-range checks and an independent progress measure. Do not assume future
+Next address general constrained progress outside Region. Read
+next-general-review.md in the evidence directory. First prove constrained
+finite-ordinary native domain closure and height bounds for each operand,
+including structural certificates for actual warm producers. Then compose
+class edits and a generalized parent certificate. This is an intermediate
+stage; Mu constraint migration remains separate. Nonempty own classes can
+change children beyond the plain Shape. Derive actual reached range checks
+and an independent progress measure. Do not assume future
 execution, future semantic answers, or a finite inventory of future keys.
 Unequal-length classes and repeated-pass convergence remain open.
 The full-library scope still includes languages, transformations, exact
