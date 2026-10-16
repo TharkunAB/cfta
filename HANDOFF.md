@@ -1,6 +1,53 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 05:02 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 05:28 CEST (Europe/Stockholm)**.
+
+## Current physical checked execution and actual branch meaning
+
+Source main `8f85ddb6` is merged at `7dccd588`. PR #54 retains named child
+measure terms over `every`. PR #55 exposes explicit typing automata and the
+`Typing` record API. Native intersection, equality, constructors, and Sized
+source bodies stay unchanged. The Haskell repair handoff at the top of
+FINDINGS.md records files, failures, commits, checks, and upstream status.
+The optimized interned core and all older constructor/equality proofs remain.
+
+Proof commits `3ca57b91` and `7d9d433b` add seven new modules. Physical native
+cache validity and actual checked execution need no semantic Produced receipt.
+Exact current operands, key bounds, running cells, and returned residency
+supply physical checks. Operation/field preservation and strict request bounds
+now derive actual yielded transitions. Pure body misses complete. The general
+recursive completion induction and reached physical plan remain open.
+
+Local node laws cover empty, repeated-reference, self, swap, reset, and unions.
+Actual checked edge, selected union, and ordinary-node bodies derive their
+parent contextual laws from exactly the reached child laws and effects.
+Original input models stay fixed. All exact returned states retain the actual
+operation cache and both native tables. Costs are not derived by these branch
+laws. Recursive child completion and semantic laws remain induction obligations.
+The existing FinishThrough endpoint includes its own root finish law; it is
+conditional transfer, not independent root correctness.
+
+The full audit passes 2272 jobs and 55698 dependency checks. Focused probes
+pass 81 public axiom checks, 47 signatures, 53 examples, and one named kernel
+theorem. Only standard foundations and the old unused-input warning occur.
+Strict Nix build, all six suites with 777 examples plus golden, five-file
+Fourmolu, and four-package Cabal-gild pass. No local test file changes.
+
+Read lean/notes-current-native-physical-meaning.md and
+lean/notes-main-8f85ddb6.md. Evidence is repository-local under
+lean/restart-evidence/20261016-physical/ and the recorded new files in
+lean/restart-evidence/20261016-recursive/. The 3052-file starting baseline and
+new frozen module hashes record preservation. Earlier missing external draft
+bytes remain unavailable after the documented temporary-directory reset.
+They are not recovered or claimed reverified.
+
+Next construct protected-frame actual traces through bind and finish. Close
+the joint node/edge completion and semantic induction from initial invariants.
+Then compose original allocation histories, the current class Scan, and the
+constrained outer caller. Keep every other full-library target and every
+separate Sized contract active. No old eager execution or historical Scan
+substitution. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress; the full goal stays active.
 
 ## Current contextual Mu components and source main d44b2a0f
 
