@@ -31,7 +31,12 @@ type, and the nesting that remains, and reads it as 'Data.CFTA.Gen.fromAutomaton
 does. The symbols are the labels of 'Data.CFTA.Gen.fromDatatype', so a value
 and its term share one rank, and 'Data.CFTA.Gen.rankOfValue' finds it. The
 ranks order the constructors of a node by arity, then in declaration order,
-as for 'Data.CFTA.Gen.fromDatatype'.
+as for 'Data.CFTA.Gen.fromDatatype'. This holds for the constructors of each
+type that the datatype reaches. A literal has no declared position, so the
+literals of one type follow the order of their labels. For numbers that are
+not negative and have at most nine digits, that is the numeric order, but it
+puts 'True' before 'False'. 'Data.CFTA.Gen.fromDatatype' orders literals as
+their domain lists them.
 
 Limits:
 
@@ -60,6 +65,7 @@ import Data.Hashable (hash)
 import qualified Data.IntMap.Strict as IntMap
 import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (Proxy))
+import qualified Data.Set as Set
 import Data.String (fromString)
 import qualified Data.Text as Text
 import Data.Typeable (typeRep)
@@ -204,11 +210,24 @@ fromTypingRules (Depth bound) roots rules = do
     labelled transition = transition{FTA.transitionSymbol = fromString (constructorLabel (FTA.transitionSymbol transition))}
 
     -- The key of 'Data.CFTA.Gen.fromDatatype': the declaration position of a
-    -- constructor of the datatype, and the label text.
+    -- constructor in its type, for each type that the datatype reaches, and
+    -- the label text. A literal has no declared position.
     positions =
         Map.fromList
-            [(Text.pack (constructorLabel constructor), position) | (position, constructor) <- zip [0 :: Int ..] declared]
+            [ (Text.pack (constructorLabel constructor), position)
+            | alternatives <- reachable Set.empty [describeType (Proxy @a)]
+            , (position, (constructor, _)) <- zip [0 :: Int ..] alternatives
+            ]
     order (Symbol label) = (Map.findWithDefault 0 label positions, label)
+
+    -- The constructors of each algebraic type in the descriptions and their
+    -- fields. A recursive type has a cyclic description, so the walk keeps
+    -- the types that it saw.
+    reachable _ [] = []
+    reachable seen (AtomicType _ : pending) = reachable seen pending
+    reachable seen (AlgebraicType typ alternatives : pending)
+        | Set.member typ seen = reachable seen pending
+        | otherwise = alternatives : reachable (Set.insert typ seen) (concatMap snd alternatives <> pending)
 
     -- A label is found by its hash, then by the identity of the symbol, as
     -- 'Data.CFTA.Gen.Internal.Automaton.datatypeDecoder' does.
