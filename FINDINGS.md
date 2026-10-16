@@ -67,6 +67,61 @@ Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
 
+## Current seeded-query language and sound allocated class scans
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`34066d33`. New proof commits are `20a9336e` and `57ead43f`.
+No Haskell implementation or test changes occur. The external Haskell fix
+registry stays at the top of FINDINGS.md. Add each later Haskell fix there
+with its failure case, affected files, commit, checks, and upstream status.
+
+Seven additive modules carry the actual finite input inventory through the
+whole checked seeded fold. Projection retains the same warm native tables.
+Each checked native request constructs its next inventory at its actual
+entry heap and derives final admission and contextual laws. The induction
+retains head projection, tail fold, final native query, and the exact source
+rotation `rest ++ [seed]`. Selected path support permits unrelated original
+siblings to remain open. Empty input returns literal empty and the unchanged
+state. No future model, completed callback, or result-language law is given.
+
+Independent term facts derive a common proper subtree for every satisfied
+active original class. The actual checked query retains that subtree.
+The CURRENT conjunction memo's true answer therefore refutes the class.
+The actual current Scan threads final inventory, physical readiness, loaded
+fields, original values, and fourth-memo correctness through its visited
+prefix. Every stopped original class has a uniform rejection theorem.
+No unvisited suffix is required after a true answer.
+
+The constructed endpoint starts after the actual allocated live precheck.
+Original allocation History, source construction, and resident field readback
+derive initial Ready, original child Values, active classes, and proper paths.
+Literal cold native tables derive initial At without a supplied cache law.
+The returned precheck operations remain. Finite Scan, final inventory At,
+and stopped-class soundness are conclusions. History, origin coverage,
+build, inherited stored readiness, initial fourth-memo Correct, and reached
+Ranges remain explicit. Empty fourth tables derive Correct. No global GHC
+cache reset or general constrained caller theorem is claimed.
+
+The pinned full Audit passes 2327 jobs and 56369 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur.
+Public axiom/signature probes, kernel integrations, and independent source
+reviews pass. Evidence and frozen sources are in
+lean/restart-evidence/20261016-seeded-language/.
+All 3638 baseline files remain. All 2319 older non-Audit proof sources retain
+identical bytes. Prior frozen proofs, stashes, other worktree records, and
+the root Haskell registry remain. Earlier unavailable external drafts are
+not claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-seeded-language.md. Next compose all three global
+gate memo receipts with CURRENT checked Scan, selected required paths and
+later edits, then the general constrained outer caller. Keep every other
+full-library and separate Sized contract active. Preserve the optimized
+interned core and every older constructor and equality proof. Runtime,
+container, allocation, machine, solver, and callback boundaries remain
+explicit. No board posts or deployments. Push verified formalize checkpoints
+regularly. The full goal remains active; this checkpoint is progress.
+
 ## Current causal memo admission through exact native queries
 
 Source main remains `8f85ddb6`. The preceding published proof checkpoint is
