@@ -35,7 +35,8 @@ import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (partition, sort)
+import qualified Data.IntSet as IntSet
+import Data.List (partition)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing, mapMaybe)
 import qualified Data.Set as Set
@@ -204,6 +205,21 @@ the first list, and none of the second.
 data Obligation symbol = Obligation ![Template symbol] ![Template symbol]
     deriving (Eq, Ord, Read, Show)
 
+{- | An obligation with compact comparison keys. The identifiers follow
+template order, so comparison gives the same order as 'Obligation'.
+-}
+data IndexedObligation symbol = IndexedObligation !([Int], [Int]) (Obligation symbol)
+
+instance Eq (IndexedObligation symbol) where
+    IndexedObligation key _ == IndexedObligation other _ = key == other
+
+instance Ord (IndexedObligation symbol) where
+    compare (IndexedObligation key _) (IndexedObligation other _) = compare key other
+
+-- | Restore the public state representation after graph construction.
+fromIndexed :: (state, IndexedObligation symbol) -> (state, Obligation symbol)
+fromIndexed (state, IndexedObligation _ obligation) = (state, obligation)
+
 {- | Keep exactly the terms of an automaton that match none of the templates
 at the root, as 'exclude' does for an interned graph.
 
@@ -229,9 +245,17 @@ excludeBelow ::
 excludeBelow everywhere templates automaton =
     -- The input is ranked, so the result is ranked and validation cannot fail.
     fromRight (error "excludeBelow: the exclusion from a ranked automaton is ranked") $
-        uncurry FTA.mkFTA (obligationRows everywhere (FTA.transitionsFrom automaton) templates (FTA.initialState automaton))
+        FTA.mkFTA
+            (fromIndexed initial)
+            [ ( fromIndexed state
+              , [transition{transitionChildren = map fromIndexed (transitionChildren transition)} | transition <- transitions]
+              )
+            | (state, transitions) <- rows
+            ]
+  where
+    (initial, rows) = obligationRows everywhere (FTA.transitionsFrom automaton) templates (FTA.initialState automaton)
 
-{- | The pairs of a state and an 'Obligation' that a state reaches, with
+{- | The pairs of a state and an indexed 'Obligation' that a state reaches, with
 their transitions, when its terms must match none of the second templates
 at the root and none of the first at a proper subterm: the first pair, and
 the rows. A transition splits as an edge does in 'exclude' ('edgeCopies').
@@ -242,17 +266,19 @@ obligationRows ::
     (state -> [Transition state symbol annotation]) ->
     [Template symbol] ->
     state ->
-    ((state, Obligation symbol), [((state, Obligation symbol), [Transition (state, Obligation symbol) symbol annotation])])
+    ( (state, IndexedObligation symbol)
+    , [((state, IndexedObligation symbol), [Transition (state, IndexedObligation symbol) symbol annotation])]
+    )
 obligationRows everywhere transitionsOf templates state = (initial, explore copies transitionChildren initial)
   where
-    initial = (state, obligation [] templates)
-    copies (state', Obligation wanted unwanted)
+    initial = (state, obligation (encode templates) [] [])
+    copies (state', IndexedObligation _ (Obligation wanted unwanted))
         | any trivial unwanted = []
         | otherwise =
             [ transition
                 { transitionChildren =
                     zipWith
-                        (\child (wanted', unwanted') -> (child, obligation wanted' (unwanted' <> everywhere)))
+                        (\child (wanted', unwanted') -> (child, obligation everywhereIds wanted' unwanted'))
                         (transitionChildren transition)
                         parts
                 }
@@ -260,8 +286,28 @@ obligationRows everywhere transitionsOf templates state = (initial, explore copi
             , parts <- edgeCopies wanted unwanted (transitionSymbol transition) (map shapesOf (transitionChildren transition))
             ]
     shapesOf child = [(transitionSymbol transition, length (transitionChildren transition)) | transition <- transitionsOf child]
-    -- One form for equal obligations, so that equal states are one state.
-    obligation wanted unwanted = Obligation (sort (nubOrd (filter (not . trivial) wanted))) (sort (nubOrd unwanted))
+    -- Assign each template part one identifier. Graph keys compare small
+    -- integers instead of traversing the template trees again.
+    templateParts = Set.toAscList (Set.fromList (Hole : concatMap subtemplates (everywhere <> templates)))
+    identifiers = Map.fromDistinctAscList (zip templateParts [0 ..])
+    templatesById = IntMap.fromDistinctAscList (zip [0 ..] templateParts)
+    encode = IntSet.fromList . map (identifiers Map.!)
+    decode = map (templatesById IntMap.!)
+    everywhereIds = encode everywhere
+    -- Share the fixed forbidden set instead of sorting its templates at
+    -- each child. The public payload has the original canonical order.
+    obligation base wanted unwanted =
+        let wantedIds = IntSet.toAscList (encode (filter (not . trivial) wanted))
+            unwantedIds = IntSet.toAscList (IntSet.union base (encode unwanted))
+         in IndexedObligation (wantedIds, unwantedIds) (Obligation (decode wantedIds) (decode unwantedIds))
+    subtemplates template = template : concatMap subtemplates children
+      where
+        children = case template of
+            Hole -> []
+            AnyNode ts -> ts
+            TemplateNode _ ts -> ts
+            AnyPrefix ts -> ts
+            TemplatePrefix _ ts -> ts
 
 {- | Keep exactly the terms of an interned graph of which no subterm matches
 one of the templates, as 'matchesNowhere' says.
@@ -421,7 +467,9 @@ after the last child has no terms. A part without holes ('ground') matches
 one term only, so the child equals at most one ground part: the split has a
 copy for each ground part, which keeps the templates of that part, and a
 copy for none, which kills them all. The other templates that may stay
-alive split over every subset.
+alive split over their distinct parts. Templates with the same part match
+that child together or not at all. A part that a template must not match
+cannot also be a part that it must match.
 
 A copy keeps only templates whose parts the child can match together: the
 parts that the child must match, wanted or kept, must all fit the root of
@@ -461,30 +509,37 @@ edgeCopies wanted unwanted symbol shapes = case traverse childrenOf wanted of
         -- cannot match it, so they need not die here. A part that a
         -- template which must die has too cannot stay alive.
         (fixed, open) = partition (ground . (!! index)) mayLive
-        (groundDying, openDying) = partition (ground . (!! index)) mustDie
+        openDying = filter (not . ground . (!! index)) mustDie
         groups = Map.fromListWith (flip (<>)) [(parts !! index, [parts]) | parts <- fixed]
-        dying = Set.fromList (map (!! index) groundDying)
+        dying = Set.fromList (map (!! index) mustDie)
+        -- Equal parts match together. Split once for the whole group,
+        -- instead of constructing inconsistent subsets of equal parts.
+        openGroups = Map.toList (Map.fromListWith (flip (<>)) [(parts !! index, [parts]) | parts <- open])
         -- The shapes that the parts which the child must match all fit.
         base = fits shapesHere (wantedHere <> map (!! index) forced)
         choices
             | null base = []
             | otherwise =
-                [(forced <> chosen, mustDie <> fixed <> notChosen) | ((chosen, notChosen), _) <- splits base open]
+                [(forced <> chosen, mustDie <> fixed <> notChosen) | ((chosen, notChosen), _) <- splits base openGroups]
                     <> [ (forced <> group <> chosen, openDying <> notChosen)
                        | (part, group) <- Map.toList groups
                        , Set.notMember part dying
                        , let narrowed = fits base [part]
                        , not (null narrowed)
-                       , ((chosen, notChosen), _) <- splits narrowed open
+                       , ((chosen, notChosen), _) <- splits narrowed openGroups
                        ]
         -- The subsets of the templates that the child can match together
         -- within the given shapes, each with the other templates and the
         -- shapes that the subset fits, in the order of the subset split.
         splits fitting [] = [(([], []), fitting)]
-        splits fitting (parts : others) =
+        splits fitting ((part, group) : others) =
             concat
-                [ [((parts : chosen, notChosen), narrowed) | let narrowed = fits remaining [parts !! index], not (null narrowed)]
-                    <> [((chosen, parts : notChosen), remaining)]
+                [ [ ((group <> chosen, notChosen), narrowed)
+                  | Set.notMember part dying
+                  , let narrowed = fits remaining [part]
+                  , not (null narrowed)
+                  ]
+                    <> [((chosen, group <> notChosen), remaining)]
                 | ((chosen, notChosen), remaining) <- splits fitting others
                 ]
     -- The shapes whose root each of the parts fits.
