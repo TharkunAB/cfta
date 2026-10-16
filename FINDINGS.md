@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current Merge and Target resource proofs add no Haskell change.
+The current shared resource proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -31,7 +31,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The current pinned Lean Audit passes: 2599 jobs and 60278 dependency checks.
+The last completed pinned Lean Audit passes: 2605 jobs and 60357 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -165,6 +165,100 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current initial resources for shared targets and leaves
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `0f1c72f7`. Proof commits are `882c4eb8` and `dd1e246d`.
+Read lean/notes-current-shared-resources.md and
+lean/restart-evidence/20261016-constrained-shared-resources/.
+This section supersedes older statements that leave shared Force and Leaf
+constructor resources or their existing numeric capacity plans open.
+
+Six additive modules retain causal profiles for actual class-local slots,
+derive the exact selected operand count, count literal values including
+Empty, construct shared Force and Leaf, and derive the existing capacity
+plans. A hit returns its exact state with zero Work. A miss constructs its
+own Target and stores the actual returned profile. Leaf then constructs
+its native intersection at that exact state. Initial total headroom derives
+the query entry and final supply capacity. Both stages retain the complete
+existing receipts, inventories, slots, Merge table, and global read effects.
+Captured originals and the current edited input have separate profiles.
+
+Stable literal Force uniqueness identifies every raw returned value and
+complete Shared state. It derives the existing universal ForceCapacity and
+LeafCapacity from initial force headroom. LeafCapacity certifies query-entry
+capacity. The separate Leaf resource endpoint bounds the actual query Work.
+The value-position count includes Empty and repeated identities or rows.
+The bound on actual edit callback occurrences is still an obligation.
+
+The full Audit passes 2605 jobs and 60357 dependency checks. All 43 public
+axiom/full-signature pairs and 15 integration pairs pass. Integration
+constructs a first Target miss and exact same-state hit, derives old range
+and finite endpoints without an initial plan, and constructs two serial
+Leaves from initial total headroom. Only propext, Classical.choice, and
+Quot.sound occur. Independent review finds no material component defect.
+Preservation retains 7423 starting files, 2598 older non-Audit proofs,
+all 234 Haskell files, 46 frozen manifests with 362 module entries,
+stashes, other worktrees, older repairs, counterexamples, and drafts.
+
+Next prove the actual edit callback count and cumulative edit resources.
+Then compose class and pass resources, local and parent calls, and the outer
+root. Derive its remaining numeric plan from initial inputs. General
+Mu/reference/union progress, repeated-pass convergence, other resource
+families, current frontends, concrete Haskell, and complete public pipeline
+composition remain open. The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external repair handoff first. Record
+later repairs with failure, reproducer, paths, commit, checks, and upstream
+status. Reuse unchanged strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
+## Proof objective and open areas (2026-10-16)
+
+The objective is to prove that the current Haskell library implements its
+intended constrained tree languages and generators. Each public operation
+has its own contract. There is no completed theorem for the whole library.
+
+For an automaton A and node-count size n, exact queries must enumerate
+exactly the distinct accepted terms of size n in the specified order.
+Counts must equal the class cardinality. Rank and unrank must satisfy both
+inverse laws. Finite queries must construct terminating evaluations.
+Exact transformations must preserve the language. Merge, representative
+selection, generator multiplicity, and sampling have separate contracts.
+
+The exact Sized query laws are proved for successful modeled dispatch on
+validated original graph rows. The finite ordinary reduction root constructs
+a stable modeled execution and proves full guarded-language equality.
+That root still takes a numeric capacity plan for later parent entries.
+Its domain excludes Mu, references, and explicit unions.
+
+The completed Target checkpoint derives its own execution and constructor
+capacity from initial forest limits. Shared profiles, record bounds,
+Empty-inclusive value counts, and shared Force now pass individual builds.
+Shared Leaf also constructs its full receipt and resource return. The full
+Audit above includes all six new modules. Actual edit callback counts and
+the complete caller composition remain open.
+
+The main remaining obligations are:
+
+- Derive cumulative initial resource bounds through edits,
+  classes, passes, local calls, parent calls, and the outer root.
+- Prove general recursive progress for Mu, references, and unions. Treat
+  repeated-pass convergence separately from the public single pass.
+- Complete current frontend adapters, validation errors, codecs, and
+  public API composition for exact queries and generators.
+- Connect the source models to concrete Haskell containers, interning,
+  lazy forcing, memo publication, signed counters, callbacks, and solver IO.
+- Compose the language, transformation, query, generator, and probability
+  contracts for the complete public pipelines. Keep external assumptions
+  explicit. Constructor request bounds do not prove total runtime bounds.
+
+The recursive field-pool repair is complete at the audited source version.
+The first section records its reproducer, commit, paths, and validation.
+Its new error and validation order still need a formal source adapter.
+No new Haskell repair is required by this status review.
 
 ## Current Target resources and derived prefix capacity
 

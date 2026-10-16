@@ -1,5 +1,54 @@
 # cfta formal model
 
+## Current initial resources for shared targets and leaves
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `0f1c72f7`. Proof commits are `882c4eb8` and `dd1e246d`.
+Read lean/notes-current-shared-resources.md and
+lean/restart-evidence/20261016-constrained-shared-resources/.
+This section supersedes older statements that leave shared Force and Leaf
+constructor resources or their existing numeric capacity plans open.
+
+Six additive modules retain causal profiles for actual class-local slots,
+derive the exact selected operand count, count literal values including
+Empty, construct shared Force and Leaf, and derive the existing capacity
+plans. A hit returns its exact state with zero Work. A miss constructs its
+own Target and stores the actual returned profile. Leaf then constructs
+its native intersection at that exact state. Initial total headroom derives
+the query entry and final supply capacity. Both stages retain the complete
+existing receipts, inventories, slots, Merge table, and global read effects.
+Captured originals and the current edited input have separate profiles.
+
+Stable literal Force uniqueness identifies every raw returned value and
+complete Shared state. It derives the existing universal ForceCapacity and
+LeafCapacity from initial force headroom. LeafCapacity certifies query-entry
+capacity. The separate Leaf resource endpoint bounds the actual query Work.
+The value-position count includes Empty and repeated identities or rows.
+The bound on actual edit callback occurrences is still an obligation.
+
+The full Audit passes 2605 jobs and 60357 dependency checks. All 43 public
+axiom/full-signature pairs and 15 integration pairs pass. Integration
+constructs a first Target miss and exact same-state hit, derives old range
+and finite endpoints without an initial plan, and constructs two serial
+Leaves from initial total headroom. Only propext, Classical.choice, and
+Quot.sound occur. Independent review finds no material component defect.
+Preservation retains 7423 starting files, 2598 older non-Audit proofs,
+all 234 Haskell files, 46 frozen manifests with 362 module entries,
+stashes, other worktrees, older repairs, counterexamples, and drafts.
+
+Next prove the actual edit callback count and cumulative edit resources.
+Then compose class and pass resources, local and parent calls, and the outer
+root. Derive its remaining numeric plan from initial inputs. General
+Mu/reference/union progress, repeated-pass convergence, other resource
+families, current frontends, concrete Haskell, and complete public pipeline
+composition remain open. The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external repair handoff first. Record
+later repairs with failure, reproducer, paths, commit, checks, and upstream
+status. Reuse unchanged strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
 ## Current Target resources and derived prefix capacity
 
 Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
