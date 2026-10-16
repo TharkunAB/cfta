@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current caller-profile proof adds no Haskell change.
+The current recursive Merge profile proof adds no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -31,7 +31,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The current pinned Lean Audit passes: 2582 jobs and 60083 dependency checks.
+The current pinned Lean Audit passes: 2587 jobs and 60115 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -165,6 +165,73 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current recursive Merge profile production
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `b3df5b08`. Read lean/notes-current-merge-profiles.md
+and lean/restart-evidence/20261016-constrained-merge-profile-producer/.
+Five additive modules close the general recursive Merge profile producer
+gap from the previous checkpoint. Proof commits are `56e098f9` and `a6756768`.
+This section supersedes older statements that list that producer as open.
+
+MergeProfileCode strengthens each recursive request with its complete
+physical contract and a universal original-relative profile certificate.
+Its ordered All₂ map retains each input/result position and exact length.
+Actual edge and node Work derive profiles and heights, including coherent
+cache hits. MergeProfileBody proves every small, column, large, group, root,
+and body certificate from the literal current code. Selection retains
+original profiles and multiplicities. A column union can require R*R rows.
+The height-indexed envelope includes that larger lower recursive input.
+
+MergeProfileProducer follows the ACTUAL mutually recursive Run and Call.
+A miss first derives physical effects and both returned storage invariants.
+The SAME smaller body Run then derives the candidate certificate for every
+input row, arity, and height limit. Completion rereads the current memo and
+certifies its actual first winner. That winner can differ from the candidate.
+No future body law, supplied result profile, or uncached worker is an input.
+The universal certificate is conditional on a finite ordinary input profile.
+It makes no profile claim for Mu, reference, or explicit union inputs.
+
+MergeProfileFinite constructs its own allocated call, stable literal return,
+result profile, height bound, and retained physical and profile tables.
+Its cold endpoint derives both initial storage invariants from empty tables.
+Its caller endpoint retains the full existing Post and language inclusion
+at the SAME returned output, heap, and completed merge table. Merge remains
+an over-approximation. No language equality is asserted for Merge.
+Imported kernels construct serial generated profiles, derive a next native
+query budget, and replay the constructed completed owner at work fuel one.
+MergeSelection proves exact ordinary selection at every comparison fuel,
+including zero. It returns distinct original inputs and the unchanged heap.
+
+The full Audit passes 2587 jobs and 60115 dependency checks. All 23 declared
+public axiom/full-signature pairs and 18 integration pairs pass. Only
+propext, Classical.choice, and Quot.sound occur. Final imported probes have
+no diagnostics or placeholders. The canonical build retains the older
+unused-input warning. Preservation retains 7144 starting files and 2581
+older non-Audit sources. Forty-three frozen manifests check 344 entries.
+All older repairs, counterexamples, drafts, stashes, and worktrees remain.
+
+Next prove Merge constructor request and reservation bounds. The ordinary
+selection identity removes its constructor-effect gap. Count all actual
+recursive body Work and preserve the actual intermediate heaps. Then
+compose Operand, Target's rotated right fold, edits, class passes, local and
+parent calls, and outer cumulative budgets. The numeric root plan is still
+an explicit premise. Read next-merge-reservations.md in this evidence directory.
+
+General Mu/reference/union progress, repeated-pass convergence, current
+frontend adapters, concrete Haskell execution, and full-pipeline composition
+remain open. The completed sequential graph does not model early lazy memo
+publication, pending ancestors, host HashMap iteration, concurrency, or GHC
+forcing. Other resource families and signed host counters remain separate.
+Retain language, transformation, exact size/count/order/rank, generator,
+and probability contracts. The full-library goal remains active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is
+already merged by PR #65. Root FINDINGS keeps its external handoff first.
+Record each later repair there with failure, reproducer, paths, commit,
+checks, and upstream status. Reuse unchanged strict Nix validation, 798
+examples plus golden, six-file Fourmolu, and four-package metadata checks.
 
 ## Current caller profiles and initial serial reservations
 
