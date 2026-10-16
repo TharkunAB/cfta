@@ -80,8 +80,10 @@ Unchanged-source Haskell validation reuses the strict Nix all-component build,
 
 ## Remaining full objective
 
-The next target is the literal bounded outer executable worker. Retain its
-complete reached state and distinguish successful results, errors, exhausted
+The next target is the literal bounded outer executable worker. First
+implement its current lower Scan, class-pass, local, and parent workers.
+Their present endpoints are relations. Retain the complete reached state
+and distinguish successful results, errors, exhausted
 outer fuel, busy or absent cells, missing fields, and unexpected Rec. A
 completed result hit can succeed without body fuel. Connect actual success
 to the strict graph and derive sufficient stable bounds only on a justified
