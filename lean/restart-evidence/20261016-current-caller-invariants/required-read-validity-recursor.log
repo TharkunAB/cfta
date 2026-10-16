@@ -1,0 +1,325 @@
+@MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.rec : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {motive_1 :
+    {needed : MicroCFTA.SourceEqualityNeeded.Needed} →
+      {value :
+          MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+        {before :
+            MicroCFTA.InternedConstructorTemplates.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+          {result :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {after :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+              (a : MicroCFTA.SourceEqualityRequiredGraph.RequireNode needed value before result after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads a a_1 a_2 → Prop}
+  {motive_2 :
+    {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} →
+      {index : Nat} →
+        {values :
+            List
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+          {before :
+              MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+            {results :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+              {after :
+                  MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+                (a : MicroCFTA.SourceEqualityRequiredGraph.RequireChildren entries index values before results after) →
+                  (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                    MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads a a_1 a_2 → Prop}
+  {motive_3 :
+    {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} →
+      {edges :
+          List
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+        {before :
+            MicroCFTA.InternedConstructorTemplates.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+          {results :
+              List
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))} →
+            {after :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)} →
+              (a : MicroCFTA.SourceEqualityRequiredGraph.RequireRows entries edges before results after) →
+                (a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos) →
+                  MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads a a_1 a_2 → Prop},
+  (∀
+      {x :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {x_1 :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_1 ⋯ memos memos ⋯) →
+    (∀
+        {x :
+          MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+        {x_1 : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {nonempty : x_1 ≠ []}
+        {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_1 ⋯ memos memos ⋯) →
+      (∀ {x : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {x_1 : Nat}
+          {x_2 : List MicroCFTA.InternedBinderProtocol.Reference}
+          {x_3 : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+          {x_4 :
+            List
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+          {x_5 :
+            MicroCFTA.InternedConstructorTemplates.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+          {x_6 :
+            List
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+          {x_7 :
+            MicroCFTA.InternedConstructorTemplates.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+          {rowsTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireRows x_3 x_4 x_5 x_6 x_7}
+          {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos} {nonempty : x_3 ≠ []}
+          {x_8 :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+          {x_9 :
+            MicroCFTA.InternedConstructorTemplates.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+          {rebuilt :
+            MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeNode x_6) x_7 =
+              (x_8, x_9)}
+          (rows : MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads rowsTrace memos saved),
+          motive_3 rowsTrace memos saved rows → motive_1 ⋯ memos saved ⋯) →
+        (∀
+            {x :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_1 :
+              MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_2 :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_3 :
+              MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {headTrace : MicroCFTA.SourceEqualityRequiredHead.Head x x_1 x_2 x_3}
+            {memos middleMemo : MicroCFTA.EndpointMemoGateTrace.Memos}
+            {x_4 : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+            {x_5 :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {x_6 :
+              MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+            {bodyTrace :
+              MicroCFTA.SourceEqualityRequiredGraph.RequireNode (MicroCFTA.SourceEqualityNeeded.Needed.node x_4) x_2 x_3
+                x_5 x_6}
+            {saved : MicroCFTA.EndpointMemoGateTrace.Memos} {nonempty : x_4 ≠ []}
+            {recursive : MicroCFTA.SourceEqualityRequiredGraph.Recursive x}
+            (head : MicroCFTA.SourceCurrentRequiredQueryMemos.HeadReads headTrace memos middleMemo)
+            (body : MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads bodyTrace middleMemo saved),
+            motive_1 bodyTrace middleMemo saved body → motive_1 ⋯ memos saved ⋯) →
+          (∀ {x : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {x_1 : Nat}
+              {x_2 :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+              {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_2 ⋯ memos memos ⋯) →
+            (∀ {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+                {values results :
+                  List
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                {before after :
+                  MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                {value :
+                  MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                {absent : MicroCFTA.SourceEqualityNeededMap.lookup (↑index) entries = none}
+                {restTrace :
+                  MicroCFTA.SourceEqualityRequiredGraph.RequireChildren entries (index + 1) values before results after}
+                {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                (rest : MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads restTrace memos saved),
+                motive_2 restTrace memos saved rest → motive_2 ⋯ memos saved ⋯) →
+              (∀ {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+                  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+                  {values results :
+                    List
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                  {value result :
+                    MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                  {before middle after :
+                    MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                  {found : MicroCFTA.SourceEqualityNeededMap.lookup (↑index) entries = some needed}
+                  {firstTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireNode needed value before result middle}
+                  {restTrace :
+                    MicroCFTA.SourceEqualityRequiredGraph.RequireChildren entries (index + 1) values middle results
+                      after}
+                  {memos middleMemo saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                  (first : MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads firstTrace memos middleMemo)
+                  (rest : MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads restTrace middleMemo saved),
+                  motive_1 firstTrace memos middleMemo first →
+                    motive_2 restTrace middleMemo saved rest → motive_2 ⋯ memos saved ⋯) →
+                (∀ {x : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+                    {x_1 :
+                      MicroCFTA.InternedConstructorTemplates.State
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                    {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, motive_3 ⋯ memos memos ⋯) →
+                  (∀ {x : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+                      {x_1 :
+                        List
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                      {x_2 :
+                        MicroCFTA.InternedConstructorTemplates.State
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                      {x_3 :
+                        List
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                      {x_4 :
+                        MicroCFTA.InternedConstructorTemplates.State
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                      {restTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireRows x x_1 x_2 x_3 x_4}
+                      {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                      {x_5 :
+                        MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                      {rejected :
+                        MicroCFTA.SourceEqualityNeeded.fits (MicroCFTA.SourceEqualityNeeded.Needed.node x)
+                            x_5.children.length =
+                          false}
+                      (rest : MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads restTrace memos saved),
+                      motive_3 restTrace memos saved rest → motive_3 ⋯ memos saved ⋯) →
+                    (∀ {x : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+                        {x_1 :
+                          MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {x_2 :
+                          MicroCFTA.InternedConstructorTemplates.State
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {x_3 :
+                          List
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                        {x_4 :
+                          MicroCFTA.InternedConstructorTemplates.State
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {childTrace :
+                          MicroCFTA.SourceEqualityRequiredGraph.RequireChildren x 0 x_1.children x_2 x_3 x_4}
+                        {memos middleMemo : MicroCFTA.EndpointMemoGateTrace.Memos}
+                        {x_5 :
+                          List
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                        {x_6 :
+                          MicroCFTA.InternedConstructorTemplates.State
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {x_7 :
+                          List
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+                        {x_8 :
+                          MicroCFTA.InternedConstructorTemplates.State
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {restTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireRows x x_5 x_6 x_7 x_8}
+                        {saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+                        {fits :
+                          MicroCFTA.SourceEqualityNeeded.fits (MicroCFTA.SourceEqualityNeeded.Needed.node x)
+                              x_1.children.length =
+                            true}
+                        {x_9 :
+                          MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {rebuilt :
+                          MicroCFTA.InternedConstructorTemplates.run
+                              (MicroCFTA.InternedConstructorTemplates.makeEdge x_1.entry.key.symbol
+                                x_1.entry.key.constraint x_3)
+                              x_4 =
+                            (x_9, x_6)}
+                        (children : MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads childTrace memos middleMemo)
+                        (rest : MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads restTrace middleMemo saved),
+                        motive_2 childTrace memos middleMemo children →
+                          motive_3 restTrace middleMemo saved rest → motive_3 ⋯ memos saved ⋯) →
+                      ∀ {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+                        {value :
+                          MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {before :
+                          MicroCFTA.InternedConstructorTemplates.State
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {result :
+                          MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {after :
+                          MicroCFTA.InternedConstructorTemplates.State
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+                        {a : MicroCFTA.SourceEqualityRequiredGraph.RequireNode needed value before result after}
+                        {a_1 a_2 : MicroCFTA.EndpointMemoGateTrace.Memos}
+                        (t : MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads a a_1 a_2), motive_1 a a_1 a_2 t

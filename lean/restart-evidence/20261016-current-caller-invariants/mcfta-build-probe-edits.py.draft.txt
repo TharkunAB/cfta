@@ -1,0 +1,157 @@
+from pathlib import Path
+old=Path('lean/MicroCFTA/SourceCurrentAllocatedSharedEditEffects.lean').read_text()
+header=old[old.index('open Cache'):old.index('/-- List-root leaves')]
+header+='''open InternedFreshOrdinaryProbeHeap (Heap)
+open SourceCurrentAllocatedSharedEditEffects (node_physical edge_physical head_physical ListSafe)
+variable {formulas : SourceGuards.Formulas FullSyntax.Formula}
+variable {solver : SourceGuards.Entailment FullSyntax.Formula}
+variable {inventory : Inventory} {record : SourceEqualityClassOrder.Record}
+variable {originals : List (Value Symbol Guard)} {base : HeapState}
+
+'''
+proof=old[old.index('private def NodeLaw'):old.index('/-- Actual node reads derive physical effects')]
+proof=proof.replace('''∃ next, NodeReceipt formulas solver next record originals base input before result after memos final''','''Values base originals → Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap''')
+proof=proof.replace('''∃ next, ChildrenReceipt formulas solver next record originals base inputs before results after memos final''','''Values base originals → Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap''')
+proof=proof.replace('''∃ next, RowsReceipt formulas solver next record originals base inputs before results after memos final''','''Values base originals → Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap''')
+bodies={
+'leafCase':'''    intro next record originals path value before result after memos saved receipt inventory populated nonempty allowed ready available safe valid known probes
+    exact SourceCurrentAllocatedProbeTargets.leaf_heap receipt.reads ready known probes
+''',
+'emptyCase':'''    intro record originals entries state memos inventory populated nonempty allowed ready available safe valid known probes
+    exact probes
+''',
+'ordinaryCase':'''    intro record originals memos saved entries edges before rebuilt middle value heap entry depth free actual built read ih
+      inventory populated nonempty allowed ready available safe valid known probes
+    have facts := ready.checked.semantic.ready.semantic.1.normal.facts
+    have middleProbes := ih inventory populated allowed ready
+      (InternedEdgeResidency.resident_edges _ facts.linked _ available.resident) (ordinary_rows safe) valid known probes
+    simpa only [built] using InternedFreshOrdinaryProbeHeap.node rebuilt middle.checked.native.machine.heap middleProbes
+''',
+'recursiveCase':'''    intro record originals memos current saved entries original before exposed heap value after recursive head body
+      headRead headGlobal bodyRead ih inventory populated nonempty allowed ready available safe valid known probes
+    have closed := recursive_closed recursive nonempty safe
+    have first := head_physical ready head available
+    have checked := head.verified ready.checked.semantic.ready available closed
+    exact ih inventory populated nonempty allowed first.1 first.2.2
+      (closed_safe _ exposed heap first.1.checked.semantic first.2.2 checked.2.2.1) headGlobal.valid known
+      (SourceCurrentAllocatedProbeExposure.head_heap head ready.checked.semantic available probes)
+''',
+'nilChildren':'''    intro record originals entries offset state memos inventory populated allowed ready available safe valid known probes
+    exact probes
+''',
+'unselectedCase':'''    intro record originals memos saved entries values before results after value offset absent rest read ih
+      inventory populated allowed ready available safe valid known probes
+    exact ih inventory populated allowed ready
+      (fun original member => available original (List.mem_cons_of_mem _ member)) (children_tail safe) valid known probes
+''',
+'selectedCase':'''    intro record originals memos current saved entries edits value before result middle values results after offset found first rest
+      firstRead restRead firstIH restIH inventory populated allowed ready available safe valid known probes
+    have member := SourceEqualityNeededMap.lookup_mem _ _ _ found
+    have children := (show ∀ index child, (index, child) ∈ entries → Populated child ∧ HasLeaf child from
+      by simpa only [Populated] using populated)
+    have childAllowed : Allowed record edits := by
+      rw [Allowed, All] at allowed
+      exact allowed _ _ member
+    have firstProbes := firstIH inventory (children _ _ member).1 (children _ _ member).2 childAllowed
+      ready (available _ List.mem_cons_self) (safe 0 _ (by simpa using found) value rfl) valid known probes
+    obtain ⟨middleInventory, firstReceipt⟩ := SourceCurrentAllocatedSharedEditEffects.node_effects firstRead
+      (children _ _ member).1 (children _ _ member).2 childAllowed ready (available _ List.mem_cons_self)
+      (safe 0 _ (by simpa using found) value rfl) valid
+    exact restIH middleInventory populated allowed firstReceipt.ready
+      (fun original member => firstReceipt.effects.keeps.available original (available original (List.mem_cons_of_mem _ member)))
+      (children_tail safe) firstReceipt.globals.valid known firstProbes
+''',
+'nilRows':'''    intro record originals entries state memos inventory populated allowed ready available safe valid known probes
+    exact probes
+''',
+'consCase':'''    intro record originals memos current saved entries before values middle result heap edges results after edge children rebuilt rest
+      firstRead restRead firstIH restIH inventory populated allowed ready resident safe valid known probes
+    have facts := ready.checked.semantic.ready.semantic.1.normal.facts
+    have available := facts.cached.edges edge.entry.key edge (resident _ List.mem_cons_self)
+    have firstProbes := firstIH inventory populated allowed ready available (safe _ List.mem_cons_self) valid known probes
+    obtain ⟨middleInventory, first⟩ := SourceCurrentAllocatedSharedEditEffects.children_effects firstRead
+      populated allowed ready available (safe _ List.mem_cons_self) valid
+    have field := (ready.checked.good.fields _ _ (resident _ List.mem_cons_self)).grows first.effects.grows
+    have rebuiltPhysical := edge_physical first.ready edge.entry.key.symbol edge.entry.key.constraint values field first.available
+    have edgeResult : Ready formulas solver middleInventory record originals base (advanceHeap middle heap) ∧
+        Effects (physical middle.checked) (physical (advanceHeap middle heap).checked) ∧
+        InternedEdgeResidency.EdgeResident heap result ∧ result.children = values := by
+      simpa only [rebuilt] using rebuiltPhysical
+    have edgeProbes : Heap heap := by
+      simpa only [rebuilt] using InternedFreshOrdinaryProbeHeap.edge edge.entry.key.symbol edge.entry.key.constraint values
+        middle.checked.native.machine.heap firstProbes
+    have edgeValid : Valid heap current := SourceQueryUnfoldMemo.valid_grows _ _ first.ready.checked.semantic
+      edgeResult.2.1.keeps current first.globals.valid
+    exact restIH middleInventory populated allowed edgeResult.1
+      (fun original member => InternedEdgeResidency.edge_grows _ _ (first.effects.keeps.trans edgeResult.2.1.keeps).growth original
+        (resident original (List.mem_cons_of_mem _ member)))
+      (fun original member => safe original (List.mem_cons_of_mem _ member)) edgeValid known edgeProbes
+'''
+}
+# Keep each existing constructor type. Replace its proof only.
+names=list(bodies)
+for i,name in enumerate(names):
+ start=proof.index('  have '+name+' :')
+ next_start=proof.index('  have '+names[i+1]+' :',start) if i+1<len(names) else proof.index('  refine ⟨?_, ?_, ?_⟩',start)
+ block=proof[start:next_start]
+ split=block.index(' := by\n')+len(' := by\n')
+ proof=proof[:start]+block[:split]+bodies[name]+proof[next_start:]
+public='''/-- Actual node edits retain probes through each annotated reached leaf and head. -/
+theorem node_heap {edits value before result after memos final}
+    {actual : EditNode (width := width) record originals edits value before result after}
+    (reads : NodeReads formulas solver base actual memos final)
+    (populated : Populated edits) (nonempty : HasLeaf edits) (allowed : Allowed record edits)
+    (ready : Ready formulas solver inventory record originals base before)
+    (available : Available before.checked.native.machine.heap value) (safe : Safe edits value)
+    (valid : Valid before.checked.native.machine.heap memos) (known : Values base originals)
+    (probes : Heap before.checked.native.machine.heap) : Heap after.checked.native.machine.heap :=
+  effects.1 reads inventory populated nonempty allowed ready available safe valid known probes
+
+/-- Actual child edits retain probes without closing unselected siblings. -/
+theorem children_heap {entries offset values before results after memos final}
+    {actual : EditChildren (width := width) record originals entries offset values before results after}
+    (reads : ChildrenReads formulas solver base actual memos final)
+    (populated : Populated (.editBelow entries)) (allowed : Allowed record (.editBelow entries))
+    (ready : Ready formulas solver inventory record originals base before)
+    (available : Values before.checked.native.machine.heap values) (safe : ChildrenSafe entries offset values)
+    (valid : Valid before.checked.native.machine.heap memos) (known : Values base originals)
+    (probes : Heap before.checked.native.machine.heap) : Heap after.checked.native.machine.heap :=
+  effects.2.1 reads inventory populated allowed ready available safe valid known probes
+
+/-- Actual row edits retain probes through raw same-arity reconstruction. -/
+theorem rows_heap {entries edges before results after memos final}
+    {actual : EditRows (width := width) record originals entries edges before results after}
+    (reads : RowsReads formulas solver base actual memos final)
+    (populated : Populated (.editBelow entries)) (allowed : Allowed record (.editBelow entries))
+    (ready : Ready formulas solver inventory record originals base before)
+    (available : Edges before.checked.native.machine.heap edges) (safe : RowsSafe entries edges)
+    (valid : Valid before.checked.native.machine.heap memos) (known : Values base originals)
+    (probes : Heap before.checked.native.machine.heap) : Heap after.checked.native.machine.heap :=
+  effects.2.2 reads inventory populated allowed ready available safe valid known probes
+
+/-- Ignored root callbacks and actual below-edits preserve probes. -/
+theorem list_heap {edits values before results after memos final}
+    {actual : EditList (width := width) record originals edits values before results after}
+    (reads : ListReads formulas solver base actual memos final)
+    (populated : Populated edits) (allowed : Allowed record edits)
+    (ready : Ready formulas solver inventory record originals base before)
+    (available : Values before.checked.native.machine.heap values) (safe : ListSafe edits values)
+    (valid : Valid before.checked.native.machine.heap memos) (known : Values base originals)
+    (probes : Heap before.checked.native.machine.heap) : Heap after.checked.native.machine.heap := by
+  cases reads with
+  | leaf => exact probes
+  | children read => exact children_heap read populated allowed ready available safe valid known probes
+
+'''
+Path('lean/MicroCFTA/SourceCurrentAllocatedProbeEdits.lean').write_text('''import MicroCFTA.SourceCurrentAllocatedProbeTargets
+import MicroCFTA.SourceCurrentAllocatedSharedEditEffects
+
+/-!
+# Filtered probes through actual simultaneous class edits
+
+The proof follows annotated actual leaves, head reads, and raw constructors.
+The existing selected-path domain derives each reached physical input.
+Unselected siblings can remain open. No future probe invariant is supplied.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedProbeEdits
+'''+header+proof+public+'end MicroCFTA.SourceCurrentAllocatedProbeEdits\n')

@@ -1,0 +1,88 @@
+from pathlib import Path
+root = Path('/home/tritlo/Code/mcfta/lean/MicroCFTA')
+local = (root/'SourceCurrentAllocatedLocalReduction.lean').read_text()
+parent = (root/'SourceCurrentAllocatedParentEdge.lean').read_text()
+header = '''import MicroCFTA.SourceCurrentAllocatedProbeReduction
+
+/-!
+# Filtered probes through finite local reduction and parent construction
+
+The construction retains the literal returned checked state at each stage.
+It derives probe preservation from the reached Scan, required worker, class
+pass, and edge constructor. Initial probe validity remains explicit.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedProbeParent
+open Cache Language EqualityNormalize InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedProvenance (Values)
+open InternedGuardedLanguage (meaning edgeMeaning)
+open SourceCurrentAllocatedNativeEffects (physical)
+open SourceCurrentAllocatedNativeInventoryState (Inventory At)
+open SourceCurrentConjunctionClassScan (Ready)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Allocated" => SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "Memo" => SourceCurrentMemoMergeGraph.Memo Symbol Guard
+local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Valid" => EndpointMemoGateTrace.Valid
+local notation "ProbeHeap" => InternedFreshOrdinaryProbeHeap.Heap
+local notation "prefixState" => SourceCurrentAllocatedPrecheck.state
+local notation "contradictory" => SourceEqualityMkEdgeAllocation.contradictory
+local notation "raw" => SourceEqualityConjoinAllocation.readback
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
+
+'''
+private = local[local.index('omit [DecidableEq Symbol]'):local.index('/-- Initial warm invariants')]
+body = local[local.index('theorem finite'):local.index('\nend MicroCFTA')]
+body = body.replace('theorem finite','theorem local_finite',1)
+body = body.replace('(ranges : Ranges ', '(ranges : SourceCurrentAllocatedLocalReduction.Ranges ')
+body = body.replace('(valid : Valid before.native.machine.heap memos) :','(valid : Valid before.native.machine.heap memos)\n    (probes : ProbeHeap before.native.machine.heap) :')
+body = body.replace('∃ actual : Reduction ', '∃ actual : SourceCurrentAllocatedLocalReduction.Reduction ')
+body = body.replace('Reads formulas solver actual memos final ∧', 'SourceCurrentAllocatedLocalReduction.Reads formulas solver actual memos final ∧')
+body = body.replace('Receipt formulas solver next original loaded inherited values results before after fourth savedFourth memo saved final := by','SourceCurrentAllocatedLocalReduction.Receipt formulas solver next original loaded inherited values results before after fourth savedFourth memo saved final ∧\n        ProbeHeap after.native.machine.heap := by')
+body = body.replace('.unchanged checked.actual, .unchanged (actual := checked.actual),\n        ⟨inventory, own', '.unchanged checked.actual, .unchanged (actual := checked.actual), ?_, probes⟩\n      refine ⟨⟨inventory, own')
+body = body.replace('.emptyChildren checked.actual, .emptyChildren (actual := checked.actual),\n        ⟨inventory, own', '.emptyChildren checked.actual, .emptyChildren (actual := checked.actual), ?_, probes⟩\n      refine ⟨⟨inventory, own')
+body = body.replace('continuation, reads, receipt⟩ :=\n        SourceCurrentConjunctionScanClassPass.finite', 'continuation, reads, receipt, finalProbes⟩ :=\n        SourceCurrentAllocatedProbeReduction.finite')
+body = body.replace('(ranges records checked.actual) memos valid', '(ranges records checked.actual) memos valid probes')
+body = body.replace('.classes (actual := checked.actual) reads,\n        ?_, receipt.ready', '.classes (actual := checked.actual) reads, ?_, finalProbes⟩\n      refine ⟨?_, receipt.ready')
+construct = '''
+/-- Edge requests retain all node records on successful and failed constructor paths. -/
+omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+theorem mkEdge_heap (symbol : Symbol) (loaded : Allocated) (children : List (Value Symbol Guard))
+    (before : Checked width) (probes : ProbeHeap before.native.machine.heap) :
+    ProbeHeap (SourceCurrentAllocatedMkEdge.build symbol loaded children before).2.native.machine.heap := by
+  unfold SourceCurrentAllocatedMkEdge.build SourceEqualityMkEdgeAllocation.build
+  dsimp only
+  cases result : (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length before.operations).1 with
+  | error message => simpa only [result] using probes
+  | ok keep =>
+      cases keep <;> simpa only [result, SourceEqualityMkEdgeAllocation.work, Bool.false_eq_true,
+        ↓reduceIte, InternedConstructorTemplates.run, InternedConstructorTemplates.makeEdge] using probes
+
+/-- The contradiction sentinel retains all node records without forcing children. -/
+omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+theorem reject_heap (symbol : Symbol) (before : Checked width)
+    (probes : ProbeHeap before.native.machine.heap) :
+    ProbeHeap (SourceCurrentAllocatedMkEdge.reject symbol before).2.native.machine.heap := by
+  exact probes
+
+'''
+pbody = parent[parent.index('theorem finite'):parent.index('\nend MicroCFTA')]
+pbody = pbody.replace('theorem finite','theorem parent_finite',1)
+pbody = pbody.replace('(ranges : Ranges ', '(ranges : SourceCurrentAllocatedParentEdge.Ranges ')
+pbody = pbody.replace('(valid : Valid before.native.machine.heap memos) :','(valid : Valid before.native.machine.heap memos)\n    (probes : ProbeHeap before.native.machine.heap) :')
+pbody = pbody.replace('∃ actual : Edge ', '∃ actual : SourceCurrentAllocatedParentEdge.Edge ')
+pbody = pbody.replace('Reads formulas solver actual memos final ∧','SourceCurrentAllocatedParentEdge.Reads formulas solver actual memos final ∧')
+pbody = pbody.replace('Receipt formulas solver next symbol original loaded inherited values before result after fourth savedFourth memo saved final := by','SourceCurrentAllocatedParentEdge.Receipt formulas solver next symbol original loaded inherited values before result after fourth savedFourth memo saved final ∧\n        ProbeHeap after.native.machine.heap := by')
+pbody = pbody.replace(':= rejected formulas', ':= SourceCurrentAllocatedParentEdge.rejected formulas')
+pbody = pbody.replace('actual, reads, receipt⟩\n  | false', 'actual, reads, receipt, reject_heap symbol before probes⟩\n  | false')
+pbody = pbody.replace('reduction, reads, receipt⟩ :=\n        SourceCurrentAllocatedLocalReduction.finite','reduction, reads, receipt, middleProbes⟩ :=\n        local_finite')
+pbody = pbody.replace('(ranges test) memos valid', '(ranges test) memos valid probes')
+pbody = pbody.replace('      refine ⟨result, after,', '''      have finalProbes := mkEdge_heap symbol loaded children middle middleProbes
+      rw [constructor.actual] at finalProbes
+      refine ⟨result, after,''')
+pbody = pbody.replace('.live (test := test) (built := constructor.actual) reads,\n        constructor.ready', '.live (test := test) (built := constructor.actual) reads, ?_, finalProbes⟩\n      refine ⟨constructor.ready')
+output = header + private + '/-- The actual local reduction preserves filtered probes on every finite branch. -/\n' + body + construct + '/-- Initial warm invariants derive the actual parent return and its filtered probes. -/\n' + pbody + '\nend MicroCFTA.SourceCurrentAllocatedProbeParent\n'
+(root/'SourceCurrentAllocatedProbeParent.lean').write_text(output)

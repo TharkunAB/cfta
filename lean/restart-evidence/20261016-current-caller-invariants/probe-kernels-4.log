@@ -1,0 +1,88 @@
+MicroCFTA.SourceCurrentAllocatedProbeParent.local_finite [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  [DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (original : Guard)
+  (loaded : Allocated) (inherited : EqValue) (values : List (Value Symbol Guard)) (before : Checked width)
+  (fourth : Fourth) (memo : Memo) (ready : Ready before) (admitted : At formulas solver inventory before)
+  (cached : SourceEqualityGuardReadback.Cached original.equalities)
+  (found : SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded))
+  (inheritedReady : SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited)
+  (available : Values before.native.machine.heap values)
+  (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth)
+  (stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+  (covered :
+    ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+      SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+  (ranges : SourceCurrentAllocatedLocalReduction.Ranges budget loaded inherited values before fourth memo)
+  (memos : Memos) (valid : Valid before.native.machine.heap memos) (probes : ProbeHeap before.native.machine.heap) :
+  ∃ results after savedFourth saved next final actual,
+    SourceCurrentAllocatedLocalReduction.Reads formulas solver actual memos final ∧
+      SourceCurrentAllocatedLocalReduction.Receipt formulas solver next original loaded inherited values results before
+          after fourth savedFourth memo saved final ∧
+        ProbeHeap after.native.machine.heap
+MicroCFTA.SourceCurrentAllocatedProbeParent.parent_finite [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  [DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (symbol : Symbol)
+  (original : Guard) (loaded : Allocated) (inherited : EqValue) (values : List (Value Symbol Guard))
+  (before : Checked width) (fourth : Fourth) (memo : Memo) (ready : Ready before)
+  (admitted : At formulas solver inventory before) (cached : SourceEqualityGuardReadback.Cached original.equalities)
+  (found : SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded))
+  (inheritedReady : SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited)
+  (available : Values before.native.machine.heap values)
+  (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth)
+  (stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+  (covered :
+    ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+      SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+  (ranges : SourceCurrentAllocatedParentEdge.Ranges budget original loaded inherited values before fourth memo)
+  (memos : Memos) (valid : Valid before.native.machine.heap memos) (probes : ProbeHeap before.native.machine.heap) :
+  ∃ result after savedFourth saved next final actual,
+    SourceCurrentAllocatedParentEdge.Reads formulas solver actual memos final ∧
+      SourceCurrentAllocatedParentEdge.Receipt formulas solver next symbol original loaded inherited values before
+          result after fourth savedFourth memo saved final ∧
+        ProbeHeap after.native.machine.heap
+MicroCFTA.SourceCurrentAllocatedProbeClassPass.pass_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  {records : List SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)} {before : Checked width}
+  {memo : Memo} (ranges : SourceCurrentAllocatedClassPass.Ranges records values before memo)
+  (coherent : ∀ (record : SourceEqualityClassOrder.Record), record ∈ records → SourceEqualityClassOrder.Coherent record)
+  (active : ∀ (record : SourceEqualityClassOrder.Record), record ∈ records → Nontrivial record.paths)
+  (ready : Ready before) (admitted : At formulas solver inventory before)
+  (available : Values before.native.machine.heap values)
+  (domains :
+    ∀ (record : SourceEqualityClassOrder.Record),
+      record ∈ records →
+        ∀ (path : Path),
+          path ∈ record.paths → SourceEqualityProjectionPathDomain.ForestClosed (List.map Int.ofNat path) values)
+  (stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+  (covered :
+    ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+      SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+  (memos : Memos) (valid : Valid before.native.machine.heap memos) (probes : ProbeHeap before.native.machine.heap) :
+  ∃ results after saved next final actual,
+    SourceCurrentAllocatedClassPass.PassReads formulas solver actual memos final ∧
+      SourceCurrentAllocatedClassPass.Receipt formulas solver next records values before memo results after saved memos
+          final ∧
+        ProbeHeap after.native.machine.heap
+MicroCFTA.SourceCurrentAllocatedProbeTargets.force_heap [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)}
+  {base : InternedConstructorTemplates.State Symbol Guard} {path : Path}
+  {before after : SourceCurrentAllocatedSharedTargetState.State width} {result : Value Symbol Guard}
+  {memos final : Memos} {actual : SourceCurrentAllocatedSharedTargetForce.Force record values path before result after}
+  (reads : SourceCurrentAllocatedSharedTargetForce.Reads formulas solver actual memos final)
+  (ready : SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values base before)
+  (known : Values base values) (probes : ProbeHeap before.checked.native.machine.heap) :
+  ProbeHeap after.checked.native.machine.heap
+MicroCFTA.SourceCurrentAllocatedProbeTargets.leaf_heap [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+  {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)}
+  {base : InternedConstructorTemplates.State Symbol Guard} {path : Path} {input result : Value Symbol Guard}
+  {before after : SourceCurrentAllocatedSharedTargetState.State width} {memos final : Memos}
+  {actual : SourceCurrentAllocatedSharedTargetLeaf.Leaf record values path input before result after}
+  (reads : SourceCurrentAllocatedSharedTargetLeaf.Reads formulas solver actual memos final)
+  (ready : SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values base before)
+  (known : Values base values) (probes : ProbeHeap before.checked.native.machine.heap) :
+  ProbeHeap after.checked.native.machine.heap

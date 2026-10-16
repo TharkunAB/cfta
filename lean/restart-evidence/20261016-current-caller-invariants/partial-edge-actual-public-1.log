@@ -1,0 +1,126 @@
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeActual.edge_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialEdgeActual.edge_body : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) {budget : Nat}
+  {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody budget request before result after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver actual memos final →
+    MicroCFTA.SourceCurrentConjunctionClassScan.Ready before.checked →
+      MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before.checked →
+        MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+          MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+            MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+              MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap
+                  before.fourth →
+                MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                  (∀
+                      (ambient :
+                        MicroCFTA.InternedGuardedLanguage.Env
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                      MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient before.merge) →
+                    MicroCFTA.SourceCurrentAllocatedPartialEdgeActual.Ranges budget request before →
+                      MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                        MicroCFTA.InternedFreshOrdinaryProbeHeap.Heap before.checked.native.machine.heap →
+                          ∃ next,
+                            MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.Receipt formulas solver next request before
+                                result after final ∧
+                              after.edgeResults = before.edgeResults ∧
+                                MicroCFTA.InternedFreshOrdinaryProbeHeap.Heap after.checked.native.machine.heap
+'MicroCFTA.SourceCurrentAllocatedPartialEdgeActual.edge_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedPartialEdgeActual.edge_call : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) {budget : Nat}
+  {request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeCall budget request before result after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver actual memos final →
+    MicroCFTA.SourceCurrentConjunctionClassScan.Ready before.checked →
+      MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before.checked →
+        MicroCFTA.SourceCurrentAllocatedPartialMemoSound.Sound formulas solver before →
+          MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+            MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+              MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap
+                  before.fourth →
+                MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                  (∀
+                      (ambient :
+                        MicroCFTA.InternedGuardedLanguage.Env
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                      MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient before.merge) →
+                    MicroCFTA.SourceCurrentAllocatedPartialEdgeActual.CallRanges budget request before →
+                      MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                        MicroCFTA.InternedFreshOrdinaryProbeHeap.Heap before.checked.native.machine.heap →
+                          ∃ next,
+                            MicroCFTA.SourceCurrentAllocatedPartialEdgeCall.Receipt formulas solver next request before
+                                result after final ∧
+                              MicroCFTA.InternedFreshOrdinaryProbeHeap.Heap after.checked.native.machine.heap
+'MicroCFTA.PartialEdgeActualIndependent.same_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+@same_owner : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (F : SourceGuards.Formulas FullSyntax.Formula)
+  (S : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) {budget : Nat}
+  {request original : EdgeRequest} {before running middle : Caller width} {handle : Nat} {result : Edge}
+  {memos final : Memos},
+  beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate original, running) →
+    ∀ {body : EdgeBody budget original running result middle},
+      SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads F S body memos final →
+        Ready before.checked →
+          At F S inventory before.checked →
+            Sound F S before →
+              SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+                Resident before.checked.native.machine.heap request.value →
+                  SourceCurrentEmptinessMemo.Correct F S before.checked.native.machine.heap before.fourth →
+                    SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge →
+                      (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                          SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds F S) ambient
+                            before.merge) →
+                        SourceCurrentAllocatedPartialEdgeActual.CallRanges budget request before →
+                          EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                            ProbeHeap before.checked.native.machine.heap →
+                              ∃ next,
+                                SourceCurrentAllocatedPartialEdgeCall.Receipt F S next request before result
+                                    (finishEdge handle result middle) final ∧
+                                  ProbeHeap (finishEdge handle result middle).checked.native.machine.heap ∧
+                                    (finishEdge handle result middle).edgeResults.cells handle =
+                                        some { request := original, status := FlatMemoThunk.Status.returned result } ∧
+                                      original.key = request.key
+'MicroCFTA.PartialEdgeActualIndependent.rejected_ranges' depends on axioms: [propext, Classical.choice, Quot.sound]
+@rejected_ranges : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  {width : Nat} (budget : Nat) (request : EdgeRequest) (before : Caller width),
+  SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint = true →
+    SourceCurrentAllocatedPartialEdgeActual.Ranges budget request before
+'MicroCFTA.PartialEdgeActualIndependent.body_table' depends on axioms: [propext, Classical.choice, Quot.sound]
+@body_table : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width budget : Nat} {request : EdgeRequest} {before after : Caller width}
+  {result : Edge}, EdgeBody budget request before result after → after.edgeResults = before.edgeResults

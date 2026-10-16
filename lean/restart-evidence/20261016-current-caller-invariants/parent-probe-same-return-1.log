@@ -1,0 +1,31 @@
+'MicroCFTA.ParentActualProbeIntegration.same_parent_return' depends on axioms: [propext, Classical.choice, Quot.sound]
+@same_parent_return : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (F : SourceGuards.Formulas FullSyntax.Formula)
+  (S : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) {budget : Nat} {symbol : Symbol}
+  {original : Guard} {loaded : Allocated} {inherited : EqValue} {values : List (Value Symbol Guard)}
+  {before after : Checked width} {result : EdgeValue Symbol Guard} {fourth savedFourth : Fourth} {memo saved : Memo}
+  {memos final : Memos}
+  {actual :
+    SourceCurrentAllocatedParentEdge.Edge budget symbol original loaded inherited values before fourth memo result after
+      savedFourth saved},
+  SourceCurrentAllocatedParentEdgeActual.Reads F S actual memos final →
+    Ready before →
+      At F S inventory before →
+        (SourceEqualityMkEdgeAllocation.contradictory original = false →
+            SourceEqualityGuardReadback.Cached original.equalities ∧
+              SourceEqualityConstraintFieldLookup.load original before.operations.constraints =
+                  Except.ok (some loaded) ∧
+                SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited ∧
+                  Values before.native.machine.heap values ∧
+                    SourceCurrentAllocatedLocalReductionActual.Ranges budget loaded inherited values before fourth) →
+          SourceCurrentEmptinessMemo.Correct F S before.native.machine.heap fourth →
+            SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+              (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                  SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds F S) ambient memo) →
+                Valid before.native.machine.heap memos →
+                  InternedFreshOrdinaryProbeHeap.Heap before.native.machine.heap →
+                    ∃ next,
+                      SourceCurrentAllocatedParentEdge.Receipt F S next symbol original loaded inherited values before
+                          result after fourth savedFourth memo saved final ∧
+                        InternedFreshOrdinaryProbeHeap.Heap after.native.machine.heap ∧
+                          SourceCurrentAllocatedParentEdge.Reads F S actual memos final

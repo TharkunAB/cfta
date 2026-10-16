@@ -1,0 +1,105 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeActual.lean:67:41: error(lean.unknownIdentifier): Unknown identifier `request.value.entry.key`
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeActual.lean:67:65: error(lean.unknownIdentifier): Unknown identifier `request.value`
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeActual.lean:69:85: error(lean.unknownIdentifier): Unknown identifier `request.value`
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeActual.lean:70:8: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+case parent
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+before : Caller width
+result : Edge
+memos final : Memos
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+valid : GlobalsValid before.checked.native.machine.heap memos
+probes : ProbeHeap before.checked.native.machine.heap
+x✝⁵ : Edge
+x✝⁴ : Allocated
+x✝³ : SourceEqualityConstraintAllocation.Value
+x✝² : SourceEqualityNativeDemand.State width
+x✝¹ : SourceCurrentEmptinessMemo.Memo
+x✝ : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+inherited :
+  SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints
+    { inherited := x✝³, value := x✝⁵ }.inherited
+resident : Resident before.checked.native.machine.heap { inherited := x✝³, value := x✝⁵ }.value
+ranges : Ranges budget { inherited := x✝³, value := x✝⁵ } before
+field✝ :
+  SourceEqualityMkEdgeAllocation.contradictory x✝⁵.entry.key.constraint = false →
+    SourceEqualityConstraintFieldLookup.load x✝⁵.entry.key.constraint before.checked.operations.constraints =
+      Except.ok (some x✝⁴)
+actual✝ :
+  SourceCurrentAllocatedParentEdge.Edge budget x✝⁵.entry.key.symbol x✝⁵.entry.key.constraint x✝⁴ x✝³ x✝⁵.children
+    before.checked before.fourth before.merge result x✝² x✝¹ x✝
+parentReads : SourceCurrentAllocatedParentEdgeActual.Reads formulas solver actual✝ memos final
+⊢ ∃ next,
+    Receipt formulas solver next { inherited := x✝³, value := x✝⁵ } before result (advance before x✝² x✝¹ x✝) final ∧
+      (advance before x✝² x✝¹ x✝).edgeResults = before.edgeResults ∧
+        ProbeHeap (advance before x✝² x✝¹ x✝).checked.native.machine.heap
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeActual.lean:120:10: error: Application type mismatch: The argument
+  handle
+has type
+  EdgeRequest
+but is expected to have type
+  Nat
+in the application
+  SourceCurrentAllocatedPartialMemoSound.beginEdge_evaluate_sound formulas solver request before sound inherited
+    resident handle
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeActual.lean:131:16: error: Application type mismatch: The argument
+  handle
+has type
+  EdgeRequest
+but is expected to have type
+  Nat
+in the application
+  ranges handle
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeActual.lean:133:28: error(lean.invalidField): Invalid field `edgeResults`: The environment does not contain `Nat.edgeResults`, so it is not possible to project the field `edgeResults` from an expression
+  middle
+of type `Nat`
+lean/MicroCFTA/SourceCurrentAllocatedPartialEdgeActual.lean:133:60: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+case evaluate
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+result : Edge
+memos final : Memos
+ready : Ready before.checked
+admitted : At formulas solver inventory before.checked
+sound : Sound formulas solver before
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : Resident before.checked.native.machine.heap request.value
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge
+ranges : CallRanges budget request before
+valid : GlobalsValid before.checked.native.machine.heap memos
+probes : ProbeHeap before.checked.native.machine.heap
+x✝³ : EdgeRequest
+x✝² x✝¹ : Caller width
+x✝ : Nat
+started✝ : beginEdge request before = (x✝, FlatMemoThunk.Observation.evaluate x✝³, x✝²)
+body✝ : EdgeBody budget x✝³ x✝² result x✝¹
+bodyReads : SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver body✝ memos final
+⊢ ∃ next,
+    Receipt formulas solver next request before result (finishEdge x✝ result x✝¹) final ∧
+      ProbeHeap (finishEdge x✝ result x✝¹).checked.native.machine.heap

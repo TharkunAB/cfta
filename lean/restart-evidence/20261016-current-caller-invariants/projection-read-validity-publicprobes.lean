@@ -1,0 +1,19 @@
+import MicroCFTA.SourceCurrentAllocatedProjectionReadValidity
+
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.read
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.head
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.readAll
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.union
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.project
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.forest_unfold
+#print axioms MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.forest
+
+#check @MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.read
+#check @MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.head
+#check @MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.readAll
+#check @MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.union
+#check @MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.project
+#check @MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.rows
+#check @MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.forest_unfold
+#check @MicroCFTA.SourceCurrentAllocatedProjectionReadValidity.forest

@@ -1,0 +1,325 @@
+'MicroCFTA.PartialWalkLanguageKernels.two_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.PartialWalkLanguageKernels.live_two_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.PartialWalkLanguageKernels.contradiction_skips' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.PartialWalkLanguageKernels.receipt_then_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+@two_calls : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {budget index : Nat}
+  {combined : SourceEqualityConstraintAllocation.Value}
+  {first second firstResult secondResult :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before middle after : SourceCurrentAllocatedPartialState.State width}
+  (firstCall :
+    @NodeCall inst inst_1 inst_2 width budget
+      {
+        inherited :=
+          @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+            (@descend width before combined index),
+        value := first }
+      (@Prod.snd SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+        (@descend width before combined index))
+      firstResult middle)
+  (secondCall :
+    @NodeCall inst inst_1 inst_2 width budget
+      {
+        inherited :=
+          @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+            (@descend width middle combined
+              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) index
+                (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))),
+        value := second }
+      (@Prod.snd SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+        (@descend width middle combined
+          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) index
+            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+      secondResult after),
+  @Eq SourceEqualityPrecheck.Constraint
+      (@Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+          (@descend width before combined index)).payload
+      (SourceEqualityDescend.descend combined.payload index) →
+    @Eq SourceEqualityPrecheck.Constraint
+        (@Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+            (@descend width middle combined
+              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) index
+                (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))).payload
+        (SourceEqualityDescend.descend combined.payload
+          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) index
+            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+      NodeLaw formulas solver
+          {
+            inherited :=
+              @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+                (@descend width before combined index),
+            value := first }
+          firstResult →
+        NodeLaw formulas solver
+            {
+              inherited :=
+                @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+                  (@descend width middle combined
+                    (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) index
+                      (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))),
+              value := second }
+            secondResult →
+          @WalkLaw width inst inst_1 inst_2 formulas solver budget combined index
+            (@List.cons
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              first
+              (@List.cons
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                second
+                (@List.nil
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+            (@List.cons
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              firstResult
+              (@List.cons
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                secondResult
+                (@List.nil
+                  (Value (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+            before after ⋯
+@live_two_calls : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {budget identity : Nat}
+  {records : List SourceEqualityClassOrder.Record}
+  {first second firstResult secondResult :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before middle after : SourceCurrentAllocatedPartialState.State width},
+  @NodeCall inst inst_1 inst_2 width budget
+      {
+        inherited :=
+          @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+            (@descend width before (SourceEqualityConstraintAllocation.Value.live identity records)
+              (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))),
+        value := first }
+      (@Prod.snd SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+        (@descend width before (SourceEqualityConstraintAllocation.Value.live identity records)
+          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+      firstResult middle →
+    @NodeCall inst inst_1 inst_2 width budget
+        {
+          inherited :=
+            @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+              (@descend width middle (SourceEqualityConstraintAllocation.Value.live identity records)
+                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
+                  (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))),
+          value := second }
+        (@Prod.snd SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+          (@descend width middle (SourceEqualityConstraintAllocation.Value.live identity records)
+            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        secondResult after →
+      @Eq SourceEqualityPrecheck.Constraint
+          (@Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+              (@descend width before (SourceEqualityConstraintAllocation.Value.live identity records)
+                (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))).payload
+          (SourceEqualityDescend.descend (@some (List SourceEqualityClassOrder.Record) records)
+            (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))) →
+        @Eq SourceEqualityPrecheck.Constraint
+            (@Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+                (@descend width middle (SourceEqualityConstraintAllocation.Value.live identity records)
+                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
+                    (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))).payload
+            (SourceEqualityDescend.descend (@some (List SourceEqualityClassOrder.Record) records)
+              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
+                (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+          NodeLaw formulas solver
+              {
+                inherited :=
+                  @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+                    (@descend width before (SourceEqualityConstraintAllocation.Value.live identity records)
+                      (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))),
+                value := first }
+              firstResult →
+            NodeLaw formulas solver
+                {
+                  inherited :=
+                    @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+                      (@descend width middle (SourceEqualityConstraintAllocation.Value.live identity records)
+                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
+                          (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))),
+                  value := second }
+                secondResult →
+              SourceEqualityDescend.WellFormed (@some (List SourceEqualityClassOrder.Record) records) →
+                ∀ (ambient : Env (SourceObservations.Label FullSyntax.Formula))
+                  (symbol : SourceObservations.Label FullSyntax.Formula)
+                  (firstTerm secondTerm : Term (SourceObservations.Label FullSyntax.Formula)),
+                  @SourceEqualityPrecheck.Sat (SourceObservations.Label FullSyntax.Formula)
+                      (@Term.node (SourceObservations.Label FullSyntax.Formula) symbol
+                        (@List.cons (Term (SourceObservations.Label FullSyntax.Formula)) firstTerm
+                          (@List.cons (Term (SourceObservations.Label FullSyntax.Formula)) secondTerm
+                            (@List.nil (Term (SourceObservations.Label FullSyntax.Formula))))))
+                      (@some (List SourceEqualityClassOrder.Record) records) →
+                    Iff
+                      (@All₂
+                        (Value (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        (Term (SourceObservations.Label FullSyntax.Formula))
+                        (@meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                            formulas solver)
+                          ambient)
+                        (@List.cons
+                          (Value (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                          firstResult
+                          (@List.cons
+                            (Value (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                            secondResult
+                            (@List.nil
+                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+                        (@List.cons (Term (SourceObservations.Label FullSyntax.Formula)) firstTerm
+                          (@List.cons (Term (SourceObservations.Label FullSyntax.Formula)) secondTerm
+                            (@List.nil (Term (SourceObservations.Label FullSyntax.Formula))))))
+                      (@All₂
+                        (Value (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        (Term (SourceObservations.Label FullSyntax.Formula))
+                        (@meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (SourceObservations.Label FullSyntax.Formula)
+                          (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq
+                            formulas solver)
+                          ambient)
+                        (@List.cons
+                          (Value (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                          first
+                          (@List.cons
+                            (Value (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                            second
+                            (@List.nil
+                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)))))
+                        (@List.cons (Term (SourceObservations.Label FullSyntax.Formula)) firstTerm
+                          (@List.cons (Term (SourceObservations.Label FullSyntax.Formula)) secondTerm
+                            (@List.nil (Term (SourceObservations.Label FullSyntax.Formula))))))
+@contradiction_skips : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (budget : Nat)
+  (value : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (before : SourceCurrentAllocatedPartialState.State width),
+  @Exists
+    (@Children inst inst_1 inst_2 width budget SourceEqualityConstraintAllocation.Value.contradiction
+      (@List.cons
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)) value
+        (@List.nil
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+      before
+      (@List.cons
+        (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        (@Value.empty (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+        (@List.nil
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+      before)
+    fun actual =>
+    And
+      (@ChildrenLaw width inst inst_1 inst_2 formulas solver budget
+        SourceEqualityConstraintAllocation.Value.contradiction
+        (@List.cons
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          value
+          (@List.nil
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+        (@List.cons
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@Value.empty (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (@List.nil
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+        before before actual)
+      (∀ (ambient : Env (SourceObservations.Label FullSyntax.Formula))
+        (term : Term (SourceObservations.Label FullSyntax.Formula)),
+        Not
+          (@All₂
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            (Term (SourceObservations.Label FullSyntax.Formula))
+            (@meaning (SourceSymbolicIndex.Constraint FullSyntax.Formula) (SourceObservations.Label FullSyntax.Formula)
+              (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq formulas solver)
+              ambient)
+            (@List.cons
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (@Value.empty (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (@List.nil
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+            (@List.cons (Term (SourceObservations.Label FullSyntax.Formula)) term
+              (@List.nil (Term (SourceObservations.Label FullSyntax.Formula))))))
+@receipt_then_call : ∀ [inst : DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {budget index : Nat}
+  {combined : SourceEqualityConstraintAllocation.Value}
+  {value result :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before after : SourceCurrentAllocatedPartialState.State width}
+  {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory},
+  @SourceCurrentAllocatedPartialDescent.Receipt width formulas solver inventory before combined index →
+    ∀
+      (actual :
+        @NodeCall inst inst_1 inst_2 width budget
+          {
+            inherited :=
+              @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+                (@descend width before combined index),
+            value := value }
+          (@Prod.snd SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+            (@descend width before combined index))
+          result after),
+      NodeLaw formulas solver
+          {
+            inherited :=
+              @Prod.fst SourceEqualityConstraintAllocation.Value (SourceCurrentAllocatedPartialState.State width)
+                (@descend width before combined index),
+            value := value }
+          result →
+        @WalkLaw width inst inst_1 inst_2 formulas solver budget combined index
+          (@List.cons
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            value
+            (@List.nil
+              (Value (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+          (@List.cons
+            (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            result
+            (@List.nil
+              (Value (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))))
+          before after ⋯

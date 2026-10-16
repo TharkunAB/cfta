@@ -1,0 +1,122 @@
+lean/MicroCFTA/SourceCurrentAllocatedProbeParent.lean:107:88: error: unexpected token 'omit'; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_cbv_simproc_decl', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_grind_propagator', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'cbv_simproc', 'cbv_simproc_decl', 'class', 'coinductive', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'grind_propagator', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_error_explanation', 'register_tactic_tag', 'register_try?_tactic', 'simproc', 'simproc_decl', 'structure', 'syntax', 'tactic_extension', 'theorem' or 'unif_hint'
+lean/MicroCFTA/SourceCurrentAllocatedProbeParent.lean:115:21: error: Type mismatch: After simplification, term
+  probes
+ has type
+  @InternedFreshOrdinaryProbeHeap.Heap Symbol Guard before.native.machine.heap
+but is expected to have type
+  @InternedFreshOrdinaryProbeHeap.Heap Symbol Guard
+    (SourceCurrentAllocatedQueryMemo.advancePhysical before
+            { heap := before.native.machine.heap,
+              equality :=
+                (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length
+                    before.operations).snd }).native.machine.heap
+lean/MicroCFTA/SourceCurrentAllocatedProbeParent.lean:117:21: error: Type mismatch: After simplification, term
+  probes
+ has type
+  ProbeHeap before.native.machine.heap
+but is expected to have type
+  ProbeHeap
+    (SourceCurrentAllocatedQueryMemo.advancePhysical before
+            {
+              heap :=
+                (edgeStep
+                    { symbol := symbol, children := List.map Value.referenceOf [Value.empty],
+                      constraint := SourceEqualityConstraintConstructors.top }
+                    (fun entry => EdgeValue.mk entry [Value.empty]) before.native.machine.heap).snd,
+              equality :=
+                SourceEqualityMkEdgeAllocation.outputState
+                  (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length
+                      before.operations).snd
+                  false }).native.machine.heap
+lean/MicroCFTA/SourceCurrentAllocatedProbeParent.lean:117:21: error: Type mismatch: After simplification, term
+  probes
+ has type
+  ProbeHeap before.native.machine.heap
+but is expected to have type
+  ProbeHeap
+    (SourceCurrentAllocatedQueryMemo.advancePhysical before
+            {
+              heap :=
+                (edgeStep
+                    { symbol := symbol, children := List.map Value.referenceOf children,
+                      constraint := SourceEqualityAccessorAllocation.constraint loaded.stored loaded.guard }
+                    (fun entry => EdgeValue.mk entry children) before.native.machine.heap).snd,
+              equality :=
+                SourceEqualityMkEdgeAllocation.outputState
+                  (SourceEqualityMkEdgeAllocation.check loaded.stored loaded.guard children.length
+                      before.operations).snd
+                  true }).native.machine.heap
+lean/MicroCFTA/SourceCurrentAllocatedProbeParent.lean:120:84: error: unexpected token 'omit'; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_cbv_simproc_decl', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_grind_propagator', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'cbv_simproc', 'cbv_simproc_decl', 'class', 'coinductive', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'grind_propagator', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_error_explanation', 'register_tactic_tag', 'register_try?_tactic', 'simproc', 'simproc_decl', 'structure', 'syntax', 'tactic_extension', 'theorem' or 'unif_hint'
+lean/MicroCFTA/SourceCurrentAllocatedProbeParent.lean:179:10: error(lean.unknownIdentifier): Unknown identifier `RawMeaning`
+lean/MicroCFTA/SourceCurrentAllocatedProbeParent.lean:181:15: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+symbol : Symbol
+original : Guard
+loaded : Allocated
+inherited : EqValue
+values : List (Value Symbol Guard)
+before : Checked width
+fourth : Fourth
+memo : Memo
+ready : Ready before
+admitted : At formulas solver inventory before
+cached : SourceEqualityGuardReadback.Cached original.equalities
+found : SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded)
+inheritedReady : SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited
+available : Values before.native.machine.heap values
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : SourceCurrentAllocatedParentEdge.Ranges budget original loaded inherited values before fourth memo
+memos : Memos
+valid : Valid before.native.machine.heap memos
+probes : ProbeHeap before.native.machine.heap
+test : contradictory original = false
+loadedReady :
+  SourceEqualityConstraintAllocation.Ready before.operations.constraints loaded.stored ∧ raw loaded = original
+children : List (Value Symbol Guard)
+middle : Checked width
+savedFourth : Fourth
+saved : Memo
+next : Inventory
+final : Memos
+reduction :
+  SourceCurrentAllocatedLocalReduction.Reduction budget loaded inherited values before fourth memo children middle
+    savedFourth saved
+reads : SourceCurrentAllocatedLocalReduction.Reads formulas solver reduction memos final
+receipt :
+  SourceCurrentAllocatedLocalReduction.Receipt formulas solver next original loaded inherited values children before
+    middle fourth savedFourth memo saved final
+middleProbes : ProbeHeap middle.native.machine.heap
+storedReady : SourceEqualityConstraintAllocation.Ready (physical middle).equality.constraints loaded.stored
+field : SourceCurrentConjunctionEquality.FieldAvailable middle.operations (raw loaded)
+result : EdgeValue Symbol Guard
+after : Checked width
+constructor : SourceCurrentAllocatedMkEdge.Receipt formulas solver next symbol loaded children middle result after
+finalProbes : ProbeHeap (Except.ok result, after).snd.native.machine.heap
+ambient : InternedGuardedLanguage.Env Symbol
+term : Term Symbol
+edgeLaw :
+  edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+    ∃ terms,
+      term = Term.node symbol terms ∧
+        All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) children terms ∧
+          SourceEqualityPCSGuard.holds formulas solver original term = true
+accepted : edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term
+x✝ :
+  ∃ terms,
+    term = Term.node symbol terms ∧
+      All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) children terms ∧
+        SourceEqualityPCSGuard.holds formulas solver original term = true
+⊢ sorry

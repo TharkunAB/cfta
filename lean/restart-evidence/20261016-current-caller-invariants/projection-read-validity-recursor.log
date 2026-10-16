@@ -1,0 +1,124 @@
+@MicroCFTA.SourceEqualityProjectionMemos.ProjectReads.rec : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {motive_1 :
+    {path : List Int} →
+      {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+        {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+          {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+            {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+              (a : MicroCFTA.SourceEqualityProjectionGraph.Project path value before result after) →
+                (a_1 a_2 : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard) →
+                  MicroCFTA.SourceEqualityProjectionMemos.ProjectReads a a_1 a_2 → Prop}
+  {motive_2 :
+    {path : List Int} →
+      {index : Int} →
+        {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} →
+          {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+            {results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} →
+              {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                (a : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows path index edges before results after) →
+                  (a_1 a_2 : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard) →
+                    MicroCFTA.SourceEqualityProjectionMemos.RowsReads a a_1 a_2 → Prop},
+  (∀ {x : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+      {x_1 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {memo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}, motive_1 ⋯ memo memo ⋯) →
+    (∀ {x : Int} {x_1 : List Int} {x_2 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+        {memo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}, motive_1 ⋯ memo memo ⋯) →
+      (∀ {x : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {x_1 : Nat}
+          {x_2 : List MicroCFTA.InternedBinderProtocol.Reference} {x_3 : List Int} {x_4 : Int}
+          {x_5 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+          {x_6 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          {x_7 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+          {x_8 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          {rowsTrace : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows x_3 x_4 x_5 x_6 x_7 x_8}
+          {memo middleMemo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+          {x_9 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+          {x_10 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          {unionTrace : MicroCFTA.SourceEqualityProjectionUnion.Union x_7 x_8 x_9 x_10}
+          {saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+          (rows : MicroCFTA.SourceEqualityProjectionMemos.RowsReads rowsTrace memo middleMemo)
+          (union : MicroCFTA.SourceEqualityProjectionMemos.UnionReads unionTrace middleMemo saved),
+          motive_2 rowsTrace memo middleMemo rows → motive_1 ⋯ memo saved ⋯) →
+        (∀ {x : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {x_1 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            {x_2 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {x_3 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            {headTrace : MicroCFTA.SourceEqualityRequiredHead.Head x x_1 x_2 x_3}
+            {memo middleMemo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard} {x_4 : Int} {x_5 : List Int}
+            {x_6 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+            {x_7 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+            {bodyTrace : MicroCFTA.SourceEqualityProjectionGraph.Project (x_4 :: x_5) x_2 x_3 x_6 x_7}
+            {saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+            {recursive : MicroCFTA.SourceEqualityRequiredGraph.Recursive x}
+            (head : MicroCFTA.SourceEqualityProjectionMemos.HeadReads headTrace memo middleMemo)
+            (body : MicroCFTA.SourceEqualityProjectionMemos.ProjectReads bodyTrace middleMemo saved),
+            motive_1 bodyTrace middleMemo saved body → motive_1 ⋯ memo saved ⋯) →
+          (∀ {x : List Int} {x_1 : Int} {x_2 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+              {memo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}, motive_2 ⋯ memo memo ⋯) →
+            (∀ {x : List Int} {x_1 : Int} {x_2 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+                {x_3 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                {x_4 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+                {x_5 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                {restTrace : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows x x_1 x_2 x_3 x_4 x_5}
+                {memo saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+                {x_6 : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+                {absent : MicroCFTA.SourceEqualityProjectionGraph.select x_6.children x_1 = none}
+                (rest : MicroCFTA.SourceEqualityProjectionMemos.RowsReads restTrace memo saved),
+                motive_2 restTrace memo saved rest → motive_2 ⋯ memo saved ⋯) →
+              (∀ {x : List Int} {x_1 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+                  {x_2 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {x_3 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+                  {x_4 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {firstTrace : MicroCFTA.SourceEqualityProjectionGraph.Project x x_1 x_2 x_3 x_4}
+                  {memo middleMemo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard} {x_5 : Int}
+                  {x_6 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+                  {x_7 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+                  {x_8 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {restTrace : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows x x_5 x_6 x_4 x_7 x_8}
+                  {saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+                  {x_9 : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+                  {found : MicroCFTA.SourceEqualityProjectionGraph.select x_9.children x_5 = some x_1}
+                  (first : MicroCFTA.SourceEqualityProjectionMemos.ProjectReads firstTrace memo middleMemo)
+                  (rest : MicroCFTA.SourceEqualityProjectionMemos.RowsReads restTrace middleMemo saved),
+                  motive_1 firstTrace memo middleMemo first →
+                    motive_2 restTrace middleMemo saved rest → motive_2 ⋯ memo saved ⋯) →
+                ∀ {path : List Int} {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+                  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+                  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                  {a : MicroCFTA.SourceEqualityProjectionGraph.Project path value before result after}
+                  {a_1 a_2 : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+                  (t : MicroCFTA.SourceEqualityProjectionMemos.ProjectReads a a_1 a_2), motive_1 a a_1 a_2 t
+@MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads.rec : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {motive :
+    {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} →
+      {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+        {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} →
+          {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+            (a : MicroCFTA.SourceEqualityProjectionUnion.ReadAll values before edges after) →
+              (a_1 a_2 : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard) →
+                MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads a a_1 a_2 → Prop},
+  (∀ {x : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+      {memo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}, motive ⋯ memo memo ⋯) →
+    (∀ {x : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+        {x_1 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+        {x_2 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+        {x_3 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+        {firstTrace : MicroCFTA.SourceEqualityProjectionRead.Read x x_1 x_2 x_3}
+        {memo middleMemo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+        {x_4 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+        {x_5 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+        {x_6 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+        {restTrace : MicroCFTA.SourceEqualityProjectionUnion.ReadAll x_4 x_3 x_5 x_6}
+        {saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+        (first : MicroCFTA.SourceEqualityProjectionMemos.ReadReads firstTrace memo middleMemo)
+        (rest : MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads restTrace middleMemo saved),
+        motive restTrace middleMemo saved rest → motive ⋯ memo saved ⋯) →
+      ∀ {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+        {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+        {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+        {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+        {a : MicroCFTA.SourceEqualityProjectionUnion.ReadAll values before edges after}
+        {a_1 a_2 : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+        (t : MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads a a_1 a_2), motive a a_1 a_2 t

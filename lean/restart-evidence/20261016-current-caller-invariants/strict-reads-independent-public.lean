@@ -1,0 +1,86 @@
+import MicroCFTA.SourceCurrentAllocatedPrimaryCompletion
+import MicroCFTA.SourceCurrentAllocatedGateReadValidity
+import MicroCFTA.SourceCurrentAllocatedReadDeterminism
+import MicroCFTA.SourceCurrentAllocatedSeededReadValidity
+import MicroCFTA.SourceCurrentAllocatedQueryReadValidity
+import MicroCFTA.SourceCurrentAllocatedPartialDescent
+
+set_option pp.universes true
+set_option pp.explicit true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_node
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_node
+#print axioms MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_child
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_child
+#print axioms MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_edges
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_edges
+#print axioms MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_path
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_path
+#print axioms MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_class
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.lift_class
+#print axioms MicroCFTA.SourceCurrentAllocatedPrimaryReads.completed_class
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.completed_class
+#print axioms MicroCFTA.SourceCurrentAllocatedPrimaryReads.complete_class
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.complete_class
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_node
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_node
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_child
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_child
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_edges
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_edges
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_path
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_path
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_class
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.primary_class
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_node
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_node
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_child
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_child
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_edges
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_edges
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_path
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_path
+#print axioms MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_class
+#check @MicroCFTA.SourceCurrentAllocatedGateReadValidity.secondary_class
+#print axioms MicroCFTA.SourceCurrentAllocatedReadDeterminism.collect_unique
+#check @MicroCFTA.SourceCurrentAllocatedReadDeterminism.collect_unique
+#print axioms MicroCFTA.SourceCurrentAllocatedReadDeterminism.exposure_unique
+#check @MicroCFTA.SourceCurrentAllocatedReadDeterminism.exposure_unique
+#print axioms MicroCFTA.SourceCurrentAllocatedReadDeterminism.exposure
+#check @MicroCFTA.SourceCurrentAllocatedReadDeterminism.exposure
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededReadValidity.operand
+#check @MicroCFTA.SourceCurrentAllocatedSeededReadValidity.operand
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededReadValidity.fold
+#check @MicroCFTA.SourceCurrentAllocatedSeededReadValidity.fold
+#print axioms MicroCFTA.SourceCurrentAllocatedSeededReadValidity.seeded
+#check @MicroCFTA.SourceCurrentAllocatedSeededReadValidity.seeded
+#print axioms MicroCFTA.SourceCurrentAllocatedQueryReadValidity.query
+#check @MicroCFTA.SourceCurrentAllocatedQueryReadValidity.query
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialDescent.components
+#check @MicroCFTA.SourceCurrentAllocatedPartialDescent.components
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialDescent.complete
+#check @MicroCFTA.SourceCurrentAllocatedPartialDescent.complete
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialDescent.parent_satisfied
+#check @MicroCFTA.SourceCurrentAllocatedPartialDescent.parent_satisfied
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialDescent.node_law
+#check @MicroCFTA.SourceCurrentAllocatedPartialDescent.node_law
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.empty
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.reference
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.union
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.finite
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.endpoint_open
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.endpoint_closed
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.branches
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.constrained
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.closed
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.NodeReads.unfold
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.ChildReads.missing
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.ChildReads.present
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.EdgesReads.nil
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.EdgesReads.stop
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.EdgesReads.next
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.PathReads.empty
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.PathReads.child
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.ClassReads.nil
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.ClassReads.stop
+#check @MicroCFTA.SourceCurrentAllocatedPrimaryReads.ClassReads.next

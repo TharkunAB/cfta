@@ -1,0 +1,428 @@
+@MicroCFTA.SourceCurrentRequiredQueryMemos.HeadReads.read : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {fuel : Nat}
+  {value result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before middle after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {exposed :
+    MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges fuel value before =
+      MicroCFTA.MergedSourceExposure.Result.done edges middle}
+  {rebuilt :
+    MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeNode edges) middle =
+      (result, after)}
+  {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceEqualityQueryGlobalMemos.ExposureReads fuel value before memos saved →
+    MicroCFTA.SourceCurrentRequiredQueryMemos.HeadReads ⋯ memos saved
+@MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.identity : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {x :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_1 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads ⋯ memos memos
+@MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.empty : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {x :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_1 : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {nonempty : x_1 ≠ []}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads ⋯ memos memos
+@MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.ordinary : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {x : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {x_1 : Nat}
+  {x_2 : List MicroCFTA.InternedBinderProtocol.Reference} {x_3 : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {x_4 :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {x_5 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_6 :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {x_7 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {rowsTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireRows x_3 x_4 x_5 x_6 x_7}
+  {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos} {nonempty : x_3 ≠ []}
+  {x_8 :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_9 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {rebuilt :
+    MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeNode x_6) x_7 = (x_8, x_9)},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads rowsTrace memos saved →
+    MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads ⋯ memos saved
+@MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.recursive : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {x :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_1 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_2 :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_3 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {headTrace : MicroCFTA.SourceEqualityRequiredHead.Head x x_1 x_2 x_3}
+  {memos middleMemo : MicroCFTA.EndpointMemoGateTrace.Memos} {x_4 : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {x_5 :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_6 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {bodyTrace :
+    MicroCFTA.SourceEqualityRequiredGraph.RequireNode (MicroCFTA.SourceEqualityNeeded.Needed.node x_4) x_2 x_3 x_5 x_6}
+  {saved : MicroCFTA.EndpointMemoGateTrace.Memos} {nonempty : x_4 ≠ []}
+  {recursive : MicroCFTA.SourceEqualityRequiredGraph.Recursive x},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.HeadReads headTrace memos middleMemo →
+    MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads bodyTrace middleMemo saved →
+      MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads ⋯ memos saved
+@MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads.nil : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {x : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {x_1 : Nat}
+  {x_2 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads ⋯ memos memos
+@MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads.unselected : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {absent : MicroCFTA.SourceEqualityNeededMap.lookup (↑index) entries = none}
+  {restTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireChildren entries (index + 1) values before results after}
+  {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads restTrace memos saved →
+    MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads ⋯ memos saved
+@MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads.selected : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {values results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {value result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before middle after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {found : MicroCFTA.SourceEqualityNeededMap.lookup (↑index) entries = some needed}
+  {firstTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireNode needed value before result middle}
+  {restTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireChildren entries (index + 1) values middle results after}
+  {memos middleMemo saved : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads firstTrace memos middleMemo →
+    MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads restTrace middleMemo saved →
+      MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads ⋯ memos saved
+@MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads.nil : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {x : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {x_1 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}, MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads ⋯ memos memos
+@MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads.rejected : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {x : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {x_1 :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {x_2 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_3 :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {x_4 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {restTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireRows x x_1 x_2 x_3 x_4}
+  {memos saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {x_5 :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {rejected :
+    MicroCFTA.SourceEqualityNeeded.fits (MicroCFTA.SourceEqualityNeeded.Needed.node x) x_5.children.length = false},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads restTrace memos saved →
+    MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads ⋯ memos saved
+@MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads.kept : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {x : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {x_1 :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_2 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_3 :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {x_4 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {childTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireChildren x 0 x_1.children x_2 x_3 x_4}
+  {memos middleMemo : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {x_5 :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {x_6 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {x_7 :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {x_8 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {restTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireRows x x_5 x_6 x_7 x_8}
+  {saved : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {fits : MicroCFTA.SourceEqualityNeeded.fits (MicroCFTA.SourceEqualityNeeded.Needed.node x) x_1.children.length = true}
+  {x_9 :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {rebuilt :
+    MicroCFTA.InternedConstructorTemplates.run
+        (MicroCFTA.InternedConstructorTemplates.makeEdge x_1.entry.key.symbol x_1.entry.key.constraint x_3) x_4 =
+      (x_9, x_6)},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads childTrace memos middleMemo →
+    MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads restTrace middleMemo saved →
+      MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads ⋯ memos saved
+@MicroCFTA.SourceEqualityProjectionMemos.ReadReads.done : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {fuel : Nat}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {actual :
+    MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges fuel value before =
+      MicroCFTA.MergedSourceExposure.Result.done edges after}
+  {memo saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityExposureMemos.NodeEdgesReads fuel value before memo saved →
+    MicroCFTA.SourceEqualityProjectionMemos.ReadReads ⋯ memo saved
+@MicroCFTA.SourceEqualityProjectionMemos.HeadReads.read : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {fuel : Nat}
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {exposed :
+    MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges fuel value before =
+      MicroCFTA.MergedSourceExposure.Result.done edges middle}
+  {rebuilt :
+    MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeNode edges) middle =
+      (result, after)}
+  {memo saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.ReadReads ⋯ memo saved →
+    MicroCFTA.SourceEqualityProjectionMemos.HeadReads ⋯ memo saved
+@MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads.nil : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {x : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads ⋯ memo memo
+@MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads.cons : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {x : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_1 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {x_2 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {x_3 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {firstTrace : MicroCFTA.SourceEqualityProjectionRead.Read x x_1 x_2 x_3}
+  {memo middleMemo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+  {x_4 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {x_5 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {x_6 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {restTrace : MicroCFTA.SourceEqualityProjectionUnion.ReadAll x_4 x_3 x_5 x_6}
+  {saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.ReadReads firstTrace memo middleMemo →
+    MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads restTrace middleMemo saved →
+      MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads ⋯ memo saved
+@MicroCFTA.SourceEqualityProjectionMemos.UnionReads.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before middle after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {read : MicroCFTA.SourceEqualityProjectionUnion.ReadAll values before edges middle}
+  {built :
+    MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeNode edges) middle =
+      (result, after)}
+  {memo saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads read memo saved →
+    MicroCFTA.SourceEqualityProjectionMemos.UnionReads ⋯ memo saved
+@MicroCFTA.SourceEqualityProjectionMemos.ProjectReads.root : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {x : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_1 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.ProjectReads ⋯ memo memo
+@MicroCFTA.SourceEqualityProjectionMemos.ProjectReads.empty : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {x : Int} {x_1 : List Int}
+  {x_2 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.ProjectReads ⋯ memo memo
+@MicroCFTA.SourceEqualityProjectionMemos.ProjectReads.ordinary : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {x : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {x_1 : Nat}
+  {x_2 : List MicroCFTA.InternedBinderProtocol.Reference} {x_3 : List Int} {x_4 : Int}
+  {x_5 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {x_6 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {x_7 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {x_8 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rowsTrace : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows x_3 x_4 x_5 x_6 x_7 x_8}
+  {memo middleMemo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+  {x_9 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_10 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {unionTrace : MicroCFTA.SourceEqualityProjectionUnion.Union x_7 x_8 x_9 x_10}
+  {saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.RowsReads rowsTrace memo middleMemo →
+    MicroCFTA.SourceEqualityProjectionMemos.UnionReads unionTrace middleMemo saved →
+      MicroCFTA.SourceEqualityProjectionMemos.ProjectReads ⋯ memo saved
+@MicroCFTA.SourceEqualityProjectionMemos.ProjectReads.recursive : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {x : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_1 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {x_2 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_3 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {headTrace : MicroCFTA.SourceEqualityRequiredHead.Head x x_1 x_2 x_3}
+  {memo middleMemo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard} {x_4 : Int} {x_5 : List Int}
+  {x_6 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_7 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {bodyTrace : MicroCFTA.SourceEqualityProjectionGraph.Project (x_4 :: x_5) x_2 x_3 x_6 x_7}
+  {saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+  {recursive : MicroCFTA.SourceEqualityRequiredGraph.Recursive x},
+  MicroCFTA.SourceEqualityProjectionMemos.HeadReads headTrace memo middleMemo →
+    MicroCFTA.SourceEqualityProjectionMemos.ProjectReads bodyTrace middleMemo saved →
+      MicroCFTA.SourceEqualityProjectionMemos.ProjectReads ⋯ memo saved
+@MicroCFTA.SourceEqualityProjectionMemos.RowsReads.nil : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {x : List Int} {x_1 : Int}
+  {x_2 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.RowsReads ⋯ memo memo
+@MicroCFTA.SourceEqualityProjectionMemos.RowsReads.missing : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {x : List Int} {x_1 : Int}
+  {x_2 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {x_3 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {x_4 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {x_5 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {restTrace : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows x x_1 x_2 x_3 x_4 x_5}
+  {memo saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+  {x_6 : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+  {absent : MicroCFTA.SourceEqualityProjectionGraph.select x_6.children x_1 = none},
+  MicroCFTA.SourceEqualityProjectionMemos.RowsReads restTrace memo saved →
+    MicroCFTA.SourceEqualityProjectionMemos.RowsReads ⋯ memo saved
+@MicroCFTA.SourceEqualityProjectionMemos.RowsReads.selected : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {x : List Int}
+  {x_1 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_2 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {x_3 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_4 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {firstTrace : MicroCFTA.SourceEqualityProjectionGraph.Project x x_1 x_2 x_3 x_4}
+  {memo middleMemo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard} {x_5 : Int}
+  {x_6 : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {x_7 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {x_8 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {restTrace : MicroCFTA.SourceEqualityProjectionGraph.ProjectRows x x_5 x_6 x_4 x_7 x_8}
+  {saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+  {x_9 : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+  {found : MicroCFTA.SourceEqualityProjectionGraph.select x_9.children x_5 = some x_1},
+  MicroCFTA.SourceEqualityProjectionMemos.ProjectReads firstTrace memo middleMemo →
+    MicroCFTA.SourceEqualityProjectionMemos.RowsReads restTrace middleMemo saved →
+      MicroCFTA.SourceEqualityProjectionMemos.RowsReads ⋯ memo saved
+@MicroCFTA.SourceEqualityProjectionMemos.ForestReads.root : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {x : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {x_1 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {x_2 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_3 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {union : MicroCFTA.SourceEqualityProjectionUnion.Union x x_1 x_2 x_3}
+  {memo saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.UnionReads union memo saved →
+    MicroCFTA.SourceEqualityProjectionMemos.ForestReads ⋯ memo saved
+@MicroCFTA.SourceEqualityProjectionMemos.ForestReads.missing : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {x : List Int}
+  {x_1 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {x_2 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} {x_3 : Int}
+  {absent : MicroCFTA.SourceEqualityProjectionGraph.select x_2 x_3 = none}
+  {memo : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard},
+  MicroCFTA.SourceEqualityProjectionMemos.ForestReads ⋯ memo memo
+@MicroCFTA.SourceEqualityProjectionMemos.ForestReads.selected : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {x : List Int}
+  {x_1 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_2 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {x_3 : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {x_4 : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {body : MicroCFTA.SourceEqualityProjectionGraph.Project x x_1 x_2 x_3 x_4}
+  {memo saved : MicroCFTA.InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+  {x_5 : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)} {x_6 : Int}
+  {found : MicroCFTA.SourceEqualityProjectionGraph.select x_5 x_6 = some x_1},
+  MicroCFTA.SourceEqualityProjectionMemos.ProjectReads body memo saved →
+    MicroCFTA.SourceEqualityProjectionMemos.ForestReads ⋯ memo saved

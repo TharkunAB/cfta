@@ -1,0 +1,140 @@
+'MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.head' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.children' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.required' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.requireAll' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.head : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {value result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {trace : MicroCFTA.SourceEqualityRequiredHead.Head value before result after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.HeadReads trace memos final →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedProbeProvenance.Available before value →
+          MicroCFTA.EndpointMemoGateTrace.Valid before memos →
+            MicroCFTA.EndpointMemoGateTrace.Valid after final ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+@MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.node : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {trace : MicroCFTA.SourceEqualityRequiredGraph.RequireNode needed value before result after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads trace memos final →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedProbeProvenance.Available before value →
+          MicroCFTA.EndpointMemoGateTrace.Valid before memos →
+            MicroCFTA.EndpointMemoGateTrace.Valid after final ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+@MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.children : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {values results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {trace : MicroCFTA.SourceEqualityRequiredGraph.RequireChildren entries index values before results after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads trace memos final →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedNestedProvenance.Values before values →
+          MicroCFTA.EndpointMemoGateTrace.Valid before memos →
+            MicroCFTA.EndpointMemoGateTrace.Valid after final ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+@MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.rows : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)}
+  {edges results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {trace : MicroCFTA.SourceEqualityRequiredGraph.RequireRows entries edges before results after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads trace memos final →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedNestedProvenance.Edges before edges →
+          MicroCFTA.EndpointMemoGateTrace.Valid before memos →
+            MicroCFTA.EndpointMemoGateTrace.Valid after final ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+@MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.required : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {paths : List (List Int)}
+  {values results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads paths values results before after memos final →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedNestedProvenance.Values before values →
+          MicroCFTA.EndpointMemoGateTrace.Valid before memos →
+            MicroCFTA.EndpointMemoGateTrace.Valid after final ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+@MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.requireAll : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {paths : List (List Int)}
+  {values results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads paths values results before after memos final →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedNestedProvenance.Values before values →
+          MicroCFTA.EndpointMemoGateTrace.Valid before memos →
+            MicroCFTA.EndpointMemoGateTrace.Valid after final ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query

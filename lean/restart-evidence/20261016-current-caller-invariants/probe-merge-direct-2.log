@@ -1,0 +1,65 @@
+lean/MicroCFTA/SourceCurrentAllocatedProbeMerge.lean:238:41: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+lean/MicroCFTA/SourceCurrentAllocatedProbeMerge.lean:249:16: warning: declaration uses `sorry`
+lean/MicroCFTA/SourceCurrentAllocatedProbeMerge.lean:255:41: error: Type mismatch
+  InternedShallowHeap.makeNode_noNewMu edges
+has type
+  ∀ (state : State Symbol Guard), NoNewMu state (run (makeNode edges) state).snd
+but is expected to have type
+  Ordinary (Code.work (makeNode edges))
+lean/MicroCFTA/SourceCurrentAllocatedProbeMerge.lean:258:43: error: Type mismatch
+  InternedShallowHeap.makeUnion_noNewMu values
+has type
+  ∀ (state : State Symbol Guard), NoNewMu state (run (makeUnion values) state).snd
+but is expected to have type
+  Ordinary (Code.work (makeUnion values))
+lean/MicroCFTA/SourceCurrentAllocatedProbeMerge.lean:305:14: error: typeclass instance problem is stuck
+  DecidableEq (EdgeKey ?m.84 ?m.85)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `DecidableEq` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+lean/MicroCFTA/SourceCurrentAllocatedProbeMerge.lean:306:8: error: Tactic `assumption` failed
+
+case h_2
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+top : Guard
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+input✝ : Value Symbol Guard
+x✝ :
+  ∀ (entry_1 : Cache.Interned InternedBinderProtocol.NodeKey) (edges_1 : List (EdgeValue Symbol Guard)) (depth_1 : Nat)
+    (free_1 : List InternedBinderProtocol.Reference),
+    Value.node entry edges depth free = Value.node entry_1 edges_1 depth_1 free_1 → False
+⊢ Ordinary
+    (if free = [] then root top (MergedSourceGrouping.groups edges) else Code.pure (Value.node entry edges depth free))
+lean/MicroCFTA/SourceCurrentAllocatedProbeMerge.lean:338:6: error: Type mismatch
+  probes
+has type
+  Value Symbol Guard
+of sort `Type` but is expected to have type
+  before✝.nodeRecords semantic = some (Value.mu costs stored available probes) →
+    InternedFreshOrdinaryProbeFilter.Clean available probes
+of sort `Prop`
+lean/MicroCFTA/SourceCurrentAllocatedProbeMerge.lean:341:17: error: Application type mismatch: The argument
+  semantic
+has type
+  InternedBinderProtocol.NodeKey
+of sort `Type` but is expected to have type
+  SemanticReady before
+of sort `Prop` in the application
+  ih ?m.287 semantic
+lean/MicroCFTA/SourceCurrentAllocatedProbeMerge.lean:341:87: error: Application type mismatch: The argument
+  semantic
+has type
+  InternedBinderProtocol.NodeKey
+of sort `Type` but is expected to have type
+  SemanticReady before
+of sort `Prop` in the application
+  SourceCurrentMemoMergeEffects.body_certified clear top input before semantic

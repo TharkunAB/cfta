@@ -1,0 +1,15 @@
+import MicroCFTA.SourceCurrentAllocatedRequiredReadValidity
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.head
+#print axioms MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.node
+#print axioms MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.children
+#print axioms MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.required
+#print axioms MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.requireAll
+
+#check @MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.head
+#check @MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.node
+#check @MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.children
+#check @MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.rows
+#check @MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.required
+#check @MicroCFTA.SourceCurrentAllocatedRequiredReadValidity.requireAll

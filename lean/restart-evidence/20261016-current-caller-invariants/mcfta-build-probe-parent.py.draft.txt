@@ -1,0 +1,62 @@
+from pathlib import Path
+old=Path('lean/MicroCFTA/SourceCurrentConjunctionScanClassPass.lean').read_text()
+header=old[old.index('open Cache'):old.index('/-- Raw reduction records')]
+header+='''open SourceCurrentConjunctionScanClassPass (Reduction Reads Ranges Receipt)
+local notation "ProbeHeap" => InternedFreshOrdinaryProbeHeap.Heap
+
+'''
+helpers=old[old.index('private theorem erased_narrows'):old.index('/-- One actual current Scan')]
+body=old[old.index('/-- One actual current Scan'):old.rindex('end MicroCFTA.')]
+body=body.replace('''(memos : Memos) (valid : Valid before.native.machine.heap memos) :''','''(memos : Memos) (valid : Valid before.native.machine.heap memos)
+    (probes : ProbeHeap before.native.machine.heap) :''')
+body=body.replace('''Receipt formulas solver next records values results before after fourth savedFourth memo saved outcome final := by''','''Receipt formulas solver next records values results before after fourth savedFourth memo saved outcome final ∧
+      ProbeHeap after.native.machine.heap := by''')
+# The finite endpoint has a different outcome binder.
+body=body.replace('''Receipt formulas solver next records values results before after fourth savedFourth memo saved outcome final := by''','''Receipt formulas solver next records values results before after fourth savedFourth memo saved outcome final ∧
+      ProbeHeap after.native.machine.heap := by''')
+needle='''  obtain ⟨scanMemos, scanInventory, scanReads, scanValid, scanReady, scanAdmitted,'''
+body=body.replace(needle,'''  have scanProbes := SourceCurrentAllocatedProbeScan.scan_heap formulas solver inventory actualScan
+    ready admitted available pathsProper correct ranges.scan probes
+'''+needle)
+body=body.replace('''        .stopped actualScan, .stopped scanReads,
+        scanReady''','''        .stopped actualScan, .stopped scanReads, ?_, scanProbes⟩
+      refine ⟨scanReady''')
+needle='''      refine ⟨results, after, saved, next, final,
+        .completed actualScan retained requiredDone passActual,
+        .completed (retained := retained) (required := requiredDone) firstReads requiredReads passReads,
+        checked.pass.ready'''
+replace='''      have requiredProbes := (SourceCurrentAllocatedProbeRequired.requireAll fuel readFuel
+        (SourceEqualitySelectedRequired.paths selected) values requiredValues middle.native.machine.heap heap
+        requiredDone scanReady.semantic scanReady.costs scanProbes scanValues).2.2.2.1
+      have passProbes := SourceCurrentAllocatedProbeClassPass.pass_heap formulas solver requiredInventory passReads
+        (fun record member => (keptFields record member).1)
+        (fun record member => (keptFields record member).2.2) required.ready required.admitted required.resident
+        (SourceCurrentConjunctionRequiredClassPass.selected_domains required kept selectedEq)
+        ((stored.grows scanEffects.keeps).grows required.effects.keeps) covered requiredValid requiredProbes
+      refine ⟨results, after, saved, next, final,
+        .completed actualScan retained requiredDone passActual,
+        .completed (retained := retained) (required := requiredDone) firstReads requiredReads passReads, ?_, passProbes⟩
+      refine ⟨checked.pass.ready'''
+assert needle in body
+body=body.replace(needle,replace)
+body=body.replace('''obtain ⟨results, after, saved, next, final, actual, reads, receipt⟩ := from_scan''','''obtain ⟨results, after, saved, next, final, actual, reads, receipt, finalProbes⟩ := from_scan''')
+# Add the new final argument only to finite's local from_scan invocation.
+body=body.replace('''proper fields correct stored covered ranges memos valid
+  exact''','''proper fields correct stored covered ranges memos valid probes
+  exact''')
+body=body.replace('''⟨outcome, results, after, savedFourth, saved, next, final, actual, reads, receipt⟩''','''⟨outcome, results, after, savedFourth, saved, next, final, actual, reads, receipt, finalProbes⟩''')
+Path('lean/MicroCFTA/SourceCurrentAllocatedProbeReduction.lean').write_text('''import MicroCFTA.SourceCurrentAllocatedProbeScan
+import MicroCFTA.SourceCurrentAllocatedProbeRequired
+import MicroCFTA.SourceCurrentAllocatedProbeClassPass
+import MicroCFTA.SourceCurrentAllocatedParentEdge
+
+/-!
+# Constructed current local reductions with filtered probes
+
+The construction keeps one actual Scan and its returned global bundles.
+Successful scans derive the required forest and the actual class pass.
+Stopped scans retain their literal returned heap. Probe preservation is
+proved from the actual stages, separately from readiness and cache growth.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedProbeReduction
+'''+header+helpers+body+'end MicroCFTA.SourceCurrentAllocatedProbeReduction\n')

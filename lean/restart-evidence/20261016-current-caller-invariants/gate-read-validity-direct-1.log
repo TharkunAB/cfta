@@ -1,0 +1,259 @@
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:24:13: error(lean.unknownIdentifier): Unknown identifier `Cache.Entry`
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:24:57: error(lean.unknownIdentifier): Unknown identifier `InternedConstructorTemplates.Body`
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:78:54: error: Type mismatch: After simplification, term
+  checked.valid
+ has type
+  SourceEndpointMemo.Valid x✝ (SourceEndpointMemo.run (Value.node x✝² x✝¹ depth✝ free✝) memos✝.query).snd
+but is expected to have type
+  SourceEndpointMemo.Valid x✝ savedQuery✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:95:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case missing
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : EndpointStatefulGateTrace.NodeTrace source reaches path value before answer after
+memos saved : Memos
+x✝¹ : Path
+x✝ : InternedConstructorTemplates.State Symbol Guard
+values✝ : List (Value Symbol Guard)
+index✝ : Nat
+memos✝ : Memos
+absent : values✝[index✝]? = none
+a✝² : Ready x✝
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ values✝ → Available x✝ value
+a✝ : EndpointMemoGateTrace.Valid x✝ memos✝
+⊢ Keeps x✝ x✝ memos✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:98:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case present
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace✝ : EndpointStatefulGateTrace.NodeTrace source reaches path value before answer after
+memos saved : Memos
+values✝ : List (Value Symbol Guard)
+index✝ : Nat
+value✝ : Value Symbol Guard
+x✝³ : Path
+x✝² : InternedConstructorTemplates.State Symbol Guard
+x✝¹ : Bool
+x✝ : InternedConstructorTemplates.State Symbol Guard
+nextTrace✝ : EndpointStatefulGateTrace.NodeTrace source reaches x✝³ value✝ x✝² x✝¹ x✝
+memos✝ saved✝ : Memos
+found : values✝[index✝]? = some value✝
+trace : EndpointMemoGateTrace.NodeReads nextTrace✝ memos✝ saved✝
+ih : Ready x✝² → Available x✝² value✝ → EndpointMemoGateTrace.Valid x✝² memos✝ → Keeps x✝² x✝ saved✝
+a✝² : Ready x✝²
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ values✝ → Available x✝² value
+a✝ : EndpointMemoGateTrace.Valid x✝² memos✝
+⊢ Keeps x✝² x✝ saved✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:101:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case nil
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : EndpointStatefulGateTrace.NodeTrace source reaches path value before answer after
+memos saved : Memos
+x✝² : Nat
+x✝¹ : Path
+x✝ : InternedConstructorTemplates.State Symbol Guard
+memos✝ : Memos
+a✝² : Ready x✝
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ List.flatMap EdgeValue.children [] → Available x✝ value
+a✝ : EndpointMemoGateTrace.Valid x✝ memos✝
+⊢ Keeps x✝ x✝ memos✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:104:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case stop
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : EndpointStatefulGateTrace.NodeTrace source reaches path value before answer after
+memos saved : Memos
+x✝⁵ : List (EdgeValue Symbol Guard)
+x✝⁴ : EdgeValue Symbol Guard
+x✝³ : Nat
+x✝² : Path
+x✝¹ x✝ : InternedConstructorTemplates.State Symbol Guard
+headTrace✝ : EndpointStatefulGateTrace.ChildTrace source reaches x✝⁴.children x✝³ x✝² x✝¹ true x✝
+memos✝ saved✝ : Memos
+head : EndpointMemoGateTrace.ChildReads headTrace✝ memos✝ saved✝
+ih :
+  Ready x✝¹ →
+    (∀ (value : Value Symbol Guard), value ∈ x✝⁴.children → Available x✝¹ value) →
+      EndpointMemoGateTrace.Valid x✝¹ memos✝ → Keeps x✝¹ x✝ saved✝
+a✝² : Ready x✝¹
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ List.flatMap EdgeValue.children (x✝⁴ :: x✝⁵) → Available x✝¹ value
+a✝ : EndpointMemoGateTrace.Valid x✝¹ memos✝
+⊢ Keeps x✝¹ x✝ saved✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:107:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case next
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : EndpointStatefulGateTrace.NodeTrace source reaches path value before answer after
+memos saved : Memos
+x✝⁷ : EdgeValue Symbol Guard
+x✝⁶ : Nat
+x✝⁵ : Path
+x✝⁴ x✝³ : InternedConstructorTemplates.State Symbol Guard
+headTrace✝ : EndpointStatefulGateTrace.ChildTrace source reaches x✝⁷.children x✝⁶ x✝⁵ x✝⁴ false x✝³
+memos✝ middle✝ : Memos
+x✝² : List (EdgeValue Symbol Guard)
+x✝¹ : Bool
+x✝ : InternedConstructorTemplates.State Symbol Guard
+tailTrace✝ : EndpointStatefulGateTrace.EdgesTrace source reaches x✝⁶ x✝⁵ x✝² x✝³ x✝¹ x✝
+saved✝ : Memos
+head : EndpointMemoGateTrace.ChildReads headTrace✝ memos✝ middle✝
+tail : EndpointMemoGateTrace.EdgesReads tailTrace✝ middle✝ saved✝
+headIH :
+  Ready x✝⁴ →
+    (∀ (value : Value Symbol Guard), value ∈ x✝⁷.children → Available x✝⁴ value) →
+      EndpointMemoGateTrace.Valid x✝⁴ memos✝ → Keeps x✝⁴ x✝³ middle✝
+tailIH :
+  Ready x✝³ →
+    (∀ (value : Value Symbol Guard), value ∈ List.flatMap EdgeValue.children x✝² → Available x✝³ value) →
+      EndpointMemoGateTrace.Valid x✝³ middle✝ → Keeps x✝³ x✝ saved✝
+a✝² : Ready x✝⁴
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ List.flatMap EdgeValue.children (x✝⁷ :: x✝²) → Available x✝⁴ value
+a✝ : EndpointMemoGateTrace.Valid x✝⁴ memos✝
+⊢ Keeps x✝⁴ x✝ saved✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:205:11: error: failed to infer `have` declaration type
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:208:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case missing
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : SourceCurrentSecondaryTrace.NodeTrace source path value before answer after
+memos saved : Memos
+x✝¹ : Path
+x✝ : InternedConstructorTemplates.State Symbol Guard
+values✝ : List (Value Symbol Guard)
+index✝ : Nat
+memos✝ : Memos
+absent : values✝[index✝]? = none
+a✝² : Ready x✝
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ values✝ → Available x✝ value
+a✝ : EndpointMemoGateTrace.Valid x✝ memos✝
+⊢ Keeps x✝ x✝ memos✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:211:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case present
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace✝ : SourceCurrentSecondaryTrace.NodeTrace source path value before answer after
+memos saved : Memos
+values✝ : List (Value Symbol Guard)
+index✝ : Nat
+value✝ : Value Symbol Guard
+x✝³ : Path
+x✝² : InternedConstructorTemplates.State Symbol Guard
+x✝¹ : Bool
+x✝ : InternedConstructorTemplates.State Symbol Guard
+nextTrace✝ : SourceCurrentSecondaryTrace.NodeTrace source x✝³ value✝ x✝² x✝¹ x✝
+memos✝ saved✝ : Memos
+found : values✝[index✝]? = some value✝
+trace : SourceCurrentSecondaryMemos.NodeReads nextTrace✝ memos✝ saved✝
+ih : Ready x✝² → Available x✝² value✝ → EndpointMemoGateTrace.Valid x✝² memos✝ → Keeps x✝² x✝ saved✝
+a✝² : Ready x✝²
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ values✝ → Available x✝² value
+a✝ : EndpointMemoGateTrace.Valid x✝² memos✝
+⊢ Keeps x✝² x✝ saved✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:214:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case nil
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : SourceCurrentSecondaryTrace.NodeTrace source path value before answer after
+memos saved : Memos
+x✝² : Nat
+x✝¹ : Path
+x✝ : InternedConstructorTemplates.State Symbol Guard
+memos✝ : Memos
+a✝² : Ready x✝
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ List.flatMap EdgeValue.children [] → Available x✝ value
+a✝ : EndpointMemoGateTrace.Valid x✝ memos✝
+⊢ Keeps x✝ x✝ memos✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:217:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case stop
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : SourceCurrentSecondaryTrace.NodeTrace source path value before answer after
+memos saved : Memos
+x✝⁵ : List (EdgeValue Symbol Guard)
+x✝⁴ : EdgeValue Symbol Guard
+x✝³ : Nat
+x✝² : Path
+x✝¹ x✝ : InternedConstructorTemplates.State Symbol Guard
+headTrace✝ : SourceCurrentSecondaryTrace.ChildTrace source x✝⁴.children x✝³ x✝² x✝¹ true x✝
+memos✝ saved✝ : Memos
+head : SourceCurrentSecondaryMemos.ChildReads headTrace✝ memos✝ saved✝
+ih :
+  Ready x✝¹ →
+    (∀ (value : Value Symbol Guard), value ∈ x✝⁴.children → Available x✝¹ value) →
+      EndpointMemoGateTrace.Valid x✝¹ memos✝ → Keeps x✝¹ x✝ saved✝
+a✝² : Ready x✝¹
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ List.flatMap EdgeValue.children (x✝⁴ :: x✝⁵) → Available x✝¹ value
+a✝ : EndpointMemoGateTrace.Valid x✝¹ memos✝
+⊢ Keeps x✝¹ x✝ saved✝
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:220:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case next
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : SourceCurrentSecondaryTrace.NodeTrace source path value before answer after
+memos saved : Memos
+x✝⁷ : EdgeValue Symbol Guard
+x✝⁶ : Nat
+x✝⁵ : Path
+x✝⁴ x✝³ : InternedConstructorTemplates.State Symbol Guard
+headTrace✝ : SourceCurrentSecondaryTrace.ChildTrace source x✝⁷.children x✝⁶ x✝⁵ x✝⁴ false x✝³
+memos✝ middle✝ : Memos
+x✝² : List (EdgeValue Symbol Guard)
+x✝¹ : Bool
+x✝ : InternedConstructorTemplates.State Symbol Guard
+tailTrace✝ : SourceCurrentSecondaryTrace.EdgesTrace source x✝⁶ x✝⁵ x✝² x✝³ x✝¹ x✝
+saved✝ : Memos
+head : SourceCurrentSecondaryMemos.ChildReads headTrace✝ memos✝ middle✝
+tail : SourceCurrentSecondaryMemos.EdgesReads tailTrace✝ middle✝ saved✝
+headIH :
+  Ready x✝⁴ →
+    (∀ (value : Value Symbol Guard), value ∈ x✝⁷.children → Available x✝⁴ value) →
+      EndpointMemoGateTrace.Valid x✝⁴ memos✝ → Keeps x✝⁴ x✝³ middle✝
+tailIH :
+  Ready x✝³ →
+    (∀ (value : Value Symbol Guard), value ∈ List.flatMap EdgeValue.children x✝² → Available x✝³ value) →
+      EndpointMemoGateTrace.Valid x✝³ middle✝ → Keeps x✝³ x✝ saved✝
+a✝² : Ready x✝⁴
+a✝¹ : ∀ (value : Value Symbol Guard), value ∈ List.flatMap EdgeValue.children (x✝⁷ :: x✝²) → Available x✝⁴ value
+a✝ : EndpointMemoGateTrace.Valid x✝⁴ memos✝
+⊢ Keeps x✝⁴ x✝ saved✝

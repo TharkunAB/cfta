@@ -1,0 +1,99 @@
+from pathlib import Path
+root=Path('lean/MicroCFTA');e=Path('lean/restart-evidence/20261016-current-caller-invariants')
+actual=(root/'SourceCurrentAllocatedProbeActual.lean').read_text()
+header=actual[actual.index('open Cache'):actual.index('namespace SourceCurrentAllocatedProbeReduction')]
+parent=actual[actual.index('theorem parent_heap'):actual.index('\n    ProbeHeap after.native.machine.heap := by',actual.index('theorem parent_heap'))]
+parent=parent.replace('theorem parent_heap','theorem supplied_parent_clean',1)
+parent+='''
+    ∃ next, SourceCurrentAllocatedParentEdge.Receipt formulas solver next symbol original loaded inherited values
+      before result after fourth savedFourth memo saved final ∧ ProbeHeap after.native.machine.heap ∧
+      ∀ entry body depth ordinary, Available after.native.machine.heap (.mu entry body depth ordinary) →
+        SourceEqualityMuReconstruction.rebuild entry body depth ordinary after.native.machine.heap =
+          .done (InternedValueNormalization.cleanup (.mu entry body depth ordinary)) after.native.machine.heap := by
+  obtain ⟨next, receipt⟩ := SourceCurrentAllocatedParentEdgeActual.verified formulas solver inventory reads ready admitted live
+    correct stored covered valid
+  have probes := SourceCurrentAllocatedProbeParent.parent_heap formulas solver inventory reads ready admitted live
+    correct stored covered valid probes
+  refine ⟨next, receipt, probes, ?_⟩
+  intro entry body depth ordinary available
+  exact (SourceCurrentAllocatedMuRebuild.resident_rebuild after receipt.ready probes entry body depth ordinary available).1
+'''
+stage=actual[actual.index('theorem stage_heap'):actual.index('\n    ProbeHeap after.native.machine.heap := by',actual.index('theorem stage_heap'))]
+stage=stage.replace('theorem stage_heap','theorem supplied_stage_same_globals',1)
+stage+='''
+    ∃ next, SourceCurrentConjunctionScanClassPass.Receipt formulas solver next records values results before after
+      fourth savedFourth memo saved outcome final ∧ Valid after.native.machine.heap final ∧
+      ProbeHeap after.native.machine.heap := by
+  obtain ⟨next, receipt⟩ := SourceCurrentConjunctionScanClassPassActual.verified formulas solver inventory reads ready admitted
+    available proper fields correct stored covered ranges valid
+  exact ⟨next, receipt, receipt.globals,
+    SourceCurrentAllocatedProbeReduction.stage_heap formulas solver inventory reads ready admitted available proper fields
+      correct stored covered ranges valid probes⟩
+'''
+more='''
+omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+theorem open_forest_projection
+    {path : List Int} {values : List (Value Symbol Guard)} {result : Value Symbol Guard}
+    {before after : InternedConstructorTemplates.State Symbol Guard}
+    (actual : SourceEqualityProjection.Forest path values before result after)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before) (available : Values before values)
+    (probes : ProbeHeap before) : ProbeHeap after :=
+  SourceCurrentAllocatedProbeExposure.forest_heap actual semantic costs available probes
+
+omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+theorem required_and_residency
+    (fuel readFuel : Nat) (paths : List (List Int)) (values results : List (Value Symbol Guard))
+    (before after : InternedConstructorTemplates.State Symbol Guard)
+    (done : SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before = .done results after)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before) (probes : ProbeHeap before) (available : Values before values) :
+    ProbeHeap after ∧ Values after results ∧ SourceEqualityRequiredCache.Keeps before after := by
+  have effect := SourceCurrentAllocatedProbeRequired.requireAll fuel readFuel paths values results before after done
+    semantic costs probes available
+  exact ⟨effect.2.2.2.1, effect.2.2.2.2, effect.1⟩
+
+omit [DecidableEq (Value Symbol Guard)] in
+theorem warm_merge_hit
+    (clear : Guard → Bool) (top : Guard) (input : Value Symbol Guard)
+    (before : InternedConstructorTemplates.State Symbol Guard) (memo : SourceCurrentMemoMergeGraph.Memo Symbol Guard)
+    (entry : SourceCurrentMemoMergeGraph.Entry Symbol Guard)
+    (found : memo input.referenceOf = some entry)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (stored : SourceCurrentMemoMergeEffects.Stored before memo) (available : Available before input)
+    (probes : ProbeHeap before) :
+    SourceCurrentMemoMergeGraph.Call clear top input before memo entry.result before memo ∧ ProbeHeap before := by
+  exact ⟨.hit found, SourceCurrentAllocatedProbeMerge.Merge.call_heap (.hit found) semantic costs stored available probes⟩
+
+omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+theorem rejected_constructor_no_children
+    (symbol : Symbol) (before : Checked width) (probes : ProbeHeap before.native.machine.heap) :
+    ProbeHeap (SourceCurrentAllocatedMkEdge.reject symbol before).2.native.machine.heap :=
+  SourceCurrentAllocatedProbeParent.reject_heap symbol before probes
+
+omit [DecidableEq (Value Symbol Guard)] in
+theorem returned_checked_trace
+    {fuel : Nat} {control : SourceEqualityNativeDemand.Control (Value Symbol Guard)} {value : Value Symbol Guard}
+    {before after : Checked width}
+    (trace : SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel control before (.code (.pure value)) after)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before.native.machine.heap)
+    (fields : SourceCurrentAllocatedNativeFieldClosure.Fields control before)
+    (probes : ProbeHeap before.native.machine.heap) :
+    SourceCurrentAllocatedNativePhysicalCompletion.Good after ∧
+      SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before)
+        (SourceCurrentAllocatedNativeEffects.physical after) ∧ ProbeHeap after.native.machine.heap := by
+  have effects := SourceCurrentAllocatedNativeTraceEffects.effects trace good semantic costs fields
+  exact ⟨effects.1, effects.2.1, SourceCurrentAllocatedMuRebuild.trace_heap trace semantic probes⟩
+'''
+# Syntactic interface checks complement the compositions above.
+checks='''
+#check SourceCurrentAllocatedProbeParent.local_finite
+#check SourceCurrentAllocatedProbeParent.parent_finite
+#check SourceCurrentAllocatedProbeClassPass.pass_complete
+#check SourceCurrentAllocatedProbeTargets.force_heap
+#check SourceCurrentAllocatedProbeTargets.leaf_heap
+'''
+(e/'probe-kernels.lean').write_text('import MicroCFTA.SourceCurrentAllocatedProbeActual\nimport MicroCFTA.SourceCurrentAllocatedNativeTraceEffects\n\nnamespace MicroCFTA.ProbeIntegration\n'+header+parent+stage+more+checks+'\nend MicroCFTA.ProbeIntegration\n')

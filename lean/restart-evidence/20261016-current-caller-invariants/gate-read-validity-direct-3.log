@@ -1,0 +1,64 @@
+lean/MicroCFTA/SourceCurrentAllocatedGateReadValidity.lean:82:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceEndpointMemo.run (Value.node entry✝ edges✝ depth✝ free✝) memos✝.query
+in the target expression
+  SourceEndpointMemo.Valid x✝ (SourceEndpointMemo.run (Value.node x✝² x✝¹ depth✝ free✝) memos✝.query).snd
+
+case endpoint_closed
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : EndpointStatefulGateTrace.NodeTrace source reaches path value before answer after
+memos saved : Memos
+x✝² : Interned InternedBinderProtocol.NodeKey
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : InternedConstructorTemplates.State Symbol Guard
+depth✝ : Nat
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+savedQuery✝ : SourceEndpointMemo.Memos
+memos✝ : Memos
+free✝ : List InternedBinderProtocol.Reference
+slow : (depth✝ == 0 && free✝.isEmpty) = false
+closed : free✝.isEmpty = true
+actual :
+  SourceEndpointMemo.run (Value.node entry✝ edges✝ depth✝ free✝) memos✝.query =
+    (reaches (Value.node entry✝ edges✝ depth✝ free✝), savedQuery✝)
+ready : Ready x✝
+available : Available x✝ (Value.node x✝² x✝¹ depth✝ free✝)
+valid : EndpointMemoGateTrace.Valid x✝ memos✝
+checked :
+  SourceEndpointMemoCorrect.Checked x✝ memos✝.query (reaches (Value.node x✝² x✝¹ depth✝ free✝))
+    (SourceEndpointMemo.run (Value.node x✝² x✝¹ depth✝ free✝) memos✝.query)
+queryValid : SourceEndpointMemo.Valid x✝ (SourceEndpointMemo.run (Value.node x✝² x✝¹ depth✝ free✝) memos✝.query).snd
+⊢ SourceEndpointMemo.Valid x✝ { unfolding := memos✝.unfolding, query := savedQuery✝ }.query
+case endpoint_closed
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path : Path
+value : Value Symbol Guard
+before after : InternedConstructorTemplates.State Symbol Guard
+answer : Bool
+trace : EndpointStatefulGateTrace.NodeTrace source reaches path value before answer after
+memos saved : Memos
+x✝² : Interned InternedBinderProtocol.NodeKey
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : InternedConstructorTemplates.State Symbol Guard
+depth✝ : Nat
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+savedQuery✝ : SourceEndpointMemo.Memos
+memos✝ : Memos
+free✝ : List InternedBinderProtocol.Reference
+slow : (depth✝ == 0 && free✝.isEmpty) = false
+closed : free✝.isEmpty = true
+actual :
+  SourceEndpointMemo.run (Value.node entry✝ edges✝ depth✝ free✝) memos✝.query =
+    (reaches (Value.node entry✝ edges✝ depth✝ free✝), savedQuery✝)
+ready : Ready x✝
+available : Available x✝ (Value.node x✝² x✝¹ depth✝ free✝)
+valid : EndpointMemoGateTrace.Valid x✝ memos✝
+checked :
+  SourceEndpointMemoCorrect.Checked x✝ memos✝.query (reaches (Value.node x✝² x✝¹ depth✝ free✝))
+    (SourceEndpointMemo.run (Value.node x✝² x✝¹ depth✝ free✝) memos✝.query)
+⊢ Keeps x✝ x✝ { unfolding := memos✝.unfolding, query := savedQuery✝ }

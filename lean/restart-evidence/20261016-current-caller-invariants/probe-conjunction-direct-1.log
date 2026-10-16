@@ -1,0 +1,45 @@
+lean/MicroCFTA/SourceCurrentAllocatedProbeConjunction.lean:22:86: error: Tactic `assumption` failed
+
+Symbol Guard : Type
+state : InternedConstructorTemplates.State Symbol Guard
+⊢ SourceEqualityAnnotationHeap.Heap (fun x => True) state
+lean/MicroCFTA/SourceCurrentAllocatedProbeConjunction.lean:62:35: error: don't know how to synthesize placeholder for argument `paths`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+forests : List (List (Value Symbol Guard))
+classes : EqualityNormalize.Constraints
+before after : InternedConstructorTemplates.State Symbol Guard
+requirements : List (List (Value Symbol Guard))
+paths✝ : EqualityNormalize.Class
+before✝ : InternedConstructorTemplates.State Symbol Guard
+projected✝ : List (Value Symbol Guard)
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+classes✝ : EqualityNormalize.Constraints
+requirements✝ : List (List (Value Symbol Guard))
+after✝ : InternedConstructorTemplates.State Symbol Guard
+first : Projections (jobs forests paths✝) before✝ projected✝ middle✝
+rest : SourceCurrentConjunctionRequirements.ClassRequirements forests classes✝ middle✝ requirements✝ after✝
+ih :
+  SemanticReady middle✝ →
+    CostHeap middle✝ → SourceCurrentConjunctionRequirements.RowsReady middle✝ forests → Heap middle✝ → Heap after✝
+semantic : SemanticReady before✝
+costs : CostHeap before✝
+inputs : SourceCurrentConjunctionRequirements.RowsReady before✝ forests
+probes : Heap before✝
+⊢ EqualityNormalize.Class
+lean/MicroCFTA/SourceCurrentAllocatedProbeConjunction.lean:62:11: error: failed to infer `have` declaration type
+lean/MicroCFTA/SourceCurrentAllocatedProbeConjunction.lean:78:20: error: Type mismatch
+  classes_heap actual semantic costs
+has type
+  SourceCurrentConjunctionRequirements.RowsReady before (List.map EdgeValue.children tuple) → Heap before → Heap after
+but is expected to have type
+  Heap after
+lean/MicroCFTA/SourceCurrentAllocatedProbeConjunction.lean:79:6: error: unexpected token '('; expected command
+lean/MicroCFTA/SourceCurrentAllocatedProbeConjunction.lean:168:27: error: Type mismatch
+  run_heap explored ready
+has type
+  SourceCurrentConjunctionWorklist.PendingReady before [[start]] → Heap before.heap → Heap after.heap
+but is expected to have type
+  Heap after.heap
+lean/MicroCFTA/SourceCurrentAllocatedProbeConjunction.lean:169:6: error: unexpected token '('; expected command

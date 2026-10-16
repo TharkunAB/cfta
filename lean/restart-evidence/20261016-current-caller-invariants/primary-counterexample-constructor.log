@@ -1,0 +1,30 @@
+@MicroCFTA.EndpointMemoGateTrace.NodeReads.endpoint_closed : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {x : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {x_1 :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {x_2 :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {depth : Nat} {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {savedQuery : MicroCFTA.SourceEndpointMemo.Memos} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {free : List MicroCFTA.InternedBinderProtocol.Reference} (slow : (depth == 0 && free.isEmpty) = false),
+  free.isEmpty = true →
+    MicroCFTA.SourceEndpointMemo.run (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free)
+          memos.query =
+        (MicroCFTA.SourceEndpointReachability.reaches MicroCFTA.SourceMemoGate.unconstrained
+            (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free),
+          savedQuery) →
+      MicroCFTA.EndpointMemoGateTrace.NodeReads (MicroCFTA.EndpointStatefulGateTrace.NodeTrace.endpoint slow) memos
+        { unfolding := memos.unfolding, query := savedQuery }

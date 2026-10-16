@@ -1,0 +1,43 @@
+import MicroCFTA.SourceCurrentAllocatedPartialFrames
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.Protocol.of_valid
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.initial_protocol
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.Frame.refl
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.Frame.trans
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.advance_frame
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.beginNode_frame
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.beginEdge_frame
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.beginNode_owner
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.beginEdge_owner
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.finishNode_frame
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.finishEdge_frame
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.node_call
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.node_body
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.edge_call
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.edge_body
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.descendants
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.children
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialFrames.walk
+
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.Protocol
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.Frame
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.Protocol.of_valid
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.initial_protocol
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.Frame.refl
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.Frame.trans
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.advance_frame
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.beginNode_frame
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.beginEdge_frame
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.beginNode_owner
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.beginEdge_owner
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.finishNode_frame
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.finishEdge_frame
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.node_call
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.node_body
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.edge_call
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.rows
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.descendants
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.children
+#check @MicroCFTA.SourceCurrentAllocatedPartialFrames.walk

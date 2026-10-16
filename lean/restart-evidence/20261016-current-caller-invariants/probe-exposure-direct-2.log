@@ -1,0 +1,49 @@
+lean/MicroCFTA/SourceCurrentAllocatedProbeExposure.lean:138:6: error: Type mismatch: After simplification, term
+  InternedFreshOrdinaryProbeHeap.node ?m.82 middle✝ middleProbes
+ has type
+  Heap (run (makeNode ?m.82) middle✝).snd
+but is expected to have type
+  Heap after
+lean/MicroCFTA/SourceCurrentAllocatedProbeExposure.lean:152:12: error: Tactic `assumption` failed
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value✝ : Value Symbol Guard
+state✝ : InternedConstructorTemplates.State Symbol Guard
+⊢ ProjectPreserves value✝ state✝ state✝
+lean/MicroCFTA/SourceCurrentAllocatedProbeExposure.lean:154:12: error: Tactic `assumption` failed
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+rootCase :
+  ∀ {value : Value Symbol Guard} {state : InternedConstructorTemplates.State Symbol Guard},
+    ProjectPreserves value state state
+state✝ : InternedConstructorTemplates.State Symbol Guard
+⊢ ProjectPreserves Value.empty state✝ state✝
+lean/MicroCFTA/SourceCurrentAllocatedProbeExposure.lean:171:12: error: Tactic `assumption` failed
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+rootCase :
+  ∀ {value : Value Symbol Guard} {state : InternedConstructorTemplates.State Symbol Guard},
+    ProjectPreserves value state state
+emptyCase : ∀ {state : InternedConstructorTemplates.State Symbol Guard}, ProjectPreserves Value.empty state state
+ordinaryCase :
+  ∀ {path : List Int} {index : Int} {edges : List (EdgeValue Symbol Guard)}
+    {before : InternedConstructorTemplates.State Symbol Guard} {values : List (Value Symbol Guard)}
+    {middle : InternedConstructorTemplates.State Symbol Guard} {result : Value Symbol Guard}
+    {after : InternedConstructorTemplates.State Symbol Guard} {entry : Interned InternedBinderProtocol.NodeKey}
+    {depth : Nat} {free : List InternedBinderProtocol.Reference},
+    ProjectRows path index edges before values middle →
+      SourceEqualityProjectionUnion.Union values middle result after →
+        RowsPreserves edges before middle → ProjectPreserves (Value.node entry edges depth free) before after
+recursiveCase :
+  ∀ {original : Value Symbol Guard} {before : InternedConstructorTemplates.State Symbol Guard}
+    {exposed : Value Symbol Guard} {middle : InternedConstructorTemplates.State Symbol Guard} {path : List Int}
+    {index : Int} {result : Value Symbol Guard} {after : InternedConstructorTemplates.State Symbol Guard},
+    SourceEqualityRequiredGraph.Recursive original →
+      SourceEqualityRequiredHead.Head original before exposed middle →
+        Project (index :: path) exposed middle result after →
+          ProjectPreserves exposed middle after → ProjectPreserves original before after
+state✝ : InternedConstructorTemplates.State Symbol Guard
+⊢ RowsPreserves [] state✝ state✝

@@ -1,0 +1,3 @@
+import MicroCFTA.SourceCurrentRequiredQueryMemos
+set_option pp.proofs false
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.rec

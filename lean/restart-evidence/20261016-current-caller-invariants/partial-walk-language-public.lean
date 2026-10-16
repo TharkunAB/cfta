@@ -1,0 +1,36 @@
+import MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage
+
+set_option pp.explicit true
+set_option pp.universes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.nil
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.nil
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.head
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.head
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.tail
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.tail
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.cons
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.cons
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.of_parent
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat.of_parent
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.walk_nil
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.walk_nil
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.walk_cons
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.walk_cons
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.walk_cons_receipt
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.walk_cons_receipt
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.WalkLaw.exact
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.WalkLaw.exact
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.children_contradiction
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.children_contradiction
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.children_live
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.children_live
+#print axioms MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.ChildrenLaw.exact
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.ChildrenLaw.exact
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.DescendedSat
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.WalkLaw
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.ChildrenLaw
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.WalkLaw.narrows
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.WalkLaw.preserves
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.ChildrenLaw.narrows
+#check @MicroCFTA.SourceCurrentAllocatedPartialWalkLanguage.ChildrenLaw.preserves

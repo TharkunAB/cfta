@@ -1,0 +1,7 @@
+import MicroCFTA.SourceCurrentConjunctionGlobalMemos
+#print MicroCFTA.SourceCurrentConjunctionGlobalMemos.ExposuresReads.cons
+#print MicroCFTA.SourceCurrentConjunctionGlobalMemos.ProjectionsReads.cons
+#print MicroCFTA.SourceCurrentConjunctionGlobalMemos.ClassesReads.cons
+#print MicroCFTA.SourceCurrentConjunctionGlobalMemos.TuplesReads.keep
+#print MicroCFTA.SourceCurrentConjunctionGlobalMemos.RowsReads.run
+#print MicroCFTA.SourceCurrentConjunctionGlobalMemos.RunReads.admit

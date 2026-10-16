@@ -1,0 +1,449 @@
+case stopped
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+records : List SourceEqualityClassOrder.Record
+values : List (Value Symbol Guard)
+before after : Checked width
+fourth savedFourth : Fourth
+memo : Memo
+memos final : Memos
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+proper :
+  ∀ (record : SourceEqualityClassOrder.Record), record ∈ records → ∀ (path : Path), path ∈ record.paths → path ≠ []
+fields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ records →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges :
+  SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values
+    (List.map SourceEqualityClassOrder.Record.paths records) before fourth
+valid : Valid before.native.machine.heap memos
+paths✝ : Class
+selected✝ : Constraints
+scan✝ :
+  Scan budget unconstrained reaches values (List.map SourceEqualityClassOrder.Record.paths records) before fourth
+    (some paths✝) selected✝ after savedFourth
+reads✝ : SourceCurrentAllocatedScanSourceReads.ScanReads scan✝ memos final
+⊢ True
+case completed
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+records : List SourceEqualityClassOrder.Record
+values results : List (Value Symbol Guard)
+before after : Checked width
+fourth savedFourth : Fourth
+memo saved : Memo
+memos final : Memos
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+proper :
+  ∀ (record : SourceEqualityClassOrder.Record), record ∈ records → ∀ (path : Path), path ∈ record.paths → path ≠ []
+fields :
+  ∀ (record : SourceEqualityClassOrder.Record),
+    record ∈ records →
+      SourceEqualityClassOrder.Coherent record ∧ EqualityTrie.Ascending record.trie ∧ Nontrivial record.paths
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges :
+  SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values
+    (List.map SourceEqualityClassOrder.Record.paths records) before fourth
+valid : Valid before.native.machine.heap memos
+kept✝ : List SourceEqualityClassOrder.Record
+requiredValues✝ : List (Value Symbol Guard)
+middle✝ : Checked width
+selected✝ : Constraints
+heap✝ : Heap
+fuel✝ readFuel✝ : Nat
+scanMemos✝ requiredMemos✝ : Memos
+required✝ :
+  SourceEqualityRequiredExecution.requireAll fuel✝ readFuel✝ (SourceEqualitySelectedRequired.paths selected✝) values
+      middle✝.native.machine.heap =
+    SourceEqualityRequiredWorker.Result.done requiredValues✝ heap✝
+second✝ :
+  SourceCurrentRequiredQueryMemos.RequireAllReads (SourceEqualitySelectedRequired.paths selected✝) values
+    requiredValues✝ middle✝.native.machine.heap heap✝ scanMemos✝ requiredMemos✝
+scan✝ :
+  Scan budget unconstrained reaches values (List.map SourceEqualityClassOrder.Record.paths records) before fourth none
+    selected✝ middle✝ savedFourth
+retained✝ : Retained scan✝ records kept✝
+pass✝ : SourceCurrentAllocatedClassPass.Pass kept✝ requiredValues✝ (advanceHeap middle✝ heap✝) memo results after saved
+first✝ : SourceCurrentAllocatedScanSourceReads.ScanReads scan✝ memos scanMemos✝
+last✝ : SourceCurrentAllocatedClassPass.PassReads formulas solver pass✝ requiredMemos✝ final
+⊢ True
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:114:5: warning: Variable name `ready` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ready
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:114:28: warning: Variable name `admitted` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _admitted
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:115:5: warning: Variable name `available` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _available
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:116:5: warning: Variable name `proper` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _proper
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:117:5: warning: Variable name `fields` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _fields
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:119:5: warning: Variable name `correct` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _correct
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:120:5: warning: Variable name `stored` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _stored
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:121:5: warning: Variable name `covered` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _covered
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:122:5: warning: Variable name `ranges` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ranges
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:124:5: warning: Variable name `valid` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _valid
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+case unchanged
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+original : Guard
+budget : Nat
+loaded : Allocated
+inherited : EqValue
+values : List (Value Symbol Guard)
+before : Checked width
+fourth : Fourth
+memo : Memo
+memos : Memos
+ready : Ready before
+admitted : At formulas solver inventory before
+cached : SourceEqualityGuardReadback.Cached original.equalities
+found : SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded)
+inheritedReady : SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited
+available : Values before.native.machine.heap values
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : Ranges budget loaded inherited values before fourth
+valid : Valid before.native.machine.heap memos
+actual✝ :
+  (runPrefix loaded.stored loaded.guard inherited before.operations).fst =
+    Except.ok SourceEqualityPrecheck.Branch.unchanged
+⊢ True
+case emptyChildren
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+original : Guard
+budget : Nat
+loaded : Allocated
+inherited : EqValue
+values : List (Value Symbol Guard)
+before : Checked width
+fourth : Fourth
+memo : Memo
+memos : Memos
+ready : Ready before
+admitted : At formulas solver inventory before
+cached : SourceEqualityGuardReadback.Cached original.equalities
+found : SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded)
+inheritedReady : SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited
+available : Values before.native.machine.heap values
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : Ranges budget loaded inherited values before fourth
+valid : Valid before.native.machine.heap memos
+actual✝ :
+  (runPrefix loaded.stored loaded.guard inherited before.operations).fst =
+    Except.ok SourceEqualityPrecheck.Branch.emptyChildren
+⊢ True
+case classes
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+original : Guard
+budget : Nat
+loaded : Allocated
+inherited : EqValue
+values results : List (Value Symbol Guard)
+before after : Checked width
+fourth savedFourth : Fourth
+memo saved : Memo
+memos final : Memos
+ready : Ready before
+admitted : At formulas solver inventory before
+cached : SourceEqualityGuardReadback.Cached original.equalities
+found : SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded)
+inheritedReady : SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited
+available : Values before.native.machine.heap values
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+ranges : Ranges budget loaded inherited values before fourth
+valid : Valid before.native.machine.heap memos
+records✝ : List SourceEqualityClassOrder.Record
+outcome✝ : Option Class
+actual✝ :
+  (runPrefix loaded.stored loaded.guard inherited before.operations).fst =
+    Except.ok (SourceEqualityPrecheck.Branch.classes records✝)
+continuation✝ :
+  SourceCurrentConjunctionScanClassPass.Reduction budget records✝ values (prefixState before loaded inherited) fourth
+    memo outcome✝ results after savedFourth saved
+reads✝ : SourceCurrentConjunctionScanClassPassActual.Reads formulas solver continuation✝ memos final
+⊢ True
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:246:5: warning: Variable name `ready` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ready
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:246:28: warning: Variable name `admitted` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _admitted
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:247:5: warning: Variable name `cached` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _cached
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:248:5: warning: Variable name `found` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _found
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:249:5: warning: Variable name `inheritedReady` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inheritedReady
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:250:5: warning: Variable name `available` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _available
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:251:5: warning: Variable name `correct` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _correct
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:252:5: warning: Variable name `stored` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _stored
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:253:5: warning: Variable name `covered` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _covered
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:254:5: warning: Variable name `ranges` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ranges
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:255:5: warning: Variable name `valid` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _valid
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+case rejected
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+symbol : Symbol
+original : Guard
+loaded : Allocated
+inherited : EqValue
+values : List (Value Symbol Guard)
+before : Checked width
+fourth : Fourth
+memo : Memo
+memos : Memos
+ready : Ready before
+admitted : At formulas solver inventory before
+live :
+  contradictory original = false →
+    SourceEqualityGuardReadback.Cached original.equalities ∧
+      SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded) ∧
+        SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited ∧
+          Values before.native.machine.heap values ∧
+            SourceCurrentAllocatedLocalReductionActual.Ranges budget loaded inherited values before fourth
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+valid : Valid before.native.machine.heap memos
+test✝ : contradictory original = true
+⊢ True
+case live
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+symbol : Symbol
+original : Guard
+loaded : Allocated
+inherited : EqValue
+values : List (Value Symbol Guard)
+before after : Checked width
+result : EdgeValue Symbol Guard
+fourth savedFourth : Fourth
+memo saved : Memo
+memos final : Memos
+ready : Ready before
+admitted : At formulas solver inventory before
+live :
+  contradictory original = false →
+    SourceEqualityGuardReadback.Cached original.equalities ∧
+      SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded) ∧
+        SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited ∧
+          Values before.native.machine.heap values ∧
+            SourceCurrentAllocatedLocalReductionActual.Ranges budget loaded inherited values before fourth
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+valid : Valid before.native.machine.heap memos
+children✝ : List (Value Symbol Guard)
+middle✝ : Checked width
+test✝ : contradictory original = false
+built✝ : SourceCurrentAllocatedMkEdge.build symbol loaded children✝ middle✝ = (Except.ok result, after)
+reduction✝ :
+  SourceCurrentAllocatedLocalReduction.Reduction budget loaded inherited values before fourth memo children✝ middle✝
+    savedFourth saved
+reads✝ : SourceCurrentAllocatedLocalReductionActual.Reads formulas solver reduction✝ memos final
+⊢ True
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:330:5: warning: Variable name `ready` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ready
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:330:28: warning: Variable name `admitted` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _admitted
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:331:5: warning: Variable name `live` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _live
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:337:5: warning: Variable name `correct` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _correct
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:338:5: warning: Variable name `stored` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _stored
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:339:5: warning: Variable name `covered` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _covered
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/restart-evidence/20261016-current-caller-invariants/actual-cases-inspect.lean:340:5: warning: Variable name `valid` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _valid
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`

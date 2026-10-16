@@ -1,0 +1,92 @@
+'MicroCFTA.SourceCurrentAllocatedRequiredReadValidityProbes.same_required_graph' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRequiredReadValidityProbes.two_required_calls' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedRequiredReadValidityProbes.selected_position' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedRequiredReadValidityProbes.same_required_graph : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {paths : List (List Int)}
+  {values results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads paths values results before after memos final →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedNestedProvenance.Values before values →
+          MicroCFTA.EndpointMemoGateTrace.Valid before memos →
+            MicroCFTA.EndpointMemoGateTrace.Valid after final ∧
+              MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧
+                final.query = memos.query ∧
+                  MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+                    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+                      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧
+                        MicroCFTA.InternedNestedProvenance.Values after results
+@MicroCFTA.SourceCurrentAllocatedRequiredReadValidityProbes.two_required_calls : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {firstPaths nextPaths : List (List Int)}
+  {values middleValues results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before middle after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos middleMemo final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads firstPaths values middleValues before middle memos
+      middleMemo →
+    MicroCFTA.SourceCurrentRequiredQueryMemos.RequireAllReads nextPaths middleValues results middle after middleMemo
+        final →
+      MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+        MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+          MicroCFTA.InternedNestedProvenance.Values before values →
+            MicroCFTA.EndpointMemoGateTrace.Valid before memos →
+              MicroCFTA.EndpointMemoGateTrace.Valid after final ∧
+                MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧
+                  final.query = memos.query ∧
+                    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+                      MicroCFTA.InternedNestedProvenance.Values after results
+@MicroCFTA.SourceCurrentAllocatedRequiredReadValidityProbes.selected_position : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {entries : List (Int × MicroCFTA.SourceEqualityNeeded.Needed)} {index : Nat}
+  {needed : MicroCFTA.SourceEqualityNeeded.Needed}
+  {value result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {values results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before middle after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {found : MicroCFTA.SourceEqualityNeededMap.lookup (↑index) entries = some needed}
+  {firstTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireNode needed value before result middle}
+  {restTrace : MicroCFTA.SourceEqualityRequiredGraph.RequireChildren entries (index + 1) values middle results after}
+  {memos middleMemo final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads firstTrace memos middleMemo →
+    MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads restTrace middleMemo final →
+      MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+        MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+          MicroCFTA.InternedNestedProvenance.Values before (value :: values) →
+            MicroCFTA.EndpointMemoGateTrace.Valid before memos →
+              MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads ⋯ memos final ∧
+                MicroCFTA.EndpointMemoGateTrace.Valid after final ∧
+                  MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧ final.query = memos.query

@@ -1,0 +1,66 @@
+lean/MicroCFTA/SourceCurrentAllocatedPartialWalkLanguage.lean:112:23: error: don't know how to synthesize implicit argument `Symbol`
+  @SourceEqualityPrecheck.Sat ?m.266 ?m.267 (descend before combined index).fst.payload
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : EqValue
+index : Nat
+value result : Value Symbol Guard
+values results : List (Value Symbol Guard)
+before middle after : Caller width
+head :
+  NodeCall budget { inherited := (descend before combined index).fst, value := value }
+    (descend before combined index).snd result middle
+tail : Walk budget combined (index + 1) values middle results after
+payload : (descend before combined index).fst.payload = SourceEqualityDescend.descend combined.payload index
+headLaw : NodeLaw formulas solver { inherited := (descend before combined index).fst, value := value } result
+tailLaw : WalkLaw formulas solver tail
+ambient : Env Symbol
+b✝ : Term Symbol
+bs✝ : List (Term Symbol)
+acceptedHead : meaning (holds formulas solver) ambient value b✝
+acceptedTail : All₂ (meaning (holds formulas solver) ambient) values bs✝
+satisfied : DescendedSat combined index (b✝ :: bs✝)
+⊢ Type
+lean/MicroCFTA/SourceCurrentAllocatedPartialWalkLanguage.lean:112:50: error: don't know how to synthesize placeholder for argument `term`
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+combined : EqValue
+index : Nat
+value result : Value Symbol Guard
+values results : List (Value Symbol Guard)
+before middle after : Caller width
+head :
+  NodeCall budget { inherited := (descend before combined index).fst, value := value }
+    (descend before combined index).snd result middle
+tail : Walk budget combined (index + 1) values middle results after
+payload : (descend before combined index).fst.payload = SourceEqualityDescend.descend combined.payload index
+headLaw : NodeLaw formulas solver { inherited := (descend before combined index).fst, value := value } result
+tailLaw : WalkLaw formulas solver tail
+ambient : Env Symbol
+b✝ : Term Symbol
+bs✝ : List (Term Symbol)
+acceptedHead : meaning (holds formulas solver) ambient value b✝
+acceptedTail : All₂ (meaning (holds formulas solver) ambient) values bs✝
+satisfied : DescendedSat combined index (b✝ :: bs✝)
+⊢ Term ?m.266
+lean/MicroCFTA/SourceCurrentAllocatedPartialWalkLanguage.lean:146:46: error: Application type mismatch: The argument
+  impossible
+has type
+  meaning (holds formulas solver) ambient ((fun x => Value.empty) value) b✝
+but is expected to have type
+  False
+in the application
+  False.elim impossible
+lean/MicroCFTA/SourceCurrentAllocatedPartialWalkLanguage.lean:158:52: error(lean.unknownIdentifier): Unknown identifier `«EqValue».live`

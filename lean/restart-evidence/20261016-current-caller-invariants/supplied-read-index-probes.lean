@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentAllocatedRequiredReadValidity
+import MicroCFTA.SourceCurrentAllocatedProjectionReadValidity
+
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.HeadReads.read
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.identity
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.empty
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.ordinary
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.NodeReads.recursive
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads.nil
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads.unselected
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.ChildrenReads.selected
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads.nil
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads.rejected
+#check @MicroCFTA.SourceCurrentRequiredQueryMemos.RowsReads.kept
+
+#check @MicroCFTA.SourceEqualityProjectionMemos.ReadReads.done
+#check @MicroCFTA.SourceEqualityProjectionMemos.HeadReads.read
+#check @MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads.nil
+#check @MicroCFTA.SourceEqualityProjectionMemos.ReadAllReads.cons
+#check @MicroCFTA.SourceEqualityProjectionMemos.UnionReads.node
+#check @MicroCFTA.SourceEqualityProjectionMemos.ProjectReads.root
+#check @MicroCFTA.SourceEqualityProjectionMemos.ProjectReads.empty
+#check @MicroCFTA.SourceEqualityProjectionMemos.ProjectReads.ordinary
+#check @MicroCFTA.SourceEqualityProjectionMemos.ProjectReads.recursive
+#check @MicroCFTA.SourceEqualityProjectionMemos.RowsReads.nil
+#check @MicroCFTA.SourceEqualityProjectionMemos.RowsReads.missing
+#check @MicroCFTA.SourceEqualityProjectionMemos.RowsReads.selected
+#check @MicroCFTA.SourceEqualityProjectionMemos.ForestReads.root
+#check @MicroCFTA.SourceEqualityProjectionMemos.ForestReads.missing
+#check @MicroCFTA.SourceEqualityProjectionMemos.ForestReads.selected
