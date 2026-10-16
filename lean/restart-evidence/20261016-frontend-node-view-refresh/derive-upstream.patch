@@ -1,0 +1,810 @@
+diff --git a/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs b/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs
+index e8bb76a7..d9108f4a 100644
+--- a/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs
++++ b/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs
+@@ -133,6 +133,18 @@ A field that a contract or a measure reads needs an integer: an atom, or a
+ measure of its type. A field of an enumeration without an atom is the error
+ 'UnmeasuredField'.
+ 
++Two fields of one type can have two pools. 'fieldAtoms' gives fields their
++own generators through the node view: a function from each node to the pools
++of its fields, as 'drawnFrom' pairs a field with a generator. A field atom
++applies before the 'atom' of the field's type. The height and the key of an
++AVL tree, @data AVL = Nil | Fork Int AVL Int AVL@, then need no newtype:
++
++@
++atoms =
++    fieldAtoms \@AVL (\\case ForkNode height _ _ _ -> [height \`drawnFrom\` elements [1 .. 3 :: Int]]; _ -> [])
++        <> atom \@Int (elements [0 .. 3])
++@
++
+ A selector of a record of measures is a Haskell function, so it cannot have
+ the name of another function of the same module, such as a Liquid Haskell
+ measure @bh :: Tree -> Int@. Put the record in its own module and import it
+@@ -155,9 +167,10 @@ module Data.CFTA.Gen.Refinement.Derive (
+     invariantAnnotations,
+ 
+     -- * Node views and measures
+-    NodeView (nodeShape, buildNode),
++    NodeView (nodeShape, buildNode, nodeFields),
+     FieldKind (..),
+     AnyNode (..),
++    checkNodeShape,
+     MeasureRecord (measureNames, measureFields, fromMeasureNames),
+     Single (..),
+     NoMeasures (..),
+@@ -172,6 +185,9 @@ module Data.CFTA.Gen.Refinement.Derive (
+     -- * Atomic fields
+     Atoms,
+     atom,
++    fieldAtoms,
++    FieldPool,
++    drawnFrom,
+ 
+     -- * The logic
+     Boolean (..),
+@@ -186,11 +202,11 @@ module Data.CFTA.Gen.Refinement.Derive (
+ 
+ import Control.Monad (unless, when)
+ import qualified Data.Kind as Kind
+-import Data.List (isPrefixOf)
++import Data.List (elemIndex, isPrefixOf)
+ import qualified Data.Map.Strict as Map
+ import Data.Maybe (fromMaybe)
+ import Data.Proxy (Proxy (Proxy))
+-import Data.Typeable (typeRep)
++import Data.Typeable (TypeRep, typeRep)
+ import GHC.Generics (
+     C,
+     D,
+@@ -215,7 +231,7 @@ import Data.CFTA.Gen.Refinement (LTAGen, satisfying)
+ import Data.CFTA.Gen.Refinement.Derive.Internal
+ import Data.CFTA.Generic (Constructor (..), Description (..), Field (..), HasFTA (..))
+ import Data.CFTA.Index (Arity (..), Depth)
+-import Data.CFTA.Refinement.Expression (Expr, literal, uninterpreted)
++import Data.CFTA.Refinement.Expression (Expr, Literal, literal, uninterpreted)
+ import Data.CFTA.Refinement.Symbolic (Boolean (..), Symbolic (..), larger, smaller)
+ import qualified Data.CFTA.Refinement.Symbolic.Internal as Children
+ import Data.CFTA.Term (Term)
+@@ -318,23 +334,33 @@ class NodeView (node :: Kind.Type -> Kind.Type) where
+         (Children.Measures e, Generic (node e), GNode (Rep (node e)) e) => Int -> [Children.Child e] -> node e
+     buildNode position children = to (gBuild position children)
+ 
++    {- | The position of the constructor of a node, and its fields in order:
++    'Just' a field of the type @e@, and 'Nothing' a record of measures.
++    -}
++    nodeFields :: node e -> (Int, [Maybe e])
++    default nodeFields :: (Generic (node e), GNode (Rep (node e)) e) => node e -> (Int, [Maybe e])
++    nodeFields = gNodeFields . from
++
+ -- | The node view of a datatype without an invariant: it fits every datatype, and the derivation does not read it.
+ data AnyNode e = AnyNode
+ 
+ instance NodeView AnyNode where
+     nodeShape _ = Nothing
+     buildNode _ _ = AnyNode
++    nodeFields AnyNode = (0, [])
+ 
+ -- | The generic representation of a node view.
+ class GNode f e where
+     gShape :: Proxy f -> [(String, [FieldKind])]
+     gCount :: Proxy f -> Int
+     gBuild :: (Children.Measures e) => Int -> [Children.Child e] -> f p
++    gNodeFields :: f p -> (Int, [Maybe e])
+ 
+ instance (GNode f e) => GNode (M1 D meta f) e where
+     gShape _ = gShape @f @e Proxy
+     gCount _ = gCount @f @e Proxy
+     gBuild position children = M1 (gBuild position children)
++    gNodeFields (M1 inner) = gNodeFields inner
+ 
+ instance (GNode f e, GNode g e) => GNode (f :+: g) e where
+     gShape _ = gShape @f @e Proxy <> gShape @g @e Proxy
+@@ -342,25 +368,31 @@ instance (GNode f e, GNode g e) => GNode (f :+: g) e where
+     gBuild position children
+         | position < gCount @f @e Proxy = L1 (gBuild position children)
+         | otherwise = R1 (gBuild (position - gCount @f @e Proxy) children)
++    gNodeFields (L1 left) = gNodeFields left
++    gNodeFields (R1 right) = let (position, fields) = gNodeFields @g @e right in (gCount @f @e Proxy + position, fields)
+ 
+ instance GNode V1 e where
+     gShape _ = []
+     gCount _ = 0
+     gBuild _ _ = error "Data.CFTA.Gen.Refinement.Derive: a node view without constructors"
++    gNodeFields _ = error "Data.CFTA.Gen.Refinement.Derive: a node view without constructors"
+ 
+ instance (Generic.Constructor meta, GFields f e) => GNode (M1 C meta f) e where
+     gShape _ = [(conName (undefined :: M1 C meta f ()), gKinds @f @e Proxy)]
+     gCount _ = 1
+     gBuild _ children = M1 (fst (gFill children))
++    gNodeFields (M1 fields) = (0, gFieldValues fields)
+ 
+ -- | The generic representation of the fields of a constructor of a node view.
+ class GFields f e where
+     gKinds :: Proxy f -> [FieldKind]
+     gFill :: (Children.Measures e) => [Children.Child e] -> (f p, [Children.Child e])
++    gFieldValues :: f p -> [Maybe e]
+ 
+ instance GFields U1 e where
+     gKinds _ = []
+     gFill children = (U1, children)
++    gFieldValues U1 = []
+ 
+ instance (GFields f e, GFields g e) => GFields (f :*: g) e where
+     gKinds _ = gKinds @f @e Proxy <> gKinds @g @e Proxy
+@@ -368,24 +400,31 @@ instance (GFields f e, GFields g e) => GFields (f :*: g) e where
+         let (x, rest) = gFill children
+             (y, rest') = gFill rest
+          in (x :*: y, rest')
++    gFieldValues (x :*: y) = gFieldValues x <> gFieldValues y
+ 
+ instance (NodeField e x) => GFields (M1 S meta (K1 index x)) e where
+     gKinds _ = [fieldKind @e @x]
+     gFill (child : rest) = (M1 (K1 (fillField child)), rest)
+     gFill [] = error "Data.CFTA.Gen.Refinement.Derive: a node view has more fields than its constructor"
++    gFieldValues (M1 (K1 field)) = [fieldValue @e field]
+ 
+ -- | A field of a node view: an integer @e@, or a record of measures @m e@.
+ class NodeField e x where
+     fieldKind :: FieldKind
+     fillField :: (Children.Measures e) => Children.Child e -> x
+ 
++    -- | The field as an @e@, or 'Nothing' for a record of measures.
++    fieldValue :: x -> Maybe e
++
+ instance NodeField e e where
+     fieldKind = Scalar
+     fillField = Children.childValue
++    fieldValue = Just
+ 
+ instance (MeasureRecord m) => NodeField e (m e) where
+     fieldKind = Record (measureNames (Proxy @m))
+     fillField child = fromMeasureNames (\name -> Children.childMeasure name child)
++    fieldValue _ = Nothing
+ 
+ -- * Invariants
+ 
+@@ -519,7 +558,43 @@ for each atomic field, and for each child an integer, or a record with the
+ names of the invariant's measures.
+ -}
+ checkNodeView :: forall a node m. (HasFTA a, NodeView node) => [String] -> Invariant node m -> Either DeriveLTAError ()
+-checkNodeView names rules = case nodeShape (Proxy @node) of
++checkNodeView names rules = checkNodeFields @a @node checkKinds
++  where
++    expected isChild
++        | isChild && childIsRecord rules = Record names
++        | otherwise = Scalar
++    checkKinds name children kinds = do
++        sequence_
++            [ unless (expected isChild == kind)
++                $ Left
++                $ NodeMismatch
++                    name
++                    ("field " <> show position <> " is " <> show kind <> " in the node view, not " <> show (expected isChild))
++            | (position, (isChild, kind)) <- zip [0 :: Int ..] (zip children kinds)
++            ]
++        when (any null names)
++            $ Left
++            $ NodeMismatch name "a record of measures has a field without a name"
++
++{- | Check that a node view has the constructors of the datatype, in order: as
++many, each with as many fields, and each with a name that starts with the name
++of the datatype's constructor in its place. A view that fits every datatype
++('AnyNode') passes.
++-}
++checkNodeShape :: forall a node. (HasFTA a, NodeView node) => Either DeriveLTAError ()
++checkNodeShape = checkNodeFields @a @node (\_ _ _ -> Right ())
++
++{- | 'checkNodeShape' with a check of the fields of each constructor, after
++its arity and before the names. The function receives the name of the
++constructor, whether each field is of the datatype, and the kinds of the
++fields in the node view.
++-}
++checkNodeFields ::
++    forall a node.
++    (HasFTA a, NodeView node) =>
++    (String -> [Bool] -> [FieldKind] -> Either DeriveLTAError ()) ->
++    Either DeriveLTAError ()
++checkNodeFields checkFieldKinds = case nodeShape (Proxy @node) of
+     Nothing -> Right ()
+     Just shape -> do
+         let constructors = datatypeConstructors @a
+@@ -529,8 +604,13 @@ checkNodeView names rules = case nodeShape (Proxy @node) of
+                 (unwords (map (constructorName . fst) constructors))
+                 ("the datatype has " <> show (length constructors) <> " constructors, the node view " <> show (length shape))
+         sequence_
+-            [ checkConstructor (constructorName constructor) children kinds
++            [ do
++                unless (length children == length kinds)
++                    $ Left
++                    $ NodeMismatch name ("the constructor has " <> show (length children) <> " fields, the node view " <> show (length kinds))
++                checkFieldKinds name children kinds
+             | ((constructor, children), (_, kinds)) <- zip constructors shape
++            , let name = constructorName constructor
+             ]
+         sequence_
+             [ Left $ NodeMismatch name ("the node view has " <> viewName <> " in its place, a name that does not start with " <> name)
+@@ -538,25 +618,6 @@ checkNodeView names rules = case nodeShape (Proxy @node) of
+             , let name = constructorName constructor
+             , not (name `isPrefixOf` viewName)
+             ]
+-  where
+-    expected isChild
+-        | isChild && childIsRecord rules = Record names
+-        | otherwise = Scalar
+-    checkConstructor name children kinds = do
+-        unless (length children == length kinds)
+-            $ Left
+-            $ NodeMismatch name ("the constructor has " <> show (length children) <> " fields, the node view " <> show (length kinds))
+-        sequence_
+-            [ unless (expected isChild == kind)
+-                $ Left
+-                $ NodeMismatch
+-                    name
+-                    ("field " <> show position <> " is " <> show kind <> " in the node view, not " <> show (expected isChild))
+-            | (position, (isChild, kind)) <- zip [0 :: Int ..] (zip children kinds)
+-            ]
+-        when (any null names)
+-            $ Left
+-            $ NodeMismatch name "a record of measures has a field without a name"
+ 
+ -- | The names of the measures of an invariant: the selectors of its record, or none.
+ invariantNames :: forall m node. Invariant node m -> [String]
+@@ -569,11 +630,11 @@ constructor of the datatype, in declaration order, as
+ 'Data.CFTA.Gen.Refinement.Derive.Internal.deriveLTAWith' takes them.
+ -}
+ invariantAnnotations ::
+-    forall a node m. (HasFTA a, NodeView node) => Invariant node m -> Either DeriveLTAError [(String, Annotation)]
++    forall a node m. (HasFTA a, NodeView node) => Invariant node m -> Either DeriveLTAError [(Constructor, Annotation)]
+ invariantAnnotations rules = do
+     checkNodeView @a (invariantNames rules) rules
+     pure
+-        [ (constructorName constructor, contractPart <> measurePart)
++        [ (constructor, contractPart <> measurePart)
+         | (position, (constructor, children)) <- zip [0 ..] (datatypeConstructors @a)
+         , let count = length children
+               view = buildNode @node @Expr position (fieldTerms count)
+@@ -592,6 +653,47 @@ invariantAnnotations rules = do
+                      in Annotation [] [] [(name, Measure (Arity count) term) | (name, term) <- zip (namesOf measures) (measureFields measures)]
+         ]
+ 
++-- * Field atoms
++
++-- | A generator for one field of a node view, as 'drawnFrom' gives it.
++data FieldPool = FieldPool !Expr !TypeRep !AtomicField
++
++{- | Draw a field of a node view from a generator, in 'fieldAtoms'. The term
++must be one field of the node, as a pattern of the node view binds it.
++-}
++drawnFrom :: forall c. (HasFTA c, Literal c) => Expr -> LTAGen c -> FieldPool
++drawnFrom term generator = FieldPool term (typeRep $ Proxy @c) (atomicField generator)
++
++{- | Give fields of the constructors of a datatype their own generators,
++through its node view:
++
++@
++fieldAtoms \@AVL (\\case ForkNode height _ _ _ -> [height \`drawnFrom\` elements [1 .. 3 :: Int]]; _ -> [])
++@
++
++The function receives the node of each constructor, with the fields as terms,
++and returns the pools of some of its fields. A field atom applies before the
++'atom' of the field's type, for that field only. The derivation reports a node
++view that does not fit the datatype ('NodeMismatch'), a pool for a term that is
++not one field ('FieldAtomTerm'), and a generator of another type than its field
++('FieldAtomMismatch').
++-}
++fieldAtoms :: forall a node. (HasFTA a, NodeView node) => (node Expr -> [FieldPool]) -> Atoms
++fieldAtoms pools = case checkNodeShape @a @node of
++    Left problem -> Atoms Map.empty Map.empty [problem]
++    Right () ->
++        Atoms
++            Map.empty
++            (Map.fromList [((constructor, index), (typ, field)) | (constructor, Just index, typ, field) <- placed])
++            [FieldAtomTerm (constructorName constructor) | (constructor, Nothing, _, _) <- placed]
++  where
++    placed =
++        [ (constructor, elemIndex term terms, typ, field)
++        | (position, (constructor, children)) <- zip [0 ..] (datatypeConstructors @a)
++        , let terms = fieldTerms (length children)
++        , FieldPool term typ field <- pools (buildNode @node @Expr position terms)
++        ]
++
+ -- * Values
+ 
+ {- | Whether each node of the value whose type is the datatype satisfies the
+@@ -635,7 +737,7 @@ view that does not fit the datatype is an error.
+ evaluate ::
+     forall a node m.
+     (HasFTA a, NodeView node) => Atoms -> Invariant node m -> Term Constructor -> (Bool, Children.NodeIntegers)
+-evaluate (Atoms atoms) rules = either (error . show) (const go) (checkNodeView @a (invariantNames rules) rules)
++evaluate (Atoms atoms fieldMap _) rules = either (error . show) (const go) (checkNodeView @a (invariantNames rules) rules)
+   where
+     datatype = typeRep (Proxy @a)
+     positions =
+@@ -644,7 +746,7 @@ evaluate (Atoms atoms) rules = either (error . show) (const go) (checkNodeView @
+     go (Term.Node constructor children) = (and [below | (below, _) <- fields] && here, Children.NodeIntegers value measures)
+       where
+         position = Map.findWithDefault 0 (constructorName constructor) positions
+-        fields = zipWith field (constructorFields constructor) children
++        fields = zipWith3 field [0 ..] (constructorFields constructor) children
+         view = buildNode @node @Integer position (map snd fields)
+         (here, value, measures) = case rules of
+             Measured measureOf' check -> (check view, Just (measureOf' view), Map.empty)
+@@ -652,7 +754,10 @@ evaluate (Atoms atoms) rules = either (error . show) (const go) (checkNodeView @
+             MeasuredBy named check ->
+                 let record = named view
+                  in (check view, Nothing, Map.fromList (zip (namesOf record) (measureFields record)))
+-        field Field{fieldType} child
++        field index Field{fieldType} child
++            | Just (typ, AtomicField{atomInteger}) <- Map.lookup (constructor, index) fieldMap
++            , typ == fieldType =
++                (True, Children.NodeIntegers (atomInteger child) Map.empty)
+             | Just AtomicField{atomInteger} <- Map.lookup fieldType atoms =
+                 (True, Children.NodeIntegers (atomInteger child) Map.empty)
+             | fieldType == datatype = go child
+diff --git a/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs b/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs
+index 160e3a27..9dc7d3f6 100644
+--- a/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs
++++ b/cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs
+@@ -3,12 +3,12 @@
+ 
+ {- | The level below "Data.CFTA.Gen.Refinement.Derive": the contracts and
+ the measures of the constructors of a datatype as annotations in the
+-expression language of "Data.CFTA.Refinement.Expression", by constructor
+-name.
++expression language of "Data.CFTA.Refinement.Expression", by the
++'Constructor' of each constructor, as 'Data.CFTA.Generic.datatypeConstructors'
++gives it.
+ 
+-This module is exposed for integration: a translation that knows the names of
+-the constructors and of the measures only at run time, such as one from
+-Liquid Haskell specifications, builds annotations here. It is not part of the
++This module is exposed for integration: a translation that knows the
++constructors and the measures only at run time builds annotations here. It is not part of the
+ PVP contract. A datatype with a 'Data.CFTA.Gen.Refinement.Derive.HasLTA'
+ instance needs none of it.
+ 
+@@ -33,7 +33,7 @@ form one group, and they unfold together: their recursive occurrences nest at
+ most the bound times. A type that is in no cycle does not use a level.
+ -}
+ module Data.CFTA.Gen.Refinement.Derive.Internal (
+-    -- * Annotations by constructor name
++    -- * Annotations by constructor
+     deriveLTAWith,
+     deriveLTAOnWith,
+     Annotation (..),
+@@ -51,6 +51,7 @@ module Data.CFTA.Gen.Refinement.Derive.Internal (
+     Atoms (..),
+     AtomicField (..),
+     atom,
++    atomicField,
+ 
+     -- * Errors
+     DeriveLTAError (..),
+@@ -61,7 +62,7 @@ import Data.Containers.ListUtils (nubOrd)
+ import Data.Graph (SCC (..), stronglyConnComp)
+ import qualified Data.Map.Lazy as LazyMap
+ import qualified Data.Map.Strict as Map
+-import Data.Maybe (fromMaybe)
++import Data.Maybe (fromMaybe, isNothing)
+ import Data.Proxy (Proxy (Proxy))
+ import qualified Data.Set as Set
+ import Data.String (fromString)
+@@ -96,8 +97,9 @@ import qualified Data.CFTA.Term as Term
+ 
+ -- | Failure while deriving a refinement generator.
+ data DeriveLTAError
+-    = {- | Annotation names that no constructor of the datatype has. The second
+-      field lists the names of the constructors.
++    = {- | Constructors with annotations or field atoms that the datatype does
++      not reach, by name. The second field lists the names of the constructors
++      that it reaches.
+       -}
+       UnknownConstructors ![String] ![String]
+     | -- | An atomic field type that 'atom' gives no generator for.
+@@ -134,10 +136,30 @@ data DeriveLTAError
+       The field is the name of its constructor.
+       -}
+       ConstrainedTransition !String
++    | {- | A field atom has a generator of another type than its field. The
++      fields are the constructor name, the position of the field, and the type
++      of the generator.
++      -}
++      FieldAtomMismatch !String !Int !TypeRep
++    | {- | A pool of 'Data.CFTA.Gen.Refinement.Derive.fieldAtoms' is for a term
++      that is not one field of the node view. The field is the constructor
++      name.
++      -}
++      FieldAtomTerm !String
+     deriving (Eq, Show)
+ 
+--- | Generators for atomic field types, by type.
+-newtype Atoms = Atoms (Map.Map TypeRep AtomicField)
++{- | Generators for atomic fields: by the type of the field ('atom'), and by
++a constructor and the position of one of its fields
++('Data.CFTA.Gen.Refinement.Derive.fieldAtoms'). A field atom applies before
++the atom of the field's type.
++-}
++data Atoms = Atoms
++    { byType :: !(Map.Map TypeRep AtomicField)
++    , byField :: !(Map.Map (Constructor, Int) (TypeRep, AtomicField))
++    -- ^ The type of the generator, and the generator.
++    , atomProblems :: ![DeriveLTAError]
++    -- ^ The errors of field atoms that do not fit, which a derivation reports.
++    }
+ 
+ -- | The generator of one atomic type, and the integer of a term of that type.
+ data AtomicField = AtomicField
+@@ -145,12 +167,13 @@ data AtomicField = AtomicField
+     , atomInteger :: Term Constructor -> Maybe Integer
+     }
+ 
+--- | When two generators are for one type, the rightmost one applies.
++-- | When two generators are for one type, or for one field, the rightmost one applies.
+ instance Semigroup Atoms where
+-    Atoms left <> Atoms right = Atoms $ Map.union right left
++    Atoms types fields problems <> Atoms types' fields' problems' =
++        Atoms (Map.union types' types) (Map.union fields' fields) (problems <> problems')
+ 
+ instance Monoid Atoms where
+-    mempty = Atoms Map.empty
++    mempty = Atoms Map.empty Map.empty []
+ 
+ {- | The generator of each field of a type, as in @atom \@Integer every@.
+ 
+@@ -159,8 +182,22 @@ The value of an atomic field stands for one integer, 'toLiteral', which
+ replaces the derived one, so a field of that type is drawn from it.
+ -}
+ atom :: forall c. (HasFTA c, Literal c) => LTAGen c -> Atoms
+-atom generator =
+-    Atoms $ Map.singleton (typeRep $ Proxy @c) $ AtomicField (encodeTerm <$> generator) (fmap (toLiteral @c) . decodeTerm)
++atom generator = Atoms (Map.singleton (typeRep $ Proxy @c) (atomicField generator)) Map.empty []
++
++-- | The generator of an atomic type, and the integer of its terms.
++atomicField :: forall c. (HasFTA c, Literal c) => LTAGen c -> AtomicField
++atomicField generator = AtomicField (encodeTerm <$> generator) (fmap (toLiteral @c) . decodeTerm)
++
++{- | The atom of a type: its own atom, or else a field atom of that type. The
++integer of a term depends only on the type, so any field atom of the type
++gives it.
++-}
++atomOfType :: Atoms -> TypeRep -> Maybe AtomicField
++atomOfType (Atoms types fields _) typ = case Map.lookup typ types of
++    Just field -> Just field
++    Nothing -> case [field | (typ', field) <- Map.elems fields, typ' == typ] of
++        field : _ -> Just field
++        [] -> Nothing
+ 
+ -- | The contracts and the measures of one constructor. Combine them with '<>'.
+ data Annotation = Annotation
+@@ -264,17 +301,22 @@ typeLimit = 10000
+ {- | Derive the refinement generator of a datatype.
+ 
+ The bound is the number of times that the recursive occurrences nest, as for
+-'recurUpTo'. Each atomic field type needs a generator from the 'Atoms'. Each
+-annotation names a constructor. Constructors of different types that have the
+-same name get the same annotations. A constructor without annotations has no
+-contract and no measure.
++'recurUpTo'. Each atomic field needs a generator from the 'Atoms': the atom
++of its type, or a field atom of the field. Each annotation is for one
++'Constructor'. A constructor without annotations has no contract and no
++measure.
+ -}
+-deriveLTAWith :: forall a. (HasFTA a) => Depth -> Atoms -> [(String, Annotation)] -> Either DeriveLTAError (LTAGen a)
+-deriveLTAWith bound (Atoms atoms) named = do
+-    Derivation derived annotationOf <- derivation @a (Atoms atoms) named
++deriveLTAWith ::
++    forall a. (HasFTA a) => Depth -> Atoms -> [(Constructor, Annotation)] -> Either DeriveLTAError (LTAGen a)
++deriveLTAWith bound atoms@(Atoms typeMap fieldMap _) named = do
++    Derivation derived annotationOf <- derivation @a atoms named
+     pure $ decodeValue <$> generatorOf (buildAll derived annotationOf) (typeRep $ Proxy @a)
+   where
+-    generatorOf built typ = Map.findWithDefault (maybe emptyGenerator atomGenerator $ Map.lookup typ atoms) typ built
++    generatorOf built typ = Map.findWithDefault (maybe emptyGenerator atomGenerator $ Map.lookup typ typeMap) typ built
++    -- The atom of a field of a constructor, when the field has one.
++    fieldAtomOf constructor position typ = case Map.lookup (constructor, position) fieldMap of
++        Just (typ', field) | typ' == typ -> Just field
++        _ -> Nothing
+ 
+     -- The types that refer to each other unfold together, as 'recurUpTo'
+     -- unfolds one type. A group comes after the groups that it refers to.
+@@ -294,8 +336,14 @@ deriveLTAWith bound (Atoms atoms) named = do
+         step built typ = case Map.findWithDefault [] typ derived of
+             [alternative] -> alternativeGenerator built alternative
+             alternatives -> oneof $ map (alternativeGenerator built) alternatives
+-        alternativeGenerator built (Alternative constructor fields) =
+-            constructorGenerator annotationOf constructor (map (`Map.member` derived) fields) (map (generatorOf built) fields)
++        alternativeGenerator built (Alternative constructor fieldTypes) =
++            constructorGenerator
++                annotationOf
++                constructor
++                [isNothing (fieldAtomOf constructor position typ) && Map.member typ derived | (position, typ) <- zip [0 ..] fieldTypes]
++                [ maybe (generatorOf built typ) atomGenerator (fieldAtomOf constructor position typ)
++                | (position, typ) <- zip [0 ..] fieldTypes
++                ]
+ 
+ {- | Derive the refinement generator of the terms of an automaton over the
+ constructors of a datatype, such as the automaton of
+@@ -313,17 +361,19 @@ and they are not the ranks of 'Data.CFTA.Gen.Typing.fromConstructorAutomaton'.
+ The automaton must be acyclic ('CyclicAutomaton'), and its transitions must
+ have no constraint ('ConstrainedTransition'), because a generator has no place
+ for an equality between children. The checks of 'deriveLTAWith' on the names,
+-the atoms, and the annotations apply.
++the atoms, and the annotations apply. A field atom gives no generator here,
++because the automaton gives the terms of each field; it gives the integer of
++its type when the type has no 'atom'.
+ -}
+ deriveLTAOnWith ::
+     forall a state.
+     (HasFTA a, Ord state) =>
+     FTA.FTA state Constructor Constraint ->
+     Atoms ->
+-    [(String, Annotation)] ->
++    [(Constructor, Annotation)] ->
+     Either DeriveLTAError (LTAGen a)
+-deriveLTAOnWith automaton (Atoms atoms) named = do
+-    Derivation derived annotationOf <- derivation @a (Atoms atoms) named
++deriveLTAOnWith automaton atoms named = do
++    Derivation derived annotationOf <- derivation @a atoms named
+     unless (Set.null $ FTA.cyclicStates trimmed) $ Left CyclicAutomaton
+     case [constructorName symbol | FTA.Transition symbol _ constraint <- concat (Map.elems rows), constraint /= noConstraint] of
+         name : _ -> Left $ ConstrainedTransition name
+@@ -341,7 +391,7 @@ deriveLTAOnWith automaton (Atoms atoms) named = do
+         [generator] -> generator
+         alternatives -> oneof alternatives
+       where
+-        transitionGenerators (FTA.Transition constructor children _) = case Map.lookup (constructorType constructor) atoms of
++        transitionGenerators (FTA.Transition constructor children _) = case atomOfType atoms (constructorType constructor) of
+             Just field ->
+                 [ leaf term (fromString $ constructorName constructor) (.== fromInteger (integerOf field term))
+                 | term <- termsOf (FTA.Transition constructor children noConstraint)
+@@ -369,15 +419,42 @@ data Derivation = Derivation !(Map.Map TypeRep [Alternative]) (Constructor -> An
+ {- | Reach the types of a datatype, and check the names of the annotations, the
+ atoms of the atomic types, and the arity and the parts of each annotation.
+ -}
+-derivation :: forall a. (HasFTA a) => Atoms -> [(String, Annotation)] -> Either DeriveLTAError Derivation
+-derivation (Atoms atoms) named = do
++derivation :: forall a. (HasFTA a) => Atoms -> [(Constructor, Annotation)] -> Either DeriveLTAError Derivation
++derivation (Atoms atoms fieldMap problems) named = do
+     reached <- reach Map.empty (describeType $ Proxy @a)
+     let derived = Map.filterWithKey (\typ _ -> not $ Map.member typ atoms) $ Map.mapMaybe id reached
+         constructors = [constructor | alternatives <- Map.elems derived, Alternative constructor _ <- alternatives]
+         known = nubOrd $ map constructorName constructors
+-        unknown = nubOrd [name | (name, _) <- named, name `notElem` known]
++        unknown =
++            nubOrd
++                [ constructorName constructor
++                | constructor <- map fst named <> map fst (Map.keys fieldMap)
++                , constructor `notElem` constructors
++                ]
++        -- An atomic type without an atom of its own.
++        atomic typ = case Map.lookup typ reached of
++            Just Nothing -> not (Map.member typ atoms)
++            _ -> False
++        root = typeRep $ Proxy @a
++    case problems of
++        problem : _ -> Left problem
++        [] -> pure ()
+     unless (null unknown) $ Left $ UnknownConstructors unknown known
+-    case [typ | (typ, Nothing) <- Map.toList reached, not $ Map.member typ atoms] of
++    case [ (constructor, position, typ)
++         | ((constructor, position), (typ, _)) <- Map.toList fieldMap
++         , take 1 (drop position (map fieldType (constructorFields constructor))) /= [typ]
++         ] of
++        (constructor, position, typ) : _ -> Left $ FieldAtomMismatch (constructorName constructor) position typ
++        [] -> pure ()
++    -- An atomic type needs an atom where a field of that type has no field
++    -- atom, and where it is the datatype itself.
++    case [root | atomic root]
++        <> [ typ
++           | Alternative constructor fieldTypes <- concat (Map.elems derived)
++           , (position, typ) <- zip [0 ..] fieldTypes
++           , atomic typ
++           , not (covered constructor position typ)
++           ] of
+         typ : _ -> Left $ MissingAtom typ
+         [] -> pure ()
+     mapM_ checkAnnotation constructors
+@@ -389,7 +466,12 @@ derivation (Atoms atoms) named = do
+     pure $ Derivation derived annotationOf
+   where
+     annotations = Map.fromListWith (flip (<>)) named
+-    annotationOf constructor = Map.findWithDefault mempty (constructorName constructor) annotations
++    annotationOf constructor = Map.findWithDefault mempty constructor annotations
++
++    -- Whether a field atom gives the field of the constructor a generator.
++    covered constructor position typ = case Map.lookup (constructor, position) fieldMap of
++        Just (typ', _) -> typ' == typ
++        Nothing -> False
+ 
+     -- The reached types: the alternatives of a type with constructors, and
+     -- 'Nothing' for an atomic type.
+@@ -424,6 +506,7 @@ derivation (Atoms atoms) named = do
+             | (position, typ) <- zip [0 ..] fields
+             , contractTermName (ArgumentIndex position) `elem` readNames
+             , not (Map.member typ atoms)
++            , not (covered constructor position typ)
+             , not (any measuredAlternative (Map.findWithDefault [] typ derived))
+             ]
+       where
+diff --git a/cfta-generator/test/Data/CFTA/Gen/Refinement/DeriveSpec.hs b/cfta-generator/test/Data/CFTA/Gen/Refinement/DeriveSpec.hs
+index 34aad216..0407decf 100644
+--- a/cfta-generator/test/Data/CFTA/Gen/Refinement/DeriveSpec.hs
++++ b/cfta-generator/test/Data/CFTA/Gen/Refinement/DeriveSpec.hs
+@@ -38,10 +38,11 @@ import Data.CFTA.Gen.Refinement.Derive.Internal (
+     measureNamed,
+  )
+ import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
+-import Data.CFTA.Generic (HasFTA)
++import Data.CFTA.Generic (Constructor (..), HasFTA (..))
+ import Data.CFTA.Index (Arity (..), Cardinality (..), Depth, Rank (..))
+ import Data.CFTA.Refinement.Expression (Enumerated (..), Expr, Formula, Literal, Refinement, uninterpreted)
+ import Data.CFTA.Refinement.Lattice (latticeEntailment)
++import qualified Data.CFTA.Term as Term
+ 
+ -- | A list that its invariant keeps sorted.
+ data SortedList = Nil | Cons Integer SortedList
+@@ -148,12 +149,19 @@ sortedLists = LTAGen.recurUpTo 8 $ \rest -> LTAGen.oneof [nil, cons rest]
+                 LTAGen.pure (element : elements)
+ 
+ -- | The annotations of the sorted lists of the builtin list type.
+-listAnnotations :: [(String, Annotation)]
++listAnnotations :: [(Constructor, Annotation)]
+ listAnnotations =
+-    [ ("[]", measure (1000001 :: Expr))
+-    , (":", contract (\x restHead -> 0 .<= x .&& x .<= 1000000 .&& x .<= restHead) <> measure (\x _ -> x))
++    [ (constructorOf ([] :: [Integer]), measure (1000001 :: Expr))
++    ,
++        ( constructorOf [0 :: Integer]
++        , contract (\x restHead -> 0 .<= x .&& x .<= 1000000 .&& x .<= restHead) <> measure (\x _ -> x)
++        )
+     ]
+ 
++-- | The constructor at the root of a value.
++constructorOf :: (HasFTA v) => v -> Constructor
++constructorOf = Term.rootLabel . encodeTerm
++
+ -- | A division of twelve by a denominator that is not zero.
+ newtype Division = Divide Integer
+     deriving stock (Eq, Show, Generic)
+@@ -242,17 +250,17 @@ data FlatTreeNode e = FlatLeaf | FlatBlack e e | FlatRed e e
+     deriving anyclass (NodeView)
+ 
+ -- | The annotations of the red-black trees in the expression language, as the strings of the named measures gave them.
+-treeAnnotations :: [(String, Annotation)]
++treeAnnotations :: [(Constructor, Annotation)]
+ treeAnnotations =
+-    [ ("Leaf", measureNamed "bh" (0 :: Expr) <> measureNamed "col" (0 :: Expr))
++    [ (constructorOf Leaf, measureNamed "bh" (0 :: Expr) <> measureNamed "col" (0 :: Expr))
+     ,
+-        ( "Black"
++        ( constructorOf (Black Leaf Leaf)
+         , contract (\left right -> bh' left .== bh' right)
+             <> measureNamed "bh" (\left _ -> bh' left + 1)
+             <> measureNamed "col" (\_ _ -> 0 :: Expr)
+         )
+     ,
+-        ( "Red"
++        ( constructorOf (Red Leaf Leaf)
+         , contract (\left right -> bh' left .== bh' right .&& col' left .== 0 .&& col' right .== 0)
+             <> measureNamed "bh" (\left _ -> bh' left)
+             <> measureNamed "col" (\_ _ -> 1 :: Expr)
+@@ -405,6 +413,47 @@ isBalanced = isJust . heightOf
+         rightHeight <- heightOf right
+         if abs (leftHeight - rightHeight) <= 1 then Just (1 + max leftHeight rightHeight) else Nothing
+ 
++-- | An AVL tree that keeps the height of each knot in its first field. The height and the key are both 'Int'.
++data Heighted = Hollow | Knot Int Heighted Int Heighted
++    deriving stock (Eq, Ord, Show, Generic)
++    deriving anyclass (HasFTA)
++
++-- | One node of a 'Heighted' tree: the kept height, the heights of the subtrees, and the key.
++data HeightedNode e = HollowNode | KnotNode e e e e
++    deriving stock (Generic)
++    deriving anyclass (NodeView)
++
++-- | The kept height is one more than the greater height of the subtrees, and those differ by at most one.
++keptHeights :: Invariant HeightedNode Single
++keptHeights = Measured heightOf balanced
++  where
++    heightOf :: (Symbolic e) => HeightedNode e -> e
++    heightOf HollowNode = 0
++    heightOf (KnotNode kept _ _ _) = kept
++    balanced :: (Symbolic e) => HeightedNode e -> Truth e
++    balanced HollowNode = true
++    balanced (KnotNode kept left _ right) = kept .== 1 + larger left right .&& abs (left - right) .<= 1
++
++-- | The pool of the kept heights, 1 to 3, as a field atom.
++keptPools :: HeightedNode Expr -> [FieldPool]
++keptPools (KnotNode kept _ _ _) = [kept `drawnFrom` LTAGen.elements [1 .. 3 :: Int]]
++keptPools HollowNode = []
++
++-- | Whether each knot keeps its height, and the heights of its subtrees differ by at most one.
++keepsHeights :: Heighted -> Bool
++keepsHeights = isJust . heightOf
++  where
++    heightOf Hollow = Just (0 :: Int)
++    heightOf (Knot kept left _ right) = do
++        leftHeight <- heightOf left
++        rightHeight <- heightOf right
++        if abs (leftHeight - rightHeight) <= 1 && kept == 1 + max leftHeight rightHeight then Just kept else Nothing
++
++-- | The keys of a 'Heighted' tree.
++heightedKeys :: Heighted -> [Int]
++heightedKeys Hollow = []
++heightedKeys (Knot _ left key right) = heightedKeys left <> [key] <> heightedKeys right
++
+ -- | Terms with de Bruijn variables, a let, and a lambda.
+ data Scoped = Zero | Index Int | Plus Scoped Scoped | Let Scoped Scoped | Lambda Scoped
+     deriving stock (Eq, Ord, Show, Generic)
+@@ -535,19 +584,20 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
+         $ sameRanks pairs
+         $ fmap (\(Pair left right) -> (left, right)) <$> deriveLTA @Pair 0 (atom @Integer (LTAGen.pool ranged))
+     it "gives the annotations of the expression language from the typed invariants, byte for byte" $ do
+-        let formulas annotations = [(name, annotationFormulas annotation) | (name, annotation) <- annotations]
++        let formulas annotations = [(constructorName constructor, annotationFormulas annotation) | (constructor, annotation) <- annotations]
+             typed ::
+                 forall a node m.
+                 (HasFTA a, NodeView node) => Invariant node m -> Either DeriveLTAError [(String, ([Formula], [Expr], [(String, Expr)]))]
+             typed rules = formulas <$> invariantAnnotations @a rules
+-            sortedListAnnotations = zip ["Nil", "Cons" :: String] (map snd listAnnotations)
++            sortedListAnnotations = zip [constructorOf Nil, constructorOf (Cons 0 Nil)] (map snd listAnnotations)
+         typed @SortedList (invariant @SortedList) `shouldBe` Right (formulas sortedListAnnotations)
+         fmap show (typed @SortedList (invariant @SortedList)) `shouldBe` Right (show (formulas sortedListAnnotations))
+         typed @Tree (invariant @Tree) `shouldBe` Right (formulas treeAnnotations)
+         fmap show (typed @Tree (invariant @Tree)) `shouldBe` Right (show (formulas treeAnnotations))
+         typed @Division (invariant @Division)
+-            `shouldBe` Right (formulas [("Divide", contract (\d -> 0 .<= d .&& d .<= 5 .&& d ./= (0 :: Expr)))])
+-        typed @Pair (invariant @Pair) `shouldBe` Right (formulas [("Pair", contract (\left right -> left .< (right :: Expr)))])
++            `shouldBe` Right (formulas [(constructorOf (Divide 1), contract (\d -> 0 .<= d .&& d .<= 5 .&& d ./= (0 :: Expr)))])
++        typed @Pair (invariant @Pair)
++            `shouldBe` Right (formulas [(constructorOf (Pair 0 0), contract (\left right -> left .< (right :: Expr)))])
+     it "reports a node view whose constructors are in another order" $
+         void (deriveLTAFrom @Signed 0 (atom @Integer LTAGen.every) (Contracted (\_ -> true) :: Invariant SignedNode NoMeasures))
+             `shouldBe` Left (NodeMismatch "Negative" "the node view has PositiveNode in its place, a name that does not start with Negative")
+@@ -604,6 +654,15 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
+         sameMembers 3 keys isAVL (deriveLTA @AVL 3 keys)
+         membersOf (deriveLTA @AVL 3 keys) >>= (`shouldBe` 25) . length
+         measuresOf keys (invariant @AVL) (Branch (Branch Empty 0 Empty) 1 Empty) `shouldBe` Shape 2 0 1
++    it "gives two fields of one type two pools with a field atom" $ do
++        let split = fieldAtoms @Heighted keptPools <> atom @Int (LTAGen.elements [0, 1])
++            onePool = atom @Int (LTAGen.elements [0 .. 3])
++        sameMembers 3 split keepsHeights (deriveLTAFrom @Heighted 3 split keptHeights)
++        fromSplit <- membersOf (deriveLTAFrom @Heighted 3 split keptHeights)
++        fromOnePool <- membersOf (deriveLTAFrom @Heighted 3 onePool keptHeights)
++        fromSplit `shouldBe` filter (all (<= 1) . heightedKeys) fromOnePool
++        length fromSplit `shouldSatisfy` (> 1)
++        measureOf split keptHeights (Knot 2 (Knot 1 Hollow 0 Hollow) 1 Hollow) `shouldBe` 2
+     it "derives height-balanced trees from a named measure with a conditional term" $
+         sameMembers
+             3
+@@ -645,11 +704,25 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
+         fmap toList (LTAGen.unrank compiled (Rank 166666666666499999)) `shouldBe` Right [999998, 999999, 1000000]
+     it "reports annotations that do not fit the datatype" $ do
+         let derive annotations = void $ deriveLTAWith @SortedList 8 (atom @Integer LTAGen.every) annotations
+-        derive [("Cosn", mempty)] `shouldBe` Left (UnknownConstructors ["Cosn"] ["Nil", "Cons"])
+-        derive [("Cons", contract (\x -> x .<= 1))] `shouldBe` Left (AnnotationArityMismatch "Cons" (Arity 2) (Arity 1))
+-        derive [("Cons", measure (\x _ -> x) <> measure (\_ y -> y))] `shouldBe` Left (SeveralMeasures "Cons")
+-        derive [("Nil", contract (0 .<= (1 :: Expr)))] `shouldBe` Left (ContractWithoutFields "Nil")
++        derive [(constructorOf (Divide 1), mempty)] `shouldBe` Left (UnknownConstructors ["Divide"] ["Nil", "Cons"])
++        derive [(constructorOf (Cons 0 Nil), contract (\x -> x .<= 1))]
++            `shouldBe` Left (AnnotationArityMismatch "Cons" (Arity 2) (Arity 1))
++        derive [(constructorOf (Cons 0 Nil), measure (\x _ -> x) <> measure (\_ y -> y))]
++            `shouldBe` Left (SeveralMeasures "Cons")
++        derive [(constructorOf Nil, contract (0 .<= (1 :: Expr)))] `shouldBe` Left (ContractWithoutFields "Nil")
+         void (deriveLTAWith @SortedList 8 mempty []) `shouldSatisfy` either isMissingAtom (const False)
++    it "reports field atoms that do not fit the datatype" $ do
++        let derive atoms = void $ deriveLTAFrom @Heighted 3 atoms keptHeights
++            keys = atom @Int (LTAGen.elements [0, 1])
++            pools pool (KnotNode kept _ _ _) = [pool kept]
++            pools _ HollowNode = []
++        derive (fieldAtoms @Heighted (pools (`drawnFrom` LTAGen.elements [1 .. 3 :: Integer])) <> keys)
++            `shouldBe` Left (FieldAtomMismatch "Knot" 0 (typeRep (Proxy @Integer)))
++        derive (fieldAtoms @Heighted (pools (\kept -> (kept + 1) `drawnFrom` LTAGen.elements [1 .. 3 :: Int])) <> keys)
++            `shouldBe` Left (FieldAtomTerm "Knot")
++        derive (fieldAtoms @Heighted (const [] :: AVLNode Expr -> [FieldPool]) <> keys)
++            `shouldBe` Left (NodeMismatch "Knot" "the constructor has 4 fields, the node view 3")
++        derive (fieldAtoms @Heighted keptPools) `shouldBe` Left (MissingAtom (typeRep (Proxy @Int)))
+   where
+     isMissingAtom (MissingAtom _) = True
+     isMissingAtom _ = False
