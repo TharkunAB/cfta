@@ -45,7 +45,7 @@ data Regex a
     | Plus (Regex a)
     deriving (Typeable, Show)
 
--- This should really use observational equality instead.
+-- | The fixed words used for sampled language equality.
 vals :: [[Sym]]
 vals = unGen (vector 100) (mkQCGen 12345) 10
 
@@ -155,6 +155,7 @@ extraReps _ = Nothing
 
 main = do
     [s, p] <- map read <$> getArgs
+    putStrLn "Observation: acceptance on 100 fixed words; seed 12345; size 10."
     res <-
         experimentalPhases
             s
