@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual
+
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.node_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.node_call
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.node_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.node_body
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.edge_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.edge_call
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.edge_body
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.descendants
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.children
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.walk
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterActual.walk

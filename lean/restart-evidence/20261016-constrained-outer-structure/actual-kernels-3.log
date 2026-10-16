@@ -1,0 +1,86 @@
+'FiniteOrdinaryOuterActualChecks.same_node_return' depends on axioms: [propext, Classical.choice, Quot.sound]
+@same_node_return : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq Node]
+  {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {request : NodeRequest} {before after : Caller width}
+  {result : Node} {actual : NodeCall budget request before result after} {memos final : Memos},
+  NodeCallReads formulas solver actual memos final →
+    ∀ (inventory : Inventory),
+      Checks (nodeCallTrace actual) →
+        Context formulas solver inventory before memos →
+          EqReady before.checked.operations.constraints request.inherited →
+            Available before.checked.native.machine.heap request.value →
+              DNode request.value →
+                Stored before →
+                  ∃ next,
+                    Post formulas solver next before after final ∧
+                      Available after.checked.native.machine.heap result ∧
+                        SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver request result ∧
+                          Stored after ∧ NodeNarrow request.value result
+'FiniteOrdinaryOuterActualChecks.generated_next_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+@generated_next_node : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq Node]
+  {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {request : NodeRequest} {before middle after : Caller width}
+  {firstValue result : Node} {first : NodeCall budget request before firstValue middle}
+  {last : NodeCall budget { inherited := request.inherited, value := firstValue } middle result after}
+  {memos current final : Memos},
+  NodeCallReads formulas solver first memos current →
+    NodeCallReads formulas solver last current final →
+      ∀ (inventory : Inventory),
+        Checks (nodeCallTrace first) →
+          Checks (nodeCallTrace last) →
+            Context formulas solver inventory before memos →
+              EqReady before.checked.operations.constraints request.inherited →
+                Available before.checked.native.machine.heap request.value →
+                  DNode request.value →
+                    Stored before →
+                      ∃ next,
+                        Post formulas solver next before after final ∧ Stored after ∧ NodeNarrow request.value result
+'FiniteOrdinaryOuterActualChecks.descendant_child_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+@descendant_child_rank : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq Node]
+  {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {inherited childInherited : EqValue} {value result : Edge}
+  {before after : Caller width} {actual : Descendants budget inherited value before result after} {memos final : Memos},
+  DescendantsReads formulas solver actual memos final →
+    ∀ (inventory : Inventory),
+      Checks (descendantsTrace actual) →
+        Context formulas solver inventory before memos →
+          EqReady before.checked.operations.constraints inherited →
+            Resident before.checked.native.machine.heap value →
+              DEdge value →
+                Stored before →
+                  ∀ (child : Node),
+                    child ∈ result.children →
+                      DNode child ∧
+                        SourceCurrentAllocatedPartialActiveOrder.nodeRank
+                            { inherited := childInherited, value := child } <
+                          SourceCurrentAllocatedPartialActiveOrder.edgeRank { inherited := inherited, value := value }
+'FiniteOrdinaryOuterActualChecks.ordered_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+@ordered_rows : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq Node] {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) {inherited : EqValue} {values results : List Edge}
+  {before after : Caller width} {actual : Rows budget inherited values before results after} {memos final : Memos},
+  RowsReads formulas solver actual memos final →
+    ∀ (inventory : Inventory),
+      Checks (rowsTrace actual) →
+        Context formulas solver inventory before memos →
+          EqReady before.checked.operations.constraints inherited →
+            Edges before.checked.native.machine.heap values →
+              DRows values →
+                Stored before →
+                  Stored after ∧
+                    DRows results ∧
+                      results.length = values.length ∧
+                        MergedOrdinaryHeight.edgesHeight results ≤ MergedOrdinaryHeight.edgesHeight values
+'FiniteOrdinaryOuterActualChecks.contradictory_children' depends on axioms: [propext, Classical.choice, Quot.sound]
+@contradictory_children : ∀ [DecidableEq Symbol]
+  [inst : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [DecidableEq Node] {width : Nat}
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (budget : Nat) (inventory : Inventory) (values : List Node) (before : Caller width) (memos : Memos),
+  Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints SourceEqualityConstraintAllocation.Value.contradiction →
+      Values before.checked.native.machine.heap values →
+        DChildren values →
+          Stored before → Stored before ∧ All₂ NodeNarrow values (EqualityLeafProjectionRuntimeEmpty.erase values)

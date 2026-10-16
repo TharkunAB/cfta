@@ -1,0 +1,5 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterRows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterRows.descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterRows.descendants
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterRows.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterRows.rows

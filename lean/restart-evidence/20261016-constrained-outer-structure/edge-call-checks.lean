@@ -1,0 +1,5 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.Ranges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.Ranges
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.finite

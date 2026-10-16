@@ -1,0 +1,56 @@
+lean/restart-evidence/20261016-constrained-outer-structure/node-root-independent-kernels.lean:37:22: warning: Variable name `built` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _built
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'FiniteOrdinaryRootIndependentChecks.prepared_zero_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+@prepared_zero_budget : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq Node] (width : Nat) (initial : Cache.State Key),
+  Cache.Valid initial →
+    ∀ (expression : InternedNestedConstruction.Syntax Symbol Guard),
+      SourceCurrentAllocatedFiniteOrdinaryConstruction.Node expression →
+        (∀ (original : Guard),
+            original ∈ SourceEqualityConstraintOrigins.guards expression →
+              SourceEqualityGuardReadback.Cached original.equalities) →
+          ∀ (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula),
+            (∀ (value : Node) (heap : InternedConstructorTemplates.State Symbol Guard),
+                InternedFreshOrdinaryConstruction.build expression [] empty =
+                    InternedNestedConstruction.Outcome.done value heap →
+                  Plan 0
+                    (SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall
+                      {
+                        inherited :=
+                          emptyValue
+                            (SourceEqualityOriginalAllocationPreparation.prepare
+                                (SourceEqualityConstraintOrigins.guards expression) initial).snd,
+                        value := value }
+                      (caller width
+                        (SourceEqualityOriginalAllocationPreparation.prepare
+                            (SourceEqualityConstraintOrigins.guards expression) initial).snd
+                        heap))) →
+              have cache :=
+                (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+                    initial).snd;
+              ∃ fields,
+                SourceEqualityOriginalAllocationPreparation.Receipt (SourceEqualityConstraintOrigins.guards expression)
+                    initial fields cache ∧
+                  ∃ value heap built result after next final,
+                    SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                        (fun f g s r e p h m c n =>
+                          SourceCurrentAllocatedPartialWorker.nodeCall f g s r e p h m c n 0
+                            { inherited := emptyValue cache, value := value } (caller width cache heap))
+                        result after ∧
+                      ∃ actual,
+                        NodeCallReads formulas solver actual globals final ∧
+                          Checks (nodeCallTrace actual) ∧
+                            Post formulas solver next (caller width cache heap) after final ∧
+                              Available after.checked.native.machine.heap result ∧
+                                Stored after ∧
+                                  NodeNarrow value result ∧
+                                    result.free = [] ∧
+                                      ∀ (ambient : InternedGuardedLanguage.Env Symbol) (term : Language.Term Symbol),
+                                        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                            ambient result term ↔
+                                          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                            ambient value term

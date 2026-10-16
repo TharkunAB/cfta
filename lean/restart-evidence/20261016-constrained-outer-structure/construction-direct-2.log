@@ -1,0 +1,45 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryConstruction.lean:106:8: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+environment : List (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+inputs : Values state environment
+domains : DChildren environment
+children : List (Syntax Symbol Guard)
+rest : List (EdgeSyntax Symbol Guard)
+symbol : Symbol
+constraint : Guard
+childrenDomain : Children children
+restDomain : Rows rest
+values : List (Value Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+returned : InternedFreshOrdinaryConstruction.buildMany children environment state = Outcome.done values middle
+resultDomain : DChildren values
+verified :
+  InternedNestedFacts.Verified state (InternedFreshOrdinaryConstruction.buildMany children environment state) Values
+current : Facts middle
+available : Values middle values
+made : EdgeValue Symbol Guard × InternedConstructorTemplates.State Symbol Guard :=
+  run (makeEdge symbol constraint values) middle
+edgeVerified : InternedNestedFacts.Verified middle (work (makeEdge symbol constraint values) middle) EdgeResident
+edgeFacts : Facts made.snd
+nextInputs : Values made.snd environment
+edgeDomain : SourceCurrentAllocatedFiniteOrdinaryDomain.Edge (run (makeEdge symbol constraint values) middle).fst
+edges : List (EdgeValue Symbol Guard)
+after : InternedConstructorTemplates.State Symbol Guard
+tailReturned : InternedFreshOrdinaryConstruction.buildEdges rest environment made.snd = Outcome.done edges after
+tailDomains : DRows edges
+⊢ (match
+      InternedFreshOrdinaryConstruction.buildEdges rest environment
+        (run (makeEdge symbol constraint values) middle).snd with
+    | Outcome.done value state => Outcome.done ((run (makeEdge symbol constraint values) middle).fst :: value) state
+    | Outcome.pending key state => Outcome.pending key state) =
+    Outcome.done (made.fst :: edges) after
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryConstruction.lean:106:98: warning: This simp argument is unused:
+  tailReturned
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [InternedFreshOrdinaryConstruction.buildEdges, returned, Outcome.bind, work]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

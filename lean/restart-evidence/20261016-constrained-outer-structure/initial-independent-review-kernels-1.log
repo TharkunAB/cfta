@@ -1,0 +1,42 @@
+'FiniteOrdinaryInitialReviewChecks.generic_nested' depends on axioms: [propext, Quot.sound]
+@generic_nested : ∀ {«Symbol» «Guard» : Type} [inst : DecidableEq (EdgeKey «Symbol» «Guard»)] (outer inner : «Symbol»)
+  (outerGuard innerGuard : «Guard»),
+  have expression :=
+    InternedNestedConstruction.Syntax.node
+      [InternedNestedConstruction.EdgeSyntax.mk outer outerGuard
+          [InternedNestedConstruction.Syntax.node [InternedNestedConstruction.EdgeSyntax.mk inner innerGuard []]]];
+  ∃ value heap,
+    InternedFreshOrdinaryConstruction.build expression [] empty = InternedNestedConstruction.Outcome.done value heap ∧
+      SourceCurrentAllocatedFiniteOrdinaryDomain.Node value ∧ InternedNestedFacts.Facts heap ∧ Available heap value
+'FiniteOrdinaryInitialReviewChecks.prepared_context' depends on axioms: [propext, Classical.choice, Quot.sound]
+@prepared_context : ∀ [DecidableEq Symbol] [inst : DecidableEq (EdgeKey Symbol Guard)] (width : Nat)
+  (initial : Cache.State Key),
+  Cache.Valid initial →
+    ∀ (expression : InternedNestedConstruction.Syntax Symbol Guard),
+      SourceCurrentAllocatedFiniteOrdinaryConstruction.Node expression →
+        (∀ (original : Guard),
+            original ∈ SourceEqualityConstraintOrigins.guards expression →
+              SourceEqualityGuardReadback.Cached original.equalities) →
+          ∀ (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula),
+            have cache :=
+              (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+                  initial).snd;
+            ∃ fields,
+              SourceEqualityOriginalAllocationPreparation.Receipt (SourceEqualityConstraintOrigins.guards expression)
+                  initial fields cache ∧
+                ∃ value heap built,
+                  SourceCurrentAllocatedPartialInvariant.Context formulas solver (inventory expression value heap built)
+                      (caller width cache heap) globals ∧
+                    SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored (caller width cache heap) ∧
+                      SourceCurrentAllocatedFiniteOrdinaryDomain.Node value ∧
+                        (caller width cache heap).checked.native.machine.heap = heap ∧
+                          SourceEqualityConstraintMemoAllocation.Grows
+                              (SourceEqualityConstraintMemoAllocation.initial cache)
+                              (caller width cache heap).checked.operations ∧
+                            ∃ identity,
+                              emptyValue cache = SourceEqualityConstraintAllocation.Value.live identity [] ∧
+                                SourceEqualityConstraintAllocation.Ready
+                                    (caller width cache heap).checked.operations.constraints
+                                    (SourceEqualityConstraintAllocation.Value.live identity []) ∧
+                                  Available heap value ∧
+                                    value.free = [] ∧ SourceRecursiveIntersectionInputView.Original value

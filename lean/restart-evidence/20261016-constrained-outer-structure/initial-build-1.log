@@ -1,0 +1,48 @@
+⚠ [762/811] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✖ [1408/1408] Building MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterInitial (661ms)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.setup.json --json
+warning: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.lean:28:0: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterInitial.stored`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.lean:66:14: Unknown identifier `SourceEqualityOriginalAllocationPreparation.Receipt`
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.lean:64:18: Unknown identifier `SourceEqualityOriginalAllocationPreparation.prepare`
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.lean:74:16: Unknown identifier `SourceEqualityOriginalAllocationPreparation.prepare`
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterInitial.lean:73:106: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+initial : Cache.State Key
+valid : Cache.Valid initial
+expression : InternedNestedConstruction.Syntax Symbol Guard
+domain : SourceCurrentAllocatedFiniteOrdinaryConstruction.Node expression
+cached :
+  ∀ (original : Guard),
+    original ∈ SourceEqualityConstraintOrigins.guards expression →
+      SourceEqualityGuardReadback.Cached original.equalities
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+⊢ let cache := sorry;
+  ∃ fields,
+    sorry ∧
+      ∃ value heap built,
+        Context formulas solver (inventory expression value heap built) (caller width cache heap) globals ∧
+          Stored (caller width cache heap) ∧
+            DNode value ∧
+              ∃ identity,
+                emptyValue cache = SourceEqualityConstraintAllocation.Value.live identity [] ∧
+                  SourceEqualityConstraintAllocation.Ready (caller width cache heap).checked.operations.constraints
+                      (SourceEqualityConstraintAllocation.Value.live identity []) ∧
+                    Available heap value ∧ value.free = [] ∧ SourceRecursiveIntersectionInputView.Original value
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterInitial
+error: build failed

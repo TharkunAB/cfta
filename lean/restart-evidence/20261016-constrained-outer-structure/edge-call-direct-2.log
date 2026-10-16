@@ -1,0 +1,54 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.lean:80:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  contradictory request.value.entry.key.constraint
+in the target expression
+  true = false
+
+case true
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget : Nat
+request : EdgeRequest
+initial : Context formulas solver inventory before memos
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : EdgeResident before.checked.native.machine.heap request.value
+domain : DEdge request.value
+stored : Stored before
+ranges : SourceCurrentAllocatedParentWorkerActual.ResidentRanges budget request before
+test : contradictory request.value.entry.key.constraint = true
+loaded : Allocated :=
+  { stored := SourceEqualityConstraintAllocation.Value.contradiction,
+    guard := request.value.entry.key.constraint.guard }
+_stable :
+  SourceCurrentAllocatedParentWorkerCompletion.StableRun
+    (fun g s r e p h m c n =>
+      SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget request.value.entry.key.symbol
+        request.value.entry.key.constraint request.inherited request.value.children before.checked before.fourth
+        before.merge)
+    (SourceCurrentAllocatedMkEdge.reject request.value.entry.key.symbol before.checked).fst
+    (SourceCurrentAllocatedMkEdge.reject request.value.entry.key.symbol before.checked).snd before.fourth before.merge
+actual :
+  SourceCurrentAllocatedParentEdge.Edge budget request.value.entry.key.symbol request.value.entry.key.constraint loaded
+    request.inherited request.value.children before.checked before.fourth before.merge
+    (SourceCurrentAllocatedMkEdge.reject request.value.entry.key.symbol before.checked).fst
+    (SourceCurrentAllocatedMkEdge.reject request.value.entry.key.symbol before.checked).snd before.fourth before.merge
+reads : SourceCurrentAllocatedParentEdgeActual.Reads formulas solver actual memos memos
+_receipt :
+  SourceCurrentAllocatedParentEdge.Receipt formulas solver inventory request.value.entry.key.symbol
+    request.value.entry.key.constraint loaded request.inherited request.value.children before.checked
+    (SourceCurrentAllocatedMkEdge.reject request.value.entry.key.symbol before.checked).fst
+    (SourceCurrentAllocatedMkEdge.reject request.value.entry.key.symbol before.checked).snd before.fourth before.fourth
+    before.merge before.merge memos
+native : NativeStored (SourceCurrentAllocatedMkEdge.reject request.value.entry.key.symbol before.checked).snd.native
+merged : MergeStored before.merge
+narrow :
+  EdgeNarrow request.value (SourceCurrentAllocatedMkEdge.reject request.value.entry.key.symbol before.checked).fst
+impossible : true = false
+⊢ SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint before.checked.operations.constraints =
+    Except.ok (some loaded)

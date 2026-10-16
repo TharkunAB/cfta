@@ -1,0 +1,42 @@
+'MicroCFTA.OuterEntryKernels.first_parent_checks' depends on axioms: [propext, Classical.choice, Quot.sound]
+@first_parent_checks : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq Node]
+  {width budget nodeHandle edgeHandle : Nat} {candidate : NodeRequest} {owner : EdgeRequest} {inherited : EqValue}
+  {entry : Cache.Interned InternedBinderProtocol.NodeKey} {original : Edge} {originals : List Edge} {depth : Nat}
+  {free : List InternedBinderProtocol.Reference} {before running parentState : Caller width},
+  Plan budget (Entry.nodeCall candidate before) →
+    beginNode candidate before =
+        (nodeHandle,
+          FlatMemoThunk.Observation.evaluate
+            { inherited := inherited, value := Value.node entry (original :: originals) depth free },
+          running) →
+      beginEdge { inherited := inherited, value := original } running =
+          (edgeHandle, FlatMemoThunk.Observation.evaluate owner, parentState) →
+        SourceCurrentAllocatedParentWorkerActual.ResidentRanges budget owner parentState
+'MicroCFTA.OuterEntryKernels.tail_parent_checks' depends on axioms: [propext, Classical.choice, Quot.sound]
+@tail_parent_checks : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq Node]
+  {width budget handle : Nat} {inherited : EqValue} {original next : Edge} {rest : List Edge} {narrowed result : Edge}
+  {owner : EdgeRequest} {before middle afterChildren running : Caller width},
+  Plan budget (Entry.rows inherited (original :: next :: rest) before) →
+    EdgeCall budget { inherited := inherited, value := original } before narrowed middle →
+      Descendants budget inherited narrowed middle result afterChildren →
+        beginEdge { inherited := inherited, value := next } afterChildren =
+            (handle, FlatMemoThunk.Observation.evaluate owner, running) →
+          SourceCurrentAllocatedParentWorkerActual.ResidentRanges budget owner running
+'MicroCFTA.OuterEntryKernels.next_index_checks' depends on axioms: [propext, Classical.choice, Quot.sound]
+@next_index_checks : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq Node]
+  {width budget index : Nat} {combined : EqValue} {value next result : Node} {rest : List Node}
+  {before middle : Caller width},
+  Plan budget (Entry.walk combined index (value :: next :: rest) before) →
+    NodeCall budget { inherited := (descend before combined index).fst, value := value }
+        (descend before combined index).snd result middle →
+      Plan budget
+        (Entry.nodeCall { inherited := (descend middle combined (index + 1)).fst, value := next }
+          (descend middle combined (index + 1)).snd)
+'MicroCFTA.OuterEntryKernels.contradiction_has_no_child_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+@contradiction_has_no_child_step : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq Node]
+  {width budget : Nat} {values : List Node} {before : Caller width} {last : Entry width},
+  ¬Step budget (Entry.children SourceEqualityConstraintAllocation.Value.contradiction values before) last

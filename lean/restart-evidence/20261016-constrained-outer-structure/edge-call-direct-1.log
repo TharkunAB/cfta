@@ -1,0 +1,28 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.lean:62:41: error: unexpected identifier; expected ','
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.lean:62:7: error: Missing cases:
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.lean:61:84: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+budget : Nat
+request : EdgeRequest
+initial : Context formulas solver inventory before memos
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : EdgeResident before.checked.native.machine.heap request.value
+domain : DEdge request.value
+stored : Stored before
+ranges : SourceCurrentAllocatedParentWorkerActual.ResidentRanges budget request before
+construct : ∃ loaded, sorry
+⊢ ∃ result checked fourth memo next final actual,
+    EdgeBodyReads formulas solver actual memos final ∧
+      Checks (edgeBodyTrace actual) ∧
+        Post formulas solver next before (advance before checked fourth memo) final ∧
+          EdgeResident checked.native.machine.heap result ∧
+            NativeStored checked.native ∧
+              MergeStored memo ∧ EdgeNarrow request.value result ∧ EdgeLaw formulas solver request result

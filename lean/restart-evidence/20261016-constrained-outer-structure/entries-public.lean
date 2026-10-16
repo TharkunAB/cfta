@@ -1,0 +1,90 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeBody
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeBody
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.edgeCall
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.edgeCall
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.edgeBody
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.edgeBody
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.descendants
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.walk
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.walk
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.node_evaluate
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.node_evaluate
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.node_ordinary
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.node_ordinary
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.edge_evaluate
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.edge_evaluate
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.rows_edge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.rows_edge
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.rows_descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.rows_descendants
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.rows_tail
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.rows_tail
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.descendants_children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.descendants_children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.children_live
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.children_live
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.walk_node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.walk_node
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.walk_tail
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.walk_tail
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Reach
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Reach
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Reach.refl
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Reach.refl
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Reach.direct
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Reach.direct
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Reach.trans
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Reach.trans
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan.restrict
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan.restrict
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan.edge_body_ranges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan.edge_body_ranges
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan.edge_call_ranges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan.edge_call_ranges
+

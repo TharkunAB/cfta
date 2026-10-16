@@ -1,0 +1,35 @@
+'FiniteOrdinaryOuterRecursionChecks.zero_rank_empty_walk' depends on axioms: [propext, Classical.choice, Quot.sound]
+@zero_rank_empty_walk : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq Node] {width : Nat}
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (budget : Nat) (inventory : Inventory) (before : Caller width) (memos : Memos) (combined : EqValue) (index : Nat),
+  Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints combined →
+      Stored before →
+        ActiveAbove 0 before →
+          Plan budget (SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.walk combined index [] before) →
+            ∃ next, Post formulas solver next before before memos ∧ Stored before
+'FiniteOrdinaryOuterRecursionChecks.walk_semantic_structure' depends on axioms: [propext, Classical.choice, Quot.sound]
+@walk_semantic_structure : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq Node] {width : Nat}
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (budget rank : Nat) (combined : EqValue) (index : Nat) (values : List Node) {inventory : Inventory}
+  {before : Caller width} {memos : Memos},
+  Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints combined →
+      Values before.checked.native.machine.heap values →
+        DChildren values →
+          (∀ (value : Node), value ∈ values → nodeRank { inherited := combined, value := value } < rank) →
+            Stored before →
+              ActiveAbove (rank - 1) before →
+                Below formulas solver budget rank →
+                  Plan budget
+                      (SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.walk combined index values before) →
+                    ∃ results after next final actual,
+                      WalkReads formulas solver actual memos final ∧
+                        Checks (walkTrace actual) ∧
+                          Post formulas solver next before after final ∧
+                            Values after.checked.native.machine.heap results ∧
+                              Stored after ∧
+                                All₂ NodeNarrow values results ∧
+                                  SourceCurrentAllocatedPartialWalkLanguage.WalkLaw formulas solver actual

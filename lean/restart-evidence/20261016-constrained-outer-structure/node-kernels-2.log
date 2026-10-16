@@ -1,0 +1,47 @@
+'FiniteOrdinaryOuterNodeKernels.finite_then_zero_bound_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryOuterNodeKernels.finite_then_zero_bound_hit : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest),
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node request.value →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored before →
+            MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+                (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank request) before →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan budget
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall request before) →
+                ∃ result after next final,
+                  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                      (fun f g s r e p h m c n =>
+                        MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall f g s r e p h m c n budget request
+                          before)
+                      result after ∧
+                    ∃ actual,
+                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver actual memos
+                          final ∧
+                        MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+                            (MicroCFTA.SourceCurrentAllocatedPartialChecks.nodeCallTrace actual) ∧
+                          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before after
+                              final ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored after ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow request.value result ∧
+                                MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver request
+                                    result ∧
+                                  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+                                      (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank request) after ∧
+                                    MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall 0 0 0 0 0 0 0 0 0 0 budget
+                                        request after =
+                                      MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done result after

@@ -1,0 +1,151 @@
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:58:50: error: don't know how to synthesize placeholder for argument `original`
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before : Caller width
+result : EdgeValue Symbol Guard
+memos : Memos
+initial : Context formulas solver inventory before memos
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : EdgeResident before.checked.native.machine.heap request.value
+domain : DEdge request.value
+stored : Stored before
+handle : Nat
+running : Caller width
+_current : Context formulas solver inventory running memos
+published : running.edgeResults.table request.key = some handle
+loaded✝ : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+inherited✝ : SourceEqualityConstraintAllocation.Value
+checked✝ : SourceEqualityNativeDemand.State width
+fourth✝ : SourceCurrentEmptinessMemo.Memo
+merge✝ : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+edge✝ : EdgeValue Symbol Guard
+started :
+  beginEdge request before =
+    (handle, FlatMemoThunk.Observation.evaluate { inherited := inherited✝, value := edge✝ }, running)
+_good :
+  SourceCurrentAllocatedPartialMemoSound.EdgeGood formulas solver running.checked
+    { request := { inherited := inherited✝, value := edge✝ }, status := FlatMemoThunk.Status.evaluating }
+_key : { inherited := inherited✝, value := edge✝ }.key = request.key
+cell :
+  running.edgeResults.cells handle =
+    some { request := { inherited := inherited✝, value := edge✝ }, status := FlatMemoThunk.Status.evaluating }
+field :
+  SourceEqualityMkEdgeAllocation.contradictory edge✝.entry.key.constraint = false →
+    SourceEqualityConstraintFieldLookup.load edge✝.entry.key.constraint running.checked.operations.constraints =
+      Except.ok (some loaded✝)
+parent :
+  SourceCurrentAllocatedParentEdge.Edge budget edge✝.entry.key.symbol edge✝.entry.key.constraint loaded✝ inherited✝
+    edge✝.children running.checked running.fourth running.merge result checked✝ fourth✝ merge✝
+⊢ EdgeRequest
+'FiniteOrdinaryOuterEdgeCallKernels.finite_then_zero_bound_hit' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+@FiniteOrdinaryOuterEdgeCallKernels.finite_then_zero_bound_hit : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge request.value →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored before →
+            MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+                (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request) before →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.Ranges budget request before →
+                ∃ result after next final,
+                  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                      (fun f g s r e p h m c n =>
+                        MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall f g s r e p h m c n budget request
+                          before)
+                      result after ∧
+                    ∃ actual,
+                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver actual memos
+                          final ∧
+                        MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+                            (MicroCFTA.SourceCurrentAllocatedPartialChecks.edgeCallTrace actual) ∧
+                          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before after
+                              final ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored after ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow request.value result ∧
+                                MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver request
+                                    result ∧
+                                  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+                                      (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request) after ∧
+                                    MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall 0 0 0 0 0 0 0 0 0 0 budget
+                                          request after =
+                                        MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done result after ∧
+                                      ∀
+                                        (child :
+                                          MicroCFTA.InternedConstructorTemplates.Value
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                        child ∈ result.children →
+                                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node child ∧
+                                            MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank
+                                                { inherited := request.inherited, value := child } <
+                                              MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request
+'FiniteOrdinaryOuterEdgeCallKernels.rejected_needs_no_ranges' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+@FiniteOrdinaryOuterEdgeCallKernels.rejected_needs_no_ranges : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge request.value →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored before →
+            MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+                (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request) before →
+              MicroCFTA.SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint = true →
+                ∃ result after next final,
+                  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                      (fun f g s r e p h m c n =>
+                        MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall f g s r e p h m c n budget request
+                          before)
+                      result after ∧
+                    ∃ actual,
+                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver actual memos
+                          final ∧
+                        MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+                            (MicroCFTA.SourceCurrentAllocatedPartialChecks.edgeCallTrace actual) ∧
+                          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before after
+                              final ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored after ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow request.value result ∧
+                                MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall 0 0 0 0 0 0 0 0 0 0 budget
+                                    request after =
+                                  MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done result after

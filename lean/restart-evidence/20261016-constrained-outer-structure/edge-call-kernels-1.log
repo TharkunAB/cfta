@@ -1,0 +1,164 @@
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:23:8: warning: automatically included section variable(s) unused in theorem `_private.lean.«restart-evidence».«20261016-constrained-outer-structure».«edge-call-kernels».0.FiniteOrdinaryOuterEdgeCallKernels.demand_table`:
+  [DecidableEq Symbol]
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  [DecidableEq (Value Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq
+  Symbol] [DecidableEq
+  (InternedConstructorTemplates.EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:42:62: error: Application type mismatch: The argument
+  reached
+has type
+  Nat
+of sort `Type` but is expected to have type
+  Caller width
+of sort `Type 1` in the application
+  Stored.edge_ready stored formulas solver request reached
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:42:70: error(lean.unknownIdentifier): Unknown identifier `handle`
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:43:86: error(lean.unknownIdentifier): Unknown identifier `started`
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:44:6: error: Tactic `subst` failed: did not find equation for eliminating 'reached'
+
+case hit
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+request : EdgeRequest
+before after : Caller width
+result : EdgeValue Symbol Guard
+memos : Memos
+initial : Context formulas solver inventory before memos
+inherited : EqReady before.checked.operations.constraints request.inherited
+resident : EdgeResident before.checked.native.machine.heap request.value
+domain : DEdge request.value
+stored : Stored before
+reached : Nat
+started✝ : beginEdge request before = (reached, FlatMemoThunk.Observation.ready result, after)
+same : sorry = before
+⊢ ∃ handle, beginEdge request after = (handle, FlatMemoThunk.Observation.ready result, after)
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:48:101: error(lean.unknownIdentifier): Unknown identifier `started`
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:49:31: error(lean.invalidField): Invalid field `edgeResults`: The environment does not contain `Nat.edgeResults`, so it is not possible to project the field `edgeResults` from an expression
+  running
+of type `Nat`
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:49:68: error(lean.unknownIdentifier): Unknown identifier `handle`
+lean/restart-evidence/20261016-constrained-outer-structure/edge-call-kernels.lean:95:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 1
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑(MergedOrdinaryHeight.edgeHeight result)
+ b := ↑(MergedOrdinaryHeight.height child)
+ c := ↑(MergedOrdinaryHeight.edgeHeight request.value)
+'FiniteOrdinaryOuterEdgeCallKernels.finite_then_zero_bound_hit' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+@FiniteOrdinaryOuterEdgeCallKernels.finite_then_zero_bound_hit : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge request.value →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored before →
+            MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+                (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request) before →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEdgeCall.Ranges budget request before →
+                ∃ result after next final,
+                  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                      (fun f g s r e p h m c n =>
+                        MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall f g s r e p h m c n budget request
+                          before)
+                      result after ∧
+                    ∃ actual,
+                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver actual memos
+                          final ∧
+                        MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+                            (MicroCFTA.SourceCurrentAllocatedPartialChecks.edgeCallTrace actual) ∧
+                          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before after
+                              final ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored after ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow request.value result ∧
+                                MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver request
+                                    result ∧
+                                  MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+                                      (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request) after ∧
+                                    MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall 0 0 0 0 0 0 0 0 0 0 budget
+                                          request after =
+                                        MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done result after ∧
+                                      ∀
+                                        (child :
+                                          MicroCFTA.InternedConstructorTemplates.Value
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                        child ∈ result.children →
+                                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node child ∧
+                                            MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank
+                                                { inherited := request.inherited, value := child } <
+                                              MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request
+'FiniteOrdinaryOuterEdgeCallKernels.rejected_needs_no_ranges' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+@FiniteOrdinaryOuterEdgeCallKernels.rejected_needs_no_ranges : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (budget : Nat) (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest),
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge request.value →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored before →
+            MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.ActiveAbove
+                (MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank request) before →
+              MicroCFTA.SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint = true →
+                ∃ result after next final,
+                  MicroCFTA.SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                      (fun f g s r e p h m c n =>
+                        MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall f g s r e p h m c n budget request
+                          before)
+                      result after ∧
+                    ∃ actual,
+                      MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver actual memos
+                          final ∧
+                        MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+                            (MicroCFTA.SourceCurrentAllocatedPartialChecks.edgeCallTrace actual) ∧
+                          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before after
+                              final ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored after ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow request.value result ∧
+                                MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall 0 0 0 0 0 0 0 0 0 0 budget
+                                    request after =
+                                  MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done result after

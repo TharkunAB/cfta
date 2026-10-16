@@ -1,0 +1,81 @@
+lean/restart-evidence/20261016-constrained-outer-structure/root-kernels.lean:29:20: warning: Variable name `built` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _built
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'FiniteOrdinaryOuterRootKernels.constructed_actual_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryOuterRootKernels.constructed_actual_root : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (width : Nat) {initial final : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key}
+  {originals : List (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceEqualityOriginalAllocationHistory.History initial final originals →
+    MicroCFTA.Cache.Valid initial →
+      ∀
+        (expression :
+          MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node expression →
+          (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+              original ∈ MicroCFTA.SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+            ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+              (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula),
+              ∃ value heap built,
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node value ∧
+                  ∀ (budget : Nat)
+                    (result :
+                      MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (after : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (actual :
+                      MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall budget
+                        { inherited := MicroCFTA.SourceCurrentAllocatedPartialInitialization.emptyValue final,
+                          value := value }
+                        (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller width final heap) result after)
+                    (finalMemos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver actual
+                        MicroCFTA.SourceCurrentAllocatedPartialInitialization.globals finalMemos →
+                      MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+                          (MicroCFTA.SourceCurrentAllocatedPartialChecks.nodeCallTrace actual) →
+                        ∃ next,
+                          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next
+                              (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller width final heap) after
+                              finalMemos ∧
+                            MicroCFTA.InternedProbeProvenance.Available after.checked.native.machine.heap result ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored after ∧
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow value result ∧
+                                  ∀
+                                    (ambient :
+                                      MicroCFTA.InternedGuardedLanguage.Env
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                                    (term :
+                                      MicroCFTA.Language.Term
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                                    MicroCFTA.InternedGuardedLanguage.meaning
+                                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+                                      MicroCFTA.InternedGuardedLanguage.meaning
+                                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient value term
+'FiniteOrdinaryOuterRootKernels.nested_guarded_source' depends on axioms: [propext, Quot.sound]
+@FiniteOrdinaryOuterRootKernels.nested_guarded_source : ∀ {S G : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey S G)] (symbol : S) (constraint : G),
+  have leaf :=
+    MicroCFTA.InternedNestedConstruction.Syntax.node
+      [MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk symbol constraint []];
+  have expression :=
+    MicroCFTA.InternedNestedConstruction.Syntax.node
+      [MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk symbol constraint [leaf, leaf],
+        MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk symbol constraint []];
+  ∃ value heap,
+    MicroCFTA.InternedFreshOrdinaryConstruction.build expression [] MicroCFTA.InternedConstructorTemplates.empty =
+        MicroCFTA.InternedNestedConstruction.Outcome.done value heap ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node value ∧
+        MicroCFTA.InternedNestedFacts.Facts heap ∧ MicroCFTA.InternedProbeProvenance.Available heap value
