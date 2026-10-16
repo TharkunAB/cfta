@@ -1,0 +1,9 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClass
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClass.verified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClass.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClass.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClass.finite

@@ -1,0 +1,145 @@
+'FiniteOrdinaryEditChecks.current_operand_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+@current_operand_bound : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {base : HeapState} {next : Inventory} {receiptBase : HeapState} {path : EqualityNormalize.Path}
+  {input result : Value Symbol Guard} {before after : SharedState width} {memos final : Memos},
+  SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record originals receiptBase path input before
+      result after memos final →
+    Ready formulas solver inventory record originals base before →
+      Values base originals →
+        DChildren originals →
+          Stored before →
+            DNode input →
+              Stored after ∧ DNode result ∧ MergedOrdinaryHeight.height result ≤ MergedOrdinaryHeight.height input
+'FiniteOrdinaryEditChecks.historical_force_base' depends on axioms: [propext, Classical.choice, Quot.sound]
+@historical_force_base : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {base : HeapState} {next : Inventory} {receiptBase : HeapState} {path : EqualityNormalize.Path}
+  {value : Value Symbol Guard} {before after : SharedState width} {memos final : Memos},
+  SourceCurrentAllocatedSharedTargetForce.Receipt formulas solver next record originals receiptBase path before value
+      after memos final →
+    Ready formulas solver inventory record originals base before →
+      Values base originals → DChildren originals → Stored before → Stored after ∧ DNode value
+'FiniteOrdinaryEditChecks.positional_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+@positional_list : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {base : HeapState} {edits : Edits EqualityNormalize.Path} {values : List (Value Symbol Guard)}
+  {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width} {memos final : Memos}
+  {actual : EditList record originals edits values before results after},
+  ListReads formulas solver base actual memos final →
+    Populated edits →
+      Allowed record edits →
+        Ready formulas solver inventory record originals base before →
+          Values before.checked.native.machine.heap values →
+            SourceCurrentAllocatedSharedEditEffects.ListSafe edits values →
+              Valid before.checked.native.machine.heap memos →
+                Values base originals →
+                  DChildren originals →
+                    Stored before →
+                      DChildren values →
+                        Stored after ∧
+                          DChildren results ∧
+                            results.length = values.length ∧
+                              MergedOrdinaryHeight.childrenHeight results ≤ MergedOrdinaryHeight.childrenHeight values
+'FiniteOrdinaryEditChecks.two_lists' depends on axioms: [propext, Classical.choice, Quot.sound]
+@two_lists : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {base : HeapState} {firstEdits nextEdits : Edits EqualityNormalize.Path}
+  {values middleValues results : List (Value Symbol Guard)} {before middle after : SharedState width}
+  {memos current final : Memos} {first : EditList record originals firstEdits values before middleValues middle}
+  {last : EditList record originals nextEdits middleValues middle results after},
+  ListReads formulas solver base first memos current →
+    ListReads formulas solver base last current final →
+      Populated firstEdits →
+        Allowed record firstEdits →
+          Populated nextEdits →
+            Allowed record nextEdits →
+              Ready formulas solver inventory record originals base before →
+                Values before.checked.native.machine.heap values →
+                  SourceCurrentAllocatedSharedEditEffects.ListSafe firstEdits values →
+                    SourceCurrentAllocatedSharedEditEffects.ListSafe nextEdits middleValues →
+                      Valid before.checked.native.machine.heap memos →
+                        Values base originals →
+                          DChildren originals →
+                            Stored before → DChildren values → Stored after ∧ All₂ NodeNarrow values results
+'FiniteOrdinaryEditChecks.ignored_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+@ignored_root : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {base : HeapState} {path : EqualityNormalize.Path} {values : List (Value Symbol Guard)} {before : SharedState width}
+  {memos : Memos},
+  path ∈ record.paths →
+    Ready formulas solver inventory record originals base before →
+      Values before.checked.native.machine.heap values →
+        Valid before.checked.native.machine.heap memos →
+          Values base originals →
+            DChildren originals → Stored before → DChildren values → Stored before ∧ All₂ NodeNarrow values values
+'FiniteOrdinaryEditChecks.ordinary_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+@ordinary_rows : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {base : HeapState} {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+  {before : SharedState width} {rebuilt : List (EdgeValue Symbol Guard)} {middle : SharedState width}
+  {result : Value Symbol Guard} {heap : HeapState} {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat}
+  {free : List InternedBinderProtocol.Reference} {memos final : Memos}
+  {actual : EditRows record originals entries edges before rebuilt middle},
+  RowsReads formulas solver base actual memos final →
+    run (makeNode rebuilt) middle.checked.native.machine.heap = (result, heap) →
+      Populated (Edits.editBelow entries) →
+        HasLeaf (Edits.editBelow entries) →
+          Allowed record (Edits.editBelow entries) →
+            Ready formulas solver inventory record originals base before →
+              Available before.checked.native.machine.heap (Value.node entry edges depth free) →
+                Safe (Edits.editBelow entries) (Value.node entry edges depth free) →
+                  Valid before.checked.native.machine.heap memos →
+                    Values base originals →
+                      DChildren originals →
+                        Stored before →
+                          DRows edges →
+                            Stored (advanceHeap middle heap) ∧ NodeNarrow (Value.node entry edges depth free) result
+'FiniteOrdinaryEditChecks.full_guard_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+@full_guard_rows : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {base : HeapState} {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+  {before : SharedState width} {results : List (EdgeValue Symbol Guard)} {after : SharedState width}
+  {memos final : Memos} {actual : EditRows record originals entries edges before results after},
+  RowsReads formulas solver base actual memos final →
+    Populated (Edits.editBelow entries) →
+      Allowed record (Edits.editBelow entries) →
+        Ready formulas solver inventory record originals base before →
+          Edges before.checked.native.machine.heap edges →
+            RowsSafe entries edges →
+              Valid before.checked.native.machine.heap memos →
+                Values base originals →
+                  DChildren originals →
+                    Stored before →
+                      DRows edges →
+                        Stored after ∧
+                          DRows results ∧
+                            results.length = edges.length ∧
+                              MergedOrdinaryHeight.edgesHeight results ≤ MergedOrdinaryHeight.edgesHeight edges
+'FiniteOrdinaryEditChecks.returned_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+@returned_slot : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List (Value Symbol Guard)}
+  {base : HeapState} {edits : Edits EqualityNormalize.Path} {values : List (Value Symbol Guard)}
+  {before : SharedState width} {results : List (Value Symbol Guard)} {after : SharedState width} {memos final : Memos}
+  {actual : EditList record originals edits values before results after},
+  ListReads formulas solver base actual memos final →
+    Populated edits →
+      Allowed record edits →
+        Ready formulas solver inventory record originals base before →
+          Values before.checked.native.machine.heap values →
+            SourceCurrentAllocatedSharedEditEffects.ListSafe edits values →
+              Valid before.checked.native.machine.heap memos →
+                Values base originals →
+                  DChildren originals →
+                    Stored before →
+                      DChildren values →
+                        ∀ (path : EqualityNormalize.Path) (value : Value Symbol Guard),
+                          after.targets path = some value → DNode value

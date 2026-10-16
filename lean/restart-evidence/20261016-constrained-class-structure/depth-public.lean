@@ -1,0 +1,10 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDepth
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDepth.depth
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDepth.depth
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDepth.fast
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDepth.fast

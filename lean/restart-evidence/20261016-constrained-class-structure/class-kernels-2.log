@@ -1,0 +1,73 @@
+lean/restart-evidence/20261016-constrained-class-structure/class-kernels.lean:34:80: error: unexpected token ':='; expected ')', ',' or ':'
+lean/restart-evidence/20261016-constrained-class-structure/class-kernels.lean:79:14: error(lean.unknownIdentifier): Unknown constant `FiniteOrdinaryClassKernels.empty_forest`
+lean/restart-evidence/20261016-constrained-class-structure/class-kernels.lean:80:8: error(lean.unknownIdentifier): Unknown identifier `FiniteOrdinaryClassKernels.empty_forest`
+'FiniteOrdinaryClassKernels.two_classes' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryClassKernels.two_classes : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (first second : MicroCFTA.SourceEqualityClassOrder.Record),
+  MicroCFTA.SourceEqualityClassOrder.Coherent first →
+    MicroCFTA.EqualityNormalize.Nontrivial first.paths →
+      MicroCFTA.SourceEqualityClassOrder.Coherent second →
+        MicroCFTA.EqualityNormalize.Nontrivial second.paths →
+          ∀
+            (values :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+            (memo :
+              MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+              MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+                MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+                    MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                      (∀
+                          (ambient :
+                            MicroCFTA.InternedGuardedLanguage.Env
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                          MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                            (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+                            MicroCFTA.SourceCurrentAllocatedClassEdits.ClassRanges first values before memo →
+                              (∀
+                                  (middle :
+                                    List
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                  (step : MicroCFTA.SourceEqualityNativeDemand.State width)
+                                  (current :
+                                    MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                  MicroCFTA.SourceCurrentAllocatedClassEdits.Class first values before memo middle step
+                                      current →
+                                    MicroCFTA.SourceCurrentAllocatedClassEdits.ClassRanges second middle step current) →
+                                ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                                  MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                                    ∃ middle step current next stageMemos results after saved last final,
+                                      MicroCFTA.SourceCurrentAllocatedClassEdits.Class first values before memo middle
+                                          step current ∧
+                                        MicroCFTA.SourceCurrentAllocatedClassEdits.Class second middle step current
+                                            results after saved ∧
+                                          MicroCFTA.SourceCurrentAllocatedClassEdits.Receipt formulas solver next first
+                                              values before memo middle step current memos stageMemos ∧
+                                            MicroCFTA.SourceCurrentAllocatedClassEdits.Receipt formulas solver last
+                                                second middle step current results after saved stageMemos final ∧
+                                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored saved ∧
+                                                  MicroCFTA.Language.All₂
+                                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow
+                                                    values results

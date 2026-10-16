@@ -1,0 +1,47 @@
+'FiniteOrdinaryReturnedIndependent.node_finish_empty' depends on axioms: [propext, Quot.sound]
+@FiniteOrdinaryReturnedIndependent.node_finish_empty : ∀ {width : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {handle : Nat}
+  {owner : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored before →
+    before.nodeResults.cells handle = some { request := owner, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap →
+        MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap owner.value →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node owner.value →
+            have after :=
+              MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle
+                MicroCFTA.InternedConstructorTemplates.Value.empty before;
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored after ∧
+              after.edgeResults = before.edgeResults ∧
+                after.checked = before.checked ∧
+                  after.nodeResults.cells handle =
+                      some
+                        { request := owner,
+                          status :=
+                            MicroCFTA.FlatMemoThunk.Status.returned
+                              MicroCFTA.InternedConstructorTemplates.Value.empty } ∧
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow owner.value
+                      MicroCFTA.InternedConstructorTemplates.Value.empty
+'FiniteOrdinaryReturnedIndependent.edge_finish_children' depends on axioms: [propext, Quot.sound]
+@FiniteOrdinaryReturnedIndependent.edge_finish_children : ∀ {width : Nat}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {handle : Nat}
+  {owner : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored before →
+    before.edgeResults.cells handle = some { request := owner, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+      MicroCFTA.InternedRecordCoherence.Coherent before.checked.native.machine.heap →
+        MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap owner.value →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge owner.value →
+            have after := MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle owner.value before;
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored after ∧
+              after.nodeResults = before.nodeResults ∧
+                after.checked = before.checked ∧
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow owner.value owner.value ∧
+                    ∀ (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                      (child :
+                        MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                      child ∈ owner.value.children →
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node child ∧
+                          MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.nodeRank
+                              { inherited := inherited, value := child } <
+                            MicroCFTA.SourceCurrentAllocatedPartialActiveOrder.edgeRank owner

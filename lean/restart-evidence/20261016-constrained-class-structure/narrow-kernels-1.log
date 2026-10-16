@@ -1,0 +1,41 @@
+'FiniteOrdinaryNarrowKernels.serial_propagation' depends on axioms: [propext]
+@FiniteOrdinaryNarrowKernels.serial_propagation : ∀ {Symbol Guard : Type}
+  {values middle results : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  MicroCFTA.Language.All₂ MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow values middle →
+    MicroCFTA.Language.All₂ MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow middle results →
+      MicroCFTA.Language.All₂ MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow values
+          (MicroCFTA.EqualityLeafProjectionRuntimeEmpty.propagate results) ∧
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children
+            (MicroCFTA.EqualityLeafProjectionRuntimeEmpty.propagate results) ∧
+          MicroCFTA.MergedOrdinaryHeight.childrenHeight
+                (MicroCFTA.EqualityLeafProjectionRuntimeEmpty.propagate results) ≤
+              MicroCFTA.MergedOrdinaryHeight.childrenHeight values ∧
+            (MicroCFTA.EqualityLeafProjectionRuntimeEmpty.propagate results).length = values.length
+'FiniteOrdinaryNarrowKernels.raw_constructors' depends on axioms: [propext, Quot.sound]
+@FiniteOrdinaryNarrowKernels.raw_constructors : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (own : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) (depth : Nat)
+  (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state →
+    MicroCFTA.InternedNestedProvenance.Values state values →
+      MicroCFTA.Language.All₂ MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow edge.children values →
+        have rebuilt :=
+          MicroCFTA.InternedConstructorTemplates.run
+            (MicroCFTA.InternedConstructorTemplates.makeEdge edge.entry.key.symbol edge.entry.key.constraint values)
+            state;
+        have output :=
+          MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeNode [rebuilt.fst])
+            rebuilt.snd;
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow
+          (MicroCFTA.InternedConstructorTemplates.Value.node own [edge] depth free) output.fst
+'FiniteOrdinaryNarrowKernels.arbitrary_erasure' depends on axioms: [propext]
+@FiniteOrdinaryNarrowKernels.arbitrary_erasure : ∀ {Symbol Guard : Type}
+  (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  MicroCFTA.Language.All₂ MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow values
+      (MicroCFTA.EqualityLeafProjectionRuntimeEmpty.erase values) ∧
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children
+        (MicroCFTA.EqualityLeafProjectionRuntimeEmpty.erase values) ∧
+      MicroCFTA.MergedOrdinaryHeight.childrenHeight (MicroCFTA.EqualityLeafProjectionRuntimeEmpty.erase values) = 0

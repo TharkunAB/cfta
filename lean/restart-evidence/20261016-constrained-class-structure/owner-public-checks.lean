@@ -1,0 +1,46 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdge
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.initial
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.initial
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.advance
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.advance
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.beginNode
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.beginNode
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.beginEdge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.beginEdge
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.finishNode
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.finishNode
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.finishEdge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.finishEdge
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.node_hit
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.node_hit
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.edge_hit
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.edge_hit
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.child
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.child
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdge.native_stored
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdge.native_stored
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdge.sentinel
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdge.sentinel
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdge.narrowed
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdge.narrowed
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdge.rejected
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdge.rejected
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.mk
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.mk
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.nodes
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.nodes
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.edges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored.edges
+
+#print MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReturned.Stored

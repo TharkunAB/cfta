@@ -1,0 +1,25 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDepth.depth' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDepth.depth : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value →
+          @Eq.{1} Nat (@MicroCFTA.InternedConstructorTemplates.Value.depth Symbol Guard value)
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDepth.fast' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDepth.fast : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard state value →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value →
+          @Eq.{1} Bool
+            ((@BEq.beq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.depth Symbol Guard value)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))).and
+              (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard value)))
+            Bool.true

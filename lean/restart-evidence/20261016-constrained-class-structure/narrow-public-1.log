@@ -1,0 +1,166 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.node_refl' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.node_refl : ∀ {Symbol Guard : Type}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard value value
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.node_trans' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.node_trans : ∀ {Symbol Guard : Type}
+  {value middle result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard value middle →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard middle result →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard value result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.node_empty' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.node_empty : ∀ {Symbol Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard value
+    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_refl' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_refl : ∀ {Symbol Guard : Type}
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+    @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) values values
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_trans' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_trans : ∀ {Symbol Guard : Type}
+  {values middle results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) values middle →
+    @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) middle results →
+      @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) values results
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_domain' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_domain : ∀ {Symbol Guard : Type}
+  {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) values results →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard results
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_height' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_height : ∀ {Symbol Guard : Type}
+  {values results : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) values results →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.MergedOrdinaryHeight.childrenHeight Symbol Guard results)
+      (@MicroCFTA.MergedOrdinaryHeight.childrenHeight Symbol Guard values)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.edge_refl' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.edge_refl : ∀ {Symbol Guard : Type}
+  {edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge Symbol Guard edge →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard edge edge
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.edge_trans' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.edge_trans : ∀ {Symbol Guard : Type}
+  {edge middle result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard edge middle →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard middle result →
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard edge result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.edge_children' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.edge_children : ∀ {Symbol Guard : Type}
+  {edge result : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard)
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard edge)
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard result) →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard edge result
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.rows_refl' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.rows_refl : ∀ {Symbol Guard : Type}
+  {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard edges →
+    @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard) edges edges
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.rows_trans' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.rows_trans : ∀ {Symbol Guard : Type}
+  {edges middle results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard) edges middle →
+    @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard) middle results →
+      @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard) edges results
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.rows_domain' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.rows_domain : ∀ {Symbol Guard : Type}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard) edges results →
+    @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Rows Symbol Guard results
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.rows_height' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.rows_height : ∀ {Symbol Guard : Type}
+  {edges results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)},
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard) edges results →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.MergedOrdinaryHeight.edgesHeight Symbol Guard results)
+      (@MicroCFTA.MergedOrdinaryHeight.edgesHeight Symbol Guard edges)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_erase' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_erase : ∀ {Symbol Guard : Type}
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)),
+  @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) values
+    (@MicroCFTA.EqualityLeafProjectionRuntimeEmpty.erase Symbol Guard values)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_propagate' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.forest_propagate : ∀ {Symbol Guard : Type}
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard values →
+    @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard) values
+      (@MicroCFTA.EqualityLeafProjectionRuntimeEmpty.propagate Symbol Guard values)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.makeEdge' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.makeEdge : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (original : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedProbeProvenance.Cached Symbol Guard state →
+      @MicroCFTA.InternedNestedProvenance.Values Symbol Guard state values →
+        @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard original) values →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard original
+            (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol Symbol Guard
+                    (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard original)))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                    (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard original)))
+                  values)
+                state))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.makeNode' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNarrow.makeNode : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (originals results : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+  (free : List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedRecordCoherence.Coherent Symbol Guard state →
+    @MicroCFTA.InternedEdgeResidency.Linked Symbol Guard state →
+      @MicroCFTA.InternedNestedProvenance.Edges Symbol Guard state results →
+        @MicroCFTA.Language.All₂ (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow Symbol Guard) originals results →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry originals depth free)
+            (@Prod.fst.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard results) state))

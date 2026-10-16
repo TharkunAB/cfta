@@ -1,0 +1,102 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:73:21: error: Tactic `assumption` failed
+
+case ordinary
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained reaches : Value Symbol Guard → Bool
+fuel : Nat
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+path : Path
+edges✝ : List (EdgeValue Symbol Guard)
+entry✝ : Interned InternedBinderProtocol.NodeKey
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+rows : SourceCurrentAllocatedFiniteOrdinaryDomain.Rows edges✝
+available : Available state (Value.node entry✝ edges✝ depth✝ free✝)
+fast :
+  ((Value.node entry✝ edges✝ depth✝ free✝).depth == 0 && (Value.node entry✝ edges✝ depth✝ free✝).free.isEmpty) = true
+⊢ (if (depth✝ == 0 && free✝.isEmpty) = true then InternedNestedConstruction.Outcome.done (some false) state
+    else
+      match path with
+      | [] =>
+        InternedNestedConstruction.Outcome.done
+          (some (!free✝.isEmpty || reaches (Value.node entry✝ edges✝ depth✝ free✝))) state
+      | index :: rest =>
+        InternedFreshOrdinaryStatefulGate.anyKnown
+          (fun edge current =>
+            InternedFreshOrdinaryStatefulGate.child (EndpointStatefulGate.nodeMeets unconstrained reaches fuel)
+              edge.children index rest current)
+          edges✝ state) =
+    InternedNestedConstruction.Outcome.done (some false) state
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:115:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryScan.primary_node_reads`:
+  [DecidableEq Symbol]
+  [DecidableEq (Value Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:148:86: error: unexpected token 'omit'; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_cbv_simproc_decl', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_grind_propagator', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'cbv_simproc', 'cbv_simproc_decl', 'class', 'coinductive', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'grind_propagator', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_error_explanation', 'register_tactic_tag', 'register_try?_tactic', 'simproc', 'simproc_decl', 'structure', 'syntax', 'tactic_extension', 'theorem' or 'unif_hint'
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:155:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryScan.primary_done`:
+  [DecidableEq Symbol]
+  [DecidableEq (Value Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:205:36: error: don't know how to synthesize implicit argument `rest`
+  @SourceCurrentAllocatedScanSourceReads.ScanReads.selected width inst✝² inst✝¹ inst✝ values paths before
+    before.native.machine.heap first memos ?m.153 budget classes memo none classes before memo ?m.161 memos ?m.163
+    ?m.164
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+values : List (Value Symbol Guard)
+before : Checked width
+memo : Memo
+ready : Ready before
+available : Values before.native.machine.heap values
+domain : DChildren values
+memos : Memos
+paths : Class
+classes : List Class
+tail : Scan budget sourceGate sourceReaches values classes before memo none classes before memo
+reads : SourceCurrentAllocatedScanSourceReads.ScanReads tail memos memos
+first : ClassTrace sourceGate sourceReaches values paths before.native.machine.heap false
+  before.native.machine.heap := ⋯
+rest :
+  Scan budget sourceGate sourceReaches values classes (advanceHeap before before.native.machine.heap) memo none classes
+    before memo
+⊢ Scan budget sourceGate sourceReaches values classes (advanceHeap before before.native.machine.heap) memo none classes
+    before memo
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:205:36: error: don't know how to synthesize implicit argument `middle`
+  @SourceCurrentAllocatedScanSourceReads.ScanReads.selected width inst✝² inst✝¹ inst✝ values paths before
+    before.native.machine.heap first memos ?m.153 budget classes memo none classes before memo ?m.161 memos ?m.163
+    ?m.164
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+values : List (Value Symbol Guard)
+before : Checked width
+memo : Memo
+ready : Ready before
+available : Values before.native.machine.heap values
+domain : DChildren values
+memos : Memos
+paths : Class
+classes : List Class
+tail : Scan budget sourceGate sourceReaches values classes before memo none classes before memo
+reads : SourceCurrentAllocatedScanSourceReads.ScanReads tail memos memos
+first : ClassTrace sourceGate sourceReaches values paths before.native.machine.heap false
+  before.native.machine.heap := ⋯
+rest :
+  Scan budget sourceGate sourceReaches values classes (advanceHeap before before.native.machine.heap) memo none classes
+    before memo
+⊢ Memos
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:217:57: error(lean.unknownIdentifier): Unknown identifier `classes`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:217:65: error(lean.unknownIdentifier): Unknown identifier `before`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:217:72: error(lean.unknownIdentifier): Unknown identifier `memo`

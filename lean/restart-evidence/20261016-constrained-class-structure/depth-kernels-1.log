@@ -1,0 +1,16 @@
+lean/restart-evidence/20261016-constrained-class-structure/depth-kernels.lean:30:86: error(lean.invalidField): Invalid field `linked`: The environment does not contain `MicroCFTA.InternedFreshOrdinaryContext.Context.linked`, so it is not possible to project the field `linked` from an expression
+  edgeSemantic.ready.semantic.left
+of type
+  InternedFreshOrdinaryContext.Context (run (makeEdge symbol guard []) state).snd []
+'FiniteOrdinaryDepthKernels.literal_constructors' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+@FiniteOrdinaryDepthKernels.literal_constructors : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (symbol : Symbol) (guard : Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state →
+    have edge :=
+      MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeEdge symbol guard [])
+        state;
+    have node :=
+      MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeNode [edge.fst]) edge.snd;
+    MicroCFTA.InternedProbeProvenance.Available node.snd node.fst ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node node.fst ∧ node.fst.depth = 0 ∧ node.fst.free = []

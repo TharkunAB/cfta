@@ -1,0 +1,109 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParent.lean:176:88: error: don't know how to synthesize implicit argument `test`
+  @SourceCurrentAllocatedParentEdgeActual.Reads.rejected inst✝² inst✝¹ inst✝ width formulas solver budget
+    original.entry.key.symbol original.entry.key.constraint loaded inherited original.children before fourth memo ?m.278
+    memos
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+original : EdgeValue Symbol Guard
+loaded : Allocated
+inherited : EqValue
+before : Checked width
+fourth : Fourth
+memo : Memo
+ready : Ready before
+admitted : At formulas solver inventory before
+test : contradictory original.entry.key.constraint = true
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+physicalStored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+nativeStored : NativeStored before.native
+mergeStored : MergeStored memo
+memos : Memos
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+_previous :
+  SourceCurrentAllocatedParentEdge.Edge budget original.entry.key.symbol original.entry.key.constraint loaded inherited
+    original.children before fourth memo (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd fourth memo
+_reads : SourceCurrentAllocatedParentEdge.Reads formulas solver _previous memos memos
+receipt :
+  SourceCurrentAllocatedParentEdge.Receipt formulas solver inventory original.entry.key.symbol
+    original.entry.key.constraint loaded inherited original.children before
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd fourth fourth memo memo memos
+constructor :
+  SourceCurrentAllocatedMkEdge.RejectReceipt formulas solver inventory original.entry.key.symbol before
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd
+actual : SourceCurrentAllocatedParentEdge.Edge budget original.entry.key.symbol original.entry.key.constraint loaded
+  inherited original.children before fourth memo
+  (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst
+  (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd fourth memo := ⋯
+⊢ contradictory original.entry.key.constraint = true
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParent.lean:168:85: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+budget : Nat
+original : EdgeValue Symbol Guard
+loaded : Allocated
+inherited : EqValue
+before : Checked width
+fourth : Fourth
+memo : Memo
+ready : Ready before
+admitted : At formulas solver inventory before
+test : contradictory original.entry.key.constraint = true
+correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth
+physicalStored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+nativeStored : NativeStored before.native
+mergeStored : MergeStored memo
+memos : Memos
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+_previous :
+  SourceCurrentAllocatedParentEdge.Edge budget original.entry.key.symbol original.entry.key.constraint loaded inherited
+    original.children before fourth memo (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd fourth memo
+_reads : SourceCurrentAllocatedParentEdge.Reads formulas solver _previous memos memos
+receipt :
+  SourceCurrentAllocatedParentEdge.Receipt formulas solver inventory original.entry.key.symbol
+    original.entry.key.constraint loaded inherited original.children before
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd fourth fourth memo memo memos
+constructor :
+  SourceCurrentAllocatedMkEdge.RejectReceipt formulas solver inventory original.entry.key.symbol before
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst
+    (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd
+actual : SourceCurrentAllocatedParentEdge.Edge budget original.entry.key.symbol original.entry.key.constraint loaded
+  inherited original.children before fourth memo
+  (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst
+  (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd fourth memo :=
+  SourceCurrentAllocatedParentEdge.Edge.rejected test
+⊢ let result := (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst;
+  let after := (SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd;
+  SourceCurrentAllocatedParentWorkerCompletion.StableRun
+      (fun g s r e p h m c n =>
+        SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget original.entry.key.symbol
+          original.entry.key.constraint inherited original.children before fourth memo)
+      result after fourth memo ∧
+    ∃ actual,
+      SourceCurrentAllocatedParentEdgeActual.Reads formulas solver actual memos memos ∧
+        SourceCurrentAllocatedParentEdge.Receipt formulas solver inventory original.entry.key.symbol
+            original.entry.key.constraint loaded inherited original.children before result after fourth fourth memo memo
+            memos ∧
+          NativeStored after.native ∧ MergeStored memo ∧ EdgeNarrow original result

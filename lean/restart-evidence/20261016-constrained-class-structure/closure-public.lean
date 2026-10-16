@@ -1,0 +1,21 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent
+
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStage.structure_from_reads
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStage.structure_from_reads
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocal.verified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocal.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocal.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocal.finite
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent.structure_from_reads
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent.structure_from_reads
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent.verified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent.verified
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent.finite
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent.rejected_finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParent.rejected_finite

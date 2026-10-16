@@ -1,0 +1,83 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:85:35: error: don't know how to synthesize placeholder for argument `fast`
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+coherent : Coherent state
+path : Path
+memos : Memos
+edges✝ : List (EdgeValue Symbol Guard)
+entry✝ : Interned InternedBinderProtocol.NodeKey
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+rows : SourceCurrentAllocatedFiniteOrdinaryDomain.Rows edges✝
+available : Available state (Value.node entry✝ edges✝ depth✝ free✝)
+⊢ (depth✝ == 0 && free✝.isEmpty) = true
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:114:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryScan.advanceHeap_self`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+  [DecidableEq (Value Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:132:22: error: Application type mismatch: The argument
+  congrArg List.cons selected
+has type
+  List.cons selected✝ = List.cons classes✝
+but is expected to have type
+  paths✝ :: selected✝ = paths✝ :: classes✝
+in the application
+  And.intro (congrArg List.cons selected)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:161:35: error: don't know how to synthesize implicit argument `primary`
+  @SourceCurrentAllocatedScanSourceReads.ScanReads.selected width inst✝² inst✝¹ inst✝ values paths before
+    before.native.machine.heap
+    (primary_class sourceGate sourceReaches before.native.machine.heap ?m.168 values available domain paths) memos memos
+    budget classes memo none classes before memo tail memos
+    (primary_class_reads before.native.machine.heap ?m.168 values available domain paths memos) reads
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+values : List (Value Symbol Guard)
+before : Checked width
+memo : Memo
+ready : Ready before
+available : Values before.native.machine.heap values
+domain : DChildren values
+memos : Memos
+paths : Class
+classes : List Class
+tail : Scan budget sourceGate sourceReaches values classes before memo none classes before memo
+reads : SourceCurrentAllocatedScanSourceReads.ScanReads tail memos memos
+first : ClassTrace sourceGate sourceReaches values paths before.native.machine.heap false
+  before.native.machine.heap := ⋯
+rest :
+  Scan budget sourceGate sourceReaches values classes (advanceHeap before before.native.machine.heap) memo none classes
+    before memo
+⊢ ClassTrace sourceGate sourceReaches values paths before.native.machine.heap false before.native.machine.heap
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryScan.lean:161:68: error: don't know how to synthesize placeholder for argument `coherent`
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+width budget : Nat
+values : List (Value Symbol Guard)
+before : Checked width
+memo : Memo
+ready : Ready before
+available : Values before.native.machine.heap values
+domain : DChildren values
+memos : Memos
+paths : Class
+classes : List Class
+tail : Scan budget sourceGate sourceReaches values classes before memo none classes before memo
+reads : SourceCurrentAllocatedScanSourceReads.ScanReads tail memos memos
+first : ClassTrace sourceGate sourceReaches values paths before.native.machine.heap false
+  before.native.machine.heap := ⋯
+rest :
+  Scan budget sourceGate sourceReaches values classes (advanceHeap before before.native.machine.heap) memo none classes
+    before memo
+⊢ Coherent before.native.machine.heap

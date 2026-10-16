@@ -1,0 +1,82 @@
+lean/restart-evidence/20261016-constrained-class-structure/local-independent-review-kernels.lean:58:19: warning: This simp argument is unused:
+  SourceEqualityConjoinAllocation.Constraint.mk.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp_all only [and_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-constrained-class-structure/local-independent-review-kernels.lean:58:72: warning: This simp argument is unused:
+  and_self
+
+Hint: Omit it from the simp argument list.
+  [apply] simp_all only [SourceEqualityConjoinAllocation.Constraint.mk.injEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'FiniteOrdinaryLocalReviewChecks.serial_actual_locals' depends on axioms: [propext, Classical.choice, Quot.sound]
+@serial_actual_locals : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  [inst_2 : DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (original : Guard) {budget : Nat}
+  {loaded : Allocated} {inherited : EqValue} {values middleValues results : List (Value Symbol Guard)}
+  {before middle after : Checked width} {fourth currentFourth savedFourth : Fourth} {memo currentMemo saved : Memo}
+  {memos current final : Memos}
+  {first : Reduction budget loaded inherited values before fourth memo middleValues middle currentFourth currentMemo}
+  {last :
+    Reduction budget loaded inherited middleValues middle currentFourth currentMemo results after savedFourth saved},
+  Reads formulas solver first memos current →
+    Reads formulas solver last current final →
+      Ready before →
+        SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+          SourceEqualityGuardReadback.Cached original.equalities →
+            SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded) →
+              SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited →
+                Values before.native.machine.heap values →
+                  DChildren values →
+                    SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth →
+                      SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                        (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                            SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver)
+                              ambient memo) →
+                          SourceCurrentAllocatedLocalReductionActual.Ranges budget loaded inherited values before
+                              fourth →
+                            SourceCurrentAllocatedLocalReductionActual.Ranges budget loaded inherited middleValues
+                                middle currentFourth →
+                              NativeStored before.native →
+                                MergeStored memo →
+                                  EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                                    ∃ firstInventory next,
+                                      Receipt formulas solver firstInventory original loaded inherited values
+                                          middleValues before middle fourth currentFourth memo currentMemo current ∧
+                                        Receipt formulas solver next original loaded inherited middleValues results
+                                            middle after currentFourth savedFourth currentMemo saved final ∧
+                                          NativeStored after.native ∧ MergeStored saved ∧ All₂ NodeNarrow values results
+'FiniteOrdinaryLocalReviewChecks.erasure_without_ranges' depends on axioms: [propext, Classical.choice, Quot.sound]
+@erasure_without_ranges : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  [DecidableEq (Value Symbol Guard)] {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (budget : Nat) (original : Guard)
+  (loaded : Allocated) (inherited : EqValue) (values : List (Value Symbol Guard)) (before : Checked width)
+  (fourth : Fourth) (memo : Memo) (memos : Memos),
+  (SourceEqualityPartialPrecheckAllocation.run loaded.stored loaded.guard inherited before.operations).fst =
+      Except.ok SourceEqualityPrecheck.Branch.emptyChildren →
+    Ready before →
+      SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+        SourceEqualityGuardReadback.Cached original.equalities →
+          SourceEqualityConstraintFieldLookup.load original before.operations.constraints = Except.ok (some loaded) →
+            SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited →
+              Values before.native.machine.heap values →
+                DChildren values →
+                  SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth →
+                    SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                      (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                          SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver)
+                            ambient memo) →
+                        NativeStored before.native →
+                          MergeStored memo →
+                            EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                              ∃ next,
+                                Receipt formulas solver next original loaded inherited values
+                                    (EqualityLeafProjectionRuntimeEmpty.erase values) before
+                                    (SourceCurrentAllocatedPrecheck.state before loaded inherited) fourth fourth memo
+                                    memo memos ∧
+                                  NativeStored (SourceCurrentAllocatedPrecheck.state before loaded inherited).native ∧
+                                    MergeStored memo ∧
+                                      All₂ NodeNarrow values (EqualityLeafProjectionRuntimeEmpty.erase values)

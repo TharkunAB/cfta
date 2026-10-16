@@ -1,0 +1,120 @@
+'FiniteOrdinaryClassPassKernels.nil_pass_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryClassPassKernels.nil_pass_erases : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap
+          (MicroCFTA.InternedConstructorTemplates.Value.empty :: values) →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children
+            (MicroCFTA.InternedConstructorTemplates.Value.empty :: values) →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+            (∀
+                (ambient :
+                  MicroCFTA.InternedGuardedLanguage.Env
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+                  ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                    MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      have results :=
+                        MicroCFTA.EqualityLeafProjectionRuntimeEmpty.propagate
+                          (MicroCFTA.InternedConstructorTemplates.Value.empty :: values);
+                      ∃ actual,
+                        MicroCFTA.SourceCurrentAllocatedClassPass.PassReads formulas solver actual memos memos ∧
+                          ∃ next,
+                            MicroCFTA.SourceCurrentAllocatedClassPass.Receipt formulas solver next []
+                                (MicroCFTA.InternedConstructorTemplates.Value.empty :: values) before memo results
+                                before memo memos memos ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native ∧
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo ∧
+                                  MicroCFTA.Language.All₂
+                                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow
+                                      (MicroCFTA.InternedConstructorTemplates.Value.empty :: values) results ∧
+                                    results =
+                                        MicroCFTA.EqualityLeafProjectionRuntimeEmpty.erase
+                                          (MicroCFTA.InternedConstructorTemplates.Value.empty :: values) ∧
+                                      results.length = values.length + 1
+'FiniteOrdinaryClassPassKernels.pass_then_class' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryClassPassKernels.pass_then_class : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (records : List MicroCFTA.SourceEqualityClassOrder.Record) (nextRecord : MicroCFTA.SourceEqualityClassOrder.Record),
+  (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+      record ∈ records → MicroCFTA.SourceEqualityClassOrder.Coherent record) →
+    (∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+        record ∈ records → MicroCFTA.EqualityNormalize.Nontrivial record.paths) →
+      MicroCFTA.SourceEqualityClassOrder.Coherent nextRecord →
+        MicroCFTA.EqualityNormalize.Nontrivial nextRecord.paths →
+          ∀
+            (values :
+              List
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+            (memo :
+              MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+              MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+                MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+                    MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                      (∀
+                          (ambient :
+                            MicroCFTA.InternedGuardedLanguage.Env
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                          MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                            (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+                            MicroCFTA.SourceCurrentAllocatedClassPass.Ranges records values before memo →
+                              (∀
+                                  (middle :
+                                    List
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                  (step : MicroCFTA.SourceEqualityNativeDemand.State width)
+                                  (current :
+                                    MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                  MicroCFTA.SourceCurrentAllocatedClassPass.Pass records values before memo middle step
+                                      current →
+                                    MicroCFTA.SourceCurrentAllocatedClassEdits.ClassRanges nextRecord middle step
+                                      current) →
+                                ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                                  MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                                    ∃ middle step current next stageMemos results after saved last final,
+                                      MicroCFTA.SourceCurrentAllocatedClassPass.Pass records values before memo middle
+                                          step current ∧
+                                        MicroCFTA.SourceCurrentAllocatedClassEdits.Class nextRecord middle step current
+                                            results after saved ∧
+                                          MicroCFTA.SourceCurrentAllocatedClassPass.Receipt formulas solver next records
+                                              values before memo middle step current memos stageMemos ∧
+                                            ⋯ ∧ ⋯

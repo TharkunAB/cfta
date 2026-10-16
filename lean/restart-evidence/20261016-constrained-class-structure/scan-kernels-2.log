@@ -1,0 +1,80 @@
+'FiniteOrdinaryScanKernels.supplied_retains_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryScanKernels.supplied_retains_all : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) {budget : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {classes selected : MicroCFTA.EqualityNormalize.Constraints}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo} {outcome : Option MicroCFTA.EqualityNormalize.Class}
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (actual :
+    MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget MicroCFTA.SourceMemoGate.unconstrained
+      (MicroCFTA.SourceEndpointReachability.reaches MicroCFTA.SourceMemoGate.unconstrained) values classes before memo
+      outcome selected after saved),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+        MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+            MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo →
+              MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                MicroCFTA.SourceCurrentAllocatedScanSourceReads.ScanReads actual memos memos ∧
+                  MicroCFTA.SourceCurrentConjunctionClassScan.Ready after ∧
+                    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory after ∧
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                        MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap saved ∧
+                          MicroCFTA.EndpointMemoGateTrace.Valid after.native.machine.heap memos ∧
+                            outcome = none ∧ selected = classes
+'FiniteOrdinaryScanKernels.serial_constructed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryScanKernels.serial_constructed : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (budget : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width) (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+        have classes := [[[0], [0, 0]], [[0], [0, 0]]];
+        ∃ first,
+          MicroCFTA.SourceCurrentAllocatedScanSourceReads.ScanReads first memos memos ∧
+            ∃ second, MicroCFTA.SourceCurrentAllocatedScanSourceReads.ScanReads second memos memos
+'FiniteOrdinaryScanKernels.reached_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryScanKernels.reached_zero : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedGateWorker.primary 0 [value] [[0]] before =
+    MicroCFTA.SourceCurrentAllocatedGateWorker.Outcome.failed
+      (MicroCFTA.SourceCurrentAllocatedGateWorker.Fault.primary
+        (MicroCFTA.InternedNestedConstruction.Outcome.done none before.native.machine.heap))
+      before

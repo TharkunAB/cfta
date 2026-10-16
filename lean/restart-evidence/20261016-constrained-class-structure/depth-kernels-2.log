@@ -1,0 +1,12 @@
+'FiniteOrdinaryDepthKernels.literal_constructors' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryDepthKernels.literal_constructors : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (symbol : Symbol) (guard : Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state →
+    have edge :=
+      MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeEdge symbol guard [])
+        state;
+    have node :=
+      MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeNode [edge.fst]) edge.snd;
+    MicroCFTA.InternedProbeProvenance.Available node.snd node.fst ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node node.fst ∧ node.fst.depth = 0 ∧ node.fst.free = []

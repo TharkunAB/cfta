@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdits
+
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.funBinderTypes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReceiptStructure.fold
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReceiptStructure.fold
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReceiptStructure.target_reads
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReceiptStructure.target_reads
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReceiptStructure.force_receipt
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReceiptStructure.force_receipt
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReceiptStructure.leaf_receipt
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReceiptStructure.leaf_receipt
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdits.node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdits.node
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdits.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdits.children
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdits.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdits.rows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdits.list
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEdits.list

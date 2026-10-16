@@ -1,0 +1,14 @@
+# Independent returned-owner review
+
+Reviewed: 2026-10-16 17:10 CEST. Read-only review of `SourceCurrentAllocatedFiniteOrdinaryReturned.lean`, SHA256 `bf01501292472669eed48b9eecdc3248e78fe05c0031b5609dfbfdb859fcb321`. No material defect found.
+
+* `Stored` (lines 28–32) conditions each certificate on the complete captured owner domain. It neither assumes that all warm entries have ordinary owners nor obtains a result domain from an arbitrary request key. The two result families remain distinct.
+* `initial` starts empty outer tables over arbitrary lower checked/merge/fourth state. It does not initialize or validate those lower tables. `advance` preserves the exact outer tables.
+* `beginNode/beginEdge` prove only reverse retention of returned cells. The private lookup and demand inversions rule out creation of a returned cell by publication or suspension-to-evaluation. They do not assert forward retention of every old cell in a malformed table. No Protocol premise is needed for this direction.
+* `finishNode/finishEdge` (lines 95/113) use the literal evaluating handle and complete captured owner. Their local law is explicitly conditional on that same owner domain. This is an intentional completion-site obligation. The theorem does not derive that law or claim whole caller completion. Other handles retain their old certificates.
+* `node_hit/edge_hit` (lines 131/143) require actual returned-cell evidence, same-key evidence, and residency for BOTH captured and requested records at one coherent heap. Full value equality follows from resident reference/edge identity injectivity. Inherited payload semantics are not needed for this structural transport. The API does not itself derive lookup observation evidence; current physical/semantic begin lemmas supply it when integrating an actual caller.
+* `child` (line 154) combines the actual result domain and result-height bound with child-below-result-edge rank. Its upper bound is the ORIGINAL captured edge owner's rank. It permits a changed child list and arbitrary child inherited payload. No PlainRegion or old three-way returned Shape is assumed.
+
+Two independent imported lifecycle kernels passed terminal exit 0, with no warnings, errors, or `sorryAx`. `node_finish_empty` derives its local law for literal Empty, completes the actual evaluating owner, and obtains warm readback while retaining the other result family and full checked state. `edge_finish_children` derives an identity local law, completes the actual edge owner, then obtains warm edge structure and strict child rank from that actual returned cell. Both use only `propext` and `Quot.sound`. No supplied desired candidate law appears in these kernels.
+
+These are structural lifecycle laws. General constrained body narrowing, selected-owner frame restoration, machine ranges, source/GHC publication correspondence, and principal outer completion remain separate obligations. This component reports no Haskell defect.

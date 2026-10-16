@@ -1,0 +1,56 @@
+lean/restart-evidence/20261016-constrained-class-structure/parent-kernels.lean:45:47: error: unexpected token '('; expected ','
+lean/restart-evidence/20261016-constrained-class-structure/parent-kernels.lean:120:14: error(lean.unknownIdentifier): Unknown constant `FiniteOrdinaryParentKernels.finite_parent_publication`
+lean/restart-evidence/20261016-constrained-class-structure/parent-kernels.lean:121:8: error(lean.unknownIdentifier): Unknown identifier `FiniteOrdinaryParentKernels.finite_parent_publication`
+'FiniteOrdinaryParentKernels.raw_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryParentKernels.raw_rejected : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (budget : Nat)
+  (original :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width) (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.SourceEqualityMkEdgeAllocation.contradictory original.entry.key.constraint = true →
+        MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+            (∀
+                (ambient :
+                  MicroCFTA.InternedGuardedLanguage.Env
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+                  ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                    MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      have result :=
+                        (MicroCFTA.SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).fst;
+                      have after :=
+                        (MicroCFTA.SourceCurrentAllocatedMkEdge.reject original.entry.key.symbol before).snd;
+                      MicroCFTA.SourceCurrentAllocatedParentWorkerCompletion.StableRun
+                          (fun g s r e p h m c n =>
+                            MicroCFTA.SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+                              original.entry.key.symbol original.entry.key.constraint inherited original.children before
+                              fourth memo)
+                          result after fourth memo ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow original result ∧
+                              result.children = [MicroCFTA.InternedConstructorTemplates.Value.empty] ∧
+                                MicroCFTA.MergedOrdinaryHeight.edgeHeight result = 0
