@@ -2,14 +2,15 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 {- | A signature from a GHC session: each function by its expression, with
-each type variable at the carrier A, as the first phase gives it. GHC gives
-the type of a function, and 'erase' of cfta-ghc makes it a type of the
-automaton. The session compiles the function once at the type
-with Int in place of A: A has the values of Int, and the code of Int is
-compiled, while the instances of a type that the session declares run in the
-interpreter. The session also compiles the generator and the equality of
-each type that the search needs, when the type has the instance of
-QuickCheck or of Eq.
+distinct unconstrained type variables at A, B, C, D, and Acc. Each function
+uses these carriers in the order of its type binders. GHC gives the type of
+a function, and 'erase' of cfta-ghc makes it a type of the automaton. The
+session compiles the function once with Int in place of each carrier.
+Variables that occur in constraints stay concrete. Container class variables
+use lists, and other constrained variables use Int. The session compiles the
+generator and the equality of each required type, when QuickCheck and Eq
+supply the required instances in the session. This includes function
+generators whose domains have CoArbitrary instances.
 
 The session is a session of cfta-ghc. It has the unit of QuickCheck of the
 program ('quickCheckUnit') and the package database of the store of cabal
@@ -19,17 +20,18 @@ give the values of the program. The values of the session are untyped (see
 
 The search runs inside the session, so that the compiled code stays loaded.
 
-Phase 1 gives the laws of a signature of Haskell. Phases 2 to 4 give fewer:
-each type variable is at A, while a signature of Haskell can keep the
-variables apart at A to Acc, so the laws with B to Acc do not come.
+Phase 1 merges the carriers in the shared search engine. Phases 2 to 4 keep
+the distinct variables of the signature. The session reserves the names A,
+B, C, D, and Acc for its carriers. A function with more than five
+unconstrained type variables is not supported.
 -}
 module Specftacular.GHC (
     withGhcSignature,
 ) where
 
-import Control.Monad (filterM)
+import Control.Monad (filterM, when)
 import qualified Data.Map as Map
-import Data.Maybe (catMaybes, fromMaybe, isNothing, listToMaybe, maybeToList)
+import Data.Maybe (catMaybes, fromMaybe, listToMaybe, maybeToList)
 import Data.Proxy (Proxy (..))
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -43,6 +45,7 @@ import GHC.Exts (Any)
 import GHC.Tc.Utils.TcType (tcSplitNestedSigmaTys)
 import GHC.Types.Name (getName, getOccString, nameModule_maybe)
 import GHC.Types.Unique.Set (nonDetEltsUniqSet)
+import GHC.Types.Var.Set (elemVarSet)
 import GHC.Unit.Module (moduleName, moduleNameString)
 import GHC.Utils.Outputable (showPprUnsafe)
 import System.Directory (
@@ -55,6 +58,7 @@ import System.Directory (
  )
 import System.Environment (lookupEnv)
 import System.FilePath ((<.>), (</>))
+import System.IO (hPutStrLn, stderr)
 import qualified Test.QuickCheck as QC
 import Unsafe.Coerce (unsafeCoerce)
 
@@ -101,55 +105,72 @@ withGhcSignature imports declarations functions extras action = do
         let typeOf expression = fromMaybe (error ("Specftacular.GHC: no type for " <> expression)) <$> typeOfExpression session expression
             -- A compiled expression, or Nothing when it does not typecheck.
             compiled = compileExpression session
-        declare session "newtype A = A Int deriving newtype (Eq, Ord, Show, QC.Arbitrary, QC.CoArbitrary)"
+        let carrierNames = ["A", "B", "C", "D", "Acc"]
+        mapM_
+            ( \name ->
+                declare
+                    session
+                    ("newtype " <> name <> " = " <> name <> " Int deriving newtype (Eq, Ord, Show, QC.Arbitrary, QC.CoArbitrary)")
+            )
+            carrierNames
         mapM_ (declare session) declarations
-        carrier <- typeOf "undefined :: A"
+        carrierTypes <- traverse (\name -> typeOf ("undefined :: " <> name)) carrierNames
         let function make (name, expression) = do
                 typ <- typeOf expression
                 let (bound, theta, body) = tcSplitNestedSigmaTys typ
-                    classes v =
-                        [ getOccString cls
+                    constraints =
+                        [ (getOccString cls, args)
                         | p <- theta
                         , Just (cls, args) <- [getClassPredTys_maybe p]
-                        , Just v `elem` map getTyVar_maybe args
                         ]
+                    constrained v = any (elemVarSet v . GHC.tyCoVarsOfType) theta
+                    container v =
+                        or
+                            [ cls `elem` ["Foldable", "Traversable", "Functor", "Applicative", "Monad"]
+                            | (cls, args) <- constraints
+                            , Just v `elem` map getTyVar_maybe args
+                            ]
+                    abstract = filter (not . constrained) bound
+                    bindings = zip abstract carrierTypes
                     -- A variable of a class of containers or monads is the
-                    -- list, a variable of another class is Int, and any other
-                    -- variable is the carrier, as the signatures of the
-                    -- benchmarks write them.
-                    at c v
-                        | any (`elem` ["Foldable", "Traversable", "Functor", "Applicative", "Monad"]) (classes v) = mkTyConTy listTyCon
-                        | not (null (classes v)) = intTy
-                        | otherwise = c
-                    instantiated c = substTyWith bound (map (at c) bound) body
-                    source = "(" <> expression <> ") :: " <> showPprUnsafe (instantiated intTy)
+                    -- list, any other constrained variable is Int, and each
+                    -- unconstrained variable has a distinct abstract carrier.
+                    at choose v
+                        | container v = mkTyConTy listTyCon
+                        | constrained v = intTy
+                        | otherwise = choose v
+                    instantiated choose = substTyWith bound (map (at choose) bound) body
+                    logicalCarrier v = fromMaybe (error "Specftacular.GHC: no carrier for a type variable") (lookup v bindings)
+                    source = "(" <> expression <> ") :: " <> showPprUnsafe (instantiated (const intTy))
+                when (length abstract > length carrierTypes) $
+                    error ("Specftacular.GHC: more than five unconstrained type variables in " <> expression)
                 value <- fromMaybe (error ("Specftacular.GHC: cannot compile " <> source)) <$> compiled source
-                case skeletonOf (instantiated carrier) of
+                case skeletonOf (instantiated logicalCarrier) of
                     Just skeleton -> pure (name, make (Untyped (unsafeCoerce value)) skeleton)
                     Nothing -> error ("Specftacular.GHC: no type for " <> expression)
             -- The generator and the equality of a type, if the session has
-            -- them, for the types that have variables in the front end of
-            -- Specftacular.Types ('frontInstances'): QuickCheck generates more
-            -- types, such as any function whose arguments have CoArbitrary,
-            -- and a variable of each such type would add many terms.
-            instanceOf t
-                | isNothing (frontInstances (const Nothing) t) = pure Nothing
+            -- them. GHC resolves the instances of the required types,
+            -- including function arguments and session declarations.
+            -- The full types of signature functions do not need variables.
             instanceOf t = do
                 let source = sourceType t
                 gen <- compiled ("\\seed size -> QCG.unGen (QC.arbitrary :: QC.Gen (" <> source <> ")) (QCR.mkQCGen seed) size")
-                eq <- compiled ("(==) :: (" <> source <> ") -> (" <> source <> ") -> Bool")
-                pure $ case gen of
-                    Nothing -> Nothing
-                    Just g ->
-                        Just
-                            ( t
-                            , Instance
-                                { inst_text = typeText t
-                                , inst_prefix = prefixOf t
-                                , inst_gen = Generator (\seed size -> Untyped ((unsafeCoerce g :: Int -> Int -> Any) seed size))
-                                , inst_eq = Untyped . unsafeCoerce <$> eq
-                                }
-                            )
+                case gen of
+                    Nothing -> do
+                        hPutStrLn stderr ("Specftacular.GHC: no generator for " <> source)
+                        pure Nothing
+                    Just g -> do
+                        eq <- compiled ("(==) :: (" <> source <> ") -> (" <> source <> ") -> Bool")
+                        pure $
+                            Just
+                                ( t
+                                , Instance
+                                    { inst_text = typeText t
+                                    , inst_prefix = prefixOf t
+                                    , inst_gen = Generator (\seed size -> Untyped ((unsafeCoerce g :: Int -> Int -> Any) seed size))
+                                    , inst_eq = Untyped . unsafeCoerce <$> eq
+                                    }
+                                )
         sigFunctions <- traverse (function SigFunc) functions
         extraFunctions <- traverse (function GenFunc) extras
         let sig = Map.fromList (sigFunctions <> extraFunctions)
@@ -183,7 +204,7 @@ storeDatabase unit = do
 
 {- | The type of the automaton of a GHC type: the type of 'erase', with the
 names of the type constructors as 'typeRepToTypeSkeleton' gives them. The
-carrier A of the session is the A of "Specftacular.Types".
+carriers of the session are the carriers of "Specftacular.Types".
 -}
 skeletonOf :: GHC.Type -> Maybe TypeSkeleton
 skeletonOf typ = convert <$> erase (const Nothing) typ
@@ -191,7 +212,10 @@ skeletonOf typ = convert <$> erase (const Nothing) typ
     names = Map.fromList [(getOccString tc, qualified tc) | tc <- nonDetEltsUniqSet (tyConsOfType typ)]
     qualified :: TyCon -> Text
     qualified tc = case (getOccString tc, nameModule_maybe (getName tc)) of
-        ("A", Just m) | "Ghci" `T.isPrefixOf` T.pack (moduleNameString (moduleName m)) -> "Specftacular.Types.A"
+        (occ, Just m)
+            | occ `elem` ["A", "B", "C", "D", "Acc"]
+            , "Ghci" `T.isPrefixOf` T.pack (moduleNameString (moduleName m)) ->
+                "Specftacular.Types." <> T.pack occ
         (occ, Just m) -> T.pack (moduleNameString (moduleName m) <> "." <> occ)
         (occ, Nothing) -> T.pack occ
     convert (Hectare.TVar v) = TVar v
@@ -202,10 +226,10 @@ skeletonOf typ = convert <$> erase (const Nothing) typ
     convert (Hectare.TCons name args) = TCons (Map.findWithDefault name (T.unpack name) names) (map convert args)
 
 {- | A type as Haskell source, with each type constructor by its name
-without its module, and Int for the carrier A.
+without its module, and Int for each abstract carrier.
 -}
 sourceType :: TypeSkeleton -> String
-sourceType (TCons "Specftacular.Types.A" []) = "Int"
+sourceType t | t `elem` map fst carriers = "Int"
 sourceType (TCons "[]" [a]) = "[" <> sourceType a <> "]"
 sourceType (TCons "(,)" [a, b]) = "(" <> sourceType a <> ", " <> sourceType b <> ")"
 sourceType (TCons "()" []) = "()"
