@@ -105,6 +105,28 @@ instance HasLTA Flags where
         set NoFlagsNode = true
         set (FlagNode flag _) = flag .== literal True
 
+-- | The measures of a sorted list for a condition on its length: the head and the length.
+data ListMeasures e = ListMeasures {front :: e, size :: e}
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (MeasureRecord)
+
+-- | One node of a sorted list, for named measures.
+data SortedListByNode e = NilBy | ConsBy e (ListMeasures e)
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | Strictly increasing keys from 0 to the bound, with the head and the length as named measures.
+byLength :: Integer -> Invariant SortedListByNode ListMeasures
+byLength top = MeasuredBy measures increasing
+  where
+    -- The functions read top, so they need signatures to stay polymorphic.
+    measures :: (Symbolic e) => SortedListByNode e -> ListMeasures e
+    measures NilBy = ListMeasures (fromInteger top + 1) 0
+    measures (ConsBy x rest) = ListMeasures x (size rest + 1)
+    increasing :: (Symbolic e) => SortedListByNode e -> Truth e
+    increasing NilBy = true
+    increasing (ConsBy x rest) = 0 .<= x .&& x .<= fromInteger top .&& x .< front rest
+
 -- | The elements of a sorted list.
 toList :: SortedList -> [Integer]
 toList Nil = []
@@ -457,23 +479,6 @@ instance HasLTA Tiles where
         darkTiles NoTilesNode = 0
         darkTiles (TileNode shade rest) = shade + rest
 
--- | The measures of a sorted list for a condition on its length: the head and the length.
-data ListMeasures e = ListMeasures {front :: e, size :: e}
-    deriving stock (Eq, Show, Generic)
-    deriving anyclass (MeasureRecord)
-
--- | One node of a sorted list, for named measures.
-data SortedListByNode e = NilBy | ConsBy e (ListMeasures e)
-    deriving stock (Generic)
-    deriving anyclass (NodeView)
-
--- | The head and the length of a sorted list, as named measures.
-byLength :: Invariant SortedListByNode ListMeasures
-byLength = MeasuredBy measures (const true)
-  where
-    measures NilBy = ListMeasures 1000001 0
-    measures (ConsBy x rest) = ListMeasures x (size rest + 1)
-
 -- | The values of a datatype up to the bound, over the atoms, without an invariant, in order.
 valuesUpTo :: forall a. (HasFTA a, Ord a) => Depth -> Atoms -> IO [a]
 valuesUpTo bound atoms = membersOf $ deriveLTAFrom @a bound atoms (Contracted (const true) :: Invariant AnyNode NoMeasures)
@@ -614,13 +619,30 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         map (measureOf indices (invariant @Scoped)) [Let Zero (Index 0), Lambda (Index 1), Plus (Index 2) Zero]
             `shouldBe` [0, 1, 3]
     it "names the measure and the child of an inexact named measure" $ do
-        generator <- either (fail . show) pure $ deriveLTAFrom @SortedList 4 (atom @Integer LTAGen.every) byLength
-        compiled <- LTAGen.compileWith latticeEntailment generator
-        void compiled `shouldBe` Left (LTAGen.InexactMeasure "Cons" (Just "front") [0])
+        let bh x = uninterpreted "bh" [x]
+            parent = LTAGen.measuredBy "parent" (\_ -> true :: Formula) [("bh", \x -> bh x + 1)] (LTAGen.elements [1, 2 :: Integer])
+        compiled <- LTAGen.compileWith latticeEntailment parent
+        void compiled `shouldBe` Left (LTAGen.InexactMeasure "parent" (Just "bh") [0])
     it "reports a field whose type has no integer" $ do
         void (deriveLTA @Tiles 3 mempty) `shouldBe` Left (UnmeasuredField "Tile" 0 (typeRep (Proxy @Shade)))
         compiled <- either (fail . show) LTAGen.compile (deriveLTA @Tiles 2 (atom @Shade (LTAGen.elements [Light, Dark])))
         LTAGen.cardinality compiled `shouldBe` Right (Cardinality 7)
+    it "counts the sorted lists of length 3 over every integer with named measures" $ do
+        let ofLength atoms = (`LTAGen.satisfying` (\v -> size (measuresAt v) .== 3)) <$> deriveLTAFrom @SortedList 5 atoms (byLength 9)
+            listsOf generator = either (fail . show) (pure . sort . map toList) (LTAGen.values generator)
+        symbolic <- either (fail . show) LTAGen.compile (ofLength (atom @Integer LTAGen.every))
+        enumerated <- either (fail . show) LTAGen.compile (ofLength (atom @Integer (LTAGen.elements [0 .. 9])))
+        LTAGen.cardinality symbolic `shouldBe` Right (Cardinality 120)
+        fromSymbolic <- listsOf symbolic
+        fromSymbolic `shouldBe` sort [[a, b, c] | a <- [0 .. 9], b <- [a + 1 .. 9], c <- [b + 1 .. 9]]
+        listsOf enumerated >>= (`shouldBe` fromSymbolic)
+    it "counts the sorted lists of length 3 with keys up to a million without enumeration" $ do
+        let lists =
+                (`LTAGen.satisfying` (\v -> size (measuresAt v) .== 3))
+                    <$> deriveLTAFrom @SortedList 5 (atom @Integer LTAGen.every) (byLength 1000000)
+        compiled <- either (fail . show) LTAGen.compile lists
+        LTAGen.cardinality compiled `shouldBe` Right (Cardinality 166666666666500000)
+        fmap toList (LTAGen.unrank compiled (Rank 166666666666499999)) `shouldBe` Right [999998, 999999, 1000000]
     it "reports annotations that do not fit the datatype" $ do
         let derive annotations = void $ deriveLTAWith @SortedList 8 (atom @Integer LTAGen.every) annotations
         derive [("Cosn", mempty)] `shouldBe` Left (UnknownConstructors ["Cosn"] ["Nil", "Cons"])
