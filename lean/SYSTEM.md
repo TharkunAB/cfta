@@ -1,5 +1,81 @@
 # Constrained languages, indexing, and distributions
 
+## Current literal conjunction execution and full caller receipts
+
+Source main remains `ccebf0f7`. The preceding published checkpoint is
+`ebf92715`. Ten additive modules implement current serial conjunction rows,
+worklist, decision, fourth-memo calls, and the full checked caller lift.
+Proof commits are `d9e77a20`, `5600e0da`, and `34b6519f`.
+No Haskell implementation or test changes occur. Root FINDINGS.md keeps the
+external Haskell fix registry first. Record every later repair there with
+failure, reproducer, files, commit, checks, and upstream status.
+
+Read lean/notes-current-conjunction-worker.md. The full objective remains
+correspondence between the specified constrained languages and generators
+and the current Haskell library. Exact size classes, finite execution, counts,
+ordered ranks and both inverses, probability laws, and each transformation's
+semantics remain separate contracts. No whole-library theorem is complete.
+
+RowsWorker executes operand exposures, row-major projections, equality folds,
+canonical child columns, and class requirements. Two bounds control projection
+and reads. Contradiction retains equality allocations and skips requirements.
+Errors, missing equality fields, pending, unresolved, and exhaustion remain
+distinct at their actual returned physical states. Completion derives stable
+bounds from finite graphs. Stability proves unconditional success preservation
+and whole-state uniqueness. Actual reconstructs successful row graphs without
+a physical premise; matching tuples derive arities without a new worker check.
+Legitimate initial facts derive finite execution, effects, rows, and probes.
+
+ConjunctionWorker.explore implements the actual dynamic worklist. Only
+admission decreases the algorithmic budget. Its definition terminates by
+budget and pending length; it adds no recursion fuel. Rows precede insertion,
+and generated requirements precede the pending suffix. Failure retains the
+physical state and local table/pending context. decision checks open input,
+then executes actual exploration, Boolean grow, and answer. call looks up the
+fourth memo before the open guard and inserts only completed misses.
+
+Completion derives the same Run/Decision/Call from literal success and stable
+bounds from finite graphs. Initial physical Ready and query availability
+construct finite calls. Stability preserves exact answers, tables, physical
+states, and saved memos under larger lower-stage bounds with budget fixed.
+AllocatedConjunctionWorker retains the full checked state, native cells, and
+domain cache. Failures retain the initial fourth memo. Warm hits retain the
+identical checked state and ignore both bounds.
+
+AllocatedConjunctionWorkerActual.finite constructs stable literal execution
+and the full caller Post from initial Context and query residency. Both outer
+result families, warm merge table, and input inventory remain. The returned
+fourth memo, probe heap, and global receipts remain valid. verified derives
+the same endpoint facts for a supplied literal success. True excludes every
+accepted finite term. False does not prove nonemptiness; valid open answers
+are false. No future body result or final invariant is a public premise.
+
+The row graph completes all operand exposures. Haskell can skip operand reads
+when an earlier tuple prefix is empty. These serial graphs do not establish
+that demand schedule, host global-table event replay, lazy publication, or
+the noConstraint CAF. Global Reads remain logical evidence at the aligned
+return. root_exact still assumes a completed source-aligned outer call.
+
+Pinned Lean 4.34.1 passes the complete Audit: 2444 jobs and 58082 theorem
+dependency checks. Only the permitted three foundations and old unused-input
+warning remain. Raw logs, public probes, integration kernels, independent
+reviews, frozen sources, and preservation checks are in
+lean/restart-evidence/20261016-current-conjunction-worker/.
+All Haskell files remain unchanged. Reuse the strict Nix build, 788 examples
+plus golden, 15-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
+Next implement the literal first-seeded checked query and current Scan, then
+local reduction, parent construction, and the mutual outer worker. Read
+scan-worker-next.md in the evidence directory. General constrained outer
+termination, unequal-length path classes, and repeated-pass convergence remain
+open. Current reducePartially performs one pass. All frontend and generator
+adapters, separate Sized and probability contracts, concrete host execution,
+containers, identities, concurrency, machine bounds, solver IO, random draws,
+callbacks, codecs, full pipeline composition, and older constructor/equality
+work remain active. Preserve the optimized interned core and all local proofs,
+counterexamples, repairs, and drafts. No board posts or deployments. Push
+verified formalize checkpoints regularly. This checkpoint is progress.
+
 ## Current literal checked edits and class passes
 
 Source main remains `ccebf0f7`. The preceding published checkpoint is
