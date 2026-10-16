@@ -1,0 +1,59 @@
+lean/MicroCFTA/SourceCurrentAllocatedMergeGraph.lean:205:6: error: Dependent elimination failed: Failed to solve equation
+  List (Value Symbol Guard) = EdgeValue Symbol Guard
+lean/MicroCFTA/SourceCurrentAllocatedMergeGraph.lean:209:6: error: Dependent elimination failed: Failed to solve equation
+  Value Symbol Guard = EdgeValue Symbol Guard
+lean/MicroCFTA/SourceCurrentAllocatedMergeGraph.lean:219:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case hit
+Output : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+original : SourceCurrentMemoMergeGraph.Code Symbol Guard Output
+before after : InternedConstructorTemplates.State Symbol Guard
+memo saved : Memo
+output : Output
+memo✝ : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+entry✝ : SourceCurrentMemoMergeGraph.Entry Symbol Guard
+input✝ : Value Symbol Guard
+before✝ : InternedConstructorTemplates.State Symbol Guard
+found : memo✝ input✝.referenceOf = some entry✝
+operations✝ : SourceEqualityConstraintMemoAllocation.State
+⊢ ∃ final,
+    Call clear input✝ { heap := before✝, equality := operations✝ } memo✝ entry✝.result
+      { heap := before✝, equality := final } memo✝
+lean/MicroCFTA/SourceCurrentAllocatedMergeGraph.lean:222:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case miss
+Output : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+original : SourceCurrentMemoMergeGraph.Code Symbol Guard Output
+before after : InternedConstructorTemplates.State Symbol Guard
+memo saved : Memo
+output : Output
+memo✝ : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+input✝ : Value Symbol Guard
+before✝ : InternedConstructorTemplates.State Symbol Guard
+candidate✝ : Value Symbol Guard
+after✝ : InternedConstructorTemplates.State Symbol Guard
+current✝ : SourceCurrentMemoMergeGraph.Memo Symbol Guard
+absent : memo✝ input✝.referenceOf = none
+actual :
+  SourceCurrentMemoMergeGraph.Run clear top (SourceCurrentMemoMergeGraph.body top input✝) before✝ memo✝ candidate✝
+    after✝ current✝
+ih :
+  ∀ (code : Code (Value Symbol Guard)),
+    erase code = SourceCurrentMemoMergeGraph.body top input✝ →
+      ∀ (operations : SourceEqualityConstraintMemoAllocation.State),
+        ∃ final,
+          Run clear code { heap := before✝, equality := operations } memo✝ candidate✝
+            { heap := after✝, equality := final } current✝
+operations✝ : SourceEqualityConstraintMemoAllocation.State
+⊢ ∃ final,
+    Call clear input✝ { heap := before✝, equality := operations✝ } memo✝
+      (SourceCurrentMemoMergeGraph.winner current✝ input✝ candidate✝).result { heap := after✝, equality := final }
+      (SourceCurrentMemoMergeGraph.remember current✝ input✝ candidate✝)
+lean/MicroCFTA/SourceCurrentAllocatedMergeGraph.lean:245:2: error: Dependent elimination failed: Failed to solve equation
+  Value Symbol Guard = EdgeValue Symbol Guard

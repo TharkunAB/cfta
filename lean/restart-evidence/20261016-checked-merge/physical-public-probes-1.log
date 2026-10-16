@@ -1,0 +1,146 @@
+'MicroCFTA.SourceCurrentAllocatedMergePhysical.SafeCode.grows' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMergePhysical.body_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMergePhysical.Run.verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMergeGraph.Call.verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMergeGraph.Run.extends' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMergeGraph.Call.extends' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMergePhysical.call_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedMergePhysical.SafeCode.grows : ∀ {Output : Type}
+  {before after : MicroCFTA.SourceEqualityConstraintMemoAllocation.State},
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before after →
+    ∀ (code : MicroCFTA.SourceCurrentAllocatedMergeGraph.Code Output),
+      MicroCFTA.SourceCurrentAllocatedMergePhysical.SafeCode before code →
+        MicroCFTA.SourceCurrentAllocatedMergePhysical.SafeCode after code
+@MicroCFTA.SourceCurrentAllocatedMergePhysical.body_safe : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.InternedProbeProvenance.Available before.heap input →
+      MicroCFTA.SourceCurrentAllocatedMergePhysical.SafeCode before.equality
+        (MicroCFTA.SourceCurrentAllocatedMergeGraph.body input)
+@MicroCFTA.SourceCurrentAllocatedMergePhysical.Run.verified : ∀ {Output : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {code : MicroCFTA.SourceCurrentAllocatedMergeGraph.Code Output}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo} {output : Output},
+  MicroCFTA.SourceCurrentAllocatedMergeGraph.Run clear code before memo output after saved →
+    ∀
+      (post :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          Output → Prop),
+      MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+        MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.heap memo →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Certified MicroCFTA.SourceCurrentMemoMergeEffects.Contract clear
+              (MicroCFTA.SourceCurrentAllocatedMergeGraph.erase code) before.heap post →
+            MicroCFTA.SourceCurrentAllocatedMergePhysical.SafeCode before.equality code →
+              MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects before after ∧
+                MicroCFTA.SourceCurrentMemoMergeEffects.Stored after.heap saved ∧ post after.heap output
+@MicroCFTA.SourceCurrentAllocatedMergeGraph.Call.verified : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  MicroCFTA.SourceCurrentAllocatedMergeGraph.Call clear input before memo output after saved →
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+      MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.heap memo →
+        MicroCFTA.InternedProbeProvenance.Available before.heap input →
+          MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects before after ∧
+            MicroCFTA.SourceCurrentMemoMergeEffects.Stored after.heap saved ∧
+              MicroCFTA.InternedProbeProvenance.Available after.heap output ∧
+                (Eq.{1} input.free List.nil.{0} → Eq.{1} output.free List.nil.{0})
+@MicroCFTA.SourceCurrentAllocatedMergeGraph.Run.extends : ∀ {Output : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {code : MicroCFTA.SourceCurrentAllocatedMergeGraph.Code Output}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo} {output : Output},
+  MicroCFTA.SourceCurrentAllocatedMergeGraph.Run clear code before memo output after saved →
+    MicroCFTA.Cache.Extends memo saved
+@MicroCFTA.SourceCurrentAllocatedMergeGraph.Call.extends : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  MicroCFTA.SourceCurrentAllocatedMergeGraph.Call clear input before memo output after saved →
+    MicroCFTA.Cache.Extends memo saved
+@MicroCFTA.SourceCurrentAllocatedMergePhysical.call_complete : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo),
+  MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before →
+    MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.heap memo →
+      MicroCFTA.InternedProbeProvenance.Available before.heap input →
+        Exists.{1} fun output =>
+          Exists.{1} fun after =>
+            Exists.{1} fun saved =>
+              MicroCFTA.SourceCurrentAllocatedMergeGraph.Call clear input before memo output after saved ∧
+                MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects before after ∧
+                  MicroCFTA.SourceCurrentMemoMergeEffects.Stored after.heap saved ∧
+                    MicroCFTA.InternedProbeProvenance.Available after.heap output ∧
+                      (Eq.{1} input.free List.nil.{0} → Eq.{1} output.free List.nil.{0})
+lean/restart-evidence/20261016-checked-merge/physical-public-probes.lean:50:18: error: don't know how to synthesize implicit argument `b`
+  @And.left
+    (SourceEqualityConstraintMemoAllocation.Grows operations (SourceEqualityMkEdgeAllocation.emptyField operations))
+    (SourceCurrentConjunctionEquality.FieldAvailable (SourceEqualityMkEdgeAllocation.emptyField operations)
+      SourceEqualityConstraintConstructors.top)
+    (SourceCurrentConjunctionFieldAllocation.empty_field operations valid).right
+context:
+operations : Ops
+valid : SourceEqualityConstraintMemoAllocation.Valid operations
+field : G
+available : SourceCurrentConjunctionEquality.FieldAvailable operations field
+⊢ Prop
+lean/restart-evidence/20261016-checked-merge/physical-public-probes.lean:50:18: error: don't know how to synthesize implicit argument `b`
+  @And.right (SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.emptyField operations))
+    (SourceEqualityConstraintMemoAllocation.Grows operations (SourceEqualityMkEdgeAllocation.emptyField operations) ∧
+      SourceCurrentConjunctionEquality.FieldAvailable (SourceEqualityMkEdgeAllocation.emptyField operations)
+        SourceEqualityConstraintConstructors.top)
+    (SourceCurrentConjunctionFieldAllocation.empty_field operations valid)
+context:
+operations : Ops
+valid : SourceEqualityConstraintMemoAllocation.Valid operations
+field : G
+available : SourceCurrentConjunctionEquality.FieldAvailable operations field
+⊢ Prop
+lean/restart-evidence/20261016-checked-merge/physical-public-probes.lean:50:19: error: don't know how to synthesize implicit argument `Formula`
+  @SourceCurrentConjunctionFieldAllocation.empty_field (?m.12 operations valid field available) operations valid
+context:
+operations : Ops
+valid : SourceEqualityConstraintMemoAllocation.Valid operations
+field : G
+available : SourceCurrentConjunctionEquality.FieldAvailable operations field
+⊢ Type

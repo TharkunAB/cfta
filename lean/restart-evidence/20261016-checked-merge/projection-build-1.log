@@ -1,0 +1,54 @@
+⚠ [699/778] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✖ [1256/1256] Building MicroCFTA.SourceCurrentConjunctionTargetProjection (787ms)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConjunctionTargetProjection.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentConjunctionTargetProjection.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentConjunctionTargetProjection.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentConjunctionTargetProjection.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentConjunctionTargetProjection.setup.json --json
+error: MicroCFTA/SourceCurrentConjunctionTargetProjection.lean:93:31: typeclass instance problem is stuck
+  DecidableEq (EdgeKey ?m.283 ?m.284)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `DecidableEq` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+error: MicroCFTA/SourceCurrentConjunctionTargetProjection.lean:75:72: unsolved goals
+case refine_2
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+path : List Int
+values : List (Value Symbol Guard)
+before : Checked width
+result : Value Symbol Guard
+heap : InternedConstructorTemplates.State Symbol Guard
+actual : Forest path values before.native.machine.heap result heap
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+domain : ForestClosed path values
+memos : Memos
+valid : Valid before.native.machine.heap memos
+selected : Keeps before.native.machine.heap heap ∧ SemanticReady heap ∧ Available heap result ∧ result.free = []
+physicalCosts :
+  Keeps before.native.machine.heap heap ∧
+    SemanticReady heap ∧ InternedFreshOrdinaryCostHeap.Heap heap ∧ Available heap result
+fields : SourceEqualityAnnotationHeap.Heap (SourceCurrentConjunctionEquality.FieldAvailable before.operations) heap
+effects : Effects (physical before) { heap := heap, equality := before.operations }
+extension :
+  SourceRecursiveIntersectionKernel.Extension before.native.machine
+    (advancePhysical before { heap := heap, equality := before.operations }).native.machine
+final : Memos
+reads : SourceEqualityQueryGlobalMemos.ProjectionReads actual memos final
+finalValid : Valid heap final
+retained : Extends memos.unfolding final.unfolding
+⊢ path = [] →
+    ∀ (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+      meaning holds ambient result term ↔ ∃ value, value ∈ values ∧ meaning holds ambient value term
+error: MicroCFTA/SourceCurrentConjunctionTargetProjection.lean:94:8: unexpected identifier; expected command
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentConjunctionTargetProjection
+error: build failed

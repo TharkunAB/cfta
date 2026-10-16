@@ -1,0 +1,486 @@
+'MicroCFTA.SourceCurrentAllocatedMerge.top_true' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMerge.literalClear_true' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMerge.normalized_clear_boundary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMerge.verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMerge.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMerge.source_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMergeOperand.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedMergeOperand.of_required' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedMerge.literalClear : MicroCFTA.SourceSymbolicIndex.Constraint
+    MicroCFTA.FullSyntax.Formula →
+  Bool
+@MicroCFTA.SourceCurrentAllocatedMerge.Merge : {width : Nat} →
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)] →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) →
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          MicroCFTA.SourceEqualityNativeDemand.State width →
+            MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                MicroCFTA.SourceEqualityNativeDemand.State width →
+                  MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                    Prop
+@MicroCFTA.SourceCurrentAllocatedMerge.Receipt : {width : Nat} →
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)] →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+        MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory →
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) →
+              MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                MicroCFTA.SourceEqualityNativeDemand.State width →
+                  MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                    MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                      MicroCFTA.SourceEqualityNativeDemand.State width →
+                        MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                          MicroCFTA.EndpointMemoGateTrace.Memos → MicroCFTA.EndpointMemoGateTrace.Memos → Prop
+MicroCFTA.SourceCurrentAllocatedMerge.top_true : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceEqualityPCSGuard.holds formulas solver MicroCFTA.SourceEqualityConstraintConstructors.top term = true
+MicroCFTA.SourceCurrentAllocatedMerge.literalClear_true : ∀
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (constraint : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  MicroCFTA.SourceCurrentAllocatedMerge.literalClear constraint = true →
+    ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceEqualityPCSGuard.holds formulas solver constraint term = true
+MicroCFTA.SourceCurrentAllocatedMerge.normalized_clear_boundary : MicroCFTA.SourceMemoGate.plain
+      { equalities := some [], guard := MicroCFTA.SourceGuards.Guard.and [] } =
+    true ∧
+  MicroCFTA.SourceCurrentAllocatedMerge.literalClear
+      { equalities := some [], guard := MicroCFTA.SourceGuards.Guard.and [] } =
+    false
+@MicroCFTA.SourceCurrentAllocatedMerge.verified : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool),
+  (∀ (constraint : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+      clear constraint = true →
+        ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourceEqualityPCSGuard.holds formulas solver constraint term = true) →
+    ∀
+      {input output :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+      {memo saved :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+      MicroCFTA.SourceCurrentAllocatedMerge.Merge clear input before memo output after saved →
+        MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+          MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+            MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+              (∀
+                  (ambient :
+                    MicroCFTA.InternedGuardedLanguage.Env
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                  MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                    (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap input →
+                  ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                    MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      ∃ final,
+                        MicroCFTA.SourceCurrentAllocatedMerge.Receipt formulas solver inventory clear input before memo
+                          output after saved memos final
+@MicroCFTA.SourceCurrentAllocatedMerge.finite : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool),
+  (∀ (constraint : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+      clear constraint = true →
+        ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourceEqualityPCSGuard.holds formulas solver constraint term = true) →
+    ∀
+      (input :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+      (memo :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+        MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+            (∀
+                (ambient :
+                  MicroCFTA.InternedGuardedLanguage.Env
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+              MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap input →
+                ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                  MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                    ∃ output after saved final,
+                      MicroCFTA.SourceCurrentAllocatedMerge.Receipt formulas solver inventory clear input before memo
+                        output after saved memos final
+@MicroCFTA.SourceCurrentAllocatedMerge.source_finite : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+        (∀
+            (ambient :
+              MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+            MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+              (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+          MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap input →
+            ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+              MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                ∃ output after saved final,
+                  MicroCFTA.SourceCurrentAllocatedMerge.Receipt formulas solver inventory
+                    MicroCFTA.SourceCurrentAllocatedMerge.literalClear input before memo output after saved memos final
+@MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt : {width : Nat} →
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)] →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+        MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory →
+            List Int →
+              List
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+                MicroCFTA.SourceEqualityNativeDemand.State width →
+                  MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                    MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                      MicroCFTA.SourceEqualityNativeDemand.State width →
+                        MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                          MicroCFTA.EndpointMemoGateTrace.Memos → MicroCFTA.EndpointMemoGateTrace.Memos → Prop
+@MicroCFTA.SourceCurrentAllocatedMergeOperand.complete : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed path values →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+            (∀
+                (ambient :
+                  MicroCFTA.InternedGuardedLanguage.Env
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+              ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                  ∃ output after saved final,
+                    MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before
+                      memo output after saved memos final
+@MicroCFTA.SourceCurrentAllocatedMergeOperand.of_required : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  {selected : MicroCFTA.EqualityNormalize.Constraints}
+  {originals values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width},
+  MicroCFTA.SourceCurrentConjunctionRequired.Receipt formulas solver inventory selected originals values before after →
+    ∀ (path : MicroCFTA.EqualityNormalize.Path),
+      path ∈ List.flatten selected →
+        ∀
+          (memo :
+            MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored after.native.machine.heap memo →
+            (∀
+                (ambient :
+                  MicroCFTA.InternedGuardedLanguage.Env
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+              ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                MicroCFTA.EndpointMemoGateTrace.Valid after.native.machine.heap memos →
+                  ∃ output reached saved final,
+                    MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory
+                      (List.map Int.ofNat path) values after memo output reached saved memos final
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:39:66: error: unexpected token ':='; expected ')', ',' or ':'
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:52:94: error: elaboration function for `_private.lean.«restart-evidence».«20261016-checked-merge».«merge-independent-probes».0.MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.termCold` has not been implemented
+  cold
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:53:6: error(lean.invalidField): Invalid field notation: Type of
+  output
+is not known; cannot resolve field `free`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `Binding.free`
+  • `Value.free`
+  • `InternedDepthSemantics.Shape.free`
+  • `IntersectSchedule.Domain.free`
+  • `IntersectSchedule.View.free`
+  • `IntersectSchedule.ViewAgreement.free`
+  • `IntersectionFlatMemoKeyDomain.DomainKey.free`
+  • `RecursiveReductionBarrier.Read.free`
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:53:65: error(lean.invalidField): Invalid field notation: Type of
+  after
+is not known; cannot resolve field `operations`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `SourceFormula.operations`
+  • `SourceCurrentAllocatedNativePhysicalCompletion.Good.operations`
+  • `SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt.operations`
+  • `SourceCurrentConjunctionRequired.Receipt.operations`
+  • `SourceCurrentConjunctionTargetProjection.Receipt.operations`
+  • `SourceEqualityNativeDemand.State.operations`
+  • `SourceEqualityNativeDemandValidity.StateValid.operations`
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:53:82: error(lean.invalidField): Invalid field notation: Type of
+  after
+is not known; cannot resolve field `native`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `SourceCurrentAllocatedNativePhysicalCompletion.Good.native`
+  • `SourceEmptinessTasks.Ready.native`
+  • `SourceEmptinessTasks.State.native`
+  • `SourceEqualityDemandTargetWorker.Result.native`
+  • `SourceEqualityNativeDemand.Blocked.native`
+  • `SourceEqualityNativeDemand.State.native`
+  • `SourceEqualityNativeDemandValidity.StateValid.native`
+  • `SourceEqualityPartialMemoWorker.State.native`
+  • `SourceEqualitySharedTargetState.Ready.native`
+  • `SourceEqualitySharedTargetState.State.native`
+  • `SourceEqualitySharedTargetWorker.Result.native`
+  • `Std.Async.Interval.native`
+  • `Std.Async.Sleep.native`
+  • `Lean.Parser.Tactic.DecideConfig.native`
+  • `Std.Async.Signal.Waiter.native`
+  • `Std.Async.UDP.Socket.native`
+  • `Std.Async.TCP.Socket.Client.native`
+  • `Std.Async.TCP.Socket.Server.native`
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:55:43: error: elaboration function for `_private.lean.«restart-evidence».«20261016-checked-merge».«merge-independent-probes».0.MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.termCold` has not been implemented
+  cold
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:54:9: error: Tactic `rcases` failed: `x✝ : Prop` is not an inductive datatype
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:89:21: error: elaboration function for `_private.lean.«restart-evidence».«20261016-checked-merge».«merge-independent-probes».0.MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.termCold` has not been implemented
+  cold
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:89:61: error(lean.invalidField): Invalid field notation: Type of
+  output
+is not known; cannot resolve field `free`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `Binding.free`
+  • `Value.free`
+  • `InternedDepthSemantics.Shape.free`
+  • `IntersectSchedule.Domain.free`
+  • `IntersectSchedule.View.free`
+  • `IntersectSchedule.ViewAgreement.free`
+  • `IntersectionFlatMemoKeyDomain.DomainKey.free`
+  • `RecursiveReductionBarrier.Read.free`
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:92:51: error: elaboration function for `_private.lean.«restart-evidence».«20261016-checked-merge».«merge-independent-probes».0.MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.termCold` has not been implemented
+  cold
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:91:9: error: Tactic `rcases` failed: `x✝ : Prop` is not an inductive datatype
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:133:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.cold_merge`
+'MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.warm_hit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:135:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.required_operand`
+'MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.operand_then_query' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:137:8: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.cold_merge`
+@MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.warm_hit : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (entry :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  memo input.referenceOf = some entry →
+    MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+      MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+        MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+          (∀
+              (ambient :
+                MicroCFTA.InternedGuardedLanguage.Env
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+            MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap input →
+              ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                  ∃ final,
+                    MicroCFTA.SourceCurrentAllocatedMerge.Receipt formulas solver inventory
+                        MicroCFTA.SourceCurrentAllocatedMerge.literalClear input before memo entry.result before memo
+                        memos final ∧
+                      MicroCFTA.SourceCurrentMemoMergeQueryMemos.CallReads
+                        MicroCFTA.SourceCurrentAllocatedMerge.literalClear
+                        MicroCFTA.SourceEqualityConstraintConstructors.top input before.native.machine.heap memo
+                        entry.result before.native.machine.heap memo memos memos
+lean/restart-evidence/20261016-checked-merge/merge-independent-probes.lean:139:8: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.required_operand`
+@MicroCFTA.SourceCurrentAllocatedMergeIndependentProbes.operand_then_query : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceEqualityProjectionPathDomain.ForestClosed path values →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+            (∀
+                (ambient :
+                  MicroCFTA.InternedGuardedLanguage.Env
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+              ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                  ∀
+                    (other :
+                      MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap other →
+                      other.free = [] →
+                        (∀
+                            (output :
+                              MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            (middle : MicroCFTA.SourceEqualityNativeDemand.State width)
+                            (saved :
+                              MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            (final : MicroCFTA.EndpointMemoGateTrace.Memos),
+                            MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values
+                                before memo output middle saved memos final →
+                              MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                  (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                    MicroCFTA.IntersectionEmptyDomain.emptyDomain output other))
+                                middle) →
+                          ∃ output middle saved final next fuel result after,
+                            MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values
+                                before memo output middle saved memos final ∧
+                              next.source = middle.native.machine.heap ∧
+                                MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.Receipt next.source formulas solver
+                                    (next.inputs (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)) fuel output
+                                    other middle result after ∧
+                                  MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver next after ∧
+                                    result.free = [] ∧
+                                      (path ≠ [] →
+                                        ∀
+                                          (ambient :
+                                            MicroCFTA.InternedGuardedLanguage.Env
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                                          (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (terms :
+                                            List
+                                              (MicroCFTA.Language.Term
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)))
+                                          (part :
+                                            MicroCFTA.Language.Term
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                                          MicroCFTA.Language.All₂
+                                              (MicroCFTA.InternedGuardedLanguage.meaning
+                                                (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient)
+                                              values terms →
+                                            MicroCFTA.SymbolicSignedPaths.lookup
+                                                  (MicroCFTA.Language.Term.node symbol terms) path =
+                                                some part →
+                                              MicroCFTA.InternedGuardedLanguage.meaning
+                                                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient other
+                                                  part →
+                                                MicroCFTA.InternedGuardedLanguage.meaning
+                                                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient
+                                                  result part)

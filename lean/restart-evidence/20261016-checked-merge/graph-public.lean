@@ -1,0 +1,25 @@
+import MicroCFTA.SourceCurrentAllocatedMergeGraph
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_map
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_map
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_retainedColumn
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_retainedColumn
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_small
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_small
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_column
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_column
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_large
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_large
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_group
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_group
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_root
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_root
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_body
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.erase_body
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.Run.graph
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.Run.graph
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.Call.graph
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.Call.graph
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.run_lift
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.run_lift
+#print axioms MicroCFTA.SourceCurrentAllocatedMergeGraph.call_lift
+#check @MicroCFTA.SourceCurrentAllocatedMergeGraph.call_lift
