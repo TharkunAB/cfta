@@ -1,5 +1,14 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+Current proof overview: read `lean/notes-proof-status-20261017.md`.
+The finite ordinary root and original raw Reach resource bridge are closed.
+General recursive native semantic completion already exists conditionally on
+current WordRanges. Derive those ranges from initial resources. Then extend
+constrained recursive selected narrowing. Do not redo semantic completion.
+The recursive field-pool repair is merged and recorded first in FINDINGS.
+Read `lean/restart-evidence/20261017-recursive-source-progress/next-recursive-query-capacity.md`
+for the corrected next target and the focused recursive source probes.
+
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
 ## Current universal raw-reach capacity and ordinary root

@@ -1,6 +1,27 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-17 00:25 CEST (Europe/Stockholm)**.
+Updated: **2026-10-17 00:35 CEST (Europe/Stockholm)**.
+
+## Current proof overview and recursive boundary clarification
+
+Read `lean/notes-proof-status-20261017.md` for the top-level theorem family,
+current results, remaining work, and Haskell repair status at `e0c1929e`.
+This status audit adds no theorem and changes no Haskell behavior.
+General recursive native semantic completion is already derived for closed
+Original resident operands. NativeColdClosedExact.cold_complete proves exact
+language and closed output at the same current checked return, conditional
+on WordRanges. ConstructedHistory.query_complete derives entry facts from
+actual generic construction and field history. The remaining range premise
+must follow from initial resources. General recursive selected narrowing
+is a separate open progress obligation. Preserve this distinction when
+reading the older next-target statements below. The field-pool defect is
+already repaired by b9219b9e and is recorded first in FINDINGS.
+The status audit and focused source probes are in
+`lean/restart-evidence/20261017-recursive-source-progress/`.
+Read its `next-recursive-query-capacity.md` before resuming proof work.
+All 2692 prior non-Audit proofs, 234 Haskell files, and 55 frozen production
+manifests with 450 entries retain their bytes. The last full Audit remains
+2693 jobs and 61393 dependency checks. It is reused without a new build.
 
 ## Current universal raw-reach capacity and ordinary root
 

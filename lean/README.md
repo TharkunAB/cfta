@@ -1,5 +1,10 @@
 # cfta formal model
 
+Current proof overview: [top-level target and remaining work](notes-proof-status-20261017.md).
+Recursive native completion already exists conditionally on reached machine
+ranges. General initial resource bounds and recursive selected narrowing
+remain open. The finite ordinary root resource bridge is closed.
+
 ## Current universal raw-reach capacity and ordinary root
 
 Updated: 2026-10-17 00:25 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.

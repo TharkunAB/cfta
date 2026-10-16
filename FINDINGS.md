@@ -12,6 +12,12 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
+Status rechecked on 2026-10-17 at proof checkpoint `e0c1929e`.
+The source rejects the direct recursive pool in derivation validation.
+The existing repair entry and executable output below apply to this source.
+No additional Haskell repair is needed for the reported Chain example.
+Read `lean/notes-proof-status-20261017.md` for the current proof boundaries.
+
 The current initial-resource outer proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
