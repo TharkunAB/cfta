@@ -13,7 +13,7 @@ import System.Environment (lookupEnv, setEnv, unsetEnv)
 import System.Exit (exitFailure)
 import Test.QuickCheck (Arbitrary (..), CoArbitrary, suchThat)
 
-import Spectacular
+import Specftacular
 
 newtype PosInt = P Int
     deriving (Eq, Ord, Show, Num, Enum, Real, Integral, CoArbitrary)

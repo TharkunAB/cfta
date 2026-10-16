@@ -4,7 +4,7 @@ terms by their values on test case k, so a term that goes into the tree
 is evaluated only on the test cases on its path. Two terms are equal when
 they have the same values on all test cases.
 -}
-module Spectacular.DecisionTree (
+module Specftacular.DecisionTree (
     DecisionTree,
     Inserted (..),
     empty,
@@ -13,7 +13,7 @@ module Spectacular.DecisionTree (
     size,
 ) where
 
-import Spectacular.Types (Term, Value)
+import Specftacular.Types (Term, Value)
 
 -- | A decision tree of terms.
 data DecisionTree

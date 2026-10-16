@@ -8,7 +8,7 @@
 import Control.Monad
 import Data.List
 
-import Spectacular
+import Specftacular
 import System.Environment (getArgs)
 
 usort :: [Int] -> [Int]

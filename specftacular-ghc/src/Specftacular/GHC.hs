@@ -23,7 +23,7 @@ Phase 1 gives the laws of a signature of Haskell. Phases 2 to 4 give fewer:
 each type variable is at A, while a signature of Haskell can keep the
 variables apart at A to Acc, so the laws with B to Acc do not come.
 -}
-module Spectacular.GHC (
+module Specftacular.GHC (
     withGhcSignature,
 ) where
 
@@ -69,7 +69,7 @@ import Data.CFTA.GHC.Session (
  )
 import qualified Data.CFTA.Gen.Synthesis as Hectare
 
-import Spectacular.Types
+import Specftacular.Types
 
 {- | Start a session with the imports and the declarations, build the
 signature of the functions and the extra functions, each given by its name
@@ -98,7 +98,7 @@ withGhcSignature imports declarations functions extras action = do
             , "import qualified Test.QuickCheck.Random as QCR"
             ]
     withSessionOptions options (imports <> qualifiedImports) $ \session -> do
-        let typeOf expression = fromMaybe (error ("Spectacular.GHC: no type for " <> expression)) <$> typeOfExpression session expression
+        let typeOf expression = fromMaybe (error ("Specftacular.GHC: no type for " <> expression)) <$> typeOfExpression session expression
             -- A compiled expression, or Nothing when it does not typecheck.
             compiled = compileExpression session
         declare session "newtype A = A Int deriving newtype (Eq, Ord, Show, QC.Arbitrary, QC.CoArbitrary)"
@@ -123,13 +123,13 @@ withGhcSignature imports declarations functions extras action = do
                         | otherwise = c
                     instantiated c = substTyWith bound (map (at c) bound) body
                     source = "(" <> expression <> ") :: " <> showPprUnsafe (instantiated intTy)
-                value <- fromMaybe (error ("Spectacular.GHC: cannot compile " <> source)) <$> compiled source
+                value <- fromMaybe (error ("Specftacular.GHC: cannot compile " <> source)) <$> compiled source
                 case skeletonOf (instantiated carrier) of
                     Just skeleton -> pure (name, make (Untyped (unsafeCoerce value)) skeleton)
-                    Nothing -> error ("Spectacular.GHC: no type for " <> expression)
+                    Nothing -> error ("Specftacular.GHC: no type for " <> expression)
             -- The generator and the equality of a type, if the session has
             -- them, for the types that have variables in the front end of
-            -- Spectacular.Types ('frontInstances'): QuickCheck generates more
+            -- Specftacular.Types ('frontInstances'): QuickCheck generates more
             -- types, such as any function whose arguments have CoArbitrary,
             -- and a variable of each such type would add many terms.
             instanceOf t
@@ -183,7 +183,7 @@ storeDatabase unit = do
 
 {- | The type of the automaton of a GHC type: the type of 'erase', with the
 names of the type constructors as 'typeRepToTypeSkeleton' gives them. The
-carrier A of the session is the A of "Spectacular.Types".
+carrier A of the session is the A of "Specftacular.Types".
 -}
 skeletonOf :: GHC.Type -> Maybe TypeSkeleton
 skeletonOf typ = convert <$> erase (const Nothing) typ
@@ -191,7 +191,7 @@ skeletonOf typ = convert <$> erase (const Nothing) typ
     names = Map.fromList [(getOccString tc, qualified tc) | tc <- nonDetEltsUniqSet (tyConsOfType typ)]
     qualified :: TyCon -> Text
     qualified tc = case (getOccString tc, nameModule_maybe (getName tc)) of
-        ("A", Just m) | "Ghci" `T.isPrefixOf` T.pack (moduleNameString (moduleName m)) -> "Spectacular.Types.A"
+        ("A", Just m) | "Ghci" `T.isPrefixOf` T.pack (moduleNameString (moduleName m)) -> "Specftacular.Types.A"
         (occ, Just m) -> T.pack (moduleNameString (moduleName m) <> "." <> occ)
         (occ, Nothing) -> T.pack occ
     convert (Hectare.TVar v) = TVar v
@@ -205,7 +205,7 @@ skeletonOf typ = convert <$> erase (const Nothing) typ
 without its module, and Int for the carrier A.
 -}
 sourceType :: TypeSkeleton -> String
-sourceType (TCons "Spectacular.Types.A" []) = "Int"
+sourceType (TCons "Specftacular.Types.A" []) = "Int"
 sourceType (TCons "[]" [a]) = "[" <> sourceType a <> "]"
 sourceType (TCons "(,)" [a, b]) = "(" <> sourceType a <> ", " <> sourceType b <> ")"
 sourceType (TCons "()" []) = "()"

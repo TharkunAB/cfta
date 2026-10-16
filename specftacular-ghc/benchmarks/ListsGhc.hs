@@ -2,8 +2,8 @@
 
 -- \| The signature of Lists, from a GHC session: the functions by their
 -- names, at the carrier A.
-import Spectacular
-import Spectacular.GHC (withGhcSignature)
+import Specftacular
+import Specftacular.GHC (withGhcSignature)
 import System.Environment (getArgs)
 
 main :: IO ()

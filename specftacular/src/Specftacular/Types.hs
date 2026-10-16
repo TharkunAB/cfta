@@ -12,7 +12,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TupleSections #-}
 
-module Spectacular.Types where
+module Specftacular.Types where
 
 import Data.Dynamic
 import Data.Map (Map)

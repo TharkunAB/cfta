@@ -6,7 +6,7 @@ in which the variables of the law are template variables. A rule
 rewrites a term only when the term gets smaller in the Knuth-Bendix
 order, as in Twee.
 -}
-module Spectacular.Rewriting (
+module Specftacular.Rewriting (
     Rules,
     emptyRules,
     reducible,
@@ -24,7 +24,7 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust)
 import qualified Data.Text as T
 
-import Spectacular.Types
+import Specftacular.Types
 
 {- | Rules by the head of their left sides (see 'spineHead'). A rule whose
 head is a template variable has the key Nothing, because it can match a

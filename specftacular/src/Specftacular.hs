@@ -2,8 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module Spectacular (
-    module Spectacular.Types,
+module Specftacular (
+    module Specftacular.Types,
     module Data.Proxy,
     tacularSpec,
     discoverMonomorphic,
@@ -15,10 +15,10 @@ import qualified Data.Bifunctor as Bi
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (..))
-import qualified Spectacular.DecisionTree as DT
-import Spectacular.Rewriting
-import Spectacular.Types
-import Spectacular.Utils
+import qualified Specftacular.DecisionTree as DT
+import Specftacular.Rewriting
+import Specftacular.Types
+import Specftacular.Utils
 
 import Control.Monad (when)
 import Data.CFTA.Equality (

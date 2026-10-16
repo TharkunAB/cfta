@@ -9,7 +9,7 @@ import Control.Monad
 import Data.List
 import QuickSpec.Internal.Utils (usort)
 
-import Spectacular
+import Specftacular
 
 main =
     tacularSpec

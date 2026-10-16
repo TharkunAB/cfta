@@ -2,7 +2,7 @@
 
 -- The monad laws for lists.
 import Control.Monad
-import Spectacular
+import Specftacular
 
 import System.Environment (getArgs)
 

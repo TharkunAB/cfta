@@ -6,7 +6,7 @@
 
 module Main where
 
-import Spectacular
+import Specftacular
 
 main =
     tacularSpec

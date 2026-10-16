@@ -4,8 +4,8 @@
 -- names.
 
 import qualified Data.Text as T
-import Spectacular
-import Spectacular.GHC (withGhcSignature)
+import Specftacular
+import Specftacular.GHC (withGhcSignature)
 import System.Environment (getArgs)
 
 main :: IO ()

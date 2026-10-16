@@ -12,7 +12,7 @@ cabal build specftacular-ghc -j1
 cabal run bench-lists-ghc -- 4 1 +RTS -M4G -RTS
 ```
 
-`Spectacular.GHC.withGhcSignature` gets the types of expressions from GHC.
+`Specftacular.GHC.withGhcSignature` gets the types of expressions from GHC.
 It compiles the expressions and the required QuickCheck generators in that
 session. The benchmark executables take the term size and the search phase
 as arguments.

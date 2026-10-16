@@ -8,8 +8,8 @@
 -- This signature uses multiplication and inversion. Its Num instance omits abs and signum.
 
 import Data.Ratio
-import Spectacular
-import Spectacular.Types (genRepFromProxy)
+import Specftacular
+import Specftacular.Types (genRepFromProxy)
 import Test.QuickCheck
 
 -- import Twee.Pretty

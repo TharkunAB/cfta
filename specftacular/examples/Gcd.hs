@@ -6,8 +6,8 @@
 
 import Data.Proxy
 import Data.Typeable
-import Spectacular
-import Spectacular.Types (genRepFromProxy)
+import Specftacular
+import Specftacular.Types (genRepFromProxy)
 import Test.QuickCheck
 
 newtype PosInt = P Int

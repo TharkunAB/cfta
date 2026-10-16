@@ -1,7 +1,7 @@
 -- Some usual list functions.
 {-# LANGUAGE OverloadedStrings #-}
 
-import Spectacular
+import Specftacular
 
 main =
     experimentalPhases

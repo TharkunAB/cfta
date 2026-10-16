@@ -5,7 +5,7 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-import Spectacular
+import Specftacular
 
 main =
     experimentalPhases

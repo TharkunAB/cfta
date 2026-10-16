@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Spectacular.Utils where
+module Specftacular.Utils where
 
 import Data.CFTA.Equality (
     Edge (Edge),
@@ -19,7 +19,7 @@ import Data.CFTA.Equality (
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.Containers.ListUtils (nubOrd)
 import Data.Text (Text)
-import Spectacular.Types (TypeSkeleton (..))
+import Specftacular.Types (TypeSkeleton (..))
 
 -- | The marker that is the first child of a function type.
 theArrowNode :: Node Symbol

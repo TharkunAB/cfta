@@ -4,6 +4,7 @@
 
 Specftacular discovers equational laws with ECTAs. It is based on
 [QuickSpec](https://hackage.haskell.org/package/quickspec).
+Import `Specftacular` to construct signatures and discover laws.
 Specftacular was called Spectacular before it moved to cfta; the DOI above is that of the original Spectacular.
 
 This package uses the ECTAs of [`cfta`](../cfta/README.md) and builds with

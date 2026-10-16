@@ -13,8 +13,8 @@ import qualified Data.Map as M
 import Data.Monoid
 import Data.Ord
 import Data.Typeable
-import Spectacular
-import Spectacular.Types (genRepFromProxy)
+import Specftacular
+import Specftacular.Types (genRepFromProxy)
 import System.Environment (getArgs)
 import Test.QuickCheck
 import Test.QuickCheck.Gen
