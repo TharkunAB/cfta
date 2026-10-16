@@ -1,5 +1,20 @@
 # Public API and source correspondence
 
+## Current supporting outer resource proofs
+
+Three additive modules prove raw outer rebuild Work and profiles, strong
+lower-store retention through supplied Target/Force/Leaf reads, and actual
+normalization/payload/precheck path bounds. Read
+[the current note](notes-current-outer-resource-components.md) and
+`restart-evidence/20261016-constrained-outer-resources/`.
+The pinned Audit passes 2624 jobs and 60653 dependency checks.
+The initial-only outer Plan still needs hereditary guard bounds, stronger
+warm return certificates, all-eight-family retention, and cumulative headroom.
+General recursion, convergence, frontend/runtime correspondence, and full
+public pipelines remain open. No Haskell change or new defect is reported.
+Root FINDINGS keeps the merged repair handoff first. The full-library goal
+stays active.
+
 ## Current initial resources for local reduction and parent calls
 
 Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts

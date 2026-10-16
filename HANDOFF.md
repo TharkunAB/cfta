@@ -1,6 +1,33 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 22:01 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 22:21 CEST (Europe/Stockholm)**.
+
+## Current supporting outer resource proofs
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at `dcf12dc3`. Proof commits are `32d29695`, `2328161d`, and
+`d4cb078f`. Read lean/notes-current-outer-resource-components.md and
+lean/restart-evidence/20261016-constrained-outer-resources/.
+
+Three additive modules prove actual raw edge/node reconstruction resources,
+retain strong lower profile stores through actual Target/Force/Leaf reads,
+and derive normalization, combination, descent, and initial parent path bounds.
+The raw reconstruction integration constructs a rejected parent followed by
+its actual contradiction Descendants graph from two edge requests of headroom.
+Lower store retention verifies supplied reads; it does not assert completion.
+Path bounds use the preserved natural-index model and the effective own field.
+The live precheck processes own classes, not additional inherited classes.
+
+The full Audit passes 2624 jobs and 60653 dependency checks. All 26 public
+axiom/full-signature pairs and 12 integration pairs pass. Only propext,
+Classical.choice, and Quot.sound occur. The complete initial-only outer
+resource theorem remains open. Next retain lower stores through Edit/Class/
+Pass/Local/Parent and all eight outer families, prove hereditary guard and
+warm output certificates, then derive cumulative remaining headroom and Plan.
+General recursion, repeated-pass convergence, current frontend adapters,
+concrete Haskell, and full public pipelines remain open. The full-library
+goal stays active. No Haskell change or new Haskell defect is reported.
+FINDINGS keeps the merged recursive field-pool repair handoff first.
 
 ## Current initial resources for local reduction and parent calls
 
