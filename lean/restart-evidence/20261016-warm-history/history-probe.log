@@ -1,0 +1,53 @@
+'MicroCFTA.SourceCurrentAllocatedNativeWarmHistory.Receipt.done' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeWarmHistory.Receipt.warm' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeWarmHistory.walk_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@Receipt.done : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  {source : InternedConstructorTemplates.State Symbol Guard} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inputs : FiniteInput (view source (SourceEqualityPCSGuard.holds formulas solver))} {fuel : Nat}
+  {pairs : List (Value Symbol Guard × Value Symbol Guard)} {before after : Checked width}
+  {values : List (Value Symbol Guard)},
+  Receipt source formulas solver inputs fuel pairs before values after →
+    SourceEqualityNativeDemand.execute (fuel + 1) (Control.code (program pairs)) before = Outcome.done values after
+@Receipt.warm : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  {source : InternedConstructorTemplates.State Symbol Guard} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+  {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inputs : FiniteInput (view source (SourceEqualityPCSGuard.holds formulas solver))} {fuel : Nat}
+  {pairs : List (Value Symbol Guard × Value Symbol Guard)} {before after : Checked width}
+  {values : List (Value Symbol Guard)},
+  Receipt source formulas solver inputs fuel pairs before values after →
+    All₂
+      (fun pair value =>
+        ∀ (key : IntersectionFlatMemoKeyDomain.Triple width),
+          SourceRecursiveIntersectionMemo.requestKey width IntersectionEmptyDomain.emptyDomain pair.fst pair.snd =
+              some key →
+            SourceEqualityNativeDemand.execute 2
+                (Control.code (requestNode IntersectionEmptyDomain.emptyDomain pair.fst pair.snd)) after =
+              Outcome.done value after)
+      pairs values
+@walk_complete : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+      (inputs : FiniteInput (view source (SourceEqualityPCSGuard.holds formulas solver)))
+      (pairs : List (Value Symbol Guard × Value Symbol Guard)) (state : Checked width),
+      Good state →
+        SourceCurrentAllocatedNativeContextCache.Contextual (view source (SourceEqualityPCSGuard.holds formulas solver))
+            (finiteInputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+            (finiteRankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+            (SourceEqualityPCSGuard.holds formulas solver) state.native →
+          SourceCurrentAllocatedNativeScopeCache.Scoped state.native →
+            SemanticReady state.native.machine.heap →
+              SourceRecursiveIntersectionNative.Idle state.native →
+                Grows source state.native.machine.heap →
+                  Extends source.nodes.issued state.native.machine.heap.nodes.issued →
+                    (∀ (pair : Value Symbol Guard × Value Symbol Guard),
+                        pair ∈ pairs → Admissible source formulas solver inputs pair) →
+                      WordRanges (Control.code (program pairs)) state →
+                        ∃ fuel values after, Receipt source formulas solver inputs fuel pairs state values after

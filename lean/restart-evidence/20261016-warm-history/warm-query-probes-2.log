@@ -1,0 +1,48 @@
+MicroCFTA.SourceCurrentAllocatedNativeWarmQuery.Receipt.done {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] {source : InternedConstructorTemplates.State Symbol Guard}
+  {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inputs : FiniteInput (view source (SourceEqualityPCSGuard.holds formulas solver))} {fuel : Nat}
+  {left right value : Value Symbol Guard} {before after : Checked width}
+  (receipt :
+    SourceCurrentAllocatedNativeWarmQuery.Receipt source formulas solver inputs fuel left right before value after) :
+  SourceEqualityNativeDemand.execute (fuel + 1)
+      (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before =
+    Outcome.done value after
+MicroCFTA.SourceCurrentAllocatedNativeWarmQuery.input_meaning (source : InternedConstructorTemplates.State Symbol Guard)
+  (facts : InternedNestedFacts.Facts source) (holds : Guard → Term Symbol → Bool)
+  (inputs : FiniteInput (view source holds)) (value : Value Symbol Guard) (original : Original value)
+  (available : Available source value) (closed : value.free = []) (valid : inputs.valid (inputOf value))
+  (output : InternedGuardedLanguage.Env Symbol) (term : Term Symbol) :
+  InternedGuardedLanguage.meaning holds output value term ↔
+    inputLanguage (finiteInputMeaning (view source holds) inputs).languages (inputOf value) term
+MicroCFTA.SourceCurrentAllocatedNativeWarmQuery.query_complete {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard)
+  (facts : InternedNestedFacts.Facts source) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inputs : FiniteInput (view source (SourceEqualityPCSGuard.holds formulas solver))) (state : Checked width)
+  (valid : Good state)
+  (contextual :
+    SourceCurrentAllocatedNativeContextCache.Contextual (view source (SourceEqualityPCSGuard.holds formulas solver))
+      (finiteInputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+      (finiteRankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+      (SourceEqualityPCSGuard.holds formulas solver) state.native)
+  (scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native)
+  (semantic : SemanticReady state.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle state.native)
+  (growth : Grows source state.native.machine.heap)
+  (history : Cache.Extends source.nodes.issued state.native.machine.heap.nodes.issued) (left right : Value Symbol Guard)
+  (leftOriginal : Original left) (rightOriginal : Original right) (leftAvailable : Available source left)
+  (rightAvailable : Available source right) (leftClosed : left.free = []) (rightClosed : right.free = [])
+  (leftValid : inputs.valid (inputOf left)) (rightValid : inputs.valid (inputOf right))
+  (ranges : WordRanges (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state) :
+  ∃ fuel value after,
+    SourceCurrentAllocatedNativeWarmQuery.Receipt source formulas solver inputs fuel left right state value after
+'MicroCFTA.SourceCurrentAllocatedNativeWarmQuery.Receipt.done' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeWarmQuery.input_meaning' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeWarmQuery.query_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.WarmQueryKernelProbe.actual_complete_stable' depends on axioms: [propext, Classical.choice, Quot.sound]

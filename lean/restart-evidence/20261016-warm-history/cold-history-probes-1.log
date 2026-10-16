@@ -1,0 +1,27 @@
+MicroCFTA.SourceCurrentAllocatedNativeColdHistoryExact.cold_complete {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  (solver : SourceGuards.Entailment FullSyntax.Formula) (machine : Machine Symbol Guard)
+  (operations : SourceEqualityConstraintMemoAllocation.State)
+  (valid : Good { native := initial width machine, operations := operations }) (semantic : SemanticReady machine.heap)
+  (pairs : List (Value Symbol Guard × Value Symbol Guard))
+  (originals :
+    ∀ (value : Value Symbol Guard),
+      value ∈ SourceCurrentAllocatedNativeColdHistoryExact.operands pairs → Original value)
+  (available : Values machine.heap (SourceCurrentAllocatedNativeColdHistoryExact.operands pairs))
+  (closed :
+    ∀ (value : Value Symbol Guard),
+      value ∈ SourceCurrentAllocatedNativeColdHistoryExact.operands pairs → value.free = [])
+  (ranges :
+    WordRanges (Control.code (SourceCurrentAllocatedNativeWarmHistory.program pairs))
+      { native := initial width machine, operations := operations }) :
+  have inputs :=
+    SourceCurrentAllocatedNativeInputInventoryModels.finiteInput machine.heap ⋯
+      (SourceEqualityPCSGuard.holds formulas solver) (SourceCurrentAllocatedNativeColdHistoryExact.operands pairs)
+      originals available closed;
+  ∃ fuel values after,
+    SourceCurrentAllocatedNativeWarmHistory.Receipt machine.heap formulas solver inputs fuel pairs
+      { native := initial width machine, operations := operations } values after
+'MicroCFTA.SourceCurrentAllocatedNativeColdHistoryExact.cold_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.ColdHistoryKernelProbe.actual_serial_cold_history' depends on axioms: [propext, Classical.choice, Quot.sound]

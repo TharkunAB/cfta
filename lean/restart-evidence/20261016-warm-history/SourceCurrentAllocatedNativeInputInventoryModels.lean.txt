@@ -1,0 +1,119 @@
+import MicroCFTA.SourceRecursiveIntersectionGuardedInput
+import MicroCFTA.InternedNestedProvenance
+
+/-!
+# One fixed original-input model for a finite operand list
+
+The valid domain contains inputs reachable from the listed closed operands.
+Every root uses the same physical representative function. Reachability
+stays in the actual finite issued carrier. No union allocation is required.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels
+open Cache Language InternedConstructorTemplates InternedProbeProvenance InternedNestedProvenance
+open InternedNestedFacts IntersectSchedule SourceRecursiveIntersectionInputView
+variable {Symbol Guard : Type}
+
+/-- The domain is the union of actual input reachability from listed physical roots. -/
+def Reachable (source : InternedConstructorTemplates.State Symbol Guard) (holds : Guard → Term Symbol → Bool)
+    (roots : List (Value Symbol Guard)) (input : Input) : Prop :=
+  ∃ root ∈ roots, InputReach (view source holds) (inputOf root) input
+
+private theorem listed_original (source : InternedConstructorTemplates.State Symbol Guard)
+    (roots : List (Value Symbol Guard)) (originals : ∀ root ∈ roots, Original root)
+    (available : Values source roots) (root : Value Symbol Guard) (member : root ∈ roots) :
+    OriginalInput source (inputOf root) :=
+  ⟨root, originals root member, available root member, (originals root member).codec root⟩
+
+private theorem listed_closed (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) (root : Value Symbol Guard) (member : root ∈ roots) :
+    IntersectSchedule.closed (view source holds) (inputOf root) = true := by
+  rw [closed_readback source facts holds root (originals root member) (available root member), closed root member]
+  rfl
+
+/-- Every reachable input retains an actual complete original physical record. -/
+theorem reachable_original (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) (input : Input) (reachable : Reachable source holds roots input) :
+    OriginalInput source input := by
+  obtain ⟨root, member, reached⟩ := reachable
+  exact closed_reach_original source facts holds (inputOf root) input
+    (listed_original source roots originals available root member)
+    (listed_closed source facts holds roots originals available closed root member) reached
+
+/-- The union of all listed reachable domains is contained in one actual finite issued carrier. -/
+theorem reachable_inventory (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) (input : Input) (reachable : Reachable source holds roots input) :
+    input ∈ inventory source :=
+  (reachable_original source facts holds roots originals available closed input reachable).inventory source facts input
+
+/-- All listed roots share one finite input interface and the actual physical representative. -/
+def finiteInput (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) : FiniteInput (view source holds) where
+  valid := Reachable source holds roots
+  representative := SourceRecursiveIntersectionInputView.representative source
+  identity_exact := by
+    rintro input ⟨root, member, reached⟩ nonempty
+    exact closed_representative source facts holds (inputOf root) input
+      (listed_original source roots originals available root member)
+      (listed_closed source facts holds roots originals available closed root member) reached nonempty
+  body_valid := by
+    rintro name ⟨root, member, reached⟩
+    exact ⟨root, member, .body reached⟩
+  reference_valid := by
+    rintro name ⟨root, member, reached⟩
+    exact ⟨root, member, .reference reached⟩
+  row_valid := by
+    rintro name ⟨root, member, reached⟩ row present child inside
+    exact ⟨root, member, .child reached present inside⟩
+  union_valid := by
+    rintro name ⟨root, member, reached⟩ child inside
+    exact ⟨root, member, .member reached inside⟩
+  copy_exact input reached isClosed environment :=
+    copy_exact_original source facts holds input
+      (reachable_original source facts holds roots originals available closed input reached) isClosed environment
+
+/-- Every listed original root belongs to this same fixed input interface. -/
+theorem root_valid (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) (root : Value Symbol Guard) (member : root ∈ roots) :
+    (finiteInput source facts holds roots originals available closed).valid (inputOf root) :=
+  ⟨root, member, .root⟩
+
+/-- The fixed inventory model has the original physical language of every listed root. -/
+theorem root_language (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) (root : Value Symbol Guard) (member : root ∈ roots)
+    (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol) :
+    InternedGuardedLanguage.meaning holds ambient root term ↔
+      inputLanguage (finiteInputMeaning (view source holds)
+        (finiteInput source facts holds roots originals available closed)).languages (inputOf root) term := by
+  rw [SourceRecursiveIntersectionGuardedInput.input_exact source facts holds root
+    (originals root member) (available root member) (closed root member) ambient]
+  exact (finiteLanguages_exact (view source holds) (finiteInput source facts holds roots originals available closed)
+    (inputOf root) (root_valid source facts holds roots originals available closed root member) term).symm
+
+/-- A finite operand inventory derives one model, one rank family, and every listed source readback law. -/
+theorem source_input_models (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) :
+    ∃ (model : InputMeaning (view source holds)) (ranked : RankedInput (view source holds) model.valid),
+      (∀ root ∈ roots, model.valid (inputOf root)) ∧
+      (∀ name term, model.languages name term ↔ ∃ rank, ranked.languages name rank term) ∧
+      (∀ root ∈ roots, ∀ ambient term, InternedGuardedLanguage.meaning holds ambient root term ↔
+        inputLanguage model.languages (inputOf root) term) := by
+  let inputs := finiteInput source facts holds roots originals available closed
+  exact ⟨finiteInputMeaning (view source holds) inputs, finiteRankedInput (view source holds) inputs,
+    root_valid source facts holds roots originals available closed, fun _ _ => Iff.rfl,
+    root_language source facts holds roots originals available closed⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels

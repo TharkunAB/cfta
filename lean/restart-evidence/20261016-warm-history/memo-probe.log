@@ -1,0 +1,122 @@
+'MicroCFTA.SourceCurrentAllocatedNativeCompletedMemo.done_retained' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCompletedMemo.completed_node' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCompletedMemo.warm_node' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCompletedMemo.completed_repeat' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCompletedMemo.uncacheable_call' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCompletedMemo.repeat_of_trace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCompletedMemo.completed_cases' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SourceCurrentAllocatedNativeCompletedMemo.done_retained : ∀ {width : Nat} {Output : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (control : Control Output)
+  (before after : SourceEqualityNativeDemand.State width) (value : Output),
+  SourceRecursiveIntersectionNative.Shape before.native →
+    SourceEqualityNativeDemand.execute fuel control before = Outcome.done value after →
+      SourceEqualityNativeDemandMemo.Retained before.native after.native
+@SourceCurrentAllocatedNativeCompletedMemo.completed_node : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (request : NodeRequest Symbol Guard)
+  (before after : SourceEqualityNativeDemand.State width) (value : Value Symbol Guard),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+    NodeReady before.native.machine request →
+      SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right →
+        ∀ (key : IntersectionFlatMemoKeyDomain.Triple width),
+          SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key →
+            SourceEqualityNativeDemand.execute fuel
+                  (Control.code (requestNode request.domain request.left request.right)) before =
+                Outcome.done value after →
+              ∃ handle,
+                after.native.nodes.table key = some handle ∧
+                  after.native.nodes.cells handle =
+                    some { request := request, status := FlatMemoThunk.Status.returned value }
+@SourceCurrentAllocatedNativeCompletedMemo.warm_node : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (request : NodeRequest Symbol Guard)
+  (state : SourceEqualityNativeDemand.State width) (value : Value Symbol Guard)
+  (key : IntersectionFlatMemoKeyDomain.Triple width) (handle : Nat),
+  SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key →
+    state.native.nodes.table key = some handle →
+      state.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned value } →
+        SourceEqualityNativeDemand.execute 2 (Control.code (requestNode request.domain request.left request.right))
+            state =
+          Outcome.done value state
+@SourceCurrentAllocatedNativeCompletedMemo.completed_repeat : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (request : NodeRequest Symbol Guard)
+  (before after : SourceEqualityNativeDemand.State width) (value : Value Symbol Guard),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+    NodeReady before.native.machine request →
+      SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right →
+        ∀ (key : IntersectionFlatMemoKeyDomain.Triple width),
+          SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key →
+            SourceEqualityNativeDemand.execute fuel
+                  (Control.code (requestNode request.domain request.left request.right)) before =
+                Outcome.done value after →
+              (∃ handle,
+                  after.native.nodes.table key = some handle ∧
+                    after.native.nodes.cells handle =
+                      some { request := request, status := FlatMemoThunk.Status.returned value }) ∧
+                SourceEqualityNativeDemand.execute 2
+                    (Control.code (requestNode request.domain request.left request.right)) after =
+                  Outcome.done value after
+@SourceCurrentAllocatedNativeCompletedMemo.uncacheable_call : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (request : NodeRequest Symbol Guard)
+  (before after : SourceEqualityNativeDemand.State width) (value : Value Symbol Guard),
+  SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = none →
+    SourceEqualityNativeDemand.execute fuel (Control.code (requestNode request.domain request.left request.right))
+          before =
+        Outcome.done value after →
+      lookupNode width request before.native = (NodeSelection.direct request, before.native) ∧
+        ∃ count,
+          count + 1 < fuel ∧
+            SourceEqualityNativeDemand.Steps count (Control.code (compileNode request)) before
+              (Control.code (Code.pure value)) after
+@SourceCurrentAllocatedNativeCompletedMemo.repeat_of_trace : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (count : Nat) (request : NodeRequest Symbol Guard)
+  (before after : SourceEqualityNativeDemand.State width) (value : Value Symbol Guard),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+    ∀ (key : IntersectionFlatMemoKeyDomain.Triple width),
+      SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key →
+        SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace count
+            (Control.code (requestNode request.domain request.left request.right)) before
+            (Control.code (Code.pure value)) after →
+          (∃ handle,
+              after.native.nodes.table key = some handle ∧
+                after.native.nodes.cells handle =
+                  some { request := request, status := FlatMemoThunk.Status.returned value }) ∧
+            SourceEqualityNativeDemand.execute 2 (Control.code (requestNode request.domain request.left request.right))
+                after =
+              Outcome.done value after
+@SourceCurrentAllocatedNativeCompletedMemo.completed_cases : ∀ {width : Nat} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (request : NodeRequest Symbol Guard)
+  (before after : SourceEqualityNativeDemand.State width) (value : Value Symbol Guard),
+  SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+    NodeReady before.native.machine request →
+      (∀ (key : IntersectionFlatMemoKeyDomain.Triple width),
+          SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key →
+            SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right) →
+        SourceEqualityNativeDemand.execute fuel (Control.code (requestNode request.domain request.left request.right))
+              before =
+            Outcome.done value after →
+          (SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = none ∧
+              ∃ count,
+                count + 1 < fuel ∧
+                  SourceEqualityNativeDemand.Steps count (Control.code (compileNode request)) before
+                    (Control.code (Code.pure value)) after) ∨
+            ∃ key handle,
+              SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key ∧
+                after.native.nodes.table key = some handle ∧
+                  after.native.nodes.cells handle =
+                      some { request := request, status := FlatMemoThunk.Status.returned value } ∧
+                    SourceEqualityNativeDemand.execute 2
+                        (Control.code (requestNode request.domain request.left request.right)) after =
+                      Outcome.done value after

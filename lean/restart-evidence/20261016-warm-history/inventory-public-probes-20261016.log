@@ -1,0 +1,84 @@
+'MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.Reachable' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.reachable_original' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.reachable_inventory' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.root_valid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.root_language' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.source_input_models' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SourceCurrentAllocatedNativeInputInventoryModels.Reachable : {Symbol Guard : Type} →
+  InternedConstructorTemplates.State Symbol Guard →
+    (Guard → Term Symbol → Bool) → List (Value Symbol Guard) → Input → Prop
+@SourceCurrentAllocatedNativeInputInventoryModels.reachable_original : ∀ {Symbol Guard : Type}
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard)),
+      (∀ (root : Value Symbol Guard), root ∈ roots → Original root) →
+        Values source roots →
+          (∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) →
+            ∀ (input : Input),
+              SourceCurrentAllocatedNativeInputInventoryModels.Reachable source holds roots input →
+                OriginalInput source input
+@reachable_inventory : ∀ {Symbol Guard : Type} (source : InternedConstructorTemplates.State Symbol Guard),
+  Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard)),
+      (∀ (root : Value Symbol Guard), root ∈ roots → Original root) →
+        Values source roots →
+          (∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) →
+            ∀ (input : Input),
+              SourceCurrentAllocatedNativeInputInventoryModels.Reachable source holds roots input →
+                input ∈ inventory source
+@SourceCurrentAllocatedNativeInputInventoryModels.finiteInput : {Symbol Guard : Type} →
+  (source : InternedConstructorTemplates.State Symbol Guard) →
+    Facts source →
+      (holds : Guard → Term Symbol → Bool) →
+        (roots : List (Value Symbol Guard)) →
+          (∀ (root : Value Symbol Guard), root ∈ roots → Original root) →
+            Values source roots →
+              (∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) → FiniteInput (view source holds)
+@root_valid : ∀ {Symbol Guard : Type} (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+  (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+  (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+  (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) (root : Value Symbol Guard),
+  root ∈ roots →
+    (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds roots originals available
+          closed).valid
+      (inputOf root)
+@root_language : ∀ {Symbol Guard : Type} (source : InternedConstructorTemplates.State Symbol Guard)
+  (facts : Facts source) (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+  (originals : ∀ (root : Value Symbol Guard), root ∈ roots → Original root) (available : Values source roots)
+  (closed : ∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) (root : Value Symbol Guard),
+  root ∈ roots →
+    ∀ (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+      InternedGuardedLanguage.meaning holds ambient root term ↔
+        inputLanguage
+          (finiteInputMeaning (view source holds)
+              (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds roots originals available
+                closed)).languages
+          (inputOf root) term
+@source_input_models : ∀ {Symbol Guard : Type} (source : InternedConstructorTemplates.State Symbol Guard),
+  Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard)),
+      (∀ (root : Value Symbol Guard), root ∈ roots → Original root) →
+        Values source roots →
+          (∀ (root : Value Symbol Guard), root ∈ roots → root.free = []) →
+            ∃ model ranked,
+              (∀ (root : Value Symbol Guard), root ∈ roots → model.valid (inputOf root)) ∧
+                (∀ (name : Nat) (term : Term Symbol),
+                    model.languages name term ↔ ∃ rank, ranked.languages name rank term) ∧
+                  ∀ (root : Value Symbol Guard),
+                    root ∈ roots →
+                      ∀ (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+                        InternedGuardedLanguage.meaning holds ambient root term ↔
+                          inputLanguage model.languages (inputOf root) term
