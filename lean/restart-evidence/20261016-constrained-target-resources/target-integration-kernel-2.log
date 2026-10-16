@@ -1,0 +1,158 @@
+lean/restart-evidence/20261016-constrained-target-resources/target-integration-kernel.lean:87:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  w ≥ 0
+  v ≥ 0
+  u ≥ 0
+  t ≥ 0
+  s ≥ 0
+  r ≥ 0
+  q ≥ 0
+  p ≥ 0
+  p + u - v ≥ 0
+  o ≥ 0
+  n ≥ 0
+  n - o ≥ 0
+  n - t ≥ 0
+  n + q - w ≥ 0
+  m ≥ 0
+  l ≥ 0
+  l - m ≥ 0
+  l - s ≥ 0
+  k ≥ 0
+  j ≥ 0
+  i ≥ 0
+  i + j - q ≥ 0
+  h - i - 2*j ≥ 0
+  g ≥ 0
+  2*g - m - s ≤ -1
+  f ≥ 0
+  f + g - p ≥ 0
+  e - f - 2*g ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  c - k ≥ 0
+  c - r ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑count
+ b := ↑values.length
+ c := ↑bound
+ d := ↑(childrenHeight values)
+ e := ↑2 ^ bits
+ f := ↑before.native.machine.heap.nodes.next
+ g := ↑(N rows arity count depth bound 3)
+ h := ↑2 ^ (bits + 2)
+ i := ↑before.native.machine.heap.edges.next
+ j := ↑(E rows arity count depth bound 3)
+ k := ↑(MergedOrdinaryHeight.height result)
+ l := ↑(N rows arity count depth bound (0 + 1 + 1 + 1))
+ m := ↑(nodeRequests firstRequests)
+ n := ↑(E rows arity count depth bound [seed, first, second].length)
+ o := ↑(edgeRequests firstRequests)
+ p := ↑middle.native.machine.heap.nodes.next
+ q := ↑middle.native.machine.heap.edges.next
+ r := ↑(MergedOrdinaryHeight.height later)
+ s := ↑(nodeRequests lastRequests)
+ t := ↑(edgeRequests lastRequests)
+ u := ↑(N rows arity count depth bound [seed, first, second].length)
+ v := ↑after.native.machine.heap.nodes.next
+ w := ↑after.native.machine.heap.edges.next
+lean/restart-evidence/20261016-constrained-target-resources/target-integration-kernel.lean:91:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  x ≥ 0
+  w ≥ 0
+  v ≥ 0
+  u ≥ 0
+  t ≥ 0
+  s ≥ 0
+  r ≥ 0
+  q ≥ 0
+  q + v - w ≥ 0
+  p ≥ 0
+  o ≥ 0
+  n ≥ 0
+  n - o ≥ 0
+  n - t ≥ 0
+  m ≥ 0
+  l ≥ 0
+  l - m ≥ 0
+  l - s ≥ 0
+  l + p - u ≥ 0
+  k ≥ 0
+  j ≥ 0
+  2*j - o - t ≤ -1
+  i ≥ 0
+  i + j - q ≥ 0
+  h - i - 2*j ≥ 0
+  g ≥ 0
+  2*g - x ≥ 0
+  f ≥ 0
+  f + g - p ≥ 0
+  e - f - 2*g ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  c - k ≥ 0
+  c - r ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑count
+ b := ↑values.length
+ c := ↑bound
+ d := ↑(childrenHeight values)
+ e := ↑2 ^ bits
+ f := ↑before.native.machine.heap.nodes.next
+ g := ↑(N rows arity count depth bound 3)
+ h := ↑2 ^ (bits + 2)
+ i := ↑before.native.machine.heap.edges.next
+ j := ↑(E rows arity count depth bound 3)
+ k := ↑(MergedOrdinaryHeight.height result)
+ l := ↑(N rows arity count depth bound [seed, first, second].length)
+ m := ↑(nodeRequests firstRequests)
+ n := ↑(E rows arity count depth bound (0 + 1 + 1 + 1))
+ o := ↑(edgeRequests firstRequests)
+ p := ↑middle.native.machine.heap.nodes.next
+ q := ↑middle.native.machine.heap.edges.next
+ r := ↑(MergedOrdinaryHeight.height later)
+ s := ↑(nodeRequests lastRequests)
+ t := ↑(edgeRequests lastRequests)
+ u := ↑after.native.machine.heap.nodes.next
+ v := ↑(E rows arity count depth bound [seed, first, second].length)
+ w := ↑after.native.machine.heap.edges.next
+ x := ↑(nodeRequests (firstRequests ++ lastRequests))
+'MicroCFTA.TargetResourcesIndependentIntegration.two_three_path_targets' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+@two_three_path_targets : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (bits : Nat) (values : List (Value Symbol Guard)) (seed first second : List Int)
+  (before : Checked (bits + 2)) (memo : Memo),
+  Ready before →
+    At formulas solver inventory before →
+      Values before.native.machine.heap values →
+        SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+          Profiles memo →
+            NativeStored before.native →
+              OutputStored before.native →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      memo) →
+                  ∀ (memos : Memos),
+                    EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      ∀ (rows arity count depth bound : Nat),
+                        ChildrenShape rows arity values →
+                          values.length ≤ count →
+                            (∀ (path : List Int), path ∈ [seed, first, second] → path.length ≤ depth) →
+                              childrenHeight values ≤ bound →
+                                before.native.machine.heap.nodes.next + 2 * N rows arity count depth bound 3 ≤
+                                    2 ^ bits →
+                                  before.native.machine.heap.edges.next + 2 * E rows arity count depth bound 3 ≤
+                                      2 ^ (bits + 2) →
+                                    ∃ result middle saved next final later after last lastInventory lastGlobals
+                                      firstRequests lastRequests, ⋯

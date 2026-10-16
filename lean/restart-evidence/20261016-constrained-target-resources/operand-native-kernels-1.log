@@ -1,0 +1,90 @@
+@OperandNativeKernels.serial_operands : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {firstPath secondPath : List Int}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before middle after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo current saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo}
+  {firstValue lastValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos currentGlobals final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory firstPath values before memo firstValue
+      middle current memos currentGlobals →
+    MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory secondPath values middle current
+        lastValue after saved currentGlobals final →
+      MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+              MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored after.native ∧
+                      MicroCFTA.SourceRecursiveIntersectionNative.Idle after.native ∧
+                        after.native.nodes = before.native.nodes ∧
+                          after.native.edges = before.native.edges ∧
+                            after.native.machine.domains = before.native.machine.domains ∧ final.query = memos.query
+'OperandNativeKernels.serial_operands' depends on axioms: [propext, Classical.choice, Quot.sound]
+@OperandNativeKernels.constructed_operand : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width) (memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+                MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+                  (∀
+                      (ambient :
+                        MicroCFTA.InternedGuardedLanguage.Env
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                      MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                    ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                      MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        ∀ (rows arity count depth bound : Nat),
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity values →
+                            values.length ≤ count →
+                              path.length ≤ depth →
+                                MicroCFTA.MergedOrdinaryHeight.childrenHeight values ≤ bound →
+                                  ∃ output after saved final requests,
+                                    MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path
+                                        values before memo output after saved memos final ∧
+                                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+                                              after.native ∧
+                                            MicroCFTA.SourceRecursiveIntersectionNative.Idle after.native ∧
+                                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace
+                                                  before.native.machine.heap after.native.machine.heap requests ∧
+                                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                                                      requests ≤
+                                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget
+                                                      rows arity count depth bound ∧
+                                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                                                      requests ≤
+                                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget
+                                                      rows arity count depth bound
+'OperandNativeKernels.constructed_operand' depends on axioms: [propext, Classical.choice, Quot.sound]

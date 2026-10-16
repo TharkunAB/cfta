@@ -1,0 +1,153 @@
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:45:99: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+bits : Nat
+source : Machine Symbol Guard
+before : Checked (bits + 2)
+request : EdgeRequest Symbol Guard
+inputs : SourceCurrentAllocatedFiniteOrdinaryWordCode.EdgeInputs bits source request
+mismatch : request.left.children.length ≠ request.right.children.length
+⊢ (if request.left.children.length ≠ request.right.children.length then
+      Outcome.yielded (Control.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind Code.pure))
+        { native := before.native, operations := SourceEqualityMkEdgeAllocation.emptyField before.operations }
+    else
+      match
+        SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints with
+      | Except.error message => Outcome.constraintError message before
+      | Except.ok none =>
+        Outcome.blocked (Blocked.missingField request.left.entry.key.constraint) (Control.edgeBody request Code.pure)
+          before
+      | Except.ok (some first) =>
+        match
+          SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints with
+        | Except.error message => Outcome.constraintError message before
+        | Except.ok none =>
+          Outcome.blocked (Blocked.missingField request.right.entry.key.constraint) (Control.edgeBody request Code.pure)
+            before
+        | Except.ok (some second) =>
+          match
+            (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                request.left.children.length request.right.children.length before.operations).fst with
+          | Except.error message =>
+            Outcome.constraintError message
+              { native := before.native,
+                operations :=
+                  (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                      request.left.children.length request.right.children.length before.operations).snd }
+          | Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.mismatch =>
+            Outcome.yielded (Control.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind Code.pure))
+              { native := before.native,
+                operations :=
+                  SourceEqualityMkEdgeAllocation.emptyField
+                    (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                        request.left.children.length request.right.children.length before.operations).snd }
+          | Except.ok SourceEqualityIntersectionEdgeAllocation.Branch.rejected =>
+            Outcome.yielded (Control.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind Code.pure))
+              { native := before.native,
+                operations :=
+                  SourceEqualityMkEdgeAllocation.emptyField
+                    (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                        request.left.children.length request.right.children.length before.operations).snd }
+          | Except.ok (SourceEqualityIntersectionEdgeAllocation.Branch.ready combined) =>
+            Outcome.yielded
+              (Control.code
+                ((SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined).bind
+                  Code.pure))
+              { native := before.native,
+                operations :=
+                  (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                      request.left.children.length request.right.children.length before.operations).snd }) =
+    Outcome.yielded (Control.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind Code.pure))
+      { native := before.native, operations := SourceEqualityMkEdgeAllocation.emptyField before.operations }
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:48:71: error: Application type mismatch: The argument
+  one
+has type
+  step (Control.edgeBody request Code.pure) before =
+    Outcome.yielded (Control.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind Code.pure))
+      { native := before.native, operations := SourceEqualityMkEdgeAllocation.emptyField before.operations }
+but is expected to have type
+  step (Control.edgeBody request Code.pure) before = Outcome.yielded ?m.109 before
+in the application
+  SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.step_trace bits source (Control.edgeBody request Code.pure) ?m.109
+    before before ⟨inputs, fun x => True.intro⟩ one
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:46:54: warning: This simp argument is unused:
+  mismatch
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, SourceEqualityNativeDemand.body, ite_true, SourceEqualityNativeDemand.sentinel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:46:64: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, SourceEqualityNativeDemand.body, mismatch, SourceEqualityNativeDemand.sentinel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'MicroCFTA.QueryWorkTraceIndependentKernels.single_makeEdge' depends on axioms: [propext, Classical.choice, Quot.sound]
+@single_makeEdge : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (source : Machine Symbol Guard) (before : Checked (bits + 2)) (symbol : Symbol) (guard : Guard)
+  (children : List (Value Symbol Guard)),
+  have job := makeEdge symbol guard children;
+  have actual := run job before.native.machine.heap;
+  have after :=
+    {
+      native :=
+        advance before.native
+          (have __src := before.native.machine;
+          { heap := actual.snd, domains := __src.domains }),
+      operations := before.operations };
+  step (Control.code (Code.work job Code.pure)) before = Outcome.yielded (Control.code (Code.pure actual.fst)) after ∧
+    Trace before.native.machine.heap after.native.machine.heap (observe job before.native.machine.heap)
+'MicroCFTA.QueryWorkTraceIndependentKernels.mismatched_body_zero_work' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+@mismatched_body_zero_work : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (source : Machine Symbol Guard) (before : Checked (bits + 2)) (request : EdgeRequest Symbol Guard),
+  SourceCurrentAllocatedFiniteOrdinaryWordCode.EdgeInputs bits source request →
+    request.left.children.length ≠ request.right.children.length →
+      have after :=
+        { native := before.native, operations := SourceEqualityMkEdgeAllocation.emptyField before.operations };
+      Trace before.native.machine.heap after.native.machine.heap [] ∧
+        step (Control.edgeBody request Code.pure) before =
+          Outcome.yielded (Control.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind Code.pure)) after
+'MicroCFTA.QueryWorkTraceIndependentKernels.query_prefix_work_budget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@query_prefix_work_budget : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (before : Checked (bits + 2)),
+  SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    ∀ (left right : Value Symbol Guard),
+      Available before.native.machine.heap left →
+        Available before.native.machine.heap right →
+          SourceCurrentAllocatedFiniteOrdinaryDomain.Node left →
+            SourceCurrentAllocatedFiniteOrdinaryDomain.Node right →
+              SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits before →
+                ∀ (fuel : Nat) (next : Control (Value Symbol Guard)) (after : Checked (bits + 2)),
+                  SourceEqualityNativeDemand.Steps fuel
+                      (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before next after →
+                    ∃ requests,
+                      Trace before.native.machine.heap after.native.machine.heap requests ∧
+                        nodeRequests requests + edgeRequests requests ≤
+                          SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget left right
+'MicroCFTA.QueryWorkTraceIndependentKernels.consecutive_prefixes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@consecutive_prefixes : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {A : Type}
+  (bits : Nat) (source : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid source →
+    ∀ (firstFuel lastFuel : Nat) (control middle next : Control A) (before current after : Checked (bits + 2)),
+      Origins source before.native →
+        Certified bits source control →
+          SourceEqualityNativeDemand.Steps firstFuel control before middle current →
+            SourceEqualityNativeDemand.Steps lastFuel middle current next after →
+              ∃ requests,
+                requests = requestsThrough firstFuel control before ++ requestsThrough lastFuel middle current ∧
+                  Trace before.native.machine.heap after.native.machine.heap requests ∧
+                    after.native.machine.heap.nodes.next =
+                        before.native.machine.heap.nodes.next +
+                          SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations requests ∧
+                      after.native.machine.heap.edges.next =
+                        before.native.machine.heap.edges.next +
+                          SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations requests

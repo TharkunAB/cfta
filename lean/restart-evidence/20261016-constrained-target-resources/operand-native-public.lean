@@ -1,0 +1,6 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandNativeStores
+
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandNativeStores.native
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandNativeStores.native
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandNativeStores.receipt
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandNativeStores.receipt

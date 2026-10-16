@@ -1,0 +1,812 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows : Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes : Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges : Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows : Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget : Nat → Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget : Nat → Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.base_le_foldRows' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.base_le_foldRows : ∀ (base steps : Nat),
+  LE.le.{0} base (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows base steps)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_succ' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_succ : ∀ (base steps : Nat),
+  LE.le.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows base steps)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows base (HAdd.hAdd.{0, 0, 0} steps 1))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_succ_square' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_succ_square : ∀ (base steps : Nat),
+  Eq.{1} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows base (HAdd.hAdd.{0, 0, 0} steps 1))
+    (HMul.hMul.{0, 0, 0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows base steps)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows base steps))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_mono : ∀ (base : Nat) {first last : Nat},
+  LE.le.{0} first last →
+    LE.le.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows base first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows base last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_parameters_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_parameters_mono : ∀ (steps : Nat)
+  {first last : Nat},
+  LE.le.{0} first last →
+    LE.le.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows first steps)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows last steps)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes_succ' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes_succ : ∀
+  (operand base arity bound steps : Nat),
+  LE.le.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes operand base arity bound steps)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes operand base arity bound
+      (HAdd.hAdd.{0, 0, 0} steps 1))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes_mono : ∀ (operand base arity bound : Nat)
+  {first last : Nat},
+  LE.le.{0} first last →
+    LE.le.{0}
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes operand base arity bound first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes operand base arity bound last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges_mono : ∀ (operand base arity bound : Nat)
+  {first last : Nat},
+  LE.le.{0} first last →
+    LE.le.{0}
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges operand base arity bound first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges operand base arity bound last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes_parameters_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes_parameters_mono : ∀ (steps : Nat)
+  {firstOperand lastOperand firstRows lastRows firstArity lastArity firstBound lastBound : Nat},
+  LE.le.{0} firstOperand lastOperand →
+    LE.le.{0} firstRows lastRows →
+      LE.le.{0} firstArity lastArity →
+        LE.le.{0} firstBound lastBound →
+          LE.le.{0}
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes firstOperand firstRows
+              firstArity firstBound steps)
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes lastOperand lastRows lastArity
+              lastBound steps)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges_parameters_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges_parameters_mono : ∀ (steps : Nat)
+  {firstOperand lastOperand firstRows lastRows firstArity lastArity firstBound lastBound : Nat},
+  LE.le.{0} firstOperand lastOperand →
+    LE.le.{0} firstRows lastRows →
+      LE.le.{0} firstArity lastArity →
+        LE.le.{0} firstBound lastBound →
+          LE.le.{0}
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges firstOperand firstRows
+              firstArity firstBound steps)
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges lastOperand lastRows lastArity
+              lastBound steps)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows_mono' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows_mono : ∀
+  {firstRows lastRows firstCount lastCount firstDepth lastDepth firstBound lastBound : Nat},
+  LE.le.{0} firstRows lastRows →
+    LE.le.{0} firstCount lastCount →
+      LE.le.{0} firstDepth lastDepth →
+        LE.le.{0} firstBound lastBound →
+          LE.le.{0}
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows firstRows firstCount
+              firstDepth firstBound)
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows lastRows lastCount lastDepth
+              lastBound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows_le_foldRows' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows_le_foldRows : ∀
+  (rows count depth bound steps : Nat),
+  LE.le.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound steps)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_base' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_base : ∀ (rows count depth bound : Nat),
+  Eq.{1} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound 0)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_step' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_step : ∀
+  (rows count depth bound steps : Nat),
+  Eq.{1}
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound
+      (HAdd.hAdd.{0, 0, 0} steps 1))
+    (HMul.hMul.{0, 0, 0}
+      (max.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound steps))
+      (max.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound steps)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_mono : ∀ (rows count depth bound : Nat)
+  {first last : Nat},
+  LE.le.{0} first last →
+    LE.le.{0}
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_parameters_mono' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_parameters_mono : ∀ (steps : Nat)
+  {firstRows lastRows firstCount lastCount firstDepth lastDepth firstBound lastBound : Nat},
+  LE.le.{0} firstRows lastRows →
+    LE.le.{0} firstCount lastCount →
+      LE.le.{0} firstDepth lastDepth →
+        LE.le.{0} firstBound lastBound →
+          LE.le.{0}
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows firstRows firstCount
+              firstDepth firstBound steps)
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows lastRows lastCount lastDepth
+              lastBound steps)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget_base' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget_base : ∀
+  (rows arity count depth bound : Nat),
+  Eq.{1} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound 0)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget rows arity count depth bound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget_base' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget_base : ∀
+  (rows arity count depth bound : Nat),
+  Eq.{1} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound 0)
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget rows arity count depth bound)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget_step' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget_step : ∀
+  (rows arity count depth bound steps : Nat),
+  Eq.{1}
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound
+      (HAdd.hAdd.{0, 0, 0} steps 1))
+    (HAdd.hAdd.{0, 0, 0}
+      (HAdd.hAdd.{0, 0, 0}
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget rows arity count depth bound)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound
+          steps))
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+        (max.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound steps))
+        (max.{0} arity 1) bound))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget_step' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget_step : ∀
+  (rows arity count depth bound steps : Nat),
+  Eq.{1}
+    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound
+      (HAdd.hAdd.{0, 0, 0} steps 1))
+    (HAdd.hAdd.{0, 0, 0}
+      (HAdd.hAdd.{0, 0, 0}
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget rows arity count depth bound)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound
+          steps))
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+        (max.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound steps))
+        (max.{0} arity 1) bound))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.node_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.node_mono : ∀ (rows arity count depth bound : Nat)
+  {first last : Nat},
+  LE.le.{0} first last →
+    LE.le.{0}
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edge_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edge_mono : ∀ (rows arity count depth bound : Nat)
+  {first last : Nat},
+  LE.le.{0} first last →
+    LE.le.{0}
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound first)
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound last)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.node_parameters_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.node_parameters_mono : ∀ (steps : Nat)
+  {firstRows lastRows firstArity lastArity firstCount lastCount firstDepth lastDepth firstBound lastBound : Nat},
+  LE.le.{0} firstRows lastRows →
+    LE.le.{0} firstArity lastArity →
+      LE.le.{0} firstCount lastCount →
+        LE.le.{0} firstDepth lastDepth →
+          LE.le.{0} firstBound lastBound →
+            LE.le.{0}
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget firstRows firstArity
+                firstCount firstDepth firstBound steps)
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget lastRows lastArity lastCount
+                lastDepth lastBound steps)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edge_parameters_mono' depends on axioms: [propext,
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edge_parameters_mono : ∀ (steps : Nat)
+  {firstRows lastRows firstArity lastArity firstCount lastCount firstDepth lastDepth firstBound lastBound : Nat},
+  LE.le.{0} firstRows lastRows →
+    LE.le.{0} firstArity lastArity →
+      LE.le.{0} firstCount lastCount →
+        LE.le.{0} firstDepth lastDepth →
+          LE.le.{0} firstBound lastBound →
+            LE.le.{0}
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget firstRows firstArity
+                firstCount firstDepth firstBound steps)
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget lastRows lastArity lastCount
+                lastDepth lastBound steps)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandNativeStores.native' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandNativeStores.native : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {path : List.{0} Int}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo}
+  {output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before memo output after
+      saved memos final →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+        MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored after.native ∧
+              MicroCFTA.SourceRecursiveIntersectionNative.Idle after.native
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandNativeStores.receipt' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandNativeStores.receipt : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {path : List.{0} Int}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo}
+  {output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before memo output after
+      saved memos final →
+    MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+            MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored after.native ∧
+                    MicroCFTA.SourceRecursiveIntersectionNative.Idle after.native
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.step_trace' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.step_trace : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {A : Type} (bits : Nat)
+  (source :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State (HAdd.hAdd.{0, 0, 0} bits 2)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Certified bits source control →
+    Eq.{2} (MicroCFTA.SourceEqualityNativeDemand.step control before)
+        (MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded next after) →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before.native.machine.heap
+        after.native.machine.heap
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.step_requests control before)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.prefix' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.prefix : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {A : Type} (bits : Nat)
+  (source :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceRecursiveIntersectionKernel.Valid source →
+    ∀ (fuel : Nat) (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+      (before after : MicroCFTA.SourceEqualityNativeDemand.State (HAdd.hAdd.{0, 0, 0} bits 2)),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Origins source before.native →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Certified bits source control →
+          MicroCFTA.SourceEqualityNativeDemand.Steps fuel control before next after →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace before.native.machine.heap
+              after.native.machine.heap
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel control before)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetQueryResources.counted' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetQueryResources.counted : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits rows arity bound : Nat)
+  {left right value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State (HAdd.hAdd.{0, 0, 0} bits 2)},
+  MicroCFTA.SourceCurrentAllocatedTargetQuery.Step left right before value after →
+    MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+          MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left →
+            MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity left →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity right →
+                  LE.le.{0}
+                      (max.{0} (MicroCFTA.MergedOrdinaryHeight.height left)
+                        (MicroCFTA.MergedOrdinaryHeight.height right))
+                      bound →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits before →
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored after.native ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                              (HMul.hMul.{0, 0, 0} rows rows) (max.{0} arity 1) value ∧
+                            LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.height value)
+                                (MicroCFTA.MergedOrdinaryHeight.height left) ∧
+                              LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.height value)
+                                  (MicroCFTA.MergedOrdinaryHeight.height right) ∧
+                                Exists.{1} fun requests =>
+                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace
+                                      before.native.machine.heap after.native.machine.heap requests ∧
+                                    LE.le.{0}
+                                        (HAdd.hAdd.{0, 0, 0}
+                                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                                            requests)
+                                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                                            requests))
+                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                          rows arity bound) ∧
+                                      LE.le.{0} after.native.machine.heap.nodes.next
+                                          (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.nodes.next
+                                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                              rows arity bound)) ∧
+                                        LE.le.{0} after.native.machine.heap.edges.next
+                                          (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.edges.next
+                                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                              rows arity bound))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetQueryResources.finite' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetQueryResources.finite : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (bits rows arity bound : Nat)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State (HAdd.hAdd.{0, 0, 0} bits 2)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+          MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left →
+            MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right →
+              Eq.{1} left.free List.nil.{0} →
+                Eq.{1} right.free List.nil.{0} →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity left →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity right →
+                      LE.le.{0}
+                          (max.{0} (MicroCFTA.MergedOrdinaryHeight.height left)
+                            (MicroCFTA.MergedOrdinaryHeight.height right))
+                          bound →
+                        LE.le.{0}
+                            (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.nodes.next
+                              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity
+                                bound))
+                            (HPow.hPow.{0, 0, 0} 2 bits) →
+                          LE.le.{0}
+                              (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.edges.next
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity
+                                  bound))
+                              (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} bits 2)) →
+                            ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                              MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                                Exists.{1} fun next =>
+                                  Exists.{1} fun value =>
+                                    Exists.{2} fun after =>
+                                      Exists.{1} fun requests =>
+                                        MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left
+                                            right before value after memos ∧
+                                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+                                                after.native ∧
+                                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                                                  (HMul.hMul.{0, 0, 0} rows rows) (max.{0} arity 1) value ∧
+                                                LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.height value)
+                                                    (MicroCFTA.MergedOrdinaryHeight.height left) ∧
+                                                  LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.height value)
+                                                      (MicroCFTA.MergedOrdinaryHeight.height right) ∧
+                                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace
+                                                        before.native.machine.heap after.native.machine.heap requests ∧
+                                                      LE.le.{0}
+                                                          (HAdd.hAdd.{0, 0, 0}
+                                                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                                                              requests)
+                                                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                                                              requests))
+                                                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                                            rows arity bound) ∧
+                                                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity
+                                                            bits after ∧
+                                                          LE.le.{0} after.native.machine.heap.nodes.next
+                                                              (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.nodes.next
+                                                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                                                  rows arity bound)) ∧
+                                                            LE.le.{0} after.native.machine.heap.edges.next
+                                                              (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.edges.next
+                                                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                                                  rows arity bound))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.fold_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.fold_complete : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (bits : Nat)
+  (values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (seed : List.{0} Int) (paths : List.{0} (List.{0} Int))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State (HAdd.hAdd.{0, 0, 0} bits 2))
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+                (∀
+                    (ambient :
+                      MicroCFTA.InternedGuardedLanguage.Env
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                  ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                    MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      ∀ (rows arity count depth bound : Nat),
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity values →
+                          LE.le.{0} (List.length.{0} values) count →
+                            (∀ (path : List.{0} Int),
+                                Membership.mem.{0, 0} (List.cons.{0} seed paths) path →
+                                  LE.le.{0} (List.length.{0} path) depth) →
+                              LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.childrenHeight values) bound →
+                                LE.le.{0}
+                                    (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.nodes.next
+                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows
+                                        arity count depth bound (List.length.{0} paths)))
+                                    (HPow.hPow.{0, 0, 0} 2 bits) →
+                                  LE.le.{0}
+                                      (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.edges.next
+                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget
+                                          rows arity count depth bound (List.length.{0} paths)))
+                                      (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} bits 2)) →
+                                    Exists.{1} fun result =>
+                                      Exists.{2} fun after =>
+                                        Exists.{1} fun saved =>
+                                          Exists.{1} fun next =>
+                                            Exists.{1} fun final =>
+                                              Exists.{1} fun requests =>
+                                                Exists.{0} fun actual =>
+                                                  MicroCFTA.SourceCurrentAllocatedTargetComplete.FoldReads formulas
+                                                      solver actual memos final ∧
+                                                    MicroCFTA.SourceCurrentAllocatedTargetComplete.Receipt formulas
+                                                        solver next values (List.cons.{0} seed paths) before memo result
+                                                        after saved memos final ∧
+                                                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                                                          saved ∧
+                                                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored
+                                                            after.native ∧
+                                                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+                                                              after.native ∧
+                                                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                                                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows
+                                                                  rows count depth bound (List.length.{0} paths))
+                                                                (max.{0} arity 1) result ∧
+                                                              LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.height result)
+                                                                  bound ∧
+                                                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace
+                                                                    before.native.machine.heap after.native.machine.heap
+                                                                    requests ∧
+                                                                  LE.le.{0}
+                                                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                                                                        requests)
+                                                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget
+                                                                        rows arity count depth bound
+                                                                        (List.length.{0} paths)) ∧
+                                                                    ⋯
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget : Nat → Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget : Nat → Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.outputRows' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.outputRows : Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.target_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.target_complete : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (bits : Nat)
+  (values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List.{0} (List.{0} Int)) (before : MicroCFTA.SourceEqualityNativeDemand.State (HAdd.hAdd.{0, 0, 0} bits 2))
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+                (∀
+                    (ambient :
+                      MicroCFTA.InternedGuardedLanguage.Env
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                  ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                    MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      ∀ (rows arity count depth bound : Nat),
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity values →
+                          LE.le.{0} (List.length.{0} values) count →
+                            (∀ (path : List.{0} Int),
+                                Membership.mem.{0, 0} paths path → LE.le.{0} (List.length.{0} path) depth) →
+                              LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.childrenHeight values) bound →
+                                LE.le.{0}
+                                    (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.nodes.next
+                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget rows
+                                        arity count depth bound (List.length.{0} paths)))
+                                    (HPow.hPow.{0, 0, 0} 2 bits) →
+                                  LE.le.{0}
+                                      (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.edges.next
+                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget rows
+                                          arity count depth bound (List.length.{0} paths)))
+                                      (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} bits 2)) →
+                                    Exists.{1} fun result =>
+                                      Exists.{2} fun after =>
+                                        Exists.{1} fun saved =>
+                                          Exists.{1} fun next =>
+                                            Exists.{1} fun final =>
+                                              Exists.{1} fun requests =>
+                                                Exists.{0} fun actual =>
+                                                  MicroCFTA.SourceCurrentAllocatedTargetWorkerCompletion.StableRun
+                                                      (fun p h m s n =>
+                                                        MicroCFTA.SourceCurrentAllocatedTargetWorker.target p h m s n
+                                                          values paths before memo)
+                                                      result after saved ∧
+                                                    MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads formulas
+                                                        solver actual memos final ∧
+                                                      MicroCFTA.SourceCurrentAllocatedTargetComplete.Receipt formulas
+                                                          solver next values paths before memo result after saved memos
+                                                          final ∧
+                                                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored
+                                                            saved ∧
+                                                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored
+                                                              after.native ∧
+                                                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored
+                                                                after.native ∧
+                                                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                                                                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.outputRows
+                                                                    rows count depth bound (List.length.{0} paths))
+                                                                  (max.{0} arity 1) result ∧
+                                                                LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.height result)
+                                                                    bound ∧
+                                                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace
+                                                                      before.native.machine.heap
+                                                                      after.native.machine.heap requests ∧
+                                                                    LE.le.{0}
+                                                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                                                                          requests)
+                                                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget
+                                                                          rows arity count depth bound
+                                                                          (List.length.{0} paths)) ∧
+                                                                      ⋯
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.stable_unique' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.stable_unique : ∀ {width : Nat}
+  {evaluation : Nat → Nat → Nat → Nat → Nat → MicroCFTA.SourceCurrentAllocatedTargetWorker.Outcome width}
+  {first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after later : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {saved current :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedTargetWorkerCompletion.StableRun evaluation first after saved →
+    MicroCFTA.SourceCurrentAllocatedTargetWorkerCompletion.StableRun evaluation second later current →
+      Eq.{1} first second ∧ Eq.{2} after later ∧ Eq.{1} saved current
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.operand_unique' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.operand_unique : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {path : List.{0} Int}
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after later : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved current :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand path values before memo first after saved →
+    MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand path values before memo second later current →
+      Eq.{1} first second ∧ Eq.{2} after later ∧ Eq.{1} saved current
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.fold_unique' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.fold_unique : ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {seed : List.{0} Int} {paths : List.{0} (List.{0} Int)}
+  {before after later : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved current :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedTargetGraph.Fold values seed paths before memo first after saved →
+    MicroCFTA.SourceCurrentAllocatedTargetGraph.Fold values seed paths before memo second later current →
+      Eq.{1} first second ∧ Eq.{2} after later ∧ Eq.{1} saved current
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.fold_capacity' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.fold_capacity : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (bits : Nat)
+  (values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (seed : List.{0} Int) (paths : List.{0} (List.{0} Int))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State (HAdd.hAdd.{0, 0, 0} bits 2))
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+                (∀
+                    (ambient :
+                      MicroCFTA.InternedGuardedLanguage.Env
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                  ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                    MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      ∀ (rows arity count depth bound : Nat),
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity values →
+                          LE.le.{0} (List.length.{0} values) count →
+                            (∀ (path : List.{0} Int),
+                                Membership.mem.{0, 0} (List.cons.{0} seed paths) path →
+                                  LE.le.{0} (List.length.{0} path) depth) →
+                              LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.childrenHeight values) bound →
+                                LE.le.{0}
+                                    (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.nodes.next
+                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows
+                                        arity count depth bound (List.length.{0} paths)))
+                                    (HPow.hPow.{0, 0, 0} 2 bits) →
+                                  LE.le.{0}
+                                      (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.edges.next
+                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget
+                                          rows arity count depth bound (List.length.{0} paths)))
+                                      (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} bits 2)) →
+                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity bits
+                                      values seed paths before memo
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.target_capacity' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.target_capacity : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (bits : Nat)
+  (values :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List.{0} (List.{0} Int)) (before : MicroCFTA.SourceEqualityNativeDemand.State (HAdd.hAdd.{0, 0, 0} bits 2))
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+                (∀
+                    (ambient :
+                      MicroCFTA.InternedGuardedLanguage.Env
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                  ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                    MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      ∀ (rows arity count depth bound : Nat),
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.ChildrenShape rows arity values →
+                          LE.le.{0} (List.length.{0} values) count →
+                            (∀ (path : List.{0} Int),
+                                Membership.mem.{0, 0} paths path → LE.le.{0} (List.length.{0} path) depth) →
+                              LE.le.{0} (MicroCFTA.MergedOrdinaryHeight.childrenHeight values) bound →
+                                LE.le.{0}
+                                    (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.nodes.next
+                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget rows
+                                        arity count depth bound (List.length.{0} paths)))
+                                    (HPow.hPow.{0, 0, 0} 2 bits) →
+                                  LE.le.{0}
+                                      (HAdd.hAdd.{0, 0, 0} before.native.machine.heap.edges.next
+                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget rows
+                                          arity count depth bound (List.length.{0} paths)))
+                                      (HPow.hPow.{0, 0, 0} 2 (HAdd.hAdd.{0, 0, 0} bits 2)) →
+                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.TargetCapacity bits
+                                      values paths before memo

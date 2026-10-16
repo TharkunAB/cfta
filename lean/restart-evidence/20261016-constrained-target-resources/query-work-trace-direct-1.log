@@ -1,0 +1,64 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.lean:39:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Outcome.yielded next after).state.native.machine.heap
+in the target expression
+  Trace before.native.machine.heap after.native.machine.heap (step_requests (Control.edgeBody request resume) before)
+
+case edgeBody
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+A : Type
+bits : Nat
+source : Machine Symbol Guard
+next : Control A
+before after : Checked (bits + 2)
+request : SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard
+resume : EdgeValue Symbol Guard → Code Symbol Guard A
+certificate : Certified bits source (Control.edgeBody request resume)
+one : step (Control.edgeBody request resume) before = Outcome.yielded next after
+same : (Outcome.yielded next after).state.native = before.native
+heap : (Outcome.yielded next after).state.native.machine.heap = before.native.machine.heap
+⊢ Trace before.native.machine.heap after.native.machine.heap (step_requests (Control.edgeBody request resume) before)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.lean:60:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Outcome.yielded next after).state.native.machine.heap
+in the target expression
+  Trace before.native.machine.heap after.native.machine.heap
+    (step_requests (Control.code (Code.node request resume)) before)
+
+case code.node
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+A : Type
+bits : Nat
+source : Machine Symbol Guard
+next : Control A
+before after : Checked (bits + 2)
+request : SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard
+resume : Value Symbol Guard → Code Symbol Guard A
+certificate : Certified bits source (Control.code (Code.node request resume))
+one : step (Control.code (Code.node request resume)) before = Outcome.yielded next after
+same : (Outcome.yielded next after).state.native.machine = before.native.machine
+heap : (Outcome.yielded next after).state.native.machine.heap = before.native.machine.heap
+⊢ Trace before.native.machine.heap after.native.machine.heap
+    (step_requests (Control.code (Code.node request resume)) before)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.lean:75:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Outcome.yielded next after).state.native.machine.heap
+in the target expression
+  Trace before.native.machine.heap after.native.machine.heap
+    (step_requests (Control.code (Code.edge request resume)) before)
+
+case code.edge
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+A : Type
+bits : Nat
+source : Machine Symbol Guard
+next : Control A
+before after : Checked (bits + 2)
+request : SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard
+resume : EdgeValue Symbol Guard → Code Symbol Guard A
+certificate : Certified bits source (Control.code (Code.edge request resume))
+one : step (Control.code (Code.edge request resume)) before = Outcome.yielded next after
+same : (Outcome.yielded next after).state.native.machine = before.native.machine
+heap : (Outcome.yielded next after).state.native.machine.heap = before.native.machine.heap
+⊢ Trace before.native.machine.heap after.native.machine.heap
+    (step_requests (Control.code (Code.edge request resume)) before)

@@ -1,0 +1,10 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.step_trace
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.step_trace
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.prefix
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.prefix

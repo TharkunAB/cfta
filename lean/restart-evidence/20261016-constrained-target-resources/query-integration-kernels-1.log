@@ -1,0 +1,90 @@
+@TargetQueryIntegration.two_generated_queries : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (bits rows arity bound : Nat)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored before.native →
+          MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left →
+            MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right →
+              left.free = [] →
+                right.free = [] →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity left →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape rows arity right →
+                      max (MicroCFTA.MergedOrdinaryHeight.height left) (MicroCFTA.MergedOrdinaryHeight.height right) ≤
+                          bound →
+                        before.native.machine.heap.nodes.next +
+                              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity
+                                  bound +
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                  (rows * rows) (max arity 1) bound) ≤
+                            2 ^ bits →
+                          before.native.machine.heap.edges.next +
+                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget rows arity
+                                    bound +
+                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                    (rows * rows) (max arity 1) bound) ≤
+                              2 ^ (bits + 2) →
+                            ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                              MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                                ∃ middleInventory finalInventory firstValue output middle after requests,
+                                  MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt formulas solver middleInventory
+                                      left right before firstValue middle memos ∧
+                                    MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt formulas solver finalInventory
+                                        firstValue firstValue middle output after memos ∧
+                                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputStored.Stored after.native ∧
+                                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeProfile.NodeShape
+                                              (rows * rows * (rows * rows)) (max (max arity 1) 1) output ∧
+                                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits after ∧
+                                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace
+                                                  before.native.machine.heap after.native.machine.heap requests ∧
+                                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                                                        requests +
+                                                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                                                        requests ≤
+                                                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                                        rows arity bound +
+                                                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                                        (rows * rows) (max arity 1) bound ∧
+                                                  after.native.machine.heap.nodes.next ≤
+                                                      before.native.machine.heap.nodes.next +
+                                                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                                            rows arity bound +
+                                                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                                            (rows * rows) (max arity 1) bound) ∧
+                                                    after.native.machine.heap.edges.next ≤
+                                                        before.native.machine.heap.edges.next +
+                                                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                                              rows arity bound +
+                                                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+                                                              (rows * rows) (max arity 1) bound) ∧
+                                                      ∀
+                                                        (ambient :
+                                                          MicroCFTA.InternedGuardedLanguage.Env
+                                                            (MicroCFTA.SourceObservations.Label
+                                                              MicroCFTA.FullSyntax.Formula))
+                                                        (term :
+                                                          MicroCFTA.Language.Term
+                                                            (MicroCFTA.SourceObservations.Label
+                                                              MicroCFTA.FullSyntax.Formula)),
+                                                        MicroCFTA.InternedGuardedLanguage.meaning
+                                                            (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                                            ambient output term ↔
+                                                          MicroCFTA.InternedGuardedLanguage.meaning
+                                                              (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                                              ambient left term ∧
+                                                            MicroCFTA.InternedGuardedLanguage.meaning
+                                                              (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                                              ambient right term
+'TargetQueryIntegration.two_generated_queries' depends on axioms: [propext, Classical.choice, Quot.sound]

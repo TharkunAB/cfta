@@ -1,0 +1,136 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows' does not depend on any axioms
+operandRows : Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows' does not depend on any axioms
+foldRows : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes' does not depend on any axioms
+foldNodes : Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges' does not depend on any axioms
+foldEdges : Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows' does not depend on any axioms
+targetRows : Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget' does not depend on any axioms
+nodeBudget : Nat → Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget' does not depend on any axioms
+edgeBudget : Nat → Nat → Nat → Nat → Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.base_le_foldRows' depends on axioms: [propext]
+base_le_foldRows : ∀ (base steps : Nat), base ≤ foldRows base steps
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_succ' depends on axioms: [propext]
+foldRows_succ : ∀ (base steps : Nat), foldRows base steps ≤ foldRows base (steps + 1)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_succ_square' depends on axioms: [propext]
+foldRows_succ_square : ∀ (base steps : Nat), foldRows base (steps + 1) = foldRows base steps * foldRows base steps
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_mono' depends on axioms: [propext]
+foldRows_mono : ∀ (base : Nat) {first last : Nat}, first ≤ last → foldRows base first ≤ foldRows base last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldRows_parameters_mono' depends on axioms: [propext]
+foldRows_parameters_mono : ∀ (steps : Nat) {first last : Nat}, first ≤ last → foldRows first steps ≤ foldRows last steps
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes_succ' depends on axioms: [propext,
+ Quot.sound]
+foldNodes_succ : ∀ (operand base arity bound steps : Nat),
+  foldNodes operand base arity bound steps ≤ foldNodes operand base arity bound (steps + 1)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes_mono' depends on axioms: [propext,
+ Quot.sound]
+foldNodes_mono : ∀ (operand base arity bound : Nat) {first last : Nat},
+  first ≤ last → foldNodes operand base arity bound first ≤ foldNodes operand base arity bound last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges_mono' depends on axioms: [propext,
+ Quot.sound]
+foldEdges_mono : ∀ (operand base arity bound : Nat) {first last : Nat},
+  first ≤ last → foldEdges operand base arity bound first ≤ foldEdges operand base arity bound last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldNodes_parameters_mono' depends on axioms: [propext,
+ Quot.sound]
+foldNodes_parameters_mono : ∀ (steps : Nat)
+  {firstOperand lastOperand firstRows lastRows firstArity lastArity firstBound lastBound : Nat},
+  firstOperand ≤ lastOperand →
+    firstRows ≤ lastRows →
+      firstArity ≤ lastArity →
+        firstBound ≤ lastBound →
+          foldNodes firstOperand firstRows firstArity firstBound steps ≤
+            foldNodes lastOperand lastRows lastArity lastBound steps
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.foldEdges_parameters_mono' depends on axioms: [propext,
+ Quot.sound]
+foldEdges_parameters_mono : ∀ (steps : Nat)
+  {firstOperand lastOperand firstRows lastRows firstArity lastArity firstBound lastBound : Nat},
+  firstOperand ≤ lastOperand →
+    firstRows ≤ lastRows →
+      firstArity ≤ lastArity →
+        firstBound ≤ lastBound →
+          foldEdges firstOperand firstRows firstArity firstBound steps ≤
+            foldEdges lastOperand lastRows lastArity lastBound steps
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows_mono' depends on axioms: [propext]
+@operandRows_mono : ∀ {firstRows lastRows firstCount lastCount firstDepth lastDepth firstBound lastBound : Nat},
+  firstRows ≤ lastRows →
+    firstCount ≤ lastCount →
+      firstDepth ≤ lastDepth →
+        firstBound ≤ lastBound →
+          operandRows firstRows firstCount firstDepth firstBound ≤ operandRows lastRows lastCount lastDepth lastBound
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows_le_foldRows' depends on axioms: [propext]
+operandRows_le_foldRows : ∀ (rows count depth bound steps : Nat),
+  operandRows rows count depth bound ≤ targetRows rows count depth bound steps
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_base' does not depend on any axioms
+targetRows_base : ∀ (rows count depth bound : Nat),
+  targetRows rows count depth bound 0 = operandRows rows count depth bound
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_step' does not depend on any axioms
+targetRows_step : ∀ (rows count depth bound steps : Nat),
+  targetRows rows count depth bound (steps + 1) =
+    max (operandRows rows count depth bound) (targetRows rows count depth bound steps) *
+      max (operandRows rows count depth bound) (targetRows rows count depth bound steps)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_mono' depends on axioms: [propext]
+targetRows_mono : ∀ (rows count depth bound : Nat) {first last : Nat},
+  first ≤ last → targetRows rows count depth bound first ≤ targetRows rows count depth bound last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows_parameters_mono' depends on axioms: [propext]
+targetRows_parameters_mono : ∀ (steps : Nat)
+  {firstRows lastRows firstCount lastCount firstDepth lastDepth firstBound lastBound : Nat},
+  firstRows ≤ lastRows →
+    firstCount ≤ lastCount →
+      firstDepth ≤ lastDepth →
+        firstBound ≤ lastBound →
+          targetRows firstRows firstCount firstDepth firstBound steps ≤
+            targetRows lastRows lastCount lastDepth lastBound steps
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget_base' does not depend on any axioms
+nodeBudget_base : ∀ (rows arity count depth bound : Nat),
+  nodeBudget rows arity count depth bound 0 =
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget rows arity count depth bound
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget_base' does not depend on any axioms
+edgeBudget_base : ∀ (rows arity count depth bound : Nat),
+  edgeBudget rows arity count depth bound 0 =
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget rows arity count depth bound
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget_step' does not depend on any axioms
+nodeBudget_step : ∀ (rows arity count depth bound steps : Nat),
+  nodeBudget rows arity count depth bound (steps + 1) =
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget rows arity count depth bound +
+        nodeBudget rows arity count depth bound steps +
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+        (max (operandRows rows count depth bound) (targetRows rows count depth bound steps)) (max arity 1) bound
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget_step' does not depend on any axioms
+edgeBudget_step : ∀ (rows arity count depth bound steps : Nat),
+  edgeBudget rows arity count depth bound (steps + 1) =
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget rows arity count depth bound +
+        edgeBudget rows arity count depth bound steps +
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+        (max (operandRows rows count depth bound) (targetRows rows count depth bound steps)) (max arity 1) bound
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.node_mono' depends on axioms: [propext, Quot.sound]
+node_mono : ∀ (rows arity count depth bound : Nat) {first last : Nat},
+  first ≤ last → nodeBudget rows arity count depth bound first ≤ nodeBudget rows arity count depth bound last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edge_mono' depends on axioms: [propext, Quot.sound]
+edge_mono : ∀ (rows arity count depth bound : Nat) {first last : Nat},
+  first ≤ last → edgeBudget rows arity count depth bound first ≤ edgeBudget rows arity count depth bound last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.node_parameters_mono' depends on axioms: [propext,
+ Quot.sound]
+node_parameters_mono : ∀ (steps : Nat)
+  {firstRows lastRows firstArity lastArity firstCount lastCount firstDepth lastDepth firstBound lastBound : Nat},
+  firstRows ≤ lastRows →
+    firstArity ≤ lastArity →
+      firstCount ≤ lastCount →
+        firstDepth ≤ lastDepth →
+          firstBound ≤ lastBound →
+            nodeBudget firstRows firstArity firstCount firstDepth firstBound steps ≤
+              nodeBudget lastRows lastArity lastCount lastDepth lastBound steps
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edge_parameters_mono' depends on axioms: [propext,
+ Quot.sound]
+edge_parameters_mono : ∀ (steps : Nat)
+  {firstRows lastRows firstArity lastArity firstCount lastCount firstDepth lastDepth firstBound lastBound : Nat},
+  firstRows ≤ lastRows →
+    firstArity ≤ lastArity →
+      firstCount ≤ lastCount →
+        firstDepth ≤ lastDepth →
+          firstBound ≤ lastBound →
+            edgeBudget firstRows firstArity firstCount firstDepth firstBound steps ≤
+              edgeBudget lastRows lastArity lastCount lastDepth lastBound steps

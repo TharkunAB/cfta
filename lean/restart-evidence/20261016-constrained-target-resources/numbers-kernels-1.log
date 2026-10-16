@@ -1,0 +1,65 @@
+'TargetBudgetNumberChecks.two_query_tail' does not depend on any axioms
+two_query_tail : foldRows 2 0 = 2 ∧
+  foldRows 2 1 = 4 ∧
+    foldRows 2 2 = 16 ∧
+      foldNodes 3 2 1 1 0 = 3 ∧
+        foldNodes 3 2 1 1 1 = 15 ∧
+          foldNodes 3 2 1 1 2 = 51 ∧ foldEdges 1 2 1 1 0 = 1 ∧ foldEdges 1 2 1 1 1 = 11 ∧ foldEdges 1 2 1 1 2 = 45
+'TargetBudgetNumberChecks.zero_arity_initial_limits' does not depend on any axioms
+zero_arity_initial_limits : operandRows 1 1 0 1 = 1 ∧
+  targetRows 1 1 0 1 2 = 1 ∧
+    nodeBudget 1 0 1 0 1 0 = 3 ∧ nodeBudget 1 0 1 0 1 2 = 15 ∧ edgeBudget 1 0 1 0 1 0 = 1 ∧ edgeBudget 1 0 1 0 1 2 = 9
+'TargetBudgetNumberChecks.widened_caller_limits' depends on axioms: [propext, Quot.sound]
+@widened_caller_limits : ∀
+  {firstRows lastRows firstArity lastArity firstCount lastCount firstDepth lastDepth firstBound lastBound firstSteps
+    lastSteps : Nat},
+  firstRows ≤ lastRows →
+    firstArity ≤ lastArity →
+      firstCount ≤ lastCount →
+        firstDepth ≤ lastDepth →
+          firstBound ≤ lastBound →
+            firstSteps ≤ lastSteps →
+              targetRows firstRows firstCount firstDepth firstBound firstSteps ≤
+                  targetRows lastRows lastCount lastDepth lastBound lastSteps ∧
+                nodeBudget firstRows firstArity firstCount firstDepth firstBound firstSteps ≤
+                    nodeBudget lastRows lastArity lastCount lastDepth lastBound lastSteps ∧
+                  edgeBudget firstRows firstArity firstCount firstDepth firstBound firstSteps ≤
+                    edgeBudget lastRows lastArity lastCount lastDepth lastBound lastSteps
+'TargetBudgetNumberChecks.seed_operand' depends on axioms: [propext, Classical.choice, Quot.sound]
+@seed_operand : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory) (path : List Int)
+  (values : List (Value Symbol Guard)) (before : Checked width) (memo : Memo),
+  SourceCurrentConjunctionClassScan.Ready before →
+    SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      InternedNestedProvenance.Values before.native.machine.heap values →
+        SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+          SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored memo →
+            (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                  memo) →
+              ∀ (memos : EndpointMemoGateTrace.Memos),
+                EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                  ∀ (rows arity count depth bound : Nat),
+                    ChildrenShape rows arity values →
+                      values.length ≤ count →
+                        path.length ≤ depth →
+                          childrenHeight values ≤ bound →
+                            ∃ output after saved final requests,
+                              SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before
+                                  memo output after saved memos final ∧
+                                SourceCurrentAllocatedFiniteOrdinaryMergeProfileCache.Stored saved ∧
+                                  NodeShape (targetRows rows count depth bound 0) (max arity 1) output ∧
+                                    height output ≤ bound ∧
+                                      SourceCurrentAllocatedFiniteOrdinaryConstructorWorkTrace.Trace
+                                          before.native.machine.heap after.native.machine.heap requests ∧
+                                        SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests ≤
+                                            nodeBudget rows arity count depth bound 0 ∧
+                                          SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests ≤
+                                              edgeBudget rows arity count depth bound 0 ∧
+                                            after.native.machine.heap.nodes.next ≤
+                                                before.native.machine.heap.nodes.next +
+                                                  nodeBudget rows arity count depth bound 0 ∧
+                                              after.native.machine.heap.edges.next ≤
+                                                before.native.machine.heap.edges.next +
+                                                  edgeBudget rows arity count depth bound 0

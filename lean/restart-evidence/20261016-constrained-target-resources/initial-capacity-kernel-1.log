@@ -1,0 +1,40 @@
+'MicroCFTA.TargetInitialCapacityIndependentIntegration.initial_budgets_to_universal_ranges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@initial_budgets_to_universal_ranges : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (bits : Nat) (values : List (Value Symbol Guard)) (seed first second : List Int)
+  (before : Checked (bits + 2)) (memo : Memo),
+  Ready before →
+    At formulas solver inventory before →
+      Values before.native.machine.heap values →
+        SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+          Profiles memo →
+            NativeStored before.native →
+              OutputStored before.native →
+                (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                    SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      memo) →
+                  ∀ (memos : Memos),
+                    EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                      ∀ (rows arity count depth bound : Nat),
+                        ChildrenShape rows arity values →
+                          values.length ≤ count →
+                            (∀ (path : List Int), path ∈ [seed, first, second] → path.length ≤ depth) →
+                              childrenHeight values ≤ bound →
+                                before.native.machine.heap.nodes.next + N rows arity count depth bound 3 ≤ 2 ^ bits →
+                                  before.native.machine.heap.edges.next + E rows arity count depth bound 3 ≤
+                                      2 ^ (bits + 2) →
+                                    SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.TargetCapacity bits values
+                                        [seed, first, second] before memo ∧
+                                      TargetRanges values [seed, first, second] before memo ∧
+                                        ∀ (head : Value Symbol Guard) (middle : Checked (bits + 2)) (current : Memo)
+                                          (tail : Value Symbol Guard) (later : Checked (bits + 2)) (saved : Memo),
+                                          Operand first values before memo head middle current →
+                                            Fold values seed [second] middle current tail later saved →
+                                              Capacity bits later ∧
+                                                SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                                                  (SourceEqualityNativeDemand.Control.code
+                                                    (SourceRecursiveIntersectionCode.requestNode
+                                                      IntersectionEmptyDomain.emptyDomain head tail))
+                                                  later

@@ -1,0 +1,136 @@
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:29:4: error: Application type mismatch: The argument
+  fun x => True.intro
+has type
+  ∀ (x : ?m.104), True
+but is expected to have type
+  Certified bits source ?m.100
+in the application
+  SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.step_trace bits source ?m.100 ?m.101 ?m.102 ?m.103 fun x =>
+    True.intro
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:45:21: error: Ambiguous term
+  body
+Possible interpretations:
+  SourceEqualityNativeDemand.body : EdgeRequest Symbol Guard →
+    (EdgeValue Symbol Guard → Code Symbol Guard ?m.99) → Checked ?m.100 → Outcome ?m.100 ?m.99
+  
+  SourceRecursiveIntersectionKernel.body : Value ?m.99 ?m.100 → Value ?m.99 ?m.100
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:45:27: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:44:99: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+bits : Nat
+source : Machine Symbol Guard
+before : Checked (bits + 2)
+request : EdgeRequest Symbol Guard
+inputs : SourceCurrentAllocatedFiniteOrdinaryWordCode.EdgeInputs bits source request
+mismatch : request.left.children.length ≠ request.right.children.length
+⊢ SourceEqualityNativeDemand.body request Code.pure before =
+    Outcome.yielded (Control.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind Code.pure))
+      { native := before.native, operations := SourceEqualityMkEdgeAllocation.emptyField before.operations }
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:47:4: error: Invalid `⟨...⟩` notation: The expected type
+  match ?m.105 with
+  | Control.code code => SourceCurrentAllocatedFiniteOrdinaryWordCode.Certified bits source code
+  | Control.edgeBody request next =>
+    SourceCurrentAllocatedFiniteOrdinaryWordCode.EdgeInputs bits source request ∧
+      ∀ (value : EdgeValue Symbol Guard),
+        SourceCurrentAllocatedFiniteOrdinaryWordCode.Certified bits source (next value)
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:45:27: warning: This simp argument is unused:
+  if_pos mismatch
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, body, sentinel]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:45:44: warning: This simp argument is unused:
+  sentinel
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, body, if_pos mismatch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/restart-evidence/20261016-constrained-target-resources/query-work-trace-kernels.lean:71:57: error: Application type mismatch: The argument
+  certificate
+has type
+  SourceCurrentAllocatedFiniteOrdinaryWordCode.Certified bits before.native.machine
+    (requestNode { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }.domain
+      { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }.left
+      { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }.right)
+but is expected to have type
+  Certified bits before.native.machine ?m.183
+in the application
+  SourceCurrentAllocatedFiniteOrdinaryQueryWorkTrace.prefix bits before.native.machine good.native.machine fuel ?m.183
+    next before after origins certificate
+'MicroCFTA.QueryWorkTraceIndependentKernels.single_makeEdge' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+@single_makeEdge : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (source : Machine Symbol Guard) (before : Checked (bits + 2)) (symbol : Symbol) (guard : Guard)
+  (children : List (Value Symbol Guard)),
+  have job := makeEdge symbol guard children;
+  have actual := run job before.native.machine.heap;
+  have after :=
+    {
+      native :=
+        advance before.native
+          (have __src := before.native.machine;
+          { heap := actual.snd, domains := __src.domains }),
+      operations := before.operations };
+  step (Control.code (Code.work job Code.pure)) before = Outcome.yielded (Control.code (Code.pure actual.fst)) after ∧
+    Trace before.native.machine.heap after.native.machine.heap (observe job before.native.machine.heap)
+'MicroCFTA.QueryWorkTraceIndependentKernels.mismatched_body_zero_work' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+@mismatched_body_zero_work : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (source : Machine Symbol Guard) (before : Checked (bits + 2)) (request : EdgeRequest Symbol Guard),
+  SourceCurrentAllocatedFiniteOrdinaryWordCode.EdgeInputs bits source request →
+    request.left.children.length ≠ request.right.children.length →
+      have after :=
+        { native := before.native, operations := SourceEqualityMkEdgeAllocation.emptyField before.operations };
+      Trace before.native.machine.heap after.native.machine.heap [] ∧
+        step (Control.edgeBody request Code.pure) before =
+          Outcome.yielded (Control.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind Code.pure)) after
+'MicroCFTA.QueryWorkTraceIndependentKernels.query_prefix_work_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+@query_prefix_work_budget : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (before : Checked (bits + 2)),
+  SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    ∀ (left right : Value Symbol Guard),
+      Available before.native.machine.heap left →
+        Available before.native.machine.heap right →
+          SourceCurrentAllocatedFiniteOrdinaryDomain.Node left →
+            SourceCurrentAllocatedFiniteOrdinaryDomain.Node right →
+              SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits before →
+                ∀ (fuel : Nat) (next : Control (Value Symbol Guard)) (after : Checked (bits + 2)),
+                  SourceEqualityNativeDemand.Steps fuel
+                      (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before next after →
+                    ∃ requests,
+                      Trace before.native.machine.heap after.native.machine.heap requests ∧
+                        nodeRequests requests + edgeRequests requests ≤
+                          SourceCurrentAllocatedFiniteOrdinaryNativeBudget.nodeBudget left right
+'MicroCFTA.QueryWorkTraceIndependentKernels.consecutive_prefixes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@consecutive_prefixes : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {A : Type}
+  (bits : Nat) (source : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid source →
+    ∀ (firstFuel lastFuel : Nat) (control middle next : Control A) (before current after : Checked (bits + 2)),
+      Origins source before.native →
+        Certified bits source control →
+          SourceEqualityNativeDemand.Steps firstFuel control before middle current →
+            SourceEqualityNativeDemand.Steps lastFuel middle current next after →
+              ∃ requests,
+                requests = requestsThrough firstFuel control before ++ requestsThrough lastFuel middle current ∧
+                  Trace before.native.machine.heap after.native.machine.heap requests ∧
+                    after.native.machine.heap.nodes.next =
+                        before.native.machine.heap.nodes.next +
+                          SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations requests ∧
+                      after.native.machine.heap.edges.next =
+                        before.native.machine.heap.edges.next +
+                          SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations requests

@@ -1,0 +1,201 @@
+⚠ [759/811] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✖ [1345/1345] Building MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity (1.1s)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.setup.json --json
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.lean:106:27: Unknown identifier `seed`
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.lean:120:125: Unknown identifier `middle`
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.lean:120:132: Unknown identifier `current`
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.lean:123:16: Tactic `subst` failed: 'actualTail' occurs at
+  ?m.888
+
+case cons.right
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+bits : Nat
+values : List (Value Symbol Guard)
+seed : List Int
+rows arity count depth bound : Nat
+profile : ChildrenShape rows arity values
+lengthBound : values.length ≤ count
+heightBound : childrenHeight values ≤ bound
+path : List Int
+paths : List (List Int)
+ih :
+  ∀ (inventory : Inventory) (before : Checked (bits + 2)) (memo : Memo),
+    Ready before →
+      At formulas solver inventory before →
+        Values before.native.machine.heap values →
+          PhysicalStored before.native.machine.heap memo →
+            Profiles memo →
+              NativeStored before.native →
+                OutputStored before.native →
+                  (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                      CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                    ∀ (memos : Memos),
+                      EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        (∀ (path : List Int), path ∈ seed :: paths → path.length ≤ depth) →
+                          before.native.machine.heap.nodes.next +
+                                SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count
+                                  depth bound paths.length ≤
+                              2 ^ bits →
+                            before.native.machine.heap.edges.next +
+                                  SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count
+                                    depth bound paths.length ≤
+                                2 ^ (bits + 2) →
+                              SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity bits values seed paths
+                                before memo
+inventory : Inventory
+before : Checked (bits + 2)
+memo : Memo
+ready : Ready before
+admitted : At formulas solver inventory before
+available : Values before.native.machine.heap values
+physical : PhysicalStored before.native.machine.heap memo
+profiles : Profiles memo
+native : NativeStored before.native
+output : OutputStored before.native
+covered :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo
+memos : Memos
+valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos
+pathsBound : ∀ (path_1 : List Int), path_1 ∈ seed :: path :: paths → path_1.length ≤ depth
+nodes :
+  before.native.machine.heap.nodes.next +
+      (SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget rows arity count depth bound +
+          SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound paths.length +
+        SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+          (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+            (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths.length))
+          (max arity 1) bound) ≤
+    2 ^ bits
+edges :
+  before.native.machine.heap.edges.next +
+      (SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget rows arity count depth bound +
+          SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound paths.length +
+        SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+          (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+            (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths.length))
+          (max arity 1) bound) ≤
+    2 ^ (bits + 2)
+currentMemos : Memos
+_requests✝ : List (SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+_firstNodes :
+  nodeRequests _requests✝ ≤ SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget rows arity count depth bound
+_firstEdges :
+  edgeRequests _requests✝ ≤ SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget rows arity count depth bound
+tailPaths : ∀ (selected : List Int), selected ∈ seed :: paths → selected.length ≤ depth
+actualHead : Value Symbol Guard
+actualMiddle : Checked (bits + 2)
+actualCurrent : Memo
+actualTail : Value Symbol Guard
+actualLater : Checked (bits + 2)
+actualSaved : Memo
+operand : Operand path values before memo actualHead actualMiddle actualCurrent
+rest : Fold values seed paths actualMiddle actualCurrent actualTail actualLater actualSaved
+_headProfile :
+  NodeShape
+    (SourceCurrentAllocatedFiniteOrdinaryMergeProfileBounds.envelope
+      (SourceCurrentAllocatedFiniteOrdinaryProjectionProfile.forestRows rows count depth) bound)
+    arity actualHead
+_headHeight : height actualHead ≤ bound
+_trace✝ : Trace before.native.machine.heap actualMiddle.native.machine.heap _requests✝
+firstNodeSupply :
+  actualMiddle.native.machine.heap.nodes.next ≤
+    before.native.machine.heap.nodes.next +
+      SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget rows arity count depth bound
+firstEdgeSupply :
+  actualMiddle.native.machine.heap.edges.next ≤
+    before.native.machine.heap.edges.next +
+      SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget rows arity count depth bound
+nativeMiddle :
+  NativeStored actualMiddle.native ∧
+    OutputStored actualMiddle.native ∧ SourceRecursiveIntersectionNative.Idle actualMiddle.native
+tailNodes :
+  actualMiddle.native.machine.heap.nodes.next +
+      SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound paths.length ≤
+    2 ^ bits
+tailEdges :
+  actualMiddle.native.machine.heap.edges.next +
+      SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound paths.length ≤
+    2 ^ (bits + 2)
+firstProfiles : Profiles actualCurrent
+tailPlan :
+  SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity bits values seed paths actualMiddle actualCurrent
+first :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before memo actualHead actualMiddle
+    actualCurrent memos currentMemos
+result : Value Symbol Guard
+after : Checked (bits + 2)
+saved : Memo
+_next : Inventory
+_final : Memos
+_requests : List (SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+constructed : Fold values seed paths sorry sorry result after saved
+_reads : FoldReads formulas solver constructed currentMemos _final
+_receipt : Receipt formulas solver _next values (seed :: paths) sorry sorry result after saved currentMemos _final
+_profiles : Profiles saved
+_native : NativeStored after.native
+_output : OutputStored after.native
+_profile :
+  NodeShape (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths.length)
+    (max arity 1) result
+_height : height result ≤ bound
+_trace : Trace sorry.native.machine.heap after.native.machine.heap _requests
+_nodes :
+  nodeRequests _requests ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound paths.length
+_edges :
+  edgeRequests _requests ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound paths.length
+capacity : Capacity bits after
+_nodeSupply :
+  after.native.machine.heap.nodes.next ≤
+    sorry.native.machine.heap.nodes.next +
+      SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound paths.length
+_edgeSupply :
+  after.native.machine.heap.edges.next ≤
+    sorry.native.machine.heap.edges.next +
+      SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound paths.length
+left✝ : actualTail = ?m.888
+right✝ : actualLater = ?m.883 ∧ actualSaved = ?m.886
+⊢ Capacity bits actualLater
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.lean:144:23: Type mismatch
+  fold_capacity formulas solver inventory bits values seed paths before memo ready admitted available
+has type
+  PhysicalStored before.native.machine.heap memo →
+    Profiles memo →
+      NativeStored before.native →
+        OutputStored before.native →
+          (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+              CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+            ∀ (memos : Memos),
+              EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                ∀ (rows arity count depth bound : Nat),
+                  ChildrenShape rows arity values →
+                    values.length ≤ count →
+                      (∀ (path : List Int), path ∈ seed :: paths → path.length ≤ depth) →
+                        childrenHeight values ≤ bound →
+                          before.native.machine.heap.nodes.next +
+                                SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count
+                                  depth bound paths.length ≤
+                              2 ^ bits →
+                            before.native.machine.heap.edges.next +
+                                  SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count
+                                    depth bound paths.length ≤
+                                2 ^ (bits + 2) →
+                              SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity bits values seed paths
+                                before memo
+but is expected to have type
+  SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.TargetCapacity bits values (seed :: paths) before memo
+error: MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity.lean:145:6: unexpected identifier; expected command
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetInitialCapacity
+error: build failed
