@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentAllocatedRecursivePrefixInduction
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixInduction.Admits
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixInduction.Admits
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixInduction.bind
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixInduction.bind
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixInduction.node_bind
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixInduction.node_bind
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixInduction.edge_bind
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixInduction.edge_bind

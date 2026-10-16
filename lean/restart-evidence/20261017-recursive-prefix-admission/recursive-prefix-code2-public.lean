@@ -1,0 +1,43 @@
+import MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.Certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.Certified
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.pure_result
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.pure_result
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.heap_inputs
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.heap_inputs
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.current_inputs
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.current_inputs
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.entered
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.entered
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.node_data
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.node_data
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.edge_data
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.edge_data
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.work_next
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.work_next
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.enter_next
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.enter_next
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.read_next
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.read_next
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.optionalBinder_next
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.optionalBinder_next
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.node_next
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.node_next
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.edge_next
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.edge_next
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.request_node
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.request_node
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.request_edge
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.request_edge
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.node_certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.node_certified
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.body_certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixCode.body_certified

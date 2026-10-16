@@ -1,0 +1,365 @@
+'MicroCFTA.RecursivePrefixControlKernels.current_node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+current_node : ∀ (bits : Nat)
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Facts (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) source →
+    ∀ (inventory : List.{0} DomainKey) (initial : Cache.State DomainKey)
+      (before :
+        SourceEqualityNativeDemand.State
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))),
+      @SourceCurrentAllocatedRecursivePrefixState.Current
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          source inventory initial before →
+        ∀
+          (request :
+            NodeRequest (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+          @NodeScope (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              source request →
+            @Membership.mem.{0, 0} DomainKey (List.{0} DomainKey) (@List.instMembership.{0} DomainKey) inventory
+                (@Interned.key DomainKey
+                  (@NodeRequest.domain (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)) →
+              @NodeReady (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@State.machine
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@State.native
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      before))
+                  request →
+                @Cache.Valid DomainKey initial →
+                  @LT.lt.{0} Nat instLTNat
+                      (@State.next InternedBinderProtocol.NodeKey
+                        (@InternedConstructorTemplates.State.nodes (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) source))
+                      (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+                    @LE.le.{0} Nat instLENat
+                        (@State.next
+                          (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                          (@InternedConstructorTemplates.State.edges (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) source))
+                        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+                      @LT.lt.{0} Nat instLTNat
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@State.next DomainKey initial) (@List.length.{0} DomainKey inventory))
+                          (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                            (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+                        And
+                          (@SourceCurrentAllocatedNativeRequestBounds.Words
+                            (Value (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            (@Control.code
+                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                              (@requestNode (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@NodeRequest.domain (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)
+                                (@NodeRequest.left (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)
+                                (@NodeRequest.right (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))))
+                          (And
+                            (@SourceCurrentAllocatedNativePhysicalExecution.Inputs
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                              (fun a b =>
+                                @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula instDecidableEqString
+                                  FormulaExecutable.formulaDecidableEq a b)
+                              (fun a b =>
+                                @instDecidableEqEdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (fun a b =>
+                                    @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula
+                                      instDecidableEqString FormulaExecutable.formulaDecidableEq a b)
+                                  (fun a b =>
+                                    Classical.propDecidable
+                                      (@Eq.{1} (SourceSymbolicIndex.Constraint FullSyntax.Formula) a b))
+                                  a b)
+                              (@Control.code
+                                (Value (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                (@requestNode (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@NodeRequest.domain (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)
+                                  (@NodeRequest.left (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)
+                                  (@NodeRequest.right (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)))
+                              before)
+                            (@SourceCurrentAllocatedNativeDomainTrace.Entered
+                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                              inventory
+                              (@Control.code
+                                (Value (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                (@requestNode (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@NodeRequest.domain (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)
+                                  (@NodeRequest.left (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)
+                                  (@NodeRequest.right (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)))))
+'MicroCFTA.RecursivePrefixControlKernels.body_yield' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@body_yield : ∀ {width : Nat}
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Facts (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) source →
+    ∀ (inventory : List.{0} DomainKey) (initial : Cache.State DomainKey)
+      (before after : SourceEqualityNativeDemand.State width),
+      @SourceCurrentAllocatedRecursivePrefixState.Current width source inventory initial before →
+        ∀
+          (request :
+            EdgeRequest (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+          @EdgeScope (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              source request →
+            @Membership.mem.{0, 0} DomainKey (List.{0} DomainKey) (@List.instMembership.{0} DomainKey) inventory
+                (@Interned.key DomainKey
+                  (@EdgeRequest.domain (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)) →
+              @EdgeReady (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@State.machine width (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) (@State.native width before))
+                  request →
+                ∀
+                  (body :
+                    Code (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                      (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula))),
+                  @Eq.{2}
+                      (Outcome width
+                        (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                      (@SourceEqualityNativeDemand.body
+                        (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        width request
+                        (@Code.pure (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                        before)
+                      (@Outcome.yielded width
+                        (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                        (@Control.code
+                          (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                          body)
+                        after) →
+                    And (@SourceCurrentAllocatedRecursivePrefixState.Current width source inventory initial after)
+                      (And
+                        (@Extension (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                          (@State.machine width (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) (@State.native width before))
+                          (@State.machine width (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) (@State.native width after)))
+                        (And
+                          (SourceEqualityConstraintMemoAllocation.Grows (@State.operations width before)
+                            (@State.operations width after))
+                          (And
+                            (@SourceCurrentAllocatedNativeFieldClosure.Fields
+                              (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                              width
+                              (@Control.code
+                                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                body)
+                              after)
+                            (@Certified source inventory
+                              (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                              (fun a b =>
+                                @instDecidableEqEdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (fun a b =>
+                                    @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula
+                                      instDecidableEqString FormulaExecutable.formulaDecidableEq a b)
+                                  (fun a b =>
+                                    Classical.propDecidable
+                                      (@Eq.{1} (SourceSymbolicIndex.Constraint FullSyntax.Formula) a b))
+                                  a b)
+                              (@Control.code
+                                (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                body)
+                              (@State.machine width (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) (@State.native width after))
+                              fun final value =>
+                              @EdgeResident (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) final)
+                                value))))
+'MicroCFTA.RecursivePrefixControlKernels.read_to_current_node' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+read_to_current_node : ∀ (bits : Nat)
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Facts (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) source →
+    ∀ (inventory : List.{0} DomainKey) (initial : Cache.State DomainKey)
+      (before :
+        SourceEqualityNativeDemand.State
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))),
+      @SourceCurrentAllocatedRecursivePrefixState.Current
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          source inventory initial before →
+        ∀ (domain : Interned DomainKey),
+          @OriginalBindings (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) source (@Interned.key DomainKey domain) →
+            ∀ (name : Nat),
+              @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+                  (SourceRecursiveIntersectionDomain.names (@Interned.key DomainKey domain)) name →
+                ∀
+                  (other :
+                    Value (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+                  @Original (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) other →
+                    @Available (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) source other →
+                      @Membership.mem.{0, 0} DomainKey (List.{0} DomainKey) (@List.instMembership.{0} DomainKey)
+                          inventory (@Interned.key DomainKey domain) →
+                        @Domain (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@State.machine
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                              (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@State.native
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                before))
+                            domain →
+                          @Cache.Valid DomainKey initial →
+                            @LT.lt.{0} Nat instLTNat
+                                (@State.next InternedBinderProtocol.NodeKey
+                                  (@InternedConstructorTemplates.State.nodes
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) source))
+                                (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                  (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+                              @LE.le.{0} Nat instLENat
+                                  (@State.next
+                                    (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                    (@InternedConstructorTemplates.State.edges
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) source))
+                                  (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                    (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+                                @LT.lt.{0} Nat instLTNat
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                      (@State.next DomainKey initial) (@List.length.{0} DomainKey inventory))
+                                    (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                                      (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+                                  @Exists.{1}
+                                    (Value (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                    fun bound =>
+                                    And
+                                      (@Eq.{1}
+                                        (Option.{0}
+                                          (Value (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                        (@SourcePreparedSharedRows.read (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                          (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@State.machine
+                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                              (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@State.native
+                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                before)))
+                                          name)
+                                        (@some.{0}
+                                          (Value (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                          bound))
+                                      (And
+                                        (@NodeScope (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) source
+                                          (@NodeRequest.mk (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) domain bound other))
+                                        (And
+                                          (@SourceCurrentAllocatedNativeRequestBounds.Words
+                                            (Value (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            (@Control.code
+                                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                              (@requestNode (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) domain bound
+                                                other)))
+                                          (@SourceCurrentAllocatedNativePhysicalExecution.Inputs
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            (Value (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                            (fun a b =>
+                                              @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula
+                                                instDecidableEqString FormulaExecutable.formulaDecidableEq a b)
+                                            (fun a b =>
+                                              @instDecidableEqEdgeKey (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (fun a b =>
+                                                  @instDecidableEqProd.{0, 0} SourceGuards.Name FullSyntax.Formula
+                                                    instDecidableEqString FormulaExecutable.formulaDecidableEq a b)
+                                                (fun a b =>
+                                                  Classical.propDecidable
+                                                    (@Eq.{1} (SourceSymbolicIndex.Constraint FullSyntax.Formula) a b))
+                                                a b)
+                                            (@Control.code
+                                              (Value (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                              (@requestNode (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) domain bound other))
+                                            before)))

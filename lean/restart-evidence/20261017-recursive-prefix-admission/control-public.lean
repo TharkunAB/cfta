@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.Certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.Certified
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.code
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.code
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.pure_result
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.pure_result
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.entered
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.entered
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.words
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.words
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.inputs
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.inputs
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.edge_body
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.edge_data
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.edge_data
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.edge_next
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.edge_next
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.body_code
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixControl.body_code

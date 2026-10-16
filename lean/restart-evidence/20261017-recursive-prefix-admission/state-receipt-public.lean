@@ -1,0 +1,90 @@
+import MicroCFTA.SourceCurrentAllocatedRecursivePrefixState
+import MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.initial
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.initial
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.yielded
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.yielded
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.operations_trans
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.operations_trans
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.zero
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.zero
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.before_step
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.before_step
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.fields_bind
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.fields_bind
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.bind_inside
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.bind_inside
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.join
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.join
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.words
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.words
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.mk
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.mk
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.good
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.good
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.semantic
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.semantic
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.growth
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.growth
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.history
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.history
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.domains
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixState.Current.domains
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.mk
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.mk
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.trace
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.trace
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.current
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.current
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.extension
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.extension
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.keeps
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.keeps
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.operations
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.operations
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.inputs
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.inputs
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.entered
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.entered
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.fields
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.fields
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.result
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixReceipt.Receipt.result

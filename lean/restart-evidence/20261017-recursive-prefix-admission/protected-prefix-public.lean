@@ -1,0 +1,38 @@
+import MicroCFTA.SourceEqualityNativeDemandProtectedPrefix
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.finish_node_cases
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.finish_node_cases
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.finish_edge_cases
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.finish_edge_cases
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.node_body_owner
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.node_body_owner
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.edge_body_owner
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.edge_body_owner
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.node_cases
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.node_cases
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.edge_cases
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.edge_cases
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.bind_nonpure
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.bind_nonpure
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.inputs_bind
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.inputs_bind
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.words_bind
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.words_bind
+
+#print axioms MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.entered_bind
+#check @MicroCFTA.SourceEqualityNativeDemandProtectedPrefix.entered_bind

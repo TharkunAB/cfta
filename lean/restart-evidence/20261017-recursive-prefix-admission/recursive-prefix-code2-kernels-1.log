@@ -1,0 +1,295 @@
+lean/restart-evidence/20261017-recursive-prefix-admission/recursive-prefix-code2-kernels.lean:20:0: warning: `entered_body` does not use the following hypotheses in its type:
+  • [DecidableEq.{1}
+  (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))] (#1)
+  • [DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)] (#2)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+lean/restart-evidence/20261017-recursive-prefix-admission/recursive-prefix-code2-kernels.lean:52:0: warning: `actual_edge_work` does not use the following hypothesis in its type outside of proofs:
+  • [DecidableEq.{1}
+  (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+    (SourceSymbolicIndex.Constraint FullSyntax.Formula))] (#1) (used in type, but only in a proof)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+'MicroCFTA.RecursivePrefixCode2Kernels.entered_body' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@entered_body : ∀
+  [DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @Facts (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) source →
+    ∀
+      (request :
+        NodeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      @NodeScope (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          source request →
+        @Membership.mem.{0, 0} DomainKey (List.{0} DomainKey) (@List.instMembership.{0} DomainKey)
+            (@SourceRecursiveIntersectionSourceInventory.domains (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) source)
+            (@Interned.key DomainKey
+              (@NodeRequest.domain (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)) →
+          ∀
+            (state :
+              Machine (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+            @SourceRecursiveIntersectionKernel.Valid (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) state →
+              @SemanticReady (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) state) →
+                @NodeReady (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) state request →
+                  @Grows (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) source
+                      (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) state) →
+                    @Extends Nat InternedBinderProtocol.NodeKey
+                        (@State.issued InternedBinderProtocol.NodeKey
+                          (@InternedConstructorTemplates.State.nodes (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) source))
+                        (@State.issued InternedBinderProtocol.NodeKey
+                          (@InternedConstructorTemplates.State.nodes (SourceObservations.Label FullSyntax.Formula)
+                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                            (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) state))) →
+                      ∀ (first second : Nat),
+                        @Eq.{1} (Option.{0} Nat)
+                            (@SourceRecursiveIntersectionControl.identity (SourceObservations.Label FullSyntax.Formula)
+                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                              (@NodeRequest.left (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))
+                            (@some.{0} Nat first) →
+                          @Eq.{1} (Option.{0} Nat)
+                              (@SourceRecursiveIntersectionControl.identity
+                                (SourceObservations.Label FullSyntax.Formula)
+                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                (@NodeRequest.right (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))
+                              (@some.{0} Nat second) →
+                            @Eq.{1} SourceRecursiveIntersectionControl.Branch
+                                (@SourceRecursiveIntersectionControl.decision
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@Interned.key DomainKey
+                                    (@NodeRequest.domain (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))
+                                  (@NodeRequest.left (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)
+                                  (@NodeRequest.right (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))
+                                SourceRecursiveIntersectionControl.Branch.bothMu →
+                              have entered :=
+                                @SourceRecursiveIntersectionEnvironment.enter
+                                  (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@Machine.domains (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) state)
+                                  (@Interned.key DomainKey
+                                    (@NodeRequest.domain (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))
+                                  (@NodeRequest.left (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)
+                                  (@NodeRequest.right (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) request)
+                                  first second;
+                              have after :=
+                                @Machine.mk (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                  (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) state)
+                                  (@Prod.snd.{0, 0} (Interned DomainKey) (Cache.State DomainKey) entered);
+                              And
+                                (@SourceRecursiveIntersectionKernel.Valid (SourceObservations.Label FullSyntax.Formula)
+                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) after)
+                                (And
+                                  (@Extension (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) state after)
+                                  (And
+                                    (@SemanticReady (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) after))
+                                    (And
+                                      (@NodeReady (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) after
+                                        (@NodeRequest.mk (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                          (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey) entered)
+                                          (@body (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@NodeRequest.left (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))
+                                          (@body (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@NodeRequest.right (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))))
+                                      (And
+                                        (@NodeScope (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) source
+                                          (@NodeRequest.mk (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                            (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey) entered)
+                                            (@body (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@NodeRequest.left (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))
+                                            (@body (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@NodeRequest.right (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) request))))
+                                        (@Membership.mem.{0, 0} DomainKey (List.{0} DomainKey)
+                                          (@List.instMembership.{0} DomainKey)
+                                          (@SourceRecursiveIntersectionSourceInventory.domains
+                                            (SourceObservations.Label FullSyntax.Formula)
+                                            (SourceSymbolicIndex.Constraint FullSyntax.Formula) source)
+                                          (@Interned.key DomainKey
+                                            (@Prod.fst.{0, 0} (Interned DomainKey) (Cache.State DomainKey)
+                                              entered)))))))
+'MicroCFTA.RecursivePrefixCode2Kernels.actual_edge_work' depends on axioms: [propext, Quot.sound.{u}]
+@actual_edge_work : ∀
+  [inst :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (inventory : List.{0} DomainKey) (symbol : SourceObservations.Label FullSyntax.Formula)
+  (guard : SourceSymbolicIndex.Constraint FullSyntax.Formula)
+  (values :
+    List.{0} (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (state : Machine (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @SourceRecursiveIntersectionKernel.Valid (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula) state →
+    @SemanticReady (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Machine.heap (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          state) →
+      (∀
+          (value :
+            Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+          @Membership.mem.{0, 0}
+              (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (List.{0}
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+              (@List.instMembership.{0}
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+              values value →
+            @Available (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) state)
+              value) →
+        have actual :=
+          @run (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            inst
+            (@makeEdge (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              symbol guard values)
+            (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) state);
+        have after :=
+          @Machine.mk (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+            (@Prod.snd.{0, 0}
+              (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              (InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              actual)
+            (@Machine.domains (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) state);
+        And
+          (@SourceRecursiveIntersectionKernel.Valid (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) after)
+          (And
+            (@Extension (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) state after)
+            (And
+              (@SemanticReady (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) after))
+              (And
+                (@EdgeResident (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) after)
+                  (@Prod.fst.{0, 0}
+                    (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    (InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                    actual))
+                (@Eq.{1} (Cache.State DomainKey)
+                  (@Machine.domains (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) after)
+                  (@Machine.domains (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) state)))))
+'MicroCFTA.RecursivePrefixCode2Kernels.actual_optional_binder' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@actual_optional_binder : ∀
+  [inst :
+    DecidableEq.{1}
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (source :
+    InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (inventory : List.{0} DomainKey) (pair : Prod.{0, 0} Nat Nat)
+  (body : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (state : Machine (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  @SourceRecursiveIntersectionKernel.Valid (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula) state →
+    @SemanticReady (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+        (@Machine.heap (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          state) →
+      @Available (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+          (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula) state)
+          body →
+        ∀
+          (value :
+            Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          (after :
+            Machine (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+          @Eq.{1}
+              (Result (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+              (@construction (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                (@SourceRecursiveIntersectionMaybeMu.maybeMu (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) inst pair body
+                  (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) state))
+                state)
+              (@Result.done (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (Value (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                value after) →
+            And
+              (@SourceRecursiveIntersectionKernel.Valid (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula) after)
+              (And
+                (@Extension (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula) state after)
+                (And
+                  (@SemanticReady (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) after))
+                  (@Available (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (@Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) after)
+                    value)))

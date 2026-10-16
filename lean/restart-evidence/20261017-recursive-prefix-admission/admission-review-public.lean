@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentAllocatedRecursiveInitialRanges
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.facts
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.facts
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.closed
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.closed
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.valid
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.valid
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.nodes
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.nodes
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.edges
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.edges
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.room
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.Resources.room
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.prefixes
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission.prefixes
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveInitialRanges.word_ranges
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveInitialRanges.word_ranges
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveInitialRanges.domain_prefixes
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveInitialRanges.domain_prefixes
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveInitialRanges.initial_ranges
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveInitialRanges.initial_ranges
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveInitialRanges.cold_complete
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveInitialRanges.cold_complete

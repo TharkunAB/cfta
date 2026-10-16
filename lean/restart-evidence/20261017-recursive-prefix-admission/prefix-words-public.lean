@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.domain_lt
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.domain_lt
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.node_words
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.node_words
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.edge_words
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.edge_words
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.node_inputs
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.node_inputs
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.edge_inputs
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.edge_inputs
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.node_words_empty
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.node_words_empty
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.edge_words_empty
+#check @MicroCFTA.SourceCurrentAllocatedRecursivePrefixWords.edge_words_empty
