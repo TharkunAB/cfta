@@ -1,5 +1,70 @@
 # Full formalization coverage
 
+## Current contextual Mu components and source main d44b2a0f
+
+Source main `d44b2a0f` is merged at `b09f4ebb`. Upstream adopts the finite
+needed-type repair from `ca0e9a65`. Typing.hs now matches main. New synthesis
+uses reduction-round order and refold edge mappings. The optimized interned
+core and all older proofs remain. The package delta from main contains only
+the historical constructor changelog entry and the equality reproducer comment.
+The Haskell fix handoff near the top of FINDINGS.md records failure cases,
+paths, commits, checks, and upstream status for external work.
+
+Proof commits are `1ce04615`, `dc64812b`, `43b910be`, `22b5e0fc`, and
+`06a73330`. Actual maybeMu least language and unfolding now support local
+soundness and rank-sum completeness. The induction derives fresh candidate
+containment. Literal source bindings, domain entry, pair codecs, and stored
+body inputs derive the Mu adapter from a contextual law for the actual child.
+Child completion and that child law remain recursive obligations.
+
+Stronger returned-cell NodeLaw/EdgeLaw invariants survive lookup, demand,
+physical advance, and actual checked execution when reached finishes supply
+their local laws. Closed input models and rank erasure construct exact closed
+receipts from actual body traces and physical effects, with no final native
+validity premise. Initial Original closed operands derive physical code
+certificates, independent request bounds, and actual checked edge prefixes.
+
+The actual query endpoint is conditional readback and cache transfer. For a
+started query, FinishThrough includes its own root finish law. The names
+query_law_of_finish_laws and query_exact_of_finish_laws make this explicit.
+Do not use that plan as an independent derivation of root language correctness.
+Prove the actual body law before its finish step. General checked completion,
+recursive semantic body induction, reached input/finish plans, and adequate
+initial warm contextual-cache admission remain open.
+
+The new birth-order component proves first observed rounds, min transport,
+injective key-renaming lookup, fallback bounds, and a supplied-total-step
+history bound of thirty-one. It does not prove process-history independence.
+Actual traversal/refolding, empty-history rejection, identity/counter bounds,
+IntMap, Double, and canonical enumeration order remain source adapters.
+
+The full audit passes 2,265 jobs and 55,567 dependency checks. Ninety-seven
+public axiom checks, seventy-two signatures, sixty proof examples, and one
+additional named kernel theorem pass. Only standard foundations and the old
+unused-input warning occur. Independent reviews found no proof defect and
+made the root-finish premise explicit. Strict Nix all-component build, all
+six suites with 770 examples plus golden, ten-file Fourmolu, and four-package
+Cabal-gild pass. No local test file is changed.
+
+Read lean/notes-current-native-contextual-completion.md and
+lean/notes-main-d44b2a0f.md. Fresh evidence is repository-local at
+lean/restart-evidence/20261016-recursive/. The execution environment reset
+its temporary directory. Before the reset, 2,981 baseline files and nineteen
+external drafts were verified. Their temporary snapshots and external bytes
+are unavailable afterward. Do not claim those missing bytes were reverified
+or recovered. All 2,981 tracked baseline files remain; older non-Audit proof
+sources are byte-identical. No missing draft is reconstructed.
+
+Next prove paired actual checked body completion and result semantics from
+initial invariants. Preserve running frames, loaded fields, semantic heaps,
+and costs at the same returned state. Then compose original whole allocation
+history, the new current class Scan, and the actual constrained outer caller.
+Keep every other full-library target and each separate Sized contract active.
+No old eager execution or historical Scan substitution. No board posts or
+deployments. Push verified formalize checkpoints regularly. The full goal
+remains active. This turn is progress: source refresh, eight proof modules,
+Haskell fix handoff, source validation, and repository-local evidence.
+
 ## Current recursive pair contexts and finite typing order
 
 Source main is `885a446e`, merged at `aa981389`. Upstream fixes ordinary
