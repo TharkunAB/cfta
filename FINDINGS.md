@@ -67,6 +67,65 @@ Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
 
+## Current checked Scan global memos and selected required execution
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`ca0b8697`. Proof commits are `e715f34c`, `bc99fc26`, `2ce01ce2`, and
+`aad5d624`. No Haskell implementation or test changes occur. The external
+Haskell fix registry remains first in root FINDINGS.md. Record each later
+fix there with its failure case, files, commit, checks, and upstream status.
+
+Ten additive modules connect all three global gate memo tables to CURRENT
+checked execution. Actual checked native steps derive constructor event
+traces and NoGlobal. Projection and seeded receipts retain exact source
+order. CURRENT conjunction exposure, allocated tuples, requirements,
+projections, Worklist, Decision, and fourth-memo Call derive their own
+physical inputs and returned global tables. No historical Decision/Call
+or unchecked whole-engine execution substitutes for these source branches.
+
+The actual current Scan threads those receipts through its reached prefix.
+A stop needs no suffix read or range plan. Its semantic endpoint also derives
+final Inventory.At and original-class refutation on the SAME Scan. Actual
+History, construction, resident load, and live precheck derive cold native
+entry and physical facts while retaining the returned equality operations.
+Initial legitimate global tables, fourth Correct, source coverage, inherited
+stored readiness, and reached ranges remain explicit. No global GHC cache
+reset is claimed.
+
+Current selected records retain exact original positions, order, and
+multiplicity. Primary certificates replay at the Scan-final heap and derive
+finite requireAll execution. Required work retains the SAME equality
+operations, both native tables, domain cache, input inventory, and loaded
+fields. Its language is exactly the original forest filtered by selected
+required paths. It derives every selected path domain without closing
+unrelated original siblings. The constructed finite endpoint produces Scan,
+then its required worker and global receipts on outcome=none. No completed
+Scan, required worker, or future result-law premise is supplied.
+
+The pinned full Audit passes 2337 jobs and 56426 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur.
+Independent public axiom/signature checks, kernel integrations, and source
+reviews pass. Evidence and frozen sources are in
+lean/restart-evidence/20261016-current-scan-memos/.
+All 3712 starting files remain. All 2326 older non-Audit proof sources
+retain identical bytes. Prior frozen proofs, stashes, other worktree records,
+and the Haskell registry remain. Earlier unavailable external drafts are
+not claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-checked-scan-memos.md and the next-class-edit boundary
+note in the evidence directory. Next port actual shared targets and class
+edits to the checked state, with Inventory.At and live equality operations.
+The older target Fold and leaf use unchecked native Step. Derive Top's
+same-cache field only at actual allocating merge branches; do not supply a
+universal old-cache Top premise or fabricate allocation on hits/small groups.
+Then compose the class pass, empty propagation, and general constrained
+outer caller. Keep every other full-library and separate Sized contract
+active. Preserve the optimized interned core and all older constructor and
+equality proofs. Runtime, containers, allocation, machine, solver, and
+callback boundaries remain explicit. No board posts or deployments. Push
+verified formalize checkpoints regularly. The full goal remains active.
+
 ## Current seeded-query language and sound allocated class scans
 
 Source main remains `8f85ddb6`. The preceding published proof checkpoint is
