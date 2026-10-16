@@ -1,0 +1,42 @@
+'MicroCFTA.SourceCurrentConjunctionClassWitness.class_nonempty' does not depend on any axioms
+MicroCFTA.SourceCurrentConjunctionClassWitness.class_nonempty (paths : MicroCFTA.EqualityNormalize.Class)
+  (active : MicroCFTA.EqualityNormalize.Nontrivial paths) : paths ≠ []
+'MicroCFTA.SourceCurrentConjunctionClassWitness.class_common' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentConjunctionClassWitness.class_common {Symbol : Type} (term : MicroCFTA.Language.Term Symbol)
+  (paths : MicroCFTA.EqualityNormalize.Class) (active : MicroCFTA.EqualityNormalize.Nontrivial paths)
+  (satisfied : MicroCFTA.EqualityNormalize.ClassSat term paths) :
+  ∃ part,
+    (∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ paths → term.atPath path = some part) ∧
+      part.height < term.height
+'MicroCFTA.SourceCurrentConjunctionClassWitness.class_signed_common' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentConjunctionClassWitness.class_signed_common {Symbol : Type}
+  (term : MicroCFTA.Language.Term Symbol) (paths : MicroCFTA.EqualityNormalize.Class)
+  (active : MicroCFTA.EqualityNormalize.Nontrivial paths)
+  (satisfied : MicroCFTA.EqualityNormalize.ClassSat term paths) :
+  ∃ part,
+    (∀ (path : List Int),
+        path ∈ List.map (List.map Int.ofNat) paths → MicroCFTA.SymbolicSignedPaths.lookup term path = some part) ∧
+      part.height < term.height
+'MicroCFTA.SourceCurrentConjunctionClassWitness.rotated_common' depends on axioms: [propext]
+MicroCFTA.SourceCurrentConjunctionClassWitness.rotated_common {Symbol : Type} (term : MicroCFTA.Language.Term Symbol)
+  (paths : List (List Int)) (part : MicroCFTA.Language.Term Symbol) :
+  (∀ (path : List Int),
+      path ∈ MicroCFTA.SourceEmptinessClassFold.seededPaths paths →
+        MicroCFTA.SymbolicSignedPaths.lookup term path = some part) ↔
+    ∀ (path : List Int), path ∈ paths → MicroCFTA.SymbolicSignedPaths.lookup term path = some part
+'MicroCFTA.SourceCurrentConjunctionClassWitness.class_rotated_common' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentConjunctionClassWitness.class_rotated_common {Symbol : Type}
+  (term : MicroCFTA.Language.Term Symbol) (paths : MicroCFTA.EqualityNormalize.Class)
+  (active : MicroCFTA.EqualityNormalize.Nontrivial paths)
+  (satisfied : MicroCFTA.EqualityNormalize.ClassSat term paths) :
+  ∃ part,
+    (∀ (path : List Int),
+        path ∈ List.map (List.map Int.ofNat) paths → MicroCFTA.SymbolicSignedPaths.lookup term path = some part) ∧
+      (∀ (path : List Int),
+          path ∈ MicroCFTA.SourceEmptinessClassFold.seededPaths (List.map (List.map Int.ofNat) paths) →
+            MicroCFTA.SymbolicSignedPaths.lookup term path = some part) ∧
+        part.height < term.height

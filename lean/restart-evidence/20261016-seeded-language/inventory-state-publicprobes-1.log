@@ -1,0 +1,285 @@
+'MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At.advanceNative' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At.advance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInventoryState.initial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInventoryState.query_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory : Type
+MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory.inputs : (inventory :
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) →
+  (holds :
+      MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+        MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool) →
+    MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view inventory.source holds)
+@MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At : {width : Nat} →
+  MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+    MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory →
+        MicroCFTA.SourceEqualityNativeDemand.State width → Prop
+@MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At.advanceNative : ∀ {width : Nat}
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width},
+  MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+    ∀
+      (machine :
+        MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine machine →
+        MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory
+          { native := MicroCFTA.SourceRecursiveIntersectionThunks.advance before.native machine,
+            operations := before.operations }
+@MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At.advance : ∀ {width : Nat}
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width},
+  MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+    ∀
+      (after :
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula),
+      MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine
+          (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine →
+        MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory
+          (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after)
+MicroCFTA.SourceCurrentAllocatedNativeInventoryState.initial : ∀
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (width : Nat)
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.InternedConstructorTemplates.Grows inventory.source machine.heap →
+    MicroCFTA.Cache.Extends inventory.source.nodes.issued machine.heap.nodes.issued →
+      MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory
+        { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine, operations := operations }
+@MicroCFTA.SourceCurrentAllocatedNativeInventoryState.query_complete : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory state →
+      MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped state.native →
+        MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap →
+          MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native →
+            ∀
+              (left right :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap left →
+                MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap right →
+                  left.free = [] →
+                    right.free = [] →
+                      MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                              MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                          state →
+                        ∃ next fuel value after,
+                          next.source = state.native.machine.heap ∧
+                            next.roots = inventory.roots ++ [left, right] ∧
+                              MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.Receipt next.source formulas solver
+                                  (next.inputs (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)) fuel left right
+                                  state value after ∧
+                                MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver next after
+'MicroCFTA.SourceCurrentAllocatedNativeInventoryStateProbes.cold_initial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInventoryStateProbes.physical_advance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInventoryStateProbes.query_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeInventoryStateProbes.two_queries' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeInventoryStateProbes.cold_initial : ∀
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (width : Nat)
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory
+    {
+      native :=
+        MicroCFTA.SourceRecursiveIntersectionThunks.initial width
+          { heap := inventory.source, domains := MicroCFTA.Cache.emptyState },
+      operations := operations }
+@MicroCFTA.SourceCurrentAllocatedNativeInventoryStateProbes.physical_advance : ∀ {width : Nat}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width},
+  MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+    ∀
+      (after :
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula),
+      MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine
+          (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine →
+        MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory
+            (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after) ∧
+          (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.nodes = before.native.nodes ∧
+            (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.edges =
+                before.native.edges ∧
+              (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after).operations = after.equality
+@MicroCFTA.SourceCurrentAllocatedNativeInventoryStateProbes.query_exact : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory state →
+      MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped state.native →
+        MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap →
+          MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native →
+            ∀
+              (left right :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap left →
+                MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap right →
+                  left.free = [] →
+                    right.free = [] →
+                      MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                              MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                          state →
+                        ∃ next fuel value after,
+                          next.source = state.native.machine.heap ∧
+                            next.roots = inventory.roots ++ [left, right] ∧
+                              MicroCFTA.SourceEqualityNativeDemand.execute (fuel + 1)
+                                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                                    state =
+                                  MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after ∧
+                                value.free = [] ∧
+                                  MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap value ∧
+                                    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver next after ∧
+                                      MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted
+                                          (MicroCFTA.SourceRecursiveIntersectionInputView.view next.source
+                                            (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+                                          (MicroCFTA.IntersectSchedule.finiteInputMeaning
+                                            (MicroCFTA.SourceRecursiveIntersectionInputView.view next.source
+                                              (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+                                            (next.inputs (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)))
+                                          after.native ∧
+                                        MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted
+                                            (next.inputs (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+                                            after.native ∧
+                                          ∀
+                                            (output :
+                                              MicroCFTA.InternedGuardedLanguage.Env
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                                            (term :
+                                              MicroCFTA.Language.Term
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                                            MicroCFTA.InternedGuardedLanguage.meaning
+                                                (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) output value
+                                                term ↔
+                                              MicroCFTA.InternedGuardedLanguage.meaning
+                                                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) output left
+                                                  term ∧
+                                                MicroCFTA.InternedGuardedLanguage.meaning
+                                                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) output right
+                                                  term
+@MicroCFTA.SourceCurrentAllocatedNativeInventoryStateProbes.two_queries : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory state →
+      MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped state.native →
+        MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap →
+          MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native →
+            ∀
+              (left right :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap left →
+                MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap right →
+                  left.free = [] →
+                    right.free = [] →
+                      MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                              MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                          state →
+                        ∃ first fuel value after,
+                          first.source = state.native.machine.heap ∧
+                            first.roots = inventory.roots ++ [left, right] ∧
+                              MicroCFTA.SourceEqualityNativeDemand.execute (fuel + 1)
+                                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                                    state =
+                                  MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after ∧
+                                (MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                        MicroCFTA.IntersectionEmptyDomain.emptyDomain value right))
+                                    after →
+                                  ∃ next count result final,
+                                    next.source = after.native.machine.heap ∧
+                                      next.roots = first.roots ++ [value, right] ∧
+                                        MicroCFTA.SourceEqualityNativeDemand.execute (count + 1)
+                                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                                (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain value right))
+                                              after =
+                                            MicroCFTA.SourceEqualityNativeDemand.Outcome.done result final ∧
+                                          MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver next
+                                              final ∧
+                                            result.free = [] ∧
+                                              MicroCFTA.InternedProbeProvenance.Available final.native.machine.heap
+                                                  result ∧
+                                                ∀
+                                                  (output :
+                                                    MicroCFTA.InternedGuardedLanguage.Env
+                                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                                                  (term :
+                                                    MicroCFTA.Language.Term
+                                                      (MicroCFTA.SourceObservations.Label
+                                                        MicroCFTA.FullSyntax.Formula)),
+                                                  MicroCFTA.InternedGuardedLanguage.meaning
+                                                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) output
+                                                      result term ↔
+                                                    MicroCFTA.InternedGuardedLanguage.meaning
+                                                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) output
+                                                        left term ∧
+                                                      MicroCFTA.InternedGuardedLanguage.meaning
+                                                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) output
+                                                        right term)

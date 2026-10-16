@@ -1,0 +1,5 @@
+import MicroCFTA.SourceCurrentConjunctionRefusedClassQuery
+#print axioms MicroCFTA.SourceCurrentConjunctionRefusedClassQuery.class_witness
+#check MicroCFTA.SourceCurrentConjunctionRefusedClassQuery.class_witness
+#print axioms MicroCFTA.SourceCurrentConjunctionRefusedClassQuery.refutes_current_memo
+#check MicroCFTA.SourceCurrentConjunctionRefusedClassQuery.refutes_current_memo

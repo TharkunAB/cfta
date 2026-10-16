@@ -1,0 +1,5 @@
+import MicroCFTA.SourceCurrentConjunctionClassScanSoundness
+#print axioms MicroCFTA.SourceCurrentConjunctionClassScanSoundness.verified
+#check MicroCFTA.SourceCurrentConjunctionClassScanSoundness.verified
+#print axioms MicroCFTA.SourceCurrentConjunctionClassScanSoundness.stopped_refutes
+#check MicroCFTA.SourceCurrentConjunctionClassScanSoundness.stopped_refutes

@@ -1,0 +1,45 @@
+'MicroCFTA.SourceCurrentAllocatedSeededOperandLanguage.Operand.effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededOperandLanguage.Operand.included' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@SourceCurrentAllocatedSeededOperandLanguage.Operand.effects : ∀ {width : Nat} [DecidableEq Symbol]
+  [inst : DecidableEq (EdgeKey Symbol Guard)] (unconstrained : Value Symbol Guard → Bool)
+  (anchor : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady anchor →
+    InternedFreshOrdinaryMemoGateTrace.Ready anchor →
+      ∀ {path : List Int} {values : List (Value Symbol Guard)} {before after : Checked width}
+        {result : Value Symbol Guard},
+        Operand path values before result after →
+          Good before →
+            SourceCurrentConjunctionRowsAllocation.Ready (physical before) →
+              SourceCurrentAllocatedNativeScopeCache.Scoped before.native →
+                SourceRecursiveIntersectionNative.Idle before.native →
+                  Values before.native.machine.heap values →
+                    Grows anchor before.native.machine.heap →
+                      PathSupport unconstrained anchor path values →
+                        Good after ∧
+                          Effects (physical before) (physical after) ∧
+                            Extension before.native.machine after.native.machine ∧
+                              SourceCurrentAllocatedNativeScopeCache.Scoped after.native ∧
+                                SourceRecursiveIntersectionNative.Idle after.native ∧
+                                  Available after.native.machine.heap result ∧ result.free = []
+@SourceCurrentAllocatedSeededOperandLanguage.Operand.included : ∀ {width : Nat} [DecidableEq Symbol]
+  [inst : DecidableEq (EdgeKey Symbol Guard)] (unconstrained : Value Symbol Guard → Bool)
+  (anchor : InternedConstructorTemplates.State Symbol Guard),
+  SemanticReady anchor →
+    InternedFreshOrdinaryMemoGateTrace.Ready anchor →
+      ∀ {path : List Int} {values : List (Value Symbol Guard)} {before after : Checked width}
+        {result : Value Symbol Guard},
+        Operand path values before result after →
+          SourceCurrentConjunctionRowsAllocation.Ready (physical before) →
+            Values before.native.machine.heap values →
+              Grows anchor before.native.machine.heap →
+                PathSupport unconstrained anchor path values →
+                  path ≠ [] →
+                    ∀ (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+                      (symbol : Symbol) (terms : List (Term Symbol)) (part : Term Symbol),
+                      All₂ (meaning holds ambient) values terms →
+                        SymbolicSignedPaths.lookup (Term.node symbol terms) path = some part →
+                          meaning holds ambient result part
