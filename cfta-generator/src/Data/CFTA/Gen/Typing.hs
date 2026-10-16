@@ -109,7 +109,10 @@ environment is that of the node with @binds@ in front: the first type of
 subterm :: [ty] -> ty -> Child ty
 subterm = Subterm
 
--- | A field with one value, such as a literal, an index, or a type.
+{- | A field with one value, such as a literal, an index, or a type.
+The field must have a type other than the datatype of the language.
+Use 'subterm' for a field of that datatype.
+-}
 value :: (HasFTA v) => v -> Child ty
 value = Value . encodeTerm
 
@@ -121,7 +124,8 @@ data TypingError
       UnknownConstructors ![String] ![String]
     | {- | A rule of the constructor does not fit its fields: it has another
       number of fields, a subterm in a field of another type than the
-      datatype, or a value of another type than its field.
+      datatype, a fixed value in a field of the datatype, or a value of
+      another type than its field.
       -}
       FieldMismatch !String
     deriving (Eq, Show)
@@ -193,7 +197,9 @@ fromTypingRules (Depth bound) roots rules = do
         constructor = constructors Map.! name
         fields = constructorFields constructor
     fits field (Subterm _ _) = fieldType field == typeRep (Proxy @a)
-    fits field (Value term) = fieldType field == constructorType (Term.rootLabel term)
+    fits field (Value term) =
+        fieldType field /= typeRep (Proxy @a)
+            && fieldType field == constructorType (Term.rootLabel term)
 
     labelled transition = transition{FTA.transitionSymbol = fromString (constructorLabel (FTA.transitionSymbol transition))}
 
