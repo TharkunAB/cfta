@@ -1,0 +1,281 @@
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.rows_certified' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.rows_certified
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (first : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (left :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (leftDepth : Nat) (leftFree : List MicroCFTA.InternedBinderProtocol.Reference)
+  (second : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (right :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (rightDepth : Nat) (rightFree : List MicroCFTA.InternedBinderProtocol.Reference)
+  (scope :
+    MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source
+      { domain := domain, left := MicroCFTA.InternedConstructorTemplates.Value.node first left leftDepth leftFree,
+        right := MicroCFTA.InternedConstructorTemplates.Value.node second right rightDepth rightFree })
+  (known :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs
+      { domain := domain, left := MicroCFTA.InternedConstructorTemplates.Value.node first left leftDepth leftFree,
+        right := MicroCFTA.InternedConstructorTemplates.Value.node second right rightDepth rightFree })
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.heap) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    (MicroCFTA.SourceRecursiveIntersectionCode.compileRows domain left right) state fun after value =>
+    MicroCFTA.InternedProbeProvenance.Available after.heap value
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.left_union_certified' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.left_union_certified
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (members :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scope :
+    MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source
+      { domain := domain, left := MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free,
+        right := right })
+  (known :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs
+      { domain := domain, left := MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free,
+        right := right })
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.heap) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    ((MicroCFTA.SourceRecursiveIntersectionCode.walk
+          (fun member => MicroCFTA.SourceRecursiveIntersectionCode.requestNode domain member right) members).bind
+      fun values =>
+      MicroCFTA.SourceRecursiveIntersectionCode.Code.work (MicroCFTA.InternedConstructorTemplates.makeUnion values)
+        MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+    state fun after value => MicroCFTA.InternedProbeProvenance.Available after.heap value
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.right_union_certified' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.right_union_certified
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (members :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (scope :
+    MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source
+      { domain := domain, left := left,
+        right := MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free })
+  (known :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs
+      { domain := domain, left := left,
+        right := MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free })
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.heap) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    ((MicroCFTA.SourceRecursiveIntersectionCode.walk
+          (fun member => MicroCFTA.SourceRecursiveIntersectionCode.requestNode domain left member) members).bind
+      fun values =>
+      MicroCFTA.SourceRecursiveIntersectionCode.Code.work (MicroCFTA.InternedConstructorTemplates.makeUnion values)
+        MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+    state fun after value => MicroCFTA.InternedProbeProvenance.Available after.heap value
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.mu_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.mu_certified
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scope : MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source request)
+  (known : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs request)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (ready : MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady state request) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    (MicroCFTA.SourceRecursiveIntersectionCode.compileMu request.domain request.left request.right) state
+    fun after value => MicroCFTA.InternedProbeProvenance.Available after.heap value
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.left_reference_certified' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.left_reference_certified
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scope :
+    MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source
+      { domain := domain,
+        left :=
+          MicroCFTA.InternedConstructorTemplates.Value.reference
+            (MicroCFTA.InternedBinderProtocol.Reference.interned name),
+        right := other })
+  (known :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs
+      { domain := domain,
+        left :=
+          MicroCFTA.InternedConstructorTemplates.Value.reference
+            (MicroCFTA.InternedBinderProtocol.Reference.interned name),
+        right := other })
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows source state.heap)
+  (history : MicroCFTA.Cache.Extends source.nodes.issued state.heap.nodes.issued) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    (MicroCFTA.SourceRecursiveIntersectionCode.compileReference domain name other true) state fun after value =>
+    MicroCFTA.InternedProbeProvenance.Available after.heap value
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.right_reference_certified' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.right_reference_certified
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+  (other :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scope :
+    MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source
+      { domain := domain, left := other,
+        right :=
+          MicroCFTA.InternedConstructorTemplates.Value.reference
+            (MicroCFTA.InternedBinderProtocol.Reference.interned name) })
+  (known :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs
+      { domain := domain, left := other,
+        right :=
+          MicroCFTA.InternedConstructorTemplates.Value.reference
+            (MicroCFTA.InternedBinderProtocol.Reference.interned name) })
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows source state.heap)
+  (history : MicroCFTA.Cache.Extends source.nodes.issued state.heap.nodes.issued) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    (MicroCFTA.SourceRecursiveIntersectionCode.compileReference domain name other false) state fun after value =>
+    MicroCFTA.InternedProbeProvenance.Available after.heap value
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.node_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates.node_certified
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scope : MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source request)
+  (known : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs request)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.heap)
+  (ready : MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady state request)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows source state.heap)
+  (history : MicroCFTA.Cache.Extends source.nodes.issued state.heap.nodes.issued) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request) state fun after value =>
+    MicroCFTA.InternedProbeProvenance.Available after.heap value

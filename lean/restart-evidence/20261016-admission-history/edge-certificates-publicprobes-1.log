@@ -1,0 +1,51 @@
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionEdgeCertificates.children_certified' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionEdgeCertificates.sentinel_certified' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionEdgeCertificates.body_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@children_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (inputs : FiniteInput (view source holds))
+      (request : EdgeRequest Symbol Guard),
+      EdgeScope source request →
+        EdgeCovered inputs request →
+          ∀ (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula) (state : Machine Symbol Guard),
+            SourceRecursiveIntersectionKernel.Valid state →
+              SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+                SourceRecursiveIntersectionThunks.EdgeReady state request →
+                  Certified source holds inputs
+                    (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) state
+                    fun after value => EdgeResident after.heap value
+@sentinel_certified : ∀ [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard) (holds : Guard → Term Symbol → Bool)
+  (inputs : FiniteInput (view source holds)) (left : EdgeValue Symbol Guard) (state : Machine Symbol Guard),
+  SourceRecursiveIntersectionKernel.Valid state →
+    Certified source holds inputs (SourceEqualityNativeCheckedCode.sentinel left) state fun after value =>
+      EdgeResident after.heap value
+@body_certified : ∀ {width : Nat} [DecidableEq Symbol] [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (source : InternedConstructorTemplates.State Symbol Guard),
+  InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → Term Symbol → Bool) (inputs : FiniteInput (view source holds))
+      (request : EdgeRequest Symbol Guard),
+      EdgeScope source request →
+        EdgeCovered inputs request →
+          ∀ (before after : SourceEqualityNativeDemand.State width) (code : Code Symbol Guard (EdgeValue Symbol Guard)),
+            SourceRecursiveIntersectionKernel.Valid before.native.machine →
+              SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+                SourceRecursiveIntersectionThunks.EdgeReady before.native.machine request →
+                  SourceEqualityNativeDemand.body request Code.pure before =
+                      SourceEqualityNativeDemand.Outcome.yielded (SourceEqualityNativeDemand.Control.code code) after →
+                    Certified source holds inputs code after.native.machine fun final value =>
+                      EdgeResident final.heap value
+lean/restart-evidence/20261016-admission-history/edge-certificates-publicprobes.lean:42:70: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.15 = ?m.15
+but is expected to have type
+  InternedFreshOrdinaryConstruction.build InternedNestedConstruction.Syntax.empty [] empty =
+    InternedNestedConstruction.Outcome.done Value.empty empty
+in the application
+  SourceEqualityRequiredSemanticCache.constructed InternedNestedConstruction.Syntax.empty Value.empty empty rfl

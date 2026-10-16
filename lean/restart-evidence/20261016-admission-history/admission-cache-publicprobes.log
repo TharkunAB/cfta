@@ -1,0 +1,251 @@
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.empty' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.lookup' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.status' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.demand' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.finish' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.initial_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.advance_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.lookupNode_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.lookupEdge_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.demandNode_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.demandEdge_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.finishNode_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.finishEdge_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered.admitted' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered.seen_admitted' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.node_published' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.edge_published' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered.rebase' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests {Request Key Answer : Type} (property : Request → Prop)
+  (state : MicroCFTA.FlatMemoThunk.State Key Request Answer) : Prop
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  Prop
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.EdgeCovered
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  Prop
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  Prop
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.empty {Request Key Answer : Type}
+  (property : Request → Prop) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests property MicroCFTA.FlatMemoThunk.empty
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.lookup {Key Request Answer : Type} [DecidableEq Key]
+  (property : Request → Prop) (key : Key) (request : Request) (state : MicroCFTA.FlatMemoThunk.State Key Request Answer)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests property state) (known : property request) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests property
+    (MicroCFTA.FlatMemoThunk.lookupOrInsert key request state).snd
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.status {Request Answer Key : Type}
+  (property : Request → Prop) (handle : Nat) (phase : MicroCFTA.FlatMemoThunk.Status Answer)
+  (state : MicroCFTA.FlatMemoThunk.State Key Request Answer)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests property state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests property
+    (MicroCFTA.FlatMemoThunk.setStatus handle phase state)
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.demand {Request Key Answer : Type}
+  (property : Request → Prop) (handle : Nat) (state : MicroCFTA.FlatMemoThunk.State Key Request Answer)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests property state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests property
+    (MicroCFTA.FlatMemoThunk.demand handle state).snd
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests.finish {Request Answer Key : Type}
+  (property : Request → Prop) (handle : Nat) (value : Answer) (state : MicroCFTA.FlatMemoThunk.State Key Request Answer)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests property state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Requests property
+    (MicroCFTA.FlatMemoThunk.finish handle value state)
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.initial_covered
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view) (width : Nat)
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine)
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.advance_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceRecursiveIntersectionThunks.advance state after)
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.lookupNode_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state)
+  (known : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs request) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode width request state).snd
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.lookupEdge_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state)
+  (known : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.EdgeCovered inputs request) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceRecursiveIntersectionThunks.lookupEdge width request state).snd
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.demandNode_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (handle : Nat) (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceRecursiveIntersectionThunks.demandNode handle state).snd
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.demandEdge_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (handle : Nat) (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceRecursiveIntersectionThunks.demandEdge handle state).snd
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.finishNode_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle result state)
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.finishEdge_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceRecursiveIntersectionThunks.finishEdge handle result state)
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered.admitted {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {inputs : MicroCFTA.IntersectSchedule.FiniteInput view}
+  {state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state) :
+  MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted view
+    (MicroCFTA.IntersectSchedule.finiteInputMeaning view inputs) state
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered.seen_admitted {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {inputs : MicroCFTA.IntersectSchedule.FiniteInput view}
+  {state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state) :
+  MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted inputs state
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.node_published {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state)
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid state)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (ready : MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady state.machine request)
+  (key : MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+  (checked : MicroCFTA.SourceRecursiveIntersectionThunks.NodeKey width request key) (handle : Nat)
+  (published : state.nodes.table key = some handle)
+  (cell :
+    MicroCFTA.FlatMemoThunk.Cell
+      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stored : state.nodes.cells handle = some cell) :
+  cell.request = request ∧ MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs request
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.edge_published {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state)
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid state)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (ready : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady state.machine request)
+  (key : MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+  (checked : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeKeyOf width request key) (handle : Nat)
+  (published : state.edges.table key = some handle)
+  (cell :
+    MicroCFTA.FlatMemoThunk.Cell
+      (MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stored : state.edges.cells handle = some cell) :
+  cell.request = request ∧ MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.EdgeCovered inputs request
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered.rebase {width : Nat}
+  {oldView newView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.IntersectSchedule.FiniteInput oldView} {after : MicroCFTA.IntersectSchedule.FiniteInput newView}
+  (agreement : MicroCFTA.SourceCurrentAllocatedNativeContextRebase.Agreement before after)
+  {state :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State width
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered before state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered after state

@@ -1,0 +1,995 @@
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.body_covered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.step_covered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.execute_covered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.done_admitted' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.RequestCovered
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {Output : Type} (inputs : MicroCFTA.IntersectSchedule.FiniteInput view) :
+  MicroCFTA.SourceEqualityNativeDemand.Control Output → Prop
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.RequestsThrough {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {Output : Type} [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view) :
+  Nat → MicroCFTA.SourceEqualityNativeDemand.Control Output → MicroCFTA.SourceEqualityNativeDemand.State width → Prop
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.body_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {Output : Type} (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (next :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state.native) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceEqualityNativeDemand.body request next state).state.native
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.step_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {Output : Type} [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view)
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state.native)
+  (current : MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.RequestCovered inputs control) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceEqualityNativeDemand.step control state).state.native
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.execute_covered {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {Output : Type} [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view) (fuel : Nat)
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state.native)
+  (requests : MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.RequestsThrough inputs fuel control state) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+    (MicroCFTA.SourceEqualityNativeDemand.execute fuel control state).state.native
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.done_admitted {width : Nat}
+  {view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  {Output : Type} [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput view) (fuel : Nat)
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (value : Output)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs before.native)
+  (requests : MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.RequestsThrough inputs fuel control before)
+  (done :
+    MicroCFTA.SourceEqualityNativeDemand.execute fuel control before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs after.native ∧
+    MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted view
+        (MicroCFTA.IntersectSchedule.finiteInputMeaning view inputs) after.native ∧
+      MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted inputs after.native
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.certified_bind' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.requestNode_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.requestEdge_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.walk_certified' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  {A : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (code :
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop) :
+  Prop
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.certified_bind
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  {A B : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (code :
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+  (next :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.heap)
+  (intermediate :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop)
+  (post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      B → Prop)
+  (certificate :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs code state intermediate)
+  (continuation :
+    ∀ (value : A)
+      (after :
+        MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceRecursiveIntersectionKernel.Valid after →
+        MicroCFTA.SourceRecursiveIntersectionKernel.Extension state after →
+          MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after.heap →
+            intermediate after value →
+              MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs (next value) after
+                post) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs (code.bind next) state post
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.requestNode_certified
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scope : MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source request)
+  (admitted : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs request) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right) state
+    fun after value => MicroCFTA.InternedProbeProvenance.Available after.heap value
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.requestEdge_certified
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scope : MicroCFTA.SourceRecursiveIntersectionCode.EdgeScope source request)
+  (admitted : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.EdgeCovered inputs request) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right) state
+    fun after value => MicroCFTA.InternedEdgeResidency.EdgeResident after.heap value
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.walk_certified.{u_1}
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  {A : Type u_1} {B : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (call :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (requests : List A)
+  (input :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop)
+  (output :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      B → Prop)
+  (inputStable : MicroCFTA.SourceRecursiveIntersectionKernel.Stable input)
+  (outputStable : MicroCFTA.SourceRecursiveIntersectionKernel.Stable output)
+  (calls :
+    ∀ (request : A),
+      request ∈ requests →
+        ∀
+          (state :
+            MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourceRecursiveIntersectionKernel.Valid state →
+            MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.heap →
+              input state request →
+                MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs (call request) state
+                  output)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.heap)
+  (known : ∀ (request : A), request ∈ requests → input state request) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+    (MicroCFTA.SourceRecursiveIntersectionCode.walk call requests) state fun after values =>
+    ∀ (value : B), value ∈ values → output after value
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.current' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.yielded_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.Trace.covered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.Branches {width : Nat}
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] :
+  Prop
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.ControlCertified {A : Type}
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (state :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop) :
+  Prop
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.current {A : Type}
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop)
+  (certificate :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.ControlCertified source holds inputs control machine post) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.RequestCovered inputs control
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.yielded_certified {width : Nat} {A : Type}
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (branches : MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.Branches source holds inputs)
+  (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows source before.native.machine.heap)
+  (history : MicroCFTA.Cache.Extends source.nodes.issued before.native.machine.heap.nodes.issued)
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.Inputs control before)
+  (fields : MicroCFTA.SourceCurrentAllocatedNativeFieldClosure.Fields control before)
+  (certificate :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.ControlCertified source holds inputs control
+      before.native.machine post)
+  (one :
+    MicroCFTA.SourceEqualityNativeDemand.step control before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded next after) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.ControlCertified source holds inputs next after.native.machine
+    post
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.Trace.covered {width : Nat} {A : Type}
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (branches : MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.Branches source holds inputs) {fuel : Nat}
+  {control next : MicroCFTA.SourceEqualityNativeDemand.Control A}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  (trace : MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel control before next after)
+  (post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      A → Prop)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows source before.native.machine.heap)
+  (history : MicroCFTA.Cache.Extends source.nodes.issued before.native.machine.heap.nodes.issued)
+  (fields : MicroCFTA.SourceCurrentAllocatedNativeFieldClosure.Fields control before)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs before.native)
+  (certificate :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.ControlCertified source holds inputs control
+      before.native.machine post) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs after.native ∧
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.ControlCertified source holds inputs next after.native.machine
+      post
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.branches' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.query_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.generated_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.Receipt {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inputs :
+    MicroCFTA.IntersectSchedule.FiniteInput
+      (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)))
+  (fuel : Nat)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width) : Prop
+MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.branches {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs :
+    MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds)) :
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.Branches source holds inputs
+MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.query_complete {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inputs :
+    MicroCFTA.IntersectSchedule.FiniteInput
+      (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)))
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state)
+  (contextual :
+    MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual
+      (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+      (MicroCFTA.IntersectSchedule.finiteInputMeaning
+        (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+        inputs)
+      (MicroCFTA.IntersectSchedule.finiteRankedInput
+        (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+        inputs)
+      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) state.native)
+  (covered : MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state.native)
+  (scopedCache : MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped state.native)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows source state.native.machine.heap)
+  (history : MicroCFTA.Cache.Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (leftOriginal : MicroCFTA.SourceRecursiveIntersectionInputView.Original left)
+  (rightOriginal : MicroCFTA.SourceRecursiveIntersectionInputView.Original right)
+  (leftAvailable : MicroCFTA.InternedProbeProvenance.Available source left)
+  (rightAvailable : MicroCFTA.InternedProbeProvenance.Available source right) (leftClosed : left.free = [])
+  (rightClosed : right.free = [])
+  (leftValid : inputs.valid (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf left))
+  (rightValid : inputs.valid (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf right))
+  (ranges :
+    MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+          right))
+      state) :
+  ∃ fuel value after,
+    MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.Receipt source formulas solver inputs fuel left right state value
+      after
+MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.generated_complete {width : Nat}
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (roots :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (originals :
+    ∀
+      (root :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      root ∈ roots → MicroCFTA.SourceRecursiveIntersectionInputView.Original root)
+  (available : MicroCFTA.InternedNestedProvenance.Values source roots)
+  (closed :
+    ∀
+      (root :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      root ∈ roots → root.free = [])
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state)
+  (contextual :
+    MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual
+      (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+      (MicroCFTA.IntersectSchedule.finiteInputMeaning
+        (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+        (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) roots originals available closed))
+      (MicroCFTA.IntersectSchedule.finiteRankedInput
+        (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+        (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) roots originals available closed))
+      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) state.native)
+  (covered :
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered
+      (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts
+        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) roots originals available closed)
+      state.native)
+  (scopedCache : MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped state.native)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows source state.native.machine.heap)
+  (history : MicroCFTA.Cache.Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (leftAvailable : MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap left)
+  (rightAvailable : MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap right)
+  (leftClosed : left.free = []) (rightClosed : right.free = [])
+  (ranges :
+    MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+          right))
+      state) :
+  let target := state.native.machine.heap;
+  have targetRoots := roots ++ [left, right];
+  ∃ targetAvailable targetClosed fuel value after,
+    MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.Receipt target formulas solver
+      (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target ⋯
+        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) targetRoots ⋯ targetAvailable targetClosed)
+      fuel left right state value after
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.execution_all_outcomes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.execution_done_full_state' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.node_admission_before_publication' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.ordered_node_requests' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.concrete_trace_admission' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.fixed_query_exact_and_covered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.generated_inventory_retained' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.two_generated_queries' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.execution_all_outcomes : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Output : Type}
+  {semanticView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput semanticView) (fuel : Nat)
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state.native →
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.RequestsThrough inputs fuel control state →
+      MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted semanticView
+          (MicroCFTA.IntersectSchedule.finiteInputMeaning semanticView inputs)
+          (MicroCFTA.SourceEqualityNativeDemand.execute fuel control state).state.native ∧
+        MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted inputs
+          (MicroCFTA.SourceEqualityNativeDemand.execute fuel control state).state.native
+@MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.execution_done_full_state : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Output : Type}
+  {semanticView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)}
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput semanticView) (fuel : Nat)
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (value : Output),
+  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs before.native →
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.RequestsThrough inputs fuel control before →
+      MicroCFTA.SourceEqualityNativeDemand.execute fuel control before =
+          MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after →
+        MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs after.native ∧
+          MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted semanticView
+              (MicroCFTA.IntersectSchedule.finiteInputMeaning semanticView inputs) after.native ∧
+            MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted inputs after.native
+@MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.node_admission_before_publication : ∀
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source request →
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs request →
+      MicroCFTA.SourceCurrentAllocatedNativeAdmissionExecution.RequestCovered inputs
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right))
+@MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.ordered_node_requests : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+  (requests :
+    List
+      (MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceRecursiveIntersectionKernel.Valid machine →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady machine.heap →
+      (∀
+          (request :
+            MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          request ∈ requests →
+            MicroCFTA.SourceRecursiveIntersectionCode.NodeScope source request ∧
+              MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs request) →
+        MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode.Certified source holds inputs
+          (MicroCFTA.SourceRecursiveIntersectionCode.walk
+            (fun request =>
+              MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right)
+            requests)
+          machine fun after values =>
+          ∀
+            (value :
+              MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            value ∈ values → MicroCFTA.InternedProbeProvenance.Available after.heap value
+@MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.concrete_trace_admission : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (inputs : MicroCFTA.IntersectSchedule.FiniteInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds)),
+  MicroCFTA.InternedNestedFacts.Facts source →
+    ∀ {A : Type} {fuel : Nat} {control next : MicroCFTA.SourceEqualityNativeDemand.Control A}
+      {before after : MicroCFTA.SourceEqualityNativeDemand.State width},
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel control before next after →
+        ∀
+          (post :
+            MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              A → Prop),
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+              MicroCFTA.InternedConstructorTemplates.Grows source before.native.machine.heap →
+                MicroCFTA.Cache.Extends source.nodes.issued before.native.machine.heap.nodes.issued →
+                  MicroCFTA.SourceCurrentAllocatedNativeFieldClosure.Fields control before →
+                    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs before.native →
+                      MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.ControlCertified source holds inputs control
+                          before.native.machine post →
+                        MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs after.native ∧
+                          MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted
+                              (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds)
+                              (MicroCFTA.IntersectSchedule.finiteInputMeaning
+                                (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds) inputs)
+                              after.native ∧
+                            MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted inputs after.native
+@MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.fixed_query_exact_and_covered : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.InternedNestedFacts.Facts source →
+    ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+      (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+      (inputs :
+        MicroCFTA.IntersectSchedule.FiniteInput
+          (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+            (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)))
+      (state : MicroCFTA.SourceEqualityNativeDemand.State width),
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state →
+        MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual
+            (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+              (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+            (MicroCFTA.IntersectSchedule.finiteInputMeaning
+              (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+                (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+              inputs)
+            (MicroCFTA.IntersectSchedule.finiteRankedInput
+              (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+                (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+              inputs)
+            (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) state.native →
+          MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs state.native →
+            MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped state.native →
+              MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap →
+                MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native →
+                  MicroCFTA.InternedConstructorTemplates.Grows source state.native.machine.heap →
+                    MicroCFTA.Cache.Extends source.nodes.issued state.native.machine.heap.nodes.issued →
+                      ∀
+                        (left right :
+                          MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                        MicroCFTA.SourceRecursiveIntersectionInputView.Original left →
+                          MicroCFTA.SourceRecursiveIntersectionInputView.Original right →
+                            MicroCFTA.InternedProbeProvenance.Available source left →
+                              MicroCFTA.InternedProbeProvenance.Available source right →
+                                left.free = [] →
+                                  right.free = [] →
+                                    inputs.valid (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf left) →
+                                      inputs.valid (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf right) →
+                                        MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                              (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                                            state →
+                                          ∃ fuel value after,
+                                            MicroCFTA.SourceEqualityNativeDemand.execute (fuel + 1)
+                                                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                                    (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                                      MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                                                  state =
+                                                MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after ∧
+                                              value.free = [] ∧
+                                                MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap
+                                                    value ∧
+                                                  MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered inputs
+                                                      after.native ∧
+                                                    MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport.Admitted
+                                                        (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+                                                          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+                                                        (MicroCFTA.IntersectSchedule.finiteInputMeaning
+                                                          (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+                                                            (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+                                                          inputs)
+                                                        after.native ∧
+                                                      MicroCFTA.SourceCurrentAllocatedNativeContextRebase.SeenAdmitted
+                                                          inputs after.native ∧
+                                                        ∀
+                                                          (output :
+                                                            MicroCFTA.InternedGuardedLanguage.Env
+                                                              (MicroCFTA.SourceObservations.Label
+                                                                MicroCFTA.FullSyntax.Formula))
+                                                          (term :
+                                                            MicroCFTA.Language.Term
+                                                              (MicroCFTA.SourceObservations.Label
+                                                                MicroCFTA.FullSyntax.Formula)),
+                                                          MicroCFTA.InternedGuardedLanguage.meaning
+                                                              (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                                              output value term ↔
+                                                            MicroCFTA.InternedGuardedLanguage.meaning
+                                                                (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                                                output left term ∧
+                                                              MicroCFTA.InternedGuardedLanguage.meaning
+                                                                (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                                                output right term
+@MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.generated_inventory_retained : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (roots :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (originals :
+    ∀
+      (root :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      root ∈ roots → MicroCFTA.SourceRecursiveIntersectionInputView.Original root)
+  (available : MicroCFTA.InternedNestedProvenance.Values source roots)
+  (closed :
+    ∀
+      (root :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      root ∈ roots → root.free = [])
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state),
+  MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual
+      (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+      (MicroCFTA.IntersectSchedule.finiteInputMeaning
+        (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+        (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) roots originals available closed))
+      (MicroCFTA.IntersectSchedule.finiteRankedInput
+        (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+        (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) roots originals available closed))
+      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) state.native →
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered
+        (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) roots originals available closed)
+        state.native →
+      MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped state.native →
+        MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap →
+          MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native →
+            MicroCFTA.InternedConstructorTemplates.Grows source state.native.machine.heap →
+              MicroCFTA.Cache.Extends source.nodes.issued state.native.machine.heap.nodes.issued →
+                ∀
+                  (left right :
+                    MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                  MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap left →
+                    MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap right →
+                      left.free = [] →
+                        right.free = [] →
+                          MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                              state →
+                            ∃ targetAvailable targetClosed fuel value after,
+                              MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.Receipt state.native.machine.heap
+                                  formulas solver
+                                  (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+                                    state.native.machine.heap ⋯ (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                    (roots ++ [left, right]) ⋯ targetAvailable targetClosed)
+                                  fuel left right state value after ∧
+                                MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered
+                                  (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+                                    state.native.machine.heap ⋯ (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                    (roots ++ [left, right]) ⋯ targetAvailable targetClosed)
+                                  after.native
+@MicroCFTA.SourceCurrentAllocatedNativeCoveredQueryIndependentProbes.two_generated_queries : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (roots :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (originals :
+    ∀
+      (root :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      root ∈ roots → MicroCFTA.SourceRecursiveIntersectionInputView.Original root)
+  (available : MicroCFTA.InternedNestedProvenance.Values source roots)
+  (closed :
+    ∀
+      (root :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      root ∈ roots → root.free = [])
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state),
+  MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual
+      (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+      (MicroCFTA.IntersectSchedule.finiteInputMeaning
+        (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+        (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) roots originals available closed))
+      (MicroCFTA.IntersectSchedule.finiteRankedInput
+        (MicroCFTA.SourceRecursiveIntersectionInputView.view source
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver))
+        (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) roots originals available closed))
+      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) state.native →
+    MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache.Covered
+        (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts
+          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) roots originals available closed)
+        state.native →
+      MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped state.native →
+        MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap →
+          MicroCFTA.SourceRecursiveIntersectionNative.Idle state.native →
+            MicroCFTA.InternedConstructorTemplates.Grows source state.native.machine.heap →
+              MicroCFTA.Cache.Extends source.nodes.issued state.native.machine.heap.nodes.issued →
+                ∀
+                  (left right :
+                    MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                  MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap left →
+                    MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap right →
+                      left.free = [] →
+                        right.free = [] →
+                          MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                              state →
+                            ∃ firstAvailable firstClosed firstFuel firstValue firstAfter firstGood,
+                              MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery.Receipt state.native.machine.heap
+                                  formulas solver
+                                  (MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+                                    state.native.machine.heap ⋯ (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                    (roots ++ [left, right]) ⋯ firstAvailable firstClosed)
+                                  firstFuel left right state firstValue firstAfter ∧
+                                (MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                        MicroCFTA.IntersectionEmptyDomain.emptyDomain firstValue right))
+                                    firstAfter →
+                                  ∃ secondAvailable secondClosed,
+                                    have nextInputs :=
+                                      MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+                                        firstAfter.native.machine.heap ⋯
+                                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                        (roots ++ [left, right] ++ [firstValue, right]) ⋯ secondAvailable secondClosed;
+                                    ∃ secondFuel secondValue secondAfter, ⋯)

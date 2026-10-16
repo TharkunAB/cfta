@@ -1,0 +1,113 @@
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.name_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.identity_input' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.physical_name_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.pair_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.empty_seen' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.restrict_seen' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.extend_seen' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.bindings_covered' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.entered_seen' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.entered_names' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.request_entered_seen' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairAdmission.request_entered_names' depends on axioms: [propext, Quot.sound]
+@name_covered : ∀ {Symbol : Type} {view : View Symbol} (inputs : FiniteInput view) (input : Input),
+  inputs.valid input → input ≠ Input.empty → NameCovered inputs (identity input)
+@identity_input : ∀ {Symbol Guard : Type} (value : Value Symbol Guard) (name : Nat),
+  SourceRecursiveIntersectionControl.identity value = some name →
+    inputOf value ≠ Input.empty ∧ identity (inputOf value) = name
+@physical_name_covered : ∀ {Symbol Guard : Type} {view : View Symbol} (inputs : FiniteInput view)
+  (value : Value Symbol Guard),
+  inputs.valid (inputOf value) →
+    ∀ (name : Nat), SourceRecursiveIntersectionControl.identity value = some name → NameCovered inputs name
+@pair_covered : ∀ {Symbol : Type} {view : View Symbol} (inputs : FiniteInput view) (first second : Nat),
+  NameCovered inputs first →
+    NameCovered inputs second →
+      NameCovered inputs (SourceRecursiveIntersectionControl.pair first second).fst ∧
+        NameCovered inputs (SourceRecursiveIntersectionControl.pair first second).snd
+@empty_seen : ∀ {Symbol : Type} {view : View Symbol} (inputs : FiniteInput view),
+  SeenCovered inputs IntersectionEmptyDomain.emptyDomain.key
+@restrict_seen : ∀ {Symbol : Type} {view : View Symbol} (inputs : FiniteInput view)
+  (before after : IntersectionFlatMemoKeyDomain.DomainKey),
+  SeenCovered inputs before → (∀ (pair : Nat × Nat), pair ∈ after.seen → pair ∈ before.seen) → SeenCovered inputs after
+@extend_seen : ∀ {Symbol : Type} {view : View Symbol} (inputs : FiniteInput view)
+  (domain : IntersectionFlatMemoKeyDomain.DomainKey) (bound : List Nat) (first second : Nat),
+  SeenCovered inputs domain →
+    NameCovered inputs first →
+      NameCovered inputs second →
+        SeenCovered inputs
+          (SourceRecursiveIntersectionDomain.extend domain bound (SourceRecursiveIntersectionControl.pair first second))
+@bindings_covered : ∀ {Symbol Guard : Type} {view : View Symbol} (inputs : FiniteInput view)
+  (left right : Value Symbol Guard),
+  inputs.valid (inputOf left) →
+    inputs.valid (inputOf right) →
+      ∀ (name : Nat),
+        name ∈ List.map Prod.fst (SourceRecursiveIntersectionEnvironment.bindings left right) → NameCovered inputs name
+@entered_seen : ∀ {Symbol Guard : Type} {view : View Symbol} (inputs : FiniteInput view)
+  (cache : Cache.State IntersectionFlatMemoKeyDomain.DomainKey),
+  Cache.Valid cache →
+    ∀ (domain : IntersectionFlatMemoKeyDomain.DomainKey) (left right : Value Symbol Guard),
+      SeenCovered inputs domain →
+        inputs.valid (inputOf left) →
+          inputs.valid (inputOf right) →
+            ∀ (first second : Nat),
+              SourceRecursiveIntersectionControl.identity left = some first →
+                SourceRecursiveIntersectionControl.identity right = some second →
+                  SeenCovered inputs
+                    (SourceRecursiveIntersectionEnvironment.enter cache domain left right first second).fst.key
+@entered_names : ∀ {Symbol Guard : Type} {view : View Symbol} (inputs : FiniteInput view)
+  (cache : Cache.State IntersectionFlatMemoKeyDomain.DomainKey),
+  Cache.Valid cache →
+    ∀ (domain : IntersectionFlatMemoKeyDomain.DomainKey) (left right : Value Symbol Guard),
+      (∀ (name : Nat), name ∈ SourceRecursiveIntersectionDomain.names domain → NameCovered inputs name) →
+        inputs.valid (inputOf left) →
+          inputs.valid (inputOf right) →
+            ∀ (first second name : Nat),
+              name ∈
+                  SourceRecursiveIntersectionDomain.names
+                    (SourceRecursiveIntersectionEnvironment.enter cache domain left right first second).fst.key →
+                NameCovered inputs name
+@request_entered_seen : ∀ {sourceView : View (SourceObservations.Label FullSyntax.Formula)}
+  (inputs : FiniteInput sourceView)
+  (request :
+    SourceRecursiveIntersectionThunks.NodeRequest (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (cache : Cache.State IntersectionFlatMemoKeyDomain.DomainKey),
+  Cache.Valid cache →
+    SeenCovered inputs request.domain.key →
+      SourceCurrentAllocatedNativeContextCache.NodeInputs sourceView (finiteInputMeaning sourceView inputs) request →
+        ∀ (first second : Nat),
+          SourceRecursiveIntersectionControl.identity request.left = some first →
+            SourceRecursiveIntersectionControl.identity request.right = some second →
+              SeenCovered inputs
+                (SourceRecursiveIntersectionEnvironment.enter cache request.domain.key request.left request.right first
+                      second).fst.key
+@request_entered_names : ∀ {sourceView : View (SourceObservations.Label FullSyntax.Formula)}
+  (inputs : FiniteInput sourceView)
+  (request :
+    SourceRecursiveIntersectionThunks.NodeRequest (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (cache : Cache.State IntersectionFlatMemoKeyDomain.DomainKey),
+  Cache.Valid cache →
+    (∀ (name : Nat), name ∈ SourceRecursiveIntersectionDomain.names request.domain.key → NameCovered inputs name) →
+      SourceCurrentAllocatedNativeContextCache.NodeInputs sourceView (finiteInputMeaning sourceView inputs) request →
+        ∀ (first second name : Nat),
+          name ∈
+              SourceRecursiveIntersectionDomain.names
+                (SourceRecursiveIntersectionEnvironment.enter cache request.domain.key request.left request.right first
+                      second).fst.key →
+            NameCovered inputs name
+lean/restart-evidence/20261016-admission-history/pair-admission-publicprobes.lean:99:84: error: Tactic `constructor` failed: no applicable constructor found
+
+case left
+⊢ Input.mu 1 = Input.mu 2
+lean/restart-evidence/20261016-admission-history/pair-admission-publicprobes.lean:110:2: error: Tactic `apply` failed: could not unify the conclusion of `(SourceRecursiveIntersectionDomain.extend_seen ?m.8 ?m.9 ?m.10
+    ?m.11).mpr`
+  ?m.11 ∈ (SourceRecursiveIntersectionDomain.extend ?m.8 ?m.9 ?m.10).seen
+with the goal
+  SourceRecursiveIntersectionControl.pair firstId firstId ∈ later.fst.key.seen
+
+Note: The full type of `(SourceRecursiveIntersectionDomain.extend_seen ?m.8 ?m.9 ?m.10 ?m.11).mpr` is
+  ?m.11 = ?m.10 ∨ ?m.11 ∈ IntersectionFlatMemoKeyDomain.DomainKey.seen ?m.8 →
+    ?m.11 ∈ (SourceRecursiveIntersectionDomain.extend ?m.8 ?m.9 ?m.10).seen
+
+⊢ SourceRecursiveIntersectionControl.pair firstId firstId ∈ later.fst.key.seen
