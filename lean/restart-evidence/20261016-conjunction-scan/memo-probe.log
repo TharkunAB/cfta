@@ -1,0 +1,145 @@
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.ready' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_good' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_scoped' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_idle' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_self' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.Receipt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.lift_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.call_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedConjunctionMemo.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.ready : ∀ {width : Nat}
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before.native.machine.heap →
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+          (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before)
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_good : ∀ {width : Nat}
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before) after →
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good
+        (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after)
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_contextual : ∀ {width : Nat}
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (model : MicroCFTA.IntersectSchedule.InputMeaning view)
+  (ranked : MicroCFTA.IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula),
+  MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual view model ranked holds before.native →
+    MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual view model ranked holds
+      (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after).native
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_scoped : ∀ {width : Nat}
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula),
+  MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped before.native →
+    MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped
+      (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after).native
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_idle : ∀ {width : Nat}
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula),
+  MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+    MicroCFTA.SourceRecursiveIntersectionNative.Idle
+      (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before after).native
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.advance_self : ∀ {width : Nat}
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before) =
+    before
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.Receipt : {width : Nat} →
+  MicroCFTA.SourceEqualityNativeDemand.State width →
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula →
+      Prop
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.lift_effects : ∀ {width : Nat}
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+      MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+          (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before) after →
+        MicroCFTA.SourceCurrentAllocatedConjunctionMemo.Receipt before after
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.call_effects : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {budget : Nat}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width} {answer : Bool}
+  {after :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.State
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula},
+  MicroCFTA.SourceCurrentConjunctionMemo.Call budget memo query
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before) answer after saved →
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+      MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+        MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before.native.machine.heap →
+          MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+            MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap query →
+              MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo →
+                MicroCFTA.SourceCurrentAllocatedConjunctionMemo.Receipt before after ∧
+                  MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver after.heap saved ∧
+                    MicroCFTA.SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+                      MicroCFTA.SourceCurrentEmptinessMemo.Extends memo saved
+@MicroCFTA.SourceCurrentAllocatedConjunctionMemo.finite : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (budget : Nat)
+  (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (query :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before.native.machine.heap →
+        MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native →
+          MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap query →
+            MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo →
+              ∃ answer after saved,
+                MicroCFTA.SourceCurrentConjunctionMemo.Call budget memo query
+                    (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before) answer after saved ∧
+                  MicroCFTA.SourceCurrentAllocatedConjunctionMemo.Receipt before after ∧
+                    MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver after.heap saved ∧
+                      MicroCFTA.SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+                        MicroCFTA.SourceCurrentEmptinessMemo.Extends memo saved

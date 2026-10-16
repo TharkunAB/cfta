@@ -1,0 +1,21 @@
+'MicroCFTA.SourceCurrentAllocatedNativeTraceEffects.effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedNativeTraceEffects.effects : ∀ {A : Type} {width fuel : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {control : MicroCFTA.SourceEqualityNativeDemand.Control A}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width} {value : A},
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel control before
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+      after →
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+      MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+        MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before.native.machine.heap →
+          MicroCFTA.SourceCurrentAllocatedNativeFieldClosure.Fields control before →
+            MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good after ∧
+              MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+                  (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before)
+                  (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) ∧
+                MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine

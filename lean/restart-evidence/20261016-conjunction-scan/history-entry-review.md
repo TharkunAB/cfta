@@ -1,0 +1,19 @@
+# Current conjunction history entry review
+
+Timestamp: 2026-10-16 07:04 CEST. Read-only review. No source edits or builds were run.
+
+Reviewed `SourceCurrentConjunctionClassHistoryEntry.lean`, SHA256 `5281ba7124f3c12c5919d4329b217a15b8612db61ebe4a7a291950e865d92a12`, and its initial-state and finite-scan dependencies. The existing `history-build.log` records GREEN1276 and only the preexisting unused-input warning.
+
+No material defect was found.
+
+`constructed` combines two independent construction endpoints at the same literal `heap` and `finalCache`. `OriginalHistory.constructed` derives physical `Good`, `SemanticReady`, and the built value's availability, closedness, and `Original` property. `ClassHistoryEntry.constructed` has result order `operationsValid AND (IdleReady AND (CostHeap AND ...))`. Therefore `initialFields.2.2.1` is exactly `CostHeap heap`; it is not a field invariant or a cost for a different state. Both endpoints receive the identical history, coverage, completed build equation, and heap. Native scope and idleness follow from the actual empty native tables.
+
+The equality interner is exactly the caller's history-final `finalCache`. Neither the initial equality interner nor this final interner is assumed empty. `operations finalCache` means `ConstraintMemoAllocation.initial finalCache`: it retains this interner and starts only the modeled completed combination and descent tables empty. `initial width (heap, Cache.emptyState)` starts the native thunk families and domain cache empty at the actual built heap. `cold_finite` additionally starts the fourth memo empty. These are explicit cold model states, not claims that Haskell resets process-global tables or forces fields in the modeled order. The module header states the cold table boundary.
+
+`finite` invokes `SourceCurrentConjunctionClassScanCompletion.finite` with the derived new `Ready` and the exact same initial checked state. It constructs the NEW `SourceCurrentConjunctionClassScan.Scan`, whose queried branch uses actual checked seeded traces and `SourceCurrentConjunctionMemo.Call`. It does not invoke the historical scan endpoints imported through `SourceCurrentClassHistoryEntry`; only that module's construction theorem supplies costs. No completed historical Scan is a premise or conclusion.
+
+The live premises remain explicit: a causal allocation history, initial interner validity, literal guard coverage, actual completed cold construction, availability of the scan's forest, proper natural paths, reached `Ranges`, and correctness of an optional warm fourth memo. Normalization is carried by the actual history events and transferred through coverage; successful interning alone is not treated as normalization. The scan forest and class list are supplied inputs. This module does not derive them from a selected physical edge or allocated precheck output. It also does not require unrelated forest siblings to be closed.
+
+`cold_finite` discharges only initial fourth-memo correctness through `empty_correct`; it preserves the same actual retained interner, forest, class list, and range plan. Both finite endpoints return the actual new scan, final `Ready`, physical effects, retained original forest availability, and fourth-memo correctness and extension. They assume no future field cache, final state invariant, native result law, completed query, or completed decision.
+
+There is no original-class language or semantic rejection conclusion. Semantic heap readiness is a physical/probe invariant; fourth-memo correctness excludes accepted terms of the actual queried value when its answer is true. The missing generated-operand contextual model and checked seeded common-subtree bridge remain separate. Full physical class entry, global memo receipts, the selected fallback and constrained outer caller, GHC lazy demand/publication, concrete containers, and concurrency are not established by this adapter.

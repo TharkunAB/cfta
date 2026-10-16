@@ -1,0 +1,78 @@
+MicroCFTA.SourceCurrentConjunctionClassScan.stopped_member {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {budget : Nat}
+  {unconstrained reaches : Value Symbol Guard → Bool} {values : List (Value Symbol Guard)}
+  {classes selected : Constraints} {paths : Class} {before after : Checked width} {memo saved : Memo}
+  (trace : Scan budget unconstrained reaches values classes before memo (some paths) selected after saved) :
+  paths ∈ classes
+MicroCFTA.SourceCurrentConjunctionClassScan.selected_sublist {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {budget : Nat}
+  {unconstrained reaches : Value Symbol Guard → Bool} {values : List (Value Symbol Guard)}
+  {classes selected : Constraints} {outcome : Option Class} {before after : Checked width} {memo saved : Memo}
+  (trace : Scan budget unconstrained reaches values classes before memo outcome selected after saved) :
+  List.Sublist selected classes
+MicroCFTA.SourceCurrentConjunctionClassScan.advance_ready {width : Nat} (before : Checked width) (after : Physical)
+  (ready : Ready before) (effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) after) :
+  Ready (advancePhysical before after)
+MicroCFTA.SourceCurrentConjunctionClassScan.primary_effects {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (unconstrained reaches : Value Symbol Guard → Bool)
+  {values : List (Value Symbol Guard)} {paths : Class} {before : Checked width} {answer : Bool}
+  {heap : State Symbol Guard}
+  (actual :
+    EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before.native.machine.heap answer heap)
+  (ready : Ready before) (available : Values before.native.machine.heap values) :
+  Ready (advanceHeap before heap) ∧
+    SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical (advanceHeap before heap)) ∧
+      Values (advanceHeap before heap).native.machine.heap values
+MicroCFTA.SourceCurrentConjunctionClassScan.secondary_effects {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (unconstrained : Value Symbol Guard → Bool) {values : List (Value Symbol Guard)}
+  {paths : Class} {before : Checked width} {answer : Bool} {heap : State Symbol Guard}
+  (actual : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap answer heap)
+  (ready : Ready before) (available : Values before.native.machine.heap values) :
+  Ready (advanceHeap before heap) ∧
+    SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical (advanceHeap before heap)) ∧
+      Values (advanceHeap before heap).native.machine.heap values
+MicroCFTA.SourceCurrentConjunctionClassScan.memo_effects {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  {budget : Nat} {memo saved : Memo} {query : Value Symbol Guard} {before : Checked width} {answer : Bool}
+  {after : Physical} (actual : SourceCurrentConjunctionMemo.Call budget memo query (physical before) answer after saved)
+  (ready : Ready before) (available : Available before.native.machine.heap query)
+  (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo) :
+  Ready (advancePhysical before after) ∧
+    SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical (advancePhysical before after)) ∧
+      SourceCurrentEmptinessMemo.Correct formulas solver (advancePhysical before after).native.machine.heap saved ∧
+        SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+          SourceCurrentEmptinessMemo.Extends memo saved
+MicroCFTA.SourceCurrentConjunctionClassScanCompletion.finite {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (budget : Nat) (unconstrained reaches : Value Symbol Guard → Bool) (values : List (Value Symbol Guard))
+  (classes : Constraints) (before : Checked width) (memo : Memo) (ready : Ready before)
+  (available : Values before.native.machine.heap values)
+  (proper : ∀ (paths : Class), paths ∈ classes → ∀ (path : Path), path ∈ paths → path ≠ [])
+  (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo)
+  (ranges :
+    SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values classes before memo) :
+  ∃ outcome selected after saved,
+    Scan budget unconstrained reaches values classes before memo outcome selected after saved ∧
+      Ready after ∧
+        SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after) ∧
+          Values after.native.machine.heap values ∧
+            SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap saved ∧
+              SourceCurrentEmptinessMemo.Extends memo saved
+'MicroCFTA.SourceCurrentConjunctionClassScan.stopped_member' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentConjunctionClassScan.selected_sublist' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentConjunctionClassScan.advance_ready' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentConjunctionClassScan.primary_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentConjunctionClassScan.secondary_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentConjunctionClassScan.memo_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentConjunctionClassScanCompletion.finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.CurrentConjunctionScanKernelProbe.finite_current_scan' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

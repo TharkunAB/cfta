@@ -1,0 +1,186 @@
+'MicroCFTA.SourceCurrentConjunctionClassHistoryEntry.constructed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentConjunctionClassHistoryEntry.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentConjunctionClassHistoryEntry.cold_finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentConjunctionClassHistoryEntry.constructed
+  {initialCache finalCache : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key}
+  {originals : List (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (width : Nat) (history : MicroCFTA.SourceEqualityOriginalAllocationHistory.History initialCache finalCache originals)
+  (valid : MicroCFTA.Cache.Valid initialCache)
+  (expression :
+    MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered :
+    ∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+      original ∈ MicroCFTA.SourceEqualityConstraintOrigins.guards expression → original ∈ originals)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build expression [] MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done value heap) :
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready
+      {
+        native :=
+          MicroCFTA.SourceRecursiveIntersectionThunks.initial width
+            { heap := heap, domains := MicroCFTA.Cache.emptyState },
+        operations := MicroCFTA.SourceEqualityConstraintMemoAllocation.initial finalCache } ∧
+    MicroCFTA.InternedProbeProvenance.Available heap value ∧
+      value.free = [] ∧ MicroCFTA.SourceRecursiveIntersectionInputView.Original value
+MicroCFTA.SourceCurrentConjunctionClassHistoryEntry.finite
+  {initialCache finalCache : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key}
+  {originals : List (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (width : Nat) (history : MicroCFTA.SourceEqualityOriginalAllocationHistory.History initialCache finalCache originals)
+  (valid : MicroCFTA.Cache.Valid initialCache)
+  (expression :
+    MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered :
+    ∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+      original ∈ MicroCFTA.SourceEqualityConstraintOrigins.guards expression → original ∈ originals)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build expression [] MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done value heap)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (budget : Nat)
+  (unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (classes : MicroCFTA.EqualityNormalize.Constraints) (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (available : MicroCFTA.InternedNestedProvenance.Values heap values)
+  (proper :
+    ∀ (paths : MicroCFTA.EqualityNormalize.Class),
+      paths ∈ classes → ∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ paths → path ≠ [])
+  (correct : MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver heap memo)
+  (ranges :
+    MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values classes
+      {
+        native :=
+          MicroCFTA.SourceRecursiveIntersectionThunks.initial width
+            { heap := heap, domains := MicroCFTA.Cache.emptyState },
+        operations := MicroCFTA.SourceEqualityConstraintMemoAllocation.initial finalCache }
+      memo) :
+  ∃ outcome selected after saved,
+    MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget unconstrained reaches values classes
+        {
+          native :=
+            MicroCFTA.SourceRecursiveIntersectionThunks.initial width
+              { heap := heap, domains := MicroCFTA.Cache.emptyState },
+          operations := MicroCFTA.SourceEqualityConstraintMemoAllocation.initial finalCache }
+        memo outcome selected after saved ∧
+      MicroCFTA.SourceCurrentConjunctionClassScan.Ready after ∧
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+            { heap := heap, equality := MicroCFTA.SourceEqualityConstraintMemoAllocation.initial finalCache }
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) ∧
+          MicroCFTA.InternedNestedProvenance.Values after.native.machine.heap values ∧
+            MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap saved ∧
+              MicroCFTA.SourceCurrentEmptinessMemo.Extends memo saved
+MicroCFTA.SourceCurrentConjunctionClassHistoryEntry.cold_finite
+  {initialCache finalCache : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key}
+  {originals : List (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (width : Nat) (history : MicroCFTA.SourceEqualityOriginalAllocationHistory.History initialCache finalCache originals)
+  (valid : MicroCFTA.Cache.Valid initialCache)
+  (expression :
+    MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered :
+    ∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+      original ∈ MicroCFTA.SourceEqualityConstraintOrigins.guards expression → original ∈ originals)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build expression [] MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done value heap)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (budget : Nat)
+  (unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (classes : MicroCFTA.EqualityNormalize.Constraints)
+  (available : MicroCFTA.InternedNestedProvenance.Values heap values)
+  (proper :
+    ∀ (paths : MicroCFTA.EqualityNormalize.Class),
+      paths ∈ classes → ∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ paths → path ≠ [])
+  (ranges :
+    MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values classes
+      {
+        native :=
+          MicroCFTA.SourceRecursiveIntersectionThunks.initial width
+            { heap := heap, domains := MicroCFTA.Cache.emptyState },
+        operations := MicroCFTA.SourceEqualityConstraintMemoAllocation.initial finalCache }
+      MicroCFTA.SourceCurrentEmptinessMemo.empty) :
+  ∃ outcome selected after saved,
+    MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget unconstrained reaches values classes
+        {
+          native :=
+            MicroCFTA.SourceRecursiveIntersectionThunks.initial width
+              { heap := heap, domains := MicroCFTA.Cache.emptyState },
+          operations := MicroCFTA.SourceEqualityConstraintMemoAllocation.initial finalCache }
+        MicroCFTA.SourceCurrentEmptinessMemo.empty outcome selected after saved ∧
+      MicroCFTA.SourceCurrentConjunctionClassScan.Ready after ∧
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+            { heap := heap, equality := MicroCFTA.SourceEqualityConstraintMemoAllocation.initial finalCache }
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) ∧
+          MicroCFTA.InternedNestedProvenance.Values after.native.machine.heap values ∧
+            MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap saved ∧
+              MicroCFTA.SourceCurrentEmptinessMemo.Extends MicroCFTA.SourceCurrentEmptinessMemo.empty saved
+lean/restart-evidence/20261016-conjunction-scan/history-publicprobes.lean:53:55: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.50 = ?m.50
+but is expected to have type
+  InternedFreshOrdinaryConstruction.build InternedNestedConstruction.Syntax.empty [] empty =
+    InternedNestedConstruction.Outcome.done Value.empty empty
+in the application
+  constructed width (History.start emptyState) Cache.empty_valid InternedNestedConstruction.Syntax.empty
+    (fun field member =>
+      List.Mem.casesOn (motive := fun a t =>
+        SourceEqualityConstraintOrigins.guards InternedNestedConstruction.Syntax.empty = a → member ≍ t → field ∈ [])
+        member (fun as h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+        (fun b {as} a h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+        (Eq.refl (SourceEqualityConstraintOrigins.guards InternedNestedConstruction.Syntax.empty)) (HEq.refl member))
+    Value.empty empty rfl

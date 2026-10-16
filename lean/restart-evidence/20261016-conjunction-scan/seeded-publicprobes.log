@@ -1,0 +1,268 @@
+'MicroCFTA.SourceCurrentAllocatedSeededQuery.Operand.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededQuery.Fold.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededQuery.operand_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededQuery.fold_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededQuery.seeded_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded.effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededQuery.false_class_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedSeededQuery.Operand.unique {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {path : List Int}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before firstAfter secondAfter : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (left : MicroCFTA.SourceCurrentAllocatedSeededQuery.Operand path values before first firstAfter)
+  (right : MicroCFTA.SourceCurrentAllocatedSeededQuery.Operand path values before second secondAfter) :
+  first = second ∧ firstAfter = secondAfter
+MicroCFTA.SourceCurrentAllocatedSeededQuery.Fold.unique {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)} {before firstAfter secondAfter : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (left : MicroCFTA.SourceCurrentAllocatedSeededQuery.Fold values paths before first firstAfter)
+  (right : MicroCFTA.SourceCurrentAllocatedSeededQuery.Fold values paths before second secondAfter) :
+  first = second ∧ firstAfter = secondAfter
+MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded.unique {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)} {before firstAfter secondAfter : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {first second :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (left : MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values paths before first firstAfter)
+  (right : MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values paths before second secondAfter) :
+  first = second ∧ firstAfter = secondAfter
+MicroCFTA.SourceCurrentAllocatedSeededQuery.operand_complete {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor) (path : List Int)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (ready :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before))
+  (scopes : MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped before.native)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.native.machine.heap)
+  (supported : MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values) :
+  ∃ result after,
+    MicroCFTA.SourceCurrentAllocatedSeededQuery.Operand path values before result after ∧
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good after ∧
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before)
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) ∧
+          MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine ∧
+            MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped after.native ∧
+              MicroCFTA.SourceRecursiveIntersectionNative.Idle after.native ∧
+                MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap result ∧ result.free = []
+MicroCFTA.SourceCurrentAllocatedSeededQuery.fold_complete {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List (List Int)) (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.FoldRanges values paths before)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (ready :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before))
+  (scopes : MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped before.native)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values) :
+  ∃ result after,
+    MicroCFTA.SourceCurrentAllocatedSeededQuery.Fold values paths before result after ∧
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good after ∧
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before)
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) ∧
+          MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine ∧
+            MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped after.native ∧
+              MicroCFTA.SourceRecursiveIntersectionNative.Idle after.native ∧
+                MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap result ∧ result.free = []
+MicroCFTA.SourceCurrentAllocatedSeededQuery.seeded_complete {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List (List Int)) (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.SeededRanges values paths before)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (ready :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before))
+  (scopes : MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped before.native)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values) :
+  ∃ result after,
+    MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values paths before result after ∧
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good after ∧
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before)
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) ∧
+          MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine ∧
+            MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped after.native ∧
+              MicroCFTA.SourceRecursiveIntersectionNative.Idle after.native ∧
+                MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap result ∧ result.free = []
+MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded.effects {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)} {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values paths before result after)
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.SeededRanges values paths before)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (ready :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before))
+  (scopes : MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped before.native)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values) :
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good after ∧
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before)
+        (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) ∧
+      MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine ∧
+        MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped after.native ∧
+          MicroCFTA.SourceRecursiveIntersectionNative.Idle after.native ∧
+            MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap result ∧ result.free = []
+MicroCFTA.SourceCurrentAllocatedSeededQuery.false_class_complete {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (paths : MicroCFTA.EqualityNormalize.Class)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (gate :
+    MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (ready :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before))
+  (scopes : MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped before.native)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (proper : ∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ paths → path ≠ [])
+  (ranges :
+    MicroCFTA.SourceCurrentAllocatedSeededQuery.SeededRanges values (List.map (List.map Int.ofNat) paths)
+      (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before
+        { heap := anchor, equality := before.operations })) :
+  ∃ query after,
+    MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values (List.map (List.map Int.ofNat) paths)
+        (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical before
+          { heap := anchor, equality := before.operations })
+        query after ∧
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good after ∧
+        MicroCFTA.SourceCurrentConjunctionRowsAllocation.Effects
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before)
+            (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical after) ∧
+          MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine ∧
+            MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped after.native ∧
+              MicroCFTA.SourceRecursiveIntersectionNative.Idle after.native ∧
+                MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap query ∧ query.free = []

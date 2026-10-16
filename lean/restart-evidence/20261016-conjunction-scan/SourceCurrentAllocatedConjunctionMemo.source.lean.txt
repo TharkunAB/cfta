@@ -1,0 +1,124 @@
+import MicroCFTA.SourceCurrentAllocatedQueryMemo
+import MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion
+import MicroCFTA.SourceCurrentAllocatedNativeContextCache
+import MicroCFTA.SourceCurrentAllocatedNativeScopeCache
+
+/-!
+# Current conjunction calls retain the checked native state
+
+The call uses the actual constructor heap and equality-operation state.
+Its returned effects derive physical validity at the same native tables.
+Completed contextual laws and scopes depend only on those unchanged cells.
+Finite calls need no preceding native query or completed decision premise.
+The completed resident schedule does not establish GHC demand order.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedConjunctionMemo
+open Language InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativeEffects (physical)
+open SourceCurrentAllocatedQueryMemo (advancePhysical)
+open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+open SourceEqualityRequiredSemanticCache (SemanticReady)
+open SourceCurrentConjunctionRowsAllocation (Ready Effects)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
+local notation "CostHeap" => InternedFreshOrdinaryCostHeap.Heap
+variable {width : Nat}
+
+/-- The initial checked invariants supply every physical conjunction premise. -/
+theorem ready (before : Checked width) (good : Good before)
+    (semantic : SemanticReady before.native.machine.heap) (costs : CostHeap before.native.machine.heap) :
+    Ready (physical before) := ⟨semantic, costs, good.operations, good.fields⟩
+
+/-- Actual returned physical effects retain validity of both native memo families. -/
+theorem advance_good (before : Checked width) (after : Physical) (good : Good before)
+    (effects : Effects (physical before) after) : Good (advancePhysical before after) := by
+  refine ⟨?_, effects.ready.semantic.ready, effects.ready.valid, effects.ready.fields⟩
+  exact SourceCurrentAllocatedNativePhysicalCache.advance_valid before.native good.native _
+    ⟨effects.ready.semantic.ready.semantic.1.normal.facts, good.native.machine.2⟩
+    (SourceCurrentAllocatedQueryMemo.advance_extension before after effects)
+
+/-- The same returned cells retain their laws in the fixed original interpretation. -/
+theorem advance_contextual (view : IntersectSchedule.View Symbol)
+    (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+    (holds : Guard → Term Symbol → Bool) (before : Checked width) (after : Physical)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual view model ranked holds before.native) :
+    SourceCurrentAllocatedNativeContextCache.Contextual view model ranked holds (advancePhysical before after).native :=
+  SourceCurrentAllocatedNativeContextCache.advance_contextual view model ranked holds before.native _ contextual
+
+/-- Constructor heap changes retain the scopes of the unchanged returned cells. -/
+theorem advance_scoped (before : Checked width) (after : Physical)
+    (scopes : SourceCurrentAllocatedNativeScopeCache.Scoped before.native) :
+    SourceCurrentAllocatedNativeScopeCache.Scoped (advancePhysical before after).native :=
+  SourceCurrentAllocatedNativeScopeCache.advance_scoped before.native _ scopes
+
+/-- The conjunction call does not start or finish a native memo cell. -/
+theorem advance_idle (before : Checked width) (after : Physical)
+    (idle : SourceRecursiveIntersectionNative.Idle before.native) :
+    SourceRecursiveIntersectionNative.Idle (advancePhysical before after).native :=
+  SourceRecursiveIntersectionNative.Idle.advance before.native _ idle
+
+/-- An unchanged physical result retains the whole checked state. -/
+theorem advance_self (before : Checked width) : advancePhysical before (physical before) = before := by
+  cases before
+  rfl
+
+/-- The actual physical result retains the original native tables and domain cache. -/
+structure Receipt (before : Checked width) (after : Physical) : Prop where
+  effects : Effects (physical before) after
+  good : Good (advancePhysical before after)
+  semantic : SemanticReady (advancePhysical before after).native.machine.heap
+  idle : SourceRecursiveIntersectionNative.Idle (advancePhysical before after).native
+  extension : Extension before.native.machine (advancePhysical before after).native.machine
+  tables : (advancePhysical before after).native.nodes = before.native.nodes ∧
+    (advancePhysical before after).native.edges = before.native.edges ∧
+    (advancePhysical before after).native.machine.domains = before.native.machine.domains
+
+/-- Physical effects derive the returned checked invariants without a future-state premise. -/
+theorem lift_effects (before : Checked width) (after : Physical) (good : Good before)
+    (idle : SourceRecursiveIntersectionNative.Idle before.native) (effects : Effects (physical before) after) :
+    Receipt before after :=
+  ⟨effects, advance_good before after good effects, effects.ready.semantic, advance_idle before after idle,
+    SourceCurrentAllocatedQueryMemo.advance_extension before after effects,
+    SourceCurrentAllocatedQueryMemo.advance_tables before after⟩
+
+/-- An actual current hit or miss derives checked and fourth-memo invariants. -/
+theorem call_effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {budget : Nat} {memo saved : SourceCurrentEmptinessMemo.Memo} {query : Value Symbol Guard}
+    {before : Checked width} {answer : Bool} {after : Physical}
+    (actual : SourceCurrentConjunctionMemo.Call budget memo query (physical before) answer after saved)
+    (good : Good before) (semantic : SemanticReady before.native.machine.heap)
+    (costs : CostHeap before.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle before.native)
+    (available : Available before.native.machine.heap query)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo) :
+    Receipt before after ∧ SourceCurrentEmptinessMemo.Correct formulas solver after.heap saved ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+      SourceCurrentEmptinessMemo.Extends memo saved := by
+  obtain ⟨effects, finalCorrect, sound, retained⟩ := SourceCurrentConjunctionMemo.verified formulas solver
+    actual (ready before good semantic costs) available correct
+  exact ⟨lift_effects before after good idle effects, finalCorrect, sound, retained⟩
+
+/-- Initial checked invariants derive a finite current call without a preceding query. -/
+theorem finite [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (budget : Nat) (memo : SourceCurrentEmptinessMemo.Memo) (query : Value Symbol Guard) (before : Checked width)
+    (good : Good before) (semantic : SemanticReady before.native.machine.heap)
+    (costs : CostHeap before.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle before.native)
+    (available : Available before.native.machine.heap query)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo) :
+    ∃ answer after saved, SourceCurrentConjunctionMemo.Call budget memo query (physical before) answer after saved ∧
+      Receipt before after ∧ SourceCurrentEmptinessMemo.Correct formulas solver after.heap saved ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+      SourceCurrentEmptinessMemo.Extends memo saved := by
+  obtain ⟨answer, after, saved, actual, _⟩ := SourceCurrentConjunctionMemo.complete budget memo query (physical before)
+    (ready before good semantic costs) available
+  exact ⟨answer, after, saved, actual,
+    call_effects formulas solver actual good semantic costs idle available correct⟩
+
+end MicroCFTA.SourceCurrentAllocatedConjunctionMemo
