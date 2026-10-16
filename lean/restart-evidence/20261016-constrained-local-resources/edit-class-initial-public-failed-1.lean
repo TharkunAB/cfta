@@ -1,0 +1,22 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditInitialCapacity
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassInitialCapacity
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.maxDepth 1000000
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditInitialCapacity.node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditInitialCapacity.node
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditInitialCapacity.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditInitialCapacity.children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditInitialCapacity.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditInitialCapacity.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditInitialCapacity.list
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryEditInitialCapacity.list
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassInitialCapacity.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassInitialCapacity.complete

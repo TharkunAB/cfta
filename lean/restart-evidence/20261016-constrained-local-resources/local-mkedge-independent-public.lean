@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdgeResources
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.proofs true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdgeResources.rejected
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdgeResources.rejected
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdgeResources.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMkEdgeResources.complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.nodeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.nodeBudget
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.edgeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.edgeBudget
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.outputRows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.outputRows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.outputArity
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.outputArity
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalResources.complete

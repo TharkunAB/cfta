@@ -1,0 +1,14 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentInitialCapacity
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.proofs true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentInitialCapacity.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentInitialCapacity.complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentInitialCapacity.resident_ranges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentInitialCapacity.resident_ranges

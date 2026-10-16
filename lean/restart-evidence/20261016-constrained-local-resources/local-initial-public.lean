@@ -1,0 +1,14 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalInitialCapacity
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalInitialCapacity.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalInitialCapacity.complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalInitialCapacity.ranges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalInitialCapacity.ranges
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalInitialCapacity.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLocalInitialCapacity.finite

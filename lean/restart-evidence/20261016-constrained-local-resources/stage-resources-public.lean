@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.outputRows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.outputRows
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.outputArity
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.outputArity
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.nodeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.nodeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.edgeBudget
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.edgeBudget
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStageResources.complete

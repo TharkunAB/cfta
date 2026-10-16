@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassInitialCapacity
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option pp.fullNames true
+set_option pp.width 180
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassInitialCapacity.fold_unique
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassInitialCapacity.fold_unique
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassInitialCapacity.complete
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassInitialCapacity.complete
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassInitialCapacity.ranges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassInitialCapacity.ranges
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassInitialCapacity.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryPassInitialCapacity.finite
