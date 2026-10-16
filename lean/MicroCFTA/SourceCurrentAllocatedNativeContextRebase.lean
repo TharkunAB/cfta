@@ -1,0 +1,225 @@
+import MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport
+
+/-!
+# Contextual cache laws across retained input views
+
+Input ranks agree only on the old admitted domain. Cached pair contexts
+also need old admission for both names of each seen pair. These local
+agreements retain the exact returned cells in the new interpretation.
+No law is inferred for a previously unadmitted cached request.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeContextRebase
+open Language IntersectSchedule InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionInputView
+open SourceCurrentAllocatedNativeContextCache SourceCurrentAllocatedNativePairContexts
+open SourceCurrentAllocatedNativeInputModelTransport (Admitted)
+variable {Symbol Guard : Type} {oldView newView : View Symbol} {width : Nat}
+
+/-- View growth preserves admission and exact ranks of every old valid input. -/
+structure Agreement (before : FiniteInput oldView) (after : FiniteInput newView) : Prop where
+  valid : ∀ input, before.valid input → after.valid input
+  rank : ∀ input, before.valid input → ∀ rank term,
+    inputAt (finiteRanks newView after) input rank term ↔ inputAt (finiteRanks oldView before) input rank term
+
+/-- An interpreted name has an old valid nonempty physical representative. -/
+def NameCovered (inputs : FiniteInput oldView) (name : Nat) : Prop :=
+  ∃ input, inputs.valid input ∧ input ≠ .empty ∧ identity input = name
+
+/-- Both identities of every enclosing pair have old admitted representatives. -/
+def SeenCovered (inputs : FiniteInput oldView) (domain : IntersectionFlatMemoKeyDomain.DomainKey) : Prop :=
+  ∀ pair ∈ domain.seen, NameCovered inputs pair.1 ∧ NameCovered inputs pair.2
+
+/-- Returned request contexts retain admission for every enclosing pair name. -/
+structure SeenAdmitted (inputs : FiniteInput oldView) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) : Prop where
+  nodes : Returned (fun (request : NodeRequest Symbol Guard) (_ : Value Symbol Guard) =>
+    SeenCovered inputs request.domain.key) state.nodes
+  edges : Returned (fun (request : EdgeRequest Symbol Guard) (_ : EdgeValue Symbol Guard) =>
+    SeenCovered inputs request.domain.key) state.edges
+
+private theorem language_ranks (view : View Symbol) (inputs : FiniteInput view) (input : Input) (term : Term Symbol) :
+    inputLanguage (finiteLanguages view inputs) input term ↔
+      ∃ rank, inputAt (finiteRanks view inputs) input rank term := by
+  cases input <;> simp only [inputLanguage, inputAt, finiteLanguages, exists_const]
+
+/-- Exact old input ranks retain precisely the old finite language. -/
+theorem Agreement.language {before : FiniteInput oldView} {after : FiniteInput newView}
+    (agreement : Agreement before after) (input : Input) (known : before.valid input) (term : Term Symbol) :
+    inputLanguage (finiteLanguages newView after) input term ↔ inputLanguage (finiteLanguages oldView before) input term := by
+  rw [language_ranks, language_ranks]
+  exact exists_congr fun rank => agreement.rank input known rank term
+
+/-- Covered identities retain exact ranks without an agreement on unrelated names. -/
+theorem Agreement.name_rank {before : FiniteInput oldView} {after : FiniteInput newView}
+    (agreement : Agreement before after) (name : Nat) (covered : NameCovered before name)
+    (rank : Nat) (term : Term Symbol) :
+    finiteRanks newView after name rank term ↔ finiteRanks oldView before name rank term := by
+  obtain ⟨input, known, nonempty, rfl⟩ := covered
+  have same := agreement.rank input known rank term
+  cases input <;> simp_all only [inputAt, inputLanguage, identity, ne_eq, not_true_eq_false]
+
+/-- Rank erasure retains the language of every covered pair identity. -/
+theorem Agreement.name_language {before : FiniteInput oldView} {after : FiniteInput newView}
+    (agreement : Agreement before after) (name : Nat) (covered : NameCovered before name) (term : Term Symbol) :
+    finiteLanguages newView after name term ↔ finiteLanguages oldView before name term :=
+  exists_congr fun rank => agreement.name_rank name covered rank term
+
+/-- Actual domain inclusion retains a name's admitted representative. -/
+theorem Agreement.name_covered {before : FiniteInput oldView} {after : FiniteInput newView}
+    (agreement : Agreement before after) {name : Nat} (covered : NameCovered before name) : NameCovered after name := by
+  obtain ⟨input, known, nonempty, same⟩ := covered
+  exact ⟨input, agreement.valid input known, nonempty, same⟩
+
+/-- Both names of old seen pairs stay covered in the new input domain. -/
+theorem Agreement.seen_covered {before : FiniteInput oldView} {after : FiniteInput newView}
+    (agreement : Agreement before after) {domain : IntersectionFlatMemoKeyDomain.DomainKey}
+    (covered : SeenCovered before domain) : SeenCovered after domain :=
+  fun pair member => ⟨agreement.name_covered (covered pair member).1, agreement.name_covered (covered pair member).2⟩
+
+/-- A new sound pair environment also satisfies the old covered pair interpretation. -/
+theorem Agreement.sound_pairs {before : FiniteInput oldView} {after : FiniteInput newView}
+    (agreement : Agreement before after) {domain : IntersectionFlatMemoKeyDomain.DomainKey}
+    (covered : SeenCovered before domain) {output : InternedGuardedLanguage.Env Symbol}
+    (sound : SoundPairs (finiteLanguages newView after) domain output) :
+    SoundPairs (finiteLanguages oldView before) domain output := by
+  intro pair member term accepted
+  have common := sound pair member term accepted
+  exact ⟨(agreement.name_language pair.1 (covered pair member).1 term).mp common.1,
+    (agreement.name_language pair.2 (covered pair member).2 term).mp common.2⟩
+
+/-- A new complete pair environment contains the same old bounded common terms. -/
+theorem Agreement.complete_pairs {before : FiniteInput oldView} {after : FiniteInput newView}
+    (agreement : Agreement before after) {domain : IntersectionFlatMemoKeyDomain.DomainKey}
+    (covered : SeenCovered before domain) {bound : Nat} {output : InternedGuardedLanguage.Env Symbol}
+    (complete : CompletePairs (finiteRanks newView after) bound domain output) :
+    CompletePairs (finiteRanks oldView before) bound domain output := by
+  intro pair member term common
+  obtain ⟨first, second, bounded, left, right⟩ := common
+  exact complete pair member term ⟨first, second, bounded,
+    (agreement.name_rank pair.1 (covered pair member).1 first term).mpr left,
+    (agreement.name_rank pair.2 (covered pair member).2 second term).mpr right⟩
+
+/-- Empty native tables have no completed pair context to admit. -/
+theorem initial_seen (inputs : FiniteInput oldView) (width : Nat) (machine : Machine Symbol Guard) :
+    SeenAdmitted inputs (initial width machine) := by
+  constructor <;> intro handle request result absent <;> cases absent
+
+/-- Machine changes leave the exact returned request contexts unchanged. -/
+theorem advance_seen (inputs : FiniteInput oldView) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+    (after : Machine Symbol Guard) (admitted : SeenAdmitted inputs state) : SeenAdmitted inputs (advance state after) :=
+  ⟨admitted.nodes, admitted.edges⟩
+
+/-- Covered returned pair contexts remain admitted in the larger view. -/
+theorem Agreement.seen_admitted {before : FiniteInput oldView} {after : FiniteInput newView}
+    (agreement : Agreement before after) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+    (admitted : SeenAdmitted before state) : SeenAdmitted after state :=
+  ⟨fun handle request result found => agreement.seen_covered (admitted.nodes handle request result found),
+    fun handle request result found => agreement.seen_covered (admitted.edges handle request result found)⟩
+
+private theorem forest_iff (first second : Value Symbol Guard → Term Symbol → Prop)
+    (values : List (Value Symbol Guard)) (terms : List (Term Symbol))
+    (same : ∀ value ∈ values, ∀ term, first value term ↔ second value term) :
+    All₂ first values terms ↔ All₂ second values terms :=
+  ⟨fun accepted => SymbolicInternedView.all₂_scoped_imp _ _ _ _ accepted
+      (fun value member term _ => (same value member term).mp),
+    fun accepted => SymbolicInternedView.all₂_scoped_imp _ _ _ _ accepted
+      (fun value member term _ => (same value member term).mpr)⟩
+
+local notation "SourceSymbol" => SourceObservations.Label FullSyntax.Formula
+local notation "SourceGuard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+section Cache
+variable {oldView newView : View SourceSymbol}
+  {before : FiniteInput oldView} {after : FiniteInput newView}
+
+/-- Actual old node admission is retained by the new valid input domain. -/
+theorem Agreement.node_inputs (agreement : Agreement before after) {request : NodeRequest SourceSymbol SourceGuard}
+    (admitted : NodeInputs oldView (finiteInputMeaning oldView before) request) :
+    NodeInputs newView (finiteInputMeaning newView after) request :=
+  ⟨admitted.1, admitted.2.1, agreement.valid _ admitted.2.2.1, agreement.valid _ admitted.2.2.2⟩
+
+/-- Actual old child admission is retained for both stored row operands. -/
+theorem Agreement.edge_inputs (agreement : Agreement before after) {request : EdgeRequest SourceSymbol SourceGuard}
+    (admitted : EdgeInputs oldView (finiteInputMeaning oldView before) request) :
+    EdgeInputs newView (finiteInputMeaning newView after) request :=
+  ⟨fun child member => ⟨(admitted.1 child member).1, agreement.valid _ (admitted.1 child member).2⟩,
+    fun child member => ⟨(admitted.2 child member).1, agreement.valid _ (admitted.2 child member).2⟩⟩
+
+/-- The original admission certificate transports both exact returned-cell families. -/
+theorem Agreement.admitted (agreement : Agreement before after)
+    (state : SourceRecursiveIntersectionThunks.State width SourceSymbol SourceGuard)
+    (admitted : Admitted oldView (finiteInputMeaning oldView before) state) :
+    Admitted newView (finiteInputMeaning newView after) state :=
+  ⟨fun handle request result found => agreement.node_inputs (admitted.nodes handle request result found),
+    fun handle request result found => agreement.edge_inputs (admitted.edges handle request result found)⟩
+
+/-- Original row language uses only its old admitted children. -/
+theorem Agreement.row_language (agreement : Agreement before after)
+    (holds : SourceGuard → Term SourceSymbol → Bool) (edge : EdgeValue SourceSymbol SourceGuard)
+    (known : ∀ child ∈ edge.children, before.valid (inputOf child)) (term : Term SourceSymbol) :
+    RowLanguage holds (finiteLanguages newView after) edge term ↔ RowLanguage holds (finiteLanguages oldView before) edge term := by
+  unfold RowLanguage
+  exact exists_congr fun terms => and_congr_right fun _ => and_congr_left
+    (fun _ => forest_iff _ _ edge.children terms (fun child member part => agreement.language _ (known child member) part))
+
+/-- Original row ranks use the identical bound for each old admitted child. -/
+theorem Agreement.row_rank (agreement : Agreement before after)
+    (holds : SourceGuard → Term SourceSymbol → Bool) (edge : EdgeValue SourceSymbol SourceGuard)
+    (known : ∀ child ∈ edge.children, before.valid (inputOf child)) (rank : Nat) (term : Term SourceSymbol) :
+    RowAt holds (finiteRanks newView after) rank edge term ↔ RowAt holds (finiteRanks oldView before) rank edge term := by
+  unfold RowAt
+  exact exists_congr fun terms => and_congr_right fun _ => and_congr_left
+    (fun _ => forest_iff _ _ edge.children terms (fun child member part => agreement.rank _ (known child member) rank part))
+
+/-- Old request and seen-pair admission retain both contextual node bounds across views. -/
+theorem node_law (agreement : Agreement before after) (holds : SourceGuard → Term SourceSymbol → Bool)
+    (request : NodeRequest SourceSymbol SourceGuard) (result : Value SourceSymbol SourceGuard)
+    (admitted : NodeInputs oldView (finiteInputMeaning oldView before) request)
+    (seen : SeenCovered before request.domain.key)
+    (law : NodeLaw oldView (finiteInputMeaning oldView before) (finiteRankedInput oldView before) holds request result) :
+    NodeLaw newView (finiteInputMeaning newView after) (finiteRankedInput newView after) holds request result := by
+  constructor
+  · intro _ output sound term accepted
+    have old := law.sound admitted output (agreement.sound_pairs seen sound) term accepted
+    exact ⟨(agreement.language _ admitted.2.2.1 term).mpr old.1,
+      (agreement.language _ admitted.2.2.2 term).mpr old.2⟩
+  · intro _ bound output complete first second bounded term left right
+    exact law.complete admitted bound output (agreement.complete_pairs seen complete) first second bounded term
+      ((agreement.rank _ admitted.2.2.1 first term).mp left) ((agreement.rank _ admitted.2.2.2 second term).mp right)
+
+/-- Old child and seen-pair admission retain both contextual edge bounds across views. -/
+theorem edge_law (agreement : Agreement before after) (holds : SourceGuard → Term SourceSymbol → Bool)
+    (request : EdgeRequest SourceSymbol SourceGuard) (result : EdgeValue SourceSymbol SourceGuard)
+    (admitted : EdgeInputs oldView (finiteInputMeaning oldView before) request)
+    (seen : SeenCovered before request.domain.key)
+    (law : EdgeLaw oldView (finiteInputMeaning oldView before) (finiteRankedInput oldView before) holds request result) :
+    EdgeLaw newView (finiteInputMeaning newView after) (finiteRankedInput newView after) holds request result := by
+  constructor
+  · intro _ output sound term accepted
+    have old := law.sound admitted output (agreement.sound_pairs seen sound) term accepted
+    exact ⟨(agreement.row_language holds request.left (fun child member => (admitted.1 child member).2) term).mpr old.1,
+      (agreement.row_language holds request.right (fun child member => (admitted.2 child member).2) term).mpr old.2⟩
+  · intro _ bound output complete first second bounded term left right
+    exact law.complete admitted bound output (agreement.complete_pairs seen complete) first second bounded term
+      ((agreement.row_rank holds request.left (fun child member => (admitted.1 child member).2) first term).mp left)
+      ((agreement.row_rank holds request.right (fun child member => (admitted.2 child member).2) second term).mp right)
+
+/-- The same returned cells retain their laws under admitted cross-view interpretation. -/
+theorem contextual (agreement : Agreement before after) (holds : SourceGuard → Term SourceSymbol → Bool)
+    (state : SourceRecursiveIntersectionThunks.State width SourceSymbol SourceGuard)
+    (admitted : Admitted oldView (finiteInputMeaning oldView before) state) (seen : SeenAdmitted before state)
+    (valid : Contextual oldView (finiteInputMeaning oldView before) (finiteRankedInput oldView before) holds state) :
+    Contextual newView (finiteInputMeaning newView after) (finiteRankedInput newView after) holds state :=
+  ⟨fun handle request result found => node_law agreement holds request result
+      (admitted.nodes handle request result found) (seen.nodes handle request result found) (valid.nodes handle request result found),
+    fun handle request result found => edge_law agreement holds request result
+      (admitted.edges handle request result found) (seen.edges handle request result found) (valid.edges handle request result found)⟩
+
+/-- Cross-view cache transport retains both coverage certificates with the contextual laws. -/
+theorem rebase (agreement : Agreement before after) (holds : SourceGuard → Term SourceSymbol → Bool)
+    (state : SourceRecursiveIntersectionThunks.State width SourceSymbol SourceGuard)
+    (admitted : Admitted oldView (finiteInputMeaning oldView before) state) (seen : SeenAdmitted before state)
+    (valid : Contextual oldView (finiteInputMeaning oldView before) (finiteRankedInput oldView before) holds state) :
+    Contextual newView (finiteInputMeaning newView after) (finiteRankedInput newView after) holds state ∧
+      Admitted newView (finiteInputMeaning newView after) state ∧ SeenAdmitted after state :=
+  ⟨contextual agreement holds state admitted seen valid, agreement.admitted state admitted, agreement.seen_admitted state seen⟩
+end Cache
+end MicroCFTA.SourceCurrentAllocatedNativeContextRebase
