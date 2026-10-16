@@ -1,0 +1,187 @@
+'MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.optionalBinder_least' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.body_monotone' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.optionalBinder_unfold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.optionalBinder_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.optionalBinder_complete_of_descent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.unfolded_language' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.mu_pair_descent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.optionalBinder_mu_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.optionalBinder_mu_sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@optionalBinder_least : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat)
+  (body : Value Symbol Guard) (before : State Symbol Guard),
+  SourceRecursiveIntersectionSemanticHeap.SemanticHeap before →
+    InternedGuardedProbeHeap.Heap before →
+      Available before body →
+        ∀ (value : Value Symbol Guard) (after : State Symbol Guard),
+          SourceRecursiveIntersectionMaybeMu.maybeMu key body before =
+              InternedNestedConstruction.Outcome.done value after →
+            ∀ (holds : Guard → Term Symbol → Bool) (output : InternedGuardedLanguage.Env Symbol),
+              InternedGuardedLanguage.meaning holds output value =
+                least fun candidate =>
+                  InternedGuardedLanguage.meaning holds
+                    (InternedGuardedLanguage.bind output (Reference.intersection key.fst key.snd) candidate) body
+@body_monotone : ∀ {Symbol Guard : Type} (holds : Guard → Term Symbol → Bool) (body : Value Symbol Guard)
+  (output : InternedGuardedLanguage.Env Symbol) (key : Nat × Nat),
+  Monotone fun candidate =>
+    InternedGuardedLanguage.meaning holds
+      (InternedGuardedLanguage.bind output (Reference.intersection key.fst key.snd) candidate) body
+@optionalBinder_unfold : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat)
+  (body : Value Symbol Guard) (before : State Symbol Guard),
+  SourceRecursiveIntersectionSemanticHeap.SemanticHeap before →
+    InternedGuardedProbeHeap.Heap before →
+      Available before body →
+        ∀ (value : Value Symbol Guard) (after : State Symbol Guard),
+          SourceRecursiveIntersectionMaybeMu.maybeMu key body before =
+              InternedNestedConstruction.Outcome.done value after →
+            ∀ (holds : Guard → Term Symbol → Bool) (output : InternedGuardedLanguage.Env Symbol) (term : Term Symbol),
+              InternedGuardedLanguage.meaning holds output value term ↔
+                InternedGuardedLanguage.meaning holds
+                  (InternedGuardedLanguage.bind output (Reference.intersection key.fst key.snd)
+                    (InternedGuardedLanguage.meaning holds output value))
+                  body term
+@optionalBinder_sound : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat)
+  (body : Value Symbol Guard) (before : State Symbol Guard),
+  SourceRecursiveIntersectionSemanticHeap.SemanticHeap before →
+    InternedGuardedProbeHeap.Heap before →
+      Available before body →
+        ∀ (value : Value Symbol Guard) (after : State Symbol Guard),
+          SourceRecursiveIntersectionMaybeMu.maybeMu key body before =
+              InternedNestedConstruction.Outcome.done value after →
+            ∀ (holds : Guard → Term Symbol → Bool) (languages : Nat → Lang Symbol)
+              (domain : IntersectionFlatMemoKeyDomain.DomainKey) (bindings : List Nat),
+              ¬key ∈ domain.seen →
+                (∀ (inner : InternedGuardedLanguage.Env Symbol),
+                    SoundPairs languages (SourceRecursiveIntersectionDomain.extend domain bindings key) inner →
+                      Included (InternedGuardedLanguage.meaning holds inner body) (PairLanguage languages key)) →
+                  ∀ (output : InternedGuardedLanguage.Env Symbol),
+                    SoundPairs languages domain output →
+                      Included (InternedGuardedLanguage.meaning holds output value) (PairLanguage languages key)
+@optionalBinder_complete_of_descent : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (key : Nat × Nat) (body : Value Symbol Guard) (before : State Symbol Guard),
+  SourceRecursiveIntersectionSemanticHeap.SemanticHeap before →
+    InternedGuardedProbeHeap.Heap before →
+      Available before body →
+        ∀ (value : Value Symbol Guard) (after : State Symbol Guard),
+          SourceRecursiveIntersectionMaybeMu.maybeMu key body before =
+              InternedNestedConstruction.Outcome.done value after →
+            ∀ (holds : Guard → Term Symbol → Bool) (ranks : Nat → Nat → Lang Symbol)
+              (domain : IntersectionFlatMemoKeyDomain.DomainKey) (bindings : List Nat),
+              ¬key ∈ domain.seen →
+                ∀ (leftBody rightBody : IntersectSchedule.Input),
+                  (∀ (bound : Nat) (term : Term Symbol),
+                      RankedPair ranks bound key term →
+                        ∃ first second,
+                          first + second < bound ∧
+                            IntersectSchedule.inputAt ranks leftBody first term ∧
+                              IntersectSchedule.inputAt ranks rightBody second term) →
+                    (∀ (bound : Nat) (inner : InternedGuardedLanguage.Env Symbol),
+                        CompletePairs ranks bound (SourceRecursiveIntersectionDomain.extend domain bindings key) inner →
+                          ∀ (first second : Nat),
+                            first + second ≤ bound →
+                              ∀ (term : Term Symbol),
+                                IntersectSchedule.inputAt ranks leftBody first term →
+                                  IntersectSchedule.inputAt ranks rightBody second term →
+                                    InternedGuardedLanguage.meaning holds inner body term) →
+                      ∀ (bound : Nat) (output : InternedGuardedLanguage.Env Symbol),
+                        CompletePairs ranks bound domain output →
+                          Included (RankedPair ranks bound key) (InternedGuardedLanguage.meaning holds output value)
+@unfolded_language : ∀ {Symbol : Type} (view : IntersectSchedule.View Symbol)
+  (model : IntersectSchedule.InputMeaning view) (input : IntersectSchedule.Input),
+  model.valid input →
+    IntersectSchedule.inputLanguage model.languages (unfolded view input) =
+      IntersectSchedule.inputLanguage model.languages input
+@mu_pair_descent : ∀ {Symbol : Type} (view : IntersectSchedule.View Symbol)
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (left right : IntersectSchedule.Input),
+  model.valid left →
+    model.valid right →
+      left ≠ IntersectSchedule.Input.empty →
+        right ≠ IntersectSchedule.Input.empty →
+          ((∃ name, left = IntersectSchedule.Input.mu name) ∨ ∃ name, right = IntersectSchedule.Input.mu name) →
+            ∀ (bound : Nat) (term : Term Symbol),
+              RankedPair ranked.languages bound (IntersectSchedule.pair left right) term →
+                ∃ first second,
+                  first + second < bound ∧
+                    IntersectSchedule.inputAt ranked.languages (unfolded view left) first term ∧
+                      IntersectSchedule.inputAt ranked.languages (unfolded view right) second term
+@optionalBinder_mu_complete : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (left right : IntersectSchedule.Input),
+  model.valid left →
+    model.valid right →
+      left ≠ IntersectSchedule.Input.empty →
+        right ≠ IntersectSchedule.Input.empty →
+          ((∃ name, left = IntersectSchedule.Input.mu name) ∨ ∃ name, right = IntersectSchedule.Input.mu name) →
+            ∀ (body : Value Symbol Guard) (before : State Symbol Guard),
+              SourceRecursiveIntersectionSemanticHeap.SemanticHeap before →
+                InternedGuardedProbeHeap.Heap before →
+                  Available before body →
+                    ∀ (value : Value Symbol Guard) (after : State Symbol Guard),
+                      SourceRecursiveIntersectionMaybeMu.maybeMu (IntersectSchedule.pair left right) body before =
+                          InternedNestedConstruction.Outcome.done value after →
+                        ∀ (holds : Guard → Term Symbol → Bool) (domain : IntersectionFlatMemoKeyDomain.DomainKey)
+                          (bindings : List Nat),
+                          ¬IntersectSchedule.pair left right ∈ domain.seen →
+                            (∀ (bound : Nat) (inner : InternedGuardedLanguage.Env Symbol),
+                                CompletePairs ranked.languages bound
+                                    (SourceRecursiveIntersectionDomain.extend domain bindings
+                                      (IntersectSchedule.pair left right))
+                                    inner →
+                                  ∀ (first second : Nat),
+                                    first + second ≤ bound →
+                                      ∀ (term : Term Symbol),
+                                        IntersectSchedule.inputAt ranked.languages (unfolded view left) first term →
+                                          IntersectSchedule.inputAt ranked.languages (unfolded view right) second term →
+                                            InternedGuardedLanguage.meaning holds inner body term) →
+                              ∀ (bound : Nat) (output : InternedGuardedLanguage.Env Symbol),
+                                CompletePairs ranked.languages bound domain output →
+                                  ∀ (first second : Nat),
+                                    first + second ≤ bound →
+                                      ∀ (term : Term Symbol),
+                                        IntersectSchedule.inputAt ranked.languages left first term →
+                                          IntersectSchedule.inputAt ranked.languages right second term →
+                                            InternedGuardedLanguage.meaning holds output value term
+@optionalBinder_mu_sound : ∀ {Symbol Guard : Type} [inst : DecidableEq (EdgeKey Symbol Guard)]
+  (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (left right : IntersectSchedule.Input),
+  model.valid left →
+    model.valid right →
+      left ≠ IntersectSchedule.Input.empty →
+        right ≠ IntersectSchedule.Input.empty →
+          ∀ (body : Value Symbol Guard) (before : State Symbol Guard),
+            SourceRecursiveIntersectionSemanticHeap.SemanticHeap before →
+              InternedGuardedProbeHeap.Heap before →
+                Available before body →
+                  ∀ (value : Value Symbol Guard) (after : State Symbol Guard),
+                    SourceRecursiveIntersectionMaybeMu.maybeMu (IntersectSchedule.pair left right) body before =
+                        InternedNestedConstruction.Outcome.done value after →
+                      ∀ (holds : Guard → Term Symbol → Bool) (domain : IntersectionFlatMemoKeyDomain.DomainKey)
+                        (bindings : List Nat),
+                        ¬IntersectSchedule.pair left right ∈ domain.seen →
+                          (∀ (inner : InternedGuardedLanguage.Env Symbol),
+                              SoundPairs model.languages
+                                  (SourceRecursiveIntersectionDomain.extend domain bindings
+                                    (IntersectSchedule.pair left right))
+                                  inner →
+                                Included (InternedGuardedLanguage.meaning holds inner body) fun term =>
+                                  IntersectSchedule.inputLanguage model.languages (unfolded view left) term ∧
+                                    IntersectSchedule.inputLanguage model.languages (unfolded view right) term) →
+                            ∀ (output : InternedGuardedLanguage.Env Symbol),
+                              SoundPairs model.languages domain output →
+                                Included (InternedGuardedLanguage.meaning holds output value) fun term =>
+                                  IntersectSchedule.inputLanguage model.languages left term ∧
+                                    IntersectSchedule.inputLanguage model.languages right term

@@ -1,0 +1,77 @@
+'MicroCFTA.SourceCurrentReductionBirthOrder.recordRound_lookup' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentReductionBirthOrder.birthsFrom_lookup' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentReductionBirthOrder.births_lookup' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentReductionBirthOrder.occurs_lower' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.locateRound_origin' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentReductionBirthOrder.locateRound_le' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.locateRound_none' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.births_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.births_bound' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.merge_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.fromMinEntries_none' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.fromMinEntries_origin' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.fromMinEntries_le' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.fromMinEntries_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.merge_none' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentReductionBirthOrder.merge_assoc' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentReductionBirthOrder.foldMin_lookup' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentReductionBirthOrder.transportEntries_mem' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.rounds_fold' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.rounds_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.locateRound_rename' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.births_rename' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.fromMinEntries_rename' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.transportEntries_rename' does not depend on any axioms
+'MicroCFTA.SourceCurrentReductionBirthOrder.rounds_rename' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.history_rounds_rename' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.rounds_bound' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.index_unknown' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentReductionBirthOrder.known_before_fallback' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.known_before_unknown' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.reductions_length' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentReductionBirthOrder.source_history_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@birthsFrom_lookup : ∀ {Key : Type} [inst : DecidableEq Key] (start : Nat) (rounds : List (List Key))
+  (table : GroupPositions.Table Key) (key : Key),
+  birthsFrom start rounds table key = (table key).or (locateRound start rounds key)
+@births_exact : ∀ {Key : Type} [inst : DecidableEq Key] (rounds : List (List Key)) (key : Key) (round : Nat),
+  births rounds key = some round ↔
+    Occurs 0 rounds key round ∧ ∀ (other : Nat), Occurs 0 rounds key other → round ≤ other
+@fromMinEntries_exact : ∀ {Key : Type} [inst : DecidableEq Key] (entries : List (Key × Nat)) (key : Key) (round : Nat),
+  fromMinEntries entries key = some round ↔
+    (key, round) ∈ entries ∧ ∀ (other : Nat), (key, other) ∈ entries → round ≤ other
+@foldMin_lookup : ∀ {Key : Type} [inst : DecidableEq Key] (entries : List (Key × Nat))
+  (table : GroupPositions.Table Key) (key : Key),
+  foldMin entries table key = merge (table key) (fromMinEntries entries key)
+@transportEntries_mem : ∀ {Key : Type} (born : GroupPositions.Table Key) (edges : List (Key × Key)) (key : Key)
+  (round : Nat),
+  (key, round) ∈ transportEntries born edges ↔ ∃ original, (original, key) ∈ edges ∧ born original = some round
+@rounds_exact : ∀ {Key : Type} [inst : DecidableEq Key] (born : GroupPositions.Table Key) (edges : List (Key × Key))
+  (key : Key) (round : Nat),
+  rounds born edges key = some round ↔
+    Supplies born edges key round ∧ ∀ (other : Nat), Supplies born edges key other → round ≤ other
+@rounds_rename : ∀ {Key Other : Type} [inst : DecidableEq Key] [inst_1 : DecidableEq Other] (rename : Key → Other),
+  Function.Injective rename →
+    ∀ (born : GroupPositions.Table Key) (renamed : GroupPositions.Table Other),
+      (∀ (key : Key), renamed (rename key) = born key) →
+        ∀ (edges : List (Key × Key)) (key : Key),
+          rounds renamed (List.map (fun edge => (rename edge.fst, rename edge.snd)) edges) (rename key) =
+            rounds born edges key
+@history_rounds_rename : ∀ {Key Other : Type} [inst : DecidableEq Key] [inst_1 : DecidableEq Other]
+  (rename : Key → Other),
+  Function.Injective rename →
+    ∀ (history : List (List Key)) (edges : List (Key × Key)) (key : Key),
+      rounds (births (List.map (List.map rename) history))
+          (List.map (fun edge => (rename edge.fst, rename edge.snd)) edges) (rename key) =
+        rounds (births history) edges key
+@known_before_unknown : ∀ {Key : Type} [inst : DecidableEq Key] (history : List (List Key)) (edges : List (Key × Key))
+  (known unknown : Key) (round : Nat),
+  rounds (births history) edges known = some round →
+    rounds (births history) edges unknown = none →
+      index history.length (rounds (births history) edges) known <
+        index history.length (rounds (births history) edges) unknown
+@source_history_bound : ∀ {Node : Type u_1} [inst : DecidableEq Node] (step : Node → Node) (node : Node),
+  0 < (reductions step 30 node).length ∧ (reductions step 30 node).length ≤ 31

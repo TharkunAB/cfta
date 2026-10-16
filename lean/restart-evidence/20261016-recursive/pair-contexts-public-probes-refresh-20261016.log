@@ -1,0 +1,191 @@
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_empty' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_empty' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_empty_domain' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_empty_domain' depends on axioms: [propext]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_restrict' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_restrict' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.ranked_pair_mono' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_mono' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_extend_candidate' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_extend' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_extend' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.repeated_reference_sound' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.repeated_reference_complete' depends on axioms: [propext,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.ranked_pair_exact' does not depend on any axioms
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.repeated_reference_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.finite_ranks_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.source_input_models' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePairContexts.unrestricted_extension_impossible' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_empty : ∀ {Symbol : Type}
+  (languages : Nat → MicroCFTA.BinderLanguage.Lang Symbol) (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  domain.seen = [] → MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages domain output
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_empty : ∀ {Symbol : Type}
+  (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang Symbol) (bound : Nat)
+  (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  domain.seen = [] → MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks bound domain output
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_empty_domain : ∀ {Symbol : Type}
+  (languages : Nat → MicroCFTA.BinderLanguage.Lang Symbol) (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages MicroCFTA.IntersectionEmptyDomain.emptyKey
+    output
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_empty_domain : ∀ {Symbol : Type}
+  (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang Symbol) (bound : Nat)
+  (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks bound
+    MicroCFTA.IntersectionEmptyDomain.emptyKey output
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_restrict : ∀ {Symbol : Type}
+  (languages : Nat → MicroCFTA.BinderLanguage.Lang Symbol)
+  (before after : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  (∀ (key : Nat × Nat), key ∈ before.seen → key ∈ after.seen) →
+    MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages after output →
+      MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages before output
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_restrict : ∀ {Symbol : Type}
+  (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang Symbol) (bound : Nat)
+  (before after : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  (∀ (key : Nat × Nat), key ∈ before.seen → key ∈ after.seen) →
+    MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks bound after output →
+      MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks bound before output
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.ranked_pair_mono : ∀ {Symbol : Type}
+  (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang Symbol) (before after : Nat),
+  before ≤ after →
+    ∀ (key : Nat × Nat),
+      MicroCFTA.BinderLanguage.Included (MicroCFTA.SourceCurrentAllocatedNativePairContexts.RankedPair ranks before key)
+        (MicroCFTA.SourceCurrentAllocatedNativePairContexts.RankedPair ranks after key)
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_mono : ∀ {Symbol : Type}
+  (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang Symbol) (before after : Nat),
+  before ≤ after →
+    ∀ (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+      MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks after domain output →
+        MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks before domain output
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_extend_candidate : ∀ {Symbol : Type}
+  (languages : Nat → MicroCFTA.BinderLanguage.Lang Symbol) (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages domain output →
+    ∀ (bindings : List Nat) (key : Nat × Nat),
+      ¬key ∈ domain.seen →
+        ∀ (candidate : MicroCFTA.BinderLanguage.Lang Symbol),
+          MicroCFTA.BinderLanguage.Included candidate
+              (MicroCFTA.SourceCurrentAllocatedNativePairContexts.PairLanguage languages key) →
+            MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages
+              (MicroCFTA.SourceRecursiveIntersectionDomain.extend domain bindings key)
+              (MicroCFTA.InternedGuardedLanguage.bind output
+                (MicroCFTA.InternedBinderProtocol.Reference.intersection key.fst key.snd) candidate)
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.sound_extend : ∀ {Symbol : Type}
+  (languages : Nat → MicroCFTA.BinderLanguage.Lang Symbol) (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages domain output →
+    ∀ (bindings : List Nat) (key : Nat × Nat),
+      ¬key ∈ domain.seen →
+        MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages
+          (MicroCFTA.SourceRecursiveIntersectionDomain.extend domain bindings key)
+          (MicroCFTA.InternedGuardedLanguage.bind output
+            (MicroCFTA.InternedBinderProtocol.Reference.intersection key.fst key.snd)
+            (MicroCFTA.SourceCurrentAllocatedNativePairContexts.PairLanguage languages key))
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.complete_extend : ∀ {Symbol : Type}
+  (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang Symbol) (bound : Nat)
+  (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks bound domain output →
+    ∀ (bindings : List Nat) (key : Nat × Nat),
+      ¬key ∈ domain.seen →
+        ∀ (candidate : MicroCFTA.BinderLanguage.Lang Symbol),
+          MicroCFTA.BinderLanguage.Included
+              (MicroCFTA.SourceCurrentAllocatedNativePairContexts.RankedPair ranks bound key) candidate →
+            MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks bound
+              (MicroCFTA.SourceRecursiveIntersectionDomain.extend domain bindings key)
+              (MicroCFTA.InternedGuardedLanguage.bind output
+                (MicroCFTA.InternedBinderProtocol.Reference.intersection key.fst key.snd) candidate)
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.repeated_reference_sound : ∀ {Symbol Guard : Type}
+  (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (languages : Nat → MicroCFTA.BinderLanguage.Lang Symbol)
+  (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages domain output →
+    ∀ (key : Nat × Nat),
+      key ∈ domain.seen →
+        MicroCFTA.BinderLanguage.Included
+          (MicroCFTA.InternedGuardedLanguage.meaning holds output
+            (MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue key))
+          (MicroCFTA.SourceCurrentAllocatedNativePairContexts.PairLanguage languages key)
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.repeated_reference_complete : ∀ {Symbol Guard : Type}
+  (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang Symbol)
+  (bound : Nat) (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+  MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks bound domain output →
+    ∀ (key : Nat × Nat),
+      key ∈ domain.seen →
+        MicroCFTA.BinderLanguage.Included
+          (MicroCFTA.SourceCurrentAllocatedNativePairContexts.RankedPair ranks bound key)
+          (MicroCFTA.InternedGuardedLanguage.meaning holds output
+            (MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue key))
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.ranked_pair_exact : ∀ {Symbol : Type}
+  (languages : Nat → MicroCFTA.BinderLanguage.Lang Symbol) (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang Symbol),
+  (∀ (name : Nat) (term : MicroCFTA.Language.Term Symbol), languages name term ↔ ∃ rank, ranks name rank term) →
+    ∀ (key : Nat × Nat) (term : MicroCFTA.Language.Term Symbol),
+      MicroCFTA.SourceCurrentAllocatedNativePairContexts.PairLanguage languages key term ↔
+        ∃ bound, MicroCFTA.SourceCurrentAllocatedNativePairContexts.RankedPair ranks bound key term
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.repeated_reference_exact : ∀ {Symbol Guard : Type}
+  (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (languages : Nat → MicroCFTA.BinderLanguage.Lang Symbol)
+  (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang Symbol),
+  (∀ (name : Nat) (term : MicroCFTA.Language.Term Symbol), languages name term ↔ ∃ rank, ranks name rank term) →
+    ∀ (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (output : MicroCFTA.InternedGuardedLanguage.Env Symbol),
+      MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs languages domain output →
+        (∀ (bound : Nat), MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranks bound domain output) →
+          ∀ (key : Nat × Nat),
+            key ∈ domain.seen →
+              ∀ (term : MicroCFTA.Language.Term Symbol),
+                MicroCFTA.InternedGuardedLanguage.meaning holds output
+                    (MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue key) term ↔
+                  MicroCFTA.SourceCurrentAllocatedNativePairContexts.PairLanguage languages key term
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.finite_ranks_exact : ∀ {Symbol : Type}
+  (view : MicroCFTA.IntersectSchedule.View Symbol) (inputs : MicroCFTA.IntersectSchedule.FiniteInput view) (name : Nat)
+  (term : MicroCFTA.Language.Term Symbol),
+  MicroCFTA.IntersectSchedule.finiteLanguages view inputs name term ↔
+    ∃ rank, MicroCFTA.IntersectSchedule.finiteRanks view inputs name rank term
+@MicroCFTA.SourceCurrentAllocatedNativePairContexts.source_input_models : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts source →
+    ∀ (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+      (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      MicroCFTA.SourceRecursiveIntersectionInputView.Original left →
+        MicroCFTA.SourceRecursiveIntersectionInputView.Original right →
+          MicroCFTA.InternedProbeProvenance.Available source left →
+            MicroCFTA.InternedProbeProvenance.Available source right →
+              left.free = [] →
+                right.free = [] →
+                  ∃ model ranked,
+                    model.valid (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf left) ∧
+                      model.valid (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf right) ∧
+                        (∀ (name : Nat) (term : MicroCFTA.Language.Term Symbol),
+                            model.languages name term ↔ ∃ rank, ranked.languages name rank term) ∧
+                          (∀ (ambient : MicroCFTA.InternedGuardedLanguage.Env Symbol)
+                              (term : MicroCFTA.Language.Term Symbol),
+                              MicroCFTA.InternedGuardedLanguage.meaning holds ambient left term ↔
+                                MicroCFTA.IntersectSchedule.inputLanguage model.languages
+                                  (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf left) term) ∧
+                            ∀ (ambient : MicroCFTA.InternedGuardedLanguage.Env Symbol)
+                              (term : MicroCFTA.Language.Term Symbol),
+                              MicroCFTA.InternedGuardedLanguage.meaning holds ambient right term ↔
+                                MicroCFTA.IntersectSchedule.inputLanguage model.languages
+                                  (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf right) term
+MicroCFTA.SourceCurrentAllocatedNativePairContexts.unrestricted_extension_impossible : ∀
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (input output :
+    MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (domain : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (bindings : List Nat) (key : Nat × Nat)
+  (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula),
+  ¬∀ (candidate : MicroCFTA.BinderLanguage.Lang (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceEqualityNativeDemandOpenMeaning.SeenContext holds source input
+        (MicroCFTA.InternedGuardedLanguage.bind output
+          (MicroCFTA.InternedBinderProtocol.Reference.intersection key.fst key.snd) candidate)
+        (MicroCFTA.SourceRecursiveIntersectionDomain.extend domain bindings key)

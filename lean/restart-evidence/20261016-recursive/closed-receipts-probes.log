@@ -1,0 +1,248 @@
+'MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.mu_node_law' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.mu_node_law
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (model : MicroCFTA.IntersectSchedule.InputMeaning view)
+  (ranked : MicroCFTA.IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (body value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (semantic : MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap before)
+  (heap : MicroCFTA.InternedGuardedProbeHeap.Heap before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before body)
+  (leftNonempty :
+    MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left ≠ MicroCFTA.IntersectSchedule.Input.empty)
+  (rightNonempty :
+    MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right ≠ MicroCFTA.IntersectSchedule.Input.empty)
+  (recursive :
+    (∃ name,
+        MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left =
+          MicroCFTA.IntersectSchedule.Input.mu name) ∨
+      ∃ name,
+        MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right =
+          MicroCFTA.IntersectSchedule.Input.mu name)
+  (bindings : List Nat)
+  (fresh :
+    ¬MicroCFTA.IntersectSchedule.pair (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left)
+          (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right) ∈
+        request.domain.key.seen)
+  (done :
+    MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu
+        (MicroCFTA.IntersectSchedule.pair (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left)
+          (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right))
+        body before =
+      MicroCFTA.InternedNestedConstruction.Outcome.done value after)
+  (bodySound :
+    ∀ (inner : MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativePairContexts.SoundPairs model.languages
+          (MicroCFTA.SourceRecursiveIntersectionDomain.extend request.domain.key bindings
+            (MicroCFTA.IntersectSchedule.pair (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left)
+              (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right)))
+          inner →
+        MicroCFTA.BinderLanguage.Included (MicroCFTA.InternedGuardedLanguage.meaning holds inner body) fun term =>
+          MicroCFTA.IntersectSchedule.inputLanguage model.languages
+              (MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.unfolded view
+                (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left))
+              term ∧
+            MicroCFTA.IntersectSchedule.inputLanguage model.languages
+              (MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.unfolded view
+                (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right))
+              term)
+  (bodyComplete :
+    ∀ (bound : Nat)
+      (inner : MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativePairContexts.CompletePairs ranked.languages bound
+          (MicroCFTA.SourceRecursiveIntersectionDomain.extend request.domain.key bindings
+            (MicroCFTA.IntersectSchedule.pair (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left)
+              (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right)))
+          inner →
+        ∀ (first second : Nat),
+          first + second ≤ bound →
+            ∀ (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.IntersectSchedule.inputAt ranked.languages
+                  (MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.unfolded view
+                    (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left))
+                  first term →
+                MicroCFTA.IntersectSchedule.inputAt ranked.languages
+                    (MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.unfolded view
+                      (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right))
+                    second term →
+                  MicroCFTA.InternedGuardedLanguage.meaning holds inner body term) :
+  MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw view model ranked holds request value
+'MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.input_finite' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.input_finite
+  (languages : Nat → MicroCFTA.BinderLanguage.Lang (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (ranks : Nat → Nat → MicroCFTA.BinderLanguage.Lang (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (finite :
+    ∀ (name : Nat) (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      languages name term ↔ ∃ rank, ranks name rank term)
+  (input : MicroCFTA.IntersectSchedule.Input)
+  (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (accepted : MicroCFTA.IntersectSchedule.inputLanguage languages input term) :
+  ∃ rank, MicroCFTA.IntersectSchedule.inputAt ranks input rank term
+'MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.node_closed_exact' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.node_closed_exact
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (model : MicroCFTA.IntersectSchedule.InputMeaning view)
+  (ranked : MicroCFTA.IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (finite :
+    ∀ (name : Nat) (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      model.languages name term ↔ ∃ rank, ranked.languages name rank term)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (inputs : MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeInputs view model request)
+  (law : MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw view model ranked holds request value)
+  (domain : request.domain = MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+  (output : MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)) :
+  MicroCFTA.InternedGuardedLanguage.meaning holds output value term ↔
+    MicroCFTA.IntersectSchedule.inputLanguage model.languages
+        (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left) term ∧
+      MicroCFTA.IntersectSchedule.inputLanguage model.languages
+        (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right) term
+'MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.node_meaning' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.node_meaning
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (model : MicroCFTA.IntersectSchedule.InputMeaning view)
+  (ranked : MicroCFTA.IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (finite :
+    ∀ (name : Nat) (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      model.languages name term ↔ ∃ rank, ranked.languages name rank term)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (inputs : MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeInputs view model request)
+  (law : MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw view model ranked holds request value)
+  (left :
+    request.left.free = [] →
+      ∀
+        (output :
+          MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+        (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.InternedGuardedLanguage.meaning holds output request.left term ↔
+          MicroCFTA.IntersectSchedule.inputLanguage model.languages
+            (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left) term)
+  (right :
+    request.right.free = [] →
+      ∀
+        (output :
+          MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+        (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.InternedGuardedLanguage.meaning holds output request.right term ↔
+          MicroCFTA.IntersectSchedule.inputLanguage model.languages
+            (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right) term) :
+  MicroCFTA.SourceEqualityNativeDemandProvenance.NodeMeaning holds request value
+'MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.node_produced' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.node_produced {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (model : MicroCFTA.IntersectSchedule.InputMeaning view)
+  (ranked : MicroCFTA.IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (finite :
+    ∀ (name : Nat) (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+      model.languages name term ↔ ∃ rank, ranked.languages name rank term)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (inputs : MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeInputs view model request)
+  (law : MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw view model ranked holds request value)
+  (left :
+    request.left.free = [] →
+      ∀
+        (output :
+          MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+        (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.InternedGuardedLanguage.meaning holds output request.left term ↔
+          MicroCFTA.IntersectSchedule.inputLanguage model.languages
+            (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left) term)
+  (right :
+    request.right.free = [] →
+      ∀
+        (output :
+          MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+        (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.InternedGuardedLanguage.meaning holds output request.right term ↔
+          MicroCFTA.IntersectSchedule.inputLanguage model.languages
+            (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right) term)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (fuel : Nat)
+  (ready : MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady before.native.machine request)
+  (done :
+    MicroCFTA.SourceEqualityNativeDemand.execute fuel
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+        before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after)
+  (growth : MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine)
+  (available : MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap value) :
+  MicroCFTA.SourceEqualityNativeDemandProvenance.NodeProduced holds after.native.machine request value
+'MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.source_models' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeClosedReceipts.source_models
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (leftOriginal : MicroCFTA.SourceRecursiveIntersectionInputView.Original request.left)
+  (rightOriginal : MicroCFTA.SourceRecursiveIntersectionInputView.Original request.right)
+  (leftAvailable : MicroCFTA.InternedProbeProvenance.Available source request.left)
+  (rightAvailable : MicroCFTA.InternedProbeProvenance.Available source request.right)
+  (leftClosed : request.left.free = []) (rightClosed : request.right.free = []) :
+  ∃ model ranked,
+    MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeInputs
+        (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds) model request ∧
+      ∀
+        (value :
+          MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw
+            (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds) model ranked holds request value →
+          MicroCFTA.SourceEqualityNativeDemandProvenance.NodeMeaning holds request value

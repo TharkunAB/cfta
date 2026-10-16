@@ -1,0 +1,140 @@
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.initial_contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.advance_contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.lookupNode_contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.lookupEdge_contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.demandNode_contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.demandEdge_contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.finishNode_contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.finishEdge_contextual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.node_ready_contextual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.edge_ready_contextual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.node_observed_ready' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextCache.edge_observed_ready' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw.sound
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  {request :
+    NodeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {result : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  (self : NodeLaw view model ranked holds request result) :
+  NodeInputs view model request →
+    ∀ (output : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+      SoundPairs model.languages request.domain.key output →
+        Included (InternedGuardedLanguage.meaning holds output result) fun term =>
+          IntersectSchedule.inputLanguage model.languages (SourceRecursiveIntersectionInputView.inputOf request.left)
+              term ∧
+            IntersectSchedule.inputLanguage model.languages (SourceRecursiveIntersectionInputView.inputOf request.right)
+              term
+MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw.complete
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  {request :
+    NodeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {result : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  (self : NodeLaw view model ranked holds request result) :
+  NodeInputs view model request →
+    ∀ (bound : Nat) (output : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+      CompletePairs ranked.languages bound request.domain.key output →
+        ∀ (first second : Nat),
+          first + second ≤ bound →
+            ∀ (term : Term (SourceObservations.Label FullSyntax.Formula)),
+              IntersectSchedule.inputAt ranked.languages (SourceRecursiveIntersectionInputView.inputOf request.left)
+                  first term →
+                IntersectSchedule.inputAt ranked.languages (SourceRecursiveIntersectionInputView.inputOf request.right)
+                    second term →
+                  InternedGuardedLanguage.meaning holds output result term
+MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeLaw.sound
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  {request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {result : EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  (self : EdgeLaw view model ranked holds request result) :
+  EdgeInputs view model request →
+    ∀ (output : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+      SoundPairs model.languages request.domain.key output →
+        Included (InternedGuardedLanguage.edgeMeaning holds output result) fun term =>
+          RowLanguage holds model.languages request.left term ∧ RowLanguage holds model.languages request.right term
+MicroCFTA.SourceCurrentAllocatedNativeContextCache.EdgeLaw.complete
+  {view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula)}
+  {model : IntersectSchedule.InputMeaning view} {ranked : IntersectSchedule.RankedInput view model.valid}
+  {holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool}
+  {request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {result : EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  (self : EdgeLaw view model ranked holds request result) :
+  EdgeInputs view model request →
+    ∀ (bound : Nat) (output : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)),
+      CompletePairs ranked.languages bound request.domain.key output →
+        ∀ (first second : Nat),
+          first + second ≤ bound →
+            ∀ (term : Term (SourceObservations.Label FullSyntax.Formula)),
+              RowAt holds ranked.languages first request.left term →
+                RowAt holds ranked.languages second request.right term →
+                  InternedGuardedLanguage.edgeMeaning holds output result term
+MicroCFTA.SourceCurrentAllocatedNativeContextCache.Contextual {width : Nat}
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  (state :
+    SourceRecursiveIntersectionThunks.State width (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)) :
+  Prop
+MicroCFTA.SourceCurrentAllocatedNativeContextCache.node_observed_ready
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  {width : Nat} [DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (before chosen after :
+    SourceRecursiveIntersectionThunks.State width (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (request :
+    NodeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (handle : Nat)
+  (result : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (physical : SourceEqualityNativeDemandProvenance.Valid holds before)
+  (valid : Contextual view model ranked holds before) (ready : NodeReady before.machine request)
+  (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupNode width request before = (NodeSelection.memoized handle, chosen))
+  (demanded : demandNode handle chosen = (FlatMemoThunk.Observation.ready result, after)) :
+  NodeLaw view model ranked holds request result ∧ after = chosen
+MicroCFTA.SourceCurrentAllocatedNativeContextCache.edge_observed_ready
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  {width : Nat} [DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (before chosen after :
+    SourceRecursiveIntersectionThunks.State width (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (handle : Nat)
+  (result : EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (physical : SourceEqualityNativeDemandProvenance.Valid holds before)
+  (valid : Contextual view model ranked holds before) (ready : EdgeReady before.machine request)
+  (safe : SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right)
+  (selected : lookupEdge width request before = (handle, chosen))
+  (demanded : demandEdge handle chosen = (FlatMemoThunk.Observation.ready result, after)) :
+  EdgeLaw view model ranked holds request result ∧ after = chosen

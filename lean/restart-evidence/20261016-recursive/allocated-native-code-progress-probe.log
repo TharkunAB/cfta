@@ -1,0 +1,113 @@
+'MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.compileNode_operands' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.children_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.sentinel_certified' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.body_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.body_prefix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.node_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.initial_certified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.current_heap_inputs' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.current_inputs' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.compileNode_operands [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (request : NodeRequest Symbol Guard) (state : Machine Symbol Guard)
+  (valid : SourceRecursiveIntersectionKernel.Valid state) (ready : NodeReady state request) :
+  Operands (compileNode request) state
+MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.children_certified [DecidableEq (EdgeKey Symbol Guard)]
+  (request : EdgeRequest Symbol Guard) (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+  (state : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid state)
+  (ready : EdgeReady state request) :
+  (Safe (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) state
+      fun after value => InternedEdgeResidency.EdgeResident after.heap value) ∧
+    Operands (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) state
+MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.sentinel_certified [DecidableEq (EdgeKey Symbol Guard)]
+  (left : EdgeValue Symbol Guard) (state : Machine Symbol Guard)
+  (valid : SourceRecursiveIntersectionKernel.Valid state) :
+  (Safe (SourceEqualityNativeCheckedCode.sentinel left) state fun after value =>
+      InternedEdgeResidency.EdgeResident after.heap value) ∧
+    Operands (SourceEqualityNativeCheckedCode.sentinel left) state
+MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.body_certified {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (request : EdgeRequest Symbol Guard)
+  (before after : SourceEqualityNativeDemand.State width) (code : Code Symbol Guard (EdgeValue Symbol Guard))
+  (valid : SourceRecursiveIntersectionKernel.Valid before.native.machine)
+  (ready : EdgeReady before.native.machine request)
+  (yielded : SourceEqualityNativeDemand.body request Code.pure before = Outcome.yielded (Control.code code) after) :
+  (Safe code after.native.machine fun final value => InternedEdgeResidency.EdgeResident final.heap value) ∧
+    Operands code after.native.machine
+MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.body_prefix {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard)
+  (facts : InternedNestedFacts.Facts source) (holds : Guard → Language.Term Symbol → Bool)
+  (request : EdgeRequest Symbol Guard) (scope : EdgeScope source request)
+  (complete :
+    IntersectSchedule.Completes (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request))
+  (before : SourceEqualityNativeDemand.State width)
+  (valid : SourceRecursiveIntersectionKernel.Valid before.native.machine)
+  (ready : EdgeReady before.native.machine request)
+  (operations : SourceEqualityConstraintMemoAllocation.Valid before.operations)
+  (heap : SourceCurrentConjunctionEquality.Fields before.operations before.native.machine.heap) :
+  ∃ code after,
+    SourceEqualityNativeDemand.body request Code.pure before =
+        Outcome.yielded (Control.code code) { native := before.native, operations := after } ∧
+      SourceEqualityConstraintMemoAllocation.Valid after ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations after ∧
+          SourceCurrentConjunctionEquality.Fields after before.native.machine.heap ∧
+            SourceCurrentAllocatedNativeCodeFields.Fields after code ∧
+              (Safe code before.native.machine fun final value => InternedEdgeResidency.EdgeResident final.heap value) ∧
+                Operands code before.native.machine ∧
+                  Below source holds
+                    (IntersectSchedule.requiredFuel (view source holds)
+                      (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete)
+                    code before.native.machine
+MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.node_certified {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard)
+  (facts : InternedNestedFacts.Facts source) (holds : Guard → Language.Term Symbol → Bool)
+  (request : NodeRequest Symbol Guard) (scope : NodeScope source request)
+  (complete : IntersectSchedule.Completes (view source holds) (SourceRecursiveIntersectionNative.nodeSemantic request))
+  (before : SourceEqualityNativeDemand.State width)
+  (valid : SourceRecursiveIntersectionKernel.Valid before.native.machine)
+  (ready : NodeReady before.native.machine request) (growth : Grows source before.native.machine.heap)
+  (history : Extends source.nodes.issued before.native.machine.heap.nodes.issued) :
+  (Safe (compileNode request) before.native.machine fun final value => Available final.heap value) ∧
+    Operands (compileNode request) before.native.machine ∧
+      Below source holds
+          (IntersectSchedule.requiredFuel (view source holds) (SourceRecursiveIntersectionNative.nodeSemantic request)
+            complete)
+          (compileNode request) before.native.machine ∧
+        SourceCurrentAllocatedNativeCodeFields.Fields before.operations (compileNode request)
+MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.initial_certified {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (holds : Guard → Language.Term Symbol → Bool)
+  (before : SourceEqualityNativeDemand.State width)
+  (valid : SourceRecursiveIntersectionKernel.Valid before.native.machine) (left right : Value Symbol Guard)
+  (leftOriginal : Original left) (rightOriginal : Original right)
+  (leftAvailable : Available before.native.machine.heap left)
+  (rightAvailable : Available before.native.machine.heap right) (leftClosed : left.free = [])
+  (rightClosed : right.free = []) :
+  have request := { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right };
+  ∃ complete,
+    (Safe (compileNode request) before.native.machine fun final value => Available final.heap value) ∧
+      Operands (compileNode request) before.native.machine ∧
+        Below before.native.machine.heap holds
+            (IntersectSchedule.requiredFuel (view before.native.machine.heap holds)
+              (SourceRecursiveIntersectionNative.nodeSemantic request) complete)
+            (compileNode request) before.native.machine ∧
+          SourceCurrentAllocatedNativeCodeFields.Fields before.operations (compileNode request)
+MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.current_heap_inputs {A : Type} {width : Nat}
+  [DecidableEq (EdgeKey Symbol Guard)] (code : Code Symbol Guard A) (state : SourceEqualityNativeDemand.State width)
+  (operands : Operands code state.native.machine) : SourceEqualityNativeDemandHeap.Inputs (Control.code code) state
+MicroCFTA.SourceCurrentAllocatedNativeCodeProgress.current_inputs {A : Type} {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (source : InternedConstructorTemplates.State Symbol Guard)
+  (holds : Guard → Language.Term Symbol → Bool) (bound : Nat) (code : Code Symbol Guard A)
+  (state : SourceEqualityNativeDemand.State width) (operands : Operands code state.native.machine)
+  (bounded : Below source holds bound code state.native.machine)
+  (words : SourceCurrentAllocatedNativeRequestBounds.Words width (Control.code code)) :
+  SourceEqualityNativeDemandValidity.Inputs holds (Control.code code) state

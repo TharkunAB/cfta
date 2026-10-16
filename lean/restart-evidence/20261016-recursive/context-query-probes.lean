@@ -1,0 +1,8 @@
+import MicroCFTA.SourceCurrentAllocatedNativeContextQuery
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeContextQuery.call_law
+#check @MicroCFTA.SourceCurrentAllocatedNativeContextQuery.call_law
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeContextQuery.query_law_of_finish_laws
+#check @MicroCFTA.SourceCurrentAllocatedNativeContextQuery.query_law_of_finish_laws
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeContextQuery.query_exact_of_finish_laws
+#check @MicroCFTA.SourceCurrentAllocatedNativeContextQuery.query_exact_of_finish_laws

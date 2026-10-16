@@ -1,0 +1,123 @@
+'MicroCFTA.SourceCurrentAllocatedNativeMuSource.enter_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedNativeMuSource.enter_prefix : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width) (first second : Nat),
+  MicroCFTA.SourceRecursiveIntersectionControl.identity request.left = some first →
+    MicroCFTA.SourceRecursiveIntersectionControl.identity request.right = some second →
+      have entered :=
+        MicroCFTA.SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+          request.left request.right first second;
+      MicroCFTA.SourceEqualityNativeDemand.step
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.compileMu request.domain request.left request.right))
+          before =
+        MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.node
+              { domain := entered.fst, left := MicroCFTA.SourceRecursiveIntersectionKernel.body request.left,
+                right := MicroCFTA.SourceRecursiveIntersectionKernel.body request.right }
+              fun value =>
+              MicroCFTA.SourceRecursiveIntersectionCode.Code.optionalBinder
+                (MicroCFTA.SourceRecursiveIntersectionControl.pair first second) value
+                MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+          {
+            native :=
+              MicroCFTA.SourceRecursiveIntersectionThunks.advance before.native
+                (have __src := before.native.machine;
+                { heap := __src.heap, domains := entered.snd }),
+            operations := before.operations }
+'MicroCFTA.SourceCurrentAllocatedNativeMuSource.original_body' depends on axioms: [propext]
+MicroCFTA.SourceCurrentAllocatedNativeMuSource.original_body : ∀
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceRecursiveIntersectionInputView.Original value →
+    MicroCFTA.SourceRecursiveIntersectionInputView.Original (MicroCFTA.SourceRecursiveIntersectionKernel.body value)
+'MicroCFTA.SourceCurrentAllocatedNativeMuSource.unfolded_valid' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeMuSource.unfolded_valid : ∀
+  (view : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (model : MicroCFTA.IntersectSchedule.InputMeaning view) (input : MicroCFTA.IntersectSchedule.Input),
+  model.valid input → model.valid (MicroCFTA.SourceCurrentAllocatedNativeMuMeaning.unfolded view input)
+'MicroCFTA.SourceCurrentAllocatedNativeMuSource.mu_source_law' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedNativeMuSource.mu_source_law : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.InternedNestedFacts.Facts source →
+    ∀
+      (holds :
+        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+      (model :
+        MicroCFTA.IntersectSchedule.InputMeaning (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds))
+      (ranked :
+        MicroCFTA.IntersectSchedule.RankedInput (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds)
+          model.valid)
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeInputs
+          (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds) model request →
+        MicroCFTA.InternedProbeProvenance.Available source request.left →
+          MicroCFTA.InternedProbeProvenance.Available source request.right →
+            ∀ (cache : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+              MicroCFTA.Cache.Valid cache →
+                ∀ (first second : Nat),
+                  MicroCFTA.SourceRecursiveIntersectionControl.identity request.left = some first →
+                    MicroCFTA.SourceRecursiveIntersectionControl.identity request.right = some second →
+                      MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left ≠
+                          MicroCFTA.IntersectSchedule.Input.empty →
+                        MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right ≠
+                            MicroCFTA.IntersectSchedule.Input.empty →
+                          ((∃ name,
+                                MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.left =
+                                  MicroCFTA.IntersectSchedule.Input.mu name) ∨
+                              ∃ name,
+                                MicroCFTA.SourceRecursiveIntersectionInputView.inputOf request.right =
+                                  MicroCFTA.IntersectSchedule.Input.mu name) →
+                            ¬MicroCFTA.SourceRecursiveIntersectionControl.pair first second ∈ request.domain.key.seen →
+                              ∀
+                                (bodyValue value :
+                                  MicroCFTA.InternedConstructorTemplates.Value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw
+                                    (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds) model ranked
+                                    holds
+                                    {
+                                      domain :=
+                                        (MicroCFTA.SourceRecursiveIntersectionEnvironment.enter cache request.domain.key
+                                            request.left request.right first second).fst,
+                                      left := MicroCFTA.SourceRecursiveIntersectionKernel.body request.left,
+                                      right := MicroCFTA.SourceRecursiveIntersectionKernel.body request.right }
+                                    bodyValue →
+                                  ∀
+                                    (before after :
+                                      MicroCFTA.InternedConstructorTemplates.State
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                    MicroCFTA.SourceRecursiveIntersectionSemanticHeap.SemanticHeap before →
+                                      MicroCFTA.InternedGuardedProbeHeap.Heap before →
+                                        MicroCFTA.InternedProbeProvenance.Available before bodyValue →
+                                          MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu
+                                                (MicroCFTA.SourceRecursiveIntersectionControl.pair first second)
+                                                bodyValue before =
+                                              MicroCFTA.InternedNestedConstruction.Outcome.done value after →
+                                            MicroCFTA.SourceCurrentAllocatedNativeContextCache.NodeLaw
+                                              (MicroCFTA.SourceRecursiveIntersectionInputView.view source holds) model
+                                              ranked holds request value

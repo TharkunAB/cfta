@@ -1,0 +1,76 @@
+'MicroCFTA.SourceCurrentAllocatedNativeContextExecution.body_contextual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextExecution.step_contextual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextExecution.execute_contextual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeContextExecution.done_contextual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeContextExecution.FinishLaw
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  {Output : Type} {width : Nat} : Control Output → SourceEqualityNativeDemand.State width → Prop
+MicroCFTA.SourceCurrentAllocatedNativeContextExecution.FinishThrough
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  {Output : Type} {width : Nat} [DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))] :
+  Nat → Control Output → SourceEqualityNativeDemand.State width → Prop
+MicroCFTA.SourceCurrentAllocatedNativeContextExecution.body_contextual
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  {Output : Type} {width : Nat}
+  (request :
+    EdgeRequest (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (next :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      Code (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula) Output)
+  (state : SourceEqualityNativeDemand.State width) (valid : Contextual view model ranked holds state.native) :
+  Contextual view model ranked holds (body request next state).state.native
+MicroCFTA.SourceCurrentAllocatedNativeContextExecution.step_contextual
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  {Output : Type} {width : Nat} [DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (control : Control Output) (state : SourceEqualityNativeDemand.State width)
+  (valid : Contextual view model ranked holds state.native)
+  (localLaw : FinishLaw view model ranked holds control state) :
+  Contextual view model ranked holds (step control state).state.native
+MicroCFTA.SourceCurrentAllocatedNativeContextExecution.execute_contextual
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  {Output : Type} {width : Nat} [DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (fuel : Nat) (control : Control Output) (state : SourceEqualityNativeDemand.State width)
+  (valid : Contextual view model ranked holds state.native)
+  (localLaws : FinishThrough view model ranked holds fuel control state) :
+  Contextual view model ranked holds (execute fuel control state).state.native
+MicroCFTA.SourceCurrentAllocatedNativeContextExecution.done_contextual
+  (view : IntersectSchedule.View (SourceObservations.Label FullSyntax.Formula))
+  (model : IntersectSchedule.InputMeaning view) (ranked : IntersectSchedule.RankedInput view model.valid)
+  (holds :
+    SourceSymbolicIndex.Constraint FullSyntax.Formula → Term (SourceObservations.Label FullSyntax.Formula) → Bool)
+  {Output : Type} {width : Nat} [DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+  [DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (fuel : Nat) (control : Control Output) (before after : SourceEqualityNativeDemand.State width) (value : Output)
+  (valid : Contextual view model ranked holds before.native)
+  (localLaws : FinishThrough view model ranked holds fuel control before)
+  (done : execute fuel control before = Outcome.done value after) : Contextual view model ranked holds after.native
