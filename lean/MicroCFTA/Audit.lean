@@ -2052,6 +2052,7 @@ import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryInitialCapacity
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericRoot
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryNativeBudget
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOutputFinite
 /-!
 # Proof dependency audit
 
