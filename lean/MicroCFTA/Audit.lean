@@ -1936,6 +1936,11 @@ import MicroCFTA.SourceCurrentAllocatedClassEditPlan
 import MicroCFTA.SourceCurrentAllocatedClassEdits
 import MicroCFTA.SourceCurrentAllocatedClassPass
 import MicroCFTA.SourceCurrentConjunctionRequiredClassPass
+import MicroCFTA.SourceCurrentAllocatedPrecheck
+import MicroCFTA.SourceCurrentConjunctionScanClassPass
+import MicroCFTA.SourceCurrentAllocatedMkEdge
+import MicroCFTA.SourceCurrentAllocatedLocalReduction
+import MicroCFTA.SourceCurrentAllocatedParentEdge
 /-!
 # Proof dependency audit
 
