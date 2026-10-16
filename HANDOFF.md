@@ -1,6 +1,63 @@
 # cfta formalization restart handoff
 
-Updated: **2026-10-16 08:25 CEST (Europe/Stockholm)**.
+Updated: **2026-10-16 08:43 CEST (Europe/Stockholm)**.
+
+## Current checked allocated merge and selected target operands
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`b7510ec5`. Proof commits are `784b2168`, `6938c72f`, and
+`4d9ea213`. No Haskell implementation or test changes occur.
+The external Haskell fix registry remains first in root FINDINGS.md.
+Record each later fix there with its failure case, files, commit, checks,
+and upstream status.
+
+Five additive modules connect selected target projection and merging to the
+CURRENT checked state. Large-row construction demands its canonical empty
+equality field at the reached constructor step. Small rows and completed
+hits add no such row demand. Dynamic field proofs and constructive lifts
+derive physical readiness without an initial Top-available premise.
+The same allocated call derives its heap-only graph. Existing finite merge,
+language, and global receipt proofs apply to that derived graph.
+
+The full checked wrapper retains both native tables and the domain cache,
+allows actual equality-operation growth, and retains concrete Inventory.At.
+Initial warm merge Stored and uniform ambient CacheCovers remain explicit.
+The literal source subsumption test compares a raw field with Top. It is
+different from the broader normalized SourceMemoGate.plain test: an empty
+And guard is a checked witness. Independent PCS truth discharges the literal
+test's semantic law. This is a proof adapter correction, not a Haskell fix.
+
+Selected support constructs projection followed by the allocated merge.
+Other captured siblings can remain open. The result is closed and available.
+It retains original values, warm tables, input inventory, loaded fields, and
+global receipts. Proper paths give selected-subterm inclusion. Projection
+discards ancestor guards and merging can add terms, so no general inverse
+language claim is made. An independent kernel composes this operand with
+the NEXT generated native query and derives its expanded inventory and
+result law from reached ranges.
+
+The pinned full Audit passes 2342 jobs and 56610 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur.
+Public probes, kernel integrations, and independent reviews pass.
+Evidence is in lean/restart-evidence/20261016-checked-merge/.
+All 3792 starting files remain. All 2336 older non-Audit proof sources
+retain identical bytes.
+Earlier frozen proofs, stashes, other worktree records, and the Haskell
+registry remain. Earlier unavailable external drafts are not claimed
+recovered or reverified. Reuse unchanged-source strict Nix build, 777 examples
+plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-checked-merge.md and the checked-target-fold-next.md
+evidence note. Next port the first-seeded target fold, class-local target
+slots, force and leaf edits, then the class pass, final empty propagation,
+and general constrained outer caller. Keep merge and native tables warm.
+The pure selection graph still needs its literal noConstraint CAF allocation
+and GHC forcing adapter. Final-row allocation alone does not establish that
+runtime trace. Containers, publication, concurrency, machine capacity, solver
+IO, random draws, codecs, broader full-library targets, and each separate
+Sized contract remain active. Preserve the optimized interned core and
+every older constructor and equality proof. No board posts or deployments.
+Push verified formalize checkpoints regularly. The full goal remains active.
 
 ## Current checked Scan global memos and selected required execution
 
