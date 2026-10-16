@@ -18,7 +18,7 @@ The existing repair entry and executable output below apply to this source.
 No additional Haskell repair is needed for the reported Chain example.
 Read `lean/notes-proof-status-20261017.md` for the current proof boundaries.
 
-The current initial-resource outer proofs add no Haskell change.
+The current recursive-domain proofs add no Haskell change.
 The reported recursive field-pool defect is already repaired upstream.
 Current source and the retained executable output confirm the repair.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
@@ -37,7 +37,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The last completed pinned Lean Audit passes: 2693 jobs and 61393 dependency checks.
+The last completed pinned Lean Audit passes: 2700 jobs and 61554 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -171,6 +171,37 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current recursive domain inventory and allocation
+
+Updated: 2026-10-17 00:58 CEST. Source main remains `c0cc8a05`.
+This checkpoint starts at published `3d1ad127`. Proof commits are
+`84312e12`, `e1ede72e`, `e6732039`, and `ef8f7b56`. Read
+`lean/notes-current-recursive-domain-capacity.md` and
+`lean/restart-evidence/20261017-recursive-capacity/`.
+
+Seven additive modules prove finite canonical Typed domain inventories, actual
+sequential allocation bounds, fixed-source request key bounds, current checked
+domain history transport, and local recursive source compiler certificates.
+Repeated hits consume no identities. Actual empty domains preserve the cache.
+Mu entry, reference lookup, unions, and checked edge bodies retain the exact
+original heap scope and current domain membership. The current checked prefix
+split also retains exact inner returns, continuation prefixes, and full states.
+The full Audit passes
+2700 jobs and 61554 dependency checks with only the permitted axioms.
+All 131 public/integration axiom and signature pairs pass. Nine component
+manifests retain 179 entries. Independent reviews find no material defect.
+
+Whole-query raw-prefix admission is still open. DomainTrace.Prefixes remains
+an explicit premise. Derive a simultaneous invariant with physical validity,
+original operands, actual allocation history, and protected finish frames.
+Then derive current WordRanges from initial resources and reuse existing
+recursive native completion. The coarse issued-range inventory may exceed
+fixed machine capacity; it is not a practical guarantee for all source inputs.
+General constrained recursive outer progress, convergence, frontend/runtime
+correspondence, and complete public pipelines remain open. The full-library
+goal stays active. No Haskell change or new defect occurs. FINDINGS keeps
+merged repair b9219b9e and the external handoff first. Preserve all older work.
 
 ## Current universal raw-reach capacity and ordinary root
 

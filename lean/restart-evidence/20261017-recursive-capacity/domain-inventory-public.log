@@ -1,0 +1,211 @@
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported : List.{0} Nat →
+  List.{0} (Prod.{0, 0} Nat Nat) → MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey → Prop
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical : List.{0} Nat →
+  List.{0} (Prod.{0, 0} Nat Nat) → MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_canonical' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_canonical : ∀ (binders : List.{0} Nat)
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+  MicroCFTA.IntersectionFlatMemoKeyDomain.Canonical
+    (MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical binders pairs)
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_typed' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_typed : ∀ (binders : List.{0} Nat)
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+  MicroCFTA.SourceRecursiveIntersectionDomain.Typed
+    (MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical binders pairs)
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_names' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_names : ∀ (binders : List.{0} Nat)
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+  @Eq.{1} (List.{0} Nat)
+    (MicroCFTA.SourceRecursiveIntersectionDomain.names
+      (MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical binders pairs))
+    (@MicroCFTA.CanonicalClasses.sortedSet.{0} Nat instDecidableEqNat instOrdNat binders)
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.typed_free' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.typed_free : ∀
+  (key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  MicroCFTA.SourceRecursiveIntersectionDomain.Typed key →
+    @Eq.{1} (List.{0} (Prod.{0, 0} Nat MicroCFTA.InternedBinderProtocol.NodeRef)) key.free
+      (@List.map.{0, 0} Nat (Prod.{0, 0} Nat MicroCFTA.InternedBinderProtocol.NodeRef)
+        (fun name =>
+          @Prod.mk.{0, 0} Nat MicroCFTA.InternedBinderProtocol.NodeRef name
+            (MicroCFTA.InternedBinderProtocol.NodeRef.mu name))
+        (MicroCFTA.SourceRecursiveIntersectionDomain.names key))
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_eq' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_eq : ∀
+  (key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  MicroCFTA.IntersectionFlatMemoKeyDomain.Canonical key →
+    MicroCFTA.SourceRecursiveIntersectionDomain.Typed key →
+      ∀ (binders : List.{0} Nat) (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+        (∀ (name : Nat),
+            Iff (@Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) binders name)
+              (@Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+                (MicroCFTA.SourceRecursiveIntersectionDomain.names key) name)) →
+          (∀ (pair : Prod.{0, 0} Nat Nat),
+              Iff
+                (@Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (List.{0} (Prod.{0, 0} Nat Nat))
+                  (@List.instMembership.{0} (Prod.{0, 0} Nat Nat)) pairs pair)
+                (@Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (List.{0} (Prod.{0, 0} Nat Nat))
+                  (@List.instMembership.{0} (Prod.{0, 0} Nat Nat)) key.seen pair)) →
+            @Eq.{1} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+              (MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical binders pairs) key
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory : List.{0} Nat →
+  List.{0} (Prod.{0, 0} Nat Nat) → List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_of_mem' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_of_mem : ∀ {binders : List.{0} Nat}
+  {pairs : List.{0} (Prod.{0, 0} Nat Nat)} {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs) key →
+    MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.mem_of_supported' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainInventory.mem_of_supported : ∀ {binders : List.{0} Nat}
+  {pairs : List.{0} (Prod.{0, 0} Nat Nat)} {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key →
+    @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs) key
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.mem_inventory_iff' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.mem_inventory_iff : ∀ (binders : List.{0} Nat)
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)) (key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  Iff
+    (@Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs) key)
+    (MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key)
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory_length' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory_length : ∀ (binders : List.{0} Nat)
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+  @Eq.{1} Nat
+    (@List.length.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs))
+    (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} Nat binders)
+        (@List.length.{0} (Prod.{0, 0} Nat Nat) pairs)))
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_empty' depends on axioms: [propext]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_empty : ∀ (binders : List.{0} Nat)
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+  MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs
+    MicroCFTA.IntersectionEmptyDomain.emptyKey
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.empty_mem' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.empty_mem : ∀ (binders : List.{0} Nat)
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+  @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+    (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+    (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+    (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs)
+    MicroCFTA.IntersectionEmptyDomain.emptyKey
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.extend' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.extend : ∀ {binders : List.{0} Nat}
+  {pairs : List.{0} (Prod.{0, 0} Nat Nat)} {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key →
+    ∀ (bound : List.{0} Nat) (pair : Prod.{0, 0} Nat Nat),
+      (∀ (name : Nat),
+          @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) bound name →
+            @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) binders name) →
+        @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (List.{0} (Prod.{0, 0} Nat Nat))
+            (@List.instMembership.{0} (Prod.{0, 0} Nat Nat)) pairs pair →
+          MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs
+            (MicroCFTA.SourceRecursiveIntersectionDomain.extend key bound pair)
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.extend_mem' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainInventory.extend_mem : ∀ {binders : List.{0} Nat}
+  {pairs : List.{0} (Prod.{0, 0} Nat Nat)} {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs) key →
+    ∀ (bound : List.{0} Nat) (pair : Prod.{0, 0} Nat Nat),
+      (∀ (name : Nat),
+          @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) bound name →
+            @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) binders name) →
+        @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (List.{0} (Prod.{0, 0} Nat Nat))
+            (@List.instMembership.{0} (Prod.{0, 0} Nat Nat)) pairs pair →
+          @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+            (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs)
+            (MicroCFTA.SourceRecursiveIntersectionDomain.extend key bound pair)
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.mono' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.mono : ∀ {binders moreBinders : List.{0} Nat}
+  {pairs morePairs : List.{0} (Prod.{0, 0} Nat Nat)} {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key →
+    @HasSubset.Subset.{0} (List.{0} Nat) (@List.instHasSubset.{0} Nat) binders moreBinders →
+      @HasSubset.Subset.{0} (List.{0} (Prod.{0, 0} Nat Nat)) (@List.instHasSubset.{0} (Prod.{0, 0} Nat Nat)) pairs
+          morePairs →
+        MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported moreBinders morePairs key
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory_mono' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory_mono : ∀ (binders moreBinders : List.{0} Nat)
+  (pairs morePairs : List.{0} (Prod.{0, 0} Nat Nat)),
+  @HasSubset.Subset.{0} (List.{0} Nat) (@List.instHasSubset.{0} Nat) binders moreBinders →
+    @HasSubset.Subset.{0} (List.{0} (Prod.{0, 0} Nat Nat)) (@List.instHasSubset.{0} (Prod.{0, 0} Nat Nat)) pairs
+        morePairs →
+      @HasSubset.Subset.{0} (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (@List.instHasSubset.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs)
+        (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory moreBinders morePairs)
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_length_le' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_length_le : ∀ (binders : List.{0} Nat)
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)) (keys : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  @List.Nodup.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey keys →
+    (∀ (key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+        @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+            (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) keys key →
+          MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key) →
+      @LE.le.{0} Nat instLENat (@List.length.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey keys)
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} Nat binders)
+            (@List.length.{0} (Prod.{0, 0} Nat Nat) pairs)))
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.canonical' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.canonical : ∀ {binders : List.{0} Nat}
+  {pairs : List.{0} (Prod.{0, 0} Nat Nat)} {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key →
+    MicroCFTA.IntersectionFlatMemoKeyDomain.Canonical key
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.typed' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.typed : ∀ {binders : List.{0} Nat}
+  {pairs : List.{0} (Prod.{0, 0} Nat Nat)} {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key →
+    MicroCFTA.SourceRecursiveIntersectionDomain.Typed key
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.names' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.names : ∀ {binders : List.{0} Nat}
+  {pairs : List.{0} (Prod.{0, 0} Nat Nat)} {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key →
+    ∀ (name : Nat),
+      @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+          (MicroCFTA.SourceRecursiveIntersectionDomain.names key) name →
+        @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) binders name
+'MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.seen' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.seen : ∀ {binders : List.{0} Nat}
+  {pairs : List.{0} (Prod.{0, 0} Nat Nat)} {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported binders pairs key →
+    ∀ (pair : Prod.{0, 0} Nat Nat),
+      @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (List.{0} (Prod.{0, 0} Nat Nat))
+          (@List.instMembership.{0} (Prod.{0, 0} Nat Nat)) key.seen pair →
+        @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (List.{0} (Prod.{0, 0} Nat Nat))
+          (@List.instMembership.{0} (Prod.{0, 0} Nat Nat)) pairs pair

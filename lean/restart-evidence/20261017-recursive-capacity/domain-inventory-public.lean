@@ -1,0 +1,78 @@
+import MicroCFTA.SourceRecursiveIntersectionDomainInventory
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_canonical
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_canonical
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_typed
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_typed
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_names
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_names
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.typed_free
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.typed_free
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_eq
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.canonical_eq
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_of_mem
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_of_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.mem_of_supported
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.mem_of_supported
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.mem_inventory_iff
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.mem_inventory_iff
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory_length
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory_length
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_empty
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_empty
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.empty_mem
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.empty_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.extend
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.extend
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.extend_mem
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.extend_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.mono
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.mono
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory_mono
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory_mono
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_length_le
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.supported_length_le
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.canonical
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.canonical
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.typed
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.typed
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.names
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.names
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.seen
+#check @MicroCFTA.SourceRecursiveIntersectionDomainInventory.Supported.seen

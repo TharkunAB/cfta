@@ -1,0 +1,38 @@
+import MicroCFTA.SourceCurrentAllocatedNativeDomainTrace
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.CodeEntered
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.CodeEntered
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Entered
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Entered
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.step
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.step
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.yielded
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.yielded
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes.current
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes.current
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes.after_step
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes.after_step
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.trace
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.trace
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.next_le
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.next_le
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.identity_lt
+#check @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.identity_lt

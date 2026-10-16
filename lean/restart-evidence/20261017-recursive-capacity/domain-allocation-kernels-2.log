@@ -1,0 +1,152 @@
+lean/restart-evidence/20261017-recursive-capacity/domain-allocation-kernels.lean:87:4: error: Type mismatch: After simplification, term
+  identity
+ has type
+  @LT.lt Nat instLTNat (make before nonemptyKey).fst.identity (2 ^ (bits + 1))
+but is expected to have type
+  @LT.lt Nat instLTNat (make (make (make emptyState nonemptyKey).snd emptyKey).snd nonemptyKey).fst.identity
+    (2 ^ (bits + 1))
+'MicroCFTA.DomainAllocationKernels.repeated_single_key' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.DomainAllocationKernels.repeated_single_key : ∀ {Key : Type} [inst : DecidableEq.{1} Key]
+  (state : MicroCFTA.Cache.State Key) (key : Key) (count : Nat),
+  And
+    (@MicroCFTA.CacheFiniteInterning.Trace Key inst (@List.cons.{0} Key key (@List.nil.{0} Key)) state
+      (@MicroCFTA.DomainAllocationKernels.repeatIntern Key inst key
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        state))
+    (And
+      (@Eq.{1} (MicroCFTA.Cache.State Key)
+        (@MicroCFTA.DomainAllocationKernels.repeatIntern Key inst key
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          state)
+        (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+          (@MicroCFTA.Cache.intern Key inst state key)))
+      (@LE.le.{0} Nat instLENat
+        (@MicroCFTA.Cache.State.next Key
+          (@MicroCFTA.DomainAllocationKernels.repeatIntern Key inst key
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            state))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@MicroCFTA.Cache.State.next Key state)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+'MicroCFTA.DomainAllocationKernels.warm_nonzero_and_empty' depends on axioms: [propext]
+MicroCFTA.DomainAllocationKernels.warm_nonzero_and_empty : And
+  (@Eq.{1}
+    (Prod.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey))
+    (MicroCFTA.IntersectionEmptyDomain.make MicroCFTA.DomainAllocationKernels.warm
+      MicroCFTA.DomainAllocationKernels.nonemptyKey)
+    (@Prod.mk.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (@MicroCFTA.Cache.Interned.mk MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+        (@OfNat.ofNat.{0} Nat (nat_lit 18) (instOfNatNat (nat_lit 18))) MicroCFTA.DomainAllocationKernels.nonemptyKey)
+      MicroCFTA.DomainAllocationKernels.warm))
+  (And
+    (@Eq.{1}
+      (Prod.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey))
+      (MicroCFTA.IntersectionEmptyDomain.make
+        (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (MicroCFTA.IntersectionEmptyDomain.make MicroCFTA.DomainAllocationKernels.warm
+            MicroCFTA.DomainAllocationKernels.nonemptyKey))
+        MicroCFTA.IntersectionEmptyDomain.emptyKey)
+      (@Prod.mk.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        MicroCFTA.IntersectionEmptyDomain.emptyDomain MicroCFTA.DomainAllocationKernels.warm))
+    (@Eq.{1}
+      (Prod.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey))
+      (MicroCFTA.IntersectionEmptyDomain.make
+        (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (MicroCFTA.IntersectionEmptyDomain.make
+            (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+              (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+              (MicroCFTA.IntersectionEmptyDomain.make MicroCFTA.DomainAllocationKernels.warm
+                MicroCFTA.DomainAllocationKernels.nonemptyKey))
+            MicroCFTA.IntersectionEmptyDomain.emptyKey))
+        MicroCFTA.DomainAllocationKernels.nonemptyKey)
+      (@Prod.mk.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (@MicroCFTA.Cache.Interned.mk MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+          (@OfNat.ofNat.{0} Nat (nat_lit 18) (instOfNatNat (nat_lit 18))) MicroCFTA.DomainAllocationKernels.nonemptyKey)
+        MicroCFTA.DomainAllocationKernels.warm)))
+'MicroCFTA.DomainAllocationKernels.empty_without_inventory' depends on axioms: [propext]
+MicroCFTA.DomainAllocationKernels.empty_without_inventory : ∀
+  (state : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  And
+    (MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace
+      (@List.nil.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) state
+      (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.IntersectionEmptyDomain.make state MicroCFTA.IntersectionEmptyDomain.emptyKey)))
+    (And
+      (@Eq.{1} (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (MicroCFTA.IntersectionEmptyDomain.make state MicroCFTA.IntersectionEmptyDomain.emptyKey))
+        state)
+      (@Eq.{1} Nat
+        (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+          (@Prod.fst.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (MicroCFTA.IntersectionEmptyDomain.make state MicroCFTA.IntersectionEmptyDomain.emptyKey)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+'MicroCFTA.DomainAllocationKernels.cold_repeat_inventory' depends on axioms: [propext, sorryAx.{u}, Quot.sound.{u}]
+MicroCFTA.DomainAllocationKernels.cold_repeat_inventory : ∀ (binders : List.{0} Nat)
+  (pairs : List.{0} (Prod.{0, 0} Nat Nat)),
+  @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs)
+      MicroCFTA.DomainAllocationKernels.nonemptyKey →
+    ∀ {bits : Nat},
+      @LT.lt.{0} Nat instLTNat
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} Nat binders)
+              (@List.length.{0} (Prod.{0, 0} Nat Nat) pairs)))
+          (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+        have before := @MicroCFTA.Cache.emptyState MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey;
+        have first := MicroCFTA.IntersectionEmptyDomain.make before MicroCFTA.DomainAllocationKernels.nonemptyKey;
+        have repeated :=
+          MicroCFTA.IntersectionEmptyDomain.make
+            (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+              (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+              (MicroCFTA.IntersectionEmptyDomain.make
+                (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                  (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) first)
+                MicroCFTA.IntersectionEmptyDomain.emptyKey))
+            MicroCFTA.DomainAllocationKernels.nonemptyKey;
+        And
+          (MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace
+            (MicroCFTA.SourceRecursiveIntersectionDomainInventory.inventory binders pairs) before
+            (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+              (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) repeated))
+          (And
+            (@Eq.{1}
+              (Prod.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey))
+              repeated first)
+            (And
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                  (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                    (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) repeated))
+                (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} Nat binders)
+                    (@List.length.{0} (Prod.{0, 0} Nat Nat) pairs))))
+              (@LT.lt.{0} Nat instLTNat
+                (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                  (@Prod.fst.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                    (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) repeated))
+                (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))

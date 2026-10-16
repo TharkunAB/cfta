@@ -1,0 +1,40 @@
+lean/MicroCFTA/SourceRecursiveIntersectionDomainInventory.lean:18:2: warning: missing doc string for public field Supported.canonical
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+lean/MicroCFTA/SourceRecursiveIntersectionDomainInventory.lean:19:2: warning: missing doc string for public field Supported.typed
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+lean/MicroCFTA/SourceRecursiveIntersectionDomainInventory.lean:20:2: warning: missing doc string for public field Supported.names
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+lean/MicroCFTA/SourceRecursiveIntersectionDomainInventory.lean:21:2: warning: missing doc string for public field Supported.seen
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+lean/MicroCFTA/SourceRecursiveIntersectionDomainInventory.lean:47:2: error: Tactic `apply` failed: could not unify the conclusion of `@List.map_congr_left`
+  List.map ?f ?l = List.map ?g ?l
+with the goal
+  List.map ((fun name => (name, NodeRef.mu name)) ∘ Prod.fst) key.free = key.free
+
+Note: The full type of `@List.map_congr_left` is
+  ∀ {α : Type ?u.15} {l : List α} {α_1 : Type ?u.14} {f g : α → α_1},
+    (∀ (a : α), a ∈ l → f a = g a) → List.map f l = List.map g l
+
+key : DomainKey
+typed : Typed key
+⊢ List.map ((fun name => (name, NodeRef.mu name)) ∘ Prod.fst) key.free = key.free
+lean/MicroCFTA/SourceRecursiveIntersectionDomainInventory.lean:74:4: error: Application type mismatch: The argument
+  List.mem_flatMap.mp member
+has type
+  ∃ a, a ∈ SourceLeafRowProgress.subsets binders ∧ key ∈ List.map (canonical a) (SourceLeafRowProgress.subsets pairs)
+but is expected to have type
+  ∃ a, ?m.33 a ∈ List.map (?m.32 a) (?m.30 a)
+in the application
+  Exists.imp (fun x rest => List.mem_map.mp rest) (List.mem_flatMap.mp member)
+lean/MicroCFTA/SourceRecursiveIntersectionDomainInventory.lean:110:58: warning: This simp argument is unused:
+  Nat.mul_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [inventory, List.length_flatMap, SourceLeafRowProgress.subsets_length, List.map_const',
+    List.sum_replicate_nat, Nat.pow_add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

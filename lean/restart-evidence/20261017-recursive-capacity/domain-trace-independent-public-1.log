@@ -1,0 +1,223 @@
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.CodeEntered' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.CodeEntered : {A : Type} →
+  List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey →
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A →
+      Prop
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Entered' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Entered : {A : Type} →
+  List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey → MicroCFTA.SourceEqualityNativeDemand.Control A → Prop
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.step' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.step : ∀ {width : Nat} {A : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width),
+  @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Entered A inventory control →
+    MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+            (@MicroCFTA.SourceEqualityNativeDemand.Outcome.state width A
+              (@MicroCFTA.SourceEqualityNativeDemand.step A width inst inst_1 control before)))))
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.yielded' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.yielded : ∀ {width : Nat} {A : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width),
+  @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Entered A inventory control →
+    @Eq.{2} (MicroCFTA.SourceEqualityNativeDemand.Outcome width A)
+        (@MicroCFTA.SourceEqualityNativeDemand.step A width inst inst_1 control before)
+        (@MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded width A next after) →
+      MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width after)))
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes : {width : Nat} →
+  {A : Type} →
+    [DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)] →
+      [DecidableEq.{1}
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+        List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey →
+          MicroCFTA.SourceEqualityNativeDemand.Control A → MicroCFTA.SourceEqualityNativeDemand.State width → Prop
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes.current' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes.current : ∀ {width : Nat} {A : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {control : MicroCFTA.SourceEqualityNativeDemand.Control A}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width},
+  @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes width A inst inst_1 inventory control before →
+    @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Entered A inventory control
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes.after_step' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes.after_step : ∀ {width : Nat} {A : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {control next : MicroCFTA.SourceEqualityNativeDemand.Control A}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width},
+  @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes width A inst inst_1 inventory control before →
+    @Eq.{2} (MicroCFTA.SourceEqualityNativeDemand.Outcome width A)
+        (@MicroCFTA.SourceEqualityNativeDemand.step A width inst inst_1 control before)
+        (@MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded width A next after) →
+      @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes width A inst inst_1 inventory next after
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.trace' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.trace : ∀ {width : Nat} {A : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (fuel : Nat)
+  (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width),
+  @MicroCFTA.SourceEqualityNativeDemand.Steps inst inst_1 A width fuel control before next after →
+    @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes width A inst inst_1 inventory control before →
+      MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)))
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width after)))
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.next_le' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.next_le : ∀ {width : Nat} {A : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (fuel : Nat)
+  (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width),
+  @MicroCFTA.SourceEqualityNativeDemand.Steps inst inst_1 A width fuel control before next after →
+    @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes width A inst inst_1 inventory control before →
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width after))))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))))
+          (@List.length.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey inventory))
+'MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.identity_lt' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.identity_lt : ∀ {width : Nat} {A : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) (fuel : Nat)
+  (control next : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width),
+  @MicroCFTA.SourceEqualityNativeDemand.Steps inst inst_1 A width fuel control before next after →
+    @MicroCFTA.SourceCurrentAllocatedNativeDomainTrace.Prefixes width A inst inst_1 inventory control before →
+      @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))) →
+        ∀ (key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+          MicroCFTA.IntersectionEmptyDomain.Represents
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width after)))
+              key domain →
+            ∀ (limit : Nat),
+              @LT.lt.{0} Nat instLTNat
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.domains
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))))
+                    (@List.length.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey inventory))
+                  limit →
+                @LT.lt.{0} Nat instLTNat
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain) limit

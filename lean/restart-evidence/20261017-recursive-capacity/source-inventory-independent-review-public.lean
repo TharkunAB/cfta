@@ -1,0 +1,54 @@
+import MicroCFTA.SourceRecursiveIntersectionSourceInventory
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.names
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.names
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.pairs
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.pairs
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.identity_mem
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.identity_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.pair_mem
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.pair_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.operand_pair_mem
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.operand_pair_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.binding_mem
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.binding_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.bound_names
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.bound_names
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.extend_mem
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.extend_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.empty_mem
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.empty_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.pairs_length
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.pairs_length
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains_length
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains_length
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.entered_mem
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.entered_mem
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.node_key_safe
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.node_key_safe
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionSourceInventory.edge_key_safe
+#check @MicroCFTA.SourceRecursiveIntersectionSourceInventory.edge_key_safe

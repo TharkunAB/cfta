@@ -1,0 +1,311 @@
+'MicroCFTA.CacheFiniteInterning.missing' does not depend on any axioms
+@MicroCFTA.CacheFiniteInterning.missing : {Key : Type} → List.{0} Key → MicroCFTA.Cache.State Key → Nat
+'MicroCFTA.CacheFiniteInterning.missing_le_length' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CacheFiniteInterning.missing_le_length : ∀ {Key : Type} (inventory : List.{0} Key)
+  (state : MicroCFTA.Cache.State Key),
+  @LE.le.{0} Nat instLENat (@MicroCFTA.CacheFiniteInterning.missing Key inventory state)
+    (@List.length.{0} Key inventory)
+'MicroCFTA.CacheFiniteInterning.missing_mono' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CacheFiniteInterning.missing_mono : ∀ {Key : Type} (inventory : List.{0} Key)
+  {before after : MicroCFTA.Cache.State Key},
+  @MicroCFTA.Cache.Extends Key (MicroCFTA.Cache.Interned Key) (@MicroCFTA.Cache.State.table Key before)
+      (@MicroCFTA.Cache.State.table Key after) →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.CacheFiniteInterning.missing Key inventory after)
+      (@MicroCFTA.CacheFiniteInterning.missing Key inventory before)
+'MicroCFTA.CacheFiniteInterning.intern_extends' depends on axioms: [propext]
+@MicroCFTA.CacheFiniteInterning.intern_extends : ∀ {Key : Type} [inst : DecidableEq.{1} Key]
+  (state : MicroCFTA.Cache.State Key) (key : Key),
+  @MicroCFTA.Cache.Extends Key (MicroCFTA.Cache.Interned Key) (@MicroCFTA.Cache.State.table Key state)
+    (@MicroCFTA.Cache.State.table Key
+      (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+        (@MicroCFTA.Cache.intern Key inst state key)))
+'MicroCFTA.CacheFiniteInterning.intern_present' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CacheFiniteInterning.intern_present : ∀ {Key : Type} [inst : DecidableEq.{1} Key]
+  (state : MicroCFTA.Cache.State Key) (key : Key),
+  @Exists.{1} (MicroCFTA.Cache.Interned Key) fun value =>
+    @Eq.{1} (Option.{0} (MicroCFTA.Cache.Interned Key))
+      (@MicroCFTA.Cache.State.table Key
+        (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+          (@MicroCFTA.Cache.intern Key inst state key))
+        key)
+      (@Option.some.{0} (MicroCFTA.Cache.Interned Key) value)
+'MicroCFTA.CacheFiniteInterning.intern_next' depends on axioms: [propext]
+@MicroCFTA.CacheFiniteInterning.intern_next : ∀ {Key : Type} [inst : DecidableEq.{1} Key]
+  (state : MicroCFTA.Cache.State Key) (key : Key),
+  @Eq.{1} Nat
+    (@MicroCFTA.Cache.State.next Key
+      (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+        (@MicroCFTA.Cache.intern Key inst state key)))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@MicroCFTA.Cache.State.next Key state)
+      (@ite.{1} Nat
+        (@Eq.{1} Bool (@Option.isNone.{0} (MicroCFTA.Cache.Interned Key) (@MicroCFTA.Cache.State.table Key state key))
+          Bool.true)
+        (instDecidableEqBool
+          (@Option.isNone.{0} (MicroCFTA.Cache.Interned Key) (@MicroCFTA.Cache.State.table Key state key)) Bool.true)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+'MicroCFTA.CacheFiniteInterning.intern_hit' depends on axioms: [propext]
+@MicroCFTA.CacheFiniteInterning.intern_hit : ∀ {Key : Type} [inst : DecidableEq.{1} Key]
+  {state : MicroCFTA.Cache.State Key} {key : Key} {value : MicroCFTA.Cache.Interned Key},
+  @Eq.{1} (Option.{0} (MicroCFTA.Cache.Interned Key)) (@MicroCFTA.Cache.State.table Key state key)
+      (@Option.some.{0} (MicroCFTA.Cache.Interned Key) value) →
+    @Eq.{1} (Prod.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key))
+      (@MicroCFTA.Cache.intern Key inst state key)
+      (@Prod.mk.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key) value state)
+'MicroCFTA.CacheFiniteInterning.missing_drop' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CacheFiniteInterning.missing_drop : ∀ {Key : Type} [inst : DecidableEq.{1} Key] (inventory : List.{0} Key)
+  (state : MicroCFTA.Cache.State Key) (key : Key),
+  @Membership.mem.{0, 0} Key (List.{0} Key) (@List.instMembership.{0} Key) inventory key →
+    @Eq.{1} (Option.{0} (MicroCFTA.Cache.Interned Key)) (@MicroCFTA.Cache.State.table Key state key)
+        (@Option.none.{0} (MicroCFTA.Cache.Interned Key)) →
+      @LE.le.{0} Nat instLENat
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@MicroCFTA.CacheFiniteInterning.missing Key inventory
+            (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+              (@MicroCFTA.Cache.intern Key inst state key)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@MicroCFTA.CacheFiniteInterning.missing Key inventory state)
+'MicroCFTA.CacheFiniteInterning.intern_potential' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CacheFiniteInterning.intern_potential : ∀ {Key : Type} [inst : DecidableEq.{1} Key]
+  (inventory : List.{0} Key) (state : MicroCFTA.Cache.State Key) (key : Key),
+  @Membership.mem.{0, 0} Key (List.{0} Key) (@List.instMembership.{0} Key) inventory key →
+    @LE.le.{0} Nat instLENat
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next Key
+          (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+            (@MicroCFTA.Cache.intern Key inst state key)))
+        (@MicroCFTA.CacheFiniteInterning.missing Key inventory
+          (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+            (@MicroCFTA.Cache.intern Key inst state key))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@MicroCFTA.Cache.State.next Key state)
+        (@MicroCFTA.CacheFiniteInterning.missing Key inventory state))
+'MicroCFTA.CacheFiniteInterning.Trace' does not depend on any axioms
+@MicroCFTA.CacheFiniteInterning.Trace : {Key : Type} →
+  [DecidableEq.{1} Key] → List.{0} Key → MicroCFTA.Cache.State Key → MicroCFTA.Cache.State Key → Prop
+'MicroCFTA.CacheFiniteInterning.Trace.trans' does not depend on any axioms
+@MicroCFTA.CacheFiniteInterning.Trace.trans : ∀ {Key : Type} [inst : DecidableEq.{1} Key] {inventory : List.{0} Key}
+  {before middle after : MicroCFTA.Cache.State Key},
+  @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory before middle →
+    @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory middle after →
+      @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory before after
+'MicroCFTA.CacheFiniteInterning.Trace.valid' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CacheFiniteInterning.Trace.valid : ∀ {Key : Type} [inst : DecidableEq.{1} Key] {inventory : List.{0} Key}
+  {before after : MicroCFTA.Cache.State Key},
+  @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory before after →
+    @MicroCFTA.Cache.Valid Key before → @MicroCFTA.Cache.Valid Key after
+'MicroCFTA.CacheFiniteInterning.Trace.extends' depends on axioms: [propext]
+@MicroCFTA.CacheFiniteInterning.Trace.extends : ∀ {Key : Type} [inst : DecidableEq.{1} Key] {inventory : List.{0} Key}
+  {before after : MicroCFTA.Cache.State Key},
+  @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory before after →
+    @MicroCFTA.Cache.Extends Key (MicroCFTA.Cache.Interned Key) (@MicroCFTA.Cache.State.table Key before)
+      (@MicroCFTA.Cache.State.table Key after)
+'MicroCFTA.CacheFiniteInterning.Trace.potential' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CacheFiniteInterning.Trace.potential : ∀ {Key : Type} [inst : DecidableEq.{1} Key] {inventory : List.{0} Key}
+  {before after : MicroCFTA.Cache.State Key},
+  @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory before after →
+    @LE.le.{0} Nat instLENat
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@MicroCFTA.Cache.State.next Key after)
+        (@MicroCFTA.CacheFiniteInterning.missing Key inventory after))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@MicroCFTA.Cache.State.next Key before)
+        (@MicroCFTA.CacheFiniteInterning.missing Key inventory before))
+'MicroCFTA.CacheFiniteInterning.Trace.next_le_missing' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CacheFiniteInterning.Trace.next_le_missing : ∀ {Key : Type} [inst : DecidableEq.{1} Key]
+  {inventory : List.{0} Key} {before after : MicroCFTA.Cache.State Key},
+  @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory before after →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.Cache.State.next Key after)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@MicroCFTA.Cache.State.next Key before)
+        (@MicroCFTA.CacheFiniteInterning.missing Key inventory before))
+'MicroCFTA.CacheFiniteInterning.Trace.next_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.CacheFiniteInterning.Trace.next_le : ∀ {Key : Type} [inst : DecidableEq.{1} Key] {inventory : List.{0} Key}
+  {before after : MicroCFTA.Cache.State Key},
+  @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory before after →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.Cache.State.next Key after)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@MicroCFTA.Cache.State.next Key before)
+        (@List.length.{0} Key inventory))
+'MicroCFTA.CacheFiniteInterning.Trace.refl' does not depend on any axioms
+@MicroCFTA.CacheFiniteInterning.Trace.refl : ∀ {Key : Type} [inst : DecidableEq.{1} Key] {inventory : List.{0} Key}
+  (state : MicroCFTA.Cache.State Key), @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory state state
+'MicroCFTA.CacheFiniteInterning.Trace.intern' does not depend on any axioms
+@MicroCFTA.CacheFiniteInterning.Trace.intern : ∀ {Key : Type} [inst : DecidableEq.{1} Key] {inventory : List.{0} Key}
+  {before middle : MicroCFTA.Cache.State Key},
+  @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory before middle →
+    ∀ (key : Key),
+      @Membership.mem.{0, 0} Key (List.{0} Key) (@List.instMembership.{0} Key) inventory key →
+        @MicroCFTA.CacheFiniteInterning.Trace Key inst inventory before
+          (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+            (@MicroCFTA.Cache.intern Key inst middle key))
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace' does not depend on any axioms
+MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace : List.{0}
+    MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey →
+  MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey →
+    MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey → Prop
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.empty' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.empty : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before middle : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before middle →
+    MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before
+      (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.IntersectionEmptyDomain.make middle MicroCFTA.IntersectionEmptyDomain.emptyKey))
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.step' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.step : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before middle : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before middle →
+    ∀ (key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+      @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+          (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) inventory key →
+        MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before
+          (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (MicroCFTA.IntersectionEmptyDomain.make middle key))
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.interns' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.interns : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before after →
+    @MicroCFTA.CacheFiniteInterning.Trace MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      MicroCFTA.IntersectionFlatMemoKeyDomain.instDecidableEqDomainKey inventory before after
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.trans' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.trans : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before middle after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before middle →
+    MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory middle after →
+      MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before after
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.valid' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.valid : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before after →
+    @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before →
+      @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey after
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.extends' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.extends : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before after →
+    @MicroCFTA.Cache.Extends MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (@MicroCFTA.Cache.State.table MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before)
+      (@MicroCFTA.Cache.State.table MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey after)
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.potential' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.potential : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before after →
+    @LE.le.{0} Nat instLENat
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey after)
+        (@MicroCFTA.CacheFiniteInterning.missing MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey inventory after))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before)
+        (@MicroCFTA.CacheFiniteInterning.missing MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey inventory before))
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.next_le_missing' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.next_le_missing : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before after →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey after)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before)
+        (@MicroCFTA.CacheFiniteInterning.missing MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey inventory before))
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.next_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.next_le : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before after →
+    @LE.le.{0} Nat instLENat (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey after)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before)
+        (@List.length.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey inventory))
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.represents_mono' depends on axioms: [propext]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.represents_mono : ∀
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  @MicroCFTA.Cache.Extends MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+      (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (@MicroCFTA.Cache.State.table MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before)
+      (@MicroCFTA.Cache.State.table MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey after) →
+    MicroCFTA.IntersectionEmptyDomain.Represents before key domain →
+      MicroCFTA.IntersectionEmptyDomain.Represents after key domain
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.represented_identity_le' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.represented_identity_le : ∀
+  {state : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey state →
+    MicroCFTA.IntersectionEmptyDomain.Represents state key domain →
+      @LE.le.{0} Nat instLENat
+        (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain)
+        (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey state)
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.identity_le' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.identity_le : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before after →
+    @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before →
+      ∀ {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+        {domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+        MicroCFTA.IntersectionEmptyDomain.Represents after key domain →
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before)
+              (@List.length.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey inventory))
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.identity_lt' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.identity_lt : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before after →
+    @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before →
+      ∀ {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+        {domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+        MicroCFTA.IntersectionEmptyDomain.Represents after key domain →
+          ∀ {limit : Nat},
+            @LT.lt.{0} Nat instLTNat
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before)
+                  (@List.length.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey inventory))
+                limit →
+              @LT.lt.{0} Nat instLTNat
+                (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain) limit
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.returned' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.returned : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before after : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory
+      (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+        (MicroCFTA.IntersectionEmptyDomain.make before key))
+      after →
+    @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey before →
+      MicroCFTA.IntersectionEmptyDomain.Represents after key
+        (@Prod.fst.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+          (MicroCFTA.IntersectionEmptyDomain.make before key))
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.refl' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.refl : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  (state : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory state state
+'MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.make' does not depend on any axioms
+@MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace.make : ∀
+  {inventory : List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey}
+  {before middle : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey},
+  MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before middle →
+    ∀ (key : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+      Or (@Eq.{1} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey key MicroCFTA.IntersectionEmptyDomain.emptyKey)
+          (@Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+            (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) inventory key) →
+        MicroCFTA.SourceRecursiveIntersectionDomainAllocation.Trace inventory before
+          (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (MicroCFTA.IntersectionEmptyDomain.make middle key))

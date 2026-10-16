@@ -1,0 +1,119 @@
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:212:30: warning: Variable name `facts` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _facts
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:232:31: warning: Variable name `facts` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _facts
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:266:84: error: Application type mismatch: The argument
+  request.domain
+has type
+  Interned DomainKey
+but is expected to have type
+  DomainKey
+in the application
+  SourceRecursiveIntersectionSchedule.entered_key state.domains valid.right request.domain
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:277:64: error: Function expected at
+  Original
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  other
+
+Hint: The identifier `Original` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:337:12: error: Tactic `assumption` failed
+
+case mk.leftReference.reference.interned
+source : InternedConstructorTemplates.State Symbol Guard
+inventory : List DomainKey
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+facts : Facts source
+closed : Closed source inventory
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+growth : Grows source state.heap
+history : Extends source.nodes.issued state.heap.nodes.issued
+domain : Interned DomainKey
+right : Value Symbol Guard
+identity✝ : Nat
+scope : NodeScope source { domain := domain, left := Value.reference (Reference.interned identity✝), right := right }
+known :
+  { domain := domain, left := Value.reference (Reference.interned identity✝), right := right }.domain.key ∈ inventory
+ready :
+  SourceRecursiveIntersectionThunks.NodeReady state
+    { domain := domain, left := Value.reference (Reference.interned identity✝), right := right }
+selected :
+  SourceRecursiveIntersectionControl.decision domain.key (Value.reference (Reference.interned identity✝)) right =
+    SourceRecursiveIntersectionControl.Branch.leftReference
+⊢ Certified source inventory
+    (match Value.reference (Reference.interned identity✝) with
+    | Value.reference (Reference.interned name) => compileReference domain name right true
+    | x => SourceRecursiveIntersectionCode.unsupported (Value.reference (Reference.interned identity✝)) right)
+    state fun after value => Available after.heap value
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:344:12: error: Tactic `assumption` failed
+
+case mk.rightReference.reference.interned
+source : InternedConstructorTemplates.State Symbol Guard
+inventory : List DomainKey
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+facts : Facts source
+closed : Closed source inventory
+state : Machine Symbol Guard
+valid : SourceRecursiveIntersectionKernel.Valid state
+semantic : SemanticReady state.heap
+growth : Grows source state.heap
+history : Extends source.nodes.issued state.heap.nodes.issued
+domain : Interned DomainKey
+left : Value Symbol Guard
+identity✝ : Nat
+scope : NodeScope source { domain := domain, left := left, right := Value.reference (Reference.interned identity✝) }
+known :
+  { domain := domain, left := left, right := Value.reference (Reference.interned identity✝) }.domain.key ∈ inventory
+ready :
+  SourceRecursiveIntersectionThunks.NodeReady state
+    { domain := domain, left := left, right := Value.reference (Reference.interned identity✝) }
+selected :
+  SourceRecursiveIntersectionControl.decision domain.key left (Value.reference (Reference.interned identity✝)) =
+    SourceRecursiveIntersectionControl.Branch.rightReference
+⊢ Certified source inventory
+    (match Value.reference (Reference.interned identity✝) with
+    | Value.reference (Reference.interned name) => compileReference domain name left false
+    | x => SourceRecursiveIntersectionCode.unsupported left (Value.reference (Reference.interned identity✝)))
+    state fun after value => Available after.heap value
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:351:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.0.MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.edge_work_certified`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:362:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.children_certified`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:395:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.sentinel_certified`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:442:42: error: Application type mismatch: The argument
+  facts
+has type
+  Facts source
+of sort `Prop` but is expected to have type
+  List DomainKey
+of sort `Type` in the application
+  @children_certified source facts
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:442:48: error(lean.unknownIdentifier): Unknown identifier `holds`
+lean/MicroCFTA/SourceCurrentAllocatedRecursiveDomainCode.lean:442:54: error(lean.unknownIdentifier): Unknown identifier `inputs`

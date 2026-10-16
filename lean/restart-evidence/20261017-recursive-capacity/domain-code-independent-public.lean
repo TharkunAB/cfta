@@ -1,0 +1,33 @@
+import MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.source_closed
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.source_closed
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.Certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.Certified
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.certified_bind
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.certified_bind
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.walk_certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.walk_certified
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.mu_certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.mu_certified
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.reference_certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.reference_certified
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.node_certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.node_certified
+
+#print axioms MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.body_certified
+#check @MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.body_certified

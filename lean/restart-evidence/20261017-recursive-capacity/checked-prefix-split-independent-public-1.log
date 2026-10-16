@@ -1,0 +1,63 @@
+'MicroCFTA.SourceEqualityNativeDemand.steps_bind_cases' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeDemand.steps_bind_cases : ∀ {A B : Type} {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat) (control : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (next :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (state after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (remaining : MicroCFTA.SourceEqualityNativeDemand.Control B),
+  @MicroCFTA.SourceEqualityNativeDemand.Steps inst inst_1 B width fuel
+      (@MicroCFTA.SourceEqualityNativeDemand.Control.bind A B control next) state remaining after →
+    Or
+      (@Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.Control A) fun inner =>
+        And (@MicroCFTA.SourceEqualityNativeDemand.Steps inst inst_1 A width fuel control state inner after)
+          (And
+            (∀ (value : A),
+              @Ne.{2} (MicroCFTA.SourceEqualityNativeDemand.Control A) inner
+                (@MicroCFTA.SourceEqualityNativeDemand.Control.code A
+                  (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A value)))
+            (@Eq.{2} (MicroCFTA.SourceEqualityNativeDemand.Control B) remaining
+              (@MicroCFTA.SourceEqualityNativeDemand.Control.bind A B inner next))))
+      (@Exists.{1} Nat fun inner =>
+        @Exists.{1} Nat fun outer =>
+          @Exists.{1} A fun value =>
+            @Exists.{2} (MicroCFTA.SourceEqualityNativeDemand.State width) fun middle =>
+              And (@Eq.{1} Nat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) inner outer) fuel)
+                (And
+                  (@MicroCFTA.SourceEqualityNativeDemand.Steps inst inst_1 A width inner control state
+                    (@MicroCFTA.SourceEqualityNativeDemand.Control.code A
+                      (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A value))
+                    middle)
+                  (@MicroCFTA.SourceEqualityNativeDemand.Steps inst inst_1 B width outer
+                    (@MicroCFTA.SourceEqualityNativeDemand.Control.code B (next value)) middle remaining after)))
+'MicroCFTA.SourceEqualityNativeDemand.Steps.length_le_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceEqualityNativeDemand.Steps.length_le_complete : ∀ {A : Type} {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {steps fuel : Nat} {control remaining : MicroCFTA.SourceEqualityNativeDemand.Control A}
+  {state after final : MicroCFTA.SourceEqualityNativeDemand.State width} {value : A},
+  @MicroCFTA.SourceEqualityNativeDemand.Steps inst inst_1 A width steps control state
+      (@MicroCFTA.SourceEqualityNativeDemand.Control.code A
+        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A value))
+      final →
+    @MicroCFTA.SourceEqualityNativeDemand.Steps inst inst_1 A width fuel control state remaining after →
+      @LE.le.{0} Nat instLENat fuel steps

@@ -1,0 +1,123 @@
+'MicroCFTA.SourceInventoryIndependentChecks.actual_enter_body' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceInventoryIndependentChecks.actual_enter_body : ∀ {Symbol Guard : Type} (bits : Nat)
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    @LT.lt.{0} Nat instLTNat
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) bits) →
+      ∀ (cache : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+        @MicroCFTA.Cache.Valid MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey cache →
+          ∀ (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+            @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                (@MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains Symbol Guard source)
+                (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain) →
+              ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                @MicroCFTA.SourceRecursiveIntersectionCode.NodeScope Symbol Guard source
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard domain left right) →
+                  ∀ (first second : Nat),
+                    @Eq.{1} (Option.{0} Nat) (@MicroCFTA.SourceRecursiveIntersectionControl.identity Symbol Guard left)
+                        (@Option.some.{0} Nat first) →
+                      @Eq.{1} (Option.{0} Nat)
+                          (@MicroCFTA.SourceRecursiveIntersectionControl.identity Symbol Guard right)
+                          (@Option.some.{0} Nat second) →
+                        @LT.lt.{0} Nat instLTNat
+                            (@MicroCFTA.Cache.Interned.identity MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                              (@Prod.fst.{0, 0}
+                                (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                                (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                                (@MicroCFTA.SourceRecursiveIntersectionEnvironment.enter Symbol Guard cache
+                                  (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                                    domain)
+                                  left right first second)))
+                            (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                              (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+                          have entered :=
+                            @Prod.fst.{0, 0}
+                              (MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                              (MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                              (@MicroCFTA.SourceRecursiveIntersectionEnvironment.enter Symbol Guard cache
+                                (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey domain)
+                                left right first second);
+                          And
+                            (@Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                              (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                              (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                              (@MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains Symbol Guard source)
+                              (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey entered))
+                            (And
+                              (MicroCFTA.IntersectionFlatMemoKeyDomain.Canonical
+                                (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                                  entered))
+                              (And
+                                (MicroCFTA.SourceRecursiveIntersectionDomain.Typed
+                                  (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                                    entered))
+                                (And
+                                  (@MicroCFTA.SourceRecursiveIntersectionCode.NodeScope Symbol Guard source
+                                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.mk Symbol Guard entered
+                                      (@MicroCFTA.SourceRecursiveIntersectionKernel.body Symbol Guard left)
+                                      (@MicroCFTA.SourceRecursiveIntersectionKernel.body Symbol Guard right)))
+                                  (∀
+                                    (key :
+                                      MicroCFTA.IntersectionFlatMemoKeyDomain.Triple
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))),
+                                    @Eq.{1}
+                                        (Option.{0}
+                                          (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                                        (@MicroCFTA.SourceRecursiveIntersectionMemo.requestKey Symbol Guard
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                          entered (@MicroCFTA.SourceRecursiveIntersectionKernel.body Symbol Guard left)
+                                          (@MicroCFTA.SourceRecursiveIntersectionKernel.body Symbol Guard right))
+                                        (@Option.some.{0}
+                                          (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                          key) →
+                                      @MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe Symbol Guard
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                        entered (@MicroCFTA.SourceRecursiveIntersectionKernel.body Symbol Guard left)
+                                        (@MicroCFTA.SourceRecursiveIntersectionKernel.body Symbol Guard right)))))
+'MicroCFTA.SourceInventoryIndependentChecks.actual_reference_name' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceInventoryIndependentChecks.actual_reference_name : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedNestedFacts.Facts Symbol Guard source →
+    ∀ (name : Nat),
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source
+          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+            (MicroCFTA.InternedBinderProtocol.Reference.interned name)) →
+        @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat)
+          (@MicroCFTA.SourceRecursiveIntersectionSourceInventory.names Symbol Guard source) name
+'MicroCFTA.SourceInventoryIndependentChecks.coarse_eight_inventory' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceInventoryIndependentChecks.coarse_eight_inventory : ∀ {Symbol Guard : Type}
+  (source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard source))
+      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) →
+    And
+      (@Eq.{1} Nat
+        (@List.length.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+          (@MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains Symbol Guard source))
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 72) (instOfNatNat (nat_lit 72)))))
+      (@LT.lt.{0} Nat instLTNat
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 63) (instOfNatNat (nat_lit 63))))
+        (@List.length.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+          (@MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains Symbol Guard source)))

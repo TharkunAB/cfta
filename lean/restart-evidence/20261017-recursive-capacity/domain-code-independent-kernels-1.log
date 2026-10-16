@@ -1,0 +1,210 @@
+'MicroCFTA.RecursiveDomainCodeIndependentChecks.original_mu_compiler' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.RecursiveDomainCodeIndependentChecks.original_mu_compiler : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @MicroCFTA.InternedNestedFacts.Facts (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) source →
+    ∀ (first second : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (leftBody leftDepth leftOrdinary rightBody rightDepth rightOrdinary :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      @MicroCFTA.SourceRecursiveIntersectionInputView.Original
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) leftBody →
+        @MicroCFTA.SourceRecursiveIntersectionInputView.Original
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) rightBody →
+          @MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) source
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) first leftBody leftDepth
+                leftOrdinary) →
+            @MicroCFTA.InternedProbeProvenance.Available
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) source
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) second rightBody rightDepth
+                  rightOrdinary) →
+              have left :=
+                @MicroCFTA.InternedConstructorTemplates.Value.mu
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) first leftBody leftDepth
+                  leftOrdinary;
+              have right :=
+                @MicroCFTA.InternedConstructorTemplates.Value.mu
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) second rightBody rightDepth
+                  rightOrdinary;
+              have inventory :=
+                @MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) source;
+              And
+                (@MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.Certified source inventory
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  inst
+                  (@MicroCFTA.SourceRecursiveIntersectionCode.compileMu
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.mk
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) source
+                    (@MicroCFTA.Cache.emptyState MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey))
+                  fun after value =>
+                  @MicroCFTA.InternedProbeProvenance.Available
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after)
+                    value)
+                (@Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                  (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                  (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey) inventory
+                  (MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey
+                    (@List.map.{0, 0}
+                      (Prod.{0, 0} Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      Nat
+                      (@Prod.fst.{0, 0} Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.SourceRecursiveIntersectionEnvironment.bindings
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) left right))
+                    (MicroCFTA.SourceRecursiveIntersectionControl.pair
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first)
+                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey second))))
+'MicroCFTA.RecursiveDomainCodeIndependentChecks.actual_checked_body' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.RecursiveDomainCodeIndependentChecks.actual_checked_body : ∀ {width : Nat}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (source :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @MicroCFTA.InternedNestedFacts.Facts (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) source →
+    ∀
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      @MicroCFTA.SourceRecursiveIntersectionCode.EdgeScope
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) source request →
+        @Membership.mem.{0, 0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+            (List.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (@List.instMembership.{0} MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+            (@MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) source)
+            (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request)) →
+          ∀ (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+            (code :
+              MicroCFTA.SourceRecursiveIntersectionCode.Code
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+            @MicroCFTA.SourceRecursiveIntersectionKernel.Valid
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width before)) →
+              @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))) →
+                @MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))
+                    request →
+                  @Eq.{2}
+                      (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.SourceEqualityNativeDemand.body
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        width request
+                        (@MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        before)
+                      (@MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded width
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          code)
+                        after) →
+                    And
+                      (@Eq.{1}
+                        (MicroCFTA.SourceRecursiveIntersectionThunks.State width
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.SourceEqualityNativeDemand.State.native width after)
+                        (@MicroCFTA.SourceEqualityNativeDemand.State.native width before))
+                      (@MicroCFTA.SourceCurrentAllocatedRecursiveDomainCode.Certified source
+                        (@MicroCFTA.SourceRecursiveIntersectionSourceInventory.domains
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) source)
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        inst code
+                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceEqualityNativeDemand.State.native width after))
+                        fun final value =>
+                        @MicroCFTA.InternedEdgeResidency.EdgeResident
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) final)
+                          value)
