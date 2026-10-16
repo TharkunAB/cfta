@@ -2,42 +2,36 @@
 
 ## Haskell fix handoff for external work
 
-Publication readback at 13:43 CEST found main `c0cc8a05`. It is fetched,
-but not merged or locally validated. PR #65 repairs the recursive field-pool
-finding below. The historical "confirmed, unfixed" entry describes audited
-source `5399d310`. PR #64 also adds drawn typing fields. Read
-`lean/restart-evidence/20261016-drawn-field-fix-pending.md` before the next
-source refresh. The passing checks below cover `5399d310` only.
+Audited source main is `c0cc8a05`, merged into `formalize` at `896b0a1c`.
+PR #64 adds drawn typing fields. PR #65 repairs the recursive field-pool
+finding below with `FieldAtomOnDatatype`. The historical "confirmed, unfixed"
+entry describes source before that repair. Its reproducer and earlier logs
+retain their bytes. The earlier negative-bound and named-measure repairs
+remain included. The optimized interned core and Sized implementation do
+not change. No additional local Haskell behavior patch is added.
+The only local Haskell-tree differences are the retained constructor
+changelog entry and reproducer comment.
 
-Audited source main is `5399d310`. It is merged into `formalize` at `82d47236`.
-PR #63 adds qualified typing do-notation. The prior field-specific atoms,
-node-view typing rules, and negative-bound repair remain included.
-The interned core and Sized implementation do not change.
-No local Haskell behavior repair is added. The historical repairs below
-remain upstream. The only local Haskell-tree differences are the retained
-constructor changelog entry and reproducer comment.
-
-The PR #63 delta is merged and validated. Its notation preserves ordinary
-list order and duplicate choices. The old typing builder implementation
-changes only in its documentation. Current-source notation and frontend
-adapters remain distinct from the preserved Lean component proofs.
-The repair and counterexample entries retain their earlier checkpoint refs.
-The recursive field-pool implementation files are unchanged from `999c04a5`.
-
-The current source validation is recorded in
-`lean/restart-evidence/20261016-typing-do-seeded-worker/`.
+Current source validation is recorded in
+`lean/restart-evidence/20261016-drawn-fields-local-worker/`.
 The strict Nix all-component build passes with `-Werror`, tests, and benchmarks.
-All six suites pass: 321 core, 240 generator, 175 refinement, 35 GHC-fit,
+All six suites pass: 321 core, 240 generator, 180 refinement, 35 GHC-fit,
 and 22 decision-model examples, plus the hole-fit golden check. This is
-793 examples plus golden. The three changed Haskell files pass Fourmolu.
-All four active packages pass Cabal-gild and metadata checks. Read
-`source-validation.md` and the raw logs in that evidence directory.
-The pinned Lean Audit passes: 2456 jobs and 58268 dependency checks.
-The previous source baseline was `999c04a5`, merged at `9aaffc95`.
+798 examples plus golden. All six incoming Haskell files pass Fourmolu.
+All four active packages pass Cabal-gild and metadata checks. The unchanged
+Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
+Read `source-validation.md` and `source-derive-self-field.log` in that directory.
+Standalone `holds` still treats the supplied pool as opaque. The repair
+rejects the invalid derivation configuration; it does not change that evaluator.
+The pinned Lean Audit passes: 2464 jobs and 58403 dependency checks.
+These checks preserve the distinction between component proofs and the
+remaining frontend and runtime correspondence. The new drawn-field states,
+errors, validation order, and generator-specific rank order need adapters.
+The previous audited source was `5399d310`, merged at `82d47236`.
 Use the current source before applying an older repair. The entries below
 separate a behavior fix from a remaining documentation change.
 
-- **Recursive field-pool repair: upstream, local validation pending.**
+- **Recursive field-pool repair: merged and locally validated.**
   Repair `b9219b9e` is merged by PR #65 at `c0cc8a05`. For
   `data Chain = End Bool | Next Chain`, a child pool containing `End False`
   could generate `Next (End False)` while `holds` accepted an invariant
@@ -51,11 +45,14 @@ separate a behavior fix from a remaining documentation change.
   `cfta-generator/CHANGELOG.md`. The new regression expects that error
   even with a trivially true invariant. The original executable counterexample
   remains in the preceding evidence directory, as recorded below.
-  Source inspection confirms the rejection and regression. This checkout
-  still executes the older implementation. Merge the fetched source, run
-  the strict Nix build and suites, and rerun the reproducer before claiming
-  local validation. The new error and its validation order also need a
-  source adapter. No local Haskell patch is added here.
+  Local merge `896b0a1c` includes the repair. The strict Nix build and all
+  798 examples plus golden pass. The unchanged original reproducer returns
+  `Left (FieldAtomOnDatatype "Next" 0)`. Read
+  `lean/restart-evidence/20261016-drawn-fields-local-worker/source-derive-self-field.log`.
+  Its standalone `holds` checks remain `(True,True,False)`: this repair
+  rejects the derivation configuration rather than validating opaque pool
+  descendants. The new error and its validation order still need a source
+  adapter. No additional local Haskell patch is added.
 - **Negative typed-language bounds.** Upstream repair `443e3458` is included
   in PR #62 and main `999c04a5`. It changes
   `cfta-generator/src/Data/CFTA/Gen/Typing.hs` and
@@ -160,6 +157,72 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current literal local reduction and validated field-pool repair
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. The preceding
+published checkpoint is `66013b03`. Eight additive modules implement
+original-record Scan, required-path success stability, and the literal local
+reducer with full caller receipts. Proof commits are `7f9db45e`, `ececc503`,
+and `9e3f6174`. Read lean/notes-current-local-worker.md.
+
+RecordScan projects to the frozen path Scan for every outcome, including
+failures. It retains original records, order, and repeated occurrences.
+Each reached gate/query runs once. Actual Retained graphs supply stable
+literal bounds; supplied success derives that same positional receipt.
+RequiredWorkerStability preserves successful literal requireAll results and
+their complete constructor heaps under larger bounds without physical or
+future callback premises.
+
+LocalWorker runs precheck once with its actual returned operations. Early
+unchanged and contradiction branches skip Scan and class work. Live Scan
+stops before required children on a true emptiness answer. A no-stop return
+requires the selected original paths on original children at the Scan heap,
+then executes the existing literal class right fold and empty propagation.
+Nine stage bounds remain distinct from the fixed conjunction budget.
+Every failure retains its complete observation and state, including failed
+class local slots. Success stability and whole-return uniqueness identify
+the forest, Checked, fourth memo, and merge memo unconditionally.
+
+LocalWorkerActual.finite derives stable literal execution, the same actual
+graph, strict Reads, language Receipt, and full caller Post from initial
+Context, actual same-cache field load, inherited EqReady, resident children,
+and reached range plans. Receipt and Post share the computed inventory.
+Final probes come from those same reads. verified handles any supplied
+literal success. Unconditional narrowing and guard/inherited conditional
+language equivalence remain explicit. No future graph, body law, or final
+invariant is a public premise.
+
+PR #64 adds drawn typing fields. PR #65 repair `b9219b9e` now rejects the
+recursive field-pool example with `FieldAtomOnDatatype "Next" 0`. The
+unchanged historical reproducer confirms that error. Standalone holds
+still treats the pool as opaque. Root FINDINGS.md records the repair and
+its actual validation first. No additional local Haskell patch is added.
+New drawn-field states/errors, validation order, and generator-specific
+rank order still need source adapters.
+
+The pinned full Audit passes 2464 jobs and 58403 dependency checks. Only
+the permitted foundations and old unused-input warning remain. The strict
+Nix build, 798 examples plus golden, six-file Fourmolu, and four-package
+Cabal-gild and metadata checks pass. Preservation retains all 5274 starting
+files, 2455 older proof sources, the six historical repair entries, stashes,
+and three other worktrees. Twenty-seven frozen manifests check 221 module
+entries. Evidence is in
+lean/restart-evidence/20261016-drawn-fields-local-worker/.
+
+The full objective remains active. Read parent-worker-next.md in that
+directory. Next implement literal parent construction, then the eight
+mutual outer families. Raw parent rejection precedes field lookup and all
+child work. root_exact still assumes a completed strict-read outer call.
+General constrained termination, unequal-length path classes, and repeated
+pass convergence remain open. Current reducePartially performs one pass.
+Logical serial Reads do not prove GHC demand, host table events, lazy
+publication, or the noConstraint CAF. All frontend, Sized, rank/probability,
+solver, random-source, callback, codec, runtime, full-pipeline, and older
+constructor/equality obligations remain. Preserve the optimized interned
+core and every proof, counterexample, repair, and draft. No board posts or
+deployments. Push verified formalize checkpoints regularly. Earlier sections
+record historical checkpoints. This checkpoint is progress, not completion.
 
 ## Current literal seeded queries and class scanning
 
