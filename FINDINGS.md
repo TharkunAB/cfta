@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current numeric root admission proof adds no Haskell change.
+The current static native budget proof adds no Haskell change.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
 For external handoff, record every later repair here with its failure,
 executable reproducer, affected paths, commit, checks, and upstream status.
@@ -29,7 +29,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The current pinned Lean Audit passes: 2556 jobs and 59607 dependency checks.
+The current pinned Lean Audit passes: 2562 jobs and 59773 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -163,6 +163,66 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current input-derived native reservation budgets
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `fcb5fdeb`. Read lean/notes-current-native-budget.md
+and lean/restart-evidence/20261016-constrained-native-budget/.
+Six additive modules derive static budgets for one ordinary native query.
+Proof commits are `6f53e07d` and `9f985068`.
+
+NativeProfile computes uniform row and arity limits for all original operand
+occurrences. With limits R and A, N(0)=1,
+N(h+1)=1+R*R*(1+A*N(h)), and E(h)=1+A*N(h). Node and edge budgets use the
+maximum original operand height. They contain no query execution or actual
+request-count premise. The full expansion counts repeated subproblems.
+Memo hits can skip their work. A swap retains the same budget.
+
+NativeBudgetCode composes literal Work, recursive calls, ordered walks,
+and finish frames. NativeBudgetCompile proves the actual node dispatcher,
+joined rows, accepted child zip, and rejected sentinel fit their budgets.
+NativeBudgetExecution retains remaining budget through every actual yielded
+prefix. Fixed-source Origins identify the exact captured evaluating owner.
+Only literal Work consumes the two constructor request counters.
+
+Principal node/edge theorems derive the code certificates from initial
+Good, resident finite ordinary operands, and initial Capacity. They bound
+total actual constructor requests and both supply increments. Initial supply
+plus the computed budget fitting the two key layouts derives Capacity at
+EVERY yielded prefix. No completed query, future readiness, future capacity,
+returned result law, or bound on the actual request list is supplied.
+This result counts constructor requests. It does not bound instruction steps.
+
+Next derive output row and arity envelopes at the same actual returned
+state, including warm result hits. The existing domain/height certificates
+are insufficient. The rejected sentinel has one Empty child even when the
+input arity is zero. Then compose required, projection, merge, edit, class,
+and outer cumulative budgets. Read next-outer-budget-review.md.
+The root numeric plans remain explicit until that composition is proved.
+
+The full Audit passes 2562 jobs and 59773 dependency checks. All 75 declared
+public axiom/full-signature pairs and 20 integration pairs pass. Coverage
+resolves nested Bound and ControlBound namespaces. Only permitted
+foundations occur. Preservation retains 6768 starting files and 2555 older
+non-Audit sources. Forty frozen manifests check 319 module entries. All
+older repairs, drafts, counterexamples, stashes, other worktrees, and the
+optimized interned core remain.
+
+The current domain admits arbitrary guards and equality classes. It excludes
+Mu, references, and explicit unions. General recursive progress, repeated
+passes, current frontends, concrete Haskell execution, and full-pipeline
+composition remain open. Retain the separate language, transformation, size,
+count, order, both rank inverses, generator, and probability contracts.
+Equality/sidecar/thunk supplies, host interleavings, losing concurrent
+candidates, lazy forcing, and signed host counters remain separate.
+
+No Haskell changes. Reuse strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks. Repair
+`b9219b9e` is already merged by PR #65. Root FINDINGS keeps the external
+Haskell repair handoff first. Record every later repair there with failure,
+reproducer, paths, commit, checks, and upstream status. The full-library
+goal remains active.
 
 ## Current numeric ordinary root admission
 
