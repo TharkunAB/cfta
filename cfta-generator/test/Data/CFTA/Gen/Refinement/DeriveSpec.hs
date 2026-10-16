@@ -38,10 +38,11 @@ import Data.CFTA.Gen.Refinement.Derive.Internal (
     measureNamed,
  )
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
-import Data.CFTA.Generic (HasFTA)
+import Data.CFTA.Generic (Constructor (..), HasFTA (..))
 import Data.CFTA.Index (Arity (..), Cardinality (..), Depth, Rank (..))
 import Data.CFTA.Refinement.Expression (Enumerated (..), Expr, Formula, Literal, Refinement, uninterpreted)
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
+import qualified Data.CFTA.Term as Term
 
 -- | A list that its invariant keeps sorted.
 data SortedList = Nil | Cons Integer SortedList
@@ -148,11 +149,18 @@ sortedLists = LTAGen.recurUpTo 8 $ \rest -> LTAGen.oneof [nil, cons rest]
                 LTAGen.pure (element : elements)
 
 -- | The annotations of the sorted lists of the builtin list type.
-listAnnotations :: [(String, Annotation)]
+listAnnotations :: [(Constructor, Annotation)]
 listAnnotations =
-    [ ("[]", measure (1000001 :: Expr))
-    , (":", contract (\x restHead -> 0 .<= x .&& x .<= 1000000 .&& x .<= restHead) <> measure (\x _ -> x))
+    [ (constructorOf ([] :: [Integer]), measure (1000001 :: Expr))
+    ,
+        ( constructorOf [0 :: Integer]
+        , contract (\x restHead -> 0 .<= x .&& x .<= 1000000 .&& x .<= restHead) <> measure (\x _ -> x)
+        )
     ]
+
+-- | The constructor at the root of a value.
+constructorOf :: (HasFTA v) => v -> Constructor
+constructorOf = Term.rootLabel . encodeTerm
 
 -- | A division of twelve by a denominator that is not zero.
 newtype Division = Divide Integer
@@ -242,17 +250,17 @@ data FlatTreeNode e = FlatLeaf | FlatBlack e e | FlatRed e e
     deriving anyclass (NodeView)
 
 -- | The annotations of the red-black trees in the expression language, as the strings of the named measures gave them.
-treeAnnotations :: [(String, Annotation)]
+treeAnnotations :: [(Constructor, Annotation)]
 treeAnnotations =
-    [ ("Leaf", measureNamed "bh" (0 :: Expr) <> measureNamed "col" (0 :: Expr))
+    [ (constructorOf Leaf, measureNamed "bh" (0 :: Expr) <> measureNamed "col" (0 :: Expr))
     ,
-        ( "Black"
+        ( constructorOf (Black Leaf Leaf)
         , contract (\left right -> bh' left .== bh' right)
             <> measureNamed "bh" (\left _ -> bh' left + 1)
             <> measureNamed "col" (\_ _ -> 0 :: Expr)
         )
     ,
-        ( "Red"
+        ( constructorOf (Red Leaf Leaf)
         , contract (\left right -> bh' left .== bh' right .&& col' left .== 0 .&& col' right .== 0)
             <> measureNamed "bh" (\left _ -> bh' left)
             <> measureNamed "col" (\_ _ -> 1 :: Expr)
@@ -405,6 +413,47 @@ isBalanced = isJust . heightOf
         rightHeight <- heightOf right
         if abs (leftHeight - rightHeight) <= 1 then Just (1 + max leftHeight rightHeight) else Nothing
 
+-- | An AVL tree that keeps the height of each knot in its first field. The height and the key are both 'Int'.
+data Heighted = Hollow | Knot Int Heighted Int Heighted
+    deriving stock (Eq, Ord, Show, Generic)
+    deriving anyclass (HasFTA)
+
+-- | One node of a 'Heighted' tree: the kept height, the heights of the subtrees, and the key.
+data HeightedNode e = HollowNode | KnotNode e e e e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
+-- | The kept height is one more than the greater height of the subtrees, and those differ by at most one.
+keptHeights :: Invariant HeightedNode Single
+keptHeights = Measured heightOf balanced
+  where
+    heightOf :: (Symbolic e) => HeightedNode e -> e
+    heightOf HollowNode = 0
+    heightOf (KnotNode kept _ _ _) = kept
+    balanced :: (Symbolic e) => HeightedNode e -> Truth e
+    balanced HollowNode = true
+    balanced (KnotNode kept left _ right) = kept .== 1 + larger left right .&& abs (left - right) .<= 1
+
+-- | The pool of the kept heights, 1 to 3, as a field atom.
+keptPools :: HeightedNode Expr -> [FieldPool]
+keptPools (KnotNode kept _ _ _) = [kept `drawnFrom` LTAGen.elements [1 .. 3 :: Int]]
+keptPools HollowNode = []
+
+-- | Whether each knot keeps its height, and the heights of its subtrees differ by at most one.
+keepsHeights :: Heighted -> Bool
+keepsHeights = isJust . heightOf
+  where
+    heightOf Hollow = Just (0 :: Int)
+    heightOf (Knot kept left _ right) = do
+        leftHeight <- heightOf left
+        rightHeight <- heightOf right
+        if abs (leftHeight - rightHeight) <= 1 && kept == 1 + max leftHeight rightHeight then Just kept else Nothing
+
+-- | The keys of a 'Heighted' tree.
+heightedKeys :: Heighted -> [Int]
+heightedKeys Hollow = []
+heightedKeys (Knot _ left key right) = heightedKeys left <> [key] <> heightedKeys right
+
 -- | Terms with de Bruijn variables, a let, and a lambda.
 data Scoped = Zero | Index Int | Plus Scoped Scoped | Let Scoped Scoped | Lambda Scoped
     deriving stock (Eq, Ord, Show, Generic)
@@ -535,19 +584,20 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         $ sameRanks pairs
         $ fmap (\(Pair left right) -> (left, right)) <$> deriveLTA @Pair 0 (atom @Integer (LTAGen.pool ranged))
     it "gives the annotations of the expression language from the typed invariants, byte for byte" $ do
-        let formulas annotations = [(name, annotationFormulas annotation) | (name, annotation) <- annotations]
+        let formulas annotations = [(constructorName constructor, annotationFormulas annotation) | (constructor, annotation) <- annotations]
             typed ::
                 forall a node m.
                 (HasFTA a, NodeView node) => Invariant node m -> Either DeriveLTAError [(String, ([Formula], [Expr], [(String, Expr)]))]
             typed rules = formulas <$> invariantAnnotations @a rules
-            sortedListAnnotations = zip ["Nil", "Cons" :: String] (map snd listAnnotations)
+            sortedListAnnotations = zip [constructorOf Nil, constructorOf (Cons 0 Nil)] (map snd listAnnotations)
         typed @SortedList (invariant @SortedList) `shouldBe` Right (formulas sortedListAnnotations)
         fmap show (typed @SortedList (invariant @SortedList)) `shouldBe` Right (show (formulas sortedListAnnotations))
         typed @Tree (invariant @Tree) `shouldBe` Right (formulas treeAnnotations)
         fmap show (typed @Tree (invariant @Tree)) `shouldBe` Right (show (formulas treeAnnotations))
         typed @Division (invariant @Division)
-            `shouldBe` Right (formulas [("Divide", contract (\d -> 0 .<= d .&& d .<= 5 .&& d ./= (0 :: Expr)))])
-        typed @Pair (invariant @Pair) `shouldBe` Right (formulas [("Pair", contract (\left right -> left .< (right :: Expr)))])
+            `shouldBe` Right (formulas [(constructorOf (Divide 1), contract (\d -> 0 .<= d .&& d .<= 5 .&& d ./= (0 :: Expr)))])
+        typed @Pair (invariant @Pair)
+            `shouldBe` Right (formulas [(constructorOf (Pair 0 0), contract (\left right -> left .< (right :: Expr)))])
     it "reports a node view whose constructors are in another order" $
         void (deriveLTAFrom @Signed 0 (atom @Integer LTAGen.every) (Contracted (\_ -> true) :: Invariant SignedNode NoMeasures))
             `shouldBe` Left (NodeMismatch "Negative" "the node view has PositiveNode in its place, a name that does not start with Negative")
@@ -604,6 +654,15 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         sameMembers 3 keys isAVL (deriveLTA @AVL 3 keys)
         membersOf (deriveLTA @AVL 3 keys) >>= (`shouldBe` 25) . length
         measuresOf keys (invariant @AVL) (Branch (Branch Empty 0 Empty) 1 Empty) `shouldBe` Shape 2 0 1
+    it "gives two fields of one type two pools with a field atom" $ do
+        let split = fieldAtoms @Heighted keptPools <> atom @Int (LTAGen.elements [0, 1])
+            onePool = atom @Int (LTAGen.elements [0 .. 3])
+        sameMembers 3 split keepsHeights (deriveLTAFrom @Heighted 3 split keptHeights)
+        fromSplit <- membersOf (deriveLTAFrom @Heighted 3 split keptHeights)
+        fromOnePool <- membersOf (deriveLTAFrom @Heighted 3 onePool keptHeights)
+        fromSplit `shouldBe` filter (all (<= 1) . heightedKeys) fromOnePool
+        length fromSplit `shouldSatisfy` (> 1)
+        measureOf split keptHeights (Knot 2 (Knot 1 Hollow 0 Hollow) 1 Hollow) `shouldBe` 2
     it "derives height-balanced trees from a named measure with a conditional term" $
         sameMembers
             3
@@ -645,11 +704,25 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         fmap toList (LTAGen.unrank compiled (Rank 166666666666499999)) `shouldBe` Right [999998, 999999, 1000000]
     it "reports annotations that do not fit the datatype" $ do
         let derive annotations = void $ deriveLTAWith @SortedList 8 (atom @Integer LTAGen.every) annotations
-        derive [("Cosn", mempty)] `shouldBe` Left (UnknownConstructors ["Cosn"] ["Nil", "Cons"])
-        derive [("Cons", contract (\x -> x .<= 1))] `shouldBe` Left (AnnotationArityMismatch "Cons" (Arity 2) (Arity 1))
-        derive [("Cons", measure (\x _ -> x) <> measure (\_ y -> y))] `shouldBe` Left (SeveralMeasures "Cons")
-        derive [("Nil", contract (0 .<= (1 :: Expr)))] `shouldBe` Left (ContractWithoutFields "Nil")
+        derive [(constructorOf (Divide 1), mempty)] `shouldBe` Left (UnknownConstructors ["Divide"] ["Nil", "Cons"])
+        derive [(constructorOf (Cons 0 Nil), contract (\x -> x .<= 1))]
+            `shouldBe` Left (AnnotationArityMismatch "Cons" (Arity 2) (Arity 1))
+        derive [(constructorOf (Cons 0 Nil), measure (\x _ -> x) <> measure (\_ y -> y))]
+            `shouldBe` Left (SeveralMeasures "Cons")
+        derive [(constructorOf Nil, contract (0 .<= (1 :: Expr)))] `shouldBe` Left (ContractWithoutFields "Nil")
         void (deriveLTAWith @SortedList 8 mempty []) `shouldSatisfy` either isMissingAtom (const False)
+    it "reports field atoms that do not fit the datatype" $ do
+        let derive atoms = void $ deriveLTAFrom @Heighted 3 atoms keptHeights
+            keys = atom @Int (LTAGen.elements [0, 1])
+            pools pool (KnotNode kept _ _ _) = [pool kept]
+            pools _ HollowNode = []
+        derive (fieldAtoms @Heighted (pools (`drawnFrom` LTAGen.elements [1 .. 3 :: Integer])) <> keys)
+            `shouldBe` Left (FieldAtomMismatch "Knot" 0 (typeRep (Proxy @Integer)))
+        derive (fieldAtoms @Heighted (pools (\kept -> (kept + 1) `drawnFrom` LTAGen.elements [1 .. 3 :: Int])) <> keys)
+            `shouldBe` Left (FieldAtomTerm "Knot")
+        derive (fieldAtoms @Heighted (const [] :: AVLNode Expr -> [FieldPool]) <> keys)
+            `shouldBe` Left (NodeMismatch "Knot" "the constructor has 4 fields, the node view 3")
+        derive (fieldAtoms @Heighted keptPools) `shouldBe` Left (MissingAtom (typeRep (Proxy @Int)))
   where
     isMissingAtom (MissingAtom _) = True
     isMissingAtom _ = False
