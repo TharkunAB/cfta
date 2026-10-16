@@ -1,5 +1,62 @@
 # Constrained languages, indexing, and distributions
 
+## Current finite class prefixes and conjunction read completion
+
+Audited source main is `a4f38cbb`, merged at `a140c37b`.
+It changes CI scheduling only. Haskell semantics remain at the prior source
+checkpoint. Proof commits are `25165c9c`, `a57bc0b7`, `abc52af9`,
+`14422982`, and `00c44f26`. Audit and notes are in `0b865a79`.
+Full library scope stays active. Earlier sections retain historical scopes.
+
+Both current class gates now derive finite stable traces directly from
+initial semantic readiness, costs, and available inputs. The false-secondary
+seeded query derives its actual projections, native calls, and returned
+physical invariants under reached range checks. The composed per-class
+prefix constructs selected, skipped, or queried outcomes from the initial
+invariants. It stops before provablyEmpty and assumes no completed gate/query.
+
+The literal conjunction map now has exact overwrite, last-winner, ascending
+readback, and faithful-key canonical sequence proofs. Actual finite nodeEdges
+and row-major getPath reads derive resident closed outputs and retained
+semantic, cost, and annotation heaps. Accepted-edge and selected-subtree
+language laws follow from the actual reads.
+
+Source boundary: SourceCurrentEmptinessDecision.closed still embeds the
+historical native-intersection TaskTrace body. Its memo Call and Scan consume
+that body. Those proofs remain valid for their definitions. They do not
+establish the post-4101 conjunction source algorithm's Boolean or heap result.
+Conservative soundness alone cannot equate the two bodies. Earlier sections
+that use these Decision/Scan names retain this historical body boundary.
+
+Next thread actual reads through literal tuples, equality accessor/combine
+allocation, child columns, class projections, identity-map canonicalization,
+and the dynamic pending worklist. Then define current Decision, memo Call,
+and Scan, and connect the scan to the executable physical class pass.
+Preserve reached word checks, native constraint-allocation transfer, pending
+publication, GHC demand, machine identity, and concrete container boundaries.
+Continue general constrained completion and every other full-library target,
+including all separate Sized contracts and older constructor/equality work.
+
+The full pinned audit passes 2,225 jobs and 54,843 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Forty public axiom probes and 23 kernel examples pass. The prior strict Nix
+build, 755 examples plus golden, Fourmolu, and Cabal-gild results remain valid.
+Haskell checks were not repeated for this CI-only and proof-only increment.
+Five new modules, two notes, and three additive Audit imports preserve every
+older non-Audit proof file. Only the upstream CI file changes outside proofs/docs.
+
+Read `lean/notes-current-conjunction-completion.md` and
+`lean/notes-main-a4f38cbb.md`. Start snapshot has 2,932 files:
+`/tmp/mcfta-memo-target-workers-checkpoint-20261016-0213/`.
+Closing: `/tmp/mcfta-general-scan-checkpoint-20261016-0228/` (2,939 files).
+Script: `/tmp/mcfta-preserve-general-scan-20261016.py`.
+Evidence uses `/tmp/mcfta-general-scan-*`, `/tmp/mcfta-current-class-*`,
+`/tmp/mcfta-seeded-query-*`, `/tmp/mcfta-conjunction-map-*`, and
+`/tmp/mcfta-conjunction-completion-reads-*`. Fourteen external drafts, stashes,
+and other worktrees remain. The last weekly allowance was 81%; it is stale.
+Stop owned work at 1% or less. No board posts or deployments. Push verified
+formalize checkpoints regularly. The full-library goal stays active.
+
 ## Current executable memo-aware class completion
 
 Audited source main is `6baa0e25`, merged at `416f0f39`.
