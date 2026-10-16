@@ -2,27 +2,69 @@
 
 ## Haskell fix handoff for external work
 
-Current source main is `ccebf0f7`. It is merged into `formalize` at `44ba7bf1`.
-This refresh adds typing inputs, type domains, binder bounds, and typed LTA
-refinement generators. It changes no interned core or Sized implementation.
+Current source main is `999c04a5`. It is merged into `formalize` at `9aaffc95`.
+This refresh adds field-specific atoms and typing rules through node views.
+It also rejects negative typing bounds. It changes no interned core or Sized
+implementation.
 No local Haskell behavior repair is added. The historical repairs below
 remain upstream. The only local Haskell-tree differences are the retained
 constructor changelog entry and reproducer comment.
 
-All six current suites pass: 321 core, 237 generator, 173 refinement,
-35 GHC-fit, and 22 decision-model examples, plus the hole-fit golden check.
-This is 788 examples plus golden. The strict Nix all-component build passes.
-Fourmolu checks all 15 changed Haskell files. Cabal-gild and metadata checks
-pass for all four active packages. Evidence is in
-`lean/restart-evidence/20261016-typing-refresh-merge-worker/source-strict-build-final.log`,
-`source-tests.log`, and `source-format-metadata.log` in that directory.
-The first build encountered a Nix linker path error for GMP. The documented
-host PATH fixes that environment error. It needs no Haskell change.
-
-The previous source baseline was `8f85ddb6`, merged at `7dccd588`.
+The current source validation is recorded in
+`lean/restart-evidence/20261016-frontend-node-view-refresh/`.
+The strict Nix all-component build passes with `-Werror`, tests, and benchmarks.
+All six suites pass: 321 core, 238 generator, 175 refinement, 35 GHC-fit,
+and 22 decision-model examples, plus the hole-fit golden check. This is
+791 examples plus golden. The seven changed Haskell files pass Fourmolu.
+All four active packages pass Cabal-gild and metadata checks. Read
+`source-validation.md` and the raw logs in that evidence directory.
+The pinned Lean Audit passes unchanged: 2444 jobs and 58082 dependency checks.
+The previous source baseline was `ccebf0f7`, merged at `44ba7bf1`.
 Use the current source before applying an older repair. The entries below
 separate a behavior fix from a remaining documentation change.
 
+- **Negative typed-language bounds.** Upstream repair `443e3458` is included
+  in PR #62 and main `999c04a5`. It changes
+  `cfta-generator/src/Data/CFTA/Gen/Typing.hs` and
+  `cfta-generator/test/Data/CFTA/Gen/TypingSpec.hs`, with the corresponding
+  entry in `cfta-generator/CHANGELOG.md`.
+  Previously, `Nesting (-1)` and `Binders (-1)` could admit alternatives
+  without subterm fields, as a zero bound does. The public
+  `typingAutomaton` now rejects either negative bound with
+  `NegativeBound bound` before it validates the node view. `fromTypingRules`
+  uses that validation. Reproduce with `fromTypingRules @Arith
+  (Typing bound [] [IntType] arithRules)`, where `bound` is `Nesting (-1)`
+  or `Binders (-1)`. The regression "take a bound that is not negative"
+  expects the corresponding error for both and no error for `Nesting 0`.
+  The same commit corrects the environment-size documentation: with at most
+  B binders in a field and nesting bound D, an environment has at most B * D
+  binders. The three regression assertions pass in the current generator
+  suite. No local repair is needed. The source adapter for this new error
+  and its validation order remains open.
+- **Recursive field-pool invariant: confirmed, unfixed.** Current main
+  `999c04a5` accepts a field-specific pool for a field of the root datatype.
+  The path was added in `d0966953`. With `data Chain = End Bool | Next Chain`,
+  require `End True` at each Chain node and give Next's child the pool
+  `[End False]`. `deriveLTAFrom @Chain 0` succeeds and enumerates
+  `[End True, Next (End False)]`. The latter violates the independent
+  all-node invariant, but `holds` returns `True`. The reproducer uses a
+  lawful nonnegative `Literal Chain` encoding.
+  Affected code is `cfta-generator/src/Data/CFTA/Gen/Refinement/Derive.hs`
+  (`fieldAtoms` and `evaluate`) and
+  `cfta-generator/src/Data/CFTA/Gen/Refinement/Derive/Internal.hs`
+  (`derivation` and `alternativeGenerator`). Field-pool generation bypasses
+  recursive derivation; value evaluation returns `below=True` for that field.
+  Run `nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta -package=cfta-generator lean/restart-evidence/20261016-frontend-node-view-refresh/derive-self-field-draft.hs'`.
+  The successful terminal-zero output is in `derive-self-field-retry.log`
+  in the same directory. The frozen file retains its historical draft comment;
+  it was subsequently executed. This focused counterexample passes as a
+  program; all 791 existing examples still pass.
+  No repair commit or local patch exists. The advertised each-node contract
+  and opaque supplied-subtree interpretation give different languages.
+  Settle that contract before a behavior repair. The old type-wide atom also
+  makes `holds` skip descendants, but the high-level derivation then rejects
+  the root annotations as `UnknownConstructors`. The new field-local case
+  keeps the root derived and succeeds. Do not conflate those two cases.
 - **Named measures over open integer children.** Upstream repair `1b3ebf09`
   is included in PR #54 and main `eda6919b`. It changes
   `cfta-generator/src/Data/CFTA/Gen/Refinement.hs` and
@@ -85,6 +127,40 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current generator node views and source refresh
+
+Source main is `999c04a5`, merged at `9aaffc95`. The preceding published
+checkpoint is `b931bcc6`. PR #60 adds field-specific atoms; PR #61 writes
+typing rules through node views; PR #62 rejects negative typing bounds.
+Root FINDINGS.md keeps the external Haskell repair registry first and records
+`443e3458` there. No local Haskell behavior repair is added by this refresh.
+
+Read lean/notes-frontend-node-view-refresh.md. All 2443 older non-Audit proof
+sources and Audit retain their bytes. The pinned full Audit passes 2444 jobs
+and 58082 dependency checks. This preserves component proofs; it does not
+prove the new node-view, field-pool, typing-validation, or codec adapters.
+Current strict Nix build, suites, format, metadata, source audits, and
+preservation evidence are in
+lean/restart-evidence/20261016-frontend-node-view-refresh/.
+
+The full objective remains correspondence between the specified constrained
+languages and generators and the current Haskell library. Exact size classes,
+finite execution, counts, ordered ranks and both inverses, probability laws,
+and transformation semantics remain separate contracts. No whole-library
+theorem is complete. root_exact still assumes a completed strict-read outer
+call. Serial graphs do not prove concrete host demand or memo publication.
+
+Next implement the literal first-seeded checked query and Scan. Read
+scan-worker-next.md in the preceding conjunction evidence directory; its
+next target remains current. Then compose local reduction, required children,
+parent construction, and the mutual outer worker. General constrained
+termination, unequal-length path classes, and repeated-pass convergence remain
+open. Current reducePartially performs one pass. Preserve all frontend,
+Sized, generator, probability, host-runtime, and older constructor/equality
+obligations, the optimized interned core, and all proofs, counterexamples,
+repairs, and drafts. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress; keep the full goal active.
 
 ## Current literal conjunction execution and full caller receipts
 

@@ -1,5 +1,39 @@
 # Full formalization coverage
 
+## Current generator node views and source refresh
+
+Source main is `999c04a5`, merged at `9aaffc95`. The preceding published
+checkpoint is `b931bcc6`. PR #60 adds field-specific atoms; PR #61 writes
+typing rules through node views; PR #62 rejects negative typing bounds.
+Root FINDINGS.md keeps the external Haskell repair registry first and records
+`443e3458` there. No local Haskell behavior repair is added by this refresh.
+
+Read lean/notes-frontend-node-view-refresh.md. All 2443 older non-Audit proof
+sources and Audit retain their bytes. The pinned full Audit passes 2444 jobs
+and 58082 dependency checks. This preserves component proofs; it does not
+prove the new node-view, field-pool, typing-validation, or codec adapters.
+Current strict Nix build, suites, format, metadata, source audits, and
+preservation evidence are in
+lean/restart-evidence/20261016-frontend-node-view-refresh/.
+
+The full objective remains correspondence between the specified constrained
+languages and generators and the current Haskell library. Exact size classes,
+finite execution, counts, ordered ranks and both inverses, probability laws,
+and transformation semantics remain separate contracts. No whole-library
+theorem is complete. root_exact still assumes a completed strict-read outer
+call. Serial graphs do not prove concrete host demand or memo publication.
+
+Next implement the literal first-seeded checked query and Scan. Read
+scan-worker-next.md in the preceding conjunction evidence directory; its
+next target remains current. Then compose local reduction, required children,
+parent construction, and the mutual outer worker. General constrained
+termination, unequal-length path classes, and repeated-pass convergence remain
+open. Current reducePartially performs one pass. Preserve all frontend,
+Sized, generator, probability, host-runtime, and older constructor/equality
+obligations, the optimized interned core, and all proofs, counterexamples,
+repairs, and drafts. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress; keep the full goal active.
+
 ## Current literal conjunction execution and full caller receipts
 
 Source main remains `ccebf0f7`. The preceding published checkpoint is
