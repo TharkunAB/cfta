@@ -1,5 +1,64 @@
 # Constrained languages, indexing, and distributions
 
+## Current numeric ordinary root admission
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `8b0a9fc1`. Read lean/notes-current-outer-admission.md
+and lean/restart-evidence/20261016-constrained-outer-admission/.
+Five additive modules lift numeric capacity plans through the whole
+ordinary root. Proof commits are `9217348e` and `efb4338c`.
+
+OuterNumericEntries.Plan contains only parent capacity at actual raw reached
+edge bodies. Admission records the current Context, Stored, inherited
+readiness, and resident domain inputs. Its inventory and global bundle can
+change after an earlier prefix. Neither predicate assumes a completed
+current or enclosing root.
+
+OuterParentReads aligns a supplied parent return with its own constructed
+strict producer. Whole-return uniqueness retains the result and every state
+component. OuterRawReads constructs strict reads for all eight supplied raw
+families. Mutual induction verifies smaller earlier graphs in literal order.
+Their exact Post, domains, and structural certificates supply later entries.
+
+OuterAdmission proves admission through the unchanged raw Step/Reach
+relation. Only then does it derive the old OuterEntries.Plan from numeric
+parent capacity. OuterNumericRoot uses the frozen strong rank theorem to
+construct its own complete root graph, reads, Checks, full Post, structural
+bound, independent language law, and stable literal execution. Constructed
+and prepared roots derive their own source root and initial Context.
+Static syntax counts add INITIAL capacity at that same constructed heap.
+The imported warm-reuse kernel returns the same result and complete caller
+at all ten zero worker bounds.
+
+Numeric plans for later queries remain explicit. This closes the raw-Reach
+admission gap. It does not derive a priori total reduction reservation
+budgets from initial resources. Next bound native query requests from a fixed
+input operand inventory. Then compose Target, merge, leaf, and rebuild
+budgets. Count losing and intervening reservations. Keep equality-interner,
+modeled packed-key, signed host-counter, and lazy forcing bounds separate.
+Read next-budget-review.md in the evidence directory.
+
+The full Audit passes 2556 jobs and 59607 dependency checks. All 22 declared
+public axiom/full-signature pairs and 12 imported integration pairs pass.
+Only the permitted foundations occur. Preservation retains 6682 starting
+files and 2550 older non-Audit proof sources. Thirty-nine frozen manifests
+check 313 module entries. All older repairs, drafts, counterexamples,
+stashes, other worktrees, and the optimized interned core remain.
+
+The finite ordinary domain admits arbitrary guards, equality classes, and
+unequal path lengths. It excludes Mu, references, and explicit unions.
+General recursive progress, repeated-pass convergence, current frontends,
+concrete Haskell execution, and full-pipeline composition remain open.
+Retain separate exact language, transformation, size, count, order, both
+rank inverses, generator, and probability contracts.
+
+No Haskell changes. Reuse strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks. The
+recursive field-pool repair `b9219b9e` is already merged by PR #65. Root
+FINDINGS.md keeps the external repair handoff first. Add every later repair
+there with failure, executable reproducer, paths, commit, checks, and
+upstream status. The full-library goal remains active.
+
 ## Current numeric query capacity and reservation bounds
 
 Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
