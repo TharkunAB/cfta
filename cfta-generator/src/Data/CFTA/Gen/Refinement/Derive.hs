@@ -675,8 +675,10 @@ The function receives the node of each constructor, with the fields as terms,
 and returns the pools of some of its fields. A field atom applies before the
 'atom' of the field's type, for that field only. The derivation reports a node
 view that does not fit the datatype ('NodeMismatch'), a pool for a term that is
-not one field ('FieldAtomTerm'), and a generator of another type than its field
-('FieldAtomMismatch').
+not one field ('FieldAtomTerm'), a generator of another type than its field
+('FieldAtomMismatch'), and a pool for a field of the datatype itself
+('FieldAtomOnDatatype'): the invariant holds at each node, so the derivation
+builds those fields.
 -}
 fieldAtoms :: forall a node. (HasFTA a, NodeView node) => (node Expr -> [FieldPool]) -> Atoms
 fieldAtoms pools = case checkNodeShape @a @node of
