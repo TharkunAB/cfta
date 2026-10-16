@@ -197,6 +197,16 @@ tree automata of `cfta`, with QuickCheck integration.
   contracts and the measures by constructor name, as annotations
   (`contract`, `measure`, `measureNamed`, `fieldsContract`,
   `fieldsMeasure`), and `annotationFormulas` gives their formulas and terms.
+- `deriveLTAOn` and `deriveLTAOnFrom` in `Data.CFTA.Gen.Refinement.Derive`,
+  and `deriveLTAOnWith` in its internal module, derive the refinement
+  generator of the terms of an automaton over the constructors of a
+  datatype, such as a typed language of `Data.CFTA.Gen.Typing`, so that the
+  measures and the contracts of an invariant hold on its terms. Each state
+  is a `oneof` of its transitions, and each transition is the generator of
+  its constructor, as `deriveLTAWith` builds one over the field types. The
+  ranks follow the generators. An automaton with a cycle gives
+  `CyclicAutomaton`, and a transition with a constraint gives
+  `ConstrainedTransition`.
 - `Data.CFTA.Gen.Typing`: typed languages with variables, from typing rules
   for the constructors of a `HasFTA` datatype, by name. `rule` gives a
   constructor a type from the types of its fields. `subterm` is a field in
@@ -213,8 +223,9 @@ tree automata of `cfta`, with QuickCheck integration.
   one: the terms of the root types up to a bound on the nesting. The inputs
   are the variables in scope at the root, so the terms are programs over
   them. It reports a name that no constructor has (`UnknownConstructors`), a
-  rule that does not fit the fields of its constructor (`FieldMismatch`),
-  and `Binders`, which is not implemented yet (`NotImplemented`). A field
+  rule that does not fit the fields of its constructor (`FieldMismatch`).
+  With `Binders`, a bound on the binders around each position, the
+  automaton is cyclic and the generator is counted by size. A field
   that holds a subterm has the type of the datatype, so a family of mutually
   recursive types is not a language here.
   A fixed value in a field of the datatype gives `FieldMismatch`.
