@@ -1,5 +1,66 @@
 # Current formalization findings
 
+## Current recursive pair contexts and finite typing order
+
+Source main is `885a446e`, merged at `aa981389`. Upstream fixes ordinary
+helper declaration order. The preserved Z/A reproduction now agrees with
+fromDatatype. Local repair `ca0e9a65` prevents unused type-growing descriptions
+from blocking finite typing ranks. It restricts metadata discovery to actual
+row constructor types, while retaining complete local declaration indices.
+The two-leaf non-regular reproduction now returns exactly Right [One,Two].
+Standard Bool remains False before True; its documentation is corrected.
+The optimized interned core and all older proofs and repairs remain intact.
+
+Proof commits are `24a5358c` and `a911bd69`. Audit and notes are in `28636822`.
+Actual closed original inputs derive independent InputMeaning and RankedInput
+without a desired output law. New SoundPairs and rank-bounded CompletePairs
+support fresh typed pair overrides and actual repeated-reference laws.
+The exact arbitrary-candidate SeenContext extension is formally refuted.
+Complete extension has a local candidate-containment obligation. Derive it
+inside the full Mu proof by smaller original input ranks; do not export it
+as an assumed parent-result law. General Mu semantics and warm open-cache
+admissibility remain open. Closed NodeProduced alone does not supply them.
+
+The historical helper-position phase retains exact local indices, source
+order, last-label-winner lookup, and zero fallback. The repaired executable
+walk derives its complete traversal from a finite needed inventory. Its
+measure is unseen needed occurrences followed by pending length. It works
+with an infinite-key description function and skips the unused growing chain.
+The actual needed row-symbol inventory, sufficient needed-only ancestor
+coverage, Generic/label coherence, containers, Int bounds, and full value/rank
+correspondence remain adapters. Atomic literal-domain order remains separate.
+
+The full audit passes 2,257 jobs and 55,353 dependency checks. Thirty-two
+public axiom probes, twenty-three signatures, and twenty-eight literal kernel
+examples pass. Only standard foundations and the old unused-input warning
+occur. Independent reviews found no context or relevant-filter defect under
+the stated source coherence boundary. Upstream strict all-component build
+and 225 generator examples pass. After the local repair, the focused strict
+generator build, all 225 generator examples, exact growing/Z-A/Bool probes,
+and Fourmolu pass. Other five suites are reused from the unchanged preceding
+source: combined 768 examples plus golden. Package files retain Cabal-gild.
+No local test file is changed.
+
+Next derive general checked completion and recursive finish receipts through
+the actual checked traces. Prove the Mu containment/rank induction and a
+stronger warm open-cache or causal-history invariant. Compose original whole
+allocation history, the new current class Scan, and the physical outer caller.
+Do not substitute the historical Scan or old eager execution. Continue every
+other full-library target and every separate Sized contract. Full scope stays
+active. Read lean/notes-current-native-pair-contexts.md and
+lean/notes-typing-relevant-order.md.
+
+Start: /tmp/mcfta-allocated-query-checkpoint-20261016-0357/ (2,976 files).
+Closing: /tmp/mcfta-pair-helper-checkpoint-20261016-0415/.
+Script: /tmp/mcfta-preserve-pair-helper-20261016.py. Evidence uses
+/tmp/mcfta-pair-helper-*, pair-context validation, helper-order validation,
+and the marked Bool/growing source reproductions. All sixteen prior external
+drafts stay. Three new marked source drafts bring the total to nineteen.
+Stashes and other worktrees stay. No board posts or deployments.
+Push verified formalize checkpoints regularly. The last allowance observation
+was 81 percent and is stale. Stop owned work at 1 percent or less.
+The full-library goal remains active.
+
 ## Current checked query composition and completion prerequisites
 
 Source main is `78618ea2`, merged at `45475383`. It adds rooted refinement
