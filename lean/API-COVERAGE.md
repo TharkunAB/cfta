@@ -1,5 +1,62 @@
 # Public API and source correspondence
 
+## Current literal seeded queries and class scanning
+
+Audited source main is `5399d310`, merged at `82d47236`. The starting
+published checkpoint is `e75e8c5c`. Twelve additive modules implement
+literal first-seeded queries, current primary and secondary gates, and Scan
+with full caller receipts. Proof commits are `8978d180`, `19f90e9c`, and
+`2b26e442`. PR #63 adds qualified typing do-notation. No local Haskell
+behavior repair occurs. Root FINDINGS.md keeps the external repair registry
+first, including the confirmed, unfixed recursive field-pool contract gap.
+
+Read lean/notes-current-scan-worker.md. SeededWorker projects without
+mergeAlternatives. Head projection precedes the tail, then checked native
+intersection uses the exact tail return. Three stage bounds remain distinct.
+Completion derives stable bounds from finite graphs. Success stability and
+whole-state uniqueness need no physical premise. Initial selected support
+derives the same graph, physical facts, probes, and full caller Post at the
+computed inventory. The language law preserves common selected subtrees.
+
+GateWorker runs literal current policies with concrete source predicates.
+Strict primary reads use the actual queried node. Scan retains five stage
+bounds and a fixed conjunction budget. Primary false selects; secondary true
+skips; a true current conjunction answer stops before the suffix. False uses
+its exact returned checked state and fourth memo. Failed selected suffixes
+retain their selected prefix. Order and repeated classes remain.
+
+ScanCompletion constructs stable literal execution from every finite current
+graph. ScanStability identifies the complete Result, Checked, and fourth memo
+across successful bounds. ScanWorkerActual.finite derives execution and full
+caller facts from initial Context, resident values, proper nontrivial classes,
+and reached word bounds. verified derives the same facts for a supplied
+literal return. Strict Reads, probes, original values, and stopped-class
+exclusion belong to that same return. No future graph, body law, or final
+invariant is a public premise. Only a no-stop completion reads the full class
+partition. A stopped result retains the selected prefix it reached.
+
+The pinned full Audit passes 2456 jobs and 58268 theorem dependency checks.
+Only the permitted foundations and old unused-input warning remain. Current
+strict Nix build, 793 examples plus golden, three-file Fourmolu, four-package
+Cabal-gild and metadata checks pass. Preservation checks retain all 5135
+starting files, 2443 older proof sources, six repair/counterexample entries,
+stashes, and three other worktree records. Twenty-six frozen manifests check
+213 module entries. Evidence is in
+lean/restart-evidence/20261016-typing-do-seeded-worker/.
+
+The full library objective remains active. Read local-worker-next.md in that
+directory. Next compose literal local precheck/reduction, required children,
+and class passes, then parent construction and the mutual outer worker.
+root_exact still assumes a completed strict-read outer call. General
+constrained termination, unequal-length path classes, and repeated-pass
+convergence remain open. Current reducePartially performs one pass. Logical
+global reads do not prove host demand, table events, lazy publication, or the
+noConstraint CAF. All frontend, Sized, generator, rank, probability, solver,
+callback, codec, concrete-runtime, and older constructor/equality obligations
+remain. Preserve the optimized interned core and every proof, counterexample,
+repair, and draft. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress, not goal completion.
+
 ## Current generator node views and source refresh
 
 Publication readback at 13:14 CEST found remote main `5399d310` (PR #63,
