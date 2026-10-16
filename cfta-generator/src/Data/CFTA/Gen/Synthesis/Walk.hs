@@ -86,9 +86,8 @@ import Data.CFTA.Gen.Synthesis (
     library,
     programRuns,
     rawSearchSpace,
-    reduceFully,
+    reduceWithOrder,
  )
-import Data.CFTA.Interned (refold)
 
 -- Leaves
 
@@ -289,7 +288,7 @@ walk encoding limits checker hooks leaves avoid goal accept = sizes 1 (State [] 
             case built of
                 Nothing -> stop OutOfTime (withProgress state' $ \p -> p{progressOutOfTime = True})
                 Just raw -> do
-                    (reduced, reduceTime) <- liftIO (timed deadline (refold (reduceFully raw)))
+                    (reduced, reduceTime) <- liftIO (timed deadline (reduceWithOrder raw))
                     let state'' = withProgress state' $ \p -> p{progressReduceNanos = progressReduceNanos p + reduceTime}
                     case reduced of
                         Nothing -> stop OutOfTime (withProgress state'' $ \p -> p{progressOutOfTime = True})

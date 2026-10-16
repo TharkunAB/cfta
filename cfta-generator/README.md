@@ -1752,7 +1752,12 @@ equality-constrained automaton: a type is a term, each type variable of a
 component is the recursive node of all types, and path equalities tie an
 application's argument type to the function's parameter type.
 `reduceFully` propagates the equalities, `refold` folds the result, and the
-enumeration lists the programs of the goal type.
+enumeration lists the programs of the goal type. `reduceWithOrder` does both
+and gives Hectare's order of the edges: an edge that is in the space after
+an earlier round of the reduction comes first, and the canonical order
+orders the edges of one round. The order depends only on the automata, so a
+query lists its programs in the same order in every process, whatever the
+process built before.
 
 ```haskell
 import Data.CFTA.Gen.Synthesis
@@ -1779,6 +1784,11 @@ cabal bench hectare --benchmark-options='hplus 300 8G'
 ```
 
 The paper reports 43 of 45 queries within 300 seconds, 84% within 7 seconds.
+The numbers of this module below come from the order of the edge identities,
+which depends on what the process built before. With 60 seconds for each
+query, the order of the rounds solves the same 53 queries of the two suites,
+and lists the expected solutions at 1.07 times their rank in that order (the
+geometric mean of the rank plus one).
 On the development machine (one core), the original code, built with its own
 toolchain (GHC 8.10.7) and run with one capability, solves 41 of 45, 36
 within 7 seconds. This module builds the same automata, size by size, and

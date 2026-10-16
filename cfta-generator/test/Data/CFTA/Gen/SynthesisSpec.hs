@@ -4,9 +4,10 @@
 -}
 module Data.CFTA.Gen.SynthesisSpec (spec) where
 
+import Control.Exception (evaluate)
 import Data.List (find)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (mapMaybe)
+import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Set as Set
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
@@ -33,12 +34,44 @@ spec = describe "Data.CFTA.Gen.Synthesis" $ do
                 map snd (concat libraries)
                     <> concat [liquidGoal query : map snd (liquidArguments query) | query <- map liquidQuery liquidBenchmarks]
         [typ | typ <- types, parseRType (Text.pack (renderRType typ)) /= Right typ] `shouldBe` []
-    it "lists the programs of a size in the order that the library makes them, not the canonical one" $ do
-        -- The names are new to the process, so the identities of their edges
-        -- follow the order of the library.
-        int <- either fail pure (parseType (Text.pack "Int"))
-        let lib = Library [(Text.pack n, int, [Text.pack n]) | n <- ["order-zeta", "order-alpha"]] [] [] FirstOrder
-        solutionsOfSize lib (Query [] int) 1 `shouldBe` [Var (Text.pack "order-zeta"), Var (Text.pack "order-alpha")]
+    it "lists the programs of a query in the same order, whatever the process built before" $ do
+        -- Each run puts a prefix of its own on the names of the library and
+        -- the queries, so that the run builds new edges, in the order of its
+        -- queries. The prefix keeps the order of the names.
+        let listing prefix name = do
+                benchmark <- maybe (fail ("no query " <> name)) pure (find ((== Text.pack name) . benchmarkName) hooglePlusBenchmarks)
+                let query =
+                        (benchmarkQuery benchmark)
+                            { queryArguments = [(prefix <> argument, typ) | (argument, typ) <- queryArguments (benchmarkQuery benchmark)]
+                            }
+                    programs = map (untag prefix) (solutionsOfSize (tagged prefix hooglePlus) query (benchmarkSize benchmark))
+                _ <- evaluate (length (show programs))
+                pure programs
+            names = historyQueries
+        forward <- mapM (listing (Text.pack "a:")) names
+        backward <- mapM (listing (Text.pack "b:")) (reverse names)
+        forward `shouldBe` reverse backward
+
+{- | The queries of the test of the order: two small Hoogle+ queries. In the
+order of the edge identities, each lists its programs in another order when
+the other query comes first.
+-}
+historyQueries :: [String]
+historyQueries = ["firstMaybe", "mapMaybes"]
+
+-- | A library with a prefix on each name.
+tagged :: Text.Text -> Library -> Library
+tagged prefix lib =
+    lib
+        { libraryGroups = [(prefix <> name, typ, map (prefix <>) members) | (name, typ, members) <- libraryGroups lib]
+        , libraryArgumentOnly = [(prefix <> name, typ) | (name, typ) <- libraryArgumentOnly lib]
+        , libraryAvoid = [(map (prefix <>) heads, map (prefix <>) <$> arguments) | (heads, arguments) <- libraryAvoid lib]
+        }
+
+-- | A program without the prefix on its names.
+untag :: Text.Text -> Program -> Program
+untag prefix (Var name) = Var (fromMaybe name (Text.stripPrefix prefix name))
+untag prefix (App function argument) = App (untag prefix function) (untag prefix argument)
 
 -- | The saturated search space against Hectare's own space.
 saturatedSpec :: Spec

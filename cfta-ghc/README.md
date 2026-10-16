@@ -87,8 +87,9 @@ test/holes/Holes.hs:16:16: error: [GHC-88464]
    |                ^
 ```
 
-The fits come in Hectare's order. `length (map x1 x2)` uses `x1` only
-through its type; the parametricity check does not see that.
+The fits come in Hectare's order, which depends only on the hole: the
+holes before it in the module do not change it. `length (map x1 x2)` uses
+`x1` only through its type; the parametricity check does not see that.
 
 How the plugin works:
 
