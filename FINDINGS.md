@@ -12,6 +12,12 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
+The current parent and outer worker proof work adds no Haskell change.
+Reuse the source validation below for the unchanged source `c0cc8a05`.
+For external handoff, record every later repair here with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Keep current repair status before historical failure reports.
+
 Current source validation is recorded in
 `lean/restart-evidence/20261016-drawn-fields-local-worker/`.
 The strict Nix all-component build passes with `-Werror`, tests, and benchmarks.
@@ -23,7 +29,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The pinned Lean Audit passes: 2464 jobs and 58403 dependency checks.
+The current pinned Lean Audit passes: 2471 jobs and 58623 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -157,6 +163,52 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current literal parent and mutual outer execution
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. The preceding
+published checkpoint is `ade9584d`. Read lean/notes-current-parent-worker.md.
+Seven additive modules implement literal checked parent execution and the
+eight mutual outer worker families. Parent proofs are in `155da673`;
+the outer definition is in `849d1509`, and completion/stability is in
+`7d9d503d`. The current evidence directory is
+lean/restart-evidence/20261016-parent-worker/.
+
+Parent Actual constructs stable execution, its same graph, strict Reads,
+language Receipt, and full caller Post from legitimate initial facts and
+reached ranges. Resident input derives the actual field and child support.
+Raw rejection needs no field or child premise. The outer worker retains
+the stored winning request, exact finish handle, returned-edge descendants,
+ordered rows, indexed child descent, literal Mu reconstruction, and every
+failure's complete caller and lower diagnostic.
+
+Completion derives ten sufficient stable bounds from every finite supplied
+outer graph. Stability preserves successful output and the entire caller
+under larger bounds; arbitrary successful bounds have the same full return.
+These results do not prove that every intended call has a finite graph.
+Next connect literal outer success to its same graph and strict Reads under
+initial Context and reached checks, then apply the existing PartialActual
+endpoints. root_exact still assumes a completed strict-read call.
+Read outer-actual-next.md in the current evidence directory.
+
+The full objective is implementation correspondence for languages,
+transformations, exact size classes, finite execution, counts, ordered ranks
+and both inverses, and probability laws. General constrained termination,
+unequal-length path classes, repeated-pass convergence, current frontend
+adapters, full-pipeline composition, and concrete runtime transfers remain.
+Logical Reads do not establish GHC demand, publication, or the noConstraint
+CAF. Preserve all older constructor/equality work and the optimized core.
+
+The pinned full Audit passes 2471 jobs and 58623 dependency checks. Only
+the permitted foundations and old unused-input warning remain. Preservation
+checks retain all 5383 starting files and 2463 older proof sources.
+Twenty-eight frozen manifests check 228 module entries. Historical repair
+text, stashes, and the three other worktrees remain unchanged.
+
+No Haskell file changes. Reuse the current source's strict Nix build,
+798 examples plus golden, six-file Fourmolu, and four-package Cabal-gild
+and metadata checks. Root FINDINGS.md keeps Haskell repair details first.
+Earlier sections are historical checkpoints. The full goal remains active.
 
 ## Current literal local reduction and validated field-pool repair
 
