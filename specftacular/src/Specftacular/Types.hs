@@ -22,7 +22,7 @@ import qualified Data.Map as Map
 import Data.Text (Text)
 import GHC.Generics (Generic)
 
-import Control.Exception (Exception, SomeException, evaluate, fromException, throw, throwIO, try)
+import Control.Exception (Exception, SomeAsyncException, SomeException, evaluate, fromException, throw, throwIO, try)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import qualified Data.CFTA.Term as CT
 import Data.Maybe (fromMaybe, mapMaybe)
@@ -859,13 +859,15 @@ equalBy (Untyped eq) (Untyped a) (Untyped b) = (unsafeCoerce eq :: Any -> Any ->
 equalBy eq a b = fromValue (apply (apply eq a) b)
 
 {- | Whether two values are equal, by the equality of their type. Nothing
-means that the comparison threw an exception.
+means that the tested function threw an exception. Cancellation and type
+errors propagate to the caller.
 -}
 valuesEqual :: Value -> Value -> Value -> IO (Maybe Bool)
 valuesEqual eq a b = do
     r <- try (evaluate (equalBy eq a b))
     case r of
         Left (e :: SomeException)
+            | Just (_ :: SomeAsyncException) <- fromException e -> throwIO e
             | Just (illTyped :: IllTyped) <- fromException e -> throwIO illTyped
             | otherwise -> return Nothing
         Right x -> return (Just x)
