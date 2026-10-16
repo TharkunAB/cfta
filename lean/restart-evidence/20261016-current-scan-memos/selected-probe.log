@@ -1,0 +1,149 @@
+'MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat}
+  {unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {classes selected : MicroCFTA.EqualityNormalize.Constraints} {outcome : Option MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo} :
+  MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget unconstrained reaches values classes before memo outcome
+      selected after saved →
+    List MicroCFTA.SourceEqualityClassOrder.Record → List MicroCFTA.SourceEqualityClassOrder.Record → Prop
+'MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained.fields' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained.fields {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat}
+  {unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {records kept : List MicroCFTA.SourceEqualityClassOrder.Record}
+  {classes selected : MicroCFTA.EqualityNormalize.Constraints} {outcome : Option MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {trace :
+    MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget unconstrained reaches values classes before memo outcome
+      selected after saved}
+  (receipt : MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained trace records kept) :
+  kept.Sublist records ∧ List.map MicroCFTA.SourceEqualityClassOrder.Record.paths kept = selected
+'MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained.input' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained.input {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat}
+  {unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {records kept : List MicroCFTA.SourceEqualityClassOrder.Record}
+  {classes selected : MicroCFTA.EqualityNormalize.Constraints} {outcome : Option MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {trace :
+    MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget unconstrained reaches values classes before memo outcome
+      selected after saved}
+  (receipt : MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained trace records kept) :
+  List.map MicroCFTA.SourceEqualityClassOrder.Record.paths records = classes
+'MicroCFTA.SourceCurrentConjunctionSelectedRecords.retained_records' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentConjunctionSelectedRecords.retained_records {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {budget : Nat}
+  {unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  (records : List MicroCFTA.SourceEqualityClassOrder.Record) {selected : MicroCFTA.EqualityNormalize.Constraints}
+  {outcome : Option MicroCFTA.EqualityNormalize.Class} {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  (trace :
+    MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget unconstrained reaches values
+      (List.map MicroCFTA.SourceEqualityClassOrder.Record.paths records) before memo outcome selected after saved) :
+  ∃ kept, MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained trace records kept
+'MicroCFTA.SourceCurrentConjunctionSelectedRecords.live_retained_records' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentConjunctionSelectedRecords.live_retained_records {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (constraint : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (cached : MicroCFTA.SourceEqualityGuardReadback.Cached constraint.equalities)
+  (inherited : MicroCFTA.SourceEqualityPrecheck.Constraint) (records : List MicroCFTA.SourceEqualityClassOrder.Record)
+  (live :
+    MicroCFTA.SourceEqualityPhysicalClassEntry.entry constraint inherited =
+      Except.ok (MicroCFTA.SourceEqualityPrecheck.Branch.classes records))
+  {budget : Nat}
+  {unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {selected : MicroCFTA.EqualityNormalize.Constraints} {outcome : Option MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  (trace :
+    MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget unconstrained reaches values
+      (List.map MicroCFTA.SourceEqualityClassOrder.Record.paths records) before memo outcome selected after saved) :
+  ∃ kept,
+    MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained trace records kept ∧
+      kept.Sublist records ∧
+        List.map MicroCFTA.SourceEqualityClassOrder.Record.paths kept = selected ∧
+          ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+            record ∈ kept →
+              MicroCFTA.SourceEqualityClassOrder.Coherent record ∧
+                MicroCFTA.EqualityTrie.Ascending record.trie ∧ MicroCFTA.EqualityNormalize.Nontrivial record.paths

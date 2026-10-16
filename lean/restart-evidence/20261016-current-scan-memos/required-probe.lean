@@ -1,0 +1,9 @@
+import MicroCFTA.SourceCurrentConjunctionRequired
+#print axioms MicroCFTA.SourceCurrentConjunctionRequired.selected_primary
+#check MicroCFTA.SourceCurrentConjunctionRequired.selected_primary
+#print axioms MicroCFTA.SourceCurrentConjunctionRequired.Receipt
+#check MicroCFTA.SourceCurrentConjunctionRequired.Receipt
+#print axioms MicroCFTA.SourceCurrentConjunctionRequired.required_complete
+#check MicroCFTA.SourceCurrentConjunctionRequired.required_complete
+#print axioms MicroCFTA.SourceCurrentConjunctionRequired.scan_required_complete
+#check MicroCFTA.SourceCurrentConjunctionRequired.scan_required_complete

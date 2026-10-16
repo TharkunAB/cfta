@@ -1,0 +1,285 @@
+'MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos.step_receipt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos.trace_receipt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos.trace_memos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededMemos.operand_memos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededMemos.fold_memos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededMemos.seeded_memos' depends on axioms: [propext, Classical.choice, Quot.sound]
+@SourceCurrentAllocatedNativeGlobalMemos.step_receipt : ∀ {width : Nat} {A : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (control : Control A) (state : Checked width)
+  (memo : InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard),
+  ∃ events,
+    SourceGlobalUnfold.Runs { heap := state.native.machine.heap, unfolding := memo }
+        { heap := (step control state).state.native.machine.heap, unfolding := memo } events ∧
+      SourceGlobalUnfold.NoGlobal events
+@SourceCurrentAllocatedNativeGlobalMemos.trace_receipt : ∀ {width : Nat} {A : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {fuel : Nat} {control next : Control A} {before after : Checked width},
+  Trace fuel control before next after →
+    ∀ (memo : InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard),
+      ∃ events,
+        SourceGlobalUnfold.Runs { heap := before.native.machine.heap, unfolding := memo }
+            { heap := after.native.machine.heap, unfolding := memo } events ∧
+          SourceGlobalUnfold.NoGlobal events
+@SourceCurrentAllocatedNativeGlobalMemos.trace_memos : ∀ {width : Nat} {A : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {fuel : Nat} {control : Control A} {before after : Checked width}
+  {value : A},
+  Trace fuel control before (Control.code (Code.pure value)) after →
+    SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+      SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+        InternedFreshOrdinaryCostHeap.Heap before.native.machine.heap →
+          SourceCurrentAllocatedNativeFieldClosure.Fields control before →
+            ∀ (memos : Memos),
+              EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                ∃ events,
+                  SourceGlobalUnfold.Runs { heap := before.native.machine.heap, unfolding := memos.unfolding }
+                      { heap := after.native.machine.heap, unfolding := memos.unfolding } events ∧
+                    SourceGlobalUnfold.NoGlobal events ∧ EndpointMemoGateTrace.Valid after.native.machine.heap memos
+@operand_memos : ∀ {width : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)] {path : List Int}
+  {values : List (Value Symbol Guard)} {before after : Checked width} {result : Value Symbol Guard}
+  (actual : Operand path values before result after),
+  SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before) →
+    InternedNestedProvenance.Values before.native.machine.heap values →
+      ∀ (memos : Memos),
+        EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+          ∃ saved,
+            OperandReads actual memos saved ∧
+              EndpointMemoGateTrace.Valid after.native.machine.heap saved ∧
+                Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query
+@fold_memos : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (unconstrained : Value Symbol Guard → Bool) (anchor : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredSemanticCache.SemanticReady anchor →
+    InternedFreshOrdinaryMemoGateTrace.Ready anchor →
+      ∀ {values : List (Value Symbol Guard)} {paths : List (List Int)} {before after : Checked width}
+        {result : Value Symbol Guard} (actual : Fold values paths before result after),
+        SourceCurrentAllocatedSeededQuery.FoldRanges values paths before →
+          SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before) →
+              SourceCurrentAllocatedNativeScopeCache.Scoped before.native →
+                SourceRecursiveIntersectionNative.Idle before.native →
+                  InternedNestedProvenance.Values before.native.machine.heap values →
+                    Grows anchor before.native.machine.heap →
+                      (∀ (path : List Int),
+                          path ∈ paths →
+                            SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values) →
+                        ∀ (memos : Memos),
+                          EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                            ∃ saved,
+                              FoldReads actual memos saved ∧
+                                EndpointMemoGateTrace.Valid after.native.machine.heap saved ∧
+                                  Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query
+@seeded_memos : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (unconstrained : Value Symbol Guard → Bool) (anchor : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredSemanticCache.SemanticReady anchor →
+    InternedFreshOrdinaryMemoGateTrace.Ready anchor →
+      ∀ {values : List (Value Symbol Guard)} {paths : List (List Int)} {before after : Checked width}
+        {result : Value Symbol Guard} (actual : Seeded values paths before result after),
+        SourceCurrentAllocatedSeededQuery.SeededRanges values paths before →
+          SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before) →
+              SourceCurrentAllocatedNativeScopeCache.Scoped before.native →
+                SourceRecursiveIntersectionNative.Idle before.native →
+                  InternedNestedProvenance.Values before.native.machine.heap values →
+                    Grows anchor before.native.machine.heap →
+                      (∀ (path : List Int),
+                          path ∈ paths →
+                            SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values) →
+                        ∀ (memos : Memos),
+                          EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                            ∃ saved,
+                              SeededReads actual memos saved ∧
+                                EndpointMemoGateTrace.Valid after.native.machine.heap saved ∧
+                                  Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:41:12: error: a non-private declaration `control` has already been declared
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:42:51: error: Application type mismatch: The argument
+  control
+has type
+  (({β : Type ?u.7} → ?m.8 β → ?m.7 (stM ?m.7 ?m.8 β)) → ?m.7 (stM ?m.7 ?m.8 ?m.11)) → ?m.8 ?m.11
+but is expected to have type
+  Control ?m.3
+in the application
+  step control
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:43:53: error: Application type mismatch: The argument
+  control
+has type
+  (({β : Type ?u.7} → ?m.10 β → ?m.9 (stM ?m.9 ?m.10 β)) → ?m.9 (stM ?m.9 ?m.10 ?m.13)) → ?m.10 ?m.13
+but is expected to have type
+  Control ?m.3
+in the application
+  Trace 1 control
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:49:36: error: Application type mismatch: The argument
+  control
+has type
+  (({β : Type ?u.7} → ?m.8 β → ?m.7 (stM ?m.7 ?m.8 β)) → ?m.7 (stM ?m.7 ?m.8 ?m.11)) → ?m.8 ?m.11
+but is expected to have type
+  Control ?m.3
+in the application
+  step control
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:51:0: warning: declaration uses `sorry`
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:56:11: error: don't know how to synthesize implicit argument `Guard`
+  @SourceGlobalUnfold.NoGlobal ?m.4 ?m.5 [SourceGlobalUnfold.Event.globalUnfold Value.empty.referenceOf]
+context:
+⊢ Type
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:56:11: error: don't know how to synthesize implicit argument `Symbol`
+  @SourceGlobalUnfold.NoGlobal ?m.4 ?m.5 [SourceGlobalUnfold.Event.globalUnfold Value.empty.referenceOf]
+context:
+⊢ Type
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:57:4: error: don't know how to synthesize implicit argument `α`
+  @List.cons (SourceGlobalUnfold.Event ?m.4 ?m.5) (SourceGlobalUnfold.Event.globalUnfold Value.empty.referenceOf) []
+context:
+⊢ Type
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:57:4: error: don't know how to synthesize implicit argument `α`
+  @List.nil (SourceGlobalUnfold.Event ?m.4 ?m.5)
+context:
+⊢ Type
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:57:5: error: don't know how to synthesize implicit argument `Guard`
+  @SourceGlobalUnfold.Event.globalUnfold ?m.4 ?m.5 Value.empty.referenceOf
+context:
+⊢ Type
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:57:5: error: don't know how to synthesize implicit argument `Symbol`
+  @SourceGlobalUnfold.Event.globalUnfold ?m.4 ?m.5 Value.empty.referenceOf
+context:
+⊢ Type
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:70:2: error: don't know how to synthesize implicit argument `projection`
+  @OperandReads.force 8 (fun a b => instDecidableEqEdgeKey a b) [0] forest before Value.empty before.native.machine.heap
+    (SourceEqualityProjectionGraph.Forest.selected (?m.44 before memos) SourceEqualityProjectionGraph.Project.root)
+    memos memos
+    ⟨SourceEqualityProjectionMemos.ForestReads.selected SourceEqualityProjectionMemos.ProjectReads.root, rfl⟩
+context:
+before : Checked 8
+memos : Memos
+⊢ SourceEqualityProjectionGraph.Forest [0] forest before.native.machine.heap Value.empty before.native.machine.heap
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:70:9: error: don't know how to synthesize implicit argument `a`
+  @And.intro
+    (SourceEqualityProjectionMemos.ForestReads
+      (SourceEqualityProjectionGraph.Forest.selected (?m.44 before memos) SourceEqualityProjectionGraph.Project.root)
+      memos.unfolding memos.unfolding)
+    (memos.query = memos.query)
+    (SourceEqualityProjectionMemos.ForestReads.selected SourceEqualityProjectionMemos.ProjectReads.root) rfl
+context:
+before : Checked 8
+memos : Memos
+⊢ Prop
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:70:10: error: don't know how to synthesize implicit argument `found`
+  @SourceEqualityProjectionMemos.ForestReads.selected Symbol Guard (fun a b => instDecidableEqEdgeKey a b) []
+    Value.empty before.native.machine.heap Value.empty before.native.machine.heap
+    SourceEqualityProjectionGraph.Project.root memos.unfolding memos.unfolding forest 0 (?m.44 before memos)
+    SourceEqualityProjectionMemos.ProjectReads.root
+context:
+before : Checked 8
+memos : Memos
+⊢ SourceEqualityProjectionGraph.select forest 0 = some Value.empty
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:73:2: error: don't know how to synthesize implicit argument `operand`
+  @FoldReads.one 8 (fun a b => instDecidableEqProd a b) (fun a b => instDecidableEqEdgeKey a b) [0] forest before
+    (projected before) Value.empty
+    (Operand.force Value.empty before.native.machine.heap
+      (SourceEqualityProjectionGraph.Forest.selected (?m.64 before memos) SourceEqualityProjectionGraph.Project.root))
+    memos memos
+    (OperandReads.force
+      ⟨SourceEqualityProjectionMemos.ForestReads.selected SourceEqualityProjectionMemos.ProjectReads.root, rfl⟩)
+context:
+before : Checked 8
+memos : Memos
+⊢ Operand [0] forest before Value.empty (projected before)
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:73:8: error: don't know how to synthesize implicit argument `projection`
+  @OperandReads.force 8 (fun a b => instDecidableEqEdgeKey a b) [0] forest before Value.empty before.native.machine.heap
+    (SourceEqualityProjectionGraph.Forest.selected (?m.64 before memos) SourceEqualityProjectionGraph.Project.root)
+    memos memos
+    ⟨SourceEqualityProjectionMemos.ForestReads.selected SourceEqualityProjectionMemos.ProjectReads.root, rfl⟩
+context:
+before : Checked 8
+memos : Memos
+⊢ SourceEqualityProjectionGraph.Forest [0] forest before.native.machine.heap Value.empty before.native.machine.heap
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:73:15: error: don't know how to synthesize implicit argument `a`
+  @And.intro
+    (SourceEqualityProjectionMemos.ForestReads
+      (SourceEqualityProjectionGraph.Forest.selected (?m.64 before memos) SourceEqualityProjectionGraph.Project.root)
+      memos.unfolding memos.unfolding)
+    (memos.query = memos.query)
+    (SourceEqualityProjectionMemos.ForestReads.selected SourceEqualityProjectionMemos.ProjectReads.root) rfl
+context:
+before : Checked 8
+memos : Memos
+⊢ Prop
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:73:16: error: don't know how to synthesize implicit argument `found`
+  @SourceEqualityProjectionMemos.ForestReads.selected Symbol Guard (fun a b => instDecidableEqEdgeKey a b) []
+    Value.empty before.native.machine.heap Value.empty before.native.machine.heap
+    SourceEqualityProjectionGraph.Project.root memos.unfolding memos.unfolding forest 0 (?m.64 before memos)
+    SourceEqualityProjectionMemos.ProjectReads.root
+context:
+before : Checked 8
+memos : Memos
+⊢ SourceEqualityProjectionGraph.select forest 0 = some Value.empty
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:77:2: error: don't know how to synthesize implicit argument `actual`
+  @SeededReads.nonempty 8 (fun a b => instDecidableEqProd a b) (fun a b => instDecidableEqEdgeKey a b) forest [0] []
+    before (projected before) Value.empty
+    (Fold.one
+      (Operand.force Value.empty before.native.machine.heap
+        (SourceEqualityProjectionGraph.Forest.selected (?m.88 before memos)
+          SourceEqualityProjectionGraph.Project.root)))
+    memos memos
+    (FoldReads.one
+      (OperandReads.force
+        ⟨SourceEqualityProjectionMemos.ForestReads.selected SourceEqualityProjectionMemos.ProjectReads.root, rfl⟩))
+context:
+before : Checked 8
+memos : Memos
+⊢ Fold forest ([] ++ [[0]]) before Value.empty (projected before)
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:77:13: error: don't know how to synthesize implicit argument `operand`
+  @FoldReads.one 8 (fun a b => instDecidableEqProd a b) (fun a b => instDecidableEqEdgeKey a b) [0] forest before
+    (projected before) Value.empty
+    (Operand.force Value.empty before.native.machine.heap
+      (SourceEqualityProjectionGraph.Forest.selected (?m.88 before memos) SourceEqualityProjectionGraph.Project.root))
+    memos memos
+    (OperandReads.force
+      ⟨SourceEqualityProjectionMemos.ForestReads.selected SourceEqualityProjectionMemos.ProjectReads.root, rfl⟩)
+context:
+before : Checked 8
+memos : Memos
+⊢ Operand [0] forest before Value.empty (projected before)
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:77:19: error: don't know how to synthesize implicit argument `projection`
+  @OperandReads.force 8 (fun a b => instDecidableEqEdgeKey a b) [0] forest before Value.empty before.native.machine.heap
+    (SourceEqualityProjectionGraph.Forest.selected (?m.88 before memos) SourceEqualityProjectionGraph.Project.root)
+    memos memos
+    ⟨SourceEqualityProjectionMemos.ForestReads.selected SourceEqualityProjectionMemos.ProjectReads.root, rfl⟩
+context:
+before : Checked 8
+memos : Memos
+⊢ SourceEqualityProjectionGraph.Forest [0] forest before.native.machine.heap Value.empty before.native.machine.heap
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:77:26: error: don't know how to synthesize implicit argument `a`
+  @And.intro
+    (SourceEqualityProjectionMemos.ForestReads
+      (SourceEqualityProjectionGraph.Forest.selected (?m.88 before memos) SourceEqualityProjectionGraph.Project.root)
+      memos.unfolding memos.unfolding)
+    (memos.query = memos.query)
+    (SourceEqualityProjectionMemos.ForestReads.selected SourceEqualityProjectionMemos.ProjectReads.root) rfl
+context:
+before : Checked 8
+memos : Memos
+⊢ Prop
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:77:27: error: don't know how to synthesize implicit argument `found`
+  @SourceEqualityProjectionMemos.ForestReads.selected Symbol Guard (fun a b => instDecidableEqEdgeKey a b) []
+    Value.empty before.native.machine.heap Value.empty before.native.machine.heap
+    SourceEqualityProjectionGraph.Project.root memos.unfolding memos.unfolding forest 0 (?m.88 before memos)
+    SourceEqualityProjectionMemos.ProjectReads.root
+context:
+before : Checked 8
+memos : Memos
+⊢ SourceEqualityProjectionGraph.select forest 0 = some Value.empty
+lean/restart-evidence/20261016-current-scan-memos/owned-publicprobes.lean:82:0: warning: declaration uses `sorry`

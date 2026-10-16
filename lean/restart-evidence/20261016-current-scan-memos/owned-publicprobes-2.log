@@ -1,0 +1,96 @@
+'MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos.step_receipt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos.trace_receipt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos.trace_memos' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededMemos.operand_memos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededMemos.fold_memos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedSeededMemos.seeded_memos' depends on axioms: [propext, Classical.choice, Quot.sound]
+@SourceCurrentAllocatedNativeGlobalMemos.step_receipt : ∀ {width : Nat} {A : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (control : Control A) (state : Checked width)
+  (memo : InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard),
+  ∃ events,
+    SourceGlobalUnfold.Runs { heap := state.native.machine.heap, unfolding := memo }
+        { heap := (step control state).state.native.machine.heap, unfolding := memo } events ∧
+      SourceGlobalUnfold.NoGlobal events
+@SourceCurrentAllocatedNativeGlobalMemos.trace_receipt : ∀ {width : Nat} {A : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {fuel : Nat} {control next : Control A} {before after : Checked width},
+  Trace fuel control before next after →
+    ∀ (memo : InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard),
+      ∃ events,
+        SourceGlobalUnfold.Runs { heap := before.native.machine.heap, unfolding := memo }
+            { heap := after.native.machine.heap, unfolding := memo } events ∧
+          SourceGlobalUnfold.NoGlobal events
+@SourceCurrentAllocatedNativeGlobalMemos.trace_memos : ∀ {width : Nat} {A : Type} [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (EdgeKey Symbol Guard)] {fuel : Nat} {control : Control A} {before after : Checked width}
+  {value : A},
+  Trace fuel control before (Control.code (Code.pure value)) after →
+    SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+      SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap →
+        InternedFreshOrdinaryCostHeap.Heap before.native.machine.heap →
+          SourceCurrentAllocatedNativeFieldClosure.Fields control before →
+            ∀ (memos : Memos),
+              EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                ∃ events,
+                  SourceGlobalUnfold.Runs { heap := before.native.machine.heap, unfolding := memos.unfolding }
+                      { heap := after.native.machine.heap, unfolding := memos.unfolding } events ∧
+                    SourceGlobalUnfold.NoGlobal events ∧ EndpointMemoGateTrace.Valid after.native.machine.heap memos
+@operand_memos : ∀ {width : Nat} [inst : DecidableEq (EdgeKey Symbol Guard)] {path : List Int}
+  {values : List (Value Symbol Guard)} {before after : Checked width} {result : Value Symbol Guard}
+  (actual : Operand path values before result after),
+  SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before) →
+    InternedNestedProvenance.Values before.native.machine.heap values →
+      ∀ (memos : Memos),
+        EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+          ∃ saved,
+            OperandReads actual memos saved ∧
+              EndpointMemoGateTrace.Valid after.native.machine.heap saved ∧
+                Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query
+@fold_memos : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (unconstrained : Value Symbol Guard → Bool) (anchor : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredSemanticCache.SemanticReady anchor →
+    InternedFreshOrdinaryMemoGateTrace.Ready anchor →
+      ∀ {values : List (Value Symbol Guard)} {paths : List (List Int)} {before after : Checked width}
+        {result : Value Symbol Guard} (actual : Fold values paths before result after),
+        SourceCurrentAllocatedSeededQuery.FoldRanges values paths before →
+          SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before) →
+              SourceCurrentAllocatedNativeScopeCache.Scoped before.native →
+                SourceRecursiveIntersectionNative.Idle before.native →
+                  InternedNestedProvenance.Values before.native.machine.heap values →
+                    Grows anchor before.native.machine.heap →
+                      (∀ (path : List Int),
+                          path ∈ paths →
+                            SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values) →
+                        ∀ (memos : Memos),
+                          EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                            ∃ saved,
+                              FoldReads actual memos saved ∧
+                                EndpointMemoGateTrace.Valid after.native.machine.heap saved ∧
+                                  Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query
+@seeded_memos : ∀ {width : Nat} [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)]
+  (unconstrained : Value Symbol Guard → Bool) (anchor : InternedConstructorTemplates.State Symbol Guard),
+  SourceEqualityRequiredSemanticCache.SemanticReady anchor →
+    InternedFreshOrdinaryMemoGateTrace.Ready anchor →
+      ∀ {values : List (Value Symbol Guard)} {paths : List (List Int)} {before after : Checked width}
+        {result : Value Symbol Guard} (actual : Seeded values paths before result after),
+        SourceCurrentAllocatedSeededQuery.SeededRanges values paths before →
+          SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before) →
+              SourceCurrentAllocatedNativeScopeCache.Scoped before.native →
+                SourceRecursiveIntersectionNative.Idle before.native →
+                  InternedNestedProvenance.Values before.native.machine.heap values →
+                    Grows anchor before.native.machine.heap →
+                      (∀ (path : List Int),
+                          path ∈ paths →
+                            SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values) →
+                        ∀ (memos : Memos),
+                          EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                            ∃ saved,
+                              SeededReads actual memos saved ∧
+                                EndpointMemoGateTrace.Valid after.native.machine.heap saved ∧
+                                  Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query

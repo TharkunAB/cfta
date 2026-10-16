@@ -1,0 +1,11 @@
+import MicroCFTA.SourceCurrentConjunctionSelectedRecords
+#print axioms MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained
+#check MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained
+#print axioms MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained.fields
+#check MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained.fields
+#print axioms MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained.input
+#check MicroCFTA.SourceCurrentConjunctionSelectedRecords.Retained.input
+#print axioms MicroCFTA.SourceCurrentConjunctionSelectedRecords.retained_records
+#check MicroCFTA.SourceCurrentConjunctionSelectedRecords.retained_records
+#print axioms MicroCFTA.SourceCurrentConjunctionSelectedRecords.live_retained_records
+#check MicroCFTA.SourceCurrentConjunctionSelectedRecords.live_retained_records

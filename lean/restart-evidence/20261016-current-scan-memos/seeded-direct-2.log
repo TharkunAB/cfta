@@ -1,0 +1,382 @@
+lean/MicroCFTA/SourceCurrentAllocatedSeededMemos.lean:151:29: error: don't know how to synthesize implicit argument `native`
+  @FoldReads.cons width inst✝¹ inst✝ values path next paths before middle later fuel value tail after ?m.547 operand
+    remaining ?m.552 memos middleMemos laterMemos laterMemos firstRead tailRead
+    (NativeReads.silent events checked quiet)
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+paths✝ : List (List Int)
+before✝ after✝ : Checked width
+result✝ : Value Symbol Guard
+path : List Int
+before : Checked width
+value : Value Symbol Guard
+middle : Checked width
+next : List Int
+paths : List (List Int)
+tail : Value Symbol Guard
+later : Checked width
+result : Nat
+after : Value Symbol Guard
+fuel : Checked width
+operand : Operand path values before value middle
+remaining : Fold values (next :: paths) middle tail later
+native :
+  Trace result (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+    (Control.code (Code.pure after)) fuel
+ih :
+  FoldRanges values (next :: paths) middle →
+    Good middle →
+      SourceCurrentConjunctionRowsAllocation.Ready (physical middle) →
+        Scoped middle.native →
+          Idle middle.native →
+            Values middle.native.machine.heap values →
+              Grows anchor middle.native.machine.heap →
+                (∀ (path : List Int), path ∈ next :: paths → PathSupport unconstrained anchor path values) →
+                  ∀ (memos : Memos),
+                    Valid middle.native.machine.heap memos →
+                      ∃ saved,
+                        FoldReads remaining memos saved ∧
+                          Valid later.native.machine.heap saved ∧
+                            Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query
+good : Good before
+ready : SourceCurrentConjunctionRowsAllocation.Ready (physical before)
+scopes : Scoped before.native
+idle : Idle before.native
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ path :: next :: paths → PathSupport unconstrained anchor path_1 values
+memos : Memos
+valid : Valid before.native.machine.heap memos
+rest :
+  ∀ (value : Value Symbol Guard) (middle : Checked width),
+    Operand path values before value middle → FoldRanges values (next :: paths) middle
+nativeRanges :
+  ∀ (value : Value Symbol Guard) (middle : Checked width) (tail : Value Symbol Guard) (later : Checked width),
+    Operand path values before value middle →
+      Fold values (next :: paths) middle tail later →
+        SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+first :
+  Good middle ∧
+    Effects (physical before) (physical middle) ∧
+      Extension before.native.machine middle.native.machine ∧
+        Scoped middle.native ∧ Idle middle.native ∧ Available middle.native.machine.heap value ∧ value.free = []
+middleMemos : Memos
+firstRead : OperandReads operand memos middleMemos
+middleValid : Valid middle.native.machine.heap middleMemos
+firstRetained : Extends memos.unfolding middleMemos.unfolding
+firstSame : middleMemos.query = memos.query
+middleValues : Values middle.native.machine.heap values
+middleGrowth : Grows anchor (physical middle).heap
+tailSupport : ∀ (path : List Int), path ∈ next :: paths → PathSupport unconstrained anchor path values
+laterMemos : Memos
+tailRead : FoldReads remaining middleMemos laterMemos
+laterValid : Valid later.native.machine.heap laterMemos
+tailRetained : Extends middleMemos.unfolding laterMemos.unfolding
+tailSame : laterMemos.query = middleMemos.query
+tailEffects :
+  Good later ∧
+    Effects (physical middle) (physical later) ∧
+      Extension middle.native.machine later.native.machine ∧
+        Scoped later.native ∧ Idle later.native ∧ Available later.native.machine.heap tail ∧ tail.free = []
+events : List (SourceGlobalUnfold.Event Symbol Guard)
+checked :
+  SourceGlobalUnfold.Runs { heap := later.native.machine.heap, unfolding := laterMemos.unfolding }
+    { heap := fuel.native.machine.heap, unfolding := laterMemos.unfolding } events
+quiet : SourceGlobalUnfold.NoGlobal events
+finalValid : Valid fuel.native.machine.heap laterMemos
+⊢ Trace ?m.547 (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+    (Control.code (Code.pure after)) fuel
+lean/MicroCFTA/SourceCurrentAllocatedSeededMemos.lean:151:29: error: don't know how to synthesize implicit argument `fuel`
+  @FoldReads.cons width inst✝¹ inst✝ values path next paths before middle later fuel value tail after ?m.547 operand
+    remaining ?m.552 memos middleMemos laterMemos laterMemos firstRead tailRead
+    (NativeReads.silent events checked quiet)
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+paths✝ : List (List Int)
+before✝ after✝ : Checked width
+result✝ : Value Symbol Guard
+path : List Int
+before : Checked width
+value : Value Symbol Guard
+middle : Checked width
+next : List Int
+paths : List (List Int)
+tail : Value Symbol Guard
+later : Checked width
+result : Nat
+after : Value Symbol Guard
+fuel : Checked width
+operand : Operand path values before value middle
+remaining : Fold values (next :: paths) middle tail later
+native :
+  Trace result (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+    (Control.code (Code.pure after)) fuel
+ih :
+  FoldRanges values (next :: paths) middle →
+    Good middle →
+      SourceCurrentConjunctionRowsAllocation.Ready (physical middle) →
+        Scoped middle.native →
+          Idle middle.native →
+            Values middle.native.machine.heap values →
+              Grows anchor middle.native.machine.heap →
+                (∀ (path : List Int), path ∈ next :: paths → PathSupport unconstrained anchor path values) →
+                  ∀ (memos : Memos),
+                    Valid middle.native.machine.heap memos →
+                      ∃ saved,
+                        FoldReads remaining memos saved ∧
+                          Valid later.native.machine.heap saved ∧
+                            Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query
+good : Good before
+ready : SourceCurrentConjunctionRowsAllocation.Ready (physical before)
+scopes : Scoped before.native
+idle : Idle before.native
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ path :: next :: paths → PathSupport unconstrained anchor path_1 values
+memos : Memos
+valid : Valid before.native.machine.heap memos
+rest :
+  ∀ (value : Value Symbol Guard) (middle : Checked width),
+    Operand path values before value middle → FoldRanges values (next :: paths) middle
+nativeRanges :
+  ∀ (value : Value Symbol Guard) (middle : Checked width) (tail : Value Symbol Guard) (later : Checked width),
+    Operand path values before value middle →
+      Fold values (next :: paths) middle tail later →
+        SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+first :
+  Good middle ∧
+    Effects (physical before) (physical middle) ∧
+      Extension before.native.machine middle.native.machine ∧
+        Scoped middle.native ∧ Idle middle.native ∧ Available middle.native.machine.heap value ∧ value.free = []
+middleMemos : Memos
+firstRead : OperandReads operand memos middleMemos
+middleValid : Valid middle.native.machine.heap middleMemos
+firstRetained : Extends memos.unfolding middleMemos.unfolding
+firstSame : middleMemos.query = memos.query
+middleValues : Values middle.native.machine.heap values
+middleGrowth : Grows anchor (physical middle).heap
+tailSupport : ∀ (path : List Int), path ∈ next :: paths → PathSupport unconstrained anchor path values
+laterMemos : Memos
+tailRead : FoldReads remaining middleMemos laterMemos
+laterValid : Valid later.native.machine.heap laterMemos
+tailRetained : Extends middleMemos.unfolding laterMemos.unfolding
+tailSame : laterMemos.query = middleMemos.query
+tailEffects :
+  Good later ∧
+    Effects (physical middle) (physical later) ∧
+      Extension middle.native.machine later.native.machine ∧
+        Scoped later.native ∧ Idle later.native ∧ Available later.native.machine.heap tail ∧ tail.free = []
+events : List (SourceGlobalUnfold.Event Symbol Guard)
+checked :
+  SourceGlobalUnfold.Runs { heap := later.native.machine.heap, unfolding := laterMemos.unfolding }
+    { heap := fuel.native.machine.heap, unfolding := laterMemos.unfolding } events
+quiet : SourceGlobalUnfold.NoGlobal events
+finalValid : Valid fuel.native.machine.heap laterMemos
+⊢ Nat
+lean/MicroCFTA/SourceCurrentAllocatedSeededMemos.lean:151:55: error: don't know how to synthesize implicit argument `trace`
+  @NativeReads.silent width inst✝¹ inst✝ (Value Symbol Guard) ?m.547
+    (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) (Control.code (Code.pure after)) later
+    fuel ?m.552 laterMemos events checked quiet
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+paths✝ : List (List Int)
+before✝ after✝ : Checked width
+result✝ : Value Symbol Guard
+path : List Int
+before : Checked width
+value : Value Symbol Guard
+middle : Checked width
+next : List Int
+paths : List (List Int)
+tail : Value Symbol Guard
+later : Checked width
+result : Nat
+after : Value Symbol Guard
+fuel : Checked width
+operand : Operand path values before value middle
+remaining : Fold values (next :: paths) middle tail later
+native :
+  Trace result (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+    (Control.code (Code.pure after)) fuel
+ih :
+  FoldRanges values (next :: paths) middle →
+    Good middle →
+      SourceCurrentConjunctionRowsAllocation.Ready (physical middle) →
+        Scoped middle.native →
+          Idle middle.native →
+            Values middle.native.machine.heap values →
+              Grows anchor middle.native.machine.heap →
+                (∀ (path : List Int), path ∈ next :: paths → PathSupport unconstrained anchor path values) →
+                  ∀ (memos : Memos),
+                    Valid middle.native.machine.heap memos →
+                      ∃ saved,
+                        FoldReads remaining memos saved ∧
+                          Valid later.native.machine.heap saved ∧
+                            Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query
+good : Good before
+ready : SourceCurrentConjunctionRowsAllocation.Ready (physical before)
+scopes : Scoped before.native
+idle : Idle before.native
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ path :: next :: paths → PathSupport unconstrained anchor path_1 values
+memos : Memos
+valid : Valid before.native.machine.heap memos
+rest :
+  ∀ (value : Value Symbol Guard) (middle : Checked width),
+    Operand path values before value middle → FoldRanges values (next :: paths) middle
+nativeRanges :
+  ∀ (value : Value Symbol Guard) (middle : Checked width) (tail : Value Symbol Guard) (later : Checked width),
+    Operand path values before value middle →
+      Fold values (next :: paths) middle tail later →
+        SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+first :
+  Good middle ∧
+    Effects (physical before) (physical middle) ∧
+      Extension before.native.machine middle.native.machine ∧
+        Scoped middle.native ∧ Idle middle.native ∧ Available middle.native.machine.heap value ∧ value.free = []
+middleMemos : Memos
+firstRead : OperandReads operand memos middleMemos
+middleValid : Valid middle.native.machine.heap middleMemos
+firstRetained : Extends memos.unfolding middleMemos.unfolding
+firstSame : middleMemos.query = memos.query
+middleValues : Values middle.native.machine.heap values
+middleGrowth : Grows anchor (physical middle).heap
+tailSupport : ∀ (path : List Int), path ∈ next :: paths → PathSupport unconstrained anchor path values
+laterMemos : Memos
+tailRead : FoldReads remaining middleMemos laterMemos
+laterValid : Valid later.native.machine.heap laterMemos
+tailRetained : Extends middleMemos.unfolding laterMemos.unfolding
+tailSame : laterMemos.query = middleMemos.query
+tailEffects :
+  Good later ∧
+    Effects (physical middle) (physical later) ∧
+      Extension middle.native.machine later.native.machine ∧
+        Scoped later.native ∧ Idle later.native ∧ Available later.native.machine.heap tail ∧ tail.free = []
+events : List (SourceGlobalUnfold.Event Symbol Guard)
+checked :
+  SourceGlobalUnfold.Runs { heap := later.native.machine.heap, unfolding := laterMemos.unfolding }
+    { heap := fuel.native.machine.heap, unfolding := laterMemos.unfolding } events
+quiet : SourceGlobalUnfold.NoGlobal events
+finalValid : Valid fuel.native.machine.heap laterMemos
+⊢ Trace ?m.547 (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+    (Control.code (Code.pure after)) fuel
+lean/MicroCFTA/SourceCurrentAllocatedSeededMemos.lean:151:55: error: don't know how to synthesize implicit argument `fuel`
+  @NativeReads.silent width inst✝¹ inst✝ (Value Symbol Guard) ?m.547
+    (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) (Control.code (Code.pure after)) later
+    fuel ?m.552 laterMemos events checked quiet
+context:
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+unconstrained : Value Symbol Guard → Bool
+anchor : InternedConstructorTemplates.State Symbol Guard
+anchorSemantic : SemanticReady anchor
+anchorReady : GateReady anchor
+values : List (Value Symbol Guard)
+paths✝ : List (List Int)
+before✝ after✝ : Checked width
+result✝ : Value Symbol Guard
+path : List Int
+before : Checked width
+value : Value Symbol Guard
+middle : Checked width
+next : List Int
+paths : List (List Int)
+tail : Value Symbol Guard
+later : Checked width
+result : Nat
+after : Value Symbol Guard
+fuel : Checked width
+operand : Operand path values before value middle
+remaining : Fold values (next :: paths) middle tail later
+native :
+  Trace result (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+    (Control.code (Code.pure after)) fuel
+ih :
+  FoldRanges values (next :: paths) middle →
+    Good middle →
+      SourceCurrentConjunctionRowsAllocation.Ready (physical middle) →
+        Scoped middle.native →
+          Idle middle.native →
+            Values middle.native.machine.heap values →
+              Grows anchor middle.native.machine.heap →
+                (∀ (path : List Int), path ∈ next :: paths → PathSupport unconstrained anchor path values) →
+                  ∀ (memos : Memos),
+                    Valid middle.native.machine.heap memos →
+                      ∃ saved,
+                        FoldReads remaining memos saved ∧
+                          Valid later.native.machine.heap saved ∧
+                            Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query
+good : Good before
+ready : SourceCurrentConjunctionRowsAllocation.Ready (physical before)
+scopes : Scoped before.native
+idle : Idle before.native
+available : Values before.native.machine.heap values
+growth : Grows anchor before.native.machine.heap
+supported : ∀ (path_1 : List Int), path_1 ∈ path :: next :: paths → PathSupport unconstrained anchor path_1 values
+memos : Memos
+valid : Valid before.native.machine.heap memos
+rest :
+  ∀ (value : Value Symbol Guard) (middle : Checked width),
+    Operand path values before value middle → FoldRanges values (next :: paths) middle
+nativeRanges :
+  ∀ (value : Value Symbol Guard) (middle : Checked width) (tail : Value Symbol Guard) (later : Checked width),
+    Operand path values before value middle →
+      Fold values (next :: paths) middle tail later →
+        SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (Control.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+first :
+  Good middle ∧
+    Effects (physical before) (physical middle) ∧
+      Extension before.native.machine middle.native.machine ∧
+        Scoped middle.native ∧ Idle middle.native ∧ Available middle.native.machine.heap value ∧ value.free = []
+middleMemos : Memos
+firstRead : OperandReads operand memos middleMemos
+middleValid : Valid middle.native.machine.heap middleMemos
+firstRetained : Extends memos.unfolding middleMemos.unfolding
+firstSame : middleMemos.query = memos.query
+middleValues : Values middle.native.machine.heap values
+middleGrowth : Grows anchor (physical middle).heap
+tailSupport : ∀ (path : List Int), path ∈ next :: paths → PathSupport unconstrained anchor path values
+laterMemos : Memos
+tailRead : FoldReads remaining middleMemos laterMemos
+laterValid : Valid later.native.machine.heap laterMemos
+tailRetained : Extends middleMemos.unfolding laterMemos.unfolding
+tailSame : laterMemos.query = middleMemos.query
+tailEffects :
+  Good later ∧
+    Effects (physical middle) (physical later) ∧
+      Extension middle.native.machine later.native.machine ∧
+        Scoped later.native ∧ Idle later.native ∧ Available later.native.machine.heap tail ∧ tail.free = []
+events : List (SourceGlobalUnfold.Event Symbol Guard)
+checked :
+  SourceGlobalUnfold.Runs { heap := later.native.machine.heap, unfolding := laterMemos.unfolding }
+    { heap := fuel.native.machine.heap, unfolding := laterMemos.unfolding } events
+quiet : SourceGlobalUnfold.NoGlobal events
+finalValid : Valid fuel.native.machine.heap laterMemos
+⊢ Nat
