@@ -1,0 +1,66 @@
+MicroCFTA.SourceCurrentAllocatedNativeConstructedHistory.query_complete {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] {initialCache finalCache : Cache.State Key} {originals : List Guard}
+  (history : SourceEqualityOriginalAllocationHistory.History initialCache finalCache originals)
+  (initialValid : Cache.Valid initialCache) (expression : InternedNestedConstruction.Syntax Symbol Guard)
+  (covered : ∀ (original : Guard), original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals)
+  (value : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard)
+  (built :
+    InternedFreshOrdinaryConstruction.build expression [] empty = InternedNestedConstruction.Outcome.done value heap)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (pairs : List (Value Symbol Guard × Value Symbol Guard))
+  (available : Values heap (SourceCurrentAllocatedNativeColdHistoryExact.operands pairs))
+  (closed :
+    ∀ (operand : Value Symbol Guard),
+      operand ∈ SourceCurrentAllocatedNativeColdHistoryExact.operands pairs → operand.free = [])
+  (ranges :
+    WordRanges (Control.code (SourceCurrentAllocatedNativeWarmHistory.program pairs))
+      { native := initial width { heap := heap, domains := emptyState },
+        operations := SourceEqualityConstraintMemoAllocation.initial finalCache }) :
+  ∃ inputs fuel values after,
+    SourceCurrentAllocatedNativeWarmHistory.Receipt heap formulas solver inputs fuel pairs
+      { native := initial width { heap := heap, domains := emptyState },
+        operations := SourceEqualityConstraintMemoAllocation.initial finalCache }
+      values after
+MicroCFTA.SourceCurrentAllocatedNativePreparedHistory.query_complete {width : Nat} [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] (initialCache : Cache.State Key) (initialValid : Cache.Valid initialCache)
+  (expression : InternedNestedConstruction.Syntax Symbol Guard)
+  (cached :
+    ∀ (original : Guard),
+      original ∈ SourceEqualityConstraintOrigins.guards expression →
+        SourceEqualityGuardReadback.Cached original.equalities)
+  (value : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard)
+  (built :
+    InternedFreshOrdinaryConstruction.build expression [] empty = InternedNestedConstruction.Outcome.done value heap)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (pairs : List (Value Symbol Guard × Value Symbol Guard))
+  (available : Values heap (SourceCurrentAllocatedNativeColdHistoryExact.operands pairs))
+  (closed :
+    ∀ (operand : Value Symbol Guard),
+      operand ∈ SourceCurrentAllocatedNativeColdHistoryExact.operands pairs → operand.free = [])
+  (ranges :
+    WordRanges (Control.code (SourceCurrentAllocatedNativeWarmHistory.program pairs))
+      { native := initial width { heap := heap, domains := emptyState },
+        operations :=
+          SourceEqualityConstraintMemoAllocation.initial
+            (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+                initialCache).snd }) :
+  ∃ fields,
+    SourceEqualityOriginalAllocationPreparation.Receipt (SourceEqualityConstraintOrigins.guards expression) initialCache
+        fields
+        (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+            initialCache).snd ∧
+      ∃ inputs fuel values after,
+        SourceCurrentAllocatedNativeWarmHistory.Receipt heap formulas solver inputs fuel pairs
+          { native := initial width { heap := heap, domains := emptyState },
+            operations :=
+              SourceEqualityConstraintMemoAllocation.initial
+                (SourceEqualityOriginalAllocationPreparation.prepare (SourceEqualityConstraintOrigins.guards expression)
+                    initialCache).snd }
+          values after
+'MicroCFTA.SourceCurrentAllocatedNativeConstructedHistory.query_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativePreparedHistory.query_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.OriginalEntryKernelProbe.prepared_actual_complete' depends on axioms: [propext, Classical.choice, Quot.sound]

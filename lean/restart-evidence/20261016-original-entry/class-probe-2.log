@@ -1,0 +1,163 @@
+'MicroCFTA.SourceCurrentClassHistoryEntry.constructed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentClassHistoryEntry.entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentClassHistoryEntry.cold_scan_memos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceCurrentClassHistoryEntry.cold_scan_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+@SourceCurrentClassHistoryEntry.constructed : ∀ {initialCache finalCache : Cache.State Key} {originals : List Guard}
+  [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (width : Nat),
+  History initialCache finalCache originals →
+    Cache.Valid initialCache →
+      ∀ (expression : InternedNestedConstruction.Syntax Symbol Guard),
+        (∀ (original : Guard), original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+          ∀ (value : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard),
+            InternedFreshOrdinaryConstruction.build expression [] empty =
+                InternedNestedConstruction.Outcome.done value heap →
+              SourceEqualityConstraintMemoAllocation.Valid (operations finalCache) ∧
+                SourceEqualityNativeScoped.IdleReady SourceEqualityConstraintConstructors.top
+                    SourceEqualityPCSNativeEdge.conjoin (SourceEqualityNativeInitial.cold width heap) ∧
+                  InternedFreshOrdinaryCostHeap.Heap heap ∧
+                    SourceEqualityNativeDemandFieldHeap.Heap heap ∧
+                      Available heap value ∧
+                        value.free = [] ∧
+                          ∀ (edge : EdgeValue Symbol Guard),
+                            EdgeResident heap edge →
+                              InternedNestedProvenance.Values heap edge.children ∧
+                                ∃ loaded,
+                                  SourceEqualityConstraintFieldLookup.load edge.entry.key.constraint finalCache =
+                                      Except.ok (some loaded) ∧
+                                    SourceEqualityConjoinAllocation.readback loaded = edge.entry.key.constraint ∧
+                                      SourceEqualityConstraintAllocation.Ready finalCache loaded.stored ∧
+                                        SourceEqualityPhysicalPayload.read edge.entry.key.constraint.equalities =
+                                          Except.ok loaded.stored.payload
+@SourceCurrentClassHistoryEntry.entry : ∀ {initialCache finalCache : Cache.State Key} {originals : List Guard}
+  [DecidableEq Symbol] [inst : DecidableEq (EdgeKey Symbol Guard)] (width : Nat),
+  History initialCache finalCache originals →
+    Cache.Valid initialCache →
+      ∀ (expression : InternedNestedConstruction.Syntax Symbol Guard),
+        (∀ (original : Guard), original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+          ∀ (value : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard),
+            InternedFreshOrdinaryConstruction.build expression [] empty =
+                InternedNestedConstruction.Outcome.done value heap →
+              ∀ (edge : EdgeValue Symbol Guard),
+                EdgeResident heap edge →
+                  ∃ loaded,
+                    SourceEqualityConstraintFieldLookup.load edge.entry.key.constraint finalCache =
+                        Except.ok (some loaded) ∧
+                      SourceEqualityConjoinAllocation.readback loaded = edge.entry.key.constraint ∧
+                        SourceEqualityConstraintAllocation.Ready finalCache loaded.stored ∧
+                          ∀ (inherited : Stored),
+                            SourceEqualityConstraintAllocation.Ready finalCache inherited →
+                              ∃ branch,
+                                (prefix loaded.stored loaded.guard inherited (operations finalCache)).fst =
+                                    Except.ok branch ∧
+                                  SourceEqualityPhysicalClassEntry.entry edge.entry.key.constraint inherited.payload =
+                                      Except.ok branch ∧
+                                    SourceEqualityConstraintMemoAllocation.Valid
+                                        (prefix loaded.stored loaded.guard inherited (operations finalCache)).snd ∧
+                                      SourceEqualityConstraintMemoAllocation.Grows (operations finalCache)
+                                        (prefix loaded.stored loaded.guard inherited (operations finalCache)).snd
+@SourceCurrentClassHistoryEntry.cold_scan_memos : ∀ {initialCache finalCache : Cache.State Key} {originals : List Guard}
+  [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (width : Nat),
+  History initialCache finalCache originals →
+    Cache.Valid initialCache →
+      ∀ (expression : InternedNestedConstruction.Syntax Symbol Guard),
+        (∀ (original : Guard), original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+          ∀ (value : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard),
+            InternedFreshOrdinaryConstruction.build expression [] empty =
+                InternedNestedConstruction.Outcome.done value heap →
+              ∀ (edge : EdgeValue Symbol Guard),
+                EdgeResident heap edge →
+                  ∀ (formulas : SourceGuards.Formulas FullSyntax.Formula)
+                    (solver : SourceGuards.Entailment FullSyntax.Formula),
+                    ∃ loaded,
+                      SourceEqualityConstraintFieldLookup.load edge.entry.key.constraint finalCache =
+                          Except.ok (some loaded) ∧
+                        SourceEqualityConjoinAllocation.readback loaded = edge.entry.key.constraint ∧
+                          SourceEqualityConstraintAllocation.Ready finalCache loaded.stored ∧
+                            ∀ (inherited : Stored),
+                              SourceEqualityConstraintAllocation.Ready finalCache inherited →
+                                ∀ (output : List SourceEqualityClassOrder.Record),
+                                  (prefix loaded.stored loaded.guard inherited (operations finalCache)).fst =
+                                      Except.ok (SourceEqualityPrecheck.Branch.classes output) →
+                                    ∀ {selected : EqualityNormalize.Constraints}
+                                      {outcome : Option EqualityNormalize.Class}
+                                      {after : SourceRecursiveIntersectionThunks.State width Symbol Guard}
+                                      {saved : SourceCurrentEmptinessMemo.Memo}
+                                      (trace :
+                                        SourceCurrentEqualityClassScan.Scan SourceMemoGate.unconstrained
+                                          (SourceEndpointReachability.reaches SourceMemoGate.unconstrained)
+                                          edge.children (List.map SourceEqualityClassOrder.Record.paths output)
+                                          (SourceEqualityNativeInitial.cold width heap) SourceCurrentEmptinessMemo.empty
+                                          outcome selected after saved),
+                                      SourceEqualityConstraintMemoAllocation.Valid
+                                          (prefix loaded.stored loaded.guard inherited (operations finalCache)).snd ∧
+                                        SourceEqualityConstraintMemoAllocation.Grows (operations finalCache)
+                                            (prefix loaded.stored loaded.guard inherited (operations finalCache)).snd ∧
+                                          ∃ final,
+                                            SourceCurrentClassScanGlobalMemos.ScanReads trace
+                                                EndpointMemoGateTrace.empty final ∧
+                                              EndpointMemoGateTrace.Valid after.machine.heap final ∧
+                                                SourceEqualityNativeScoped.IdleReady
+                                                    SourceEqualityConstraintConstructors.top
+                                                    SourceEqualityPCSNativeEdge.conjoin after ∧
+                                                  InternedFreshOrdinaryCostHeap.Heap after.machine.heap ∧
+                                                    SourceEqualityNativeDemandFieldHeap.Heap after.machine.heap ∧
+                                                      SourceEqualityRequiredCache.Keeps heap after.machine.heap ∧
+                                                        InternedNestedProvenance.Values after.machine.heap
+                                                            edge.children ∧
+                                                          SourceCurrentEmptinessMemo.Correct formulas solver
+                                                              after.machine.heap saved ∧
+                                                            SourceCurrentEmptinessMemo.Extends
+                                                              SourceCurrentEmptinessMemo.empty saved
+@SourceCurrentClassHistoryEntry.cold_scan_sound : ∀ {initialCache finalCache : Cache.State Key} {originals : List Guard}
+  [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (width : Nat),
+  History initialCache finalCache originals →
+    Cache.Valid initialCache →
+      ∀ (expression : InternedNestedConstruction.Syntax Symbol Guard),
+        (∀ (original : Guard), original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+          ∀ (value : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard),
+            InternedFreshOrdinaryConstruction.build expression [] empty =
+                InternedNestedConstruction.Outcome.done value heap →
+              ∀ (edge : EdgeValue Symbol Guard),
+                EdgeResident heap edge →
+                  ∀ (formulas : SourceGuards.Formulas FullSyntax.Formula)
+                    (solver : SourceGuards.Entailment FullSyntax.Formula) (ambient : InternedGuardedLanguage.Env Symbol)
+                    (term : Term Symbol),
+                    InternedGuardedLanguage.edgeMeaning (SourceSymbolicIndex.acceptsConstraint formulas solver) ambient
+                        edge term →
+                      ∃ loaded,
+                        SourceEqualityConstraintFieldLookup.load edge.entry.key.constraint finalCache =
+                            Except.ok (some loaded) ∧
+                          SourceEqualityConjoinAllocation.readback loaded = edge.entry.key.constraint ∧
+                            SourceEqualityConstraintAllocation.Ready finalCache loaded.stored ∧
+                              ∀ (inherited : Stored),
+                                SourceEqualityConstraintAllocation.Ready finalCache inherited →
+                                  ∀ (output : List SourceEqualityClassOrder.Record),
+                                    (prefix loaded.stored loaded.guard inherited (operations finalCache)).fst =
+                                        Except.ok (SourceEqualityPrecheck.Branch.classes output) →
+                                      ∀ {selected : EqualityNormalize.Constraints}
+                                        {outcome : Option EqualityNormalize.Class}
+                                        {after : SourceRecursiveIntersectionThunks.State width Symbol Guard}
+                                        {saved : SourceCurrentEmptinessMemo.Memo},
+                                        SourceCurrentEqualityClassScan.Scan SourceMemoGate.unconstrained
+                                            (SourceEndpointReachability.reaches SourceMemoGate.unconstrained)
+                                            edge.children (List.map SourceEqualityClassOrder.Record.paths output)
+                                            (SourceEqualityNativeInitial.cold width heap)
+                                            SourceCurrentEmptinessMemo.empty outcome selected after saved →
+                                          outcome = none
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261016-original-entry/class-probe.lean:71:87: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.27 = ?m.27
+but is expected to have type
+  InternedFreshOrdinaryConstruction.build InternedNestedConstruction.Syntax.empty [] empty =
+    InternedNestedConstruction.Outcome.done Value.empty empty
+in the application
+  SourceCurrentClassHistoryEntry.constructed width (History.start cache) Cache.empty_valid
+    InternedNestedConstruction.Syntax.empty
+    (fun original member =>
+      List.Mem.casesOn (motive := fun a t =>
+        SourceEqualityConstraintOrigins.guards InternedNestedConstruction.Syntax.empty = a → member ≍ t → original ∈ [])
+        member (fun as h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+        (fun b {as} a h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+        (Eq.refl (SourceEqualityConstraintOrigins.guards InternedNestedConstruction.Syntax.empty)) (HEq.refl member))
+    Value.empty empty rfl

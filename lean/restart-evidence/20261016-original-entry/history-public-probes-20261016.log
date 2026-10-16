@@ -1,0 +1,72 @@
+'MicroCFTA.SourceEqualityOriginalAllocationHistory.History.cached' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceEqualityOriginalAllocationHistory.History.cached_inventory' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceEqualityOriginalAllocationHistory.History.syntax_valid' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceEqualityOriginalAllocationHistory.History.fields' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeOriginalHistory.constructed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@History.cached : ∀ {Formula : Type} {initial final : Cache.State SourceEqualityPartialConstraintKey.Key}
+  {originals : List (SourceSymbolicIndex.Constraint Formula)},
+  History initial final originals →
+    ∀ (original : SourceSymbolicIndex.Constraint Formula),
+      original ∈ originals → SourceEqualityGuardReadback.Cached original.equalities
+@History.cached_inventory : ∀ {Formula Symbol : Type}
+  {initial final : Cache.State SourceEqualityPartialConstraintKey.Key}
+  {originals : List (SourceSymbolicIndex.Constraint Formula)},
+  History initial final originals →
+    ∀ (expression : InternedNestedConstruction.Syntax Symbol (SourceSymbolicIndex.Constraint Formula)),
+      (∀ (original : SourceSymbolicIndex.Constraint Formula),
+          original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+        ∀ (original : SourceSymbolicIndex.Constraint Formula),
+          original ∈ SourceEqualityConstraintOrigins.guards expression →
+            SourceEqualityGuardReadback.Cached original.equalities
+@History.syntax_valid : ∀ {Formula Symbol : Type} {initial final : Cache.State SourceEqualityPartialConstraintKey.Key}
+  {originals : List (SourceSymbolicIndex.Constraint Formula)},
+  History initial final originals →
+    ∀ (expression : InternedNestedConstruction.Syntax Symbol (SourceSymbolicIndex.Constraint Formula)),
+      (∀ (original : SourceSymbolicIndex.Constraint Formula),
+          original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+        InternedFreshOrdinaryConstraintHeap.SyntaxValid
+          (fun guard => SourceEqualityGuardReadback.Cached guard.equalities) expression
+@History.fields : ∀ {Formula Symbol : Type} {initial final : Cache.State SourceEqualityPartialConstraintKey.Key}
+  {originals : List (SourceSymbolicIndex.Constraint Formula)},
+  History initial final originals →
+    Cache.Valid initial →
+      ∀ [inst : DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))]
+        (expression : InternedNestedConstruction.Syntax Symbol (SourceSymbolicIndex.Constraint Formula)),
+        (∀ (original : SourceSymbolicIndex.Constraint Formula),
+            original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+          ∀ (value : Value Symbol (SourceSymbolicIndex.Constraint Formula))
+            (heap : InternedConstructorTemplates.State Symbol (SourceSymbolicIndex.Constraint Formula)),
+            InternedFreshOrdinaryConstruction.build expression [] empty =
+                InternedNestedConstruction.Outcome.done value heap →
+              SourceCurrentConjunctionEquality.Fields (SourceEqualityConstraintMemoAllocation.initial final) heap
+@SourceCurrentAllocatedNativeOriginalHistory.constructed : ∀
+  [inst :
+    DecidableEq
+      (EdgeKey (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (width : Nat) {initial final : Cache.State SourceEqualityPartialConstraintKey.Key}
+  {originals : List (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  History initial final originals →
+    Cache.Valid initial →
+      ∀
+        (expression :
+          InternedNestedConstruction.Syntax (SourceObservations.Label FullSyntax.Formula)
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+        (∀ (original : SourceSymbolicIndex.Constraint FullSyntax.Formula),
+            original ∈ SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+          ∀
+            (value :
+              Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+            (heap :
+              InternedConstructorTemplates.State (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+            InternedFreshOrdinaryConstruction.build expression [] empty =
+                InternedNestedConstruction.Outcome.done value heap →
+              SourceCurrentAllocatedNativePhysicalCompletion.Good
+                  { native := SourceRecursiveIntersectionThunks.initial width { heap := heap, domains := emptyState },
+                    operations := SourceEqualityConstraintMemoAllocation.initial final } ∧
+                SourceEqualityRequiredSemanticCache.SemanticReady heap ∧
+                  Available heap value ∧ value.free = [] ∧ SourceRecursiveIntersectionInputView.Original value

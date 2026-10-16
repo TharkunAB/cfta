@@ -1,0 +1,42 @@
+'MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare_head_error' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare_tail_error' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare_cons_done' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceEqualityOriginalAllocationPreparation.Receipt.retained' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceEqualityOriginalAllocationPreparation.Receipt.load' depends on axioms: [propext, Quot.sound]
+@prepare : {Formula : Type} → List (Guard Formula) → State Key → Except String (List Value) × State Key
+@prepare_head_error : ∀ {Formula : Type} (original : Guard Formula) (rest : List (Guard Formula))
+  (before after : State Key) (message : String),
+  construct original.equalities before = (Except.error message, after) →
+    prepare (original :: rest) before = (Except.error message, after)
+@prepare_tail_error : ∀ {Formula : Type} (original : Guard Formula) (rest : List (Guard Formula))
+  (before middle after : State Key) (value : Value) (message : String),
+  construct original.equalities before = (Except.ok value, middle) →
+    prepare rest middle = (Except.error message, after) →
+      prepare (original :: rest) before = (Except.error message, after)
+@prepare_cons_done : ∀ {Formula : Type} (original : Guard Formula) (rest : List (Guard Formula))
+  (before middle after : State Key) (value : Value) (values : List Value),
+  construct original.equalities before = (Except.ok value, middle) →
+    prepare rest middle = (Except.ok values, after) →
+      prepare (original :: rest) before = (Except.ok (value :: values), after)
+@Receipt.retained : ∀ {Formula : Type} {originals : List (Guard Formula)} {before after : State Key}
+  {values : List Value}, Receipt originals before values after → Extends before.table after.table
+@prepare_complete : ∀ {Formula : Type} (originals : List (Guard Formula)) (before : State Key),
+  Valid before →
+    (∀ (original : Guard Formula), original ∈ originals → SourceEqualityGuardReadback.Cached original.equalities) →
+      ∃ values after, Receipt originals before values after
+@Receipt.load : ∀ {Formula : Type} {originals : List (Guard Formula)} {before after : State Key} {values : List Value},
+  Receipt originals before values after →
+    ∀ (original : Guard Formula),
+      original ∈ originals →
+        ∃ value,
+          SourceEqualityConstraintFieldLookup.load original after = Except.ok (some value) ∧
+            SourceEqualityConjoinAllocation.readback value = original ∧
+              Ready after value.stored ∧
+                SourceEqualityPhysicalPayload.read original.equalities = Except.ok value.stored.payload
+(Except.ok [some 1, some 1], 2)
+(Except.error "toPathTrie: input paths must be distinct, with none a prefix of another", 1)
+(Except.ok [none], 1)
