@@ -2,6 +2,70 @@ Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 Read NEXT-PROMPT.md, HANDOFF.md, root FINDINGS.md, CONTEXT.md, and docs/adr/0004-explicit-graph-boundary.md. Then read lean/notes-sized-finite-keys.md and the note for the next proof target. HANDOFF.md records the current proof map, commands, preservation hashes, and remaining obligations. Older next-target statements may be stale.
 
+## Current executable memo-aware class completion
+
+Audited source main is `6baa0e25`, merged at `416f0f39`.
+Proof commits are `e6cd7144`, `ed4d2a22`, `939612a9`, `ebc925e8`,
+and `91724f7b`. Audit and scope notes are in `6be321b2`.
+Full library scope stays active. Earlier sections retain their historical
+source definitions and proof boundaries.
+
+Executable memo-aware target, shared leaf, signed edit, row, and class
+workers now have successful graph correspondence and stable completion.
+Actual finite graphs derive sufficient bounds for the same results and
+full returned native, target-slot, and completed merge-table states.
+Initial physical invariants and selected domains construct finite targets
+and class passes. No future cache validity or recursive completion is supplied.
+Unselected original siblings can remain open.
+
+`SourceCurrentMemoPhysicalClassWorker.live_scan_pass` composes live entry,
+actual successful Scan, finite required execution, and one executable class
+pass under its reached range plan. The same pass supplies six-stage stable
+completion, a sufficient common bound, normalized fields, physical readiness,
+producer histories, selected domains, fourth-memo correctness, ordered global
+receipts, and independent original-forest language bounds. Only its completed
+merge table starts empty. The exact caller still checks original constraints.
+
+Successful Scan and actual-prefix native range checks remain premises.
+These bounds instrument logical execution. They do not measure runtime work.
+The sequential worker order does not prove literal lazy GHC forcing or
+cache-allocation order. Pending publication, runtime identities, concurrency,
+and concrete host representation remain separate obligations.
+
+Main adds conditional measures and derived-field diagnostics. The new
+measure evaluator follows chosen-only Ite and complete Option traversal for
+Boolean lists. The folding proof preserves full denotation and existing
+lowering interpretations under explicit integer laws. Label maps, substitution,
+sort preparation, onlyPoint, derived-type discovery, and diagnostic compilation
+remain frontend bridges. Static missing-child scans include both Ite branches.
+The derived-field precheck does not guarantee every named measure exists.
+
+The full pinned audit passes 2,220 jobs and 54,792 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Seventy-four public axiom probes and 43 kernel examples pass.
+Strict Nix build and all six suites pass: 755 examples plus golden.
+Fourmolu passes eight changed Haskell files. Cabal-gild passes four packages.
+Fifteen new modules, two notes, and three additive Audit imports preserve
+every earlier non-Audit proof file. Upstream changes eleven existing files.
+
+Read `lean/notes-current-memo-class-workers.md` and
+`lean/notes-main-6baa0e25.md`. Next continue general Scan and outer constrained
+completion, native allocation and checked semantic transfer, pending lazy
+publication and GHC demand, literal HashMap iteration and allocation order,
+import trim/DFS/SCC, whole enumeration and waiting counts, templates and typed
+refinements, heterogeneous generators, decision-model, curried/GHC, synthesis,
+normal forms, and every separate Sized contract. Keep the optimized interned
+core and all older constructor and equality work.
+
+Start: `/tmp/mcfta-memo-workers-checkpoint-20261016-0149/` (2,915 files).
+Closing: `/tmp/mcfta-memo-target-workers-checkpoint-20261016-0213/` (2,932 files).
+Script: `/tmp/mcfta-preserve-memo-target-workers-20261016.py`.
+Evidence uses `/tmp/mcfta-memo-target-workers-*` and `/tmp/mcfta-measure-choice-*`.
+Fourteen external drafts, stashes, and other worktrees remain. The last weekly
+allowance was 81%; it is stale. Stop owned work at 1% or less. No board posts
+or deployments. Push verified formalize checkpoints regularly. The full-library
+goal stays active. HANDOFF.md records the per-command SSH port 443 fallback.
+
 ## Current executable memo merge and physical class entry
 
 Audited source main is `4101746a`, merged at `0fca52f8`.
