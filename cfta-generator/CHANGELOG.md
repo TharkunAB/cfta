@@ -172,14 +172,20 @@ tree automata of `cfta`, with QuickCheck integration.
   node view, a datatype with the constructors of the datatype and the
   integers of their fields (`NodeView`). `deriveLTA` builds the generator
   that the combinators give, with their ranks, and reports a node view that
-  does not fit the datatype (`NodeMismatch`). `Measured` has one measure,
+  does not fit the datatype (`NodeMismatch`): the shapes of the constructors
+  differ, or the name of a constructor of the view does not start with the
+  name of the constructor in its place. `Measured` has one measure,
   `Contracted` none, and `MeasuredBy` named measures, the fields of a record
   (`MeasureRecord`) whose selector names are the names in the logic. `holds`,
   `measureOf`, and `measuresOf` run the invariant on values, and
-  `measuresAt` gives the measures of a value term. `atom` gives the
+  `measuresAt` gives the measures of a value term. `deriveLTARooted` and
+  `deriveLTAFromRooted` take a condition on the measures of the root, written
+  once over `Symbolic`, and `holdsRooted` runs it on values. `atom` gives the
   generator of each atomic field type. A contract conjunct about one atomic
   field becomes a condition on that field. A contract or a measure that reads
-  a field whose type has no atom and no measure is `UnmeasuredField`.
+  a field whose type has no atom and no measure is `UnmeasuredField`. The
+  module re-exports `Boolean`, `Symbolic`, `smaller`, `larger`, and
+  `literal`.
 - `Data.CFTA.Gen.Refinement.Derive.Internal`: the level below, exposed for
   integration and outside the PVP contract. `deriveLTAWith` takes the
   contracts and the measures by constructor name, as annotations

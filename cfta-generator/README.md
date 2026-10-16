@@ -1634,7 +1634,9 @@ the same order, and one field for each field: the integer of an atomic field,
 and the measure of a field of the datatype. So GHC checks the number of
 children, and `-Wincomplete-patterns` checks that each constructor has a
 clause. `deriveLTA` checks the node view against the datatype and reports
-`NodeMismatch`.
+`NodeMismatch`. The name of each constructor of the view starts with the
+name of the constructor of the datatype in its place, as `ConsNode` for
+`Cons`.
 
 On `Expr`, the functions give the formulas of the generator. Here
 `sortedLists` is the generator of SortedLists.hs: the contract conjuncts that
@@ -1683,16 +1685,28 @@ instance HasLTA Tree where
         balanced (BlackNode left right) = bh left .== bh right
         balanced (RedNode left right) = bh left .== bh right .&& col left .== 0 .&& col right .== 0
 
-trees = (`LTAGen.satisfying` \v -> col (measuresAt v) .== 0 .&& bh (measuresAt v) .<= 3)
-    <$> deriveLTA @Tree 6 mempty
+trees = deriveLTARooted @Tree 6 mempty (\root -> col root .== 0 .&& bh root .<= 3)
 ```
 
 These are the 25,728,160,405 trees of `RedBlackTrees.hs`, at the same ranks.
-`measuresAt` gives the measures of a value term, for a condition on the
-root, and `measuresOf` gives the measures of a value as the record. A
-selector such as `bh` is a Haskell function, so it cannot share a module with
-another function `bh`, such as a Liquid Haskell measure: put the record in its
-own module and import it qualified, or use `OverloadedRecordDot`.
+The condition on the root reads the measures of the root, and `holdsRooted`
+runs the same condition on values. `measuresOf` gives the measures of a value
+as the record, and `measuresAt` those of a value term. A selector such as
+`bh` is a Haskell function, so it cannot share a module with another function
+`bh`, such as a Liquid Haskell measure: put the record in its own module and
+import it qualified, or use `OverloadedRecordDot`.
+
+`Data.CFTA.Gen.Refinement.Derive` re-exports the logic: `Boolean`,
+`Symbolic`, and `literal`, which names a value of an enumeration on both
+sides, as in `color .== literal Black`. The class `HasLTA` is not necessary:
+a top-level `Invariant` with a type signature and `deriveLTAFrom` (or
+`deriveLTAFromRooted`) give the same generator, and one datatype can have
+several invariants. Give a constant in the `where` of an invariant a type
+signature, as `black :: (Num e) => e`; without it, the monomorphism
+restriction gives it one type, and GHC reports the functions of the
+invariant instead of the constant. A function of the `where` that reads a
+parameter of the invariant needs a signature too, when `TypeFamilies` or
+`GADTs` turn on `MonoLocalBinds`.
 
 A measure can choose with `ite` of `Data.CFTA.Refinement.Symbolic`, and
 `smaller` and `larger` come from it. An AVL tree computes its height and the
