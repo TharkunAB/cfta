@@ -1,5 +1,54 @@
 # Public API and source correspondence
 
+## Current plain parent and outer edge-call completion
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `8906d5e6`. Five additive modules derive complete
+plain parent ranges, returned-edge structural support, exact warm-owner
+input transport, and finite literal outer EdgeCall execution.
+Read lean/notes-current-plain-edge-completion.md and
+lean/restart-evidence/20261016-parent-plain/.
+Proof commits are `db438c0b` (full ranges), `b7fd0ee5` (returned domain),
+`3f817e89` (parent completion), `96a1afee` (owner inputs), and
+`6bbf2ee0` (outer edge-call completion).
+
+ParentPlain derives its own stable parent execution, strict Reads, full
+Post, and three-way child Shape from initial caller facts and the live
+effective-own-empty condition. Shape allows original children, erased
+slots, or the singleton Empty sentinel. It preserves child Region and
+bounds height; it does not preserve arity. Stored tracks this Shape for
+actual returned edge owners through begin, advance, and exact finish.
+
+PartialPlainEdgeCall.finite constructs literal completion from initial
+Context, inherited readiness, resident input, Plain, Stored, and the
+active-owner bound. It returns its own graph, strict Reads, reached Checks,
+full Post, result residency, Stored after, Shape, and EdgeLaw. A ready hit
+uses its captured owner. A new evaluation finishes the selected handle
+before descendants. No literal success, future body, range plan, or desired
+result law is a public input.
+
+Next construct node, rows, descendants, children, and walk completion in
+plain Region. Thread actual returned Context and Stored through every
+prefix. Read region-next-review.md in the evidence directory and the
+node-rank induction outline in the note. The constructed-root exact theorem
+still needs literal worker success. General constrained completion,
+unequal-length classes, and repeated-pass convergence remain open.
+The full-library objective includes languages, transformation contracts,
+exact size classes, finite execution, counts, ordered ranks and inverses,
+probability, current frontends, runtime, and full-pipeline composition.
+Keep all older constructor/equality work and the optimized interned core.
+
+The full Audit passes 2485 jobs and 58868 dependency checks. Preservation
+retains all 5648 starting files and 2479 older non-Audit proof sources.
+Thirty-one frozen manifests check 242 module entries. Historical repair
+records, stashes, and the three other worktrees remain. No Haskell file
+changes. Reuse current source validation: strict Nix build, 798 examples
+plus golden, six-file Fourmolu, and four-package Cabal-gild and metadata.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+any later repair there with its failure, executable reproducer, paths,
+commit, checks, and upstream status. Earlier sections are historical
+checkpoints. This is progress; the full objective remains active.
+
 ## Current constructed root entry and active-owner progress
 
 Source main remains `c0cc8a05`, merged at `896b0a1c`. The starting
