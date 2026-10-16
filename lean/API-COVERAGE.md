@@ -1,5 +1,44 @@
 # Public API and source correspondence
 
+## Current recursive native completion from initial resources
+
+Updated: 2026-10-17 01:17 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `3c8bc858`. Proof commits are
+`495ecd7c`, `0d4f89b0`, and `16a888d1`. Read
+`lean/notes-current-recursive-initial-ranges.md` and
+`lean/restart-evidence/20261017-recursive-prefix-admission/`.
+
+Eleven additive modules close the whole-query raw-prefix admission gap.
+Strong induction derives physical checks, current Good and SemanticReady,
+original operand scope, actual past domain allocation, and exact captured
+finish inputs. The caller supplies no future Prefixes, WordRanges, physical
+trace, or completed body. RecursiveInitialRanges.initial_ranges derives
+both range predicates from initial original counters and domain headroom.
+Its cold_complete returns the exact closed recursive intersection at the
+same actual checked result. Mu, references, and explicit unions are included.
+This section supersedes older statements that leave this cold range gap open.
+
+The full pinned Audit passes 2711 jobs and 61656 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. Strict current-source checks
+and all 114 imported public/integration axiom and full-signature pairs pass.
+Ten component manifests retain 200 entries. Independent reviews find no
+material defect. Preservation retains 9182 starting files, 2699 older
+non-Audit proofs, all 239 Haskell files, and 57 frozen production manifests
+with 468 entries. All earlier repairs, counterexamples, and drafts remain.
+
+The coarse domain inventory can exceed fixed machine capacity. This is a
+sufficient initial condition, not coverage of every practical input. Output
+allocation and concrete runtime bounds remain separate. Serial warm-query
+pipelines still need their own certificate producers and composition.
+Next extend general constrained recursive selected-path progress. Read
+next-recursive-selected-progress.md in the new evidence directory. Repeated
+convergence, frontend and runtime adapters, and complete public pipelines
+remain open. The full-library goal stays active.
+
+No Haskell change or new defect occurs. FINDINGS keeps merged b9219b9e and
+the external repair handoff first. Reuse unchanged strict Nix validation:
+798 examples plus golden, Fourmolu, and Cabal-gild. Preserve the optimized core.
+
 ## Current recursive domain inventory and allocation
 
 Updated: 2026-10-17 00:58 CEST. Source main remains `c0cc8a05`.
