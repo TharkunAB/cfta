@@ -55,10 +55,10 @@ test/holes/Holes.hs:9:11: error: [GHC-88464]
           (imported from `Prelude' at test/holes/Holes.hs:1:8-12
            (and originally defined in `GHC.Internal.Data.Foldable'))
         \x1 -> mconcat (sequence x1)
-        \x1 -> head (sequence x1)
-        \x1 -> last (sequence x1)
         \x1 -> mconcat (sequenceA x1)
-        \x1 -> head (sequenceA x1)
+        \x1 -> mconcat (cycle x1)
+        \x1 -> mconcat (init x1)
+        \x1 -> mconcat (reverse x1)
         (Some hole fits suppressed; use -fmax-valid-hole-fits=N or -fno-max-valid-hole-fits)
   |
 9 | flatten = _
@@ -97,11 +97,11 @@ test/holes/Holes.hs:12:11: error: [GHC-88464]
           with mempty @((a -> b) -> [a] -> [b])
           (imported from `Prelude' at test/holes/Holes.hs:1:8-12
            (and originally defined in `GHC.Internal.Base'))
-        \x1 x2 -> (<*>) (repeat x1) x2
-        \x1 x2 -> (<*>) (pure x1) x2
-        \x1 x2 -> (<*>) (return x1) x2
-        \x1 x2 -> fmap x1 (cycle x2)
-        \x1 x2 -> fmap x1 (init x2)
+        \x1 x2 -> pure (x1 (head x2))
+        \x1 x2 -> pure (x1 (last x2))
+        \x1 x2 -> return (x1 (head x2))
+        \x1 x2 -> return (x1 (last x2))
+        \x1 x2 -> cycle (fmap x1 x2)
    |
 12 | mapList = _
    |           ^
@@ -143,9 +143,9 @@ test/holes/Holes.hs:20:23: error: [GHC-88464]
         fallback :: a (bound at test/holes/Holes.hs:20:9)
         head xs
         last xs
-        foldl1 const Nothing
-        foldr1 const Nothing
-        foldl1 const []
+        foldl1 asTypeOf Nothing
+        foldr1 asTypeOf Nothing
+        foldl1 asTypeOf []
    |
 20 | firstOr fallback xs = _
    |                       ^

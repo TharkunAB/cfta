@@ -34,7 +34,9 @@ machinery does, so that a hole-fit plugin can call it. It takes GHC's
   each of those classes can hold: the type constructors of the candidates'
   types and of the query, the function type, and a rigid variable of the
   query that an instance matches. So @maximum@ does not have a rigid goal
-  @a@ without a given @Ord a@.
+  @a@ without a given @Ord a@. A run that does not determine such a
+  variable lists one typed term for it ('Data.CFTA.Gen.Synthesis.TypeDomain'),
+  not one for each type of its domain.
 * Each program is checked in preorder, one leaf at a time
   ("Data.CFTA.GHC.Internal.Check"), as a refinement hole fit, with the
   parts of 'GHC.Tc.Errors.Hole.tcCheckHoleFit': 'tcSubTypeSigma' at the
@@ -123,7 +125,7 @@ import Data.IORef (atomicModifyIORef', modifyIORef', newIORef, readIORef, writeI
 import Data.List (nub, sort)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, isJust, mapMaybe)
+import Data.Maybe (catMaybes, fromMaybe, isJust, mapMaybe)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -132,6 +134,7 @@ import GHC.Clock (getMonotonicTimeNSec)
 
 import Data.CFTA.GHC.Erase (
     anyResult,
+    classKey,
     curriedClasses,
     erase,
     eraseCurried,
@@ -143,7 +146,7 @@ import Data.CFTA.GHC.Erase (
 import Data.CFTA.GHC.Internal.Check
 import Data.CFTA.GHC.NormalForm (NormalForm, mentions, normalForm, termOfId)
 import Data.CFTA.GHC.States (holeGoals)
-import Data.CFTA.Gen.Synthesis (Defaulting (..), Encoding (..), Program (..))
+import Data.CFTA.Gen.Synthesis (Defaulting (..), Domain (..), Encoding (..), Program (..))
 import qualified Data.CFTA.Gen.Synthesis as Hectare
 import Data.CFTA.Gen.Synthesis.States (Figures, Walking (..), searchStatesWith)
 import Data.CFTA.Gen.Synthesis.Walk (
@@ -166,8 +169,8 @@ import GHC.Builtin.Types.Prim (alphaTy, betaTy)
 import GHC.Core.Class (className)
 import GHC.Core.ConLike (ConLike (RealDataCon))
 import GHC.Core.DataCon (dataConName, dataConNonlinearType, dataConWrapId)
-import GHC.Core.InstEnv (lookupInstEnv)
-import GHC.Core.Predicate (mkClassPred)
+import GHC.Core.InstEnv (instanceSig, lookupInstEnv, nullUnifiers)
+import GHC.Core.Predicate (getClassPredTys_maybe, mkClassPred)
 import GHC.Core.TyCo.Compare (eqType)
 import GHC.Core.TyCo.FVs (tyCoVarsOfType, tyCoVarsOfTypesList)
 import GHC.Core.TyCon (isAlgTyCon, isClassTyCon, tyConResKind, tyConTyVars)
@@ -180,9 +183,12 @@ import GHC.Core.Type (
     mkTyVarTys,
     mkVisFunTyMany,
     splitAppTys,
+    splitTyConApp_maybe,
+    substTheta,
     substTyWith,
     tyConAppTyCon_maybe,
     tyConsOfType,
+    zipTvSubst,
  )
 import GHC.Data.Bag (bagToList, emptyBag)
 import GHC.Tc.Errors.Hole.FitTypes (TypedHole (..))
@@ -287,7 +293,7 @@ data Options = Options
     , optionTypeDomains :: Bool
     {- ^ With 'optionCurried': a variable of kind @Type@ with classes that
     the instances decide ranges over the types of the scope at which an
-    instance of each of those classes can hold.
+    instance of each of those classes can hold. On by default.
     -}
     , optionNormalForms :: Bool
     {- ^ Whether to use the normal forms of the fits: a fit with the normal
@@ -306,7 +312,7 @@ data Mode
       States Walking
     deriving (Eq, Show, Read)
 
--- | Programs of up to five leaves, the first ten fits, mode (a), no other limit, with Hectare's curried types and normal forms.
+-- | Programs of up to five leaves, the first ten fits, mode (a), no other limit, with Hectare's curried types, type domains, and normal forms.
 defaultOptions :: Options
 defaultOptions =
     Options
@@ -320,7 +326,7 @@ defaultOptions =
         , optionTrace = Nothing
         , optionCurried = True
         , optionOnlyDefaulted = False
-        , optionTypeDomains = False
+        , optionTypeDomains = True
         , optionNormalForms = True
         }
 
@@ -444,7 +450,11 @@ streamFits options hole candidates goal accept = do
         States _ -> pure []
     let encoding
             | optionCurried options =
-                Curried defaulting (domains environment instances <> typeDomains environment instances decided)
+                Curried
+                    defaulting
+                    ( Map.mapWithKey (HeadDomain . defaults) (domains environment instances)
+                        <> fmap TypeDomain (typeDomains environment instances decided)
+                    )
             | otherwise = FirstOrder
     -- The time of the checks of the fits' parts, which are checks too.
     ignoring <- liftIO (newIORef 0)
@@ -591,8 +601,7 @@ streamFits options hole candidates goal accept = do
     -- variable has a class only by an instance that matches it, as no given
     -- provides a decided class.
     typeDomains environment instances decided =
-        let keys = Map.fromList (concatMap (typeClasses decided . candidateType) candidates)
-            scope = goal : relevant <> map (body . candidateType) candidates
+        let scope = goal : relevant <> map (body . candidateType) candidates
             constructors =
                 [ mkTyConApp constructor (mkTyVarTys (tyConTyVars constructor))
                 | constructor <- nonDetEltsUniqSet (unionManyUniqSets (map (tyConsOfType . expandTypeSynonyms) scope))
@@ -604,8 +613,47 @@ streamFits options hole candidates goal accept = do
             function = mkVisFunTyMany alphaTy betaTy
             holds classes typ = all (\cls -> mayHold environment instances (mkClassPred cls [typ])) classes
             matches classes typ = all (\cls -> let (found, _, _) = lookupInstEnv False instances cls [typ] in not (null found)) classes
+            -- The classes that the context of the instance of each class puts
+            -- on the arguments of a type constructor, as a key with its
+            -- classes for each argument. An instance that is not the only one
+            -- that can apply (another match, or a unifier) puts no class on
+            -- the arguments, so a domain is never smaller than what GHC
+            -- accepts.
+            restrictions classes typ = case splitTyConApp_maybe typ of
+                Just (_, arguments) ->
+                    [ case nub [cls' | cls <- classes, cls' <- requiredOn cls argument] of
+                        [] -> Nothing
+                        classes' -> Just (classKey classes', classes')
+                    | argument <- arguments
+                    ]
+                Nothing -> []
+              where
+                requiredOn cls argument = case lookupInstEnv False instances cls [typ] of
+                    ([(instance', matched)], unifiers, _)
+                        | nullUnifiers unifiers ->
+                            let (variables, theta, _, _) = instanceSig instance'
+                                substitution = zipTvSubst variables [fromMaybe (mkTyVarTy variable) found | (variable, found) <- zip variables matched]
+                             in [ cls'
+                                | predicate <- substTheta substitution theta
+                                , Just (cls', [argument']) <- [getClassPredTys_maybe predicate]
+                                , argument' `eqType` argument
+                                , decided cls'
+                                ]
+                    _ -> []
+            -- A type constructor of the domain, with the domain of each
+            -- argument that the contexts restrict: ?Ord x0 for the first
+            -- argument of a list of Ord.
+            withArguments classes typ erased = case erased of
+                Hectare.TCons name arguments ->
+                    Hectare.TCons
+                        name
+                        [ maybe argument (\(key, _) -> Hectare.TCons ("?" <> key <> " x" <> Text.pack (show index)) []) restriction
+                        | (index, argument, restriction) <- zip3 [0 :: Int ..] arguments (restrictions classes typ <> repeat Nothing)
+                        ]
+                other -> other
             types classes =
-                sort (mapMaybe (eraseHead rigid) (filter (holds classes) constructors))
+                sort
+                    [withArguments classes typ erased | typ <- filter (holds classes) constructors, Just erased <- [eraseHead rigid typ]]
                     <> [Hectare.TFun (Hectare.TVar "x0") (Hectare.TVar "x1") | holds classes function]
                     <> [ Hectare.TCons name []
                        | variable <- free
@@ -613,16 +661,24 @@ streamFits options hole candidates goal accept = do
                        , matches classes (mkTyVarTy variable)
                        , Just name <- [rigid variable]
                        ]
-         in fmap types keys
-    -- With optionOnlyDefaulted, the keys of the curried variables, each with
-    -- whether it defaults to the list type under ExtendedDefaultRules: a
+            -- The keys of the variables, and the keys that their domains
+            -- restrict their arguments to, until no new key comes.
+            close known [] = known
+            close known ((key, classes) : rest)
+                | Map.member key known = close known rest
+                | otherwise =
+                    let found = types classes
+                        referenced = [restriction | typ <- filter (holds classes) constructors, Just restriction <- restrictions classes typ]
+                     in close (Map.insert key found known) (rest <> referenced)
+         in close Map.empty (concatMap (typeClasses decided . candidateType) candidates)
+    -- With optionOnlyDefaulted, whether a key of the curried variables of
+    -- kind * -> * defaults to the list type under ExtendedDefaultRules: a
     -- key of an interactive class (of which Foldable and Traversable have
     -- kind * -> *), or the key of no class, as a variable without a
     -- constraint fits at any type head.
     defaulted = optionCurried options && optionOnlyDefaulted options
-    defaulting
-        | defaulted = OnlyDefault (fmap (\classes -> null classes || any interactive classes) curriedKeys)
-        | otherwise = AnyHead
+    defaulting = if defaulted then OnlyDefault else AnyHead
+    defaults key = maybe False (\classes -> null classes || any interactive classes) (Map.lookup key curriedKeys)
     interactive cls = className cls `elem` [showClassName, eqClassName, ordClassName, foldableClassName, traversableClassName]
     -- A candidate's type without its foralls and contexts, so that its heads
     -- are visible (Maybe in the type of lookup).

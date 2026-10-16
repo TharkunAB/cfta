@@ -42,8 +42,8 @@ search with Hectare's curried types; @HECTARE_GHC_FIRST_ORDER@ makes them
 search with its first-order types ('optionCurried'), and
 @HECTARE_GHC_DEFAULTED@ with only the default of a type variable that a
 program does not determine ('optionOnlyDefaulted').
-@HECTARE_GHC_TYPE_DOMAINS@ gives a type variable of kind @Type@ the domain
-of its classes ('optionTypeDomains'). The names @hplus@ and
+@HECTARE_GHC_NO_TYPE_DOMAINS@ gives a type variable of kind @Type@ any
+type, not the domain of its classes ('optionTypeDomains'). The names @hplus@ and
 @stackoverflow@ stand for the queries of each suite; the Stack Overflow
 queries are the queries of Hectare's evaluation, with GHC's library of the
 rung. Next to the Hoogle+ queries, the parent takes the names of the
@@ -317,7 +317,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
             tracing <- isJust <$> lookupEnv "HECTARE_GHC_TRACE"
             firstOrder <- isJust <$> lookupEnv "HECTARE_GHC_FIRST_ORDER"
             defaulted <- isJust <$> lookupEnv "HECTARE_GHC_DEFAULTED"
-            typeDomains <- isJust <$> lookupEnv "HECTARE_GHC_TYPE_DOMAINS"
+            noTypeDomains <- isJust <$> lookupEnv "HECTARE_GHC_NO_TYPE_DOMAINS"
             normalForms <- (/= Just "off") <$> lookupEnv "HECTARE_GHC_NORMAL_FORMS"
             -- The normal forms of programs, built at the first fit.
             normalRef <- newIORef Nothing
@@ -345,7 +345,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                             , optionTrace = if tracing then Just trace else Nothing
                             , optionCurried = not firstOrder
                             , optionOnlyDefaulted = defaulted
-                            , optionTypeDomains = typeDomains
+                            , optionTypeDomains = not noTypeDomains
                             , optionNormalForms = normalForms
                             }
                     -- With normal forms, a fit with the normal form of the solution is the solution.

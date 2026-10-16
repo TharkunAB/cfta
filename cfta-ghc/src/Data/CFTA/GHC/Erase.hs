@@ -49,6 +49,7 @@ module Data.CFTA.GHC.Erase (
     eraseHead,
     curriedClasses,
     typeClasses,
+    classKey,
     anyResult,
     higherKinded,
     typeHeads,

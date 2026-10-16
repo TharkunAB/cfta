@@ -149,6 +149,8 @@ module Data.CFTA.Gen.Refinement.Derive (
     deriveLTAFrom,
     deriveLTARooted,
     deriveLTAFromRooted,
+    deriveLTAOn,
+    deriveLTAOnFrom,
     Invariant (..),
     invariantAnnotations,
 
@@ -206,6 +208,8 @@ import GHC.Generics (
  )
 import qualified GHC.Generics as Generic
 
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (Constraint)
 import Data.CFTA.Formula (Formula (Top))
 import Data.CFTA.Gen.Refinement (LTAGen, satisfying)
 import Data.CFTA.Gen.Refinement.Derive.Internal
@@ -471,6 +475,30 @@ rootMeasures rules value = case rules of
     Measured _ _ -> Single value
     Contracted _ -> NoMeasures
     MeasuredBy _ _ -> measuresAt value
+
+{- | Derive the refinement generator of the terms of an automaton over the
+constructors of a datatype, such as the typed language of
+'Data.CFTA.Gen.Typing.typingAutomaton', from the 'HasLTA' instance. The
+invariant holds on each term. The automaton must be acyclic and without
+constraints; 'Data.CFTA.Gen.Refinement.Derive.Internal.deriveLTAOnWith' says
+how it is built.
+-}
+deriveLTAOn ::
+    forall a state.
+    (HasLTA a, Ord state) => FTA.FTA state Constructor Constraint -> Atoms -> Either DeriveLTAError (LTAGen a)
+deriveLTAOn automaton atoms = deriveLTAOnFrom automaton atoms (invariant @a)
+
+-- | 'deriveLTAOn' with an invariant over a node view of the datatype, as 'deriveLTAFrom'.
+deriveLTAOnFrom ::
+    forall a state node m.
+    (HasFTA a, Ord state, NodeView node) =>
+    FTA.FTA state Constructor Constraint ->
+    Atoms ->
+    Invariant node m ->
+    Either DeriveLTAError (LTAGen a)
+deriveLTAOnFrom automaton atoms rules = do
+    annotations <- invariantAnnotations @a rules
+    deriveLTAOnWith @a automaton atoms annotations
 
 -- | The constructors of a datatype in declaration order, with whether each field is of the datatype itself.
 datatypeConstructors :: forall a. (HasFTA a) => [(Constructor, [Bool])]

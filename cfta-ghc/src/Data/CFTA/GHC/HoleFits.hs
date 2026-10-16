@@ -166,7 +166,7 @@ readOptions arguments = do
         ("programs", '=' : value) -> (\programs -> search (\o -> o{optionMaximumPrograms = Just programs})) <$> number value
         ("first-order", "") -> Right (search (\o -> o{optionCurried = False}))
         ("only-defaulted", "") -> Right (search (\o -> o{optionCurried = True, optionOnlyDefaulted = True}))
-        ("type-domains", "") -> Right (search (\o -> o{optionCurried = True, optionTypeDomains = True}))
+        ("no-type-domains", "") -> Right (search (\o -> o{optionTypeDomains = False}))
         ("normal-forms", '=' : "on") -> Right (search (\o -> o{optionNormalForms = True}))
         ("normal-forms", '=' : "off") -> Right (search (\o -> o{optionNormalForms = False}))
         ("rank", "") -> Right (options, ranking, True, settings)
@@ -178,7 +178,7 @@ readOptions arguments = do
             Left
                 ( "unknown option "
                     <> argument
-                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, type-domains, normal-forms, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
+                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
                 )
       where
         search change = (change options, ranking, ranked, settings)
