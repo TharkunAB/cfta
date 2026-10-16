@@ -197,6 +197,16 @@ tree automata of `cfta`, with QuickCheck integration.
   contracts and the measures by constructor name, as annotations
   (`contract`, `measure`, `measureNamed`, `fieldsContract`,
   `fieldsMeasure`), and `annotationFormulas` gives their formulas and terms.
+- `deriveLTAOn` and `deriveLTAOnFrom` in `Data.CFTA.Gen.Refinement.Derive`,
+  and `deriveLTAOnWith` in its internal module, derive the refinement
+  generator of the terms of an automaton over the constructors of a
+  datatype, such as a typed language of `Data.CFTA.Gen.Typing`, so that the
+  measures and the contracts of an invariant hold on its terms. Each state
+  is a `oneof` of its transitions, and each transition is the generator of
+  its constructor, as `deriveLTAWith` builds one over the field types. The
+  ranks follow the generators. An automaton with a cycle gives
+  `CyclicAutomaton`, and a transition with a constraint gives
+  `ConstrainedTransition`.
 - `Data.CFTA.Gen.Typing`: typed languages with variables, from typing rules
   for the constructors of a `HasFTA` datatype, by name. `rule` gives a
   constructor a type from the types of its fields. `subterm` is a field in

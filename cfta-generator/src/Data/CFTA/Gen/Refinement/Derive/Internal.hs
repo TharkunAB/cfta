@@ -1,3 +1,4 @@
+{-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE PatternSynonyms #-}
 
 {- | The level below "Data.CFTA.Gen.Refinement.Derive": the contracts and
@@ -34,6 +35,7 @@ most the bound times. A type that is in no cycle does not use a level.
 module Data.CFTA.Gen.Refinement.Derive.Internal (
     -- * Annotations by constructor name
     deriveLTAWith,
+    deriveLTAOnWith,
     Annotation (..),
     Contract (..),
     Measure (..),
@@ -57,18 +59,22 @@ module Data.CFTA.Gen.Refinement.Derive.Internal (
 import Control.Monad (unless, zipWithM)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Graph (SCC (..), stronglyConnComp)
+import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import Data.Proxy (Proxy (Proxy))
+import qualified Data.Set as Set
 import Data.String (fromString)
 import Data.Typeable (TypeRep, typeRep)
 
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (Constraint, noConstraint)
 import Data.CFTA.Formula (Formula (And, Atom, Top), Relation (Eq), conjunction)
 import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Gen.Error (GenError (EmptyGenerator))
 import Data.CFTA.Gen.Internal.Types (pattern Transparent)
 import Data.CFTA.Gen.Refinement (LTAGen, guarded, leaf, measured, measuredBy, node, oneof, satisfying)
-import Data.CFTA.Generic (Constructor (..), Description (..), HasFTA (..))
+import Data.CFTA.Generic (Constructor (..), Description (..), Field (..), HasFTA (..))
 import Data.CFTA.Index (ArgumentIndex (..), Arity (..), Depth)
 import Data.CFTA.Refinement (contractTermName)
 import Data.CFTA.Refinement.Expression (
@@ -122,6 +128,12 @@ data DeriveLTAError
       constructor name, the position of the field, and its type.
       -}
       UnmeasuredField !String !Int !TypeRep
+    | -- | The automaton of 'deriveLTAOnWith' has a cycle.
+      CyclicAutomaton
+    | {- | A transition of the automaton of 'deriveLTAOnWith' has a constraint.
+      The field is the name of its constructor.
+      -}
+      ConstrainedTransition !String
     deriving (Eq, Show)
 
 -- | Generators for atomic field types, by type.
@@ -259,6 +271,106 @@ contract and no measure.
 -}
 deriveLTAWith :: forall a. (HasFTA a) => Depth -> Atoms -> [(String, Annotation)] -> Either DeriveLTAError (LTAGen a)
 deriveLTAWith bound (Atoms atoms) named = do
+    Derivation derived annotationOf <- derivation @a (Atoms atoms) named
+    pure $ decodeValue <$> generatorOf (buildAll derived annotationOf) (typeRep $ Proxy @a)
+  where
+    generatorOf built typ = Map.findWithDefault (maybe emptyGenerator atomGenerator $ Map.lookup typ atoms) typ built
+
+    -- The types that refer to each other unfold together, as 'recurUpTo'
+    -- unfolds one type. A group comes after the groups that it refers to.
+    buildAll derived annotationOf = foldl buildGroup Map.empty $ stronglyConnComp graph
+      where
+        graph =
+            [ (typ, typ, nubOrd [field | Alternative _ fields <- alternatives, field <- fields, Map.member field derived])
+            | (typ, alternatives) <- Map.toList derived
+            ]
+        buildGroup built (AcyclicSCC typ) = Map.insert typ (step built typ) built
+        buildGroup built (CyclicSCC types)
+            | bound < 0 = Map.union emptyGroup built
+            | otherwise = Map.union (iterate unfold (unfold emptyGroup) !! fromEnum bound) built
+          where
+            emptyGroup = Map.fromList [(typ, emptyGenerator) | typ <- types]
+            unfold previous = Map.fromList [(typ, step (Map.union previous built) typ) | typ <- types]
+        step built typ = case Map.findWithDefault [] typ derived of
+            [alternative] -> alternativeGenerator built alternative
+            alternatives -> oneof $ map (alternativeGenerator built) alternatives
+        alternativeGenerator built (Alternative constructor fields) =
+            constructorGenerator annotationOf constructor (map (`Map.member` derived) fields) (map (generatorOf built) fields)
+
+{- | Derive the refinement generator of the terms of an automaton over the
+constructors of a datatype, such as the automaton of
+'Data.CFTA.Gen.Typing.typingAutomaton'.
+
+Each state of the automaton is a 'oneof' of its transitions, in order, and
+each transition is the generator of its constructor, with the contracts and
+the measures of the annotations, over the generators of its child states, as
+'deriveLTAWith' builds a constructor over the generators of its field types.
+A transition of an atomic type, or of a type that an atom replaces, is a
+'leaf' for each of its terms, whose refinement is the integer that the atom
+gives the term. So the ranks follow the generators, as for 'deriveLTAWith',
+and they are not the ranks of 'Data.CFTA.Gen.Typing.fromConstructorAutomaton'.
+
+The automaton must be acyclic ('CyclicAutomaton'), and its transitions must
+have no constraint ('ConstrainedTransition'), because a generator has no place
+for an equality between children. The checks of 'deriveLTAWith' on the names,
+the atoms, and the annotations apply.
+-}
+deriveLTAOnWith ::
+    forall a state.
+    (HasFTA a, Ord state) =>
+    FTA.FTA state Constructor Constraint ->
+    Atoms ->
+    [(String, Annotation)] ->
+    Either DeriveLTAError (LTAGen a)
+deriveLTAOnWith automaton (Atoms atoms) named = do
+    Derivation derived annotationOf <- derivation @a (Atoms atoms) named
+    unless (Set.null $ FTA.cyclicStates trimmed) $ Left CyclicAutomaton
+    case [constructorName symbol | FTA.Transition symbol _ constraint <- concat (Map.elems rows), constraint /= noConstraint] of
+        name : _ -> Left $ ConstrainedTransition name
+        [] -> pure ()
+    -- The automaton is acyclic, so each generator of the lazy map reads only
+    -- the generators of states below it.
+    let generators = LazyMap.map (stateGenerator derived annotationOf generators) rows
+    pure $ decodeValue <$> Map.findWithDefault emptyGenerator (FTA.initialState trimmed) generators
+  where
+    trimmed = FTA.trim automaton
+    rows = FTA.transitionTable trimmed
+
+    stateGenerator derived annotationOf generators transitions = case concatMap transitionGenerators transitions of
+        [] -> emptyGenerator
+        [generator] -> generator
+        alternatives -> oneof alternatives
+      where
+        transitionGenerators (FTA.Transition constructor children _) = case Map.lookup (constructorType constructor) atoms of
+            Just field ->
+                [ leaf term (fromString $ constructorName constructor) (.== fromInteger (integerOf field term))
+                | term <- termsOf (FTA.Transition constructor children noConstraint)
+                ]
+            Nothing ->
+                [ constructorGenerator
+                    annotationOf
+                    constructor
+                    [Map.member (fieldType field) derived | field <- constructorFields constructor]
+                    [Map.findWithDefault emptyGenerator child generators | child <- children]
+                ]
+
+    integerOf field term =
+        fromMaybe
+            (error "cfta-generator bug in Data.CFTA.Gen.Refinement.Derive: an atom without the integer of its term")
+            (atomInteger field term)
+
+    -- The terms of a transition, finitely many in an acyclic automaton.
+    termsOf (FTA.Transition constructor children _) =
+        Term.Node constructor <$> traverse (\child -> concatMap termsOf (Map.findWithDefault [] child rows)) children
+
+-- | The checked parts of a derivation: the types with constructors that no atom replaces, and the annotation of each constructor.
+data Derivation = Derivation !(Map.Map TypeRep [Alternative]) (Constructor -> Annotation)
+
+{- | Reach the types of a datatype, and check the names of the annotations, the
+atoms of the atomic types, and the arity and the parts of each annotation.
+-}
+derivation :: forall a. (HasFTA a) => Atoms -> [(String, Annotation)] -> Either DeriveLTAError Derivation
+derivation (Atoms atoms) named = do
     reached <- reach Map.empty (describeType $ Proxy @a)
     let derived = Map.filterWithKey (\typ _ -> not $ Map.member typ atoms) $ Map.mapMaybe id reached
         constructors = [constructor | alternatives <- Map.elems derived, Alternative constructor _ <- alternatives]
@@ -274,12 +386,10 @@ deriveLTAWith bound (Atoms atoms) named = do
         | alternatives <- Map.elems derived
         , Alternative constructor fields <- alternatives
         ]
-    pure $ decode <$> generatorOf (buildAll derived) (typeRep $ Proxy @a)
+    pure $ Derivation derived annotationOf
   where
     annotations = Map.fromListWith (flip (<>)) named
     annotationOf constructor = Map.findWithDefault mempty (constructorName constructor) annotations
-    empty = Transparent $ Left EmptyGenerator
-    generatorOf built typ = Map.findWithDefault (maybe empty atomGenerator $ Map.lookup typ atoms) typ built
 
     -- The reached types: the alternatives of a type with constructors, and
     -- 'Nothing' for an atomic type.
@@ -325,71 +435,60 @@ deriveLTAWith bound (Atoms atoms) named = do
         measuredAlternative (Alternative alternative _) =
             let Annotation _ measures' named' = annotationOf alternative in not (null measures' && null named')
 
-    -- The types that refer to each other unfold together, as 'recurUpTo'
-    -- unfolds one type. A group comes after the groups that it refers to.
-    buildAll derived = foldl buildGroup Map.empty $ stronglyConnComp graph
-      where
-        graph =
-            [ (typ, typ, nubOrd [field | Alternative _ fields <- alternatives, field <- fields, Map.member field derived])
-            | (typ, alternatives) <- Map.toList derived
-            ]
-        buildGroup built (AcyclicSCC typ) = Map.insert typ (step built typ) built
-        buildGroup built (CyclicSCC types)
-            | bound < 0 = Map.union emptyGroup built
-            | otherwise = Map.union (iterate unfold (unfold emptyGroup) !! fromEnum bound) built
-          where
-            emptyGroup = Map.fromList [(typ, empty) | typ <- types]
-            unfold previous = Map.fromList [(typ, step (Map.union previous built) typ) | typ <- types]
-        step built typ = case Map.findWithDefault [] typ derived of
-            [alternative] -> alternativeGenerator built alternative
-            alternatives -> oneof $ map (alternativeGenerator built) alternatives
-        alternativeGenerator built (Alternative constructor fields) =
-            constructorGenerator constructor (map (`Map.member` derived) fields) (map (generatorOf built) fields)
+-- | A generator without members.
+emptyGenerator :: LTAGen a
+emptyGenerator = Transparent $ Left EmptyGenerator
 
-    -- The contract conjuncts that name only one atomic field become
-    -- conditions on that field. The other conjuncts stay in the contract.
-    constructorGenerator constructor derivedFields generators = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
-        _ | null generators -> leaf (Term.Node constructor []) symbol refinement
-        ([measureAnnotation], _) -> measured symbol remaining measureAnnotation spine
-        (_, namedMeasures@(_ : _)) -> measuredBy symbol remaining namedMeasures spine
-        _
-            | remainingFormula == Top -> node symbol spine
-            | otherwise -> guarded symbol remaining spine
-      where
-        annotation = annotationOf constructor
-        symbol = fromString $ constructorName constructor
-        refinement = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
-            ([Measure _ term], _) -> (.== term)
-            (_, namedMeasures@(_ : _)) -> \value -> foldr1 (.&&) [uninterpreted name [value] .== term | (name, Measure _ term) <- namedMeasures]
-            _ -> const Top
-        conjuncts = concatMap parts [formula | Contract _ formula <- annotationContracts annotation]
-        parts (And formulas) = concatMap parts formulas
-        parts Top = []
-        parts formula = [formula]
-        fieldOf formula = case nubOrd (freeNames formula) of
-            [name]
-                | (position, False) : _ <-
-                    [ (position, isDerived)
-                    | (position, isDerived) <- zip [0 ..] derivedFields
-                    , contractTermName (ArgumentIndex position) == name
-                    ] ->
-                    Just position
-            _ -> Nothing
-        conditions = Map.fromListWith (flip (<>)) [(position, [formula]) | formula <- conjuncts, Just position <- [fieldOf formula]]
-        remainingFormula = conjunction [formula | formula <- conjuncts, Nothing <- [fieldOf formula]]
-        remaining = Contract (Arity $ length generators) remainingFormula
-        spine = Term.Node constructor <$> zipWithM conditioned [0 ..] generators
-        conditioned position generator = case Map.lookup position conditions of
-            Nothing -> generator
-            Just formulas -> generator `satisfying` fieldRefinement position formulas
-        fieldRefinement :: Int -> [Formula] -> Refinement
-        fieldRefinement position formulas value =
-            substitute [(contractTermName (ArgumentIndex position), value)] (conjunction formulas)
+-- | The value of a term of the datatype.
+decodeValue :: (HasFTA a) => Term Constructor -> a
+decodeValue term =
+    fromMaybe
+        (error "cfta-generator bug in Data.CFTA.Gen.Refinement.Derive: the codec rejected a term of its own grammar")
+        (decodeTerm term)
 
-    decode term =
-        fromMaybe
-            (error "cfta-generator bug in Data.CFTA.Gen.Refinement.Derive: the codec rejected a term of its own grammar")
-            (decodeTerm term)
+{- | The generator of a constructor over the generators of its fields, with its
+annotation. The contract conjuncts that name only one atomic field become
+conditions on that field. The other conjuncts stay in the contract.
+-}
+constructorGenerator ::
+    (Constructor -> Annotation) -> Constructor -> [Bool] -> [LTAGen (Term Constructor)] -> LTAGen (Term Constructor)
+constructorGenerator annotationOf constructor derivedFields generators = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
+    _ | null generators -> leaf (Term.Node constructor []) symbol refinement
+    ([measureAnnotation], _) -> measured symbol remaining measureAnnotation spine
+    (_, namedMeasures@(_ : _)) -> measuredBy symbol remaining namedMeasures spine
+    _
+        | remainingFormula == Top -> node symbol spine
+        | otherwise -> guarded symbol remaining spine
+  where
+    annotation = annotationOf constructor
+    symbol = fromString $ constructorName constructor
+    refinement = case (annotationMeasures annotation, annotationNamedMeasures annotation) of
+        ([Measure _ term], _) -> (.== term)
+        (_, namedMeasures@(_ : _)) -> \value -> foldr1 (.&&) [uninterpreted name [value] .== term | (name, Measure _ term) <- namedMeasures]
+        _ -> const Top
+    conjuncts = concatMap parts [formula | Contract _ formula <- annotationContracts annotation]
+    parts (And formulas) = concatMap parts formulas
+    parts Top = []
+    parts formula = [formula]
+    fieldOf formula = case nubOrd (freeNames formula) of
+        [name]
+            | (position, False) : _ <-
+                [ (position, isDerived)
+                | (position, isDerived) <- zip [0 ..] derivedFields
+                , contractTermName (ArgumentIndex position) == name
+                ] ->
+                Just position
+        _ -> Nothing
+    conditions = Map.fromListWith (flip (<>)) [(position, [formula]) | formula <- conjuncts, Just position <- [fieldOf formula]]
+    remainingFormula = conjunction [formula | formula <- conjuncts, Nothing <- [fieldOf formula]]
+    remaining = Contract (Arity $ length generators) remainingFormula
+    spine = Term.Node constructor <$> zipWithM conditioned [0 ..] generators
+    conditioned position generator = case Map.lookup position conditions of
+        Nothing -> generator
+        Just formulas -> generator `satisfying` fieldRefinement position formulas
+    fieldRefinement :: Int -> [Formula] -> Refinement
+    fieldRefinement position formulas value =
+        substitute [(contractTermName (ArgumentIndex position), value)] (conjunction formulas)
 
 -- | The type that a description describes.
 descriptionType :: Description -> TypeRep
