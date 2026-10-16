@@ -12,7 +12,7 @@ not change. No additional local Haskell behavior patch is added.
 The only local Haskell-tree differences are the retained constructor
 changelog entry and reproducer comment.
 
-The current constrained finite ordinary parent proof adds no Haskell change.
+The current constrained finite ordinary outer proof adds no Haskell change.
 Reuse the source validation below for the unchanged source `c0cc8a05`.
 For external handoff, record every later repair here with its failure,
 executable reproducer, affected paths, commit, checks, and upstream status.
@@ -29,7 +29,7 @@ Chain reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`.
 Read `source-validation.md` and `source-derive-self-field.log` in that directory.
 Standalone `holds` still treats the supplied pool as opaque. The repair
 rejects the invalid derivation configuration; it does not change that evaluator.
-The current pinned Lean Audit passes: 2520 jobs and 59190 dependency checks.
+The current pinned Lean Audit passes: 2531 jobs and 59275 dependency checks.
 These checks preserve the distinction between component proofs and the
 remaining frontend and runtime correspondence. The new drawn-field states,
 errors, validation order, and generator-specific rank order need adapters.
@@ -163,6 +163,64 @@ No local test file is added or changed.
 Inspect `git diff origin/main -- cfta cfta-generator cfta-ghc decision-model`
 to identify an outstanding source patch. Add each later Haskell fix here
 with its failure case, affected file, commit, checks, and upstream status.
+
+## Current constrained finite ordinary outer completion
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `f5a20d96`. Read lean/notes-current-constrained-outer-completion.md
+and lean/restart-evidence/20261016-constrained-outer-structure/.
+Eleven additive modules construct conditional finite ordinary root execution.
+Proof commits are `4cd272b3` (source construction and causal admission),
+`c7d0529e` (all eight completed structural families and finite edge calls),
+and `bfa5504c` (entry checks, strong node induction, and constructed roots).
+
+Source syntax constructs its own successful root and finite ordinary domain.
+Actual field preparation derives history, full Context, the actual empty
+inherited identity, and cold native/merge/outer structural certificates.
+Warm callers retain their separate causal certificates and complete owners.
+All eight actual strict read families retain domain and input-relative height
+bounds at the SAME actual returned caller. Rows use narrowed parent results.
+
+Entry controls require no result or enclosing completed graph. The range
+plan checks each independently reached parent entry BEFORE its execution.
+Completed earlier prefixes reach later siblings at their actual warm states.
+This avoids the old success-conditioned WorkerRanges gap. Native machine
+and allocation range checks remain explicit. No future readiness, successful
+body, result law, or finite future-key inventory is supplied.
+
+Strong Nat node-rank induction discharges the smaller-node interface.
+The parent height bound makes each generated child strictly smaller than
+its ORIGINAL edge. Node.finite constructs its own graph, strict reads,
+Checks, full Post, structural certificates, and independent language law.
+Root.constructed_root/prepared_root compose source construction and actual
+preparation with stable literal root execution and full language equality.
+Every larger tuple of all ten worker bounds returns the same result and
+complete caller. This covers one ordinary constrained pass, conditional on
+the entry range plan. Guards, equality classes, and unequal path lengths
+remain unrestricted in this domain. Mu, references, and explicit unions
+remain outside it. The old plain Region remains a separate proof domain.
+
+Next derive the entry plan from concrete key/allocation bounds and machine
+capacity. Read next-capacity-review.md in this evidence directory. General
+Mu/union/reference progress, repeated-pass convergence, current frontends,
+concrete Haskell execution, and full-pipeline composition remain open.
+Retain all separate language, transformation, Sized, rank/inverse, generator,
+and probability contracts and the older constructor/equality work.
+
+The full Audit passes 2531 jobs and 59275 dependency checks. All 50 declared
+public axiom/full-signature pairs pass. Imported integration probes retain
+actual prefixes, cold admission, exact language/structure composition, and
+all-zero-bound warm reuse. Only the permitted foundations occur.
+Preservation retains 6259 starting files and 2519 older non-Audit proof
+sources, with only named restart-authority changes and additive Audit imports.
+Thirty-six frozen manifests check 288 module entries. Historical repairs,
+stashes, other worktrees, drafts, and the optimized interned core remain.
+
+No Haskell file changes. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+every later repair there with failure, executable reproducer, paths, commit,
+checks, and upstream status. The full-library goal remains active.
 
 ## Current constrained finite ordinary parent bounds
 
