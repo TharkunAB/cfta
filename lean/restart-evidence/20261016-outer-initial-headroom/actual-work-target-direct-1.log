@@ -1,0 +1,402 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualTargetWork.lean:149:54: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget ?rows ?arity ?count ?depth ?bound (?steps + 1)
+in the target expression
+  nodeRequests firstRequests + (nodeRequests tailRequests + nodeRequests queryRequests) ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound
+      (path✝ :: paths✝).length
+
+case cons.refine_2
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+memos final : Memos
+actual : Fold values seed paths before memo result after saved
+path✝ : List Int
+values✝ : List (Value Symbol Guard)
+before✝ : Checked width
+memo✝ : Memo
+value✝ : Value Symbol Guard
+middle✝ : Checked width
+current✝ : Memo
+seed✝ : List Int
+paths✝ : List (List Int)
+tail✝ : Value Symbol Guard
+later✝ : Checked width
+saved✝ : Memo
+result✝ : Value Symbol Guard
+after✝ : Checked width
+inventory✝ : Inventory
+memos✝ nextMemos✝ lastMemos✝ : Memos
+nextInventory✝ : Inventory
+operand✝ : Operand path✝ values✝ before✝ memo✝ value✝ middle✝ current✝
+rest✝ : Fold values✝ seed✝ paths✝ middle✝ current✝ tail✝ later✝ saved✝
+step✝ : SourceCurrentAllocatedTargetQuery.Step value✝ tail✝ later✝ result✝ after✝
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory✝ path✝ values✝ before✝ memo✝ value✝ middle✝
+    current✝ memos✝ nextMemos✝
+remaining : FoldReads formulas solver rest✝ nextMemos✝ lastMemos✝
+query :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver nextInventory✝ value✝ tail✝ later✝ result✝ after✝ lastMemos✝
+ih :
+  Ready middle✝ →
+    Values middle✝.native.machine.heap values✝ →
+      PhysicalStored middle✝.native.machine.heap current✝ →
+        Profiles current✝ →
+          NativeStored middle✝.native →
+            OutputStored middle✝.native →
+              ∀ (rows arity count depth bound : Nat),
+                ChildrenShape rows arity values✝ →
+                  values✝.length ≤ count →
+                    (∀ (path : List Int), path ∈ seed✝ :: paths✝ → path.length ≤ depth) →
+                      childrenHeight values✝ ≤ bound →
+                        Ready later✝ ∧
+                          Effects (SourceCurrentAllocatedNativeEffects.physical middle✝)
+                              (SourceCurrentAllocatedNativeEffects.physical later✝) ∧
+                            PhysicalStored later✝.native.machine.heap saved✝ ∧
+                              Profiles saved✝ ∧
+                                NativeStored later✝.native ∧
+                                  OutputStored later✝.native ∧
+                                    Available later✝.native.machine.heap tail✝ ∧
+                                      NodeShape
+                                          (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count
+                                            depth bound paths✝.length)
+                                          (max arity 1) tail✝ ∧
+                                        height tail✝ ≤ bound ∧
+                                          ∃ requests,
+                                            Trace middle✝.native.machine.heap later✝.native.machine.heap requests ∧
+                                              nodeRequests requests ≤
+                                                  SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget
+                                                    rows arity count depth bound paths✝.length ∧
+                                                edgeRequests requests ≤
+                                                  SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget
+                                                    rows arity count depth bound paths✝.length
+ready : Ready before✝
+available : Values before✝.native.machine.heap values✝
+physical : PhysicalStored before✝.native.machine.heap memo✝
+profiles : Profiles memo✝
+native : NativeStored before✝.native
+output : OutputStored before✝.native
+rows arity count depth bound : Nat
+profile : ChildrenShape rows arity values✝
+lengthBound : values✝.length ≤ count
+pathsBound : ∀ (path : List Int), path ∈ seed✝ :: path✝ :: paths✝ → path.length ≤ depth
+heightBound : childrenHeight values✝ ≤ bound
+headMerged : Profiles current✝
+headNative : NativeStored middle✝.native
+headOutput : OutputStored middle✝.native
+headShape :
+  NodeShape (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound) arity value✝
+headHeight : height value✝ ≤ bound
+firstRequests : List (SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+firstTrace : Trace before✝.native.machine.heap middle✝.native.machine.heap firstRequests
+firstNodes :
+  nodeRequests firstRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget rows arity count depth bound
+firstEdges :
+  edgeRequests firstRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget rows arity count depth bound
+tailReady : Ready later✝
+tailEffects :
+  Effects (SourceCurrentAllocatedNativeEffects.physical middle✝) (SourceCurrentAllocatedNativeEffects.physical later✝)
+tailPhysical : PhysicalStored later✝.native.machine.heap saved✝
+tailMerged : Profiles saved✝
+tailNative : NativeStored later✝.native
+tailOutput : OutputStored later✝.native
+_tailAvailable : Available later✝.native.machine.heap tail✝
+tailShape :
+  NodeShape (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length)
+    (max arity 1) tail✝
+tailHeight : height tail✝ ≤ bound
+tailRequests : List (SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+tailTrace : Trace middle✝.native.machine.heap later✝.native.machine.heap tailRequests
+tailNodes :
+  nodeRequests tailRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound paths✝.length
+tailEdges :
+  edgeRequests tailRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound paths✝.length
+finalNative : NativeStored after✝.native
+finalOutput : OutputStored after✝.native
+resultShape :
+  NodeShape
+    (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+        (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length) *
+      max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+        (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length))
+    (max (max arity 1) 1) result✝
+_leftHeight : height result✝ ≤ height value✝
+rightHeight : height result✝ ≤ height tail✝
+queryRequests : List (SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+queryTrace : Trace later✝.native.machine.heap after✝.native.machine.heap queryRequests
+queryCount :
+  nodeRequests queryRequests + edgeRequests queryRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+      (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+        (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length))
+      (max arity 1) bound
+_nodeSupply :
+  after✝.native.machine.heap.nodes.next ≤
+    later✝.native.machine.heap.nodes.next +
+      SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+        (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+          (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length))
+        (max arity 1) bound
+_edgeSupply :
+  after✝.native.machine.heap.edges.next ≤
+    later✝.native.machine.heap.edges.next +
+      SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+        (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+          (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length))
+        (max arity 1) bound
+⊢ nodeRequests firstRequests + (nodeRequests tailRequests + nodeRequests queryRequests) ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound
+      (path✝ :: paths✝).length
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualTargetWork.lean:151:54: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget ?rows ?arity ?count ?depth ?bound (?steps + 1)
+in the target expression
+  edgeRequests firstRequests + (edgeRequests tailRequests + edgeRequests queryRequests) ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound
+      (path✝ :: paths✝).length
+
+case cons.refine_3
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+values : List (Value Symbol Guard)
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Value Symbol Guard
+memos final : Memos
+actual : Fold values seed paths before memo result after saved
+path✝ : List Int
+values✝ : List (Value Symbol Guard)
+before✝ : Checked width
+memo✝ : Memo
+value✝ : Value Symbol Guard
+middle✝ : Checked width
+current✝ : Memo
+seed✝ : List Int
+paths✝ : List (List Int)
+tail✝ : Value Symbol Guard
+later✝ : Checked width
+saved✝ : Memo
+result✝ : Value Symbol Guard
+after✝ : Checked width
+inventory✝ : Inventory
+memos✝ nextMemos✝ lastMemos✝ : Memos
+nextInventory✝ : Inventory
+operand✝ : Operand path✝ values✝ before✝ memo✝ value✝ middle✝ current✝
+rest✝ : Fold values✝ seed✝ paths✝ middle✝ current✝ tail✝ later✝ saved✝
+step✝ : SourceCurrentAllocatedTargetQuery.Step value✝ tail✝ later✝ result✝ after✝
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory✝ path✝ values✝ before✝ memo✝ value✝ middle✝
+    current✝ memos✝ nextMemos✝
+remaining : FoldReads formulas solver rest✝ nextMemos✝ lastMemos✝
+query :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver nextInventory✝ value✝ tail✝ later✝ result✝ after✝ lastMemos✝
+ih :
+  Ready middle✝ →
+    Values middle✝.native.machine.heap values✝ →
+      PhysicalStored middle✝.native.machine.heap current✝ →
+        Profiles current✝ →
+          NativeStored middle✝.native →
+            OutputStored middle✝.native →
+              ∀ (rows arity count depth bound : Nat),
+                ChildrenShape rows arity values✝ →
+                  values✝.length ≤ count →
+                    (∀ (path : List Int), path ∈ seed✝ :: paths✝ → path.length ≤ depth) →
+                      childrenHeight values✝ ≤ bound →
+                        Ready later✝ ∧
+                          Effects (SourceCurrentAllocatedNativeEffects.physical middle✝)
+                              (SourceCurrentAllocatedNativeEffects.physical later✝) ∧
+                            PhysicalStored later✝.native.machine.heap saved✝ ∧
+                              Profiles saved✝ ∧
+                                NativeStored later✝.native ∧
+                                  OutputStored later✝.native ∧
+                                    Available later✝.native.machine.heap tail✝ ∧
+                                      NodeShape
+                                          (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count
+                                            depth bound paths✝.length)
+                                          (max arity 1) tail✝ ∧
+                                        height tail✝ ≤ bound ∧
+                                          ∃ requests,
+                                            Trace middle✝.native.machine.heap later✝.native.machine.heap requests ∧
+                                              nodeRequests requests ≤
+                                                  SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget
+                                                    rows arity count depth bound paths✝.length ∧
+                                                edgeRequests requests ≤
+                                                  SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget
+                                                    rows arity count depth bound paths✝.length
+ready : Ready before✝
+available : Values before✝.native.machine.heap values✝
+physical : PhysicalStored before✝.native.machine.heap memo✝
+profiles : Profiles memo✝
+native : NativeStored before✝.native
+output : OutputStored before✝.native
+rows arity count depth bound : Nat
+profile : ChildrenShape rows arity values✝
+lengthBound : values✝.length ≤ count
+pathsBound : ∀ (path : List Int), path ∈ seed✝ :: path✝ :: paths✝ → path.length ≤ depth
+heightBound : childrenHeight values✝ ≤ bound
+headMerged : Profiles current✝
+headNative : NativeStored middle✝.native
+headOutput : OutputStored middle✝.native
+headShape :
+  NodeShape (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound) arity value✝
+headHeight : height value✝ ≤ bound
+firstRequests : List (SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+firstTrace : Trace before✝.native.machine.heap middle✝.native.machine.heap firstRequests
+firstNodes :
+  nodeRequests firstRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryOperandResources.nodeBudget rows arity count depth bound
+firstEdges :
+  edgeRequests firstRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryOperandResources.edgeBudget rows arity count depth bound
+tailReady : Ready later✝
+tailEffects :
+  Effects (SourceCurrentAllocatedNativeEffects.physical middle✝) (SourceCurrentAllocatedNativeEffects.physical later✝)
+tailPhysical : PhysicalStored later✝.native.machine.heap saved✝
+tailMerged : Profiles saved✝
+tailNative : NativeStored later✝.native
+tailOutput : OutputStored later✝.native
+_tailAvailable : Available later✝.native.machine.heap tail✝
+tailShape :
+  NodeShape (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length)
+    (max arity 1) tail✝
+tailHeight : height tail✝ ≤ bound
+tailRequests : List (SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+tailTrace : Trace middle✝.native.machine.heap later✝.native.machine.heap tailRequests
+tailNodes :
+  nodeRequests tailRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound paths✝.length
+tailEdges :
+  edgeRequests tailRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound paths✝.length
+finalNative : NativeStored after✝.native
+finalOutput : OutputStored after✝.native
+resultShape :
+  NodeShape
+    (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+        (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length) *
+      max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+        (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length))
+    (max (max arity 1) 1) result✝
+_leftHeight : height result✝ ≤ height value✝
+rightHeight : height result✝ ≤ height tail✝
+queryRequests : List (SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+queryTrace : Trace later✝.native.machine.heap after✝.native.machine.heap queryRequests
+queryCount :
+  nodeRequests queryRequests + edgeRequests queryRequests ≤
+    SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+      (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+        (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length))
+      (max arity 1) bound
+_nodeSupply :
+  after✝.native.machine.heap.nodes.next ≤
+    later✝.native.machine.heap.nodes.next +
+      SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+        (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+          (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length))
+        (max arity 1) bound
+_edgeSupply :
+  after✝.native.machine.heap.edges.next ≤
+    later✝.native.machine.heap.edges.next +
+      SourceCurrentAllocatedFiniteOrdinaryNativeBudgetNumbers.nodeBudget
+        (max (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.operandRows rows count depth bound)
+          (SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.targetRows rows count depth bound paths✝.length))
+        (max arity 1) bound
+⊢ edgeRequests firstRequests + (edgeRequests tailRequests + edgeRequests queryRequests) ≤
+    SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound
+      (path✝ :: paths✝).length
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualTargetWork.lean:181:97: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  n ≥ 0
+  m ≥ 0
+  l ≥ 0
+  k ≥ 0
+  j ≥ 0
+  j - k + n ≤ -1
+  i ≥ 0
+  i + l - m ≥ 0
+  h ≥ 0
+  h - i ≥ 0
+  g ≥ 0
+  g + j - k ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  c - e ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑count
+ b := ↑values.length
+ c := ↑bound
+ d := ↑(childrenHeight values)
+ e := ↑(height result)
+ f := ↑(SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound paths✝.length)
+ g := ↑(nodeRequests requests)
+ h := ↑(SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound paths✝.length)
+ i := ↑(edgeRequests requests)
+ j := ↑before.native.machine.heap.nodes.next
+ k := ↑after.native.machine.heap.nodes.next
+ l := ↑before.native.machine.heap.edges.next
+ m := ↑after.native.machine.heap.edges.next
+ n := ↑(SourceCurrentAllocatedFiniteOrdinaryTargetResources.nodeBudget rows arity count depth bound
+    (seed✝ :: paths✝).length)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualTargetWork.lean:181:107: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  n ≥ 0
+  m ≥ 0
+  l ≥ 0
+  l - m + n ≤ -1
+  k ≥ 0
+  j ≥ 0
+  i ≥ 0
+  i + l - m ≥ 0
+  h ≥ 0
+  h - i ≥ 0
+  g ≥ 0
+  g + j - k ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  c - e ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑count
+ b := ↑values.length
+ c := ↑bound
+ d := ↑(childrenHeight values)
+ e := ↑(height result)
+ f := ↑(SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.nodeBudget rows arity count depth bound paths✝.length)
+ g := ↑(nodeRequests requests)
+ h := ↑(SourceCurrentAllocatedFiniteOrdinaryTargetBudgetNumbers.edgeBudget rows arity count depth bound paths✝.length)
+ i := ↑(edgeRequests requests)
+ j := ↑before.native.machine.heap.nodes.next
+ k := ↑after.native.machine.heap.nodes.next
+ l := ↑before.native.machine.heap.edges.next
+ m := ↑after.native.machine.heap.edges.next
+ n := ↑(SourceCurrentAllocatedFiniteOrdinaryTargetResources.edgeBudget rows arity count depth bound
+    (seed✝ :: paths✝).length)

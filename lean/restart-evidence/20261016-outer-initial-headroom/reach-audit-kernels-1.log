@@ -1,0 +1,116 @@
+lean/restart-evidence/20261016-outer-initial-headroom/reach-audit-kernels.lean:23:8: warning: automatically included section variable(s) unused in theorem `_private.lean.«restart-evidence».«20261016-outer-initial-headroom».«reach-audit-kernels».0.MicroCFTA.ReachAudit.stable_unique`:
+  [DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [DecidableEq.{1}
+  (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+    (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [DecidableEq.{1}
+  (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq.{1}
+  (SourceObservations.Label
+    FullSyntax.Formula)] [DecidableEq.{1}
+  (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+    (SourceSymbolicIndex.Constraint
+      FullSyntax.Formula))] [DecidableEq.{1}
+  (Value (SourceObservations.Label FullSyntax.Formula)
+    (SourceSymbolicIndex.Constraint FullSyntax.Formula))] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/restart-evidence/20261016-outer-initial-headroom/reach-audit-kernels.lean:23:0: warning: `stable_unique` does not use the following hypotheses in its type:
+  • [DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)] (#1)
+  • [DecidableEq.{1}
+  (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+    (SourceSymbolicIndex.Constraint FullSyntax.Formula))] (#2)
+  • [DecidableEq.{1}
+  (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))] (#3)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+'MicroCFTA.ReachAudit.node_prefix_unique' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@node_prefix_unique : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} {request : NodeRequest} {before after later : SourceCurrentAllocatedPartialState.State width}
+  {first second :
+    Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @NodeCall inst inst_1 inst_2 width budget request before first after →
+    @NodeCall inst inst_1 inst_2 width budget request before second later →
+      And
+        (@Eq.{1}
+          (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          first second)
+        (@Eq.{2} (SourceCurrentAllocatedPartialState.State width) after later)
+'MicroCFTA.ReachAudit.edge_prefix_unique' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@edge_prefix_unique : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} {request : EdgeRequest} {before after later : SourceCurrentAllocatedPartialState.State width}
+  {first second :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)},
+  @EdgeCall inst inst_1 inst_2 width budget request before first after →
+    @EdgeCall inst inst_1 inst_2 width budget request before second later →
+      And
+        (@Eq.{1}
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          first second)
+        (@Eq.{2} (SourceCurrentAllocatedPartialState.State width) after later)
+'MicroCFTA.ReachAudit.descendant_prefix_unique' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@descendant_prefix_unique : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} {inherited : SourceEqualityConstraintAllocation.Value}
+  {edge first second :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before after later : SourceCurrentAllocatedPartialState.State width},
+  @Descendants inst inst_1 inst_2 width budget inherited edge before first after →
+    @Descendants inst inst_1 inst_2 width budget inherited edge before second later →
+      And
+        (@Eq.{1}
+          (EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+          first second)
+        (@Eq.{2} (SourceCurrentAllocatedPartialState.State width) after later)
+'MicroCFTA.ReachAudit.two_row_prefixes_join' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@two_row_prefixes_join : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {width budget : Nat} {inherited : SourceEqualityConstraintAllocation.Value}
+  {original narrowed other result second :
+    EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {before middle alternate after later : SourceCurrentAllocatedPartialState.State width},
+  @EdgeCall inst inst_1 inst_2 width budget { inherited := inherited, value := original } before narrowed middle →
+    @EdgeCall inst inst_1 inst_2 width budget { inherited := inherited, value := original } before other alternate →
+      @Descendants inst inst_1 inst_2 width budget inherited narrowed middle result after →
+        @Descendants inst inst_1 inst_2 width budget inherited other alternate second later →
+          And
+            (@Eq.{1}
+              (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+              narrowed other)
+            (And (@Eq.{2} (SourceCurrentAllocatedPartialState.State width) middle alternate)
+              (And
+                (@Eq.{1}
+                  (EdgeValue (SourceObservations.Label FullSyntax.Formula)
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                  result second)
+                (@Eq.{2} (SourceCurrentAllocatedPartialState.State width) after later)))

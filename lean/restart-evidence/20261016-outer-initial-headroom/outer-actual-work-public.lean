@@ -1,0 +1,48 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+set_option pp.fullNames true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds.refl
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds.refl
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds.mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds.mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds.trans
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds.trans
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds.next_le
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds.next_le
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.node_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.node_call
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.node_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.node_body
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.edge_call
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.edge_call
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.edge_body
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.descendants
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.walk
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.walk

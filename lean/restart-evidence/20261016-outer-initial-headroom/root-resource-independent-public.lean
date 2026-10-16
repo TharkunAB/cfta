@@ -1,0 +1,56 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom.mono
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom.mono
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom.after
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom.after
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.NodeResult
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.NodeResult
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Below
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Below
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceEdge.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceEdge.finite
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceChildren.walk
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceChildren.walk
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceChildren.children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceChildren.children
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRows.descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRows.descendants
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRows.rows
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRows.rows
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceNode.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceNode.finite
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialNodes
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialNodes
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialEdges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialEdges
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.finite
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.finite
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.constructed_root
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.constructed_root
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.prepared_root
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.prepared_root

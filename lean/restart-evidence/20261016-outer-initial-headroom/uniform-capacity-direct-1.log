@@ -1,0 +1,48 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParentUniformCapacity.lean:29:28: error: Unknown identifier `SourceCurrentAllocatedFiniteOrdinaryParentUniformBudgets` at quotation precheck
+
+Note: You can use `set_option quotPrecheck false` to disable this check.
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParentUniformCapacity.lean:41:61: error(lean.unknownIdentifier): Unknown identifier `«Budgets».nodeBudget`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParentUniformCapacity.lean:42:61: error(lean.unknownIdentifier): Unknown identifier `«Budgets».edgeBudget`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParentUniformCapacity.lean:50:17: error(lean.unknownIdentifier): Unknown identifier `«Budgets».receipt_budget`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParentUniformCapacity.lean:43:49: error: unsolved goals
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq (Value Symbol Guard)
+bits : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+budget : Nat
+request : EdgeRequest
+before : Caller (bits + 2)
+inventory : Inventory
+memos : Memos
+initial : Context formulas solver inventory before memos
+inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited
+resident : EdgeResident before.checked.native.machine.heap request.value
+stored : Stored before
+limits : Limits
+rows arity bound : Nat
+guards : GuardEdge limits request.value
+profile : EdgeShape rows arity request.value
+heightBound : edgeHeight request.value ≤ bound
+nodes : before.checked.native.machine.heap.nodes.next + sorry ≤ 2 ^ bits
+edges : before.checked.native.machine.heap.edges.next + sorry ≤ 2 ^ (bits + 2)
+live : SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint = false
+loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+found :
+  SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint before.checked.operations.constraints =
+    Except.ok (some loaded)
+cached : SourceEqualityGuardReadback.Cached request.value.entry.key.constraint.equalities
+own : SourceEqualityConstraintAllocation.Value
+branch : SourceEqualityPrecheck.Branch
+receipt :
+  SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory request.value.entry.key.constraint loaded
+    request.inherited before.checked own branch
+rawBound : SourceCurrentAllocatedFiniteOrdinaryGuardEnvelope.Bounds limits request.value.entry.key.constraint
+lengthBound : request.value.children.length ≤ arity
+⊢ SourceCurrentAllocatedFiniteOrdinaryLocalCapacity.LocalCapacity bits budget loaded request.inherited
+    request.value.children before.checked before.fourth before.merge
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParentUniformCapacity.lean:76:61: error(lean.unknownIdentifier): Unknown identifier `«Budgets».nodeBudget`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParentUniformCapacity.lean:77:61: error(lean.unknownIdentifier): Unknown identifier `«Budgets».edgeBudget`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParentUniformCapacity.lean:93:61: error(lean.unknownIdentifier): Unknown identifier `«Budgets».nodeBudget`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryParentUniformCapacity.lean:94:61: error(lean.unknownIdentifier): Unknown identifier `«Budgets».edgeBudget`

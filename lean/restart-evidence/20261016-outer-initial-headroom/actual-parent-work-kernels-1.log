@@ -1,0 +1,195 @@
+'MicroCFTA.ActualParentWorkKernels.exact_parent_work_profile_and_counters' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@exact_parent_work_profile_and_counters : ∀ [inst : DecidableEq.{1} (SourceObservations.Label FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (InternedConstructorTemplates.EdgeKey (SourceObservations.Label FullSyntax.Formula)
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  {width budget : Nat} {request : EdgeRequest} {before after : SourceCurrentAllocatedPartialState.State width}
+  {result : EdgeValue (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+  {actual : @EdgeBody inst inst_1 inst_2 width budget request before result after}
+  {memos final : EndpointMemoGateTrace.Memos},
+  @EdgeBodyReads inst inst_1 inst_2 width formulas solver budget request before result after actual memos final →
+    ∀ (inventory : Inventory),
+      @Context inst_1 width formulas solver inventory before memos →
+        SourceEqualityConstraintAllocation.Ready
+            (@SourceEqualityNativeDemand.State.operations width (@State.checked width before)).constraints
+            request.inherited →
+          @EdgeResident (SourceObservations.Label FullSyntax.Formula)
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+              (@SourceRecursiveIntersectionKernel.Machine.heap (SourceObservations.Label FullSyntax.Formula)
+                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                (@SourceRecursiveIntersectionThunks.State.machine width (SourceObservations.Label FullSyntax.Formula)
+                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                  (@SourceEqualityNativeDemand.State.native width (@State.checked width before))))
+              request.value →
+            @Stored width before →
+              ∀ (limits : Limits) (rows arity bound : Nat),
+                @SourceCurrentAllocatedFiniteOrdinaryGuardProfiles.Edge (SourceObservations.Label FullSyntax.Formula)
+                    FullSyntax.Formula limits request.value →
+                  @EdgeShape (SourceObservations.Label FullSyntax.Formula)
+                      (SourceSymbolicIndex.Constraint FullSyntax.Formula) rows arity request.value →
+                    @LE.le.{0} Nat instLENat
+                        (@edgeHeight (SourceObservations.Label FullSyntax.Formula)
+                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) request.value)
+                        bound →
+                      And (@Stored width after)
+                        (And (EdgeCertificate request result)
+                          (@Exists.{1} Inventory fun next =>
+                            And (@Post inst_1 width formulas solver next before after final)
+                              (@Exists.{1}
+                                (List.{0}
+                                  (SourceCurrentAllocatedFiniteOrdinaryReservations.Request
+                                    (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                fun requests =>
+                                And
+                                  (@Trace (SourceObservations.Label FullSyntax.Formula)
+                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula) inst_1
+                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@SourceRecursiveIntersectionThunks.State.machine width
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@SourceEqualityNativeDemand.State.native width (@State.checked width before))))
+                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                      (SourceObservations.Label FullSyntax.Formula)
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                      (@SourceRecursiveIntersectionThunks.State.machine width
+                                        (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                        (@SourceEqualityNativeDemand.State.native width (@State.checked width after))))
+                                    requests)
+                                  (And
+                                    (@LE.le.{0} Nat instLENat
+                                      (@nodeRequests (SourceObservations.Label FullSyntax.Formula)
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula) requests)
+                                      (nodeBudget limits rows arity bound))
+                                    (And
+                                      (@LE.le.{0} Nat instLENat
+                                        (@edgeRequests (SourceObservations.Label FullSyntax.Formula)
+                                          (SourceSymbolicIndex.Constraint FullSyntax.Formula) requests)
+                                        (edgeBudget limits rows arity bound))
+                                      (And
+                                        (@Eq.{1} Nat
+                                          (@Cache.State.next InternedBinderProtocol.NodeKey
+                                            (@State.nodes (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                              (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@SourceRecursiveIntersectionThunks.State.machine width
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceEqualityNativeDemand.State.native width
+                                                    (@State.checked width after))))))
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                            (@Cache.State.next InternedBinderProtocol.NodeKey
+                                              (@State.nodes (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceRecursiveIntersectionThunks.State.machine width
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceEqualityNativeDemand.State.native width
+                                                      (@State.checked width before))))))
+                                            (@nodeReservations (SourceObservations.Label FullSyntax.Formula)
+                                              (SourceSymbolicIndex.Constraint FullSyntax.Formula) requests)))
+                                        (And
+                                          (@Eq.{1} Nat
+                                            (@Cache.State.next
+                                              (InternedConstructorTemplates.EdgeKey
+                                                (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                              (@State.edges (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceRecursiveIntersectionThunks.State.machine width
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceEqualityNativeDemand.State.native width
+                                                      (@State.checked width after))))))
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                              (@Cache.State.next
+                                                (InternedConstructorTemplates.EdgeKey
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                (@State.edges (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceRecursiveIntersectionThunks.State.machine width
+                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                      (@SourceEqualityNativeDemand.State.native width
+                                                        (@State.checked width before))))))
+                                              (@edgeReservations (SourceObservations.Label FullSyntax.Formula)
+                                                (SourceSymbolicIndex.Constraint FullSyntax.Formula) requests)))
+                                          (And
+                                            (@LE.le.{0} Nat instLENat
+                                              (@Cache.State.next InternedBinderProtocol.NodeKey
+                                                (@State.nodes (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceRecursiveIntersectionThunks.State.machine width
+                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                      (@SourceEqualityNativeDemand.State.native width
+                                                        (@State.checked width after))))))
+                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                (@Cache.State.next InternedBinderProtocol.NodeKey
+                                                  (@State.nodes (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                      (@SourceRecursiveIntersectionThunks.State.machine width
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                        (@SourceEqualityNativeDemand.State.native width
+                                                          (@State.checked width before))))))
+                                                (nodeBudget limits rows arity bound)))
+                                            (@LE.le.{0} Nat instLENat
+                                              (@Cache.State.next
+                                                (InternedConstructorTemplates.EdgeKey
+                                                  (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                (@State.edges (SourceObservations.Label FullSyntax.Formula)
+                                                  (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                  (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceRecursiveIntersectionThunks.State.machine width
+                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                      (@SourceEqualityNativeDemand.State.native width
+                                                        (@State.checked width after))))))
+                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                (@Cache.State.next
+                                                  (InternedConstructorTemplates.EdgeKey
+                                                    (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                                  (@State.edges (SourceObservations.Label FullSyntax.Formula)
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                    (@SourceRecursiveIntersectionKernel.Machine.heap
+                                                      (SourceObservations.Label FullSyntax.Formula)
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                      (@SourceRecursiveIntersectionThunks.State.machine width
+                                                        (SourceObservations.Label FullSyntax.Formula)
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                                                        (@SourceEqualityNativeDemand.State.native width
+                                                          (@State.checked width before))))))
+                                                (edgeBudget limits rows arity bound)))))))))))

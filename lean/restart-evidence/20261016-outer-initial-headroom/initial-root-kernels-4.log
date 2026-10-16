@@ -1,0 +1,1090 @@
+lean/restart-evidence/20261016-outer-initial-headroom/initial-root-kernels.lean:230:49: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityConstraintOrigins.guards, SourceEqualityConstraintOrigins.edgeGuards,
+    SourceEqualityConstraintOrigins.childGuards, List.append_nil, List.mem_cons, List.not_mem_nil, or_false] at member
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'MicroCFTA.InitialRootResourceChecks.Reduction' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.InitialRootResourceChecks.Reduction : [DecidableEq.{1}
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)] →
+  [DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+    [DecidableEq.{1}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      Nat →
+        MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+            Nat →
+              MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key →
+                MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                  MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                    Prop
+'MicroCFTA.InitialRootResourceChecks.constructed_then_warm' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InitialRootResourceChecks.constructed_then_warm : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) {initial cache : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key}
+  {originals : List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @MicroCFTA.SourceEqualityOriginalAllocationHistory.History MicroCFTA.FullSyntax.Formula initial cache originals →
+    @MicroCFTA.Cache.Valid MicroCFTA.SourceEqualityPartialConstraintKey.Key initial →
+      ∀
+        (expression :
+          MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression →
+          (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+              @Membership.mem.{0, 0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@List.instMembership.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                  original →
+                @Membership.mem.{0, 0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@List.instMembership.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  originals original) →
+            ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+              (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (budget : Nat),
+              (∀
+                  (value :
+                    MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (heap :
+                    MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                  @Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1 expression
+                        (@List.nil.{0}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        (@MicroCFTA.InternedConstructorTemplates.empty
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        value heap) →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom bits heap
+                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialNodes value)
+                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialEdges value)) →
+                @Exists.{1}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  fun value =>
+                  @Exists.{1}
+                    (MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    fun heap =>
+                    @Exists.{0}
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1 expression
+                          (@List.nil.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                          (@MicroCFTA.InternedConstructorTemplates.empty
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          value heap))
+                      fun _built =>
+                      @MicroCFTA.InitialRootResourceChecks.Reduction inst inst_1 inst_2 bits formulas solver budget
+                        cache value heap
+'MicroCFTA.InitialRootResourceChecks.prepared_fields_and_root' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InitialRootResourceChecks.prepared_fields_and_root : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (initial : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key),
+  @MicroCFTA.Cache.Valid MicroCFTA.SourceEqualityPartialConstraintKey.Key initial →
+    ∀
+      (expression :
+        MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression →
+        (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+            @Membership.mem.{0, 0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@List.instMembership.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                original →
+              MicroCFTA.SourceEqualityGuardReadback.Cached
+                (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula original)) →
+          ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+            (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (budget : Nat),
+            (∀
+                (value :
+                  MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (heap :
+                  MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                @Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1 expression
+                      (@List.nil.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.InternedConstructorTemplates.empty
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      value heap) →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom bits heap
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialNodes value)
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialEdges value)) →
+              have cache :=
+                @Prod.snd.{0, 0} (Except.{0, 0} String (List.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                  (MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key)
+                  (@MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare MicroCFTA.FullSyntax.Formula
+                    (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                    initial);
+              @Exists.{1} (List.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value) fun fields =>
+                And
+                  (@MicroCFTA.SourceEqualityOriginalAllocationPreparation.Receipt MicroCFTA.FullSyntax.Formula
+                    (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                    initial fields cache)
+                  (And
+                    (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+                      @Membership.mem.{0, 0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (@List.instMembership.{0}
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                          original →
+                        @Exists.{1} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+                          fun loaded =>
+                          And
+                            (@Eq.{1}
+                              (Except.{0, 0} String
+                                (Option.{0}
+                                  (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+                              (@MicroCFTA.SourceEqualityConstraintFieldLookup.load MicroCFTA.FullSyntax.Formula original
+                                cache)
+                              (@Except.ok.{0, 0} String
+                                (Option.{0}
+                                  (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+                                (@Option.some.{0}
+                                  (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+                                  loaded)))
+                            (And
+                              (@Eq.{1} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula
+                                  loaded)
+                                original)
+                              (And
+                                (MicroCFTA.SourceEqualityConstraintAllocation.Ready cache
+                                  (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored
+                                    MicroCFTA.FullSyntax.Formula loaded))
+                                (@Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+                                  (MicroCFTA.SourceEqualityPhysicalPayload.read
+                                    (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula
+                                      original))
+                                  (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint
+                                    (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored
+                                        MicroCFTA.FullSyntax.Formula loaded).payload)))))
+                    (@Exists.{1}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      fun value =>
+                      @Exists.{1}
+                        (MicroCFTA.InternedConstructorTemplates.State
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        fun heap =>
+                        @Exists.{0}
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1 expression
+                              (@List.nil.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                              (@MicroCFTA.InternedConstructorTemplates.empty
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              value heap))
+                          fun _built =>
+                          @MicroCFTA.InitialRootResourceChecks.Reduction inst inst_1 inst_2 bits formulas solver budget
+                            cache value heap))
+'MicroCFTA.InitialRootResourceChecks.prepared_endpoint_supplies' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InitialRootResourceChecks.prepared_endpoint_supplies : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (initial : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key),
+  @MicroCFTA.Cache.Valid MicroCFTA.SourceEqualityPartialConstraintKey.Key initial →
+    ∀
+      (expression :
+        MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression →
+        (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+            @Membership.mem.{0, 0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@List.instMembership.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                original →
+              MicroCFTA.SourceEqualityGuardReadback.Cached
+                (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula original)) →
+          ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+            (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (budget : Nat),
+            (∀
+                (value :
+                  MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (heap :
+                  MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                @Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1 expression
+                      (@List.nil.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.InternedConstructorTemplates.empty
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      value heap) →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom bits heap
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialNodes value)
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialEdges value)) →
+              have cache :=
+                @Prod.snd.{0, 0} (Except.{0, 0} String (List.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                  (MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key)
+                  (@MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare MicroCFTA.FullSyntax.Formula
+                    (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                    initial);
+              @Exists.{1} (List.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value) fun fields =>
+                And
+                  (@MicroCFTA.SourceEqualityOriginalAllocationPreparation.Receipt MicroCFTA.FullSyntax.Formula
+                    (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                    initial fields cache)
+                  (@Exists.{1}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    fun value =>
+                    @Exists.{1}
+                      (MicroCFTA.InternedConstructorTemplates.State
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      fun heap =>
+                      @Exists.{1}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        fun result =>
+                        @Exists.{2}
+                          (MicroCFTA.SourceCurrentAllocatedPartialState.State
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                          fun after =>
+                          @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory fun next =>
+                            @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos fun final =>
+                              And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.InternedConstructorTemplates.Value
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                  (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1
+                                    expression
+                                    (@List.nil.{0}
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                    (@MicroCFTA.InternedConstructorTemplates.empty
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.InternedConstructorTemplates.Value
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    value heap))
+                                (@Exists.{0}
+                                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall inst inst_1 inst_2
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                    budget
+                                    {
+                                      inherited :=
+                                        MicroCFTA.SourceCurrentAllocatedPartialInitialization.emptyValue cache,
+                                      value := value }
+                                    (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                      cache heap)
+                                    result after)
+                                  fun actual =>
+                                  And
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads inst inst_1
+                                      inst_2
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                      formulas solver budget
+                                      {
+                                        inherited :=
+                                          MicroCFTA.SourceCurrentAllocatedPartialInitialization.emptyValue cache,
+                                        value := value }
+                                      (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                        cache heap)
+                                      result after actual MicroCFTA.SourceCurrentAllocatedPartialInitialization.globals
+                                      final)
+                                    (And
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks inst inst_1 inst_2
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                        budget
+                                        (@MicroCFTA.SourceCurrentAllocatedPartialChecks.nodeCallTrace inst inst_1 inst_2
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                          budget
+                                          {
+                                            inherited :=
+                                              MicroCFTA.SourceCurrentAllocatedPartialInitialization.emptyValue cache,
+                                            value := value }
+                                          result
+                                          (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            cache heap)
+                                          after actual))
+                                      (And
+                                        (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst_1
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                          formulas solver next
+                                          (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            cache heap)
+                                          after final)
+                                        (And
+                                          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeState.Stored
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            after)
+                                          (And
+                                            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterQuantitativeReturned.NodeCertificate
+                                              {
+                                                inherited :=
+                                                  MicroCFTA.SourceCurrentAllocatedPartialInitialization.emptyValue
+                                                    cache,
+                                                value := value }
+                                              result)
+                                            (And
+                                              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualOuterWork.WorkBounds
+                                                inst_1 heap
+                                                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula)
+                                                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      bits
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                    (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                      MicroCFTA.FullSyntax.Formula)
+                                                    (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        bits
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                          bits
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                        after))))
+                                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialNodes
+                                                  value)
+                                                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialEdges
+                                                  value))
+                                              (And
+                                                (@LE.le.{0} Nat instLENat
+                                                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes
+                                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula)
+                                                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                                                        (MicroCFTA.SourceObservations.Label
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2))))
+                                                          (MicroCFTA.SourceObservations.Label
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                (instOfNatNat (nat_lit 2))))
+                                                            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                  (instOfNatNat (nat_lit 2))))
+                                                              after))))))
+                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                    (@MicroCFTA.Cache.State.next
+                                                      MicroCFTA.InternedBinderProtocol.NodeKey
+                                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes
+                                                        (MicroCFTA.SourceObservations.Label
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        heap))
+                                                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialNodes
+                                                      value)))
+                                                (And
+                                                  (@LE.le.{0} Nat instLENat
+                                                    (@MicroCFTA.Cache.State.next
+                                                      (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                                        (MicroCFTA.SourceObservations.Label
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula))
+                                                      (@MicroCFTA.InternedConstructorTemplates.State.edges
+                                                        (MicroCFTA.SourceObservations.Label
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                                                          (MicroCFTA.SourceObservations.Label
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                (instOfNatNat (nat_lit 2))))
+                                                            (MicroCFTA.SourceObservations.Label
+                                                              MicroCFTA.FullSyntax.Formula)
+                                                            (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                              MicroCFTA.FullSyntax.Formula)
+                                                            (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                  (instOfNatNat (nat_lit 2))))
+                                                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                  (@instHAdd.{0} Nat instAddNat) bits
+                                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                    (instOfNatNat (nat_lit 2))))
+                                                                after))))))
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      (@MicroCFTA.Cache.State.next
+                                                        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                                          (MicroCFTA.SourceObservations.Label
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula))
+                                                        (@MicroCFTA.InternedConstructorTemplates.State.edges
+                                                          (MicroCFTA.SourceObservations.Label
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          heap))
+                                                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialEdges
+                                                        value)))
+                                                  (∀
+                                                    (ambient :
+                                                      MicroCFTA.InternedGuardedLanguage.Env
+                                                        (MicroCFTA.SourceObservations.Label
+                                                          MicroCFTA.FullSyntax.Formula))
+                                                    (term :
+                                                      MicroCFTA.Language.Term
+                                                        (MicroCFTA.SourceObservations.Label
+                                                          MicroCFTA.FullSyntax.Formula)),
+                                                    Iff
+                                                      (@MicroCFTA.InternedGuardedLanguage.meaning
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (MicroCFTA.SourceObservations.Label
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (@MicroCFTA.SourceEqualityPCSGuard.holds
+                                                          MicroCFTA.FullSyntax.Formula
+                                                          MicroCFTA.FormulaExecutable.formulaDecidableEq formulas
+                                                          solver)
+                                                        ambient result term)
+                                                      (@MicroCFTA.InternedGuardedLanguage.meaning
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (MicroCFTA.SourceObservations.Label
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (@MicroCFTA.SourceEqualityPCSGuard.holds
+                                                          MicroCFTA.FullSyntax.Formula
+                                                          MicroCFTA.FormulaExecutable.formulaDecidableEq formulas
+                                                          solver)
+                                                        ambient value term)))))))))))
+'MicroCFTA.InitialRootResourceChecks.guarded_nullary_budget_zero' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InitialRootResourceChecks.guarded_nullary_budget_zero : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (initial : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key),
+  @MicroCFTA.Cache.Valid MicroCFTA.SourceEqualityPartialConstraintKey.Key initial →
+    ∀ (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (guard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+      MicroCFTA.SourceEqualityGuardReadback.Cached
+          (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula guard) →
+        ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+          (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula),
+          (∀
+              (value :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (heap :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              @Eq.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1
+                    (@MicroCFTA.InternedNestedConstruction.Syntax.node
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@List.cons.{0}
+                        (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) symbol guard
+                          (@List.nil.{0}
+                            (MicroCFTA.InternedNestedConstruction.Syntax
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                        (@List.nil.{0}
+                          (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))))
+                    (@List.nil.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.InternedConstructorTemplates.empty
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    value heap) →
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom bits heap
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialNodes value)
+                  (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialEdges value)) →
+            have expression :=
+              @MicroCFTA.InternedNestedConstruction.Syntax.node
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@List.cons.{0}
+                  (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) symbol guard
+                    (@List.nil.{0}
+                      (MicroCFTA.InternedNestedConstruction.Syntax
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                  (@List.nil.{0}
+                    (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))));
+            have cache :=
+              @Prod.snd.{0, 0} (Except.{0, 0} String (List.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                (MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key)
+                (@MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare MicroCFTA.FullSyntax.Formula
+                  (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                  initial);
+            @Exists.{1} (List.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value) fun fields =>
+              And
+                (@MicroCFTA.SourceEqualityOriginalAllocationPreparation.Receipt MicroCFTA.FullSyntax.Formula
+                  (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                  initial fields cache)
+                (And
+                  (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+                    @Membership.mem.{0, 0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@List.instMembership.{0}
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                        original →
+                      @Exists.{1} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+                        fun loaded =>
+                        And
+                          (@Eq.{1}
+                            (Except.{0, 0} String
+                              (Option.{0}
+                                (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.SourceEqualityConstraintFieldLookup.load MicroCFTA.FullSyntax.Formula original
+                              cache)
+                            (@Except.ok.{0, 0} String
+                              (Option.{0}
+                                (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+                              (@Option.some.{0}
+                                (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+                                loaded)))
+                          (And
+                            (@Eq.{1} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula loaded)
+                              original)
+                            (And
+                              (MicroCFTA.SourceEqualityConstraintAllocation.Ready cache
+                                (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored
+                                  MicroCFTA.FullSyntax.Formula loaded))
+                              (@Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+                                (MicroCFTA.SourceEqualityPhysicalPayload.read
+                                  (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula
+                                    original))
+                                (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint
+                                  (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored
+                                      MicroCFTA.FullSyntax.Formula loaded).payload)))))
+                  (@Exists.{1}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    fun value =>
+                    @Exists.{1}
+                      (MicroCFTA.InternedConstructorTemplates.State
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      fun heap =>
+                      @Exists.{0}
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1 expression
+                            (@List.nil.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.InternedConstructorTemplates.empty
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            value heap))
+                        fun _built =>
+                        @MicroCFTA.InitialRootResourceChecks.Reduction inst inst_1 inst_2 bits formulas solver
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) cache value heap))
+'MicroCFTA.InitialRootResourceChecks.guarded_nested_budget_zero' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InitialRootResourceChecks.guarded_nested_budget_zero : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (initial : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key),
+  @MicroCFTA.Cache.Valid MicroCFTA.SourceEqualityPartialConstraintKey.Key initial →
+    ∀ (outerSymbol innerSymbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (outerGuard innerGuard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+      MicroCFTA.SourceEqualityGuardReadback.Cached
+          (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula outerGuard) →
+        MicroCFTA.SourceEqualityGuardReadback.Cached
+            (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula innerGuard) →
+          ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+            (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula),
+            (∀
+                (value :
+                  MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (heap :
+                  MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                @Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1
+                      (@MicroCFTA.InternedNestedConstruction.Syntax.node
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@List.cons.{0}
+                          (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) outerSymbol
+                            outerGuard
+                            (@List.cons.{0}
+                              (MicroCFTA.InternedNestedConstruction.Syntax
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              (@MicroCFTA.InternedNestedConstruction.Syntax.node
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@List.cons.{0}
+                                  (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) innerSymbol
+                                    innerGuard
+                                    (@List.nil.{0}
+                                      (MicroCFTA.InternedNestedConstruction.Syntax
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                                  (@List.nil.{0}
+                                    (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))))
+                              (@List.nil.{0}
+                                (MicroCFTA.InternedNestedConstruction.Syntax
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))))
+                          (@List.nil.{0}
+                            (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))))
+                      (@List.nil.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.InternedConstructorTemplates.empty
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      value heap) →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceDefs.Headroom bits heap
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialNodes value)
+                    (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterResourceRoot.initialEdges value)) →
+              have expression :=
+                @MicroCFTA.InternedNestedConstruction.Syntax.node
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@List.cons.{0}
+                    (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) outerSymbol outerGuard
+                      (@List.cons.{0}
+                        (MicroCFTA.InternedNestedConstruction.Syntax
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.InternedNestedConstruction.Syntax.node
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@List.cons.{0}
+                            (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) innerSymbol
+                              innerGuard
+                              (@List.nil.{0}
+                                (MicroCFTA.InternedNestedConstruction.Syntax
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                            (@List.nil.{0}
+                              (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))))
+                        (@List.nil.{0}
+                          (MicroCFTA.InternedNestedConstruction.Syntax
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))))
+                    (@List.nil.{0}
+                      (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))));
+              have cache :=
+                @Prod.snd.{0, 0} (Except.{0, 0} String (List.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                  (MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key)
+                  (@MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare MicroCFTA.FullSyntax.Formula
+                    (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                    initial);
+              @Exists.{1} (List.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value) fun fields =>
+                And
+                  (@MicroCFTA.SourceEqualityOriginalAllocationPreparation.Receipt MicroCFTA.FullSyntax.Formula
+                    (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                    initial fields cache)
+                  (And
+                    (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+                      @Membership.mem.{0, 0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (@List.instMembership.{0}
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (@MicroCFTA.SourceEqualityConstraintOrigins.guards
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) expression)
+                          original →
+                        @Exists.{1} (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+                          fun loaded =>
+                          And
+                            (@Eq.{1}
+                              (Except.{0, 0} String
+                                (Option.{0}
+                                  (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)))
+                              (@MicroCFTA.SourceEqualityConstraintFieldLookup.load MicroCFTA.FullSyntax.Formula original
+                                cache)
+                              (@Except.ok.{0, 0} String
+                                (Option.{0}
+                                  (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula))
+                                (@Option.some.{0}
+                                  (MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+                                  loaded)))
+                            (And
+                              (@Eq.{1} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.SourceEqualityConjoinAllocation.readback MicroCFTA.FullSyntax.Formula
+                                  loaded)
+                                original)
+                              (And
+                                (MicroCFTA.SourceEqualityConstraintAllocation.Ready cache
+                                  (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored
+                                    MicroCFTA.FullSyntax.Formula loaded))
+                                (@Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+                                  (MicroCFTA.SourceEqualityPhysicalPayload.read
+                                    (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula
+                                      original))
+                                  (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint
+                                    (@MicroCFTA.SourceEqualityConjoinAllocation.Constraint.stored
+                                        MicroCFTA.FullSyntax.Formula loaded).payload)))))
+                    (@Exists.{1}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      fun value =>
+                      @Exists.{1}
+                        (MicroCFTA.InternedConstructorTemplates.State
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        fun heap =>
+                        @Exists.{0}
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.build
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1 expression
+                              (@List.nil.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                              (@MicroCFTA.InternedConstructorTemplates.empty
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              value heap))
+                          fun _built =>
+                          @MicroCFTA.InitialRootResourceChecks.Reduction inst inst_1 inst_2 bits formulas solver
+                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) cache value heap))

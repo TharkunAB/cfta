@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualParentWork
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option format.width 200
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualParentWork.stage
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualParentWork.stage
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualParentWork.local_reads
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualParentWork.local_reads
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualParentWork.structure_from_reads
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualParentWork.structure_from_reads
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualParentWork.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualParentWork.edge_body

@@ -1,0 +1,402 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:29:8: warning: automatically included section variable(s) unused in theorem `_private.lean.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.0.MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.selected_node_safe`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:77:73: error(lean.unknownIdentifier): Unknown identifier `bits`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:83:18: error: Tactic `subst` failed: did not find equation for eliminating 'chosen'
+
+case code.node.mk.direct
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+scheme : Scheme Symbol Guard
+compiled :
+  ∀ (request : NodeRequest Symbol Guard),
+    scheme.nodeInputs request → Bound scheme (compileNode request) (scheme.nodeCost request)
+bodyBound :
+  ∀ {A : Type} (request : EdgeRequest Symbol Guard) (resume : EdgeValue Symbol Guard → Code Symbol Guard A)
+    {width : Nat} (before after : Checked width) (next : Control A) (tail : Nat),
+    scheme.edgeInputs request →
+      (∀ (value : EdgeValue Symbol Guard), Bound scheme (resume value) tail) →
+        SourceEqualityNativeDemand.body request resume before = Outcome.yielded next after →
+          ControlBound scheme next (scheme.edgeCost request + tail)
+A : Type
+next : Control A
+before after : Checked width
+budget : Nat
+valid : SourceCurrentAllocatedNativePhysicalCache.Valid before.native
+request : NodeRequest Symbol Guard
+resume : Value Symbol Guard → Code Symbol Guard A
+physical : SourceCurrentAllocatedNativePhysicalExecution.Inputs (Control.code (Code.node request resume)) before
+one : step (Control.code (Code.node request resume)) before = Outcome.yielded next after
+inputs : scheme.nodeInputs request
+tail : Nat
+enough : scheme.nodeCost request + tail ≤ budget
+rest : ∀ (value : Value Symbol Guard), Bound scheme (resume value) tail
+chosen : SourceRecursiveIntersectionThunks.State (sorry + 2) Symbol Guard
+unchanged : sorry = before.native
+selected : lookupNode (sorry + 2) request sorry = (NodeSelection.direct request, chosen)
+⊢ ∃ remaining,
+    ControlBound scheme next remaining ∧
+      nodeRequests (step_requests (Control.code (Code.node request resume)) before) +
+            edgeRequests (step_requests (Control.code (Code.node request resume)) before) +
+          remaining ≤
+        budget
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:93:132: error: Dependent elimination failed: Failed to solve equation
+  Outcome.yielded next after =
+    match
+      match (lookupNode width request before.native).fst with
+      | NodeSelection.direct actual =>
+        SourceRecursiveIntersectionNative.Outcome.yielded ((compileNode actual).bind resume)
+          (lookupNode width request before.native).snd
+      | NodeSelection.memoized handle =>
+        match (demandNode handle (lookupNode width request before.native).snd).fst with
+        | FlatMemoThunk.Observation.absent =>
+          SourceRecursiveIntersectionNative.Outcome.blocked
+            (SourceRecursiveIntersectionNative.Blocked.absentNode handle) (Code.node request resume)
+            (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.busy =>
+          SourceRecursiveIntersectionNative.Outcome.blocked (SourceRecursiveIntersectionNative.Blocked.nodeBusy handle)
+            (Code.node request resume) (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.ready value =>
+          SourceRecursiveIntersectionNative.Outcome.yielded (resume value)
+            (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.evaluate actual =>
+          SourceRecursiveIntersectionNative.Outcome.yielded
+            ((compileNode actual).bind fun value => Code.finishNode handle value (resume value))
+            (demandNode handle (lookupNode width request before.native).snd).snd with
+    | SourceRecursiveIntersectionNative.Outcome.yielded code state =>
+      Outcome.yielded (Control.code code) { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.done value state =>
+      Outcome.done value { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.failed failure state =>
+      Outcome.failed failure { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.blocked reason code state =>
+      Outcome.blocked (Blocked.native reason) (Control.code code) { native := state, operations := before.operations }
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:93:132: error: Dependent elimination failed: Failed to solve equation
+  Outcome.yielded next after =
+    match
+      match (lookupNode width request before.native).fst with
+      | NodeSelection.direct actual =>
+        SourceRecursiveIntersectionNative.Outcome.yielded ((compileNode actual).bind resume)
+          (lookupNode width request before.native).snd
+      | NodeSelection.memoized handle =>
+        match (demandNode handle (lookupNode width request before.native).snd).fst with
+        | FlatMemoThunk.Observation.absent =>
+          SourceRecursiveIntersectionNative.Outcome.blocked
+            (SourceRecursiveIntersectionNative.Blocked.absentNode handle) (Code.node request resume)
+            (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.busy =>
+          SourceRecursiveIntersectionNative.Outcome.blocked (SourceRecursiveIntersectionNative.Blocked.nodeBusy handle)
+            (Code.node request resume) (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.ready value =>
+          SourceRecursiveIntersectionNative.Outcome.yielded (resume value)
+            (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.evaluate actual =>
+          SourceRecursiveIntersectionNative.Outcome.yielded
+            ((compileNode actual).bind fun value => Code.finishNode handle value (resume value))
+            (demandNode handle (lookupNode width request before.native).snd).snd with
+    | SourceRecursiveIntersectionNative.Outcome.yielded code state =>
+      Outcome.yielded (Control.code code) { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.done value state =>
+      Outcome.done value { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.failed failure state =>
+      Outcome.failed failure { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.blocked reason code state =>
+      Outcome.blocked (Blocked.native reason) (Control.code code) { native := state, operations := before.operations }
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:96:26: error: Dependent elimination failed: Failed to solve equation
+  Outcome.yielded next after =
+    match
+      match (lookupNode width request before.native).fst with
+      | NodeSelection.direct actual =>
+        SourceRecursiveIntersectionNative.Outcome.yielded ((compileNode actual).bind resume)
+          (lookupNode width request before.native).snd
+      | NodeSelection.memoized handle =>
+        match (demandNode handle (lookupNode width request before.native).snd).fst with
+        | FlatMemoThunk.Observation.absent =>
+          SourceRecursiveIntersectionNative.Outcome.blocked
+            (SourceRecursiveIntersectionNative.Blocked.absentNode handle) (Code.node request resume)
+            (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.busy =>
+          SourceRecursiveIntersectionNative.Outcome.blocked (SourceRecursiveIntersectionNative.Blocked.nodeBusy handle)
+            (Code.node request resume) (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.ready value =>
+          SourceRecursiveIntersectionNative.Outcome.yielded (resume value)
+            (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.evaluate actual =>
+          SourceRecursiveIntersectionNative.Outcome.yielded
+            ((compileNode actual).bind fun value => Code.finishNode handle value (resume value))
+            (demandNode handle (lookupNode width request before.native).snd).snd with
+    | SourceRecursiveIntersectionNative.Outcome.yielded code state =>
+      Outcome.yielded (Control.code code) { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.done value state =>
+      Outcome.done value { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.failed failure state =>
+      Outcome.failed failure { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.blocked reason code state =>
+      Outcome.blocked (Blocked.native reason) (Control.code code) { native := state, operations := before.operations }
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:106:26: error: Dependent elimination failed: Failed to solve equation
+  Outcome.yielded next after =
+    match
+      match (lookupNode width request before.native).fst with
+      | NodeSelection.direct actual =>
+        SourceRecursiveIntersectionNative.Outcome.yielded ((compileNode actual).bind resume)
+          (lookupNode width request before.native).snd
+      | NodeSelection.memoized handle =>
+        match (demandNode handle (lookupNode width request before.native).snd).fst with
+        | FlatMemoThunk.Observation.absent =>
+          SourceRecursiveIntersectionNative.Outcome.blocked
+            (SourceRecursiveIntersectionNative.Blocked.absentNode handle) (Code.node request resume)
+            (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.busy =>
+          SourceRecursiveIntersectionNative.Outcome.blocked (SourceRecursiveIntersectionNative.Blocked.nodeBusy handle)
+            (Code.node request resume) (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.ready value =>
+          SourceRecursiveIntersectionNative.Outcome.yielded (resume value)
+            (demandNode handle (lookupNode width request before.native).snd).snd
+        | FlatMemoThunk.Observation.evaluate actual =>
+          SourceRecursiveIntersectionNative.Outcome.yielded
+            ((compileNode actual).bind fun value => Code.finishNode handle value (resume value))
+            (demandNode handle (lookupNode width request before.native).snd).snd with
+    | SourceRecursiveIntersectionNative.Outcome.yielded code state =>
+      Outcome.yielded (Control.code code) { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.done value state =>
+      Outcome.done value { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.failed failure state =>
+      Outcome.failed failure { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.blocked reason code state =>
+      Outcome.blocked (Blocked.native reason) (Control.code code) { native := state, operations := before.operations }
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:112:73: error(lean.unknownIdentifier): Unknown identifier `bits`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:117:82: error: Dependent elimination failed: Failed to solve equation
+  Outcome.yielded next after =
+    match
+      (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).fst with
+    | FlatMemoThunk.Observation.absent =>
+      Outcome.blocked
+        (Blocked.native
+          (SourceRecursiveIntersectionNative.Blocked.absentEdge (lookupEdge width request before.native).fst))
+        (Control.code (Code.edge request resume))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.busy =>
+      Outcome.blocked
+        (Blocked.native
+          (SourceRecursiveIntersectionNative.Blocked.edgeBusy (lookupEdge width request before.native).fst))
+        (Control.code (Code.edge request resume))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.ready value =>
+      Outcome.yielded (Control.code (resume value))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.evaluate actual =>
+      Outcome.yielded
+        (Control.edgeBody actual fun value =>
+          Code.finishEdge (lookupEdge width request before.native).fst value (resume value))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:117:82: error: Dependent elimination failed: Failed to solve equation
+  Outcome.yielded next after =
+    match
+      (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).fst with
+    | FlatMemoThunk.Observation.absent =>
+      Outcome.blocked
+        (Blocked.native
+          (SourceRecursiveIntersectionNative.Blocked.absentEdge (lookupEdge width request before.native).fst))
+        (Control.code (Code.edge request resume))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.busy =>
+      Outcome.blocked
+        (Blocked.native
+          (SourceRecursiveIntersectionNative.Blocked.edgeBusy (lookupEdge width request before.native).fst))
+        (Control.code (Code.edge request resume))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.ready value =>
+      Outcome.yielded (Control.code (resume value))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.evaluate actual =>
+      Outcome.yielded
+        (Control.edgeBody actual fun value =>
+          Code.finishEdge (lookupEdge width request before.native).fst value (resume value))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:120:22: error: Dependent elimination failed: Failed to solve equation
+  Outcome.yielded next after =
+    match
+      (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).fst with
+    | FlatMemoThunk.Observation.absent =>
+      Outcome.blocked
+        (Blocked.native
+          (SourceRecursiveIntersectionNative.Blocked.absentEdge (lookupEdge width request before.native).fst))
+        (Control.code (Code.edge request resume))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.busy =>
+      Outcome.blocked
+        (Blocked.native
+          (SourceRecursiveIntersectionNative.Blocked.edgeBusy (lookupEdge width request before.native).fst))
+        (Control.code (Code.edge request resume))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.ready value =>
+      Outcome.yielded (Control.code (resume value))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.evaluate actual =>
+      Outcome.yielded
+        (Control.edgeBody actual fun value =>
+          Code.finishEdge (lookupEdge width request before.native).fst value (resume value))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:129:22: error: Dependent elimination failed: Failed to solve equation
+  Outcome.yielded next after =
+    match
+      (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).fst with
+    | FlatMemoThunk.Observation.absent =>
+      Outcome.blocked
+        (Blocked.native
+          (SourceRecursiveIntersectionNative.Blocked.absentEdge (lookupEdge width request before.native).fst))
+        (Control.code (Code.edge request resume))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.busy =>
+      Outcome.blocked
+        (Blocked.native
+          (SourceRecursiveIntersectionNative.Blocked.edgeBusy (lookupEdge width request before.native).fst))
+        (Control.code (Code.edge request resume))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.ready value =>
+      Outcome.yielded (Control.code (resume value))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+    | FlatMemoThunk.Observation.evaluate actual =>
+      Outcome.yielded
+        (Control.edgeBody actual fun value =>
+          Code.finishEdge (lookupEdge width request before.native).fst value (resume value))
+        {
+          native :=
+            (demandEdge (lookupEdge width request before.native).fst (lookupEdge width request before.native).snd).snd,
+          operations := before.operations }
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:93:98: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, SourceRecursiveIntersectionNative.step, demanded, lift] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:93:108: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, SourceRecursiveIntersectionNative.step, selected, lift] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:95:83: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, SourceRecursiveIntersectionNative.step, demanded, lift] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:95:93: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, SourceRecursiveIntersectionNative.step, selected, lift] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:105:83: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, SourceRecursiveIntersectionNative.step, demanded, lift] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:105:93: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, SourceRecursiveIntersectionNative.step, selected, lift] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:117:54: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, demanded] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:117:64: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, selected] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:119:39: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, demanded] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:119:49: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, selected] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:128:39: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, demanded] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:128:49: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [step, selected] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:143:26: error(lean.unknownIdentifier): Unknown identifier `compiled`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryActualNativeWork.lean:143:35: error(lean.unknownIdentifier): Unknown identifier `bodyBound`
