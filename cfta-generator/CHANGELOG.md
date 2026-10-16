@@ -40,10 +40,15 @@ tree automata of `cfta`, with QuickCheck integration.
   `programRuns` list a `Space`. `libraryEncoding` chooses how a space encodes the types
   (`Encoding`): `FirstOrder`, or `Curried`, in which a type constructor is
   a leaf applied by `@` edges, so that a type variable of kind `* -> *`
-  (`?Foldable t0`) ranges over a domain of type constructors. With
-  `Curried (OnlyDefault keys)` (`Defaulting`), such a variable that a run
-  does not determine takes only the list type, or none: marker leaves in
-  its domain, which `runsNarrowedBy` of `cfta` reads in each run.
+  (`?Foldable t0`) ranges over a domain of type constructors. Each key of
+  the domains has its kind (`Domain`): a `HeadDomain` of type constructors
+  of kind `* -> *`, or a `TypeDomain` of types. With `Curried OnlyDefault`
+  (`Defaulting`), a variable of kind `* -> *` that a run does not determine
+  takes only the list type, or none; a variable of a `TypeDomain` that a
+  run does not determine gives one typed term. Marker leaves in the domains
+  give both, and `runsNarrowedBy` of `cfta` reads them in each run. A
+  domain type can refer to a domain (`List (?Ord x0)`); Hectare unrolls
+  such a reference to one level, below which it takes any type.
   `parseType` and `parseProgram` read types
   and programs in Haskell syntax, and `renderType` and `renderProgram` print
   them. The `hectare` benchmark runs the paper's Hoogle+ and Stack Overflow

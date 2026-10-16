@@ -7,7 +7,7 @@ module Data.CFTA.Gen.SynthesisSpec (spec) where
 import Control.Exception (evaluate)
 import Data.List (find)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Maybe (catMaybes, fromMaybe, mapMaybe)
 import qualified Data.Set as Set
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
@@ -51,6 +51,26 @@ spec = describe "Data.CFTA.Gen.Synthesis" $ do
         forward <- mapM (listing (Text.pack "a:")) names
         backward <- mapM (listing (Text.pack "b:")) (reverse names)
         forward `shouldBe` reverse backward
+    it "lists one typed term for each program when a variable of a type domain is not determined" $ do
+        -- domain-f takes a variable of the domain C, and domain-x has any type,
+        -- so no part of a program fixes the variable: without the marker, each
+        -- program would have a typed term for each type of the domain.
+        let name = Text.pack
+            bool = TCons (name "Bool") []
+            classed = TCons (name "?C t0") []
+            domains = Map.singleton (name "C") (TypeDomain [TCons (name "Int") [], bool, TCons (name "List") [TVar (name "x0")]])
+            lib =
+                Library
+                    [(name "domain-f", TFun classed bool, [name "domain-f"]), (name "domain-x", TVar (name "a"), [name "domain-x"])]
+                    []
+                    []
+                    (Curried AnyHead domains)
+            listed = programRuns (libraryEncoding lib) (reduceWithOrder (rawSearchSpace lib (Query [] bool) 2))
+            f = name "domain-f"
+            x = name "domain-x"
+        -- One run for each of the three programs: domain-x can take a function type.
+        (length listed, Set.fromList (catMaybes listed))
+            `shouldBe` (3, Set.fromList [App (Var f) (Var x), App (Var x) (Var f), App (Var x) (Var x)])
 
 {- | The queries of the test of the order: two small Hoogle+ queries. In the
 order of the edge identities, each lists its programs in another order when
