@@ -208,6 +208,8 @@ tree automata of `cfta`, with QuickCheck integration.
   The ranks order the constructors of each type that the datatype reaches in
   declaration order, as `fromDatatype` does. Literals have no declared
   position and follow the order of their labels.
+  The positions come only from the types in the typing rows, so a field of a
+  non-regular type that no rule uses does not stop the build.
 - `compile` folds the recipe of a generator once with the solver. It groups
   child languages by the observations a guard reads, decides each guard once
   for each tuple of groups, and prunes and splits imports by the same
