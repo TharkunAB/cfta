@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.proofs true
+set_option pp.maxSteps 10000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.operand_receipt
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.operand_receipt
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.fold
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.fold
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.target_reads
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.target_reads
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.force_receipt
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.force_receipt
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.leaf_receipt
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryLowerProfiles.leaf_receipt

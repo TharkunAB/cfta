@@ -1,0 +1,104 @@
+lean/restart-evidence/20261016-constrained-outer-resources/constraint-envelope-kernels.lean:14:17: error: Tactic `decide` failed for proposition
+  congruenceStep initial = some extended
+because its `Decidable` instance
+  (congruenceStep initial).instDecidableEq (some extended)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Option.instDecidableEq`, reduction got stuck at the `Decidable` instance
+  match congruenceStep initial with
+  | none =>
+    match some extended with
+    | none => isTrue ⋯
+    | some val => isFalse ⋯
+  | some a =>
+    match some extended with
+    | none => isFalse ⋯
+    | some b =>
+      match (fun a b => instDecidableEqList a b) a b with
+      | isTrue h => isTrue ⋯
+      | isFalse n => isFalse ⋯
+lean/restart-evidence/20261016-constrained-outer-resources/constraint-envelope-kernels.lean:20:85: error: Tactic `decide` failed for proposition
+  mkEqConstraints 3 initial = RunResult.normalized extended
+because its `Decidable` instance
+  instDecidableEqRunResult (mkEqConstraints 3 initial) (RunResult.normalized extended)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `instDecidableEqRunResult`, and `instDecidableEqRunResult.decEq`, reduction got stuck at the `Decidable` instance
+  match mkEqConstraints 3 initial, RunResult.normalized extended with
+  | RunResult.timeout, RunResult.timeout => isTrue ⋯
+  | RunResult.timeout, RunResult.contradiction => isFalse instDecidableEqRunResult.decEq._proof_1
+  | RunResult.timeout, RunResult.normalized classes => isFalse ⋯
+  | RunResult.contradiction, RunResult.timeout => isFalse instDecidableEqRunResult.decEq._proof_3
+  | RunResult.contradiction, RunResult.contradiction => isTrue ⋯
+  | RunResult.contradiction, RunResult.normalized classes => isFalse ⋯
+  | RunResult.normalized classes, RunResult.timeout => isFalse ⋯
+  | RunResult.normalized classes, RunResult.contradiction => isFalse ⋯
+  | RunResult.normalized a, RunResult.normalized b => if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+'MicroCFTA.ConstraintEnvelopeChecks.suffix_extension' depends on axioms: [propext, sorryAx, Quot.sound]
+MicroCFTA.ConstraintEnvelopeChecks.suffix_extension : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds
+    4 2 MicroCFTA.ConstraintEnvelopeChecks.initial ∧
+  MicroCFTA.EqualityNormalize.congruenceStep MicroCFTA.ConstraintEnvelopeChecks.initial =
+      some MicroCFTA.ConstraintEnvelopeChecks.extended ∧
+    [1, 1, 2] ∈ List.flatten MicroCFTA.ConstraintEnvelopeChecks.extended ∧ ¬[1, 1, 2].length ≤ 2
+'MicroCFTA.ConstraintEnvelopeChecks.completed_extension' depends on axioms: [propext, sorryAx, Quot.sound]
+MicroCFTA.ConstraintEnvelopeChecks.completed_extension : MicroCFTA.EqualityNormalize.mkEqConstraints 3
+    MicroCFTA.ConstraintEnvelopeChecks.initial =
+  MicroCFTA.EqualityNormalize.RunResult.normalized MicroCFTA.ConstraintEnvelopeChecks.extended
+'MicroCFTA.ConstraintEnvelopeChecks.unbounded_indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.ConstraintEnvelopeChecks.unbounded_indices : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Envelope
+  2 2 (MicroCFTA.SourceCompactGuards.normalize [[[1000000], [1000001, 1000002]]])
+'MicroCFTA.ConstraintEnvelopeChecks.combine_then_descend' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.ConstraintEnvelopeChecks.combine_then_descend : ∀
+  (inherited own : MicroCFTA.SourceEqualityPrecheck.Constraint)
+  (firstCount secondCount firstDepth secondDepth index : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds firstCount firstDepth inherited →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds secondCount secondDepth own →
+      ∃ combined,
+        MicroCFTA.SourceEqualityInheritedPayload.combine inherited own = Except.ok combined ∧
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds
+            ((firstCount + secondCount) *
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount
+                ((firstCount + secondCount) * max firstDepth secondDepth)
+                (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalizedDepth
+                  (firstCount + secondCount) (max firstDepth secondDepth)))
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalizedDepth (firstCount + secondCount)
+                (max firstDepth secondDepth) -
+              1)
+            (MicroCFTA.SourceEqualityDescend.descend combined index)
+'MicroCFTA.ConstraintEnvelopeChecks.live_original_only' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.ConstraintEnvelopeChecks.live_original_only : ∀ (own inherited : MicroCFTA.SourceEqualityPrecheck.Constraint)
+  (occurrences depth : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds occurrences depth own →
+    ∀ (records : List MicroCFTA.SourceEqualityClassOrder.Record),
+      MicroCFTA.SourceEqualityPrecheck.precheck own inherited =
+          Except.ok (MicroCFTA.SourceEqualityPrecheck.Branch.classes records) →
+        (List.map MicroCFTA.SourceEqualityClassOrder.Record.paths records).flatten.length ≤ occurrences ∧
+          ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+            record ∈ records →
+              ∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ record.paths → List.length path ≤ depth
+'MicroCFTA.ConstraintEnvelopeChecks.initial_allocated_paths' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.ConstraintEnvelopeChecks.initial_allocated_paths : ∀ {Formula : Type}
+  (stored : MicroCFTA.SourceEqualityConstraintAllocation.Value) (guard : MicroCFTA.SourceGuards.Guard Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints stored →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints inherited →
+        ∀ (original : Option MicroCFTA.EqualityNormalize.Constraints),
+          MicroCFTA.SourceEqualityGuardReadback.Cached original →
+            MicroCFTA.SourceEqualityPhysicalPayload.read original = Except.ok stored.payload →
+              ∀ (occurrences depth : Nat),
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds occurrences depth
+                    (MicroCFTA.SourceCompactGuards.sourceEqualities { equalities := original, guard := guard }) →
+                  ∀ (records : List MicroCFTA.SourceEqualityClassOrder.Record),
+                    (MicroCFTA.SourceEqualityPartialPrecheckAllocation.run stored guard inherited before).fst =
+                        Except.ok (MicroCFTA.SourceEqualityPrecheck.Branch.classes records) →
+                      ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+                        record ∈ records →
+                          ∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ record.paths → List.length path ≤ depth
+'MicroCFTA.ConstraintEnvelopeChecks.terminal_descent' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.ConstraintEnvelopeChecks.terminal_descent : ∀ (index : Nat),
+  MicroCFTA.SourceEqualityDescend.descend none index = none ∧
+    MicroCFTA.SourceEqualityDescend.descend (some []) index = some [] ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds 0 0
+        (MicroCFTA.SourceEqualityDescend.descend (some []) index)

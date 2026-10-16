@@ -1,0 +1,171 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalizedDepth' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalizedDepth : Nat → Nat → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds : Nat →
+  Nat → MicroCFTA.EqualityNormalize.Constraints → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds : Nat →
+  Nat → Option.{0} MicroCFTA.EqualityNormalize.Constraints → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Envelope' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Envelope : Nat →
+  Nat → Option.{0} MicroCFTA.EqualityNormalize.Constraints → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Envelope.bounds' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Envelope.bounds : ∀ {occurrences depth : Nat}
+  {classes : Option.{0} MicroCFTA.EqualityNormalize.Constraints},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Envelope occurrences depth classes →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) occurrences
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) occurrences depth)
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalizedDepth occurrences depth)))
+      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalizedDepth occurrences depth) classes
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount_mono' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount_mono : ∀ {first second : Nat},
+  @LE.le.{0} Nat instLENat first second →
+    ∀ (depth : Nat),
+      @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount first depth)
+        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.wordCount second depth)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalize' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.normalize : ∀
+  (classes : MicroCFTA.EqualityNormalize.Constraints) (occurrences depth : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds occurrences depth classes →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Envelope occurrences depth
+      (MicroCFTA.SourceCompactGuards.normalize classes)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds.append' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds.append : ∀
+  {firstCount secondCount firstDepth secondDepth : Nat} {first second : MicroCFTA.EqualityNormalize.Constraints},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds firstCount firstDepth first →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds secondCount secondDepth second →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstCount secondCount)
+        (@Max.max.{0} Nat Nat.instMax firstDepth secondDepth)
+        (@HAppend.hAppend.{0, 0, 0} MicroCFTA.EqualityNormalize.Constraints MicroCFTA.EqualityNormalize.Constraints
+          MicroCFTA.EqualityNormalize.Constraints
+          (@instHAppendOfAppend.{0} MicroCFTA.EqualityNormalize.Constraints
+            (@List.instAppend.{0} MicroCFTA.EqualityNormalize.Class))
+          first second)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.combine' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.combine : ∀
+  {firstCount secondCount firstDepth secondDepth : Nat}
+  (first second : Option.{0} MicroCFTA.EqualityNormalize.Constraints),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds firstCount firstDepth first →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds secondCount secondDepth second →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Envelope
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstCount secondCount)
+        (@Max.max.{0} Nat Nat.instMax firstDepth secondDepth)
+        (MicroCFTA.SourceCompactGuards.combineEqualities first second)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds : Nat →
+  Nat → MicroCFTA.SourceEqualityPrecheck.Constraint → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.read_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.read_bounds : ∀
+  (equalities : Option.{0} MicroCFTA.EqualityNormalize.Constraints) (occurrences depth : Nat),
+  MicroCFTA.SourceEqualityGuardReadback.Cached equalities →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds occurrences depth equalities →
+      ∀ (payload : MicroCFTA.SourceEqualityPrecheck.Constraint),
+        @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+            (MicroCFTA.SourceEqualityPhysicalPayload.read equalities)
+            (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint payload) →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds occurrences depth payload
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.payload_combine' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.payload_combine : ∀
+  {firstCount secondCount firstDepth secondDepth : Nat}
+  (inherited own combined : MicroCFTA.SourceEqualityPrecheck.Constraint),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds firstCount firstDepth inherited →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds secondCount secondDepth own →
+      @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+          (MicroCFTA.SourceEqualityInheritedPayload.combine inherited own)
+          (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint combined) →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Envelope
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstCount secondCount)
+          (@Max.max.{0} Nat Nat.instMax firstDepth secondDepth)
+          (MicroCFTA.SourceEqualityInheritedPayload.classes combined)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.payload_descend' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.payload_descend : ∀
+  (payload : MicroCFTA.SourceEqualityPrecheck.Constraint) (index occurrences depth : Nat),
+  MicroCFTA.SourceEqualityDescend.WellFormed payload →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds occurrences depth payload →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds occurrences
+        (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) depth
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (MicroCFTA.SourceEqualityDescend.descend payload index)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.precheck_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.precheck_bounds : ∀
+  (own inherited : MicroCFTA.SourceEqualityPrecheck.Constraint) (occurrences depth : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds occurrences depth own →
+    ∀ (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+      @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch)
+          (MicroCFTA.SourceEqualityPrecheck.precheck own inherited)
+          (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch
+            (MicroCFTA.SourceEqualityPrecheck.Branch.classes records)) →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.Bounds occurrences depth
+          (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+            MicroCFTA.SourceEqualityClassOrder.Record.paths records)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.precheck_paths' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.precheck_paths : ∀
+  (own inherited : MicroCFTA.SourceEqualityPrecheck.Constraint) (occurrences depth : Nat),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.PayloadBounds occurrences depth own →
+    ∀ (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+      @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch)
+          (MicroCFTA.SourceEqualityPrecheck.precheck own inherited)
+          (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch
+            (MicroCFTA.SourceEqualityPrecheck.Branch.classes records)) →
+        ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+          @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+              (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+            ∀ (path : MicroCFTA.EqualityNormalize.Path),
+              @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+                @LE.le.{0} Nat instLENat (@List.length.{0} Nat path) depth
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.allocated_precheck_paths' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.allocated_precheck_paths : ∀ {Formula : Type}
+  (stored : MicroCFTA.SourceEqualityConstraintAllocation.Value) (guard : MicroCFTA.SourceGuards.Guard Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints stored →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints inherited →
+        ∀ (original : Option.{0} MicroCFTA.EqualityNormalize.Constraints),
+          MicroCFTA.SourceEqualityGuardReadback.Cached original →
+            @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+                (MicroCFTA.SourceEqualityPhysicalPayload.read original)
+                (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint stored.payload) →
+              ∀ (occurrences depth : Nat),
+                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.OptionBounds occurrences depth
+                    (@MicroCFTA.SourceCompactGuards.sourceEqualities Formula
+                      (@MicroCFTA.SourceSymbolicIndex.Constraint.mk Formula original guard)) →
+                  ∀ (records : List.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+                    @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch)
+                        (@Prod.fst.{0, 0} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch)
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (@MicroCFTA.SourceEqualityPartialPrecheckAllocation.run Formula stored guard inherited
+                            before))
+                        (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Branch
+                          (MicroCFTA.SourceEqualityPrecheck.Branch.classes records)) →
+                      ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record),
+                        @Membership.mem.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                            (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@List.instMembership.{0} MicroCFTA.SourceEqualityClassOrder.Record) records record →
+                          ∀ (path : MicroCFTA.EqualityNormalize.Path),
+                            @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+                              @LE.le.{0} Nat instLENat (@List.length.{0} Nat path) depth

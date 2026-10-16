@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRawRebuildResources
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.proofs true
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRawRebuildResources.edge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRawRebuildResources.edge
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRawRebuildResources.modifyRequests
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRawRebuildResources.modifyRequests
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRawRebuildResources.modify_work
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRawRebuildResources.modify_work
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRawRebuildResources.modify
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRawRebuildResources.modify

@@ -1,0 +1,48 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.lean:51:18: error: unsolved goals
+case succ
+alphabet : List Nat
+depth : Nat
+ih : (words alphabet depth).length = wordCount alphabet.length depth
+⊢ (List.map (fun a => wordCount alphabet.length depth) alphabet).sum + 1 =
+    1 + alphabet.length * wordCount alphabet.length depth
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.lean:132:24: error: Application type mismatch: The argument
+  fun own member => pathCounts own (List.mem_cons_of_mem paths member)
+has type
+  ∀ (own : Class), own ∈ rest → List.length own ≤ wordCount alphabet (normalizedDepth occurrences depth)
+but is expected to have type
+  mkEqConstraints fuel classes = RunResult.normalized rest
+in the application
+  ih fun own member => pathCounts own (List.mem_cons_of_mem paths member)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.lean:134:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  d - e - f + g ≤ -1
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≥ 0
+where
+ a := ↑occurrences
+ b := ↑(members initial).length
+ c := ↑(paths :: rest).length
+ d := ↑(wordCount alphabet (normalizedDepth occurrences depth))
+ e := ↑(List.length paths)
+ f := ↑rest.flatten.length
+ g := ↑rest.length * ↑(wordCount alphabet (normalizedDepth occurrences depth))
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryConstraintEnvelope.lean:155:66: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + b - c - d ≥ 1
+where
+ a := ↑(List.flatten first).length
+ b := ↑(List.flatten second).length
+ c := ↑firstCount
+ d := ↑secondCount
