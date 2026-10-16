@@ -176,13 +176,15 @@ instantiateType s (Term h ts) = Term h <$> traverse (instantiateType s) ts
 matchTypeTerm :: Term -> Term -> Map Symbol Term -> Maybe (Map Symbol Term)
 matchTypeTerm (Term h []) t s
     | isTypeVar h
-    , not (hasTypeVars t) || t == Term h [] = bindMatch h t s
+    , not (hasTypeVars t) || t == Term h [] =
+        bindMatch h t s
 matchTypeTerm (Term h ts) (Term k us) s
-    | h == k && length ts == length us = foldM (\m (a,b) -> matchTypeTerm a b m) s (zip ts us)
+    | h == k && length ts == length us = foldM (\m (a, b) -> matchTypeTerm a b m) s (zip ts us)
 matchTypeTerm _ _ _ = Nothing
 
--- | Completion keeps unresolved type patterns apart. Ground matches can
--- instantiate a carrier with any checked type.
+{- | Completion keeps unresolved type patterns apart. Ground matches can
+instantiate a carrier with any checked type.
+-}
 hasTypeVars :: Term -> Bool
 hasTypeVars (Term h ts) = isTypeVar h || any hasTypeVars ts
 

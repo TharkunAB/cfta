@@ -58,7 +58,7 @@ data StEcta = StEcta
     {- ^ The variables of each type, from the variable with
     the index 0 of the type.
     -}
-    , test_cases :: [VarVals]
+    , test_cases :: [TestCase]
     -- ^ The test cases that all terms of the phase share.
     }
     deriving (Show)
@@ -276,7 +276,7 @@ mkStecta size numTests instances sig givenTrans skelTrans =
         , schema_vars = Map.fromList [(Symbol x, map (Symbol . fst) vs) | (x, vs) <- moreVars]
         , sig_ty_cons = Map.keys eq_insts
         , eq_insts = eq_insts
-        , test_cases = testCases numTests inst_sig
+        , test_cases = testSchedule numTests
         , arb_insts = arbs
         }
   where
@@ -448,7 +448,7 @@ consider Settings{..} StEcta{..} lvl full_term s0
             (so_far s0)
         -- The schema goes into the decision tree of its type. It is
         -- evaluated on the test cases of its path only.
-        inserted <- DT.insert (valuesEqual eq_inst) np_term (values np_term) tree
+        inserted <- DT.insert (valuesEqual eq_inst) test_cases np_term (values np_term) tree
         let s = s0{so_far = so_far s0 + 1}
             -- A later phase enumerates the schema again, so it goes into
             -- seen.
@@ -491,7 +491,9 @@ consider Settings{..} StEcta{..} lvl full_term s0
     -- The values of a term on the test cases, evaluated when needed.
     values u = case compileTerm inst_sig u of
         Left message -> error message
-        Right evaluateTerm -> map evaluateTerm test_cases
+        Right evaluateTerm ->
+            let required = Map.fromList [(v, inst_sig Map.! v) | Symbol v <- holes isVar u]
+             in \tc -> evaluateTerm (testCaseValues required tc)
 
     -- The schema equals the representative schema rep. Test the most
     -- general instance of the schema against the instances of rep.
@@ -532,7 +534,7 @@ consider Settings{..} StEcta{..} lvl full_term s0
         | not (testable i) = return (Knew, s)
         | otherwise = do
             let table = Map.findWithDefault DT.empty rep (instance_trees s)
-            inserted <- DT.insert (valuesEqual eq_inst) i (values i) table
+            inserted <- DT.insert (valuesEqual eq_inst) test_cases i (values i) table
             case inserted of
                 DT.Untested -> return (Knew, s)
                 DT.Distinct table' ->

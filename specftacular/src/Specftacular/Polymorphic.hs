@@ -18,12 +18,14 @@ import qualified Type.Reflection as TR
 import Type.Reflection.Unsafe (mkTrApp)
 import Unsafe.Coerce (unsafeCoerce)
 
--- | Each key is an exact carrier TypeRep. Each value is its verified instance.
--- Build this map separately for every occurrence of a signature constant.
+{- | Each key is an exact carrier TypeRep. Each value is its verified instance.
+Build this map separately for every occurrence of a signature constant.
+-}
 type Substitution = Map SomeTypeRep SomeTypeRep
 
--- | Apply an existing type constructor. Check the argument kind first.
--- This operation does not create a TyCon or infer its kind from its name.
+{- | Apply an existing type constructor. Check the argument kind first.
+This operation does not create a TyCon or infer its kind from its name.
+-}
 applyType :: SomeTypeRep -> SomeTypeRep -> Either String SomeTypeRep
 applyType (SomeTypeRep fun) (SomeTypeRep arg) =
     case TR.typeRepKind fun of
@@ -49,8 +51,9 @@ functionType (SomeTypeRep arg) (SomeTypeRep result) =
                 Nothing -> Left "function result is not a lifted type"
                 Just HRefl -> Right (SomeTypeRep (TR.Fun arg result))
 
--- | Rebuild only applications and arrows. Reuse all other representations.
--- A carrier replacement must have the same kind as its original carrier.
+{- | Rebuild only applications and arrows. Reuse all other representations.
+A carrier replacement must have the same kind as its original carrier.
+-}
 substitute :: Substitution -> SomeTypeRep -> Either String SomeTypeRep
 substitute substitution original@(SomeTypeRep rep)
     | Just replacement@(SomeTypeRep rep') <- Map.lookup original substitution =

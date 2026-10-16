@@ -32,12 +32,12 @@ import Data.Typeable
 import Debug.Trace (trace)
 
 import GHC.Exts (Any)
+import Specftacular.Polymorphic (applyType, functionType, specialiseDynamic)
 import Test.QuickCheck (Arbitrary (..), Gen (..))
 import qualified Test.QuickCheck as QC
 import Test.QuickCheck.Gen (unGen)
 import Test.QuickCheck.Gen.Unsafe (promote)
 import Test.QuickCheck.Random (mkQCGen)
-import Specftacular.Polymorphic (applyType, functionType, specialiseDynamic)
 import qualified Type.Reflection as TR
 import Unsafe.Coerce
 
@@ -606,7 +606,7 @@ toTemplate _ t = t
 -- | Abstract carrier types in a rule share one type substitution.
 templateType :: Term -> Term
 templateType t
-    | Just v <- lookup t [(typeSkeletonToTerm ty, name) | (ty,name) <- carriers] = Term (Symbol ("<t>" <> v)) []
+    | Just v <- lookup t [(typeSkeletonToTerm ty, name) | (ty, name) <- carriers] = Term (Symbol ("<t>" <> v)) []
 templateType (Term s ts) = Term s (map templateType ts)
 
 -- | Whether two types are equal when A, B, C, D, and Acc are one type.
@@ -655,7 +655,7 @@ matchType patternType actualType = go (generalizeType patternType) actualType Ma
         _ -> Left "inconsistent type instance"
     go (TFun a b) (TFun c d) s = go a c s >>= go b d
     go (TCons c as) (TCons d bs) s
-        | c == d && length as == length bs = foldM (\m (a,b) -> go a b m) s (zip as bs)
+        | c == d && length as == length bs = foldM (\m (a, b) -> go a b m) s (zip as bs)
     go _ _ _ = Left "signature does not match its type annotation"
 
 {- | Check every leaf and application against its annotation. Signature
@@ -719,7 +719,11 @@ specialiseValue sig fun target
         Untyped value -> Right (Untyped value)
         Typed dynamic -> do
             bindings <- matchType (sfTypeRep fun) target
-            substitution <- Map.fromList <$> traverse (\(t,v) -> (,) <$> representation t <*> representation (bindings Map.! v)) [(t,v) | (t,v) <- carriers, Map.member v bindings]
+            substitution <-
+                Map.fromList
+                    <$> traverse
+                        (\(t, v) -> (,) <$> representation t <*> representation (bindings Map.! v))
+                        [(t, v) | (t, v) <- carriers, Map.member v bindings]
             specialized <- specialiseDynamic substitution dynamic
             if typeRepToTypeSkeleton (dynTypeRep specialized) == target
                 then Right (Typed specialized)
@@ -730,13 +734,21 @@ specialiseValue sig fun target
         b' <- representation b
         functionType a' b'
     representation (TCons name args) = do
-        constructor <- maybe (Left ("no type representation for " ++ T.unpack name)) Right (Map.lookup name constructors <|> Map.lookup name generatedConstructors)
+        constructor <-
+            maybe
+                (Left ("no type representation for " ++ T.unpack name))
+                Right
+                (Map.lookup name constructors <|> Map.lookup name generatedConstructors)
         foldM (\f a -> representation a >>= applyType f) constructor args
     representation (TVar _) = Left "unresolved type variable"
-    constructors = Map.fromList (concatMap collect (map (g_tr . snd) builtinReps ++ [dynTypeRep d | f <- Map.elems sig, Typed d <- [sfFunc f]]))
+    constructors =
+        Map.fromList
+            (concatMap collect (map (g_tr . snd) builtinReps ++ [dynTypeRep d | f <- Map.elems sig, Typed d <- [sfFunc f]]))
     -- A native generator stores its TypeRep without forcing the generated
     -- payload. Consult these types only when the signature lacks a type.
-    generatedConstructors = Map.fromList (concatMap collect [dynTypeRep d | GivenFun (GivenVar _ _ _ (Generator g)) _ <- Map.elems sig, Typed d <- [g 0 0]])
+    generatedConstructors =
+        Map.fromList
+            (concatMap collect [dynTypeRep d | GivenFun (GivenVar _ _ _ (Generator g)) _ <- Map.elems sig, Typed d <- [g 0 0]])
     collect (TR.SomeTypeRep rep) = case rep of
         TR.Fun a b -> collect (TR.SomeTypeRep a) ++ collect (TR.SomeTypeRep b)
         TR.App f x -> collect (TR.SomeTypeRep f) ++ collect (TR.SomeTypeRep x)
@@ -761,40 +773,42 @@ untypedInstance inst = inst{inst_gen = untypedGenerator (inst_gen inst), inst_eq
 untypedGenerator :: Generator -> Generator
 untypedGenerator (Generator g) = Generator (\seed size -> untyped (g seed size))
 
-{- | The test cases of a signature. Keep the n random cases unchanged.
-Add eight random cases with separate seeds. Add 32 cases that combine
-Int boundaries with empty and singleton lists. Each variable has the same
-values in each phase.
+{- | A reproducible test case. Store seeds and directed-case indexes,
+so validation does not retain all generated inputs.
 -}
-testCases :: Int -> Sig -> [VarVals]
-testCases n sig = randomCases ++ validationCases ++ boundaryCases
+data TestCase
+    = RandomCase Int Int
+    | ValidationCase Int Int
+    | BoundaryCase Int Int Int
+    deriving (Show)
+
+-- | Keep the random schedule and add independent and boundary cases.
+testSchedule :: Int -> [TestCase]
+testSchedule n =
+    zipWith RandomCase [0 ..] (testSizes n)
+        ++ zipWith ValidationCase [0 ..] (testSizes 8)
+        ++ [ BoundaryCase k boundary active
+           | (k, boundary) <- zip [0 ..] [minBound, minBound + 1, -1, 0, 1, 2, maxBound - 1, maxBound]
+           , active <- [0 .. 3]
+           ]
+
+-- | Generate one valuation from its descriptor. Repeated calls agree.
+testCaseValues :: Sig -> TestCase -> VarVals
+testCaseValues sig testcase =
+    Map.fromList
+        [(v, value v i g t) | (v, GivenFun (GivenVar _ _ i g) t) <- Map.assocs sig]
   where
-    variables =
-        [(v, i, g, t) | (v, GivenFun (GivenVar _ _ i g) t) <- Map.assocs sig]
-    randomCases =
-        [ Map.fromList [(v, generate g (hash (k, v)) size) | (v, _, g, _) <- variables]
-        | (k, size) <- zip [0 :: Int ..] (testSizes n)
-        ]
-    validationCases =
-        [ Map.fromList
-            [(v, generate g (hash ("validation" :: String, k, v)) size) | (v, _, g, _) <- variables]
-        | (k, size) <- zip [0 :: Int ..] (testSizes 8)
-        ]
-    boundaryCases =
-        [ Map.fromList
-            [ ( v
-              , fromMaybe
-                    (generate g (hash ("boundary" :: String, k, active, v)) 100)
-                    (lookup t (if i `mod` 4 == active then nonempty else empty))
-              )
-            | (v, i, g, t) <- variables
-            ]
-        | (k, boundary) <- zip [0 :: Int ..] [minBound, minBound + 1, -1, 0, 1, 2, maxBound - 1, maxBound]
-        , let empty = boundaryValues boundary False
-        , let nonempty = boundaryValues boundary True
-        , active <- [0 .. 3]
-        ]
-    generate (Generator g) seed size = g seed size
+    value v _ (Generator g) _ | RandomCase k size <- testcase = g (hash (k, v)) size
+    value v _ (Generator g) _ | ValidationCase k size <- testcase = g (hash ("validation" :: String, k, v)) size
+    value v i (Generator g) t
+        | BoundaryCase k boundary active <- testcase =
+            fromMaybe
+                (g (hash ("boundary" :: String, k, active, v)) 100)
+                (lookup t (boundaryValues boundary (i `mod` 4 == active)))
+
+-- | The valuations of the complete test schedule.
+testCases :: Int -> Sig -> [VarVals]
+testCases n sig = map (testCaseValues sig) (testSchedule n)
 
 {- | Values for Int and the carrier types, and their first three list
 types. A selected list contains one zero value. Every other list is empty.
