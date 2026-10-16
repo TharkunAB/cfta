@@ -20,6 +20,7 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, conjoinConstraints, equalityConstraint, noConstraint)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import qualified Data.CFTA.Gen as Gen
+import Data.CFTA.Gen.Refinement.Derive (NodeView)
 import Data.CFTA.Gen.TypedArithmeticLanguage
 import Data.CFTA.Gen.Typing (
     Bound (..),
@@ -64,16 +65,21 @@ data Typed = TZero | TTrue | TAdd Typed Typed | TIsZero Typed | TVar !Int !Ty | 
     deriving stock (Eq, Ord, Show, Generic)
     deriving anyclass (HasFTA)
 
+-- | One node of a 'Typed' term, for the typing rules.
+data TypedNode e = TZeroNode | TTrueNode | TAddNode e e | TIsZeroNode e | TVarNode e e | TLetNode e e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
 -- | The typing rules of 'Typed'.
-typedRules :: [Rule Ty]
+typedRules :: [Rule TypedNode Ty]
 typedRules =
-    [ rule "TZero" [] TInt
-    , rule "TTrue" [] TBool
-    , rule "TAdd" [subterm [] TInt, subterm [] TInt] TInt
-    , rule "TIsZero" [subterm [] TInt] TBool
-    , variable "TVar" (\index typ -> [value index, value typ])
+    [ rule TZeroNode TInt
+    , rule TTrueNode TBool
+    , rule (TAddNode (subterm [] TInt) (subterm [] TInt)) TInt
+    , rule (TIsZeroNode (subterm [] TInt)) TBool
+    , variable (\index typ -> TVarNode (value index) (value typ))
     ]
-        <> [rule "TLet" [subterm [] rhs, subterm [rhs] typ] typ | rhs <- [TInt, TBool], typ <- [TInt, TBool]]
+        <> [rule (TLetNode (subterm [] rhs) (subterm [rhs] typ)) typ | rhs <- [TInt, TBool], typ <- [TInt, TBool]]
 
 -- | The closed well-typed terms up to the bound, from the rules.
 typedLanguage :: Int -> Gen.Gen Symbol Typed
@@ -186,7 +192,7 @@ arithPrograms inputTypes argumentTypes bound =
     either (error . show) id $
         fromTypingRules (Typing (Nesting (fromIntegral bound)) inputTypes [IntType, BoolType] withArguments)
   where
-    withArguments = arithRules <> [rule "Arg" [value position] typ | (position, typ) <- zip [0 :: Int ..] argumentTypes]
+    withArguments = arithRules <> [rule (ArgNode (value position)) typ | (position, typ) <- zip [0 :: Int ..] argumentTypes]
 
 -- | Whether each conditional of the type 'IntType' in a well-typed term has two equal branches.
 equalIntBranches :: [ArithType] -> Arith -> Bool
@@ -339,6 +345,11 @@ newtype Lettered = Lit Letter
     deriving stock (Eq, Ord, Show, Generic)
     deriving anyclass (HasFTA)
 
+-- | The node of a 'Lettered' term.
+newtype LetteredNode e = LitNode e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
 -- | A non-regular type: each level nests its element type in a list.
 data Nested a = Here a | Deeper (Nested [a])
     deriving stock (Eq, Ord, Show, Generic)
@@ -349,6 +360,11 @@ instance (HasFTA a) => HasFTA (Nested a)
 data Holding = Plain | Other | Holder (Nested Int)
     deriving stock (Eq, Ord, Show, Generic)
     deriving anyclass (HasFTA)
+
+-- | The node of a 'Holding' term.
+data HoldingNode e = PlainNode | OtherNode | HolderNode e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
 
 spec :: Spec
 spec = describe "Data.CFTA.Gen.Typing" $ do
@@ -442,38 +458,35 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
             length (nubOrd listed) `shouldBe` length listed
             fromIntegral (length listed) `shouldBe` sum (arithSizeCounts [] 1 11)
     describe "the rules" $ do
-        it "names only constructors of the datatype" $
-            either
-                Just
-                (const Nothing)
-                (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] [rule "Num" [value (0 :: Int)] IntType, rule "Mul" [] IntType]))
-                `shouldBe` Just (UnknownConstructors ["Mul"] ["Num", "Flag", "Plus", "Less", "If", "Var", "Let", "Arg"])
+        it "take a node view that fits the datatype" $
+            either Just (const Nothing) (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] [rule TZeroNode IntType]))
+                `shouldBe` Just (NodeViewMismatch "Num Flag Plus Less If Var Let Arg" "the datatype has 8 constructors, the node view 6")
         it "fit the fields of their constructor" $ do
-            let mismatch given = either Just (const Nothing) (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] given))
-            mismatch [rule "Plus" [subterm [] IntType] IntType] `shouldBe` Just (FieldMismatch "Plus")
-            mismatch [rule "Num" [subterm [] IntType] IntType] `shouldBe` Just (FieldMismatch "Num")
-            mismatch [rule "Num" [value True] IntType] `shouldBe` Just (FieldMismatch "Num")
-            mismatch [rule "Let" [value (Var 99), subterm [IntType] IntType] IntType] `shouldBe` Just (FieldMismatch "Let")
-            mismatch [rule "Let" [value (Plus (Num 0) (Num 0)), subterm [IntType] IntType] IntType]
+            let mismatch :: [Rule ArithNode ArithType] -> Maybe TypingError
+                mismatch given = either Just (const Nothing) (fromTypingRules @Arith (Typing (Nesting 1) [] [IntType] given))
+            mismatch [rule (NumNode (subterm [] IntType)) IntType] `shouldBe` Just (FieldMismatch "Num")
+            mismatch [rule (NumNode (value True)) IntType] `shouldBe` Just (FieldMismatch "Num")
+            mismatch [rule (LetNode (value (Var 99)) (subterm [IntType] IntType)) IntType] `shouldBe` Just (FieldMismatch "Let")
+            mismatch [rule (LetNode (value (Plus (Num 0) (Num 0))) (subterm [IntType] IntType)) IntType]
                 `shouldBe` Just (FieldMismatch "Let")
-            mismatch [rule "Let" [value (0 :: Int), subterm [IntType] IntType] IntType] `shouldBe` Just (FieldMismatch "Let")
+            mismatch [rule (LetNode (value (0 :: Int)) (subterm [IntType] IntType)) IntType] `shouldBe` Just (FieldMismatch "Let")
             mismatch
-                [ rule "Num" [value (0 :: Int)] IntType
-                , rule "Let" [subterm [] IntType, subterm [IntType] IntType] IntType
-                , variable "Var" (\_ _ -> [value False])
+                [ rule (NumNode (value (0 :: Int))) IntType
+                , rule (LetNode (subterm [] IntType) (subterm [IntType] IntType)) IntType
+                , variable (\_ _ -> VarNode (value False))
                 ]
                 `shouldBe` Just (FieldMismatch "Var")
     describe "the order of the values" $ do
         it "orders the constructors of a helper type in declaration order, as fromDatatype does" $ do
             let typed =
                     either (error . show) id $
-                        fromTypingRules @Lettered (Typing (Nesting 0) [] [()] [rule "Lit" [value A] (), rule "Lit" [value Z] ()])
+                        fromTypingRules @Lettered (Typing (Nesting 0) [] [()] [rule (LitNode (value A)) (), rule (LitNode (value Z)) ()])
                 derived = Gen.fromDatatype $ either (error . show) id $ deriveFTA @Lettered
             Gen.values derived `shouldBe` Right [Lit Z, Lit A]
             Gen.values typed `shouldBe` Right [Lit Z, Lit A]
         it "reads only the types of the rules, so a non-regular field that no rule uses does not stop it" $
             Gen.values
                 ( either (error . show) id $
-                    fromTypingRules @Holding (Typing (Nesting 0) [] [()] [rule "Other" [] (), rule "Plain" [] ()])
+                    fromTypingRules @Holding (Typing (Nesting 0) [] [()] [rule OtherNode (), rule PlainNode ()])
                 )
                 `shouldBe` Right [Plain, Other]

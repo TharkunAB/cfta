@@ -167,9 +167,10 @@ module Data.CFTA.Gen.Refinement.Derive (
     invariantAnnotations,
 
     -- * Node views and measures
-    NodeView (nodeShape, buildNode),
+    NodeView (nodeShape, buildNode, nodeFields),
     FieldKind (..),
     AnyNode (..),
+    checkNodeShape,
     MeasureRecord (measureNames, measureFields, fromMeasureNames),
     Single (..),
     NoMeasures (..),
@@ -333,23 +334,33 @@ class NodeView (node :: Kind.Type -> Kind.Type) where
         (Children.Measures e, Generic (node e), GNode (Rep (node e)) e) => Int -> [Children.Child e] -> node e
     buildNode position children = to (gBuild position children)
 
+    {- | The position of the constructor of a node, and its fields in order:
+    'Just' a field of the type @e@, and 'Nothing' a record of measures.
+    -}
+    nodeFields :: node e -> (Int, [Maybe e])
+    default nodeFields :: (Generic (node e), GNode (Rep (node e)) e) => node e -> (Int, [Maybe e])
+    nodeFields = gNodeFields . from
+
 -- | The node view of a datatype without an invariant: it fits every datatype, and the derivation does not read it.
 data AnyNode e = AnyNode
 
 instance NodeView AnyNode where
     nodeShape _ = Nothing
     buildNode _ _ = AnyNode
+    nodeFields AnyNode = (0, [])
 
 -- | The generic representation of a node view.
 class GNode f e where
     gShape :: Proxy f -> [(String, [FieldKind])]
     gCount :: Proxy f -> Int
     gBuild :: (Children.Measures e) => Int -> [Children.Child e] -> f p
+    gNodeFields :: f p -> (Int, [Maybe e])
 
 instance (GNode f e) => GNode (M1 D meta f) e where
     gShape _ = gShape @f @e Proxy
     gCount _ = gCount @f @e Proxy
     gBuild position children = M1 (gBuild position children)
+    gNodeFields (M1 inner) = gNodeFields inner
 
 instance (GNode f e, GNode g e) => GNode (f :+: g) e where
     gShape _ = gShape @f @e Proxy <> gShape @g @e Proxy
@@ -357,25 +368,31 @@ instance (GNode f e, GNode g e) => GNode (f :+: g) e where
     gBuild position children
         | position < gCount @f @e Proxy = L1 (gBuild position children)
         | otherwise = R1 (gBuild (position - gCount @f @e Proxy) children)
+    gNodeFields (L1 left) = gNodeFields left
+    gNodeFields (R1 right) = let (position, fields) = gNodeFields @g @e right in (gCount @f @e Proxy + position, fields)
 
 instance GNode V1 e where
     gShape _ = []
     gCount _ = 0
     gBuild _ _ = error "Data.CFTA.Gen.Refinement.Derive: a node view without constructors"
+    gNodeFields _ = error "Data.CFTA.Gen.Refinement.Derive: a node view without constructors"
 
 instance (Generic.Constructor meta, GFields f e) => GNode (M1 C meta f) e where
     gShape _ = [(conName (undefined :: M1 C meta f ()), gKinds @f @e Proxy)]
     gCount _ = 1
     gBuild _ children = M1 (fst (gFill children))
+    gNodeFields (M1 fields) = (0, gFieldValues fields)
 
 -- | The generic representation of the fields of a constructor of a node view.
 class GFields f e where
     gKinds :: Proxy f -> [FieldKind]
     gFill :: (Children.Measures e) => [Children.Child e] -> (f p, [Children.Child e])
+    gFieldValues :: f p -> [Maybe e]
 
 instance GFields U1 e where
     gKinds _ = []
     gFill children = (U1, children)
+    gFieldValues U1 = []
 
 instance (GFields f e, GFields g e) => GFields (f :*: g) e where
     gKinds _ = gKinds @f @e Proxy <> gKinds @g @e Proxy
@@ -383,24 +400,31 @@ instance (GFields f e, GFields g e) => GFields (f :*: g) e where
         let (x, rest) = gFill children
             (y, rest') = gFill rest
          in (x :*: y, rest')
+    gFieldValues (x :*: y) = gFieldValues x <> gFieldValues y
 
 instance (NodeField e x) => GFields (M1 S meta (K1 index x)) e where
     gKinds _ = [fieldKind @e @x]
     gFill (child : rest) = (M1 (K1 (fillField child)), rest)
     gFill [] = error "Data.CFTA.Gen.Refinement.Derive: a node view has more fields than its constructor"
+    gFieldValues (M1 (K1 field)) = [fieldValue @e field]
 
 -- | A field of a node view: an integer @e@, or a record of measures @m e@.
 class NodeField e x where
     fieldKind :: FieldKind
     fillField :: (Children.Measures e) => Children.Child e -> x
 
+    -- | The field as an @e@, or 'Nothing' for a record of measures.
+    fieldValue :: x -> Maybe e
+
 instance NodeField e e where
     fieldKind = Scalar
     fillField = Children.childValue
+    fieldValue = Just
 
 instance (MeasureRecord m) => NodeField e (m e) where
     fieldKind = Record (measureNames (Proxy @m))
     fillField child = fromMeasureNames (\name -> Children.childMeasure name child)
+    fieldValue _ = Nothing
 
 -- * Invariants
 
@@ -554,10 +578,16 @@ checkNodeView names rules = checkNodeFields @a @node checkKinds
 
 {- | Check that a node view has the constructors of the datatype, in order: as
 many, each with as many fields, and each with a name that starts with the name
-of the datatype's constructor in its place. The function checks the fields of
-each constructor after its arity, and before the names: it receives the name
-of the constructor, whether each field is of the datatype, and the kinds of
-the fields in the node view.
+of the datatype's constructor in its place. A view that fits every datatype
+('AnyNode') passes.
+-}
+checkNodeShape :: forall a node. (HasFTA a, NodeView node) => Either DeriveLTAError ()
+checkNodeShape = checkNodeFields @a @node (\_ _ _ -> Right ())
+
+{- | 'checkNodeShape' with a check of the fields of each constructor, after
+its arity and before the names. The function receives the name of the
+constructor, whether each field is of the datatype, and the kinds of the
+fields in the node view.
 -}
 checkNodeFields ::
     forall a node.
@@ -649,7 +679,7 @@ not one field ('FieldAtomTerm'), and a generator of another type than its field
 ('FieldAtomMismatch').
 -}
 fieldAtoms :: forall a node. (HasFTA a, NodeView node) => (node Expr -> [FieldPool]) -> Atoms
-fieldAtoms pools = case checkNodeFields @a @node (\_ _ _ -> Right ()) of
+fieldAtoms pools = case checkNodeShape @a @node of
     Left problem -> Atoms Map.empty Map.empty [problem]
     Right () ->
         Atoms

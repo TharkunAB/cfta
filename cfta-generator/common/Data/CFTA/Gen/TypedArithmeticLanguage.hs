@@ -11,6 +11,7 @@ type checker.
 module Data.CFTA.Gen.TypedArithmeticLanguage (
     ArithType (..),
     Arith (..),
+    ArithNode (..),
     arithRules,
     arithTyping,
     arithLanguage,
@@ -25,6 +26,7 @@ import GHC.Generics (Generic)
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint)
 import qualified Data.CFTA.Gen as Gen
+import Data.CFTA.Gen.Refinement.Derive (NodeView)
 import Data.CFTA.Gen.Typing (
     Bound (..),
     Rule,
@@ -57,20 +59,33 @@ data Arith
     deriving stock (Eq, Ord, Show, Generic)
     deriving anyclass (HasFTA)
 
+-- | One node of a typed arithmetic term: for the typing rules, and for the invariants of the refinement tests.
+data ArithNode e
+    = NumNode e
+    | FlagNode e
+    | PlusNode e e
+    | LessNode e e
+    | IfNode e e e
+    | VarNode e
+    | LetNode e e
+    | ArgNode e
+    deriving stock (Generic)
+    deriving anyclass (NodeView)
+
 -- | The typing rules of 'Arith'. The type of a conditional is the type of its branches.
-arithRules :: [Rule ArithType]
+arithRules :: [Rule ArithNode ArithType]
 arithRules =
-    [rule "Num" [value n] IntType | n <- [0, 1 :: Int]]
-        <> [rule "Flag" [value b] BoolType | b <- [False, True]]
-        <> [ rule "Plus" [subterm [] IntType, subterm [] IntType] IntType
-           , rule "Less" [subterm [] IntType, subterm [] IntType] BoolType
-           , variable "Var" (\index _ -> [value index])
+    [rule (NumNode (value n)) IntType | n <- [0, 1 :: Int]]
+        <> [rule (FlagNode (value b)) BoolType | b <- [False, True]]
+        <> [ rule (PlusNode (subterm [] IntType) (subterm [] IntType)) IntType
+           , rule (LessNode (subterm [] IntType) (subterm [] IntType)) BoolType
+           , variable (\index _ -> VarNode (value index))
            ]
-        <> [rule "If" [subterm [] BoolType, subterm [] typ, subterm [] typ] typ | typ <- [IntType, BoolType]]
-        <> [rule "Let" [subterm [] rhs, subterm [rhs] typ] typ | rhs <- [IntType, BoolType], typ <- [IntType, BoolType]]
+        <> [rule (IfNode (subterm [] BoolType) (subterm [] typ) (subterm [] typ)) typ | typ <- [IntType, BoolType]]
+        <> [rule (LetNode (subterm [] rhs) (subterm [rhs] typ)) typ | rhs <- [IntType, BoolType], typ <- [IntType, BoolType]]
 
 -- | The typed arithmetic language up to the bound.
-arithTyping :: Int -> Typing ArithType
+arithTyping :: Int -> Typing ArithNode ArithType
 arithTyping bound = Typing (Nesting (fromIntegral bound)) [] [IntType, BoolType] arithRules
 
 -- | The closed well-typed arithmetic terms up to the bound, from the rules.
