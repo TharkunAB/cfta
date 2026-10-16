@@ -1,5 +1,54 @@
 # Public API and source correspondence
 
+## Current paired physical completion and actual Mu/reference meaning
+
+Source main stays `8f85ddb6`, merged at `7dccd588`. Checkpoint `554a116f`
+is published on formalize. Haskell source and tests stay unchanged. The fix
+handoff near the top of FINDINGS.md remains current for external work.
+Proof commits `bcc1165d` and `60e83ee8` add general checked physical
+completion and actual bound-reference/Mu branch composition.
+
+The strong independent request induction now discharges both node and edge
+body completion hypotheses internally. Constructed traces derive the reached
+physical input plan. Closed Original available roots complete from initial
+Good and Idle, returning physical invariants, exact effects, availability,
+and final Idle. Actual-prefix WordRanges remains explicit. Good includes
+physical cache validity, ready heap, operation validity, and loaded fields.
+No own-body completion or future InputsThrough premise remains at this endpoint.
+This is checked-model physical completion under those contracts.
+
+Reference resolution derives original bound scope and actual readback. The
+selected Mu bodies derive middle SemanticReady from their child trace, then
+complete the actual optional binder and derive the parent contextual law.
+Only the exact child's local NodeLaw and physical trace/effects remain as
+recursive semantic hypotheses. The global contextual semantic/cache induction,
+result closedness, and independent root language correctness remain open.
+Do not treat the older FinishThrough endpoint as an independent root proof.
+
+The full audit passes 2275 jobs and 55741 theorem dependency checks.
+Focused validation passes 104 public axiom reports, 62 signatures, 70 examples,
+and one named kernel theorem across this update and the preceding seven modules.
+Only standard foundations and the old unused-input warning occur. Independent
+reviews found no material defect. Reuse the unchanged-source Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-paired-physical-completion.md, then the two
+preceding physical/source notes. All ten frozen module hashes and new evidence
+are repository-local. The 3052-file baseline has no missing file; all 2262 older
+non-Audit proof sources remain byte-identical. Earlier missing external draft
+bytes remain unavailable and are not claimed recovered or reverified.
+
+Next combine actual recursive returns with contextual child laws, preserve
+Contextual at each actual finish, derive result scope/closedness and admissible
+warm-cache use, and prove root exactness without its own finish-law premise.
+Then compose original allocation histories, the current class Scan, and the
+constrained outer caller. All other full-library and separate Sized targets
+remain active. Runtime capacity, GHC forcing/publication, concurrency, frontend,
+and graph/synthesis adapters retain their recorded boundaries. Keep the
+optimized interned core and every older constructor/equality proof. No board
+posts or deployments. Push verified formalize checkpoints regularly.
+The full goal remains active; this checkpoint is progress.
+
 ## Current physical checked execution and actual branch meaning
 
 Source main `8f85ddb6` is merged at `7dccd588`. PR #54 retains named child
