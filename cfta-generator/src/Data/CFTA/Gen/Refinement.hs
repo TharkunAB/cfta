@@ -81,7 +81,7 @@ import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Internal.Automaton (datatypeDecoder, declarationOrder, undecodableConstructor)
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import Data.CFTA.Gen.Internal.Types (Gen (..), Language (..), Recipe (..), withRecipe, pattern Transparent)
-import Data.CFTA.Gen.Refinement.Internal.Compile (spineArity, validOutcomes)
+import Data.CFTA.Gen.Refinement.Internal.Compile (namedTerms, spineArity, validOutcomes)
 import qualified Data.CFTA.Gen.Refinement.Internal.Compile as Compile
 import Data.CFTA.Generic (TypedFTA, constructorLabel, constructorName, datatypeDecode, datatypeFTA)
 import Data.CFTA.Index (ArgumentIndex (..), Depth)
@@ -117,6 +117,7 @@ import Data.CFTA.Refinement.Expression (
     literal,
     refinementFormula,
     substitute,
+    toExpr,
     true,
     uninterpreted,
     variable,
@@ -450,12 +451,14 @@ black child =
     bh x = uninterpreted "bh" [x]
 @
 
-Each measure must give one integer: a child that a measure reads must have
-that measure as one integer in its refinement, as a conjunct
-@name(v) == value@. A 'leaf' gives its measures in its refinement, as in
-@\\v -> bh v .== 0 .&& col v .== 0@. Otherwise 'compile' reports
-'InexactMeasure', with the measure and the children. A value from 'every'
-stays a term, so a named measure cannot read it. A measure can choose with
+Each measure must give one term: a child that a measure reads must have
+that measure in its refinement, as a conjunct @name(v) == t@, where @t@ is an
+integer or a term of the integers of its leaves. A 'leaf' gives its measures
+in its refinement, as in @\\v -> bh v .== 0 .&& col v .== 0@. A value from
+'every' is its own term. So a named measure of a child over 'every' stays a
+term of the integers of its leaves, and 'compile' counts it without
+enumerating them. Otherwise 'compile' reports 'InexactMeasure', with the
+measure and the children. A measure can choose with
 'Data.CFTA.Refinement.Symbolic.ite', as @larger (bh left) (bh right)@ does:
 the condition reads the same integers, and the measure takes the branch that
 it chooses. The contract and each measure must take one term for every
@@ -480,48 +483,67 @@ measuredBy symbol builder measures child
                 Map.fromList
                     [ ((term, name), value)
                     | (term, RefinedSymbol _ refinement) <- children
-                    , (name, value) <- namedValues refinement
+                    , (name, value) <- namedTerms refinement
                     ]
-            points =
+            childValues =
                 Map.fromList
-                    [(term, value) | (term, RefinedSymbol _ refinement) <- children, Just value <- [onlyPoint valueName refinement]]
-        measureValues <- traverse (valueOf known points) measures
+                    [(term, value) | (term, RefinedSymbol _ refinement) <- children, Just value <- [valueTerm refinement]]
+        measureTerms <- traverse (termOf known childValues) measures
         pure
             $ RefinedSymbol symbol
-            $ foldr (.&&) true [uninterpreted name [variable valueName] .== literal value | (name, value) <- measureValues]
-    valueOf known points (name, measure) =
-        case evaluateTerm (leafValue known points) term of
-            Just value -> Right (name, value)
-            Nothing -> Left $ InexactMeasure symbol (Just name) (missingChildren known points term)
+            $ foldr (.&&) true [uninterpreted name [variable valueName] .== toExpr term | (name, term) <- measureTerms]
+    termOf known childValues (name, measure) =
+        case resolve known childValues term of
+            Just resolved -> Right (name, exact resolved)
+            Nothing -> Left $ InexactMeasure symbol (Just name) (missingChildren known childValues term)
       where
         term = fromExpr $ measureTerm measure
-    -- A measure of a child, and a child that is one integer, have that
-    -- integer. A term that names anything else has none.
-    leafValue known points term = case term of
+    -- A term without names is its integer.
+    exact term = maybe term Formula.Lit $ evaluateTerm (const Nothing) term
+    -- The value of a child: its integer, or the term of the integers of its leaves.
+    valueTerm refinement =
+        (Formula.Lit <$> onlyPoint valueName refinement) <|> do
+            term <- definingTerm refinement
+            if valueName `elem` freeNames (term .== 0)
+                then Nothing
+                else Just (fromExpr term)
+    -- A measure of a child, and a child, have the term of the label of the
+    -- child. A term that names anything else has none.
+    leafTerm known childValues term = case term of
         Formula.App (Formula.Name function) [Formula.Var position] -> Map.lookup (position, Text.unpack function) known
-        Formula.Var position -> Map.lookup position points
+        Formula.Var position -> Map.lookup position childValues
         _ -> Nothing
-    -- The positions of the children that the term reads without an integer.
-    missingChildren known points term =
+    -- Replace each read of a child by its term. A conditional whose condition
+    -- then compares literals takes the branch that it chooses.
+    resolve known childValues = go
+      where
+        go term = case term of
+            Formula.Lit _ -> Just term
+            Formula.Neg inner -> Formula.Neg <$> go inner
+            Formula.Add left right -> Formula.Add <$> go left <*> go right
+            Formula.Sub left right -> Formula.Sub <$> go left <*> go right
+            Formula.Mul left right -> Formula.Mul <$> go left <*> go right
+            Formula.Ite condition yes no -> do
+                resolved <- goFormula condition
+                case evaluateFormula (const Nothing) resolved of
+                    Just holds -> go (if holds then yes else no)
+                    Nothing -> Formula.Ite resolved <$> go yes <*> go no
+            _ -> leafTerm known childValues term
+        goFormula formula = case formula of
+            Formula.Top -> Just formula
+            Formula.Bottom -> Just formula
+            Formula.And parts -> Formula.And <$> traverse goFormula parts
+            Formula.Or parts -> Formula.Or <$> traverse goFormula parts
+            Formula.Not inner -> Formula.Not <$> goFormula inner
+            Formula.Atom relation left right -> Formula.Atom relation <$> go left <*> go right
+            _ -> Nothing
+    -- The positions of the children that the term reads without a term.
+    missingChildren known childValues term =
         [ index
         | index <- [0 .. fromEnum arity - 1]
         , let position = Formula.Name $ fromString $ contractTermName $ ArgumentIndex index
-        , any (isNothing . leafValue known points) (childReads position term)
+        , any (isNothing . leafTerm known childValues) (childReads position term)
         ]
-
-{- | The named measures that a refinement fixes: each conjunct
-@name(v) == value@, with @v@ the value.
--}
-namedValues :: Formula -> [(String, Integer)]
-namedValues formula = case formula of
-    Formula.And parts -> concatMap namedValues parts
-    Formula.Atom Formula.Eq left right
-        | Just found <- named left right <|> named right left -> [found]
-    _ -> []
-  where
-    named (Formula.App (Formula.Name function) [Formula.Var (Formula.Name argument)]) (Formula.Lit value)
-        | Text.unpack argument == valueName = Just (Text.unpack function, value)
-    named _ _ = Nothing
 
 {- | A recursive description, unfolded a bounded number of times.
 

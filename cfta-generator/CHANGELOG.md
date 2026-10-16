@@ -160,8 +160,12 @@ tree automata of `cfta`, with QuickCheck integration.
   the children without one integer.
   `measuredNode` takes a positional guard in place of the contract.
   `measuredBy` gives a constructor several named measures: uninterpreted
-  functions of the value, each one integer, which a contract reads as
-  `uninterpreted name [child]`. A measure can choose with `ite`, `smaller`,
+  functions of the value, each one integer or one term of the integers of
+  the leaves, which a contract reads as `uninterpreted name [child]`. A named
+  measure of a child over `every` stays such a term, so `compile` counts it
+  without enumerating the integers: the sorted lists of length 3 with keys up
+  to a million and the named measures of their head and length count
+  166,666,666,666,500,000 lists. A measure can choose with `ite`, `smaller`,
   or `larger`: when the children have one integer each, it takes the branch
   that the condition chooses, so the measure stays one integer. `recurUpTo` unfolds a recursive description a bounded number
   of times. The module also has liquid automaton and datatype imports,

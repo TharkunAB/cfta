@@ -1180,8 +1180,11 @@ exact head of each `cons`.
 
 A child that a measure names must have a measure of its own: a refinement that
 fixes one integer, as `elements` and `leaf` give, an integer from `every`, or a
-constructor built with `measured`. Otherwise `compile` reports
-`InexactMeasure`. A parent reads only the root of a child whose integers stay
+constructor built with `measured` or `measuredBy`. Otherwise `compile` reports
+`InexactMeasure`. The named measures of `measuredBy` stay terms of the
+integers of the leaves in the same way, so a derived sorted list with the
+named measures of its head and its length counts over `every` too: with keys
+up to a million, there are 166,666,666,666,500,000 lists of length 3. A parent reads only the root of a child whose integers stay
 open. `measuredNode` is `measured` with a positional guard, as `refinedNode`
 takes, in place of the contract.
 [`RedBlackTrees.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/RedBlackTrees.hs)
