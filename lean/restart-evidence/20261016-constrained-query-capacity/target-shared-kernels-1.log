@@ -1,0 +1,86 @@
+'MicroCFTA.FiniteOrdinarySharedCapacityChecks.force_hit_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.FiniteOrdinarySharedCapacityChecks.force_hit_capacity : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (path : MicroCFTA.EqualityNormalize.Path)
+  (before : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State (bits + 2))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  before.targets path = some value →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedCapacity.ForceCapacity bits record values path before
+'MicroCFTA.FiniteOrdinarySharedCapacityChecks.leaf_hit_capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.FiniteOrdinarySharedCapacityChecks.leaf_hit_capacity : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (path : MicroCFTA.EqualityNormalize.Path)
+  (input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State (bits + 2))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  before.targets path = some value →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits before.checked →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinarySharedCapacity.LeafCapacity bits record values path input before
+'MicroCFTA.FiniteOrdinarySharedCapacityChecks.force_hit_finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.FiniteOrdinarySharedCapacityChecks.force_hit_finite : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (path : MicroCFTA.EqualityNormalize.Path)
+  (before : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State (bits + 2))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values base before →
+    MicroCFTA.InternedNestedProvenance.Values base values →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.Stored before →
+          MicroCFTA.SourceEqualityClassOrder.Coherent record →
+            MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+              path ∈ record.paths →
+                before.targets path = some value →
+                  ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                    MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                      ∃ next final,
+                        MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt formulas solver next record values
+                            base path before value before memos final ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryShared.Stored before ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node value

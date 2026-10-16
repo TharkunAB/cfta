@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.step_requests
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.step_requests
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.step_counts
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.step_counts
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.prefix_counts
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.prefix_counts
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.prefix_bounds
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.prefix_bounds
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.capacity_after
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.capacity_after
+

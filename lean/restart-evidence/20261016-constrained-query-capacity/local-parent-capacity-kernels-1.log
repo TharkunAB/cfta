@@ -1,0 +1,78 @@
+@numeric_finite_then_zero_bound_hit : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (bits : Nat) {inventory : Inventory} {before : Caller (bits + 2)} {memos : Memos} (budget : Nat)
+  (request : EdgeRequest),
+  Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited →
+      EdgeResident before.checked.native.machine.heap request.value →
+        DEdge request.value →
+          Stored before →
+            ActiveAbove (edgeRank request) before →
+              SourceCurrentAllocatedFiniteOrdinaryParentCapacity.CallCapacity bits budget request before →
+                ∃ result after next final,
+                  SourceCurrentAllocatedPartialWorkerCompletion.StableRun
+                      (fun f g s r e p h m c n =>
+                        SourceCurrentAllocatedPartialWorker.edgeCall f g s r e p h m c n budget request before)
+                      result after ∧
+                    ∃ actual,
+                      EdgeCallReads formulas solver actual memos final ∧
+                        Checks (edgeCallTrace actual) ∧
+                          Post formulas solver next before after final ∧
+                            Stored after ∧
+                              EdgeNarrow request.value result ∧
+                                EdgeLaw formulas solver request result ∧
+                                  ActiveAbove (edgeRank request) after ∧
+                                    SourceCurrentAllocatedPartialWorker.edgeCall 0 0 0 0 0 0 0 0 0 0 budget request
+                                          after =
+                                        SourceCurrentAllocatedPartialWorker.Outcome.done result after ∧
+                                      ∀ (child : Value Symbol Guard),
+                                        child ∈ result.children →
+                                          DNode child ∧
+                                            nodeRank { inherited := request.inherited, value := child } <
+                                              edgeRank request
+'NumericParentCapacityKernels.numeric_finite_then_zero_bound_hit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@live_resident_field_ranges : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (bits : Nat) {inventory : Inventory} {before : Caller (bits + 2)} {memos : Memos} (budget : Nat)
+  (request : EdgeRequest),
+  Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited →
+      EdgeResident before.checked.native.machine.heap request.value →
+        DEdge request.value →
+          Stored before →
+            SourceCurrentAllocatedFiniteOrdinaryParentCapacity.ParentCapacity bits budget request before →
+              SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint = false →
+                ∃ loaded,
+                  SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint
+                        before.checked.operations.constraints =
+                      Except.ok (some loaded) ∧
+                    EqReady before.checked.operations.constraints loaded.stored ∧
+                      SourceCurrentAllocatedLocalReduction.Ranges budget loaded request.inherited request.value.children
+                        before.checked before.fourth before.merge
+'NumericParentCapacityKernels.live_resident_field_ranges' depends on axioms: [propext, Classical.choice, Quot.sound]
+@captured_owner_ranges : ∀ [inst : DecidableEq Symbol]
+  [inst_1 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] [inst_2 : DecidableEq (Value Symbol Guard)]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (bits : Nat) {inventory : Inventory} {before running : Caller (bits + 2)} {memos : Memos} (budget : Nat)
+  (request owner : EdgeRequest) (handle : Nat),
+  Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited →
+      EdgeResident before.checked.native.machine.heap request.value →
+        DEdge request.value →
+          Stored before →
+            SourceCurrentAllocatedFiniteOrdinaryParentCapacity.CallCapacity bits budget request before →
+              beginEdge request before = (handle, FlatMemoThunk.Observation.evaluate owner, running) →
+                Context formulas solver inventory running memos ∧
+                  Stored running ∧
+                    owner.value = request.value ∧
+                      DEdge owner.value ∧
+                        EqReady running.checked.operations.constraints owner.inherited ∧
+                          EdgeResident running.checked.native.machine.heap owner.value ∧
+                            running.edgeResults.cells handle =
+                                some { request := owner, status := FlatMemoThunk.Status.evaluating } ∧
+                              SourceCurrentAllocatedParentWorkerActual.ResidentRanges budget owner running
+'NumericParentCapacityKernels.captured_owner_ranges' depends on axioms: [propext, Classical.choice, Quot.sound]

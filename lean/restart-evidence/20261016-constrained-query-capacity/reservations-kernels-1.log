@@ -1,0 +1,102 @@
+lean/restart-evidence/20261016-constrained-query-capacity/reservations-kernels.lean:20:72: error: Tactic `decide` failed for proposition
+  let before := empty;
+  let requests := observe repeatedConstructors before;
+  (run repeatedConstructors before).snd.nodes.next = 1 ∧
+    (run repeatedConstructors before).snd.edges.next = 1 ∧
+      nodeRequests requests = 2 ∧
+        edgeRequests requests = 2 ∧ nodeReservations requests = 1 ∧ edgeReservations requests = 1
+because its `Decidable` instance
+  instDecidableAnd
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableAnd`, `instDecidableEqNat`, and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h : (run repeatedConstructors empty).snd.nodes.next.beq 1 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+lean/restart-evidence/20261016-constrained-query-capacity/reservations-kernels.lean:30:49: error: failed to synthesize
+  Decidable
+    (let work := (makeEdge 9 () [Value.empty]).bind fun edge => makeNode [edge];
+    let before := empty;
+    (run work before).fst = Value.empty ∧
+      (run work before).snd.nodes.next = 0 ∧
+        (run work before).snd.edges.next = 1 ∧ nodeRequests (observe work before) = 0)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+lean/restart-evidence/20261016-constrained-query-capacity/reservations-kernels.lean:75:42: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c + d ≥ 0
+  b ≥ 1
+  a ≥ 0
+  a + b ≥ 0
+where
+ a := ↑(run work before).snd.nodes.next
+ b := ↑(nodeReservations (observe work (run work before).snd))
+ c := ↑(run work before).snd.edges.next
+ d := ↑(edgeReservations (observe work (run work before).snd))
+lean/restart-evidence/20261016-constrained-query-capacity/reservations-kernels.lean:75:42: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 1
+  c ≥ 0
+  c + d ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + b ≥ 0
+where
+ a := ↑(run work before).snd.nodes.next
+ b := ↑(nodeReservations (observe work (run work before).snd))
+ c := ↑(run work before).snd.edges.next
+ d := ↑(edgeReservations (observe work (run work before).snd))
+'MicroCFTA.ReservationIntegration.repeated_requests' depends on axioms: [propext, sorryAx, Quot.sound]
+MicroCFTA.ReservationIntegration.repeated_requests : have before := MicroCFTA.InternedConstructorTemplates.empty;
+have requests :=
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe
+    MicroCFTA.ReservationIntegration.repeatedConstructors before;
+(MicroCFTA.InternedConstructorTemplates.run MicroCFTA.ReservationIntegration.repeatedConstructors
+            before).snd.nodes.next =
+    1 ∧
+  (MicroCFTA.InternedConstructorTemplates.run MicroCFTA.ReservationIntegration.repeatedConstructors
+              before).snd.edges.next =
+      1 ∧
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests = 2 ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests = 2 ∧
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations requests = 1 ∧
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations requests = 1
+'MicroCFTA.ReservationIntegration.filtered_constructor' depends on axioms: [propext, sorryAx, Quot.sound]
+MicroCFTA.ReservationIntegration.filtered_constructor : have work :=
+  (MicroCFTA.InternedConstructorTemplates.makeEdge 9 () [MicroCFTA.InternedConstructorTemplates.Value.empty]).bind
+    fun edge => MicroCFTA.InternedConstructorTemplates.makeNode [edge];
+have before := MicroCFTA.InternedConstructorTemplates.empty;
+(MicroCFTA.InternedConstructorTemplates.run work before).fst = MicroCFTA.InternedConstructorTemplates.Value.empty ∧
+  (MicroCFTA.InternedConstructorTemplates.run work before).snd.nodes.next = 0 ∧
+    (MicroCFTA.InternedConstructorTemplates.run work before).snd.edges.next = 1 ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe work before) =
+        0
+'MicroCFTA.ReservationIntegration.losing_candidate' depends on axioms: [propext, Quot.sound]
+MicroCFTA.ReservationIntegration.losing_candidate : have initial := MicroCFTA.Cache.emptyState;
+have first := MicroCFTA.Cache.reserve initial 7;
+have second := MicroCFTA.Cache.reserve first.snd 7;
+have winner := MicroCFTA.Cache.install second.snd first.fst;
+have after := MicroCFTA.Cache.install winner second.fst;
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace initial after 2 ∧
+  after.next = initial.next + 2 ∧
+    after.table 7 = some { identity := 0, key := 7 } ∧ after.issued 0 = some 7 ∧ after.issued 1 = some 7
+'MicroCFTA.ReservationIntegration.warm_replay' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+@MicroCFTA.ReservationIntegration.warm_replay : ∀ {Symbol Guard Output : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (work : MicroCFTA.InternedConstructorTemplates.Work Symbol Guard Output)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedConstructorTemplates.Valid before →
+    have after := (MicroCFTA.InternedConstructorTemplates.run work before).snd;
+    MicroCFTA.InternedConstructorTemplates.run work after =
+        ((MicroCFTA.InternedConstructorTemplates.run work before).fst, after) ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe work after) =
+          0 ∧
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe work after) =
+            0 ∧
+          MicroCFTA.Cache.Extends before.nodes.issued after.nodes.issued ∧
+            MicroCFTA.Cache.Extends before.edges.issued after.edges.issued

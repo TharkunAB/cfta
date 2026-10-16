@@ -1,0 +1,238 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.counts' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.counts : {Symbol Guard : Type} →
+  MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard → Prod.{0, 0} Nat Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.countsMany' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.countsMany : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) → Prod.{0, 0} Nat Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.countsRows' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.countsRows : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard) → Prod.{0, 0} Nat Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.nodeCount' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.nodeCount : {Symbol Guard : Type} →
+  MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.edgeCount' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.edgeCount : {Symbol Guard : Type} →
+  MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.complete : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node Symbol Guard expression →
+    ∀ (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+          And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+            (And
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                  (@Prod.fst.{0, 0} Nat Nat
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.counts Symbol Guard
+                      expression))))
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+                  (@Prod.snd.{0, 0} Nat Nat
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.counts Symbol Guard
+                      expression)))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.completeMany' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.completeMany : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Children Symbol Guard expressions →
+    ∀ (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) fun values =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+          And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst expressions environment state)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values after))
+            (And
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                  (@Prod.fst.{0, 0} Nat Nat
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.countsMany Symbol Guard
+                      expressions))))
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+                  (@Prod.snd.{0, 0} Nat Nat
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.countsMany Symbol Guard
+                      expressions)))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.completeRows' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.completeRows : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Rows Symbol Guard expressions →
+    ∀ (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @Exists.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) fun values =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+          And
+            (@Eq.{1}
+              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges Symbol Guard inst expressions environment state)
+              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) values after))
+            (And
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                  (@Prod.fst.{0, 0} Nat Nat
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.countsRows Symbol Guard
+                      expressions))))
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+                  (@Prod.snd.{0, 0} Nat Nat
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.countsRows Symbol Guard
+                      expressions)))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.build_bounds' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.build_bounds : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node Symbol Guard expression →
+    ∀ (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after) →
+        And
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.nodeCount Symbol Guard
+                expression)))
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.edgeCount Symbol Guard
+                expression)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.build' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.build : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node Symbol Guard expression →
+    ∀ (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.InternedNestedFacts.Facts Symbol Guard state →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard state environment →
+          @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children Symbol Guard environment →
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+                And
+                  (@Eq.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+                  (And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value)
+                    (And (@MicroCFTA.InternedNestedFacts.Facts Symbol Guard after)
+                      (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+                        (And
+                          (@LE.le.{0} Nat instLENat
+                            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.nodeCount Symbol
+                                Guard expression)))
+                          (@LE.le.{0} Nat instLENat
+                            (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+                              (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.edgeCount Symbol
+                                Guard expression)))))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.closed' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.closed : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node Symbol Guard expression →
+    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun value =>
+      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun after =>
+        And
+          (@Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+              (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after))
+          (And (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node Symbol Guard value)
+            (And (@MicroCFTA.InternedNestedFacts.Facts Symbol Guard after)
+              (And (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after value)
+                (And
+                  (@LE.le.{0} Nat instLENat
+                    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.nodeCount Symbol Guard
+                      expression))
+                  (@LE.le.{0} Nat instLENat
+                    (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard after))
+                    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.edgeCount Symbol Guard
+                      expression))))))

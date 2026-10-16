@@ -1,0 +1,182 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:43:2: error: Too many variable names provided at alternative `refl`: 1 provided, but 0 expected
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:43:30: error(lean.unknownIdentifier): Unknown identifier `state`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:51:2: error: Too many variable names provided at alternative `refl`: 1 provided, but 0 expected
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:51:34: error(lean.unknownIdentifier): Unknown identifier `state`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:55:6: error: Too many variable names provided at alternative `reserve`: 2 provided, but 1 expected
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:55:64: error(lean.unknownIdentifier): Unknown identifier `key`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:56:6: error: Too many variable names provided at alternative `install`: 3 provided, but 2 expected
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:56:73: error: Application type mismatch: The argument
+  candidate
+has type
+  middle✝.issued state.identity = some state.key
+of sort `Prop` but is expected to have type
+  Interned Key
+of sort `Type` in the application
+  install counted candidate
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:56:83: error(lean.unknownIdentifier): Unknown identifier `issued`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:117:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeStep_next`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:135:24: error: Ambiguous term
+  run
+Possible interpretations:
+  InternedBinderProtocol.run : InternedBinderProtocol.Work ?m.68 ?m.69 → Cache.State ?m.68 → ?m.69 × Cache.State ?m.68
+  
+  InternedConstructorTemplates.run : InternedConstructorTemplates.Work ?m.68 ?m.69 ?m.70 →
+    InternedConstructorTemplates.State ?m.68 ?m.69 → ?m.70 × InternedConstructorTemplates.State ?m.68 ?m.69
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:135:15: error: unsolved goals
+case pure
+Symbol Guard Result : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+value : Result
+state : InternedConstructorTemplates.State Symbol Guard
+⊢ (InternedConstructorTemplates.run (InternedConstructorTemplates.Work.pure value) state).snd.nodes.next =
+      state.nodes.next ∧
+    (InternedConstructorTemplates.run (InternedConstructorTemplates.Work.pure value) state).snd.edges.next =
+      state.edges.next
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:139:17: error: Ambiguous term
+  run
+Possible interpretations:
+  InternedBinderProtocol.run : InternedBinderProtocol.Work ?m.91 ?m.92 → Cache.State ?m.91 → ?m.92 × Cache.State ?m.91
+  
+  InternedConstructorTemplates.run : InternedConstructorTemplates.Work ?m.91 ?m.92 ?m.93 →
+    InternedConstructorTemplates.State ?m.91 ?m.92 → ?m.93 × InternedConstructorTemplates.State ?m.91 ?m.92
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:140:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c + d ≥ 0
+  b ≥ 0
+  b + e ≥ 0
+  a ≥ 0
+  a + c + d ≥ 0
+  a + c + d - f ≥ 1
+where
+ a := ↑(nodeReservations (observe (next (nodeStep key identify state).fst) (nodeStep key identify state).snd))
+ b := ↑(edgeReservations (observe (next (nodeStep key identify state).fst) (nodeStep key identify state).snd))
+ c := ↑state.nodes.next
+ d := ↑(if (state.nodes.table key).isNone = true then 1 else 0)
+ e := ↑state.edges.next
+ f := ↑(InternedConstructorTemplates.run (Work.node key identify next) state).snd.nodes.next
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:144:17: error: Ambiguous term
+  run
+Possible interpretations:
+  InternedBinderProtocol.run : InternedBinderProtocol.Work ?m.122 ?m.123 →
+    Cache.State ?m.122 → ?m.123 × Cache.State ?m.122
+  
+  InternedConstructorTemplates.run : InternedConstructorTemplates.Work ?m.122 ?m.123 ?m.124 →
+    InternedConstructorTemplates.State ?m.122 ?m.123 → ?m.124 × InternedConstructorTemplates.State ?m.122 ?m.123
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:145:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c + d ≥ 0
+  b ≥ 0
+  b + c + d ≥ 0
+  a ≥ 0
+  a + e ≥ 0
+  a + e - f ≥ 1
+where
+ a := ↑(nodeReservations (observe (next (edgeStep key identify state).fst) (edgeStep key identify state).snd))
+ b := ↑(edgeReservations (observe (next (edgeStep key identify state).fst) (edgeStep key identify state).snd))
+ c := ↑state.edges.next
+ d := ↑(if (state.edges.table key).isNone = true then 1 else 0)
+ e := ↑state.nodes.next
+ f := ↑(InternedConstructorTemplates.run (Work.edge key identify next) state).snd.nodes.next
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:148:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.reservations_le_requests`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:186:46: error: Ambiguous term
+  Work.bind
+Possible interpretations:
+  InternedBinderProtocol.Work.bind : InternedBinderProtocol.Work ?m.60 ?m.61 →
+    (?m.61 → InternedBinderProtocol.Work ?m.60 ?m.62) → InternedBinderProtocol.Work ?m.60 ?m.62
+  
+  InternedConstructorTemplates.Work.bind : InternedConstructorTemplates.Work ?m.60 ?m.61 ?m.62 →
+    (?m.62 → InternedConstructorTemplates.Work ?m.60 ?m.61 ?m.63) → InternedConstructorTemplates.Work ?m.60 ?m.61 ?m.63
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:186:66: error: Ambiguous term
+  run
+Possible interpretations:
+  InternedBinderProtocol.run : InternedBinderProtocol.Work ?m.60 ?m.61 → Cache.State ?m.60 → ?m.61 × Cache.State ?m.60
+  
+  InternedConstructorTemplates.run : InternedConstructorTemplates.Work ?m.60 ?m.61 ?m.62 →
+    InternedConstructorTemplates.State ?m.60 ?m.61 → ?m.62 × InternedConstructorTemplates.State ?m.60 ?m.61
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:186:32: error: unsolved goals
+case node
+Symbol Guard Result First : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+next : First → InternedConstructorTemplates.Work Symbol Guard Result
+key : NodeKey
+identify : Interned NodeKey → Value Symbol Guard
+resume : Value Symbol Guard → InternedConstructorTemplates.Work Symbol Guard First
+ih :
+  ∀ (a : Value Symbol Guard) (state : InternedConstructorTemplates.State Symbol Guard),
+    observe ((resume a).bind next) state =
+      observe (resume a) state ++
+        observe (next (InternedConstructorTemplates.run (resume a) state).fst)
+          (InternedConstructorTemplates.run (resume a) state).snd
+state : InternedConstructorTemplates.State Symbol Guard
+⊢ observe ((Work.node key identify resume).bind next) state =
+    Request.node key (state.nodes.table key).isNone ::
+      (observe (resume (nodeStep key identify state).fst) (nodeStep key identify state).snd ++
+        observe (next (InternedConstructorTemplates.run (Work.node key identify resume) state).fst)
+          (InternedConstructorTemplates.run (Work.node key identify resume) state).snd)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:187:46: error: Ambiguous term
+  Work.bind
+Possible interpretations:
+  InternedBinderProtocol.Work.bind : InternedBinderProtocol.Work ?m.66 ?m.67 →
+    (?m.67 → InternedBinderProtocol.Work ?m.66 ?m.68) → InternedBinderProtocol.Work ?m.66 ?m.68
+  
+  InternedConstructorTemplates.Work.bind : InternedConstructorTemplates.Work ?m.66 ?m.67 ?m.68 →
+    (?m.68 → InternedConstructorTemplates.Work ?m.66 ?m.67 ?m.69) → InternedConstructorTemplates.Work ?m.66 ?m.67 ?m.69
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:187:66: error: Ambiguous term
+  run
+Possible interpretations:
+  InternedBinderProtocol.run : InternedBinderProtocol.Work ?m.66 ?m.67 → Cache.State ?m.66 → ?m.67 × Cache.State ?m.66
+  
+  InternedConstructorTemplates.run : InternedConstructorTemplates.Work ?m.66 ?m.67 ?m.68 →
+    InternedConstructorTemplates.State ?m.66 ?m.67 → ?m.68 × InternedConstructorTemplates.State ?m.66 ?m.67
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:187:32: error: unsolved goals
+case edge
+Symbol Guard Result First : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+next : First → InternedConstructorTemplates.Work Symbol Guard Result
+key : EdgeKey Symbol Guard
+identify : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard
+resume : EdgeValue Symbol Guard → InternedConstructorTemplates.Work Symbol Guard First
+ih :
+  ∀ (a : EdgeValue Symbol Guard) (state : InternedConstructorTemplates.State Symbol Guard),
+    observe ((resume a).bind next) state =
+      observe (resume a) state ++
+        observe (next (InternedConstructorTemplates.run (resume a) state).fst)
+          (InternedConstructorTemplates.run (resume a) state).snd
+state : InternedConstructorTemplates.State Symbol Guard
+⊢ observe ((Work.edge key identify resume).bind next) state =
+    Request.edge key (state.edges.table key).isNone ::
+      (observe (resume (edgeStep key identify state).fst) (edgeStep key identify state).snd ++
+        observe (next (InternedConstructorTemplates.run (Work.edge key identify resume) state).fst)
+          (InternedConstructorTemplates.run (Work.edge key identify resume) state).snd)
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:186:89: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Work.bind, observe, run, List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryReservations.lean:187:89: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Work.bind, observe, run, List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

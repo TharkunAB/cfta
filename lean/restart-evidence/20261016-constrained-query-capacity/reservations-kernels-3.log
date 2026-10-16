@@ -1,0 +1,52 @@
+'MicroCFTA.ReservationIntegration.repeated_requests' depends on axioms: [propext, Quot.sound]
+MicroCFTA.ReservationIntegration.repeated_requests : have before := MicroCFTA.InternedConstructorTemplates.empty;
+have requests :=
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe
+    MicroCFTA.ReservationIntegration.repeatedConstructors before;
+(MicroCFTA.InternedConstructorTemplates.run MicroCFTA.ReservationIntegration.repeatedConstructors
+            before).snd.nodes.next =
+    1 ∧
+  (MicroCFTA.InternedConstructorTemplates.run MicroCFTA.ReservationIntegration.repeatedConstructors
+              before).snd.edges.next =
+      1 ∧
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests requests = 2 ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests requests = 2 ∧
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations requests = 1 ∧
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations requests = 1
+'MicroCFTA.ReservationIntegration.filtered_constructor' depends on axioms: [propext, Quot.sound]
+MicroCFTA.ReservationIntegration.filtered_constructor : have work :=
+  (MicroCFTA.InternedConstructorTemplates.makeEdge 9 () [MicroCFTA.InternedConstructorTemplates.Value.empty]).bind
+    fun edge => MicroCFTA.InternedConstructorTemplates.makeNode [edge];
+have before := MicroCFTA.InternedConstructorTemplates.empty;
+(MicroCFTA.InternedConstructorTemplates.run work before).fst = MicroCFTA.InternedConstructorTemplates.Value.empty ∧
+  (MicroCFTA.InternedConstructorTemplates.run work before).snd.nodes.next = 0 ∧
+    (MicroCFTA.InternedConstructorTemplates.run work before).snd.edges.next = 1 ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe work before) =
+        0
+'MicroCFTA.ReservationIntegration.losing_candidate' depends on axioms: [propext, Quot.sound]
+MicroCFTA.ReservationIntegration.losing_candidate : have initial := MicroCFTA.Cache.emptyState;
+have first := MicroCFTA.Cache.reserve initial 7;
+have second := MicroCFTA.Cache.reserve first.snd 7;
+have winner := MicroCFTA.Cache.install second.snd first.fst;
+have after := MicroCFTA.Cache.install winner second.fst;
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace initial after 2 ∧
+  after.next = initial.next + 2 ∧
+    after.table 7 = some { identity := 0, key := 7 } ∧ after.issued 0 = some 7 ∧ after.issued 1 = some 7
+'MicroCFTA.ReservationIntegration.warm_replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.ReservationIntegration.warm_replay : ∀ {Symbol Guard Output : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (work : MicroCFTA.InternedConstructorTemplates.Work Symbol Guard Output)
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedConstructorTemplates.Valid before →
+    have after := (MicroCFTA.InternedConstructorTemplates.run work before).snd;
+    MicroCFTA.InternedConstructorTemplates.run work after =
+        ((MicroCFTA.InternedConstructorTemplates.run work before).fst, after) ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe work after) =
+          0 ∧
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations
+              (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe work after) =
+            0 ∧
+          MicroCFTA.Cache.Extends before.nodes.issued after.nodes.issued ∧
+            MicroCFTA.Cache.Extends before.edges.issued after.edges.issued

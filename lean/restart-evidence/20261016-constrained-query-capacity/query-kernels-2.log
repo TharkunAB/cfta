@@ -1,0 +1,213 @@
+'MicroCFTA.QueryReservationIntegration.mismatch_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.QueryReservationIntegration.mismatch_body : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (guard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  have left :=
+    MicroCFTA.InternedConstructorTemplates.EdgeValue.mk
+      { identity := 0, key := { symbol := symbol, children := [], constraint := guard } } [];
+  have right :=
+    MicroCFTA.InternedConstructorTemplates.EdgeValue.mk
+      { identity := 1,
+        key := { symbol := symbol, children := [MicroCFTA.InternedBinderProtocol.NodeRef.empty], constraint := guard } }
+      [MicroCFTA.InternedConstructorTemplates.Value.empty];
+  have request := { domain := MicroCFTA.IntersectionEmptyDomain.emptyDomain, left := left, right := right };
+  have after :=
+    { native := before.native, operations := MicroCFTA.SourceEqualityMkEdgeAllocation.emptyField before.operations };
+  MicroCFTA.SourceEqualityNativeDemand.step
+        (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+        before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceEqualityNativeCheckedCode.sentinel left))
+        after ∧
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough 1
+          (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+            MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+          before =
+        [] ∧
+      after.native = before.native
+'MicroCFTA.QueryReservationIntegration.zero_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.QueryReservationIntegration.zero_prefix : ∀
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits before →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits before
+'MicroCFTA.QueryReservationIntegration.edge_work_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.QueryReservationIntegration.edge_work_prefix : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2))
+  (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (guard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (children :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+  have job := MicroCFTA.InternedConstructorTemplates.makeEdge symbol guard children;
+  have actual := MicroCFTA.InternedConstructorTemplates.run job before.native.machine.heap;
+  have after :=
+    {
+      native :=
+        MicroCFTA.SourceRecursiveIntersectionThunks.advance before.native
+          (have __src := before.native.machine;
+          { heap := actual.snd, domains := __src.domains }),
+      operations := before.operations };
+  MicroCFTA.SourceEqualityNativeDemand.Steps 1
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.work job MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      before
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure actual.fst))
+      after ∧
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough 1
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.Code.work job
+                MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+            before) =
+        0 ∧
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+            (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough 1
+              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                (MicroCFTA.SourceRecursiveIntersectionCode.Code.work job
+                  MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+              before) =
+          1 ∧
+        after.native.machine.heap.nodes.next = before.native.machine.heap.nodes.next ∧
+          after.native.machine.heap.edges.next =
+            before.native.machine.heap.edges.next +
+              if
+                  (before.native.machine.heap.edges.table
+                        { symbol := symbol,
+                          children := List.map MicroCFTA.InternedConstructorTemplates.Value.referenceOf children,
+                          constraint := guard }).isNone =
+                    true then
+                1
+              else 0
+'MicroCFTA.QueryReservationIntegration.raw_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.QueryReservationIntegration.raw_prefix : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Output : Type} (bits : Nat)
+  (source :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceRecursiveIntersectionKernel.Valid source →
+    ∀ (fuel : Nat) (control next : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+      (before after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Origins source before.native →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Certified bits source control →
+          MicroCFTA.SourceEqualityNativeDemand.Steps fuel control before next after →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Origins source after.native ∧
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Certified bits source next ∧
+                MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.Words (bits + 2) next ∧
+                  after.native.machine.heap.nodes.next ≤
+                      before.native.machine.heap.nodes.next +
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel control
+                            before) ∧
+                    after.native.machine.heap.edges.next ≤
+                      before.native.machine.heap.edges.next +
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel control
+                            before)
+'MicroCFTA.QueryReservationIntegration.ready_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.QueryReservationIntegration.ready_hit : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat)
+  (source :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2))
+  (chosen running :
+    MicroCFTA.SourceRecursiveIntersectionThunks.State (bits + 2)
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (handle : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Certified bits source
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right)) →
+    MicroCFTA.SourceRecursiveIntersectionThunks.lookupNode (bits + 2) request before.native =
+        (MicroCFTA.SourceRecursiveIntersectionThunks.NodeSelection.memoized handle, chosen) →
+      MicroCFTA.SourceRecursiveIntersectionThunks.demandNode handle chosen =
+          (MicroCFTA.FlatMemoThunk.Observation.ready value, running) →
+        have after := { native := running, operations := before.operations };
+        MicroCFTA.SourceEqualityNativeDemand.Steps 1
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right))
+            before
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+            after ∧
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough 1
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right))
+                before =
+              [] ∧
+            after.native.machine.heap.nodes.next = before.native.machine.heap.nodes.next ∧
+              after.native.machine.heap.edges.next = before.native.machine.heap.edges.next
+'MicroCFTA.QueryReservationIntegration.two_prefix_capacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.QueryReservationIntegration.two_prefix_capacity : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Output : Type} (bits : Nat)
+  (source :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceRecursiveIntersectionKernel.Valid source →
+    ∀ (fuel extra : Nat) (control middle next : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+      (before current after : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Origins source before.native →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryWordExecution.Certified bits source control →
+          MicroCFTA.SourceEqualityNativeDemand.Steps fuel control before middle current →
+            MicroCFTA.SourceEqualityNativeDemand.Steps extra middle current next after →
+              before.native.machine.heap.nodes.next +
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel control
+                          before) +
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests
+                      (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough extra middle
+                        current) ≤
+                  2 ^ bits →
+                before.native.machine.heap.edges.next +
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                          (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough fuel control
+                            before) +
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations.requestsThrough extra middle
+                          current) ≤
+                    2 ^ (bits + 2) →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits after

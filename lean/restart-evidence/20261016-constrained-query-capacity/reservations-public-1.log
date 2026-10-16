@@ -1,0 +1,406 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.intern_next' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.intern_next : ∀ {Key : Type} [inst : DecidableEq.{1} Key]
+  (state : MicroCFTA.Cache.State Key) (key : Key),
+  @Eq.{1} Nat
+    (@MicroCFTA.Cache.State.next Key
+      (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+        (@MicroCFTA.Cache.intern Key inst state key)))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@MicroCFTA.Cache.State.next Key state)
+      (@ite.{1} Nat
+        (@Eq.{1} Bool (@Option.isNone.{0} (MicroCFTA.Cache.Interned Key) (@MicroCFTA.Cache.State.table Key state key))
+          Bool.true)
+        (instDecidableEqBool
+          (@Option.isNone.{0} (MicroCFTA.Cache.Interned Key) (@MicroCFTA.Cache.State.table Key state key)) Bool.true)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.intern_issued' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.intern_issued : ∀ {Key : Type} [inst : DecidableEq.{1} Key]
+  (state : MicroCFTA.Cache.State Key) (key : Key),
+  @MicroCFTA.Cache.Valid Key state →
+    @MicroCFTA.Cache.Extends Nat Key (@MicroCFTA.Cache.State.issued Key state)
+      (@MicroCFTA.Cache.State.issued Key
+        (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+          (@MicroCFTA.Cache.intern Key inst state key)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace : {Key : Type} →
+  [DecidableEq.{1} Key] → MicroCFTA.Cache.State Key → MicroCFTA.Cache.State Key → Nat → Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.refl' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.refl : ∀ {Key : Type}
+  [inst : DecidableEq.{1} Key] (state : MicroCFTA.Cache.State Key),
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace Key inst state state
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.reserve' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.reserve : ∀ {Key : Type}
+  [inst : DecidableEq.{1} Key] {before current : MicroCFTA.Cache.State Key} {count : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace Key inst before current count →
+    ∀ (key : Key),
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace Key inst before
+        (@Prod.snd.{0, 0} (MicroCFTA.Cache.Interned Key) (MicroCFTA.Cache.State Key)
+          (@MicroCFTA.Cache.reserve Key current key))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.install' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.install : ∀ {Key : Type}
+  [inst : DecidableEq.{1} Key] {before current : MicroCFTA.Cache.State Key} {count : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace Key inst before current count →
+    ∀ (candidate : MicroCFTA.Cache.Interned Key),
+      @Eq.{1} (Option.{0} Key)
+          (@MicroCFTA.Cache.State.issued Key current (@MicroCFTA.Cache.Interned.identity Key candidate))
+          (@Option.some.{0} Key (@MicroCFTA.Cache.Interned.key Key candidate)) →
+        @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace Key inst before
+          (@MicroCFTA.Cache.install Key inst current candidate) count
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.steps' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.steps : ∀ {Key : Type}
+  [inst : DecidableEq.{1} Key] {before after : MicroCFTA.Cache.State Key} {count : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace Key inst before after count →
+    @MicroCFTA.Cache.Steps Key inst before after
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.of_steps' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.of_steps : ∀ {Key : Type}
+  [inst : DecidableEq.{1} Key] {before after : MicroCFTA.Cache.State Key},
+  @MicroCFTA.Cache.Steps Key inst before after →
+    @Exists.{1} Nat fun count =>
+      @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace Key inst before after count
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.next_exact' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.next_exact : ∀ {Key : Type}
+  [inst : DecidableEq.{1} Key] {before after : MicroCFTA.Cache.State Key} {count : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace Key inst before after count →
+    @Eq.{1} Nat (@MicroCFTA.Cache.State.next Key after)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@MicroCFTA.Cache.State.next Key before) count)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.issued' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.issued : ∀ {Key : Type}
+  [inst : DecidableEq.{1} Key] {before after : MicroCFTA.Cache.State Key} {count : Nat},
+  @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace Key inst before after count →
+    @MicroCFTA.Cache.Valid Key before →
+      @MicroCFTA.Cache.Extends Nat Key (@MicroCFTA.Cache.State.issued Key before)
+        (@MicroCFTA.Cache.State.issued Key after)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request' does not depend on any axioms
+MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request : Type → Type → Type
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request.node' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request.node : {Symbol Guard : Type} →
+  MicroCFTA.InternedBinderProtocol.NodeKey →
+    Bool → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request.edge' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request.edge : {Symbol Guard : Type} →
+  MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard →
+    Bool → MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations : {Symbol Guard : Type} →
+  List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard) → Nat
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe : {Symbol Guard Result : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.Work Symbol Guard Result →
+      MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+        List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeStep_next' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeStep_next : ∀ {Symbol Guard : Type}
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (identify :
+    MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.nodeStep Symbol Guard key identify state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@ite.{1} Nat
+          (@Eq.{1} Bool
+            (@Option.isNone.{0} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+              (@MicroCFTA.Cache.State.table MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state) key))
+            Bool.true)
+          (instDecidableEqBool
+            (@Option.isNone.{0} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+              (@MicroCFTA.Cache.State.table MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state) key))
+            Bool.true)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.nodeStep Symbol Guard key identify state))))
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeStep_next' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeStep_next : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (key : MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+  (identify :
+    MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard) →
+      MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.edgeStep Symbol Guard inst key identify state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+        (@ite.{1} Nat
+          (@Eq.{1} Bool
+            (@Option.isNone.{0} (MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard))
+              (@MicroCFTA.Cache.State.table (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state) key))
+            Bool.true)
+          (instDecidableEqBool
+            (@Option.isNone.{0} (MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard))
+              (@MicroCFTA.Cache.State.table (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state) key))
+            Bool.true)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.edgeStep Symbol Guard inst key identify state))))
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.run_next' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.run_next : ∀ {Symbol Guard Result : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (work : MicroCFTA.InternedConstructorTemplates.Work Symbol Guard Result)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@Prod.snd.{0, 0} Result (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard Result inst work state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations Symbol Guard
+          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard Result inst work state))))
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@Prod.snd.{0, 0} Result (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard Result inst work state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations Symbol Guard
+          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard Result inst work state))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.reservations_le_requests' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.reservations_le_requests : ∀ {Symbol Guard : Type}
+  (requests : List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)),
+  And
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeReservations Symbol Guard requests)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests Symbol Guard requests))
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeReservations Symbol Guard requests)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests Symbol Guard requests))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.run_next_le' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.run_next_le : ∀ {Symbol Guard Result : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (work : MicroCFTA.InternedConstructorTemplates.Work Symbol Guard Result)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@Prod.snd.{0, 0} Result (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard Result inst work state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests Symbol Guard
+          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard Result inst work state))))
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@Prod.snd.{0, 0} Result (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard Result inst work state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests Symbol Guard
+          (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard Result inst work state))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.run_issued' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.run_issued : ∀ {Symbol Guard Result : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (work : MicroCFTA.InternedConstructorTemplates.Work Symbol Guard Result)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard state →
+    And
+      (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+            (@Prod.snd.{0, 0} Result (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard Result inst work state)))))
+      (@MicroCFTA.Cache.Extends Nat (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.Cache.State.issued (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+        (@MicroCFTA.Cache.State.issued (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+            (@Prod.snd.{0, 0} Result (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard Result inst work state)))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe_bind' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe_bind : ∀ {Symbol Guard Result First : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (work : MicroCFTA.InternedConstructorTemplates.Work Symbol Guard First)
+  (next : First → MicroCFTA.InternedConstructorTemplates.Work Symbol Guard Result)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @Eq.{1} (List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard))
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard Result inst
+      (@MicroCFTA.InternedConstructorTemplates.Work.bind Symbol Guard First Result work next) state)
+    (@HAppend.hAppend.{0, 0, 0}
+      (List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard))
+      (List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard))
+      (List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard))
+      (@instHAppendOfAppend.{0}
+        (List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard))
+        (@List.instAppend.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)))
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard First inst work state)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard Result inst
+        (next
+          (@Prod.fst.{0, 0} First (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard First inst work state)))
+        (@Prod.snd.{0, 0} First (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard First inst work state))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.makeEdge_observe' does not depend on any axioms
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.makeEdge_observe : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (symbol : Symbol)
+  (guard : Guard) (children : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @Eq.{1} (List.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard))
+    (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+      (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard children) state)
+    (@List.cons.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request.edge Symbol Guard
+        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.mk Symbol Guard symbol
+          (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            MicroCFTA.InternedBinderProtocol.NodeRef
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard) children)
+          guard)
+        (@Option.isNone.{0} (MicroCFTA.Cache.Interned (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard))
+          (@MicroCFTA.Cache.State.table (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state)
+            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.mk Symbol Guard symbol
+              (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                MicroCFTA.InternedBinderProtocol.NodeRef
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard) children)
+              guard))))
+      (@List.nil.{0} (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.Request Symbol Guard)))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.makeEdge_next' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.makeEdge_next : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (symbol : Symbol)
+  (guard : Guard) (children : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard children) state))))
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeEdge Symbol Guard symbol guard children) state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state))
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.makeNode_requests' depends on axioms: [propext,
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.makeNode_requests : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.nodeRequests Symbol Guard
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+          (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) state))
+      (@ite.{1} Nat
+        (@Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.canonicalEdges Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.surviving Symbol Guard edges))
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+        (@List.instDecidableEqNil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.canonicalEdges Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.surviving Symbol Guard edges)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+    (@Eq.{1} Nat
+      (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.edgeRequests Symbol Guard
+        (@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.observe Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+          (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) state))
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.makeNode_next' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations.makeNode_next : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  And
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) state))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+    (@Eq.{1} Nat
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard
+          (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) state))))
+      (@MicroCFTA.Cache.State.next (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.State.edges Symbol Guard state)))

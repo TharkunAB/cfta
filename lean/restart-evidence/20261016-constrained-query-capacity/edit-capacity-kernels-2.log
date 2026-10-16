@@ -1,0 +1,44 @@
+@numeric_node_execution : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard))
+  (base : Heap),
+  Values base originals →
+    DChildren originals →
+      SourceEqualityClassOrder.Coherent record →
+        EqualityNormalize.Nontrivial record.paths →
+          ∀ (edits : Edits EqualityNormalize.Path) (value : Value Symbol Guard) (before : SharedState (bits + 2)),
+            SourceCurrentAllocatedFiniteOrdinaryEditCapacity.NodeCapacity bits record originals edits value before →
+              Populated edits →
+                HasLeaf edits →
+                  Allowed record edits →
+                    SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base
+                        before →
+                      Available before.checked.native.machine.heap value →
+                        Safe edits value →
+                          Stored before →
+                            DNode value →
+                              ∀ (memos : EndpointMemoGateTrace.Memos),
+                                EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos →
+                                  ∃ result after next final actual,
+                                    NodeReads formulas solver base actual memos final ∧
+                                      NodeReceipt formulas solver next record originals base value before result after
+                                          memos final ∧
+                                        Stored after ∧
+                                          SourceCurrentAllocatedFiniteOrdinaryRequired.NodeNarrow value result ∧
+                                            SourceCurrentAllocatedSharedEditWorkerCompletion.StableRun
+                                              (fun e p h m s n =>
+                                                SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n
+                                                  edits value before)
+                                              result after
+'MicroCFTA.EditCapacityKernels.numeric_node_execution' depends on axioms: [propext, Classical.choice, Quot.sound]
+@ignored_list_root : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (record : SourceEqualityClassOrder.Record) (originals values : List (Value Symbol Guard))
+  (target : EqualityNormalize.Path) (before : SharedState (bits + 2)),
+  SourceCurrentAllocatedFiniteOrdinaryEditCapacity.ListCapacity bits record originals (Edits.editAt target) values
+      before ∧
+    ∀ (e p h m s n : Nat),
+      SourceCurrentAllocatedSharedEditWorker.editList
+          (SourceCurrentAllocatedSharedEditWorker.edit record originals e p h m s n) (Edits.editAt target) values
+          before =
+        SourceCurrentAllocatedSharedEditWorker.Outcome.done values before
+'MicroCFTA.EditCapacityKernels.ignored_list_root' depends on axioms: [propext, Classical.choice, Quot.sound]

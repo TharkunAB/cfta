@@ -1,0 +1,214 @@
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity : [DecidableEq
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)] →
+  [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+    (bits : Nat) →
+      List
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+        List Int →
+          List (List Int) →
+            MicroCFTA.SourceEqualityNativeDemand.State (bits + 2) →
+              MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.TargetCapacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.TargetCapacity : [DecidableEq
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)] →
+  [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+    (bits : Nat) →
+      List
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+        List (List Int) →
+          MicroCFTA.SourceEqualityNativeDemand.State (bits + 2) →
+            MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              Prop
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity.tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity.tail : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {bits : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {seed path : List Int} {paths : List (List Int)}
+  {before middle : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)}
+  {memo current :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {head :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity bits values seed (path :: paths) before
+      memo →
+    MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand path values before memo head middle current →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity bits values seed paths middle current
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity.query' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity.query : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {bits : Nat}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {seed path : List Int} {paths : List (List Int)}
+  {before middle later : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2)}
+  {memo current saved :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {head tail :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity bits values seed (path :: paths) before
+      memo →
+    MicroCFTA.SourceCurrentAllocatedTargetGraph.Operand path values before memo head middle current →
+      MicroCFTA.SourceCurrentAllocatedTargetGraph.Fold values seed paths middle current tail later saved →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits later
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.fold_ranges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.fold_ranges : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (bits : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (seed : List Int) (paths : List (List Int)) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2))
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+                (∀
+                    (ambient :
+                      MicroCFTA.InternedGuardedLanguage.Env
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.FoldCapacity bits values seed paths
+                      before memo →
+                    ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                      MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        MicroCFTA.SourceCurrentAllocatedTargetGraph.FoldRanges values seed paths before memo
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.target_ranges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.target_ranges : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (bits : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List (List Int)) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2))
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+                (∀
+                    (ambient :
+                      MicroCFTA.InternedGuardedLanguage.Env
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.TargetCapacity bits values paths before
+                      memo →
+                    ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                      MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        MicroCFTA.SourceCurrentAllocatedTargetGraph.TargetRanges values paths before memo
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.finite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.finite : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) (bits : Nat)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (paths : List (List Int)) (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2))
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready before →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before →
+      MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+          MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored memo →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored before.native →
+                (∀
+                    (ambient :
+                      MicroCFTA.InternedGuardedLanguage.Env
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.SourceCurrentMemoMergeLanguage.CacheCovers
+                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient memo) →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryTargetCapacity.TargetCapacity bits values paths before
+                      memo →
+                    ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                      MicroCFTA.EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                        ∃ result after saved next final actual,
+                          MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads formulas solver actual memos
+                              final ∧
+                            MicroCFTA.SourceCurrentAllocatedTargetComplete.Receipt formulas solver next values paths
+                                before memo result after saved memos final ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryMergeCache.Stored saved ∧
+                                MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryStored.Stored after.native ∧
+                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node result

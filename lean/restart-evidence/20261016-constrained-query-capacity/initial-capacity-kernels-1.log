@@ -1,0 +1,68 @@
+'FiniteOrdinaryInitialCapacityKernels.first_query' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryInitialCapacityKernels.first_query : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) {initial final : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key}
+  {originals : List (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  MicroCFTA.SourceEqualityOriginalAllocationHistory.History initial final originals →
+    MicroCFTA.Cache.Valid initial →
+      ∀
+        (expression :
+          MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node expression →
+          (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+              original ∈ MicroCFTA.SourceEqualityConstraintOrigins.guards expression → original ∈ originals) →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.nodeCount expression ≤ 2 ^ bits →
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.edgeCount expression ≤
+                  2 ^ (bits + 2) →
+                ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+                  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula),
+                  ∃ value heap _built,
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node value ∧
+                      ∃ next result after,
+                        MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt formulas solver next value value
+                          (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) final heap).checked
+                          result after MicroCFTA.SourceCurrentAllocatedPartialInitialization.globals
+'FiniteOrdinaryInitialCapacityKernels.prepared_admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+@FiniteOrdinaryInitialCapacityKernels.prepared_admission : ∀
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (initial : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key),
+  MicroCFTA.Cache.Valid initial →
+    ∀
+      (expression :
+        MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node expression →
+        (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+            original ∈ MicroCFTA.SourceEqualityConstraintOrigins.guards expression →
+              MicroCFTA.SourceEqualityGuardReadback.Cached original.equalities) →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.nodeCount expression ≤ 2 ^ bits →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.edgeCount expression ≤
+                2 ^ (bits + 2) →
+              ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+                (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula),
+                have cache :=
+                  (MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare
+                      (MicroCFTA.SourceEqualityConstraintOrigins.guards expression) initial).snd;
+                ∃ fields,
+                  MicroCFTA.SourceEqualityOriginalAllocationPreparation.Receipt
+                      (MicroCFTA.SourceEqualityConstraintOrigins.guards expression) initial fields cache ∧
+                    ∃ value heap built,
+                      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver
+                          (MicroCFTA.SourceCurrentAllocatedPartialInitialization.inventory expression value heap built)
+                          (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap)
+                          MicroCFTA.SourceCurrentAllocatedPartialInitialization.globals ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored
+                            (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap) ∧
+                          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Node value ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits
+                              (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache
+                                  heap).checked

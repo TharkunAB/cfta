@@ -1,0 +1,36 @@
+@serial_classes : ∀ [inst : DecidableEq Symbol] [inst_1 : DecidableEq (EdgeKey Symbol Guard)] (bits : Nat)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : Inventory) (first second : SourceEqualityClassOrder.Record),
+  SourceEqualityClassOrder.Coherent first →
+    EqualityNormalize.Nontrivial first.paths →
+      SourceEqualityClassOrder.Coherent second →
+        EqualityNormalize.Nontrivial second.paths →
+          ∀ (values : List (Value Symbol Guard)) (before : Checked (bits + 2)) (memo : Memo),
+            SourceCurrentConjunctionClassScan.Ready before →
+              At formulas solver inventory before →
+                Values before.native.machine.heap values →
+                  SourceCurrentAllocatedFiniteOrdinaryDomain.Children values →
+                    SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo →
+                      (∀ (ambient : InternedGuardedLanguage.Env Symbol),
+                          SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver)
+                            ambient memo) →
+                        NativeStored before.native →
+                          MergeStored memo →
+                            ClassCapacity bits first values before memo →
+                              (∀ (middle : List (Value Symbol Guard)) (current : Checked (bits + 2)) (saved : Memo),
+                                  Class first values before memo middle current saved →
+                                    ClassCapacity bits second middle current saved) →
+                                ∀ (memos : EndpointMemoGateTrace.Memos),
+                                  EndpointMemoGateTrace.Valid before.native.machine.heap memos →
+                                    ∃ results after saved next final actual,
+                                      SourceCurrentAllocatedClassPass.FoldReads formulas solver actual memos final ∧
+                                        At formulas solver next after ∧
+                                          NativeStored after.native ∧
+                                            MergeStored saved ∧
+                                              All₂ NodeNarrow values results ∧
+                                                SourceCurrentAllocatedClassWorkerCompletion.StableRun
+                                                  (fun e p h m s n =>
+                                                    SourceCurrentAllocatedClassWorker.fold e p h m s n [second, first]
+                                                      values before memo)
+                                                  results after saved
+'MicroCFTA.ClassCapacityKernels.serial_classes' depends on axioms: [propext, Classical.choice, Quot.sound]

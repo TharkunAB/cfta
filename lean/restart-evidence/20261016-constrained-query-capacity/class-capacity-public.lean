@@ -1,0 +1,8 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassCapacity
+
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassCapacity.ClassCapacity
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassCapacity.ClassCapacity
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassCapacity.class_ranges
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassCapacity.class_ranges
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassCapacity.finite
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryClassCapacity.finite

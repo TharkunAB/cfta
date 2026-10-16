@@ -1,0 +1,113 @@
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:142:12: error(lean.unknownIdentifier): Unknown identifier `known`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:142:18: error(lean.unknownIdentifier): Unknown identifier `capturedDomain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:142:40: error(lean.unknownIdentifier): Unknown identifier `coherent`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:142:49: error(lean.unknownIdentifier): Unknown identifier `active`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:185:61: error(lean.unknownIdentifier): Unknown identifier `known`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:185:82: error(lean.unknownIdentifier): Unknown identifier `capturedDomain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:187:99: error(lean.unknownIdentifier): Unknown identifier `known`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:187:113: error(lean.unknownIdentifier): Unknown identifier `coherent`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:187:122: error(lean.unknownIdentifier): Unknown identifier `active`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:192:55: error(lean.unknownIdentifier): Unknown identifier `known`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:192:61: error(lean.unknownIdentifier): Unknown identifier `capturedDomain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:194:34: error(lean.unknownIdentifier): Unknown identifier `result`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:194:41: error(lean.unknownIdentifier): Unknown identifier `middle`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:135:115: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+bits : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+record : SourceEqualityClassOrder.Record
+originals : List (Value Symbol Guard)
+base : Heap
+leafCase :
+  ∀ {target : EqualityNormalize.Path} {value : Value Symbol Guard}
+    {before : SourceCurrentAllocatedSharedTargetState.State (bits + 2)},
+    SourceCurrentAllocatedFiniteOrdinarySharedCapacity.LeafCapacity bits record originals target value before →
+      NL (Edits.editAt target) value before
+emptyCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {before : SharedState (bits + 2)},
+    NL (Edits.editBelow entries) Value.empty before
+ordinaryCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List (EdgeValue Symbol Guard)}
+    {before : SharedState (bits + 2)} {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat}
+    {free : List InternedBinderProtocol.Reference},
+    RowsCapacity bits record originals entries edges before →
+      RL entries edges before → NL (Edits.editBelow entries) (Value.node entry edges depth free) before
+nilChildren :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {index : Nat} {before : SharedState (bits + 2)},
+    CL entries index [] before
+unselectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {values : List (Value Symbol Guard)}
+    {before : SharedState (bits + 2)} {value : Value Symbol Guard} (index : Nat),
+    SourceEqualityNeededMap.lookup (↑index) entries = none →
+      ChildrenCapacity bits record originals entries (index + 1) values before →
+        CL entries (index + 1) values before → CL entries index (value :: values) before
+selectedCase :
+  ∀ {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path}
+    {value : Value Symbol Guard} {before : SharedState (bits + 2)} {values : List (Value Symbol Guard)} (index : Nat),
+    SourceEqualityNeededMap.lookup (↑index) entries = some edits →
+      NodeCapacity bits record originals edits value before →
+        (∀ (result : Value Symbol Guard) (middle : SharedState (bits + 2)),
+            EditNode record originals edits value before result middle →
+              ChildrenCapacity bits record originals entries (index + 1) values middle) →
+          NL edits value before →
+            (∀ (result : Value Symbol Guard) (middle : SharedState (bits + 2)),
+                EditNode record originals edits value before result middle → CL entries (index + 1) values middle) →
+              CL entries index (value :: values) before
+⊢ (∀ (edits : Edits EqualityNormalize.Path) (value : Value Symbol Guard) (before : SharedState (bits + 2)),
+      NodeCapacity bits record originals edits value before → NL edits value before) ∧
+    (∀ (entries : List (Int × Edits EqualityNormalize.Path)) (index : Nat) (values : List (Value Symbol Guard))
+        (before : SharedState (bits + 2)),
+        ChildrenCapacity bits record originals entries index values before → CL entries index values before) ∧
+      ∀ (entries : List (Int × Edits EqualityNormalize.Path)) (edges : List (EdgeValue Symbol Guard))
+        (before : SharedState (bits + 2)),
+        RowsCapacity bits record originals entries edges before → RL entries edges before
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:195:8: error: unexpected token '('; expected command
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:260:3: error: Function expected at
+  derive bits formulas solver record originals base
+but this term has type
+  (∀ (edits : Edits EqualityNormalize.Path) (value : Value Symbol Guard) (before : SharedState (bits + 2)),
+      NodeCapacity bits record originals edits value before → NL edits value before) ∧
+    (∀ (entries : List (Int × Edits EqualityNormalize.Path)) (index : Nat) (values : List (Value Symbol Guard))
+        (before : SharedState (bits + 2)),
+        ChildrenCapacity bits record originals entries index values before → CL entries index values before) ∧
+      ∀ (entries : List (Int × Edits EqualityNormalize.Path)) (edges : List (EdgeValue Symbol Guard))
+        (before : SharedState (bits + 2)),
+        RowsCapacity bits record originals entries edges before → RL entries edges before
+
+Note: Expected a function because this term is being applied to the argument
+  known
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:270:3: error: Function expected at
+  derive bits formulas solver record originals base
+but this term has type
+  (∀ (edits : Edits EqualityNormalize.Path) (value : Value Symbol Guard) (before : SharedState (bits + 2)),
+      NodeCapacity bits record originals edits value before → NL edits value before) ∧
+    (∀ (entries : List (Int × Edits EqualityNormalize.Path)) (index : Nat) (values : List (Value Symbol Guard))
+        (before : SharedState (bits + 2)),
+        ChildrenCapacity bits record originals entries index values before → CL entries index values before) ∧
+      ∀ (entries : List (Int × Edits EqualityNormalize.Path)) (edges : List (EdgeValue Symbol Guard))
+        (before : SharedState (bits + 2)),
+        RowsCapacity bits record originals entries edges before → RL entries edges before
+
+Note: Expected a function because this term is being applied to the argument
+  known
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:280:3: error: Function expected at
+  derive bits formulas solver record originals base
+but this term has type
+  (∀ (edits : Edits EqualityNormalize.Path) (value : Value Symbol Guard) (before : SharedState (bits + 2)),
+      NodeCapacity bits record originals edits value before → NL edits value before) ∧
+    (∀ (entries : List (Int × Edits EqualityNormalize.Path)) (index : Nat) (values : List (Value Symbol Guard))
+        (before : SharedState (bits + 2)),
+        ChildrenCapacity bits record originals entries index values before → CL entries index values before) ∧
+      ∀ (entries : List (Int × Edits EqualityNormalize.Path)) (edges : List (EdgeValue Symbol Guard))
+        (before : SharedState (bits + 2)),
+        RowsCapacity bits record originals entries edges before → RL entries edges before
+
+Note: Expected a function because this term is being applied to the argument
+  known
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:292:90: error(lean.unknownIdentifier): Unknown identifier `known`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:292:96: error(lean.unknownIdentifier): Unknown identifier `capturedDomain`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:292:111: error(lean.unknownIdentifier): Unknown identifier `coherent`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:292:120: error(lean.unknownIdentifier): Unknown identifier `active`
+lean/MicroCFTA/SourceCurrentAllocatedFiniteOrdinaryEditCapacity.lean:293:6: error: unexpected identifier; expected command
