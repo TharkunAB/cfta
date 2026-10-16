@@ -1,0 +1,8 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission
+
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.step
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.step
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.reach
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.reach
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.ranges
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.ranges

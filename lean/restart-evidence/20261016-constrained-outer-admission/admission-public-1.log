@@ -1,0 +1,59 @@
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.step : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {budget : Nat}
+  {first last : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry (bits + 2)},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step budget first last →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Admitted formulas solver first →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Plan bits budget first →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Admitted formulas solver last
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.step' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.reach : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {budget : Nat}
+  {root entry : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry (bits + 2)},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Reach budget root entry →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Admitted formulas solver root →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Plan bits budget root →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Admitted formulas solver entry
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.reach' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.ranges : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {budget : Nat}
+  {root : MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry (bits + 2)},
+  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Admitted formulas solver root →
+    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Plan bits budget root →
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Plan budget root
+'MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterAdmission.ranges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

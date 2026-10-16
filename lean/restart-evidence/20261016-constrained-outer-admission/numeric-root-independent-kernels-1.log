@@ -1,0 +1,92 @@
+lean/restart-evidence/20261016-constrained-outer-admission/numeric-root-independent-kernels.lean:35:22: warning: Variable name `built` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _built
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'MicroCFTA.NumericRootIndependentIntegration.prepared_initial_words' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.NumericRootIndependentIntegration.prepared_initial_words : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (initial : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key),
+  MicroCFTA.Cache.Valid initial →
+    ∀
+      (expression :
+        MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstruction.Node expression →
+        (∀ (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+            original ∈ MicroCFTA.SourceEqualityConstraintOrigins.guards expression →
+              MicroCFTA.SourceEqualityGuardReadback.Cached original.equalities) →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.nodeCount expression ≤ 2 ^ bits →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryConstructionReservations.edgeCount expression ≤
+                2 ^ (bits + 2) →
+              ∀ (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+                (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (budget : Nat),
+                (∀
+                    (value :
+                      MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (heap :
+                      MicroCFTA.InternedConstructorTemplates.State
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.InternedFreshOrdinaryConstruction.build expression []
+                          MicroCFTA.InternedConstructorTemplates.empty =
+                        MicroCFTA.InternedNestedConstruction.Outcome.done value heap →
+                      MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries.Plan bits budget
+                        (MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Entry.nodeCall
+                          {
+                            inherited :=
+                              MicroCFTA.SourceCurrentAllocatedPartialInitialization.emptyValue
+                                (MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare
+                                    (MicroCFTA.SourceEqualityConstraintOrigins.guards expression) initial).snd,
+                            value := value }
+                          (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2)
+                            (MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare
+                                (MicroCFTA.SourceEqualityConstraintOrigins.guards expression) initial).snd
+                            heap))) →
+                  have cache :=
+                    (MicroCFTA.SourceEqualityOriginalAllocationPreparation.prepare
+                        (MicroCFTA.SourceEqualityConstraintOrigins.guards expression) initial).snd;
+                  ∃ fields,
+                    MicroCFTA.SourceEqualityOriginalAllocationPreparation.Receipt
+                        (MicroCFTA.SourceEqualityConstraintOrigins.guards expression) initial fields cache ∧
+                      ∃ value heap built,
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits
+                            (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache
+                                heap).checked ∧
+                          MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                  MicroCFTA.IntersectionEmptyDomain.emptyDomain value value))
+                              (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache
+                                  heap).checked ∧
+                            ∃ result after next final actual,
+                              MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver actual
+                                  MicroCFTA.SourceCurrentAllocatedPartialInitialization.globals final ∧
+                                MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next
+                                    (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap)
+                                    after final ∧
+                                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored after ∧
+                                    ∀
+                                      (ambient :
+                                        MicroCFTA.InternedGuardedLanguage.Env
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                                      (term :
+                                        MicroCFTA.Language.Term
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                                      MicroCFTA.InternedGuardedLanguage.meaning
+                                          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+                                        MicroCFTA.InternedGuardedLanguage.meaning
+                                          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient value term

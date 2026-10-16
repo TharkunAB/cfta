@@ -1,0 +1,11 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterNumericEntries
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.node_evaluate
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.node_ordinary
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.edge_evaluate
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.rows_edge
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.rows_descendants
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.rows_tail
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.descendants_children
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.children_live
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.walk_node
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterEntries.Step.walk_tail

@@ -1,0 +1,86 @@
+'MicroCFTA.OuterParentReadIntegration.evaluated_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.OuterParentReadIntegration.evaluated_owner : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {budget handle : Nat}
+  {request owner : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before running middle : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (body : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody budget owner running result middle)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge request.value →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored before →
+            ∀
+              (started :
+                MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before =
+                  (handle, MicroCFTA.FlatMemoThunk.Observation.evaluate owner, running)),
+              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentCapacity.ParentCapacity bits budget owner running →
+                ∃ final next,
+                  MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver body memos final ∧
+                    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeCallReads formulas solver ⋯ memos final ∧
+                      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before
+                          (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result middle) final ∧
+                        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored
+                            (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result middle) ∧
+                          MicroCFTA.InternedEdgeResidency.EdgeResident
+                              (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result
+                                        middle).checked.native.machine.heap
+                              result ∧
+                            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryRequired.EdgeNarrow request.value result ∧
+                              MicroCFTA.SourceCurrentAllocatedPartialMemoSound.EdgeLaw formulas solver request result
+'MicroCFTA.OuterParentReadIntegration.serial_parents' depends on axioms: [propext, Classical.choice, Quot.sound]
+@MicroCFTA.OuterParentReadIntegration.serial_parents : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (bits : Nat) (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {budget : Nat}
+  {first second : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest}
+  {before middle after : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {firstResult secondResult :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (firstBody : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody budget first before firstResult middle)
+  (secondBody : MicroCFTA.SourceCurrentAllocatedPartialGraph.EdgeBody budget second middle secondResult after)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints first.inherited →
+      MicroCFTA.InternedEdgeResidency.EdgeResident before.checked.native.machine.heap first.value →
+        MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge first.value →
+          MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored before →
+            MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentCapacity.ParentCapacity bits budget first before →
+              MicroCFTA.SourceEqualityConstraintAllocation.Ready middle.checked.operations.constraints
+                  second.inherited →
+                MicroCFTA.InternedEdgeResidency.EdgeResident middle.checked.native.machine.heap second.value →
+                  MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryDomain.Edge second.value →
+                    MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryParentCapacity.ParentCapacity bits budget second
+                        middle →
+                      ∃ current final next,
+                        MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver firstBody memos
+                            current ∧
+                          MicroCFTA.SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver secondBody
+                              current final ∧
+                            MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before after
+                                final ∧
+                              MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterState.Stored after

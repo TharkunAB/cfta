@@ -1,0 +1,10 @@
+import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterParentReads
+
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.universes true
+
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterParentReads.edge_body
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterParentReads.edge_body
+#print axioms MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterParentReads.verified
+#check @MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryOuterParentReads.verified

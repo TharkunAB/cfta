@@ -1,0 +1,11 @@
+# Outer admission scope review
+
+The numeric plan supplies ParentCapacity only at raw reached edge bodies. It has no Context, output law, or completed enclosing call as a field. Initial admission supplies the root's current inventory, global bundle, full Context, structural tables, inherited readiness, resident input, and finite ordinary domain.
+
+`OuterAdmission.step` derives these facts at each direct target control. Node and edge starts preserve the exact captured owner, not only its key. Ordinary node and row selection use the actual resident record and domain inversion. Inherited-prefix and indexed-descent entries use their literal operation receipts and preserve all structural table families.
+
+The three transitions after completed earlier calls are separate. `rows_descendants` reconstructs the earlier edge's strict reads. `rows_tail` reconstructs the earlier edge and descendant reads in order. `walk_tail` first executes the literal indexed descent, then reconstructs the earlier node reads. Frozen OuterVerification derives each prefix's own exact Post, current inventory, global bundle, residency, domain bound, and Stored. The suffix receives these derived facts. No supplied prefix Read, Post, result certificate, final readiness, or old range plan is used.
+
+`OuterAdmission.reach` composes these direct admission results. Its existential inventory and global bundle can change at each control. `ranges` uses admission at each raw reached edge body and ParentCapacity.resident_ranges to derive the frozen OuterEntries.Plan. It does not invoke OuterNode.finite. The external node integration can invoke that rank-induction theorem only after this conversion. Thus the admission proof does not depend on the outer completion it supports.
+
+The inputs remain finite ordinary values with unrestricted full guards and equality classes. The native structural certificate remains conditional on empty seen history. The numeric plan remains an explicit word-capacity premise at reached entries. The proof does not infer capacity from structural height or resident table size. It does not establish general Mu/reference/union completion, arbitrary repeated reduction termination, solver implementation correctness, or GHC lazy demand and publication. This task changes no Haskell source and no older proof source.
